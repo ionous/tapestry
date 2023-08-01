@@ -93,9 +93,9 @@ create table mdl_rev( domain text not null, oneWord text, otherWord text, at tex
  */
 create table mdl_rule( domain text not null, kind int not null, target int, phase int, filter blob, prog blob, at text );
 /* 
- * initial values for various nouns.
+ * initial values for the fields of nouns;
  * note: currently, the scope of the value is the same as the noun.
  * ( ie. one value per noun per field; not values that change as new domains are activated. )
- * the affinity and subtype of the value come from the field.
+ * path contains comma separated names.
  */
-create table mdl_value( noun int not null, field int not null, value blob, at text, primary key( noun, field ));
+create table mdl_value( noun int not null, path string, value blob, at text, primary key( noun, path ));

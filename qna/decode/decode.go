@@ -22,10 +22,36 @@ func NewDecoder(signatures cin.Signatures) *Decoder {
 }
 
 func (d *Decoder) DecodeField(b []byte, a affine.Affinity, fieldType string) (ret rt.Assignment, err error) {
-	if isEvalLike := b[0] == '{'; !isEvalLike {
-		ret, err = literal.ReadLiteral(a, fieldType, b)
-	} else {
+	if isEvalLike := b[0] == '{'; isEvalLike {
 		ret, err = parseEval(a, b, d.signatures)
+	} else {
+		if v, e := literal.ReadLiteral(a, fieldType, b); e != nil {
+			err = e
+		} else {
+			ret = AssignLiteral(v)
+		}
+	}
+	return
+}
+
+func AssignLiteral(v literal.LiteralValue) (ret rt.Assignment) {
+	switch v := v.(type) {
+	case *literal.BoolValue:
+		ret = &assign.FromBool{Value: v}
+	case *literal.NumValue:
+		ret = &assign.FromNumber{Value: v}
+	case *literal.TextValue:
+		ret = &assign.FromText{Value: v}
+	case *literal.RecordValue:
+		ret = &assign.FromRecord{Value: v}
+	case *literal.NumValues:
+		ret = &assign.FromNumList{Value: v}
+	case *literal.TextValues:
+		ret = &assign.FromTextList{Value: v}
+	case *literal.RecordList:
+		ret = &assign.FromRecordList{Value: v}
+	default:
+		panic(errutil.Fmt("unknown literal %T", v))
 	}
 	return
 }

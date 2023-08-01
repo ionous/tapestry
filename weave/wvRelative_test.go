@@ -7,13 +7,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/kr/pretty"
 )
 
 // follow along with relative test except add list of ephemera
 func TestRelativeFormation(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
@@ -86,7 +87,7 @@ func TestRelativeFormation(t *testing.T) {
 	}
 	// expects 4 warnings, one from each group
 	for i := 0; i < 4; i++ {
-		if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate relation`); !ok {
+		if e := warnings.Expect(`Duplicate relation`); e != nil {
 			t.Fatal(e)
 		}
 	}

@@ -61,14 +61,12 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
 	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
 		rt.Execute_Type: chart.KeyMap{
-			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
-				// activity depth should probably be on the story side only
-				// to fix: rather than passing "catalog" around, should probably be passing a story.Importer
-				cat.Env.ActivityDepth++
+			chart.BlockStart: func(b jsn.Block, _ interface{}) (_ error) {
+				cat.Env.Inc(activityDepth, 1)
 				return
 			},
-			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
-				cat.Env.ActivityDepth--
+			chart.BlockEnd: func(b jsn.Block, _ interface{}) (_ error) {
+				cat.Env.Inc(activityDepth, -1)
 				return
 			},
 		},

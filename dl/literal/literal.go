@@ -6,18 +6,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"github.com/ionous/errutil"
 )
 
 // LiteralValue marks script constants.
-// ( same interface as assign.Assignment currently )
 type LiteralValue interface {
-	Affinity() affine.Affinity // alt: use a switch on the eval type to generate affinity.
-	GetAssignedValue(rt.Runtime) (g.Value, error)
-}
-
-// Affinity returns affine.Bool
-func (op *BoolValue) Affinity() affine.Affinity {
-	return affine.Bool
+	GetLiteralValue(rt.Runtime) (g.Value, error)
 }
 
 // String uses strconv.FormatBool.
@@ -25,7 +19,7 @@ func (op *BoolValue) String() string {
 	return strconv.FormatBool(op.Value)
 }
 
-func (op *BoolValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *BoolValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetBool(run)
 }
 
@@ -33,11 +27,6 @@ func (op *BoolValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 func (op *BoolValue) GetBool(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.BoolOf(op.Value)
 	return
-}
-
-// Affinity returns affine.Number
-func (op *NumValue) Affinity() affine.Affinity {
-	return affine.Number
 }
 
 // Int converts to native int.
@@ -55,7 +44,7 @@ func (op *NumValue) String() string {
 	return strconv.FormatFloat(op.Value, 'g', -1, 64)
 }
 
-func (op *NumValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *NumValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetNumber(run)
 }
 
@@ -65,17 +54,12 @@ func (op *NumValue) GetNumber(rt.Runtime) (ret g.Value, _ error) {
 	return
 }
 
-// Affinity returns affine.Text
-func (op *TextValue) Affinity() affine.Affinity {
-	return affine.Text
-}
-
 // String returns the text.
 func (op *TextValue) String() string {
 	return op.Value
 }
 
-func (op *TextValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *TextValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetText(run)
 }
 
@@ -85,12 +69,7 @@ func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
 	return
 }
 
-// Affinity returns affine.NumList
-func (op *NumValues) Affinity() affine.Affinity {
-	return affine.NumList
-}
-
-func (op *NumValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *NumValues) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetNumList(run)
 }
 
@@ -101,12 +80,7 @@ func (op *NumValues) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 	return
 }
 
-// Affinity returns affine.TextList
-func (op *TextValues) Affinity() affine.Affinity {
-	return affine.TextList
-}
-
-func (op *TextValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *TextValues) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetTextList(run)
 }
 
@@ -117,12 +91,7 @@ func (op *TextValues) GetTextList(rt.Runtime) (ret g.Value, _ error) {
 	return
 }
 
-// Affinity returns affine.Record
-func (op *RecordValue) Affinity() affine.Affinity {
-	return affine.Record
-}
-
-func (op *RecordValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *RecordValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetRecord(run)
 }
 
@@ -131,12 +100,7 @@ func (op *RecordValue) GetRecord(run rt.Runtime) (g.Value, error) {
 	return op.Cache.GetRecord(run, op.Kind, op.Fields)
 }
 
-// Affinity returns affine.RecordList
-func (op *RecordList) Affinity() affine.Affinity {
-	return affine.RecordList
-}
-
-func (op *RecordList) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *RecordList) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	return op.GetRecordList(run)
 }
 
@@ -145,17 +109,36 @@ func (op *RecordList) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
 	return op.Cache.GetRecords(run, op.Kind, op.Records)
 }
 
-// unimplemented: returns empty string.
-func (op *FieldList) Affinity() affine.Affinity {
-	return ""
-}
-
 // unimplemented: panics.
 func (op *FieldList) String() (ret string) {
 	panic("field values are not intended to be comparable")
 }
 
 // unimplemented: panics.
-func (op *FieldList) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *FieldList) GetLiteralValue(run rt.Runtime) (g.Value, error) {
 	panic("field values should only be used in record literals")
+}
+
+func GetAffinity(a LiteralValue) (ret affine.Affinity) {
+	if a != nil {
+		switch a.(type) {
+		case *BoolValue:
+			ret = affine.Bool
+		case *NumValue:
+			ret = affine.Number
+		case *TextValue:
+			ret = affine.Text
+		case *RecordValue:
+			ret = affine.Record
+		case *NumValues:
+			ret = affine.NumList
+		case *TextValues:
+			ret = affine.TextList
+		case *RecordList:
+			ret = affine.RecordList
+		default:
+			panic(errutil.Fmt("unknown Assignment %T", a))
+		}
+	}
+	return
 }

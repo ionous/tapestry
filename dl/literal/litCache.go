@@ -104,7 +104,7 @@ func buildRecord(run rt.Runtime, k *g.Kind, fields []FieldValue) (ret *g.Record,
 
 func makeValue(run rt.Runtime, ft g.Field, val LiteralValue) (ret g.Value, err error) {
 	if fvs, ok := val.(*FieldList); !ok {
-		ret, err = val.GetAssignedValue(run)
+		ret, err = val.GetLiteralValue(run)
 	} else if fvk, e := run.GetKindByName(ft.Type); e != nil {
 		err = e
 	} else if c, e := buildRecord(run, fvk, fvs.Fields); e != nil {

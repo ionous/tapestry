@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -57,8 +58,8 @@ func TestFieldsCrossDomain(t *testing.T) {
 
 // we can redefine fields in the same domain, and in another
 func TestFieldsRedefine(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 	//
 	dt := testweave.NewWeaver(t.Name())
@@ -74,10 +75,10 @@ func TestFieldsRedefine(t *testing.T) {
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate field "n" for kind "k"`); !ok {
-		t.Fatal("unexpected warning:", e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate field "n" for kind "k"`); !ok {
-		t.Fatal("unexpected warning:", e)
+	} else if e := warnings.Expect(`Duplicate field "n" for kind "k"`); e != nil {
+		t.Fatal(e)
+	} else if e := warnings.Expect(`Duplicate field "n" for kind "k"`); e != nil {
+		t.Fatal(e)
 	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
@@ -109,8 +110,8 @@ func TestFieldsConflict(t *testing.T) {
 // rival fields are fine so long as they match
 // ( really the fields exist all at the same time )
 func TestFieldsMatchingRivals(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 
 	dt := testweave.NewWeaver(t.Name())
@@ -128,8 +129,8 @@ func TestFieldsMatchingRivals(t *testing.T) {
 	// fix: is this supposed to be an error?
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate field "t" for kind "k"`); !ok {
-		t.Fatal("unexpected warning:", e)
+	} else if e := warnings.Expect(`Duplicate field "t" for kind "k"`); e != nil {
+		t.Fatal(e)
 	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
@@ -143,8 +144,8 @@ func TestFieldsMatchingRivals(t *testing.T) {
 // fields in a given kind exist all at once; there's really not "rival" fields.
 // this is really a name conflict.
 func TestFieldsMismatchingRivals(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 
 	dt := testweave.NewWeaver(t.Name())

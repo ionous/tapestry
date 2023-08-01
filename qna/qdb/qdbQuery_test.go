@@ -340,7 +340,7 @@ func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.Pin(domain, at).AddNoun(noun, kind); e != nil {
+		if e := m.Pin(domain, at).AddNoun(noun, "", kind); e != nil {
 			err = e
 			break
 		}

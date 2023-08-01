@@ -248,18 +248,19 @@ func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err err
 }
 
 func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
-	var noun *weave.ScopedNoun
+	var noun string
 	og := n.Name.String()
+	pen := w.Pin()
 	if name := lang.Normalize(og); name == "you" {
 		// tdb: the current thought is that "the player" should be a variable;
 		// currently its an "agent".
-		noun, err = w.Domain.GetExactNoun("self")
+		noun, err = pen.GetExactNoun("self")
 	} else {
 		if n.Exact { // ex. ".... called the spatula."
-			noun, err = w.Domain.GetExactNoun(name)
+			noun, err = pen.GetExactNoun(name)
 		} else {
 			// if it doesnt exist; we create it.
-			if fold, e := w.Domain.GetClosestNoun(name); e != nil {
+			if fold, e := pen.GetClosestNoun(name); e != nil {
 				err = e
 			} else {
 				noun = fold
@@ -271,39 +272,46 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 			if len(n.Kinds) > 0 {
 				base = lang.Normalize(n.Kinds[0].String())
 			}
-			// note: this can return nil if it existed
-			// but since we just checked for it; things in single threading are fine.
-			noun, err = w.Domain.AddNoun(og, name, base)
+			err = pen.AddNoun(name, og, base)
 		}
 	}
 	// assign kinds
 	if err == nil {
-		pen := w.Pin()
 		for _, k := range n.Kinds {
-			// fix dont listen to any errors since we cant filter dupes here
 			k := lang.Normalize(k.String())
-			pen.AddNoun(noun.Name(), k)
+			// since noun already exists: this ensures that the noun inherits from all of the specified kinds
+			if e := pen.AddNoun(noun, "", k); e != nil {
+				err = e
+				break
+			}
 		}
 	}
 	// add articles:
 	if err == nil {
+		pen := w.Pin()
 		if isProper(n.Article, og) {
-			if e := noun.WriteValue(w.At, "proper named", nil, B(true)); e != nil {
+			if e := pen.AddValueField(noun, "proper named", truly()); e != nil {
 				err = e
 			}
 		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := noun.WriteValue(w.At, "indefinite article", nil, T(a)); e != nil {
+			if e := pen.AddValueField(noun, "indefinite article", text(a, "")); e != nil {
 				err = e
 			}
 		}
 	}
 	// add traits:
 	if err == nil {
-		err = assignTraits(w, noun, n.Traits)
+		for _, t := range n.Traits {
+			t := lang.Normalize(t.String())
+			if e := pen.AddValueField(noun, t, truly()); e != nil {
+				err = errutil.Append(err, e)
+				break // out of the traits to the next noun
+			}
+		}
 	}
 	// return
 	if err == nil {
-		ret = noun.Name()
+		ret = noun
 	}
 	return
 }
@@ -338,7 +346,7 @@ func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error
 
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
-			names[i] = w.Catalog.NewCounter(name, nil)
+			names[i] = newCounter(w.Catalog, name)
 		}
 
 		var kind, kinds string
@@ -350,43 +358,35 @@ func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error
 			kinds = name
 			kind = w.SingularOf(name)
 		}
-		if e := w.Pin().AddKind(kinds, parent); e != nil {
+		pen := w.Pin()
+		if e := pen.AddKind(kinds, parent); e != nil {
 			err = e
 		} else {
-			pen := w.Pin()
+		Loop:
 			for _, n := range names {
-				if n, e := w.Domain.AddNoun(n, n, kinds); e != nil {
+				if e := pen.AddNoun(n, "", kinds); e != nil {
 					err = e
-				} else if e := pen.AddName(n.Name(), kind, -1); e != nil {
+				} else if e := pen.AddName(n, kind, -1); e != nil {
 					err = e // ^ so that typing "triangle" means "triangles-1"
 					break
-				} else if e := n.WriteValue(w.At, "counted", nil, B(true)); e != nil {
+				} else if e := pen.AddValueField(n, "counted", truly()); e != nil {
 					err = e
 					break
-				} else if e := n.WriteValue(w.At, "printed name", nil, T(kind)); e != nil {
+				} else if e := pen.AddValueField(n, "printed name", text(kind, "")); e != nil {
 					err = e // so that printing "triangles-1" yields "triangle"
 					break   // FIX: itd make a lot more sense to have a default value for the kind
-				} else if e := assignTraits(w, n, noun.Traits); e != nil {
-					err = e
-					break
+				} else {
+					for _, t := range noun.Traits {
+						if e := pen.AddValueField(n, t.String(), truly()); e != nil {
+							err = e
+							break Loop
+						}
+					}
 				}
 			}
 			if err == nil {
 				ret = names
 			}
-		}
-	}
-	return
-}
-
-func assignTraits(w *weave.Weaver, noun *weave.ScopedNoun, traits []grok.Match) (err error) {
-	for _, t := range traits {
-		// FIX: this passes through "GetClosestNoun" which seems wrong here.
-		// the issue is the noun might not exist;
-		// so we'd have to break some of this open to handle it.
-		if e := noun.WriteValue(w.At, t.String(), nil, B(true)); e != nil {
-			err = e
-			break
 		}
 	}
 	return

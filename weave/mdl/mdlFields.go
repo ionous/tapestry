@@ -8,7 +8,11 @@ import (
 	"github.com/ionous/errutil"
 )
 
-var fieldSource = ` 
+var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
+
+func (pen *Pen) addField(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
+	domain, at := pen.domain, pen.at
+	if rows, e := pen.db.Query(`
 -- all possible traits:
 with allTraits as (	
 	select mk.rowid as kind,  -- id of the aspect,
@@ -58,30 +62,7 @@ with allTraits as (
 	select name, aspect
 	from allTraits ma
 	where (?3 = ma.kind)
-)`
-
-var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
-
-func (pen *Pen) addField(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
-
-	// println("=== adding field", domain, kid.name, field, cls.name)
-	// if existing, e := tables.QueryStrings(pen.db, fieldSource+`
-	// 	select origin|| ', ' || name || ', '|| affinity|| ', ' || typeName
-	// 	from existingFields`,
-	// 	kid.fullpath(), field, cls.id, pen.aspectPath); e != nil {
-	// 	panic(e)
-	// } else if pending, e := tables.QueryStrings(pen.db, fieldSource+`
-	// 	select '-' || name || ', ' || coalesce(aspect, 'nil')
-	// 	from pendingFields`,
-	// 	kid.fullpath(), field, cls.id, pen.aspectPath); e != nil {
-	// 	panic(e)
-	// } else {
-	// 	println("existing", strings.Join(existing, ";\n "))
-	// 	println("pending", strings.Join(pending, ";\n "))
-	// }
-
-	domain, at := pen.domain, pen.at
-	if rows, e := pen.db.Query(fieldSource+`
+)
 select origin, name, affinity, typeName, aspect
 from existingFields
 join pendingFields
@@ -145,58 +126,70 @@ using(name)
 	return
 }
 
+type fieldInfo struct {
+	id   int64
+	name string
+	cls  classInfo
+}
+
+func (f *fieldInfo) class() classInfo {
+	return f.cls
+}
+
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
-// FIX: i think this would work better using the runtime kind cache.
-func (pen *Pen) FindCompatibleField(kind, field string, aff affine.Affinity) (retName, retClass string, err error) {
+func (pen *Pen) findField(kind classInfo, field string, aff affine.Affinity) (ret fieldInfo, err error) {
 	var prev struct {
-		name string
-		aff  affine.Affinity
-		cls  *string
+		fieldInfo
+		aff affine.Affinity
 	}
-	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to find field %q", e, field)
-	} else if e := pen.db.QueryRow(` 
+	if e := pen.db.QueryRow(` 
 -- all possible traits:
 with allTraits as (	
-	select mk.rowid as kind,    -- id of the aspect,
+	select mk.rowid as kind,   -- id of the aspect,
 				 field as name,      -- name of trait 
 	       mk.kind as aspect,  -- name of aspect
-	       mk.domain          -- name of originating domain
+	       mk.domain           -- name of originating domain
 	from mdl_field mf 
 	join mdl_kind mk
 		on(mf.kind = mk.rowid)
 	-- where the field's kind (X) contains the aspect kind (Y)
 	where instr(',' || mk.path, @aspects)
+	and field = @fieldName
 )
 -- all fields of the targeted kind:
 , fieldsInKind as (
-	select mk.domain, field as name, affinity, mf.type as typeId, mt.kind as typeName
+	select mk.domain,            -- domain of kind 
+				 field as name,        -- field name 
+				 affinity,             -- affinity 
+				 mt.rowid as typeId,   -- type of the field 
+				 mt.kind as typeName,  -- name of that type 
+				 (',' || mt.rowid || ',' || mt.path) as fullpath
 	from mdl_field mf 
 	join mdl_kind mk 
 		-- does our ancestry (X) contain any of these kinds (Y)
 		on ((mf.kind = mk.rowid) and instr(@ancestry, ',' || mk.rowid || ',' ))
 	left join mdl_kind mt 
 		on (mt.rowid = mf.type)
+	where field = @fieldName 
 )
 -- fields in the target kind
-select name, affinity, typeName
+-- if the field isnt a record; the type info (id,name,path) can be null
+select name, affinity, coalesce(typeId,0), coalesce(typeName, ''), coalesce(fullpath, '')
 from fieldsInKind
-where name = @fieldName 
 union all
 
 -- traits in the target kind: return the aspect
-select ma.aspect, 'text', null
+select ma.aspect, 'text', 0, "", ""
 from allTraits ma
 join fieldsInKind fk
-where ma.name = @fieldName
-and ma.kind = fk.typeId`,
+	on (ma.kind = fk.typeId)`,
 		sql.Named("aspects", pen.paths.aspectPath),
-		sql.Named("ancestry", kid.fullpath()),
+		sql.Named("ancestry", kind.fullpath),
 		sql.Named("fieldName", field)).
-		Scan(&prev.name, &prev.aff, &prev.cls); e != nil {
+		Scan(&prev.name, &prev.aff, &prev.cls.id, &prev.cls.name, &prev.cls.fullpath); e != nil {
 		if e == sql.ErrNoRows {
-			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind, pen.domain)
+			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind.name, pen.domain)
 		} else {
 			err = errutil.New("database error", e)
 		}
@@ -205,20 +198,17 @@ and ma.kind = fk.typeId`,
 		if prev.name != field {
 			if aff != affine.Bool {
 				err = errutil.Fmt("affinity %s is incompatible with trait %q of aspect %q in kind %q",
-					aff, field, prev.name, kind)
+					aff, field, prev.name, kind.name)
 			} else {
-				retName = prev.name
+				ret = prev.fieldInfo
 			}
 		} else {
 			// otherwise the search returned a normal field:
 			if prev.aff != aff {
 				err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
-					aff, prev.aff, field, kind)
+					aff, prev.aff, field, kind.name)
 			} else {
-				retName = prev.name
-				if prev.cls != nil {
-					retClass = *prev.cls
-				}
+				ret = prev.fieldInfo
 			}
 		}
 	}

@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -31,8 +32,8 @@ func TestPluralConflict(t *testing.T) {
 // catalog some plural ephemera from different domain levels
 // and verify things wind up in the right place
 func TestPluralAssembly(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 	// cant shuffle because the test picks out warnings one by one
 	// tbd: add some warnings.Includes()?
@@ -60,7 +61,7 @@ func TestPluralAssembly(t *testing.T) {
 	_, e := dt.Assemble()
 	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate plural "cauldron"`); !ok {
+	} else if e := warnings.Expect(`Duplicate plural "cauldron"`); e != nil {
 		t.Fatal(e)
 	} else if out, e := dt.ReadPlurals(); e != nil {
 		t.Fatal(e)

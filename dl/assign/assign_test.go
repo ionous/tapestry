@@ -29,13 +29,15 @@ func testString(n, a string) (err error) {
 	out := &assign.CallPattern{
 		PatternName: n,
 		Arguments: []assign.Arg{{
-			Name:  a,
-			Value: literal.I(5), // the encode gets unhappy without a real value here.1
+			Name: a,
+			Value: &assign.FromNumber{
+				Value: literal.I(5), // the encode gets unhappy without a real value here.
+			},
 		}}}
 
 	if have, e := cout.Marshal(out, encoder); e != nil {
 		err = e
-	} else if have != `{"PatternName argName:":5}` {
+	} else if have != `{"PatternName argName:":{"FromNumber:":5}}` {
 		err = errutil.New(have)
 	}
 	return

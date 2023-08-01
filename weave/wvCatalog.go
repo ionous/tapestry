@@ -2,10 +2,9 @@ package weave
 
 import (
 	"database/sql"
-	"errors"
 	"log"
 
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -17,41 +16,25 @@ import (
 
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
+	*mdl.Modeler
+
+	// cleanup? seems redundant to have three views of the same domain
 	domains        map[string]*Domain
 	processing     DomainStack
 	pendingDomains []*Domain
-	Errors         []error
-	cursor         string
-	run            rt.Runtime
-	db             *tables.Cache
 
-	*mdl.Modeler
+	cursor string        // current source position
+	run    rt.Runtime    // custom runtime for running macros
+	gdb    grokdb.Source // english parser
+	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
 
-	// sometimes the importer needs to define a singleton like type or instance
-	oneTime     map[string]bool
-	macros      macroReg
-	autoCounter Counters
-	Env         Environ
-
-	domainNouns map[domainNoun]*ScopedNoun
-
-	gdb  grokdb.Source
-	warn func(error)
+	Env Env
 }
 
 type domainNoun struct{ domain, noun string }
 
 func NewCatalog(db *sql.DB) *Catalog {
 	return NewCatalogWithWarnings(db, nil, nil)
-}
-
-func (cat *Catalog) eatDuplicates(e error) (err error) {
-	if e == nil || !errors.Is(e, mdl.Duplicate) {
-		err = e
-	} else if cat.warn != nil {
-		cat.warn(e)
-	}
-	return
 }
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
@@ -85,17 +68,13 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	// what should be public for Catalog?
 	// no panics on creation... etc.
 	return &Catalog{
-		macros:      make(macroReg),
-		oneTime:     make(map[string]bool),
-		domainNouns: make(map[domainNoun]*ScopedNoun),
-		autoCounter: make(Counters),
-		cursor:      "x", // fix
-		db:          cache,
-		domains:     make(map[string]*Domain),
-		Modeler:     m,
-		run:         run,
-		gdb:         gdb,
-		warn:        warn, // compat for scoped noun
+		Env:     make(Env),
+		cursor:  "x", // fix
+		db:      cache,
+		domains: make(map[string]*Domain),
+		Modeler: m,
+		run:     run,
+		gdb:     gdb,
 	}
 }
 
@@ -129,9 +108,6 @@ func (cat *Catalog) AssembleCatalog() (err error) {
 			ds = append(ds, was)
 		}
 	}
-	if err == nil {
-		err = cat.writeValues()
-	}
 	return
 }
 
@@ -164,8 +140,8 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 			cat.processing.Push(d)
 			//
 			for p := Phase(0); p <= RequireAll; p++ {
-				ctx := Weaver{Catalog: cat, Domain: d, Phase: p, Runtime: cat.run}
-				if e := d.runPhase(&ctx); e != nil {
+				w := Weaver{Catalog: cat, Domain: d.name, Phase: p, Runtime: cat.run}
+				if e := d.runPhase(&w); e != nil {
 					err = e
 					break
 				} else if e := d.flush(true); e != nil {
@@ -190,11 +166,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 
 // calls to schedule() between begin/end domain write to this newly declared domain.
 func (cat *Catalog) DomainStart(name string, requires []string) (err error) {
-	if n, ok := UniformString(name); !ok {
-		err = InvalidString(name)
-	} else if reqs, e := UniformStrings(requires); e != nil {
-		err = e // transform all the names first to determine any errors
-	} else if d, e := cat.addDomain(n, cat.cursor, reqs...); e != nil {
+	if d, e := cat.addDomain(name, cat.cursor, requires...); e != nil {
 		err = e
 	} else {
 		cat.processing.Push(d)
@@ -211,63 +183,6 @@ func (cat *Catalog) DomainEnd() (err error) {
 	return
 }
 
-// note: values are written per *noun* not per domain....
-// todo: this should be removed once the values can be written directly into the db
-// see writeValues()
-func (cat *Catalog) AddNounValue(opNoun, opField string, opPath []string, value literal.LiteralValue) error {
-	return cat.Schedule(RequireNames, func(ctx *Weaver) (err error) {
-		d, at := ctx.Domain, ctx.At
-		if noun, ok := UniformString(opNoun); !ok {
-			err = InvalidString(opNoun)
-		} else if field, ok := UniformString(opField); !ok {
-			err = InvalidString(opField)
-		} else if path, e := UniformStrings(opPath); e != nil {
-			err = e
-		} else if n, e := d.GetClosestNoun(noun); e != nil {
-			err = e
-		} else {
-			err = n.WriteValue(at, field, path, value)
-		}
-		return
-	})
-}
-
-// fix: at some point it'd be nice to write values as they are generated
-// the basic idea i think would be to write each field AND sub-record path individually
-// and, on write, do a test to ensure the path is meaningful,
-// and that no "directory value" value exists for any sub path
-// ex. "a.b.c" is okay, so long as there's no record stored at "a.b" directly.
-// the runtime would change the way it reconstitutes values using multiple rows
-func (cat *Catalog) writeValues() (err error) {
-Loop:
-	for _, n := range cat.domainNouns {
-		if rv := n.localRecord; rv.isValid() {
-			for _, fv := range rv.rec.Fields {
-				// pin each time because the values might have multiple sources
-				if e := cat.Modeler.Pin(n.domain.name, rv.at).AddValue(n.name, fv.Field, fv.Value); e != nil {
-					err = e
-					break Loop
-				}
-			}
-		}
-	}
-	return
-}
-
-// NewCounter generates a unique string, and uses local markup to try to create a stable one.
-// instead consider "PreImport" could be used to write a key into the markup if one doesnt already exist.
-// and a free function could also extract what it needs from any op's markup.
-// ( then Schedule wouldn't need Catalog for counters )
-func (cat *Catalog) NewCounter(name string, markup map[string]any) (ret string) {
-	// fix: use a special "id" marker instead?
-	if at, ok := markup["comment"].(string); ok && len(at) > 0 {
-		ret = at
-	} else {
-		ret = cat.autoCounter.Next(name)
-	}
-	return
-}
-
 func (cat *Catalog) Schedule(when Phase, what func(*Weaver) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
@@ -278,8 +193,9 @@ func (cat *Catalog) Schedule(when Phase, what func(*Weaver) error) (err error) {
 }
 
 // return the uniformly named domain ( creating it if necessary )
-func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
+func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err error) {
 	// find or create the domain
+	n := lang.Normalize(name)
 	d, ok := cat.domains[n]
 	if !ok {
 		d = &Domain{name: n, cat: cat}
@@ -301,31 +217,26 @@ func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err er
 			err = cat.Modeler.Pin(d.name, at).AddDependency("")
 		} else {
 			for _, req := range reqs {
-				if dep, ok := UniformString(req); !ok {
-					err = errutil.New("invalid name", req)
-					break
+				// check for circular references:
+				if req := lang.Normalize(req); n == req {
+					err = errutil.Fmt("circular reference: %q can't depend on itself", n)
 				} else {
-					// check for circular references:
-					if n == req {
-						err = errutil.Fmt("circular reference: %q can't depend on itself", n)
-					} else {
-						var exists bool
-						if e := cat.db.QueryRow(
-							`select 1 
+					var exists bool
+					if e := cat.db.QueryRow(
+						`select 1 
 						from domain_tree 
 						where base = ?1
 						and uses = ?2
 						and base != uses`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
+						err = e
+						break
+					} else if exists {
+						err = errutil.Fmt("circular reference: %q requires %q", req, n)
+						break
+					} else {
+						if e := cat.Modeler.Pin(n, at).AddDependency(req); e != nil {
 							err = e
 							break
-						} else if exists {
-							err = errutil.Fmt("circular reference: %q requires %q", req, n)
-							break
-						} else {
-							if e := cat.Modeler.Pin(n, at).AddDependency(dep); e != nil {
-								err = e
-								break
-							}
 						}
 					}
 				}

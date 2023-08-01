@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -103,8 +104,8 @@ func TestAncestryRedundancy(t *testing.T) {
 }
 
 func TestAncestryMissing(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 	//
 	dt := testweave.NewWeaver(t.Name())
@@ -122,8 +123,8 @@ func TestAncestryMissing(t *testing.T) {
 }
 
 func TestAncestryRedefined(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 	//
 	dt := testweave.NewWeaver(t.Name())
@@ -143,15 +144,15 @@ func TestAncestryRedefined(t *testing.T) {
 	_, e := dt.Assemble()
 	if ok, e := testweave.OkayError(t, e, `Conflict can't redefine the ancestor of "m" as "n"`); !ok {
 		t.Fatal("unexpected error:", e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate "k" already declared as an ancestor of "q"`); !ok {
+	} else if e := warnings.Expect(`Duplicate "k" already declared as an ancestor of "q"`); e != nil {
 		t.Fatal("unexpected warning:", e)
 	}
 }
 
 // a similar named kind in another domain should be fine
 func TestAncestryRivalsOkay(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()

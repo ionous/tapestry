@@ -33,7 +33,7 @@ func TestMacros(t *testing.T) {
 		decode.NewDecoder(story.AllSignatures),
 		qna.NewOptions(),
 	)
-	cat := weave.NewCatalogWithWarnings(db, run, testweave.LogWarning)
+	cat := weave.NewCatalogWithWarnings(db, run, mdl.LogWarning)
 	dt := testweave.NewWeaverCatalog(name, db, cat, true)
 	//
 	if curr, e := story.CompactDecode(storyMacroData); e != nil {

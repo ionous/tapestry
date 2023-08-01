@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -128,7 +129,7 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 				} else {
 					var aff affine.Affinity
 					if value != nil {
-						aff = value.Affinity()
+						aff = literal.GetAffinity(value)
 					}
 					if prev.id == 0 {
 						_, err = pen.db.Exec(mdl_check, d, name, out, aff, prog, at)
@@ -156,7 +157,6 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 var mdl_default = tables.Insert("mdl_default", "field", "value")
 
 // the pattern half of Start; domain, kind, field are a pointer into Field
-// value should be a marshaled compact value
 func (pen *Pen) addDefault(kid kindInfo, field string, v assign.Assignment) (err error) {
 	if out, e := marshalout(v); e != nil {
 		err = e
@@ -456,40 +456,29 @@ func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls strin
 	return
 }
 
-// words for authors and game players refer to nouns
-// follows the domain rules of Noun.
-func (pen *Pen) AddName(noun, name string, rank int) (err error) {
-	domain, at := pen.domain, pen.at
-	if noun, e := pen.findRequiredNoun(noun, nounSansKind); e != nil {
-		err = e // ^ for now, this can be a derived domain
-	} else {
-		var exists bool
-		if e := pen.db.QueryRow(`
-	select 1
-	from mdl_name mn
-	join domain_tree
-		on (uses = domain)
-	where base = ?1
-	and noun = ?2
-	and name = ?3`, domain, noun.id, name).Scan(&exists); e != nil && e != sql.ErrNoRows {
-			err = errutil.New("database error", e)
-		} else if exists {
-			pen.warn("%w %q already an alias of %q", Duplicate, name, noun.name)
-		} else if _, e := pen.db.Exec(mdl_name, domain, noun.id, name, rank, at); e != nil {
-			err = errutil.New("database error", e)
+// the domain tells the scope in which the noun was defined
+// ( the same as - or a child of - the domain of the kind )
+var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
+
+func (pen *Pen) AddNoun(short, long, kind string) (err error) {
+	if n, e := pen.addNoun(short, kind); e != nil {
+		err = eatDuplicates(pen.warn, e)
+	} else if len(long) == 0 {
+		parts := genNames(n.name, long)
+		for i, name := range parts {
+			if e := pen.addName(n, name, i); e != nil {
+				err = e
+				break
+			}
 		}
 	}
 	return
 }
 
 // the domain tells the scope in which the noun was defined
-// ( the same as - or a child of - the domain of the kind )
-var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
-
-// the domain tells the scope in which the noun was defined
 // ( the same as - or a child of - the domain of the kind ) error
 // this duplicates the algorithm used by Kind()
-func (pen *Pen) AddNoun(name, ancestor string) (err error) {
+func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 	domain, at := pen.domain, pen.at
 	if parent, e := pen.findRequiredKind(ancestor); e != nil {
 		err = e
@@ -498,7 +487,20 @@ func (pen *Pen) AddNoun(name, ancestor string) (err error) {
 	} else if prev.id == 0 {
 		// easiest is if the name has never been mentioned before;
 		// we verified the other inputs already, so just go ahead and insert:
-		_, err = pen.db.Exec(mdl_noun, domain, name, parent.id, at)
+		if res, e := pen.db.Exec(mdl_noun, domain, name, parent.id, at); e != nil {
+			err = errutil.New("database error", e)
+		} else if newid, e := res.LastInsertId(); e != nil {
+			err = e
+		} else {
+			ret = nounInfo{
+				id:       newid,
+				name:     name,
+				domain:   domain,
+				kid:      parent.id,
+				kind:     parent.name,
+				fullpath: parent.fullpath(),
+			}
+		}
 	} else {
 		// does the newly specified ancestor contain the existing parent?
 		// then we are ratcheting down. (ex. new: ,c,b,a,)  ( existing: ,a, )
@@ -507,6 +509,7 @@ func (pen *Pen) AddNoun(name, ancestor string) (err error) {
 			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
 			err = errutil.Fmt("%w %q already declared as a kind of %q",
 				Duplicate, name, ancestor)
+
 		} else if !strings.HasSuffix(parent.fullpath(), prev.fullpath) {
 			// unrelated completely? then its an error
 			err = errutil.Fmt("%w can't redefine kind of %q as %q",
@@ -524,8 +527,73 @@ func (pen *Pen) AddNoun(name, ancestor string) (err error) {
 					name, cnt)
 			} else if e != nil {
 				err = e
+			} else {
+				ret = prev
 			}
 		}
+	}
+	return
+}
+
+// tbd: anyway to remove or improve?
+// i especially don't like this is the one dependency on lang.
+// and really... it should have explicit tests
+// a Noun builder maybe? and let story be the one to genNames
+func genNames(short, long string) (ret []string) {
+	// if the original got transformed into underscores
+	// write the original name (ex. "toy boat" vs "toy_boat" )
+	var out []string
+	if clip := strings.TrimSpace(long); clip != short {
+		out = append(out, clip)
+	}
+	out = append(out, short)
+
+	// generate additional names by splitting the name into parts
+	split := lang.Fields(short)
+	if cnt := len(split); cnt > 1 {
+		// in case the name was reduced due to multiple separators
+		if breaks := strings.Join(split, " "); breaks != short {
+			out = append(out, breaks)
+		}
+		// write individual words in increasing rank ( ex. "boat", then "toy" )
+		// note: trailing words are considered "stronger"
+		// because adjectives in noun names tend to be first ( ie. "toy boat" )
+		for i := len(split) - 1; i >= 0; i-- {
+			word := split[i]
+			out = append(out, word)
+		}
+	}
+	return
+}
+
+func (pen *Pen) AddName(noun, name string, rank int) (err error) {
+	if n, e := pen.findRequiredNoun(noun, nounSansKind); e != nil {
+		err = e
+	} else {
+		err = pen.addName(n, name, rank)
+	}
+	return
+}
+
+// words for authors and game players refer to nouns
+// follows the domain rules of Noun.
+func (pen *Pen) addName(noun nounInfo, name string, rank int) (err error) {
+	var exists bool
+	if e := pen.db.QueryRow(`
+	select 1
+	from mdl_name mn
+	join domain_tree
+		on (uses = domain)
+	where base = ?1
+	and noun = ?2
+	and name = ?3`, pen.domain, noun.id, name).Scan(&exists); e != nil && e != sql.ErrNoRows {
+		err = errutil.New("database error", e)
+	} else if exists {
+		// tbd: silence duplicates?
+		// since these are generated, there's probably very little the user could do about them.
+		pen.warn("%w %q already an alias of %q", Duplicate, name, noun.name)
+	} else if _, e := pen.db.Exec(mdl_name, pen.domain, noun.id, name, rank, pen.at); e != nil {
+		err = errutil.New("database error", e)
 	}
 	return
 }
@@ -859,45 +927,104 @@ func (pen *Pen) AddTestRule(pattern, target string, phase int, filter, prog stri
 
 // note: values are written per noun, not per domain
 // fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
-var mdl_value = tables.Insert("mdl_value", "noun", "field", "value", "at")
+var mdl_value = tables.Insert("mdl_value", "noun", "path", "value", "at")
 
-// public for tests:
+// unmarshaled version of AddValue... for testing.
 func (pen *Pen) AddTestValue(noun, field, value string) error {
-	return pen.addValue(noun, field, value)
+	return pen.addValue(noun, nil, field, value, affine.Text)
 }
 
-// the noun half of what was Start.
-// domain, noun, field reference a join of Noun and Kind to get a filtered Field.
-// FIX: nouns should be able to store EVALS too
-// example: an object with a counter in its description.
-func (pen *Pen) AddValue(noun, field string, value literal.LiteralValue) (err error) {
-	if value, e := marshalout(value); e != nil {
+type Path []string
+
+func MakePath(path ...string) Path {
+	return path
+}
+
+func (pen *Pen) AddValueField(noun, field string, value assign.Assignment) (err error) {
+	if out, e := marshalout(value); e != nil {
 		err = e
 	} else {
-		err = pen.addValue(noun, field, value)
+		err = pen.addValue(noun, nil, field, out, assign.GetAffinity(value))
 	}
 	return
 }
 
-// public for tests:
-func (pen *Pen) addValue(noun, field, value string) (err error) {
+// the noun half of what was Start.
+// domain, noun, field reference a join of Noun and Kind to get a filtered Field.
+func (pen *Pen) AddValuePath(noun string, path Path, value assign.Assignment) (err error) {
+	if out, e := marshalout(value); e != nil {
+		err = e
+	} else {
+		end := len(path) - 1
+		rest, target := path[:end], path[end]
+		err = pen.addValue(noun, rest, target, out, assign.GetAffinity(value))
+	}
+	return
+}
+
+func (pen *Pen) addValue(noun string, p []string, target, value string, aff affine.Affinity) (err error) {
 	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else {
-		var fieldId int
-		if e := pen.db.QueryRow(`
-		select mf.rowid
-		from mdl_field mf
-		join mdl_kind mk 
-			on(mf.kind = mk.rowid)
-		where field = ?2
-		and instr(?1, ','||mk.rowid||',')`,
-			noun.fullpath, field).Scan(&fieldId); e == sql.ErrNoRows {
-			err = errutil.Fmt("%w field %q in noun %q in domain %q", Missing, field, noun.name, noun.domain)
-		} else if e != nil {
-			err = errutil.New("database error", e)
-		} else {
-			_, err = pen.db.Exec(mdl_value, noun.id, fieldId, value, pen.at)
+		// drill down through records to find the final targeted field.
+		cls := noun.class()
+		var join strings.Builder
+		for _, field := range p {
+			if next, e := pen.findField(cls, field, affine.Record); e != nil {
+				err = e
+				break
+			} else {
+				join.WriteString(field)
+				join.WriteRune('.')
+				cls = next.class()
+			}
+		}
+		if err == nil {
+			if _, e := pen.findField(cls, target, aff); e != nil {
+				err = e
+			} else {
+				join.WriteString(target)
+				path := join.String()
+
+				// search for existing paths which conflict:
+				// could be the same path, or could be a record written as a whole
+				// now being written as a part; or vice versa.
+				// OR the exact match ( ex. a duplicate )
+				var prev struct {
+					path, value string
+				}
+				// find cases where the new path starts a previous path,
+				// or a previous path starts the new path.
+				// instr(X,Y) - searches X for Y.
+				if rows, e := pen.db.Query(`
+				select mv.path, mv.value 
+				from mdl_value mv 
+				where mv.noun = @1
+				and (
+					 (1 == instr('.' || mv.path || '.', '.' || @2 || '.' )) or 
+				   (1 == instr('.' || @2 || '.'     , '.' || mv.path || '.'))
+				)`,
+					noun.id, path,
+				); e != nil {
+					err = errutil.New("database error", e)
+				} else if e := tables.ScanAll(rows, func() (err error) {
+					if prev.path != path {
+						err = errutil.Fmt(`%w writing value for %s.%s, had value for %s.%s.`,
+							Conflict, noun.name, path, noun.name, prev.path)
+					} else if prev.value != value {
+						err = errutil.Fmt(`%w mismatched value for %s.%s.`,
+							Conflict, noun.name, path)
+					} else {
+						err = errutil.Fmt(`%w value for %s.%s.`,
+							Duplicate, noun.name, path)
+					}
+					return
+				}, &prev.path, &prev.value); e != nil {
+					err = eatDuplicates(pen.warn, e)
+				} else if _, e := pen.db.Exec(mdl_value, noun.id, path, value, pen.at); e != nil {
+					err = e
+				}
+			}
 		}
 	}
 	return

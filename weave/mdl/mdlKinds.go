@@ -36,6 +36,13 @@ func updatePath(res sql.Result, parent string, path *string) (err error) {
 	return
 }
 
+// snapshot of kind needed for adding fields
+type classInfo struct {
+	id       int64
+	name     string
+	fullpath string
+}
+
 type kindInfo struct {
 	id        int64  // unique id of the kind
 	name      string // validated name of the kind
@@ -43,6 +50,10 @@ type kindInfo struct {
 	path      string // comma separated ids of ancestors: ,2,1,
 	exact     bool   // allows plural named kinds for nouns, etc. not for patterns and built in kinds.
 	_fullpath string
+}
+
+func (ki *kindInfo) class() classInfo {
+	return classInfo{id: ki.id, name: ki.name, fullpath: ki.fullpath()}
 }
 
 func (ki *kindInfo) numAncestors() int {

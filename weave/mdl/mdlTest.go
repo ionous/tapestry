@@ -1,8 +1,8 @@
-package testweave
+package mdl
 
 import (
 	"log"
-	"testing"
+	"strings"
 
 	"github.com/ionous/errutil"
 )
@@ -17,14 +17,14 @@ type Warnings []error
 // returns a defer-able function which:
 // 1. restores the warning function; and,
 // 2. raises a Fatal error if there are any unhandled warnings.
-func (w *Warnings) Catch(t *testing.T) func() {
+func (w *Warnings) Catch(fatal func(args ...any)) func() {
 	was := LogWarning
 	LogWarning = func(e error) {
 		(*w) = append((*w), e)
 	}
 	return func() {
 		if len(*w) > 0 {
-			t.Fatal("unhandled warnings", *w)
+			fatal("unhandled warnings", *w)
 		}
 		LogWarning = was
 	}
@@ -36,11 +36,19 @@ func (w *Warnings) All() (ret []error) {
 	return ret
 }
 
-// remove and return the first warning, or error if there are none left.
-func (w *Warnings) Shift() (err error) {
-	if cnt := len(*w); cnt == 0 {
-		err = errutil.New("out of warnings")
-	} else {
+// remove and return the first warning,
+// error if there is none, or if warning doesnt start with the passed prefix.
+func (w *Warnings) Expect(prefix string) (err error) {
+	if e := w.pop(); e == nil {
+		err = errutil.Fmt("expected %q, received nothing", prefix)
+	} else if str := e.Error(); !strings.HasPrefix(str, prefix) {
+		err = errutil.Fmt("expected %q, received %q", prefix, str)
+	}
+	return
+}
+
+func (w *Warnings) pop() (err error) {
+	if cnt := len(*w); cnt > 0 {
 		err, (*w) = (*w)[0], (*w)[1:]
 	}
 	return

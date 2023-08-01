@@ -11,9 +11,59 @@ type nounInfo struct {
 	id     int64  // unique id of the noun
 	name   string // validated name of the noun
 	domain string // validated domain name
+	// optional:
+	kid      int64 // kind's id
+	kind     string
+	fullpath string // full path of kind
+}
 
-	kind     int    // kind's id
-	fullpath string // full path
+func (n *nounInfo) class() classInfo {
+	return classInfo{
+		id:       n.kid,
+		name:     n.kind,
+		fullpath: n.fullpath,
+	}
+}
+
+// find the noun named exactly as specified.
+// FIX: can we GetClose and then see if the matched name is exact name we found?
+func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
+	if n, e := pen.findRequiredNoun(name, nounWithKind); e != nil {
+		err = e
+	} else {
+		ret = n.name
+	}
+	return
+}
+
+// find the noun with the closest name in this scope
+// skips aliases for the sake of backwards compatibility:
+// there should be a difference between "a noun is known as"
+// and "understand this word by the player as" -- and currently there's not.
+func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
+	var out nounInfo
+	if e := pen.db.QueryRow(`
+	select mn.domain, mn.rowid, mn.noun, mk.rowid, ',' || mk.rowid || ',' || mk.path
+	from mdl_name my
+	join mdl_noun mn
+		on (mn.rowid = my.noun)
+	join mdl_kind mk 
+		on (mn.kind = mk.rowid)
+	join domain_tree dt
+		on (dt.uses = my.domain)
+	where base = ?1
+	and my.name = ?2
+	and my.rank >= 0
+	order by my.rank, my.rowid asc
+	limit 1`, pen.domain, name).
+		Scan(&out.domain, &out.id, &out.name, &out.kind, &out.fullpath); e != nil && e != sql.ErrNoRows {
+		err = e
+	} else if out.id == 0 {
+		err = errutil.Fmt("%w noun %q in domain %q", Missing, name, pen.domain)
+	} else {
+		ret = out.name
+	}
+	return
 }
 
 // if specified, must exist.
@@ -26,7 +76,7 @@ func (pen *Pen) findOptionalNoun(noun string, q nounFinder) (ret nounInfo, err e
 
 // if not specified errors, also errors if not found.
 func (pen *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err error) {
-	if out, e := pen.findNoun(noun, q); e != nil {
+	if out, e := pen.findNoun(noun, q); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if out.id == 0 {
 		err = errutil.Fmt("%w noun %q in domain %q", Missing, noun, pen.domain)
@@ -53,7 +103,7 @@ type nounFinder func(db *tables.Cache, domain, noun string) (ret nounInfo, err e
 
 func nounWithKind(db *tables.Cache, domain, noun string) (ret nounInfo, err error) {
 	err = db.QueryRow(`
-	select mn.domain, mn.rowid, mk.rowid, ',' || mk.rowid || ',' || mk.path
+	select mn.domain, mn.rowid, mn.noun, mk.rowid, mk.kind, ',' || mk.rowid || ',' || mk.path
 	from mdl_noun mn
 	join mdl_kind mk 
 		on (mn.kind = mk.rowid)
@@ -61,18 +111,18 @@ func nounWithKind(db *tables.Cache, domain, noun string) (ret nounInfo, err erro
 		on (dt.uses = mn.domain)
 	where base = ?1
 	and noun = ?2
-	limit 1`, domain, noun).Scan(&ret.domain, &ret.id, &ret.kind, &ret.fullpath)
+	limit 1`, domain, noun).Scan(&ret.domain, &ret.id, &ret.name, &ret.kid, &ret.kind, &ret.fullpath)
 	return
 }
 
 func nounSansKind(db *tables.Cache, domain, noun string) (ret nounInfo, err error) {
 	err = db.QueryRow(`
-	select domain, mn.rowid
+	select domain, mn.rowid, mn.noun
 	from mdl_noun mn
 	join domain_tree
 		on (uses = domain)
 	where base = ?1
 	and noun = ?2
-	limit 1`, domain, noun).Scan(&ret.domain, &ret.id)
+	limit 1`, domain, noun).Scan(&ret.domain, &ret.id, &ret.name)
 	return
 }

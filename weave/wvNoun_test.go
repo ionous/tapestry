@@ -5,13 +5,14 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/kr/pretty"
 )
 
 // test nouns and their names
 func TestNounFormation(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 
 	dt := testweave.NewWeaver(t.Name())
@@ -181,8 +182,8 @@ func TestNounAliases(t *testing.T) {
 
 // simple words should pick out reasonable nouns
 func TestNounDistance(t *testing.T) {
-	var warnings testweave.Warnings
-	unwarn := warnings.Catch(t)
+	var warnings mdl.Warnings
+	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
 
 	dt := testweave.NewWeaver(t.Name())
@@ -195,9 +196,8 @@ func TestNounDistance(t *testing.T) {
 
 	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if d, ok := cat.GetDomain("a"); !ok {
-		t.Fatal("unknown domain")
 	} else {
+		pen := cat.Pin("a", "x")
 		tests := []string{
 			// word(s), noun(s)
 			"toy", "toy boat",
@@ -206,9 +206,9 @@ func TestNounDistance(t *testing.T) {
 		}
 		for i, cnt := 0, len(tests); i < cnt; i += 2 {
 			name, want := tests[i], tests[i+1]
-			if got, e := d.GetClosestNoun(name); e != nil {
+			if got, e := pen.GetClosestNoun(name); e != nil {
 				t.Error("couldnt get noun for name", name, e)
-			} else if got := got.Name(); want != got {
+			} else if want != got {
 				t.Errorf("wanted %q got %q", want, got)
 			}
 		}

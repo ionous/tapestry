@@ -47,7 +47,8 @@ func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	// they should be top level.
 	case *grammar.Alias:
 		err = cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-			if n, e := w.GetClosestNoun(el.AsNoun); e != nil {
+			name := lang.Normalize(el.AsNoun)
+			if n, e := w.GetClosestNoun(name); e != nil {
 				err = e
 			} else {
 				pen := w.Pin()
@@ -89,6 +90,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
 		} else {
+			pen := w.Pin()
 			names := nouns.Strings()
 			if kind, e := grok.StripArticle(kind.String()); e != nil {
 				err = e
@@ -97,18 +99,20 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 					if name, e := grok.StripArticle(name); e != nil {
 						err = errutil.Append(err, e)
 					} else {
-						names[i] = name // replace for the traits loop
-						if e := w.AddNoun(name, kind); e != nil {
+						n := lang.Normalize(name)
+						if e := pen.AddNoun(n, name, kind); e != nil {
 							err = errutil.Append(err, e)
+						} else {
+							names[i] = n // replace for the traits loop
 						}
 					}
 				}
 			}
-			if traits := traits.Strings(); len(traits) > 0 {
+			if traits := traits.Strings(); len(traits) > 0 && err == nil {
 				for _, t := range traits {
 					t := lang.Normalize(t)
 					for _, n := range names {
-						if e := assertNounValue(cat, B(true), n, t); e != nil {
+						if e := pen.AddValueField(n, t, truly()); e != nil {
 							err = errutil.Append(err, e)
 							break // out of the traits to the next noun
 						}
@@ -159,10 +163,11 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 				if kind, e := grok.StripArticle(kind); e != nil {
 					err = e
 				} else {
+					pen := w.Pin()
 					for _, noun := range names {
 						if noun, e := grok.StripArticle(noun); e != nil {
 							err = errutil.Append(err, e)
-						} else if e := w.AddNoun(noun, kind); e != nil {
+						} else if e := pen.AddNoun(lang.Normalize(noun), noun, kind); e != nil {
 							err = errutil.Append(err, e)
 						}
 					}
@@ -188,13 +193,17 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 		} else if lines, e := ConvertText(op.Lines.String()); e != nil {
 			err = e
 		} else {
+			pen := w.Pin()
 			subjects := nouns.Strings()
-			field, lines := field.String(), T(lines)
+			field, lines := field.String(), text(lines, "")
 			for _, noun := range subjects {
 				if noun, e := grok.StripArticle(noun); e != nil {
 					err = errutil.Append(err, e)
-				} else if e := assertNounValue(cat, lines, noun, field); e != nil {
-					err = errutil.Append(err, e)
+				} else {
+					n := lang.Normalize(noun)
+					if e := pen.AddValueField(n, field, lines); e != nil {
+						err = errutil.Append(err, e)
+					}
 				}
 			}
 		}
@@ -245,11 +254,11 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 func defineRelatives(w *weave.Weaver, rel string, nouns, otherNouns []string) (err error) {
 	pen, rel := w.Pin(), lang.Normalize(rel)
 	for _, one := range nouns {
-		if a, e := w.GetClosestNoun(one); e != nil {
+		if a, e := w.GetClosestNoun(lang.Normalize(one)); e != nil {
 			err = errutil.Append(err, e)
 		} else {
 			for _, other := range otherNouns {
-				if b, e := w.GetClosestNoun(other); e != nil {
+				if b, e := w.GetClosestNoun(lang.Normalize(other)); e != nil {
 					err = errutil.Append(err, e)
 				} else {
 					if e := pen.AddPair(rel, a, b); e != nil {

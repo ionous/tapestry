@@ -8,6 +8,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave"
 )
 
+const activityDepth = "activityDepth"
+
 // Schedule - comment does nothing when imported.
 func (*Comment) Weave(*weave.Catalog) (_ error) {
 	return
@@ -15,7 +17,7 @@ func (*Comment) Weave(*weave.Catalog) (_ error) {
 
 // PreImport turns a comment statement into a debug log.
 func (op *Comment) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
-	if !cat.Env.InProgram() {
+	if cat.Env.Inc(activityDepth, 0) > 0 {
 		ret = op
 	} else {
 		ret = &debug.DebugLog{

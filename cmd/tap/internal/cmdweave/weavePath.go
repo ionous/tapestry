@@ -58,8 +58,6 @@ func WeavePath(srcPath, outFile string) (err error) {
 					err = e
 				} else if e := cat.DomainEnd(); e != nil {
 					err = e
-				} else if len(cat.Errors) > 0 {
-					err = errutil.New(cat.Errors)
 				} else {
 					err = cat.AssembleCatalog()
 				}

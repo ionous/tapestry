@@ -1,10 +1,15 @@
 package weave
 
-type Environ struct {
-	ActivityDepth int
-}
+// custom storage for importers ( ie. package story )
+// alt: could use context and pass through all functions to be more go like.
+type Env map[string]any
 
-// tbd? could we look upwards to ask whether we are in a given block?
-func (env *Environ) InProgram() bool {
-	return env.ActivityDepth > 0
+func (m Env) Inc(name string, inc int) int {
+	var prev int
+	if a, ok := m[name]; ok {
+		prev = a.(int)
+	}
+	next := prev + inc
+	m[name] = next
+	return next
 }

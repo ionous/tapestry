@@ -3,6 +3,8 @@ package eph
 import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -15,7 +17,8 @@ type Aliases struct {
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-		if n, e := w.GetClosestNoun(op.ShortName); e != nil {
+		n := lang.Normalize(op.ShortName)
+		if n, e := w.GetClosestNoun(n); e != nil {
 			err = e
 		} else {
 			pen := w.Pin()
@@ -107,7 +110,7 @@ type Nouns struct {
 
 func (op *Nouns) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDefaults, func(w *weave.Weaver) error {
-		return w.AddNoun(op.Noun, op.Kind)
+		return w.Pin().AddNoun(op.Noun, "", op.Kind)
 	})
 }
 
@@ -218,8 +221,8 @@ type Rules struct {
 	Touch       Always
 }
 
-func (op *Rules) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+func (op *Rules) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		flags := toTiming(op.When, op.Touch)
 		kb.AddRule(op.Target, op.Filter, flags, op.Exe)
@@ -239,6 +242,16 @@ type Values struct {
 	Value literal.LiteralValue
 }
 
-func (op *Values) Assert(cat *weave.Catalog) (err error) {
-	return cat.AddNounValue(op.Noun, op.Field, op.Path, op.Value)
+func (op *Values) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+		pen := w.Pin()
+		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
+			err = e
+		} else {
+			path := append(op.Path, op.Field)
+			v := decode.AssignLiteral(op.Value)
+			err = pen.AddValuePath(n, mdl.MakePath(path...), v)
+		}
+		return
+	})
 }

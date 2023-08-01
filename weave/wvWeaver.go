@@ -9,37 +9,34 @@ import (
 
 type Weaver struct {
 	Catalog *Catalog
-	Domain  *Domain
+	Domain  string
 	At      string
 	Phase   Phase
 	rt.Runtime
 }
 
 func (w *Weaver) GrokSpan(p grok.Span) (grok.Results, error) {
-	return w.Catalog.gdb.GrokSpan(w.Domain.name, p)
+	return w.Catalog.gdb.GrokSpan(w.Domain, p)
 }
 
 func (w *Weaver) MatchArticle(ws []string) (ret int, err error) {
 	return w.Catalog.gdb.MatchArticle(ws)
 }
 
-func (w *Weaver) AddNoun(name, kind string) (err error) {
-	long, short, kind := name, lang.Normalize(name), lang.Normalize(kind)
-	_, err = w.Domain.AddNoun(long, short, kind)
-	return
+func (w *Weaver) Pin() *mdl.Pen {
+	return w.Catalog.Modeler.Pin(w.Domain, w.At)
 }
 
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
 	if bare, e := grok.StripArticle(name); e != nil {
 		err = e
-	} else if n, e := w.Domain.GetClosestNoun(lang.Normalize(bare)); e != nil {
-		err = e
 	} else {
-		ret = n.name
+		n := lang.Normalize(bare)
+		if n, e := w.Pin().GetClosestNoun(n); e != nil {
+			err = e
+		} else {
+			ret = n
+		}
 	}
 	return
-}
-
-func (w *Weaver) Pin() *mdl.Pen {
-	return w.Catalog.Modeler.Pin(w.Domain.name, w.At)
 }
