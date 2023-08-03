@@ -59,9 +59,8 @@ func (op *TextField) FieldInfo() mdl.FieldInfo {
 		init = &assign.FromText{Value: i}
 	}
 	return mdl.FieldInfo{
-		Name:  lang.Normalize(op.Name),
-		Class: lang.Normalize(op.Type),
-
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
 		Affinity: affine.Text,
 		Init:     init,
 	}

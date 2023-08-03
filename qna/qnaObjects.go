@@ -7,7 +7,7 @@ import (
 
 // given an id, return the (a) name defined for it by the author
 func (run *Runner) getObjectName(id string) (ret string, err error) {
-	if c, e := run.values.cache(func() (ret interface{}, err error) {
+	if c, e := run.values.cache(func() (ret any, err error) {
 		ret, err = run.query.NounName(id)
 		return
 	}, "objectName", id); e != nil {
@@ -20,7 +20,7 @@ func (run *Runner) getObjectName(id string) (ret string, err error) {
 
 // given an object name, return its id and kind.
 func (run *Runner) getObjectInfo(name string) (ret query.NounInfo, err error) {
-	if c, e := run.values.cache(func() (ret interface{}, err error) {
+	if c, e := run.values.cache(func() (ret any, err error) {
 		if info, e := run.query.NounInfo(name); e != nil {
 			err = e
 		} else if !info.IsValid() {

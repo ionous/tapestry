@@ -25,7 +25,7 @@ type Query struct {
 	kindOfAncestors,
 	nounInfo,
 	nounName,
-	nounValue,
+	nounValues,
 	nounIsNamed,
 	nounsByKind,
 	oppositeOf,
@@ -180,9 +180,16 @@ func (q *Query) NounName(id string) (ret string, err error) {
 
 // interpreting the value is left to the caller ( re: field affinity )
 // fix? would it make more sense to pass a pointer to the value so that sqlite can do the value transformation
-func (q *Query) NounValue(id, field string) (retVal []byte, err error) {
-	if e := q.nounValue.QueryRow(id, field).Scan(&retVal); e != nil && e != sql.ErrNoRows {
+func (q *Query) NounValues(id, field string) (ret []string, err error) {
+	if rows, e := q.nounValues.Query(id, field); e != nil {
 		err = e
+	} else {
+		var path sql.NullString
+		var value string
+		err = tables.ScanAll(rows, func() (_ error) {
+			ret = append(ret, path.String, value)
+			return
+		}, &path, &value)
 	}
 	return
 }
@@ -264,17 +271,6 @@ func NewQueries(db *sql.DB, reset bool) (ret *Query, err error) {
 	if e := tables.CreateRun(db); e != nil {
 		err = e
 	} else if e := resetDomain(db, reset); e != nil {
-		err = e
-	} else {
-		ret, err = newQueries(db)
-	}
-	return
-}
-
-func NewQueryx(db *sql.DB) (ret *Query, err error) {
-	if e := tables.CreateAll(db); e != nil {
-		err = e
-	} else if e := resetDomain(db, false); e != nil {
 		err = e
 	} else {
 		ret, err = newQueries(db)
@@ -481,17 +477,17 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			and ifnull(mt.kind,'') = ?2
 			order by abs(mu.phase), mu.rowid desc`,
 		),
-		// query the db for the value of a given field for a given noun
+		// query the db for the value(s) of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.
-		nounValue: ps.Prep(db,
-			`select mv.value
+		nounValues: ps.Prep(db,
+			`select mv.dot, mv.value
 			from mdl_value mv
 			join active_nouns ns
 				using (noun)
 			join mdl_field mf
-				on (mf.rowid=mv.field)
-			where ns.name=?1 and mf.field=?2
-			limit 1`,
+				on (mf.rowid = mv.field)
+			where ns.name = ?1 and mf.field = ?2
+			order by length(mv.dot)`,
 		),
 	}
 	if e := ps.Err(); e != nil {

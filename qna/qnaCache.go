@@ -3,11 +3,11 @@ package qna
 type cache map[uint64]cachedValue
 
 type cachedValue struct {
-	v interface{}
+	v any
 	e error
 }
 
-func (c *cache) cache(build func() (interface{}, error), args ...string) (ret interface{}, err error) {
+func (c *cache) cache(build func() (any, error), args ...string) (ret any, err error) {
 	if len(args) == 0 {
 		panic("missing key for cache")
 	}

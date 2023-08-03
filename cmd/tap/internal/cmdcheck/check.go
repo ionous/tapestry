@@ -14,6 +14,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
 )
@@ -21,7 +22,9 @@ import (
 // CheckAll tests stored in the passed db.
 // It logs the results of running the checks, and only returns error on critical errors.
 func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]interface{}) (ret int, err error) {
-	if qdb, e := qdb.NewQueries(db, true); e != nil {
+	if e := tables.CreateRun(db); e != nil {
+		err = e
+	} else if qdb, e := qdb.NewQueries(db, true); e != nil {
 		err = e
 	} else if checks, e := qdb.ReadChecks(actuallyJustThisOne); e != nil {
 		err = e

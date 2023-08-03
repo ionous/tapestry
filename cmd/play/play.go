@@ -6,12 +6,13 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"git.sr.ht/~ionous/tapestry/qna/decode"
 
 	"git.sr.ht/~ionous/tapestry"
 	play "git.sr.ht/~ionous/tapestry/cmd/play/internal"
@@ -67,7 +68,9 @@ func playGame(inFile, testString, domain string, jsonMode bool) (ret int, err er
 			_ = db.Close() // log?
 		}()
 		// fix: some sort of reset flag; but also: how to rejoin properly?
-		if query, e := qdb.NewQueries(db, true); e != nil {
+		if e := tables.CreateRun(db); e != nil {
+			err = e
+		} else if query, e := qdb.NewQueries(db, true); e != nil {
 			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e

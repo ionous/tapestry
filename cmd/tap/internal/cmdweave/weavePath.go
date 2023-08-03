@@ -40,7 +40,9 @@ func WeavePath(srcPath, outFile string) (err error) {
 		} else {
 			defer db.Close()
 			// fix: why do we have to create qdb?
-			if qx, e := qdb.NewQueryx(db); e != nil {
+			if e := tables.CreateAll(db); e != nil {
+				err = e
+			} else if qx, e := qdb.NewQueries(db, false); e != nil {
 				err = e
 			} else {
 				run := qna.NewRuntimeOptions(

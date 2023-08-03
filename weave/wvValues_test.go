@@ -40,10 +40,10 @@ func TestValueFieldAssignment(t *testing.T) {
 	} else if out, e := dt.ReadValues(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		`a:apple:t:"some text"`,
-		`a:boat:t:"more text"`,
-		`a:pear:d:123`,
-		`a:toy boat:d:321`,
+		`a:apple:t::{"FromText:":"some text"}`,
+		`a:boat:t::{"FromText:":"more text"}`,
+		`a:pear:d::{"FromNumber:":123}`,
+		`a:toy boat:d::{"FromNumber:":321}`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -108,10 +108,10 @@ func TestValueTraitAssignment(t *testing.T) {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		// domain, noun, field, value
-		`a:apple:a:"y"`,
-		`a:boat:b:"z"`,
-		`a:pear:a:"x"`,
-		`a:toy boat:a:"w"`,
+		`a:apple:a::{"FromText:":"y"}`,
+		`a:boat:b::{"FromText:":"z"}`,
+		`a:pear:a::{"FromText:":"x"}`,
+		`a:toy boat:a::{"FromText:":"w"}`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -152,8 +152,7 @@ func TestValuePaths(t *testing.T) {
 	} else if out, e := dt.ReadValues(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		// `a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}`,
-		`a:test:outer:{"inner":{"text":"some text"}}`,
+		`a:test:outer:inner.text:"some text"`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

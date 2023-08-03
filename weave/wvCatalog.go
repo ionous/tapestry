@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grokdb"
@@ -39,16 +40,19 @@ func NewCatalog(db *sql.DB) *Catalog {
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
 	if run == nil {
-		qx, e := qdb.NewQueryx(db)
-		if e != nil {
+		dec := decoder.DecodeNone("unsupported decoder")
+		if e := tables.CreateAll(db); e != nil {
 			panic(e)
+		} else if qx, e := qdb.NewQueries(db, false); e != nil {
+			panic(e)
+		} else {
+			run = qna.NewRuntimeOptions(
+				log.Writer(),
+				qx,
+				dec,
+				qna.NewOptions(),
+			)
 		}
-		run = qna.NewRuntimeOptions(
-			log.Writer(),
-			qx,
-			qna.DecodeNone("unsupported decoder"),
-			qna.NewOptions(),
-		)
 	}
 	var logerr mdl.Log
 	if warn != nil {

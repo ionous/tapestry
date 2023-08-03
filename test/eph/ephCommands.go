@@ -110,7 +110,7 @@ type Nouns struct {
 
 func (op *Nouns) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDefaults, func(w *weave.Weaver) error {
-		return w.Pin().AddNoun(op.Noun, "", op.Kind)
+		return w.Pin().AddNoun(op.Noun, op.Noun, op.Kind)
 	})
 }
 
@@ -247,10 +247,11 @@ func (op *Values) Assert(cat *weave.Catalog) error {
 		pen := w.Pin()
 		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
 			err = e
+		} else if field, path := op.Field, op.Path; len(path) == 0 {
+			err = pen.AddValueField(n, field, decode.AssignLiteral(op.Value))
 		} else {
-			path := append(op.Path, op.Field)
-			v := decode.AssignLiteral(op.Value)
-			err = pen.AddValuePath(n, mdl.MakePath(path...), v)
+			path := append(path, field)
+			err = pen.AddValuePath(n, mdl.MakePath(path...), op.Value)
 		}
 		return
 	})

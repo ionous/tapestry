@@ -96,6 +96,8 @@ create table mdl_rule( domain text not null, kind int not null, target int, phas
  * initial values for the fields of nouns;
  * note: currently, the scope of the value is the same as the noun.
  * ( ie. one value per noun per field; not values that change as new domains are activated. )
- * path contains comma separated names.
+ * dot contains sub field names separated by full stops.
  */
-create table mdl_value( noun int not null, path string, value blob, at text, primary key( noun, path ));
+create table mdl_value( noun int not null, field int not null, dot string, value blob, at text, primary key( noun, field, dot ));
+
+

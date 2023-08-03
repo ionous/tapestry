@@ -32,24 +32,25 @@ type Rules struct {
 }
 
 type Query interface {
-	IsDomainActive(name string) (okay bool, err error)
-	ActivateDomain(name string) (ret string, err error)
-	ReadChecks(actuallyJustThisOne string) (ret []CheckData, err error)
-	FieldsOf(kind string) (ret []FieldData, err error)
+	IsDomainActive(name string) (bool, error)
+	ActivateDomain(name string) (string, error)
+	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
+	FieldsOf(kind string) ([]FieldData, error)
 	KindOfAncestors(kind string) ([]string, error)
-	NounInfo(name string) (ret NounInfo, err error)
-	NounIsNamed(id, name string) (ret bool, err error)
-	NounName(id string) (ret string, err error)
-	NounValue(id, field string) (retVal []byte, err error)
+	NounInfo(name string) (NounInfo, error)
+	NounIsNamed(id, name string) (bool, error)
+	NounName(id string) (string, error)
+	// returns pairs of path, value
+	NounValues(id, field string) ([]string, error)
 	NounsByKind(kind string) ([]string, error)
-	PluralToSingular(plural string) (ret string, err error)
-	PluralFromSingular(singular string) (ret string, err error)
-	OppositeOf(word string) (ret string, err error)
-	PatternLabels(pat string) (ret []string, err error)
-	RulesFor(pat, target string) (ret []Rules, err error)
+	PluralToSingular(plural string) (string, error)
+	PluralFromSingular(singular string) (string, error)
+	OppositeOf(word string) (string, error)
+	PatternLabels(pat string) ([]string, error)
+	RulesFor(pat, target string) ([]Rules, error)
 	ReciprocalsOf(rel, id string) ([]string, error)
 	RelativesOf(rel, id string) ([]string, error)
-	Relate(rel, noun, otherNoun string) (err error)
+	Relate(rel, noun, otherNoun string) error
 }
 
 func (n *NounInfo) IsValid() bool {

@@ -155,11 +155,11 @@ with allTraits as (
 		on(mf.kind = mk.rowid)
 	-- where the field's kind (X) contains the aspect kind (Y)
 	where instr(',' || mk.path, @aspects)
-	and field = @fieldName
 )
 -- all fields of the targeted kind:
 , fieldsInKind as (
-	select mk.domain,            -- domain of kind 
+	select mf.rowid as id,
+				 mk.domain,            -- domain of kind 
 				 field as name,        -- field name 
 				 affinity,             -- affinity 
 				 mt.rowid as typeId,   -- type of the field 
@@ -171,23 +171,24 @@ with allTraits as (
 		on ((mf.kind = mk.rowid) and instr(@ancestry, ',' || mk.rowid || ',' ))
 	left join mdl_kind mt 
 		on (mt.rowid = mf.type)
-	where field = @fieldName 
 )
 -- fields in the target kind
 -- if the field isnt a record; the type info (id,name,path) can be null
-select name, affinity, coalesce(typeId,0), coalesce(typeName, ''), coalesce(fullpath, '')
+select id, name, affinity, coalesce(typeId,0), coalesce(typeName, ''), coalesce(fullpath, '')
 from fieldsInKind
+where name = @fieldName 
 union all
 
 -- traits in the target kind: return the aspect
-select ma.aspect, 'text', 0, "", ""
+select id, ma.aspect, 'text', 0, "", ""
 from allTraits ma
 join fieldsInKind fk
-	on (ma.kind = fk.typeId)`,
+	on (ma.kind = fk.typeId)
+where ma.name = @fieldName`,
 		sql.Named("aspects", pen.paths.aspectPath),
 		sql.Named("ancestry", kind.fullpath),
 		sql.Named("fieldName", field)).
-		Scan(&prev.name, &prev.aff, &prev.cls.id, &prev.cls.name, &prev.cls.fullpath); e != nil {
+		Scan(&prev.id, &prev.name, &prev.aff, &prev.cls.id, &prev.cls.name, &prev.cls.fullpath); e != nil {
 		if e == sql.ErrNoRows {
 			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind.name, pen.domain)
 		} else {

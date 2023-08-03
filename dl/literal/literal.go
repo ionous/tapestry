@@ -11,7 +11,7 @@ import (
 
 // LiteralValue marks script constants.
 type LiteralValue interface {
-	GetLiteralValue(rt.Runtime) (g.Value, error)
+	GetLiteralValue(g.Kinds) (g.Value, error)
 }
 
 // String uses strconv.FormatBool.
@@ -19,14 +19,14 @@ func (op *BoolValue) String() string {
 	return strconv.FormatBool(op.Value)
 }
 
-func (op *BoolValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetBool(run)
+func (op *BoolValue) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
+	ret = g.BoolFrom(op.Value, op.Kind)
+	return
 }
 
 // GetBool implements rt.BoolEval; providing the dl with a boolean literal.
-func (op *BoolValue) GetBool(rt.Runtime) (ret g.Value, _ error) {
-	ret = g.BoolOf(op.Value)
-	return
+func (op *BoolValue) GetBool(run rt.Runtime) (g.Value, error) {
+	return op.GetLiteralValue(run)
 }
 
 // Int converts to native int.
@@ -44,14 +44,14 @@ func (op *NumValue) String() string {
 	return strconv.FormatFloat(op.Value, 'g', -1, 64)
 }
 
-func (op *NumValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetNumber(run)
+func (op *NumValue) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
+	ret = g.FloatOf(op.Value)
+	return
 }
 
 // GetNumber implements rt.NumberEval providing the dl with a number literal.
-func (op *NumValue) GetNumber(rt.Runtime) (ret g.Value, _ error) {
-	ret = g.FloatOf(op.Value)
-	return
+func (op *NumValue) GetNumber(run rt.Runtime) (g.Value, error) {
+	return op.GetLiteralValue(run)
 }
 
 // String returns the text.
@@ -59,54 +59,54 @@ func (op *TextValue) String() string {
 	return op.Value
 }
 
-func (op *TextValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetText(run)
-}
-
-// GetText implements interface rt.TextEval providing the dl with a text literal.
-func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
+func (op *TextValue) GetLiteralValue(kinds g.Kinds) (ret g.Value, _ error) {
 	ret = g.StringFrom(op.Value, op.Kind)
 	return
 }
 
-func (op *NumValues) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetNumList(run)
+// GetText implements interface rt.TextEval providing the dl with a text literal.
+func (op *TextValue) GetText(run rt.Runtime) (g.Value, error) {
+	return op.GetLiteralValue(run)
 }
 
-// GetNumList implements rt.NumListEval providing the dl with a literal list of numbers.
-func (op *NumValues) GetNumList(rt.Runtime) (ret g.Value, _ error) {
+func (op *NumValues) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
 	// fix? would copying be better?
 	ret = g.FloatsOf(op.Values)
 	return
 }
 
-func (op *TextValues) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetTextList(run)
+// GetNumList implements rt.NumListEval providing the dl with a literal list of numbers.
+func (op *NumValues) GetNumList(run rt.Runtime) (g.Value, error) {
+	return op.GetLiteralValue(run)
 }
 
-// GetTextList implements rt.TextListEval providing the dl with a literal list of text.
-func (op *TextValues) GetTextList(rt.Runtime) (ret g.Value, _ error) {
+func (op *TextValues) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
 	// fix? would copying be better?
 	ret = g.StringsOf(op.Values)
 	return
 }
 
-func (op *RecordValue) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetRecord(run)
+// GetTextList implements rt.TextListEval providing the dl with a literal list of text.
+func (op *TextValues) GetTextList(run rt.Runtime) (ret g.Value, _ error) {
+	return op.GetLiteralValue(run)
+}
+
+func (op *RecordValue) GetLiteralValue(kinds g.Kinds) (ret g.Value, err error) {
+	return op.Cache.GetRecord(kinds, op.Kind, op.Fields)
 }
 
 // GetRecord implements interface rt.RecordEval providing the dl with a structured literal.
 func (op *RecordValue) GetRecord(run rt.Runtime) (g.Value, error) {
-	return op.Cache.GetRecord(run, op.Kind, op.Fields)
+	return op.GetLiteralValue(run)
 }
 
-func (op *RecordList) GetLiteralValue(run rt.Runtime) (g.Value, error) {
-	return op.GetRecordList(run)
+func (op *RecordList) GetLiteralValue(kinds g.Kinds) (g.Value, error) {
+	return op.Cache.GetRecords(kinds, op.Kind, op.Records)
 }
 
 // GetNumList implements rt.RecordListEval providing the dl with a literal list of records.
 func (op *RecordList) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
-	return op.Cache.GetRecords(run, op.Kind, op.Records)
+	return op.GetLiteralValue(run)
 }
 
 // unimplemented: panics.
@@ -115,7 +115,7 @@ func (op *FieldList) String() (ret string) {
 }
 
 // unimplemented: panics.
-func (op *FieldList) GetLiteralValue(run rt.Runtime) (g.Value, error) {
+func (op *FieldList) GetLiteralValue(g.Kinds) (g.Value, error) {
 	panic("field values should only be used in record literals")
 }
 

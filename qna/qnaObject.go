@@ -1,6 +1,8 @@
 package qna
 
 import (
+	"unicode/utf8"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -80,13 +82,13 @@ func (run *Runner) setFieldCache(obj query.NounInfo, field g.Field, val g.Value)
 }
 
 func (run *Runner) getFieldCache(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
-	if c, e := run.nounValues.cache(func() (ret interface{}, err error) {
+	if c, e := run.nounValues.cache(func() (ret any, err error) {
 		// note: in the original version of this, we queried *all* fields
 		// ( unioning in those with traits, and those without defaults )
-		if b, e := run.query.NounValue(obj.Id, field.Name); e != nil {
+		if pairs, e := run.query.NounValues(obj.Id, field.Name); e != nil {
 			err = e
-		} else if len(b) != 0 { // fields be empty, have literal values, or dynamic values.
-			ret, e = run.decode.DecodeField(b, field.Affinity, field.Type)
+		} else if len(pairs) == 0 { // fields be empty, have literal values, or dynamic values.
+			ret, e = readFields(run, field, pairs)
 		} else {
 			// tbd: needed for create record, wish there was a nicer way
 			// at the very least it'd be nice if the decoder could hold this
@@ -110,6 +112,110 @@ func (run *Runner) getFieldCache(obj query.NounInfo, field g.Field) (ret g.Value
 			}
 		default:
 			err = errutil.Fmt("unexpected type in object cache %T", c)
+		}
+	}
+	return
+}
+
+// return can be an assignment ( which gets evaluated )
+// or a literal value ( a fixed value )
+func readFields(run *Runner, field g.Field, pairs []string) (ret any, err error) {
+	if !dotted(pairs) {
+		// a single top level value? then its an assignment
+		value := pairs[1]
+		ret, err = run.decode.DecodeAssignment([]byte(value))
+	} else {
+		// sparse pairs of values? then its a sparse record of literals
+		if k, e := run.GetKindByName(field.Type); e != nil {
+			err = e
+		} else {
+			rec := k.NewRecord()
+			if e := makeRecords(run, rec, pairs); e != nil {
+				err = e
+			} else {
+				ret = g.RecordOf(rec)
+			}
+		}
+	}
+	return
+}
+
+func makeRecords(run *Runner, rec *g.Record, pairs []string) (err error) {
+	for i, cnt := 0, len(pairs); i < cnt; i += 2 {
+		if e := fillRecord(run, rec, pairs[i], pairs[i+1]); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func fillRecord(run *Runner, rec *g.Record, fullpath, value string) (err error) {
+	for path := fullpath; len(path) > 0; {
+		part, rest := dotscan(path)
+		k := rec.Kind() // has aff if needed
+		if i := k.FieldIndex(part); i < 0 {
+			err = errutil.New("error")
+		} else {
+			if len(rest) == 0 {
+				field := k.Field(i)
+				// FIX: how does fieldType actually get recorded!?!
+				if l, e := run.decode.DecodeField([]byte(value), field.Affinity, field.Type); e != nil {
+					err = e
+				} else if v, e := l.GetLiteralValue(run); e != nil {
+					err = e
+				} else {
+					err = rec.SetIndexedField(i, v)
+				}
+				break // all done regardless
+			} else {
+				// a part ending with a dot is a record:
+				// the Get() will auto-create the value --
+				// fix, future: this is questionable requires rec to know Kinds.
+				// the caller could surely handle that ( ex. Dotted and this ) when needed.
+				if v, e := rec.GetIndexedField(i); e != nil {
+					err = e
+					break
+				} else if v.Affinity() != affine.Record {
+					err = errutil.New("error")
+					break
+				} else {
+					rec, path = v.Record(), rest
+				}
+			}
+		}
+	}
+	return
+}
+
+// do the pairs contain a dotted path?
+// if so then they are *all* literals
+// -- only the root level allows evals
+// because that's all that can be queried for
+// (dotted paths live in core, not in the runtime interface )
+func dotted(pairs []string) (ret bool) {
+	// any more than two elements requires it
+	if cnt := len(pairs); cnt > 2 {
+		ret = true
+	} else if cnt == 2 {
+		path := pairs[0]
+		_, rhs := dotscan(path)
+		ret = len(rhs) > 0 // a dot always has two parts left and right
+	}
+	return
+}
+
+// return the string up to the next dot, and everything after.
+func dotscan(str string) (lhs, rhs string) {
+	lhs = str // provisionally
+	for accum := 0; accum < len(str); {
+		if r, n := utf8.DecodeRuneInString(str[accum:]); r == utf8.RuneError {
+			break // all done or error
+		} else if r == '.' {
+			lhs, rhs = str[:accum], str[:accum+n]
+			break
+		} else {
+			accum += n
 		}
 	}
 	return

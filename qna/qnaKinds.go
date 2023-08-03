@@ -33,7 +33,7 @@ func (run *Runner) getKindOf(kn, kt string) (ret cachedKind, err error) {
 }
 
 func (run *Runner) getKind(k string) (ret cachedKind, err error) {
-	if c, e := run.values.cache(func() (ret interface{}, err error) {
+	if c, e := run.values.cache(func() (ret any, err error) {
 		ret, err = run.buildKind(k)
 		return
 	}, "kinds", k); e != nil {
@@ -150,7 +150,7 @@ func (run *Runner) getFields(kind string) (ret fieldSet, err error) {
 		for i, f := range fs {
 			fields[i] = g.Field{f.Name, f.Affinity, f.Class}
 			if prog := f.Init; len(prog) > 0 {
-				if val, e := run.decode.DecodeAssignment(prog, f.Affinity); e != nil {
+				if val, e := run.decode.DecodeAssignment(prog /*, f.Affinity*/); e != nil {
 					err = errutil.New("error while decoding", f.Name, e)
 					break
 				} else {

@@ -147,9 +147,9 @@ func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor helperNoun, mapDir Map
 			err = e // ^ ensure the existence of the door
 		} else if e := relateNouns(w, room, exitDoor); e != nil {
 			err = e // ^ put the exit in the current room
-		} else if e := pen.AddValuePath(room.name, mdl.MakePath("compass", dir), text(exitName, "door")); e != nil {
+		} else if e := pen.AddValuePath(room.name, mdl.MakePath("compass", dir), Tx(exitName, "door")); e != nil {
 			err = e // ^ set the room's compass to the exit
-		} else if e := pen.AddValuePath(exitDoor.name, mdl.MakePath(exitDoor.name, "destination"), text(otherName, "rooms")); e != nil {
+		} else if e := pen.AddValuePath(exitDoor.name, mdl.MakePath(exitDoor.name, "destination"), Tx(otherName, "rooms")); e != nil {
 			err = e // ^ set the door's target to the other room
 		} else {
 			if generateExit {

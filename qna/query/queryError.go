@@ -47,7 +47,7 @@ func (q QueryNone) NounName(id string) (ret string, err error) {
 	return
 }
 
-func (q QueryNone) NounValue(id, field string) (ret []byte, err error) {
+func (q QueryNone) NounValues(id, field string) (ret []string, err error) {
 	return
 }
 

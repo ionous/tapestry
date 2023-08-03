@@ -220,10 +220,10 @@ func ReadRules(db *sql.DB) ([]string, error) {
   `)
 }
 
-// domain, noun, field, value
+// domain, noun, field, dot, value
 func ReadValues(db *sql.DB) ([]string, error) {
 	return tables.QueryStrings(db, `
-	select mn.domain ||':'|| mn.noun ||':'|| mf.field ||':'|| mv.value
+	select mn.domain ||':'|| mn.noun ||':'|| mf.field ||':'|| coalesce(mv.dot, '') ||':'|| mv.value
 	from mdl_value mv 
 	join mdl_noun mn 
 		on(mv.noun = mn.rowid)

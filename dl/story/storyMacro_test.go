@@ -10,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -23,7 +24,12 @@ func TestMacros(t *testing.T) {
 	name := t.Name()
 	db := testdb.Create(name)
 	defer db.Close()
-	qx, e := qdb.NewQueryx(db)
+
+	if e := tables.CreateAll(db); e != nil {
+		panic(e)
+	}
+
+	qx, e := qdb.NewQueries(db, false)
 	if e != nil {
 		panic(e)
 	}

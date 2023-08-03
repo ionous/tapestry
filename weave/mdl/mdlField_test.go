@@ -10,6 +10,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// todo: test that traits write to their aspect's field
 func TestValueWriting(t *testing.T) {
 	const (
 		oneField   = "oneField"
@@ -72,42 +73,46 @@ func TestValueWriting(t *testing.T) {
 		} else {
 			pen := m.Pin("domain", "at")
 			// some independent fields:
-			if e := pen.addValue(nounA, nil, oneField, oneValue, affine.Text); e != nil {
+			if e := pen.AddTestValue(nounA, oneField, oneValue); e != nil {
 				t.Fatal(e)
-			} else if e := pen.addValue(nounA, nil, otherField, otherValue, affine.Text); e != nil {
+			} else if e := pen.AddTestValue(nounA, otherField, otherValue); e != nil {
 				t.Fatal(e)
 			}
 			// the deepening
-			if e := pen.addValue(nounA, MakePath(recName, recName), oneField, oneValue, affine.Text); e != nil {
+			if e := pen.AddTestValue(nounA, MakePath(recName, recName, oneField), oneValue); e != nil {
 				t.Fatal(e)
 			}
 			// writing again should be okay:
-			if e := pen.addValue(nounA, MakePath(recName, recName), oneField, oneValue, affine.Text); e != nil {
+			if e := pen.AddTestValue(nounA, MakePath(recName, recName, oneField), oneValue); e != nil {
 				t.Fatal(e)
-			} else if e := warnings.Expect("Duplicate value for a.record.record.oneField."); e != nil {
+			} else if e := warnings.Expect("Duplicate value for 'a.record.record.oneField'."); e != nil {
 				t.Fatal(e)
 			}
 			// make sure we can't now write at the record itself
-			if e := pen.addValue(nounA, nil, recName, oneValue, affine.Record); e == nil {
-				t.Fatal("shouldn't have been able to write to a whole record after writing one of its fields")
+			if e := pen.AddTestValue(nounA, MakePath(recName, ""), oneValue); e == nil {
+				t.Fatal("shouldn't have written a whole record after writing one of its fields")
 			} else {
 				t.Log("ok", e)
 			}
 			// make sure we can however write deeper
-			if e := pen.addValue(nounA, MakePath(recName, recName, recName), oneField, oneValue, affine.Text); e != nil {
+			if e := pen.AddTestValue(nounA, MakePath(recName, recName, recName, oneField), oneValue); e != nil {
 				t.Fatal(e)
 			}
-			if e := pen.addValue(nounA, MakePath(recName, recName, recName), otherField, otherValue, affine.Text); e != nil {
+			if e := pen.AddTestValue(nounA, MakePath(recName, recName, recName, otherField), otherValue); e != nil {
 				t.Fatal(e)
+			}
+			// make sure to detect the conflict deeper
+			if e := pen.AddTestValue(nounA, MakePath(recName, recName), otherValue); e == nil {
+				t.Fatal("shouldn't have written a whole record after writing one of its fields")
 			}
 			//
 			// reverse the order of writing ( via the second noun ) and make sure that fails too.
 			//
-			if e := pen.addValue(nounB, nil, recName, oneValue, affine.Record); e != nil {
+			if e := pen.AddTestValue(nounB, MakePath(recName, ""), oneValue); e != nil {
 				t.Fatal(e)
 			}
-			if e := pen.addValue(nounB, MakePath(recName, recName), oneField, oneValue, affine.Text); e == nil {
-				t.Fatal("shouldn't have been able to write to a field of a record after writing the whole record")
+			if e := pen.AddTestValue(nounB, MakePath(recName, recName, oneField), oneValue); e == nil {
+				t.Fatal("shouldn't have written a field after writing the whole record")
 			} else {
 				t.Log("ok", e)
 			}

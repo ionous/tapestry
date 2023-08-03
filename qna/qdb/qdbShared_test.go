@@ -3,6 +3,7 @@ package qdb
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
@@ -12,7 +13,9 @@ type QueryTest struct {
 }
 
 func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
-	if q, e := NewQueries(db, false); e != nil {
+	if e := tables.CreateRun(db); e != nil {
+		err = e
+	} else if q, e := NewQueries(db, false); e != nil {
 		err = e
 	} else if scan, e := db.Prepare(
 		`select domain || ':' || active

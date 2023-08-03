@@ -28,7 +28,7 @@ type cachedRules struct {
 
 // get the rules from the cache, or build them and add them to the cache
 func (run *Runner) getRules(pat, tgt string) (ret cachedRules, err error) {
-	if c, e := run.values.cache(func() (interface{}, error) {
+	if c, e := run.values.cache(func() (any, error) {
 		return run.buildRules(pat, tgt)
 	}, "rules", pat, tgt); e != nil {
 		err = e

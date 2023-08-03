@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -15,7 +16,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func NewRuntimeOptions(w io.Writer, q query.Query, d Decoder, options Options) *Runner {
+func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, options Options) *Runner {
 	run := &Runner{
 		query:      q,
 		decode:     d,
@@ -30,7 +31,7 @@ func NewRuntimeOptions(w io.Writer, q query.Query, d Decoder, options Options) *
 
 type Runner struct {
 	query  query.Query
-	decode Decoder
+	decode decoder.Decoder
 
 	values     cache
 	nounValues cache
@@ -98,7 +99,7 @@ func (run *Runner) OppositeOf(word string) (ret string) {
 
 // the last value is the results; blank if need be
 func (run *Runner) getPatternLabels(pat string) (ret []string, err error) {
-	if c, e := run.values.cache(func() (ret interface{}, err error) {
+	if c, e := run.values.cache(func() (ret any, err error) {
 		ret, err = run.query.PatternLabels(pat)
 		return
 	}, "PatternLabels", pat); e != nil {
