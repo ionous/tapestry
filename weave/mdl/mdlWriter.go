@@ -928,40 +928,40 @@ func (pen *Pen) AddTestRule(pattern, target string, phase int, filter, prog stri
 // fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
 var mdl_value = tables.Insert("mdl_value", "noun", "field", "dot", "value", "at")
 
-// unmarshaled version of AddValue... for testing.
-// if the path ends with a dot, it assumes a fake record
-// otherwise it assumes fake text.
-func (pen *Pen) AddTestValue(noun, path, value string) error {
-	aff := affine.Text
-	parts := strings.Split(path, ".")
-	if end := len(parts) - 1; parts[end] == "" {
-		aff = affine.Record
-		parts = parts[:end]
+// unmarshaled version of AddValue for testing.
+func (pen *Pen) AddTestValue(noun, path, out string) (err error) {
+	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
+		err = e
+	} else {
+		parts := strings.Split(path, ".")
+		if outer, _, e := pen.digField(noun, parts); e != nil {
+			err = e // for testing, we accept any inner most affinity ( so long as the parts were resolvable )
+		} else {
+			root, dot := parts[0], strings.Join(parts[1:], ".")
+			err = pen.addValue(noun, outer, root, dot, out)
+		}
 	}
-	return pen.addValue(noun, parts[0], parts[1:], value, aff)
+	return
 }
 
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: in storage, the assignment wrapper ( FromText, etc. ) is redundant;
 // we know what the assignment will be because we know the type of field.
-func (pen *Pen) AddValueField(noun, field string, value assign.Assignment) (err error) {
-	if out, e := marshalout(value); e != nil {
-		err = e
-	} else if strings.IndexRune(field, '.') >= 0 {
+func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err error) {
+	if strings.IndexRune(field, '.') >= 0 {
 		err = errutil.New("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
-		err = pen.addValue(noun, field, nil, out, assign.GetAffinity(value))
+		err = pen.addFieldValue(noun, field, value)
 	}
 	return
 }
 
 // store a literal value somewhere within a record held by a noun.
-func (pen *Pen) AddValuePath(noun, path string, value literal.LiteralValue) (err error) {
-	if out, e := marshalout(value); e != nil {
-		err = e
+func (pen *Pen) AddPathValue(noun, path string, value literal.LiteralValue) (err error) {
+	if parts := strings.Split(path, "."); len(parts) == 1 {
+		err = pen.addFieldValue(noun, path, assign.Literal(value))
 	} else {
-		parts := strings.Split(path, ".")
-		err = pen.addValue(noun, parts[0], parts[1:], out, literal.GetAffinity(value))
+		err = pen.addPathValue(noun, parts, value)
 	}
 	return
 }

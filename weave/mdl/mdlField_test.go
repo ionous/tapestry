@@ -89,7 +89,7 @@ func TestValueWriting(t *testing.T) {
 				t.Fatal(e)
 			}
 			// make sure we can't now write at the record itself
-			if e := pen.AddTestValue(nounA, MakePath(recName, ""), oneValue); e == nil {
+			if e := pen.AddTestValue(nounA, MakePath(recName), oneValue); e == nil {
 				t.Fatal("shouldn't have written a whole record after writing one of its fields")
 			} else {
 				t.Log("ok", e)
@@ -108,7 +108,7 @@ func TestValueWriting(t *testing.T) {
 			//
 			// reverse the order of writing ( via the second noun ) and make sure that fails too.
 			//
-			if e := pen.AddTestValue(nounB, MakePath(recName, ""), oneValue); e != nil {
+			if e := pen.AddTestValue(nounB, MakePath(recName), oneValue); e != nil {
 				t.Fatal(e)
 			}
 			if e := pen.AddTestValue(nounB, MakePath(recName, recName, oneField), oneValue); e == nil {

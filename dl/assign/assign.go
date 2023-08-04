@@ -2,6 +2,7 @@ package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -53,6 +54,30 @@ func GetAffinity(a Assignment) (ret affine.Affinity) {
 		default:
 			panic(errutil.Fmt("unknown Assignment %T", a))
 		}
+	}
+	return
+}
+
+// turn a literal into an assignment
+// ( whats's the right package for this function? )
+func Literal(v literal.LiteralValue) (ret Assignment) {
+	switch v := v.(type) {
+	case *literal.BoolValue:
+		ret = &FromBool{Value: v}
+	case *literal.NumValue:
+		ret = &FromNumber{Value: v}
+	case *literal.TextValue:
+		ret = &FromText{Value: v}
+	case *literal.RecordValue:
+		ret = &FromRecord{Value: v}
+	case *literal.NumValues:
+		ret = &FromNumList{Value: v}
+	case *literal.TextValues:
+		ret = &FromTextList{Value: v}
+	case *literal.RecordList:
+		ret = &FromRecordList{Value: v}
+	default:
+		panic(errutil.Fmt("unknown literal %T", v))
 	}
 	return
 }

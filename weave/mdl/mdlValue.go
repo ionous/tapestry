@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
@@ -17,94 +17,89 @@ func MakePath(path ...string) string {
 	return strings.Join(path, ".")
 }
 
-type pathAff struct {
-	a affine.Affinity
-	p []string
-}
-
-func (pa *pathAff) getAff(i int) (ret affine.Affinity) {
-	if i == len(pa.p) {
-		ret = pa.a
+func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err error) {
+	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
+		err = e
+	} else if field, e := pen.findField(noun.class(), name); e != nil {
+		err = e
+	} else if value, e := field.rewriteTrait(name, value); e != nil {
+		err = errutil.New("can't assign trait to noun")
+	} else if aff := assign.GetAffinity(value); aff != field.aff {
+		err = errutil.Fmt("mismatched affinity, cant assign %s to field of %s", aff, field.aff)
+	} else if out, e := marshalfrom(value); e != nil {
+		err = e
 	} else {
-		ret = affine.Record
+		err = pen.addValue(noun, field, field.name, "", out)
 	}
 	return
 }
 
-func (pen *Pen) addValue(owner, root string, path []string, value string, aff affine.Affinity) (err error) {
-	pathAff := pathAff{aff, path}
-	if noun, e := pen.findRequiredNoun(owner, nounWithKind); e != nil {
+func (pen *Pen) addPathValue(noun string, parts []string, value literal.LiteralValue) (err error) {
+	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
+		err = e
+	} else if outer, inner, e := pen.digField(noun, parts); e != nil {
+		err = e
+	} else if end := len(parts) - 1; parts[end] != inner.name {
+		err = errutil.New("can't add traits to records of nouns")
+	} else if aff := literal.GetAffinity(value); aff != inner.aff {
+		err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
+			aff, inner.aff, inner.name, noun.kind)
+	} else if out, e := marshalout(value); e != nil {
 		err = e
 	} else {
-		var dot string
-		var field fieldInfo
-		if field, err = pen.findField(noun.class(), root, pathAff.getAff(0)); e == nil && len(path) > 0 {
-			cls := field.class() // drill down through records to find the final targeted field.
-			var join strings.Builder
-			for i, subField := range path {
-				if i > 0 {
-					join.WriteRune('.')
-				}
-				if next, e := pen.findField(cls, subField, pathAff.getAff(i+1)); e != nil {
-					err = e
-					break
-				} else {
-					join.WriteString(subField)
-					cls = next.class()
-				}
-			}
-			dot = join.String()
-		}
+		root, dot := parts[0], strings.Join(parts[1:], ".")
+		err = pen.addValue(noun, outer, root, dot, out)
+	}
+	return
+}
 
-		if err == nil {
-			opt := sql.NullString{
-				String: dot,
-				Valid:  len(dot) > 0,
-			}
-			// search for existing paths which conflict:
-			// could be the same path, or could be a record written as a whole
-			// now being written as a part; or vice versa.
-			// OR the exact match ( ex. a duplicate )
-			var prev struct {
-				dot   sql.NullString
-				value string
-			}
-			// find cases where the new path starts a previous path,
-			// or a previous path starts the new path.
-			// instr(X,Y) - searches X for Y.
-			if rows, e := pen.db.Query(`
+func (pen *Pen) addValue(noun nounInfo, outer fieldInfo, root, dot, value string) (err error) {
+	opt := sql.NullString{
+		String: dot,
+		Valid:  len(dot) > 0,
+	}
+	// search for existing paths which conflict:
+	// could be the same path, or could be a record written as a whole
+	// now being written as a part; or vice versa.
+	// OR the exact match ( ex. a duplicate )
+	var prev struct {
+		dot   sql.NullString
+		value string
+	}
+	// find cases where the new path starts a previous path,
+	// or a previous path starts the new path.
+	// instr(X,Y) - searches X for Y.
+	if rows, e := pen.db.Query(`
 				select mv.dot, mv.value 
 				from mdl_value mv 
 				where mv.noun = @1
 				and mv.field = @2
 				and (
-					 (1 == instr(CASE WHEN mv.dot is null THEN "." ELSE '.' || mv.dot || '.' END, 
-					             CASE WHEN   @3   is null THEN "." ELSE '.' ||   @3   || '.' END)) or 
-				   (1 == instr(CASE WHEN   @3   is null THEN "." ELSE '.' ||   @3   || '.' END, 
-				               CASE WHEN mv.dot is null THEN "." ELSE '.' || mv.dot || '.' END))
+					 (1 == instr(case when mv.dot is null then "." else '.' || mv.dot || '.' end, 
+					             case when   @3   is null then "." else '.' ||   @3   || '.' end)) or 
+				   (1 == instr(case when   @3   is null then "." else '.' ||   @3   || '.' end, 
+				               case when mv.dot is null then "." else '.' || mv.dot || '.' end))
 				)`,
-				noun.id, field.id, opt,
-			); e != nil {
-				err = errutil.New("database error", e)
-			} else if e := tables.ScanAll(rows, func() (err error) {
-				if prev.dot.String != dot {
-					err = errutil.Fmt(`%w writing value for %s, had value for %s.`,
-						Conflict, debugJoin(owner, root, dot), debugJoin(owner, root, prev.dot.String))
-				} else if prev.value != value {
-					err = errutil.Fmt(`%w mismatched value for %s.`,
-						Conflict, debugJoin(owner, root, dot))
-				} else {
-					err = errutil.Fmt(`%w value for %s.`,
-						Duplicate, debugJoin(owner, root, dot))
-				}
-				return
-			}, &prev.dot, &prev.value); e != nil {
-				err = eatDuplicates(pen.warn, e)
-			} else {
-				if _, e := pen.db.Exec(mdl_value, noun.id, field.id, opt, value, pen.at); e != nil {
-					err = e
-				}
-			}
+		noun.id, outer.id, opt,
+	); e != nil {
+		err = errutil.New("database error", e)
+	} else if e := tables.ScanAll(rows, func() (err error) {
+		if prev.dot.String != dot {
+			err = errutil.Fmt(`%w writing value for %s, had value for %s.`,
+				Conflict, debugJoin(noun.name, root, dot), debugJoin(noun.name, root, prev.dot.String))
+		} else if prev.value != value {
+			err = errutil.Fmt(`%w mismatched value for %s.`,
+				Conflict, debugJoin(noun.name, root, dot))
+		} else {
+			err = errutil.Fmt(`%w value for %s.`,
+				Duplicate, debugJoin(noun.name, root, dot))
+		}
+		return
+	}, &prev.dot, &prev.value); e != nil {
+		err = eatDuplicates(pen.warn, e)
+	} else {
+		if _, e := pen.db.Exec(mdl_value, noun.id, outer.id, opt, value, pen.at); e != nil {
+			err = e
 		}
 	}
 	return
@@ -124,14 +119,37 @@ func debugJoin(noun, field, path string) string {
 	return b.String()
 }
 
+func marshalfrom(val assign.Assignment) (ret string, err error) {
+	// questionable: since we know the type of the field
+	// storing the assignment wrapper is redundant.
+	switch v := val.(type) {
+	case *assign.FromBool:
+		ret, err = marshalout(v.Value)
+	case *assign.FromNumber:
+		ret, err = marshalout(v.Value)
+	case *assign.FromText:
+		ret, err = marshalout(v.Value)
+	case *assign.FromRecord:
+		ret, err = marshalout(v.Value)
+	case *assign.FromNumList:
+		ret, err = marshalout(v.Value)
+	case *assign.FromTextList:
+		ret, err = marshalout(v.Value)
+	case *assign.FromRecordList:
+		ret, err = marshalout(v.Value)
+	default:
+		err = errutil.New("unknown type")
+	}
+	return
+}
+
 // shared generic marshal prog to text
 func marshalout(cmd any) (ret string, err error) {
 	if cmd != nil {
-		if pen, ok := cmd.(jsn.Marshalee); !ok {
+		if op, ok := cmd.(jsn.Marshalee); !ok {
 			err = errutil.Fmt("can only marshal autogenerated types (%T)", cmd)
 		} else {
-
-			ret, err = cout.Marshal(pen, literal.CompactEncoder)
+			ret, err = marshalop(op)
 		}
 	}
 	return
@@ -140,11 +158,15 @@ func marshalout(cmd any) (ret string, err error) {
 func marshalprog(prog []rt.Execute) (ret string, err error) {
 	if len(prog) > 0 {
 		slice := rt.Execute_Slice(prog)
-		if out, e := marshalout(&slice); e != nil {
+		if out, e := marshalop(&slice); e != nil {
 			err = e
 		} else {
 			ret = out
 		}
 	}
 	return
+}
+
+func marshalop(op jsn.Marshalee) (string, error) {
+	return cout.Marshal(op, literal.CompactEncoder)
 }

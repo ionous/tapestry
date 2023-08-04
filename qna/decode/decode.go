@@ -25,28 +25,6 @@ func (d *Decoder) DecodeField(b []byte, a affine.Affinity, fieldType string) (re
 	return literal.ReadLiteral(a, fieldType, b)
 }
 
-func AssignLiteral(v literal.LiteralValue) (ret rt.Assignment) {
-	switch v := v.(type) {
-	case *literal.BoolValue:
-		ret = &assign.FromBool{Value: v}
-	case *literal.NumValue:
-		ret = &assign.FromNumber{Value: v}
-	case *literal.TextValue:
-		ret = &assign.FromText{Value: v}
-	case *literal.RecordValue:
-		ret = &assign.FromRecord{Value: v}
-	case *literal.NumValues:
-		ret = &assign.FromNumList{Value: v}
-	case *literal.TextValues:
-		ret = &assign.FromTextList{Value: v}
-	case *literal.RecordList:
-		ret = &assign.FromRecordList{Value: v}
-	default:
-		panic(errutil.Fmt("unknown literal %T", v))
-	}
-	return
-}
-
 func (d *Decoder) DecodeAssignment(b []byte) (ret rt.Assignment, err error) {
 	// fix? mdl_default technically has redundant info --
 	// because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else

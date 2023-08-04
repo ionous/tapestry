@@ -33,7 +33,7 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	} else {
 		trait := v.String()
 		ret = BoolFrom(trait == field, "" /*"trait"*/)
-		// fix? the assembler doesnt flag these as class trait
+		// fix? weave doesnt flag these as class trait
 		// we could add that, or put the name of the aspect they came from ( so class stays a "kind" )
 	}
 	return

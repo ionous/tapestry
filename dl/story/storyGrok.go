@@ -290,11 +290,11 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 	if err == nil {
 		pen := w.Pin()
 		if isProper(n.Article, og) {
-			if e := pen.AddValueField(noun, "proper named", truly()); e != nil {
+			if e := pen.AddFieldValue(noun, "proper named", truly()); e != nil {
 				err = e
 			}
 		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := pen.AddValueField(noun, "indefinite article", text(a, "")); e != nil {
+			if e := pen.AddFieldValue(noun, "indefinite article", text(a, "")); e != nil {
 				err = e
 			}
 		}
@@ -303,7 +303,7 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 	if err == nil {
 		for _, t := range n.Traits {
 			t := lang.Normalize(t.String())
-			if e := pen.AddValueField(noun, t, truly()); e != nil {
+			if e := pen.AddFieldValue(noun, t, truly()); e != nil {
 				err = errutil.Append(err, e)
 				break // out of the traits to the next noun
 			}
@@ -369,15 +369,15 @@ func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error
 				} else if e := pen.AddName(n, kind, -1); e != nil {
 					err = e // ^ so that typing "triangle" means "triangles-1"
 					break
-				} else if e := pen.AddValueField(n, "counted", truly()); e != nil {
+				} else if e := pen.AddFieldValue(n, "counted", truly()); e != nil {
 					err = e
 					break
-				} else if e := pen.AddValueField(n, "printed name", text(kind, "")); e != nil {
+				} else if e := pen.AddFieldValue(n, "printed name", text(kind, "")); e != nil {
 					err = e // so that printing "triangles-1" yields "triangle"
 					break   // FIX: itd make a lot more sense to have a default value for the kind
 				} else {
 					for _, t := range noun.Traits {
-						if e := pen.AddValueField(n, t.String(), truly()); e != nil {
+						if e := pen.AddFieldValue(n, t.String(), truly()); e != nil {
 							err = e
 							break Loop
 						}

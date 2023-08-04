@@ -1,10 +1,10 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -248,10 +248,10 @@ func (op *Values) Assert(cat *weave.Catalog) error {
 		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
 			err = e
 		} else if field, path := op.Field, op.Path; len(path) == 0 {
-			err = pen.AddValueField(n, field, decode.AssignLiteral(op.Value))
+			err = pen.AddFieldValue(n, field, assign.Literal(op.Value))
 		} else {
 			path := append(path, field)
-			err = pen.AddValuePath(n, mdl.MakePath(path...), op.Value)
+			err = pen.AddPathValue(n, mdl.MakePath(path...), op.Value)
 		}
 		return
 	})

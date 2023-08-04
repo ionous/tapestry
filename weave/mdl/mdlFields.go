@@ -2,8 +2,11 @@ package mdl
 
 import (
 	"database/sql"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -130,19 +133,63 @@ type fieldInfo struct {
 	id   int64
 	name string
 	cls  classInfo
+	aff  affine.Affinity
 }
 
 func (f *fieldInfo) class() classInfo {
 	return f.cls
 }
 
+func (f *fieldInfo) rewriteTrait(name string, value assign.Assignment) (ret assign.Assignment, err error) {
+	if name == f.name {
+		ret = value
+	} else {
+		switch v := value.(type) {
+		default:
+			err = errutil.New("incompatible assignment to trait, got %T", value)
+		case *assign.FromBool:
+			switch b := v.Value.(type) {
+			default:
+				err = errutil.New("trait's only support literal bools, got %T", value)
+			case *literal.BoolValue:
+				if !b.Value {
+					err = errutil.New("opposite trait assignment not supported")
+				} else {
+					ret = &assign.FromText{Value: &literal.TextValue{Value: name}}
+				}
+			}
+		}
+	}
+	return
+}
+
+// recursively descend through the specified fields
+// returns the outer and inner most fields
+func (pen *Pen) digField(noun nounInfo, path []string) (retout, retin fieldInfo, err error) {
+	root, path := path[0], path[1:]
+	if outer, e := pen.findField(noun.class(), root); e != nil {
+		err = e
+	} else {
+		inner := outer
+		for i := 0; i < len(path) && err == nil; i++ {
+			subField := path[i]
+			if inner.aff != affine.Record {
+				err = errutil.New("expected a field of type record for noun %q, kind %q, path %q(%d)",
+					noun.name, noun.kind, strings.Join(path, "."), i)
+			} else {
+				inner, err = pen.findField(inner.class(), subField)
+			}
+		}
+		if err == nil {
+			retout, retin = outer, inner
+		}
+	}
+	return
+}
+
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
-func (pen *Pen) findField(kind classInfo, field string, aff affine.Affinity) (ret fieldInfo, err error) {
-	var prev struct {
-		fieldInfo
-		aff affine.Affinity
-	}
+func (pen *Pen) findField(kind classInfo, field string) (ret fieldInfo, err error) {
 	if e := pen.db.QueryRow(` 
 -- all possible traits:
 with allTraits as (	
@@ -188,29 +235,11 @@ where ma.name = @fieldName`,
 		sql.Named("aspects", pen.paths.aspectPath),
 		sql.Named("ancestry", kind.fullpath),
 		sql.Named("fieldName", field)).
-		Scan(&prev.id, &prev.name, &prev.aff, &prev.cls.id, &prev.cls.name, &prev.cls.fullpath); e != nil {
+		Scan(&ret.id, &ret.name, &ret.aff, &ret.cls.id, &ret.cls.name, &ret.cls.fullpath); e != nil {
 		if e == sql.ErrNoRows {
 			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind.name, pen.domain)
 		} else {
 			err = errutil.New("database error", e)
-		}
-	} else {
-		// if the names don't match, than the search found a trait of an aspect:
-		if prev.name != field {
-			if aff != affine.Bool {
-				err = errutil.Fmt("affinity %s is incompatible with trait %q of aspect %q in kind %q",
-					aff, field, prev.name, kind.name)
-			} else {
-				ret = prev.fieldInfo
-			}
-		} else {
-			// otherwise the search returned a normal field:
-			if prev.aff != aff {
-				err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
-					aff, prev.aff, field, kind.name)
-			} else {
-				ret = prev.fieldInfo
-			}
 		}
 	}
 	return
