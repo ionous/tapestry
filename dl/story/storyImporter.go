@@ -91,7 +91,7 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 						if rep, e := tgt.PreImport(cat); e != nil {
 							err = errutil.New(e, "failed to create replacement")
 						} else if rep != nil && !slot.SetSlot(rep) {
-							err = errutil.New("failed to set replacement")
+							err = errutil.Fmt("failed to set slot %T with replacement %T", slot, rep)
 						}
 					}
 				}
