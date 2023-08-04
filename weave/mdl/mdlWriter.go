@@ -640,6 +640,7 @@ func (pen *Pen) AddOpposite(a, b string) (err error) {
 // even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
 var mdl_pair = tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at")
 
+// currently assumes exact noun names
 func (pen *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
 	if rel, e := pen.findRequiredKind(rel); e != nil {
 		err = e
@@ -945,8 +946,7 @@ func (pen *Pen) AddTestValue(noun, path, out string) (err error) {
 }
 
 // the top level fields of nouns can hold runtime evaluated assignments.
-// note: in storage, the assignment wrapper ( FromText, etc. ) is redundant;
-// we know what the assignment will be because we know the type of field.
+// note: assumes noun is an exact name
 func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
 		err = errutil.New("unexpected dot in assigned value for noun %q field %q", noun, field)
@@ -957,6 +957,7 @@ func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err 
 }
 
 // store a literal value somewhere within a record held by a noun.
+// note: assumes noun is an exact name
 func (pen *Pen) AddPathValue(noun, path string, value literal.LiteralValue) (err error) {
 	if parts := strings.Split(path, "."); len(parts) == 1 {
 		err = pen.addFieldValue(noun, path, assign.Literal(value))

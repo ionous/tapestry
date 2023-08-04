@@ -26,7 +26,7 @@ func (n *nounInfo) class() classInfo {
 }
 
 // find the noun named exactly as specified.
-// FIX: can we GetClose and then see if the matched name is exact name we found?
+// FIX: can we GetClose and then have the caller see if the matched name is exact name we found?
 func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
 	if n, e := pen.findRequiredNoun(name, nounWithKind); e != nil {
 		err = e
@@ -41,6 +41,15 @@ func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
 // there should be a difference between "a noun is known as"
 // and "understand this word by the player as" -- and currently there's not.
 func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
+	if noun, e := pen.getClosestNoun(name); e != nil {
+		err = e
+	} else {
+		ret = noun.name
+	}
+	return
+}
+
+func (pen *Pen) getClosestNoun(name string) (ret nounInfo, err error) {
 	var out nounInfo
 	if e := pen.db.QueryRow(`
 	select mn.domain, mn.rowid, mn.noun, mk.rowid, ',' || mk.rowid || ',' || mk.path
@@ -61,15 +70,7 @@ func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
 	} else if out.id == 0 {
 		err = errutil.Fmt("%w noun %q in domain %q", Missing, name, pen.domain)
 	} else {
-		ret = out.name
-	}
-	return
-}
-
-// if specified, must exist.
-func (pen *Pen) findOptionalNoun(noun string, q nounFinder) (ret nounInfo, err error) {
-	if len(noun) > 0 {
-		ret, err = pen.findRequiredNoun(noun, q)
+		ret = out
 	}
 	return
 }

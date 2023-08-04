@@ -94,19 +94,23 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			names := nouns.Strings()
 			if kind, e := grok.StripArticle(kind.String()); e != nil {
 				err = e
-			} else if len(kind) > 0 {
+			} else {
+				//
 				for i, name := range names {
 					if name, e := grok.StripArticle(name); e != nil {
 						err = errutil.Append(err, e)
 					} else {
 						n := lang.Normalize(name)
-						if e := pen.AddNoun(n, name, kind); e != nil {
-							err = errutil.Append(err, e)
-						} else {
-							names[i] = n // replace for the traits loop
+						names[i] = n // replace for the traits loop
+						//
+						if len(kind) > 0 {
+							if e := pen.AddNoun(n, name, kind); e != nil {
+								err = errutil.Append(err, e)
+							}
 						}
 					}
 				}
+
 			}
 			if traits := traits.Strings(); len(traits) > 0 && err == nil {
 				for _, t := range traits {
@@ -197,13 +201,13 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 			subjects := nouns.Strings()
 			field, lines := field.String(), text(lines, "")
 			for _, noun := range subjects {
-				if noun, e := grok.StripArticle(noun); e != nil {
+				if name, e := grok.StripArticle(noun); e != nil {
 					err = errutil.Append(err, e)
-				} else {
-					n := lang.Normalize(noun)
-					if e := pen.AddFieldValue(n, field, lines); e != nil {
-						err = errutil.Append(err, e)
-					}
+				} else if noun, e := pen.GetClosestNoun(lang.Normalize(name)); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := pen.AddFieldValue(noun, field, lines); e != nil {
+					err = errutil.Append(err, e)
+
 				}
 			}
 		}
@@ -245,6 +249,14 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
 		} else {
+			// fix: for nearly every statement; after we resolve the names -- we'd want to re-schedule
+			// because if there's anything mssing; we will lose the context ( ex. pattern call stack )
+			// needed to re-resolve the names. capturing the context might work, but re-issuing the schedule might make sense too
+			// ( ex. could make it RequireNames instead of requirePlurals, etc. )
+			// even more interesting are "partial resolutions" --
+			// this is where the promise api (weave.res) would come in handy --
+			// resolve the rel, resolve the nouns promise all
+			// then define the relation.
 			err = defineRelatives(w, rel.String(), otherNouns.Strings(), nouns.Strings())
 		}
 		return

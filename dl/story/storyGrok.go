@@ -226,7 +226,7 @@ func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err err
 				names = append(names, ns...)
 			}
 		} else {
-			if name, e := importNamedNoun(w, n); e != nil {
+			if name, e := importNamedNoun(w.Pin(), n); e != nil {
 				err = e
 				break
 			} else {
@@ -247,35 +247,36 @@ func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err err
 	return
 }
 
-func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
+func importNamedNoun(pen *mdl.Pen, n grok.Noun) (ret string, err error) {
 	var noun string
-	og := n.Name.String()
-	pen := w.Pin()
-	if name := lang.Normalize(og); name == "you" {
+	fullName := n.Name.String()
+	if name := lang.Normalize(fullName); name == "you" {
 		// tdb: the current thought is that "the player" should be a variable;
 		// currently its an "agent".
 		noun, err = pen.GetExactNoun("self")
 	} else {
 		if n.Exact { // ex. ".... called the spatula."
 			noun, err = pen.GetExactNoun(name)
+		} else if fold, e := pen.GetClosestNoun(name); e != nil {
+			err = e
 		} else {
-			// if it doesnt exist; we create it.
-			if fold, e := pen.GetClosestNoun(name); e != nil {
-				err = e
-			} else {
-				noun = fold
-			}
+			noun = fold
 		}
+		// if it doesnt exist; we create it.
 		if errors.Is(err, mdl.Missing) {
-			// ugh
-			base := "things"
+			base := "things" // ugh
 			if len(n.Kinds) > 0 {
 				base = lang.Normalize(n.Kinds[0].String())
 			}
-			err = pen.AddNoun(name, og, base)
+			if e := pen.AddNoun(name, fullName, base); e != nil {
+				err = e
+			} else {
+				noun = name
+			}
 		}
 	}
 	// assign kinds
+	// fix consider a "noun builder" instead
 	if err == nil {
 		for _, k := range n.Kinds {
 			k := lang.Normalize(k.String())
@@ -288,8 +289,7 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 	}
 	// add articles:
 	if err == nil {
-		pen := w.Pin()
-		if isProper(n.Article, og) {
+		if isProper(n.Article, fullName) {
 			if e := pen.AddFieldValue(noun, "proper named", truly()); e != nil {
 				err = e
 			}
@@ -364,7 +364,7 @@ func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error
 		} else {
 		Loop:
 			for _, n := range names {
-				if e := pen.AddNoun(n, "", kinds); e != nil {
+				if e := pen.AddNoun(n, n, kinds); e != nil {
 					err = e
 				} else if e := pen.AddName(n, kind, -1); e != nil {
 					err = e // ^ so that typing "triangle" means "triangles-1"

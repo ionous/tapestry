@@ -117,7 +117,7 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 			err = e
 		} else {
 			pen := w.Pin()
-			if e := pen.AddNoun(door.name, "", "doors"); e != nil {
+			if e := pen.AddNoun(door.name, door.name, "doors"); e != nil {
 				err = e // ^ ensure the exit exists
 			} else if e := relateNouns(w, room, door); e != nil {
 				err = e // ^ put the exit in the current room
@@ -143,13 +143,13 @@ func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor helperNoun, mapDir Map
 		exitName, otherName := exitDoor.uniform, otherRoom.uniform
 		// -- Refs(nounOf(room, "rooms")))// verify the current room
 		// -- Refs(nounOf(otherRoom, "rooms")))// verify the target room
-		if e := pen.AddNoun(exitDoor.name, "", "doors"); e != nil {
+		if e := pen.AddNoun(exitDoor.name, exitDoor.name, "doors"); e != nil {
 			err = e // ^ ensure the existence of the door
 		} else if e := relateNouns(w, room, exitDoor); e != nil {
 			err = e // ^ put the exit in the current room
 		} else if e := pen.AddPathValue(room.name, mdl.MakePath("compass", dir), Tx(exitName, "door")); e != nil {
 			err = e // ^ set the room's compass to the exit
-		} else if e := pen.AddPathValue(exitDoor.name, mdl.MakePath(exitDoor.name, "destination"), Tx(otherName, "rooms")); e != nil {
+		} else if e := pen.AddPathValue(exitDoor.name, "destination", Tx(otherName, "rooms")); e != nil {
 			err = e // ^ set the door's target to the other room
 		} else {
 			if generateExit {
