@@ -157,7 +157,7 @@ func expectFullResults(t *testing.T, dt *testweave.TestWeave) {
 	} else if outlocals, e := dt.ReadLocals(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{
-		`a:p:l2:{"FromNumber:":10}`,
+		`a:p:l2:10`,
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outlocals))
 		t.Fatal(diff)

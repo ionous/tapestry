@@ -83,12 +83,10 @@ func (run *Runner) setFieldCache(obj query.NounInfo, field g.Field, val g.Value)
 
 func (run *Runner) getFieldCache(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
 	if c, e := run.nounValues.cache(func() (ret any, err error) {
-		// note: in the original version of this, we queried *all* fields
-		// ( unioning in those with traits, and those without defaults )
 		if pairs, e := run.query.NounValues(obj.Id, field.Name); e != nil {
 			err = e
-		} else if len(pairs) == 0 { // fields be empty, have literal values, or dynamic values.
-			ret, e = readFields(run, field, pairs)
+		} else if len(pairs) > 0 {
+			ret, err = readFields(run, field, pairs)
 		} else {
 			// tbd: needed for create record, wish there was a nicer way
 			// at the very least it'd be nice if the decoder could hold this
@@ -111,7 +109,7 @@ func (run *Runner) getFieldCache(obj query.NounInfo, field g.Field) (ret g.Value
 				ret, err = safe.AutoConvert(run, field, v)
 			}
 		default:
-			err = errutil.Fmt("unexpected type in object cache %T", c)
+			err = errutil.Fmt("unexpected type in object cache %T for noun %q field %q", c, obj.Id, field.Name)
 		}
 	}
 	return
@@ -123,7 +121,7 @@ func readFields(run *Runner, field g.Field, pairs []string) (ret any, err error)
 	if !dotted(pairs) {
 		// a single top level value? then its an assignment
 		value := pairs[1]
-		ret, err = run.decode.DecodeAssignment([]byte(value))
+		ret, err = run.decode.DecodeAssignment(field.Affinity, []byte(value))
 	} else {
 		// sparse pairs of values? then its a sparse record of literals
 		if k, e := run.GetKindByName(field.Type); e != nil {
@@ -160,7 +158,7 @@ func fillRecord(run *Runner, rec *g.Record, fullpath, value string) (err error) 
 			if len(rest) == 0 {
 				field := k.Field(i)
 				// FIX: how does fieldType actually get recorded!?!
-				if l, e := run.decode.DecodeField([]byte(value), field.Affinity, field.Type); e != nil {
+				if l, e := run.decode.DecodeField(field.Affinity, []byte(value), field.Type); e != nil {
 					err = e
 				} else if v, e := l.GetLiteralValue(run); e != nil {
 					err = e
@@ -193,16 +191,8 @@ func fillRecord(run *Runner, rec *g.Record, fullpath, value string) (err error) 
 // -- only the root level allows evals
 // because that's all that can be queried for
 // (dotted paths live in core, not in the runtime interface )
-func dotted(pairs []string) (ret bool) {
-	// any more than two elements requires it
-	if cnt := len(pairs); cnt > 2 {
-		ret = true
-	} else if cnt == 2 {
-		path := pairs[0]
-		_, rhs := dotscan(path)
-		ret = len(rhs) > 0 // a dot always has two parts left and right
-	}
-	return
+func dotted(pairs []string) bool {
+	return len(pairs) > 2 || len(pairs[0]) > 0
 }
 
 // return the string up to the next dot, and everything after.

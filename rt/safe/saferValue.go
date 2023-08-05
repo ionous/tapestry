@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
 
@@ -12,11 +13,17 @@ import (
 // and the incoming value is untyped, try to convert it.
 func AutoConvert(run rt.Runtime, ft g.Field, val g.Value) (ret g.Value, err error) {
 	ret = val // provisionally.
-	// assigning to typed text?
+	// assigning to a field of typed text (which refers to an object?)
 	if ft.Affinity == affine.Text && len(ft.Type) > 0 {
-		// and we have some valid untyped text.
+		// and the input is untyped?
+		// (tbd: reject objects of incompatible type?)
 		if val.Affinity() == affine.Text && val.Len() > 0 && len(val.Type()) == 0 {
-			ret, err = run.GetField(meta.ObjectId, val.String())
+			// is the target field of object type?
+			if k, e := run.GetKindByName(ft.Type); e != nil {
+				err = e
+			} else if k.Implements(kindsOf.Kind.String()) {
+				ret, err = run.GetField(meta.ObjectId, val.String())
+			}
 		}
 	}
 	return

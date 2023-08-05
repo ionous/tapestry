@@ -179,7 +179,7 @@ func (q *Query) NounName(id string) (ret string, err error) {
 }
 
 // interpreting the value is left to the caller ( re: field affinity )
-// fix? would it make more sense to pass a pointer to the value so that sqlite can do the value transformation
+// returns pairs of path, (marshaled) value
 func (q *Query) NounValues(id, field string) (ret []string, err error) {
 	if rows, e := q.nounValues.Query(id, field); e != nil {
 		err = e

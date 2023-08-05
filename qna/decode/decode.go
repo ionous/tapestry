@@ -21,21 +21,12 @@ func NewDecoder(signatures cin.Signatures) *Decoder {
 	}
 }
 
-func (d *Decoder) DecodeField(b []byte, a affine.Affinity, fieldType string) (ret literal.LiteralValue, err error) {
+func (d *Decoder) DecodeField(a affine.Affinity, b []byte, fieldType string) (literal.LiteralValue, error) {
 	return literal.ReadLiteral(a, fieldType, b)
 }
 
-func (d *Decoder) DecodeAssignment(b []byte) (ret rt.Assignment, err error) {
-	// fix? mdl_default technically has redundant info --
-	// because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else
-	// storing the evals ( re: readEval below ) would eliminate that.
-	var out assign.Assignment
-	if e := core.Decode(assign.Assignment_Slot{Value: &out}, b, d.signatures); e != nil {
-		err = e
-	} else {
-		ret = out
-	}
-	return
+func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (rt.Assignment, error) {
+	return parseEval(a, b, d.signatures)
 }
 
 func (d *Decoder) DecodeFilter(b []byte) (ret rt.BoolEval, err error) {
@@ -52,6 +43,7 @@ func (d *Decoder) DecodeProg(b []byte) (ret rt.Execute_Slice, err error) {
 	return
 }
 
+// matches with mdl.marshalAssignment
 // the expected eval depends on the affinity (a) of the destination field.
 // fix? merge somehow with express.newAssignment? with compact decoding.
 func parseEval(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {

@@ -9,7 +9,7 @@ type cachedValue struct {
 
 func (c *cache) cache(build func() (any, error), args ...string) (ret any, err error) {
 	if len(args) == 0 {
-		panic("missing key for cache")
+		panic("key for cache unspecified")
 	}
 	key := makeKey(args...)
 	if n, ok := (*c)[key]; ok {

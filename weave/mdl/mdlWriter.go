@@ -156,7 +156,7 @@ var mdl_default = tables.Insert("mdl_default", "field", "value")
 
 // the pattern half of Start; domain, kind, field are a pointer into Field
 func (pen *Pen) addDefault(kid kindInfo, field string, v assign.Assignment) (err error) {
-	if out, e := marshalout(v); e != nil {
+	if out, e := marshalAssignment(v); e != nil {
 		err = e
 	} else {
 		domain := pen.domain

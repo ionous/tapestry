@@ -148,9 +148,9 @@ func (run *Runner) getFields(kind string) (ret fieldSet, err error) {
 		fields := make([]g.Field, len(fs))
 		var init []rt.Assignment // init is so often empty, only allocate on demand.
 		for i, f := range fs {
-			fields[i] = g.Field{f.Name, f.Affinity, f.Class}
+			fields[i] = g.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class}
 			if prog := f.Init; len(prog) > 0 {
-				if val, e := run.decode.DecodeAssignment(prog /*, f.Affinity*/); e != nil {
+				if val, e := run.decode.DecodeAssignment(f.Affinity, prog); e != nil {
 					err = errutil.New("error while decoding", f.Name, e)
 					break
 				} else {

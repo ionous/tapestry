@@ -40,7 +40,8 @@ type Query interface {
 	NounInfo(name string) (NounInfo, error)
 	NounIsNamed(id, name string) (bool, error)
 	NounName(id string) (string, error)
-	// returns pairs of path, value
+	// a single field can contain a set of recursive spare values;
+	// so this returns pairs of path, value.
 	NounValues(id, field string) ([]string, error)
 	NounsByKind(kind string) ([]string, error)
 	PluralToSingular(plural string) (string, error)

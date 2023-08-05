@@ -18,7 +18,6 @@ const (
 	Action Kinds = Pattern | 1<<iota // actions
 	Event                            // events
 	Macro                            // macros
-
 )
 
 var DefaultKinds = []Kinds{

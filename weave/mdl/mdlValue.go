@@ -26,7 +26,7 @@ func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err e
 		err = errutil.New("can't assign trait to noun")
 	} else if aff := assign.GetAffinity(value); aff != field.aff {
 		err = errutil.Fmt("mismatched affinity, cant assign %s to field of %s", aff, field.aff)
-	} else if out, e := marshalfrom(value); e != nil {
+	} else if out, e := marshalAssignment(value); e != nil {
 		err = e
 	} else {
 		err = pen.addValue(noun, field, field.name, "", out)
@@ -119,7 +119,8 @@ func debugJoin(noun, field, path string) string {
 	return b.String()
 }
 
-func marshalfrom(val assign.Assignment) (ret string, err error) {
+// matches with decode.parseEval
+func marshalAssignment(val assign.Assignment) (ret string, err error) {
 	// questionable: since we know the type of the field
 	// storing the assignment wrapper is redundant.
 	switch v := val.(type) {
