@@ -15,7 +15,7 @@ import (
 // backwards compat
 type helperNoun struct {
 	name    string
-	uniform string // fix: things that generate nouns should be be commands dependent on the generated noun names
+	uniform string
 }
 
 // return the name of a noun based on the name of the current noun
@@ -25,10 +25,7 @@ func (h *helperNoun) dependentNoun(name string) helperNoun {
 }
 
 // can return a noun with an empty name
-// fix: things that generate nouns should be be commands dependent on the generated noun names
-//
-//	its not valid to generate a noun name here.
-func makeNoun(w *weave.Weaver, name rt.TextEval) (ret helperNoun, err error) {
+func normalizeName(w *weave.Weaver, name rt.TextEval) (ret helperNoun, err error) {
 	if name, e := safe.GetOptionalText(w, name, ""); e != nil {
 		err = e
 	} else if name := name.String(); len(name) > 0 {
@@ -49,32 +46,35 @@ func (op *MapHeading) Execute(macro rt.Runtime) error {
 // departing from the current room in a direction
 func (op *MapHeading) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
-		if room, e := makeNoun(w, op.RoomName); e != nil {
+		//
+		if room, e := normalizeName(w, op.RoomName); e != nil {
 			err = e
 		} else if len(room.name) == 0 {
-			err = errutil.New("missing room name")
-		} else if otherRoom, e := makeNoun(w, op.OtherRoomName); e != nil {
+			err = errutil.New("empty room name")
+		} else if otherRoom, e := normalizeName(w, op.OtherRoomName); e != nil {
 			err = e
 		} else if len(otherRoom.name) == 0 {
-			err = errutil.New("missing other room name")
-		} else if door, e := makeNoun(w, op.DoorName); e != nil {
-			err = e // ^ note: door name is optional
-		} else {
+			err = errutil.New("empty other room name")
+		} else if door, e := normalizeName(w, op.DoorName); e != nil {
+			err = e // ^ note: door is optional; if not specified door names are blank
+		} else if e := cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
 			// exit this room moving through the (optional) door
+			return mapDirect(w, room, otherRoom, door, op.Dir)
+		}); e != nil {
+			err = e
+		} else {
 			pen := w.Pin()
-			mapDirect(w, room, otherRoom, door, op.Dir)
-
 			// write a fact stating the general direction from one room to the other has been established.
 			// ( used to detect conflicts in (the reverse directional) implications of some other statement )
 			if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
-				err = errutil.New("missing map direction")
+				err = errutil.New("empty map direction")
 			} else if e := pen.AddFact(makeKey("dir", room.uniform, dir), otherRoom.uniform); e != nil {
 				err = e
 			} else {
 				// reverse connect
 				if op.MapConnection.isTwoWay() {
 					if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
-						err = errutil.New("missing map direction")
+						err = errutil.New("empty map direction")
 					} else {
 						otherDir := w.OppositeOf(dir)
 						// to prioritize some other potentially more explicit definition of a door:
@@ -86,8 +86,10 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 						if e := pen.AddFact(makeKey("dir", otherRoom.uniform, otherDir), room.uniform); e != nil {
 							err = e
 						} else {
-							// create the reverse door, etc.
-							err = mapDirect(w, otherRoom, room, missingDoor, MapDirection{otherDir})
+							err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+								// create the reverse door, etc.
+								return mapDirect(w, otherRoom, room, missingDoor, MapDirection{otherDir})
+							})
 						}
 					}
 				}
@@ -109,19 +111,19 @@ func (op *MapDeparting) Execute(macro rt.Runtime) error {
 // departing from the current room via a door
 func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
-		if room, e := makeNoun(w, op.RoomName); e != nil {
+		if room, e := normalizeName(w, op.RoomName); e != nil {
 			err = e // ^ todo: ensure the room exists without declaring it
-		} else if door, e := makeNoun(w, op.DoorName); e != nil {
+		} else if door, e := normalizeName(w, op.DoorName); e != nil {
 			err = e
-		} else if otherRoom, e := makeNoun(w, op.OtherRoomName); e != nil {
+		} else if otherRoom, e := normalizeName(w, op.OtherRoomName); e != nil {
 			err = e
 		} else {
 			pen := w.Pin()
-			if e := pen.AddNoun(door.name, door.name, "doors"); e != nil {
-				err = e // ^ ensure the exit exists
-			} else if e := relateNouns(w, room, door); e != nil {
+			if e := relateNouns(w, room, door); e != nil {
 				err = e // ^ put the exit in the current room
-			} else if e := pen.AddFieldValue(door.name, "destination", text(otherRoom.uniform, "rooms")); e != nil {
+			} else if e := pen.AddNoun(door.uniform, door.name, "doors"); e != nil {
+				err = e // ^ ensure the exit exists
+			} else if e := pen.AddFieldValue(door.uniform, "destination", text(otherRoom.uniform, "rooms")); e != nil {
 				err = e // ^ set the door's target to the other room; todo:
 			}
 		}
@@ -132,33 +134,34 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 // set the room's compass, creating an exit if needed to normalize directional travel to always involve a door.
 func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor helperNoun, mapDir MapDirection) (err error) {
 	if dir := lang.Normalize(mapDir.Str); len(dir) == 0 {
-		err = errutil.New("missing map direction")
+		err = errutil.New("empty map direction")
 	} else {
 		pen := w.Pin()
 		generateExit := len(exitDoor.name) == 0
 		if generateExit { // ex. "lobby-up-door"
 			exitDoor = room.dependentNoun(dir + "-door")
 		}
-		//  manually transform the names since we are using them as values
-		exitName, otherName := exitDoor.uniform, otherRoom.uniform
 		// -- Refs(nounOf(room, "rooms")))// verify the current room
 		// -- Refs(nounOf(otherRoom, "rooms")))// verify the target room
-		if e := pen.AddNoun(exitDoor.name, exitDoor.name, "doors"); e != nil {
-			err = e // ^ ensure the existence of the door
-		} else if e := relateNouns(w, room, exitDoor); e != nil {
+		if e := relateNouns(w, room, exitDoor); e != nil {
 			err = e // ^ put the exit in the current room
-		} else if e := pen.AddPathValue(room.name, mdl.MakePath("compass", dir), Tx(exitName, "door")); e != nil {
-			err = e // ^ set the room's compass to the exit
-		} else if e := pen.AddPathValue(exitDoor.name, "destination", Tx(otherName, "rooms")); e != nil {
-			err = e // ^ set the door's target to the other room
+		} else if e := pen.AddNoun(exitDoor.uniform, exitDoor.name, "doors"); e != nil {
+			err = e // ^ ensure the existence of the door
 		} else {
 			if generateExit {
 				// mark the autogenerated door as privately named scenery.
 				// ( keeps it unlisted, and stops the player from being able to refer to it )
-				if e := pen.AddFieldValue(exitName, "scenery", truly()); e != nil {
+				if e := pen.AddFieldValue(exitDoor.uniform, "scenery", truly()); e != nil {
 					err = e
-				} else if e := pen.AddFieldValue(exitName, "privately named", truly()); e != nil {
+				} else if e := pen.AddFieldValue(exitDoor.uniform, "privately named", truly()); e != nil {
 					err = e
+				}
+			}
+			if err == nil {
+				if e := pen.AddPathValue(room.uniform, mdl.MakePath("compass", dir), Tx(exitDoor.uniform, "door")); e != nil {
+					err = e // ^ set the room's compass to the exit
+				} else if e := pen.AddPathValue(exitDoor.uniform, "destination", Tx(otherRoom.uniform, "rooms")); e != nil {
+					err = e // ^ set the door's target to the other room
 				}
 			}
 		}
@@ -170,6 +173,7 @@ func (op *MapConnection) isTwoWay() bool {
 	return op.Str == MapConnection_ConnectingTo
 }
 
+// queue this as its own commands helps ensure the relation gets built properly
 func relateNouns(w *weave.Weaver, noun, other helperNoun) error {
 	return w.Catalog.Schedule(weave.RequireNames, func(w *weave.Weaver) error {
 		return w.Pin().AddPair("whereabouts", noun.uniform, other.uniform)

@@ -1,6 +1,8 @@
 package debug
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -44,7 +46,8 @@ func compareLast(run rt.Runtime, match []string) (err error) {
 
 func compareAtLast(match, input []string) (err error) {
 	if want, have := len(match), len(input); want > have {
-		err = errutil.New("expected", want, "lines, have", have)
+		err = errutil.New("expected", want, "lines, have", have,
+			"wanted:", strings.Join(match, "; "), "have:", strings.Join(input, "; "))
 	} else {
 		input = input[have-want:]
 		for i, w := range match {
