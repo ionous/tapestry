@@ -3,9 +3,9 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
@@ -49,21 +49,21 @@ func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) 
 }
 
 // returns a string or a FromText assignment as a slice of bytes
-func ConvertText(str string) (ret string, err error) {
-	// FIX: it would make more sense if the ephemera stored this as an rt.Assignment
-	// upgrade to include Affinity() for literal value, and all would be well.
+func convertText(str string) (ret assign.Assignment, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {
-		ret = str // okay; return the string.
+		ret = &assign.FromText{Value: &literal.TextValue{Value: str}}
 	} else {
 		if got, e := express.Convert(xs); e != nil {
 			err = errutil.New(e, xs)
 		} else if eval, ok := got.(rt.TextEval); !ok {
+			// todo: could probably fix this now
+			// maybe passing in the expected aff to Convert or
+			// exposing / sharing unpackPatternArg
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
-			// fix!
-			ret, err = cout.Marshal(&assign.FromText{Value: eval}, CompactEncoder)
+			ret = &assign.FromText{Value: eval}
 		}
 	}
 	return

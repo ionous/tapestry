@@ -9,7 +9,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -183,31 +185,39 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 }
 
 // Execute - called by the macro runtime during weave.
-func (op *NounAssignment) Execute(macro rt.Runtime) error {
+func (op *DefineValue) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
 // ex. The description of the nets is xxx
-func (op *NounAssignment) Weave(cat *weave.Catalog) error {
+func (op *DefineValue) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if field, e := safe.GetText(w, op.FieldName); e != nil {
 			err = e
-		} else if lines, e := ConvertText(op.Lines.String()); e != nil {
-			err = e
 		} else {
-			pen := w.Pin()
-			subjects := nouns.Strings()
-			field, lines := field.String(), text(lines, "")
-			for _, noun := range subjects {
-				if name, e := grok.StripArticle(noun); e != nil {
-					err = errutil.Append(err, e)
-				} else if noun, e := pen.GetClosestNoun(lang.Normalize(name)); e != nil {
-					err = errutil.Append(err, e)
-				} else if e := pen.AddFieldValue(noun, field, lines); e != nil {
-					err = errutil.Append(err, e)
-
+			// try to convert from literal templates ( if any )
+			value := op.Value
+			switch wrapper := op.Value.(type) {
+			case *assign.FromText:
+				switch text := wrapper.Value.(type) {
+				case *literal.TextValue:
+					value, err = convertText(text.Value)
+				}
+			}
+			if err == nil {
+				pen := w.Pin()
+				subjects := nouns.Strings()
+				field := field.String()
+				for _, noun := range subjects {
+					if name, e := grok.StripArticle(noun); e != nil {
+						err = errutil.Append(err, e)
+					} else if noun, e := pen.GetClosestNoun(lang.Normalize(name)); e != nil {
+						err = errutil.Append(err, e)
+					} else if e := pen.AddFieldValue(noun, field, value); e != nil {
+						err = errutil.Append(err, e)
+					}
 				}
 			}
 		}

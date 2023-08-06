@@ -27,13 +27,15 @@
             ]
           },
           {
-            "Define value:of:asLines:": [
+            "Define value:of:as:": [
               "indefinite article",
               [
                 "the x",
                 "the f"
               ],
-              "an"
+              {
+                "FromText:": "an"
+              }
             ]
           },
           {

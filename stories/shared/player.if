@@ -42,20 +42,26 @@
       ]
     },
     {
-      "Define value:of:asLines:": [
+      "Define value:of:as:": [
         "pawn",
         "the player",
-        "self"
+        {
+          "FromText:": "self"
+        }
       ]
     },
     {
-      "Define value:of:asLines:": [
+      "Define value:of:as:": [
         "printed name",
         "self",
-        "you"
+        {
+          "FromText:": "you"
+        }
       ]
     },
-    { "Declare:": "You are proper named and privately named."},
+    {
+      "Declare:": "You are proper named and privately named."
+    },
     {
       "--": ""
     },

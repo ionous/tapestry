@@ -82,10 +82,12 @@
             "Declare:": "The flowerpot, the dishes, and the spoon are things."
           },
           {
-            "Define value:of:asLines:": [
+            "Define value:of:as:": [
               "printed plural name",
               "the flowerpot",
-              "broken flower pots"
+              {
+                "FromText:": "broken flower pots"
+              }
             ]
           }
         ],

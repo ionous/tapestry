@@ -956,10 +956,10 @@
         },
         {
           "--": [
-            "Assign one or more lines of text to a noun."
+            "Assign a starting value to the field of one or nouns."
           ],
           "Spec:slots:with flow:": [
-            "noun_assignment",
+            "define_value",
             [
               "story_statement",
               "execute"
@@ -984,9 +984,9 @@
                   },
                   {
                     "Term:name:type:": [
-                      "as_lines",
-                      "lines",
-                      "lines"
+                      "as",
+                      "value",
+                      "assignment"
                     ]
                   }
                 ]

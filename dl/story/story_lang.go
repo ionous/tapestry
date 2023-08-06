@@ -2476,7 +2476,6 @@ func DefineRelation_Marshal(m jsn.Marshaler, val *DefineRelation) (err error) {
 // DefineRelatives Relate nouns to each other
 type DefineRelatives struct {
 	Nouns      rt.TextListEval `if:"label=nouns"`
-	Kind       rt.TextEval     `if:"label=as,optional"`
 	Relation   rt.TextEval     `if:"label=relative_to"`
 	OtherNouns rt.TextListEval `if:"label=other_nouns"`
 	Markup     map[string]any
@@ -2496,7 +2495,6 @@ func (*DefineRelatives) Compose() composer.Spec {
 
 const DefineRelatives_Type = "define_relatives"
 const DefineRelatives_Field_Nouns = "$NOUNS"
-const DefineRelatives_Field_Kind = "$KIND"
 const DefineRelatives_Field_Relation = "$RELATION"
 const DefineRelatives_Field_OtherNouns = "$OTHER_NOUNS"
 
@@ -2578,26 +2576,19 @@ func DefineRelatives_Marshal(m jsn.Marshaler, val *DefineRelatives) (err error) 
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineRelatives_Field_Nouns))
 		}
-		e1 := m.MarshalKey("as", DefineRelatives_Field_Kind)
+		e1 := m.MarshalKey("relative_to", DefineRelatives_Field_Relation)
 		if e1 == nil {
-			e1 = rt.TextEval_Optional_Marshal(m, &val.Kind)
+			e1 = rt.TextEval_Marshal(m, &val.Relation)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefineRelatives_Field_Kind))
+			m.Error(errutil.New(e1, "in flow at", DefineRelatives_Field_Relation))
 		}
-		e2 := m.MarshalKey("relative_to", DefineRelatives_Field_Relation)
+		e2 := m.MarshalKey("other_nouns", DefineRelatives_Field_OtherNouns)
 		if e2 == nil {
-			e2 = rt.TextEval_Marshal(m, &val.Relation)
+			e2 = rt.TextListEval_Marshal(m, &val.OtherNouns)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", DefineRelatives_Field_Relation))
-		}
-		e3 := m.MarshalKey("other_nouns", DefineRelatives_Field_OtherNouns)
-		if e3 == nil {
-			e3 = rt.TextListEval_Marshal(m, &val.OtherNouns)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", DefineRelatives_Field_OtherNouns))
+			m.Error(errutil.New(e2, "in flow at", DefineRelatives_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
@@ -2832,6 +2823,128 @@ func DefineTraits_Marshal(m jsn.Marshaler, val *DefineTraits) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", DefineTraits_Field_Aspect))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineValue Assign a starting value to the field of one or nouns.
+type DefineValue struct {
+	FieldName rt.TextEval       `if:"label=value"`
+	Nouns     rt.TextListEval   `if:"label=of"`
+	Value     assign.Assignment `if:"label=as"`
+	Markup    map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineValue)(nil)
+var _ rt.Execute = (*DefineValue)(nil)
+
+func (*DefineValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineValue_Type = "define_value"
+const DefineValue_Field_FieldName = "$FIELD_NAME"
+const DefineValue_Field_Nouns = "$NOUNS"
+const DefineValue_Field_Value = "$VALUE"
+
+func (op *DefineValue) Marshal(m jsn.Marshaler) error {
+	return DefineValue_Marshal(m, op)
+}
+
+type DefineValue_Slice []DefineValue
+
+func (op *DefineValue_Slice) GetType() string { return DefineValue_Type }
+
+func (op *DefineValue_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineValue_Repeats_Marshal(m, (*[]DefineValue)(op))
+}
+
+func (op *DefineValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineValue_Slice) SetSize(cnt int) {
+	var els []DefineValue
+	if cnt >= 0 {
+		els = make(DefineValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineValue_Marshal(m, &(*op)[i])
+}
+
+func DefineValue_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineValue) error {
+	return jsn.RepeatBlock(m, (*DefineValue_Slice)(vals))
+}
+
+func DefineValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineValue_Flow struct{ ptr *DefineValue }
+
+func (n DefineValue_Flow) GetType() string      { return DefineValue_Type }
+func (n DefineValue_Flow) GetLede() string      { return "define" }
+func (n DefineValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineValue_Optional_Marshal(m jsn.Marshaler, pv **DefineValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineValue_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineValue
+		if err = DefineValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineValue_Marshal(m jsn.Marshaler, val *DefineValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("value", DefineValue_Field_FieldName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.FieldName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineValue_Field_FieldName))
+		}
+		e1 := m.MarshalKey("of", DefineValue_Field_Nouns)
+		if e1 == nil {
+			e1 = rt.TextListEval_Marshal(m, &val.Nouns)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineValue_Field_Nouns))
+		}
+		e2 := m.MarshalKey("as", DefineValue_Field_Value)
+		if e2 == nil {
+			e2 = assign.Assignment_Marshal(m, &val.Value)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineValue_Field_Value))
 		}
 		m.EndBlock()
 	}
@@ -4494,128 +4607,6 @@ func NothingField_Optional_Marshal(m jsn.Marshaler, pv **NothingField) (err erro
 func NothingField_Marshal(m jsn.Marshaler, val *NothingField) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NothingField_Flow{val}); err == nil {
-		m.EndBlock()
-	}
-	return
-}
-
-// NounAssignment Assign one or more lines of text to a noun.
-type NounAssignment struct {
-	FieldName rt.TextEval     `if:"label=value"`
-	Nouns     rt.TextListEval `if:"label=of"`
-	Lines     prim.Lines      `if:"label=as_lines"`
-	Markup    map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*NounAssignment)(nil)
-var _ rt.Execute = (*NounAssignment)(nil)
-
-func (*NounAssignment) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounAssignment_Type,
-		Uses: composer.Type_Flow,
-		Lede: "define",
-	}
-}
-
-const NounAssignment_Type = "noun_assignment"
-const NounAssignment_Field_FieldName = "$FIELD_NAME"
-const NounAssignment_Field_Nouns = "$NOUNS"
-const NounAssignment_Field_Lines = "$LINES"
-
-func (op *NounAssignment) Marshal(m jsn.Marshaler) error {
-	return NounAssignment_Marshal(m, op)
-}
-
-type NounAssignment_Slice []NounAssignment
-
-func (op *NounAssignment_Slice) GetType() string { return NounAssignment_Type }
-
-func (op *NounAssignment_Slice) Marshal(m jsn.Marshaler) error {
-	return NounAssignment_Repeats_Marshal(m, (*[]NounAssignment)(op))
-}
-
-func (op *NounAssignment_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounAssignment_Slice) SetSize(cnt int) {
-	var els []NounAssignment
-	if cnt >= 0 {
-		els = make(NounAssignment_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounAssignment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounAssignment_Marshal(m, &(*op)[i])
-}
-
-func NounAssignment_Repeats_Marshal(m jsn.Marshaler, vals *[]NounAssignment) error {
-	return jsn.RepeatBlock(m, (*NounAssignment_Slice)(vals))
-}
-
-func NounAssignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounAssignment) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounAssignment_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounAssignment_Flow struct{ ptr *NounAssignment }
-
-func (n NounAssignment_Flow) GetType() string      { return NounAssignment_Type }
-func (n NounAssignment_Flow) GetLede() string      { return "define" }
-func (n NounAssignment_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounAssignment_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounAssignment); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounAssignment_Optional_Marshal(m jsn.Marshaler, pv **NounAssignment) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounAssignment_Marshal(m, *pv)
-	} else if !enc {
-		var v NounAssignment
-		if err = NounAssignment_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounAssignment_Flow{val}); err == nil {
-		e0 := m.MarshalKey("value", NounAssignment_Field_FieldName)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.FieldName)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounAssignment_Field_FieldName))
-		}
-		e1 := m.MarshalKey("of", NounAssignment_Field_Nouns)
-		if e1 == nil {
-			e1 = rt.TextListEval_Marshal(m, &val.Nouns)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounAssignment_Field_Nouns))
-		}
-		e2 := m.MarshalKey("as_lines", NounAssignment_Field_Lines)
-		if e2 == nil {
-			e2 = prim.Lines_Marshal(m, &val.Lines)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounAssignment_Field_Lines))
-		}
 		m.EndBlock()
 	}
 	return
@@ -6996,6 +6987,7 @@ var Slats = []composer.Composer{
 	(*DefineRelatives)(nil),
 	(*DefineScene)(nil),
 	(*DefineTraits)(nil),
+	(*DefineValue)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
 	(*EventName)(nil),
@@ -7011,7 +7003,6 @@ var Slats = []composer.Composer{
 	(*MapDirection)(nil),
 	(*MapHeading)(nil),
 	(*NothingField)(nil),
-	(*NounAssignment)(nil),
 	(*NumListField)(nil),
 	(*NumberField)(nil),
 	(*OneToMany)(nil),
@@ -7096,8 +7087,6 @@ var Signatures = map[uint64]interface{}{
 	17317068367254309973: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:result:with: */
 	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
 	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
-	16220995888003687425: (*DefineRelatives)(nil),      /* execute=Define nouns:as:relativeTo:otherNouns: */
-	1103497420051368541:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:as:relativeTo:otherNouns: */
 	11310404142062902510: (*DefineNounTraits)(nil),     /* execute=Define nouns:as:traits: */
 	15286672803702417298: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:as:traits: */
 	9839172640820177073:  (*DefineRelatives)(nil),      /* execute=Define nouns:relativeTo:otherNouns: */
@@ -7124,8 +7113,8 @@ var Signatures = map[uint64]interface{}{
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
 	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
-	13015531987120768169: (*NounAssignment)(nil),       /* execute=Define value:of:asLines: */
-	6282260507942600093:  (*NounAssignment)(nil),       /* story_statement=Define value:of:asLines: */
+	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
+	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
 	11410817647196565135: (*ActionDecl)(nil),           /* execute=Event:action:args common: */
