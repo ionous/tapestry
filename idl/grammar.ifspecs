@@ -11,7 +11,7 @@
             "scanner_maker",
             {
               "Flow:uses:": [
-                "as",
+                "action",
                 [
                   {
                     "Term:name:type:": [
@@ -25,38 +25,15 @@
             }
           ]
         },
-        {
-          "--": "allows the user to refer to a noun by one or more other terms.",
-          "Spec:slots:with flow:": [
-            "alias",
-            "grammar_maker",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:repeats:": [
-                    "_",
-                    "names",
-                    "text",
-                    true
-                  ]
-                },
-                {
-                  "Term:type:": [
-                    "as_noun",
-                    "text"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
+       
         {
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "all_of",
             "scanner_maker",
             {
-              "Flow uses:": [
+              "Flow:uses:": [
+                "sequence",
                 {
                   "Term:name:type:repeats:": [
                     "_",
@@ -75,10 +52,11 @@
             "any_of",
             "scanner_maker",
             {
-              "Flow uses:": [
+              "Flow:uses:": [
+                "one",
                 {
                   "Term:name:type:repeats:": [
-                    "_",
+                    "of",
                     "options",
                     "scanner_maker",
                     true
@@ -90,44 +68,31 @@
         },
         {
           "--": "starts a parser scanner.",
-          "Spec:slots:with flow:": [
+          "Spec:slots:groups:with flow:": [
             "directive",
             "grammar_maker",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:repeats:": [
-                    "_",
-                    "lede",
-                    "text",
-                    true
-                  ]
-                },
-                {
-                  "Term:type:repeats:": [
-                    "scans",
-                    "scanner_maker",
-                    true
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Read what the player types and turn it into actions.",
-          "Spec:groups:with flow:": [
-            "grammar",
             "internal",
             {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "grammar",
-                    "grammar_maker"
-                  ]
-                }
+              "Flow:uses:": [
+                "interpret",
+                [
+                  {
+                    "Term:name:type:repeats:": [
+                      "_",
+                      "lede",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "with",
+                      "scans",
+                      "scanner_maker",
+                      true
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -147,10 +112,11 @@
             "noun",
             "scanner_maker",
             {
-              "Flow uses:": [
+              "Flow:uses:": [
+                "one",
                 {
                   "Term:name:type:": [
-                    "_",
+                    "noun",
                     "kind",
                     "text"
                   ]
@@ -230,10 +196,11 @@
             "words",
             "scanner_maker",
             {
-              "Flow uses:": [
+              "Flow:uses:": [
+                "one",
                 {
                   "Term:name:type:repeats:": [
-                    "_",
+                    "word",
                     "words",
                     "text",
                     true

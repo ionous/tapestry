@@ -169,8 +169,7 @@
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Alias:asNoun:": [
+        "Interpret alias:asNoun:": [
           [
             "me",
             "myself",
@@ -178,7 +177,7 @@
           ],
           "player"
         ]
-      }
+      
     }
   ]
 }

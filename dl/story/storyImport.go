@@ -1,8 +1,6 @@
 package story
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
@@ -10,7 +8,6 @@ import (
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -36,46 +33,6 @@ func (op *DefineTraits) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *GrammarDecl) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
-func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
-	switch el := op.Grammar.(type) {
-	// fix: why have a generic "grammar" decl, just to switch on two sub decls
-	// they should be top level.
-	case *grammar.Alias:
-		err = cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-			name := lang.Normalize(el.AsNoun)
-			if n, e := w.GetClosestNoun(name); e != nil {
-				err = e
-			} else {
-				pen := w.Pin()
-				for _, a := range el.Names {
-					if a := lang.Normalize(a); len(a) > 0 {
-						if e := pen.AddName(n, a, -1); e != nil {
-							err = e
-							break
-						}
-					}
-				}
-			}
-			return
-		})
-
-	case *grammar.Directive:
-		// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-		name := strings.Join(el.Lede, "/")
-		err = cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
-			return w.Pin().AddGrammar(name, el)
-		})
-	default:
-		err = errutil.Fmt("unknown grammar %T", el)
-	}
-	return
 }
 
 // Execute - called by the macro runtime during weave.

@@ -1,8 +1,7 @@
 {
   "Tapestry:": [
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
+        "Interpret:with:": [
           [
             "attack",
             "break",
@@ -20,14 +19,14 @@
           ],
           [
             {
-              "AnyOf:": [
+              "One of:": [
                 {
-                  "AllOf:": [
+                  "Sequence:": [
                     {
-                      "Noun:": "things"
+                      "One noun:": "things"
                     },
                     {
-                      "As:": "attacking"
+                      "Action:": "attacking"
                     }
                   ]
                 }
@@ -35,7 +34,7 @@
             }
           ]
         ]
-      }
+      
     },
     {
       "--": ""

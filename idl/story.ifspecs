@@ -522,23 +522,62 @@
           ]
         },
         {
-          "--": "Read what the player types and turn it into actions.",
-          "Spec:slots:groups:with flow:": [
-            "grammar_decl",
+          "--": "allows the player to refer to a noun by one or more other terms.",
+          "Spec:slots:with flow:": [
+            "story_alias",
             [
-              "story_statement",
-              "execute"
+              "execute",
+              "story_statement"
             ],
-            "grammar",
             {
-              "Flow phrase:uses:": [
-                "understand {_$grammar}",
+              "Flow:uses:": [
+                "interpret",
                 [
                   {
-                    "Term:name:type:": [
+                    "Term:name:type:repeats:": [
+                      "alias",
+                      "names",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "as_noun",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "starts a parser scanner.",
+          "Spec:slots:with flow:": [
+            "story_directive",
+            [
+              "execute",
+              "story_statement"
+            ],
+            {
+              "Flow:uses:": [
+                "interpret",
+                [
+                  {
+                    "Term:name:type:repeats:": [
                       "_",
-                      "grammar",
-                      "grammar_maker"
+                      "lede",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "with",
+                      "scans",
+                      "scanner_maker",
+                      true
                     ]
                   }
                 ]

@@ -7,8 +7,6 @@ import (
 // GrammarMaker -
 type GrammarMaker interface{ MakeGrammar() GrammarMaker }
 
-func (op *Alias) MakeGrammar() GrammarMaker { return op }
-
 func (op *Directive) MakeGrammar() GrammarMaker { return op }
 
 // acts as AllOf{Words, ... }

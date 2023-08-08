@@ -1,8 +1,7 @@
 {
   "Tapestry:": [
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
+        "Interpret:with:": [
           [
             "jump",
             "skip",
@@ -10,11 +9,11 @@
           ],
           [
             {
-              "As:": "jumping"
+              "Action:": "jumping"
             }
           ]
         ]
-      }
+      
     },
     {
       "--": ""

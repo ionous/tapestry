@@ -1,1037 +1,991 @@
 {
   "Tapestry:": [
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "carry",
-            "hold"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "inventory"
-                    },
-                    {
-                      "As:": "inventorying"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "taking"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "carry",
+          "hold"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "inventory"
+                  },
+                  {
+                    "Action:": "inventorying"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "taking"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "close",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "off"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "deactivating"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "off"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "closing"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "AnyOf:": [
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "off"
-                            },
-                            {
-                              "As:": "deactivating"
-                            }
-                          ]
-                        },
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "up"
-                            },
-                            {
-                              "As:": "closing"
-                            }
-                          ]
-                        },
-                        {
-                          "As:": "closing"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "close",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "off"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "deactivating"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "off"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "closing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One of:": [
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "off"
+                          },
+                          {
+                            "Action:": "deactivating"
+                          }
+                        ]
+                      },
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "up"
+                          },
+                          {
+                            "Action:": "closing"
+                          }
+                        ]
+                      },
+                      {
+                        "Action:": "closing"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "cover",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "up"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "closing"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "closing"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "cover",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "up"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "closing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "closing"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "doff",
-            "disrobe",
-            "shed"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "removing"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "doff",
+          "disrobe",
+          "shed"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "removing"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "drop",
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": [
-                        "in",
-                        "into",
-                        "down",
-                        "on",
-                        "onto"
-                      ]
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "storing"
-                    }
-                  ]
-                },
-                {
-                  "As:": "dropping"
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "drop",
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": [
+                      "in",
+                      "into",
+                      "down",
+                      "on",
+                      "onto"
+                    ]
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "storing"
+                  }
+                ]
+              },
+              {
+                "Action:": "dropping"
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": "traveling"
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "enter",
-            "cross",
-            "sit on",
-            "sit on top of",
-            "sit in",
-            "sit inside",
-            "stand on"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "traveling"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "enter",
+          "cross",
+          "sit on",
+          "sit on top of",
+          "sit in",
+          "sit inside",
+          "stand on"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "traveling"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": "examining"
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "examine",
-            "x",
-            "watch",
-            "describe",
-            "check"
-          ],
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "As:": "examining"
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "examine",
+          "x",
+          "watch",
+          "describe",
+          "check"
+        ],
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "Action:": "examining"
+          }
         ]
-      }
+      ]
     },
     {
       "--": "getting in/from; taking"
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "get",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": [
-                        "in",
-                        "on"
-                      ]
-                    },
-                    {
-                      "As:": "traveling"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": [
-                        "in",
-                        "into",
-                        "on",
-                        "onto"
-                      ]
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "traveling"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Retarget:": [
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "Words:": [
-                            "from",
-                            "off"
-                          ]
-                        },
-                        {
-                          "Noun:": "things"
-                        }
-                      ]
-                    },
-                    {
-                      "As:": "retrieving"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "taking"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "get",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": [
+                      "in",
+                      "on"
+                    ]
+                  },
+                  {
+                    "Action:": "traveling"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": [
+                      "in",
+                      "into",
+                      "on",
+                      "onto"
+                    ]
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "traveling"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "Retarget:": [
+                      {
+                        "One noun:": "things"
+                      },
+                      {
+                        "One word:": [
+                          "from",
+                          "off"
+                        ]
+                      },
+                      {
+                        "One noun:": "things"
+                      }
+                    ]
+                  },
+                  {
+                    "Action:": "retrieving"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "taking"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": "go (enter)"
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "go",
-            "run",
-            "walk"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": [
-                        "in",
-                        "into",
-                        "inside",
-                        "through"
-                      ]
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "traveling"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "traveling"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "go",
+          "run",
+          "walk"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": [
+                      "in",
+                      "into",
+                      "inside",
+                      "through"
+                    ]
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "traveling"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "traveling"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "i",
-            "inv",
-            "inventorying"
-          ],
-          [
-            {
-              "As:": "inventorying"
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "i",
+          "inv",
+          "inventorying"
+        ],
+        [
+          {
+            "Action:": "inventorying"
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "insert",
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "Words:": [
-                "in",
-                "into"
-              ]
-            },
-            {
-              "Noun:": "things"
-            },
-            {
-              "As:": "storing"
-            }
-          ]
+      "Interpret:with:": [
+        "insert",
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "One word:": [
+              "in",
+              "into"
+            ]
+          },
+          {
+            "One noun:": "things"
+          },
+          {
+            "Action:": "storing"
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "look",
-            "l"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "at"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "examining"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": [
-                        "in",
-                        "inside",
-                        "into",
-                        "through",
-                        "on"
-                      ]
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "searching"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "under"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "peeking"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "examining"
-                    }
-                  ]
-                },
-                {
-                  "As:": "looking"
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "look",
+          "l"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "at"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "examining"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": [
+                      "in",
+                      "inside",
+                      "into",
+                      "through",
+                      "on"
+                    ]
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "searching"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "under"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "peeking"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "examining"
+                  }
+                ]
+              },
+              {
+                "Action:": "looking"
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "open",
-            "unwrap",
-            "uncover"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "opening"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "open",
+          "unwrap",
+          "uncover"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "opening"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "pick",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "up"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "taking"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "Words:": "up"
-                    },
-                    {
-                      "As:": "taking"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "pick",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "up"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "taking"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One word:": "up"
+                  },
+                  {
+                    "Action:": "taking"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "put",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "on"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "wearing"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "AnyOf:": [
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": [
-                                "in",
-                                "inside",
-                                "into",
-                                "onto"
-                              ]
-                            },
-                            {
-                              "Noun:": "things"
-                            },
-                            {
-                              "As:": "storing"
-                            }
-                          ]
-                        },
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "on"
-                            },
-                            {
-                              "AnyOf:": [
-                                {
-                                  "AllOf:": [
-                                    {
-                                      "Noun:": "things"
-                                    },
-                                    {
-                                      "As:": "storing"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "As:": "wearing"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "put",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "on"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "wearing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One of:": [
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": [
+                              "in",
+                              "inside",
+                              "into",
+                              "onto"
+                            ]
+                          },
+                          {
+                            "One noun:": "things"
+                          },
+                          {
+                            "Action:": "storing"
+                          }
+                        ]
+                      },
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "on"
+                          },
+                          {
+                            "One of:": [
+                              {
+                                "Sequence:": [
+                                  {
+                                    "One noun:": "things"
+                                  },
+                                  {
+                                    "Action:": "storing"
+                                  }
+                                ]
+                              },
+                              {
+                                "Action:": "wearing"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "read",
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "As:": "examining"
-            }
-          ]
+      "Interpret:with:": [
+        "read",
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "Action:": "examining"
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "remove",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Retarget:": [
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "Words:": "from"
-                        },
-                        {
-                          "Noun:": "things"
-                        }
-                      ]
-                    },
-                    {
-                      "As:": "retrieving"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "removing"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "remove",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "Retarget:": [
+                      {
+                        "One noun:": "things"
+                      },
+                      {
+                        "One word:": "from"
+                      },
+                      {
+                        "One noun:": "things"
+                      }
+                    ]
+                  },
+                  {
+                    "Action:": "retrieving"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "removing"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "search",
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "As:": "searching"
-            }
-          ]
+      "Interpret:with:": [
+        "search",
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "Action:": "searching"
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "switch",
-            "rotate",
-            "twist",
-            "unscrew",
-            "screw"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "on"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "activating"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "off"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "deactivating"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "AnyOf:": [
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "on"
-                            },
-                            {
-                              "As:": "activating"
-                            }
-                          ]
-                        },
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "off"
-                            },
-                            {
-                              "As:": "deactivating"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "switch",
+          "rotate",
+          "twist",
+          "unscrew",
+          "screw"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "on"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "activating"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "off"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "deactivating"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One of:": [
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "on"
+                          },
+                          {
+                            "Action:": "activating"
+                          }
+                        ]
+                      },
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "off"
+                          },
+                          {
+                            "Action:": "deactivating"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "shut",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "off"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "deactivating"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "up"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "closing"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "AnyOf:": [
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "off"
-                            },
-                            {
-                              "As:": "deactivating"
-                            }
-                          ]
-                        },
-                        {
-                          "AllOf:": [
-                            {
-                              "Words:": "up"
-                            },
-                            {
-                              "As:": "closing"
-                            }
-                          ]
-                        },
-                        {
-                          "As:": "closing"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "shut",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "off"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "deactivating"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "up"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "closing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One of:": [
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "off"
+                          },
+                          {
+                            "Action:": "deactivating"
+                          }
+                        ]
+                      },
+                      {
+                        "Sequence:": [
+                          {
+                            "One word:": "up"
+                          },
+                          {
+                            "Action:": "closing"
+                          }
+                        ]
+                      },
+                      {
+                        "Action:": "closing"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          "take",
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "inventory"
-                    },
-                    {
-                      "As:": "inventorying"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Words:": "off"
-                    },
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "removing"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Retarget:": [
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "Words:": [
-                            "off",
-                            "from"
-                          ]
-                        },
-                        {
-                          "Noun:": "things"
-                        }
-                      ]
-                    },
-                    {
-                      "As:": "removing"
-                    }
-                  ]
-                },
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "things"
-                    },
-                    {
-                      "As:": "taking"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        "take",
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "inventory"
+                  },
+                  {
+                    "Action:": "inventorying"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One word:": "off"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "removing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "Retarget:": [
+                      {
+                        "One noun:": "things"
+                      },
+                      {
+                        "One word:": [
+                          "off",
+                          "from"
+                        ]
+                      },
+                      {
+                        "One noun:": "things"
+                      }
+                    ]
+                  },
+                  {
+                    "Action:": "removing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "taking"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "wait",
-            "z"
-          ],
-          [
-            {
-              "As:": "waiting"
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "wait",
+          "z"
+        ],
+        [
+          {
+            "Action:": "waiting"
+          }
         ]
-      }
+      ]
     },
     {
       "--": ""
     },
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "wear",
-            "don"
-          ],
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "As:": "wearing"
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "wear",
+          "don"
+        ],
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "Action:": "wearing"
+          }
         ]
-      }
+      ]
     }
   ]
 }

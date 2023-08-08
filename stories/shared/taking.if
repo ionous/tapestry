@@ -218,7 +218,7 @@
         {
           "Nothing": true
         },
-        []
+        null
       ]
     },
     {
@@ -299,7 +299,7 @@
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can't take nothings",
+                          "can't take nothing",
                           {
                             "Say:": "{we:|capitalize!} can't carry {the: .noun}."
                           }

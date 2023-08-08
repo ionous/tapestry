@@ -3542,109 +3542,6 @@ func FieldDefinition_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FieldDefini
 	return
 }
 
-// GrammarDecl Read what the player types and turn it into actions.
-type GrammarDecl struct {
-	Grammar grammar.GrammarMaker `if:"label=_"`
-	Markup  map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*GrammarDecl)(nil)
-var _ rt.Execute = (*GrammarDecl)(nil)
-
-func (*GrammarDecl) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GrammarDecl_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const GrammarDecl_Type = "grammar_decl"
-const GrammarDecl_Field_Grammar = "$GRAMMAR"
-
-func (op *GrammarDecl) Marshal(m jsn.Marshaler) error {
-	return GrammarDecl_Marshal(m, op)
-}
-
-type GrammarDecl_Slice []GrammarDecl
-
-func (op *GrammarDecl_Slice) GetType() string { return GrammarDecl_Type }
-
-func (op *GrammarDecl_Slice) Marshal(m jsn.Marshaler) error {
-	return GrammarDecl_Repeats_Marshal(m, (*[]GrammarDecl)(op))
-}
-
-func (op *GrammarDecl_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *GrammarDecl_Slice) SetSize(cnt int) {
-	var els []GrammarDecl
-	if cnt >= 0 {
-		els = make(GrammarDecl_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *GrammarDecl_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GrammarDecl_Marshal(m, &(*op)[i])
-}
-
-func GrammarDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]GrammarDecl) error {
-	return jsn.RepeatBlock(m, (*GrammarDecl_Slice)(vals))
-}
-
-func GrammarDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarDecl) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GrammarDecl_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type GrammarDecl_Flow struct{ ptr *GrammarDecl }
-
-func (n GrammarDecl_Flow) GetType() string      { return GrammarDecl_Type }
-func (n GrammarDecl_Flow) GetLede() string      { return GrammarDecl_Type }
-func (n GrammarDecl_Flow) GetFlow() interface{} { return n.ptr }
-func (n GrammarDecl_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GrammarDecl); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func GrammarDecl_Optional_Marshal(m jsn.Marshaler, pv **GrammarDecl) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GrammarDecl_Marshal(m, *pv)
-	} else if !enc {
-		var v GrammarDecl
-		if err = GrammarDecl_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GrammarDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GrammarDecl_Field_Grammar)
-		if e0 == nil {
-			e0 = grammar.GrammarMaker_Marshal(m, &val.Grammar)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GrammarDecl_Field_Grammar))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // MakeOpposite The opposite of east is west.
 type MakeOpposite struct {
 	Word     string `if:"label=_,type=text"`
@@ -6236,6 +6133,119 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 	return
 }
 
+// StoryAlias allows the player to refer to a noun by one or more other terms.
+type StoryAlias struct {
+	Names  []string `if:"label=alias,type=text"`
+	AsNoun string   `if:"label=as_noun,type=text"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*StoryAlias)(nil)
+var _ StoryStatement = (*StoryAlias)(nil)
+
+func (*StoryAlias) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryAlias_Type,
+		Uses: composer.Type_Flow,
+		Lede: "interpret",
+	}
+}
+
+const StoryAlias_Type = "story_alias"
+const StoryAlias_Field_Names = "$NAMES"
+const StoryAlias_Field_AsNoun = "$AS_NOUN"
+
+func (op *StoryAlias) Marshal(m jsn.Marshaler) error {
+	return StoryAlias_Marshal(m, op)
+}
+
+type StoryAlias_Slice []StoryAlias
+
+func (op *StoryAlias_Slice) GetType() string { return StoryAlias_Type }
+
+func (op *StoryAlias_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryAlias_Repeats_Marshal(m, (*[]StoryAlias)(op))
+}
+
+func (op *StoryAlias_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryAlias_Slice) SetSize(cnt int) {
+	var els []StoryAlias
+	if cnt >= 0 {
+		els = make(StoryAlias_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryAlias_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryAlias_Marshal(m, &(*op)[i])
+}
+
+func StoryAlias_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryAlias) error {
+	return jsn.RepeatBlock(m, (*StoryAlias_Slice)(vals))
+}
+
+func StoryAlias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryAlias) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryAlias_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryAlias_Flow struct{ ptr *StoryAlias }
+
+func (n StoryAlias_Flow) GetType() string      { return StoryAlias_Type }
+func (n StoryAlias_Flow) GetLede() string      { return "interpret" }
+func (n StoryAlias_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryAlias_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryAlias); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryAlias_Optional_Marshal(m jsn.Marshaler, pv **StoryAlias) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryAlias_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryAlias
+		if err = StoryAlias_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryAlias_Marshal(m jsn.Marshaler, val *StoryAlias) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(StoryAlias_Flow{val}); err == nil {
+		e0 := m.MarshalKey("alias", StoryAlias_Field_Names)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Names)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", StoryAlias_Field_Names))
+		}
+		e1 := m.MarshalKey("as_noun", StoryAlias_Field_AsNoun)
+		if e1 == nil {
+			e1 = prim.Text_Unboxed_Marshal(m, &val.AsNoun)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", StoryAlias_Field_AsNoun))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // StoryBreak a command with a signature of the comment marker.
 // a cheat which allows nodes that appear to be comments but are actually story breaks.
 type StoryBreak struct {
@@ -6327,6 +6337,119 @@ func StoryBreak_Optional_Marshal(m jsn.Marshaler, pv **StoryBreak) (err error) {
 func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(StoryBreak_Flow{val}); err == nil {
+		m.EndBlock()
+	}
+	return
+}
+
+// StoryDirective starts a parser scanner.
+type StoryDirective struct {
+	Lede   []string               `if:"label=_,type=text"`
+	Scans  []grammar.ScannerMaker `if:"label=with"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*StoryDirective)(nil)
+var _ StoryStatement = (*StoryDirective)(nil)
+
+func (*StoryDirective) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryDirective_Type,
+		Uses: composer.Type_Flow,
+		Lede: "interpret",
+	}
+}
+
+const StoryDirective_Type = "story_directive"
+const StoryDirective_Field_Lede = "$LEDE"
+const StoryDirective_Field_Scans = "$SCANS"
+
+func (op *StoryDirective) Marshal(m jsn.Marshaler) error {
+	return StoryDirective_Marshal(m, op)
+}
+
+type StoryDirective_Slice []StoryDirective
+
+func (op *StoryDirective_Slice) GetType() string { return StoryDirective_Type }
+
+func (op *StoryDirective_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryDirective_Repeats_Marshal(m, (*[]StoryDirective)(op))
+}
+
+func (op *StoryDirective_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryDirective_Slice) SetSize(cnt int) {
+	var els []StoryDirective
+	if cnt >= 0 {
+		els = make(StoryDirective_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryDirective_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryDirective_Marshal(m, &(*op)[i])
+}
+
+func StoryDirective_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryDirective) error {
+	return jsn.RepeatBlock(m, (*StoryDirective_Slice)(vals))
+}
+
+func StoryDirective_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryDirective) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryDirective_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryDirective_Flow struct{ ptr *StoryDirective }
+
+func (n StoryDirective_Flow) GetType() string      { return StoryDirective_Type }
+func (n StoryDirective_Flow) GetLede() string      { return "interpret" }
+func (n StoryDirective_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryDirective_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryDirective); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryDirective_Optional_Marshal(m jsn.Marshaler, pv **StoryDirective) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryDirective_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryDirective
+		if err = StoryDirective_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryDirective_Marshal(m jsn.Marshaler, val *StoryDirective) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(StoryDirective_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", StoryDirective_Field_Lede)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", StoryDirective_Field_Lede))
+		}
+		e1 := m.MarshalKey("with", StoryDirective_Field_Scans)
+		if e1 == nil {
+			e1 = grammar.ScannerMaker_Repeats_Marshal(m, &val.Scans)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", StoryDirective_Field_Scans))
+		}
 		m.EndBlock()
 	}
 	return
@@ -6993,7 +7116,6 @@ var Slats = []composer.Composer{
 	(*EventName)(nil),
 	(*EventPhase)(nil),
 	(*ExtendPattern)(nil),
-	(*GrammarDecl)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
@@ -7018,7 +7140,9 @@ var Slats = []composer.Composer{
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
 	(*StoppingText)(nil),
+	(*StoryAlias)(nil),
 	(*StoryBreak)(nil),
+	(*StoryDirective)(nil),
 	(*StoryFile)(nil),
 	(*Test)(nil),
 	(*TestName)(nil),
@@ -7127,12 +7251,14 @@ var Signatures = map[uint64]interface{}{
 	17581573717059123596: (*ExtendPattern)(nil),        /* story_statement=Extend pattern:provides:withRules: */
 	478002506548269918:   (*ExtendPattern)(nil),        /* execute=Extend pattern:withRules: */
 	7244900390452508762:  (*ExtendPattern)(nil),        /* story_statement=Extend pattern:withRules: */
-	5982437905673817746:  (*GrammarDecl)(nil),          /* execute=GrammarDecl: */
-	4045441026877120438:  (*GrammarDecl)(nil),          /* story_statement=GrammarDecl: */
 	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
 	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
 	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
 	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
+	18076782925803178620: (*StoryAlias)(nil),           /* execute=Interpret alias:asNoun: */
+	85958334792709048:    (*StoryAlias)(nil),           /* story_statement=Interpret alias:asNoun: */
+	2895546536328156972:  (*StoryDirective)(nil),       /* execute=Interpret:with: */
+	6001249499689096432:  (*StoryDirective)(nil),       /* story_statement=Interpret:with: */
 	8614414075732041311:  (*EventBlock)(nil),           /* execute=Listen:handlers: */
 	9724607381207436691:  (*EventBlock)(nil),           /* story_statement=Listen:handlers: */
 	6624124429048254998:  (*MakeOpposite)(nil),         /* execute=Make:opposite: */

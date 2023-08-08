@@ -1,8 +1,7 @@
 {
   "Tapestry:": [
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
+        "Interpret:with:": [
           [
             "kiss",
             "hug",
@@ -10,14 +9,14 @@
           ],
           [
             {
-              "Noun:": "things"
+              "One noun:": "things"
             },
             {
-              "As:": "kissing"
+              "Action:": "kissing"
             }
           ]
         ]
-      }
+      
     },
     {
       "--": ""

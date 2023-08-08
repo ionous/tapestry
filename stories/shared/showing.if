@@ -1,8 +1,7 @@
 {
   "Tapestry:": [
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
+        "Interpret:with:": [
           [
             "show",
             "present",
@@ -10,66 +9,66 @@
           ],
           [
             {
-              "AnyOf:": [
+              "One of:": [
                 {
-                  "AllOf:": [
+                  "Sequence:": [
                     {
                       "Self:": "player"
                     },
                     {
-                      "Noun:": "things"
+                      "One noun:": "things"
                     },
                     {
-                      "As:": "examining"
+                      "Action:": "examining"
                     }
                   ]
                 },
                 {
-                  "AllOf:": [
+                  "Sequence:": [
                     {
-                      "Noun:": "things"
+                      "One noun:": "things"
                     },
                     {
-                      "Words:": "to"
+                      "One word:": "to"
                     },
                     {
                       "Self:": "player"
                     },
                     {
-                      "As:": "examining"
+                      "Action:": "examining"
                     }
                   ]
                 },
                 {
-                  "AllOf:": [
+                  "Sequence:": [
                     {
                       "Reverse:": [
                         {
-                          "Noun:": "actors"
+                          "One noun:": "actors"
                         },
                         {
-                          "Noun:": "things"
+                          "One noun:": "things"
                         }
                       ]
                     },
                     {
-                      "As:": "showing"
+                      "Action:": "showing"
                     }
                   ]
                 },
                 {
-                  "AllOf:": [
+                  "Sequence:": [
                     {
-                      "Noun:": "things"
+                      "One noun:": "things"
                     },
                     {
-                      "Words:": "to"
+                      "One word:": "to"
                     },
                     {
-                      "Noun:": "actors"
+                      "One noun:": "actors"
                     },
                     {
-                      "As:": "showing"
+                      "Action:": "showing"
                     }
                   ]
                 }
@@ -77,7 +76,7 @@
             }
           ]
         ]
-      }
+      
     },
     {
       "Event:action:args common:": [

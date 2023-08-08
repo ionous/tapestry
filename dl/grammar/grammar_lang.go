@@ -21,7 +21,7 @@ func (*Action) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Action_Type,
 		Uses: composer.Type_Flow,
-		Lede: "as",
+		Lede: "action",
 	}
 }
 
@@ -75,7 +75,7 @@ func Action_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Action) (err error) 
 type Action_Flow struct{ ptr *Action }
 
 func (n Action_Flow) GetType() string      { return Action_Type }
-func (n Action_Flow) GetLede() string      { return "as" }
+func (n Action_Flow) GetLede() string      { return "action" }
 func (n Action_Flow) GetFlow() interface{} { return n.ptr }
 func (n Action_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Action); ok {
@@ -111,117 +111,6 @@ func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
 	return
 }
 
-// Alias allows the user to refer to a noun by one or more other terms.
-type Alias struct {
-	Names  []string `if:"label=_,type=text"`
-	AsNoun string   `if:"label=as_noun,type=text"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ GrammarMaker = (*Alias)(nil)
-
-func (*Alias) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Alias_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Alias_Type = "alias"
-const Alias_Field_Names = "$NAMES"
-const Alias_Field_AsNoun = "$AS_NOUN"
-
-func (op *Alias) Marshal(m jsn.Marshaler) error {
-	return Alias_Marshal(m, op)
-}
-
-type Alias_Slice []Alias
-
-func (op *Alias_Slice) GetType() string { return Alias_Type }
-
-func (op *Alias_Slice) Marshal(m jsn.Marshaler) error {
-	return Alias_Repeats_Marshal(m, (*[]Alias)(op))
-}
-
-func (op *Alias_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Alias_Slice) SetSize(cnt int) {
-	var els []Alias
-	if cnt >= 0 {
-		els = make(Alias_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Alias_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Alias_Marshal(m, &(*op)[i])
-}
-
-func Alias_Repeats_Marshal(m jsn.Marshaler, vals *[]Alias) error {
-	return jsn.RepeatBlock(m, (*Alias_Slice)(vals))
-}
-
-func Alias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Alias) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Alias_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Alias_Flow struct{ ptr *Alias }
-
-func (n Alias_Flow) GetType() string      { return Alias_Type }
-func (n Alias_Flow) GetLede() string      { return Alias_Type }
-func (n Alias_Flow) GetFlow() interface{} { return n.ptr }
-func (n Alias_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Alias); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Alias_Optional_Marshal(m jsn.Marshaler, pv **Alias) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Alias_Marshal(m, *pv)
-	} else if !enc {
-		var v Alias
-		if err = Alias_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Alias_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Alias_Field_Names)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Names)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Alias_Field_Names))
-		}
-		e1 := m.MarshalKey("as_noun", Alias_Field_AsNoun)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.AsNoun)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Alias_Field_AsNoun))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // AllOf makes a parser scanner.
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
@@ -235,6 +124,7 @@ func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AllOf_Type,
 		Uses: composer.Type_Flow,
+		Lede: "sequence",
 	}
 }
 
@@ -288,7 +178,7 @@ func AllOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AllOf) (err error) {
 type AllOf_Flow struct{ ptr *AllOf }
 
 func (n AllOf_Flow) GetType() string      { return AllOf_Type }
-func (n AllOf_Flow) GetLede() string      { return AllOf_Type }
+func (n AllOf_Flow) GetLede() string      { return "sequence" }
 func (n AllOf_Flow) GetFlow() interface{} { return n.ptr }
 func (n AllOf_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*AllOf); ok {
@@ -326,7 +216,7 @@ func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
 
 // AnyOf makes a parser scanner.
 type AnyOf struct {
-	Options []ScannerMaker `if:"label=_"`
+	Options []ScannerMaker `if:"label=of"`
 	Markup  map[string]any
 }
 
@@ -337,6 +227,7 @@ func (*AnyOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AnyOf_Type,
 		Uses: composer.Type_Flow,
+		Lede: "one",
 	}
 }
 
@@ -390,7 +281,7 @@ func AnyOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AnyOf) (err error) {
 type AnyOf_Flow struct{ ptr *AnyOf }
 
 func (n AnyOf_Flow) GetType() string      { return AnyOf_Type }
-func (n AnyOf_Flow) GetLede() string      { return AnyOf_Type }
+func (n AnyOf_Flow) GetLede() string      { return "one" }
 func (n AnyOf_Flow) GetFlow() interface{} { return n.ptr }
 func (n AnyOf_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*AnyOf); ok {
@@ -414,7 +305,7 @@ func AnyOf_Optional_Marshal(m jsn.Marshaler, pv **AnyOf) (err error) {
 func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AnyOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AnyOf_Field_Options)
+		e0 := m.MarshalKey("of", AnyOf_Field_Options)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Options)
 		}
@@ -429,7 +320,7 @@ func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 // Directive starts a parser scanner.
 type Directive struct {
 	Lede   []string       `if:"label=_,type=text"`
-	Scans  []ScannerMaker `if:"label=scans"`
+	Scans  []ScannerMaker `if:"label=with"`
 	Markup map[string]any
 }
 
@@ -440,6 +331,7 @@ func (*Directive) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Directive_Type,
 		Uses: composer.Type_Flow,
+		Lede: "interpret",
 	}
 }
 
@@ -494,7 +386,7 @@ func Directive_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Directive) (err e
 type Directive_Flow struct{ ptr *Directive }
 
 func (n Directive_Flow) GetType() string      { return Directive_Type }
-func (n Directive_Flow) GetLede() string      { return Directive_Type }
+func (n Directive_Flow) GetLede() string      { return "interpret" }
 func (n Directive_Flow) GetFlow() interface{} { return n.ptr }
 func (n Directive_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Directive); ok {
@@ -525,111 +417,12 @@ func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Directive_Field_Lede))
 		}
-		e1 := m.MarshalKey("scans", Directive_Field_Scans)
+		e1 := m.MarshalKey("with", Directive_Field_Scans)
 		if e1 == nil {
 			e1 = ScannerMaker_Repeats_Marshal(m, &val.Scans)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Directive_Field_Scans))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Grammar Read what the player types and turn it into actions.
-type Grammar struct {
-	Grammar GrammarMaker `if:"label=_"`
-	Markup  map[string]any
-}
-
-func (*Grammar) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Grammar_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Grammar_Type = "grammar"
-const Grammar_Field_Grammar = "$GRAMMAR"
-
-func (op *Grammar) Marshal(m jsn.Marshaler) error {
-	return Grammar_Marshal(m, op)
-}
-
-type Grammar_Slice []Grammar
-
-func (op *Grammar_Slice) GetType() string { return Grammar_Type }
-
-func (op *Grammar_Slice) Marshal(m jsn.Marshaler) error {
-	return Grammar_Repeats_Marshal(m, (*[]Grammar)(op))
-}
-
-func (op *Grammar_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Grammar_Slice) SetSize(cnt int) {
-	var els []Grammar
-	if cnt >= 0 {
-		els = make(Grammar_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Grammar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Grammar_Marshal(m, &(*op)[i])
-}
-
-func Grammar_Repeats_Marshal(m jsn.Marshaler, vals *[]Grammar) error {
-	return jsn.RepeatBlock(m, (*Grammar_Slice)(vals))
-}
-
-func Grammar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Grammar) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Grammar_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Grammar_Flow struct{ ptr *Grammar }
-
-func (n Grammar_Flow) GetType() string      { return Grammar_Type }
-func (n Grammar_Flow) GetLede() string      { return Grammar_Type }
-func (n Grammar_Flow) GetFlow() interface{} { return n.ptr }
-func (n Grammar_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Grammar); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Grammar_Optional_Marshal(m jsn.Marshaler, pv **Grammar) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Grammar_Marshal(m, *pv)
-	} else if !enc {
-		var v Grammar
-		if err = Grammar_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Grammar_Marshal(m jsn.Marshaler, val *Grammar) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Grammar_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Grammar_Field_Grammar)
-		if e0 == nil {
-			e0 = GrammarMaker_Marshal(m, &val.Grammar)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Grammar_Field_Grammar))
 		}
 		m.EndBlock()
 	}
@@ -707,7 +500,7 @@ func GrammarMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarMaker) 
 
 // Noun makes a parser scanner.
 type Noun struct {
-	Kind   string `if:"label=_,type=text"`
+	Kind   string `if:"label=noun,type=text"`
 	Markup map[string]any
 }
 
@@ -718,6 +511,7 @@ func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Noun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "one",
 	}
 }
 
@@ -771,7 +565,7 @@ func Noun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Noun) (err error) {
 type Noun_Flow struct{ ptr *Noun }
 
 func (n Noun_Flow) GetType() string      { return Noun_Type }
-func (n Noun_Flow) GetLede() string      { return Noun_Type }
+func (n Noun_Flow) GetLede() string      { return "one" }
 func (n Noun_Flow) GetFlow() interface{} { return n.ptr }
 func (n Noun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Noun); ok {
@@ -795,7 +589,7 @@ func Noun_Optional_Marshal(m jsn.Marshaler, pv **Noun) (err error) {
 func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Noun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Noun_Field_Kind)
+		e0 := m.MarshalKey("noun", Noun_Field_Kind)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
@@ -1184,7 +978,7 @@ func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
 
 // Words makes a parser scanner.
 type Words struct {
-	Words  []string `if:"label=_,type=text"`
+	Words  []string `if:"label=word,type=text"`
 	Markup map[string]any
 }
 
@@ -1195,6 +989,7 @@ func (*Words) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Words_Type,
 		Uses: composer.Type_Flow,
+		Lede: "one",
 	}
 }
 
@@ -1248,7 +1043,7 @@ func Words_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Words) (err error) {
 type Words_Flow struct{ ptr *Words }
 
 func (n Words_Flow) GetType() string      { return Words_Type }
-func (n Words_Flow) GetLede() string      { return Words_Type }
+func (n Words_Flow) GetLede() string      { return "one" }
 func (n Words_Flow) GetFlow() interface{} { return n.ptr }
 func (n Words_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Words); ok {
@@ -1272,7 +1067,7 @@ func Words_Optional_Marshal(m jsn.Marshaler, pv **Words) (err error) {
 func Words_Marshal(m jsn.Marshaler, val *Words) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Words_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Words_Field_Words)
+		e0 := m.MarshalKey("word", Words_Field_Words)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Words)
 		}
@@ -1291,11 +1086,9 @@ var Slots = []interface{}{
 
 var Slats = []composer.Composer{
 	(*Action)(nil),
-	(*Alias)(nil),
 	(*AllOf)(nil),
 	(*AnyOf)(nil),
 	(*Directive)(nil),
-	(*Grammar)(nil),
 	(*Noun)(nil),
 	(*Retarget)(nil),
 	(*Reverse)(nil),
@@ -1304,15 +1097,13 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	15013060695242199180: (*Grammar)(nil),   /* Grammar: */
-	10322292321972431108: (*Alias)(nil),     /* grammar_maker=Alias:asNoun: */
-	10740453355331089621: (*AllOf)(nil),     /* scanner_maker=AllOf: */
-	17379347258926967174: (*AnyOf)(nil),     /* scanner_maker=AnyOf: */
-	9513197071073824621:  (*Action)(nil),    /* scanner_maker=As: */
-	3139964255630909885:  (*Directive)(nil), /* grammar_maker=Directive:scans: */
-	4932583886962667953:  (*Noun)(nil),      /* scanner_maker=Noun: */
+	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
+	3954853544935742221:  (*Directive)(nil), /* grammar_maker=Interpret:with: */
+	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */
+	16418039705711067622: (*AnyOf)(nil),     /* scanner_maker=One of: */
+	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */
 	7324699817922923089:  (*Retarget)(nil),  /* scanner_maker=Retarget: */
 	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
 	5951604050986778367:  (*Self)(nil),      /* scanner_maker=Self: */
-	15460804987301738344: (*Words)(nil),     /* scanner_maker=Words: */
+	10728359537834940094: (*AllOf)(nil),     /* scanner_maker=Sequence: */
 }

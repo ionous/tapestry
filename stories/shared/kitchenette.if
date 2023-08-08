@@ -83,12 +83,10 @@
             ]
           },
           {
-            "GrammarDecl:": {
-              "Alias:asNoun:": [
+              "Interpret alias:asNoun:": [
                 "blade",
                 "rusty knife"
               ]
-            }
           },
           {
             "--": ""

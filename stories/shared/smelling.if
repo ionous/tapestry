@@ -1,33 +1,32 @@
 {
   "Tapestry:": [
     {
-      "GrammarDecl:": {
-        "Directive:scans:": [
+        "Interpret:with:": [
           [
             "smell",
             "sniff"
           ],
           [
             {
-              "AnyOf:": [
+              "One of:": [
                 {
-                  "AllOf:": [
+                  "Sequence:": [
                     {
-                      "Noun:": "objects"
+                      "One noun:": "objects"
                     },
                     {
-                      "As:": "smelling"
+                      "Action:": "smelling"
                     }
                   ]
                 },
                 {
-                  "As:": "sniffing"
+                  "Action:": "sniffing"
                 }
               ]
             }
           ]
         ]
-      }
+      
     },
     {
       "--": ""

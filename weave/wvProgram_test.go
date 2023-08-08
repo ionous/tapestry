@@ -30,7 +30,7 @@ func TestGrammar(t *testing.T) {
 	} else if out, e := dt.ReadGrammar(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		`b:jump/skip/hop:{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}`,
+		`b:jump/skip/hop:{"Interpret:with:":[["jump","skip","hop"],[{"Action:":"jumping"}]]}`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
