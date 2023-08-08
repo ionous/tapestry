@@ -189,11 +189,11 @@ const tapestryHelpers = {
         // ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind )
         field.setValidator(this.onSwapChanged.bind(this, input.name, swaps));
       }
-    } else if (input) {
+    } else if (input && input.itemDef) {
       // means that we created something other than a dummy input
       // and we should give it an initial value
+      const itemDef = input.itemDef; // this can be null; tbd: maybe on close?
       const isToolbox = this.workspace !== Blockly.mainWorkspace;
-      const itemDef = input.itemDef;
       if (isToolbox && itemDef.shadow) {
         const sub = this.workspace.newBlock(itemDef.shadow);
         // guess at a bunch of random things to make this show up correctly.

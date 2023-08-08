@@ -1,0 +1,56 @@
+{
+  "Tapestry:": [
+    {
+      "Comment:": [
+        "\"Cloak of Darkness\" has been implemented by most interactive fiction engines.",
+        "It contains a few of the essential features needed for IF games: ",
+        "descriptions of rooms, their contents, and connections; customized user interactions; ",
+        "darkness and the control of light; scoring; and more."
+      ]
+    },
+    {
+      "Define scene:dependsOn:with:": [
+        "Cloak of Darkness",
+        "scoring",
+        [
+          {
+            "Define value:of:as:": [
+              "maximum score",
+              "story",
+              {
+                "FromNumber:": 2
+              }
+            ]
+          },
+          {
+            "Declare:": "Foyer of the Opera House is a room.  You are in the foyer."
+          },
+          {
+            "Define value:of:as:": [
+              "description",
+              "the Foyer",
+              {
+                "FromText:": "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. \nThe entrance from the street is to the north, and there are doorways south and west."
+              }
+            ]
+          },
+          {
+            "Heading:from:via:and:otherRoom:": [
+              "north",
+              "the foyer",
+              "the entrance ",
+              "arriving_at",
+              "nowhere"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Listen:handlers:": [
+        "initial description",
+        null
+      ]
+    }
+  ]
+}

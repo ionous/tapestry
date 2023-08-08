@@ -47,7 +47,8 @@ function loadData() {
     const shapes = values[1];
 
     registerFieldType("mosaic_str_field", MosaicStrField);
-    registerFieldType("mosaic_text_field", MosaicTextField);
+    // note: this was MoasicTextField, but visual line wrapping is nice.
+    registerFieldType("mosaic_text_field", MosaicMultilineField);
     registerFieldType("mosaic_multiline_field", MosaicMultilineField);
     registerExtension("tapestry_generic_mutation", tapestryMutator);
     registerExtension(
