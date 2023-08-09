@@ -216,10 +216,30 @@ func (pen *Pen) AddDependency(requires string) (err error) {
 
 var mdl_fact = tables.Insert("mdl_fact", "domain", "fact", "value", "at")
 
+func makeKeyValue(key string, partsAndValue []string) (k, v string, err error) {
+	if end := len(partsAndValue) - 1; end < 0 {
+		err = errutil.New("invalid fact", key)
+	} else if end == 0 {
+		k, v = key, partsAndValue[0]
+	} else {
+		var b strings.Builder
+		b.WriteString(key)
+		for i := 0; i < end; i++ {
+			part := partsAndValue[i]
+			b.WriteRune('/')
+			b.WriteString(part)
+		}
+		k, v = b.String(), partsAndValue[end]
+	}
+	return
+}
+
 // arbitrary key-value storage
-func (pen *Pen) AddFact(fact, value string) (err error) {
-	at := pen.at
-	if domain, e := pen.findDomain(); e != nil {
+// returns true if its a new fact, false otherwise or on error.
+func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err error) {
+	if fact, value, e := makeKeyValue(key, partsAndValue); e != nil {
+		err = e
+	} else if domain, e := pen.findDomain(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -234,8 +254,10 @@ func (pen *Pen) AddFact(fact, value string) (err error) {
 		and fact = ?2`, domain, fact)
 		switch e := q.Scan(&prev.domain, &prev.value); e {
 		case sql.ErrNoRows:
-			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, at); e != nil {
+			if _, e := pen.db.Exec(mdl_fact, domain, fact, value, pen.at); e != nil {
 				err = errutil.New("database error", e)
+			} else {
+				okay = true
 			}
 		case nil:
 			if prev.value != value {
@@ -418,41 +440,6 @@ func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 }
 
 var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
-
-// for testing: a generic field of the kind
-func (pen *Pen) AddTestField(kind, field string, aff affine.Affinity, cls string) (err error) {
-	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add field %q", e, field)
-	} else if cls, e := pen.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write field %q", e, field)
-	} else {
-		e := pen.addField(kid, cls, field, aff)
-		err = eatDuplicates(pen.warn, e)
-	}
-	return
-}
-
-func (pen *Pen) AddTestParameter(kind, field string, aff affine.Affinity, cls string) (err error) {
-	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add parameter %q", e, field)
-	} else if cls, e := pen.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write parameter %q", e, field)
-	} else {
-		err = pen.addParameter(kid, cls, field, aff)
-	}
-	return
-}
-
-func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls string) (err error) {
-	if kid, e := pen.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add parameter %q", e, field)
-	} else if cls, e := pen.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write parameter %q", e, field)
-	} else {
-		err = pen.addResult(kid, cls, field, aff)
-	}
-	return
-}
 
 // the domain tells the scope in which the noun was defined
 // ( the same as - or a child of - the domain of the kind )
@@ -713,7 +700,6 @@ func (pen *Pen) ExtendPattern(pat Pattern) (err error) {
 	} else if e := pat.writePattern(pen, false); e != nil {
 		err = errutil.Fmt("%w in pattern %q domain %q", e, pat.name, pen.domain)
 	}
-
 	return
 }
 
@@ -912,44 +898,15 @@ func (pen *Pen) addRule(pattern, target kindInfo, phase int, filter, prog string
 	return
 }
 
-// public for tests:
-func (pen *Pen) AddTestRule(pattern, target string, phase int, filter, prog string) (err error) {
-	domain, at := pen.domain, pen.at
-	if kid, e := pen.findRequiredKind(pattern); e != nil {
-		err = e
-	} else if tgt, e := pen.findOptionalKind(target); e != nil {
-		err = e
-	} else {
-		_, err = pen.db.Exec(mdl_rule, domain, kid.id, tgt.id, phase, filter, prog, at)
-	}
-	return
-}
-
 // note: values are written per noun, not per domain
 // fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
 var mdl_value = tables.Insert("mdl_value", "noun", "field", "dot", "value", "at")
-
-// unmarshaled version of AddValue for testing.
-func (pen *Pen) AddTestValue(noun, path, out string) (err error) {
-	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
-		err = e
-	} else {
-		parts := strings.Split(path, ".")
-		if outer, _, e := pen.digField(noun, parts); e != nil {
-			err = e // for testing, we accept any inner most affinity ( so long as the parts were resolvable )
-		} else {
-			root, dot := parts[0], strings.Join(parts[1:], ".")
-			err = pen.addValue(noun, outer, root, dot, out)
-		}
-	}
-	return
-}
 
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: assumes noun is an exact name
 func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
-		err = errutil.New("unexpected dot in assigned value for noun %q field %q", noun, field)
+		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
 		err = pen.addFieldValue(noun, field, value)
 	}

@@ -17,7 +17,8 @@ import (
 
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
-	*mdl.Modeler
+	*mdl.Modeler     // db output
+	Env          Env // generic storage for command processing
 
 	// cleanup? seems redundant to have three views of the same domain
 	domains        map[string]*Domain
@@ -28,11 +29,9 @@ type Catalog struct {
 	run    rt.Runtime    // custom runtime for running macros
 	gdb    grokdb.Source // english parser
 	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
-
-	Env Env
 }
 
-type domainNoun struct{ domain, noun string }
+type ScheduledCallback func(*Weaver) error
 
 func NewCatalog(db *sql.DB) *Catalog {
 	return NewCatalogWithWarnings(db, nil, nil)
@@ -187,7 +186,7 @@ func (cat *Catalog) DomainEnd() (err error) {
 	return
 }
 
-func (cat *Catalog) Schedule(when Phase, what func(*Weaver) error) (err error) {
+func (cat *Catalog) Schedule(when Phase, what ScheduledCallback) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
 	} else {

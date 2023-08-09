@@ -25,7 +25,7 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 		for i, target := range targets {
 			pb := mdl.NewPatternSubtype(patterns[i], ancestors[i])
 			// the first parameter is always (ex) "agent" of type "agent":
-			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
+			pb.AddParam(mdl.FieldInfo{
 				Name:     target,
 				Class:    target,
 				Affinity: affine.Text,
@@ -35,7 +35,7 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 				err = e
 				break
 			} else if i == 1 {
-				pb.AddField(mdl.PatternResults, mdl.FieldInfo{
+				pb.AddResult(mdl.FieldInfo{
 					Name:     "success",
 					Affinity: affine.Bool,
 				})

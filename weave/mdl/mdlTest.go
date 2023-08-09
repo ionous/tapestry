@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"github.com/ionous/errutil"
 )
 
@@ -50,6 +51,70 @@ func (w *Warnings) Expect(prefix string) (err error) {
 func (w *Warnings) pop() (err error) {
 	if cnt := len(*w); cnt > 0 {
 		err, (*w) = (*w)[0], (*w)[1:]
+	}
+	return
+}
+
+// for testing: a generic field of the kind
+func (pen *Pen) AddTestField(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := pen.findRequiredKind(kind); e != nil {
+		err = errutil.Fmt("%w trying to add field %q", e, field)
+	} else if cls, e := pen.findOptionalKind(cls); e != nil {
+		err = errutil.Fmt("%w trying to write field %q", e, field)
+	} else {
+		e := pen.addField(kid, cls, field, aff)
+		err = eatDuplicates(pen.warn, e)
+	}
+	return
+}
+
+func (pen *Pen) AddTestParameter(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := pen.findRequiredKind(kind); e != nil {
+		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+	} else if cls, e := pen.findOptionalKind(cls); e != nil {
+		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+	} else {
+		err = pen.addParameter(kid, cls, field, aff)
+	}
+	return
+}
+
+func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := pen.findRequiredKind(kind); e != nil {
+		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+	} else if cls, e := pen.findOptionalKind(cls); e != nil {
+		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+	} else {
+		err = pen.addResult(kid, cls, field, aff)
+	}
+	return
+}
+
+// public for tests:
+func (pen *Pen) AddTestRule(pattern, target string, phase int, filter, prog string) (err error) {
+	domain, at := pen.domain, pen.at
+	if kid, e := pen.findRequiredKind(pattern); e != nil {
+		err = e
+	} else if tgt, e := pen.findOptionalKind(target); e != nil {
+		err = e
+	} else {
+		_, err = pen.db.Exec(mdl_rule, domain, kid.id, tgt.id, phase, filter, prog, at)
+	}
+	return
+}
+
+// unmarshaled version of AddValue for testing.
+func (pen *Pen) AddTestValue(noun, path, out string) (err error) {
+	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
+		err = e
+	} else {
+		parts := strings.Split(path, ".")
+		if outer, _, e := pen.digField(noun, parts); e != nil {
+			err = e // for testing, we accept any inner most affinity ( so long as the parts were resolvable )
+		} else {
+			root, dot := parts[0], strings.Join(parts[1:], ".")
+			err = pen.addValue(noun, outer, root, dot, out)
+		}
 	}
 	return
 }

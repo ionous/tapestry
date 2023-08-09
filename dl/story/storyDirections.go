@@ -68,29 +68,26 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 			// ( used to detect conflicts in (the reverse directional) implications of some other statement )
 			if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
 				err = errutil.New("empty map direction")
-			} else if e := pen.AddFact(makeKey("dir", room.uniform, dir), otherRoom.uniform); e != nil {
+			} else if ok, e := pen.AddFact("dir", room.uniform, dir, otherRoom.uniform); e != nil {
 				err = e
-			} else {
-				// reverse connect
-				if op.MapConnection.isTwoWay() {
-					if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
-						err = errutil.New("empty map direction")
-					} else {
-						otherDir := w.OppositeOf(dir)
-						// to prioritize some other potentially more explicit definition of a door:
-						// if the directional connection is newly established, lets connect these two rooms.
-						// it's possible that the only way to handle all the potential conflicts
-						// ( ex. an author manually specifying a door and settings its directions )
-						// and explicit "assemble directions" phases would be needed.
-						var missingDoor helperNoun
-						if e := pen.AddFact(makeKey("dir", otherRoom.uniform, otherDir), room.uniform); e != nil {
-							err = e
-						} else {
-							err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
-								// create the reverse door, etc.
-								return mapDirect(w, otherRoom, room, missingDoor, MapDirection{otherDir})
-							})
-						}
+			} else if ok && op.MapConnection.isTwoWay() {
+				if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
+					err = errutil.New("empty map direction")
+				} else {
+					otherDir := w.OppositeOf(dir)
+					// to prioritize some other potentially more explicit definition of a door:
+					// if the directional connection is newly established, lets connect these two rooms.
+					// it's possible that the only way to handle all the potential conflicts
+					// ( ex. an author manually specifying a door and settings its directions )
+					// and explicit "assemble directions" phases would be needed.
+					var missingDoor helperNoun
+					if ok, e := pen.AddFact("dir", otherRoom.uniform, otherDir, room.uniform); e != nil {
+						err = e
+					} else if ok {
+						err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+							// create the reverse door, etc.
+							return mapDirect(w, otherRoom, room, missingDoor, MapDirection{otherDir})
+						})
 					}
 				}
 			}

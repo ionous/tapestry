@@ -128,6 +128,7 @@ type rivalFact string
 
 func (el rivalFact) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) error {
-		return w.Pin().AddFact("rivalFact", string(el))
+		_, e := w.Pin().AddFact("rivalFact", string(el))
+		return e
 	})
 }

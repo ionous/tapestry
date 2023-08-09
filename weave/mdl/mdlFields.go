@@ -146,11 +146,11 @@ func (f *fieldInfo) rewriteTrait(name string, value assign.Assignment) (ret assi
 	} else {
 		switch v := value.(type) {
 		default:
-			err = errutil.New("incompatible assignment to trait, got %T", value)
+			err = errutil.Fmt("incompatible assignment to trait, got %T", value)
 		case *assign.FromBool:
 			switch b := v.Value.(type) {
 			default:
-				err = errutil.New("trait's only support literal bools, got %T", value)
+				err = errutil.Fmt("trait's only support literal bools, got %T", value)
 			case *literal.BoolValue:
 				if !b.Value {
 					err = errutil.New("opposite trait assignment not supported")
@@ -174,7 +174,7 @@ func (pen *Pen) digField(noun nounInfo, path []string) (retout, retin fieldInfo,
 		for i := 0; i < len(path) && err == nil; i++ {
 			subField := path[i]
 			if inner.aff != affine.Record {
-				err = errutil.New("expected a field of type record for noun %q, kind %q, path %q(%d)",
+				err = errutil.Fmt("expected a field of type record for noun %q, kind %q, path %q(%d)",
 					noun.name, noun.kind, strings.Join(path, "."), i)
 			} else {
 				inner, err = pen.findField(inner.class(), subField)

@@ -17,7 +17,7 @@ type Domain struct {
 }
 
 type memento struct {
-	cb    func(*Weaver) error
+	cb    ScheduledCallback
 	at    string
 	phase Phase
 	err   error
@@ -57,7 +57,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 	return
 }
 
-func (d *Domain) schedule(at string, when Phase, what func(*Weaver) error) (err error) {
+func (d *Domain) schedule(at string, when Phase, what ScheduledCallback) (err error) {
 	if d.currPhase < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
 	} else if d.currPhase <= when {
