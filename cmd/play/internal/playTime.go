@@ -16,7 +16,7 @@ type Playtime struct {
 	*qna.Runner
 	player   string
 	relation string
-	bounds   *g.Kind
+	bounds   string
 }
 
 func NewPlaytime(run *qna.Runner) *Playtime {
@@ -26,7 +26,7 @@ func NewPlaytime(run *qna.Runner) *Playtime {
 // the named relation should yield a single object for the named player.
 // the bounds pattern should return the objects in that player's local area.
 func NewCustomPlaytime(run *qna.Runner, player, relation, bounds string) *Playtime {
-	if bounds, e := run.GetKindByName(bounds); e != nil {
+	if _, e := run.GetKindByName(bounds); e != nil {
 		panic(e)
 	} else {
 		return &Playtime{
@@ -41,40 +41,13 @@ func NewCustomPlaytime(run *qna.Runner, player, relation, bounds string) *Playti
 // step the world by running some command
 func (pt *Playtime) Play(name, player string, args []string) (err error) {
 	// future: to differentiate b/t system actions and "timed" actions,
-	// consider using naming convention: ex. #save.
-	if k, e := pt.GetKindByName(name); e != nil {
-		err = e
-	} else if max, min := k.NumField(), len(args)+1; max < min {
-		err = errutil.New("not enough fields", min, max)
-	} else {
-		rec := k.NewRecord()
-		if e := setField(rec, 0, "player"); e != nil {
-			err = e
-		} else {
-			for i, a := range args {
-				if e := setField(rec, i+1, a); e != nil {
-					err = e
-					break
-				}
-			}
-		}
-		if err == nil {
-			if _, e := pt.Call(rec, affine.None); e != nil {
-				err = e
-			}
-		}
+	// consider using naming convention: ex. @save (mud style), or #save
+	vs := make([]g.Value, len(args)+1)
+	vs[0] = g.StringOf("player")
+	for i, n := range args {
+		vs[i+1] = g.StringOf(n)
 	}
-	return
-}
-
-func setField(rec *g.Record, i int, a string) (err error) {
-	f := rec.Kind().Field(i)
-	// fix conversion of numbers
-	if aff := f.Affinity; aff != affine.Text {
-		err = errutil.New("field", i, "expected text, have", aff)
-	} else if e := rec.SetIndexedField(i, g.StringOf(a)); e != nil {
-		err = errutil.New("field", i, e)
-	}
+	_, err = pt.Call(name, affine.None, nil, vs)
 	return
 }
 

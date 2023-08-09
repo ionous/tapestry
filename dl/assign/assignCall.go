@@ -4,11 +4,12 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *CallPattern) Execute(run rt.Runtime) error {
@@ -45,27 +46,29 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	pat := op.PatternName
-	if rec, e := MakeRecord(run, pat, op.Arguments...); e != nil {
+	name := lang.Normalize(op.PatternName)
+	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
 		err = cmdError(op, e)
-	} else if k := rec.Kind(); !k.Implements(kindsOf.Record.String()) {
-		// note: this doesnt positively affirm kindsOf.Pattern:
-		// some tests use golang structs as faux patterns.
-		// ( instead the internals verify there are labels )
-		if v, e := run.Call(rec, aff); e != nil && !errors.Is(e, rt.NoResult) {
-			err = cmdError(op, e)
-		} else {
-			ret = v
-		}
+	} else if v, e := run.Call(name, aff, k, v); e != nil && !errors.Is(e, rt.NoResult) {
+		err = cmdError(op, e)
 	} else {
-		// fix? CallPattern is being used as a side effect to initialize records
-		// tbd: at the very least maybe use error return checking instead of testing kind record hierarchy?
-		// ( originally this was inside of Runner.Call; qnaCall.go )
-		if aff != affine.Record {
-			err = errutil.Fmt("attempting to call a record %q with affine %q", pat, aff)
+		ret = v
+	}
+	return
+}
+
+func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []g.Value, err error) {
+	keys, vals := make([]string, len(args)), make([]g.Value, len(args))
+	for i, a := range args {
+		if val, e := safe.GetAssignment(run, a.Value); e != nil {
+			err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
+			break
 		} else {
-			ret = g.RecordOf(rec)
+			keys[i], vals[i] = lang.Normalize(a.Name), val
 		}
+	}
+	if err == nil {
+		retKeys, retVals = keys, vals
 	}
 	return
 }

@@ -30,7 +30,7 @@ type Runtime interface {
 	GetRules(pattern, target string, pflags *Flags) ([]Rule, error)
 	// Call - run the pattern defined by the passed record.
 	// passes the expected return because patterns can be called in ambiguous context ( ex. template expressions )
-	Call(pat *g.Record, expectedReturn affine.Affinity) (g.Value, error)
+	Call(name string, expectedReturn affine.Affinity, keys []string, vals []g.Value) (g.Value, error)
 	// Send - trigger the named event, passing the objects to visit: target first, root-most last.
 	Send(pat *g.Record, up []string) (g.Value, error)
 	// RelativesOf - returns a list, even for one-to-one relationships.

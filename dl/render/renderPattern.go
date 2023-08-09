@@ -5,11 +5,9 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -69,33 +67,24 @@ func (op *RenderPattern) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g
 }
 
 func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
-	name := op.PatternName
-	if rec, e := assign.MakeRecord(run, name); e != nil {
+	if k, e := run.GetKindByName(op.PatternName); e != nil {
 		err = e
 	} else {
-		k := rec.Kind()
-		if have, want := len(op.Render), k.NumField(); have > want {
-			err = errutil.Fmt("too many arguments for %s have %d want %d", name, have, want)
-		} else {
-			for i, el := range op.Render {
-				field := k.Field(i) // use render value to ask for the right type of value
-				if v, e := el.RenderEval(run, field.Affinity); e != nil {
-					err = errutil.New("rendering", name, "arg", i, e)
-					break
-				} else if val, e := safe.AutoConvert(run, k.Field(i), v); e != nil {
-					err = errutil.New("converting", name, "arg", i, e)
-					break
-				} else if e := rec.SetIndexedField(i, val); e != nil {
-					err = errutil.New("setting name", name, "arg", i, e)
-					break
-				}
+		name := k.Name()
+		vals := make([]g.Value, len(op.Render))
+		for i, el := range op.Render { // use the targeted field to know how to read the value
+			if v, e := el.RenderEval(run, k.Field(i).Affinity); e != nil {
+				err = errutil.New("rendering", name, "arg", i, e)
+				break
+			} else {
+				vals[i] = v
 			}
-			if err == nil {
-				if v, e := run.Call(rec, hint); e != nil && !errors.Is(e, rt.NoResult) {
-					err = errutil.New("calling", name, e)
-				} else {
-					ret = v
-				}
+		}
+		if err == nil {
+			if v, e := run.Call(name, hint, nil, vals); e != nil && !errors.Is(e, rt.NoResult) {
+				err = errutil.New("calling", name, e)
+			} else {
+				ret = v
 			}
 		}
 	}

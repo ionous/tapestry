@@ -116,26 +116,12 @@ func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {
 			} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
 				err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", macro, fieldCnt)
 			} else {
-				rec := kind.NewRecord()
 				args := []g.Value{src, tgt}
-				for i := 0; i < 2; i++ {
-					if val, e := safe.AutoConvert(w, kind.Field(i), args[i]); e != nil {
-						err = e
-						break
-					} else if e := rec.SetIndexedField(i, val); e != nil {
-						// note: set indexed field assigns without copying
-						// but get value copies out, so this should be okay.
-						err = errutil.Fmt("%w while setting %q arg %v", e, macro, i)
-						break
-					}
-				}
-				if err == nil {
-					if v, e := w.Call(rec, affine.Text); e != nil && !errors.Is(e, rt.NoResult) {
-						err = e
-					} else if v != nil {
-						if msg := v.String(); len(msg) > 0 {
-							err = errutil.Fmt("Declare statement: %s", msg)
-						}
+				if v, e := w.Call(kind.Name(), affine.Text, nil, args); e != nil && !errors.Is(e, rt.NoResult) {
+					err = e
+				} else if v != nil {
+					if msg := v.String(); len(msg) > 0 {
+						err = errutil.Fmt("Declare statement: %s", msg)
 					}
 				}
 			}

@@ -25,10 +25,12 @@ func (pt *Playtime) getPawn() (ret string, err error) {
 // enc is the enclosureOf the player
 func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 	return func(cb parser.NounVisitor) (ret bool) {
-		rec := pt.bounds.NewRecord() // tbd: should obj be translated through labels? and/or should this use positional args
-		if e := rec.SetNamedField("obj", g.StringOf(enc)); e != nil {
-			log.Println(e)
-		} else if kids, e := pt.Call(rec, affine.TextList); e != nil && !errors.Is(e, rt.NoResult) {
+		if kids, e := pt.Call(
+			pt.bounds,
+			affine.TextList,
+			[]string{"obj"},
+			[]g.Value{g.StringOf(enc)},
+		); e != nil && !errors.Is(e, rt.NoResult) {
 			log.Println(e)
 		} else {
 			for _, k := range kids.Strings() {

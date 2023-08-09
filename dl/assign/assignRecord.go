@@ -1,12 +1,8 @@
 package assign
 
 import (
-	"strings"
-
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -20,12 +16,13 @@ func MakeRecord(run rt.Runtime, recordName string, args ...Arg) (ret *g.Record, 
 	} else if rec := kind.NewRecord(); len(args) == 0 {
 		// no args specified? oh this is the easy way.
 		ret = rec
+	} else if lf, e := safe.NewLabelFinder(run, kind); e != nil {
+		err = e
 	} else {
-		lf := labelFinder{kind: kind}
 		for i, a := range args {
 			if i >= kind.NumField() {
 				err = errutil.New("too many args", i, "making record", kind)
-			} else if at, e := lf.findNext(run, i, a); e != nil {
+			} else if at, e := lf.FindNext(a.Name); e != nil {
 				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
 				break
 			} else if at < 0 {
@@ -47,79 +44,6 @@ func MakeRecord(run rt.Runtime, recordName string, args ...Arg) (ret *g.Record, 
 			ret = rec
 		} else {
 			err = errutil.Fmt("%w for %q", err, recordName)
-		}
-	}
-	return
-}
-
-type labelFinder struct {
-	kind         *g.Kind
-	labels       []string
-	next         int
-	noMoreBlanks bool // error checking
-}
-
-// returns nil on success; updates internals
-func (lf *labelFinder) findNext(run rt.Runtime, i int, a Arg) (ret int, err error) {
-	// blank names are positional arguments
-	if n := a.Name; len(n) == 0 {
-		if lf.noMoreBlanks {
-			err = errutil.New("unexpected blank label", i)
-		} else {
-			ret, lf.next = lf.next, lf.next+1
-		}
-	} else {
-		// otherwise, find the named argument
-		if labels, e := lf.getLabels(run); e != nil {
-			err = e
-		} else {
-			n := lang.Normalize(n)
-			// search in increasing order for the next label that matches the specified argument
-			// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
-			if at := findLabel(labels, n, lf.next); at < 0 {
-				err = errutil.Fmt("no matching arg in labels %q", strings.Join(lf.labels, ","))
-			} else {
-				var fn string
-				if at < lf.kind.NumField() {
-					fn = lf.kind.Field(at).Name
-				}
-				if fn == n {
-					ret, lf.next = at, at+1
-					lf.noMoreBlanks = true
-				} else {
-					err = errutil.Fmt("mismatched field %q", fn)
-				}
-			}
-		}
-	}
-	return
-}
-
-// could all this be determined at assembly time?s
-func (lf *labelFinder) getLabels(run rt.Runtime) (ret []string, err error) {
-	if lf.labels != nil {
-		ret = lf.labels
-	} else if labels, e := run.GetField(meta.PatternLabels, lf.kind.Name()); e != nil {
-		err = e
-	} else {
-		lf.labels = labels.Strings()
-		ret = lf.labels
-	}
-	return
-}
-
-// returns -1 if not found, but startingAt if there are no labels at all
-// ( no labels indicates a CallPattern is being used for record initialization )
-func findLabel(labels []string, name string, startingAt int) (ret int) {
-	if cnt := len(labels); cnt == 0 {
-		ret = startingAt
-	} else {
-		ret = -1 // provisionally
-		for i := startingAt; i < cnt; i++ {
-			if l := labels[i]; l == name {
-				ret = i
-				break
-			}
 		}
 	}
 	return

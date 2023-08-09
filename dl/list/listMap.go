@@ -3,6 +3,7 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -17,7 +18,7 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
-	pat := op.PatternName
+	pat := lang.Normalize(op.PatternName)
 	if src, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(src.Affinity()) {
@@ -27,19 +28,13 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 	} else if tgt, e := root.GetList(run); e != nil {
 		err = e
 	} else {
-		const (
-			inArg = iota
-		)
+
 		var changes int
 		aff := affine.Element(tgt.Affinity())
 		for it := g.ListIt(src); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
-			} else if rec, e := assign.MakeRecord(run, pat); e != nil {
-				err = e // created a fresh record so it has blank default values
-			} else if e := rec.SetIndexedField(inArg, inVal); e != nil {
-				err = e
-			} else if newVal, e := run.Call(rec, aff); e != nil {
+			} else if newVal, e := run.Call(pat, aff, nil, []g.Value{inVal}); e != nil {
 				// note: this treats "no result" as an error because its
 				// trying to map *all* of the elements from one list into another
 				err = e

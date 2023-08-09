@@ -6,6 +6,7 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
 )
@@ -26,19 +27,18 @@ func (run *Runtime) GetField(object, field string) (ret g.Value, err error) {
 	return
 }
 
-func (run *Runtime) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err error) {
-	// fix: this duplicates qnaCall....
-	// maybe it could all be moved into package rt/pattern?
-	// ( some tweak to handle "startedPattern/endedPattern" would be needed.
-	//   some ideas: maybe be writing to a global, using SetField with a start/end key,
-	//               checking replace scope for a patter results type )
-	//  see also maybe "Send" -- which uses "BuildPath"
-	if res, e := pattern.NewResults(run, rec, aff); e != nil {
+func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals []g.Value) (ret g.Value, err error) {
+	// create a container to hold results of args, locals, and the pending return value
+	if kind, e := run.GetKindByName(name); e != nil {
+		err = e
+	} else if rec, e := safe.FillRecord(run, kind.NewRecord(), keys, vals); e != nil {
+		err = e
+	} else if res, e := pattern.NewResults(run, rec, aff); e != nil {
 		err = e
 	} else {
+		var allFlags rt.Flags
 		oldScope := run.Stack.ReplaceScope(res)
 		// ignores the initialization of locals during testing...
-		var allFlags rt.Flags
 		if rules, e := run.GetRules(rec.Kind().Name(), "", &allFlags); e != nil {
 			err = e
 		} else if e := res.ApplyRules(run, rules, allFlags); e != nil {

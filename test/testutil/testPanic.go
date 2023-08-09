@@ -16,7 +16,7 @@ var _ rt.Runtime = (*PanicRuntime)(nil)
 func (PanicRuntime) ActivateDomain(name string) (string, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Call(*g.Record, affine.Affinity) (ret g.Value, err error) {
+func (PanicRuntime) Call(string, affine.Affinity, []string, []g.Value) (g.Value, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetField(target, field string) (g.Value, error) {
@@ -25,7 +25,7 @@ func (PanicRuntime) GetField(target, field string) (g.Value, error) {
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
+func (PanicRuntime) GetRules(pattern, target string, pflags *rt.Flags) ([]rt.Rule, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) OppositeOf(string) string {
@@ -49,7 +49,7 @@ func (PanicRuntime) RelativesOf(a, relation string) (g.Value, error) {
 func (PanicRuntime) ReciprocalsOf(a, relation string) (g.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Send(*g.Record, []string) (ret g.Value, err error) {
+func (PanicRuntime) Send(*g.Record, []string) (g.Value, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) SetField(target, field string, v g.Value) error {

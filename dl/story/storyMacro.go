@@ -83,9 +83,9 @@ func (op *CallMacro) GetRecordList(run rt.Runtime) (g.Value, error) {
 
 func (op *CallMacro) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	name := lang.Normalize(op.MacroName)
-	if rec, e := assign.MakeRecord(run, name, op.Arguments...); e != nil {
+	if k, v, e := assign.ExpandArgs(run, op.Arguments); e != nil {
 		err = assign.CmdError(op, e)
-	} else if v, e := run.Call(rec, aff); e != nil {
+	} else if v, e := run.Call(name, aff, k, v); e != nil {
 		err = assign.CmdError(op, e)
 	} else {
 		ret = v
