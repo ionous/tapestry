@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"github.com/ionous/errutil"
@@ -17,9 +18,10 @@ import (
 func (run *Runner) Send(rec *g.Record, up []string) (ret g.Value, err error) {
 	okay := true // provisionally
 	name := rec.Kind().Name()
-	if res, e := pattern.NewResults(run, rec, affine.Bool); e != nil {
+	if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
 		err = e
 	} else {
+		res := pattern.NewResults(rec, labels.Strings(), affine.Bool)
 		oldScope := run.Stack.ReplaceScope(res)
 		if cached, e := run.getKindOf(name, kindsOf.Pattern.String()); e != nil {
 			err = e

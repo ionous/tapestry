@@ -2,6 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -78,6 +79,18 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 					err = errutil.Fmt("trying to import something other than a response")
 				} else {
 					// k.WriteEphemera(ImportCall(op))
+				}
+				return
+			},
+		},
+		grammar.Action_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
+				if flow, ok := b.(jsn.FlowBlock); !ok {
+					err = errutil.Fmt("trying to import something other than a flow")
+				} else if op, ok := flow.GetFlow().(*grammar.Action); !ok {
+					err = errutil.Fmt("trying to import something other than append action")
+				} else {
+					err = importAction(cat, op)
 				}
 				return
 			},

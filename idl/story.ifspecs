@@ -210,6 +210,87 @@
           ]
         },
         {
+          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
+          "Spec:slots:groups:with flow:": [
+            "story_action",
+            [
+              "story_statement",
+              "execute"
+            ],
+            "events",
+            {
+              "Flow:uses:": [
+                "action",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "action",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "requires",
+                      "first_noun",
+                      "action_param"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "and",
+                      "second_noun",
+                      "action_param"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with slot:": [
+            "action_param",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
+          "Spec:slots:groups:with flow:": [
+            "action_param_noun",
+            "action_param",
+            "events",
+            {
+              "Flow:uses:": [
+                "one",
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "kind_name",
+                    "text_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
+          "Spec:slots:groups:with flow:": [
+            "action_param_nothing",
+            "action_param",
+            "events",
+            {
+              "Flow:uses:": [
+                "nothing_else",
+                []
+              ]
+            }
+          ]
+        },
+        {
           "Spec:groups:with swap:": [
             "action_params",
             "events",

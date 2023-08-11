@@ -33,10 +33,11 @@ func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals [
 		err = e
 	} else if rec, e := safe.FillRecord(run, kind.NewRecord(), keys, vals); e != nil {
 		err = e
-	} else if res, e := pattern.NewResults(run, rec, aff); e != nil {
+	} else if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
 		err = e
 	} else {
 		var allFlags rt.Flags
+		res := pattern.NewResults(rec, labels.Strings(), aff)
 		oldScope := run.Stack.ReplaceScope(res)
 		// ignores the initialization of locals during testing...
 		if rules, e := run.GetRules(rec.Kind().Name(), "", &allFlags); e != nil {

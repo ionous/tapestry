@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -21,40 +20,17 @@ type Results struct {
 }
 
 // fix. itd be nice to remove expectedAff if possible. ( need to fx HackTillTemplatesCanEvaluatePatternTypes i think )
-func NewResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Results, err error) {
-	// tbd: is the result field really last?
-	// fix: if every pattern returned a result (ex. if execute returned a hidden bool or c-like int )
-	// then we could avoid the label look up, and always use the last indexed field
-	// currently, there might be a blank label "" for the return, which means no indexed field
-	// we also cant use "aff" because the calling context might not be right ( re Hack, and hints )
-	if rec == nil {
-		err = errutil.New("internal error: nil pattern passed to pattern results")
-	} else {
-		name := rec.Kind().Name()
-		if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
-			err = e
-		} else {
-			// note: this tests labels rather than k.Implements(kindsOf.Record.String())
-			// because several tests use raw golang structs as faux pattern records
-			// ( they have their own implementation of PatternLabels )
-			labels := labels.Strings()
-			if cnt := len(labels); cnt == 0 {
-				err = errutil.Fmt("record %q isn't a pattern", name)
-			} else {
-				resultField := labels[cnt-1]
-				// note: this is not considered an error right now.
-				// if aff != affine.None && len(resultField) == 0 {
-				// 	err = errutil.Fmt("expecting a %s result, but %q returns nothing", aff, name)
-				// }
-				ret = &Results{
-					rec:         rec,
-					resultField: resultField,
-					expectedAff: aff,
-				}
-			}
-		}
+func NewResults(rec *g.Record, labels []string, aff affine.Affinity) (ret *Results) {
+	// we allow nil labels as a shortcut for events;
+	var resultField string
+	if cnt := len(labels); cnt > 0 {
+		resultField = labels[cnt-1]
 	}
-	return
+	return &Results{
+		rec:         rec,
+		resultField: resultField,
+		expectedAff: aff,
+	}
 }
 
 func (rw *Results) Record() *g.Record {
@@ -172,7 +148,7 @@ func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, flags rt.Flags) (
 // returns remaining flags.
 func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret rt.Flags, err error) {
 	resultCount := rw.resultCount // check if rule changes this.
-	if ranFlag, e := apply(run, rule, flags); e != nil {
+	if ranFlag, e := ApplyRule(run, rule, flags); e != nil {
 		err = errutil.New(e, "while applying", rule.Name)
 	} else {
 		var didSomething bool
@@ -195,7 +171,7 @@ func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret 
 }
 
 // return the flags of the rule if it ran; even if it didnt return anything.
-func apply(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
+func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
 	// get the rule's flags and see whether we should run the rule
 	// rt.Filter is a flag for filters that need to always evalute (ex. counters)
 	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) {

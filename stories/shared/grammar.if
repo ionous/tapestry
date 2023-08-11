@@ -200,7 +200,7 @@
                     "One noun:": "things"
                   },
                   {
-                    "Action:": "storing"
+                    "Action:": "storing into"
                   }
                 ]
               },
@@ -325,7 +325,7 @@
                     ]
                   },
                   {
-                    "Action:": "retrieving"
+                    "Action:": "retrieving from"
                   }
                 ]
               },
@@ -427,7 +427,7 @@
             "One noun:": "things"
           },
           {
-            "Action:": "storing"
+            "Action:": "storing into"
           }
         ]
       ]
@@ -618,7 +618,7 @@
                             "One noun:": "things"
                           },
                           {
-                            "Action:": "storing"
+                            "Action:": "storing into"
                           }
                         ]
                       },
@@ -635,7 +635,7 @@
                                     "One noun:": "things"
                                   },
                                   {
-                                    "Action:": "storing"
+                                    "Action:": "storing into"
                                   }
                                 ]
                               },
@@ -696,7 +696,7 @@
                     ]
                   },
                   {
-                    "Action:": "retrieving"
+                    "Action:": "retrieving from"
                   }
                 ]
               },

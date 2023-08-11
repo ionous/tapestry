@@ -390,6 +390,272 @@ func ActionName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionName) (err
 	return
 }
 
+const ActionParam_Type = "action_param"
+
+var ActionParam_Optional_Marshal = ActionParam_Marshal
+
+type ActionParam_Slot struct{ Value *ActionParam }
+
+func (at ActionParam_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+func (at ActionParam_Slot) GetType() string              { return ActionParam_Type }
+func (at ActionParam_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at ActionParam_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(ActionParam)
+	return
+}
+
+func ActionParam_Marshal(m jsn.Marshaler, ptr *ActionParam) (err error) {
+	slot := ActionParam_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type ActionParam_Slice []ActionParam
+
+func (op *ActionParam_Slice) GetType() string { return ActionParam_Type }
+
+func (op *ActionParam_Slice) Marshal(m jsn.Marshaler) error {
+	return ActionParam_Repeats_Marshal(m, (*[]ActionParam)(op))
+}
+
+func (op *ActionParam_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ActionParam_Slice) SetSize(cnt int) {
+	var els []ActionParam
+	if cnt >= 0 {
+		els = make(ActionParam_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ActionParam_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ActionParam_Marshal(m, &(*op)[i])
+}
+
+func ActionParam_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionParam) error {
+	return jsn.RepeatBlock(m, (*ActionParam_Slice)(vals))
+}
+
+func ActionParam_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionParam) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ActionParam_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+// ActionParamNothing Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
+type ActionParamNothing struct {
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ ActionParam = (*ActionParamNothing)(nil)
+
+func (*ActionParamNothing) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ActionParamNothing_Type,
+		Uses: composer.Type_Flow,
+		Lede: "nothing_else",
+	}
+}
+
+const ActionParamNothing_Type = "action_param_nothing"
+
+func (op *ActionParamNothing) Marshal(m jsn.Marshaler) error {
+	return ActionParamNothing_Marshal(m, op)
+}
+
+type ActionParamNothing_Slice []ActionParamNothing
+
+func (op *ActionParamNothing_Slice) GetType() string { return ActionParamNothing_Type }
+
+func (op *ActionParamNothing_Slice) Marshal(m jsn.Marshaler) error {
+	return ActionParamNothing_Repeats_Marshal(m, (*[]ActionParamNothing)(op))
+}
+
+func (op *ActionParamNothing_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ActionParamNothing_Slice) SetSize(cnt int) {
+	var els []ActionParamNothing
+	if cnt >= 0 {
+		els = make(ActionParamNothing_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ActionParamNothing_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ActionParamNothing_Marshal(m, &(*op)[i])
+}
+
+func ActionParamNothing_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionParamNothing) error {
+	return jsn.RepeatBlock(m, (*ActionParamNothing_Slice)(vals))
+}
+
+func ActionParamNothing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionParamNothing) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ActionParamNothing_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ActionParamNothing_Flow struct{ ptr *ActionParamNothing }
+
+func (n ActionParamNothing_Flow) GetType() string      { return ActionParamNothing_Type }
+func (n ActionParamNothing_Flow) GetLede() string      { return "nothing_else" }
+func (n ActionParamNothing_Flow) GetFlow() interface{} { return n.ptr }
+func (n ActionParamNothing_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ActionParamNothing); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ActionParamNothing_Optional_Marshal(m jsn.Marshaler, pv **ActionParamNothing) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ActionParamNothing_Marshal(m, *pv)
+	} else if !enc {
+		var v ActionParamNothing
+		if err = ActionParamNothing_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ActionParamNothing_Marshal(m jsn.Marshaler, val *ActionParamNothing) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ActionParamNothing_Flow{val}); err == nil {
+		m.EndBlock()
+	}
+	return
+}
+
+// ActionParamNoun Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
+type ActionParamNoun struct {
+	KindName rt.TextEval `if:"label=_"`
+	Markup   map[string]any
+}
+
+// User implemented slots:
+var _ ActionParam = (*ActionParamNoun)(nil)
+
+func (*ActionParamNoun) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ActionParamNoun_Type,
+		Uses: composer.Type_Flow,
+		Lede: "one",
+	}
+}
+
+const ActionParamNoun_Type = "action_param_noun"
+const ActionParamNoun_Field_KindName = "$KIND_NAME"
+
+func (op *ActionParamNoun) Marshal(m jsn.Marshaler) error {
+	return ActionParamNoun_Marshal(m, op)
+}
+
+type ActionParamNoun_Slice []ActionParamNoun
+
+func (op *ActionParamNoun_Slice) GetType() string { return ActionParamNoun_Type }
+
+func (op *ActionParamNoun_Slice) Marshal(m jsn.Marshaler) error {
+	return ActionParamNoun_Repeats_Marshal(m, (*[]ActionParamNoun)(op))
+}
+
+func (op *ActionParamNoun_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ActionParamNoun_Slice) SetSize(cnt int) {
+	var els []ActionParamNoun
+	if cnt >= 0 {
+		els = make(ActionParamNoun_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ActionParamNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ActionParamNoun_Marshal(m, &(*op)[i])
+}
+
+func ActionParamNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionParamNoun) error {
+	return jsn.RepeatBlock(m, (*ActionParamNoun_Slice)(vals))
+}
+
+func ActionParamNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionParamNoun) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ActionParamNoun_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ActionParamNoun_Flow struct{ ptr *ActionParamNoun }
+
+func (n ActionParamNoun_Flow) GetType() string      { return ActionParamNoun_Type }
+func (n ActionParamNoun_Flow) GetLede() string      { return "one" }
+func (n ActionParamNoun_Flow) GetFlow() interface{} { return n.ptr }
+func (n ActionParamNoun_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ActionParamNoun); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ActionParamNoun_Optional_Marshal(m jsn.Marshaler, pv **ActionParamNoun) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ActionParamNoun_Marshal(m, *pv)
+	} else if !enc {
+		var v ActionParamNoun
+		if err = ActionParamNoun_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ActionParamNoun_Marshal(m jsn.Marshaler, val *ActionParamNoun) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ActionParamNoun_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ActionParamNoun_Field_KindName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.KindName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ActionParamNoun_Field_KindName))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // ActionParams swaps between various options
 type ActionParams struct {
 	Choice string
@@ -6133,6 +6399,128 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 	return
 }
 
+// StoryAction Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
+type StoryAction struct {
+	Action     rt.TextEval `if:"label=_"`
+	FirstNoun  ActionParam `if:"label=requires"`
+	SecondNoun ActionParam `if:"label=and"`
+	Markup     map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*StoryAction)(nil)
+var _ rt.Execute = (*StoryAction)(nil)
+
+func (*StoryAction) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryAction_Type,
+		Uses: composer.Type_Flow,
+		Lede: "action",
+	}
+}
+
+const StoryAction_Type = "story_action"
+const StoryAction_Field_Action = "$ACTION"
+const StoryAction_Field_FirstNoun = "$FIRST_NOUN"
+const StoryAction_Field_SecondNoun = "$SECOND_NOUN"
+
+func (op *StoryAction) Marshal(m jsn.Marshaler) error {
+	return StoryAction_Marshal(m, op)
+}
+
+type StoryAction_Slice []StoryAction
+
+func (op *StoryAction_Slice) GetType() string { return StoryAction_Type }
+
+func (op *StoryAction_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryAction_Repeats_Marshal(m, (*[]StoryAction)(op))
+}
+
+func (op *StoryAction_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryAction_Slice) SetSize(cnt int) {
+	var els []StoryAction
+	if cnt >= 0 {
+		els = make(StoryAction_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryAction_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryAction_Marshal(m, &(*op)[i])
+}
+
+func StoryAction_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryAction) error {
+	return jsn.RepeatBlock(m, (*StoryAction_Slice)(vals))
+}
+
+func StoryAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryAction) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryAction_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryAction_Flow struct{ ptr *StoryAction }
+
+func (n StoryAction_Flow) GetType() string      { return StoryAction_Type }
+func (n StoryAction_Flow) GetLede() string      { return "action" }
+func (n StoryAction_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryAction_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryAction); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryAction_Optional_Marshal(m jsn.Marshaler, pv **StoryAction) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryAction_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryAction
+		if err = StoryAction_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryAction_Marshal(m jsn.Marshaler, val *StoryAction) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(StoryAction_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", StoryAction_Field_Action)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Action)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", StoryAction_Field_Action))
+		}
+		e1 := m.MarshalKey("requires", StoryAction_Field_FirstNoun)
+		if e1 == nil {
+			e1 = ActionParam_Marshal(m, &val.FirstNoun)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", StoryAction_Field_FirstNoun))
+		}
+		e2 := m.MarshalKey("and", StoryAction_Field_SecondNoun)
+		if e2 == nil {
+			e2 = ActionParam_Marshal(m, &val.SecondNoun)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", StoryAction_Field_SecondNoun))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // StoryAlias allows the player to refer to a noun by one or more other terms.
 type StoryAlias struct {
 	Names  []string `if:"label=alias,type=text"`
@@ -7080,6 +7468,7 @@ func TextListField_Marshal(m jsn.Marshaler, val *TextListField) (err error) {
 }
 
 var Slots = []interface{}{
+	(*ActionParam)(nil),
 	(*FieldDefinition)(nil),
 	(*StoryStatement)(nil),
 }
@@ -7089,6 +7478,8 @@ var Slats = []composer.Composer{
 	(*ActionContext)(nil),
 	(*ActionDecl)(nil),
 	(*ActionName)(nil),
+	(*ActionParamNothing)(nil),
+	(*ActionParamNoun)(nil),
 	(*ActionParams)(nil),
 	(*AspectField)(nil),
 	(*BoolField)(nil),
@@ -7140,6 +7531,7 @@ var Slats = []composer.Composer{
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
 	(*StoppingText)(nil),
+	(*StoryAction)(nil),
 	(*StoryAlias)(nil),
 	(*StoryBreak)(nil),
 	(*StoryDirective)(nil),
@@ -7182,6 +7574,8 @@ var Signatures = map[uint64]interface{}{
 	3588173502446728488:  (*EventHandler)(nil),         /* With:event:rules: */
 	15882152812809098721: (*StoryBreak)(nil),           /* execute=-- */
 	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
+	16065076838869750884: (*StoryAction)(nil),          /* execute=Action:requires:and: */
+	14153819274714835576: (*StoryAction)(nil),          /* story_statement=Action:requires:and: */
 	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),            /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),            /* field_definition=Bool:initially: */
@@ -7266,6 +7660,7 @@ var Signatures = map[uint64]interface{}{
 	14758176820705861311: (*MakePlural)(nil),           /* execute=Make:plural: */
 	8107023930195182683:  (*MakePlural)(nil),           /* story_statement=Make:plural: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
+	7788523484730691028:  (*ActionParamNothing)(nil),   /* action_param=NothingElse */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
 	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */
 	2289982379805608146:  (*NumListField)(nil),         /* field_definition=NumList:kind: */
@@ -7274,6 +7669,7 @@ var Signatures = map[uint64]interface{}{
 	7599754526096278866:  (*NumberField)(nil),          /* field_definition=Number:initially: */
 	13275028962550729195: (*NumberField)(nil),          /* field_definition=Number:kind: */
 	8920589511475179656:  (*NumberField)(nil),          /* field_definition=Number:kind:initially: */
+	7587102257432104774:  (*ActionParamNoun)(nil),      /* action_param=One: */
 	16830519956255384977: (*SayResponse)(nil),          /* execute=Print response:with: */
 	10478796600040997822: (*SayResponse)(nil),          /* text_eval=Print response:with: */
 	7896413305974623897:  (*RecordField)(nil),          /* field_definition=Record: */

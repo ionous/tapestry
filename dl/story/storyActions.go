@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/action"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -49,9 +50,6 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-const actionNoun = "noun"
-const actionOtherNoun = "other noun"
-
 func (op *ActionDecl) defineExtras(run rt.Runtime, pb *mdl.PatternBuilder) (err error) {
 	extras := op.ActionParams.Value
 	switch p := extras.(type) {
@@ -61,7 +59,7 @@ func (op *ActionDecl) defineExtras(run rt.Runtime, pb *mdl.PatternBuilder) (err 
 		} else {
 			cls := lang.Normalize(kind.String())
 			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
-				Name:     actionNoun,
+				Name:     action.Noun.String(),
 				Class:    cls,
 				Affinity: affine.Text,
 			})
@@ -72,12 +70,12 @@ func (op *ActionDecl) defineExtras(run rt.Runtime, pb *mdl.PatternBuilder) (err 
 		} else {
 			cls := lang.Normalize(kinds.String())
 			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
-				Name:     actionNoun,
+				Name:     action.Noun.String(),
 				Class:    cls,
 				Affinity: affine.Text,
 			})
 			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
-				Name:     actionOtherNoun,
+				Name:     action.OtherNoun.String(),
 				Class:    cls,
 				Affinity: affine.Text,
 			})

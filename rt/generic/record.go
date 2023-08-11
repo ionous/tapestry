@@ -20,6 +20,11 @@ func (d *Record) Type() string {
 	return d.kind.name
 }
 
+// return whether the indexed field has ever been written to.
+func (d *Record) HasValue(i int) (ret bool) {
+	return d.values[i] != nil
+}
+
 // GetNamedField picks out a value from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	// note: the field is a trait when the field that was found doesnt match the field requested

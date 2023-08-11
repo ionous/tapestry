@@ -88,7 +88,8 @@ type cachedKind struct {
 // ( so that args can be put into scope for locals to see. )
 func (k cachedKind) initializeRecord(run rt.Runtime, rec *g.Record) (err error) {
 	for fieldIndex, init := range k.init {
-		if init != nil {
+		// init only if initable, and so long as a field hasnt already been set
+		if init != nil && !rec.HasValue(fieldIndex) {
 			ft := k.Field(fieldIndex)
 			if src, e := safe.GetAssignment(run, init); e != nil {
 				err = errutil.New("error determining local", k.Name(), ft.Name, e)
