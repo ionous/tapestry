@@ -9,7 +9,7 @@ export default {
   // horizontalLayout: // If true toolbox is horizontal, if false toolbox is vertical. Defaults to false.
   // maxBlocks:        // number of blocks that may be created. Useful for student exercises. Defaults to Infinity.
   // maxInstances:     // { block types =>  maximum number of that type }. Undeclared types default to Infinity.
-  // media:            //  Path from page (or frame) to the Blockly media directory. Defaults to "https://blockly-demo.appspot.com/static/media/".
+  media:  "/assets/blockly/media/",          //  Path from page (or frame) to the Blockly media directory. Defaults to "https://blockly-demo.appspot.com/static/media/".
   move:   {            // https://developers.google.com/blockly/guides/configure/web/move
     scrollbars: true,
     drag: false,
