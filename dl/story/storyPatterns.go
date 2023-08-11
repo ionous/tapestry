@@ -10,36 +10,13 @@ import (
 )
 
 // Execute - called by the macro runtime during weave.
-func (op *ExtendPattern) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
-func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
-			err = e
-		} else {
-			pb := mdl.NewPatternBuilder(name.String())
-			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
-				err = e
-			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
-				err = e
-			} else {
-				err = w.Pin().ExtendPattern(pb.Pattern)
-			}
-		}
-		return
-	})
-}
-
-// Execute - called by the macro runtime during weave.
 func (op *DefinePattern) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
@@ -54,6 +31,29 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 				err = e
 			} else {
 				err = w.Pin().AddPattern(pb.Pattern)
+			}
+		}
+		return
+	})
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *ExtendPattern) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
+	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
+			err = e
+		} else {
+			pb := mdl.NewPatternBuilder(name.String())
+			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
+				err = e
+			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
+				err = e
+			} else {
+				err = w.Pin().ExtendPattern(pb.Pattern)
 			}
 		}
 		return
