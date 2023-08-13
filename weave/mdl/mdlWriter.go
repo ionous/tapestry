@@ -891,10 +891,12 @@ func (pen *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) 
 	return
 }
 
-var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "filter", "prog", "at")
+var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "appends", "updates", "terminates", "filter", "prog", "at")
 
-func (pen *Pen) addRule(pattern, target kindInfo, phase int, filter, prog string) (err error) {
-	_, err = pen.db.Exec(mdl_rule, pen.domain, pattern.id, target.id, phase, filter, prog, pen.at)
+func (pen *Pen) addRule(pattern, target kindInfo, phase int, appends, updates, terminates bool, filter, prog string) (err error) {
+	_, err = pen.db.Exec(mdl_rule, pen.domain, pattern.id, target.id,
+		phase, appends, updates, terminates,
+		filter, prog, pen.at)
 	return
 }
 

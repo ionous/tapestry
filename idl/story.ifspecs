@@ -1369,6 +1369,152 @@
         },
         {
           "--": [
+            "Change the behavior of an existing pattern.",
+            "The default behavior for events is to fall through to the next handler unless canceled or stopped."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "rule_for_pattern",
+            [
+              "story_statement",
+              "execute"
+            ],
+            "patterns",
+            {
+              "Flow:uses:": [
+                "rule",
+                [
+                  {
+                    "Term:name:type:": [
+                      "for",
+                      "pattern_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
+                      "locals",
+                      "field_definition",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "do",
+                      "execute",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Change the behavior of an existing pattern.",
+            "The default behavior for events is to fall through to the next handler unless canceled or stopped."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "rule_for_noun",
+            [
+              "story_statement",
+              "execute"
+            ],
+            "patterns",
+            {
+              "Flow:uses:": [
+                "rule",
+                [
+                  {
+                    "Term:name:type:": [
+                      "for",
+                      "pattern_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "noun",
+                      "noun_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
+                      "locals",
+                      "field_definition",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "do",
+                      "execute",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Change the behavior of an existing pattern.",
+            "The default behavior for events is to fall through to the next handler unless canceled or stopped."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "rule_for_kind",
+            [
+              "story_statement",
+              "execute"
+            ],
+            "patterns",
+            {
+              "Flow:uses:": [
+                "rule",
+                [
+                  {
+                    "Term:name:type:": [
+                      "for",
+                      "pattern_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "kind",
+                      "kind_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
+                      "locals",
+                      "field_definition",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "do",
+                      "execute",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
             "Declare a function which can produce statements about the game world.",
             "They are processed at import time, and they cannot call patterns",
             "nor can patterns -- which are processed during play -- call macros.",

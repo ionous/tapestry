@@ -30,6 +30,9 @@ type rule struct {
 	filter rt.BoolEval
 	flags  EventTiming
 	prog   []rt.Execute
+	appends,
+	updates,
+	terminates bool
 }
 
 func NewPatternBuilder(name string) *PatternBuilder {
@@ -86,6 +89,16 @@ func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags EventT
 	})
 }
 
+func (b *PatternBuilder) AddNewRule(appends, updates, terminates bool, prog []rt.Execute) {
+	b.rules = append(b.rules, rule{
+		flags:      2,
+		appends:    appends,
+		updates:    updates,
+		terminates: terminates,
+		prog:       prog,
+	})
+}
+
 func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 	if cache, e := pat.fields.cache(pen); e != nil {
 		err = e
@@ -113,7 +126,7 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 						break
 					} else {
 						flags := fromTiming(rule.flags)
-						if e := pen.addRule(kid, tgt, flags, filter, prog); e != nil {
+						if e := pen.addRule(kid, tgt, flags, rule.appends, rule.updates, rule.terminates, filter, prog); e != nil {
 							err = e
 							break
 						}

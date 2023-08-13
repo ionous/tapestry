@@ -1,8 +1,14 @@
 package story
 
 import (
+	"strings"
+
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/action"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -60,6 +66,125 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
+func (op *RuleForPattern) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
+	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
+			err = e
+		} else if name := lang.Normalize(name.String()); len(name) == 0 {
+			err = errutil.New("rule has empty pattern")
+		} else if prefix, e := findPrefix(w, name); e != nil {
+			err = e
+		} else {
+			name, appends := prefix.name, prefix.after
+			updates := ruleDoesUpdate(op.Do)
+			terminates := ruleDoesTerminate(op.Do)
+			pb := mdl.NewPatternBuilder(name)
+			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
+				err = e
+			} else {
+				pb.AddNewRule(appends, updates, terminates, op.Do)
+				err = w.Pin().ExtendPattern(pb.Pattern)
+			}
+		}
+		return
+	})
+}
+
+func (op *RuleForNoun) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
+	return errutil.New("not implemented")
+}
+
+func (op *RuleForKind) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
+	return errutil.New("not implemented")
+}
+
+type prefix struct {
+	name  string
+	after bool
+}
+
+// if the named kind has the passed prefix:
+// check if its an action -- if so, then the prefix pattern implicitly exists
+// so return the passed name;
+// otherwise, if its a normal pattern, then return that shortned name
+func findPrefix(w *weave.Weaver, name string) (ret prefix, err error) {
+	// if the pattern starts with the word after
+	// then see whether the pattern is an action.
+	before := strings.HasPrefix(name, action.BeforeEvent.Prefix())
+	after := !before && strings.HasPrefix(name, action.AfterEvent.Prefix())
+	if !before && !after {
+		ret.name = name
+	} else {
+		var prefix string
+		if before {
+			prefix = action.BeforeEvent.Prefix()
+		} else {
+			prefix = action.AfterEvent.Prefix()
+		}
+		short := name[len(prefix):]
+		if k, e := w.GetKindByName(short); e != nil {
+			err = e
+		} else {
+			// when an action, then "before <name>" is valid
+			if k.Implements(action.AtEvent.Kind().String()) {
+				ret.name = name
+			} else {
+				ret.name = short
+			}
+			ret.after = after
+		}
+	}
+	return
+}
+
+// tdb: could this be processed at load time (storyImport)
+// ( ex. flag via env when the rule opens )
+func ruleDoesUpdate(exes []rt.Execute) (okay bool) {
+	for _, exe := range exes {
+		if guard, ok := exe.(jsn.Marshalee); !ok {
+			panic("unknown type")
+		} else if SearchForCounters(guard) {
+			okay = true
+			break
+		}
+	}
+	return
+}
+
+// tdb: could this? be processed at load time (storyImport)
+func ruleDoesTerminate(exe []rt.Execute) bool {
+	var continues bool // provisionally
+Out:
+	for _, el := range exe {
+		switch el := el.(type) {
+		case *Comment, *debug.DebugLog:
+			// skip comments and debug logs
+			// todo: make a "no op" interface so other things can join in?
+		case core.Brancher:
+			for el != nil {
+				el, continues = el.Descend()
+			}
+			break Out
+		default:
+			continues = false
+			break Out
+		}
+	}
+	return !continues
+}
+
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
 func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags mdl.EventTiming) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
@@ -102,6 +227,7 @@ func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags m
 			// 		guard,
 			// 	}}
 			pb.AddRule(target, op.Guard, flags, act)
+
 		}
 	}
 	return

@@ -5,7 +5,7 @@
         "Prints the objects in a pre-determined group.",
         "Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:result:provides:withRules:": [
         "print group",
         [
           {
@@ -18,12 +18,6 @@
         {
           "Bool:": "success"
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print group",
         [
           {
             "Record:kind:initially:": [

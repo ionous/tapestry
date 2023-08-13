@@ -5973,6 +5973,393 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 	return
 }
 
+// RuleForKind Change the behavior of an existing pattern.
+// The default behavior for events is to fall through to the next handler unless canceled or stopped.
+type RuleForKind struct {
+	PatternName rt.TextEval       `if:"label=for"`
+	KindName    rt.TextEval       `if:"label=kind"`
+	Locals      []FieldDefinition `if:"label=provides,optional"`
+	Do          []rt.Execute      `if:"label=do"`
+	Markup      map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*RuleForKind)(nil)
+var _ rt.Execute = (*RuleForKind)(nil)
+
+func (*RuleForKind) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RuleForKind_Type,
+		Uses: composer.Type_Flow,
+		Lede: "rule",
+	}
+}
+
+const RuleForKind_Type = "rule_for_kind"
+const RuleForKind_Field_PatternName = "$PATTERN_NAME"
+const RuleForKind_Field_KindName = "$KIND_NAME"
+const RuleForKind_Field_Locals = "$LOCALS"
+const RuleForKind_Field_Do = "$DO"
+
+func (op *RuleForKind) Marshal(m jsn.Marshaler) error {
+	return RuleForKind_Marshal(m, op)
+}
+
+type RuleForKind_Slice []RuleForKind
+
+func (op *RuleForKind_Slice) GetType() string { return RuleForKind_Type }
+
+func (op *RuleForKind_Slice) Marshal(m jsn.Marshaler) error {
+	return RuleForKind_Repeats_Marshal(m, (*[]RuleForKind)(op))
+}
+
+func (op *RuleForKind_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RuleForKind_Slice) SetSize(cnt int) {
+	var els []RuleForKind
+	if cnt >= 0 {
+		els = make(RuleForKind_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RuleForKind_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RuleForKind_Marshal(m, &(*op)[i])
+}
+
+func RuleForKind_Repeats_Marshal(m jsn.Marshaler, vals *[]RuleForKind) error {
+	return jsn.RepeatBlock(m, (*RuleForKind_Slice)(vals))
+}
+
+func RuleForKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleForKind) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RuleForKind_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RuleForKind_Flow struct{ ptr *RuleForKind }
+
+func (n RuleForKind_Flow) GetType() string      { return RuleForKind_Type }
+func (n RuleForKind_Flow) GetLede() string      { return "rule" }
+func (n RuleForKind_Flow) GetFlow() interface{} { return n.ptr }
+func (n RuleForKind_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RuleForKind); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RuleForKind_Optional_Marshal(m jsn.Marshaler, pv **RuleForKind) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RuleForKind_Marshal(m, *pv)
+	} else if !enc {
+		var v RuleForKind
+		if err = RuleForKind_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RuleForKind_Flow{val}); err == nil {
+		e0 := m.MarshalKey("for", RuleForKind_Field_PatternName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.PatternName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RuleForKind_Field_PatternName))
+		}
+		e1 := m.MarshalKey("kind", RuleForKind_Field_KindName)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.KindName)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RuleForKind_Field_KindName))
+		}
+		e2 := m.MarshalKey("provides", RuleForKind_Field_Locals)
+		if e2 == nil {
+			e2 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", RuleForKind_Field_Locals))
+		}
+		e3 := m.MarshalKey("do", RuleForKind_Field_Do)
+		if e3 == nil {
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", RuleForKind_Field_Do))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// RuleForNoun Change the behavior of an existing pattern.
+// The default behavior for events is to fall through to the next handler unless canceled or stopped.
+type RuleForNoun struct {
+	PatternName rt.TextEval       `if:"label=for"`
+	NounName    rt.TextEval       `if:"label=noun"`
+	Locals      []FieldDefinition `if:"label=provides,optional"`
+	Do          []rt.Execute      `if:"label=do"`
+	Markup      map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*RuleForNoun)(nil)
+var _ rt.Execute = (*RuleForNoun)(nil)
+
+func (*RuleForNoun) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RuleForNoun_Type,
+		Uses: composer.Type_Flow,
+		Lede: "rule",
+	}
+}
+
+const RuleForNoun_Type = "rule_for_noun"
+const RuleForNoun_Field_PatternName = "$PATTERN_NAME"
+const RuleForNoun_Field_NounName = "$NOUN_NAME"
+const RuleForNoun_Field_Locals = "$LOCALS"
+const RuleForNoun_Field_Do = "$DO"
+
+func (op *RuleForNoun) Marshal(m jsn.Marshaler) error {
+	return RuleForNoun_Marshal(m, op)
+}
+
+type RuleForNoun_Slice []RuleForNoun
+
+func (op *RuleForNoun_Slice) GetType() string { return RuleForNoun_Type }
+
+func (op *RuleForNoun_Slice) Marshal(m jsn.Marshaler) error {
+	return RuleForNoun_Repeats_Marshal(m, (*[]RuleForNoun)(op))
+}
+
+func (op *RuleForNoun_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RuleForNoun_Slice) SetSize(cnt int) {
+	var els []RuleForNoun
+	if cnt >= 0 {
+		els = make(RuleForNoun_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RuleForNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RuleForNoun_Marshal(m, &(*op)[i])
+}
+
+func RuleForNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]RuleForNoun) error {
+	return jsn.RepeatBlock(m, (*RuleForNoun_Slice)(vals))
+}
+
+func RuleForNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleForNoun) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RuleForNoun_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RuleForNoun_Flow struct{ ptr *RuleForNoun }
+
+func (n RuleForNoun_Flow) GetType() string      { return RuleForNoun_Type }
+func (n RuleForNoun_Flow) GetLede() string      { return "rule" }
+func (n RuleForNoun_Flow) GetFlow() interface{} { return n.ptr }
+func (n RuleForNoun_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RuleForNoun); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RuleForNoun_Optional_Marshal(m jsn.Marshaler, pv **RuleForNoun) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RuleForNoun_Marshal(m, *pv)
+	} else if !enc {
+		var v RuleForNoun
+		if err = RuleForNoun_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RuleForNoun_Flow{val}); err == nil {
+		e0 := m.MarshalKey("for", RuleForNoun_Field_PatternName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.PatternName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RuleForNoun_Field_PatternName))
+		}
+		e1 := m.MarshalKey("noun", RuleForNoun_Field_NounName)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.NounName)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RuleForNoun_Field_NounName))
+		}
+		e2 := m.MarshalKey("provides", RuleForNoun_Field_Locals)
+		if e2 == nil {
+			e2 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", RuleForNoun_Field_Locals))
+		}
+		e3 := m.MarshalKey("do", RuleForNoun_Field_Do)
+		if e3 == nil {
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", RuleForNoun_Field_Do))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// RuleForPattern Change the behavior of an existing pattern.
+// The default behavior for events is to fall through to the next handler unless canceled or stopped.
+type RuleForPattern struct {
+	PatternName rt.TextEval       `if:"label=for"`
+	Locals      []FieldDefinition `if:"label=provides,optional"`
+	Do          []rt.Execute      `if:"label=do"`
+	Markup      map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*RuleForPattern)(nil)
+var _ rt.Execute = (*RuleForPattern)(nil)
+
+func (*RuleForPattern) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RuleForPattern_Type,
+		Uses: composer.Type_Flow,
+		Lede: "rule",
+	}
+}
+
+const RuleForPattern_Type = "rule_for_pattern"
+const RuleForPattern_Field_PatternName = "$PATTERN_NAME"
+const RuleForPattern_Field_Locals = "$LOCALS"
+const RuleForPattern_Field_Do = "$DO"
+
+func (op *RuleForPattern) Marshal(m jsn.Marshaler) error {
+	return RuleForPattern_Marshal(m, op)
+}
+
+type RuleForPattern_Slice []RuleForPattern
+
+func (op *RuleForPattern_Slice) GetType() string { return RuleForPattern_Type }
+
+func (op *RuleForPattern_Slice) Marshal(m jsn.Marshaler) error {
+	return RuleForPattern_Repeats_Marshal(m, (*[]RuleForPattern)(op))
+}
+
+func (op *RuleForPattern_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RuleForPattern_Slice) SetSize(cnt int) {
+	var els []RuleForPattern
+	if cnt >= 0 {
+		els = make(RuleForPattern_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RuleForPattern_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RuleForPattern_Marshal(m, &(*op)[i])
+}
+
+func RuleForPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]RuleForPattern) error {
+	return jsn.RepeatBlock(m, (*RuleForPattern_Slice)(vals))
+}
+
+func RuleForPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleForPattern) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RuleForPattern_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RuleForPattern_Flow struct{ ptr *RuleForPattern }
+
+func (n RuleForPattern_Flow) GetType() string      { return RuleForPattern_Type }
+func (n RuleForPattern_Flow) GetLede() string      { return "rule" }
+func (n RuleForPattern_Flow) GetFlow() interface{} { return n.ptr }
+func (n RuleForPattern_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RuleForPattern); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RuleForPattern_Optional_Marshal(m jsn.Marshaler, pv **RuleForPattern) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RuleForPattern_Marshal(m, *pv)
+	} else if !enc {
+		var v RuleForPattern
+		if err = RuleForPattern_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RuleForPattern_Marshal(m jsn.Marshaler, val *RuleForPattern) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RuleForPattern_Flow{val}); err == nil {
+		e0 := m.MarshalKey("for", RuleForPattern_Field_PatternName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.PatternName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RuleForPattern_Field_PatternName))
+		}
+		e1 := m.MarshalKey("provides", RuleForPattern_Field_Locals)
+		if e1 == nil {
+			e1 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RuleForPattern_Field_Locals))
+		}
+		e2 := m.MarshalKey("do", RuleForPattern_Field_Do)
+		if e2 == nil {
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", RuleForPattern_Field_Do))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // SayResponse Generate text in a replaceable manner.
 // ( note: this is transformed for the runtime into a named 'RenderResponse'. )
 type SayResponse struct {
@@ -7527,6 +7914,9 @@ var Slats = []composer.Composer{
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
+	(*RuleForKind)(nil),
+	(*RuleForNoun)(nil),
+	(*RuleForPattern)(nil),
 	(*SayResponse)(nil),
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
@@ -7680,6 +8070,18 @@ var Signatures = map[uint64]interface{}{
 	5153309692795646250:  (*RecordListField)(nil),      /* field_definition=RecordList:initially: */
 	15479801779125468947: (*RecordListField)(nil),      /* field_definition=RecordList:kind: */
 	17384295137903978384: (*RecordListField)(nil),      /* field_definition=RecordList:kind:initially: */
+	15471847624221143333: (*RuleForPattern)(nil),       /* execute=Rule for:do: */
+	5691084228856271265:  (*RuleForPattern)(nil),       /* story_statement=Rule for:do: */
+	938756285616980517:   (*RuleForKind)(nil),          /* execute=Rule for:kind:do: */
+	16646221460438913289: (*RuleForKind)(nil),          /* story_statement=Rule for:kind:do: */
+	11146926484931132893: (*RuleForKind)(nil),          /* execute=Rule for:kind:provides:do: */
+	7333743129330436729:  (*RuleForKind)(nil),          /* story_statement=Rule for:kind:provides:do: */
+	5961726239343816143:  (*RuleForNoun)(nil),          /* execute=Rule for:noun:do: */
+	9209820952942420835:  (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:do: */
+	17261382214997337711: (*RuleForNoun)(nil),          /* execute=Rule for:noun:provides:do: */
+	6186122149607325867:  (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:provides:do: */
+	4140750123388353245:  (*RuleForPattern)(nil),       /* execute=Rule for:provides:do: */
+	2945621939612183889:  (*RuleForPattern)(nil),       /* story_statement=Rule for:provides:do: */
 	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */
 	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
 	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */

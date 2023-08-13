@@ -30,8 +30,10 @@ func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (rt.Assignment, 
 }
 
 func (d *Decoder) DecodeFilter(b []byte) (ret rt.BoolEval, err error) {
-	if e := core.Decode(rt.BoolEval_Slot{Value: &ret}, b, d.signatures); e != nil {
-		err = e
+	if len(b) > 0 {
+		if e := core.Decode(rt.BoolEval_Slot{Value: &ret}, b, d.signatures); e != nil {
+			err = e
+		}
 	}
 	return
 }

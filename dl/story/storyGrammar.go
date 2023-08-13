@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/action"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -95,12 +94,8 @@ func (op *StoryAction) Weave(cat *weave.Catalog) error {
 			err = e
 		} else {
 			act := lang.Normalize(act.String())
-			for _, name := range action.EventNames(act) {
-				subType := kindsOf.Action
-				if name == act {
-					subType = kindsOf.Event // fix these are revsersed
-				}
-				pb := mdl.NewPatternSubtype(name, subType)
+			for evt := action.FirstEvent; evt < action.NumEvents; evt++ {
+				pb := mdl.NewPatternSubtype(evt.Name(act), evt.Kind())
 				if name, e := getParamName(w.Runtime, op.FirstNoun); e != nil {
 					err = e
 					break

@@ -210,14 +210,14 @@ func TestQueries(t *testing.T) {
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(got, []query.Rules{
-		{"1", 1, []byte("filter1"), []byte("prog1")},
+		{Id: "1", Phase: 1, Filter: []byte("filter1"), Prog: []byte("prog1")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else if got, e := q.RulesFor(pattern, kind); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(got, []query.Rules{
-		{"2", 2, []byte("filter2"), []byte("prog2")},
-		{"3", 3, []byte("filter3"), []byte("prog3")},
+		{Id: "2", Phase: 2, Filter: []byte("filter2"), Prog: []byte("prog2")},
+		{Id: "3", Phase: 3, Filter: []byte("filter3"), Prog: []byte("prog3")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else /*if got, e := q.Relation(relation); e != nil {

@@ -10,6 +10,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
+const Missing = errutil.Error("Missing")
+
 func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
 	if name := lang.Normalize(rawName); len(name) == 0 {
 		err = errutil.New("no kind of empty name")
@@ -65,7 +67,7 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 			}
 		}
 		if !okay {
-			err = errutil.Fmt("no such kind %q", k)
+			err = errutil.Fmt("%w kind %q", Missing, k)
 		} else {
 			// fix? this is maybe a little odd... because when the domain changes, so will the kinds
 			// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
@@ -86,12 +88,11 @@ type cachedKind struct {
 // fix? probably would make more sense if this happened when the record was created instead of after.
 // to do that though, the "args" and "locals" would have to be separate
 // ( so that args can be put into scope for locals to see. )
-func (k cachedKind) initializeRecord(run rt.Runtime, rec *g.Record) (err error) {
-	for fieldIndex, init := range k.init {
-		// init only if initable, and so long as a field hasnt already been set
-		if init != nil && !rec.HasValue(fieldIndex) {
+func (k cachedKind) recordInit(run rt.Runtime, rec *g.Record, base int) (err error) {
+	for fieldIndex, init := range k.init[base:] {
+		if init != nil {
 			ft := k.Field(fieldIndex)
-			if src, e := safe.GetAssignment(run, init); e != nil {
+			if src, e := init.GetAssignedValue(run); e != nil {
 				err = errutil.New("error determining local", k.Name(), ft.Name, e)
 				break
 			} else if val, e := safe.AutoConvert(run, ft, src); e != nil {

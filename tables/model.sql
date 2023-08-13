@@ -59,7 +59,7 @@ create table mdl_name( domain text not null, noun int not null, name text, rank 
 create table mdl_noun( domain text not null, noun text, kind int not null, at text, primary key( domain, noun ));
 /* 
  * relation between two specific nouns. these change over the course of a game.
- * similar to mdl_rule, points back to the relation's kind rather than the entry in the mdl_rel table 
+ * similar to rulese, points back to the relation's kind rather than the entry in the mdl_rel table 
  */
 create table mdl_pair( domain text not null, relKind int not null, oneNoun int not null, otherNoun int not null, at text );
 /* 
@@ -91,7 +91,7 @@ create table mdl_rev( domain text not null, oneWord text, otherWord text, at tex
  * the scope of a rule can be narrower than its uses kind ( or target )
  * fix? can target (kind of nouns the rule applies to) be moved to filter? 
  */
-create table mdl_rule( domain text not null, kind int not null, target int, phase int, filter blob, prog blob, at text );
+create table mdl_rule( domain text not null, kind int not null, target int, phase int, appends int, updates int, terminates int, filter blob, prog blob, at text );
 /* 
  * initial values for the fields of nouns;
  * note: currently, the scope of the value is the same as the noun.
@@ -99,5 +99,3 @@ create table mdl_rule( domain text not null, kind int not null, target int, phas
  * dot contains sub field names separated by full stops.
  */
 create table mdl_value( noun int not null, field int not null, dot string, value blob, at text, primary key( noun, field, dot ));
-
-

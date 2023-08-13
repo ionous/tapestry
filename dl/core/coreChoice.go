@@ -12,6 +12,10 @@ func (op *ChooseAction) Execute(run rt.Runtime) (err error) {
 	return
 }
 
+func (op *ChooseAction) Descend() (Brancher, bool) {
+	return op.Else, true
+}
+
 func (op *ChooseAction) Branch(run rt.Runtime) (err error) {
 	if e := op.ifDoElse(run); e != nil {
 		err = cmdError(op, e)

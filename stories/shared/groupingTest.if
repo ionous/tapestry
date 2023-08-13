@@ -21,7 +21,7 @@
               "are defined by the \"starts with vowel\" pattern. so, even though, we've explicitly said \"an x\" in the declaration: that doesn't matter.",
               "ImportNouns() doesn't see the \"an\" as being special, and so doesn't get assign the noun a customized indefinite article.",
               "( Inform also has this issue. ) ",
-              "Potentially, the importer could look for the \"starts with vowel\" pattern, and if it exists, call it, and if it differs store the article.",
+              "Potentially, the importer could call the \"starts with vowel\" pattern, and when true store the article.",
               "Or, maybe we could store the (various) articles used when defining the noun, sort through them, and pick the most reasonable one -- always storing that regardless.",
               "saying only ever \"the X\" , for example, would be remembered, but wouldn't alter the set of indefinite articles."
             ]
@@ -443,39 +443,36 @@
                   "--": ""
                 },
                 {
-                  "Extend pattern:withRules:": [
-                    "print group",
-                    [
-                      {
-                        "PatternRule:flags:does:": [
-                          {
-                            "Cmp:is:txt:": [
-                              {
-                                "Variable:dot:": [
-                                  "group",
-                                  [
-                                    {
-                                      "AtField:": "grouping"
-                                    },
-                                    {
-                                      "AtField:": "label"
-                                    }
-                                  ]
-                                ]
-                              },
-                              "equal_to",
-                              "the tiles"
-                            ]
-                          },
-                          "before",
-                          [
+                  "Rule for:do:": [
+                    "after print group",
+                    {
+                      "If:does:": [
+                        {
+                          "Cmp:is:txt:": [
                             {
-                              "Print:": "from a Scrabble set"
-                            }
+                              "Variable:dot:": [
+                                "group",
+                                [
+                                  {
+                                    "AtField:": "grouping"
+                                  },
+                                  {
+                                    "AtField:": "label"
+                                  }
+                                ]
+                              ]
+                            },
+                            "equal_to",
+                            "the tiles"
                           ]
+                        },
+                        [
+                          {
+                            "Print:": "from a Scrabble set"
+                          }
                         ]
-                      }
-                    ]
+                      ]
+                    }
                   ]
                 },
                 {

@@ -234,7 +234,7 @@ func (q *Query) RulesFor(pat, target string) (ret []query.Rules, err error) {
 		if e := tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, rule)
 			return
-		}, &rule.Id, &rule.Phase, &rule.Filter, &rule.Prog); e != nil {
+		}, &rule.Id, &rule.Phase, &rule.Updates, &rule.Terminates, &rule.Filter, &rule.Prog); e != nil {
 			err = e // scan error...
 		}
 	}
@@ -465,7 +465,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
-			`select mu.rowid, mu.phase, mu.filter, mu.prog
+			`select mu.rowid, mu.phase, mu.updates, mu.terminates, mu.filter, mu.prog
 			from active_domains 
 			join mdl_rule mu
 				using (domain)
@@ -475,7 +475,10 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			  on (mt.rowid = mu.target)
 			where mk.kind = ?1
 			and ifnull(mt.kind,'') = ?2
-			order by abs(mu.phase), mu.rowid desc`,
+			order by 
+				abs(mu.phase), 
+				(1 + (-2 * appends)) *  mu.rowid desc
+			`,
 		),
 		// query the db for the value(s) of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.

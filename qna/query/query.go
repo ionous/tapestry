@@ -26,9 +26,10 @@ type NounInfo struct {
 }
 
 type Rules struct {
-	Id           string // really an id, but we'll let the driver convert
-	Phase        int
-	Filter, Prog []byte
+	Id                  string // really an id, but we'll let the driver convert
+	Phase               int
+	Updates, Terminates bool
+	Filter, Prog        []byte
 }
 
 type Query interface {

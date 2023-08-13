@@ -98,7 +98,8 @@ func (pen *Pen) AddTestRule(pattern, target string, phase int, filter, prog stri
 	} else if tgt, e := pen.findOptionalKind(target); e != nil {
 		err = e
 	} else {
-		_, err = pen.db.Exec(mdl_rule, domain, kid.id, tgt.id, phase, filter, prog, at)
+		var appends, updates, terminates bool
+		_, err = pen.db.Exec(mdl_rule, domain, kid.id, tgt.id, phase, appends, updates, terminates, filter, prog, at)
 	}
 	return
 }

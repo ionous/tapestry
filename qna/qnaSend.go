@@ -25,7 +25,7 @@ func (run *Runner) Send(rec *g.Record, up []string) (ret g.Value, err error) {
 		oldScope := run.Stack.ReplaceScope(res)
 		if cached, e := run.getKindOf(name, kindsOf.Pattern.String()); e != nil {
 			err = e
-		} else if e := cached.initializeRecord(run, rec); e != nil {
+		} else if e := cached.recordInit(run, rec, 0); e != nil {
 			err = e
 		} else {
 			// fix: nobody is using "current_noun" currently... so what does that say?
