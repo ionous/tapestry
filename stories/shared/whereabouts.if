@@ -120,21 +120,6 @@
         {
           "TextList:": "list"
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "Capture",
-        [
-          {
-            "Text:kind:initially:": [
-              "it",
-              "object",
-              "@obj"
-            ]
-          }
-        ],
         [
           {
             "PatternRule:does:": [
@@ -144,25 +129,25 @@
                   "Repeating:does:": [
                     {
                       "Not:": {
-                        "Is empty:": "@it"
+                        "Is empty:": "@obj"
                       }
                     },
                     [
                       {
                         "Push:into:": [
                           {
-                            "FromText:": "@it"
+                            "FromText:": "@obj"
                           },
                           "@list"
                         ]
                       },
                       {
                         "Set:from:": [
-                          "@it",
+                          "@obj",
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": "@it"
+                                "FromText:": "@obj"
                               }
                             }
                           }
