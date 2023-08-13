@@ -134,7 +134,13 @@ func findPrefix(w *weave.Weaver, name string) (ret prefix, err error) {
 			prefix = action.AfterEvent.Prefix()
 		}
 		short := name[len(prefix):]
-		if k, e := w.GetKindByName(short); e != nil {
+		// fix: we poll the db and once its there ask for more info
+		// if we ask for info first, qna returns "Unknown kind" --
+		// and even if it returned "missing kind" the error would get cached.
+		// option: return "Missing" from qnaKind and implement a runtime config that doest cache?
+		if _, e := w.Pin().FindKind(short); e != nil {
+			err = e
+		} else if k, e := w.GetKindByName(short); e != nil {
 			err = e
 		} else {
 			// when an action, then "before <name>" is valid

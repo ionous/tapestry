@@ -32,7 +32,51 @@
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:do:": [
+        "before can reach",
+        {
+          "If:does:": [
+            {
+              "AllTrue:": [
+                "@requires_light",
+                {
+                  "Object:field:": [
+                    "@actor",
+                    "is in darkness"
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Comment:": [
+                	"Used to determine whether an action needing light can proceed.", 
+                	"Returns some response text if the action is blocked.",
+                	"Relies on the player's \"is in darkness\" which gets calculated once per turn ( in \"adjust light.\" )"
+                ]
+              },
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Print response:with:": [
+                        "can't act in the dark",
+                        {
+                          "Say:": "It is pitch dark, and {we!} can't see a thing."
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:provides:do:": [
         "can reach",
         [
           {
@@ -65,252 +109,64 @@
         ],
         [
           {
-            "PatternRule:flags:does:": [
+            "Set:from:": [
+              "@i",
               {
-                "AllTrue:": [
-                  "@requires_light",
-                  {
-                    "Object:field:": [
-                      "@actor",
-                      "is in darkness"
-                    ]
-                  }
-                ]
-              },
-              "after",
-              [
-                {
-                  "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
-                },
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't act in the dark",
-                          {
-                            "Say:": "It is pitch dark, and {we!} can't see a thing."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
+                "FromText:": "@actor"
+              }
             ]
           },
           {
-            "PatternRule:does:": [
-              true,
+            "Repeating:does:": [
+              {
+                "Not:": {
+                  "Is empty:": "@i"
+                }
+              },
               [
                 {
-                  "Set:from:": [
-                    "@i",
-                    {
-                      "FromText:": "@actor"
-                    }
-                  ]
+                  "Comment:": "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
                 },
                 {
-                  "Repeating:does:": [
+                  "Push:into:": [
                     {
-                      "Not:": {
-                        "Is empty:": "@i"
-                      }
+                      "FromText:": "@i"
                     },
-                    [
-                      {
-                        "Comment:": "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
-                      },
-                      {
-                        "Push:into:": [
-                          {
-                            "FromText:": "@i"
-                          },
-                          "@path"
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@next",
-                          {
-                            "FromText:": {
-                              "ParentOf obj:": {
-                                "FromText:": "@i"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "If:does:": [
-                          {
-                            "Is empty:": "@reach_response"
-                          },
-                          [
-                            {
-                              "Comment:": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized. "
-                            },
-                            {
-                              "If:from:and:does:": [
-                                "response",
-                                {
-                                  "FromText:": {
-                                    "ReachUp fromObj:intoObj:actor:noun:action:": [
-                                      {
-                                        "FromText:": "@i"
-                                      },
-                                      {
-                                        "FromText:": "@next"
-                                      },
-                                      {
-                                        "FromText:": "@actor"
-                                      },
-                                      {
-                                        "FromText:": "@noun"
-                                      },
-                                      {
-                                        "FromText:": "@action"
-                                      }
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Not:": {
-                                    "Is empty:": "@response"
-                                  }
-                                },
-                                [
-                                  {
-                                    "Set:from:": [
-                                      "@reach_error",
-                                      {
-                                        "FromNumber:": {
-                                          "Len:": {
-                                            "FromTextList:": "@path"
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Set:from:": [
-                                      "@reach_response",
-                                      {
-                                        "FromText:": "@response"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Comment:": [
-                                      "This doesn't exit the loop. ",
-                                      "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
-                                    ]
-                                  }
-                                ]
-                              ]
-                            }
-                          ]
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@i",
-                          {
-                            "FromText:": "@next"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Comment:": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
-                },
-                {
-                  "Log:value:": [
-                    "note",
-                    {
-                      "FromTextList:": "@path"
-                    }
+                    "@path"
                   ]
                 },
                 {
                   "Set:from:": [
-                    "@i",
+                    "@next",
                     {
-                      "FromText:": "@noun"
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@i"
+                        }
+                      }
                     }
                   ]
                 },
                 {
-                  "Repeating:does:": [
+                  "If:does:": [
                     {
-                      "Not:": {
-                        "Is empty:": "@i"
-                      }
+                      "Is empty:": "@reach_response"
                     },
                     [
                       {
-                        "Set:from:": [
-                          "@lca",
-                          {
-                            "FromNumber:": {
-                              "Find:inList:": [
-                                {
-                                  "FromText:": "@i"
-                                },
-                                {
-                                  "FromTextList:": "@path"
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "If:does:": [
-                          {
-                            "Cmp:is:num:": [
-                              "@lca",
-                              "greater_than",
-                              0
-                            ]
-                          },
-                          [
-                            {
-                              "Comment:": "Exit once we've found the lca."
-                            },
-                            {
-                              "Break": true
-                            }
-                          ]
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@next",
-                          {
-                            "FromText:": {
-                              "ParentOf obj:": {
-                                "FromText:": "@i"
-                              }
-                            }
-                          }
-                        ]
+                        "Comment:": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized. "
                       },
                       {
                         "If:from:and:does:": [
                           "response",
                           {
                             "FromText:": {
-                              "ReachDown fromObj:intoObj:actor:noun:action:": [
-                                {
-                                  "FromText:": "@next"
-                                },
+                              "ReachUp fromObj:intoObj:actor:noun:action:": [
                                 {
                                   "FromText:": "@i"
+                                },
+                                {
+                                  "FromText:": "@next"
                                 },
                                 {
                                   "FromText:": "@actor"
@@ -332,7 +188,19 @@
                           [
                             {
                               "Set:from:": [
-                                "@dig_error",
+                                "@reach_error",
+                                {
+                                  "FromNumber:": {
+                                    "Len:": {
+                                      "FromTextList:": "@path"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "Set:from:": [
+                                "@reach_response",
                                 {
                                   "FromText:": "@response"
                                 }
@@ -340,105 +208,238 @@
                             },
                             {
                               "Comment:": [
-                                "To find the outermost dig error keep going, ",
-                                "updating the error each time."
+                                "This doesn't exit the loop. ",
+                                "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
                               ]
                             }
                           ]
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@i",
-                          {
-                            "FromText:": "@next"
-                          }
                         ]
                       }
                     ]
                   ]
                 },
                 {
-                  "Comment:": "Return the best response."
+                  "Set:from:": [
+                    "@i",
+                    {
+                      "FromText:": "@next"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Comment:": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
+          },
+          {
+            "Log:value:": [
+              "note",
+              {
+                "FromTextList:": "@path"
+              }
+            ]
+          },
+          {
+            "Set:from:": [
+              "@i",
+              {
+                "FromText:": "@noun"
+              }
+            ]
+          },
+          {
+            "Repeating:does:": [
+              {
+                "Not:": {
+                  "Is empty:": "@i"
+                }
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@lca",
+                    {
+                      "FromNumber:": {
+                        "Find:inList:": [
+                          {
+                            "FromText:": "@i"
+                          },
+                          {
+                            "FromTextList:": "@path"
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 },
                 {
-                  "If:does:else:": [
+                  "If:does:": [
                     {
                       "Cmp:is:num:": [
                         "@lca",
-                        "equal_to",
+                        "greater_than",
                         0
                       ]
                     },
                     [
                       {
-                        "Comment:": "No lca ever found? That's the most important error."
+                        "Comment:": "Exit once we've found the lca."
                       },
                       {
-                        "Set:from:": [
-                          "@response",
+                        "Break": true
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Set:from:": [
+                    "@next",
+                    {
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@i"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "If:from:and:does:": [
+                    "response",
+                    {
+                      "FromText:": {
+                        "ReachDown fromObj:intoObj:actor:noun:action:": [
                           {
-                            "FromText:": {
-                              "Print response:with:": [
-                                "can't reach a common ancestor",
-                                {
-                                  "Say:": "{They:.noun|capitalize!} {arent:.noun} available."
-                                }
-                              ]
-                            }
+                            "FromText:": "@next"
+                          },
+                          {
+                            "FromText:": "@i"
+                          },
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@action"
                           }
                         ]
                       }
-                    ],
+                    },
                     {
-                      "ElseIf:does:else:": [
-                        {
-                          "Cmp:is:num:": [
-                            "@reach_error",
-                            "less_than",
-                            "@lca"
-                          ]
-                        },
-                        [
+                      "Not:": {
+                        "Is empty:": "@response"
+                      }
+                    },
+                    [
+                      {
+                        "Set:from:": [
+                          "@dig_error",
                           {
-                            "Comment:": "There is an error reaching up from the actor towards the lca."
-                          },
-                          {
-                            "Set:from:": [
-                              "@response",
-                              {
-                                "FromText:": "@reach_response"
-                              }
-                            ]
+                            "FromText:": "@response"
                           }
-                        ],
-                        {
-                          "ElseIf:does:": [
-                            {
-                              "Not:": {
-                                "Is empty:": "@dig_error"
-                              }
-                            },
-                            [
-                              {
-                                "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
-                              },
-                              {
-                                "Set:from:": [
-                                  "@response",
-                                  {
-                                    "FromText:": "@dig_error"
-                                  }
-                                ]
-                              }
-                            ]
-                          ]
-                        }
-                      ]
+                        ]
+                      },
+                      {
+                        "Comment:": [
+                          "To find the outermost dig error keep going, ",
+                          "updating the error each time."
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Set:from:": [
+                    "@i",
+                    {
+                      "FromText:": "@next"
                     }
                   ]
                 }
               ]
+            ]
+          },
+          {
+            "Comment:": "Return the best response."
+          },
+          {
+            "If:does:else:": [
+              {
+                "Cmp:is:num:": [
+                  "@lca",
+                  "equal_to",
+                  0
+                ]
+              },
+              [
+                {
+                  "Comment:": "No lca ever found? That's the most important error."
+                },
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't reach a common ancestor",
+                          {
+                            "Say:": "{They:.noun|capitalize!} {arent:.noun} available."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              {
+                "ElseIf:does:else:": [
+                  {
+                    "Cmp:is:num:": [
+                      "@reach_error",
+                      "less_than",
+                      "@lca"
+                    ]
+                  },
+                  [
+                    {
+                      "Comment:": "There is an error reaching up from the actor towards the lca."
+                    },
+                    {
+                      "Set:from:": [
+                        "@response",
+                        {
+                          "FromText:": "@reach_response"
+                        }
+                      ]
+                    }
+                  ],
+                  {
+                    "ElseIf:does:": [
+                      {
+                        "Not:": {
+                          "Is empty:": "@dig_error"
+                        }
+                      },
+                      [
+                        {
+                          "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
+                        },
+                        {
+                          "Set:from:": [
+                            "@response",
+                            {
+                              "FromText:": "@dig_error"
+                            }
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]

@@ -10,8 +10,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-const Missing = errutil.Error("Missing")
-
 func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
 	if name := lang.Normalize(rawName); len(name) == 0 {
 		err = errutil.New("no kind of empty name")
@@ -67,7 +65,7 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 			}
 		}
 		if !okay {
-			err = errutil.Fmt("%w kind %q", Missing, k)
+			err = errutil.Fmt("unknown kind %q", k)
 		} else {
 			// fix? this is maybe a little odd... because when the domain changes, so will the kinds
 			// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
