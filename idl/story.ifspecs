@@ -232,14 +232,7 @@
                   {
                     "Term:name:type:": [
                       "requires",
-                      "first_noun",
-                      "action_param"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "and",
-                      "second_noun",
+                      "params",
                       "action_param"
                     ]
                   }
@@ -265,13 +258,23 @@
             {
               "Flow:uses:": [
                 "one",
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "kind_name",
-                    "text_eval"
-                  ]
-                }
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "kind_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "and_one",
+                      "other_kind_name",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -284,7 +287,7 @@
             "events",
             {
               "Flow:uses:": [
-                "nothing_else",
+                "nothing",
                 []
               ]
             }
@@ -1391,15 +1394,6 @@
                     ]
                   },
                   {
-                    "Term:name:type:optional:repeats:": [
-                      "provides",
-                      "locals",
-                      "field_definition",
-                      true,
-                      true
-                    ]
-                  },
-                  {
                     "Term:type:repeats:": [
                       "do",
                       "execute",
@@ -1442,15 +1436,6 @@
                     ]
                   },
                   {
-                    "Term:name:type:optional:repeats:": [
-                      "provides",
-                      "locals",
-                      "field_definition",
-                      true,
-                      true
-                    ]
-                  },
-                  {
                     "Term:type:repeats:": [
                       "do",
                       "execute",
@@ -1490,15 +1475,6 @@
                       "kind",
                       "kind_name",
                       "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "provides",
-                      "locals",
-                      "field_definition",
-                      true,
-                      true
                     ]
                   },
                   {

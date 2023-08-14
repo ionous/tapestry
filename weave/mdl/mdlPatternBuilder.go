@@ -14,7 +14,16 @@ type Pattern struct {
 	name, parent string
 	fields       fieldSet
 	rules        []rule
-	ruleOfs      int
+	ruleOfs      int // tracks how many rules were successfully written ( for retru )
+}
+
+func (p Pattern) Copy(name string) Pattern {
+	return Pattern{
+		name:   name,
+		parent: p.parent,
+		fields: p.fields,
+		rules:  p.rules,
+	}
 }
 
 func (p *Pattern) Name() string {

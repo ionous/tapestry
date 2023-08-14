@@ -16,7 +16,7 @@ import (
 
 // marker interface
 type ActionParam interface {
-	GetParam(rt.Runtime) (string, error)
+	GetParamNames(rt.Runtime) (one, other string, err error)
 }
 
 // Execute - called by the macro runtime during weave.
@@ -75,15 +75,18 @@ func (op *StoryAction) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
-func (*ActionParamNothing) GetParam(rt.Runtime) (_ string, _ error) {
+func (*ActionParamNothing) GetParamNames(rt.Runtime) (_, _ string, _ error) {
 	return
 }
 
-func (op *ActionParamNoun) GetParam(run rt.Runtime) (ret string, err error) {
-	if name, e := op.KindName.GetText(run); e != nil {
+func (op *ActionParamNoun) GetParamNames(run rt.Runtime) (one, other string, err error) {
+	if kind, e := safe.GetText(run, op.KindName); e != nil {
+		err = e
+	} else if otherKind, e := safe.GetText(run, op.OtherKindName); e != nil {
 		err = e
 	} else {
-		ret = lang.Normalize(name.String())
+		one, other = lang.Normalize(kind.String()),
+			lang.Normalize(otherKind.String())
 	}
 	return
 }
@@ -96,22 +99,23 @@ func (op *StoryAction) Weave(cat *weave.Catalog) error {
 			act := lang.Normalize(act.String())
 			for evt := action.FirstEvent; evt < action.NumEvents; evt++ {
 				pb := mdl.NewPatternSubtype(evt.Name(act), evt.Kind())
-				if name, e := getParamName(w.Runtime, op.FirstNoun); e != nil {
+				if params := op.Params; params == nil {
+					err = errutil.New("invalid param names")
+					break
+				} else if one, other, e := params.GetParamNames(w); e != nil {
 					err = e
 					break
 				} else {
-					addParam(pb, action.Noun, name)
-				}
-				if name, e := getParamName(w.Runtime, op.SecondNoun); e != nil {
-					err = e
-					break
-				} else {
-					addParam(pb, action.OtherNoun, name)
+					// for now we add both, even if they are blank.
+					// fix: what about a separate event object;
+					// then we only have to declare it once.
+					// could put it on the stack during event processing.
+					addParam(pb, action.Noun, one)
+					addParam(pb, action.OtherNoun, other)
 				}
 				addParam(pb, action.Actor, action.Actor.String())
 				// other information for events:
 				addParam(pb, action.Target, nil)
-				addParam(pb, action.CurrentTarget, nil)
 				addParam(pb, action.Interupt, affine.Bool)
 				addParam(pb, action.Cancel, affine.Bool)
 				// write the pattern
@@ -140,15 +144,4 @@ func addParam(pb *mdl.PatternBuilder, f action.Field, affineOrCls any) {
 		Affinity: aff,
 		Class:    clsname,
 	})
-}
-
-func getParamName(run rt.Runtime, op ActionParam) (ret string, err error) {
-	if op == nil {
-		err = errutil.New("invalid")
-	} else if txt, e := op.GetParam(run); e != nil {
-		err = e
-	} else {
-		ret = txt
-	}
-	return
 }

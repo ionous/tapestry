@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/action"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -52,14 +53,33 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
+		} else if name, e := w.Pin().GetKind(lang.Normalize(name.String())); e != nil {
+			err = e
+		} else if k, e := w.GetKindByName(name); e != nil {
+			err = e
 		} else {
-			pb := mdl.NewPatternBuilder(name.String())
+			pb := mdl.NewPatternBuilder(name)
 			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
 				err = e
 			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
 				err = e
 			} else {
-				err = w.Pin().ExtendPattern(pb.Pattern)
+				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+					if !k.Implements(action.AtEvent.Kind().String()) {
+						err = w.Pin().ExtendPattern(pb.Pattern)
+					} else {
+						for evt := action.FirstEvent; evt < action.NumEvents; evt++ {
+							// fix: we copy all the initialization too
+							// maybe an explicit ExtendPatternSet that in mdl to do better things.
+							pat := pb.Copy(evt.Name(name))
+							if e := w.Pin().ExtendPattern(pat); e != nil {
+								err = e
+								break
+							}
+						}
+					}
+					return
+				})
 			}
 		}
 		return
@@ -72,23 +92,10 @@ func (op *RuleForPattern) Execute(macro rt.Runtime) error {
 
 func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
-			err = e
-		} else if name := lang.Normalize(name.String()); len(name) == 0 {
-			err = errutil.New("rule has empty pattern")
-		} else if prefix, e := findPrefix(w, name); e != nil {
+		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {
-			name, appends := prefix.name, prefix.after
-			updates := ruleDoesUpdate(op.Do)
-			terminates := ruleDoesTerminate(op.Do)
-			pb := mdl.NewPatternBuilder(name)
-			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
-				err = e
-			} else {
-				pb.AddNewRule(appends, updates, terminates, op.Do)
-				err = w.Pin().ExtendPattern(pb.Pattern)
-			}
+			err = weaveRule(w, lang.Normalize(name.String()), op.Do)
 		}
 		return
 	})
@@ -108,6 +115,53 @@ func (op *RuleForKind) Execute(macro rt.Runtime) error {
 
 func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 	return errutil.New("not implemented")
+	// return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	// if kind, e := safe.GetText(w, op.KindName); e != nil {
+	// 	err = e
+	// } else if name, e := safe.GetText(w, op.PatternName); e != nil {
+	// 	err = e
+	// } else if k, e := w.Pin().GetKind(kind.String()); e != nil {
+	// 	err = e
+	// } else {
+	// 	//
+	// 	&core.IsKindOf{Object: x/*
+	// 	Get Noun
+	// 	*/, Kind: T(k)}
+	// 	err = weaveRule(w, name.String(), op.Do)
+	// }
+	// return
+	// })
+}
+
+func weaveRule(w *weave.Weaver, name string, exe []rt.Execute) (err error) {
+	if prefix, e := findPrefix(w, name); e != nil {
+		err = e
+	} else {
+		name, appends := prefix.name, prefix.after
+		if k, e := w.GetKindByName(name); e != nil {
+			err = e
+		} else {
+			// by default: all event handlers are filtered to the player
+			// fix: will need to be able to choose no actor and let the author filter manually
+			if k.Implements(kindsOf.Event.String()) ||
+				k.Implements(kindsOf.Action.String()) {
+				exe = []rt.Execute{&core.ChooseAction{
+					If: &core.CompareText{
+						A:  core.Variable("actor"),
+						Is: core.Equal,
+						B:  T("self"),
+					},
+					Does: exe,
+				}}
+			}
+			updates := ruleDoesUpdate(exe)
+			terminates := ruleDoesTerminate(exe)
+			pb := mdl.NewPatternBuilder(name)
+			pb.AddNewRule(appends, updates, terminates, exe)
+			err = w.Pin().ExtendPattern(pb.Pattern)
+		}
+	}
+	return
 }
 
 type prefix struct {
@@ -138,12 +192,12 @@ func findPrefix(w *weave.Weaver, name string) (ret prefix, err error) {
 		// if we ask for info first, qna returns "Unknown kind" --
 		// and even if it returned "missing kind" the error would get cached.
 		// option: return "Missing" from qnaKind and implement a runtime config that doest cache?
-		if _, e := w.Pin().FindKind(short); e != nil {
+		if _, e := w.Pin().GetKind(short); e != nil {
 			err = e
 		} else if k, e := w.GetKindByName(short); e != nil {
 			err = e
 		} else {
-			// when an action, then "before <name>" is valid
+			// when an action, then actually "before <name>" is valid
 			if k.Implements(action.AtEvent.Kind().String()) {
 				ret.name = name
 			} else {

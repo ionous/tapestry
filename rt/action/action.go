@@ -20,14 +20,13 @@ type Field int
 
 //go:generate stringer -type=Field -linecomment
 const (
-	Noun          Field = iota // noun
-	OtherNoun                  // other noun
-	Actor                      // actor
-	Target                     // target
-	CurrentTarget              // current target
-	Interupt                   // interrupt event
-	Cancel                     // cancel event
-	NumFields     = int(Cancel)
+	Noun      Field = iota // noun
+	OtherNoun              // other noun
+	Actor                  // actor
+	Target                 // target
+	Interupt               // interrupt event
+	Cancel                 // cancel event
+	NumFields = int(Cancel)
 )
 
 func (af Field) Index() int {

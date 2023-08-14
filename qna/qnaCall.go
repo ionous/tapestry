@@ -4,7 +4,6 @@ import (
 	"golang.org/x/exp/slices"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/action"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -12,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"github.com/ionous/errutil"
 )
 
@@ -41,7 +41,9 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 			}
 		} else {
 			// get the request event target, and the chain of objects up to the root.
-			if target, e := rec.GetIndexedField(action.Target.Index()); e != nil {
+			if len(keys) <= 0 {
+				err = errutil.Fmt("attempting to call an event %q with no target  %q", name, aff)
+			} else if target, e := rec.GetNamedField(keys[0]); e != nil {
 				err = e
 			} else if els, e := run.Call(action.CapturePattern, affine.TextList, nil, []g.Value{target}); e != nil {
 				err = e
@@ -117,8 +119,7 @@ func copyEventObject(dstKind *g.Kind, src *g.Record) (ret *g.Record, err error) 
 
 // return true if all done ( canceled )
 func (run *Runner) send(rec *g.Record, kind cachedKind, chain []string, base int) (retDone bool, err error) {
-	var flags rt.Flags
-	oldScope := run.Stack.ReplaceScope(pattern.NewResults(rec, nil, affine.None))
+	oldScope := run.Stack.ReplaceScope(scope.FromRecord(rec))
 	run.currentPatterns.startedPattern(kind.Name())
 	// run any record init statements
 	// ( with the scope of the pattern so that locals can refer to parameters )
@@ -128,42 +129,41 @@ func (run *Runner) send(rec *g.Record, kind cachedKind, chain []string, base int
 		var stopPropogation bool // stopPropogation -- finish the current event level, and no more.
 		for i, cnt := 0, len(chain); i < cnt && err == nil && !stopPropogation; i++ {
 			tgt := chain[i]
-			if rec.SetIndexedField(action.CurrentTarget.Index(), g.StringOf(tgt)); e != nil {
+			if rec.SetIndexedField(action.Target.Index(), g.StringOf(tgt)); e != nil {
 				err = e
 				break
-			} else if rules, e := run.GetRules(kind.Name(), "", &flags); e != nil {
+			} else if rs, e := run.getRules(kind.Name(), ""); e != nil {
 				err = e
 				break
 			} else {
-				for _, rule := range rules {
-					// end if there are no flags left, and we didn't want to filter everything.
-					if _, e := pattern.ApplyRule(run, rule, flags); e != nil {
-						err = errutil.New(e, "while applying", rule.Name)
+				for i := range rs.rules {
+					if done, e := rs.applyRule(run, i); e != nil || done {
+						err = e
 						break
-					}
-
-					// setting cancel blocks the rest of processing
-					// setting it false lets the handler set continue
-					// ( so it can be controlled via stopPropogation/Immediate similar to the dom )
-					if rec.HasValue(action.Cancel.Index()) {
-						retDone = true
-						if cancel, e := rec.GetIndexedField(action.Cancel.Index()); e != nil {
-							err = e
-							break
-						} else if cancel.Bool() {
-							stopPropogation = true
-							break //
+					} else {
+						// setting cancel blocks the rest of processing
+						// setting it false lets the handler set continue
+						// ( so it can be controlled via stopPropogation/Immediate similar to the dom )
+						if rec.HasValue(action.Cancel.Index()) {
+							retDone = true
+							if cancel, e := rec.GetIndexedField(action.Cancel.Index()); e != nil {
+								err = e
+								break
+							} else if cancel.Bool() {
+								stopPropogation = true
+								break //
+							}
 						}
-					}
 
-					// setting stopPropogation blocks rest of the bubble / cancel
-					// setting it true stops all other events on this noun.
-					if rec.HasValue(action.Interupt.Index()) {
-						stopPropogation = true
-						if interrupt, e := rec.GetIndexedField(action.Interupt.Index()); e != nil {
-							err = e
-						} else if interrupt.Bool() {
-							break
+						// setting stopPropogation blocks rest of the bubble / cancel
+						// setting it true stops all other events on this noun.
+						if rec.HasValue(action.Interupt.Index()) {
+							stopPropogation = true
+							if interrupt, e := rec.GetIndexedField(action.Interupt.Index()); e != nil {
+								err = e
+							} else if interrupt.Bool() {
+								break
+							}
 						}
 					}
 				}
@@ -219,7 +219,9 @@ func (run *Runner) newCall(rec *g.Record, kind cachedKind, aff affine.Affinity, 
 		run.currentPatterns.startedPattern(name)
 		if e := kind.recordInit(run, rec, base); e != nil {
 			err = e
-		} else if e := run.applyRules(name); e != nil {
+		} else if rs, e := run.getRules(name, ""); e != nil {
+			err = e
+		} else if e := rs.applyRules(run); e != nil {
 			err = e
 		} else if v, e := res.GetResult(); e != nil {
 			err = e
@@ -238,24 +240,29 @@ func (run *Runner) newCall(rec *g.Record, kind cachedKind, aff affine.Affinity, 
 	return
 }
 
-func (run *Runner) applyRules(name string) (err error) {
-	if rs, e := run.getRules(lang.Normalize(name), ""); e != nil {
+func (rs *ruleSet) applyRules(run rt.Runtime) (err error) {
+	for i := range rs.rules {
+		if done, e := rs.applyRule(run, i); e != nil || done {
+			err = e
+			break
+		}
+	}
+	return
+
+}
+
+func (rs *ruleSet) applyRule(run rt.Runtime, i int) (done bool, err error) {
+	rule := rs.rules[i]
+	if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 		err = e
-	} else {
-		alwaysUpdate, allowRun := rs.alwaysUpdate, true
-		for _, rule := range rs.rules {
-			if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
-				err = e
-			} else if allowRun && ok.Bool() {
-				if e := safe.RunAll(run, rule.Execute); e != nil {
-					err = e
-				} else if rule.Terminates {
-					if !alwaysUpdate {
-						break
-					}
-					allowRun = false // turn off the run flag, but keep going
-				}
+	} else if ok.Bool() && !rs.skipRun {
+		if e := safe.RunAll(run, rule.Execute); e != nil {
+			err = e
+		} else if rule.Terminates {
+			if !rs.updateAll {
+				done = true
 			}
+			rs.skipRun = true
 		}
 	}
 	return

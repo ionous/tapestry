@@ -57,7 +57,14 @@
             ]
           },
           {
-            "AdjustLight": true
+            "AdjustingLight actor:": {
+            	"FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
           },
           {
             "Expect output:": "It is now pitch dark in here!"
@@ -87,7 +94,14 @@
             ]
           },
           {
-            "AdjustLight": true
+            "AdjustingLight actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
           },
           {
             "Expect output:": "The light, it burns."

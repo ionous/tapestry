@@ -21,32 +21,33 @@ func (run *Runner) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 }
 
 // stored in Runner.cache
-type cachedRules struct {
-	rules        []rt.Rule
-	flags        rt.Flags // sum of flags of each rule
-	alwaysUpdate bool
+type ruleSet struct {
+	rules     []rt.Rule
+	flags     rt.Flags // sum of flags of each rule
+	updateAll bool
+	skipRun   bool
 }
 
 // get the rules from the cache, or build them and add them to the cache
-func (run *Runner) getRules(pat, tgt string) (ret cachedRules, err error) {
+func (run *Runner) getRules(pat, tgt string) (ret ruleSet, err error) {
 	if c, e := run.values.cache(func() (any, error) {
 		return run.buildRules(pat, tgt)
 	}, "rules", pat, tgt); e != nil {
 		err = e
 	} else {
-		ret = c.(cachedRules)
+		ret = c.(ruleSet)
 	}
 	return
 }
 
 // build the rules for the passed pat,tgt pair
-func (run *Runner) buildRules(pat, tgt string) (ret cachedRules, err error) {
+func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
 	if els, e := run.query.RulesFor(pat, tgt); e != nil {
 		err = e
 	} else {
 		var rules []rt.Rule
 		var sum rt.Flags
-		var alwaysUpdate bool
+		var updateAll bool
 		for _, el := range els {
 			if filter, e := run.decode.DecodeFilter(el.Filter); e != nil {
 				err = errutil.Append(err, errutil.New("decoding filter", pat, tgt, el.Id, e))
@@ -63,11 +64,11 @@ func (run *Runner) buildRules(pat, tgt string) (ret cachedRules, err error) {
 					Terminates: el.Terminates,
 				})
 				sum |= flags
-				alwaysUpdate = alwaysUpdate || el.Updates
+				updateAll = updateAll || el.Updates
 			}
 		}
 		if err == nil {
-			ret = cachedRules{rules: rules, flags: sum, alwaysUpdate: alwaysUpdate}
+			ret = ruleSet{rules: rules, flags: sum, updateAll: updateAll}
 		}
 	}
 	return

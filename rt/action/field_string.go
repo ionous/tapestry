@@ -12,14 +12,13 @@ func _() {
 	_ = x[OtherNoun-1]
 	_ = x[Actor-2]
 	_ = x[Target-3]
-	_ = x[CurrentTarget-4]
-	_ = x[Interupt-5]
-	_ = x[Cancel-6]
+	_ = x[Interupt-4]
+	_ = x[Cancel-5]
 }
 
-const _Field_name = "nounother nounactortargetcurrent targetinterrupt eventcancel event"
+const _Field_name = "nounother nounactorthe dom current targetinterrupt eventcancel event"
 
-var _Field_index = [...]uint8{0, 4, 14, 19, 25, 39, 54, 66}
+var _Field_index = [...]uint8{0, 4, 14, 19, 41, 56, 68}
 
 func (i Field) String() string {
 	if i < 0 || i >= Field(len(_Field_index)-1) {

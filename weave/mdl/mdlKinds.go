@@ -70,7 +70,7 @@ func (ki *kindInfo) fullpath() string {
 	return ki._fullpath
 }
 
-func (pen *Pen) FindKind(name string) (ret string, err error) {
+func (pen *Pen) GetKind(name string) (ret string, err error) {
 	if n, e := pen.findRequiredKind(name); e != nil {
 		err = e
 	} else {

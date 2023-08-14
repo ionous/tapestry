@@ -87,8 +87,9 @@ type cachedKind struct {
 // to do that though, the "args" and "locals" would have to be separate
 // ( so that args can be put into scope for locals to see. )
 func (k cachedKind) recordInit(run rt.Runtime, rec *g.Record, base int) (err error) {
-	for fieldIndex, init := range k.init[base:] {
+	for i, init := range k.init[base:] {
 		if init != nil {
+			fieldIndex := i + base
 			ft := k.Field(fieldIndex)
 			if src, e := init.GetAssignedValue(run); e != nil {
 				err = errutil.New("error determining local", k.Name(), ft.Name, e)
@@ -140,8 +141,20 @@ func (run *Runner) getFieldSet(kind string, path []string) (ret fieldSet, err er
 	return
 }
 
-// get the fields and initialization settings of a single kind
 func (run *Runner) getFields(kind string) (ret fieldSet, err error) {
+	if c, e := run.values.cache(func() (ret any, err error) {
+		ret, err = run.getUncachedFields(kind)
+		return
+	}, "fields", kind); e != nil {
+		err = e
+	} else {
+		ret = c.(fieldSet)
+	}
+	return
+}
+
+// get the fields and initialization settings of a single kind
+func (run *Runner) getUncachedFields(kind string) (ret fieldSet, err error) {
 	if fs, e := run.query.FieldsOf(kind); e != nil {
 		err = e
 	} else {

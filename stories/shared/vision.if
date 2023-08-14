@@ -1,38 +1,41 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
-        "adjust light",
-        [
-          {
-            "Nothing": true
-          }
-        ],
-        {
-          "Nothing": true
-        },
-        []
+      "Comment:": [
+        "Adjusting light runs at the end of the turn.",
+        "It checks the state of the world to decide if the player has been plunged into darkness or thrust into the light."
       ]
     },
     {
-      "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
+      "Action:requires:": [
+        "adjusting light",
+        {
+          "Nothing": true
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "after adjusting light",
+        {
+          "Set:from:": [
+            {
+              "Object:field:": [
+                "@actor",
+                "not in darkness"
+              ]
+            },
+            {
+              "FromBool:": "@now_lit"
+            }
+          ]
+        }
+      ]
     },
     {
       "Extend pattern:provides:withRules:": [
-        "adjust light",
+        "adjusting light",
         [
-          {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
-              }
-            ]
-          },
           {
             "Bool:initially:": [
               "was lit",
@@ -56,27 +59,6 @@
           }
         ],
         [
-          {
-            "PatternRule:flags:does:": [
-              true,
-              "before",
-              [
-                {
-                  "Set:from:": [
-                    {
-                      "Object:field:": [
-                        "@actor",
-                        "not in darkness"
-                      ]
-                    },
-                    {
-                      "FromBool:": "@now_lit"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {

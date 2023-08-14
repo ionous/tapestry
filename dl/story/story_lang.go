@@ -471,7 +471,7 @@ func (*ActionParamNothing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ActionParamNothing_Type,
 		Uses: composer.Type_Flow,
-		Lede: "nothing_else",
+		Lede: "nothing",
 	}
 }
 
@@ -524,7 +524,7 @@ func ActionParamNothing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionPa
 type ActionParamNothing_Flow struct{ ptr *ActionParamNothing }
 
 func (n ActionParamNothing_Flow) GetType() string      { return ActionParamNothing_Type }
-func (n ActionParamNothing_Flow) GetLede() string      { return "nothing_else" }
+func (n ActionParamNothing_Flow) GetLede() string      { return "nothing" }
 func (n ActionParamNothing_Flow) GetFlow() interface{} { return n.ptr }
 func (n ActionParamNothing_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*ActionParamNothing); ok {
@@ -555,8 +555,9 @@ func ActionParamNothing_Marshal(m jsn.Marshaler, val *ActionParamNothing) (err e
 
 // ActionParamNoun Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
 type ActionParamNoun struct {
-	KindName rt.TextEval `if:"label=_"`
-	Markup   map[string]any
+	KindName      rt.TextEval `if:"label=_"`
+	OtherKindName rt.TextEval `if:"label=and_one,optional"`
+	Markup        map[string]any
 }
 
 // User implemented slots:
@@ -572,6 +573,7 @@ func (*ActionParamNoun) Compose() composer.Spec {
 
 const ActionParamNoun_Type = "action_param_noun"
 const ActionParamNoun_Field_KindName = "$KIND_NAME"
+const ActionParamNoun_Field_OtherKindName = "$OTHER_KIND_NAME"
 
 func (op *ActionParamNoun) Marshal(m jsn.Marshaler) error {
 	return ActionParamNoun_Marshal(m, op)
@@ -650,6 +652,13 @@ func ActionParamNoun_Marshal(m jsn.Marshaler, val *ActionParamNoun) (err error) 
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ActionParamNoun_Field_KindName))
+		}
+		e1 := m.MarshalKey("and_one", ActionParamNoun_Field_OtherKindName)
+		if e1 == nil {
+			e1 = rt.TextEval_Optional_Marshal(m, &val.OtherKindName)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ActionParamNoun_Field_OtherKindName))
 		}
 		m.EndBlock()
 	}
@@ -5976,10 +5985,9 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 // RuleForKind Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForKind struct {
-	PatternName rt.TextEval       `if:"label=for"`
-	KindName    rt.TextEval       `if:"label=kind"`
-	Locals      []FieldDefinition `if:"label=provides,optional"`
-	Do          []rt.Execute      `if:"label=do"`
+	PatternName rt.TextEval  `if:"label=for"`
+	KindName    rt.TextEval  `if:"label=kind"`
+	Do          []rt.Execute `if:"label=do"`
 	Markup      map[string]any
 }
 
@@ -5998,7 +6006,6 @@ func (*RuleForKind) Compose() composer.Spec {
 const RuleForKind_Type = "rule_for_kind"
 const RuleForKind_Field_PatternName = "$PATTERN_NAME"
 const RuleForKind_Field_KindName = "$KIND_NAME"
-const RuleForKind_Field_Locals = "$LOCALS"
 const RuleForKind_Field_Do = "$DO"
 
 func (op *RuleForKind) Marshal(m jsn.Marshaler) error {
@@ -6086,19 +6093,12 @@ func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RuleForKind_Field_KindName))
 		}
-		e2 := m.MarshalKey("provides", RuleForKind_Field_Locals)
+		e2 := m.MarshalKey("do", RuleForKind_Field_Do)
 		if e2 == nil {
-			e2 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RuleForKind_Field_Locals))
-		}
-		e3 := m.MarshalKey("do", RuleForKind_Field_Do)
-		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RuleForKind_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", RuleForKind_Field_Do))
 		}
 		m.EndBlock()
 	}
@@ -6108,10 +6108,9 @@ func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
 // RuleForNoun Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForNoun struct {
-	PatternName rt.TextEval       `if:"label=for"`
-	NounName    rt.TextEval       `if:"label=noun"`
-	Locals      []FieldDefinition `if:"label=provides,optional"`
-	Do          []rt.Execute      `if:"label=do"`
+	PatternName rt.TextEval  `if:"label=for"`
+	NounName    rt.TextEval  `if:"label=noun"`
+	Do          []rt.Execute `if:"label=do"`
 	Markup      map[string]any
 }
 
@@ -6130,7 +6129,6 @@ func (*RuleForNoun) Compose() composer.Spec {
 const RuleForNoun_Type = "rule_for_noun"
 const RuleForNoun_Field_PatternName = "$PATTERN_NAME"
 const RuleForNoun_Field_NounName = "$NOUN_NAME"
-const RuleForNoun_Field_Locals = "$LOCALS"
 const RuleForNoun_Field_Do = "$DO"
 
 func (op *RuleForNoun) Marshal(m jsn.Marshaler) error {
@@ -6218,19 +6216,12 @@ func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RuleForNoun_Field_NounName))
 		}
-		e2 := m.MarshalKey("provides", RuleForNoun_Field_Locals)
+		e2 := m.MarshalKey("do", RuleForNoun_Field_Do)
 		if e2 == nil {
-			e2 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RuleForNoun_Field_Locals))
-		}
-		e3 := m.MarshalKey("do", RuleForNoun_Field_Do)
-		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RuleForNoun_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", RuleForNoun_Field_Do))
 		}
 		m.EndBlock()
 	}
@@ -6240,9 +6231,8 @@ func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
 // RuleForPattern Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForPattern struct {
-	PatternName rt.TextEval       `if:"label=for"`
-	Locals      []FieldDefinition `if:"label=provides,optional"`
-	Do          []rt.Execute      `if:"label=do"`
+	PatternName rt.TextEval  `if:"label=for"`
+	Do          []rt.Execute `if:"label=do"`
 	Markup      map[string]any
 }
 
@@ -6260,7 +6250,6 @@ func (*RuleForPattern) Compose() composer.Spec {
 
 const RuleForPattern_Type = "rule_for_pattern"
 const RuleForPattern_Field_PatternName = "$PATTERN_NAME"
-const RuleForPattern_Field_Locals = "$LOCALS"
 const RuleForPattern_Field_Do = "$DO"
 
 func (op *RuleForPattern) Marshal(m jsn.Marshaler) error {
@@ -6341,19 +6330,12 @@ func RuleForPattern_Marshal(m jsn.Marshaler, val *RuleForPattern) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RuleForPattern_Field_PatternName))
 		}
-		e1 := m.MarshalKey("provides", RuleForPattern_Field_Locals)
+		e1 := m.MarshalKey("do", RuleForPattern_Field_Do)
 		if e1 == nil {
-			e1 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Do)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RuleForPattern_Field_Locals))
-		}
-		e2 := m.MarshalKey("do", RuleForPattern_Field_Do)
-		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RuleForPattern_Field_Do))
+			m.Error(errutil.New(e1, "in flow at", RuleForPattern_Field_Do))
 		}
 		m.EndBlock()
 	}
@@ -6788,10 +6770,9 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 
 // StoryAction Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
 type StoryAction struct {
-	Action     rt.TextEval `if:"label=_"`
-	FirstNoun  ActionParam `if:"label=requires"`
-	SecondNoun ActionParam `if:"label=and"`
-	Markup     map[string]any
+	Action rt.TextEval `if:"label=_"`
+	Params ActionParam `if:"label=requires"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6808,8 +6789,7 @@ func (*StoryAction) Compose() composer.Spec {
 
 const StoryAction_Type = "story_action"
 const StoryAction_Field_Action = "$ACTION"
-const StoryAction_Field_FirstNoun = "$FIRST_NOUN"
-const StoryAction_Field_SecondNoun = "$SECOND_NOUN"
+const StoryAction_Field_Params = "$PARAMS"
 
 func (op *StoryAction) Marshal(m jsn.Marshaler) error {
 	return StoryAction_Marshal(m, op)
@@ -6889,19 +6869,12 @@ func StoryAction_Marshal(m jsn.Marshaler, val *StoryAction) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", StoryAction_Field_Action))
 		}
-		e1 := m.MarshalKey("requires", StoryAction_Field_FirstNoun)
+		e1 := m.MarshalKey("requires", StoryAction_Field_Params)
 		if e1 == nil {
-			e1 = ActionParam_Marshal(m, &val.FirstNoun)
+			e1 = ActionParam_Marshal(m, &val.Params)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", StoryAction_Field_FirstNoun))
-		}
-		e2 := m.MarshalKey("and", StoryAction_Field_SecondNoun)
-		if e2 == nil {
-			e2 = ActionParam_Marshal(m, &val.SecondNoun)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", StoryAction_Field_SecondNoun))
+			m.Error(errutil.New(e1, "in flow at", StoryAction_Field_Params))
 		}
 		m.EndBlock()
 	}
@@ -7964,8 +7937,8 @@ var Signatures = map[uint64]interface{}{
 	3588173502446728488:  (*EventHandler)(nil),         /* With:event:rules: */
 	15882152812809098721: (*StoryBreak)(nil),           /* execute=-- */
 	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
-	16065076838869750884: (*StoryAction)(nil),          /* execute=Action:requires:and: */
-	14153819274714835576: (*StoryAction)(nil),          /* story_statement=Action:requires:and: */
+	13262721671722854645: (*StoryAction)(nil),          /* execute=Action:requires: */
+	13102982041430601641: (*StoryAction)(nil),          /* story_statement=Action:requires: */
 	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),            /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),            /* field_definition=Bool:initially: */
@@ -8049,8 +8022,8 @@ var Signatures = map[uint64]interface{}{
 	12130342806058120266: (*MakeOpposite)(nil),         /* story_statement=Make:opposite: */
 	14758176820705861311: (*MakePlural)(nil),           /* execute=Make:plural: */
 	8107023930195182683:  (*MakePlural)(nil),           /* story_statement=Make:plural: */
+	17311001142702269553: (*ActionParamNothing)(nil),   /* action_param=Nothing */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
-	7788523484730691028:  (*ActionParamNothing)(nil),   /* action_param=NothingElse */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
 	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */
 	2289982379805608146:  (*NumListField)(nil),         /* field_definition=NumList:kind: */
@@ -8060,6 +8033,7 @@ var Signatures = map[uint64]interface{}{
 	13275028962550729195: (*NumberField)(nil),          /* field_definition=Number:kind: */
 	8920589511475179656:  (*NumberField)(nil),          /* field_definition=Number:kind:initially: */
 	7587102257432104774:  (*ActionParamNoun)(nil),      /* action_param=One: */
+	3330265781826257573:  (*ActionParamNoun)(nil),      /* action_param=One:andOne: */
 	16830519956255384977: (*SayResponse)(nil),          /* execute=Print response:with: */
 	10478796600040997822: (*SayResponse)(nil),          /* text_eval=Print response:with: */
 	7896413305974623897:  (*RecordField)(nil),          /* field_definition=Record: */
@@ -8074,14 +8048,8 @@ var Signatures = map[uint64]interface{}{
 	5691084228856271265:  (*RuleForPattern)(nil),       /* story_statement=Rule for:do: */
 	938756285616980517:   (*RuleForKind)(nil),          /* execute=Rule for:kind:do: */
 	16646221460438913289: (*RuleForKind)(nil),          /* story_statement=Rule for:kind:do: */
-	11146926484931132893: (*RuleForKind)(nil),          /* execute=Rule for:kind:provides:do: */
-	7333743129330436729:  (*RuleForKind)(nil),          /* story_statement=Rule for:kind:provides:do: */
 	5961726239343816143:  (*RuleForNoun)(nil),          /* execute=Rule for:noun:do: */
 	9209820952942420835:  (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:do: */
-	17261382214997337711: (*RuleForNoun)(nil),          /* execute=Rule for:noun:provides:do: */
-	6186122149607325867:  (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:provides:do: */
-	4140750123388353245:  (*RuleForPattern)(nil),       /* execute=Rule for:provides:do: */
-	2945621939612183889:  (*RuleForPattern)(nil),       /* story_statement=Rule for:provides:do: */
 	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */
 	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
 	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */
