@@ -26,12 +26,12 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 		err = e
 	} else {
 		if e := safe.RunAll(&checker{run, &buf, 0}, t.Test); e != nil {
-			err = errutil.Fmt("ng! %s test encountered error: %s", t.Name, e)
+			err = errutil.Fmt("NG!  %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect && len(t.Expect) > 0 {
 			if eol := '\n'; strings.ContainsRune(res, eol) || strings.ContainsRune(t.Expect, eol) {
-				err = errutil.Fmt("ng! %s have:>>>\n%s<<<\nwant:>>>\n%s<<<", t.Name, res, t.Expect)
+				err = errutil.Fmt("NG!  %s have:>>>\n%s<<<\nwant:>>>\n%s<<<", t.Name, res, t.Expect)
 			} else {
-				err = errutil.Fmt("ng! %s have: %q want: %q", t.Name, res, t.Expect)
+				err = errutil.Fmt("NG!  %s have: %q want: %q", t.Name, res, t.Expect)
 			}
 		}
 		// restore even on a test mismatch
