@@ -32,14 +32,14 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
                   "Print:": {
-                    "Commas does:": [
+                    "Commas do:": [
                       {
-                        "Repeating across:as:does:": [
+                        "Repeating across:as:do:": [
                           {
                             "FromRecordList:": "@groups"
                           },
@@ -47,7 +47,7 @@
                           [
                             {
                               "Print:": {
-                                "Spaces does:": [
+                                "Spaces do:": [
                                   {
                                     "PrintGroup group:": {
                                       "FromRecord:": "@group"
@@ -103,14 +103,14 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
                   "Print:": {
-                    "Rows does:": [
+                    "Rows do:": [
                       {
-                        "Repeating across:as:does:": [
+                        "Repeating across:as:do:": [
                           {
                             "FromRecordList:": "@groups"
                           },
@@ -118,7 +118,7 @@
                           [
                             {
                               "Print:": {
-                                "Row does:": [
+                                "Row do:": [
                                   {
                                     "PrintGroup group:": {
                                       "FromRecord:": "@group"
@@ -185,7 +185,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -214,7 +214,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -236,7 +236,7 @@
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "A noun:": {
                           "FromText:": "@obj"
@@ -244,7 +244,7 @@
                       },
                       {
                         "Print:": {
-                          "Brackets does:": [
+                          "Brackets do:": [
                             {
                               "PrintDetails obj:": {
                                 "FromText:": "@obj"
@@ -260,7 +260,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -325,12 +325,12 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "A noun:": {
                           "FromText:": "@obj"
@@ -352,7 +352,7 @@
                   }
                 },
                 {
-                  "If:does:": [
+                  "If:do:": [
                     "@has_kids",
                     [
                       {
@@ -406,7 +406,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Cmp:is:num:": [
                   {
@@ -481,7 +481,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -510,7 +510,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -540,7 +540,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -597,18 +597,18 @@
         "print status",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "Print:": {
-                          "Brackets does:": [
+                          "Brackets do:": [
                             {
                               "Print:": {
-                                "Commas does:": [
+                                "Commas do:": [
                                   {
                                     "PrintInnerStatus obj:isEmpty:": [
                                       {
@@ -665,7 +665,7 @@
         "print inner status",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@obj",
@@ -685,7 +685,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@obj",
@@ -705,7 +705,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@obj",
@@ -725,7 +725,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -755,7 +755,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@obj",

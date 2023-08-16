@@ -19,7 +19,7 @@ var FactorialStory = &story.StoryFile{
 			TestName: story.TestName{
 				Str: "factorial",
 			},
-			Do: FactorialCheck,
+			Exe: FactorialCheck,
 		},
 		&story.DefinePattern{
 			PatternName: T("factorial"),
@@ -35,10 +35,10 @@ var FactorialStory = &story.StoryFile{
 			Rules: []story.PatternRule{{
 				Markup: UserComment("rules within a set of rules are evaluated top to bottom"),
 				Guard:  FactorialIsZero,
-				Does:   FactorialUseOne,
+				Exe:    FactorialUseOne,
 			}, {
 				Guard: &core.Always{},
-				Does:  FactorialMulMinusOne,
+				Exe:   FactorialMulMinusOne,
 			}},
 		}},
 }

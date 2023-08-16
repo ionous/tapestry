@@ -14,13 +14,13 @@ func TestLoopBreak(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			True: B(true), Does: MakeActivity(
+			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
 					Target: Variable("i"),
 					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
 				&ChooseAction{
 					If: &CompareNum{A: Variable("i"), Is: AtLeast, B: I(4)},
-					Does: MakeActivity(
+					Exe: MakeActivity(
 						&Break{},
 					),
 				},
@@ -39,13 +39,13 @@ func TestLoopNext(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			True: B(true), Does: MakeActivity(
+			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
 					Target: Variable("i"),
 					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
 				&ChooseAction{
 					If: &CompareNum{A: Variable("i"), Is: AtLeast, B: I(4)},
-					Does: MakeActivity(
+					Exe: MakeActivity(
 						&Break{},
 					),
 				},
@@ -66,7 +66,7 @@ func TestLoopInfinite(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			True: B(true), Does: MakeActivity(
+			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
 					Target: Variable("i"),
 					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},

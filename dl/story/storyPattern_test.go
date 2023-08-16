@@ -70,7 +70,7 @@ func xTestPatternRuleImport(t *testing.T) {
 	// 	PatternName: T("example"),
 	// 	Rules: []story.PatternRule{{
 	// 		Guard: &core.Always{},
-	// 		Does: []rt.Execute{
+	// 		Exe: []rt.Execute{
 	// 			&core.PrintText{Text: T("hello")},
 	// 			&core.PrintText{Text: T("hello")},
 	// 		},

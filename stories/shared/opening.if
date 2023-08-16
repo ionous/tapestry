@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -36,7 +36,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "resp",
                     {
                       "FromText:": {
@@ -64,9 +64,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:from:and:does:else:": [
+                          "If:from:and:do:else:": [
                             "resp",
                             {
                               "FromText:": {
@@ -94,7 +94,7 @@
                               }
                             ],
                             {
-                              "ElseDo does:": [
+                              "Else do:": [
                                 {
                                   "Send:event:": [
                                     {
@@ -168,7 +168,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -176,7 +176,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "resp",
                     {
                       "FromText:": {
@@ -204,9 +204,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:from:and:does:else:": [
+                          "If:from:and:do:else:": [
                             "resp",
                             {
                               "FromText:": {
@@ -234,7 +234,7 @@
                               }
                             ],
                             {
-                              "ElseDo does:": [
+                              "Else do:": [
                                 {
                                   "Send:event:": [
                                     {
@@ -286,7 +286,7 @@
         "state changing",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -351,7 +351,7 @@
               ],
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     {
                       "AllTrue:": [
                         {
@@ -406,7 +406,7 @@
                         ]
                       },
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "Cmp:is:num:": [
                               {
@@ -426,15 +426,15 @@
                               "Print response:with:": [
                                 "reveal newly visible objects",
                                 {
-                                  "Spaces does:": [
+                                  "Spaces do:": [
                                     {
                                       "Say:": "{We!|capitalize!} open {the: .noun}, revealing"
                                     },
                                     {
                                       "Print:": {
-                                        "Commas does:": [
+                                        "Commas do:": [
                                           {
-                                            "Repeating across:as:does:": [
+                                            "Repeating across:as:do:": [
                                               {
                                                 "FromTextList:": "@concealed_items"
                                               },

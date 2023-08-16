@@ -34,7 +34,7 @@ func (op *ChooseValue) ifDoElse(run rt.Runtime) (err error) {
 			err = e
 		} else {
 			if ok.Bool() {
-				err = safe.RunAll(run, op.Does)
+				err = safe.RunAll(run, op.Exe)
 			} else if branch := op.Else; branch != nil {
 				err = branch.Branch(run)
 			}

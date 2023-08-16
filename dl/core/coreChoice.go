@@ -27,7 +27,7 @@ func (op *ChooseAction) ifDoElse(run rt.Runtime) (err error) {
 	if b, e := safe.GetBool(run, op.If); e != nil {
 		err = e
 	} else if b.Bool() {
-		err = safe.RunAll(run, op.Does)
+		err = safe.RunAll(run, op.Exe)
 	} else if branch := op.Else; branch != nil {
 		err = branch.Branch(run)
 	}

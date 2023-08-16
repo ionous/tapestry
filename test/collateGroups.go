@@ -46,7 +46,7 @@ var collateGroups = testpat.Pattern{
 			&list.ListEach{
 				List: &assign.FromRecordList{Value: core.Variable("collation", "groups")},
 				As:   W("el"),
-				Does: core.MakeActivity(
+				Exe: core.MakeActivity(
 					&core.ChooseAction{
 						If: &assign.CallPattern{
 							PatternName: P("match groups"),
@@ -58,7 +58,7 @@ var collateGroups = testpat.Pattern{
 								&assign.FromRecord{Value: core.Variable("el", "settings")},
 							),
 						},
-						Does: core.MakeActivity(
+						Exe: core.MakeActivity(
 							&assign.SetValue{
 								Target: core.Variable("found"),
 								Value:  &assign.FromBool{Value: B(true)},
@@ -80,7 +80,7 @@ var collateGroups = testpat.Pattern{
 				// pack the object and its settings into the local 'group'
 				// then push the group into the groups.
 				// FIX: a command to MakeRecord from args, and remove the local.
-				Does: core.MakeActivity(
+				Exe: core.MakeActivity(
 					&assign.SetValue{
 						Target: core.Variable("group", "settings"),
 						Value:  &assign.FromRecord{Value: core.Variable("settings")}},

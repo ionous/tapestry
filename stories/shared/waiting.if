@@ -26,7 +26,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -34,7 +34,7 @@
               },
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "Send:event:": [
                         {
@@ -94,7 +94,7 @@
         "report waiting",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "IsPlayer obj:": {
@@ -115,7 +115,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {

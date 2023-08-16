@@ -15,7 +15,7 @@ func (e MaxLoopError) Error() string { return "nearly infinite loop detected" }
 var MaxLoopIterations MaxLoopError = 0xbad
 
 func (op *While) Execute(run rt.Runtime) (err error) {
-	if len(op.Does) > 0 {
+	if len(op.Exe) > 0 {
 	LoopBreak:
 		for i := 0; ; i++ {
 			if i >= int(MaxLoopIterations) {
@@ -29,7 +29,7 @@ func (op *While) Execute(run rt.Runtime) (err error) {
 				break
 			} else {
 				// run the loop:
-				if e := safe.RunAll(run, op.Does); e != nil {
+				if e := safe.RunAll(run, op.Exe); e != nil {
 					var i DoInterrupt
 					if !errors.As(e, &i) {
 						err = cmdError(op, e)

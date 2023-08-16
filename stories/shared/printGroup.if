@@ -53,7 +53,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -68,7 +68,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -115,7 +115,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -188,7 +188,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -233,7 +233,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -253,7 +253,7 @@
                   "Comment:": "unless something else stops us, print a bracketed list of objects"
                 },
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     {
                       "Variable:dot:": [
                         "grouping",
@@ -267,12 +267,12 @@
                     [
                       {
                         "Print:": {
-                          "Brackets does:": [
+                          "Brackets do:": [
                             {
                               "Print:": {
-                                "Commas does:": [
+                                "Commas do:": [
                                   {
-                                    "Repeating across:as:does:": [
+                                    "Repeating across:as:do:": [
                                       {
                                         "FromTextList:": "@objs"
                                       },
@@ -299,12 +299,12 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Print:": {
-                            "Commas does:": [
+                            "Commas do:": [
                               {
-                                "Repeating across:as:does:": [
+                                "Repeating across:as:do:": [
                                   {
                                     "FromTextList:": "@objs"
                                   },
@@ -370,7 +370,7 @@
         "print grouped object",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {

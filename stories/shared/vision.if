@@ -63,7 +63,7 @@
         "adjusting light",
         "discovered the light",
         {
-          "If:does:": [
+          "If:do:": [
             {
               "AllTrue:": [
                 "@now_lit",
@@ -86,7 +86,7 @@
         "adjusting light",
         "discovered the dark",
         {
-          "If:does:": [
+          "If:do:": [
             {
               "AllTrue:": [
                 "@was_lit",
@@ -126,7 +126,7 @@
         "Print news of darkness",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -165,7 +165,7 @@
         "Print news of light",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {

@@ -87,7 +87,7 @@
         "is player",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -115,7 +115,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",

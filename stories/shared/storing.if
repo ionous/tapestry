@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -49,7 +49,7 @@
                   ]
                 },
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "result",
                     {
                       "FromText:": {
@@ -80,12 +80,12 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Comment:": "Then, we need to make sure we can reach the other noun:"
                         },
                         {
-                          "If:from:and:does:else:": [
+                          "If:from:and:do:else:": [
                             "result",
                             {
                               "FromText:": {
@@ -113,9 +113,9 @@
                               }
                             ],
                             {
-                              "ElseDo does:": [
+                              "Else do:": [
                                 {
-                                  "If:from:and:does:else:": [
+                                  "If:from:and:do:else:": [
                                     "result",
                                     {
                                       "FromText:": {
@@ -146,9 +146,9 @@
                                       }
                                     ],
                                     {
-                                      "ElseDo does:": [
+                                      "Else do:": [
                                         {
-                                          "If:does:": [
+                                          "If:do:": [
                                             {
                                               "Send:event:": [
                                                 {
@@ -219,11 +219,11 @@
               "store into",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
-                        "If:from:and:does:else:": [
+                        "If:from:and:do:else:": [
                           "error",
                           {
                             "FromText:": {
@@ -256,7 +256,7 @@
                             }
                           ],
                           {
-                            "ElseDo does:": [
+                            "Else do:": [
                               {
                                 "Set:from:": [
                                   "@success",
@@ -315,7 +315,7 @@
         "report storing into",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "IsPlayer obj:": {
@@ -336,7 +336,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -361,7 +361,7 @@
         "can handle",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -404,7 +404,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -459,7 +459,7 @@
         "reach down",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -500,7 +500,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -550,7 +550,7 @@
           },
           {
             "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {

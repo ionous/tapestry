@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -36,7 +36,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "resp",
                     {
                       "FromText:": {
@@ -67,9 +67,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:from:and:does:else:": [
+                          "If:from:and:do:else:": [
                             "resp",
                             {
                               "FromText:": {
@@ -97,9 +97,9 @@
                               }
                             ],
                             {
-                              "ElseDo does:": [
+                              "Else do:": [
                                 {
-                                  "If:does:": [
+                                  "If:do:": [
                                     {
                                       "Send:event:": [
                                         {
@@ -180,7 +180,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "Is empty:": "@description"
@@ -199,11 +199,11 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "Not:": {
                         "PrintParticulars obj:": {
@@ -254,7 +254,7 @@
         "Print particulars",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -263,7 +263,7 @@
               },
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "PrintInlineStorage obj:": {
                         "FromText:": "@obj"
@@ -285,7 +285,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -294,7 +294,7 @@
               },
               [
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     {
                       "PrintInlineStorage obj:": {
                         "FromText:": "@obj"
@@ -311,12 +311,12 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Comment:": "if the player isn't in the container."
                         },
                         {
-                          "If:does:": [
+                          "If:do:": [
                             {
                               "Cmp:is:txt:": [
                                 "@obj",

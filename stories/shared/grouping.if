@@ -31,7 +31,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -99,7 +99,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -181,7 +181,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -280,7 +280,7 @@
         "match groups",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AnyTrue:": [
                   {
@@ -322,7 +322,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -491,21 +491,21 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
                   "Comment:": "find the index of the matching group"
                 },
                 {
-                  "Repeating across:as:does:": [
+                  "Repeating across:as:do:": [
                     {
                       "FromRecordList:": "@groups"
                     },
                     "el",
                     [
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "MatchGroups first:second:": [
                               {
@@ -547,7 +547,7 @@
                   ]
                 },
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     {
                       "Cmp:is:num:": [
                         "@idx",
@@ -617,7 +617,7 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Comment:": [
                             "found a matching group?",

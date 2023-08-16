@@ -39,7 +39,7 @@ var assignGrouping = testpat.Pattern{
 				If: &core.Matches{
 					Text:  core.Variable("in"),
 					Match: "^thing"},
-				Does: core.MakeActivity(
+				Exe: core.MakeActivity(
 					&assign.SetValue{
 						Target: core.Variable("out", "label"),
 						Value:  &assign.FromText{Value: T("thingies")}},

@@ -25,7 +25,7 @@
         "fully opaque",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -48,7 +48,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -84,7 +84,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -142,7 +142,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "FullyOpaque obj:": {
                   "FromText:": "@obj"
@@ -164,7 +164,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -212,11 +212,11 @@
         "transparent list",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Not:": {
                         "Is empty:": "@obj"
@@ -288,14 +288,14 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
                   "Comment:": "Determine the ceiling, and add it to the queue for processing."
                 },
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Not:": {
                         "Is empty:": "@spot"
@@ -334,7 +334,7 @@
                   ]
                 },
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Cmp:is:num:": [
                         {
@@ -348,7 +348,7 @@
                     },
                     [
                       {
-                        "Erasing:as:does:": [
+                        "Erasing:as:do:": [
                           "@queue",
                           "it",
                           [
@@ -356,7 +356,7 @@
                               "Comment:": "objects which generate light are considered to be bright both inside and out; all of their surfaces aglow."
                             },
                             {
-                              "If:does:else:": [
+                              "If:do:else:": [
                                 {
                                   "Object:field:": [
                                     "@it",
@@ -377,7 +377,7 @@
                                   }
                                 ],
                                 {
-                                  "ElseIf:does:": [
+                                  "Else if:do:": [
                                     {
                                       "AnyTrue:": [
                                         {

@@ -78,7 +78,7 @@ func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret g.V
 }
 
 func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret g.Value, err error) {
-	if printedName, e := safe.GetText(run, &core.BufferText{Does: core.MakeActivity(
+	if printedName, e := safe.GetText(run, &core.BufferText{Exe: core.MakeActivity(
 		&assign.CallPattern{
 			PatternName: "print name",
 			Arguments: core.MakeArgs(&assign.FromText{Value: &literal.TextValue{

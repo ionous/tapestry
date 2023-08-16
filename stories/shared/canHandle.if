@@ -39,7 +39,7 @@
         "can handle",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Cmp:is:txt:": [
                   {

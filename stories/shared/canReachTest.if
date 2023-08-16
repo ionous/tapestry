@@ -20,7 +20,7 @@
         ],
         [
           {
-            "If:from:and:does:else:": [
+            "If:from:and:do:else:": [
               "resp",
               {
                 "FromText:": {
@@ -45,7 +45,7 @@
                 }
               ],
               {
-                "ElseDo does:": [
+                "Else do:": [
                   {
                     "Print:": "failed: shouldnt have reached into the espresso machine."
                   }
@@ -57,7 +57,7 @@
             "Expect output:": "okay: The espresso machine isn't open."
           },
           {
-            "If:from:and:does:else:": [
+            "If:from:and:do:else:": [
               "resp",
               {
                 "FromText:": {
@@ -82,7 +82,7 @@
                 }
               ],
               {
-                "ElseDo does:": [
+                "Else do:": [
                   {
                     "Print:": "okay: reached outside the open cabinet."
                   }
@@ -107,7 +107,7 @@
             ]
           },
           {
-            "If:from:and:does:else:": [
+            "If:from:and:do:else:": [
               "resp",
               {
                 "FromText:": {
@@ -132,7 +132,7 @@
                 }
               ],
               {
-                "ElseDo does:": [
+                "Else do:": [
                   {
                     "Print:": "okay: reached inside the open espresso machine."
                   }
@@ -157,7 +157,7 @@
             ]
           },
           {
-            "If:from:and:does:else:": [
+            "If:from:and:do:else:": [
               "resp",
               {
                 "FromText:": {
@@ -182,7 +182,7 @@
                 }
               ],
               {
-                "ElseDo does:": [
+                "Else do:": [
                   {
                     "Print:": "failed: shouldnt have reached from the closed cabinet."
                   }
@@ -194,7 +194,7 @@
             "Expect output:": "okay: The cabinet isn't open."
           },
           {
-            "If:from:and:does:else:": [
+            "If:from:and:do:else:": [
               "resp",
               {
                 "FromText:": {
@@ -219,7 +219,7 @@
                 }
               ],
               {
-                "ElseDo does:": [
+                "Else do:": [
                   {
                     "Print:": "failed: shouldnt have reached out of world."
                   }

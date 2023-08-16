@@ -46,7 +46,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -54,7 +54,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "resp",
                     {
                       "FromText:": {
@@ -82,9 +82,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:from:and:does:else:": [
+                          "If:from:and:do:else:": [
                             "resp",
                             {
                               "FromText:": {
@@ -115,9 +115,9 @@
                               }
                             ],
                             {
-                              "ElseDo does:": [
+                              "Else do:": [
                                 {
-                                  "If:does:": [
+                                  "If:do:": [
                                     {
                                       "Send:event:": [
                                         {
@@ -193,11 +193,11 @@
               ],
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
-                        "If:from:and:does:else:": [
+                        "If:from:and:do:else:": [
                           "error",
                           {
                             "FromText:": {
@@ -230,7 +230,7 @@
                             }
                           ],
                           {
-                            "ElseDo does:": [
+                            "Else do:": [
                               {
                                 "Log:value:": [
                                   "debug",
@@ -293,7 +293,7 @@
         "report traveling",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "IsPlayer obj:": {
@@ -314,7 +314,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -350,7 +350,7 @@
         "can use",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -394,7 +394,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -432,7 +432,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "--": "can only travel to valid destinations",
                 "AllTrue:": [

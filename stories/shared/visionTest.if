@@ -10,7 +10,7 @@
               "Print news of light",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {

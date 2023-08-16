@@ -5276,7 +5276,7 @@ func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) 
 type PatternRule struct {
 	Guard  rt.BoolEval  `if:"label=_"`
 	Flags  PatternFlags `if:"label=flags,optional"`
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -5290,7 +5290,7 @@ func (*PatternRule) Compose() composer.Spec {
 const PatternRule_Type = "pattern_rule"
 const PatternRule_Field_Guard = "$GUARD"
 const PatternRule_Field_Flags = "$FLAGS"
-const PatternRule_Field_Does = "$DOES"
+const PatternRule_Field_Exe = "$EXE"
 
 func (op *PatternRule) Marshal(m jsn.Marshaler) error {
 	return PatternRule_Marshal(m, op)
@@ -5377,12 +5377,12 @@ func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", PatternRule_Field_Flags))
 		}
-		e2 := m.MarshalKey("does", PatternRule_Field_Does)
+		e2 := m.MarshalKey("do", PatternRule_Field_Exe)
 		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternRule_Field_Does))
+			m.Error(errutil.New(e2, "in flow at", PatternRule_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -5834,7 +5834,7 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 type RuleForKind struct {
 	PatternName rt.TextEval  `if:"label=for"`
 	KindName    rt.TextEval  `if:"label=kind"`
-	Do          []rt.Execute `if:"label=do"`
+	Exe         []rt.Execute `if:"label=do"`
 	Markup      map[string]any
 }
 
@@ -5853,7 +5853,7 @@ func (*RuleForKind) Compose() composer.Spec {
 const RuleForKind_Type = "rule_for_kind"
 const RuleForKind_Field_PatternName = "$PATTERN_NAME"
 const RuleForKind_Field_KindName = "$KIND_NAME"
-const RuleForKind_Field_Do = "$DO"
+const RuleForKind_Field_Exe = "$EXE"
 
 func (op *RuleForKind) Marshal(m jsn.Marshaler) error {
 	return RuleForKind_Marshal(m, op)
@@ -5940,12 +5940,12 @@ func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RuleForKind_Field_KindName))
 		}
-		e2 := m.MarshalKey("do", RuleForKind_Field_Do)
+		e2 := m.MarshalKey("do", RuleForKind_Field_Exe)
 		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RuleForKind_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", RuleForKind_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -5957,7 +5957,7 @@ func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
 type RuleForNoun struct {
 	PatternName rt.TextEval  `if:"label=for"`
 	NounName    rt.TextEval  `if:"label=noun"`
-	Do          []rt.Execute `if:"label=do"`
+	Exe         []rt.Execute `if:"label=do"`
 	Markup      map[string]any
 }
 
@@ -5976,7 +5976,7 @@ func (*RuleForNoun) Compose() composer.Spec {
 const RuleForNoun_Type = "rule_for_noun"
 const RuleForNoun_Field_PatternName = "$PATTERN_NAME"
 const RuleForNoun_Field_NounName = "$NOUN_NAME"
-const RuleForNoun_Field_Do = "$DO"
+const RuleForNoun_Field_Exe = "$EXE"
 
 func (op *RuleForNoun) Marshal(m jsn.Marshaler) error {
 	return RuleForNoun_Marshal(m, op)
@@ -6063,12 +6063,12 @@ func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RuleForNoun_Field_NounName))
 		}
-		e2 := m.MarshalKey("do", RuleForNoun_Field_Do)
+		e2 := m.MarshalKey("do", RuleForNoun_Field_Exe)
 		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RuleForNoun_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", RuleForNoun_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -6082,7 +6082,7 @@ func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
 type RuleForPattern struct {
 	PatternName rt.TextEval  `if:"label=for"`
 	RuleName    rt.TextEval  `if:"label=named,optional"`
-	Do          []rt.Execute `if:"label=do"`
+	Exe         []rt.Execute `if:"label=do"`
 	Markup      map[string]any
 }
 
@@ -6101,7 +6101,7 @@ func (*RuleForPattern) Compose() composer.Spec {
 const RuleForPattern_Type = "rule_for_pattern"
 const RuleForPattern_Field_PatternName = "$PATTERN_NAME"
 const RuleForPattern_Field_RuleName = "$RULE_NAME"
-const RuleForPattern_Field_Do = "$DO"
+const RuleForPattern_Field_Exe = "$EXE"
 
 func (op *RuleForPattern) Marshal(m jsn.Marshaler) error {
 	return RuleForPattern_Marshal(m, op)
@@ -6188,12 +6188,12 @@ func RuleForPattern_Marshal(m jsn.Marshaler, val *RuleForPattern) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RuleForPattern_Field_RuleName))
 		}
-		e2 := m.MarshalKey("do", RuleForPattern_Field_Do)
+		e2 := m.MarshalKey("do", RuleForPattern_Field_Exe)
 		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Do)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RuleForPattern_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", RuleForPattern_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -7122,7 +7122,7 @@ type Test struct {
 	TestName       TestName         `if:"label=_"`
 	DependsOn      TestName         `if:"label=depends_on,optional"`
 	TestStatements []StoryStatement `if:"label=with_scene,optional"`
-	Do             []rt.Execute     `if:"label=do"`
+	Exe            []rt.Execute     `if:"label=do"`
 	Markup         map[string]any
 }
 
@@ -7141,7 +7141,7 @@ const Test_Type = "test"
 const Test_Field_TestName = "$TEST_NAME"
 const Test_Field_DependsOn = "$DEPENDS_ON"
 const Test_Field_TestStatements = "$TEST_STATEMENTS"
-const Test_Field_Do = "$DO"
+const Test_Field_Exe = "$EXE"
 
 func (op *Test) Marshal(m jsn.Marshaler) error {
 	return Test_Marshal(m, op)
@@ -7235,12 +7235,12 @@ func Test_Marshal(m jsn.Marshaler, val *Test) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", Test_Field_TestStatements))
 		}
-		e3 := m.MarshalKey("do", Test_Field_Do)
+		e3 := m.MarshalKey("do", Test_Field_Exe)
 		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", Test_Field_Do))
+			m.Error(errutil.New(e3, "in flow at", Test_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -7666,8 +7666,8 @@ var Signatures = map[uint64]interface{}{
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
 	355438255946453678:   (*PatternFlags)(nil),         /* PatternFlags: */
-	10703761093736583840: (*PatternRule)(nil),          /* PatternRule:does: */
-	1493717172765332753:  (*PatternRule)(nil),          /* PatternRule:flags:does: */
+	12283514816093491040: (*PatternRule)(nil),          /* PatternRule:do: */
+	573707243023402517:   (*PatternRule)(nil),          /* PatternRule:flags:do: */
 	8871095629143932769:  (*PatternType)(nil),          /* PatternType: */
 	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
 	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */

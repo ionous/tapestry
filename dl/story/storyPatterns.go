@@ -127,7 +127,7 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			act := lang.Normalize(act.String())
-			if e := weaveRule(w, lang.Normalize(act), op.Do); e != nil {
+			if e := weaveRule(w, lang.Normalize(act), op.Exe); e != nil {
 				err = errutil.Fmt("%w weaving a rule", e)
 			}
 		}
@@ -161,7 +161,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 	// 	&core.IsKindOf{Object: x/*
 	// 	Get Noun
 	// 	*/, Kind: T(k)}
-	// 	err = weaveRule(w, name.String(), op.Do)
+	// 	err = weaveRule(w, name.String(), op.Exe)
 	// }
 	// return
 	// })
@@ -192,7 +192,7 @@ func weaveRule(w *weave.Weaver, name string, exe []rt.Execute) (err error) {
 							B:  core.Variable(event.Object, event.Target.String()),
 						}},
 					},
-					Does: exe,
+					Exe: exe,
 				}}
 			}
 			updates := ruleDoesUpdate(exe)
@@ -307,7 +307,7 @@ func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags
 }
 
 func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags mdl.EventTiming) (err error) {
-	act := op.Does
+	act := op.Exe
 	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
 	} else if flags > 0 && tgtFlags > 0 {

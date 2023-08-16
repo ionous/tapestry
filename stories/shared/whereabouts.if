@@ -47,7 +47,7 @@
         "parent of",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -77,7 +77,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -122,11 +122,11 @@
         },
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Not:": {
                         "Is empty:": "@obj"
@@ -187,7 +187,7 @@
         "children of",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -247,11 +247,11 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Not:": {
                         "Is empty:": "@search"
@@ -259,7 +259,7 @@
                     },
                     [
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@search",
@@ -294,7 +294,7 @@
                         ]
                       },
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "Cmp:is:txt:": [
                               "@search",
@@ -371,7 +371,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -384,7 +384,7 @@
                 },
                 {
                   "--": "We search every parent of the second object for every parent of the first object. Slow but simple.",
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Is empty:": "@ancestor"
                     },
@@ -398,11 +398,11 @@
                         ]
                       },
                       {
-                        "Repeating:does:": [
+                        "Repeating:do:": [
                           true,
                           [
                             {
-                              "If:does:": [
+                              "If:do:": [
                                 {
                                   "Cmp:is:txt:": [
                                     "@o1",
@@ -439,7 +439,7 @@
                               ]
                             },
                             {
-                              "If:does:else:": [
+                              "If:do:else:": [
                                 {
                                   "Cmp:is:txt:": [
                                     "@o2",
@@ -453,7 +453,7 @@
                                   }
                                 ],
                                 {
-                                  "ElseIf:does:": [
+                                  "Else if:do:": [
                                     {
                                       "Cmp:is:txt:": [
                                         "@o2",
@@ -486,7 +486,7 @@
                         ]
                       },
                       {
-                        "If:does:else:": [
+                        "If:do:else:": [
                           {
                             "Cmp:is:txt:": [
                               "@o1",
@@ -501,7 +501,7 @@
                             }
                           ],
                           {
-                            "ElseIf:does:": [
+                            "Else if:do:": [
                               {
                                 "Cmp:is:txt:": [
                                   "@o1",
@@ -569,7 +569,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -581,7 +581,7 @@
                   ]
                 },
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     true,
                     [
                       {
@@ -598,7 +598,7 @@
                         ]
                       },
                       {
-                        "If:does:else:": [
+                        "If:do:else:": [
                           {
                             "Cmp:is:txt:": [
                               "@up",
@@ -613,7 +613,7 @@
                             }
                           ],
                           {
-                            "ElseIf:does:": [
+                            "Else if:do:": [
                               {
                                 "Cmp:is:txt:": [
                                   "@up",
@@ -632,7 +632,7 @@
                         ]
                       },
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "Cmp:is:txt:": [
                               "@up",
@@ -716,11 +716,11 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "AnyTrue:": [
                         {
@@ -803,11 +803,11 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "KindOf:is:": [
                         "@parent",
@@ -874,11 +874,11 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "KindOf:is:": [
                         "@parent",
@@ -940,7 +940,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -956,7 +956,7 @@
                   ]
                 },
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "KindOf:is:": [
                         "@parent",
@@ -1021,7 +1021,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -1037,7 +1037,7 @@
                   ]
                 },
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "AllTrue:": [
                         {
@@ -1112,7 +1112,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -1128,7 +1128,7 @@
                   ]
                 },
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "AllTrue:": [
                         {

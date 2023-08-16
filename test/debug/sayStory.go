@@ -91,10 +91,10 @@ var SayPattern = testpat.Pattern{
 var SayHelloGoodbye = core.MakeActivity(
 	&core.ChooseAction{
 		If: B(true),
-		Does: core.MakeActivity(&core.PrintText{
+		Exe: core.MakeActivity(&core.PrintText{
 			Text: T("hello"),
 		}),
-		Else: &core.ChooseNothingElse{Does: core.MakeActivity(&core.PrintText{
+		Else: &core.ChooseNothingElse{Exe: core.MakeActivity(&core.PrintText{
 			Text: T("goodbye"),
 		}),
 		},

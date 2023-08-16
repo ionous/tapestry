@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -36,7 +36,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "result",
                     {
                       "FromText:": {
@@ -67,9 +67,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:does:": [
+                          "If:do:": [
                             {
                               "Send:event:": [
                                 {
@@ -144,7 +144,7 @@
         "report peeking",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "IsPlayer obj:": {
@@ -165,7 +165,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {

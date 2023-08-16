@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -39,7 +39,7 @@
                   "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
                 },
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "result",
                     {
                       "FromText:": {
@@ -67,9 +67,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:from:and:does:else:": [
+                          "If:from:and:do:else:": [
                             "result",
                             {
                               "FromText:": {
@@ -100,9 +100,9 @@
                               }
                             ],
                             {
-                              "ElseDo does:": [
+                              "Else do:": [
                                 {
-                                  "If:does:": [
+                                  "If:do:": [
                                     {
                                       "Send:event:": [
                                         {
@@ -164,7 +164,7 @@
         "can reach",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -211,7 +211,7 @@
         "can use",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -254,7 +254,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -306,7 +306,7 @@
               "retrieve from",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
@@ -381,7 +381,7 @@
         "report retrieving from",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {

@@ -29,7 +29,7 @@ func TestImportSequence(t *testing.T) {
 		StoryStatements: []story.StoryStatement{
 			&story.Test{
 				TestName: story.TestName{t.Name()},
-				Do: []rt.Execute{
+				Exe: []rt.Execute{
 					printText,
 				},
 			},

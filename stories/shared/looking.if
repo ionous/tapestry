@@ -26,7 +26,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -79,7 +79,7 @@
               ],
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
@@ -166,7 +166,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -183,7 +183,7 @@
                   "SetEverythingUnmentioned": true
                 },
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     "@in_darkness",
                     [
                       {
@@ -195,7 +195,7 @@
                         "Comment:": "fix? if \"thedark\" was an object, darkness witnessed could be \"thedark.visited.\" ( same as below )"
                       },
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "AnyTrue:": [
                               {
@@ -233,7 +233,7 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
                         },
@@ -259,7 +259,7 @@
                           "Comment:": "(b/c we dont have a newline op yet, we use fullstop instead.)"
                         },
                         {
-                          "If:does:": [
+                          "If:do:": [
                             {
                               "AnyTrue:": [
                                 {
@@ -294,7 +294,7 @@
                                 "Reverse list:": "@enclosures"
                               },
                               {
-                                "Repeating across:as:does:": [
+                                "Repeating across:as:do:": [
                                   {
                                     "FromTextList:": "@enclosures"
                                   },
@@ -324,7 +324,7 @@
                   ]
                 },
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     "@in_darkness",
                     [
                       {
@@ -342,7 +342,7 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Set:from:": [
                             {
@@ -391,7 +391,7 @@
         "Print dark header",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -433,7 +433,7 @@
         "Print dark description",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -500,11 +500,11 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     {
                       "Cmp:is:txt:": [
                         "@room",
@@ -518,7 +518,7 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Say:": "{The: .ceiling|capitalize!}"
                         }
@@ -576,18 +576,18 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "Repeating across:as:does:": [
+                  "Repeating across:as:do:": [
                     {
                       "FromTextList:": "@enclosures"
                     },
                     "it",
                     [
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "Cmp:is:txt:": [
                               "@it",
@@ -677,11 +677,11 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "Cmp:is:txt:": [
                         "@where",
@@ -708,7 +708,7 @@
                   ]
                 },
                 {
-                  "Repeating across:as:does:": [
+                  "Repeating across:as:do:": [
                     {
                       "FromTextList:": "@kids"
                     },
@@ -718,7 +718,7 @@
                         "Comment:": "exclude objects that enclose the viewpoint, those get their own locale descriptions"
                       },
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "Not:": {
                               "AnyTrue:": [
@@ -754,7 +754,7 @@
                               }
                             },
                             {
-                              "If:does:": [
+                              "If:do:": [
                                 {
                                   "AllTrue:": [
                                     {
@@ -862,7 +862,7 @@
         "print object description",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -885,7 +885,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@obj",
@@ -910,7 +910,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -943,7 +943,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -1042,7 +1042,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -1069,7 +1069,7 @@
                   "Comment:": "we check where to stop recursion of supporters in supporters"
                 },
                 {
-                  "Repeating across:as:does:": [
+                  "Repeating across:as:do:": [
                     {
                       "FromTextList:": {
                         "ChildrenOf obj:": {
@@ -1091,7 +1091,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   "@first_look",
@@ -1160,7 +1160,7 @@
         "Can also see",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -1199,7 +1199,7 @@
         "set everything unmentioned",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -1216,7 +1216,7 @@
                   ]
                 },
                 {
-                  "Repeating across:as:does:": [
+                  "Repeating across:as:do:": [
                     {
                       "FromTextList:": {
                         "KindsOf:": "things"

@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -36,7 +36,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "resp",
                     {
                       "FromText:": {
@@ -64,7 +64,7 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Send:event:": [
                             {
@@ -134,7 +134,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -142,7 +142,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "resp",
                     {
                       "FromText:": {
@@ -170,7 +170,7 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Send:event:": [
                             {
@@ -220,7 +220,7 @@
         "state changing",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {

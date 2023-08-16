@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -36,7 +36,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "result",
                     {
                       "--": [
@@ -69,9 +69,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:does:": [
+                          "If:do:": [
                             {
                               "--": [
                                 "send the drop event to noun",
@@ -133,11 +133,11 @@
               "drop",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
-                        "If:from:and:does:else:": [
+                        "If:from:and:do:else:": [
                           "error",
                           {
                             "FromText:": {
@@ -174,7 +174,7 @@
                             }
                           ],
                           {
-                            "ElseDo does:": [
+                            "Else do:": [
                               {
                                 "Log:value:": [
                                   "debug",
@@ -237,7 +237,7 @@
         "report dropping",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "IsPlayer obj:": {
@@ -258,7 +258,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -283,7 +283,7 @@
         "can reach",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -322,7 +322,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {

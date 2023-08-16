@@ -64,8 +64,9 @@
                   ]
                 },
                 {
-                  "Term:type:repeats:": [
+                  "Term:name:type:repeats:": [
                     "do",
+                    "exe",
                     "execute",
                     true
                   ]
@@ -1361,8 +1362,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
                       "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -1403,8 +1405,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
                       "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -1445,8 +1448,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
                       "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -1667,8 +1671,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]

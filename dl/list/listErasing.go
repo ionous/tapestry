@@ -18,7 +18,7 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 		err = e
 	} else {
 		run.PushScope(scope.NewSingleValue(op.As, els))
-		err = safe.RunAll(run, op.Does)
+		err = safe.RunAll(run, op.Exe)
 		run.PopScope()
 	}
 	return
@@ -38,7 +38,7 @@ func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
 		err = otherwise.Branch(run)
 	} else if cnt > 0 {
 		run.PushScope(scope.NewSingleValue(op.As, vs.Index(0)))
-		err = safe.RunAll(run, op.Does)
+		err = safe.RunAll(run, op.Exe)
 		run.PopScope()
 	}
 	return

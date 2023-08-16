@@ -28,7 +28,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "IsPlayer obj:": {
                   "FromText:": "@actor"
@@ -36,7 +36,7 @@
               },
               [
                 {
-                  "If:from:and:does:else:": [
+                  "If:from:and:do:else:": [
                     "result",
                     {
                       "FromText:": {
@@ -67,9 +67,9 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
-                          "If:does:": [
+                          "If:do:": [
                             {
                               "Send:event:": [
                                 {
@@ -149,7 +149,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -178,7 +178,7 @@
                   ]
                 },
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     {
                       "Cmp:is:num:": [
                         {
@@ -201,20 +201,20 @@
                       }
                     ],
                     {
-                      "ElseDo does:": [
+                      "Else do:": [
                         {
                           "Print response:with:": [
                             "player searches storage",
                             {
-                              "Spaces does:": [
+                              "Spaces do:": [
                                 {
                                   "Say:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
                                 },
                                 {
                                   "Print:": {
-                                    "Commas does:": [
+                                    "Commas do:": [
                                       {
-                                        "Repeating across:as:does:": [
+                                        "Repeating across:as:do:": [
                                           {
                                             "FromTextList:": "@items"
                                           },
@@ -244,7 +244,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "IsPlayer obj:": {
@@ -265,7 +265,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -290,7 +290,7 @@
         "can reach",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -329,7 +329,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {

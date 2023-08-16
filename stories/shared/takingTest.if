@@ -18,10 +18,10 @@
         [
           {
             "Print:": {
-              "Rows does:": [
+              "Rows do:": [
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take from something closed:<br>"
                       },
@@ -40,7 +40,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Say:": "The apple's parent: {the: {parent_of: .apple}}."
                       },
@@ -62,7 +62,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take possessions:<br>"
                       },
@@ -81,7 +81,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take your container:<br>"
                       },
@@ -100,7 +100,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Say:": "The knife's parent was: {the: {parent_of: .knife}}."
                       },
@@ -125,7 +125,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take your self:<br>"
                       },
@@ -144,7 +144,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take someone else:<br>"
                       },
@@ -163,7 +163,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take scenery:<br>"
                       },
@@ -182,7 +182,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to take something fixed in place:<br>"
                       },

@@ -17,7 +17,7 @@ var helloThereWorld = MakeActivity(
 func ExampleSpan() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &SpanText{Does: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &SpanText{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -27,7 +27,7 @@ func ExampleSpan() {
 func ExampleBracket() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &BracketText{Does: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &BracketText{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -37,7 +37,7 @@ func ExampleBracket() {
 func ExampleSlash() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &SlashText{Does: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &SlashText{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -47,7 +47,7 @@ func ExampleSlash() {
 func ExampleCommas() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &CommaText{Does: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &CommaText{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:

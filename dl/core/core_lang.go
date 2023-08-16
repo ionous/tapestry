@@ -403,7 +403,7 @@ func Blankline_Marshal(m jsn.Marshaler, val *Blankline) (err error) {
 
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis '()'.
 type BracketText struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -419,7 +419,7 @@ func (*BracketText) Compose() composer.Spec {
 }
 
 const BracketText_Type = "bracket_text"
-const BracketText_Field_Does = "$DOES"
+const BracketText_Field_Exe = "$EXE"
 
 func (op *BracketText) Marshal(m jsn.Marshaler) error {
 	return BracketText_Marshal(m, op)
@@ -492,12 +492,12 @@ func BracketText_Optional_Marshal(m jsn.Marshaler, pv **BracketText) (err error)
 func BracketText_Marshal(m jsn.Marshaler, val *BracketText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(BracketText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", BracketText_Field_Does)
+		e0 := m.MarshalKey("do", BracketText_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BracketText_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", BracketText_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -668,7 +668,7 @@ func Break_Marshal(m jsn.Marshaler, val *Break) (err error) {
 
 // BufferText
 type BufferText struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -684,7 +684,7 @@ func (*BufferText) Compose() composer.Spec {
 }
 
 const BufferText_Type = "buffer_text"
-const BufferText_Field_Does = "$DOES"
+const BufferText_Field_Exe = "$EXE"
 
 func (op *BufferText) Marshal(m jsn.Marshaler) error {
 	return BufferText_Marshal(m, op)
@@ -757,12 +757,12 @@ func BufferText_Optional_Marshal(m jsn.Marshaler, pv **BufferText) (err error) {
 func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(BufferText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", BufferText_Field_Does)
+		e0 := m.MarshalKey("do", BufferText_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BufferText_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", BufferText_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -1332,7 +1332,7 @@ func Capitalize_Marshal(m jsn.Marshaler, val *Capitalize) (err error) {
 // ChooseAction An if statement.
 type ChooseAction struct {
 	If     rt.BoolEval  `if:"label=_"`
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Else   Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
@@ -1351,7 +1351,7 @@ func (*ChooseAction) Compose() composer.Spec {
 
 const ChooseAction_Type = "choose_action"
 const ChooseAction_Field_If = "$IF"
-const ChooseAction_Field_Does = "$DOES"
+const ChooseAction_Field_Exe = "$EXE"
 const ChooseAction_Field_Else = "$ELSE"
 
 func (op *ChooseAction) Marshal(m jsn.Marshaler) error {
@@ -1432,12 +1432,12 @@ func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseAction_Field_If))
 		}
-		e1 := m.MarshalKey("does", ChooseAction_Field_Does)
+		e1 := m.MarshalKey("do", ChooseAction_Field_Exe)
 		if e1 == nil {
-			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseAction_Field_Does))
+			m.Error(errutil.New(e1, "in flow at", ChooseAction_Field_Exe))
 		}
 		e2 := m.MarshalKey("else", ChooseAction_Field_Else)
 		if e2 == nil {
@@ -1453,8 +1453,8 @@ func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
 
 // ChooseMore
 type ChooseMore struct {
-	If     rt.BoolEval  `if:"label=_"`
-	Does   []rt.Execute `if:"label=does"`
+	If     rt.BoolEval  `if:"label=if"`
+	Exe    []rt.Execute `if:"label=do"`
 	Else   Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
@@ -1466,13 +1466,13 @@ func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseMore_Type,
 		Uses: composer.Type_Flow,
-		Lede: "else_if",
+		Lede: "else",
 	}
 }
 
 const ChooseMore_Type = "choose_more"
 const ChooseMore_Field_If = "$IF"
-const ChooseMore_Field_Does = "$DOES"
+const ChooseMore_Field_Exe = "$EXE"
 const ChooseMore_Field_Else = "$ELSE"
 
 func (op *ChooseMore) Marshal(m jsn.Marshaler) error {
@@ -1522,7 +1522,7 @@ func ChooseMore_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseMore) (err
 type ChooseMore_Flow struct{ ptr *ChooseMore }
 
 func (n ChooseMore_Flow) GetType() string      { return ChooseMore_Type }
-func (n ChooseMore_Flow) GetLede() string      { return "else_if" }
+func (n ChooseMore_Flow) GetLede() string      { return "else" }
 func (n ChooseMore_Flow) GetFlow() interface{} { return n.ptr }
 func (n ChooseMore_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*ChooseMore); ok {
@@ -1546,19 +1546,19 @@ func ChooseMore_Optional_Marshal(m jsn.Marshaler, pv **ChooseMore) (err error) {
 func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseMore_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ChooseMore_Field_If)
+		e0 := m.MarshalKey("if", ChooseMore_Field_If)
 		if e0 == nil {
 			e0 = rt.BoolEval_Marshal(m, &val.If)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseMore_Field_If))
 		}
-		e1 := m.MarshalKey("does", ChooseMore_Field_Does)
+		e1 := m.MarshalKey("do", ChooseMore_Field_Exe)
 		if e1 == nil {
-			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseMore_Field_Does))
+			m.Error(errutil.New(e1, "in flow at", ChooseMore_Field_Exe))
 		}
 		e2 := m.MarshalKey("else", ChooseMore_Field_Else)
 		if e2 == nil {
@@ -1574,10 +1574,10 @@ func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 
 // ChooseMoreValue
 type ChooseMoreValue struct {
-	Assign string            `if:"label=_,type=text"`
+	Assign string            `if:"label=if,type=text"`
 	From   assign.Assignment `if:"label=from"`
 	Filter rt.BoolEval       `if:"label=and"`
-	Does   []rt.Execute      `if:"label=does"`
+	Exe    []rt.Execute      `if:"label=do"`
 	Else   Brancher          `if:"label=else,optional"`
 	Markup map[string]any
 }
@@ -1589,7 +1589,7 @@ func (*ChooseMoreValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseMoreValue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "else_if",
+		Lede: "else",
 	}
 }
 
@@ -1597,7 +1597,7 @@ const ChooseMoreValue_Type = "choose_more_value"
 const ChooseMoreValue_Field_Assign = "$ASSIGN"
 const ChooseMoreValue_Field_From = "$FROM"
 const ChooseMoreValue_Field_Filter = "$FILTER"
-const ChooseMoreValue_Field_Does = "$DOES"
+const ChooseMoreValue_Field_Exe = "$EXE"
 const ChooseMoreValue_Field_Else = "$ELSE"
 
 func (op *ChooseMoreValue) Marshal(m jsn.Marshaler) error {
@@ -1647,7 +1647,7 @@ func ChooseMoreValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseMoreV
 type ChooseMoreValue_Flow struct{ ptr *ChooseMoreValue }
 
 func (n ChooseMoreValue_Flow) GetType() string      { return ChooseMoreValue_Type }
-func (n ChooseMoreValue_Flow) GetLede() string      { return "else_if" }
+func (n ChooseMoreValue_Flow) GetLede() string      { return "else" }
 func (n ChooseMoreValue_Flow) GetFlow() interface{} { return n.ptr }
 func (n ChooseMoreValue_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*ChooseMoreValue); ok {
@@ -1671,7 +1671,7 @@ func ChooseMoreValue_Optional_Marshal(m jsn.Marshaler, pv **ChooseMoreValue) (er
 func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseMoreValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ChooseMoreValue_Field_Assign)
+		e0 := m.MarshalKey("if", ChooseMoreValue_Field_Assign)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
 		}
@@ -1692,12 +1692,12 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseMoreValue_Field_Filter))
 		}
-		e3 := m.MarshalKey("does", ChooseMoreValue_Field_Does)
+		e3 := m.MarshalKey("do", ChooseMoreValue_Field_Exe)
 		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ChooseMoreValue_Field_Does))
+			m.Error(errutil.New(e3, "in flow at", ChooseMoreValue_Field_Exe))
 		}
 		e4 := m.MarshalKey("else", ChooseMoreValue_Field_Else)
 		if e4 == nil {
@@ -1713,7 +1713,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 
 // ChooseNothingElse
 type ChooseNothingElse struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -1724,12 +1724,12 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseNothingElse_Type,
 		Uses: composer.Type_Flow,
-		Lede: "else_do",
+		Lede: "else",
 	}
 }
 
 const ChooseNothingElse_Type = "choose_nothing_else"
-const ChooseNothingElse_Field_Does = "$DOES"
+const ChooseNothingElse_Field_Exe = "$EXE"
 
 func (op *ChooseNothingElse) Marshal(m jsn.Marshaler) error {
 	return ChooseNothingElse_Marshal(m, op)
@@ -1778,7 +1778,7 @@ func ChooseNothingElse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseNot
 type ChooseNothingElse_Flow struct{ ptr *ChooseNothingElse }
 
 func (n ChooseNothingElse_Flow) GetType() string      { return ChooseNothingElse_Type }
-func (n ChooseNothingElse_Flow) GetLede() string      { return "else_do" }
+func (n ChooseNothingElse_Flow) GetLede() string      { return "else" }
 func (n ChooseNothingElse_Flow) GetFlow() interface{} { return n.ptr }
 func (n ChooseNothingElse_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*ChooseNothingElse); ok {
@@ -1802,12 +1802,12 @@ func ChooseNothingElse_Optional_Marshal(m jsn.Marshaler, pv **ChooseNothingElse)
 func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseNothingElse_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", ChooseNothingElse_Field_Does)
+		e0 := m.MarshalKey("do", ChooseNothingElse_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -2061,7 +2061,7 @@ type ChooseValue struct {
 	Assign string            `if:"label=_,type=text"`
 	From   assign.Assignment `if:"label=from"`
 	Filter rt.BoolEval       `if:"label=and"`
-	Does   []rt.Execute      `if:"label=does"`
+	Exe    []rt.Execute      `if:"label=do"`
 	Else   Brancher          `if:"label=else,optional"`
 	Markup map[string]any
 }
@@ -2082,7 +2082,7 @@ const ChooseValue_Type = "choose_value"
 const ChooseValue_Field_Assign = "$ASSIGN"
 const ChooseValue_Field_From = "$FROM"
 const ChooseValue_Field_Filter = "$FILTER"
-const ChooseValue_Field_Does = "$DOES"
+const ChooseValue_Field_Exe = "$EXE"
 const ChooseValue_Field_Else = "$ELSE"
 
 func (op *ChooseValue) Marshal(m jsn.Marshaler) error {
@@ -2177,12 +2177,12 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseValue_Field_Filter))
 		}
-		e3 := m.MarshalKey("does", ChooseValue_Field_Does)
+		e3 := m.MarshalKey("do", ChooseValue_Field_Exe)
 		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ChooseValue_Field_Does))
+			m.Error(errutil.New(e3, "in flow at", ChooseValue_Field_Exe))
 		}
 		e4 := m.MarshalKey("else", ChooseValue_Field_Else)
 		if e4 == nil {
@@ -2198,7 +2198,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 
 // CommaText Separates words with commas, and 'and'.
 type CommaText struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -2214,7 +2214,7 @@ func (*CommaText) Compose() composer.Spec {
 }
 
 const CommaText_Type = "comma_text"
-const CommaText_Field_Does = "$DOES"
+const CommaText_Field_Exe = "$EXE"
 
 func (op *CommaText) Marshal(m jsn.Marshaler) error {
 	return CommaText_Marshal(m, op)
@@ -2287,12 +2287,12 @@ func CommaText_Optional_Marshal(m jsn.Marshaler, pv **CommaText) (err error) {
 func CommaText_Marshal(m jsn.Marshaler, val *CommaText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CommaText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", CommaText_Field_Does)
+		e0 := m.MarshalKey("do", CommaText_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CommaText_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", CommaText_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -5793,7 +5793,7 @@ func RemainderOf_Marshal(m jsn.Marshaler, val *RemainderOf) (err error) {
 // Row Group text into a single line <li> as part of a list of lines.
 // See also: 'rows'.
 type Row struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -5808,7 +5808,7 @@ func (*Row) Compose() composer.Spec {
 }
 
 const Row_Type = "row"
-const Row_Field_Does = "$DOES"
+const Row_Field_Exe = "$EXE"
 
 func (op *Row) Marshal(m jsn.Marshaler) error {
 	return Row_Marshal(m, op)
@@ -5881,12 +5881,12 @@ func Row_Optional_Marshal(m jsn.Marshaler, pv **Row) (err error) {
 func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Row_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", Row_Field_Does)
+		e0 := m.MarshalKey("do", Row_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Row_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", Row_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -5895,7 +5895,7 @@ func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 
 // Rows Group text into an unordered list <ul>.
 type Rows struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -5910,7 +5910,7 @@ func (*Rows) Compose() composer.Spec {
 }
 
 const Rows_Type = "rows"
-const Rows_Field_Does = "$DOES"
+const Rows_Field_Exe = "$EXE"
 
 func (op *Rows) Marshal(m jsn.Marshaler) error {
 	return Rows_Marshal(m, op)
@@ -5983,12 +5983,12 @@ func Rows_Optional_Marshal(m jsn.Marshaler, pv **Rows) (err error) {
 func Rows_Marshal(m jsn.Marshaler, val *Rows) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Rows_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", Rows_Field_Does)
+		e0 := m.MarshalKey("do", Rows_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Rows_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", Rows_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -6100,7 +6100,7 @@ func Singularize_Marshal(m jsn.Marshaler, val *Singularize) (err error) {
 
 // SlashText Separates words with left-leaning slashes '/'.
 type SlashText struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -6116,7 +6116,7 @@ func (*SlashText) Compose() composer.Spec {
 }
 
 const SlashText_Type = "slash_text"
-const SlashText_Field_Does = "$DOES"
+const SlashText_Field_Exe = "$EXE"
 
 func (op *SlashText) Marshal(m jsn.Marshaler) error {
 	return SlashText_Marshal(m, op)
@@ -6189,12 +6189,12 @@ func SlashText_Optional_Marshal(m jsn.Marshaler, pv **SlashText) (err error) {
 func SlashText_Marshal(m jsn.Marshaler, val *SlashText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SlashText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", SlashText_Field_Does)
+		e0 := m.MarshalKey("do", SlashText_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SlashText_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", SlashText_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -6297,7 +6297,7 @@ func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
 
 // SpanText Writes text with spaces between words.
 type SpanText struct {
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -6313,7 +6313,7 @@ func (*SpanText) Compose() composer.Spec {
 }
 
 const SpanText_Type = "span_text"
-const SpanText_Field_Does = "$DOES"
+const SpanText_Field_Exe = "$EXE"
 
 func (op *SpanText) Marshal(m jsn.Marshaler) error {
 	return SpanText_Marshal(m, op)
@@ -6386,12 +6386,12 @@ func SpanText_Optional_Marshal(m jsn.Marshaler, pv **SpanText) (err error) {
 func SpanText_Marshal(m jsn.Marshaler, val *SpanText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SpanText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("does", SpanText_Field_Does)
+		e0 := m.MarshalKey("do", SpanText_Field_Exe)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SpanText_Field_Does))
+			m.Error(errutil.New(e0, "in flow at", SpanText_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -6864,7 +6864,7 @@ func TriggerSwitch_Marshal(m jsn.Marshaler, val *TriggerSwitch) (err error) {
 // While Keep running a series of actions while a condition is true.
 type While struct {
 	True   rt.BoolEval  `if:"label=_"`
-	Does   []rt.Execute `if:"label=does"`
+	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
 
@@ -6881,7 +6881,7 @@ func (*While) Compose() composer.Spec {
 
 const While_Type = "while"
 const While_Field_True = "$TRUE"
-const While_Field_Does = "$DOES"
+const While_Field_Exe = "$EXE"
 
 func (op *While) Marshal(m jsn.Marshaler) error {
 	return While_Marshal(m, op)
@@ -6961,12 +6961,12 @@ func While_Marshal(m jsn.Marshaler, val *While) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", While_Field_True))
 		}
-		e1 := m.MarshalKey("does", While_Field_Does)
+		e1 := m.MarshalKey("do", While_Field_Exe)
 		if e1 == nil {
-			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", While_Field_Does))
+			m.Error(errutil.New(e1, "in flow at", While_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -7053,14 +7053,14 @@ var Signatures = map[uint64]interface{}{
 	1963945852392897915:  (*AnyTrue)(nil),           /* bool_eval=AnyTrue: */
 	2233111806717201007:  (*TriggerOnce)(nil),       /* trigger=At */
 	15800853823523633295: (*Newline)(nil),           /* execute=Br */
-	18222385133081373684: (*BracketText)(nil),       /* text_eval=Brackets does: */
+	8805770583889466012:  (*BracketText)(nil),       /* text_eval=Brackets do: */
 	9570569845423374482:  (*Break)(nil),             /* execute=Break */
-	11793928305886057198: (*BufferText)(nil),        /* text_eval=Buffers does: */
+	11322251195672034522: (*BufferText)(nil),        /* text_eval=Buffers do: */
 	8695677004499439692:  (*Capitalize)(nil),        /* text_eval=Capitalize: */
 	5770232330560742655:  (*CompareNum)(nil),        /* bool_eval=Cmp:is:num: */
 	3133023233294705026:  (*CompareNum)(nil),        /* bool_eval=Cmp:is:num:within: */
 	3980368314252876379:  (*CompareText)(nil),       /* bool_eval=Cmp:is:txt: */
-	16246548377343461249: (*CommaText)(nil),         /* text_eval=Commas does: */
+	18319016698864768677: (*CommaText)(nil),         /* text_eval=Commas do: */
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
 	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
 	3530384008651052276:  (*DiffOf)(nil),            /* number_eval=Dec: */
@@ -7068,22 +7068,22 @@ var Signatures = map[uint64]interface{}{
 	15996371593171599094: (*QuotientOf)(nil),        /* number_eval=Div:by: */
 	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
 	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
-	11253707510276332344: (*ChooseNothingElse)(nil), /* brancher=ElseDo does: */
-	12123664166410465852: (*ChooseMore)(nil),        /* brancher=ElseIf:does: */
-	10172152994557366141: (*ChooseMore)(nil),        /* brancher=ElseIf:does:else: */
-	12734322650065726395: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does: */
-	16834345759272094552: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does:else: */
+	2612401738948423533:  (*ChooseNothingElse)(nil), /* brancher=Else do: */
+	49696778309444364:    (*ChooseMore)(nil),        /* brancher=Else if:do: */
+	12459138571714601581: (*ChooseMore)(nil),        /* brancher=Else if:do:else: */
+	2599893869760132115:  (*ChooseMoreValue)(nil),   /* brancher=Else if:from:and:do: */
+	5806580860764010048:  (*ChooseMoreValue)(nil),   /* brancher=Else if:from:and:do:else: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
 	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
-	7148628340285471837:  (*ChooseAction)(nil),      /* brancher=If:does: */
-	14393611566046450287: (*ChooseAction)(nil),      /* execute=If:does: */
-	6302964726971699110:  (*ChooseAction)(nil),      /* brancher=If:does:else: */
-	14501220926082590620: (*ChooseAction)(nil),      /* execute=If:does:else: */
-	16406941430984447480: (*ChooseValue)(nil),       /* brancher=If:from:and:does: */
-	12357574444125496774: (*ChooseValue)(nil),       /* execute=If:from:and:does: */
-	100567086370651161:   (*ChooseValue)(nil),       /* brancher=If:from:and:does:else: */
-	1836790182809498779:  (*ChooseValue)(nil),       /* execute=If:from:and:does:else: */
+	11676187955438326921: (*ChooseAction)(nil),      /* brancher=If:do: */
+	16551038912311542599: (*ChooseAction)(nil),      /* execute=If:do: */
+	11846460753008131314: (*ChooseAction)(nil),      /* brancher=If:do:else: */
+	9882017885672780228:  (*ChooseAction)(nil),      /* execute=If:do:else: */
+	10655670532271177368: (*ChooseValue)(nil),       /* brancher=If:from:and:do: */
+	14466057388518005874: (*ChooseValue)(nil),       /* execute=If:from:and:do: */
+	1227874404978937785:  (*ChooseValue)(nil),       /* brancher=If:from:and:do:else: */
+	6358622063945913767:  (*ChooseValue)(nil),       /* execute=If:from:and:do:else: */
 	11335666314438122404: (*SumOf)(nil),             /* number_eval=Inc: */
 	425597877445155633:   (*SumOf)(nil),             /* number_eval=Inc:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
@@ -7111,15 +7111,15 @@ var Signatures = map[uint64]interface{}{
 	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
 	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
 	4512128922644282356:  (*PrintText)(nil),         /* execute=Print: */
-	2842299911742259355:  (*While)(nil),             /* execute=Repeating:does: */
+	16853421744116592875: (*While)(nil),             /* execute=Repeating:do: */
 	12963686195606417453: (*MakeReversed)(nil),      /* text_eval=Reverse text: */
-	18412814242923983245: (*Row)(nil),               /* text_eval=Row does: */
-	176976729959796892:   (*Rows)(nil),              /* text_eval=Rows does: */
+	14820902432990466009: (*Row)(nil),               /* text_eval=Row do: */
+	42419598592471524:    (*Rows)(nil),              /* text_eval=Rows do: */
 	10747671703915852065: (*MakeSentenceCase)(nil),  /* text_eval=Sentence: */
 	3632089819497852687:  (*CallShuffle)(nil),       /* text_eval=Shuffle:over: */
 	2397382738676796596:  (*Singularize)(nil),       /* text_eval=Singular of: */
-	1629446371562398452:  (*SlashText)(nil),         /* text_eval=Slashes does: */
-	11448029373331046522: (*SpanText)(nil),          /* text_eval=Spaces does: */
+	13377280423859122588: (*SlashText)(nil),         /* text_eval=Slashes do: */
+	14637971099620461998: (*SpanText)(nil),          /* text_eval=Spaces do: */
 	10180508752412200934: (*CallTerminal)(nil),      /* text_eval=Stopping:over: */
 	10878271994667616824: (*MakeTitleCase)(nil),     /* text_eval=Title: */
 	2711869841453509536:  (*CallTrigger)(nil),       /* bool_eval=Trigger:on:num: */

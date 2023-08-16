@@ -45,11 +45,11 @@
               "state change",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
-                        "If:from:and:does:else:": [
+                        "If:from:and:do:else:": [
                           "resp",
                           {
                             "FromText:": {
@@ -91,7 +91,7 @@
                             }
                           ],
                           {
-                            "ElseDo does:": [
+                            "Else do:": [
                               {
                                 "Comment:": "nothing has stopped us, so lets change the state now."
                               },
@@ -142,7 +142,7 @@
               "state change",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     {
                       "IsPlayer obj:": {
                         "FromText:": "@actor"
@@ -169,7 +169,7 @@
                   ]
                 },
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
@@ -244,7 +244,7 @@
         "state changing",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -285,7 +285,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@noun",

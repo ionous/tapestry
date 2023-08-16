@@ -72,7 +72,7 @@
               "if the object doesn't exist, use 'print nothing'.",
               "( by default, that will try to write: 'nowhere', 'nobody', or 'nothing'. )"
             ],
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Not:": {
                   "Is valid:": "@obj"
@@ -89,7 +89,7 @@
           },
           {
             "--": "if the object was given an explicit 'printed name', print that.",
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Cmp:is:txt:": [
                   {
@@ -124,7 +124,7 @@
               "if the object is publicly named, print the original name of the object;",
               "privately named objects skip this rule."
             ],
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Object:field:": [
                   "@obj",
@@ -147,7 +147,7 @@
           },
           {
             "--": "if nothing else was printed, print the singular name of the kind: 'room', 'container', etc.",
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -198,7 +198,7 @@
         "Print nothing",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:nothing:": [
                   "@obj",
@@ -214,7 +214,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:nothing:": [
                   "@obj",
@@ -230,7 +230,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -267,7 +267,7 @@
         "mention",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",

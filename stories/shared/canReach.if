@@ -58,7 +58,7 @@
           }
         ],
         {
-          "PatternRule:does:": [
+          "PatternRule:do:": [
             true,
             [
               {
@@ -70,7 +70,7 @@
                 ]
               },
               {
-                "Repeating:does:": [
+                "Repeating:do:": [
                   {
                     "Not:": {
                       "Is empty:": "@i"
@@ -101,7 +101,7 @@
                       ]
                     },
                     {
-                      "If:does:": [
+                      "If:do:": [
                         {
                           "Is empty:": "@reach_response"
                         },
@@ -110,7 +110,7 @@
                             "Comment:": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized. "
                           },
                           {
-                            "If:from:and:does:": [
+                            "If:from:and:do:": [
                               "response",
                               {
                                 "FromText:": {
@@ -202,7 +202,7 @@
                 ]
               },
               {
-                "Repeating:does:": [
+                "Repeating:do:": [
                   {
                     "Not:": {
                       "Is empty:": "@i"
@@ -227,7 +227,7 @@
                       ]
                     },
                     {
-                      "If:does:": [
+                      "If:do:": [
                         {
                           "Cmp:is:num:": [
                             "@lca",
@@ -258,7 +258,7 @@
                       ]
                     },
                     {
-                      "If:from:and:does:": [
+                      "If:from:and:do:": [
                         "response",
                         {
                           "FromText:": {
@@ -319,7 +319,7 @@
                 "Comment:": "Return the best response."
               },
               {
-                "If:does:else:": [
+                "If:do:else:": [
                   {
                     "Cmp:is:num:": [
                       "@lca",
@@ -348,7 +348,7 @@
                     }
                   ],
                   {
-                    "ElseIf:does:else:": [
+                    "Else if:do:else:": [
                       {
                         "Cmp:is:num:": [
                           "@reach_error",
@@ -370,7 +370,7 @@
                         }
                       ],
                       {
-                        "ElseIf:does:": [
+                        "Else if:do:": [
                           {
                             "Not:": {
                               "Is empty:": "@dig_error"
@@ -404,7 +404,7 @@
       "Rule for:do:": [
         "before can reach",
         {
-          "If:does:": [
+          "If:do:": [
             {
               "AllTrue:": [
                 "@requires_light",
@@ -490,7 +490,7 @@
         "reach up",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -507,7 +507,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@from_obj",
@@ -534,7 +534,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -619,7 +619,7 @@
         "reach down",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -636,7 +636,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@into_obj",
@@ -663,7 +663,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {

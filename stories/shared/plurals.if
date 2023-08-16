@@ -38,7 +38,7 @@
         "print plural name",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "Cmp:is:txt:": [
                   {
@@ -59,7 +59,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {

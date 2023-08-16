@@ -25,7 +25,7 @@
         "provides storage",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -45,7 +45,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "KindOf:is:": [
                   "@obj",
@@ -95,7 +95,7 @@
         "shows storage",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "ProvidesStorage obj:": {
                   "FromText:": "@obj"
@@ -150,7 +150,7 @@
         "visible storage",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "ShowsStorage obj:": {
                   "FromText:": "@obj"
@@ -158,7 +158,7 @@
               },
               [
                 {
-                  "Repeating across:as:does:": [
+                  "Repeating across:as:do:": [
                     {
                       "FromTextList:": {
                         "ChildrenOf obj:": {
@@ -169,7 +169,7 @@
                     "it",
                     [
                       {
-                        "If:does:": [
+                        "If:do:": [
                           {
                             "Not:": {
                               "AnyTrue:": [
@@ -243,7 +243,7 @@
         "allows storage",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "AllTrue:": [
                   {
@@ -273,7 +273,7 @@
             ]
           },
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               {
                 "ProvidesStorage obj:": {
                   "FromText:": "@obj"

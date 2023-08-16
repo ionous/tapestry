@@ -80,8 +80,9 @@
                 "brackets",
                 [
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -121,8 +122,9 @@
                 "buffers",
                 [
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -303,8 +305,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -328,18 +331,19 @@
             "misc",
             {
               "Flow:uses:": [
-                "else_if",
+                "else",
                 [
                   {
                     "Term:name:type:": [
-                      "_",
+                      "if",
                       "if",
                       "bool_eval"
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -363,11 +367,11 @@
             "misc",
             {
               "Flow:uses:": [
-                "else_if",
+                "else",
                 [
                   {
                     "Term:name:type:": [
-                      "_",
+                      "if",
                       "assign",
                       "text"
                     ]
@@ -386,8 +390,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -411,11 +416,12 @@
             "misc",
             {
               "Flow:uses:": [
-                "else_do",
+                "else",
                 [
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -531,8 +537,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -560,8 +567,9 @@
                 "commas",
                 [
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -930,17 +938,17 @@
                     "text_eval"
                   ]
                 },
-                  {
-                    "--": [
-                      "try to check the type of nothing objects?",
-                      "normally, nothing objects have no kind."
-                    ],
-                    "Term:type:optional:": [
-                      "nothing",
-                      "bool",
-                      true
-                    ]
-                  }
+                {
+                  "--": [
+                    "try to check the type of nothing objects?",
+                    "normally, nothing objects have no kind."
+                  ],
+                  "Term:type:optional:": [
+                    "nothing",
+                    "bool",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -1387,8 +1395,9 @@
             {
               "Flow uses:": [
                 {
-                  "Term:type:repeats:": [
-                    "does",
+                  "Term:name:type:repeats:": [
+                    "do",
+                    "exe",
                     "execute",
                     true
                   ]
@@ -1408,8 +1417,9 @@
             {
               "Flow uses:": [
                 {
-                  "Term:type:repeats:": [
-                    "does",
+                  "Term:name:type:repeats:": [
+                    "do",
+                    "exe",
                     "execute",
                     true
                   ]
@@ -1451,8 +1461,9 @@
                 "slashes",
                 [
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -1487,8 +1498,9 @@
                 "spaces",
                 [
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]
@@ -1594,8 +1606,9 @@
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "does",
+                    "Term:name:type:repeats:": [
+                      "do",
+                      "exe",
                       "execute",
                       true
                     ]

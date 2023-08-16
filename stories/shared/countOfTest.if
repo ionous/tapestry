@@ -23,7 +23,7 @@
               "magic symbols",
               [
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     {
                       "CountOf:num:": [
                         {
@@ -40,7 +40,7 @@
                   ]
                 },
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     {
                       "CountOf:num:": [
                         {
@@ -57,7 +57,7 @@
                   ]
                 },
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     {
                       "CountOf:num:": [
                         {
@@ -74,7 +74,7 @@
                   ]
                 },
                 {
-                  "PatternRule:does:": [
+                  "PatternRule:do:": [
                     true,
                     [
                       {
@@ -89,7 +89,7 @@
         ],
         [
           {
-            "Repeating across:as:does:": [
+            "Repeating across:as:do:": [
               {
                 "FromNumList:": {
                   "Range:": 6

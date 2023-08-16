@@ -28,11 +28,11 @@
         "Move Object",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:else:": [
+                  "If:do:else:": [
                     {
                       "Is empty:": "@obj"
                     },
@@ -54,7 +54,7 @@
                       }
                     ],
                     {
-                      "ElseIf:does:else:": [
+                      "Else if:do:else:": [
                         {
                           "Not:": {
                             "KindOf:is:": [
@@ -81,9 +81,9 @@
                           }
                         ],
                         {
-                          "ElseDo does:": [
+                          "Else do:": [
                             {
-                              "If:does:": [
+                              "If:do:": [
                                 {
                                   "Object:field:": [
                                     "@obj",
@@ -108,7 +108,7 @@
                               ]
                             },
                             {
-                              "If:does:": [
+                              "If:do:": [
                                 {
                                   "Cmp:is:txt:": [
                                     "@dest",
@@ -181,11 +181,11 @@
         "Remove from play",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "Is empty:": "@from"
                     },
@@ -261,11 +261,11 @@
         "Wear object",
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "Not:": {
                         "Cmp:is:txt:": [
@@ -294,7 +294,7 @@
                   ]
                 },
                 {
-                  "If:does:": [
+                  "If:do:": [
                     {
                       "Cmp:is:txt:": [
                         {

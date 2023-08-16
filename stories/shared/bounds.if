@@ -27,7 +27,7 @@
         ],
         [
           {
-            "PatternRule:does:": [
+            "PatternRule:do:": [
               true,
               [
                 {
@@ -48,7 +48,7 @@
                   ]
                 },
                 {
-                  "Repeating:does:": [
+                  "Repeating:do:": [
                     {
                       "Cmp:is:num:": [
                         {
@@ -62,13 +62,13 @@
                     },
                     [
                       {
-                        "Erasing:atFront:as:does:": [
+                        "Erasing:atFront:as:do:": [
                           "@queue",
                           true,
                           "enc",
                           [
                             {
-                              "Repeating across:as:does:": [
+                              "Repeating across:as:do:": [
                                 {
                                   "FromTextList:": {
                                     "ChildrenOf obj:": {
@@ -87,7 +87,7 @@
                                     ]
                                   },
                                   {
-                                    "If:does:": [
+                                    "If:do:": [
                                       {
                                         "Not:": {
                                           "FullyOpaque obj:": {

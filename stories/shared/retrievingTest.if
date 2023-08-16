@@ -16,10 +16,10 @@
         [
           {
             "Print:": {
-              "Rows does:": [
+              "Rows do:": [
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to retrieve from something closed:<br>"
                       },
@@ -41,7 +41,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Say:": "The soup's parent was: {the: {parent_of: .soup}}."
                       },
@@ -69,7 +69,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Say:": "The hook's parent was: {the: {parent_of: .hook}}."
                       },
@@ -97,7 +97,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to retrieve incorrectly:<br>"
                       },
@@ -119,7 +119,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to steal:<br>"
                       },

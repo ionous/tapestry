@@ -47,7 +47,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           true,
                           [
                             {
@@ -127,7 +127,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:isExactly:": [
                               "@obj",
@@ -200,7 +200,7 @@
                     "print several",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "AllTrue:": [
                               {
@@ -232,7 +232,7 @@
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "PrintInlineObjects objs:": {
                           "FromTextList:": [
@@ -278,7 +278,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -347,7 +347,7 @@
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "PrintInlineObjects objs:": {
                           "FromTextList:": [
@@ -391,7 +391,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -446,7 +446,7 @@
                   "Rule for:do:": [
                     "after print group",
                     {
-                      "If:does:": [
+                      "If:do:": [
                         {
                           "Cmp:is:txt:": [
                             {
@@ -483,7 +483,7 @@
                     "print grouped object",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -504,7 +504,7 @@
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "PrintInlineObjects objs:": {
                           "FromTextList:": [
@@ -552,7 +552,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -591,7 +591,7 @@
                     "print grouped object",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -640,7 +640,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -709,7 +709,7 @@
                     "assign grouping",
                     [
                       {
-                        "PatternRule:does:": [
+                        "PatternRule:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -744,7 +744,7 @@
               [
                 {
                   "Print:": {
-                    "Spaces does:": [
+                    "Spaces do:": [
                       {
                         "PrintInlineObjects objs:": {
                           "FromTextList:": [

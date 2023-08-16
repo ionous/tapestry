@@ -131,7 +131,7 @@
             ]
           },
           {
-            "If:does:": [
+            "If:do:": [
               {
                 "Not:": {
                   "KindOf:is:": [

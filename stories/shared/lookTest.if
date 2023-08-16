@@ -17,7 +17,7 @@
             "Comment:": "Say the list of visible objects from one of several vantage points."
           },
           {
-            "Repeating across:as:does:": [
+            "Repeating across:as:do:": [
               {
                 "FromTextList:": [
                   "cabinet",
@@ -29,9 +29,9 @@
               [
                 {
                   "Print:": {
-                    "Commas does:": [
+                    "Commas do:": [
                       {
-                        "Repeating across:as:does:": [
+                        "Repeating across:as:do:": [
                           {
                             "FromTextList:": {
                               "TransparentList obj:": {
@@ -80,7 +80,7 @@
             ]
           },
           {
-            "Repeating across:as:does:": [
+            "Repeating across:as:do:": [
               {
                 "FromTextList:": {
                   "TransparentList obj:": {

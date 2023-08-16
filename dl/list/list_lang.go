@@ -252,7 +252,7 @@ type Erasing struct {
 	Target  assign.Address `if:"label=from"`
 	AtIndex rt.NumberEval  `if:"label=at_index"`
 	As      string         `if:"label=as,type=text"`
-	Does    []rt.Execute   `if:"label=does"`
+	Exe     []rt.Execute   `if:"label=do"`
 	Markup  map[string]any
 }
 
@@ -271,7 +271,7 @@ const Erasing_Field_Count = "$COUNT"
 const Erasing_Field_Target = "$TARGET"
 const Erasing_Field_AtIndex = "$AT_INDEX"
 const Erasing_Field_As = "$AS"
-const Erasing_Field_Does = "$DOES"
+const Erasing_Field_Exe = "$EXE"
 
 func (op *Erasing) Marshal(m jsn.Marshaler) error {
 	return Erasing_Marshal(m, op)
@@ -372,12 +372,12 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", Erasing_Field_As))
 		}
-		e4 := m.MarshalKey("does", Erasing_Field_Does)
+		e4 := m.MarshalKey("do", Erasing_Field_Exe)
 		if e4 == nil {
-			e4 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e4 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Does))
+			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -389,7 +389,7 @@ type ErasingEdge struct {
 	Target assign.Address `if:"label=_"`
 	AtEdge rt.BoolEval    `if:"label=at_front,optional"`
 	As     string         `if:"label=as,type=text"`
-	Does   []rt.Execute   `if:"label=does"`
+	Exe    []rt.Execute   `if:"label=do"`
 	Else   core.Brancher  `if:"label=else,optional"`
 	Markup map[string]any
 }
@@ -409,7 +409,7 @@ const ErasingEdge_Type = "erasing_edge"
 const ErasingEdge_Field_Target = "$TARGET"
 const ErasingEdge_Field_AtEdge = "$AT_EDGE"
 const ErasingEdge_Field_As = "$AS"
-const ErasingEdge_Field_Does = "$DOES"
+const ErasingEdge_Field_Exe = "$EXE"
 const ErasingEdge_Field_Else = "$ELSE"
 
 func (op *ErasingEdge) Marshal(m jsn.Marshaler) error {
@@ -504,12 +504,12 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ErasingEdge_Field_As))
 		}
-		e3 := m.MarshalKey("does", ErasingEdge_Field_Does)
+		e3 := m.MarshalKey("do", ErasingEdge_Field_Exe)
 		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Does))
+			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Exe))
 		}
 		e4 := m.MarshalKey("else", ErasingEdge_Field_Else)
 		if e4 == nil {
@@ -527,7 +527,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 type ListEach struct {
 	List   assign.Assignment `if:"label=across"`
 	As     string            `if:"label=as,type=text"`
-	Does   []rt.Execute      `if:"label=does"`
+	Exe    []rt.Execute      `if:"label=do"`
 	Else   core.Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
@@ -546,7 +546,7 @@ func (*ListEach) Compose() composer.Spec {
 const ListEach_Type = "list_each"
 const ListEach_Field_List = "$LIST"
 const ListEach_Field_As = "$AS"
-const ListEach_Field_Does = "$DOES"
+const ListEach_Field_Exe = "$EXE"
 const ListEach_Field_Else = "$ELSE"
 
 func (op *ListEach) Marshal(m jsn.Marshaler) error {
@@ -634,12 +634,12 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListEach_Field_As))
 		}
-		e2 := m.MarshalKey("does", ListEach_Field_Does)
+		e2 := m.MarshalKey("do", ListEach_Field_Exe)
 		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Does)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Does))
+			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Exe))
 		}
 		e3 := m.MarshalKey("else", ListEach_Field_Else)
 		if e3 == nil {
@@ -2448,11 +2448,11 @@ var Signatures = map[uint64]interface{}{
 	17857642077015906043: (*EraseEdge)(nil),       /* execute=Erase: */
 	4911242881414594201:  (*EraseEdge)(nil),       /* execute=Erase:atFront: */
 	13326390992756169124: (*EraseIndex)(nil),      /* execute=Erase:from:atIndex: */
-	16587893764566352449: (*ErasingEdge)(nil),     /* execute=Erasing:as:does: */
-	1771685988622306554:  (*ErasingEdge)(nil),     /* execute=Erasing:as:does:else: */
-	12709950044197813063: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does: */
-	307909849155983812:   (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does:else: */
-	1558163885147286548:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:does: */
+	15309883842271607141: (*ErasingEdge)(nil),     /* execute=Erasing:as:do: */
+	2341467540630172606:  (*ErasingEdge)(nil),     /* execute=Erasing:as:do:else: */
+	7006351070379896671:  (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do: */
+	12034742036302137452: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do:else: */
+	1044384912965145788:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:do: */
 	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
 	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
 	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
@@ -2467,8 +2467,8 @@ var Signatures = map[uint64]interface{}{
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
 	14227857065891717050: (*Range)(nil),           /* num_list_eval=Range:from:byStep: */
 	18245549119758376391: (*ListReduce)(nil),      /* execute=Reduce into:fromList:using: */
-	8451005089688158034:  (*ListEach)(nil),        /* execute=Repeating across:as:does: */
-	7170937308629588871:  (*ListEach)(nil),        /* execute=Repeating across:as:does:else: */
+	7084717997213120806:  (*ListEach)(nil),        /* execute=Repeating across:as:do: */
+	12445157229684471803: (*ListEach)(nil),        /* execute=Repeating across:as:do:else: */
 	177314099445105829:   (*ListReverse)(nil),     /* execute=Reverse list: */
 	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
 	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */

@@ -38,7 +38,7 @@ func (op *ChooseMoreValue) Branch(run rt.Runtime) (err error) {
 }
 
 func (op *ChooseNothingElse) Branch(run rt.Runtime) (err error) {
-	if e := safe.RunAll(run, op.Does); e != nil {
+	if e := safe.RunAll(run, op.Exe); e != nil {
 		err = cmdError(op, e)
 	}
 	return

@@ -15,10 +15,10 @@
         [
           {
             "Print:": {
-              "Rows does:": [
+              "Rows do:": [
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to store something into an actor:<br>"
                       },
@@ -43,7 +43,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to store something into a closed container:<br>"
                       },
@@ -68,7 +68,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to store something into something nested:<br>"
                       },
@@ -93,7 +93,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Okay, store something into an open container:<br>"
                       },
@@ -118,7 +118,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Okay, store something onto a supporter:<br>"
                       },
@@ -143,7 +143,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to store something worn:<br>"
                       },
@@ -168,7 +168,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to store something not held:<br>"
                       },
@@ -193,7 +193,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Okay, store something into something held:<br>"
                       },
@@ -218,7 +218,7 @@
                 },
                 {
                   "Print:": {
-                    "Row does:": [
+                    "Row do:": [
                       {
                         "Print:": "Fail to store something to somewhere unreachable:<br>"
                       },

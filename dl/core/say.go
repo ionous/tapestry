@@ -21,7 +21,7 @@ func (op *PrintText) Execute(run rt.Runtime) (err error) {
 
 func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	var buf bytes.Buffer
-	if v, e := writeSpan(run, &buf, op.Does, &buf); e != nil {
+	if v, e := writeSpan(run, &buf, op.Exe, &buf); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -31,7 +31,7 @@ func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.NewSpanner() // separate writes with spaces
-	if v, e := writeSpan(run, span, op.Does, span.ChunkOutput()); e != nil {
+	if v, e := writeSpan(run, span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -41,7 +41,7 @@ func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.Parens()
-	if v, e := writeSpan(run, span, op.Does, span.ChunkOutput()); e != nil {
+	if v, e := writeSpan(run, span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -51,7 +51,7 @@ func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	if v, e := writeSpan(run, span, op.Does, print.Slash(span.ChunkOutput())); e != nil {
+	if v, e := writeSpan(run, span, op.Exe, print.Slash(span.ChunkOutput())); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -61,7 +61,7 @@ func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *CommaText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	if v, e := writeSpan(run, span, op.Does, print.AndSeparator(span.ChunkOutput())); e != nil {
+	if v, e := writeSpan(run, span, op.Exe, print.AndSeparator(span.ChunkOutput())); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
