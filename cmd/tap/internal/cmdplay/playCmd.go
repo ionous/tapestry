@@ -10,7 +10,7 @@ import (
 )
 
 func goPlay(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if cnt, e := play.PlayGame(playFlags.inFile, playFlags.testString, playFlags.domain, playFlags.json); e != nil {
+	if cnt, e := play.PlayGame(playFlags.inFile, playFlags.testString, playFlags.scene, playFlags.json); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")
@@ -21,7 +21,7 @@ func goPlay(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	return
 }
 
-var CmdWeave = &base.Command{
+var CmdPlay = &base.Command{
 	Run:       goPlay,
 	Flag:      buildFlags(),
 	UsageLine: "tap play [-in dbpath] [-scene name]",

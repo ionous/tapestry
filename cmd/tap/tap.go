@@ -10,10 +10,11 @@ import (
 	"context"
 	"errors"
 	"flag"
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 	"log"
 	"os"
 	"runtime/pprof"
+
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
@@ -21,6 +22,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdidlb"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdplay"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdweave"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
 	"github.com/ionous/errutil"
@@ -177,11 +179,12 @@ const UnknownCommand errutil.Error = "unknown command"
 func init() {
 	// rewrites the main tap command to simplify exitBadUsage
 	base.Go.Commands = []*base.Command{
-		cmdidlb.CmdIdl,
 		cmdcheck.CmdCheck,
 		cmdcompact.CmdCompact,
 		cmdgenerate.CmdGenerate,
+		cmdidlb.CmdIdl,
 		cmdmosaic.CmdMosaic,
+		cmdplay.CmdPlay,
 		cmdweave.CmdWeave,
 	}
 }

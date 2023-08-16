@@ -4,14 +4,12 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
-
-	"github.com/ionous/errutil"
 )
 
 // collection of local flags
 var playFlags = struct {
-	inFile, testString, domain string
-	json, debugging            bool
+	inFile, testString, scene string
+	json, debugging           bool
 }{}
 
 func buildFlags() (flags flag.FlagSet) {
@@ -20,11 +18,10 @@ func buildFlags() (flags flag.FlagSet) {
 		inFile = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 	}
 
-	flag.StringVar(&playFlags.inFile, "in", inFile, "input file name (sqlite3)")
-	flag.StringVar(&playFlags.domain, "scene", "tapestry", "scene to start playing")
-	flag.StringVar(&playFlags.testString, "test", "", "optional list of commands to run (non-interactive)")
-	flag.BoolVar(&playFlags.json, "json", false, "expect input/output in json (default is plain text)")
-	flag.BoolVar(&playFlags.debugging, "debug", false, "extra debugging output?")
-	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
+	flags.StringVar(&playFlags.inFile, "in", inFile, "input file name (sqlite3)")
+	flags.StringVar(&playFlags.scene, "scene", "tapestry", "scene to start playing")
+	flags.StringVar(&playFlags.testString, "test", "", "optional list of commands to run (non-interactive)")
+	flags.BoolVar(&playFlags.json, "json", false, "expect input/output in json (default is plain text)")
+	flags.BoolVar(&playFlags.debugging, "debug", false, "extra debugging output?")
 	return
 }

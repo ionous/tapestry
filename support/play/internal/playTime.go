@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -20,7 +21,7 @@ type Playtime struct {
 }
 
 func NewPlaytime(run *qna.Runner) *Playtime {
-	return NewCustomPlaytime(run, "player", "whereabouts", "parser_bounds")
+	return NewCustomPlaytime(run, "player", "whereabouts", lang.Normalize("parser bounds"))
 }
 
 // the named relation should yield a single object for the named player.
