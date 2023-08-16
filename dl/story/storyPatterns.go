@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/action"
+	"git.sr.ht/~ionous/tapestry/rt/event"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -36,8 +36,10 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 				err = e
 			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
 				err = e
-			} else {
-				err = w.Pin().AddPattern(pb.Pattern)
+			} else if e := cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+				return w.Pin().AddPattern(pb.Pattern)
+			}); e != nil {
+				err = e
 			}
 		}
 		return
@@ -65,14 +67,14 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 				err = e
 			} else {
 				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-					if !k.Implements(action.AtEvent.Kind().String()) {
+					if !k.Implements(kindsOf.Action.String()) {
 						err = w.Pin().ExtendPattern(pb.Pattern)
 					} else {
-						for evt := action.FirstEvent; evt < action.NumEvents; evt++ {
+						for i := 0; i < event.NumPhases; i++ {
 							// fix: we copy all the initialization too
 							// maybe an explicit ExtendPatternSet that in mdl to do better things.
-							pat := pb.Copy(evt.Name(name))
-							if e := w.Pin().ExtendPattern(pat); e != nil {
+							name := event.Phase(i).PatternName(name)
+							if e := w.Pin().ExtendPattern(pb.Copy(name)); e != nil {
 								err = e
 								break
 							}
@@ -86,16 +88,48 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
+func (op *DefineAction) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *DefineAction) Weave(cat *weave.Catalog) error {
+	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+		if act, e := safe.GetText(w, op.Action); e != nil {
+			err = e
+		} else {
+			act := lang.Normalize(act.String())
+			for i := 0; i < event.NumPhases; i++ {
+				phase := event.Phase(i)
+				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
+				if e := addFields(pb, mdl.PatternParameters, op.Params); e != nil {
+					err = e
+				} else if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
+					err = e
+				} else if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+					return w.Pin().AddPattern(pb.Pattern)
+				}); e != nil {
+					err = errutil.Fmt("%w defining action %q", e, act)
+					break
+				}
+			}
+		}
+		return
+	})
+}
+
 func (op *RuleForPattern) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
 func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(w, op.PatternName); e != nil {
+		if act, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {
-			err = weaveRule(w, lang.Normalize(name.String()), op.Do)
+			act := lang.Normalize(act.String())
+			if e := weaveRule(w, lang.Normalize(act), op.Do); e != nil {
+				err = errutil.Fmt("%w weaving a rule", e)
+			}
 		}
 		return
 	})
@@ -135,21 +169,28 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 
 func weaveRule(w *weave.Weaver, name string, exe []rt.Execute) (err error) {
 	if prefix, e := findPrefix(w, name); e != nil {
-		err = e
+		err = errutil.New("determining prefix", e)
 	} else {
 		name, appends := prefix.name, prefix.after
 		if k, e := w.GetKindByName(name); e != nil {
-			err = e
+			err = errutil.New("finding base pattern", e)
 		} else {
-			// by default: all event handlers are filtered to the player
+			// by default: all event handlers are filtered to the player and the innermost target.
 			// fix: will need to be able to choose no actor and let the author filter manually
-			if k.Implements(kindsOf.Event.String()) ||
-				k.Implements(kindsOf.Action.String()) {
+			if k.Implements(kindsOf.Event.String()) || k.Implements(kindsOf.Action.String()) {
 				exe = []rt.Execute{&core.ChooseAction{
-					If: &core.CompareText{
-						A:  core.Variable("actor"),
-						Is: core.Equal,
-						B:  T("self"),
+					If: &core.AllTrue{Test: []rt.BoolEval{
+						&core.CompareText{
+							// fix? assumes every event has an actor
+							// if so, something should check for that during weave.
+							A:  core.Variable(event.Actor),
+							Is: core.Equal,
+							B:  T("self"),
+						}, &core.CompareText{
+							A:  core.Variable(event.Object, event.CurrentTarget.String()),
+							Is: core.Equal,
+							B:  core.Variable(event.Object, event.Target.String()),
+						}},
 					},
 					Does: exe,
 				}}
@@ -158,7 +199,12 @@ func weaveRule(w *weave.Weaver, name string, exe []rt.Execute) (err error) {
 			terminates := ruleDoesTerminate(exe)
 			pb := mdl.NewPatternBuilder(name)
 			pb.AddNewRule(appends, updates, terminates, exe)
-			err = w.Pin().ExtendPattern(pb.Pattern)
+			err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+				if e := w.Pin().ExtendPattern(pb.Pattern); e != nil {
+					err = errutil.New("extending pattern", e)
+				}
+				return
+			})
 		}
 	}
 	return
@@ -176,16 +222,20 @@ type prefix struct {
 func findPrefix(w *weave.Weaver, name string) (ret prefix, err error) {
 	// if the pattern starts with the word after
 	// then see whether the pattern is an action.
-	before := strings.HasPrefix(name, action.BeforeEvent.Prefix())
-	after := !before && strings.HasPrefix(name, action.AfterEvent.Prefix())
+	before := strings.HasPrefix(name, event.BeforePhase.Prefix())
+	after := !before && strings.HasPrefix(name, event.AfterPhase.Prefix())
 	if !before && !after {
-		ret.name = name
+		if _, e := w.Pin().GetKind(name); e != nil {
+			err = e
+		} else {
+			ret.name = name
+		}
 	} else {
 		var prefix string
 		if before {
-			prefix = action.BeforeEvent.Prefix()
+			prefix = event.BeforePhase.Prefix()
 		} else {
-			prefix = action.AfterEvent.Prefix()
+			prefix = event.AfterPhase.Prefix()
 		}
 		short := name[len(prefix):]
 		// fix: we poll the db and once its there ask for more info
@@ -197,8 +247,8 @@ func findPrefix(w *weave.Weaver, name string) (ret prefix, err error) {
 		} else if k, e := w.GetKindByName(short); e != nil {
 			err = e
 		} else {
-			// when an action, then actually "before <name>" is valid
-			if k.Implements(action.AtEvent.Kind().String()) {
+			// when an event, then actually "before <name>" is valid
+			if k.Implements(kindsOf.Event.String()) {
 				ret.name = name
 			} else {
 				ret.name = short

@@ -33,8 +33,10 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
 				err = e
 			} else {
-				/**/ pb.AddRule("", &core.Always{}, 0, op.MacroStatements)
-				err = w.Pin().AddPattern(pb.Pattern)
+				/**/ pb.AddRule("", &core.Always{}, 2, op.MacroStatements)
+				if e := w.Pin().AddPattern(pb.Pattern); e != nil {
+					err = e
+				}
 			}
 		}
 		return

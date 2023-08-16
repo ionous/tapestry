@@ -212,7 +212,7 @@
         {
           "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
           "Spec:slots:groups:with flow:": [
-            "story_action",
+            "define_action",
             [
               "story_statement",
               "execute"
@@ -220,75 +220,32 @@
             "events",
             {
               "Flow:uses:": [
-                "action",
+                "define",
                 [
                   {
-                    "Term:name:type:": [
-                      "_",
+                    "Term:type:": [
                       "action",
                       "text_eval"
                     ]
                   },
                   {
-                    "Term:name:type:": [
+                    "Term:name:type:repeats:": [
                       "requires",
                       "params",
-                      "action_param"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with slot:": [
-            "action_param",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
-          "Spec:slots:groups:with flow:": [
-            "action_param_noun",
-            "action_param",
-            "events",
-            {
-              "Flow:uses:": [
-                "one",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "kind_name",
-                      "text_eval"
+                      "field_definition",
+                      true
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "and_one",
-                      "other_kind_name",
-                      "text_eval",
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
+                      "locals",
+                      "field_definition",
+                      true,
                       true
                     ]
                   }
                 ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
-          "Spec:slots:groups:with flow:": [
-            "action_param_nothing",
-            "action_param",
-            "events",
-            {
-              "Flow:uses:": [
-                "nothing",
-                []
               ]
             }
           ]
@@ -1373,7 +1330,9 @@
         {
           "--": [
             "Change the behavior of an existing pattern.",
-            "The default behavior for events is to fall through to the next handler unless canceled or stopped."
+            "For events, this adds a listener that responds to the targeted object only when triggered by the player.",
+            "By default, rules with filters continue on to the next rule automatically.",
+            "Because event listeners have filters they continue to the next listener unless specifically stopped."
           ],
           "Spec:slots:groups:with flow:": [
             "rule_for_pattern",
@@ -1391,6 +1350,14 @@
                       "for",
                       "pattern_name",
                       "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "named",
+                      "rule_name",
+                      "text_eval",
+                      true
                     ]
                   },
                   {

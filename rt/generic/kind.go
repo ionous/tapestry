@@ -35,6 +35,7 @@ func NewKind(kinds Kinds, name string, path []string, fields []Field) *Kind {
 	return &Kind{kinds: kinds, name: name, path: fullpath, fields: fields}
 }
 
+// a record without a named kind
 func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {
 	return NewKind(kinds, "", nil, fields).NewRecord()
 }

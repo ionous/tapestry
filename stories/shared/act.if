@@ -53,7 +53,7 @@
                           "resp",
                           {
                             "FromText:": {
-                              "StateChanging noun:trait:guard:change:": [
+                              "StateChanging noun:trait:guard:actor:change:": [
                                 {
                                   "FromText:": "@noun"
                                 },
@@ -62,6 +62,9 @@
                                 },
                                 {
                                   "FromText:": "@guard"
+                                },
+                                {
+                                  "FromText:": "@actor"
                                 },
                                 {
                                   "FromText:": "@change"
@@ -201,7 +204,7 @@
       "Define pattern:requires:result:withRules:": [
         "state changing",
         [
-          {
+        	{
             "Text:kind:": [
               "noun",
               "object"
@@ -214,6 +217,13 @@
           {
             "--": "a trait which blocks the noun from changing",
             "Text:": "guard"
+          },
+          {
+             "--": "actor responsible for the change.",
+           "Text:kind:": [
+              "actor",
+              "actor"
+            ]
           },
           {
             "--": "some text which describes the action",

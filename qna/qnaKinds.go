@@ -86,20 +86,25 @@ type cachedKind struct {
 // fix? probably would make more sense if this happened when the record was created instead of after.
 // to do that though, the "args" and "locals" would have to be separate
 // ( so that args can be put into scope for locals to see. )
-func (k cachedKind) recordInit(run rt.Runtime, rec *g.Record, base int) (err error) {
-	for i, init := range k.init[base:] {
-		if init != nil {
-			fieldIndex := i + base
-			ft := k.Field(fieldIndex)
-			if src, e := init.GetAssignedValue(run); e != nil {
-				err = errutil.New("error determining local", k.Name(), ft.Name, e)
-				break
-			} else if val, e := safe.AutoConvert(run, ft, src); e != nil {
-				err = e
-			} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
-				err = errutil.New("error setting local", k.Name(), ft.Name, e)
-				break
-			}
+func (k cachedKind) recordInit(run rt.Runtime, rec *g.Record) (err error) {
+	for i := range k.init {
+		if e := k.initIndex(run, rec, i); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func (k cachedKind) initIndex(run rt.Runtime, rec *g.Record, fieldIndex int) (err error) {
+	if init := k.init[fieldIndex]; init != nil {
+		ft := k.Field(fieldIndex)
+		if src, e := init.GetAssignedValue(run); e != nil {
+			err = errutil.New("error determining local", k.Name(), ft.Name, e)
+		} else if val, e := safe.AutoConvert(run, ft, src); e != nil {
+			err = e
+		} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
+			err = errutil.New("error setting local", k.Name(), ft.Name, e)
 		}
 	}
 	return

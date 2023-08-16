@@ -16,8 +16,8 @@ type panicTime struct {
 // Runtime - a simple runtime for testing
 type Runtime struct {
 	panicTime
-	ObjectMap map[string]*g.Record
-	scope.Stack
+	ObjectMap   map[string]*g.Record
+	scope.Stack // fix: replace with chain
 	*Kinds
 }
 

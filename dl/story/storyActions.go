@@ -4,8 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/action"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -22,16 +20,13 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
 		patterns := []string{op.Action.Str, op.Event.Str}
 		targets := []string{"agent", "actor"}
-		ancestors := []kindsOf.Kinds{kindsOf.Action, kindsOf.Event}
 		for i, target := range targets {
-			pb := mdl.NewPatternSubtype(patterns[i], ancestors[i])
-			// the first parameter is always (ex) "agent" of type "agent":
+			pb := mdl.NewPatternBuilder(patterns[i])
 			pb.AddParam(mdl.FieldInfo{
 				Name:     target,
 				Class:    target,
 				Affinity: affine.Text,
 			})
-			//
 			if e := op.defineExtras(cat.Runtime(), pb); e != nil {
 				err = e
 				break
@@ -41,7 +36,9 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 					Affinity: affine.Bool,
 				})
 			}
-			if e := w.Pin().AddPattern(pb.Pattern); e != nil {
+			if e := cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+				return w.Pin().AddPattern(pb.Pattern)
+			}); e != nil {
 				err = e
 				break
 			}
@@ -59,7 +56,7 @@ func (op *ActionDecl) defineExtras(run rt.Runtime, pb *mdl.PatternBuilder) (err 
 		} else {
 			cls := lang.Normalize(kind.String())
 			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
-				Name:     action.Noun.String(),
+				Name:     "noun",
 				Class:    cls,
 				Affinity: affine.Text,
 			})
@@ -70,12 +67,12 @@ func (op *ActionDecl) defineExtras(run rt.Runtime, pb *mdl.PatternBuilder) (err 
 		} else {
 			cls := lang.Normalize(kinds.String())
 			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
-				Name:     action.Noun.String(),
+				Name:     "noun",
 				Class:    cls,
 				Affinity: affine.Text,
 			})
 			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
-				Name:     action.OtherNoun.String(),
+				Name:     "other noun",
 				Class:    cls,
 				Affinity: affine.Text,
 			})

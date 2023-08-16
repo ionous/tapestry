@@ -22,10 +22,10 @@ func (run *Runner) Send(rec *g.Record, up []string) (ret g.Value, err error) {
 		err = e
 	} else {
 		res := pattern.NewResults(rec, labels.Strings(), affine.Bool)
-		oldScope := run.Stack.ReplaceScope(res)
+		oldScope := run.replaceScope(res)
 		if cached, e := run.getKindOf(name, kindsOf.Pattern.String()); e != nil {
 			err = e
-		} else if e := cached.recordInit(run, rec, 0); e != nil {
+		} else if e := cached.recordInit(run, rec); e != nil {
 			err = e
 		} else {
 			// fix: nobody is using "current_noun" currently... so what does that say?
@@ -63,7 +63,7 @@ func (run *Runner) Send(rec *g.Record, up []string) (ret g.Value, err error) {
 			}
 			run.PopScope()
 		}
-		run.Stack.ReplaceScope(oldScope)
+		run.restoreScope(oldScope)
 	}
 	if err != nil {
 		err = errutil.New(err, "sending", name)

@@ -24,6 +24,7 @@ func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, options Op
 		nounValues: make(cache),
 		counters:   make(counters),
 		options:    options,
+		scope:      scope.Chain{Scope: scope.Empty{}},
 	}
 	run.SetWriter(w)
 	return run
@@ -38,7 +39,7 @@ type Runner struct {
 	counters
 	options Options
 	//
-	scope.Stack
+	scope scope.Chain
 	Randomizer
 	writer.Sink
 	currentPatterns
@@ -47,6 +48,7 @@ type Runner struct {
 func (run *Runner) NounIsNamed(noun, name string) (bool, error) {
 	return run.query.NounIsNamed(noun, name)
 }
+
 func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 	if prev, e := run.query.ActivateDomain(domain); e != nil {
 		err = run.reportError(e)
@@ -185,7 +187,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		switch target {
 		case meta.Variables:
 			cpy := g.CopyValue(val)
-			err = run.Stack.SetFieldByName(field, cpy)
+			err = run.scope.SetFieldByName(field, cpy)
 
 		case meta.Option:
 			cpy := g.CopyValue(val)
@@ -203,7 +205,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 				// unpack the real target and field
 				switch target, field := field, val.String(); target {
 				case meta.Variables:
-					err = run.Stack.SetFieldDirty(field)
+					err = run.scope.SetFieldDirty(field)
 				default:
 					// todo: example, flag object or db for save.
 					// for now, simply verify that the field exists.
@@ -317,7 +319,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			ret = g.IntOf(b)
 
 		case meta.Variables:
-			ret, err = run.Stack.FieldByName(field)
+			ret, err = run.scope.FieldByName(field)
 		}
 	}
 	return

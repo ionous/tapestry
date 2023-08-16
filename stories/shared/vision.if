@@ -7,34 +7,14 @@
       ]
     },
     {
-      "Action:requires:": [
+      "Define action:requires:provides:": [
         "adjusting light",
         {
-          "Nothing": true
-        }
-      ]
-    },
-    {
-      "Rule for:do:": [
-        "after adjusting light",
-        {
-          "Set:from:": [
-            {
-              "Object:field:": [
-                "@actor",
-                "not in darkness"
-              ]
-            },
-            {
-              "FromBool:": "@now_lit"
-            }
+          "Text:kind:": [
+            "actor",
+            "actor"
           ]
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "adjusting light",
+        },
         [
           {
             "Bool:initially:": [
@@ -57,43 +37,71 @@
               }
             ]
           }
-        ],
-        [
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  "@now_lit",
-                  {
-                    "Not:": "@was_lit"
-                  }
-                ]
-              },
-              [
-                {
-                  "PrintNewsOfLight": true
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  "@was_lit",
-                  {
-                    "Not:": "@now_lit"
-                  }
-                ]
-              },
-              [
-                {
-                  "PrintNewsOfDarkness": true
-                }
-              ]
-            ]
-          }
         ]
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "after adjusting light",
+        {
+          "Set:from:": [
+            {
+              "Object:field:": [
+                "@actor",
+                "not in darkness"
+              ]
+            },
+            {
+              "FromBool:": "@now_lit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "adjusting light",
+        "discovered the light",
+        {
+          "If:does:": [
+            {
+              "AllTrue:": [
+                "@now_lit",
+                {
+                  "Not:": "@was_lit"
+                }
+              ]
+            },
+            [
+              {
+                "PrintNewsOfLight": true
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "adjusting light",
+        "discovered the dark",
+        {
+          "If:does:": [
+            {
+              "AllTrue:": [
+                "@was_lit",
+                {
+                  "Not:": "@now_lit"
+                }
+              ]
+            },
+            [
+              {
+                "PrintNewsOfDarkness": true
+              }
+            ]
+          ]
+        }
       ]
     },
     {
