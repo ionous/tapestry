@@ -5,12 +5,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-// name of the (implicit) actor variable (that should be) defined by all events.
-const Actor = "actor"
+// name of kind which incorporates the player
+const Actors = "actors"
 
 // name of the event object variable
 // the fields of the object are listed as Field constants
-const Object = "event" // n
+const Object = "event"
 
 // the individual events raised for an action
 // they are represented collectively by a "pattern set"

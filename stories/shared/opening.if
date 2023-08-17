@@ -94,36 +94,25 @@
                               }
                             ],
                             {
-                              "Else do:": [
-                                {
-                                  "Send:event:": [
-                                    {
-                                      "Capture obj:": {
-                                        "FromText:": "@noun"
-                                      }
-                                    },
-                                    {
-                                      "StateChange actor:noun:trait:guard:change:": [
-                                        {
-                                          "FromText:": "@actor"
-                                        },
-                                        {
-                                          "FromText:": "@noun"
-                                        },
-                                        {
-                                          "FromText:": "open"
-                                        },
-                                        {
-                                          "FromText:": "openable"
-                                        },
-                                        {
-                                          "FromText:": "open"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "Else do:": {
+                                "StateChanging noun:actor:trait:guard:change:": [
+                                  {
+                                    "FromText:": "@noun"
+                                  },
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "open"
+                                  },
+                                  {
+                                    "FromText:": "openable"
+                                  },
+                                  {
+                                    "FromText:": "open"
+                                  }
+                                ]
+                              }
                             }
                           ]
                         }
@@ -234,36 +223,25 @@
                               }
                             ],
                             {
-                              "Else do:": [
-                                {
-                                  "Send:event:": [
-                                    {
-                                      "Capture obj:": {
-                                        "FromText:": "@noun"
-                                      }
-                                    },
-                                    {
-                                      "StateChange actor:noun:trait:guard:change:": [
-                                        {
-                                          "FromText:": "@actor"
-                                        },
-                                        {
-                                          "FromText:": "@noun"
-                                        },
-                                        {
-                                          "FromText:": "closed"
-                                        },
-                                        {
-                                          "FromText:": "openable"
-                                        },
-                                        {
-                                          "FromText:": "close"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "Else do:": {
+                                "StateChanging noun:actor:trait:guard:change:": [
+                                  {
+                                    "FromText:": "@noun"
+                                  },
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "closed"
+                                  },
+                                  {
+                                    "FromText:": "openable"
+                                  },
+                                  {
+                                    "FromText:": "close"
+                                  }
+                                ]
+                              }
                             }
                           ]
                         }
@@ -281,199 +259,167 @@
       "--": ""
     },
     {
-      "--": "Can't open when locked.",
-      "Extend pattern:withRules:": [
-        "state changing",
-        [
-          {
-            "PatternRule:do:": [
+      "Rule for:kind:named:do:": [
+        "before state changing",
+        "openers",
+        "can't open when locked",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@trait",
+                    "equal_to",
+                    "open"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "lockable"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "locked"
+                  ]
+                }
+              ]
+            },
+            [
               {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@trait",
-                      "equal_to",
-                      "open"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "lockable"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "locked"
-                    ]
-                  }
+                "Say response:with:": [
+                  "can't open when locked",
+                  "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                 ]
               },
-              [
-                {
-                  "Set:from:": [
-                    "@result",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't open when locked",
-                          {
-                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
-                          }
-                        ]
+              {
+                "Set:from:": [
+                  {
+                    "Variable:dot:": [
+                      "event",
+                      {
+                        "AtField:": "cancel"
                       }
+                    ]
+                  },
+                  {
+                    "FromBool:": true
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "--": "FIX FIX FIX -- should be on opening"
+    },
+    {
+      "Rule for:kind:named:do:": [
+        "after state changing",
+        "containers",
+        "reveal newly visible objects",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@trait",
+                    "equal_to",
+                    "open"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "opaque"
+                  ]
+                },
+                {
+                  "Not:": {
+                    "--": "stop if the actor is contained by the noun",
+                    "AncestorOf obj:root:": [
+                      {
+                        "FromText:": "@noun"
+                      },
+                      {
+                        "FromText:": "@actor"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "If:from:and:do:": [
+                "concealed items",
+                {
+                  "FromTextList:": {
+                    "VisibleStorage obj:": {
+                      "FromText:": "@noun"
+                    }
+                  }
+                },
+                {
+                  "Cmp:is:num:": [
+                    {
+                      "Len:": {
+                        "FromTextList:": "@concealed_items"
+                      }
+                    },
+                    "greater_than",
+                    0
+                  ]
+                },
+                {
+                  "--": "inform doesn't print the inventory details when opening objects, so this doesn't either.",
+                  "Say response:with:": [
+                    "reveal newly visible objects",
+                    {
+                      "--": [
+                        "uses 'spaces' to join multiple pieces of text",
+                        "( because print response only allows a single text return.",
+                        "tbd: maybe it'd make more sense for print to take repeated elements and space them automatically."
+                      ],
+                      "Spaces do:": [
+                        {
+                          "Say:": "{We!|capitalize!} open {the: .noun} revealing"
+                        },
+                        {
+                          "Print:": {
+                            "Commas do:": [
+                              {
+                                "Repeating across:as:do:": [
+                                  {
+                                    "FromTextList:": "@concealed_items"
+                                  },
+                                  "item",
+                                  [
+                                    {
+                                      "Say:": "{the: .item}"
+                                    }
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Print:": "."
+                        }
+                      ]
                     }
                   ]
                 }
               ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "things",
-        [
-          {
-            "With:event:provides:rules:": [
-              "after",
-              "state change",
-              [
-                {
-                  "--": "initialized only when needed, for containers revealing their contents.",
-                  "TextList:": "concealed items"
-                }
-              ],
-              [
-                {
-                  "PatternRule:do:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "Cmp:is:txt:": [
-                            "@trait",
-                            "equal_to",
-                            "open"
-                          ]
-                        },
-                        {
-                          "IsPlayer obj:": {
-                            "FromText:": "@actor"
-                          }
-                        },
-                        {
-                          "KindOf:is:": [
-                            "@noun",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Object:field:": [
-                            "@noun",
-                            "opaque"
-                          ]
-                        },
-                        {
-                          "Not:": {
-                            "AncestorOf obj:root:": [
-                              {
-                                "FromText:": "@noun"
-                              },
-                              {
-                                "FromText:": "@actor"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@concealed_items",
-                          {
-                            "FromTextList:": {
-                              "VisibleStorage obj:": {
-                                "FromText:": "@noun"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "If:do:": [
-                          {
-                            "Cmp:is:num:": [
-                              {
-                                "Len:": {
-                                  "FromTextList:": "@concealed_items"
-                                }
-                              },
-                              "greater_than",
-                              0
-                            ]
-                          },
-                          [
-                            {
-                              "Comment:": "inform doesn't print the inventory details when opening objects, so this doesn't either. "
-                            },
-                            {
-                              "Print response:with:": [
-                                "reveal newly visible objects",
-                                {
-                                  "Spaces do:": [
-                                    {
-                                      "Say:": "{We!|capitalize!} open {the: .noun}, revealing"
-                                    },
-                                    {
-                                      "Print:": {
-                                        "Commas do:": [
-                                          {
-                                            "Repeating across:as:do:": [
-                                              {
-                                                "FromTextList:": "@concealed_items"
-                                              },
-                                              "item",
-                                              [
-                                                {
-                                                  "Say:": "{the: .item}"
-                                                }
-                                              ]
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Print:": "."
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Set:from:": [
-                                "@success",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     }
   ]

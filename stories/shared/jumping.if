@@ -95,11 +95,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player jumping",
-                    {
-                      "Say:": "{we:|capitalize!} jump on the spot."
-                    }
+                    "{we:|capitalize!} jump on the spot."
                   ]
                 }
               ]
@@ -110,11 +108,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "actor jumping",
-                    {
-                      "Say:": "{the:.actor|capitalize!} jumps on the spot."
-                    }
+                    "{the:.actor|capitalize!} jumps on the spot."
                   ]
                 }
               ]

@@ -1404,6 +1404,14 @@
                       "text_eval"
                     ]
                   },
+                   {
+                    "Term:name:type:optional:": [
+                      "named",
+                      "rule_name",
+                      "text_eval",
+                      true
+                    ]
+                  },
                   {
                     "Term:name:type:repeats:": [
                       "do",
@@ -1445,6 +1453,21 @@
                       "kind",
                       "kind_name",
                       "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "exactly",
+                      "bool_eval",
+                      true
+                    ]
+                  },
+                   {
+                    "Term:name:type:optional:": [
+                      "named",
+                      "rule_name",
+                      "text_eval",
+                      true
                     ]
                   },
                   {
@@ -1922,7 +1945,7 @@
             "printing",
             {
               "Flow:uses:": [
-                "print",
+                "say",
                 [
                   {
                     "Term:name:type:": [

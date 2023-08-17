@@ -1,40 +1,39 @@
 {
   "Tapestry:": [
     {
-        "Interpret:with:": [
-          [
-            "attack",
-            "break",
-            "crack",
-            "destroy",
-            "fight",
-            "hit",
-            "kill",
-            "murder",
-            "punch",
-            "smash",
-            "thump",
-            "torture",
-            "wreck"
-          ],
-          [
-            {
-              "One of:": [
-                {
-                  "Sequence:": [
-                    {
-                      "One noun:": "things"
-                    },
-                    {
-                      "Action:": "attacking"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "attack",
+          "break",
+          "crack",
+          "destroy",
+          "fight",
+          "hit",
+          "kill",
+          "murder",
+          "punch",
+          "smash",
+          "thump",
+          "torture",
+          "wreck"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "attacking"
+                  }
+                ]
+              }
+            ]
+          }
         ]
-      
+      ]
     },
     {
       "--": ""
@@ -163,11 +162,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player attacking",
-                    {
-                      "Say:": "Violence isn't the answer."
-                    }
+                    "Violence isn't the answer."
                   ]
                 }
               ]
@@ -178,11 +175,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "actor attacking",
-                    {
-                      "Say:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                    }
+                    "{the:.actor|capitalize!} attacks {the: .noun}."
                   ]
                 }
               ]

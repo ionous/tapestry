@@ -325,11 +325,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone stores",
-                    {
-                      "Say:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                    }
+                    "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
                   ]
                 }
               ]
@@ -340,11 +338,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player stores",
-                    {
-                      "Say:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                    }
+                    "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
                   ]
                 }
               ]
@@ -390,11 +386,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't insert clothing",
-                          {
-                            "Say:": "{We:|capitalize!} would have to take {those:.noun} off first."
-                          }
+                          "{We:|capitalize!} would have to take {those:.noun} off first."
                         ]
                       }
                     }
@@ -432,11 +426,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't insert something into itself",
-                          {
-                            "Say:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
-                          }
+                          "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
                         ]
                       }
                     }
@@ -486,11 +478,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't store people's possessions",
-                          {
-                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."
-                          }
+                          "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."
                         ]
                       }
                     }
@@ -535,11 +525,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can only store to storage",
-                          {
-                            "Say:": "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
-                          }
+                          "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
                         ]
                       }
                     }
@@ -582,11 +570,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can only store when allowed",
-                          {
-                            "Say:": "{the: .from_obj|capitalize!} is closed."
-                          }
+                          "{the: .from_obj|capitalize!} is closed."
                         ]
                       }
                     }

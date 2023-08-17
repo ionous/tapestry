@@ -336,11 +336,9 @@
                         "@response",
                         {
                           "FromText:": {
-                            "Print response:with:": [
+                            "Say response:with:": [
                               "can't reach a common ancestor",
-                              {
-                                "Say:": "{They:.noun|capitalize!} {arent:.noun} available."
-                              }
+                              "{They:.noun|capitalize!} {arent:.noun} available."
                             ]
                           }
                         }
@@ -429,11 +427,9 @@
                   "@response",
                   {
                     "FromText:": {
-                      "Print response:with:": [
+                      "Say response:with:": [
                         "can't act in the dark",
-                        {
-                          "Say:": "It is pitch dark, and {we!} can't see a thing."
-                        }
+                        "It is pitch dark, and {we!} can't see a thing."
                       ]
                     }
                   }
@@ -520,11 +516,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't reach outside rooms",
-                          {
-                            "Say:": "{They:.noun|capitalize!} {arent:.noun} available."
-                          }
+                          "{They:.noun|capitalize!} {arent:.noun} available."
                         ]
                       }
                     }
@@ -557,11 +551,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't reach outside closed containers",
-                          {
-                            "Say:": "{The: .from_obj|capitalize!} {arent: .from_obj} open."
-                          }
+                          "{The: .from_obj|capitalize!} {arent: .from_obj} open."
                         ]
                       }
                     }
@@ -649,11 +641,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't reach inside rooms",
-                          {
-                            "Say:": "{We:|capitalize!} can't reach into {the: .into_obj}."
-                          }
+                          "{We:|capitalize!} can't reach into {the: .into_obj}."
                         ]
                       }
                     }
@@ -695,11 +685,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't reach inside closed containers",
-                          {
-                            "Say:": "{The: .into_obj|capitalize!} {arent: .into_obj} open."
-                          }
+                          "{The: .into_obj|capitalize!} {arent: .into_obj} open."
                         ]
                       }
                     }

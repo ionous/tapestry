@@ -1,320 +1,180 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
-        "state change",
+      "--": "State changing alters the state of a noun by changing a trait.",
+      "Define action:requires:": [
+        "state changing",
         [
           {
-            "Text:kind:": [
-              "actor",
-              "actor"
-            ]
-          },
-          {
+            "--": "the noun that wants to change state.",
             "Text:kind:": [
               "noun",
               "thing"
             ]
           },
           {
-            "Text:": "trait"
-          },
-          {
-            "Text:": "guard"
-          },
-          {
-            "Text:": "change"
-          }
-        ],
-        {
-          "Bool:": "success"
-        },
-        []
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "things",
-        [
-          {
-            "With:event:rules:": [
-              "while",
-              "state change",
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "If:from:and:do:else:": [
-                          "resp",
-                          {
-                            "FromText:": {
-                              "StateChanging noun:trait:guard:actor:change:": [
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": "@trait"
-                                },
-                                {
-                                  "FromText:": "@guard"
-                                },
-                                {
-                                  "FromText:": "@actor"
-                                },
-                                {
-                                  "FromText:": "@change"
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@resp"
-                            }
-                          },
-                          [
-                            {
-                              "Print:": "@resp"
-                            },
-                            {
-                              "Set:from:": [
-                                "@success",
-                                {
-                                  "FromBool:": false
-                                }
-                              ]
-                            }
-                          ],
-                          {
-                            "Else do:": [
-                              {
-                                "Comment:": "nothing has stopped us, so lets change the state now."
-                              },
-                              {
-                                "Set:from:": [
-                                  {
-                                    "Object:field:": [
-                                      "@noun",
-                                      "@trait"
-                                    ]
-                                  },
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
-                              },
-                              {
-                                "Set:from:": [
-                                  "@success",
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "things",
-        [
-          {
-            "With:event:rules:": [
-              "after",
-              "state change",
-              [
-                {
-                  "PatternRule:do:": [
-                    {
-                      "IsPlayer obj:": {
-                        "FromText:": "@actor"
-                      }
-                    },
-                    [
-                      {
-                        "Print response:with:": [
-                          "the player changed something",
-                          {
-                            "Say:": "{We!|capitalize!} {.change} {the: .noun}."
-                          }
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "Print response:with:": [
-                          "something changed itself",
-                          {
-                            "Say:": "{The: .noun|capitalize!} {are:.noun} {.trait}."
-                          }
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "state changing",
-        [
-        	{
+            "--": "the actor who is causing the state to change.",
             "Text:kind:": [
-              "noun",
-              "object"
-            ]
-          },
-          {
-            "--": "the trait we're changing to",
-            "Text:": "trait"
-          },
-          {
-            "--": "a trait which blocks the noun from changing",
-            "Text:": "guard"
-          },
-          {
-             "--": "actor responsible for the change.",
-           "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "--": "some text which describes the action",
+            "--": "the state the noun wants to change to.",
+            "Text:": "trait"
+          },
+          {
+            "--": "a trait which, if true, can block the noun from changing.",
+            "Text:": "guard"
+          },
+          {
+            "--": "some text which describes what's changing.",
             "Text:": "change"
           }
-        ],
-        {
-          "Text:": "result"
-        },
-        []
+        ]
       ]
     },
     {
-      "Comment:": "Called from the state change event to attempt to change the state. "
+      "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "--": "Assuming all the rules before now passed, give the noun the desired trait.",
+      "Rule for:do:": [
         "state changing",
-        [
-          {
-            "PatternRule:do:": [
+        {
+          "Set:from:": [
+            {
+              "Object:field:": [
+                "@noun",
+                "@trait"
+              ]
+            },
+            {
+              "FromBool:": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "--": "Print the results of the change.",
+      "Rule for:named:do:": [
+        "after state changing",
+        "the player changed something",
+        {
+          "If:do:else:": [
+            {
+              "IsPlayer obj:": {
+                "FromText:": "@actor"
+              }
+            },
+            {
+              "Say response:with:": [
+                "the player changed something",
+                "{We!|capitalize!} {.change} {the: .noun}."
+              ]
+            },
+            {
+              "Else do:": {
+                "Say response:with:": [
+                  "something changed itself",
+                  "{The: .noun|capitalize!} {are:.noun} {.trait}."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "--": "The noun won't change if the 'guard' value is set and the noun has that trait.",
+      "Rule for:named:do:": [
+        "before state changing",
+        "can't change the unchangeable",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Not:": {
+                    "Is empty:": "@guard"
+                  }
+                },
+                {
+                  "Not:": {
+                    "Object:field:": [
+                      "@noun",
+                      "@guard"
+                    ]
+                  }
+                }
+              ]
+            },
+            [
               {
-                "AllTrue:": [
+                "Say response:with:": [
+                  "can't change the unchangeable",
+                  "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
+                ]
+              },
+              {
+                "Set:from:": [
                   {
-                    "Not:": {
-                      "Is empty:": "@guard"
-                    }
+                    "Variable:dot:": [
+                      "event",
+                      {
+                        "AtField:": "cancel"
+                      }
+                    ]
                   },
                   {
-                    "Not:": {
-                      "Object:field:": [
-                        "@noun",
-                        "@guard"
-                      ]
-                    }
+                    "FromBool:": true
                   }
                 ]
-              },
-              [
-                {
-                  "Comment:": "can't change the unchangeable."
-                },
-                {
-                  "Set:from:": [
-                    "@result",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't change the unchangeable",
-                          {
-                            "Say:": "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
+              }
             ]
-          },
-          {
-            "PatternRule:do:": [
+          ]
+        }
+      ]
+    },
+    {
+      "--": "The noun won't change if it already has the desired trait.",
+      "Rule for:named:do:": [
+        "before state changing",
+        "can't change what is",
+        {
+          "If:do:": [
+            {
+              "Object:field:": [
+                "@noun",
+                "@trait"
+              ]
+            },
+            [
               {
-                "Object:field:": [
-                  "@noun",
-                  "@trait"
+                "Say response:with:": [
+                  "can't change what is",
+                  "{They: .noun|capitalize!} {are:.noun} already {.trait}."
                 ]
               },
-              [
-                {
-                  "Comment:": "can't change what is."
-                },
-                {
-                  "Set:from:": [
-                    "@result",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't change what is",
-                          {
-                            "Say:": "{They: .noun|capitalize!} {are:.noun} already {.trait}."
-                          }
-                        ]
+              {
+                "Set:from:": [
+                  {
+                    "Variable:dot:": [
+                      "event",
+                      {
+                        "AtField:": "cancel"
                       }
-                    }
-                  ]
-                }
-              ]
+                    ]
+                  },
+                  {
+                    "FromBool:": true
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]

@@ -187,11 +187,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't kiss yourself",
-                          {
-                            "Say:": "{we:|capitalize!} don't get much from that."
-                          }
+                          "{we:|capitalize!} don't get much from that."
                         ]
                       }
                     }
@@ -224,11 +222,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't kiss without consent",
-                          {
-                            "Say:": "{the:.noun|capitalize!} might not like that."
-                          }
+                          "{the:.noun|capitalize!} might not like that."
                         ]
                       }
                     }
@@ -311,11 +307,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player kissing",
-                    {
-                      "Say:": "{we:|capitalize!} kiss on {the:.noun}."
-                    }
+                    "{we:|capitalize!} kiss on {the:.noun}."
                   ]
                 }
               ]
@@ -326,11 +320,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "actor kissing",
-                    {
-                      "Say:": "{the:.actor|capitalize!} kisses {the:.noun}."
-                    }
+                    "{the:.actor|capitalize!} kisses {the:.noun}."
                   ]
                 }
               ]

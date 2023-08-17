@@ -213,11 +213,9 @@
                     },
                     [
                       {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "unremarkable description",
-                          {
-                            "Say:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                          }
+                          "{We!|make_title_case!} see nothing special about {the: .obj}."
                         ]
                       }
                     ]
@@ -330,11 +328,9 @@
                             },
                             [
                               {
-                                "Print response:with:": [
+                                "Say response:with:": [
                                   "empty container description",
-                                  {
-                                    "Say:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                  }
+                                  "{The: .obj|capitalize!} {are: .obj} empty."
                                 ]
                               },
                               {

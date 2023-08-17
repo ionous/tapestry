@@ -33,6 +33,7 @@
             ]
           },
           {
+          	"--": "The 'can't change what is' response.",
             "Expect output:": "It is already worn."
           },
           {

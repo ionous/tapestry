@@ -240,11 +240,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't retrieve what's not inside",
-                          {
-                            "Say:": "But {they:.noun} {arent: .noun} there now."
-                          }
+                          "But {they:.noun} {arent: .noun} there now."
                         ]
                       }
                     }

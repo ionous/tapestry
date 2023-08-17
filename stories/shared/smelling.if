@@ -242,11 +242,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player smelling",
-                    {
-                      "Say:": "{we:|capitalize!} smell nothing unexpected."
-                    }
+                    "{we:|capitalize!} smell nothing unexpected."
                   ]
                 }
               ]
@@ -257,11 +255,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "actor smelling",
-                    {
-                      "Say:": "{the:.actor|capitalize!} sniffs {the: .noun}."
-                    }
+                    "{the:.actor|capitalize!} sniffs {the: .noun}."
                   ]
                 }
               ]

@@ -57,11 +57,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can only use possessions",
-                          {
-                            "Say:": "{we:|capitalize!} haven't got {those:.noun}!"
-                          }
+                          "{we:|capitalize!} haven't got {those:.noun}!"
                         ]
                       }
                     }

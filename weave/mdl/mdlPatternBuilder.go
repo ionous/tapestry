@@ -98,8 +98,9 @@ func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags EventT
 	})
 }
 
-func (b *PatternBuilder) AddNewRule(appends, updates, terminates bool, prog []rt.Execute) {
+func (b *PatternBuilder) AddNewRule(name string, appends, updates, terminates bool, prog []rt.Execute) {
 	b.rules = append(b.rules, rule{
+		// fix: name,
 		flags:      2,
 		appends:    appends,
 		updates:    updates,

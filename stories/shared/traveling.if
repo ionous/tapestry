@@ -303,11 +303,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone else travels",
-                    {
-                      "Say:": "{The: .actor|capitalize!} went through {the: .noun}."
-                    }
+                    "{The: .actor|capitalize!} went through {the: .noun}."
                   ]
                 }
               ]
@@ -380,11 +378,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't travel through locked doors",
-                          {
-                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
-                          }
+                          "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                         ]
                       }
                     }
@@ -418,11 +414,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't travel through closed doors",
-                          {
-                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
-                          }
+                          "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
                         ]
                       }
                     }
@@ -459,11 +453,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can only travel to a destination",
-                          {
-                            "Say:": "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
-                          }
+                          "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
                         ]
                       }
                     }

@@ -247,11 +247,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone else drops",
-                    {
-                      "Say:": "{The: .actor|capitalize!} put down {the: .noun}."
-                    }
+                    "{The: .actor|capitalize!} put down {the: .noun}."
                   ]
                 }
               ]
@@ -262,11 +260,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player drops",
-                    {
-                      "Say:": "Dropped."
-                    }
+                    "Dropped."
                   ]
                 }
               ]
@@ -308,11 +304,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't drop yourself",
-                          {
-                            "Say:": "{We:|capitalize!} lack the dexterity."
-                          }
+                          "{We:|capitalize!} lack the dexterity."
                         ]
                       }
                     }
@@ -358,7 +352,7 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't drop what's already there",
                           "{The: .noun|capitalize!} {are: .noun} already here.\""
                         ]

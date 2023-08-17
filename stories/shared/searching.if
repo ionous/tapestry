@@ -192,18 +192,16 @@
                     },
                     [
                       {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "player searches empty storage",
-                          {
-                            "Say:": "There is nothing {on:.noun} {the:.noun}."
-                          }
+                          "There is nothing {on:.noun} {the:.noun}."
                         ]
                       }
                     ],
                     {
                       "Else do:": [
                         {
-                          "Print response:with:": [
+                          "Say response:with:": [
                             "player searches storage",
                             {
                               "Spaces do:": [
@@ -254,11 +252,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone else searches something",
-                    {
-                      "Say:": "{The: .actor|capitalize!} searches {the: .noun}."
-                    }
+                    "{The: .actor|capitalize!} searches {the: .noun}."
                   ]
                 }
               ]
@@ -269,11 +265,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player searches something",
-                    {
-                      "Say:": "{we!|capitalize!} find nothing of interest."
-                    }
+                    "{we!|capitalize!} find nothing of interest."
                   ]
                 }
               ]
@@ -315,11 +309,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can only search storage",
-                          {
-                            "Say:": "{we!|capitalize!} find nothing of interest."
-                          }
+                          "{we!|capitalize!} find nothing of interest."
                         ]
                       }
                     }
@@ -352,11 +344,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't search opaque objects",
-                          {
-                            "Say:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
-                          }
+                          "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
                         ]
                       }
                     }

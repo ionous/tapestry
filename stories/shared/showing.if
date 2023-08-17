@@ -251,11 +251,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone else shows",
-                    {
-                      "Say:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                    }
+                    "{The: .actor|capitalize!} shows off {the: .noun}."
                   ]
                 }
               ]
@@ -266,11 +264,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player shows",
-                    {
-                      "Say:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                    }
+                    "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
                   ]
                 }
               ]

@@ -420,11 +420,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "inline storage",
-                    {
-                      "Say:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
-                    }
+                    "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
                   ]
                 },
                 {
@@ -499,11 +497,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "on which are",
-                    {
-                      "Say:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
-                    }
+                    "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
                   ]
                 }
               ]
@@ -529,11 +525,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "closed container",
-                    {
-                      "Say:": "closed"
-                    }
+                    "closed"
                   ]
                 }
               ]
@@ -553,11 +547,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "empty container",
-                    {
-                      "Say:": "empty"
-                    }
+                    "empty"
                   ]
                 }
               ]
@@ -674,11 +666,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "lit status",
-                    {
-                      "Say:": "providing light"
-                    }
+                    "providing light"
                   ]
                 }
               ]
@@ -694,11 +684,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "worn status",
-                    {
-                      "Say:": "being worn"
-                    }
+                    "being worn"
                   ]
                 }
               ]
@@ -714,11 +702,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "openable status",
-                    {
-                      "Say:": "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
-                    }
+                    "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
                   ]
                 }
               ]
@@ -744,11 +730,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "transparent status",
-                    {
-                      "Say:": "{if .is_empty}empty{end}"
-                    }
+                    "{if .is_empty}empty{end}"
                   ]
                 }
               ]
@@ -764,11 +748,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "locked status",
-                    {
-                      "Say:": "{if .obj.closed and .obj.locked}locked{end}"
-                    }
+                    "{if .obj.closed and .obj.locked}locked{end}"
                   ]
                 }
               ]

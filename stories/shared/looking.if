@@ -395,11 +395,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "the darkness",
-                    {
-                      "Say:": "Darkness."
-                    }
+                    "Darkness."
                   ]
                 }
               ]
@@ -437,11 +435,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "pitch dark",
-                    {
-                      "Say:": "It is pitch dark, and you can't see a thing."
-                    }
+                    "It is pitch dark, and you can't see a thing."
                   ]
                 }
               ]
@@ -1164,11 +1160,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "you can also see",
-                    {
-                      "Say:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .first_mention}also {end}see {print_inline_objects: .children}."
-                    }
+                    "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .first_mention}also {end}see {print_inline_objects: .children}."
                   ]
                 }
               ]

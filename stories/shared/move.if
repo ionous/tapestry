@@ -42,11 +42,9 @@
                           "@response",
                           {
                             "FromText:": {
-                              "Print response:with:": [
+                              "Say response:with:": [
                                 "You can't move nothing.",
-                                {
-                                  "Say:": "You can't move nothing."
-                                }
+                                "You can't move nothing."
                               ]
                             }
                           }
@@ -69,11 +67,9 @@
                               "@response",
                               {
                                 "FromText:": {
-                                  "Print response:with:": [
+                                  "Say response:with:": [
                                     "You can only move things.",
-                                    {
-                                      "Say:": "You can only move things."
-                                    }
+                                    "You can only move things."
                                   ]
                                 }
                               }
@@ -136,7 +132,7 @@
                                 "@response",
                                 {
                                   "FromText:": {
-                                    "Print response:with:": [
+                                    "Say response:with:": [
                                       "okay",
                                       ""
                                     ]

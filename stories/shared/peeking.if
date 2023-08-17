@@ -154,11 +154,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone else peeks",
-                    {
-                      "Say:": "{The: .actor|capitalize!} looks under {the: .noun}."
-                    }
+                    "{The: .actor|capitalize!} looks under {the: .noun}."
                   ]
                 }
               ]
@@ -169,11 +167,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player peeks",
-                    {
-                      "Say:": "{we!|capitalize!} find nothing of interest."
-                    }
+                    "{we!|capitalize!} find nothing of interest."
                   ]
                 }
               ]

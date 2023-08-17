@@ -130,11 +130,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "darkness has fallen",
-                    {
-                      "Say:": "It is now pitch dark in here!"
-                    }
+                    "It is now pitch dark in here!"
                   ]
                 }
               ]

@@ -236,11 +236,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone else takes",
-                    {
-                      "Say:": "{The: .actor|capitalize!} picks up {the: .noun}."
-                    }
+                    "{The: .actor|capitalize!} picks up {the: .noun}."
                   ]
                 }
               ]
@@ -251,11 +249,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "player takes",
-                    {
-                      "Say:": "Taken."
-                    }
+                    "Taken."
                   ]
                 }
               ]
@@ -298,11 +294,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take nothing",
-                          {
-                            "Say:": "{we:|capitalize!} can't carry {the: .noun}."
-                          }
+                          "{we:|capitalize!} can't carry {the: .noun}."
                         ]
                       }
                     }
@@ -336,11 +330,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take what's fixed in place",
-                          {
-                            "Say:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
-                          }
+                          "{they:.noun|capitalize!} {are:.noun} fixed in place."
                         ]
                       }
                     }
@@ -374,11 +366,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take scenery",
-                          {
-                            "Say:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
-                          }
+                          "{they:.noun|capitalize!} {are:.noun} hardly portable."
                         ]
                       }
                     }
@@ -413,11 +403,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take yourself",
-                          {
-                            "Say:": "{we!|capitalize!} {are:.self} always self-possessed."
-                          }
+                          "{we!|capitalize!} {are:.self} always self-possessed."
                         ]
                       }
                     }
@@ -451,11 +439,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take other people",
-                          {
-                            "Say:": "I don't suppose {the: .noun} would care for that."
-                          }
+                          "I don't suppose {the: .noun} would care for that."
                         ]
                       }
                     }
@@ -503,11 +489,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take what you're inside",
-                          {
-                            "Say:": "{We:|capitalize!} would have to get {off:.noun} first."
-                          }
+                          "{We:|capitalize!} would have to get {off:.noun} first."
                         ]
                       }
                     }
@@ -560,11 +544,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take what you're holding",
-                          {
-                            "Say:": "{we:|capitalize!} already have {those:.noun}."
-                          }
+                          "{we:|capitalize!} already have {those:.noun}."
                         ]
                       }
                     }
@@ -602,11 +584,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Print response:with:": [
+                        "Say response:with:": [
                           "can't take people's possessions",
-                          {
-                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .from_obj}."
-                          }
+                          "{those: .noun|capitalize!} seems to belong to {the: .from_obj}."
                         ]
                       }
                     }

@@ -94,36 +94,25 @@
                               }
                             ],
                             {
-                              "Else do:": [
-                                {
-                                  "Send:event:": [
-                                    {
-                                      "Capture obj:": {
-                                        "FromText:": "@noun"
-                                      }
-                                    },
-                                    {
-                                      "StateChange actor:noun:trait:guard:change:": [
-                                        {
-                                          "FromText:": "@actor"
-                                        },
-                                        {
-                                          "FromText:": "@noun"
-                                        },
-                                        {
-                                          "FromText:": "activated"
-                                        },
-                                        {
-                                          "FromText:": "activatable"
-                                        },
-                                        {
-                                          "FromText:": "switch on"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "Else do:": {
+                                "StateChanging noun:actor:trait:guard:change:": [
+                                  {
+                                    "FromText:": "@noun"
+                                  },
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "activated"
+                                  },
+                                  {
+                                    "FromText:": "activatable"
+                                  },
+                                  {
+                                    "FromText:": "switch on"
+                                  }
+                                ]
+                              }
                             }
                           ]
                         }
@@ -234,36 +223,25 @@
                               }
                             ],
                             {
-                              "Else do:": [
-                                {
-                                  "Send:event:": [
-                                    {
-                                      "Capture obj:": {
-                                        "FromText:": "@noun"
-                                      }
-                                    },
-                                    {
-                                      "StateChange actor:noun:trait:guard:change:": [
-                                        {
-                                          "FromText:": "@actor"
-                                        },
-                                        {
-                                          "FromText:": "@noun"
-                                        },
-                                        {
-                                          "FromText:": "deactivated"
-                                        },
-                                        {
-                                          "FromText:": "activatable"
-                                        },
-                                        {
-                                          "FromText:": "switch off"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "Else do:": {
+                                "StateChanging noun:actor:trait:guard:change:": [
+                                  {
+                                    "FromText:": "@noun"
+                                  },
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "deactivated"
+                                  },
+                                  {
+                                    "FromText:": "activatable"
+                                  },
+                                  {
+                                    "FromText:": "switch off"
+                                  }
+                                ]
+                              }
                             }
                           ]
                         }

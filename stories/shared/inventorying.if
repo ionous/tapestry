@@ -142,11 +142,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "carrying something",
-                    {
-                      "Say:": "You are carrying:"
-                    }
+                    "You are carrying:"
                   ]
                 },
                 {
@@ -162,11 +160,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "carrying nothing",
-                    {
-                      "Say:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                    }
+                    "{we:|capitalize!} {are:.actor} carrying nothing."
                   ]
                 }
               ]

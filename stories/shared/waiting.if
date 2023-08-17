@@ -104,11 +104,9 @@
               },
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "someone waits",
-                    {
-                      "Say:": "{The: .actor|capitalize!} waited."
-                    }
+                    "{The: .actor|capitalize!} waited."
                   ]
                 }
               ]
@@ -119,11 +117,9 @@
               true,
               [
                 {
-                  "Print response:with:": [
+                  "Say response:with:": [
                     "the player waits",
-                    {
-                      "Say:": "Time passes."
-                    }
+                    "Time passes."
                   ]
                 }
               ]

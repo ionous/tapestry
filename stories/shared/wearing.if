@@ -64,36 +64,25 @@
                       }
                     ],
                     {
-                      "Else do:": [
-                        {
-                          "Send:event:": [
-                            {
-                              "Capture obj:": {
-                                "FromText:": "@noun"
-                              }
-                            },
-                            {
-                              "StateChange actor:noun:trait:guard:change:": [
-                                {
-                                  "FromText:": "@actor"
-                                },
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": "worn"
-                                },
-                                {
-                                  "FromText:": "wearable"
-                                },
-                                {
-                                  "FromText:": "put on"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Else do:": {
+                        "StateChanging noun:actor:trait:guard:change:": [
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "worn"
+                          },
+                          {
+                            "FromText:": "wearable"
+                          },
+                          {
+                            "FromText:": "put on"
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -170,36 +159,25 @@
                       }
                     ],
                     {
-                      "Else do:": [
-                        {
-                          "Send:event:": [
-                            {
-                              "Capture obj:": {
-                                "FromText:": "@noun"
-                              }
-                            },
-                            {
-                              "StateChange actor:noun:trait:guard:change:": [
-                                {
-                                  "FromText:": "@actor"
-                                },
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": "not worn"
-                                },
-                                {
-                                  "FromText:": "wearable"
-                                },
-                                {
-                                  "FromText:": "take off"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Else do:": {
+                        "StateChanging noun:actor:trait:guard:change:": [
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "not worn"
+                          },
+                          {
+                            "FromText:": "wearable"
+                          },
+                          {
+                            "FromText:": "take off"
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -213,56 +191,59 @@
       "--": ""
     },
     {
-      "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
-    },
-    {
-      "Extend pattern:withRules:": [
-        "state changing",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@trait",
-                      "equal_to",
-                      "not worn"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      "@actor",
-                      "other_than",
-                      {
-                        "WearerOf obj:": {
-                          "FromText:": "@noun"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              [
+      "--": "This isn't perfectly symmetrical with can only wear possessions, and that's okay.",
+      "Rule for:named:do:": [
+        "before state changing",
+        "can only remove what's worn",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@result",
+                  "Cmp:is:txt:": [
+                    "@trait",
+                    "equal_to",
+                    "not worn"
+                  ]
+                },
+                {
+                  "Cmp:is:txt:": [
+                    "@actor",
+                    "other_than",
                     {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can only remove what's worn",
-                          {
-                            "Say:": "{We:|capitalize!} aren't wearing {those:.noun}!"
-                          }
-                        ]
+                      "WearerOf obj:": {
+                        "FromText:": "@noun"
                       }
                     }
                   ]
                 }
               ]
+            },
+            [
+              {
+                "Say response:with:": [
+                  "can only remove what's worn",
+                  "{We:|capitalize!} aren't wearing {those:.noun}!"
+                ]
+              },
+              {
+                "Set:from:": [
+                  {
+                    "Variable:dot:": [
+                      "event",
+                      {
+                        "AtField:": "cancel"
+                      }
+                    ]
+                  },
+                  {
+                    "FromBool:": true
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]
