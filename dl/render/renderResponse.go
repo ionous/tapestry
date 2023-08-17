@@ -55,7 +55,7 @@ func (op *RenderResponse) getResponse(run rt.Runtime) (ret g.Value, err error) {
 	} else if op.Text == nil {
 		// todo: once warnings are implemented instead of errors
 		// this could return the response name instead.
-		err = errutil.Fmt("unknown response %q and no fallback specified", name)
+		err = errutil.Fmt("%w and no fallback specified", g.UnknownResponse(name))
 	} else {
 		ret, err = op.getLocalText(run)
 	}

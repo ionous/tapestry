@@ -76,7 +76,7 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to import something other than a flow")
 				} else if _, ok := flow.GetFlow().(*assign.CallPattern); !ok {
-					err = errutil.Fmt("trying to import something other than a response")
+					err = errutil.Fmt("trying to import something other unexpected")
 				} else {
 					// k.WriteEphemera(ImportCall(op))
 				}
@@ -88,7 +88,7 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to import something other than a flow")
 				} else if op, ok := flow.GetFlow().(*grammar.Action); !ok {
-					err = errutil.Fmt("trying to import something other than append action")
+					err = errutil.Fmt("trying to import something other unexpected")
 				} else {
 					err = importAction(cat, op)
 				}
@@ -102,6 +102,20 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 						err = jsn.Missing
 					} else if tgt, ok := slat.(PreImport); ok {
 						if rep, e := tgt.PreImport(cat); e != nil {
+							err = errutil.New(e, "failed to create replacement")
+						} else if rep != nil && !slot.SetSlot(rep) {
+							err = errutil.Fmt("failed to set slot %T with replacement %T", slot, rep)
+						}
+					}
+				}
+				return
+			},
+			chart.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
+				if slot, ok := b.(jsn.SlotBlock); ok {
+					if slat, ok := slot.GetSlot(); !ok {
+						err = jsn.Missing
+					} else if tgt, ok := slat.(PostImport); ok {
+						if rep, e := tgt.PostImport(cat); e != nil {
 							err = errutil.New(e, "failed to create replacement")
 						} else if rep != nil && !slot.SetSlot(rep) {
 							err = errutil.Fmt("failed to set slot %T with replacement %T", slot, rep)

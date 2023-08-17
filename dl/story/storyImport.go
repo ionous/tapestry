@@ -160,7 +160,7 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 			case *assign.FromText:
 				switch text := wrapper.Value.(type) {
 				case *literal.TextValue:
-					value, err = convertText(text.Value)
+					value, err = convertTextAssignment(text.Value)
 				}
 			}
 			if err == nil {

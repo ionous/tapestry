@@ -136,7 +136,10 @@
           "--": "Generate text in a replaceable manner.",
           "Spec:slots:groups:with flow:": [
             "render_response",
-            ["execute", "text_eval"],
+            [
+              "execute",
+              "text_eval"
+            ],
             "internal",
             {
               "Flow uses:": [
@@ -148,9 +151,10 @@
                   ]
                 },
                 {
-                  "Term:type:": [
+                  "Term:type:optional:": [
                     "text",
-                    "text_eval"
+                    "text_eval",
+                    true
                   ]
                 }
               ]

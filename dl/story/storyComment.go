@@ -16,7 +16,7 @@ func (*Comment) Weave(*weave.Catalog) (_ error) {
 }
 
 // PreImport turns a comment statement into a debug log.
-func (op *Comment) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+func (op *Comment) PreImport(cat *weave.Catalog) (ret any, err error) {
 	if cat.Env.Inc(activityDepth, 0) == 0 {
 		ret = op
 	} else {

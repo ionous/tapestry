@@ -422,7 +422,7 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 // RenderResponse Generate text in a replaceable manner.
 type RenderResponse struct {
 	Name   string      `if:"label=_,type=text"`
-	Text   rt.TextEval `if:"label=text"`
+	Text   rt.TextEval `if:"label=text,optional"`
 	Markup map[string]any
 }
 
@@ -521,7 +521,7 @@ func RenderResponse_Marshal(m jsn.Marshaler, val *RenderResponse) (err error) {
 		}
 		e1 := m.MarshalKey("text", RenderResponse_Field_Text)
 		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Text)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Text)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RenderResponse_Field_Text))
@@ -666,6 +666,8 @@ var Signatures = map[uint64]interface{}{
 	7883271647282708009:  (*RenderRef)(nil),      /* render_eval=RenderRef:dot: */
 	239223853229152058:   (*RenderRef)(nil),      /* text_eval=RenderRef:dot: */
 	3872622981826050135:  (*RenderRef)(nil),      /* text_list_eval=RenderRef:dot: */
+	15658359855727638606: (*RenderResponse)(nil), /* execute=RenderResponse: */
+	6351613444865908923:  (*RenderResponse)(nil), /* text_eval=RenderResponse: */
 	167592851841791829:   (*RenderResponse)(nil), /* execute=RenderResponse:text: */
 	10415880721138830946: (*RenderResponse)(nil), /* text_eval=RenderResponse:text: */
 	7608693554121607902:  (*RenderValue)(nil),    /* render_eval=RenderValue: */

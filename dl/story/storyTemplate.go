@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
@@ -16,21 +17,35 @@ import (
 )
 
 // transform SayTemplate into a RenderResponse
-func (op *SayTemplate) PreImport(cat *weave.Catalog) (interface{}, error) {
+func (op *SayTemplate) PreImport(cat *weave.Catalog) (any, error) {
 	return convertTemplate("", op.Template.Str)
 }
 
 // transform SayResponse into a RenderResponse
-func (op *SayResponse) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
-	fields := mdl.NewFieldBuilder(kindsOf.Response.String())
-	fields.AddField(mdl.FieldInfo{Name: op.Name, Affinity: affine.Text, Init: &assign.FromText{Value: op.Text}})
-
-	if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-		return w.Pin().AddFields(fields.Fields)
-	}); e != nil {
-		err = e
+// ( post import so it happens after any transforms in its evals have been processed )
+func (op *SayResponse) PostImport(cat *weave.Catalog) (ret any, err error) {
+	// render by lookup if there's no text
+	if name := lang.Normalize(op.Name); op.Text == nil {
+		ret = &render.RenderResponse{Name: name}
 	} else {
-		ret = &render.RenderResponse{Name: op.Name, Text: op.Text}
+		if txt, e := convertEval(op.Text); e != nil {
+			err = e
+		} else if len(name) == 0 {
+			// no name? render by value
+			ret = &render.RenderResponse{Text: txt}
+		} else {
+			// otherwise store the value
+			fields := mdl.NewFieldBuilder(kindsOf.Response.String())
+			fields.AddField(mdl.FieldInfo{Name: name, Affinity: affine.Text, Init: &assign.FromText{Value: txt}})
+			if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+				return w.Pin().AddFields(fields.Fields)
+			}); e != nil {
+				err = e
+			} else {
+				// and render by lookup if we stored the text
+				ret = &render.RenderResponse{Name: name}
+			}
+		}
 	}
 	return
 }
@@ -48,12 +63,30 @@ func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) 
 	return
 }
 
+func convertEval(txt rt.TextEval) (ret rt.TextEval, err error) {
+	if lit, ok := txt.(*literal.TextValue); !ok || len(lit.Kind) > 0 {
+		ret = txt
+	} else {
+		ret, err = convertText(lit.Value)
+	}
+	return
+}
+
+func convertTextAssignment(str string) (ret assign.Assignment, err error) {
+	if txt, e := convertText(str); e != nil {
+		err = e
+	} else {
+		ret = &assign.FromText{Value: txt}
+	}
+	return
+}
+
 // returns a string or a FromText assignment as a slice of bytes
-func convertText(str string) (ret assign.Assignment, err error) {
+func convertText(str string) (ret rt.TextEval, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {
-		ret = &assign.FromText{Value: &literal.TextValue{Value: str}}
+		ret = &literal.TextValue{Value: str}
 	} else {
 		if got, e := express.Convert(xs); e != nil {
 			err = errutil.New(e, xs)
@@ -63,7 +96,7 @@ func convertText(str string) (ret assign.Assignment, err error) {
 			// exposing / sharing unpackPatternArg
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
-			ret = &assign.FromText{Value: eval}
+			ret = eval
 		}
 	}
 	return

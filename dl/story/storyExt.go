@@ -8,10 +8,16 @@ import (
 
 // these commands are transformed into other commands at import time.
 // fix: replace stubs with custom decoder states?
+// ( difficult because the generic handler works at the slot level not the block content level;
+//  at the block level it would need to somehow stuff into the parent slot to do replacement )
 
 // PreImport happens at the opening of a json block and it can transform the value into something completely new.
 type PreImport interface {
-	PreImport(*weave.Catalog) (interface{}, error)
+	PreImport(*weave.Catalog) (any, error)
+}
+
+type PostImport interface {
+	PostImport(*weave.Catalog) (any, error)
 }
 
 var _ PreImport = (*CountOf)(nil)
@@ -50,7 +56,7 @@ func (*SayTemplate) Execute(rt.Runtime) error {
 }
 
 // the import step transforms say response into a render.RenderResponse
-var _ PreImport = (*SayResponse)(nil)
+var _ PostImport = (*SayResponse)(nil)
 
 func (*SayResponse) GetText(rt.Runtime) (g.Value, error) {
 	panic("unexpected use of story method")
