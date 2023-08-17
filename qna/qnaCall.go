@@ -85,6 +85,37 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	return
 }
 
+func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (ret g.Value, err error) {
+	name := kind.Name()
+	if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
+		err = e
+	} else {
+		res := pattern.NewResults(rec, labels.Strings(), aff)
+		oldScope := run.replaceScope(res)
+		run.currentPatterns.startedPattern(name)
+		if e := kind.recordInit(run, rec); e != nil {
+			err = e
+		} else if rules, e := run.GetRules(name, ""); e != nil {
+			err = e
+		} else if e := res.ApplyRules(run, rules); e != nil {
+			err = e
+		} else if v, e := res.GetResult(); e != nil {
+			err = e
+		} else {
+			// warning: in order to generate appropriate defaults ( ex. a record of the right type )
+			// while still informing the caller of lack of pattern decision in a concise manner
+			// can return both a valid value and an error
+			ret = v
+			if !res.ComputedResult() {
+				err = errutil.Fmt("%w computing %s", rt.NoResult, aff)
+			}
+		}
+		run.currentPatterns.stoppedPattern(name)
+		run.restoreScope(oldScope)
+	}
+	return
+}
+
 // creates a new record for an event phase:
 // copies any matching values from the previous phase, and initialize the rest.
 // just like call, replaces the scope so init can see all of the parameters and locals
@@ -128,6 +159,7 @@ func (run *Runner) newPhase(k cachedKind, src *g.Record) (ret *g.Record, err err
 	return
 }
 
+// trigger a patter for each of the targets in the passed chain.
 // return true if all done ( canceled )
 func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retDone bool, err error) {
 	var stopPropogation bool // stopPropogation -- finish the current event level, and no more.
@@ -171,54 +203,6 @@ func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retD
 					}
 				}
 			}
-		}
-	}
-	return
-}
-
-func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (ret g.Value, err error) {
-	name := kind.Name()
-	if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
-		err = e
-	} else {
-		res := pattern.NewResults(rec, labels.Strings(), aff)
-		oldScope := run.replaceScope(res)
-		run.currentPatterns.startedPattern(name)
-		if e := kind.recordInit(run, rec); e != nil {
-			err = e
-		} else if rules, e := run.GetRules(name, ""); e != nil {
-			err = e
-		} else if e := res.ApplyRules(run, rules); e != nil {
-			err = e
-		} else if v, e := res.GetResult(); e != nil {
-			err = e
-		} else {
-			// warning: in order to generate appropriate defaults ( ex. a record of the right type )
-			// while still informing the caller of lack of pattern decision in a concise manner
-			// can return both a valid value and an error
-			ret = v
-			if !res.ComputedResult() {
-				err = errutil.Fmt("%w computing %s", rt.NoResult, aff)
-			}
-		}
-		run.currentPatterns.stoppedPattern(name)
-		run.restoreScope(oldScope)
-	}
-	return
-}
-
-func (rs *ruleSet) applyRule(run rt.Runtime, i int) (done bool, err error) {
-	rule := rs.rules[i]
-	if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
-		err = e
-	} else if ok.Bool() && !rs.skipRun {
-		if e := safe.RunAll(run, rule.Execute); e != nil {
-			err = e
-		} else if rule.Terminates {
-			if !rs.updateAll {
-				done = true
-			}
-			rs.skipRun = true
 		}
 	}
 	return

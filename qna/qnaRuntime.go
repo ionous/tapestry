@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -45,6 +46,13 @@ type Runner struct {
 	currentPatterns
 }
 
+func (run *Runner) reportError(e error) error {
+	log.Println(e) // fix? now what?
+	return e
+}
+
+// used by the parser to determine if a noun in a scope has a given name
+// tbd: can this be refactored so that play time can ask it directly?
 func (run *Runner) NounIsNamed(noun, name string) (bool, error) {
 	return run.query.NounIsNamed(noun, name)
 }
@@ -55,6 +63,17 @@ func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 	} else {
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
 		ret = prev
+	}
+	return
+}
+
+// return the runtime rules matching the passed pattern and target
+func (run *Runner) GetRules(pattern, target string) (ret []rt.Rule, err error) {
+	pat, tgt := lang.Normalize(pattern), lang.Normalize(target) // FIX: caller normalization would be best.
+	if rs, e := run.getRules(pat, tgt); e != nil {
+		err = e
+	} else {
+		ret = rs.rules
 	}
 	return
 }
@@ -97,24 +116,6 @@ func (run *Runner) OppositeOf(word string) (ret string) {
 		ret = word
 	}
 	return
-}
-
-// the last value is the results; blank if need be
-func (run *Runner) getPatternLabels(pat string) (ret []string, err error) {
-	if c, e := run.values.cache(func() (ret any, err error) {
-		ret, err = run.query.PatternLabels(pat)
-		return
-	}, "PatternLabels", pat); e != nil {
-		err = run.reportError(e)
-	} else {
-		ret = c.([]string)
-	}
-	return
-}
-
-func (run *Runner) reportError(e error) error {
-	log.Println(e) // fix? now what?
-	return e
 }
 
 // doesnt reformat the names.

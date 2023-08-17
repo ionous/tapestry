@@ -1,27 +1,33 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-// return the runtime rules matching the passed pattern and target
-func (run *Runner) GetRules(pattern, target string) (ret []rt.Rule, err error) {
-	pat, tgt := lang.Normalize(pattern), lang.Normalize(target) // FIX: caller normalization would be best.
-	if rs, e := run.getRules(pat, tgt); e != nil {
-		err = e
-	} else {
-		ret = rs.rules
-	}
-	return
-}
 
 // stored in Runner.cache
 type ruleSet struct {
 	rules     []rt.Rule
 	updateAll bool
 	skipRun   bool
+}
+
+func (rs *ruleSet) applyRule(run rt.Runtime, i int) (done bool, err error) {
+	rule := rs.rules[i]
+	if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
+		err = e
+	} else if ok.Bool() && !rs.skipRun {
+		if e := safe.RunAll(run, rule.Execute); e != nil {
+			err = e
+		} else if rule.Terminates {
+			if !rs.updateAll {
+				done = true
+			}
+			rs.skipRun = true
+		}
+	}
+	return
 }
 
 // get the rules from the cache, or build them and add them to the cache
