@@ -216,16 +216,13 @@ type Rules struct {
 	PatternName string
 	Target      string
 	Filter      rt.BoolEval
-	When        Timing
 	Exe         []rt.Execute
-	Touch       Always
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
 		kb := mdl.NewPatternBuilder(op.PatternName)
-		flags := toTiming(op.When, op.Touch)
-		kb.AddRule(op.Target, op.Filter, flags, op.Exe)
+		kb.AddRule(op.Target, op.Filter, false, op.Exe)
 		return w.Pin().ExtendPattern(kb.Pattern)
 	})
 }

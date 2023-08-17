@@ -25,7 +25,7 @@ func (PanicRuntime) GetField(target, field string) (g.Value, error) {
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetRules(pattern, target string, pflags *rt.Flags) ([]rt.Rule, error) {
+func (PanicRuntime) GetRules(pattern, target string) ([]rt.Rule, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) OppositeOf(string) string {

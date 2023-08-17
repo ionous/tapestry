@@ -37,7 +37,6 @@ func (p *Pattern) Parent() string {
 type rule struct {
 	target string
 	filter rt.BoolEval
-	flags  EventTiming
 	prog   []rt.Execute
 	appends,
 	updates,
@@ -89,19 +88,18 @@ func (b *PatternBuilder) AddParam(fn FieldInfo) {
 
 // defers execution; so no return value.
 // expects target class name to be normalized.
-func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags EventTiming, prog []rt.Execute) {
+func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, updates bool, prog []rt.Execute) {
 	b.rules = append(b.rules, rule{
-		target: target,
-		filter: filter,
-		flags:  flags,
-		prog:   prog,
+		target:  target,
+		filter:  filter,
+		updates: updates,
+		prog:    prog,
 	})
 }
 
 func (b *PatternBuilder) AddNewRule(name string, appends, updates, terminates bool, prog []rt.Execute) {
 	b.rules = append(b.rules, rule{
 		// fix: name,
-		flags:      2,
 		appends:    appends,
 		updates:    updates,
 		terminates: terminates,
@@ -135,8 +133,7 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 						err = e
 						break
 					} else {
-						flags := fromTiming(rule.flags)
-						if e := pen.addRule(kid, tgt, flags, rule.appends, rule.updates, rule.terminates, filter, prog); e != nil {
+						if e := pen.addRule(kid, tgt, 0, rule.appends, rule.updates, rule.terminates, filter, prog); e != nil {
 							err = e
 							break
 						}
@@ -146,27 +143,4 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 		}
 	}
 	return
-}
-
-func fromTiming(timing EventTiming) int {
-	var part int
-	always := timing&RunAlways != 0
-	if always {
-		timing ^= RunAlways
-	}
-	switch timing {
-	case Before:
-		part = 0
-	case During:
-		part = 1
-	case After:
-		part = 2
-	case Later:
-		part = 3
-	}
-	flags := part + int(rt.FirstPhase)
-	if always {
-		flags = -flags // marker for rules that need to always run (ex. counters "every third try" )
-	}
-	return flags
 }

@@ -6,6 +6,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 )
 
+// fix? could we instead just strstr for countOf
+// also might be cool to augment or replace the serialized type
+// with our own that has an pre-calced field ( at import, via state parser )
 func SearchForCounters(i jsn.Marshalee) (okay bool) {
 	if ok, e := searchForType(i, core.CallTrigger_Type); e != nil && e != jsn.Missing {
 		panic(e)

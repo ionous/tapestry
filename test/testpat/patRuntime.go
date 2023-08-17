@@ -36,13 +36,12 @@ func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals [
 	} else if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
 		err = e
 	} else {
-		var allFlags rt.Flags
 		res := pattern.NewResults(rec, labels.Strings(), aff)
 		oldScope := run.Stack.ReplaceScope(res)
 		// ignores the initialization of locals during testing...
-		if rules, e := run.GetRules(rec.Kind().Name(), "", &allFlags); e != nil {
+		if rules, e := run.GetRules(rec.Kind().Name(), ""); e != nil {
 			err = e
-		} else if e := res.ApplyRules(run, rules, allFlags); e != nil {
+		} else if e := res.ApplyRules(run, rules); e != nil {
 			err = e
 		} else {
 			ret, err = res.GetResult()

@@ -2,12 +2,10 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
-	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"github.com/ionous/errutil"
 )
 
@@ -28,40 +26,27 @@ func (run *Runner) Send(rec *g.Record, up []string) (ret g.Value, err error) {
 		} else if e := cached.recordInit(run, rec); e != nil {
 			err = e
 		} else {
-			// fix: nobody is using "current_noun" currently... so what does that say?
-			// ( and what type should the current noun be here? )
-			currentNoun := scope.NewSingleValue("current_noun", g.Empty)
-			run.PushScope(currentNoun)
 			// note: the scope has to be established before BuildPath gets called
 			// ( suspiciously like initialize value )
-			var flags rt.Flags
-			if rules, e := BuildPath(run, name, up, &flags); e != nil {
+			if rules, e := BuildPath(run, name, up); e != nil {
 				err = e
 			} else {
-			AllPhases:
-				for i, cnt := 0, len(rules); okay && i < cnt && flags != 0; i++ {
-					if phase := rt.Flags(1 << i); phase&flags != 0 {
-						for _, el := range rules[i] {
-							currentNoun.SetValue(g.StringFrom(el.Noun, el.Kind))
-							// fix? would it make more sense to return the result here?
-							// possibly as a pointer so that we can check "has result"
-							if next, e := res.ApplyRule(run, el.Rule, flags); e != nil {
-								err = errutil.New(e, "applying phase", phase)
-								break AllPhases
-							} else if flags = next; flags&phase == 0 {
-								break // we're done with this phase.
-							}
-						}
-						if ok, e := res.GetContinuation(); e != nil {
-							err = errutil.New(e, "resulting from phase", phase)
-						} else if !ok {
-							okay = false
-							break
-						}
+				var skip bool
+				for _, el := range rules {
+					if next, e := res.ApplyRule(run, el.Rule, skip); e != nil {
+						err = errutil.New(e, "applying phase")
+						break
+					} else {
+						skip = next
 					}
 				}
+				if ok, e := res.GetContinuation(); e != nil {
+					err = errutil.New(e, "resulting from phase")
+				} else if !ok {
+					okay = false
+				}
 			}
-			run.PopScope()
+
 		}
 		run.restoreScope(oldScope)
 	}

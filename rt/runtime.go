@@ -27,7 +27,7 @@ type Runtime interface {
 	// GetKindByName  -record manipulation.
 	GetKindByName(name string) (*g.Kind, error)
 	// GetRules - return the runtime rules matching the passed pattern and target.
-	GetRules(pattern, target string, pflags *Flags) ([]Rule, error)
+	GetRules(pattern, target string) ([]Rule, error)
 	// Call - run the pattern defined by the passed record.
 	// passes the expected return because patterns can be called in ambiguous context ( ex. template expressions )
 	Call(name string, expectedReturn affine.Affinity, keys []string, vals []g.Value) (g.Value, error)

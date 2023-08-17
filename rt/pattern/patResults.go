@@ -16,7 +16,6 @@ type Results struct {
 	expectedAff affine.Affinity // the type of the result
 	resultCount int             // number of times the result field was written to
 	currRules   int             // number of rules that were run
-	currFlags   rt.Flags        // which phases have run, still have to run?
 }
 
 // fix. itd be nice to remove expectedAff if possible. ( need to fx HackTillTemplatesCanEvaluatePatternTypes i think )
@@ -92,7 +91,6 @@ func (rw *Results) ComputedResult() bool {
 func (rw *Results) reset() {
 	rw.resultCount = 0
 	rw.currRules = 0
-	rw.currFlags = 0
 }
 
 // GetResult returns a default value if none was computed.
@@ -101,9 +99,7 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 	if len(field) == 0 {
 		// no result field, but we still might be checking for whether it had any matching rules.
 		if aff == affine.Bool {
-			// should it be any rule? just the infix rule?
-			// probably always using a return flag would be best.
-			ret = g.BoolOf(rw.currFlags&rt.Infix != 0)
+			ret = g.BoolOf(rw.ComputedResult())
 		} else if len(aff) != 0 {
 			err = errutil.Fmt("%w; caller expected %s", rt.NoResult, aff)
 		}
@@ -131,62 +127,33 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 }
 
 // ApplyRules - note: assumes whatever scope is needed to run the pattern has already been setup.
-func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, flags rt.Flags) (err error) {
+func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule) (err error) {
+	var skip bool
 	for _, rule := range rules {
 		// end if there are no flags left, and we didn't want to filter everything.
-		if next, e := rw.ApplyRule(run, rule, flags); e != nil || (next == 0 && flags&rt.Filter == 0) {
-			err = e
+		if skip, err = rw.ApplyRule(run, rule, skip); err != nil {
 			break
-		} else {
-			flags = next | (flags & rt.Filter) // if filter was set, keep it set.
 		}
 	}
 	return
 }
 
 // ApplyRule - assumes whatever scope is needed to run the pattern has already been setup.
-// returns remaining flags.
-func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret rt.Flags, err error) {
+// skip controls whether the rules should be executed or whether the filters need updating.
+func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, skip bool) (_ bool, err error) {
 	resultCount := rw.resultCount // check if rule changes this.
-	if ranFlag, e := ApplyRule(run, rule, flags); e != nil {
-		err = errutil.New(e, "while applying", rule.Name)
-	} else {
-		var didSomething bool
-		if ranFlag != 0 {
-			rw.currRules++
-			rw.currFlags |= ranFlag
-			// did the rule return a value ( or did it run and doesn't expect an explicit return )
-			didSomething = len(rw.resultField) == 0 || rw.resultCount > resultCount
-		}
-		//
-		if !didSomething {
-			ret = flags // no? keep trying rules of this type.
-		} else if ranFlag == rt.Infix {
-			// for prefix and postfix rules, we are completely done: return 0.
-			// for infix rules, just stop running infix type
-			ret = flags &^ ranFlag
-		}
-	}
-	return
-}
-
-// return the flags of the rule if it ran; even if it didnt return anything.
-func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
-	// get the rule's flags and see whether we should run the rule
-	// rt.Filter is a flag for filters that need to always evalute (ex. counters)
-	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) {
-		// actually run the filter:
+	if rule.Updates || !skip {
 		if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 			err = e
-		} else if ok.Bool() && allow&flags != 0 { // check whether the filter succeeded and whether the rule is actually supposed to run.
+		} else if ok.Bool() && !skip {
 			if e := safe.RunAll(run, rule.Execute); e != nil {
 				err = e
 			} else {
-				// don't let the "run always" filter flag show through
-				// only let through if we actually executed something.
-				ret = flags & ^rt.Filter
+				rw.currRules++
+				// did the rule return a value ( or did it run and doesn't expect an explicit return )
+				skip = len(rw.resultField) == 0 || rw.resultCount > resultCount
 			}
 		}
 	}
-	return
+	return skip, err
 }

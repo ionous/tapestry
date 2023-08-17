@@ -3,7 +3,6 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -33,7 +32,7 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
 				err = e
 			} else {
-				/**/ pb.AddRule("", &core.Always{}, 2, op.MacroStatements)
+				/**/ pb.AddRule("", nil, false, op.MacroStatements)
 				if e := w.Pin().AddPattern(pb.Pattern); e != nil {
 					err = e
 				}

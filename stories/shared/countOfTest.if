@@ -92,7 +92,7 @@
             "Repeating across:as:do:": [
               {
                 "FromNumList:": {
-                  "Range:": 6
+                  "Range:": 7
                 }
               },
               "i",

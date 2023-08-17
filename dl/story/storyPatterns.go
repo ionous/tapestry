@@ -35,7 +35,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 				err = e
 			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
 				err = e
-			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
+			} else if e := addRules(pb, "", op.Rules); e != nil {
 				err = e
 			} else if e := cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
@@ -64,7 +64,7 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 			pb := mdl.NewPatternBuilder(name)
 			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
 				err = e
-			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
+			} else if e := addRules(pb, "", op.Rules); e != nil {
 				err = e
 			} else {
 				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
@@ -350,69 +350,27 @@ Out:
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags mdl.EventTiming) (err error) {
+func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
-		if e := els[i].addRule(pb, target, flags); e != nil {
+		if e := els[i].addRule(pb, target); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
-func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags mdl.EventTiming) (err error) {
+func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string) (err error) {
 	act := op.Exe
-	if flags, e := op.Flags.ReadFlags(); e != nil {
-		err = e
-	} else if flags > 0 && tgtFlags > 0 {
-		// ensure flags were only set via the rule or via the pattern
-		err = errutil.New("unexpected continuation flags", pb.Name())
+	// check if this rule is declared inside a specific domain
+	if guard, ok := op.Guard.(jsn.Marshalee); !ok {
+		err = errutil.New("missing guard", pb.Name())
 	} else {
-		if tgtFlags > 0 {
-			flags = tgtFlags
-		} else if flags == 0 {
-			flags = mdl.During
-		}
-
-		// check if this rule is declared inside a specific domain
-		if guard, ok := op.Guard.(jsn.Marshalee); !ok {
-			err = errutil.New("missing guard", pb.Name())
-		} else {
-			// fix? could we instead just strstr for countOf
-			// also might be cool to augment or replace the serialized type
-			// with our own that has an pre-calced field ( at import, via state parser )
-			if SearchForCounters(guard) {
-				flags |= mdl.RunAlways
-			}
-			// fix via runtime? check if this rule is declared inside a specific domain
-			// if domain != k.Env().Game.Domain {
-			// 	guard = &core.AllTrue{[]rt.BoolEval{
-			// 		&core.HasDominion{domain.String()},
-			// 		guard,
-			// 	}}
-			pb.AddRule(target, op.Guard, flags, act)
-
-		}
+		update := SearchForCounters(guard)
+		pb.AddRule(target, op.Guard, update, act)
 	}
 	return
 }
-
-func (op *PatternFlags) ReadFlags() (ret mdl.EventTiming, err error) {
-	switch str := op.Str; str {
-	case PatternFlags_Before:
-		ret = mdl.After // run other matching patterns, and then run this pattern. other...this.
-	case PatternFlags_After:
-		ret = mdl.Before // keep going after running the current pattern. this...others.
-	case PatternFlags_Terminate:
-		ret = mdl.During
-	default:
-		if len(str) > 0 {
-			err = errutil.Fmt("unknown pattern flags %q", str)
-		}
-	}
-	return
-}
-
 func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) (_ error) {
 	if field != nil {
 		var empty mdl.FieldInfo // the Nothing type generates a blank field info
@@ -436,10 +394,10 @@ func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinitio
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags mdl.EventTiming) (err error) {
+func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
-		if e := els[i].addRule(pb, target, flags); e != nil {
+		if e := els[i].addRule(pb, target); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

@@ -7,14 +7,11 @@ import (
 )
 
 // return the runtime rules matching the passed pattern and target
-func (run *Runner) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
+func (run *Runner) GetRules(pattern, target string) (ret []rt.Rule, err error) {
 	pat, tgt := lang.Normalize(pattern), lang.Normalize(target) // FIX: caller normalization would be best.
 	if rs, e := run.getRules(pat, tgt); e != nil {
 		err = e
 	} else {
-		if pflags != nil {
-			*pflags = rs.flags
-		}
 		ret = rs.rules
 	}
 	return
@@ -23,7 +20,6 @@ func (run *Runner) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 // stored in Runner.cache
 type ruleSet struct {
 	rules     []rt.Rule
-	flags     rt.Flags // sum of flags of each rule
 	updateAll bool
 	skipRun   bool
 }
@@ -46,7 +42,6 @@ func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
 		err = e
 	} else {
 		var rules []rt.Rule
-		var sum rt.Flags
 		var updateAll bool
 		for _, el := range els {
 			if filter, e := run.decode.DecodeFilter(el.Filter); e != nil {
@@ -54,21 +49,18 @@ func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
 			} else if prog, e := run.decode.DecodeProg(el.Prog); e != nil {
 				err = errutil.Append(err, errutil.New("decoding prog", pat, tgt, el.Id, e))
 			} else {
-				flags := rt.MakeFlags(rt.Phase(el.Phase))
 				rules = append(rules, rt.Rule{
 					Name:       el.Id,
 					Filter:     filter,
 					Execute:    prog,
-					RawFlags:   float64(flags),
 					Updates:    el.Updates,
 					Terminates: el.Terminates,
 				})
-				sum |= flags
 				updateAll = updateAll || el.Updates
 			}
 		}
 		if err == nil {
-			ret = ruleSet{rules: rules, flags: sum, updateAll: updateAll}
+			ret = ruleSet{rules: rules, updateAll: updateAll}
 		}
 	}
 	return

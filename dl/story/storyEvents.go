@@ -26,11 +26,9 @@ func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 			for _, h := range op.Handlers {
 				// each handler references a pattern
 				pb := mdl.NewPatternBuilder(h.Event.String())
-				if flags, e := h.EventPhase.ReadFlags(); e != nil {
+				if e := addFields(pb, mdl.PatternLocals, h.Locals); e != nil {
 					err = errutil.Append(e)
-				} else if e := addFields(pb, mdl.PatternLocals, h.Locals); e != nil {
-					err = errutil.Append(e)
-				} else if e := addRules(pb, tgt, h.Rules, flags); e != nil {
+				} else if e := addRules(pb, tgt, h.Rules); e != nil {
 					err = errutil.Append(e)
 				} else if e := pen.ExtendPattern(pb.Pattern); e != nil {
 					err = errutil.Append(e)
@@ -39,20 +37,4 @@ func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 		}
 		return
 	})
-}
-
-func (op *EventPhase) ReadFlags() (ret mdl.EventTiming, err error) {
-	switch str := op.Str; str {
-	case EventPhase_Before:
-		ret = mdl.Before
-	case EventPhase_While:
-		ret = mdl.During
-	case EventPhase_After:
-		ret = mdl.After
-	default:
-		if len(str) > 0 {
-			err = errutil.Fmt("unknown event flags %q", str)
-		}
-	}
-	return
 }

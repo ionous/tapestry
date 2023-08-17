@@ -181,15 +181,14 @@ func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (re
 	if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
 		err = e
 	} else {
-		var flags rt.Flags
 		res := pattern.NewResults(rec, labels.Strings(), aff)
 		oldScope := run.replaceScope(res)
 		run.currentPatterns.startedPattern(name)
 		if e := kind.recordInit(run, rec); e != nil {
 			err = e
-		} else if rules, e := run.GetRules(name, "", &flags); e != nil {
+		} else if rules, e := run.GetRules(name, ""); e != nil {
 			err = e
-		} else if e := res.ApplyRules(run, rules, flags); e != nil {
+		} else if e := res.ApplyRules(run, rules); e != nil {
 			err = e
 		} else if v, e := res.GetResult(); e != nil {
 			err = e
