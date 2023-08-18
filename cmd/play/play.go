@@ -23,6 +23,8 @@ func main() {
 	if !debugging {
 		log.SetOutput(io.Discard)
 	}
+	opt := qna.NewOptions()
+	opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
 
 	if cnt, e := play.PlayGame(inFile, testString, domain, json); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })

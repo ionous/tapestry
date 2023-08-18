@@ -166,7 +166,7 @@ func (dt *TestWeave) ReadRelations() ([]string, error) {
 	return mdl.ReadRelations(dt.db)
 }
 
-// domain, pattern, target, phase, filter, prog
+// domain, pattern, target, rank, filter, prog
 func (dt *TestWeave) ReadRules() ([]string, error) {
 	return mdl.ReadRules(dt.db)
 }

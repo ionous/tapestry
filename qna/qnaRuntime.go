@@ -239,17 +239,18 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			err = errutil.Fmt("GetField: unknown target %q (with field %q)", target, rawField)
 			// not one of the predefined options?
 		case meta.Response:
-			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
-			if flag, e := run.options.Option(meta.PrintResponseNames.String()); e != nil {
+			if flag, e := run.options.Option(meta.PrintResponseNames); e != nil {
 				err = e
 			} else if flag.Affinity() == affine.Bool && flag.Bool() {
-				ret = g.StringOf(field)
+				// fix? hen response are printed inline, they get munged together
+				// manually add some spacing.
+				ret = g.StringOf(field + ". ")
 			} else if k, e := run.getKind(kindsOf.Response.String()); e != nil {
 				err = errutil.New("couldnt find response table", e)
 			} else if len(k.init) == 0 {
 				err = errutil.New("response table was empty")
 			} else if i := k.FieldIndex(field); i < 0 {
-				// ^ fix: this is a slow, in order search; probably should have a hash for responses
+				// ^ fix: this is an in-order search; have a custom cached lookup for responses?
 				err = g.UnknownResponse(rawField)
 			} else {
 				ret, err = k.init[i].GetAssignedValue(run)
@@ -308,7 +309,8 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		// custom options
 		case meta.Option:
 			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
-			if t, e := run.options.Option(rawField); e != nil {
+			// fix? specify those strings as their lang.Normalized versions using -linecomment?
+			if t, e := run.options.OptionByName(rawField); e != nil {
 				err = run.reportError(e)
 			} else {
 				ret = t

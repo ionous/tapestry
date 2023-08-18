@@ -5,18 +5,33 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/qna"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"github.com/ionous/errutil"
 )
 
 func goPlay(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if cnt, e := play.PlayGame(playFlags.inFile, playFlags.testString, playFlags.scene, playFlags.json); e != nil {
-		errutil.PrintErrors(e, func(s string) { log.Println(s) })
-		if errutil.Panic {
-			log.Panic("mismatched")
-		}
+	if lvl, e := getLogLevel(cfg.logLevel); e != nil {
+		err = e
 	} else {
-		log.Println("done", cnt, playFlags.inFile)
+		debug.LogLevel = lvl
+		opts := qna.NewOptions()
+		opts.SetOption(meta.PrintResponseNames, g.BoolOf(cfg.responses))
+		if cfg.json {
+			opts.SetOption(meta.JsonMode, g.BoolOf(true))
+		}
+
+		if cnt, e := play.PlayWithOptions(cfg.inFile, cfg.testString, cfg.scene, opts); e != nil {
+			errutil.PrintErrors(e, func(s string) { log.Println(s) })
+			if errutil.Panic {
+				log.Panic("mismatched")
+			}
+		} else {
+			log.Println("done", cnt, cfg.inFile)
+		}
 	}
 	return
 }

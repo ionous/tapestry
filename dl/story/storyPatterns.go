@@ -1,11 +1,9 @@
 package story
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/story/internal/rules"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -187,10 +185,10 @@ type ruleKind struct {
 }
 
 func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (err error) {
-	if prefix, e := findPrefix(w, lang.Normalize(pat)); e != nil {
+	if prefix, e := rules.ReadName(w, lang.Normalize(pat)); e != nil {
 		err = errutil.New("determining prefix", e)
 	} else {
-		pat, appends := prefix.name, prefix.after
+		pat, rank := prefix.Name, prefix.Rank
 		if k, e := w.GetKindByName(pat); e != nil {
 			err = errutil.New("finding base pattern", e)
 		} else {
@@ -250,10 +248,10 @@ func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (
 				Exe: exe,
 			}}
 		}
-		updates := ruleDoesUpdate(exe)
-		terminates := ruleDoesTerminate(exe)
+		updates := rules.DoesUpdate(exe)
+		terminates := /*prefix.Terminates ||*/ rules.DoesTerminate(exe)
 		pb := mdl.NewPatternBuilder(pat)
-		pb.AddNewRule(lang.Normalize(rule), appends, updates, terminates, exe)
+		pb.AddNewRule(lang.Normalize(rule), rank, updates, terminates, exe)
 		err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
 			if e := w.Pin().ExtendPattern(pb.Pattern); e != nil {
 				err = errutil.New("extending pattern", e)
@@ -262,91 +260,6 @@ func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (
 		})
 	}
 	return
-}
-
-type prefix struct {
-	name  string
-	after bool
-}
-
-// if the named kind has the passed prefix:
-// check if its an action -- if so, then the prefix pattern implicitly exists
-// so return the passed name;
-// otherwise, if its a normal pattern, then return that shortned name
-func findPrefix(w *weave.Weaver, name string) (ret prefix, err error) {
-	// if the pattern starts with the word after
-	// then see whether the pattern is an action.
-	before := strings.HasPrefix(name, event.BeforePhase.Prefix())
-	after := !before && strings.HasPrefix(name, event.AfterPhase.Prefix())
-	if !before && !after {
-		if _, e := w.Pin().GetKind(name); e != nil {
-			err = e
-		} else {
-			ret.name = name
-		}
-	} else {
-		var prefix string
-		if before {
-			prefix = event.BeforePhase.Prefix()
-		} else {
-			prefix = event.AfterPhase.Prefix()
-		}
-		short := name[len(prefix):]
-		// fix: we poll the db and once its there ask for more info
-		// if we ask for info first, qna returns "Unknown kind" --
-		// and even if it returned "missing kind" the error would get cached.
-		// option: return "Missing" from qnaKind and implement a runtime config that doest cache?
-		if _, e := w.Pin().GetKind(short); e != nil {
-			err = e
-		} else if k, e := w.GetKindByName(short); e != nil {
-			err = e
-		} else {
-			// when an event, then actually "before <name>" is valid
-			if k.Implements(kindsOf.Action.String()) {
-				ret.name = name
-			} else {
-				ret.name = short
-			}
-			ret.after = after
-		}
-	}
-	return
-}
-
-// tdb: could this be processed at load time (storyImport)
-// ( ex. flag via env when the rule opens )
-func ruleDoesUpdate(exes []rt.Execute) (okay bool) {
-	for _, exe := range exes {
-		if guard, ok := exe.(jsn.Marshalee); !ok {
-			panic("unknown type")
-		} else if SearchForCounters(guard) {
-			okay = true
-			break
-		}
-	}
-	return
-}
-
-// tdb: could this? be processed at load time (storyImport)
-func ruleDoesTerminate(exe []rt.Execute) bool {
-	var continues bool // provisionally
-Out:
-	for _, el := range exe {
-		switch el := el.(type) {
-		case *Comment, *debug.DebugLog:
-			// skip comments and debug logs
-			// todo: make a "no op" interface so other things can join in?
-		case core.Brancher:
-			for el != nil {
-				el, continues = el.Descend()
-			}
-			break Out
-		default:
-			continues = false
-			break Out
-		}
-	}
-	return !continues
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
@@ -366,11 +279,12 @@ func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string) (err error
 	if guard, ok := op.Guard.(jsn.Marshalee); !ok {
 		err = errutil.New("missing guard", pb.Name())
 	} else {
-		update := SearchForCounters(guard)
+		update := rules.SearchForCounters(guard)
 		pb.AddRule(target, op.Guard, update, act)
 	}
 	return
 }
+
 func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) (_ error) {
 	if field != nil {
 		var empty mdl.FieldInfo // the Nothing type generates a blank field info

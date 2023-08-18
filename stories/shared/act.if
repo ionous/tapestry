@@ -59,7 +59,7 @@
     {
       "--": "Print the results of the change.",
       "Rule for:named:do:": [
-        "after state changing",
+        "report state changing",
         "the player changed something",
         {
           "If:do:else:": [

@@ -110,7 +110,7 @@ func TestQueries(t *testing.T) {
 				err = e
 				t.Fatal(e)
 			} else if e := mdlRule(m,
-				// "domain", "kind", "target", "phase", "filter", "prog", "at"
+				// "domain", "kind", "target", "rank", "filter", "prog", "at"
 				// ---------------------------------------
 				domain, pattern, "" /**/, 1, "filter1", "prog1", at,
 				domain, pattern, kind, 2, "filter2", "prog2", at,
@@ -418,7 +418,7 @@ func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 7 {
 		row := els[i:]
-		domain, pattern, target, phase, filter, prog, at :=
+		domain, pattern, target, rank, filter, prog, at :=
 			row[0].(string),
 			row[1].(string),
 			row[2].(string),
@@ -426,7 +426,7 @@ func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 			row[4].(string),
 			row[5].(string),
 			row[6].(string)
-		if e := m.Pin(domain, at).AddTestRule(pattern, target, phase, filter, prog); e != nil {
+		if e := m.Pin(domain, at).AddTestRule(pattern, target, rank, filter, prog); e != nil {
 			err = e
 			break
 		}

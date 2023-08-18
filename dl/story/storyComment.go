@@ -15,6 +15,12 @@ func (*Comment) Weave(*weave.Catalog) (_ error) {
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+// since Schedule doesnt do anything, neither do we.
+func (*Comment) Execute(rt.Runtime) (_ error) {
+	return
+}
+
 // PreImport turns a comment statement into a debug log.
 func (op *Comment) PreImport(cat *weave.Catalog) (ret any, err error) {
 	if cat.Env.Inc(activityDepth, 0) == 0 {
@@ -27,11 +33,5 @@ func (op *Comment) PreImport(cat *weave.Catalog) (ret any, err error) {
 			},
 		}
 	}
-	return
-}
-
-// Execute - called by the macro runtime during weave.
-// since Schedule doesnt do anything, neither do we.
-func (*Comment) Execute(rt.Runtime) (_ error) {
 	return
 }

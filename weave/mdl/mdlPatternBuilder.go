@@ -35,10 +35,11 @@ func (p *Pattern) Parent() string {
 }
 
 type rule struct {
+	name   string
 	target string
 	filter rt.BoolEval
 	prog   []rt.Execute
-	appends,
+	rank   int
 	updates,
 	terminates bool
 }
@@ -97,10 +98,10 @@ func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, updates bool
 	})
 }
 
-func (b *PatternBuilder) AddNewRule(name string, appends, updates, terminates bool, prog []rt.Execute) {
+func (b *PatternBuilder) AddNewRule(name string, rank int, updates, terminates bool, prog []rt.Execute) {
 	b.rules = append(b.rules, rule{
-		// fix: name,
-		appends:    appends,
+		name:       name,
+		rank:       rank,
 		updates:    updates,
 		terminates: terminates,
 		prog:       prog,
@@ -132,11 +133,9 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 					} else if prog, e := marshalprog(rule.prog); e != nil {
 						err = e
 						break
-					} else {
-						if e := pen.addRule(kid, tgt, 0, rule.appends, rule.updates, rule.terminates, filter, prog); e != nil {
-							err = e
-							break
-						}
+					} else if e := pen.addRule(kid, tgt, rule.name, rule.rank, rule.updates, rule.terminates, filter, prog); e != nil {
+						err = e
+						break
 					}
 				}
 			}

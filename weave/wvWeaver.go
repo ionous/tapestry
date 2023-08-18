@@ -3,6 +3,7 @@ package weave
 import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
@@ -37,6 +38,21 @@ func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
 		} else {
 			ret = n
 		}
+	}
+	return
+}
+
+func (w *Weaver) GetKindByName(name string) (ret *g.Kind, err error) {
+	// fix: we poll the db and once its there ask for more info
+	// if we ask for info first, qna returns "Unknown kind" --
+	// and even if it returned "missing kind" the error would get cached.
+	// option: return "Missing" from qnaKind and implement a runtime config that doest cache?
+	if _, e := w.Pin().GetKind(name); e != nil {
+		err = e
+	} else if k, e := w.Runtime.GetKindByName(name); e != nil {
+		err = e
+	} else {
+		ret = k
 	}
 	return
 }

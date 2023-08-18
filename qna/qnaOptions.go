@@ -52,11 +52,15 @@ func (m *Options) SetOptionByName(name string, v g.Value) (err error) {
 }
 
 // return an existing option.
-func (m Options) Option(name string) (ret g.Value, err error) {
+func (m Options) OptionByName(name string) (ret g.Value, err error) {
 	if was, ok := m.options[name]; !ok {
 		err = errutil.New("no such option", name)
 	} else {
 		ret = was
 	}
 	return
+}
+
+func (m Options) Option(opt meta.Options) (ret g.Value, err error) {
+	return m.OptionByName(opt.String())
 }

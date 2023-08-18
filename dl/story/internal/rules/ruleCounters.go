@@ -1,4 +1,4 @@
-package story
+package rules
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"

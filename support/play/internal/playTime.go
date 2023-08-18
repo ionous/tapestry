@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"log"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/parser"
@@ -83,7 +81,7 @@ func (pt *Playtime) GetPlayerLocale() (ret parser.Bounds, err error) {
 			where = v.String()
 		}
 		if where != lastLocation {
-			log.Println("GetPlayerBounds", pt.player, pawn, where)
+			// log.Println("# GetPlayerBounds updated location ", pt.player, pawn, where)
 			lastLocation = where
 		}
 		ret = pt.locationBounded(where) // calls the bounds pattern to return nouns near to the player.

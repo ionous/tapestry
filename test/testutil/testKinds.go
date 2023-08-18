@@ -64,7 +64,7 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	} else {
 		b := ks.Builder
 		if fs, ok := b.Fields[name]; !ok {
-			err = errutil.New("unknown kind", name)
+			err = errutil.Fmt("unknown kind %q", name)
 		} else {
 			if ks.Kinds == nil {
 				ks.Kinds = make(KindMap)

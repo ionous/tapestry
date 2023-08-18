@@ -23,7 +23,6 @@ const (
 	BeforePhase Phase = iota
 	TargetPhase
 	AfterPhase
-	ReportPhase
 	//
 	NumPhases = iota
 )
@@ -82,20 +81,9 @@ const (
 	Bubbles
 )
 
-// friendly string for the phase; this isn' the same as the prefix
+// friendly string for the phase
 func (p Phase) String() (ret string) {
-	if p == TargetPhase {
-		ret = "at event"
-	} else {
-		ret = p.prefix() + "event"
-	}
-	return
-}
-
-// event phases are represented by patterns following a certain naming convention:
-// return the  string ( including separator ) used to differentiate the patterns of this phase.
-func (p Phase) Prefix() string {
-	return p.prefix()
+	return p.prefix() + "event"
 }
 
 // event phases are represented by separate patterns following a certain naming convention;
@@ -135,7 +123,7 @@ func (p Phase) prefix() string {
 	return prefixes[p]
 }
 
-var prefixes = []string{"before ", "", "after ", "report "}
+var prefixes = []string{"before ", "", "after "}
 
 func _() {
 	var assert [1]struct{}

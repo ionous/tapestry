@@ -465,7 +465,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
-			`select mu.rowid, mu.phase, mu.updates, mu.terminates, mu.filter, mu.prog
+			`select mu.rowid, mu.rank, mu.updates, mu.terminates, mu.filter, mu.prog
 			from active_domains 
 			join mdl_rule mu
 				using (domain)
@@ -476,8 +476,11 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			where mk.kind = ?1
 			and ifnull(mt.kind,'') = ?2
 			order by 
-				abs(mu.phase), 
-				(1 + (-2 * appends)) *  mu.rowid desc
+				mu.rank,
+				-- tbd: positive rank items sort first specified to last specified (asc)
+				-- zero and negative ranked items sort last specified to first specified  (desc)
+				--  mu.rowid * (case when mu.rank > 0 then 1 else -1 end)
+				mu.rowid desc
 			`,
 		),
 		// query the db for the value(s) of a given field for a given noun

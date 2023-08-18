@@ -320,7 +320,7 @@
     },
     {
       "Rule for:kind:named:do:": [
-        "after state changing",
+        "report state changing",
         "containers",
         "reveal newly visible objects",
         {
