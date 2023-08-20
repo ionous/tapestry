@@ -91,15 +91,15 @@ func (pen *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls strin
 }
 
 // public for tests:
-func (pen *Pen) AddTestRule(pattern, target string, rank int, filter, prog string) (err error) {
+func (pen *Pen) AddTestRule(pattern, target string, rank int, prog string) (err error) {
 	domain, at := pen.domain, pen.at
 	if kid, e := pen.findRequiredKind(pattern); e != nil {
 		err = e
 	} else if tgt, e := pen.findOptionalKind(target); e != nil {
 		err = e
 	} else {
-		var updates, terminates bool
-		_, err = pen.db.Exec(mdl_rule, domain, kid.id, tgt.id, rank, updates, terminates, filter, prog, at)
+		var name any = nil
+		_, err = pen.db.Exec(mdl_rule, domain, kid.id, tgt.id, name, rank, prog, at)
 	}
 	return
 }

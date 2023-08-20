@@ -47,7 +47,7 @@ var collateGroups = testpat.Pattern{
 				List: &assign.FromRecordList{Value: core.Variable("collation", "groups")},
 				As:   W("el"),
 				Exe: core.MakeActivity(
-					&core.ChooseAction{
+					&core.ChooseBranch{
 						If: &assign.CallPattern{
 							PatternName: P("match groups"),
 							Arguments: core.MakeArgs(
@@ -74,7 +74,7 @@ var collateGroups = testpat.Pattern{
 						),
 					},
 				)}, // end go-each
-			&core.ChooseAction{
+			&core.ChooseBranch{
 				// didn't find a matching group?
 				If: &core.Not{Test: core.Variable("found")},
 				// pack the object and its settings into the local 'group'

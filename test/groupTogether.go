@@ -35,7 +35,7 @@ var assignGrouping = testpat.Pattern{
 			&assign.SetValue{
 				Target: core.Variable("out", "name"),
 				Value:  &assign.FromText{Value: core.Variable("in")}},
-			&core.ChooseAction{
+			&core.ChooseBranch{
 				If: &core.Matches{
 					Text:  core.Variable("in"),
 					Match: "^thing"},

@@ -52,6 +52,8 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 
 func checkOne(qdb *qdb.Query, check query.CheckData, options qna.Options, signatures []map[uint64]interface{}, pret *int) (err error) {
 	var act rt.Execute_Slice
+	// FIX: shouldnt this be core.Decode -- look at query Decoder instead
+	// story shouldnt be needed for any runtime like stuff; only import->weave.
 	if e := story.Decode(&act, check.Prog, signatures); e != nil {
 		err = e
 	} else if expect, e := readLegacyExpectation(check); e != nil {

@@ -119,7 +119,14 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
+                  "If:assuming:do:else:": [
+
+                    {
+                      "Not:": {
+                        "Is empty:": "@response"
+                      }
+                    },
+                    { "Arg:from:": [
                     "response",
                     {
                       "FromText:": {
@@ -138,19 +145,21 @@
                           }
                         ]
                       }
-                    },
-                    {
-                      "Not:": {
-                        "Is empty:": "@response"
-                      }
-                    },
+                    }]},
                     [
                       {
                         "Print:": "@response"
                       }
                     ],
                     {
-                      "Else if:from:and:do:else:": [
+                      "If:assuming:do:else:": [
+
+                        {
+                          "Not:": {
+                            "Is empty:": "@response"
+                          }
+                        },
+                        	{ "Arg:from:": [
                         "result",
                         {
                           "FromText:": {
@@ -166,19 +175,14 @@
                               }
                             ]
                           }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@response"
-                          }
-                        },
+                        }]},
                         [
                           {
                             "Print:": "@response"
                           }
                         ],
                         {
-                          "Else do:": [
+                          "Finally do:": [
                             {
                               "ReportShowing actor:noun:otherNoun:": [
                                 {

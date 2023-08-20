@@ -1,22 +1,21 @@
 {
   "Tapestry:": [
     {
-        "Interpret:with:": [
-          [
-            "kiss",
-            "hug",
-            "embrace"
-          ],
-          [
-            {
-              "One noun:": "things"
-            },
-            {
-              "Action:": "kissing"
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "kiss",
+          "hug",
+          "embrace"
+        ],
+        [
+          {
+            "One noun:": "things"
+          },
+          {
+            "Action:": "kissing"
+          }
         ]
-      
+      ]
     },
     {
       "--": ""
@@ -57,27 +56,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "kissing"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "kissing"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -85,29 +88,33 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "kissing"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
                             {
                               "Not:": {
                                 "Is empty:": "@resp"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "resp",
+                                {
+                                  "FromText:": {
+                                    "CanUse actor:action:noun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "kissing"
+                                      },
+                                      {
+                                        "FromText:": "@noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -115,7 +122,7 @@
                               }
                             ],
                             {
-                              "Else do:": [
+                              "Finally do:": [
                                 {
                                   "Send:event:": [
                                     {

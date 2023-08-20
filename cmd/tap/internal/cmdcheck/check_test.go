@@ -19,7 +19,7 @@ func TestCheck(t *testing.T) {
 		Name:   t.Name(),
 		Expect: "hello",
 		Test: []rt.Execute{
-			&core.ChooseAction{
+			&core.ChooseBranch{
 				If: &literal.BoolValue{Value: true},
 				Exe: core.MakeActivity(&core.PrintText{
 					Text: &literal.TextValue{Value: "hello"},

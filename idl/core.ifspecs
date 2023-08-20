@@ -285,9 +285,13 @@
           ]
         },
         {
-          "--": "An if statement.",
+          "--": 
+          [ 
+          		"An if statement.",
+          		"The provided local fields are evaluated before the if test itself."
+          ],
           "Spec:slots:groups:with flow:": [
-            "choose_action",
+            "choose_branch",
             [
               "execute",
               "brancher"
@@ -305,88 +309,12 @@
                     ]
                   },
                   {
-                    "Term:name:type:repeats:": [
-                      "do",
-                      "exe",
-                      "execute",
+                    "Term:name:type:optional:repeats:": [
+                      "assuming",
+                      "args",
+                      "arg",
+                      true,
                       true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "else",
-                      "brancher",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "choose_more",
-            "brancher",
-            "misc",
-            {
-              "Flow:uses:": [
-                "else",
-                [
-                  {
-                    "Term:name:type:": [
-                      "if",
-                      "if",
-                      "bool_eval"
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                      "do",
-                      "exe",
-                      "execute",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "else",
-                      "brancher",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "choose_more_value",
-            "brancher",
-            "misc",
-            {
-              "Flow:uses:": [
-                "else",
-                [
-                  {
-                    "Term:name:type:": [
-                      "if",
-                      "assign",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "assignment"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "and",
-                      "filter",
-                      "bool_eval"
                     ]
                   },
                   {
@@ -416,8 +344,17 @@
             "misc",
             {
               "Flow:uses:": [
-                "else",
+                "finally",
                 [
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "assuming",
+                      "args",
+                      "arg",
+                      true,
+                      true
+                    ]
+                  },
                   {
                     "Term:name:type:repeats:": [
                       "do",
@@ -495,59 +432,6 @@
                       "else",
                       "false",
                       "text_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "An if statement with local assignment.",
-          "Spec:slots:groups:with flow:": [
-            "choose_value",
-            [
-              "execute",
-              "brancher"
-            ],
-            "misc",
-            {
-              "Flow:uses:": [
-                "if",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "assign",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "assignment"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "and",
-                      "filter",
-                      "bool_eval"
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                      "do",
-                      "exe",
-                      "execute",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "else",
-                      "brancher",
                       true
                     ]
                   }

@@ -1,6 +1,7 @@
 package qna
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -8,7 +9,7 @@ import (
 
 // stored in Runner.cache
 type ruleSet struct {
-	rules     []rt.Rule
+	rules     []localRule
 	updateAll bool
 	skipRun   bool
 }
@@ -18,7 +19,7 @@ func (rs *ruleSet) applyRule(run rt.Runtime, i int) (done bool, err error) {
 	if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 		err = e
 	} else if ok.Bool() && !rs.skipRun {
-		if e := safe.RunAll(run, rule.Execute); e != nil {
+		if e := safe.RunAll(run, rule.Exe); e != nil {
 			err = e
 		} else if rule.Terminates {
 			if !rs.updateAll {
@@ -47,22 +48,18 @@ func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
 	if els, e := run.query.RulesFor(pat, tgt); e != nil {
 		err = e
 	} else {
-		var rules []rt.Rule
+		var rules []localRule
 		var updateAll bool
 		for _, el := range els {
-			if filter, e := run.decode.DecodeFilter(el.Filter); e != nil {
-				err = errutil.Append(err, errutil.New("decoding filter", pat, tgt, el.Id, e))
-			} else if prog, e := run.decode.DecodeProg(el.Prog); e != nil {
-				err = errutil.Append(err, errutil.New("decoding prog", pat, tgt, el.Id, e))
+
+			if prog, e := run.decode.DecodeProg(el.Prog); e != nil {
+				err = errutil.Append(err, errutil.New("decoding prog", pat, tgt, el.Name, e))
 			} else {
-				rules = append(rules, rt.Rule{
-					Name:       el.Id,
-					Filter:     filter,
-					Execute:    prog,
-					Updates:    el.Updates,
-					Terminates: el.Terminates,
+				rules = append(rules, localRule{
+					Name: el.Name,
+					Prog: prog,
 				})
-				updateAll = updateAll || el.Updates
+				updateAll = updateAll || prog.Updates
 			}
 		}
 		if err == nil {
@@ -70,4 +67,11 @@ func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
 		}
 	}
 	return
+}
+
+// deserialized version of query rule
+// tbd: hand deserialize interface to query so only one return type is needed?
+type localRule struct {
+	Name string
+	assign.Prog
 }

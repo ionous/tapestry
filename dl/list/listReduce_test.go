@@ -1,7 +1,6 @@
 package list_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -9,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/kr/pretty"

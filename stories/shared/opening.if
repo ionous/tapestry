@@ -36,27 +36,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "opening"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "opening"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -64,29 +68,33 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "opening"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
                             {
                               "Not:": {
                                 "Is empty:": "@resp"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "resp",
+                                {
+                                  "FromText:": {
+                                    "CanUse actor:action:noun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "opening"
+                                      },
+                                      {
+                                        "FromText:": "@noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -94,7 +102,7 @@
                               }
                             ],
                             {
-                              "Else do:": {
+                              "Finally do:": {
                                 "StateChanging noun:actor:trait:guard:change:": [
                                   {
                                     "FromText:": "@noun"
@@ -165,27 +173,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "closing"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "closing"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -193,29 +205,33 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "closing"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
                             {
                               "Not:": {
                                 "Is empty:": "@resp"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "resp",
+                                {
+                                  "FromText:": {
+                                    "CanUse actor:action:noun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "closing"
+                                      },
+                                      {
+                                        "FromText:": "@noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -223,7 +239,7 @@
                               }
                             ],
                             {
-                              "Else do:": {
+                              "Finally do:": {
                                 "StateChanging noun:actor:trait:guard:change:": [
                                   {
                                     "FromText:": "@noun"
@@ -356,15 +372,7 @@
               ]
             },
             {
-              "If:from:and:do:": [
-                "concealed items",
-                {
-                  "FromTextList:": {
-                    "VisibleStorage obj:": {
-                      "FromText:": "@noun"
-                    }
-                  }
-                },
+              "If:assuming:do:": [
                 {
                   "Cmp:is:num:": [
                     {
@@ -374,6 +382,18 @@
                     },
                     "greater_than",
                     0
+                  ]
+                },
+                {
+                  "Arg:from:": [
+                    "concealed items",
+                    {
+                      "FromTextList:": {
+                        "VisibleStorage obj:": {
+                          "FromText:": "@noun"
+                        }
+                      }
+                    }
                   ]
                 },
                 {

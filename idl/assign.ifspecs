@@ -1,469 +1,453 @@
 {
-    "--": "assign",
-    "Spec:with group:":
-    [
-        "assign",
+  "--": "assign",
+  "Spec:with group:": [
+    "assign",
+    {
+      "Group contains:": [
         {
-            "Group contains:":
-            [
-                {
-                    "--": [
-                        "Identifies some particular object field, local variable, or pattern argument.",
-                        "Addresses can be read from or written to.",
-                        "That is to say, addresses implement all of the rt evals,",
-                        "and all commands which read from objects or variables should use the methods the address interface provides."
-                    ],
-                    "Spec:with slot:":
-                    [
-                        "address",
-                        {
-                            "Slot": true
-                        }
-                    ]
-                },    
-                {
-                    "--": "Reads from evals in a uniform manner for common functions.",
-                    "Spec:with slot:":
-                    [
-                        "assignment",
-                        {
-                            "Slot": true
-                        }
-                    ]
-                },
-                 {
-                    "--": "Store a value into a local variable ( or pattern argument. )",
-                    "Spec:slots:with flow:":
-                    [
-                        "set_value",
-                        "execute",
-                        {
-                            "Flow:uses:":
-                            [
-                                "set",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "target",
-                                            "address"
-                                        ]
-                                    },
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "from",
-                                            "value",
-                                            "assignment"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
+          "--": [
+            "Identifies some particular object field, local variable, or pattern argument.",
+            "Addresses can be read from or written to.",
+            "That is to say, addresses implement all of the rt evals,",
+            "and all commands which read from objects or variables should use the methods the address interface provides."
+          ],
+          "Spec:with slot:": [
+            "address",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Reads from evals in a uniform manner for common functions.",
+          "Spec:with slot:": [
+            "assignment",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Store a value into a local variable ( or pattern argument. )",
+          "Spec:slots:with flow:": [
+            "set_value",
+            "execute",
+            {
+              "Flow:uses:": [
+                "set",
+                [
                   {
-                    "Spec:slots:with flow:":
-                    [
-                        "object_ref",
-                        [
-                            "address",
-                            "bool_eval",
-                            "number_eval",
-                            "text_eval",
-                            "record_eval",
-                            "num_list_eval",
-                            "text_list_eval",
-                            "record_list_eval"
-                        ],
-                        {
-                            "Flow:uses:":
-                            [
-                                "object",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "name",
-                                            "text_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:type:":
-                                        [
-                                            "field",
-                                            "text_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:optional:repeats:":
-                                        [
-                                            "dot",
-                                            true,
-                                            true
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "address"
                     ]
-                },
+                  },
+                  {
+                    "Term:name:type:": [
+                      "from",
+                      "value",
+                      "assignment"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "object_ref",
+            [
+              "address",
+              "bool_eval",
+              "number_eval",
+              "text_eval",
+              "record_eval",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "object",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "field",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:optional:repeats:": [
+                      "dot",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "variable_ref",
+            [
+              "address",
+              "bool_eval",
+              "number_eval",
+              "text_eval",
+              "record_eval",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "variable",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:optional:repeats:": [
+                      "dot",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Picks values from types containing other values.",
+          "--blockly-color": "MATH_HUE",
+          "Spec:with slot:": [
+            "dot",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "at_field",
+            "dot",
+            {
+              "Flow uses:": [
                 {
-                    "Spec:slots:with flow:":
-                    [
-                        "variable_ref",
-                        [
-                            "address",
-                            "bool_eval",
-                            "number_eval",
-                            "text_eval",
-                            "record_eval",
-                            "num_list_eval",
-                            "text_list_eval",
-                            "record_list_eval"
-                        ],
-                        {
-                            "Flow:uses:":
-                            [
-                                "variable",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "name",
-                                            "text_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:optional:repeats:":
-                                        [
-                                            "dot",
-                                            true,
-                                            true
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-               
-                {
-                    "--": "Picks values from types containing other values.",
-                    "--blockly-color": "MATH_HUE",
-                    "Spec:with slot:":
-                    [
-                        "dot",
-                        {
-                            "Slot": true
-                        }
-                    ]
-                },
-                {
-                    "Spec:slots:with flow:":
-                    [
-                        "at_field",
-                        "dot",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "field",
-                                        "text_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Spec:slots:with flow:":
-                    [
-                        "at_index",
-                        "dot",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "index",
-                                        "number_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-              
-               
-                {
-                    "--": "Executes a pattern, and potentially returns a value.",
-                    "Spec:slots:with flow:":
-                    [
-                        "call_pattern",
-                        [
-                            "execute",
-                            "bool_eval",
-                            "number_eval",
-                            "text_eval",
-                            "record_eval",
-                            "num_list_eval",
-                            "text_list_eval",
-                            "record_list_eval"
-                        ],
-                        {
-                            "Flow:uses:":
-                            [
-                                "determine",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "pattern_name",
-                                            "text"
-                                        ]
-                                    },
-                                    {
-                                        "Term:name:type:repeats:":
-                                        [
-                                            "args",
-                                            "arguments",
-                                            "arg",
-                                            true
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--":
-                    [
-                        "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
-                        "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
-                        "Returns a true/false success value."
-                    ],
-                    "Spec:slots:with flow:":
-                    [
-                        "send_pattern",
-                        [
-                            "execute",
-                            "bool_eval"
-                        ],
-                        {
-                            "Flow:uses:":
-                            [
-                                "send",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "path",
-                                            "text_list_eval"
-                                        ]
-                                    },
-                                    {
-                                        "--": "this should always be a pattern call",
-                                        "Term:type:":
-                                        [
-                                            "event",
-                                            "bool_eval"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                 {
-                    "--": "Runtime version of argument.",
-                    "Spec:with flow:":
-                    [
-                        "arg",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "name",
-                                        "text"
-                                    ]
-                                },
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "from",
-                                        "value",
-                                        "assignment"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--": "Assigns the calculated boolean value.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_bool",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "bool_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--": "Assigns the calculated number.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_number",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "number_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-
-                {
-                    "--": "Assigns the calculated piece of text.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_text",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "text_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--": "Assigns the calculated record.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_record",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "record_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                   {
-                    "--": "Assigns the calculated numbers.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_num_list",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "num_list_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-
-                {
-                    "--": "Assigns the calculated pieces of text.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_text_list",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "text_list_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--": "Assigns the calculated records.",
-                    "Spec:slots:with flow:":
-                    [
-                        "from_record_list",
-                        "assignment",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "value",
-                                        "record_list_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
+                  "Term:name:type:": [
+                    "_",
+                    "field",
+                    "text_eval"
+                  ]
                 }
-            ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "at_index",
+            "dot",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "index",
+                    "number_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "A pattern handler. Stored in the mdl_rule database table.",
+          "Spec:groups:with flow:": [
+            "prog",
+            "internal",
+            {
+              "Flow:uses:": [
+                "args",
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "args",
+                      "arg",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "filter",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                    	"do",
+                      "exe",
+                      "execute",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "updates",
+                      "bool"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "terminates",
+                      "bool"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Executes a pattern, and potentially returns a value.",
+          "Spec:slots:with flow:": [
+            "call_pattern",
+            [
+              "execute",
+              "bool_eval",
+              "number_eval",
+              "text_eval",
+              "record_eval",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "determine",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "pattern_name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "args",
+                      "arguments",
+                      "arg",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
+            "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
+            "Returns a true/false success value."
+          ],
+          "Spec:slots:with flow:": [
+            "send_pattern",
+            [
+              "execute",
+              "bool_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "send",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "path",
+                      "text_list_eval"
+                    ]
+                  },
+                  {
+                    "--": "this should always be a pattern call",
+                    "Term:type:": [
+                      "event",
+                      "bool_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Runtime version of argument.",
+          "Spec:with flow:": [
+            "arg",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:name:type:": [
+                    "from",
+                    "value",
+                    "assignment"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated boolean value.",
+          "Spec:slots:with flow:": [
+            "from_bool",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "bool_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated number.",
+          "Spec:slots:with flow:": [
+            "from_number",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "number_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated piece of text.",
+          "Spec:slots:with flow:": [
+            "from_text",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "text_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated record.",
+          "Spec:slots:with flow:": [
+            "from_record",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "record_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated numbers.",
+          "Spec:slots:with flow:": [
+            "from_num_list",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "num_list_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated pieces of text.",
+          "Spec:slots:with flow:": [
+            "from_text_list",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "text_list_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Assigns the calculated records.",
+          "Spec:slots:with flow:": [
+            "from_record_list",
+            "assignment",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "value",
+                    "record_list_eval"
+                  ]
+                }
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

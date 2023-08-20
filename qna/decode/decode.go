@@ -38,7 +38,7 @@ func (d *Decoder) DecodeFilter(b []byte) (ret rt.BoolEval, err error) {
 	return
 }
 
-func (d *Decoder) DecodeProg(b []byte) (ret rt.Execute_Slice, err error) {
+func (d *Decoder) DecodeProg(b []byte) (ret assign.Prog, err error) {
 	if e := core.Decode(&ret, b, d.signatures); e != nil {
 		err = e
 	}

@@ -1489,6 +1489,142 @@ func ObjectRef_Marshal(m jsn.Marshaler, val *ObjectRef) (err error) {
 	return
 }
 
+// Prog A pattern handler. Stored in the mdl_rule database table.
+type Prog struct {
+	Args       []Arg        `if:"label=args"`
+	Filter     rt.BoolEval  `if:"label=filter"`
+	Exe        []rt.Execute `if:"label=do"`
+	Updates    bool         `if:"label=updates,type=bool"`
+	Terminates bool         `if:"label=terminates,type=bool"`
+	Markup     map[string]any
+}
+
+func (*Prog) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Prog_Type,
+		Uses: composer.Type_Flow,
+		Lede: "args",
+	}
+}
+
+const Prog_Type = "prog"
+const Prog_Field_Args = "$ARGS"
+const Prog_Field_Filter = "$FILTER"
+const Prog_Field_Exe = "$EXE"
+const Prog_Field_Updates = "$UPDATES"
+const Prog_Field_Terminates = "$TERMINATES"
+
+func (op *Prog) Marshal(m jsn.Marshaler) error {
+	return Prog_Marshal(m, op)
+}
+
+type Prog_Slice []Prog
+
+func (op *Prog_Slice) GetType() string { return Prog_Type }
+
+func (op *Prog_Slice) Marshal(m jsn.Marshaler) error {
+	return Prog_Repeats_Marshal(m, (*[]Prog)(op))
+}
+
+func (op *Prog_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Prog_Slice) SetSize(cnt int) {
+	var els []Prog
+	if cnt >= 0 {
+		els = make(Prog_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Prog_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Prog_Marshal(m, &(*op)[i])
+}
+
+func Prog_Repeats_Marshal(m jsn.Marshaler, vals *[]Prog) error {
+	return jsn.RepeatBlock(m, (*Prog_Slice)(vals))
+}
+
+func Prog_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Prog) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Prog_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Prog_Flow struct{ ptr *Prog }
+
+func (n Prog_Flow) GetType() string      { return Prog_Type }
+func (n Prog_Flow) GetLede() string      { return "args" }
+func (n Prog_Flow) GetFlow() interface{} { return n.ptr }
+func (n Prog_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Prog); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Prog_Optional_Marshal(m jsn.Marshaler, pv **Prog) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Prog_Marshal(m, *pv)
+	} else if !enc {
+		var v Prog
+		if err = Prog_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Prog_Marshal(m jsn.Marshaler, val *Prog) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Prog_Flow{val}); err == nil {
+		e0 := m.MarshalKey("args", Prog_Field_Args)
+		if e0 == nil {
+			e0 = Arg_Repeats_Marshal(m, &val.Args)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Prog_Field_Args))
+		}
+		e1 := m.MarshalKey("filter", Prog_Field_Filter)
+		if e1 == nil {
+			e1 = rt.BoolEval_Marshal(m, &val.Filter)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Prog_Field_Filter))
+		}
+		e2 := m.MarshalKey("do", Prog_Field_Exe)
+		if e2 == nil {
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Prog_Field_Exe))
+		}
+		e3 := m.MarshalKey("updates", Prog_Field_Updates)
+		if e3 == nil {
+			e3 = prim.Bool_Unboxed_Marshal(m, &val.Updates)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", Prog_Field_Updates))
+		}
+		e4 := m.MarshalKey("terminates", Prog_Field_Terminates)
+		if e4 == nil {
+			e4 = prim.Bool_Unboxed_Marshal(m, &val.Terminates)
+		}
+		if e4 != nil && e4 != jsn.Missing {
+			m.Error(errutil.New(e4, "in flow at", Prog_Field_Terminates))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // SendPattern Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.
 // Although the event advertises it can take any bool evaluation, only pattern calls are supported.
 // Returns a true/false success value.
@@ -1854,6 +1990,7 @@ var Slats = []composer.Composer{
 	(*FromText)(nil),
 	(*FromTextList)(nil),
 	(*ObjectRef)(nil),
+	(*Prog)(nil),
 	(*SendPattern)(nil),
 	(*SetValue)(nil),
 	(*VariableRef)(nil),
@@ -1861,6 +1998,7 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
+	4642395463158968874:  (*Prog)(nil),           /* Args args:filter:do:updates:terminates: */
 	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
 	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
 	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */

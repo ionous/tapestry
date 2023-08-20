@@ -39,27 +39,31 @@
                   "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
                 },
                 {
-                  "If:from:and:do:else:": [
-                    "result",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "retrieving from"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@result"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "result",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "retrieving from"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -67,32 +71,36 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
-                          "If:from:and:do:else:": [
-                            "result",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:otherNoun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "retrieving from"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  },
-                                  {
-                                    "FromText:": "@other_noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
                             {
                               "Not:": {
                                 "Is empty:": "@result"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "result",
+                                {
+                                  "FromText:": {
+                                    "CanUse actor:action:noun:otherNoun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "retrieving from"
+                                      },
+                                      {
+                                        "FromText:": "@noun"
+                                      },
+                                      {
+                                        "FromText:": "@other_noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -100,7 +108,7 @@
                               }
                             ],
                             {
-                              "Else do:": [
+                              "Finally do:": [
                                 {
                                   "If:do:": [
                                     {

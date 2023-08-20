@@ -71,7 +71,7 @@ func (q QueryNone) PatternLabels(pat string) (ret []string, err error) {
 	return
 }
 
-func (q QueryNone) RulesFor(pat, target string) (ret []Rules, err error) {
+func (q QueryNone) RulesFor(pat, target string) (ret []RuleData, err error) {
 	return
 }
 

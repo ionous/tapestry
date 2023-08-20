@@ -36,27 +36,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanHandle actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "wearing"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanHandle actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "wearing"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -64,7 +68,7 @@
                       }
                     ],
                     {
-                      "Else do:": {
+                      "Finally do:": {
                         "StateChanging noun:actor:trait:guard:change:": [
                           {
                             "FromText:": "@noun"
@@ -131,27 +135,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanHandle actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "removing"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanHandle actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "removing"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -159,7 +167,7 @@
                       }
                     ],
                     {
-                      "Else do:": {
+                      "Finally do:": {
                         "StateChanging noun:actor:trait:guard:change:": [
                           {
                             "FromText:": "@noun"

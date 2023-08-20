@@ -110,33 +110,37 @@
                             "Comment:": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized. "
                           },
                           {
-                            "If:from:and:do:": [
-                              "response",
-                              {
-                                "FromText:": {
-                                  "ReachUp fromObj:intoObj:actor:noun:action:": [
-                                    {
-                                      "FromText:": "@i"
-                                    },
-                                    {
-                                      "FromText:": "@next"
-                                    },
-                                    {
-                                      "FromText:": "@actor"
-                                    },
-                                    {
-                                      "FromText:": "@noun"
-                                    },
-                                    {
-                                      "FromText:": "@action"
-                                    }
-                                  ]
-                                }
-                              },
+                            "If:assuming:do:": [
                               {
                                 "Not:": {
                                   "Is empty:": "@response"
                                 }
+                              },
+                              {
+                                "Arg:from:": [
+                                  "response",
+                                  {
+                                    "FromText:": {
+                                      "ReachUp fromObj:intoObj:actor:noun:action:": [
+                                        {
+                                          "FromText:": "@i"
+                                        },
+                                        {
+                                          "FromText:": "@next"
+                                        },
+                                        {
+                                          "FromText:": "@actor"
+                                        },
+                                        {
+                                          "FromText:": "@noun"
+                                        },
+                                        {
+                                          "FromText:": "@action"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
                               },
                               [
                                 {
@@ -258,33 +262,37 @@
                       ]
                     },
                     {
-                      "If:from:and:do:": [
-                        "response",
-                        {
-                          "FromText:": {
-                            "ReachDown fromObj:intoObj:actor:noun:action:": [
-                              {
-                                "FromText:": "@next"
-                              },
-                              {
-                                "FromText:": "@i"
-                              },
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              },
-                              {
-                                "FromText:": "@action"
-                              }
-                            ]
-                          }
-                        },
+                      "If:assuming:do:": [
                         {
                           "Not:": {
                             "Is empty:": "@response"
                           }
+                        },
+                        {
+                          "Arg:from:": [
+                            "response",
+                            {
+                              "FromText:": {
+                                "ReachDown fromObj:intoObj:actor:noun:action:": [
+                                  {
+                                    "FromText:": "@next"
+                                  },
+                                  {
+                                    "FromText:": "@i"
+                                  },
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "@noun"
+                                  },
+                                  {
+                                    "FromText:": "@action"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
                         },
                         [
                           {
@@ -346,7 +354,7 @@
                     }
                   ],
                   {
-                    "Else if:do:else:": [
+                    "If:do:else:": [
                       {
                         "Cmp:is:num:": [
                           "@reach_error",
@@ -368,7 +376,7 @@
                         }
                       ],
                       {
-                        "Else if:do:": [
+                        "If:do:": [
                           {
                             "Not:": {
                               "Is empty:": "@dig_error"

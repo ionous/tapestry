@@ -1,10 +1,9 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/story/internal/rules"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
@@ -12,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/rules"
 	"github.com/ionous/errutil"
 )
 
@@ -27,19 +27,13 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			pb := mdl.NewPatternBuilder(name.String())
-			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
-				err = e
-			} else if e := addFields(pb, mdl.PatternParameters, op.Params); e != nil {
-				err = e
-			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
-				err = e
-			} else if e := addRules(pb, "", op.Rules); e != nil {
-				err = e
-			} else if e := cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+			addFields(pb, mdl.PatternLocals, op.Locals)
+			addFields(pb, mdl.PatternParameters, op.Params)
+			addOptionalField(pb, mdl.PatternResults, op.Result)
+			addRules(pb, "", op.Rules)
+			err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
-			}); e != nil {
-				err = e
-			}
+			})
 		}
 		return
 	})
@@ -60,28 +54,24 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			pb := mdl.NewPatternBuilder(name)
-			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
-				err = e
-			} else if e := addRules(pb, "", op.Rules); e != nil {
-				err = e
-			} else {
-				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-					if !k.Implements(kindsOf.Action.String()) {
-						err = w.Pin().ExtendPattern(pb.Pattern)
-					} else {
-						for i := 0; i < event.NumPhases; i++ {
-							// fix: we copy all the initialization too
-							// maybe an explicit ExtendPatternSet that in mdl to do better things.
-							name := event.Phase(i).PatternName(name)
-							if e := w.Pin().ExtendPattern(pb.Copy(name)); e != nil {
-								err = e
-								break
-							}
+			addFields(pb, mdl.PatternLocals, op.Locals)
+			addRules(pb, "", op.Rules)
+			err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+				if !k.Implements(kindsOf.Action.String()) {
+					err = w.Pin().ExtendPattern(pb.Pattern)
+				} else {
+					for i := 0; i < event.NumPhases; i++ {
+						// fix: we copy all the initialization too
+						// maybe an explicit ExtendPatternSet that in mdl to do better things.
+						name := event.Phase(i).PatternName(name)
+						if e := w.Pin().ExtendPattern(pb.Copy(name)); e != nil {
+							err = e
+							break
 						}
 					}
-					return
-				})
-			}
+				}
+				return
+			})
 		}
 		return
 	})
@@ -100,16 +90,11 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 			for i := 0; i < event.NumPhases; i++ {
 				phase := event.Phase(i)
 				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
-				if e := addFields(pb, mdl.PatternParameters, op.Params); e != nil {
-					err = e
-				} else if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
-					err = e
-				} else if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+				addFields(pb, mdl.PatternParameters, op.Params)
+				addFields(pb, mdl.PatternLocals, op.Locals)
+				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
 					return w.Pin().AddPattern(pb.Pattern)
-				}); e != nil {
-					err = errutil.Fmt("%w defining action %q", e, act)
-					break
-				}
+				})
 			}
 		}
 		return
@@ -196,7 +181,6 @@ func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (
 
 			// by default: all event handlers are filtered to the player and the innermost target.
 			if k.Implements(kindsOf.Event.String()) || k.Implements(kindsOf.Action.String()) {
-
 				// if the focus of the event involves an actor;
 				// then we automatically filter for the player
 				if k.NumField() > 0 {
@@ -241,51 +225,48 @@ func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (
 				default:
 					panic(errutil.Sprint("unknown guard %T", extra))
 				}
-
 			}
-			exe = []rt.Execute{&core.ChooseAction{
+			exe = []rt.Execute{&core.ChooseBranch{
 				If:  &core.AllTrue{Test: equals},
 				Exe: exe,
 			}}
 		}
-		updates := rules.DoesUpdate(exe)
-		terminates := /*prefix.Terminates ||*/ rules.DoesTerminate(exe)
+		//
 		pb := mdl.NewPatternBuilder(pat)
-		pb.AddNewRule(lang.Normalize(rule), rank, updates, terminates, exe)
-		err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-			if e := w.Pin().ExtendPattern(pb.Pattern); e != nil {
-				err = errutil.New("extending pattern", e)
-			}
-			return
+		// pb.AppendRules(rules.Split(rule, rank, exe))
+		pb.AppendRule(mdl.Rule{
+			Name: rule,
+			Rank: rank,
+			Prog: assign.Prog{
+				Exe:        exe,
+				Updates:    rules.DoesUpdate(exe),
+				Terminates: rules.DoesTerminate(exe),
+			},
+		})
+		err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+			return w.Pin().ExtendPattern(pb.Pattern)
 		})
 	}
 	return
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule) (err error) {
+func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
-		if e := els[i].addRule(pb, target); e != nil {
-			err = errutil.Append(err, e)
-		}
+		els[i].addRule(pb, target)
 	}
-	return
 }
 
-func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string) (err error) {
-	act := op.Exe
-	// check if this rule is declared inside a specific domain
-	if guard, ok := op.Guard.(jsn.Marshalee); !ok {
-		err = errutil.New("missing guard", pb.Name())
-	} else {
-		update := rules.SearchForCounters(guard)
-		pb.AddRule(target, op.Guard, update, act)
-	}
-	return
+func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string) {
+	pb.AppendRule(mdl.Rule{Target: target, Prog: assign.Prog{
+		Filter:  op.Guard,
+		Exe:     op.Exe,
+		Updates: rules.FilterHasCounter(op.Guard),
+	}})
 }
 
-func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) (_ error) {
+func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) {
 	if field != nil {
 		var empty mdl.FieldInfo // the Nothing type generates a blank field info
 		if f := field.FieldInfo(); f != empty {
@@ -295,7 +276,7 @@ func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefin
 	return
 }
 
-func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinition) (_ error) {
+func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinition) {
 	// fix; should probably be an error if nothing is used for locals
 	// or if nothing exists in a list of more than one nothing parameter
 	for _, field := range fields {
@@ -304,16 +285,12 @@ func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinitio
 			pb.AddField(ft, f)
 		}
 	}
-	return
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule) (err error) {
+func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
-		if e := els[i].addRule(pb, target); e != nil {
-			err = errutil.Append(err, e)
-		}
+		els[i].addRule(pb, target)
 	}
-	return
 }

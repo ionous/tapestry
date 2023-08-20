@@ -5,6 +5,9 @@ import (
 	"io"
 	"log"
 
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"github.com/ionous/errutil"
 )
@@ -24,7 +27,7 @@ func main() {
 		log.SetOutput(io.Discard)
 	}
 	opt := qna.NewOptions()
-	opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
+	opt.SetOption(meta.JsonMode, generic.BoolOf(json))
 
 	if cnt, e := play.PlayGame(inFile, testString, domain, json); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })

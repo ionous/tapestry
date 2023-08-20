@@ -4,12 +4,24 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
+
+func FilterHasCounter(filter rt.BoolEval) (okay bool) {
+	if filter != nil {
+		if m, ok := filter.(jsn.Marshalee); !ok {
+			panic("unknown type")
+		} else {
+			okay = searchCounters(m)
+		}
+	}
+	return
+}
 
 // fix? could we instead just strstr for countOf
 // also might be cool to augment or replace the serialized type
 // with our own that has an pre-calced field ( at import, via state parser )
-func SearchForCounters(i jsn.Marshalee) (okay bool) {
+func searchCounters(i jsn.Marshalee) (okay bool) {
 	if ok, e := searchForType(i, core.CallTrigger_Type); e != nil && e != jsn.Missing {
 		panic(e)
 	} else {

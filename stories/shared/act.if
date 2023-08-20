@@ -75,7 +75,7 @@
               ]
             },
             {
-              "Else do:": {
+              "Finally do:": {
                 "Say response:with:": [
                   "something changed itself",
                   "{The: .noun|capitalize!} {are:.noun} {.trait}."

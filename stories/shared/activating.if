@@ -36,27 +36,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "activating"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "activating"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -64,9 +68,14 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "If:assuming:do:else:": [
                         {
-                          "If:from:and:do:else:": [
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        {
+                          "Arg:from:": [
                             "resp",
                             {
                               "FromText:": {
@@ -82,39 +91,34 @@
                                   }
                                 ]
                               }
-                            },
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            [
-                              {
-                                "Print:": "@resp"
-                              }
-                            ],
-                            {
-                              "Else do:": {
-                                "StateChanging noun:actor:trait:guard:change:": [
-                                  {
-                                    "FromText:": "@noun"
-                                  },
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "activated"
-                                  },
-                                  {
-                                    "FromText:": "activatable"
-                                  },
-                                  {
-                                    "FromText:": "switch on"
-                                  }
-                                ]
-                              }
                             }
                           ]
+                        },
+                        [
+                          {
+                            "Print:": "@resp"
+                          }
+                        ],
+                        {
+                          "Finally do:": {
+                            "StateChanging noun:actor:trait:guard:change:": [
+                              {
+                                "FromText:": "@noun"
+                              },
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "activated"
+                              },
+                              {
+                                "FromText:": "activatable"
+                              },
+                              {
+                                "FromText:": "switch on"
+                              }
+                            ]
+                          }
                         }
                       ]
                     }
@@ -165,27 +169,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "deactivating"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "deactivating"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -193,9 +201,14 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "If:assuming:do:else:": [
                         {
-                          "If:from:and:do:else:": [
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        {
+                          "Arg:from:": [
                             "resp",
                             {
                               "FromText:": {
@@ -211,39 +224,34 @@
                                   }
                                 ]
                               }
-                            },
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            [
-                              {
-                                "Print:": "@resp"
-                              }
-                            ],
-                            {
-                              "Else do:": {
-                                "StateChanging noun:actor:trait:guard:change:": [
-                                  {
-                                    "FromText:": "@noun"
-                                  },
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "deactivated"
-                                  },
-                                  {
-                                    "FromText:": "activatable"
-                                  },
-                                  {
-                                    "FromText:": "switch off"
-                                  }
-                                ]
-                              }
                             }
                           ]
+                        },
+                        [
+                          {
+                            "Print:": "@resp"
+                          }
+                        ],
+                        {
+                          "Finally do:": {
+                            "StateChanging noun:actor:trait:guard:change:": [
+                              {
+                                "FromText:": "@noun"
+                              },
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "deactivated"
+                              },
+                              {
+                                "FromText:": "activatable"
+                              },
+                              {
+                                "FromText:": "switch off"
+                              }
+                            ]
+                          }
                         }
                       ]
                     }

@@ -49,30 +49,34 @@
                   ]
                 },
                 {
-                  "If:from:and:do:else:": [
-                    "result",
-                    {
-                      "FromText:": {
-                        "CanHandle actor:action:noun:otherNoun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "storing into"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          },
-                          {
-                            "FromText:": "@other_noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@result"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "result",
+                        {
+                          "FromText:": {
+                            "CanHandle actor:action:noun:otherNoun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "storing into"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              },
+                              {
+                                "FromText:": "@other_noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -80,32 +84,37 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "Comment:": "Then, we need to make sure we can reach the other noun:"
                         },
                         {
-                          "If:from:and:do:else:": [
-                            "result",
-                            {
-                              "FromText:": {
-                                "CanReach actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "storing into"
-                                  },
-                                  {
-                                    "FromText:": "@other_noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
+                            
                             {
                               "Not:": {
                                 "Is empty:": "@result"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "result",
+                                {
+                                  "FromText:": {
+                                    "CanReach actor:action:noun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "storing into"
+                                      },
+                                      {
+                                        "FromText:": "@other_noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -113,32 +122,36 @@
                               }
                             ],
                             {
-                              "Else do:": [
+                              "Finally do:": [
                                 {
-                                  "If:from:and:do:else:": [
-                                    "result",
-                                    {
-                                      "FromText:": {
-                                        "CanUse actor:action:noun:otherNoun:": [
-                                          {
-                                            "FromText:": "@actor"
-                                          },
-                                          {
-                                            "FromText:": "storing into"
-                                          },
-                                          {
-                                            "FromText:": "@noun"
-                                          },
-                                          {
-                                            "FromText:": "@other_noun"
-                                          }
-                                        ]
-                                      }
-                                    },
+                                  "If:assuming:do:else:": [
                                     {
                                       "Not:": {
                                         "Is empty:": "@result"
                                       }
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "result",
+                                        {
+                                          "FromText:": {
+                                            "CanUse actor:action:noun:otherNoun:": [
+                                              {
+                                                "FromText:": "@actor"
+                                              },
+                                              {
+                                                "FromText:": "storing into"
+                                              },
+                                              {
+                                                "FromText:": "@noun"
+                                              },
+                                              {
+                                                "FromText:": "@other_noun"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      ]
                                     },
                                     [
                                       {
@@ -146,7 +159,7 @@
                                       }
                                     ],
                                     {
-                                      "Else do:": [
+                                      "Finally do:": [
                                         {
                                           "If:do:": [
                                             {
@@ -223,24 +236,28 @@
                     true,
                     [
                       {
-                        "If:from:and:do:else:": [
-                          "error",
-                          {
-                            "FromText:": {
-                              "MoveObject obj:dest:": [
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": "@other_noun"
-                                }
-                              ]
-                            }
-                          },
+                        "If:assuming:do:else:": [
                           {
                             "Not:": {
                               "Is empty:": "@error"
                             }
+                          },
+                          {
+                            "Arg:from:": [
+                              "error",
+                              {
+                                "FromText:": {
+                                  "MoveObject obj:dest:": [
+                                    {
+                                      "FromText:": "@noun"
+                                    },
+                                    {
+                                      "FromText:": "@other_noun"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
                           },
                           [
                             {
@@ -256,7 +273,7 @@
                             }
                           ],
                           {
-                            "Else do:": [
+                            "Finally do:": [
                               {
                                 "Set:from:": [
                                   "@success",

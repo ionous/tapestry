@@ -453,7 +453,7 @@
                                   }
                                 ],
                                 {
-                                  "Else if:do:": [
+                                  "If:do:": [
                                     {
                                       "Cmp:is:txt:": [
                                         "@o2",
@@ -501,7 +501,7 @@
                             }
                           ],
                           {
-                            "Else if:do:": [
+                            "If:do:": [
                               {
                                 "Cmp:is:txt:": [
                                   "@o1",
@@ -613,7 +613,7 @@
                             }
                           ],
                           {
-                            "Else if:do:": [
+                            "If:do:": [
                               {
                                 "Cmp:is:txt:": [
                                   "@up",

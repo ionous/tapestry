@@ -233,7 +233,7 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
                         },
@@ -342,7 +342,7 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "Set:from:": [
                             {
@@ -514,7 +514,7 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "Say:": "{The: .ceiling|capitalize!}"
                         }

@@ -221,9 +221,14 @@ type Rules struct {
 
 func (op *Rules) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
-		kb := mdl.NewPatternBuilder(op.PatternName)
-		kb.AddRule(op.Target, op.Filter, false, op.Exe)
-		return w.Pin().ExtendPattern(kb.Pattern)
+		pb := mdl.NewPatternBuilder(op.PatternName)
+		pb.AppendRule(mdl.Rule{
+			Target: lang.Normalize(op.Target),
+			Prog: assign.Prog{
+				Filter: op.Filter,
+				Exe:    op.Exe,
+			}})
+		return w.Pin().ExtendPattern(pb.Pattern)
 	})
 }
 

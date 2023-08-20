@@ -1329,44 +1329,47 @@ func Capitalize_Marshal(m jsn.Marshaler, val *Capitalize) (err error) {
 	return
 }
 
-// ChooseAction An if statement.
-type ChooseAction struct {
+// ChooseBranch An if statement.
+// The provided local fields are evaluated before the if test itself.
+type ChooseBranch struct {
 	If     rt.BoolEval  `if:"label=_"`
+	Args   []assign.Arg `if:"label=assuming,optional"`
 	Exe    []rt.Execute `if:"label=do"`
 	Else   Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.Execute = (*ChooseAction)(nil)
-var _ Brancher = (*ChooseAction)(nil)
+var _ rt.Execute = (*ChooseBranch)(nil)
+var _ Brancher = (*ChooseBranch)(nil)
 
-func (*ChooseAction) Compose() composer.Spec {
+func (*ChooseBranch) Compose() composer.Spec {
 	return composer.Spec{
-		Name: ChooseAction_Type,
+		Name: ChooseBranch_Type,
 		Uses: composer.Type_Flow,
 		Lede: "if",
 	}
 }
 
-const ChooseAction_Type = "choose_action"
-const ChooseAction_Field_If = "$IF"
-const ChooseAction_Field_Exe = "$EXE"
-const ChooseAction_Field_Else = "$ELSE"
+const ChooseBranch_Type = "choose_branch"
+const ChooseBranch_Field_If = "$IF"
+const ChooseBranch_Field_Args = "$ARGS"
+const ChooseBranch_Field_Exe = "$EXE"
+const ChooseBranch_Field_Else = "$ELSE"
 
-func (op *ChooseAction) Marshal(m jsn.Marshaler) error {
-	return ChooseAction_Marshal(m, op)
+func (op *ChooseBranch) Marshal(m jsn.Marshaler) error {
+	return ChooseBranch_Marshal(m, op)
 }
 
-type ChooseAction_Slice []ChooseAction
+type ChooseBranch_Slice []ChooseBranch
 
-func (op *ChooseAction_Slice) GetType() string { return ChooseAction_Type }
+func (op *ChooseBranch_Slice) GetType() string { return ChooseBranch_Type }
 
-func (op *ChooseAction_Slice) Marshal(m jsn.Marshaler) error {
-	return ChooseAction_Repeats_Marshal(m, (*[]ChooseAction)(op))
+func (op *ChooseBranch_Slice) Marshal(m jsn.Marshaler) error {
+	return ChooseBranch_Repeats_Marshal(m, (*[]ChooseBranch)(op))
 }
 
-func (op *ChooseAction_Slice) GetSize() (ret int) {
+func (op *ChooseBranch_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -1375,336 +1378,83 @@ func (op *ChooseAction_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *ChooseAction_Slice) SetSize(cnt int) {
-	var els []ChooseAction
+func (op *ChooseBranch_Slice) SetSize(cnt int) {
+	var els []ChooseBranch
 	if cnt >= 0 {
-		els = make(ChooseAction_Slice, cnt)
+		els = make(ChooseBranch_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *ChooseAction_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ChooseAction_Marshal(m, &(*op)[i])
+func (op *ChooseBranch_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ChooseBranch_Marshal(m, &(*op)[i])
 }
 
-func ChooseAction_Repeats_Marshal(m jsn.Marshaler, vals *[]ChooseAction) error {
-	return jsn.RepeatBlock(m, (*ChooseAction_Slice)(vals))
+func ChooseBranch_Repeats_Marshal(m jsn.Marshaler, vals *[]ChooseBranch) error {
+	return jsn.RepeatBlock(m, (*ChooseBranch_Slice)(vals))
 }
 
-func ChooseAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseAction) (err error) {
+func ChooseBranch_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseBranch) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ChooseAction_Repeats_Marshal(m, pv)
+		err = ChooseBranch_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type ChooseAction_Flow struct{ ptr *ChooseAction }
+type ChooseBranch_Flow struct{ ptr *ChooseBranch }
 
-func (n ChooseAction_Flow) GetType() string      { return ChooseAction_Type }
-func (n ChooseAction_Flow) GetLede() string      { return "if" }
-func (n ChooseAction_Flow) GetFlow() interface{} { return n.ptr }
-func (n ChooseAction_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ChooseAction); ok {
+func (n ChooseBranch_Flow) GetType() string      { return ChooseBranch_Type }
+func (n ChooseBranch_Flow) GetLede() string      { return "if" }
+func (n ChooseBranch_Flow) GetFlow() interface{} { return n.ptr }
+func (n ChooseBranch_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ChooseBranch); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func ChooseAction_Optional_Marshal(m jsn.Marshaler, pv **ChooseAction) (err error) {
+func ChooseBranch_Optional_Marshal(m jsn.Marshaler, pv **ChooseBranch) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ChooseAction_Marshal(m, *pv)
+		err = ChooseBranch_Marshal(m, *pv)
 	} else if !enc {
-		var v ChooseAction
-		if err = ChooseAction_Marshal(m, &v); err == nil {
+		var v ChooseBranch
+		if err = ChooseBranch_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
+func ChooseBranch_Marshal(m jsn.Marshaler, val *ChooseBranch) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ChooseAction_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ChooseAction_Field_If)
+	if err = m.MarshalBlock(ChooseBranch_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ChooseBranch_Field_If)
 		if e0 == nil {
 			e0 = rt.BoolEval_Marshal(m, &val.If)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseAction_Field_If))
+			m.Error(errutil.New(e0, "in flow at", ChooseBranch_Field_If))
 		}
-		e1 := m.MarshalKey("do", ChooseAction_Field_Exe)
+		e1 := m.MarshalKey("assuming", ChooseBranch_Field_Args)
 		if e1 == nil {
-			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
+			e1 = assign.Arg_Optional_Repeats_Marshal(m, &val.Args)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseAction_Field_Exe))
+			m.Error(errutil.New(e1, "in flow at", ChooseBranch_Field_Args))
 		}
-		e2 := m.MarshalKey("else", ChooseAction_Field_Else)
+		e2 := m.MarshalKey("do", ChooseBranch_Field_Exe)
 		if e2 == nil {
-			e2 = Brancher_Optional_Marshal(m, &val.Else)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ChooseAction_Field_Else))
+			m.Error(errutil.New(e2, "in flow at", ChooseBranch_Field_Exe))
 		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ChooseMore
-type ChooseMore struct {
-	If     rt.BoolEval  `if:"label=if"`
-	Exe    []rt.Execute `if:"label=do"`
-	Else   Brancher     `if:"label=else,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Brancher = (*ChooseMore)(nil)
-
-func (*ChooseMore) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ChooseMore_Type,
-		Uses: composer.Type_Flow,
-		Lede: "else",
-	}
-}
-
-const ChooseMore_Type = "choose_more"
-const ChooseMore_Field_If = "$IF"
-const ChooseMore_Field_Exe = "$EXE"
-const ChooseMore_Field_Else = "$ELSE"
-
-func (op *ChooseMore) Marshal(m jsn.Marshaler) error {
-	return ChooseMore_Marshal(m, op)
-}
-
-type ChooseMore_Slice []ChooseMore
-
-func (op *ChooseMore_Slice) GetType() string { return ChooseMore_Type }
-
-func (op *ChooseMore_Slice) Marshal(m jsn.Marshaler) error {
-	return ChooseMore_Repeats_Marshal(m, (*[]ChooseMore)(op))
-}
-
-func (op *ChooseMore_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ChooseMore_Slice) SetSize(cnt int) {
-	var els []ChooseMore
-	if cnt >= 0 {
-		els = make(ChooseMore_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ChooseMore_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ChooseMore_Marshal(m, &(*op)[i])
-}
-
-func ChooseMore_Repeats_Marshal(m jsn.Marshaler, vals *[]ChooseMore) error {
-	return jsn.RepeatBlock(m, (*ChooseMore_Slice)(vals))
-}
-
-func ChooseMore_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseMore) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ChooseMore_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ChooseMore_Flow struct{ ptr *ChooseMore }
-
-func (n ChooseMore_Flow) GetType() string      { return ChooseMore_Type }
-func (n ChooseMore_Flow) GetLede() string      { return "else" }
-func (n ChooseMore_Flow) GetFlow() interface{} { return n.ptr }
-func (n ChooseMore_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ChooseMore); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ChooseMore_Optional_Marshal(m jsn.Marshaler, pv **ChooseMore) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ChooseMore_Marshal(m, *pv)
-	} else if !enc {
-		var v ChooseMore
-		if err = ChooseMore_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ChooseMore_Flow{val}); err == nil {
-		e0 := m.MarshalKey("if", ChooseMore_Field_If)
-		if e0 == nil {
-			e0 = rt.BoolEval_Marshal(m, &val.If)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseMore_Field_If))
-		}
-		e1 := m.MarshalKey("do", ChooseMore_Field_Exe)
-		if e1 == nil {
-			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseMore_Field_Exe))
-		}
-		e2 := m.MarshalKey("else", ChooseMore_Field_Else)
-		if e2 == nil {
-			e2 = Brancher_Optional_Marshal(m, &val.Else)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ChooseMore_Field_Else))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ChooseMoreValue
-type ChooseMoreValue struct {
-	Assign string            `if:"label=if,type=text"`
-	From   assign.Assignment `if:"label=from"`
-	Filter rt.BoolEval       `if:"label=and"`
-	Exe    []rt.Execute      `if:"label=do"`
-	Else   Brancher          `if:"label=else,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Brancher = (*ChooseMoreValue)(nil)
-
-func (*ChooseMoreValue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ChooseMoreValue_Type,
-		Uses: composer.Type_Flow,
-		Lede: "else",
-	}
-}
-
-const ChooseMoreValue_Type = "choose_more_value"
-const ChooseMoreValue_Field_Assign = "$ASSIGN"
-const ChooseMoreValue_Field_From = "$FROM"
-const ChooseMoreValue_Field_Filter = "$FILTER"
-const ChooseMoreValue_Field_Exe = "$EXE"
-const ChooseMoreValue_Field_Else = "$ELSE"
-
-func (op *ChooseMoreValue) Marshal(m jsn.Marshaler) error {
-	return ChooseMoreValue_Marshal(m, op)
-}
-
-type ChooseMoreValue_Slice []ChooseMoreValue
-
-func (op *ChooseMoreValue_Slice) GetType() string { return ChooseMoreValue_Type }
-
-func (op *ChooseMoreValue_Slice) Marshal(m jsn.Marshaler) error {
-	return ChooseMoreValue_Repeats_Marshal(m, (*[]ChooseMoreValue)(op))
-}
-
-func (op *ChooseMoreValue_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ChooseMoreValue_Slice) SetSize(cnt int) {
-	var els []ChooseMoreValue
-	if cnt >= 0 {
-		els = make(ChooseMoreValue_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ChooseMoreValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ChooseMoreValue_Marshal(m, &(*op)[i])
-}
-
-func ChooseMoreValue_Repeats_Marshal(m jsn.Marshaler, vals *[]ChooseMoreValue) error {
-	return jsn.RepeatBlock(m, (*ChooseMoreValue_Slice)(vals))
-}
-
-func ChooseMoreValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseMoreValue) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ChooseMoreValue_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ChooseMoreValue_Flow struct{ ptr *ChooseMoreValue }
-
-func (n ChooseMoreValue_Flow) GetType() string      { return ChooseMoreValue_Type }
-func (n ChooseMoreValue_Flow) GetLede() string      { return "else" }
-func (n ChooseMoreValue_Flow) GetFlow() interface{} { return n.ptr }
-func (n ChooseMoreValue_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ChooseMoreValue); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ChooseMoreValue_Optional_Marshal(m jsn.Marshaler, pv **ChooseMoreValue) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ChooseMoreValue_Marshal(m, *pv)
-	} else if !enc {
-		var v ChooseMoreValue
-		if err = ChooseMoreValue_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ChooseMoreValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("if", ChooseMoreValue_Field_Assign)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseMoreValue_Field_Assign))
-		}
-		e1 := m.MarshalKey("from", ChooseMoreValue_Field_From)
-		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseMoreValue_Field_From))
-		}
-		e2 := m.MarshalKey("and", ChooseMoreValue_Field_Filter)
-		if e2 == nil {
-			e2 = rt.BoolEval_Marshal(m, &val.Filter)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ChooseMoreValue_Field_Filter))
-		}
-		e3 := m.MarshalKey("do", ChooseMoreValue_Field_Exe)
+		e3 := m.MarshalKey("else", ChooseBranch_Field_Else)
 		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Exe)
+			e3 = Brancher_Optional_Marshal(m, &val.Else)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ChooseMoreValue_Field_Exe))
-		}
-		e4 := m.MarshalKey("else", ChooseMoreValue_Field_Else)
-		if e4 == nil {
-			e4 = Brancher_Optional_Marshal(m, &val.Else)
-		}
-		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", ChooseMoreValue_Field_Else))
+			m.Error(errutil.New(e3, "in flow at", ChooseBranch_Field_Else))
 		}
 		m.EndBlock()
 	}
@@ -1713,6 +1463,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 
 // ChooseNothingElse
 type ChooseNothingElse struct {
+	Args   []assign.Arg `if:"label=assuming,optional"`
 	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
@@ -1724,11 +1475,12 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseNothingElse_Type,
 		Uses: composer.Type_Flow,
-		Lede: "else",
+		Lede: "finally",
 	}
 }
 
 const ChooseNothingElse_Type = "choose_nothing_else"
+const ChooseNothingElse_Field_Args = "$ARGS"
 const ChooseNothingElse_Field_Exe = "$EXE"
 
 func (op *ChooseNothingElse) Marshal(m jsn.Marshaler) error {
@@ -1778,7 +1530,7 @@ func ChooseNothingElse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseNot
 type ChooseNothingElse_Flow struct{ ptr *ChooseNothingElse }
 
 func (n ChooseNothingElse_Flow) GetType() string      { return ChooseNothingElse_Type }
-func (n ChooseNothingElse_Flow) GetLede() string      { return "else" }
+func (n ChooseNothingElse_Flow) GetLede() string      { return "finally" }
 func (n ChooseNothingElse_Flow) GetFlow() interface{} { return n.ptr }
 func (n ChooseNothingElse_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*ChooseNothingElse); ok {
@@ -1802,12 +1554,19 @@ func ChooseNothingElse_Optional_Marshal(m jsn.Marshaler, pv **ChooseNothingElse)
 func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseNothingElse_Flow{val}); err == nil {
-		e0 := m.MarshalKey("do", ChooseNothingElse_Field_Exe)
+		e0 := m.MarshalKey("assuming", ChooseNothingElse_Field_Args)
 		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
+			e0 = assign.Arg_Optional_Repeats_Marshal(m, &val.Args)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Exe))
+			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Args))
+		}
+		e1 := m.MarshalKey("do", ChooseNothingElse_Field_Exe)
+		if e1 == nil {
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ChooseNothingElse_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -2050,146 +1809,6 @@ func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseText_Field_False))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ChooseValue An if statement with local assignment.
-type ChooseValue struct {
-	Assign string            `if:"label=_,type=text"`
-	From   assign.Assignment `if:"label=from"`
-	Filter rt.BoolEval       `if:"label=and"`
-	Exe    []rt.Execute      `if:"label=do"`
-	Else   Brancher          `if:"label=else,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ChooseValue)(nil)
-var _ Brancher = (*ChooseValue)(nil)
-
-func (*ChooseValue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ChooseValue_Type,
-		Uses: composer.Type_Flow,
-		Lede: "if",
-	}
-}
-
-const ChooseValue_Type = "choose_value"
-const ChooseValue_Field_Assign = "$ASSIGN"
-const ChooseValue_Field_From = "$FROM"
-const ChooseValue_Field_Filter = "$FILTER"
-const ChooseValue_Field_Exe = "$EXE"
-const ChooseValue_Field_Else = "$ELSE"
-
-func (op *ChooseValue) Marshal(m jsn.Marshaler) error {
-	return ChooseValue_Marshal(m, op)
-}
-
-type ChooseValue_Slice []ChooseValue
-
-func (op *ChooseValue_Slice) GetType() string { return ChooseValue_Type }
-
-func (op *ChooseValue_Slice) Marshal(m jsn.Marshaler) error {
-	return ChooseValue_Repeats_Marshal(m, (*[]ChooseValue)(op))
-}
-
-func (op *ChooseValue_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ChooseValue_Slice) SetSize(cnt int) {
-	var els []ChooseValue
-	if cnt >= 0 {
-		els = make(ChooseValue_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ChooseValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ChooseValue_Marshal(m, &(*op)[i])
-}
-
-func ChooseValue_Repeats_Marshal(m jsn.Marshaler, vals *[]ChooseValue) error {
-	return jsn.RepeatBlock(m, (*ChooseValue_Slice)(vals))
-}
-
-func ChooseValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseValue) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ChooseValue_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ChooseValue_Flow struct{ ptr *ChooseValue }
-
-func (n ChooseValue_Flow) GetType() string      { return ChooseValue_Type }
-func (n ChooseValue_Flow) GetLede() string      { return "if" }
-func (n ChooseValue_Flow) GetFlow() interface{} { return n.ptr }
-func (n ChooseValue_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ChooseValue); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ChooseValue_Optional_Marshal(m jsn.Marshaler, pv **ChooseValue) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ChooseValue_Marshal(m, *pv)
-	} else if !enc {
-		var v ChooseValue
-		if err = ChooseValue_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ChooseValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ChooseValue_Field_Assign)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseValue_Field_Assign))
-		}
-		e1 := m.MarshalKey("from", ChooseValue_Field_From)
-		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseValue_Field_From))
-		}
-		e2 := m.MarshalKey("and", ChooseValue_Field_Filter)
-		if e2 == nil {
-			e2 = rt.BoolEval_Marshal(m, &val.Filter)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ChooseValue_Field_Filter))
-		}
-		e3 := m.MarshalKey("do", ChooseValue_Field_Exe)
-		if e3 == nil {
-			e3 = rt.Execute_Repeats_Marshal(m, &val.Exe)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ChooseValue_Field_Exe))
-		}
-		e4 := m.MarshalKey("else", ChooseValue_Field_Else)
-		if e4 == nil {
-			e4 = Brancher_Optional_Marshal(m, &val.Else)
-		}
-		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", ChooseValue_Field_Else))
 		}
 		m.EndBlock()
 	}
@@ -6991,13 +6610,10 @@ var Slats = []composer.Composer{
 	(*CallTerminal)(nil),
 	(*CallTrigger)(nil),
 	(*Capitalize)(nil),
-	(*ChooseAction)(nil),
-	(*ChooseMore)(nil),
-	(*ChooseMoreValue)(nil),
+	(*ChooseBranch)(nil),
 	(*ChooseNothingElse)(nil),
 	(*ChooseNum)(nil),
 	(*ChooseText)(nil),
-	(*ChooseValue)(nil),
 	(*CommaText)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
@@ -7068,22 +6684,19 @@ var Signatures = map[uint64]interface{}{
 	15996371593171599094: (*QuotientOf)(nil),        /* number_eval=Div:by: */
 	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
 	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
-	2612401738948423533:  (*ChooseNothingElse)(nil), /* brancher=Else do: */
-	49696778309444364:    (*ChooseMore)(nil),        /* brancher=Else if:do: */
-	12459138571714601581: (*ChooseMore)(nil),        /* brancher=Else if:do:else: */
-	2599893869760132115:  (*ChooseMoreValue)(nil),   /* brancher=Else if:from:and:do: */
-	5806580860764010048:  (*ChooseMoreValue)(nil),   /* brancher=Else if:from:and:do:else: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
+	12721242800902657822: (*ChooseNothingElse)(nil), /* brancher=Finally assuming:do: */
+	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
 	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
-	11676187955438326921: (*ChooseAction)(nil),      /* brancher=If:do: */
-	16551038912311542599: (*ChooseAction)(nil),      /* execute=If:do: */
-	11846460753008131314: (*ChooseAction)(nil),      /* brancher=If:do:else: */
-	9882017885672780228:  (*ChooseAction)(nil),      /* execute=If:do:else: */
-	10655670532271177368: (*ChooseValue)(nil),       /* brancher=If:from:and:do: */
-	14466057388518005874: (*ChooseValue)(nil),       /* execute=If:from:and:do: */
-	1227874404978937785:  (*ChooseValue)(nil),       /* brancher=If:from:and:do:else: */
-	6358622063945913767:  (*ChooseValue)(nil),       /* execute=If:from:and:do:else: */
+	6524366950360243674:  (*ChooseBranch)(nil),      /* brancher=If:assuming:do: */
+	12195526980856142720: (*ChooseBranch)(nil),      /* execute=If:assuming:do: */
+	16752471159562852415: (*ChooseBranch)(nil),      /* brancher=If:assuming:do:else: */
+	2092791308408463217:  (*ChooseBranch)(nil),      /* execute=If:assuming:do:else: */
+	11676187955438326921: (*ChooseBranch)(nil),      /* brancher=If:do: */
+	16551038912311542599: (*ChooseBranch)(nil),      /* execute=If:do: */
+	11846460753008131314: (*ChooseBranch)(nil),      /* brancher=If:do:else: */
+	9882017885672780228:  (*ChooseBranch)(nil),      /* execute=If:do:else: */
 	11335666314438122404: (*SumOf)(nil),             /* number_eval=Inc: */
 	425597877445155633:   (*SumOf)(nil),             /* number_eval=Inc:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */

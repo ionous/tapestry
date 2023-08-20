@@ -1,32 +1,31 @@
 {
   "Tapestry:": [
     {
-        "Interpret:with:": [
-          [
-            "smell",
-            "sniff"
-          ],
-          [
-            {
-              "One of:": [
-                {
-                  "Sequence:": [
-                    {
-                      "One noun:": "objects"
-                    },
-                    {
-                      "Action:": "smelling"
-                    }
-                  ]
-                },
-                {
-                  "Action:": "sniffing"
-                }
-              ]
-            }
-          ]
+      "Interpret:with:": [
+        [
+          "smell",
+          "sniff"
+        ],
+        [
+          {
+            "One of:": [
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "objects"
+                  },
+                  {
+                    "Action:": "smelling"
+                  }
+                ]
+              },
+              {
+                "Action:": "sniffing"
+              }
+            ]
+          }
         ]
-      
+      ]
     },
     {
       "--": ""
@@ -120,27 +119,31 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "smelling"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "smelling"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -148,29 +151,33 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "smelling"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
                             {
                               "Not:": {
                                 "Is empty:": "@resp"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "resp",
+                                {
+                                  "FromText:": {
+                                    "CanUse actor:action:noun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "smelling"
+                                      },
+                                      {
+                                        "FromText:": "@noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -178,7 +185,7 @@
                               }
                             ],
                             {
-                              "Else do:": [
+                              "Finally do:": [
                                 {
                                   "ReportSmelling actor:noun:": [
                                     {

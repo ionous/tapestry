@@ -58,17 +58,19 @@ func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Val
 }
 
 func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []g.Value, err error) {
-	keys, vals := make([]string, len(args)), make([]g.Value, len(args))
-	for i, a := range args {
-		if val, e := safe.GetAssignment(run, a.Value); e != nil {
-			err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
-			break
-		} else {
-			keys[i], vals[i] = lang.Normalize(a.Name), val
+	if len(args) > 0 {
+		keys, vals := make([]string, len(args)), make([]g.Value, len(args))
+		for i, a := range args {
+			if val, e := safe.GetAssignment(run, a.Value); e != nil {
+				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
+				break
+			} else {
+				keys[i], vals[i] = lang.Normalize(a.Name), val
+			}
 		}
-	}
-	if err == nil {
-		retKeys, retVals = keys, vals
+		if err == nil {
+			retKeys, retVals = keys, vals
+		}
 	}
 	return
 }

@@ -110,11 +110,11 @@ func TestQueries(t *testing.T) {
 				err = e
 				t.Fatal(e)
 			} else if e := mdlRule(m,
-				// "domain", "kind", "target", "rank", "filter", "prog", "at"
+				// "domain", "kind", "target", "rank", "prog", "at"
 				// ---------------------------------------
-				domain, pattern, "" /**/, 1, "filter1", "prog1", at,
-				domain, pattern, kind, 2, "filter2", "prog2", at,
-				domain, pattern, kind, 3, "filter3", "prog3", at,
+				domain, pattern, "", 1, "prog1", at,
+				domain, pattern, kind, 2, "prog2", at,
+				domain, pattern, kind, 3, "prog3", at,
 			); e != nil {
 				err = e
 				t.Fatal(e)
@@ -209,15 +209,15 @@ func TestQueries(t *testing.T) {
 		t.Fatal(e, diff)
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []query.Rules{
-		{Id: "1", Phase: 1, Filter: []byte("filter1"), Prog: []byte("prog1")},
+	} else if diff := pretty.Diff(got, []query.RuleData{
+		{Name: "1", Prog: []byte("prog1")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else if got, e := q.RulesFor(pattern, kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []query.Rules{
-		{Id: "2", Phase: 2, Filter: []byte("filter2"), Prog: []byte("prog2")},
-		{Id: "3", Phase: 3, Filter: []byte("filter3"), Prog: []byte("prog3")},
+	} else if diff := pretty.Diff(got, []query.RuleData{
+		{Name: "2", Prog: []byte("prog2")},
+		{Name: "3", Prog: []byte("prog3")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else /*if got, e := q.Relation(relation); e != nil {
@@ -416,17 +416,15 @@ func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 	return
 }
 func mdlRule(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 7 {
+	for i, cnt := 0, len(els); i < cnt; i += 6 {
 		row := els[i:]
-		domain, pattern, target, rank, filter, prog, at :=
-			row[0].(string),
-			row[1].(string),
-			row[2].(string),
-			row[3].(int),
-			row[4].(string),
-			row[5].(string),
-			row[6].(string)
-		if e := m.Pin(domain, at).AddTestRule(pattern, target, rank, filter, prog); e != nil {
+		domain := row[0].(string)
+		pattern := row[1].(string)
+		target := row[2].(string)
+		rank := row[3].(int)
+		prog := row[4].(string)
+		at := row[5].(string)
+		if e := m.Pin(domain, at).AddTestRule(pattern, target, rank, prog); e != nil {
 			err = e
 			break
 		}

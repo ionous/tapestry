@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"github.com/ionous/errutil"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -26,13 +25,11 @@ func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 			for _, h := range op.Handlers {
 				// each handler references a pattern
 				pb := mdl.NewPatternBuilder(h.Event.String())
-				if e := addFields(pb, mdl.PatternLocals, h.Locals); e != nil {
-					err = errutil.Append(e)
-				} else if e := addRules(pb, tgt, h.Rules); e != nil {
-					err = errutil.Append(e)
-				} else if e := pen.ExtendPattern(pb.Pattern); e != nil {
-					err = errutil.Append(e)
-				}
+				addFields(pb, mdl.PatternLocals, h.Locals)
+				addRules(pb, tgt, h.Rules)
+				err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
+					return pen.ExtendPattern(pb.Pattern)
+				})
 			}
 		}
 		return

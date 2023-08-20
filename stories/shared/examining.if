@@ -36,30 +36,34 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "resp",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:requiresLight:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "examining"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          },
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@resp"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "resp",
+                        {
+                          "FromText:": {
+                            "CanReach actor:action:noun:requiresLight:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "examining"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              },
+                              {
+                                "FromBool:": true
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -67,29 +71,33 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "examining"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            },
+                          "If:assuming:do:else:": [
                             {
                               "Not:": {
                                 "Is empty:": "@resp"
                               }
+                            },
+                            {
+                              "Arg:from:": [
+                                "resp",
+                                {
+                                  "FromText:": {
+                                    "CanUse actor:action:noun:": [
+                                      {
+                                        "FromText:": "@actor"
+                                      },
+                                      {
+                                        "FromText:": "examining"
+                                      },
+                                      {
+                                        "FromText:": "@noun"
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
                             },
                             [
                               {
@@ -97,7 +105,7 @@
                               }
                             ],
                             {
-                              "Else do:": [
+                              "Finally do:": [
                                 {
                                   "If:do:": [
                                     {
@@ -309,7 +317,7 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "Comment:": "if the player isn't in the container."
                         },

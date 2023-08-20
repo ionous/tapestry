@@ -89,7 +89,7 @@ var SayPattern = testpat.Pattern{
 }
 
 var SayHelloGoodbye = core.MakeActivity(
-	&core.ChooseAction{
+	&core.ChooseBranch{
 		If: B(true),
 		Exe: core.MakeActivity(&core.PrintText{
 			Text: T("hello"),

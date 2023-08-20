@@ -52,7 +52,7 @@
                       }
                     ],
                     {
-                      "Else if:do:else:": [
+                      "If:do:else:": [
                         {
                           "Not:": {
                             "KindOf:is:": [
@@ -77,7 +77,7 @@
                           }
                         ],
                         {
-                          "Else do:": [
+                          "Finally do:": [
                             {
                               "If:do:": [
                                 {

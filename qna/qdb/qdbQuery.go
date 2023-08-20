@@ -226,15 +226,15 @@ func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	return
 }
 
-func (q *Query) RulesFor(pat, target string) (ret []query.Rules, err error) {
+func (q *Query) RulesFor(pat, target string) (ret []query.RuleData, err error) {
 	if rows, e := q.rulesFor.Query(pat, target); e != nil {
 		err = e
 	} else {
-		var rule query.Rules
+		var rule query.RuleData
 		if e := tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, rule)
 			return
-		}, &rule.Id, &rule.Phase, &rule.Updates, &rule.Terminates, &rule.Filter, &rule.Prog); e != nil {
+		}, &rule.Name, &rule.Prog); e != nil {
 			err = e // scan error...
 		}
 	}
@@ -465,7 +465,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
-			`select mu.rowid, mu.rank, mu.updates, mu.terminates, mu.filter, mu.prog
+			`select coalesce(mu.name, mu.rowid), mu.prog
 			from active_domains 
 			join mdl_rule mu
 				using (domain)

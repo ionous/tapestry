@@ -18,7 +18,7 @@ func TestLoopBreak(t *testing.T) {
 				&assign.SetValue{
 					Target: Variable("i"),
 					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
-				&ChooseAction{
+				&ChooseBranch{
 					If: &CompareNum{A: Variable("i"), Is: AtLeast, B: I(4)},
 					Exe: MakeActivity(
 						&Break{},
@@ -43,7 +43,7 @@ func TestLoopNext(t *testing.T) {
 				&assign.SetValue{
 					Target: Variable("i"),
 					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
-				&ChooseAction{
+				&ChooseBranch{
 					If: &CompareNum{A: Variable("i"), Is: AtLeast, B: I(4)},
 					Exe: MakeActivity(
 						&Break{},

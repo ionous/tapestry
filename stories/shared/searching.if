@@ -36,7 +36,14 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
+                  "If:assuming:do:else:": [
+
+                    {
+                      "Not:": {
+                        "Is empty:": "@result"
+                      }
+                    },
+                    	{ "Arg:from:": [
                     "result",
                     {
                       "FromText:": {
@@ -55,19 +62,14 @@
                           }
                         ]
                       }
-                    },
-                    {
-                      "Not:": {
-                        "Is empty:": "@result"
-                      }
-                    },
+                    }]},
                     [
                       {
                         "Print:": "@result"
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "If:do:": [
                             {
@@ -199,7 +201,7 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "Say response:with:": [
                             "player searches storage",

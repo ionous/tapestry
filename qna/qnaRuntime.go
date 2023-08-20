@@ -68,12 +68,21 @@ func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 }
 
 // return the runtime rules matching the passed pattern and target
+// FIX: remove
 func (run *Runner) GetRules(pattern, target string) (ret []rt.Rule, err error) {
 	pat, tgt := lang.Normalize(pattern), lang.Normalize(target) // FIX: caller normalization would be best.
 	if rs, e := run.getRules(pat, tgt); e != nil {
 		err = e
 	} else {
-		ret = rs.rules
+		for _, r := range rs.rules {
+			ret = append(ret, rt.Rule{
+				Name:       r.Name,
+				Filter:     r.Filter,
+				Execute:    r.Exe,
+				Updates:    r.Updates,
+				Terminates: r.Terminates,
+			})
+		}
 	}
 	return
 }

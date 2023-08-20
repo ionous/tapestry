@@ -36,32 +36,36 @@
               },
               [
                 {
-                  "If:from:and:do:else:": [
-                    "result",
-                    {
-                      "--": [
-                        "can we handle ( locally touch ) the object.",
-                        "the result will be empty if we can",
-                        "or an error message if we cant"
-                      ],
-                      "FromText:": {
-                        "CanHandle actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "dropping"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    },
+                  "If:assuming:do:else:": [
                     {
                       "Not:": {
                         "Is empty:": "@result"
                       }
+                    },
+                    {
+                      "Arg:from:": [
+                        "result",
+                        {
+                          "--": [
+                            "can we handle ( locally touch ) the object.",
+                            "the result will be empty if we can",
+                            "or an error message if we cant"
+                          ],
+                          "FromText:": {
+                            "CanHandle actor:action:noun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "dropping"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     },
                     [
                       {
@@ -69,7 +73,7 @@
                       }
                     ],
                     {
-                      "Else do:": [
+                      "Finally do:": [
                         {
                           "If:do:": [
                             {
@@ -137,28 +141,32 @@
                     true,
                     [
                       {
-                        "If:from:and:do:else:": [
-                          "error",
-                          {
-                            "FromText:": {
-                              "MoveObject obj:dest:": [
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": {
-                                    "ParentOf obj:": {
-                                      "FromText:": "@actor"
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          },
+                        "If:assuming:do:else:": [
                           {
                             "Not:": {
                               "Is empty:": "@error"
                             }
+                          },
+                          {
+                            "Arg:from:": [
+                              "error",
+                              {
+                                "FromText:": {
+                                  "MoveObject obj:dest:": [
+                                    {
+                                      "FromText:": "@noun"
+                                    },
+                                    {
+                                      "FromText:": {
+                                        "ParentOf obj:": {
+                                          "FromText:": "@actor"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
                           },
                           [
                             {
@@ -174,7 +182,7 @@
                             }
                           ],
                           {
-                            "Else do:": [
+                            "Finally do:": [
                               {
                                 "Log:value:": [
                                   "debug",

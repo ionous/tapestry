@@ -377,7 +377,7 @@
                                   }
                                 ],
                                 {
-                                  "Else if:do:": [
+                                  "If:do:": [
                                     {
                                       "AnyTrue:": [
                                         {

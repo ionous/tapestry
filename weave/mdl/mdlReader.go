@@ -205,10 +205,10 @@ func ReadRelations(db *sql.DB) ([]string, error) {
 	order by mk.kind`)
 }
 
-// domain, pattern, target, rank, filter, prog
+// domain, pattern, target, rank, rule
 func ReadRules(db *sql.DB) ([]string, error) {
 	return tables.QueryStrings(db, `
-  select mr.domain ||':'|| mk.kind ||':'|| coalesce(mt.kind, '') ||':'|| rank ||':'|| filter ||':'|| prog
+  select mr.domain ||':'|| mk.kind ||':'|| coalesce(mt.kind, '') ||':'|| mr.prog
   from mdl_rule mr 
   join mdl_kind mk
   	on(mr.kind = mk.rowid)

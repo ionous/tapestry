@@ -1,8 +1,8 @@
 package mdl
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
@@ -13,7 +13,7 @@ type PatternBuilder struct {
 type Pattern struct {
 	name, parent string
 	fields       fieldSet
-	rules        []rule
+	rules        []Rule
 	ruleOfs      int // tracks how many rules were successfully written ( for retru )
 }
 
@@ -34,14 +34,11 @@ func (p *Pattern) Parent() string {
 	return p.parent
 }
 
-type rule struct {
-	name   string
-	target string
-	filter rt.BoolEval
-	prog   []rt.Execute
-	rank   int
-	updates,
-	terminates bool
+type Rule struct {
+	Name   string
+	Target string // TEMP
+	Rank   int
+	Prog   assign.Prog
 }
 
 func NewPatternBuilder(name string) *PatternBuilder {
@@ -89,23 +86,12 @@ func (b *PatternBuilder) AddParam(fn FieldInfo) {
 
 // defers execution; so no return value.
 // expects target class name to be normalized.
-func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, updates bool, prog []rt.Execute) {
-	b.rules = append(b.rules, rule{
-		target:  target,
-		filter:  filter,
-		updates: updates,
-		prog:    prog,
-	})
+func (b *PatternBuilder) AppendRule(rs Rule) {
+	b.rules = append(b.rules, rs)
 }
 
-func (b *PatternBuilder) AddNewRule(name string, rank int, updates, terminates bool, prog []rt.Execute) {
-	b.rules = append(b.rules, rule{
-		name:       name,
-		rank:       rank,
-		updates:    updates,
-		terminates: terminates,
-		prog:       prog,
-	})
+func (b *PatternBuilder) AppendRules(rs []Rule) {
+	b.rules = append(b.rules, rs...)
 }
 
 func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
@@ -124,16 +110,12 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 			} else {
 				for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
 					rule := pat.rules[pat.ruleOfs]
-					if tgt, e := pen.findOptionalKind(rule.target); e != nil {
+					if tgt, e := pen.findOptionalKind(rule.Target); e != nil {
 						err = e
 						break
-					} else if filter, e := marshalout(rule.filter); e != nil {
+					} else if out, e := marshalop(&rule.Prog); e != nil {
 						err = e
-						break
-					} else if prog, e := marshalprog(rule.prog); e != nil {
-						err = e
-						break
-					} else if e := pen.addRule(kid, tgt, rule.name, rule.rank, rule.updates, rule.terminates, filter, prog); e != nil {
+					} else if e := pen.addRule(kid, tgt, rule.Name, rule.Rank, out); e != nil {
 						err = e
 						break
 					}

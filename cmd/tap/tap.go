@@ -14,10 +14,9 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
-
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcompact"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdidlb"

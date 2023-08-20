@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/story/internal/rules"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
+	"git.sr.ht/~ionous/tapestry/weave/rules"
 	"github.com/ionous/errutil"
 )
 
@@ -31,15 +31,23 @@ func TestPrefixing(t *testing.T) {
 		(*AfterTesting)(nil),
 	)
 
+	var (
+		at      = 0
+		instead = rules.Ranks[0]
+		before  = rules.Ranks[1]
+		after   = rules.Ranks[2]
+		report  = rules.Ranks[3]
+	)
+
 	// test misc:
 	// "before" and "after" match misc with appropriate rank
 	// "instead of" and "report" dont match.
 	t.Run("simple patterns", func(t *testing.T) {
-		if e := match(t, &ks, "misc", "misc", 0); e != nil {
+		if e := match(t, &ks, "misc", "misc", at); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "before misc", "misc", -1); e != nil {
+		} else if e := match(t, &ks, "before misc", "misc", before); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "after misc", "misc", 1); e != nil {
+		} else if e := match(t, &ks, "after misc", "misc", after); e != nil {
 			t.Fatal(e)
 		} else if e := fail(t, &ks, "instead of misc"); e != nil {
 			t.Fatal(e)
@@ -54,13 +62,13 @@ func TestPrefixing(t *testing.T) {
 	t.Run("action events", func(t *testing.T) {
 		if e := match(t, &ks, "testing", "testing", 0); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "before testing", "before testing", -1); e != nil {
+		} else if e := match(t, &ks, "before testing", "before testing", before); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "after testing", "after testing", 1); e != nil {
+		} else if e := match(t, &ks, "after testing", "after testing", after); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "instead of testing", "before testing", -2); e != nil {
+		} else if e := match(t, &ks, "instead of testing", "before testing", instead); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "report testing", "after testing", 2); e != nil {
+		} else if e := match(t, &ks, "report testing", "after testing", report); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -88,9 +96,9 @@ func TestPrefixing(t *testing.T) {
 	t.Run("now what!?", func(t *testing.T) {
 		if e := match(t, &ks, "misc", "misc", 0); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "before misc", "misc", -1); e != nil {
+		} else if e := match(t, &ks, "before misc", "misc", -10); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "after misc", "misc", 1); e != nil {
+		} else if e := match(t, &ks, "after misc", "misc", 10); e != nil {
 			t.Fatal(e)
 		} else if e := fail(t, &ks, "instead of misc"); e != nil {
 			t.Fatal(e)

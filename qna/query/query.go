@@ -10,26 +10,24 @@ type CheckData struct {
 	Name   string
 	Domain string
 	Aff    affine.Affinity
-	Prog   []byte
-	Value  []byte
+	Prog   []byte // a serialized rt.Execute_Slice
+	Value  []byte // a serialized literal.Value
 }
 
 type FieldData struct {
 	Name     string
 	Affinity affine.Affinity
 	Class    string
-	Init     []byte
+	Init     []byte // a serialized assign.Assignment
 }
 
 type NounInfo struct {
 	Domain, Id, Kind string // id is the string identifier for the noun, unique within the domain.
 }
 
-type Rules struct {
-	Id                  string // really an id, but we'll let the driver convert
-	Phase               int
-	Updates, Terminates bool
-	Filter, Prog        []byte
+type RuleData struct {
+	Name string
+	Prog []byte // a serialized assign.Prog
 }
 
 type Query interface {
@@ -51,7 +49,7 @@ type Query interface {
 	// includes the parameters, followed by the result
 	// the result can be a blank string for execute statements
 	PatternLabels(pat string) ([]string, error)
-	RulesFor(pat, target string) ([]Rules, error)
+	RulesFor(pat, target string) ([]RuleData, error)
 	ReciprocalsOf(rel, id string) ([]string, error)
 	RelativesOf(rel, id string) ([]string, error)
 	Relate(rel, noun, otherNoun string) error
