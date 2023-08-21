@@ -1,117 +1,51 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args none:": [
-        "look",
-        "looking",
-        "nothing"
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:provides:": [
         "looking",
         [
           {
-            "Text:kind:initially:": [
+            "--": "the actor looking ( ex. the player. )",
+            "Text:kind:": [
               "actor",
-              "object",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
+              "actor"
             ]
           }
         ],
         [
           {
-            "PatternRule:do:": [
+            "Text:kind:initially:": [
+              "location",
+              "object",
               {
-                "IsPlayer obj:": {
+                "LocationOf obj:": {
                   "FromText:": "@actor"
                 }
-              },
-              [
-                {
-                  "Send:event:": [
-                    {
-                      "Capture obj:": {
-                        "FromText:": "@actor"
-                      }
-                    },
-                    {
-                      "Look actor:": {
-                        "FromText:": "@actor"
-                      }
-                    }
-                  ]
-                }
-              ]
+              }
             ]
           }
         ]
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "actors",
-        [
-          {
-            "With:event:provides:rules:": [
-              "while",
-              "look",
-              [
-                {
-                  "Text:kind:initially:": [
-                    "location",
-                    "object",
-                    {
-                      "LocationOf obj:": {
-                        "FromText:": "@actor"
-                      }
-                    }
-                  ]
-                }
-              ],
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "PrintVantage where:inDarkness:": [
-                          {
-                            "FromText:": "@location"
-                          },
-                          {
-                            "FromBool:": {
-                              "Object:field:": [
-                                "@actor",
-                                "is in darkness"
-                              ]
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+      "Rule for:named:do:": [
+        "looking",
+        "the standard looking action",
+        {
+          "PrintVantage where:inDarkness:": [
+            {
+              "FromText:": "@location"
+            },
+            {
+              "FromBool:": {
+                "Object:field:": [
+                  "@actor",
+                  "is in darkness"
+                ]
+              }
+            }
+          ]
+        }
       ]
     },
     {

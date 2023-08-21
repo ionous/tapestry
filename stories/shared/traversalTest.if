@@ -76,8 +76,13 @@
         ],
         [
           {
-            "Looking agent:": {
-              "FromText:": "player"
+            "Looking actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
             }
           },
           {
