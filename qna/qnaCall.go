@@ -39,13 +39,12 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 				// .call can return both a value and an error.
 				err = errutil.Fmt("%w calling %q", err, name)
 			}
+		} else if len(vals) <= 0 {
+			err = errutil.Fmt("attempting to call an event %q with no target  %q", name, aff)
 		} else {
+			tgt := vals[0]
 			callState := run.saveCallState()
-			if len(keys) <= 0 {
-				err = errutil.Fmt("attempting to call an event %q with no target  %q", name, aff)
-			} else if tgt, e := rec.GetNamedField(keys[0]); e != nil {
-				err = e
-			} else if path, e := run.newPathForTarget(tgt); e != nil {
+			if path, e := run.newPathForTarget(tgt); e != nil {
 				err = e
 			} else if evtObj, e := newEventRecord(run, event.Object, tgt); e != nil {
 				err = e // ^ create the "event" object sent to each event phase pattern.

@@ -219,6 +219,7 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 							})
 					}
 				}
+				// filter to the innermost target.
 				filters = append(filters,
 					&core.CompareText{
 						A:  core.Variable(event.Object, event.CurrentTarget.String()),

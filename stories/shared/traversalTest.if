@@ -113,9 +113,14 @@
             "Expect output:": "They seem to be closed."
           },
           {
-            "Opening agent:noun:": [
+            "Opening actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "double doors"

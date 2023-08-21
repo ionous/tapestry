@@ -1,134 +1,122 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args common:": [
-        "open",
+      "Define action:requires:": [
         "opening",
-        {
-          "CommonAction:": "object"
-        }
+        [
+          {
+            "--": "the actor opening something ( ex. the player. )",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the thing being opened.",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:named:do:": [
         "opening",
+        "the standard opening action",
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
+            "If:assuming:do:else:": [
               {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
+                "Not:": {
+                  "Is empty:": "@res"
                 }
               },
-              [
-                {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
+              {
+                "Arg:from:": [
+                  "res",
+                  {
+                    "FromText:": {
+                      "CanReach actor:action:noun:": [
                         {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "opening"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
+                          "FromText:": "@actor"
+                        },
                         {
-                          "If:assuming:do:else:": [
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Arg:from:": [
-                                "resp",
-                                {
-                                  "FromText:": {
-                                    "CanUse actor:action:noun:": [
-                                      {
-                                        "FromText:": "@actor"
-                                      },
-                                      {
-                                        "FromText:": "opening"
-                                      },
-                                      {
-                                        "FromText:": "@noun"
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "Print:": "@resp"
-                              }
-                            ],
-                            {
-                              "Finally do:": {
-                                "StateChanging noun:actor:trait:guard:change:": [
-                                  {
-                                    "FromText:": "@noun"
-                                  },
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "open"
-                                  },
-                                  {
-                                    "FromText:": "openable"
-                                  },
-                                  {
-                                    "FromText:": "open"
-                                  }
-                                ]
-                              }
-                            }
-                          ]
+                          "FromText:": "opening"
+                        },
+                        {
+                          "FromText:": "@noun"
                         }
                       ]
                     }
-                  ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Print:": "@res"
                 }
-              ]
+              ],
+              {
+                "Finally do:": [
+                  {
+                    "If:assuming:do:else:": [
+                      {
+                        "Not:": {
+                          "Is empty:": "@res"
+                        }
+                      },
+                      {
+                        "Arg:from:": [
+                          "res",
+                          {
+                            "FromText:": {
+                              "CanUse actor:action:noun:": [
+                                {
+                                  "FromText:": "@actor"
+                                },
+                                {
+                                  "FromText:": "opening"
+                                },
+                                {
+                                  "FromText:": "@noun"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      [
+                        {
+                          "Print:": "@res"
+                        }
+                      ],
+                      {
+                        "Finally do:": {
+                          "StateChanging noun:actor:trait:guard:change:": [
+                            {
+                              "FromText:": "@noun"
+                            },
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "open"
+                            },
+                            {
+                              "FromText:": "openable"
+                            },
+                            {
+                              "FromText:": "open"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]
@@ -138,134 +126,122 @@
       "--": ""
     },
     {
-      "Event:action:args common:": [
-        "close",
+      "Define action:requires:": [
         "closing",
-        {
-          "CommonAction:": "object"
-        }
+        [
+          {
+            "--": "the actor closing something ( ex. the player. )",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the thing being closed.",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:named:do:": [
         "closing",
+        "the standard closing action",
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
+            "If:assuming:do:else:": [
               {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
+                "Not:": {
+                  "Is empty:": "@res"
                 }
               },
-              [
-                {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
+              {
+                "Arg:from:": [
+                  "res",
+                  {
+                    "FromText:": {
+                      "CanReach actor:action:noun:": [
                         {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "closing"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
+                          "FromText:": "@actor"
+                        },
                         {
-                          "If:assuming:do:else:": [
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Arg:from:": [
-                                "resp",
-                                {
-                                  "FromText:": {
-                                    "CanUse actor:action:noun:": [
-                                      {
-                                        "FromText:": "@actor"
-                                      },
-                                      {
-                                        "FromText:": "closing"
-                                      },
-                                      {
-                                        "FromText:": "@noun"
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "Print:": "@resp"
-                              }
-                            ],
-                            {
-                              "Finally do:": {
-                                "StateChanging noun:actor:trait:guard:change:": [
-                                  {
-                                    "FromText:": "@noun"
-                                  },
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "closed"
-                                  },
-                                  {
-                                    "FromText:": "openable"
-                                  },
-                                  {
-                                    "FromText:": "close"
-                                  }
-                                ]
-                              }
-                            }
-                          ]
+                          "FromText:": "closing"
+                        },
+                        {
+                          "FromText:": "@noun"
                         }
                       ]
                     }
-                  ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Print:": "@res"
                 }
-              ]
+              ],
+              {
+                "Finally do:": [
+                  {
+                    "If:assuming:do:else:": [
+                      {
+                        "Not:": {
+                          "Is empty:": "@res"
+                        }
+                      },
+                      {
+                        "Arg:from:": [
+                          "res",
+                          {
+                            "FromText:": {
+                              "CanUse actor:action:noun:": [
+                                {
+                                  "FromText:": "@actor"
+                                },
+                                {
+                                  "FromText:": "closing"
+                                },
+                                {
+                                  "FromText:": "@noun"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      [
+                        {
+                          "Print:": "@res"
+                        }
+                      ],
+                      {
+                        "Finally do:": {
+                          "StateChanging noun:actor:trait:guard:change:": [
+                            {
+                              "FromText:": "@noun"
+                            },
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "closed"
+                            },
+                            {
+                              "FromText:": "openable"
+                            },
+                            {
+                              "FromText:": "close"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]
@@ -332,7 +308,11 @@
       ]
     },
     {
-      "--": "FIX FIX FIX -- should be on opening"
+      "--": [
+      		"FIX -- should probably be on opening",
+      		"to do so reporting state change would have to be launched by the actions",
+      		"so state changing ( events in general ) need to return true / false."
+      	]
     },
     {
       "Rule for:kind:named:do:": [
