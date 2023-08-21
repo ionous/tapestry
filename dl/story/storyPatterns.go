@@ -132,8 +132,15 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if rule, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
 			err = e
-		} else if e := weaveRule(w, act.String(), rule.String(), ruleNoun(noun), op.Exe); e != nil {
-			err = errutil.Fmt("%w weaving a rule", e)
+		} else {
+			filter := &core.CompareText{
+				A:  core.Variable(event.Object, event.Target.String()),
+				Is: core.Equal,
+				B:  &literal.TextValue{Value: noun},
+			}
+			if e := weaveRule(w, act.String(), rule.String(), filter, op.Exe); e != nil {
+				err = errutil.Fmt("%w weaving a rule", e)
+			}
 		}
 		return
 	})
@@ -155,8 +162,20 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if rule, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
 			err = e
-		} else if e := weaveRule(w, act.String(), rule.String(), ruleKind{k, exact.Bool()}, op.Exe); e != nil {
-			err = errutil.Fmt("%w weaving a rule", e)
+		} else {
+			var filter rt.BoolEval
+			if exact.Bool() {
+				filter = &core.IsExactKindOf{Object: core.Variable(event.Object, event.Target.String()),
+					Kind: k,
+				}
+			} else {
+				filter = &core.IsKindOf{Object: core.Variable(event.Object, event.Target.String()),
+					Kind: k,
+				}
+			}
+			if e := weaveRule(w, act.String(), rule.String(), filter, op.Exe); e != nil {
+				err = errutil.Fmt("%w weaving a rule", e)
+			}
 		}
 		return
 	})
@@ -169,7 +188,7 @@ type ruleKind struct {
 	exactly bool
 }
 
-func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (err error) {
+func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.Execute) (err error) {
 	if prefix, e := rules.ReadName(w, lang.Normalize(pat)); e != nil {
 		err = errutil.New("determining prefix", e)
 	} else {
@@ -177,15 +196,22 @@ func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (
 		if k, e := w.GetKindByName(pat); e != nil {
 			err = errutil.New("finding base pattern", e)
 		} else {
-			equals := make([]rt.BoolEval, 0, 3)
+			updates := rules.DoesUpdate(exe)
+			cancels := prefix.Cancels
+			interrupts := cancels || rules.DoesTerminate(exe)
 
+			// add additional filters:
+			filters := make([]rt.BoolEval, 0, 3)
+			if filter != nil {
+				filters = append(filters, filter)
+			}
 			// by default: all event handlers are filtered to the player and the innermost target.
 			if k.Implements(kindsOf.Event.String()) || k.Implements(kindsOf.Action.String()) {
 				// if the focus of the event involves an actor;
 				// then we automatically filter for the player
 				if k.NumField() > 0 {
 					if f := k.Field(0); f.Type == event.Actors {
-						equals = append(equals,
+						filters = append(filters,
 							&core.CompareText{
 								A:  core.Variable(f.Name),
 								Is: core.Equal,
@@ -193,59 +219,36 @@ func weaveRule(w *weave.Weaver, pat, rule string, extra any, exe []rt.Execute) (
 							})
 					}
 				}
-				equals = append(equals,
+				filters = append(filters,
 					&core.CompareText{
 						A:  core.Variable(event.Object, event.CurrentTarget.String()),
 						Is: core.Equal,
 						B:  core.Variable(event.Object, event.Target.String()),
 					})
-
-				switch extra := extra.(type) {
-				case nil:
-				case ruleNoun:
-					equals = append(equals,
-						&core.CompareText{
-							A:  core.Variable(event.Object, event.Target.String()),
-							Is: core.Equal,
-							B:  &literal.TextValue{Value: string(extra)},
-						})
-				case ruleKind:
-					if extra.exactly {
-						equals = append(equals,
-							&core.IsExactKindOf{Object: core.Variable(event.Object, event.Target.String()),
-								Kind: extra.name,
-							})
-					} else {
-						equals = append(equals,
-							&core.IsKindOf{Object: core.Variable(event.Object, event.Target.String()),
-								Kind: extra.name,
-							})
-					}
-
-				default:
-					panic(errutil.Sprint("unknown guard %T", extra))
-				}
 			}
-			exe = []rt.Execute{&core.ChooseBranch{
-				If:  &core.AllTrue{Test: equals},
-				Exe: exe,
-			}}
+			if len(filters) > 0 {
+				exe = []rt.Execute{&core.ChooseBranch{
+					If:  &core.AllTrue{Test: filters},
+					Exe: exe,
+				}}
+			}
+
+			//
+			pb := mdl.NewPatternBuilder(pat)
+			pb.AppendRule(mdl.Rule{
+				Name: rule,
+				Rank: rank,
+				Prog: assign.Prog{
+					Exe:        exe,
+					Updates:    updates,
+					Interrupts: interrupts,
+					Cancels:    cancels,
+				},
+			})
+			err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+				return w.Pin().ExtendPattern(pb.Pattern)
+			})
 		}
-		//
-		pb := mdl.NewPatternBuilder(pat)
-		// pb.AppendRules(rules.Split(rule, rank, exe))
-		pb.AppendRule(mdl.Rule{
-			Name: rule,
-			Rank: rank,
-			Prog: assign.Prog{
-				Exe:        exe,
-				Updates:    rules.DoesUpdate(exe),
-				Terminates: rules.DoesTerminate(exe),
-			},
-		})
-		err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
-			return w.Pin().ExtendPattern(pb.Pattern)
-		})
 	}
 	return
 }

@@ -1463,7 +1463,6 @@ func ChooseBranch_Marshal(m jsn.Marshaler, val *ChooseBranch) (err error) {
 
 // ChooseNothingElse
 type ChooseNothingElse struct {
-	Args   []assign.Arg `if:"label=assuming,optional"`
 	Exe    []rt.Execute `if:"label=do"`
 	Markup map[string]any
 }
@@ -1480,7 +1479,6 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 }
 
 const ChooseNothingElse_Type = "choose_nothing_else"
-const ChooseNothingElse_Field_Args = "$ARGS"
 const ChooseNothingElse_Field_Exe = "$EXE"
 
 func (op *ChooseNothingElse) Marshal(m jsn.Marshaler) error {
@@ -1554,19 +1552,12 @@ func ChooseNothingElse_Optional_Marshal(m jsn.Marshaler, pv **ChooseNothingElse)
 func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseNothingElse_Flow{val}); err == nil {
-		e0 := m.MarshalKey("assuming", ChooseNothingElse_Field_Args)
+		e0 := m.MarshalKey("do", ChooseNothingElse_Field_Exe)
 		if e0 == nil {
-			e0 = assign.Arg_Optional_Repeats_Marshal(m, &val.Args)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Args))
-		}
-		e1 := m.MarshalKey("do", ChooseNothingElse_Field_Exe)
-		if e1 == nil {
-			e1 = rt.Execute_Repeats_Marshal(m, &val.Exe)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseNothingElse_Field_Exe))
+			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -6685,7 +6676,6 @@ var Signatures = map[uint64]interface{}{
 	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
 	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
-	12721242800902657822: (*ChooseNothingElse)(nil), /* brancher=Finally assuming:do: */
 	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
 	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */

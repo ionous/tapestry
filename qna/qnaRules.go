@@ -2,6 +2,7 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -11,23 +12,27 @@ import (
 type ruleSet struct {
 	rules     []localRule
 	updateAll bool
-	skipRun   bool
 }
 
-func (rs *ruleSet) applyRule(run rt.Runtime, i int) (done bool, err error) {
+func (rs *ruleSet) tryRule(run rt.Runtime, skip bool, i int) (ret localRule, err error) {
+	var pop int
+	var exe []rt.Execute
 	rule := rs.rules[i]
-	if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
+	if pick := core.FindBranch(rule.Exe); pick == nil {
+		exe = rule.Exe
+	} else if b, e := pick.PickBranch(run, &pop); e != nil {
 		err = e
-	} else if ok.Bool() && !rs.skipRun {
-		if e := safe.RunAll(run, rule.Exe); e != nil {
+	} else {
+		exe = b
+	}
+	if err == nil && exe != nil && !skip {
+		if e := safe.RunAll(run, exe); e != nil {
 			err = e
-		} else if rule.Terminates {
-			if !rs.updateAll {
-				done = true
-			}
-			rs.skipRun = true
+		} else {
+			ret = rule
 		}
 	}
+	safe.PopSeveral(run, pop)
 	return
 }
 

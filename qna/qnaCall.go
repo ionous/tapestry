@@ -172,10 +172,21 @@ func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retD
 			err = e // fix? get rules earlier to skip setup if they dont exist?
 			break
 		} else {
+			var skip bool
 			for ruleIdx := range rs.rules {
-				if done, e := rs.applyRule(run, ruleIdx); e != nil || done {
+				if rule, e := rs.tryRule(run, skip, ruleIdx); e != nil {
 					err = e
 					break
+				} else if rule.Cancels {
+					retDone = true
+					break
+				} else if rule.Interrupts {
+					if !rs.updateAll {
+						break
+					} else {
+						skip = true
+					}
+
 				} else {
 					// setting cancel blocks the rest of processing
 					// clearing it lets the handler set continue

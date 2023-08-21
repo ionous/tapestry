@@ -4,7 +4,4 @@ package rules
 type UpdateTracker = updateTracker
 
 // exports for testing
-var SplitTree = splitTree
-var FindTree = findTree
-
 var Ranks = ranks

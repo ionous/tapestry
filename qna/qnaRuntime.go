@@ -76,11 +76,10 @@ func (run *Runner) GetRules(pattern, target string) (ret []rt.Rule, err error) {
 	} else {
 		for _, r := range rs.rules {
 			ret = append(ret, rt.Rule{
-				Name:       r.Name,
-				Filter:     r.Filter,
-				Execute:    r.Exe,
-				Updates:    r.Updates,
-				Terminates: r.Terminates,
+				Name:    r.Name,
+				Filter:  r.Filter,
+				Execute: r.Exe,
+				Updates: r.Updates,
 			})
 		}
 	}

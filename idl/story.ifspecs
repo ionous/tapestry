@@ -115,10 +115,9 @@
                     ]
                   },
                   {
-                    "Term:type:required:repeats:": [
+                    "Term:type:repeats:": [
                       "with",
                       "story_statement",
-                      true,
                       true
                     ]
                   }

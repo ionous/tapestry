@@ -1491,11 +1491,12 @@ func ObjectRef_Marshal(m jsn.Marshaler, val *ObjectRef) (err error) {
 
 // Prog A pattern handler. Stored in the mdl_rule database table.
 type Prog struct {
-	Args       []Arg        `if:"label=args"`
-	Filter     rt.BoolEval  `if:"label=filter"`
+	Args       []Arg        `if:"label=args,optional"`
+	Filter     rt.BoolEval  `if:"label=filter,optional"`
 	Exe        []rt.Execute `if:"label=do"`
-	Updates    bool         `if:"label=updates,type=bool"`
-	Terminates bool         `if:"label=terminates,type=bool"`
+	Updates    bool         `if:"label=updates,optional,type=bool"`
+	Interrupts bool         `if:"label=interrupts,optional,type=bool"`
+	Cancels    bool         `if:"label=cancels,optional,type=bool"`
 	Markup     map[string]any
 }
 
@@ -1503,7 +1504,6 @@ func (*Prog) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Prog_Type,
 		Uses: composer.Type_Flow,
-		Lede: "args",
 	}
 }
 
@@ -1512,7 +1512,8 @@ const Prog_Field_Args = "$ARGS"
 const Prog_Field_Filter = "$FILTER"
 const Prog_Field_Exe = "$EXE"
 const Prog_Field_Updates = "$UPDATES"
-const Prog_Field_Terminates = "$TERMINATES"
+const Prog_Field_Interrupts = "$INTERRUPTS"
+const Prog_Field_Cancels = "$CANCELS"
 
 func (op *Prog) Marshal(m jsn.Marshaler) error {
 	return Prog_Marshal(m, op)
@@ -1561,7 +1562,7 @@ func Prog_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Prog) (err error) {
 type Prog_Flow struct{ ptr *Prog }
 
 func (n Prog_Flow) GetType() string      { return Prog_Type }
-func (n Prog_Flow) GetLede() string      { return "args" }
+func (n Prog_Flow) GetLede() string      { return Prog_Type }
 func (n Prog_Flow) GetFlow() interface{} { return n.ptr }
 func (n Prog_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Prog); ok {
@@ -1587,14 +1588,14 @@ func Prog_Marshal(m jsn.Marshaler, val *Prog) (err error) {
 	if err = m.MarshalBlock(Prog_Flow{val}); err == nil {
 		e0 := m.MarshalKey("args", Prog_Field_Args)
 		if e0 == nil {
-			e0 = Arg_Repeats_Marshal(m, &val.Args)
+			e0 = Arg_Optional_Repeats_Marshal(m, &val.Args)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Prog_Field_Args))
 		}
 		e1 := m.MarshalKey("filter", Prog_Field_Filter)
 		if e1 == nil {
-			e1 = rt.BoolEval_Marshal(m, &val.Filter)
+			e1 = rt.BoolEval_Optional_Marshal(m, &val.Filter)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Prog_Field_Filter))
@@ -1608,17 +1609,24 @@ func Prog_Marshal(m jsn.Marshaler, val *Prog) (err error) {
 		}
 		e3 := m.MarshalKey("updates", Prog_Field_Updates)
 		if e3 == nil {
-			e3 = prim.Bool_Unboxed_Marshal(m, &val.Updates)
+			e3 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Updates)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", Prog_Field_Updates))
 		}
-		e4 := m.MarshalKey("terminates", Prog_Field_Terminates)
+		e4 := m.MarshalKey("interrupts", Prog_Field_Interrupts)
 		if e4 == nil {
-			e4 = prim.Bool_Unboxed_Marshal(m, &val.Terminates)
+			e4 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Interrupts)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", Prog_Field_Terminates))
+			m.Error(errutil.New(e4, "in flow at", Prog_Field_Interrupts))
+		}
+		e5 := m.MarshalKey("cancels", Prog_Field_Cancels)
+		if e5 == nil {
+			e5 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Cancels)
+		}
+		if e5 != nil && e5 != jsn.Missing {
+			m.Error(errutil.New(e5, "in flow at", Prog_Field_Cancels))
 		}
 		m.EndBlock()
 	}
@@ -1998,7 +2006,38 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
-	4642395463158968874:  (*Prog)(nil),           /* Args args:filter:do:updates:terminates: */
+	9201024288851220289:  (*Prog)(nil),           /* Prog args:do: */
+	4566663538597678170:  (*Prog)(nil),           /* Prog args:do:cancels: */
+	404919893979018277:   (*Prog)(nil),           /* Prog args:do:interrupts: */
+	7373497678810567558:  (*Prog)(nil),           /* Prog args:do:interrupts:cancels: */
+	6733754003404409545:  (*Prog)(nil),           /* Prog args:do:updates: */
+	15965240942014671890: (*Prog)(nil),           /* Prog args:do:updates:cancels: */
+	12883711254754591981: (*Prog)(nil),           /* Prog args:do:updates:interrupts: */
+	14538722533235079230: (*Prog)(nil),           /* Prog args:do:updates:interrupts:cancels: */
+	2783150732220683881:  (*Prog)(nil),           /* Prog args:filter:do: */
+	2090510423672918194:  (*Prog)(nil),           /* Prog args:filter:do:cancels: */
+	10408156351642278797: (*Prog)(nil),           /* Prog args:filter:do:interrupts: */
+	16437476798912131422: (*Prog)(nil),           /* Prog args:filter:do:interrupts:cancels: */
+	9645338248103821345:  (*Prog)(nil),           /* Prog args:filter:do:updates: */
+	13918036246970215610: (*Prog)(nil),           /* Prog args:filter:do:updates:cancels: */
+	16335404921107193733: (*Prog)(nil),           /* Prog args:filter:do:updates:interrupts: */
+	4280923456434367590:  (*Prog)(nil),           /* Prog args:filter:do:updates:interrupts:cancels: */
+	5067340950479104120:  (*Prog)(nil),           /* Prog do: */
+	12227908227799360331: (*Prog)(nil),           /* Prog do:cancels: */
+	3755963473507582214:  (*Prog)(nil),           /* Prog do:interrupts: */
+	10712242547281339301: (*Prog)(nil),           /* Prog do:interrupts:cancels: */
+	7455578436021391916:  (*Prog)(nil),           /* Prog do:updates: */
+	271948666284575239:   (*Prog)(nil),           /* Prog do:updates:cancels: */
+	2299333964840602090:  (*Prog)(nil),           /* Prog do:updates:interrupts: */
+	15746625426422462673: (*Prog)(nil),           /* Prog do:updates:interrupts:cancels: */
+	18014764736867633486: (*Prog)(nil),           /* Prog filter:do: */
+	14919503010611094653: (*Prog)(nil),           /* Prog filter:do:cancels: */
+	170558645893210180:   (*Prog)(nil),           /* Prog filter:do:interrupts: */
+	15439027480023174831: (*Prog)(nil),           /* Prog filter:do:interrupts:cancels: */
+	4749999544988196546:  (*Prog)(nil),           /* Prog filter:do:updates: */
+	14929487156242422937: (*Prog)(nil),           /* Prog filter:do:updates:cancels: */
+	9053223929124211720:  (*Prog)(nil),           /* Prog filter:do:updates:interrupts: */
+	11532767400305822939: (*Prog)(nil),           /* Prog filter:do:updates:interrupts:cancels: */
 	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
 	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
 	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */

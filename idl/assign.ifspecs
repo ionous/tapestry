@@ -183,43 +183,51 @@
             "prog",
             "internal",
             {
-              "Flow:uses:": [
-                "args",
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "args",
-                      "arg",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "filter",
-                      "bool_eval"
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                    	"do",
-                      "exe",
-                      "execute",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "updates",
-                      "bool"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "terminates",
-                      "bool"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:type:optional:repeats:": [
+                    "args",
+                    "arg",
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "filter",
+                    "bool_eval",
+                    true
+                  ]
+                },
+                {
+                  "Term:name:type:repeats:": [
+                    "do",
+                    "exe",
+                    "execute",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "updates",
+                    "bool",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "interrupts",
+                    "bool",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "cancels",
+                    "bool",
+                    true
+                  ]
+                }
               ]
             }
           ]

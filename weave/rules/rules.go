@@ -14,9 +14,9 @@ import (
 )
 
 type RuleInfo struct {
-	Name       string // name of the pattern / kind
-	Rank       int    // smaller ranked rules run first
-	Terminates bool   // did the author intend the rule to terminate
+	Name    string // name of the pattern / kind
+	Rank    int    // smaller ranked rules run first
+	Cancels bool   // did the author intend the rule to terminate
 }
 
 // match an author specified pattern reference
@@ -51,27 +51,27 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 		}
 	} else {
 		var pattern string
-		var terminal bool
+		var cancels bool
 		switch prefix {
 		case instead:
 			// ex. "instead of some action, return "before some action"
 			pattern = event.BeforePhase.PatternName(short)
-			terminal = true
+			cancels = true
 		case report:
 			// ex. "report some action, return "after some action"
 			pattern = event.AfterPhase.PatternName(short)
-			terminal = true
+			cancels = true
 		default:
 			// ex. "before some action, return "before some action"
 			pattern = name
 		}
-		ret = RuleInfo{Name: pattern, Rank: prefix.rank(), Terminates: terminal}
+		ret = RuleInfo{Name: pattern, Rank: prefix.rank(), Cancels: cancels}
 	}
 	return
 }
 
+// Check to see if there are counters that might need updating on the regular.
 // tdb: could this be processed at load time (storyImport)
-// ( ex. flag via env when the rule opens )
 func DoesUpdate(exes []rt.Execute) (okay bool) {
 	for _, exe := range exes {
 		if guard, ok := exe.(jsn.Marshalee); !ok {

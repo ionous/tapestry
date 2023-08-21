@@ -347,15 +347,6 @@
                 "finally",
                 [
                   {
-                    "Term:name:type:optional:repeats:": [
-                      "assuming",
-                      "args",
-                      "arg",
-                      true,
-                      true
-                    ]
-                  },
-                  {
                     "Term:name:type:repeats:": [
                       "do",
                       "exe",
