@@ -195,10 +195,15 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 		pat, rank := prefix.Name, prefix.Rank
 		if k, e := w.GetKindByName(pat); e != nil {
 			err = errutil.New("finding base pattern", e)
+		} else if canFilterActor := rules.CanFilterActor(k); prefix.ExcludesPlayer && !canFilterActor {
+			err = errutil.New("only actor events can filter by actor")
 		} else {
 			updates := rules.DoesUpdate(exe)
 			cancels := prefix.Cancels
 			interrupts := cancels || rules.DoesTerminate(exe)
+			if rule = lang.Normalize(rule); len(rule) == 0 {
+				rule = rules.FindNamedResponse(exe)
+			}
 
 			// add additional filters:
 			filters := make([]rt.BoolEval, 0, 3)
@@ -206,18 +211,17 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 				filters = append(filters, filter)
 			}
 			// by default: all event handlers are filtered to the player and the innermost target.
-			if k.Implements(kindsOf.Event.String()) || k.Implements(kindsOf.Action.String()) {
+			eventLike := k.Implements(kindsOf.Event.String()) || k.Implements(kindsOf.Action.String())
+			if eventLike {
 				// if the focus of the event involves an actor;
 				// then we automatically filter for the player
-				if k.NumField() > 0 {
-					if f := k.Field(0); f.Type == event.Actors {
-						filters = append(filters,
-							&core.CompareText{
-								A:  core.Variable(f.Name),
-								Is: core.Equal,
-								B:  T("self"),
-							})
-					}
+				if !prefix.ExcludesPlayer {
+					filters = append(filters,
+						&core.CompareText{
+							A:  core.Variable(event.Actor),
+							Is: core.Equal,
+							B:  T("self"),
+						})
 				}
 				// filter to the innermost target.
 				filters = append(filters,

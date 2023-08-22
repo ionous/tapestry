@@ -22,27 +22,31 @@ func FilterHasCounter(filter rt.BoolEval) (okay bool) {
 // also might be cool to augment or replace the serialized type
 // with our own that has an pre-calced field ( at import, via state parser )
 func searchCounters(i jsn.Marshalee) (okay bool) {
-	if ok, e := searchForType(i, core.CallTrigger_Type); e != nil && e != jsn.Missing {
+	if ok, e := searchForFlow(i, core.CallTrigger_Type); e != nil && e != jsn.Missing {
 		panic(e)
 	} else {
-		okay = ok
+		okay = ok != nil
 	}
 	return
 }
 
-func searchForType(src jsn.Marshalee, typeName string) (okay bool, err error) {
+// return the first flow of the passed type
+func searchForFlow(src jsn.Marshalee, typeName string) (ret any, err error) {
 	ts := chart.MakeEncoder()
-	// fix use panic / recover to early exit?
-	var earlyOut error
+	var earlyOut error // tbd: use panic / recover to early exit more quickly?
 	err = ts.Marshal(src, &chart.StateMix{
+		OnKey:   func(_, _ string) error { return earlyOut },
+		OnValue: func(_ string, _ interface{}) error { return earlyOut },
 		OnBlock: func(b jsn.Block) error {
-			if b.GetType() == typeName {
-				okay, earlyOut = true, jsn.Missing
+			if earlyOut == nil && b.GetType() == typeName {
+				if flow, ok := b.(jsn.FlowBlock); ok {
+					if op := flow.GetFlow(); op != nil {
+						ret, earlyOut = op, jsn.Missing
+					}
+				}
 			}
 			return earlyOut
 		},
-		OnKey:   func(_, _ string) error { return earlyOut },
-		OnValue: func(_ string, _ interface{}) error { return earlyOut },
 	})
 	return
 }

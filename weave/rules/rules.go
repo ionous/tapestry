@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
@@ -14,9 +15,10 @@ import (
 )
 
 type RuleInfo struct {
-	Name    string // name of the pattern / kind
-	Rank    int    // smaller ranked rules run first
-	Cancels bool   // did the author intend the rule to terminate
+	Name           string // name of the pattern / kind
+	Rank           int    // smaller ranked rules run first
+	Cancels        bool   // did the author intend the rule to terminate
+	ExcludesPlayer bool
 }
 
 // match an author specified pattern reference
@@ -34,6 +36,16 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 			break
 		}
 	}
+	// fix: probably want some sort of "try prefix/suffix" that attempts to chop the parts
+	// but restores them if it cant find them --
+	// maybe see grok -- it does that sort of partial matching
+	// and itd be neat to be able to use it here.
+	var excludesPlayer bool
+	const someone = "someone "
+	if excludesPlayer = strings.HasPrefix(short, someone); excludesPlayer {
+		short = short[len(someone)+1:]
+	}
+
 	prefix := eventPrefix(prefixIndex)
 	if k, e := w.GetKindByName(short); e != nil {
 		err = e
@@ -53,6 +65,8 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 		var pattern string
 		var cancels bool
 		switch prefix {
+		case before:
+			cancels = true
 		case instead:
 			// ex. "instead of some action, return "before some action"
 			pattern = event.BeforePhase.PatternName(short)
@@ -65,23 +79,23 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 			// ex. "before some action, return "before some action"
 			pattern = name
 		}
-		ret = RuleInfo{Name: pattern, Rank: prefix.rank(), Cancels: cancels}
+		ret = RuleInfo{
+			Name:           pattern,
+			Rank:           prefix.rank(),
+			Cancels:        cancels,
+			ExcludesPlayer: excludesPlayer,
+		}
 	}
 	return
 }
 
 // Check to see if there are counters that might need updating on the regular.
 // tdb: could this be processed at load time (storyImport)
-func DoesUpdate(exes []rt.Execute) (okay bool) {
-	for _, exe := range exes {
-		if guard, ok := exe.(jsn.Marshalee); !ok {
-			panic("unknown type")
-		} else if searchCounters(guard) {
-			okay = true
-			break
-		}
-	}
-	return
+func DoesUpdate(exe []rt.Execute) (okay bool) {
+	// wrap the exes up into a single block for easier searching
+	return searchCounters(&core.ChooseNothingElse{
+		Exe: exe,
+	})
 }
 
 // tdb: could this? be processed at load time (storyImport)
@@ -116,4 +130,16 @@ Out:
 		}
 	}
 	return terminal
+}
+
+// return the first response definition in the block
+func FindNamedResponse(exe []rt.Execute) (ret string) {
+	if op, e := searchForFlow(&core.ChooseNothingElse{
+		Exe: exe,
+	}, render.RenderResponse_Type); e != nil && e != jsn.Missing {
+		panic(e)
+	} else if response, ok := op.(*render.RenderResponse); ok && response.Text != nil {
+		ret = response.Name
+	}
+	return
 }
