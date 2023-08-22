@@ -127,89 +127,6 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
-            "abstract_action",
-            "events",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "nothing"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with flow:": [
-            "action_context",
-            "events",
-            {
-              "Flow phrase:uses:": [
-                "and one {$kind} ( the other noun )",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "kind",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
-          "Spec:slots:groups:with flow:": [
-            "action_decl",
-            [
-              "story_statement",
-              "execute"
-            ],
-            "events",
-            {
-              "Flow:phrase:uses:": [
-                "Event",
-                "Agents can {act$event} and {acting$action} requires {action params$action_params}.",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "event",
-                      "event_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "action",
-                      "action_name"
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "args",
-                      "action_params"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "action_name",
-            "events",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
           "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
           "Spec:slots:groups:with flow:": [
             "define_action",
@@ -246,37 +163,6 @@
                     ]
                   }
                 ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with swap:": [
-            "action_params",
-            "events",
-            {
-              "Swap between:": [
-                {
-                  "Pick:label:type:": [
-                    "common",
-                    "one or more objects",
-                    "common_action"
-                  ]
-                },
-                {
-                  "Pick:label:type:": [
-                    "dual",
-                    "two similar objects",
-                    "paired_action"
-                  ]
-                },
-                {
-                  "Pick:label:type:": [
-                    "none",
-                    "nothing",
-                    "abstract_action"
-                  ]
-                }
               ]
             }
           ]
@@ -372,32 +258,6 @@
           ]
         },
         {
-          "Spec:groups:with flow:": [
-            "common_action",
-            "events",
-            {
-              "Flow phrase:uses:": [
-                "one {$kind} ( the noun ) {$action_context}",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "kind",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:": [
-                      "action_context",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": [
             "A guard which returns true based on a counter.",
             "Counters start at zero and are incremented every time the guard gets checked."
@@ -444,118 +304,6 @@
                       "text_eval",
                       true
                     ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "Declare event listeners.",
-            "Listeners let objects in the game world react to changes before, during, or after they happen."
-          ],
-          "Spec:slots:groups:with flow:": [
-            "event_block",
-            [
-              "story_statement",
-              "execute"
-            ],
-            "events",
-            {
-              "Flow:phrase:uses:": [
-                "listen",
-                "For {the target$target} {$handlers}",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "target",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "handlers",
-                      "event_handler",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with flow:": [
-            "event_handler",
-            "events",
-            {
-              "Flow:phrase:uses:": [
-                "with",
-                "{$event_phase} {the event$event} {$locals} do:{$rules}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "event_phase"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "event",
-                      "event_name"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "provides",
-                      "locals",
-                      "field_definition",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "rules",
-                      "pattern_rule",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "event_name",
-            "events",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "event_phase",
-            "events",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "before"
-                  },
-                  {
-                    "Option:label:": [
-                      "while",
-                      "during"
-                    ]
-                  },
-                  {
-                    "Option:": "after"
                   }
                 ]
               ]
@@ -1403,7 +1151,7 @@
                       "text_eval"
                     ]
                   },
-                   {
+                  {
                     "Term:name:type:optional:": [
                       "named",
                       "rule_name",
@@ -1461,7 +1209,7 @@
                       true
                     ]
                   },
-                   {
+                  {
                     "Term:name:type:optional:": [
                       "named",
                       "rule_name",
@@ -2013,19 +1761,16 @@
         },
         {
           "--": [
-            "a command with a signature of the comment marker.",
-            "a cheat which allows nodes that appear to be comments but are actually story breaks."
+            "a command with a signature of the comment marker metadata.",
+            "a cheat to allows nodes that have only a comment marker and no actual command.",
+            "see also: debug.do_nothing"
           ],
           "Spec:slots:with flow:": [
             "story_break",
-            [
-              "story_statement",
-              "execute"
-            ],
+            "story_statement",
             {
-              "Flow:phrase:uses:": [
+              "Flow:uses:": [
                 "--",
-                "story_break",
                 []
               ]
             }

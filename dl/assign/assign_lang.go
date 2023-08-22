@@ -1633,121 +1633,6 @@ func Prog_Marshal(m jsn.Marshaler, val *Prog) (err error) {
 	return
 }
 
-// SendPattern Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.
-// Although the event advertises it can take any bool evaluation, only pattern calls are supported.
-// Returns a true/false success value.
-type SendPattern struct {
-	Path   rt.TextListEval `if:"label=_"`
-	Event  rt.BoolEval     `if:"label=event"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*SendPattern)(nil)
-var _ rt.BoolEval = (*SendPattern)(nil)
-
-func (*SendPattern) Compose() composer.Spec {
-	return composer.Spec{
-		Name: SendPattern_Type,
-		Uses: composer.Type_Flow,
-		Lede: "send",
-	}
-}
-
-const SendPattern_Type = "send_pattern"
-const SendPattern_Field_Path = "$PATH"
-const SendPattern_Field_Event = "$EVENT"
-
-func (op *SendPattern) Marshal(m jsn.Marshaler) error {
-	return SendPattern_Marshal(m, op)
-}
-
-type SendPattern_Slice []SendPattern
-
-func (op *SendPattern_Slice) GetType() string { return SendPattern_Type }
-
-func (op *SendPattern_Slice) Marshal(m jsn.Marshaler) error {
-	return SendPattern_Repeats_Marshal(m, (*[]SendPattern)(op))
-}
-
-func (op *SendPattern_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SendPattern_Slice) SetSize(cnt int) {
-	var els []SendPattern
-	if cnt >= 0 {
-		els = make(SendPattern_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SendPattern_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SendPattern_Marshal(m, &(*op)[i])
-}
-
-func SendPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]SendPattern) error {
-	return jsn.RepeatBlock(m, (*SendPattern_Slice)(vals))
-}
-
-func SendPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SendPattern) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SendPattern_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type SendPattern_Flow struct{ ptr *SendPattern }
-
-func (n SendPattern_Flow) GetType() string      { return SendPattern_Type }
-func (n SendPattern_Flow) GetLede() string      { return "send" }
-func (n SendPattern_Flow) GetFlow() interface{} { return n.ptr }
-func (n SendPattern_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SendPattern); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func SendPattern_Optional_Marshal(m jsn.Marshaler, pv **SendPattern) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SendPattern_Marshal(m, *pv)
-	} else if !enc {
-		var v SendPattern
-		if err = SendPattern_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func SendPattern_Marshal(m jsn.Marshaler, val *SendPattern) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SendPattern_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SendPattern_Field_Path)
-		if e0 == nil {
-			e0 = rt.TextListEval_Marshal(m, &val.Path)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SendPattern_Field_Path))
-		}
-		e1 := m.MarshalKey("event", SendPattern_Field_Event)
-		if e1 == nil {
-			e1 = rt.BoolEval_Marshal(m, &val.Event)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", SendPattern_Field_Event))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // SetValue Store a value into a local variable ( or pattern argument. )
 type SetValue struct {
 	Target Address    `if:"label=_"`
@@ -1999,7 +1884,6 @@ var Slats = []composer.Composer{
 	(*FromTextList)(nil),
 	(*ObjectRef)(nil),
 	(*Prog)(nil),
-	(*SendPattern)(nil),
 	(*SetValue)(nil),
 	(*VariableRef)(nil),
 }
@@ -2071,8 +1955,6 @@ var Signatures = map[uint64]interface{}{
 	13722223890291796107: (*ObjectRef)(nil),      /* record_list_eval=Object:field:dot: */
 	15784348372409109382: (*ObjectRef)(nil),      /* text_eval=Object:field:dot: */
 	11516059561048599401: (*ObjectRef)(nil),      /* text_list_eval=Object:field:dot: */
-	10829518726009615643: (*SendPattern)(nil),    /* bool_eval=Send:event: */
-	5953636708531320523:  (*SendPattern)(nil),    /* execute=Send:event: */
 	7241459153126815557:  (*SetValue)(nil),       /* execute=Set:from: */
 	13692207992970428220: (*VariableRef)(nil),    /* address=Variable: */
 	17908519799628660539: (*VariableRef)(nil),    /* bool_eval=Variable: */

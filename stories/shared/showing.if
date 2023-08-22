@@ -1,282 +1,226 @@
 {
   "Tapestry:": [
     {
-        "Interpret:with:": [
-          [
-            "show",
-            "present",
-            "display"
-          ],
-          [
-            {
-              "One of:": [
-                {
-                  "Sequence:": [
-                    {
-                      "Self:": "player"
-                    },
-                    {
-                      "One noun:": "things"
-                    },
-                    {
-                      "Action:": "examining"
-                    }
-                  ]
-                },
-                {
-                  "Sequence:": [
-                    {
-                      "One noun:": "things"
-                    },
-                    {
-                      "One word:": "to"
-                    },
-                    {
-                      "Self:": "player"
-                    },
-                    {
-                      "Action:": "examining"
-                    }
-                  ]
-                },
-                {
-                  "Sequence:": [
-                    {
-                      "Reverse:": [
-                        {
-                          "One noun:": "actors"
-                        },
-                        {
-                          "One noun:": "things"
-                        }
-                      ]
-                    },
-                    {
-                      "Action:": "showing"
-                    }
-                  ]
-                },
-                {
-                  "Sequence:": [
-                    {
-                      "One noun:": "things"
-                    },
-                    {
-                      "One word:": "to"
-                    },
-                    {
-                      "One noun:": "actors"
-                    },
-                    {
-                      "Action:": "showing"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        ]
-      
-    },
-    {
-      "Event:action:args common:": [
-        "show",
-        "showing",
-        {
-          "CommonAction:actionContext:": [
-            "thing",
-            {
-              "ActionContext:": "actor"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "showing",
+      "Interpret:with:": [
+        [
+          "show",
+          "present",
+          "display"
+        ],
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
+            "One of:": [
               {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
+                "Sequence:": [
+                  {
+                    "Self:": "player"
+                  },
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "Action:": "examining"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One word:": "to"
+                  },
+                  {
+                    "Self:": "player"
+                  },
+                  {
+                    "Action:": "examining"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "Reverse:": [
+                      {
+                        "One noun:": "actors"
+                      },
+                      {
+                        "One noun:": "things"
+                      }
+                    ]
+                  },
+                  {
+                    "Action:": "showing"
+                  }
+                ]
+              },
+              {
+                "Sequence:": [
+                  {
+                    "One noun:": "things"
+                  },
+                  {
+                    "One word:": "to"
+                  },
+                  {
+                    "One noun:": "actors"
+                  },
+                  {
+                    "Action:": "showing"
+                  }
                 ]
               }
             ]
           }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "If:assuming:do:else:": [
-
-                    {
-                      "Not:": {
-                        "Is empty:": "@response"
-                      }
-                    },
-                    { "Arg:from:": [
-                    "response",
-                    {
-                      "FromText:": {
-                        "CanHandle actor:action:noun:otherNoun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "showing"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          },
-                          {
-                            "FromText:": "@other_noun"
-                          }
-                        ]
-                      }
-                    }]},
-                    [
-                      {
-                        "Print:": "@response"
-                      }
-                    ],
-                    {
-                      "If:assuming:do:else:": [
-
-                        {
-                          "Not:": {
-                            "Is empty:": "@response"
-                          }
-                        },
-                        	{ "Arg:from:": [
-                        "result",
-                        {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "showing"
-                              },
-                              {
-                                "FromText:": "@other_noun"
-                              }
-                            ]
-                          }
-                        }]},
-                        [
-                          {
-                            "Print:": "@response"
-                          }
-                        ],
-                        {
-                          "Finally do:": [
-                            {
-                              "ReportShowing actor:noun:otherNoun:": [
-                                {
-                                  "FromText:": "@actor"
-                                },
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": "@other_noun"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
         ]
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "report showing",
+      "Define action:requires:": [
+        "showing",
         [
           {
+            "--": "the actor showing ( ex. the player. ) something to someone",
             "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
+            "--": "the thing being shown",
             "Text:kind:": [
               "noun",
               "thing"
             ]
           },
           {
+            "--": "the actor the noun is being shown to",
             "Text:kind:": [
               "other noun",
               "actor"
             ]
           }
-        ],
-        {
-          "Nothing": true
-        },
-        []
+        ]
       ]
     },
     {
-      "Extend pattern:withRules:": [
-        "report showing",
+      "Rule for:do:": [
+        "before showing",
         [
           {
-            "PatternRule:do:": [
+            "If:assuming:do:else:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
+                  "Is empty:": "@response"
                 }
+              },
+              {
+                "Arg:from:": [
+                  "response",
+                  {
+                    "FromText:": {
+                      "CanHandle actor:action:noun:otherNoun:": [
+                        {
+                          "FromText:": "@actor"
+                        },
+                        {
+                          "FromText:": "showing"
+                        },
+                        {
+                          "FromText:": "@noun"
+                        },
+                        {
+                          "FromText:": "@other_noun"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               [
                 {
-                  "Say response:with:": [
-                    "someone else shows",
-                    "{The: .actor|capitalize!} shows off {the: .noun}."
-                  ]
+                  "Print:": "@response"
                 }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "player shows",
-                    "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+              ],
+              {
+                "If:assuming:do:": [
+                  {
+                    "Not:": {
+                      "Is empty:": "@response"
+                    }
+                  },
+                  {
+                    "Arg:from:": [
+                      "result",
+                      {
+                        "FromText:": {
+                          "CanReach actor:action:noun:": [
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "showing"
+                            },
+                            {
+                              "FromText:": "@other_noun"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  [
+                    {
+                      "Print:": "@response"
+                    }
                   ]
-                }
-              ]
+                ]
+              }
             ]
           }
         ]
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "showing",
+        {
+          "ReportShowing actor:noun:otherNoun:": [
+            {
+              "FromText:": "@actor"
+            },
+            {
+              "FromText:": "@noun"
+            },
+            {
+              "FromText:": "@other_noun"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "report someone showing",
+        {
+          "Say response:with:": [
+            "someone else shows",
+            "{The: .actor|capitalize!} shows off {the: .noun}."
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "report showing",
+        {
+          "Say response:with:": [
+            "player shows",
+            "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+          ]
+        }
       ]
     }
   ]

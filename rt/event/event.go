@@ -5,6 +5,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
+// name of the optional event target parameter
+const Actor = "actor"
+
 // name of kind which incorporates the player
 const Actors = "actors"
 

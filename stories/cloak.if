@@ -45,12 +45,6 @@
           }
         ]
       ]
-    },
-    {
-      "Listen:handlers:": [
-        "initial description",
-        null
-      ]
     }
   ]
 }

@@ -1,37 +1,31 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args common:": [
-        "travel",
-        "traveling",
-        {
-          "--": [
-            "Traveling takes one argument: the door to travel through.",
-            "Future: allow directions too"
-          ],
-          "CommonAction:": "door"
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "--": [
+        "Traveling takes one argument: the door to travel through.",
+        "Future: allow directions too"
+      ],
+      "Define action:requires:provides:": [
         "traveling",
         [
           {
-            "--": "Get the actor from the agent.",
-            "Text:kind:initially:": [
+            "--": "the actor traveling s( ex. the player. )",
+            "Text:kind:": [
               "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
+              "actor"
             ]
           },
           {
-            "--": "Get the destination from the door.",
+            "--": "the door being traveled through",
+            "Text:kind:": [
+              "noun",
+              "door"
+            ]
+          }
+        ],
+        [
+          {
+            "--": "Determine the destination from the door.",
             "Text:kind:initially:": [
               "destination",
               "room",
@@ -43,313 +37,156 @@
               }
             ]
           }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
-                        {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "traveling"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "If:assuming:do:else:": [
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Arg:from:": [
-                                "resp",
-                                {
-                                  "FromText:": {
-                                    "CanUse actor:action:noun:otherNoun:": [
-                                      {
-                                        "FromText:": "@actor"
-                                      },
-                                      {
-                                        "FromText:": "traveling"
-                                      },
-                                      {
-                                        "FromText:": "@noun"
-                                      },
-                                      {
-                                        "FromText:": "@destination"
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "Print:": "@resp"
-                              }
-                            ],
-                            {
-                              "Finally do:": [
-                                {
-                                  "If:do:": [
-                                    {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": {
-                                            "FromText:": "@noun"
-                                          }
-                                        },
-                                        {
-                                          "Travel actor:noun:": [
-                                            {
-                                              "FromText:": "@actor"
-                                            },
-                                            {
-                                              "FromText:": "@noun"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    [
-                                      {
-                                        "ReportTraveling actor:noun:": [
-                                          {
-                                            "FromText:": "@actor"
-                                          },
-                                          {
-                                            "FromText:": "@noun"
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
         ]
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "things",
-        [
-          {
-            "With:event:provides:rules:": [
-              "while",
-              "travel",
-              [
+      "Rule for:named:do:": [
+        "before traveling",
+        "standard traveling checks",
+        {
+          "If:assuming:do:else:": [
+            {
+              "Not:": {
+                "Is empty:": "@resp"
+              }
+            },
+            {
+              "Arg:from:": [
+                "resp",
                 {
-                  "--": "Get the destination from the door.",
-                  "Text:kind:initially:": [
-                    "destination",
-                    "room",
-                    {
-                      "Object:field:": [
-                        "@noun",
-                        "destination"
-                      ]
-                    }
-                  ]
-                }
-              ],
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
+                  "FromText:": {
+                    "CanReach actor:action:noun:": [
                       {
-                        "If:assuming:do:else:": [
-                          {
-                            "Not:": {
-                              "Is empty:": "@error"
-                            }
-                          },
-                          {
-                            "Arg:from:": [
-                              "error",
-                              {
-                                "FromText:": {
-                                  "MoveObject obj:dest:": [
-                                    {
-                                      "FromText:": "@actor"
-                                    },
-                                    {
-                                      "FromText:": "@destination"
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          },
-                          [
-                            {
-                              "Print:": "@error"
-                            },
-                            {
-                              "Set:from:": [
-                                "@success",
-                                {
-                                  "FromBool:": false
-                                }
-                              ]
-                            }
-                          ],
-                          {
-                            "Finally do:": [
-                              {
-                                "Log:value:": [
-                                  "debug",
-                                  {
-                                    "FromText:": {
-                                      "Say:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
-                                    }
-                                  }
-                                ]
-                              },
-                              {
-                                "Set:from:": [
-                                  "@success",
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "traveling"
+                      },
+                      {
+                        "FromText:": "@noun"
                       }
                     ]
-                  ]
+                  }
                 }
               ]
-            ]
-          }
-        ]
+            },
+            [
+              {
+                "Print:": "@resp"
+              }
+            ],
+            {
+              "If:assuming:do:": [
+                {
+                  "Not:": {
+                    "Is empty:": "@resp"
+                  }
+                },
+                {
+                  "Arg:from:": [
+                    "resp",
+                    {
+                      "FromText:": {
+                        "CanUse actor:action:noun:otherNoun:": [
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "traveling"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@destination"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                [
+                  {
+                    "Print:": "@resp"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
-        "report traveling",
-        [
-          {
-            "Text:kind:": [
-              "actor",
-              "actor"
-            ]
-          },
-          {
-            "Text:kind:": [
-              "noun",
-              "thing"
-            ]
-          }
-        ],
+      "Rule for:do:": [
+        "traveling",
         {
-          "Nothing": true
-        },
-        []
+          "If:assuming:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
+              }
+            },
+            {
+              "Arg:from:": [
+                "response",
+                {
+                  "FromText:": {
+                    "MoveObject obj:dest:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "@destination"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Print:": "@response"
+            }
+          ]
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
+        "report someone traveling",
+        {
+          "Say response:with:": [
+            "someone else travels",
+            "{The: .actor|capitalize!} went through {the: .noun}."
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
         "report traveling",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
+        {
+          "PrintVantage where:inDarkness:": [
+            {
+              "FromText:": {
+                "ParentOf obj:": {
+                  "FromText:": "@actor"
                 }
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "someone else travels",
-                    "{The: .actor|capitalize!} went through {the: .noun}."
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "PrintVantage where:inDarkness:": [
-                    {
-                      "FromText:": {
-                        "ParentOf obj:": {
-                          "FromText:": "@actor"
-                        }
-                      }
-                    },
-                    {
-                      "FromBool:": {
-                        "Object:field:": [
-                          "@actor",
-                          "is in darkness"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+              }
+            },
+            {
+              "FromBool:": {
+                "Object:field:": [
+                  "@actor",
+                  "is in darkness"
+                ]
+              }
+            }
+          ]
+        }
       ]
     },
     {

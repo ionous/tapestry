@@ -92,9 +92,14 @@
             ]
           },
           {
-            "Traveling agent:noun:": [
+            "Traveling actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "faux door"
@@ -105,9 +110,14 @@
             "Expect output:": "It doesn't lead anywhere."
           },
           {
-            "Traveling agent:noun:": [
+            "Traveling actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "double doors"
@@ -136,9 +146,14 @@
             "Expect output:": "You open the double doors."
           },
           {
-            "Traveling agent:noun:": [
+            "Traveling actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "double doors"

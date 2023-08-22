@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/qna"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -42,28 +41,20 @@ func NewCustomPlaytime(run *qna.Runner, player, relation, bounds string) *Playti
 // future: to differentiate b/t system actions and "timed" actions,
 // consider using naming convention: ex. @save (mud style), or #save
 func (pt *Playtime) Play(name, player string, args []string) (err error) {
-	// insert the player in front of the other args.
-	vs := make([]g.Value, len(args)+1)
-	vs[0] = g.StringOf(player)
-	for i, n := range args {
-		vs[i+1] = g.StringOf(n)
-	}
-	if k, e := pt.GetKindByName(name); e != nil {
+	// temp patch to new:
+	// should instead raise a parsing event with the nouns and the action name
+	// ( possibly -- probably send in the player since it would be needed for bounds still )
+	// player should be a variable not a pawn; although handling the difference here helps.
+	if actor, e := pt.GetField(player, "pawn"); e != nil {
 		err = e
-	} else if !k.Implements(kindsOf.Action.String()) {
-		// old:
-		_, err = pt.Call(name, affine.None, nil, vs)
 	} else {
-		// temp patch to new:
-		// should instead raise a parsing event with the nouns and the action name
-		// ( possibly -- probably send in the player since it would be needed for bounds still )
-		// player should be a variable not a pawn; although handling the difference here helps.
-		if v, e := pt.GetField(player, "pawn"); e != nil {
-			err = e
-		} else {
-			vs[0] = v
-			_, err = pt.Call(name, affine.None, nil, vs)
+		// insert the player in front of the other args.
+		vs := make([]g.Value, len(args)+1)
+		vs[0] = actor
+		for i, n := range args {
+			vs[i+1] = g.StringOf(n)
 		}
+		_, err = pt.Call(name, affine.None, nil, vs)
 	}
 	return
 }

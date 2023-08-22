@@ -271,41 +271,6 @@
           ]
         },
         {
-          "--": [
-            "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
-            "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
-            "Returns a true/false success value."
-          ],
-          "Spec:slots:with flow:": [
-            "send_pattern",
-            [
-              "execute",
-              "bool_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "send",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "path",
-                      "text_list_eval"
-                    ]
-                  },
-                  {
-                    "--": "this should always be a pattern call",
-                    "Term:type:": [
-                      "event",
-                      "bool_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": "Runtime version of argument.",
           "Spec:with flow:": [
             "arg",

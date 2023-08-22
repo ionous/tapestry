@@ -49,7 +49,7 @@ type Query interface {
 	// includes the parameters, followed by the result
 	// the result can be a blank string for execute statements
 	PatternLabels(pat string) ([]string, error)
-	RulesFor(pat, target string) ([]RuleData, error)
+	RulesFor(pat string) ([]RuleData, error)
 	ReciprocalsOf(rel, id string) ([]string, error)
 	RelativesOf(rel, id string) ([]string, error)
 	Relate(rel, noun, otherNoun string) error

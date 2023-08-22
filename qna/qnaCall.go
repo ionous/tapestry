@@ -49,6 +49,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 			} else if evtObj, e := newEventRecord(run, event.Object, tgt); e != nil {
 				err = e // ^ create the "event" object sent to each event phase pattern.
 			} else {
+				var canceled bool
 				for prevRec, i := rec, 0; i < event.NumPhases; i++ {
 					phase := event.Phase(i)
 					if kindForPhase, e := run.getKind(phase.PatternName(name)); e != nil {
@@ -67,16 +68,18 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 							// push the event scope. we dont pop later; we replace.
 							// ( the event gets pushed last so it cant be hidden by pattern locals )
 							run.PushScope(scope.NewReadOnlyValue(event.Object, g.RecordOf(evtObj)))
-							if allDone, e := run.send(evtObj, kindForPhase, path.slice(phase)); e != nil {
+							if x, e := run.send(evtObj, kindForPhase, path.slice(phase)); e != nil {
 								err = errutil.Fmt("%w calling %q", e, kindForPhase.Name())
 								break
-							} else if allDone {
+							} else if x {
+								canceled = true
 								break
 							}
 							prevRec = phaseRec
 						}
 					}
 				}
+				ret = g.BoolOf(!canceled)
 			}
 			callState.restore()
 		}
@@ -94,24 +97,37 @@ func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (re
 		run.currentPatterns.startedPattern(name)
 		if e := kind.recordInit(run, rec); e != nil {
 			err = e
-		} else if rules, e := run.GetRules(name, ""); e != nil {
-			err = e
-		} else if e := res.ApplyRules(run, rules); e != nil {
-			err = e
-		} else if v, e := res.GetResult(); e != nil {
+		} else if rs, e := run.getRules(name); e != nil {
 			err = e
 		} else {
-			// warning: in order to generate appropriate defaults ( ex. a record of the right type )
-			// while still informing the caller of lack of pattern decision in a concise manner
-			// can return both a valid value and an error
-			ret = v
-			if !res.ComputedResult() {
-				err = errutil.Fmt("%w computing %s", rt.NoResult, aff)
+			// FIX!  (requires paring down NewResults)
+			var rules []rt.Rule
+			for _, r := range rs.rules {
+				rules = append(rules, rt.Rule{
+					Name:    r.Name,
+					Filter:  r.Filter,
+					Execute: r.Exe,
+					Updates: r.Updates,
+				})
 			}
+			if e := res.ApplyRules(run, rules); e != nil {
+				err = e
+			} else if v, e := res.GetResult(); e != nil {
+				err = e
+			} else {
+				// warning: in order to generate appropriate defaults ( ex. a record of the right type )
+				// while still informing the caller of lack of pattern decision in a concise manner
+				// can return both a valid value and an error
+				ret = v
+				if !res.ComputedResult() {
+					err = errutil.Fmt("%w computing %s", rt.NoResult, aff)
+				}
+			}
+			run.currentPatterns.stoppedPattern(name)
+			run.restoreScope(oldScope)
 		}
-		run.currentPatterns.stoppedPattern(name)
-		run.restoreScope(oldScope)
 	}
+
 	return
 }
 
@@ -160,14 +176,14 @@ func (run *Runner) newPhase(k cachedKind, src *g.Record) (ret *g.Record, err err
 
 // trigger a patter for each of the targets in the passed chain.
 // return true if all done ( canceled )
-func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retDone bool, err error) {
+func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retCanceled bool, err error) {
 	var stopPropogation bool // stopPropogation -- finish the current event level, and no more.
 	for tgtIdx, cnt := 0, len(chain); tgtIdx < cnt && err == nil && !stopPropogation; tgtIdx++ {
 		tgt := chain[tgtIdx]
 		if e := evtObj.SetIndexedField(event.CurrentTarget.Index(), g.StringOf(tgt)); e != nil {
 			err = e
 			break
-		} else if rs, e := run.getRules(kind.Name(), ""); e != nil {
+		} else if rs, e := run.getRules(kind.Name()); e != nil {
 			err = e // fix? get rules earlier to skip setup if they dont exist?
 			break
 		} else {
@@ -177,7 +193,7 @@ func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retD
 					err = e
 					break
 				} else if rule.Cancels {
-					retDone = true
+					retCanceled = true
 					break
 				} else if rule.Interrupts {
 					if !rs.updateAll {
@@ -191,7 +207,7 @@ func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retD
 					// clearing it lets the handler set continue
 					// ( so it can be controlled via stopPropogation/Immediate similar to the dom )
 					if evtObj.HasValue(event.Cancel.Index()) {
-						retDone = true
+						retCanceled = true
 						if cancel, e := evtObj.GetIndexedField(event.Cancel.Index()); e != nil {
 							err = e
 							break

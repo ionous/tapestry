@@ -39,7 +39,7 @@ func (lf *LabelFinder) FindNext(k string) (ret int, err error) {
 			ret, lf.next = now, lf.next+1
 		}
 	} else if at := findLabel(lf.labels, key, lf.next); at < 0 {
-		err = errutil.Fmt("no matching arg in labels %q", strings.Join(lf.labels, ","))
+		err = errutil.Fmt("no matching arg for %q in labels %q", lf.kind.Name(), strings.Join(lf.labels, ","))
 	} else {
 		var fn string
 		if at < lf.kind.NumField() {

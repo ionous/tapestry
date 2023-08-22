@@ -122,9 +122,10 @@ func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
 	return
 }
 
-// DoNothing Statement which does nothing.
+// DoNothing a command with a signature of the comment marker metadata.
+// a cheat to allows nodes that have only a comment marker and no actual command.
+// see also: story.story_break
 type DoNothing struct {
-	Reason string `if:"label=why,optional,type=text"`
 	Markup map[string]any
 }
 
@@ -135,11 +136,11 @@ func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: DoNothing_Type,
 		Uses: composer.Type_Flow,
+		Lede: "--",
 	}
 }
 
 const DoNothing_Type = "do_nothing"
-const DoNothing_Field_Reason = "$REASON"
 
 func (op *DoNothing) Marshal(m jsn.Marshaler) error {
 	return DoNothing_Marshal(m, op)
@@ -188,7 +189,7 @@ func DoNothing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DoNothing) (err e
 type DoNothing_Flow struct{ ptr *DoNothing }
 
 func (n DoNothing_Flow) GetType() string      { return DoNothing_Type }
-func (n DoNothing_Flow) GetLede() string      { return DoNothing_Type }
+func (n DoNothing_Flow) GetLede() string      { return "--" }
 func (n DoNothing_Flow) GetFlow() interface{} { return n.ptr }
 func (n DoNothing_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*DoNothing); ok {
@@ -212,13 +213,6 @@ func DoNothing_Optional_Marshal(m jsn.Marshaler, pv **DoNothing) (err error) {
 func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(DoNothing_Flow{val}); err == nil {
-		e0 := m.MarshalKey("why", DoNothing_Field_Reason)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Optional_Marshal(m, &val.Reason)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", DoNothing_Field_Reason))
-		}
 		m.EndBlock()
 	}
 	return
@@ -630,8 +624,7 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	15823738440204397330: (*LoggingLevel)(nil), /* LoggingLevel: */
-	14645287343365598707: (*DoNothing)(nil),    /* execute=DoNothing */
-	12243119421914882789: (*DoNothing)(nil),    /* execute=DoNothing why: */
+	15882152812809098721: (*DoNothing)(nil),    /* execute=-- */
 	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
 	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */

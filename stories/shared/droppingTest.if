@@ -17,9 +17,14 @@
             "Expect output:": "The knife's parent: you."
           },
           {
-            "Dropping agent:noun:": [
+            "Dropping actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "knife"
@@ -36,9 +41,14 @@
             "Expect output:": "The knife's new parent: the Kitchen."
           },
           {
-            "Dropping agent:noun:": [
+            "Dropping actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "knife"

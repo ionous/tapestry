@@ -91,7 +91,7 @@ create table mdl_rev( domain text not null, oneWord text, otherWord text, at tex
  * the scope of a rule can be narrower than its uses kind ( or target )
  * fix? can target (kind of nouns the rule applies to) be moved to filter? 
  */
-create table mdl_rule( domain text not null, kind int not null, target int, name text, rank int, prog blob, at text );
+create table mdl_rule( domain text not null, kind int not null, name text, rank int, prog blob, at text );
 /* 
  * initial values for the fields of nouns;
  * note: currently, the scope of the value is the same as the noun.

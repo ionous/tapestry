@@ -1,175 +1,121 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args common:": [
-        "search",
-        "searching",
-        {
-          "CommonAction:": "thing"
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "searching",
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "If:assuming:do:else:": [
-
-                    {
-                      "Not:": {
-                        "Is empty:": "@result"
-                      }
-                    },
-                    	{ "Arg:from:": [
-                    "result",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:requiresLight:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "searching"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          },
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    }]},
-                    [
-                      {
-                        "Print:": "@result"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "If:do:": [
-                            {
-                              "Send:event:": [
-                                {
-                                  "Capture obj:": {
-                                    "FromText:": "@noun"
-                                  }
-                                },
-                                {
-                                  "Search actor:noun:": [
-                                    {
-                                      "FromText:": "@actor"
-                                    },
-                                    {
-                                      "FromText:": "@noun"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "ReportSearching actor:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            ]
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "report searching",
-        [
-          {
+            "--": "the actor searching ( ex. the player. ) something",
             "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
+            "--": "the thing being searched",
             "Text:kind:": [
               "noun",
               "thing"
             ]
           }
-        ],
-        {
-          "Nothing": true
-        },
-        []
+        ]
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
-        "report searching",
-        [
-          {
-            "TextList:": "items"
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "IsPlayer obj:": {
-                      "FromText:": "@actor"
-                    }
-                  },
-                  {
-                    "ShowsStorage obj:": {
-                      "FromText:": "@noun"
-                    }
-                  }
-                ]
-              },
-              [
+      "Rule for:do:": [
+        "before searching",
+        {
+          "If:assuming:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@result"
+              }
+            },
+            {
+              "Arg:from:": [
+                "result",
                 {
-                  "Set:from:": [
-                    "@items",
+                  "FromText:": {
+                    "CanReach actor:action:noun:requiresLight:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "searching"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      },
+                      {
+                        "FromBool:": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Print:": "@result"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Rule for:do:": [
+        "report someone searching",
+        {
+          "Say response:with:": [
+            "someone else searches something",
+            "{The: .actor|capitalize!} searches {the: .noun}."
+          ]
+        }
+      ]
+    },
+    {
+      "--": "handle the player if all else fails",
+      "Rule for:do:": [
+        "report searching",
+        {
+          "Say response:with:": [
+            "the player finds nothing",
+            "{we!|capitalize!} find nothing of interest."
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "report searching",
+        "the player finds something",
+        {
+          "If:do:": [
+            {
+              "ShowsStorage obj:": {
+                "FromText:": "@noun"
+              }
+            },
+            {
+              "If:assuming:do:else:": [
+                {
+                  "Cmp:is:num:": [
+                    {
+                      "Len:": {
+                        "FromTextList:": "@items"
+                      }
+                    },
+                    "equal_to",
+                    0
+                  ]
+                },
+                {
+                  "Arg:from:": [
+                    "items",
                     {
                       "FromTextList:": {
                         "VisibleStorage obj:": {
@@ -179,60 +125,45 @@
                     }
                   ]
                 },
+                [
+                  {
+                    "Say response:with:": [
+                      "player searches empty storage",
+                      "There is nothing {on:.noun} {the:.noun}."
+                    ]
+                  }
+                ],
                 {
-                  "If:do:else:": [
+                  "Finally do:": [
                     {
-                      "Cmp:is:num:": [
+                      "Say response:with:": [
+                        "player searches storage",
                         {
-                          "Len:": {
-                            "FromTextList:": "@items"
-                          }
-                        },
-                        "equal_to",
-                        0
-                      ]
-                    },
-                    [
-                      {
-                        "Say response:with:": [
-                          "player searches empty storage",
-                          "There is nothing {on:.noun} {the:.noun}."
-                        ]
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "Say response:with:": [
-                            "player searches storage",
+                          "Spaces do:": [
                             {
-                              "Spaces do:": [
-                                {
-                                  "Say:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                                },
-                                {
-                                  "Print:": {
-                                    "Commas do:": [
+                              "Say:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                            },
+                            {
+                              "Print:": {
+                                "Commas do:": [
+                                  {
+                                    "Repeating across:as:do:": [
                                       {
-                                        "Repeating across:as:do:": [
-                                          {
-                                            "FromTextList:": "@items"
-                                          },
-                                          "item",
-                                          [
-                                            {
-                                              "Say:": "{the: .item}"
-                                            }
-                                          ]
-                                        ]
-                                      }
+                                        "FromTextList:": "@items"
+                                      },
+                                      "item",
+                                      [
+                                        {
+                                          "Say:": "{the: .item}"
+                                        }
+                                      ]
                                     ]
                                   }
-                                },
-                                {
-                                  "Print:": "."
-                                }
-                              ]
+                                ]
+                              }
+                            },
+                            {
+                              "Print:": "."
                             }
                           ]
                         }
@@ -241,41 +172,9 @@
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
-                }
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "someone else searches something",
-                    "{The: .actor|capitalize!} searches {the: .noun}."
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "player searches something",
-                    "{we!|capitalize!} find nothing of interest."
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {

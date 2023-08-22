@@ -891,7 +891,7 @@ func (pen *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) 
 	return
 }
 
-var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "target", "name", "rank", "prog", "at")
+var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "name", "rank", "prog", "at")
 
 func (pen *Pen) addRule(pattern, target kindInfo, name string, rank int, prog string) (err error) {
 	// fix name needs to check for conflicts;
@@ -899,7 +899,6 @@ func (pen *Pen) addRule(pattern, target kindInfo, name string, rank int, prog st
 	_, err = pen.db.Exec(mdl_rule,
 		pen.domain,
 		pattern.id,
-		target.id,
 		sql.NullString{
 			String: name,
 			Valid:  len(name) > 0,

@@ -37,10 +37,10 @@ func (rs *ruleSet) tryRule(run rt.Runtime, skip bool, i int) (ret localRule, err
 }
 
 // get the rules from the cache, or build them and add them to the cache
-func (run *Runner) getRules(pat, tgt string) (ret ruleSet, err error) {
+func (run *Runner) getRules(pat string) (ret ruleSet, err error) {
 	if c, e := run.values.cache(func() (any, error) {
-		return run.buildRules(pat, tgt)
-	}, "rules", pat, tgt); e != nil {
+		return run.buildRules(pat)
+	}, "rules", pat); e != nil {
 		err = e
 	} else {
 		ret = c.(ruleSet)
@@ -49,8 +49,8 @@ func (run *Runner) getRules(pat, tgt string) (ret ruleSet, err error) {
 }
 
 // build the rules for the passed pat,tgt pair
-func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
-	if els, e := run.query.RulesFor(pat, tgt); e != nil {
+func (run *Runner) buildRules(pat string) (ret ruleSet, err error) {
+	if els, e := run.query.RulesFor(pat); e != nil {
 		err = e
 	} else {
 		var rules []localRule
@@ -58,7 +58,7 @@ func (run *Runner) buildRules(pat, tgt string) (ret ruleSet, err error) {
 		for _, el := range els {
 
 			if prog, e := run.decode.DecodeProg(el.Prog); e != nil {
-				err = errutil.Append(err, errutil.New("decoding prog", pat, tgt, el.Name, e))
+				err = errutil.Append(err, errutil.New("decoding prog", pat, el.Name, e))
 			} else {
 				rules = append(rules, localRule{
 					Name: el.Name,

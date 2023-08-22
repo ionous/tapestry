@@ -49,9 +49,6 @@ func (PanicRuntime) RelativesOf(a, relation string) (g.Value, error) {
 func (PanicRuntime) ReciprocalsOf(a, relation string) (g.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Send(*g.Record, []string) (g.Value, error) {
-	panic("Runtime panic")
-}
 func (PanicRuntime) SetField(target, field string, v g.Value) error {
 	panic("Runtime panic")
 }

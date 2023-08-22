@@ -21,139 +21,97 @@
       "--": ""
     },
     {
-      "Event:action:args common:": [
-        "kiss",
-        "kissing",
-        {
-          "CommonAction:": "object"
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "kissing",
         [
           {
-            "Text:kind:initially:": [
+            "--": "the actor kissing ( ex. the player. ) something",
+            "Text:kind:": [
               "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
+              "actor"
             ]
-          }
-        ],
-        [
+          },
           {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
-                        {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "kissing"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "If:assuming:do:else:": [
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Arg:from:": [
-                                "resp",
-                                {
-                                  "FromText:": {
-                                    "CanUse actor:action:noun:": [
-                                      {
-                                        "FromText:": "@actor"
-                                      },
-                                      {
-                                        "FromText:": "kissing"
-                                      },
-                                      {
-                                        "FromText:": "@noun"
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "Print:": "@resp"
-                              }
-                            ],
-                            {
-                              "Finally do:": [
-                                {
-                                  "Send:event:": [
-                                    {
-                                      "Capture obj:": {
-                                        "FromText:": "@noun"
-                                      }
-                                    },
-                                    {
-                                      "Kiss actor:noun:": [
-                                        {
-                                          "FromText:": "@actor"
-                                        },
-                                        {
-                                          "FromText:": "@noun"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+            "--": "the thing being kissed",
+            "Text:kind:": [
+              "noun",
+              "thing"
             ]
           }
         ]
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "kissing",
+        {
+          "If:assuming:do:else:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
+              }
+            },
+            {
+              "Arg:from:": [
+                "response",
+                {
+                  "FromText:": {
+                    "CanReach actor:action:noun:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "kissing"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Print:": "@response"
+              }
+            ],
+            {
+              "If:assuming:do:": [
+                {
+                  "Not:": {
+                    "Is empty:": "@response"
+                  }
+                },
+                {
+                  "Arg:from:": [
+                    "response",
+                    {
+                      "FromText:": {
+                        "CanUse actor:action:noun:": [
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "kissing"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                [
+                  {
+                    "Print:": "@response"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -247,95 +205,25 @@
       "--": ""
     },
     {
-      "Listen:handlers:": [
-        "actors",
-        [
-          {
-            "With:event:rules:": [
-              "while",
-              "kiss",
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "ReportKissing actor:": {
-                          "FromText:": "@actor"
-                        }
-                      },
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "report kissing",
-        [
-          {
-            "Text:kind:": [
-              "actor",
-              "actor"
-            ]
-          }
-        ],
+      "Rule for:do:": [
+        "report someone kissing",
         {
-          "Nothing": true
-        },
-        []
+          "Say response:with:": [
+            "actor kissing",
+            "{the:.actor|capitalize!} kisses {the:.noun}."
+          ]
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "report kissing",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "player kissing",
-                    "{we:|capitalize!} kiss on {the:.noun}."
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "actor kissing",
-                    "{the:.actor|capitalize!} kisses {the:.noun}."
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "Say response:with:": [
+            "player kissing",
+            "{we:|capitalize!} kiss on {the:.noun}."
+          ]
+        }
       ]
     }
   ]

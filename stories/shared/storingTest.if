@@ -5,11 +5,11 @@
         "storing test",
         "Kitchenette",
         [
-        	{
-          	"Declare:": "You are carrying the coffee, the coin, the clutch, the knife, and the flower."
+          {
+            "Declare:": "You are carrying the coffee, the coin, the clutch, the knife, and the flower."
           },
           {
-          	"Declare:": "Mildred is in the kitchen."
+            "Declare:": "Mildred is in the kitchen."
           }
         ],
         [
@@ -23,9 +23,14 @@
                         "Print:": "Fail to store something into an actor:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "clutch"
@@ -48,9 +53,14 @@
                         "Print:": "Fail to store something into a closed container:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "coffee"
@@ -73,9 +83,14 @@
                         "Print:": "Fail to store something into something nested:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "clutch"
@@ -98,9 +113,14 @@
                         "Print:": "Okay, store something into an open container:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "coffee"
@@ -123,9 +143,14 @@
                         "Print:": "Okay, store something onto a supporter:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "coin"
@@ -148,9 +173,14 @@
                         "Print:": "Fail to store something worn:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "flower"
@@ -173,9 +203,14 @@
                         "Print:": "Fail to store something not held:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "broom"
@@ -198,9 +233,14 @@
                         "Print:": "Okay, store something into something held:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "knife"
@@ -223,9 +263,14 @@
                         "Print:": "Fail to store something to somewhere unreachable:<br>"
                       },
                       {
-                        "StoringInto agent:noun:otherNoun:": [
+                        "StoringInto actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "purse"

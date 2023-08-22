@@ -43,7 +43,11 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 	var excludesPlayer bool
 	const someone = "someone "
 	if excludesPlayer = strings.HasPrefix(short, someone); excludesPlayer {
-		short = short[len(someone)+1:]
+		next := short[len(someone):]
+		if name == short {
+			name = next
+		}
+		short = next
 	}
 
 	prefix := eventPrefix(prefixIndex)
@@ -65,8 +69,6 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 		var pattern string
 		var cancels bool
 		switch prefix {
-		case before:
-			cancels = true
 		case instead:
 			// ex. "instead of some action, return "before some action"
 			pattern = event.BeforePhase.PatternName(short)
@@ -75,8 +77,11 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 			// ex. "report some action, return "after some action"
 			pattern = event.AfterPhase.PatternName(short)
 			cancels = true
+		case before:
+			cancels = true
+			fallthrough
 		default:
-			// ex. "before some action, return "before some action"
+			// ex. "before some pattern, return "before some pattern"
 			pattern = name
 		}
 		ret = RuleInfo{

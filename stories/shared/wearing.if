@@ -1,198 +1,192 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args common:": [
-        "wear",
+      "Define action:requires:": [
         "wearing",
+        [
+          {
+            "--": "the actor wearing something ( ex. the player. )",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the thing being worn",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "before wearing",
+        "standard wearing checks",
         {
-          "CommonAction:": "object"
+          "If:assuming:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
+              }
+            },
+            {
+              "Arg:from:": [
+                "response",
+                {
+                  "FromText:": {
+                    "CanHandle actor:action:noun:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "wearing"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Print:": "@response"
+              }
+            ]
+          ]
         }
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:named:do:": [
         "wearing",
-        [
-          {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
+        "standard wearing action",
+        {
+          "If:do:": [
+            {
+              "StateChanging noun:actor:trait:guard:change:": [
                 {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
-                        {
-                          "FromText:": {
-                            "CanHandle actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "wearing"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "Finally do:": {
-                        "StateChanging noun:actor:trait:guard:change:": [
-                          {
-                            "FromText:": "@noun"
-                          },
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "worn"
-                          },
-                          {
-                            "FromText:": "wearable"
-                          },
-                          {
-                            "FromText:": "put on"
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  "FromText:": "@noun"
+                },
+                {
+                  "FromText:": "@actor"
+                },
+                {
+                  "FromText:": "worn"
+                },
+                {
+                  "FromText:": "wearable"
+                },
+                {
+                  "FromText:": "put on"
                 }
               ]
-            ]
-          }
-        ]
+            },
+            {
+              "--": "Continue on to the next event phase"
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Event:action:args common:": [
-        "remove",
+      "Define action:requires:": [
         "removing",
+        [
+          {
+            "--": "the actor taking off something ( ex. the player. )",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the thing being taken off",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "before removing",
+        "standard removing checks",
         {
-          "CommonAction:": "object"
+          "If:assuming:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
+              }
+            },
+            {
+              "Arg:from:": [
+                "response",
+                {
+                  "FromText:": {
+                    "CanHandle actor:action:noun:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "removing"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Print:": "@response"
+              }
+            ]
+          ]
         }
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:named:do:": [
         "removing",
-        [
-          {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
+        "standard removing action",
+        {
+          "If:do:": [
+            {
+              "StateChanging noun:actor:trait:guard:change:": [
                 {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
-                        {
-                          "FromText:": {
-                            "CanHandle actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "removing"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "Finally do:": {
-                        "StateChanging noun:actor:trait:guard:change:": [
-                          {
-                            "FromText:": "@noun"
-                          },
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "not worn"
-                          },
-                          {
-                            "FromText:": "wearable"
-                          },
-                          {
-                            "FromText:": "take off"
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  "FromText:": "@noun"
+                },
+                {
+                  "FromText:": "@actor"
+                },
+                {
+                  "FromText:": "not worn"
+                },
+                {
+                  "FromText:": "wearable"
+                },
+                {
+                  "FromText:": "take off"
                 }
               ]
-            ]
-          }
-        ]
+            },
+            {
+              "--": "Continue on to the next event phase"
+            }
+          ]
+        }
       ]
     },
     {
@@ -200,9 +194,8 @@
     },
     {
       "--": "This isn't perfectly symmetrical with can only wear possessions, and that's okay.",
-      "Rule for:named:do:": [
+      "Rule for:do:": [
         "before state changing",
-        "can only remove what's worn",
         {
           "If:do:": [
             {
@@ -227,29 +220,12 @@
                 }
               ]
             },
-            [
-              {
-                "Say response:with:": [
-                  "can only remove what's worn",
-                  "{We:|capitalize!} aren't wearing {those:.noun}!"
-                ]
-              },
-              {
-                "Set:from:": [
-                  {
-                    "Variable:dot:": [
-                      "event",
-                      {
-                        "AtField:": "cancel"
-                      }
-                    ]
-                  },
-                  {
-                    "FromBool:": true
-                  }
-                ]
-              }
-            ]
+            {
+              "Say response:with:": [
+                "can only remove what's worn",
+                "{We:|capitalize!} aren't wearing {those:.noun}!"
+              ]
+            }
           ]
         }
       ]

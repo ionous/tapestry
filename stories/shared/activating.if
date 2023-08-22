@@ -1,266 +1,260 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args common:": [
-        "activate",
-        "activating",
-        {
-          "CommonAction:": "object"
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "activating",
         [
           {
-            "Text:kind:initially:": [
+            "--": "the actor activating something ( ex. the player. )",
+            "Text:kind:": [
               "actor",
-              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the thing being activated",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "before activating",
+        "the standard activating checks",
+        [
+          {
+            "If:assuming:do:else:": [
               {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
+                "Not:": {
+                  "Is empty:": "@response"
+                }
+              },
+              {
+                "Arg:from:": [
+                  "response",
+                  {
+                    "FromText:": {
+                      "CanReach actor:action:noun:": [
+                        {
+                          "FromText:": "@actor"
+                        },
+                        {
+                          "FromText:": "activating"
+                        },
+                        {
+                          "FromText:": "@noun"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Print:": "@response"
+                }
+              ],
+              {
+                "If:assuming:do:": [
+                  {
+                    "Not:": {
+                      "Is empty:": "@response"
+                    }
+                  },
+                  {
+                    "Arg:from:": [
+                      "response",
+                      {
+                        "FromText:": {
+                          "CanUse actor:action:noun:": [
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "activating"
+                            },
+                            {
+                              "FromText:": "@noun"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Print:": "@response"
+                  }
                 ]
               }
             ]
           }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "activating",
+        "the standard activating action",
+        {
+          "If:do:": [
+            {
+              "StateChanging noun:actor:trait:guard:change:": [
                 {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
-                        {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "activating"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "If:assuming:do:else:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Arg:from:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "activating"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        },
-                        [
-                          {
-                            "Print:": "@resp"
-                          }
-                        ],
-                        {
-                          "Finally do:": {
-                            "StateChanging noun:actor:trait:guard:change:": [
-                              {
-                                "FromText:": "@noun"
-                              },
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "activated"
-                              },
-                              {
-                                "FromText:": "activatable"
-                              },
-                              {
-                                "FromText:": "switch on"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
+                  "FromText:": "@noun"
+                },
+                {
+                  "FromText:": "@actor"
+                },
+                {
+                  "FromText:": "activated"
+                },
+                {
+                  "FromText:": "activatable"
+                },
+                {
+                  "FromText:": "switch on"
                 }
               ]
-            ]
-          }
-        ]
+            },
+            {
+              "--": "Continue on to the next event phase"
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Event:action:args common:": [
-        "deactivate",
+      "Define action:requires:": [
         "deactivating",
+        [
+          {
+            "--": "the actor deactivating ( ex. the player. ) something",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the thing being deactivated",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "before deactivating",
+        "the standard deactivating checks",
         {
-          "CommonAction:": "object"
+          "If:assuming:do:else:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
+              }
+            },
+            {
+              "Arg:from:": [
+                "response",
+                {
+                  "FromText:": {
+                    "CanReach actor:action:noun:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "deactivating"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Print:": "@response"
+              }
+            ],
+            {
+              "If:assuming:do:": [
+                {
+                  "Not:": {
+                    "Is empty:": "@response"
+                  }
+                },
+                {
+                  "Arg:from:": [
+                    "response",
+                    {
+                      "FromText:": {
+                        "CanUse actor:action:noun:": [
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "deactivating"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                [
+                  {
+                    "Print:": "@response"
+                  }
+                ]
+              ]
+            }
+          ]
         }
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:named:do:": [
         "deactivating",
-        [
-          {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
+        "the standard deactivating action",
+        {
+          "If:do:": [
+            {
+              "StateChanging noun:actor:trait:guard:change:": [
                 {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@resp"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "resp",
-                        {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "deactivating"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@resp"
-                      }
-                    ],
-                    {
-                      "If:assuming:do:else:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Arg:from:": [
-                            "resp",
-                            {
-                              "FromText:": {
-                                "CanUse actor:action:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "deactivating"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        },
-                        [
-                          {
-                            "Print:": "@resp"
-                          }
-                        ],
-                        {
-                          "Finally do:": {
-                            "StateChanging noun:actor:trait:guard:change:": [
-                              {
-                                "FromText:": "@noun"
-                              },
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "deactivated"
-                              },
-                              {
-                                "FromText:": "activatable"
-                              },
-                              {
-                                "FromText:": "switch off"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
+                  "FromText:": "@noun"
+                },
+                {
+                  "FromText:": "@actor"
+                },
+                {
+                  "FromText:": "deactivated"
+                },
+                {
+                  "FromText:": "activatable"
+                },
+                {
+                  "FromText:": "switch off"
                 }
               ]
-            ]
-          }
-        ]
+            },
+            {
+              "--": "Continue on to the next event phase"
+            }
+          ]
+        }
       ]
     },
     {

@@ -26,13 +26,9 @@ type Runtime interface {
 	ActivateDomain(name string) (ret string, err error)
 	// GetKindByName  -record manipulation.
 	GetKindByName(name string) (*g.Kind, error)
-	// GetRules - return the runtime rules matching the passed pattern and target.
-	GetRules(pattern, target string) ([]Rule, error)
 	// Call - run the pattern defined by the passed record.
 	// passes the expected return because patterns can be called in ambiguous context ( ex. template expressions )
 	Call(name string, expectedReturn affine.Affinity, keys []string, vals []g.Value) (g.Value, error)
-	// Send - trigger the named event, passing the objects to visit: target first, root-most last.
-	Send(pat *g.Record, up []string) (g.Value, error)
 	// RelativesOf - returns a list, even for one-to-one relationships.
 	RelativesOf(a, relation string) (g.Value, error)
 	// ReciprocalsOf - returns a list, even for one-to-one relationships.

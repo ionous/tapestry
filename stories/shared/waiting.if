@@ -1,131 +1,39 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args none:": [
-        "wait",
-        "waiting",
-        "nothing"
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "waiting",
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "If:do:": [
-                    {
-                      "Send:event:": [
-                        {
-                          "Capture obj:": {
-                            "FromText:": "@actor"
-                          }
-                        },
-                        {
-                          "Wait actor:noun:": [
-                            {
-                              "FromText:": "@actor"
-                            },
-                            {
-                              "FromText:": "@actor"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "ReportWaiting actor:": {
-                          "FromText:": "@actor"
-                        }
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "report waiting",
-        [
-          {
+            "--": "the actor being lazy ( ex. the player. )",
             "Text:kind:": [
               "actor",
               "actor"
             ]
           }
-        ],
-        {
-          "Nothing": true
-        },
-        []
+        ]
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
+        "report someone waiting",
+        {
+          "Say response:with:": [
+            "someone waits",
+            "{The: .actor|capitalize!} waited."
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
         "report waiting",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
-                }
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "someone waits",
-                    "{The: .actor|capitalize!} waited."
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "the player waits",
-                    "Time passes."
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "Say response:with:": [
+            "the player waits",
+            "Time passes."
+          ]
+        }
       ]
     }
   ]

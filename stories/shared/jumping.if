@@ -1,63 +1,15 @@
 {
   "Tapestry:": [
     {
-        "Interpret:with:": [
-          [
-            "jump",
-            "skip",
-            "hop"
-          ],
-          [
-            {
-              "Action:": "jumping"
-            }
-          ]
-        ]
-      
-    },
-    {
-      "--": ""
-    },
-    {
-      "Event:action:args none:": [
-        "jump",
-        "jumping",
-        "nothing"
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "jumping",
+      "Interpret:with:": [
         [
-          {
-            "Text:kind:initially:": [
-              "actor",
-              "object",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
+          "jump",
+          "skip",
+          "hop"
         ],
         [
           {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "ReportJumping actor:": {
-                    "FromText:": "@actor"
-                  }
-                }
-              ]
-            ]
+            "Action:": "jumping"
           }
         ]
       ]
@@ -66,57 +18,39 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
-        "report jumping",
+      "Define action:requires:": [
+        "jumping",
         [
           {
+            "--": "the actor jumping up and down ( ex. the player. )",
             "Text:kind:": [
               "actor",
               "actor"
             ]
           }
-        ],
-        {
-          "Nothing": true
-        },
-        []
+        ]
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
+        "report someone jumping",
+        {
+          "Say response:with:": [
+            "actor jumping",
+            "{the:.actor|capitalize!} jumps on the spot."
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
         "report jumping",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "player jumping",
-                    "{we:|capitalize!} jump on the spot."
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "actor jumping",
-                    "{the:.actor|capitalize!} jumps on the spot."
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "Say response:with:": [
+            "player jumping",
+            "{we:|capitalize!} jump on the spot."
+          ]
+        }
       ]
     }
   ]

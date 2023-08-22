@@ -112,9 +112,9 @@ func TestQueries(t *testing.T) {
 			} else if e := mdlRule(m,
 				// "domain", "kind", "target", "rank", "prog", "at"
 				// ---------------------------------------
-				domain, pattern, "", 1, "prog1", at,
-				domain, pattern, kind, 2, "prog2", at,
-				domain, pattern, kind, 3, "prog3", at,
+				domain, pattern, 1, "prog1", at,
+				domain, pattern, 2, "prog2", at,
+				domain, pattern, 3, "prog3", at,
 			); e != nil {
 				err = e
 				t.Fatal(e)
@@ -207,15 +207,10 @@ func TestQueries(t *testing.T) {
 		t.Fatal("patternLabels:", e)
 	} else if diff := pretty.Diff(got, []string{"object", "other object", "ancestor"}); len(diff) > 0 {
 		t.Fatal(e, diff)
-	} else if got, e := q.RulesFor(pattern, ""); e != nil {
+	} else if got, e := q.RulesFor(pattern); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(got, []query.RuleData{
 		{Name: "1", Prog: []byte("prog1")},
-	}); len(diff) > 0 {
-		t.Fatal(got, diff)
-	} else if got, e := q.RulesFor(pattern, kind); e != nil {
-		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []query.RuleData{
 		{Name: "2", Prog: []byte("prog2")},
 		{Name: "3", Prog: []byte("prog3")},
 	}); len(diff) > 0 {
@@ -416,15 +411,14 @@ func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 	return
 }
 func mdlRule(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 6 {
+	for i, cnt := 0, len(els); i < cnt; i += 5 {
 		row := els[i:]
 		domain := row[0].(string)
 		pattern := row[1].(string)
-		target := row[2].(string)
-		rank := row[3].(int)
-		prog := row[4].(string)
-		at := row[5].(string)
-		if e := m.Pin(domain, at).AddTestRule(pattern, target, rank, prog); e != nil {
+		rank := row[2].(int)
+		prog := row[3].(string)
+		at := row[4].(string)
+		if e := m.Pin(domain, at).AddTestRule(pattern, rank, prog); e != nil {
 			err = e
 			break
 		}

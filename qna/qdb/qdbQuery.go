@@ -226,8 +226,8 @@ func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	return
 }
 
-func (q *Query) RulesFor(pat, target string) (ret []query.RuleData, err error) {
-	if rows, e := q.rulesFor.Query(pat, target); e != nil {
+func (q *Query) RulesFor(pat string) (ret []query.RuleData, err error) {
+	if rows, e := q.rulesFor.Query(pat); e != nil {
 		err = e
 	} else {
 		var rule query.RuleData
@@ -471,10 +471,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				using (domain)
 			join mdl_kind mk 
 			  on (mk.rowid = mu.kind) 
-			left join mdl_kind mt 
-			  on (mt.rowid = mu.target)
 			where mk.kind = ?1
-			and ifnull(mt.kind,'') = ?2
 			order by 
 				mu.rank,
 				-- tbd: positive rank items sort first specified to last specified (asc)

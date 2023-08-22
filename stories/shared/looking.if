@@ -28,6 +28,17 @@
       ]
     },
     {
+      "Rule for:do:": [
+        "someone looking",
+        {
+          "Say response:with:": [
+          	"someone looks around",
+          	"{the:.actor|capitalize!} looks around."
+          ]
+        }
+      ]
+    },
+    {
       "Rule for:named:do:": [
         "looking",
         "the standard looking action",

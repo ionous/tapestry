@@ -3,7 +3,6 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 )
 
@@ -17,8 +16,3 @@ var CompactEncoder = core.CompactEncoder
 
 // story break is an empty do nothing statement, used as a paragraph marker.
 func (op *StoryBreak) Weave(cat *weave.Catalog) error { return nil }
-
-// Execute - called by the macro runtime during weave.
-func (op *StoryBreak) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}

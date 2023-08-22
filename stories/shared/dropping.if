@@ -1,282 +1,130 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args common:": [
-        "drop",
-        "dropping",
-        {
-          "CommonAction:": "thing"
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "dropping",
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@result"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "result",
-                        {
-                          "--": [
-                            "can we handle ( locally touch ) the object.",
-                            "the result will be empty if we can",
-                            "or an error message if we cant"
-                          ],
-                          "FromText:": {
-                            "CanHandle actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "dropping"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@result"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "If:do:": [
-                            {
-                              "--": [
-                                "send the drop event to noun",
-                                "it will return true if it dropped the object okay.",
-                                "we expect any handler which blocks the event to say why not."
-                              ],
-                              "Send:event:": [
-                                {
-                                  "Capture obj:": {
-                                    "FromText:": "@noun"
-                                  }
-                                },
-                                {
-                                  "Drop actor:noun:": [
-                                    {
-                                      "FromText:": "@actor"
-                                    },
-                                    {
-                                      "FromText:": "@noun"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "ReportDropping actor:noun:": [
-                                  {
-                                    "FromText:": "@actor"
-                                  },
-                                  {
-                                    "FromText:": "@noun"
-                                  }
-                                ]
-                              }
-                            ]
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "things",
-        [
-          {
-            "With:event:rules:": [
-              "while",
-              "drop",
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "If:assuming:do:else:": [
-                          {
-                            "Not:": {
-                              "Is empty:": "@error"
-                            }
-                          },
-                          {
-                            "Arg:from:": [
-                              "error",
-                              {
-                                "FromText:": {
-                                  "MoveObject obj:dest:": [
-                                    {
-                                      "FromText:": "@noun"
-                                    },
-                                    {
-                                      "FromText:": {
-                                        "ParentOf obj:": {
-                                          "FromText:": "@actor"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          },
-                          [
-                            {
-                              "Print:": "@error"
-                            },
-                            {
-                              "Set:from:": [
-                                "@success",
-                                {
-                                  "FromBool:": false
-                                }
-                              ]
-                            }
-                          ],
-                          {
-                            "Finally do:": [
-                              {
-                                "Log:value:": [
-                                  "debug",
-                                  {
-                                    "FromText:": {
-                                      "Say:": "{The: .actor} is taking {the: .noun} ..."
-                                    }
-                                  }
-                                ]
-                              },
-                              {
-                                "Set:from:": [
-                                  "@success",
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "report dropping",
-        [
-          {
+            "--": "the actor activating something ( ex. the player. )",
             "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
+            "--": "the thing being dropped",
             "Text:kind:": [
               "noun",
               "thing"
             ]
           }
-        ],
-        {
-          "Nothing": true
-        },
-        []
+        ]
       ]
     },
     {
-      "Extend pattern:withRules:": [
-        "report dropping",
+      "Rule for:named:do:": [
+        "before dropping",
+        "the standard dropping checks",
         [
           {
-            "PatternRule:do:": [
+            "If:assuming:do:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
+                  "Is empty:": "@response"
                 }
               },
-              [
-                {
-                  "Say response:with:": [
-                    "someone else drops",
-                    "{The: .actor|capitalize!} put down {the: .noun}."
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "player drops",
-                    "Dropped."
-                  ]
-                }
-              ]
+              {
+                "Arg:from:": [
+                  "response",
+                  {
+                    "--": [
+                      "can we handle ( locally touch ) the object.",
+                      "the response will be empty if we can",
+                      "or an error message if we cant"
+                    ],
+                    "FromText:": {
+                      "CanHandle actor:action:noun:": [
+                        {
+                          "FromText:": "@actor"
+                        },
+                        {
+                          "FromText:": "dropping"
+                        },
+                        {
+                          "FromText:": "@noun"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "Print:": "@response"
+              }
             ]
           }
         ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "dropping",
+        "the standard dropping action",
+        {
+          "If:assuming:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
+              }
+            },
+            {
+              "Arg:from:": [
+                "response",
+                {
+                  "FromText:": {
+                    "MoveObject obj:dest:": [
+                      {
+                        "FromText:": "@noun"
+                      },
+                      {
+                        "FromText:": {
+                          "ParentOf obj:": {
+                            "FromText:": "@actor"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Print:": "@response"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "report someone dropping",
+        {
+          "Say response:with:": [
+            "someone else drops",
+            "{The: .actor|capitalize!} put down {the: .noun}."
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "report dropping",
+        {
+          "Say response:with:": [
+            "player drops",
+            "Dropped."
+          ]
+        }
       ]
     },
     {

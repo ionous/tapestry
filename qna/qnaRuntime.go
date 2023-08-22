@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -63,25 +62,6 @@ func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 	} else {
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
 		ret = prev
-	}
-	return
-}
-
-// return the runtime rules matching the passed pattern and target
-// FIX: remove
-func (run *Runner) GetRules(pattern, target string) (ret []rt.Rule, err error) {
-	pat, tgt := lang.Normalize(pattern), lang.Normalize(target) // FIX: caller normalization would be best.
-	if rs, e := run.getRules(pat, tgt); e != nil {
-		err = e
-	} else {
-		for _, r := range rs.rules {
-			ret = append(ret, rt.Rule{
-				Name:    r.Name,
-				Filter:  r.Filter,
-				Execute: r.Exe,
-				Updates: r.Updates,
-			})
-		}
 	}
 	return
 }

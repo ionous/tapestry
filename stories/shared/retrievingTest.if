@@ -24,9 +24,14 @@
                         "Print:": "Fail to retrieve from something closed:<br>"
                       },
                       {
-                        "RetrievingFrom agent:noun:otherNoun:": [
+                        "RetrievingFrom actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "coffee"
@@ -49,9 +54,14 @@
                         "Print:": "Okay, retrieve from supporter:<br>"
                       },
                       {
-                        "RetrievingFrom agent:noun:otherNoun:": [
+                        "RetrievingFrom actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "soup"
@@ -77,9 +87,14 @@
                         "Print:": "Okay, retrieve from container:<br>"
                       },
                       {
-                        "RetrievingFrom agent:noun:otherNoun:": [
+                        "RetrievingFrom actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "hook"
@@ -102,9 +117,14 @@
                         "Print:": "Fail to retrieve incorrectly:<br>"
                       },
                       {
-                        "RetrievingFrom agent:noun:otherNoun:": [
+                        "RetrievingFrom actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "hat"
@@ -124,9 +144,14 @@
                         "Print:": "Fail to steal:<br>"
                       },
                       {
-                        "RetrievingFrom agent:noun:otherNoun:": [
+                        "RetrievingFrom actor:noun:otherNoun:": [
                           {
-                            "FromText:": "player"
+                            "FromText:": {
+                              "Object:field:": [
+                                "player",
+                                "pawn"
+                              ]
+                            }
                           },
                           {
                             "FromText:": "apple"

@@ -1,171 +1,129 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args dual:": [
-        "retrieve from",
-        "retrieving from",
-        {
-          "PairedAction:": "things"
-        }
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "retrieving from",
         [
           {
-            "Text:kind:initially:": [
+            "--": "the actor activating ( ex. the player. ) something",
+            "Text:kind:": [
               "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
+              "actor"
             ]
-          }
-        ],
-        [
+          },
           {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
-                },
-                {
-                  "If:assuming:do:else:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@result"
-                      }
-                    },
-                    {
-                      "Arg:from:": [
-                        "result",
-                        {
-                          "FromText:": {
-                            "CanReach actor:action:noun:": [
-                              {
-                                "FromText:": "@actor"
-                              },
-                              {
-                                "FromText:": "retrieving from"
-                              },
-                              {
-                                "FromText:": "@noun"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "@result"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "If:assuming:do:else:": [
-                            {
-                              "Not:": {
-                                "Is empty:": "@result"
-                              }
-                            },
-                            {
-                              "Arg:from:": [
-                                "result",
-                                {
-                                  "FromText:": {
-                                    "CanUse actor:action:noun:otherNoun:": [
-                                      {
-                                        "FromText:": "@actor"
-                                      },
-                                      {
-                                        "FromText:": "retrieving from"
-                                      },
-                                      {
-                                        "FromText:": "@noun"
-                                      },
-                                      {
-                                        "FromText:": "@other_noun"
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "Print:": "@result"
-                              }
-                            ],
-                            {
-                              "Finally do:": [
-                                {
-                                  "If:do:": [
-                                    {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": {
-                                            "FromText:": "@noun"
-                                          }
-                                        },
-                                        {
-                                          "RetrieveFrom actor:noun:otherNoun:": [
-                                            {
-                                              "FromText:": "@actor"
-                                            },
-                                            {
-                                              "FromText:": "@noun"
-                                            },
-                                            {
-                                              "FromText:": "@other_noun"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    [
-                                      {
-                                        "ReportRetrievingFrom actor:noun:otherNoun:": [
-                                          {
-                                            "FromText:": "@actor"
-                                          },
-                                          {
-                                            "FromText:": "@noun"
-                                          },
-                                          {
-                                            "FromText:": "@other_noun"
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+            "--": "the thing being retrieved",
+            "Text:kind:": [
+              "noun",
+              "thing"
+            ]
+          },
+          {
+            "--": "the thing from which the noun is being retrieved",
+            "Text:kind:": [
+              "other noun",
+              "thing"
             ]
           }
         ]
       ]
     },
     {
-      "--": ""
+      "Rule for:do:": [
+        "before retrieving from",
+        [
+          {
+            "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
+          },
+          {
+            "If:assuming:do:else:": [
+              {
+                "Not:": {
+                  "Is empty:": "@result"
+                }
+              },
+              {
+                "Arg:from:": [
+                  "result",
+                  {
+                    "FromText:": {
+                      "CanReach actor:action:noun:": [
+                        {
+                          "FromText:": "@actor"
+                        },
+                        {
+                          "FromText:": "retrieving from"
+                        },
+                        {
+                          "FromText:": "@noun"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Print:": "@result"
+                }
+              ],
+              {
+                "If:assuming:do:": [
+                  {
+                    "Not:": {
+                      "Is empty:": "@result"
+                    }
+                  },
+                  {
+                    "Arg:from:": [
+                      "result",
+                      {
+                        "FromText:": {
+                          "CanUse actor:action:noun:otherNoun:": [
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "retrieving from"
+                            },
+                            {
+                              "FromText:": "@noun"
+                            },
+                            {
+                              "FromText:": "@other_noun"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  [
+                    {
+                      "Print:": "@result"
+                    }
+                  ]
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "retrieving from",
+        "the standard retrieving action",
+        {
+          "Taking actor:noun:": [
+            {
+              "FromText:": "@actor"
+            },
+            {
+              "FromText:": "@noun"
+            }
+          ]
+        }
+      ]
     },
     {
       "Extend pattern:withRules:": [
@@ -290,113 +248,6 @@
                           }
                         ]
                       }
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen:handlers:": [
-        "things",
-        [
-          {
-            "With:event:rules:": [
-              "while",
-              "retrieve from",
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": {
-                              "Send:event:": [
-                                {
-                                  "Capture obj:": {
-                                    "FromText:": "@noun"
-                                  }
-                                },
-                                {
-                                  "Take actor:noun:": [
-                                    {
-                                      "FromText:": "@actor"
-                                    },
-                                    {
-                                      "FromText:": "@noun"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "report retrieving from",
-        [
-          {
-            "Text:kind:": [
-              "actor",
-              "actor"
-            ]
-          },
-          {
-            "Text:kind:": [
-              "noun",
-              "thing"
-            ]
-          },
-          {
-            "Text:kind:": [
-              "other noun",
-              "thing"
-            ]
-          }
-        ],
-        {
-          "Nothing": true
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "report retrieving from",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "ReportTaking actor:noun:": [
-                    {
-                      "FromText:": "@actor"
-                    },
-                    {
-                      "FromText:": "@noun"
                     }
                   ]
                 }

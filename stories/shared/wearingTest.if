@@ -5,12 +5,12 @@
         "wearing test",
         "Kitchenette",
         [
-        	{
-        		"Declare:": "You are carrying the flower and the knife."
-        	},
-        	{
-        		"Declare:": "The purse is in the kitchen."
-        	}
+          {
+            "Declare:": "You are carrying the flower and the knife."
+          },
+          {
+            "Declare:": "The purse is in the kitchen."
+          }
         ],
         [
           {
@@ -23,9 +23,14 @@
             "Comment:": "Fail to re-wear the flower:"
           },
           {
-            "Wearing agent:noun:": [
+            "Wearing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "flower"
@@ -33,16 +38,21 @@
             ]
           },
           {
-          	"--": "The 'can't change what is' response.",
+            "--": "The 'can't change what is' response.",
             "Expect output:": "It is already worn."
           },
           {
             "Comment:": "Take off the flower:"
           },
           {
-            "Removing agent:noun:": [
+            "Removing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "flower"
@@ -62,9 +72,14 @@
             "Comment:": "Fail to re-remove the flower:"
           },
           {
-            "Removing agent:noun:": [
+            "Removing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "flower"
@@ -78,9 +93,14 @@
             "Comment:": "Wear the flower again:"
           },
           {
-            "Wearing agent:noun:": [
+            "Wearing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "flower"
@@ -106,9 +126,14 @@
             "Comment:": "Fail to wear an unwearable:"
           },
           {
-            "Wearing agent:noun:": [
+            "Wearing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "knife"
@@ -134,9 +159,14 @@
             "Comment:": "Fail to wear something not held:"
           },
           {
-            "Wearing agent:noun:": [
+            "Wearing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "purse"
@@ -150,9 +180,14 @@
             "Comment:": "Fail to remove something not held:"
           },
           {
-            "Removing agent:noun:": [
+            "Removing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "purse"
@@ -166,9 +201,14 @@
             "Comment:": "Fail to put on something not reachable:"
           },
           {
-            "Wearing agent:noun:": [
+            "Wearing actor:noun:": [
               {
-                "FromText:": "player"
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
               },
               {
                 "FromText:": "purse"

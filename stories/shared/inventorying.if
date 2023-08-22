@@ -1,94 +1,39 @@
 {
   "Tapestry:": [
     {
-      "Event:action:args none:": [
-        "inventory",
-        "inventorying",
-        "nothing"
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
+      "Define action:requires:": [
         "inventorying",
         [
           {
-            "Text:kind:initially:": [
+            "--": "the actor who checking their inventory ( ex. the player. )",
+            "Text:kind:": [
               "actor",
-              "object",
-              {
-                "Object:field:": [
-                  "@agent",
-                  "pawn"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@actor"
-                }
-              },
-              [
-                {
-                  "Send:event:": [
-                    {
-                      "Capture obj:": {
-                        "FromText:": "@actor"
-                      }
-                    },
-                    {
-                      "Inventory actor:": {
-                        "FromText:": "@actor"
-                      }
-                    }
-                  ]
-                }
-              ]
+              "actor"
             ]
           }
         ]
       ]
     },
-    {
-      "--": ""
+		{
+      "Rule for:do:": [
+        "someone inventorying",
+        {
+          "Say response:with:": [
+          	"someone takes inventory",
+          	"{the:.actor|capitalize!} looks through their possessions."
+          ]
+        }
+      ]
     },
     {
-      "Listen:handlers:": [
-        "actors",
-        [
-          {
-            "With:event:rules:": [
-              "while",
-              "inventory",
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "PrintInventory actor:": {
-                          "FromText:": "@actor"
-                        }
-                      },
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
+      "Rule for:named:do:": [
+        "inventorying",
+        "the standard inventorying action",
+        {
+          "PrintInventory actor:": {
+            "FromText:": "@actor"
           }
-        ]
+        }
       ]
     },
     {
