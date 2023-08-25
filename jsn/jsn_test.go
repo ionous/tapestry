@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/debug"
-	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
@@ -44,7 +46,6 @@ func TestCompactEncoder(t *testing.T) {
 
 // test the compact decoder can read from the "golden image" and get the hardwired factorial story.
 func TestCompactDecode(t *testing.T) {
-	errutil.Panic = true
 	if file, e := story.CompactDecode([]byte(jsnTestIf)); e != nil {
 		pretty.Println(file)
 		t.Fatal(e)
@@ -58,30 +59,6 @@ func TestCompactDecode(t *testing.T) {
 
 //go:embed jsnTest.if
 var jsnTestIf string
-
-// TestAnonymousSwap - unit test for broken parsing case
-// -- EventTarget no longer exists
-// func TestAnonymousSwap(t *testing.T) {
-// 	var jsnTestIf = `{"Listen kinds:handlers:": ["things",[]]}`
-// 	want := story.EventBlock{
-// 		Target: story.EventTarget{
-// 			Value: &story.PluralKinds{
-// 				Str: "things",
-// 			},
-// 			Choice: story.EventTarget_Kinds_Opt,
-// 		},
-// 		Handlers: make([]story.EventHandler, 0, 0),
-// 	}
-// 	//
-// 	var have story.EventBlock
-// 	if e := story.Decode(&have, []byte(jsnTestIf), story.AllSignatures); e != nil {
-// 		pretty.Println(have)
-// 		t.Fatal(e)
-// 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
-// 		pretty.Println(have)
-// 		t.Fatal(diff)
-// 	}
-// }
 
 func TestMissingSlot(t *testing.T) {
 	in := `{"Join parts:":["one","two","three"]}`
@@ -97,3 +74,31 @@ func TestMissingSlot(t *testing.T) {
 		t.Fatal(diff)
 	}
 }
+
+// cinStates: xDecoder.readFlow() reads the Text:initially signature
+// but previously only used itto separate out the parameter names;
+// it didnt validate it against the flow, and handed the json map to Arg_Marshal
+// which read any matching fields, ex. the the _ field holding "description".
+// now: it tests that the lede of the command matches the first part of the signature
+func TestExpectedFailure(t *testing.T) {
+	var dst assign.Arg_Slice
+	if e := cin.NewDecoder(cin.Signatures(tapestry.AllSignatures)).
+		SetSlotDecoder(core.CompactSlotDecoder).
+		Decode(&dst, []byte(failure)); e == nil {
+		t.Fatal("expected error")
+	} else {
+		t.Log("ok:", e)
+	}
+}
+
+var failure = `[{
+  "Text:initially:": [
+    "description",
+    {
+      "Object:field:": [
+        "@obj",
+        "description"
+      ]
+    }
+  ]
+}]`

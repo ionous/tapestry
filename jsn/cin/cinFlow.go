@@ -7,6 +7,7 @@ import (
 )
 
 type cinFlow struct {
+	name      string
 	params    []Parameter
 	args      []json.RawMessage
 	bestIndex int
@@ -16,7 +17,7 @@ func newFlowData(op Op) (ret *cinFlow, err error) {
 	if sig, args, e := op.ReadMsg(); e != nil {
 		err = e
 	} else {
-		ret = &cinFlow{params: sig.Params, args: args}
+		ret = &cinFlow{name: sig.Name, params: sig.Params, args: args}
 	}
 	return
 }

@@ -80,10 +80,12 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 			if ptr := dec.Machine.Markout; ptr != nil {
 				*ptr, dec.Machine.Markout = op.Markup, nil
 			}
-			if flowData, e := newFlowData(op); e != nil {
+			if flowMsg, e := newFlowData(op); e != nil {
 				dec.Error(e)
+			} else if name := flow.GetLede(); name != flowMsg.name {
+				dec.Error(errutil.Fmt("mismatched commands: expected %q have %q", name, flowMsg.name))
 			} else {
-				dec.PushState(dec.newFlow(flowData))
+				dec.PushState(dec.newFlow(flowMsg))
 				okay = true
 			}
 		}

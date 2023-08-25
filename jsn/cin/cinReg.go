@@ -11,17 +11,21 @@ import (
 // Generate instances of go types from .if file signatures.
 type TypeCreator interface {
 	HasType(Hashed) bool
-	NewFromSignature(Hashed) (interface{}, error)
+	NewFromSignature(Hashed) (any, error)
 }
 
-type Signatures []map[uint64]interface{}
+// hash to pointer to a nil value of the type
+// ex. 15485098871275255450: (*Comparison)(nil)
+type Signatures []map[uint64]any
 
+// true if the signature is known
 func (regs Signatures) HasType(sig Hashed) (okay bool) {
 	_, okay = regs.FindType(sig)
 	return
 }
 
-func (regs Signatures) FindType(sig Hashed) (ret interface{}, okay bool) {
+// return the nil pointer to the type.
+func (regs Signatures) FindType(sig Hashed) (ret any, okay bool) {
 	for _, reg := range regs {
 		if a, ok := reg[sig.Value]; ok {
 			ret, okay = a, ok
@@ -31,7 +35,8 @@ func (regs Signatures) FindType(sig Hashed) (ret interface{}, okay bool) {
 	return
 }
 
-func (regs Signatures) NewFromSignature(sig Hashed) (ret interface{}, err error) {
+// create a new instance of the type and return its pointer
+func (regs Signatures) NewFromSignature(sig Hashed) (ret any, err error) {
 	if cmd, ok := regs.FindType(sig); !ok {
 		err = errutil.New("unknown signature", sig)
 	} else {
