@@ -17,8 +17,9 @@ import (
 type RuleInfo struct {
 	Name           string // name of the pattern / kind
 	Rank           int    // smaller ranked rules run first
-	Cancels        bool   // did the author intend the rule to terminate
-	ExcludesPlayer bool
+	Stop           bool
+	Jump           rt.Jump
+	ExcludesPlayer bool // true if the rule should apply to all actors
 }
 
 // match an author specified pattern reference
@@ -66,28 +67,31 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 			ret = RuleInfo{Name: short, Rank: prefix.rank()}
 		}
 	} else {
-		var pattern string
-		var cancels bool
+		var stop bool // stopping before the action happens is considered a cancel.
+		var jump rt.Jump
+		pattern := name
+
 		switch prefix {
 		case instead:
-			// ex. "instead of some action, return "before some action"
 			pattern = event.BeforePhase.PatternName(short)
-			cancels = true
-		case report:
-			// ex. "report some action, return "after some action"
-			pattern = event.AfterPhase.PatternName(short)
-			cancels = true
+			stop, jump = true, rt.JumpNow
 		case before:
-			cancels = true
-			fallthrough
+			// because jump is used for checking if things are valid
+			// JumpNow makes most sense, even if, symmetrically JumpLater would make sense.
+			stop, jump = true, rt.JumpNow
 		default:
-			// ex. "before some pattern, return "before some pattern"
-			pattern = name
+			stop, jump = false, rt.JumpNow
+		case after:
+			stop, jump = false, rt.JumpLater
+		case report:
+			pattern = event.AfterPhase.PatternName(short)
+			stop, jump = true, rt.JumpNow
 		}
 		ret = RuleInfo{
 			Name:           pattern,
 			Rank:           prefix.rank(),
-			Cancels:        cancels,
+			Stop:           stop,
+			Jump:           jump,
 			ExcludesPlayer: excludesPlayer,
 		}
 	}
@@ -98,9 +102,8 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 // tdb: could this be processed at load time (storyImport)
 func DoesUpdate(exe []rt.Execute) (okay bool) {
 	// wrap the exes up into a single block for easier searching
-	return searchCounters(&core.ChooseNothingElse{
-		Exe: exe,
-	})
+	var m rt.Execute_Slice = exe
+	return searchCounters(&m)
 }
 
 // tdb: could this? be processed at load time (storyImport)
@@ -139,9 +142,8 @@ Out:
 
 // return the first response definition in the block
 func FindNamedResponse(exe []rt.Execute) (ret string) {
-	if op, e := searchForFlow(&core.ChooseNothingElse{
-		Exe: exe,
-	}, render.RenderResponse_Type); e != nil && e != jsn.Missing {
+	var m rt.Execute_Slice = exe
+	if op, e := searchForFlow(&m, render.RenderResponse_Type); e != nil && e != jsn.Missing {
 		panic(e)
 	} else if response, ok := op.(*render.RenderResponse); ok && response.Text != nil {
 		ret = response.Name

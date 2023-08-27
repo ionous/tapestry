@@ -2,11 +2,9 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -35,99 +33,84 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 		} else if !pat.Implements(kindsOf.Action.String()) {
 			// note: this doesnt positively affirm kindsOf.Pattern:
 			// some tests use golang structs as faux patterns.
-			if ret, err = run.call(rec, pat, aff); err != nil {
-				// .call can return both a value and an error.
-				err = errutil.Fmt("%w calling %q", err, name)
-			}
-		} else if len(vals) <= 0 {
-			err = errutil.Fmt("attempting to call an event %q with no target  %q", name, aff)
+			ret, err = run.call(rec, pat, aff)
 		} else {
-			tgt := vals[0]
-			callState := run.saveCallState()
-			if path, e := run.newPathForTarget(tgt); e != nil {
-				err = e
-			} else if evtObj, e := newEventRecord(run, event.Object, tgt); e != nil {
-				err = e // ^ create the "event" object sent to each event phase pattern.
+			if len(vals) <= 0 {
+				err = errutil.Fmt("attempting to call an event %q with no target  %q", name, aff)
 			} else {
-				var canceled bool
-				for prevRec, i := rec, 0; i < event.NumPhases; i++ {
-					phase := event.Phase(i)
-					if kindForPhase, e := run.getKind(phase.PatternName(name)); e != nil {
-						err = e
-						break
-					} else {
-						// set the name of the phase
-						// ( so that authors can determine the name of the phase during initialization )
-						callState.setPattern(kindForPhase.Name())
-						// create the phase record, set it into scope, and initialize.
-						// ( the event object isnt available till the main pattern body )
-						if phaseRec, e := run.newPhase(kindForPhase, prevRec); e != nil {
-							err = e
-							break
-						} else {
-							// push the event scope. we dont pop later; we replace.
-							// ( the event gets pushed last so it cant be hidden by pattern locals )
-							run.PushScope(scope.NewReadOnlyValue(event.Object, g.RecordOf(evtObj)))
-							if x, e := run.send(evtObj, kindForPhase, path.slice(phase)); e != nil {
-								err = errutil.Fmt("%w calling %q", e, kindForPhase.Name())
-								break
-							} else if x {
-								canceled = true
-								break
-							}
-							prevRec = phaseRec
-						}
-					}
-				}
-				ret = g.BoolOf(!canceled)
+				ret, err = run.send(name, rec, vals[0])
 			}
-			callState.restore()
 		}
 	}
 	return
 }
 
 func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (ret g.Value, err error) {
-	name := kind.Name()
-	if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
+	if field, e := pattern.GetResultField(run, kind.Kind); e != nil {
 		err = e
 	} else {
-		res := pattern.NewResults(rec, labels.Strings(), aff)
-		oldScope := run.replaceScope(res)
+		name := kind.Name()
+		oldScope := run.scope.ReplaceScope(scope.FromRecord(rec))
 		run.currentPatterns.startedPattern(name)
 		if e := kind.recordInit(run, rec); e != nil {
 			err = e
-		} else if rs, e := run.getRules(name); e != nil {
+		} else if rules, e := run.getRules(name); e != nil {
+			err = e
+		} else if res, e := rules.Call(run, rec, field); e != nil {
 			err = e
 		} else {
-			// FIX!  (requires paring down NewResults)
-			var rules []rt.Rule
-			for _, r := range rs.rules {
-				rules = append(rules, rt.Rule{
-					Name:    r.Name,
-					Filter:  r.Filter,
-					Execute: r.Exe,
-					Updates: r.Updates,
-				})
-			}
-			if e := res.ApplyRules(run, rules); e != nil {
+			ret, err = res.GetResult(aff)
+		}
+		run.currentPatterns.stoppedPattern(name)
+		run.scope.RestoreScope(oldScope)
+	}
+	return
+}
+
+func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, err error) {
+	callState := run.saveCallState()
+	if path, e := run.newPathForTarget(tgt); e != nil {
+		err = e
+	} else if evtObj, e := newEventRecord(run, event.Object, tgt); e != nil {
+		err = e // ^ create the "event" object sent to each event phase pattern.
+	} else {
+		var canceled bool
+		for prevRec, i := rec, 0; i < event.NumPhases; i++ {
+			phase := event.Phase(i)
+			if kindForPhase, e := run.getKind(phase.PatternName(name)); e != nil {
 				err = e
-			} else if v, e := res.GetResult(); e != nil {
+				break
+			} else if rules, e := run.getRules(kindForPhase.Name()); e != nil {
 				err = e
 			} else {
-				// warning: in order to generate appropriate defaults ( ex. a record of the right type )
-				// while still informing the caller of lack of pattern decision in a concise manner
-				// can return both a valid value and an error
-				ret = v
-				if !res.ComputedResult() {
-					err = errutil.Fmt("%w computing %s", rt.NoResult, aff)
+				// set the name of the phase
+				// ( so that authors can determine the name of the phase during initialization )
+				callState.setPattern(kindForPhase.Name())
+				// create the phase record, set it into scope, and initialize.
+				// ( the event object isnt available till the main pattern body )
+				if phaseRec, e := run.newPhase(kindForPhase, prevRec); e != nil {
+					err = e
+					break
+				} else {
+					// push the event scope. we dont pop later; we replace.
+					// ( the event gets pushed last so it cant be hidden by pattern locals )
+					run.PushScope(scope.NewReadOnlyValue(event.Object, g.RecordOf(evtObj)))
+					if ok, e := rules.Send(run, evtObj, path.slice(phase)); e != nil {
+						err = errutil.Fmt("%w calling %q", e, kindForPhase.Name())
+						break
+					} else if !ok {
+						// stopping before, is the same as canceling
+						// tbd: should this also check for explicit canceling in later phases?
+						canceled = phase < event.TargetPhase
+						break
+					}
+					prevRec = phaseRec
 				}
 			}
-			run.currentPatterns.stoppedPattern(name)
-			run.restoreScope(oldScope)
 		}
+		ret = g.BoolOf(!canceled)
 	}
-
+	callState.restore()
 	return
 }
 
@@ -139,7 +122,7 @@ func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (re
 // fix: backdoor record creation to slice the values across?
 func (run *Runner) newPhase(k cachedKind, src *g.Record) (ret *g.Record, err error) {
 	dst, srcKind := k.NewRecord(), src.Kind()
-	_ = run.replaceScope(scope.FromRecord(dst)) // assumes the caller handles scope restoration
+	_ = run.scope.ReplaceScope(scope.FromRecord(dst)) // assumes the caller handles scope restoration
 
 	i := 0
 	// copy until the fields are mismatched
@@ -170,66 +153,6 @@ func (run *Runner) newPhase(k cachedKind, src *g.Record) (ret *g.Record, err err
 	}
 	if err == nil {
 		ret = dst
-	}
-	return
-}
-
-// trigger a patter for each of the targets in the passed chain.
-// return true if all done ( canceled )
-func (run *Runner) send(evtObj *g.Record, kind cachedKind, chain []string) (retCanceled bool, err error) {
-	var stopPropogation bool // stopPropogation -- finish the current event level, and no more.
-	for tgtIdx, cnt := 0, len(chain); tgtIdx < cnt && err == nil && !stopPropogation; tgtIdx++ {
-		tgt := chain[tgtIdx]
-		if e := evtObj.SetIndexedField(event.CurrentTarget.Index(), g.StringOf(tgt)); e != nil {
-			err = e
-			break
-		} else if rs, e := run.getRules(kind.Name()); e != nil {
-			err = e // fix? get rules earlier to skip setup if they dont exist?
-			break
-		} else {
-			var skip bool
-			for ruleIdx := range rs.rules {
-				if rule, e := rs.tryRule(run, skip, ruleIdx); e != nil {
-					err = e
-					break
-				} else if rule.Cancels {
-					retCanceled = true
-					break
-				} else if rule.Interrupts {
-					if !rs.updateAll {
-						break
-					} else {
-						skip = true
-					}
-
-				} else {
-					// setting cancel blocks the rest of processing
-					// clearing it lets the handler set continue
-					// ( so it can be controlled via stopPropogation/Immediate similar to the dom )
-					if evtObj.HasValue(event.Cancel.Index()) {
-						retCanceled = true
-						if cancel, e := evtObj.GetIndexedField(event.Cancel.Index()); e != nil {
-							err = e
-							break
-						} else if cancel.Bool() {
-							stopPropogation = true
-							break // hard exit targets and rules
-						}
-					}
-
-					// setting interrupt stops all handlers in this flow;
-					// clearing this blocks allows this level of the hierarchy to finish, then stops.
-					if evtObj.HasValue(event.Interupt.Index()) {
-						stopPropogation = true // stops target loop, but not rule loop.
-						if interrupt, e := evtObj.GetIndexedField(event.Interupt.Index()); e != nil {
-							err = e
-						} else if interrupt.Bool() {
-							break
-						}
-					}
-				}
-			}
-		}
 	}
 	return
 }

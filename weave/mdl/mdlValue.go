@@ -169,5 +169,6 @@ func marshalprog(prog []rt.Execute) (ret string, err error) {
 }
 
 func marshalop(op jsn.Marshalee) (string, error) {
+	// fix:shouldn't this be core?
 	return cout.Marshal(op, literal.CompactEncoder)
 }

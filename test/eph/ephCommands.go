@@ -214,20 +214,15 @@ func (op *Relatives) Assert(cat *weave.Catalog) error {
 // Rules
 type Rules struct {
 	PatternName string
-	Target      string
-	Filter      rt.BoolEval
 	Exe         []rt.Execute
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
 		pb := mdl.NewPatternBuilder(op.PatternName)
-		pb.AppendRule(mdl.Rule{
-			Target: lang.Normalize(op.Target),
-			Prog: assign.Prog{
-				Filter: op.Filter,
-				Exe:    op.Exe,
-			}})
+		pb.AppendRule(0, rt.Rule{
+			Exe: op.Exe,
+		})
 		return w.Pin().ExtendPattern(pb.Pattern)
 	})
 }

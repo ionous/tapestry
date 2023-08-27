@@ -40,7 +40,7 @@ var collateGroups = testpat.Pattern{
 		{Name: "group", Affinity: affine.Record, Type: "grouped objects"},
 	},
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(
+		Exe: core.MakeActivity(
 			// walk collation.groups, set .idx to whichever best matches.
 			// fix: could this be list find? ( could list find take an optional pattern )
 			&list.ListEach{

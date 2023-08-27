@@ -118,11 +118,51 @@
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
+        "can use",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "kissing"
+                  ]
+                },
+                {
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't kiss without consent",
+                        "{the:.noun|capitalize!} might not like that."
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
         "can use",
         [
           {
-            "PatternRule:do:": [
+            "If:do:": [
               {
                 "AllTrue:": [
                   {
@@ -155,41 +195,6 @@
                         "Say response:with:": [
                           "can't kiss yourself",
                           "{we:|capitalize!} don't get much from that."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "kissing"
-                    ]
-                  },
-                  {
-                    "IsPlayer obj:": {
-                      "FromText:": "@actor"
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't kiss without consent",
-                          "{the:.noun|capitalize!} might not like that."
                         ]
                       }
                     }

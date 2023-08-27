@@ -26,38 +26,34 @@ var matchGroups = testpat.Pattern{
 		{Name: "matches", Affinity: affine.Bool},
 	},
 	Return: "matches",
-	// rules are evaluated in reverse order ( see sortRules )
-	Rules: []rt.Rule{{
-		Filter:  &core.Always{},
-		Execute: matches(true),
-	}, {
-		Filter: &core.CompareText{
-			A:  core.Variable("a", "label"),
-			Is: core.Unequal,
-			B:  core.Variable("b", "label"),
-		},
-		Execute: matches(false),
-	}, {
-		Filter: &core.CompareText{
-			A:  core.Variable("a", "innumerable"),
-			Is: core.Unequal,
-			B:  core.Variable("b", "innumerable"),
-		},
-		Execute: matches(false),
-	}, {
-		Filter: &core.CompareText{
-			A:  core.Variable("a", "group options"),
-			Is: core.Unequal,
-			B:  core.Variable("b", "group options"),
-		},
-		Execute: matches(false),
-	}},
+	// rules are evaluated in reverse order
+	Rules: []rt.Rule{
+		core.MakeRule(
+			nil, matches(true)),
+		core.MakeRule(
+			&core.CompareText{
+				A:  core.Variable("a", "label"),
+				Is: core.Unequal,
+				B:  core.Variable("b", "label"),
+			}, matches(false)),
+		core.MakeRule(
+			&core.CompareText{
+				A:  core.Variable("a", "innumerable"),
+				Is: core.Unequal,
+				B:  core.Variable("b", "innumerable"),
+			}, matches(false)),
+		core.MakeRule(
+			&core.CompareText{
+				A:  core.Variable("a", "group options"),
+				Is: core.Unequal,
+				B:  core.Variable("b", "group options"),
+			}, matches(false)),
+	},
 }
 
-func matches(b bool) []rt.Execute {
-	return []rt.Execute{
-		&assign.SetValue{
-			Target: core.Variable("matches"),
-			Value:  &assign.FromBool{Value: B(b)}},
+func matches(b bool) rt.Execute {
+	return &assign.SetValue{
+		Target: core.Variable("matches"),
+		Value:  &assign.FromBool{Value: B(b)},
 	}
 }

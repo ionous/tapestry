@@ -163,6 +163,19 @@
         "look object description",
         "kitchenette",
         [
+        	{
+            "PrintObjectDescription obj:locale:": [
+              {
+                "FromText:": "shelf"
+              },
+              {
+                "FromText:": "kitchen"
+              }
+            ]
+          },
+          {
+            "Expect output:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+          },
           {
             "PrintObjectDescription obj:locale:": [
               {
@@ -176,19 +189,7 @@
           {
             "Expect output:": "A pointed black hat lies discarded on the floor under a dusty shelf."
           },
-          {
-            "PrintObjectDescription obj:locale:": [
-              {
-                "FromText:": "shelf"
-              },
-              {
-                "FromText:": "kitchen"
-              }
-            ]
-          },
-          {
-            "Expect output:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
-          },
+          
           {
             "PrintObjectDescription obj:locale:": [
               {

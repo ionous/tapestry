@@ -779,10 +779,10 @@ func DeclareStatement_Marshal(m jsn.Marshaler, val *DeclareStatement) (err error
 
 // DefineAction Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
 type DefineAction struct {
-	Action rt.TextEval       `if:"label=action"`
-	Params []FieldDefinition `if:"label=requires"`
-	Locals []FieldDefinition `if:"label=provides,optional"`
-	Markup map[string]any
+	Action   rt.TextEval       `if:"label=action"`
+	Requires []FieldDefinition `if:"label=requires"`
+	Provides []FieldDefinition `if:"label=provides,optional"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -799,8 +799,8 @@ func (*DefineAction) Compose() composer.Spec {
 
 const DefineAction_Type = "define_action"
 const DefineAction_Field_Action = "$ACTION"
-const DefineAction_Field_Params = "$PARAMS"
-const DefineAction_Field_Locals = "$LOCALS"
+const DefineAction_Field_Requires = "$REQUIRES"
+const DefineAction_Field_Provides = "$PROVIDES"
 
 func (op *DefineAction) Marshal(m jsn.Marshaler) error {
 	return DefineAction_Marshal(m, op)
@@ -880,19 +880,19 @@ func DefineAction_Marshal(m jsn.Marshaler, val *DefineAction) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineAction_Field_Action))
 		}
-		e1 := m.MarshalKey("requires", DefineAction_Field_Params)
+		e1 := m.MarshalKey("requires", DefineAction_Field_Requires)
 		if e1 == nil {
-			e1 = FieldDefinition_Repeats_Marshal(m, &val.Params)
+			e1 = FieldDefinition_Repeats_Marshal(m, &val.Requires)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefineAction_Field_Params))
+			m.Error(errutil.New(e1, "in flow at", DefineAction_Field_Requires))
 		}
-		e2 := m.MarshalKey("provides", DefineAction_Field_Locals)
+		e2 := m.MarshalKey("provides", DefineAction_Field_Provides)
 		if e2 == nil {
-			e2 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+			e2 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Provides)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", DefineAction_Field_Locals))
+			m.Error(errutil.New(e2, "in flow at", DefineAction_Field_Provides))
 		}
 		m.EndBlock()
 	}
@@ -1131,10 +1131,9 @@ func DefineKinds_Marshal(m jsn.Marshaler, val *DefineKinds) (err error) {
 // Unlike patterns, they cannot be extended; the entire definition must live in one place.
 type DefineMacro struct {
 	MacroName       rt.TextEval       `if:"label=macro"`
-	Params          []FieldDefinition `if:"label=requires"`
-	Result          FieldDefinition   `if:"label=result"`
-	Locals          []FieldDefinition `if:"label=provides,optional"`
-	MacroStatements []rt.Execute      `if:"label=with"`
+	Requires        []FieldDefinition `if:"label=requires"`
+	Provides        []FieldDefinition `if:"label=provides"`
+	MacroStatements []rt.Execute      `if:"label=do"`
 	Markup          map[string]any
 }
 
@@ -1152,9 +1151,8 @@ func (*DefineMacro) Compose() composer.Spec {
 
 const DefineMacro_Type = "define_macro"
 const DefineMacro_Field_MacroName = "$MACRO_NAME"
-const DefineMacro_Field_Params = "$PARAMS"
-const DefineMacro_Field_Result = "$RESULT"
-const DefineMacro_Field_Locals = "$LOCALS"
+const DefineMacro_Field_Requires = "$REQUIRES"
+const DefineMacro_Field_Provides = "$PROVIDES"
 const DefineMacro_Field_MacroStatements = "$MACRO_STATEMENTS"
 
 func (op *DefineMacro) Marshal(m jsn.Marshaler) error {
@@ -1235,33 +1233,26 @@ func DefineMacro_Marshal(m jsn.Marshaler, val *DefineMacro) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineMacro_Field_MacroName))
 		}
-		e1 := m.MarshalKey("requires", DefineMacro_Field_Params)
+		e1 := m.MarshalKey("requires", DefineMacro_Field_Requires)
 		if e1 == nil {
-			e1 = FieldDefinition_Repeats_Marshal(m, &val.Params)
+			e1 = FieldDefinition_Repeats_Marshal(m, &val.Requires)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefineMacro_Field_Params))
+			m.Error(errutil.New(e1, "in flow at", DefineMacro_Field_Requires))
 		}
-		e2 := m.MarshalKey("result", DefineMacro_Field_Result)
+		e2 := m.MarshalKey("provides", DefineMacro_Field_Provides)
 		if e2 == nil {
-			e2 = FieldDefinition_Marshal(m, &val.Result)
+			e2 = FieldDefinition_Repeats_Marshal(m, &val.Provides)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", DefineMacro_Field_Result))
+			m.Error(errutil.New(e2, "in flow at", DefineMacro_Field_Provides))
 		}
-		e3 := m.MarshalKey("provides", DefineMacro_Field_Locals)
+		e3 := m.MarshalKey("do", DefineMacro_Field_MacroStatements)
 		if e3 == nil {
-			e3 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.MacroStatements)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", DefineMacro_Field_Locals))
-		}
-		e4 := m.MarshalKey("with", DefineMacro_Field_MacroStatements)
-		if e4 == nil {
-			e4 = rt.Execute_Repeats_Marshal(m, &val.MacroStatements)
-		}
-		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", DefineMacro_Field_MacroStatements))
+			m.Error(errutil.New(e3, "in flow at", DefineMacro_Field_MacroStatements))
 		}
 		m.EndBlock()
 	}
@@ -1630,10 +1621,9 @@ func DefineOtherRelatives_Marshal(m jsn.Marshaler, val *DefineOtherRelatives) (e
 // Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
 type DefinePattern struct {
 	PatternName rt.TextEval       `if:"label=pattern"`
-	Params      []FieldDefinition `if:"label=requires"`
-	Result      FieldDefinition   `if:"label=result"`
-	Locals      []FieldDefinition `if:"label=provides,optional"`
-	Rules       []PatternRule     `if:"label=with_rules"`
+	Requires    []FieldDefinition `if:"label=requires"`
+	Provides    []FieldDefinition `if:"label=provides"`
+	Exe         []rt.Execute      `if:"label=do,optional"`
 	Markup      map[string]any
 }
 
@@ -1651,10 +1641,9 @@ func (*DefinePattern) Compose() composer.Spec {
 
 const DefinePattern_Type = "define_pattern"
 const DefinePattern_Field_PatternName = "$PATTERN_NAME"
-const DefinePattern_Field_Params = "$PARAMS"
-const DefinePattern_Field_Result = "$RESULT"
-const DefinePattern_Field_Locals = "$LOCALS"
-const DefinePattern_Field_Rules = "$RULES"
+const DefinePattern_Field_Requires = "$REQUIRES"
+const DefinePattern_Field_Provides = "$PROVIDES"
+const DefinePattern_Field_Exe = "$EXE"
 
 func (op *DefinePattern) Marshal(m jsn.Marshaler) error {
 	return DefinePattern_Marshal(m, op)
@@ -1734,33 +1723,26 @@ func DefinePattern_Marshal(m jsn.Marshaler, val *DefinePattern) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefinePattern_Field_PatternName))
 		}
-		e1 := m.MarshalKey("requires", DefinePattern_Field_Params)
+		e1 := m.MarshalKey("requires", DefinePattern_Field_Requires)
 		if e1 == nil {
-			e1 = FieldDefinition_Repeats_Marshal(m, &val.Params)
+			e1 = FieldDefinition_Repeats_Marshal(m, &val.Requires)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefinePattern_Field_Params))
+			m.Error(errutil.New(e1, "in flow at", DefinePattern_Field_Requires))
 		}
-		e2 := m.MarshalKey("result", DefinePattern_Field_Result)
+		e2 := m.MarshalKey("provides", DefinePattern_Field_Provides)
 		if e2 == nil {
-			e2 = FieldDefinition_Marshal(m, &val.Result)
+			e2 = FieldDefinition_Repeats_Marshal(m, &val.Provides)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", DefinePattern_Field_Result))
+			m.Error(errutil.New(e2, "in flow at", DefinePattern_Field_Provides))
 		}
-		e3 := m.MarshalKey("provides", DefinePattern_Field_Locals)
+		e3 := m.MarshalKey("do", DefinePattern_Field_Exe)
 		if e3 == nil {
-			e3 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+			e3 = rt.Execute_Optional_Repeats_Marshal(m, &val.Exe)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", DefinePattern_Field_Locals))
-		}
-		e4 := m.MarshalKey("with_rules", DefinePattern_Field_Rules)
-		if e4 == nil {
-			e4 = PatternRule_Repeats_Marshal(m, &val.Rules)
-		}
-		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", DefinePattern_Field_Rules))
+			m.Error(errutil.New(e3, "in flow at", DefinePattern_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -2473,128 +2455,6 @@ func DefineValue_Marshal(m jsn.Marshaler, val *DefineValue) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", DefineValue_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ExtendPattern Change the behavior of an existing pattern.
-type ExtendPattern struct {
-	PatternName rt.TextEval       `if:"label=pattern"`
-	Locals      []FieldDefinition `if:"label=provides,optional"`
-	Rules       []PatternRule     `if:"label=with_rules"`
-	Markup      map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*ExtendPattern)(nil)
-var _ rt.Execute = (*ExtendPattern)(nil)
-
-func (*ExtendPattern) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ExtendPattern_Type,
-		Uses: composer.Type_Flow,
-		Lede: "extend",
-	}
-}
-
-const ExtendPattern_Type = "extend_pattern"
-const ExtendPattern_Field_PatternName = "$PATTERN_NAME"
-const ExtendPattern_Field_Locals = "$LOCALS"
-const ExtendPattern_Field_Rules = "$RULES"
-
-func (op *ExtendPattern) Marshal(m jsn.Marshaler) error {
-	return ExtendPattern_Marshal(m, op)
-}
-
-type ExtendPattern_Slice []ExtendPattern
-
-func (op *ExtendPattern_Slice) GetType() string { return ExtendPattern_Type }
-
-func (op *ExtendPattern_Slice) Marshal(m jsn.Marshaler) error {
-	return ExtendPattern_Repeats_Marshal(m, (*[]ExtendPattern)(op))
-}
-
-func (op *ExtendPattern_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ExtendPattern_Slice) SetSize(cnt int) {
-	var els []ExtendPattern
-	if cnt >= 0 {
-		els = make(ExtendPattern_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ExtendPattern_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ExtendPattern_Marshal(m, &(*op)[i])
-}
-
-func ExtendPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]ExtendPattern) error {
-	return jsn.RepeatBlock(m, (*ExtendPattern_Slice)(vals))
-}
-
-func ExtendPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExtendPattern) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ExtendPattern_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ExtendPattern_Flow struct{ ptr *ExtendPattern }
-
-func (n ExtendPattern_Flow) GetType() string      { return ExtendPattern_Type }
-func (n ExtendPattern_Flow) GetLede() string      { return "extend" }
-func (n ExtendPattern_Flow) GetFlow() interface{} { return n.ptr }
-func (n ExtendPattern_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ExtendPattern); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ExtendPattern_Optional_Marshal(m jsn.Marshaler, pv **ExtendPattern) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ExtendPattern_Marshal(m, *pv)
-	} else if !enc {
-		var v ExtendPattern
-		if err = ExtendPattern_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ExtendPattern_Marshal(m jsn.Marshaler, val *ExtendPattern) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ExtendPattern_Flow{val}); err == nil {
-		e0 := m.MarshalKey("pattern", ExtendPattern_Field_PatternName)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.PatternName)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ExtendPattern_Field_PatternName))
-		}
-		e1 := m.MarshalKey("provides", ExtendPattern_Field_Locals)
-		if e1 == nil {
-			e1 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ExtendPattern_Field_Locals))
-		}
-		e2 := m.MarshalKey("with_rules", ExtendPattern_Field_Rules)
-		if e2 == nil {
-			e2 = PatternRule_Repeats_Marshal(m, &val.Rules)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ExtendPattern_Field_Rules))
 		}
 		m.EndBlock()
 	}
@@ -4194,292 +4054,6 @@ func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 	return
 }
 
-// PatternFlags requires a predefined string.
-type PatternFlags struct {
-	Str string
-}
-
-func (op *PatternFlags) String() string {
-	return op.Str
-}
-
-const PatternFlags_Before = "$BEFORE"
-const PatternFlags_After = "$AFTER"
-const PatternFlags_Terminate = "$TERMINATE"
-
-func (*PatternFlags) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternFlags_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			PatternFlags_Before, PatternFlags_After, PatternFlags_Terminate,
-		},
-		Strings: []string{
-			"before", "after", "terminate",
-		},
-	}
-}
-
-const PatternFlags_Type = "pattern_flags"
-
-func (op *PatternFlags) Marshal(m jsn.Marshaler) error {
-	return PatternFlags_Marshal(m, op)
-}
-
-func PatternFlags_Optional_Marshal(m jsn.Marshaler, val *PatternFlags) (err error) {
-	var zero PatternFlags
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = PatternFlags_Marshal(m, val)
-	}
-	return
-}
-
-func PatternFlags_Marshal(m jsn.Marshaler, val *PatternFlags) (err error) {
-	return m.MarshalValue(PatternFlags_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type PatternFlags_Slice []PatternFlags
-
-func (op *PatternFlags_Slice) GetType() string { return PatternFlags_Type }
-
-func (op *PatternFlags_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternFlags_Repeats_Marshal(m, (*[]PatternFlags)(op))
-}
-
-func (op *PatternFlags_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternFlags_Slice) SetSize(cnt int) {
-	var els []PatternFlags
-	if cnt >= 0 {
-		els = make(PatternFlags_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternFlags_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternFlags_Marshal(m, &(*op)[i])
-}
-
-func PatternFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternFlags) error {
-	return jsn.RepeatBlock(m, (*PatternFlags_Slice)(vals))
-}
-
-func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternFlags_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PatternRule Rule
-type PatternRule struct {
-	Guard  rt.BoolEval  `if:"label=_"`
-	Flags  PatternFlags `if:"label=flags,optional"`
-	Exe    []rt.Execute `if:"label=do"`
-	Markup map[string]any
-}
-
-func (*PatternRule) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternRule_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const PatternRule_Type = "pattern_rule"
-const PatternRule_Field_Guard = "$GUARD"
-const PatternRule_Field_Flags = "$FLAGS"
-const PatternRule_Field_Exe = "$EXE"
-
-func (op *PatternRule) Marshal(m jsn.Marshaler) error {
-	return PatternRule_Marshal(m, op)
-}
-
-type PatternRule_Slice []PatternRule
-
-func (op *PatternRule_Slice) GetType() string { return PatternRule_Type }
-
-func (op *PatternRule_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternRule_Repeats_Marshal(m, (*[]PatternRule)(op))
-}
-
-func (op *PatternRule_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternRule_Slice) SetSize(cnt int) {
-	var els []PatternRule
-	if cnt >= 0 {
-		els = make(PatternRule_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternRule_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternRule_Marshal(m, &(*op)[i])
-}
-
-func PatternRule_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternRule) error {
-	return jsn.RepeatBlock(m, (*PatternRule_Slice)(vals))
-}
-
-func PatternRule_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternRule) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternRule_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternRule_Flow struct{ ptr *PatternRule }
-
-func (n PatternRule_Flow) GetType() string      { return PatternRule_Type }
-func (n PatternRule_Flow) GetLede() string      { return PatternRule_Type }
-func (n PatternRule_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternRule_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternRule); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternRule_Optional_Marshal(m jsn.Marshaler, pv **PatternRule) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternRule_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternRule
-		if err = PatternRule_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PatternRule_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternRule_Field_Guard)
-		if e0 == nil {
-			e0 = rt.BoolEval_Marshal(m, &val.Guard)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternRule_Field_Guard))
-		}
-		e1 := m.MarshalKey("flags", PatternRule_Field_Flags)
-		if e1 == nil {
-			e1 = PatternFlags_Optional_Marshal(m, &val.Flags)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternRule_Field_Flags))
-		}
-		e2 := m.MarshalKey("do", PatternRule_Field_Exe)
-		if e2 == nil {
-			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternRule_Field_Exe))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PatternType requires a predefined or user-specified string.
-type PatternType struct {
-	Str string
-}
-
-func (op *PatternType) String() string {
-	return op.Str
-}
-
-const PatternType_Patterns = "$PATTERNS"
-const PatternType_Actions = "$ACTIONS"
-const PatternType_Events = "$EVENTS"
-
-func (*PatternType) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        PatternType_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-		Choices: []string{
-			PatternType_Patterns, PatternType_Actions, PatternType_Events,
-		},
-		Strings: []string{
-			"patterns", "actions", "events",
-		},
-	}
-}
-
-const PatternType_Type = "pattern_type"
-
-func (op *PatternType) Marshal(m jsn.Marshaler) error {
-	return PatternType_Marshal(m, op)
-}
-
-func PatternType_Optional_Marshal(m jsn.Marshaler, val *PatternType) (err error) {
-	var zero PatternType
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = PatternType_Marshal(m, val)
-	}
-	return
-}
-
-func PatternType_Marshal(m jsn.Marshaler, val *PatternType) (err error) {
-	return m.MarshalValue(PatternType_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type PatternType_Slice []PatternType
-
-func (op *PatternType_Slice) GetType() string { return PatternType_Type }
-
-func (op *PatternType_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternType_Repeats_Marshal(m, (*[]PatternType)(op))
-}
-
-func (op *PatternType_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternType_Slice) SetSize(cnt int) {
-	var els []PatternType
-	if cnt >= 0 {
-		els = make(PatternType_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternType_Marshal(m, &(*op)[i])
-}
-
-func PatternType_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternType) error {
-	return jsn.RepeatBlock(m, (*PatternType_Slice)(vals))
-}
-
-func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternType_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // RecordField
 type RecordField struct {
 	Name      string        `if:"label=_,type=text"`
@@ -5227,6 +4801,119 @@ func RuleForPattern_Marshal(m jsn.Marshaler, val *RuleForPattern) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RuleForPattern_Field_Exe))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// RuleProvides
+type RuleProvides struct {
+	PatternName rt.TextEval       `if:"label=for"`
+	Provides    []FieldDefinition `if:"label=provides"`
+	Markup      map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*RuleProvides)(nil)
+var _ rt.Execute = (*RuleProvides)(nil)
+
+func (*RuleProvides) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RuleProvides_Type,
+		Uses: composer.Type_Flow,
+		Lede: "rule",
+	}
+}
+
+const RuleProvides_Type = "rule_provides"
+const RuleProvides_Field_PatternName = "$PATTERN_NAME"
+const RuleProvides_Field_Provides = "$PROVIDES"
+
+func (op *RuleProvides) Marshal(m jsn.Marshaler) error {
+	return RuleProvides_Marshal(m, op)
+}
+
+type RuleProvides_Slice []RuleProvides
+
+func (op *RuleProvides_Slice) GetType() string { return RuleProvides_Type }
+
+func (op *RuleProvides_Slice) Marshal(m jsn.Marshaler) error {
+	return RuleProvides_Repeats_Marshal(m, (*[]RuleProvides)(op))
+}
+
+func (op *RuleProvides_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RuleProvides_Slice) SetSize(cnt int) {
+	var els []RuleProvides
+	if cnt >= 0 {
+		els = make(RuleProvides_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RuleProvides_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RuleProvides_Marshal(m, &(*op)[i])
+}
+
+func RuleProvides_Repeats_Marshal(m jsn.Marshaler, vals *[]RuleProvides) error {
+	return jsn.RepeatBlock(m, (*RuleProvides_Slice)(vals))
+}
+
+func RuleProvides_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleProvides) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RuleProvides_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RuleProvides_Flow struct{ ptr *RuleProvides }
+
+func (n RuleProvides_Flow) GetType() string      { return RuleProvides_Type }
+func (n RuleProvides_Flow) GetLede() string      { return "rule" }
+func (n RuleProvides_Flow) GetFlow() interface{} { return n.ptr }
+func (n RuleProvides_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RuleProvides); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RuleProvides_Optional_Marshal(m jsn.Marshaler, pv **RuleProvides) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RuleProvides_Marshal(m, *pv)
+	} else if !enc {
+		var v RuleProvides
+		if err = RuleProvides_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RuleProvides_Marshal(m jsn.Marshaler, val *RuleProvides) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RuleProvides_Flow{val}); err == nil {
+		e0 := m.MarshalKey("for", RuleProvides_Field_PatternName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.PatternName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RuleProvides_Field_PatternName))
+		}
+		e1 := m.MarshalKey("provides", RuleProvides_Field_Provides)
+		if e1 == nil {
+			e1 = FieldDefinition_Repeats_Marshal(m, &val.Provides)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RuleProvides_Field_Provides))
 		}
 		m.EndBlock()
 	}
@@ -6632,7 +6319,6 @@ var Slats = []composer.Composer{
 	(*DefineScene)(nil),
 	(*DefineTraits)(nil),
 	(*DefineValue)(nil),
-	(*ExtendPattern)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
@@ -6647,15 +6333,13 @@ var Slats = []composer.Composer{
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
 	(*PairedAction)(nil),
-	(*PatternFlags)(nil),
-	(*PatternRule)(nil),
-	(*PatternType)(nil),
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
 	(*RuleForKind)(nil),
 	(*RuleForNoun)(nil),
 	(*RuleForPattern)(nil),
+	(*RuleProvides)(nil),
 	(*SayResponse)(nil),
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
@@ -6678,10 +6362,6 @@ var Signatures = map[uint64]interface{}{
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
-	355438255946453678:   (*PatternFlags)(nil),         /* PatternFlags: */
-	12283514816093491040: (*PatternRule)(nil),          /* PatternRule:do: */
-	573707243023402517:   (*PatternRule)(nil),          /* PatternRule:flags:do: */
-	8871095629143932769:  (*PatternType)(nil),          /* PatternType: */
 	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
 	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
 	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
@@ -6716,10 +6396,8 @@ var Signatures = map[uint64]interface{}{
 	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
 	17025532743550436003: (*DefineKinds)(nil),          /* execute=Define kinds:as: */
 	11622379079031968031: (*DefineKinds)(nil),          /* story_statement=Define kinds:as: */
-	4088968181697308175:  (*DefineMacro)(nil),          /* execute=Define macro:requires:result:provides:with: */
-	13649996907616853483: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:result:provides:with: */
-	15337064981331082689: (*DefineMacro)(nil),          /* execute=Define macro:requires:result:with: */
-	17317068367254309973: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:result:with: */
+	18413110137608794005: (*DefineMacro)(nil),          /* execute=Define macro:requires:provides:do: */
+	17004191702311840201: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:provides:do: */
 	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
 	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
 	11310404142062902510: (*DefineNounTraits)(nil),     /* execute=Define nouns:as:traits: */
@@ -6728,10 +6406,10 @@ var Signatures = map[uint64]interface{}{
 	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
 	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
 	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
-	15358769559004192942: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:provides:withRules: */
-	2733154260078704538:  (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:provides:withRules: */
-	13567867628780565820: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:withRules: */
-	13056176094891343360: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:withRules: */
+	811338311732531998:   (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides: */
+	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
+	2917659442779702699:  (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides:do: */
+	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
 	4650767708903763835:  (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro: */
 	89301097593785617:    (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro:reversed: */
 	10321772035226997803: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToMany: */
@@ -6752,10 +6430,6 @@ var Signatures = map[uint64]interface{}{
 	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
-	13239915769926244872: (*ExtendPattern)(nil),        /* execute=Extend pattern:provides:withRules: */
-	17581573717059123596: (*ExtendPattern)(nil),        /* story_statement=Extend pattern:provides:withRules: */
-	478002506548269918:   (*ExtendPattern)(nil),        /* execute=Extend pattern:withRules: */
-	7244900390452508762:  (*ExtendPattern)(nil),        /* story_statement=Extend pattern:withRules: */
 	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
 	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
 	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
@@ -6801,6 +6475,8 @@ var Signatures = map[uint64]interface{}{
 	9209820952942420835:  (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:do: */
 	244103529869767696:   (*RuleForNoun)(nil),          /* execute=Rule for:noun:named:do: */
 	17931239271906416164: (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:named:do: */
+	6379682438544458700:  (*RuleProvides)(nil),         /* execute=Rule for:provides: */
+	17193433418172088968: (*RuleProvides)(nil),         /* story_statement=Rule for:provides: */
 	12945074305202371477: (*SayResponse)(nil),          /* execute=Say response:with: */
 	7921553818502082370:  (*SayResponse)(nil),          /* text_eval=Say response:with: */
 	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */

@@ -2,12 +2,12 @@
   "Tapestry:": [
     {
       "Comment:": [
-        "Determine if text starts with a vowel or vowel sound. ",
+        "Determine if text starts with a vowel or vowel sound.",
         "( This method is from mudconnect.com )"
       ]
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "starts with vowel",
         [
           {
@@ -17,15 +17,9 @@
         {
           "Bool:": "matching"
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "starts with vowel",
         [
           {
-            "PatternRule:do:": [
+            "If:do:else:": [
               {
                 "Matches:to:": [
                   "@text",
@@ -41,47 +35,47 @@
                     }
                   ]
                 }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+              ],
               {
-                "Matches:to:": [
-                  "@text",
-                  "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@matching",
+                "If:do:else:": [
+                  {
+                    "Matches:to:": [
+                      "@text",
+                      "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
+                    ]
+                  },
+                  [
                     {
-                      "FromBool:": false
+                      "Set:from:": [
+                        "@matching",
+                        {
+                          "FromBool:": false
+                        }
+                      ]
                     }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Matches:to:": [
-                  "@text",
-                  "^(?i:A|E|I|O|U)"
+                  ],
+                  {
+                    "If:do:": [
+                      {
+                        "Matches:to:": [
+                          "@text",
+                          "^(?i:A|E|I|O|U)"
+                        ]
+                      },
+                      [
+                        {
+                          "Set:from:": [
+                            "@matching",
+                            {
+                              "FromBool:": true
+                            }
+                          ]
+                        }
+                      ]
+                    ]
+                  }
                 ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@matching",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
+              }
             ]
           }
         ]

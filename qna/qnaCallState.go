@@ -14,12 +14,12 @@ type callState struct {
 func (run *Runner) saveCallState() callState {
 	return callState{
 		run:       run,
-		prevScope: run.replaceScope(scope.Empty{}),
+		prevScope: run.scope.ReplaceScope(scope.Empty{}),
 	}
 }
 
 func (r *callState) restore() {
-	r.run.restoreScope(r.prevScope)
+	r.run.scope.RestoreScope(r.prevScope)
 	r.setPattern("")
 }
 

@@ -294,7 +294,7 @@
               "  - Fail to store something into an actor:",
               "  That seems to belong to Mildred.clutch parent: clutch.",
               "  - Fail to store something into a closed container:",
-              "  The counter is closed.coffee parent: self.",
+              "  The espresso machine is closed.coffee parent: self.",
               "  - Fail to store something into something nested:",
               "  You can't put  that in itself.clutch parent: self.",
               "  - Okay, store something into an open container:",

@@ -70,6 +70,5 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 			run.PopScope()
 		}
 	}
-
 	return
 }

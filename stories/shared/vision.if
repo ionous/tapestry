@@ -108,7 +108,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Print news of darkness",
         [
           {
@@ -118,34 +118,19 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Print news of darkness",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say response:with:": [
-                    "darkness has fallen",
-                    "It is now pitch dark in here!"
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "Say response:with:": [
+            "darkness has fallen",
+            "It is now pitch dark in here!"
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Print news of light",
         [
           {
@@ -155,31 +140,16 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Print news of light",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "PrintVantage where:": {
-                    "FromText:": {
-                      "Object:field:": [
-                        "player",
-                        "pawn"
-                      ]
-                    }
-                  }
-                }
+        {
+          "PrintVantage where:": {
+            "FromText:": {
+              "Object:field:": [
+                "player",
+                "pawn"
               ]
-            ]
+            }
           }
-        ]
+        }
       ]
     }
   ]

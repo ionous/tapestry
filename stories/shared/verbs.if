@@ -1,7 +1,11 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "--:": [
+        "adapts a verb from its specified (usually present) tense, to the story's tense.",
+        "fix: this is just a placeholder for future work."
+      ],
+      "Define pattern:requires:provides:do:": [
         "verbing",
         [
           {
@@ -11,40 +15,23 @@
         {
           "Text:": "result"
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "verb adapts a verb from its specified (usually present) tense, to the story's tense. [ this is just a placeholder for future work. ] "
-    },
-    {
-      "Extend pattern:withRules:": [
-        "verbing",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Set:from:": [
-                    "@result",
-                    {
-                      "FromText:": "@verb"
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "Set:from:": [
+            "@result",
+            {
+              "FromText:": "@verb"
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
-        "contain",
+      "--": "print contain or support depending on the kind of container",
+      "Define pattern:requires:provides:do:": [
+        "Contain",
         [
           {
             "Text:kind:": [
@@ -56,50 +43,35 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "contain",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+        {
+          "If:do:else:": [
+            {
+              "KindOf:is:": [
+                "@noun",
+                "containers"
+              ]
+            },
+            [
+              {
+                "Print:": "contain"
+              }
+            ],
+            {
+              "Finally do:": [
                 {
-                  "If:do:else:": [
-                    {
-                      "KindOf:is:": [
-                        "@noun",
-                        "containers"
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "contain"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "Print:": "support"
-                        }
-                      ]
-                    }
-                  ]
+                  "Print:": "support"
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "On",
         [
           {
@@ -112,50 +84,35 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "On",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+        {
+          "If:do:else:": [
+            {
+              "KindOf:is:": [
+                "@noun",
+                "containers"
+              ]
+            },
+            [
+              {
+                "Print:": "in"
+              }
+            ],
+            {
+              "Finally do:": [
                 {
-                  "If:do:else:": [
-                    {
-                      "KindOf:is:": [
-                        "@noun",
-                        "containers"
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "in"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "Print:": "on"
-                        }
-                      ]
-                    }
-                  ]
+                  "Print:": "on"
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Off",
         [
           {
@@ -168,50 +125,36 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Off",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+        {
+          "If:do:else:": [
+            {
+              "KindOf:is:": [
+                "@noun",
+                "containers"
+              ]
+            },
+            [
+              {
+                "Print:": "out"
+              }
+            ],
+            {
+              "Finally do:": [
                 {
-                  "If:do:else:": [
-                    {
-                      "KindOf:is:": [
-                        "@noun",
-                        "containers"
-                      ]
-                    },
-                    [
-                      {
-                        "Print:": "out"
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "Print:": "off"
-                        }
-                      ]
-                    }
-                  ]
+                  "Print:": "off"
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "--:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names.",
+      "Define pattern:requires:provides:do:": [
         "Are",
         [
           {
@@ -227,75 +170,53 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names. "
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Are",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@noun"
-                }
-              },
-              [
+        {
+          "If:do:else:": [
+            {
+              "IsPlayer obj:": {
+                "FromText:": "@noun"
+              }
+            },
+            {
+              "Print:": "are"
+            },
+            {
+              "If:do:else:": [
                 {
-                  "Print:": "are"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "If:do:else:": [
+                  "AnyTrue:": [
                     {
-                      "AnyTrue:": [
+                      "Cmp:is:num:": [
                         {
-                          "Cmp:is:num:": [
-                            {
-                              "Len:": {
-                                "FromTextList:": "@names"
-                              }
-                            },
-                            "greater_than",
-                            1
-                          ]
+                          "Len:": {
+                            "FromTextList:": "@names"
+                          }
                         },
-                        {
-                          "Object:field:": [
-                            "@noun",
-                            "plural named"
-                          ]
-                        }
+                        "greater_than",
+                        1
                       ]
                     },
-                    [
-                      {
-                        "Print:": "are"
-                      }
-                    ],
                     {
-                      "Finally do:": [
-                        {
-                          "Print:": "is"
-                        }
+                      "Object:field:": [
+                        "@noun",
+                        "plural named"
                       ]
+                    }
+                  ]
+                },
+                {
+                  "Print:": "are"
+                },
+                {
+                  "Finally do:": [
+                    {
+                      "Print:": "is"
                     }
                   ]
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -305,7 +226,7 @@
       "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Are not",
         [
           {
@@ -318,53 +239,36 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Are not",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@noun"
-                }
-              },
-              [
+        {
+          "If:do:else:": [
+            {
+              "IsPlayer obj:": {
+                "FromText:": "@noun"
+              }
+            },
+            {
+              "Print:": "are not"
+            },
+            {
+              "If:do:else:": [
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "plural named"
+                  ]
+                },
                 {
                   "Print:": "are not"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "plural named"
-                ]
-              },
-              [
+                },
                 {
-                  "Print:": "are not"
+                  "Finally do:": {
+                    "Print:": "is not"
+                  }
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": "is not"
-                }
-              ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -372,7 +276,7 @@
     },
     {
       "--": "Say the contraction aren't or isn't ( depending on the plural of the noun ).",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Arent",
         [
           {
@@ -385,58 +289,41 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Arent",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@noun"
-                }
-              },
-              [
+        {
+          "If:do:else:": [
+            {
+              "IsPlayer obj:": {
+                "FromText:": "@noun"
+              }
+            },
+            {
+              "Print:": "aren't"
+            },
+            {
+              "If:do:else:": [
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "plural named"
+                  ]
+                },
                 {
                   "Print:": "aren't"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "plural named"
-                ]
-              },
-              [
+                },
                 {
-                  "Print:": "aren't"
+                  "Finally do:": {
+                    "Print:": "isn't"
+                  }
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": "isn't"
-                }
-              ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
       "--": "Say the contraction don't or doesn't ( depending on the plural of the noun ).",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Dont",
         [
           {
@@ -449,39 +336,24 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Dont",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "plural named"
-                ]
-              },
-              [
-                {
-                  "Print:": "don't"
-                }
+        {
+          "If:do:else:": [
+            {
+              "Object:field:": [
+                "@noun",
+                "plural named"
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": "doesn't"
-                }
-              ]
-            ]
-          }
-        ]
+            },
+            {
+              "Print:": "don't"
+            },
+            {
+              "Finally do:": {
+                "Print:": "doesn't"
+              }
+            }
+          ]
+        }
       ]
     }
   ]

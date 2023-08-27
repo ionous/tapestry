@@ -6,7 +6,7 @@
         "It exists as a hook for author customization.",
         "Authors should return some 'response' text if they want to block the action."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "can use",
         [
           {
@@ -35,7 +35,9 @@
         {
           "Text:": "response"
         },
-        []
+        {
+          "--": "no default rules"
+        }
       ]
     }
   ]

@@ -6,20 +6,11 @@
         "Kitchenette",
         [
           {
-            "Extend pattern:withRules:": [
+            "Rule for:do:": [
               "Print news of light",
-              [
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "Print:": "The light, it burns."
-                      }
-                    ]
-                  ]
-                }
-              ]
+              {
+                "Print:": "The light, it burns."
+              }
             ]
           }
         ],
@@ -58,7 +49,7 @@
           },
           {
             "AdjustingLight actor:": {
-            	"FromText:": {
+              "FromText:": {
                 "Object:field:": [
                   "player",
                   "pawn"

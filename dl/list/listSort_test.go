@@ -1,14 +1,13 @@
 package list_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/sliceOf"
 	"github.com/kr/pretty"
@@ -26,9 +25,9 @@ func TestSort(t *testing.T) {
 	lt := testutil.Runtime{
 		Kinds:     &kinds,
 		ObjectMap: objs,
-		Stack: []rt.Scope{
+		Chain: scope.MakeChain(
 			scope.FromRecord(locals),
-		},
+		),
 	}
 	// create a new value of type "locals" containing "Objects:objectNames"
 	for key, obj := range objs {

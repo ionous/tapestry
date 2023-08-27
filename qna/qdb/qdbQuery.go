@@ -234,7 +234,7 @@ func (q *Query) RulesFor(pat string) (ret []query.RuleData, err error) {
 		if e := tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, rule)
 			return
-		}, &rule.Name, &rule.Prog); e != nil {
+		}, &rule.Name, &rule.Stop, &rule.Jump, &rule.Updates, &rule.Prog); e != nil {
 			err = e // scan error...
 		}
 	}
@@ -465,7 +465,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
-			`select coalesce(mu.name, mu.rowid), mu.prog
+			`select coalesce(mu.name, mu.rowid), mu.stop, mu.jump, mu.updates, mu.prog
 			from active_domains 
 			join mdl_rule mu
 				using (domain)

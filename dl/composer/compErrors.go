@@ -9,7 +9,7 @@ type CommandError struct {
 	Ctx string
 }
 
-func (e *CommandError) Error() string {
+func (e CommandError) Error() string {
 	name := SpecName(e.Cmd)
 	var padding string
 	if len(e.Ctx) > 0 {

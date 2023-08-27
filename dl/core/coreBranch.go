@@ -63,7 +63,7 @@ Pick:
 			if matched {
 				// see if there's another branch to evaluate;
 				// if not, return the statements to execute
-				if n := FindBranch(next.Exe); n != nil {
+				if n := PickTree(next.Exe); n != nil {
 					next = n
 				} else {
 					ret = next.Exe
@@ -76,7 +76,7 @@ Pick:
 				case *ChooseBranch:
 					next = otherwise
 				case *ChooseNothingElse:
-					if n := FindBranch(otherwise.Exe); n != nil {
+					if n := PickTree(otherwise.Exe); n != nil {
 						next = n
 					} else {
 						ret = otherwise.Exe
@@ -109,10 +109,12 @@ func (op *ChooseBranch) eval(run rt.Runtime, pushed *int) (matched bool, err err
 	return
 }
 
-// scan for a branching statement; or return nil if nothing was found.
-func FindBranch(exe []rt.Execute) (ret *ChooseBranch) {
+// scan for an initial branching statement in a "case like" switch,.
+// that statement indicates a filter for a rule;
+// returns nil if no such statement exists
+func PickTree(exe []rt.Execute) (ret *ChooseBranch) {
 FindTree:
-	for _, el := range exe {
+	for i, el := range exe {
 		switch el := el.(type) {
 		case *debug.DebugLog:
 			// skip debug logs when trying to find a tree
@@ -122,14 +124,18 @@ FindTree:
 			// or could return an index for ChooseBranch i suppose, -1 on nothing found
 			// and have the caller run the excess.
 		case *ChooseBranch:
-			// a branch; we'll use it if we can
-			// if there's a sibling following statement --
-			// then we're not really a branch in a single tree
-			// we're an entirely separate statement
+			// found a branch; we'll use it if we can.
+			// if there's a following sibling statement of any kind --
+			// other than a debug log, but even another branch --
+			// then we're not really a switch like series of if-else(s)
+			for _, sib := range exe[i+1:] {
+				if _, ok := sib.(*debug.DebugLog); !ok {
+					break FindTree
+				}
+			}
 			ret = el
 		default:
 			// some other statement
-			ret = nil
 			break FindTree
 		}
 	}

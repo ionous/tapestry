@@ -95,22 +95,28 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 // SetIndexedField - note this doesn't handle trait translation.
 // Unlike the Value interface, this doesnt panic and it doesnt copy values.
 func (d *Record) SetIndexedField(i int, val Value) (err error) {
-	var okay bool
-	ft, aff, cls := d.kind.fields[i], val.Affinity(), val.Type()
-	switch aff {
-	// the most flexible: anything can fit into anything.
-	case affine.Bool, affine.Number, affine.Text, affine.TextList, affine.NumList:
-		okay = aff == ft.Affinity
-
-	// the least flexible: exact matches are needed.
-	case affine.Record, affine.RecordList:
-		okay = aff == ft.Affinity && cls == ft.Type
-
-	}
-	if !okay {
-		err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
-	} else {
+	if val == nil {
+		// probably a terrible idea: resets status of the value to default
+		// ( ex. for event interrupt )
 		d.values[i] = val
+	} else {
+		var okay bool
+		ft, aff, cls := d.kind.fields[i], val.Affinity(), val.Type()
+		switch aff {
+		// the most flexible: anything can fit into anything.
+		case affine.Bool, affine.Number, affine.Text, affine.TextList, affine.NumList:
+			okay = aff == ft.Affinity
+
+		// the least flexible: exact matches are needed.
+		case affine.Record, affine.RecordList:
+			okay = aff == ft.Affinity && cls == ft.Type
+
+		}
+		if !okay {
+			err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
+		} else {
+			d.values[i] = val
+		}
 	}
 	return
 }

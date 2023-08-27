@@ -23,8 +23,8 @@
         "An object indicating the position or ownership of another:",
         "A kitchen encloses the cook, the cook holds a sack, the sack contains some flour."
       ],
-      "Define pattern:requires:result:withRules:": [
-        "parent of",
+      "Define pattern:requires:provides:do:": [
+        "Parent of",
         [
           {
             "Text:kind:": [
@@ -39,64 +39,49 @@
             "object"
           ]
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "parent of",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "agents"
+        {
+          "If:do:else:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "agents"
+              ]
+            },
+            {
+              "Set:from:": [
+                "@parent",
+                {
+                  "FromText:": {
+                    "Reciprocal:object:": [
+                      "whereabouts",
+                      {
+                        "Object:field:": [
+                          "@obj",
+                          "pawn"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Finally do:": {
+                "Set:from:": [
+                  "@parent",
+                  {
+                    "FromText:": {
+                      "Reciprocal:object:": [
+                        "whereabouts",
+                        "@obj"
+                      ]
+                    }
+                  }
                 ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@parent",
-                    {
-                      "FromText:": {
-                        "Reciprocal:object:": [
-                          "whereabouts",
-                          {
-                            "Object:field:": [
-                              "@obj",
-                              "pawn"
-                            ]
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Set:from:": [
-                    "@parent",
-                    {
-                      "FromText:": {
-                        "Reciprocal:object:": [
-                          "whereabouts",
-                          "@obj"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -107,7 +92,7 @@
         "Returns the name of the specified object followed by all of its parents names.",
         "Often used for event handling."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Capture",
         [
           {
@@ -122,83 +107,29 @@
         },
         [
           {
-            "PatternRule:do:": [
-              true,
+            "Repeating:do:": [
+              {
+                "Not:": {
+                  "Is empty:": "@obj"
+                }
+              },
               [
                 {
-                  "Repeating:do:": [
+                  "Push:into:": [
                     {
-                      "Not:": {
-                        "Is empty:": "@obj"
-                      }
+                      "FromText:": "@obj"
                     },
-                    [
-                      {
-                        "Push:into:": [
-                          {
-                            "FromText:": "@obj"
-                          },
-                          "@list"
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@obj",
-                          {
-                            "FromText:": {
-                              "ParentOf obj:": {
-                                "FromText:": "@obj"
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    ]
+                    "@list"
                   ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "children of",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          }
-        ],
-        {
-          "TextList:": "kids"
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "children of",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+                },
                 {
                   "Set:from:": [
-                    "@kids",
+                    "@obj",
                     {
-                      "FromTextList:": {
-                        "Relatives:object:": [
-                          "whereabouts",
-                          "@obj"
-                        ]
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@obj"
+                        }
                       }
                     }
                   ]
@@ -213,9 +144,8 @@
       "--": ""
     },
     {
-      "--": "The room in which an object can be found.",
-      "Define pattern:requires:result:withRules:": [
-        "Current room",
+      "Define pattern:requires:provides:do:": [
+        "children of",
         [
           {
             "Text:kind:": [
@@ -225,18 +155,45 @@
           }
         ],
         {
-          "Text:kind:": [
-            "room",
-            "room"
-          ]
+          "TextList:": "kids"
         },
-        []
+        {
+          "Set:from:": [
+            "@kids",
+            {
+              "FromTextList:": {
+                "Relatives:object:": [
+                  "whereabouts",
+                  "@obj"
+                ]
+              }
+            }
+          ]
+        }
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "--": ""
+    },
+    {
+      "--": "The room in which an object can be found.",
+      "Define pattern:requires:provides:do:": [
         "Current room",
         [
+          {
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
+        [
+          {
+            "Text:kind:": [
+              "room",
+              "room"
+            ]
+          },
           {
             "Text:kind:initially:": [
               "search",
@@ -245,78 +202,69 @@
             ]
           }
         ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Repeating:do:": [
-                    {
-                      "Not:": {
-                        "Is empty:": "@search"
-                      }
-                    },
-                    [
-                      {
-                        "If:do:": [
-                          {
-                            "KindOf:is:": [
-                              "@search",
-                              "rooms"
-                            ]
-                          },
-                          [
-                            {
-                              "Set:from:": [
-                                "@room",
-                                {
-                                  "FromText:": "@search"
-                                }
-                              ]
-                            },
-                            {
-                              "Break": true
-                            }
-                          ]
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@search",
-                          {
-                            "FromText:": {
-                              "ParentOf obj:": {
-                                "FromText:": "@search"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "If:do:": [
-                          {
-                            "Cmp:is:txt:": [
-                              "@search",
-                              "equal_to",
-                              "@obj"
-                            ]
-                          },
-                          [
-                            {
-                              "--": "Parent cycle detected",
-                              "Break": true
-                            }
-                          ]
-                        ]
-                      }
+        {
+          "Repeating:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@search"
+              }
+            },
+            [
+              {
+                "If:do:": [
+                  {
+                    "KindOf:is:": [
+                      "@search",
+                      "rooms"
                     ]
+                  },
+                  [
+                    {
+                      "Set:from:": [
+                        "@room",
+                        {
+                          "FromText:": "@search"
+                        }
+                      ]
+                    },
+                    {
+                      "Break": true
+                    }
                   ]
-                }
-              ]
+                ]
+              },
+              {
+                "Set:from:": [
+                  "@search",
+                  {
+                    "FromText:": {
+                      "ParentOf obj:": {
+                        "FromText:": "@search"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "If:do:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@search",
+                      "equal_to",
+                      "@obj"
+                    ]
+                  },
+                  [
+                    {
+                      "--": "Parent cycle detected",
+                      "Break": true
+                    }
+                  ]
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
@@ -327,7 +275,7 @@
         "Finds the innermost object housing two objects.",
         "However, if one object directly encloses the other, it will return that object."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Common Ancestor",
         [
           {
@@ -343,19 +291,13 @@
             ]
           }
         ],
-        {
-          "Text:kind:": [
-            "ancestor",
-            "object"
-          ]
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "Common Ancestor",
         [
+          {
+            "Text:kind:": [
+              "ancestor",
+              "object"
+            ]
+          },
           {
             "Text:kind:": [
               "o1",
@@ -371,115 +313,64 @@
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
+            "Set:from:": [
+              "@o1",
+              {
+                "FromText:": "@object"
+              }
+            ]
+          },
+          {
+            "--": "We search every parent of the second object for every parent of the first object. Slow but simple.",
+            "Repeating:do:": [
+              {
+                "Is empty:": "@ancestor"
+              },
               [
                 {
                   "Set:from:": [
-                    "@o1",
+                    "@o2",
                     {
-                      "FromText:": "@object"
+                      "FromText:": "@other_object"
                     }
                   ]
                 },
                 {
-                  "--": "We search every parent of the second object for every parent of the first object. Slow but simple.",
                   "Repeating:do:": [
-                    {
-                      "Is empty:": "@ancestor"
-                    },
+                    true,
                     [
                       {
-                        "Set:from:": [
-                          "@o2",
+                        "If:do:": [
                           {
-                            "FromText:": "@other_object"
-                          }
-                        ]
-                      },
-                      {
-                        "Repeating:do:": [
-                          true,
+                            "Cmp:is:txt:": [
+                              "@o1",
+                              "equal_to",
+                              "@o2"
+                            ]
+                          },
                           [
                             {
-                              "If:do:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@o1",
-                                    "equal_to",
-                                    "@o2"
-                                  ]
-                                },
-                                [
-                                  {
-                                    "--": "Success!",
-                                    "Set:from:": [
-                                      "@ancestor",
-                                      {
-                                        "FromText:": "@o2"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Break": true
-                                  }
-                                ]
-                              ]
-                            },
-                            {
+                              "--": "Success!",
                               "Set:from:": [
-                                "@o2",
+                                "@ancestor",
                                 {
-                                  "FromText:": {
-                                    "ParentOf obj:": {
-                                      "FromText:": "@o2"
-                                    }
-                                  }
+                                  "FromText:": "@o2"
                                 }
                               ]
                             },
                             {
-                              "If:do:else:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@o2",
-                                    "equal_to",
-                                    "@other_object"
-                                  ]
-                                },
-                                [
-                                  {
-                                    "Break": true
-                                  }
-                                ],
-                                {
-                                  "If:do:": [
-                                    {
-                                      "Cmp:is:txt:": [
-                                        "@o2",
-                                        "equal_to",
-                                        ""
-                                      ]
-                                    },
-                                    [
-                                      {
-                                        "Break": true
-                                      }
-                                    ]
-                                  ]
-                                }
-                              ]
+                              "Break": true
                             }
                           ]
                         ]
                       },
                       {
                         "Set:from:": [
-                          "@o1",
+                          "@o2",
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": "@o1"
+                                "FromText:": "@o2"
                               }
                             }
                           }
@@ -489,14 +380,13 @@
                         "If:do:else:": [
                           {
                             "Cmp:is:txt:": [
-                              "@o1",
+                              "@o2",
                               "equal_to",
-                              "@object"
+                              "@other_object"
                             ]
                           },
                           [
                             {
-                              "--": "parent cycle detected",
                               "Break": true
                             }
                           ],
@@ -504,14 +394,13 @@
                             "If:do:": [
                               {
                                 "Cmp:is:txt:": [
-                                  "@o1",
+                                  "@o2",
                                   "equal_to",
                                   ""
                                 ]
                               },
                               [
                                 {
-                                  "--": "out of world",
                                   "Break": true
                                 }
                               ]
@@ -520,6 +409,52 @@
                         ]
                       }
                     ]
+                  ]
+                },
+                {
+                  "Set:from:": [
+                    "@o1",
+                    {
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@o1"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "If:do:else:": [
+                    {
+                      "Cmp:is:txt:": [
+                        "@o1",
+                        "equal_to",
+                        "@object"
+                      ]
+                    },
+                    [
+                      {
+                        "--": "parent cycle detected",
+                        "Break": true
+                      }
+                    ],
+                    {
+                      "If:do:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@o1",
+                            "equal_to",
+                            ""
+                          ]
+                        },
+                        [
+                          {
+                            "--": "out of world",
+                            "Break": true
+                          }
+                        ]
+                      ]
+                    }
                   ]
                 }
               ]
@@ -533,7 +468,7 @@
     },
     {
       "--": "Returns true if the root is a parent of the object.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "ancestor of",
         [
           {
@@ -549,17 +484,11 @@
             ]
           }
         ],
-        {
-          "--": "true if one object acts as the ancestor of another.",
-          "Bool:": "is ancestor"
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "ancestor of",
         [
+          {
+            "--": "true if one object acts as the ancestor of another.",
+            "Bool:": "is ancestor"
+          },
           {
             "Text:kind:": [
               "up",
@@ -569,92 +498,85 @@
         ],
         [
           {
-            "PatternRule:do:": [
+            "Set:from:": [
+              "@up",
+              {
+                "FromText:": "@obj"
+              }
+            ]
+          },
+          {
+            "Repeating:do:": [
               true,
               [
                 {
+                  "--": "Step up immediately, indirect implies objects dont hold themselves.",
                   "Set:from:": [
                     "@up",
                     {
-                      "FromText:": "@obj"
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@up"
+                        }
+                      }
                     }
                   ]
                 },
                 {
-                  "Repeating:do:": [
-                    true,
+                  "If:do:else:": [
+                    {
+                      "Cmp:is:txt:": [
+                        "@up",
+                        "equal_to",
+                        "@obj"
+                      ]
+                    },
                     [
                       {
-                        "--": "Step up immediately, indirect implies objects dont hold themselves.",
-                        "Set:from:": [
-                          "@up",
-                          {
-                            "FromText:": {
-                              "ParentOf obj:": {
-                                "FromText:": "@up"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "If:do:else:": [
-                          {
-                            "Cmp:is:txt:": [
-                              "@up",
-                              "equal_to",
-                              "@obj"
-                            ]
-                          },
-                          [
-                            {
-                              "--": "parent cycle detected",
-                              "Break": true
-                            }
-                          ],
-                          {
-                            "If:do:": [
-                              {
-                                "Cmp:is:txt:": [
-                                  "@up",
-                                  "equal_to",
-                                  ""
-                                ]
-                              },
-                              [
-                                {
-                                  "--": "out of world",
-                                  "Break": true
-                                }
-                              ]
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "If:do:": [
-                          {
-                            "Cmp:is:txt:": [
-                              "@up",
-                              "equal_to",
-                              "@root"
-                            ]
-                          },
-                          [
-                            {
-                              "--": "Success!",
-                              "Set:from:": [
-                                "@is_ancestor",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            },
-                            {
-                              "Break": true
-                            }
+                        "--": "parent cycle detected",
+                        "Break": true
+                      }
+                    ],
+                    {
+                      "If:do:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@up",
+                            "equal_to",
+                            ""
                           ]
+                        },
+                        [
+                          {
+                            "--": "out of world",
+                            "Break": true
+                          }
                         ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "If:do:": [
+                    {
+                      "Cmp:is:txt:": [
+                        "@up",
+                        "equal_to",
+                        "@root"
+                      ]
+                    },
+                    [
+                      {
+                        "--": "Success!",
+                        "Set:from:": [
+                          "@is_ancestor",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      },
+                      {
+                        "Break": true
                       }
                     ]
                   ]
@@ -679,86 +601,66 @@
         "For example: 'is supporting', 'is supported by', 'is held', 'running through things carried by the actor'.",
         "Whether for good or ill, Tapestry has no differentiation between phrases and internal commands."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "location of",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          }
-        ],
+        {
+          "Text:kind:": [
+            "obj",
+            "object"
+          ]
+        },
         {
           "Text:kind:": [
             "location",
             "object"
           ]
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "location of",
-        [
-          {
-            "Text:kind:initially:": [
-              "parent",
-              "object",
-              {
-                "ParentOf obj:": {
-                  "FromText:": "@obj"
-                }
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+        {
+          "If:assuming:do:": [
+            {
+              "AnyTrue:": [
                 {
-                  "If:do:": [
-                    {
-                      "AnyTrue:": [
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "supporters"
-                          ]
-                        },
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "rooms"
-                          ]
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@location",
-                          {
-                            "FromText:": "@parent"
-                          }
-                        ]
-                      }
-                    ]
+                  "KindOf:is:": [
+                    "@parent",
+                    "containers"
+                  ]
+                },
+                {
+                  "KindOf:is:": [
+                    "@parent",
+                    "supporters"
+                  ]
+                },
+                {
+                  "KindOf:is:": [
+                    "@parent",
+                    "rooms"
                   ]
                 }
               ]
-            ]
-          }
-        ]
+            },
+            {
+              "Arg:from:": [
+              	"parent",
+                {
+                  "FromText:": {
+                    "ParentOf obj:": {
+                      "FromText:": "@obj"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "Set:from:": [
+                "@location",
+                {
+                  "FromText:": "@parent"
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -766,70 +668,52 @@
     },
     {
       "--": "If the parent of the specified object is a kind of supporter, return its name.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Supporter of",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          }
-        ],
+        {
+          "Text:kind:": [
+            "obj",
+            "object"
+          ]
+        },
         {
           "Text:kind:": [
             "supporter",
             "supporter"
           ]
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "Supporter of",
-        [
-          {
-            "Text:kind:initially:": [
-              "parent",
-              "object",
-              {
-                "ParentOf obj:": {
-                  "FromText:": "@obj"
-                }
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+        {
+          "If:assuming:do:": [
+            {
+              "KindOf:is:": [
+                "@parent",
+                "supporters"
+              ]
+            },
+            {
+              "Arg:from:": [
+                "parent",
                 {
-                  "If:do:": [
-                    {
-                      "KindOf:is:": [
-                        "@parent",
-                        "supporters"
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@supporter",
-                          {
-                            "FromText:": "@parent"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
+                  "FromText:": {
+                    "ParentOf obj:": {
+                      "FromText:": "@obj"
+                    }
+                  }
                 }
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@supporter",
+                  {
+                    "FromText:": "@parent"
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
@@ -837,7 +721,7 @@
     },
     {
       "--": "If the parent of the specified object is a kind of container, return its name.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Container of",
         [
           {
@@ -847,19 +731,13 @@
             ]
           }
         ],
-        {
-          "Text:kind:": [
-            "container",
-            "container"
-          ]
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "Container of",
         [
+          {
+            "Text:kind:": [
+              "container",
+              "container"
+            ]
+          },
           {
             "Text:kind:initially:": [
               "parent",
@@ -874,27 +752,20 @@
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
+            "If:do:": [
+              {
+                "KindOf:is:": [
+                  "@parent",
+                  "containers"
+                ]
+              },
               [
                 {
-                  "If:do:": [
+                  "Set:from:": [
+                    "@container",
                     {
-                      "KindOf:is:": [
-                        "@parent",
-                        "containers"
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@container",
-                          {
-                            "FromText:": "@parent"
-                          }
-                        ]
-                      }
-                    ]
+                      "FromText:": "@parent"
+                    }
                   ]
                 }
               ]
@@ -908,71 +779,48 @@
     },
     {
       "--": "If the parent of the specified object is wearing or carrying the noun, return its name.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "holder of",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          }
-        ],
+        {
+          "Text:kind:": [
+            "obj",
+            "object"
+          ]
+        },
         {
           "Text:kind:": [
             "owner",
             "actor"
           ]
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "holder of",
         [
           {
-            "Text:kind:": [
-              "parent",
-              "object"
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
+            "If:assuming:do:": [
+              {
+                "KindOf:is:": [
+                  "@parent",
+                  "actors"
+                ]
+              },
+              {
+                "Arg:from:": [
+                  "parent",
+                  {
+                    "FromText:": {
+                      "ParentOf obj:": {
+                        "FromText:": "@obj"
+                      }
+                    }
+                  }
+                ]
+              },
               [
                 {
                   "Set:from:": [
-                    "@parent",
+                    "@owner",
                     {
-                      "FromText:": {
-                        "ParentOf obj:": {
-                          "FromText:": "@obj"
-                        }
-                      }
+                      "FromText:": "@parent"
                     }
-                  ]
-                },
-                {
-                  "If:do:": [
-                    {
-                      "KindOf:is:": [
-                        "@parent",
-                        "actors"
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@owner",
-                          {
-                            "FromText:": "@parent"
-                          }
-                        ]
-                      }
-                    ]
                   ]
                 }
               ]
@@ -989,7 +837,7 @@
         "If the parent of the specified object is carrying the noun, return its name.",
         "Note that only actors can carry other objects."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Carrier of",
         [
           {
@@ -999,19 +847,13 @@
             ]
           }
         ],
-        {
-          "Text:kind:": [
-            "carrier",
-            "actor"
-          ]
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "Carrier of",
         [
+          {
+            "Text:kind:": [
+              "carrier",
+              "actor"
+            ]
+          },
           {
             "Text:kind:": [
               "parent",
@@ -1021,49 +863,42 @@
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
+            "Set:from:": [
+              "@parent",
+              {
+                "FromText:": {
+                  "ParentOf obj:": {
+                    "FromText:": "@obj"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "If:do:": [
+              {
+                "AllTrue:": [
+                  {
+                    "KindOf:is:": [
+                      "@parent",
+                      "actors"
+                    ]
+                  },
+                  {
+                    "Object:field:": [
+                      "@obj",
+                      "not worn"
+                    ]
+                  }
+                ]
+              },
               [
                 {
                   "Set:from:": [
-                    "@parent",
+                    "@carrier",
                     {
-                      "FromText:": {
-                        "ParentOf obj:": {
-                          "FromText:": "@obj"
-                        }
-                      }
+                      "FromText:": "@parent"
                     }
-                  ]
-                },
-                {
-                  "If:do:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "actors"
-                          ]
-                        },
-                        {
-                          "Object:field:": [
-                            "@obj",
-                            "not worn"
-                          ]
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@carrier",
-                          {
-                            "FromText:": "@parent"
-                          }
-                        ]
-                      }
-                    ]
                   ]
                 }
               ]
@@ -1080,7 +915,7 @@
         "If the parent of the specified object is wearing the noun, return its name.",
         "Note that only actors can wear other objects."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Wearer of",
         [
           {
@@ -1090,77 +925,55 @@
             ]
           }
         ],
-        {
-          "Text:kind:": [
-            "wearer",
-            "actor"
-          ]
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "Wearer of",
         [
           {
             "Text:kind:": [
+              "wearer",
+              "actor"
+            ]
+          },
+          {
+            "Text:kind:initially:": [
               "parent",
-              "object"
+              "object",
+              {
+                "ParentOf obj:": {
+                  "FromText:": "@obj"
+                }
+              }
             ]
           }
         ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
+                  "KindOf:is:": [
                     "@parent",
-                    {
-                      "FromText:": {
-                        "ParentOf obj:": {
-                          "FromText:": "@obj"
-                        }
-                      }
-                    }
+                    "actors"
                   ]
                 },
                 {
-                  "If:do:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "actors"
-                          ]
-                        },
-                        {
-                          "Object:field:": [
-                            "@obj",
-                            "worn"
-                          ]
-                        }
-                      ]
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@wearer",
-                          {
-                            "FromText:": "@parent"
-                          }
-                        ]
-                      }
-                    ]
+                  "Object:field:": [
+                    "@obj",
+                    "worn"
                   ]
                 }
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@wearer",
+                  {
+                    "FromText:": "@parent"
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]

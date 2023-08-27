@@ -13,7 +13,6 @@ import (
 // so it's just an example not a test of runtime behavior.
 // see also: http://learnyouahaskell.com/syntax-in-functions
 func ExampleSayMe() {
-	// rules are run in reverse order.
 	var kinds testutil.Kinds
 	kinds.AddKinds((*debug.SayMe)(nil))
 	run := testpat.Runtime{

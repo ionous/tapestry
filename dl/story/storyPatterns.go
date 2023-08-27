@@ -1,7 +1,8 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
@@ -26,51 +27,21 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
-			pb := mdl.NewPatternBuilder(name.String())
-			addFields(pb, mdl.PatternLocals, op.Locals)
-			addFields(pb, mdl.PatternParameters, op.Params)
-			addOptionalField(pb, mdl.PatternResults, op.Result)
-			addRules(pb, "", op.Rules)
+			name := lang.Normalize(name.String())
+			pb := mdl.NewPatternBuilder(name)
+			addRequiredFields(pb, op.Requires)
+			addProvidingFields(pb, op.Provides)
+			if len(op.Exe) > 0 {
+				pb.AppendRule(0, rt.Rule{
+					Name:    fmt.Sprintf("the default %s rule", name),
+					Exe:     op.Exe,
+					Updates: rules.DoesUpdate(op.Exe),
+					// Stop/Jump is 0/0 by default;
+					// and so is the rule Rank
+				})
+			}
 			err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
-			})
-		}
-		return
-	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *ExtendPattern) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
-func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
-			err = e
-		} else if name, e := w.Pin().GetKind(lang.Normalize(name.String())); e != nil {
-			err = e
-		} else if k, e := w.GetKindByName(name); e != nil {
-			err = e
-		} else {
-			pb := mdl.NewPatternBuilder(name)
-			addFields(pb, mdl.PatternLocals, op.Locals)
-			addRules(pb, "", op.Rules)
-			err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-				if !k.Implements(kindsOf.Action.String()) {
-					err = w.Pin().ExtendPattern(pb.Pattern)
-				} else {
-					for i := 0; i < event.NumPhases; i++ {
-						// fix: we copy all the initialization too
-						// maybe an explicit ExtendPatternSet that in mdl to do better things.
-						name := event.Phase(i).PatternName(name)
-						if e := w.Pin().ExtendPattern(pb.Copy(name)); e != nil {
-							err = e
-							break
-						}
-					}
-				}
-				return
 			})
 		}
 		return
@@ -90,8 +61,8 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 			for i := 0; i < event.NumPhases; i++ {
 				phase := event.Phase(i)
 				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
-				addFields(pb, mdl.PatternParameters, op.Params)
-				addFields(pb, mdl.PatternLocals, op.Locals)
+				addRequiredFields(pb, op.Requires)
+				addFields(pb, mdl.PatternLocals, op.Provides) // note: actions dont have an explicit return
 				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
 					return w.Pin().AddPattern(pb.Pattern)
 				})
@@ -99,6 +70,30 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
+}
+
+func (op *RuleProvides) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
+	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+		if act, e := safe.GetText(w, op.PatternName); e != nil {
+			err = e
+		} else {
+			act := lang.Normalize(act.String())
+			for i := 0; i < event.NumPhases; i++ {
+				phase := event.Phase(i)
+				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
+				addFields(pb, mdl.PatternLocals, op.Provides) // rules add more locals, never results
+				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+					return w.Pin().AddPattern(pb.Pattern)
+				})
+			}
+		}
+		return
+	})
+
 }
 
 func (op *RuleForPattern) Execute(macro rt.Runtime) error {
@@ -199,8 +194,8 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 			err = errutil.New("only actor events can filter by actor")
 		} else {
 			updates := rules.DoesUpdate(exe)
-			cancels := prefix.Cancels
-			interrupts := cancels || rules.DoesTerminate(exe)
+			// term := rules.DoesTerminate(exe)
+
 			if rule = lang.Normalize(rule); len(rule) == 0 {
 				rule = rules.FindNamedResponse(exe)
 			}
@@ -237,18 +232,14 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 					Exe: exe,
 				}}
 			}
-
 			//
 			pb := mdl.NewPatternBuilder(pat)
-			pb.AppendRule(mdl.Rule{
-				Name: rule,
-				Rank: rank,
-				Prog: assign.Prog{
-					Exe:        exe,
-					Updates:    updates,
-					Interrupts: interrupts,
-					Cancels:    cancels,
-				},
+			pb.AppendRule(rank, rt.Rule{
+				Name:    rule,
+				Exe:     exe,
+				Updates: updates,
+				Stop:    prefix.Stop,
+				Jump:    prefix.Jump,
 			})
 			err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
 				return w.Pin().ExtendPattern(pb.Pattern)
@@ -258,20 +249,17 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 	return
 }
 
-// note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule) {
-	// write in reverse order because within a given pattern, earlier rules take precedence.
-	for i := len(els) - 1; i >= 0; i-- {
-		els[i].addRule(pb, target)
-	}
+func addRequiredFields(pb *mdl.PatternBuilder, fields []FieldDefinition) {
+	addFields(pb, mdl.PatternParameters, fields)
 }
 
-func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string) {
-	pb.AppendRule(mdl.Rule{Target: target, Prog: assign.Prog{
-		Filter:  op.Guard,
-		Exe:     op.Exe,
-		Updates: rules.FilterHasCounter(op.Guard),
-	}})
+// assumes the first field ( if any ) is the return value
+// i'm sure i'll come to hate this, but for now i like that it simplifies specification
+func addProvidingFields(pb *mdl.PatternBuilder, fields []FieldDefinition) {
+	if len(fields) > 0 {
+		addOptionalField(pb, mdl.PatternResults, fields[0])
+		addFields(pb, mdl.PatternLocals, fields[1:])
+	}
 }
 
 func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) {
@@ -292,13 +280,5 @@ func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinitio
 		if f := field.FieldInfo(); f != empty {
 			pb.AddField(ft, f)
 		}
-	}
-}
-
-// note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule) {
-	// write in reverse order because within a given pattern, earlier rules take precedence.
-	for i := len(els) - 1; i >= 0; i-- {
-		els[i].addRule(pb, target)
 	}
 }

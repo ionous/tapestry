@@ -219,235 +219,247 @@
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "can handle",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "storing into"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "WearerOf obj:": {
-                          "FromText:": "@noun"
-                        }
-                      },
-                      "equal_to",
-                      "@actor"
-                    ]
-                  }
-                ]
-              },
-              [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't insert clothing",
-                          "{We:|capitalize!} would have to take {those:.noun} off first."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "storing into"
-                    ]
-                  },
-                  {
-                    "AncestorOf obj:root:": [
-                      {
-                        "FromText:": "@other_noun"
-                      },
-                      {
-                        "FromText:": "@noun"
-                      }
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't insert something into itself",
-                          "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
-                        ]
-                      }
-                    }
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "storing into"
                   ]
                 },
                 {
-                  "Comment:": "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
+                  "AncestorOf obj:root:": [
+                    {
+                      "FromText:": "@other_noun"
+                    },
+                    {
+                      "FromText:": "@noun"
+                    }
+                  ]
                 }
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't insert something into itself",
+                        "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "Comment:": "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
+              }
             ]
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "can handle",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "storing into"
+                  ]
+                },
+                {
+                  "Cmp:is:txt:": [
+                    {
+                      "WearerOf obj:": {
+                        "FromText:": "@noun"
+                      }
+                    },
+                    "equal_to",
+                    "@actor"
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't insert clothing",
+                        "{We:|capitalize!} would have to take {those:.noun} off first."
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "reach down",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "storing into"
-                    ]
-                  },
-                  {
-                    "KindOf:is:": [
-                      "@into_obj",
-                      "actors"
-                    ]
-                  }
-                ]
-              },
-              [
+        {
+          "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "storing into"
+                  ]
                 },
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't store people's possessions",
-                          "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."
-                        ]
-                      }
-                    }
+                  "Cmp:is:txt:": [
+                    "@into_obj",
+                    "equal_to",
+                    "@noun"
                   ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "storing into"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      "@into_obj",
-                      "equal_to",
-                      "@noun"
-                    ]
-                  },
-                  {
-                    "Not:": {
-                      "ProvidesStorage obj:": {
-                        "FromText:": "@into_obj"
-                      }
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
                 },
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can only store to storage",
-                          "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
-                        ]
-                      }
+                  "Not:": {
+                    "AllowsStorage obj:": {
+                      "FromText:": "@into_obj"
                     }
-                  ]
+                  }
                 }
               ]
-            ]
-          },
-          {
-            "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
-            "PatternRule:do:": [
+            },
+            {
+              "Set:from:": [
+                "@response",
+                {
+                  "FromText:": {
+                    "Say response:with:": [
+                      "can only store when allowed",
+                      "{the: .into_obj|capitalize!} is closed."
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "reach down",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "storing into"
+                  ]
+                },
+                {
+                  "Cmp:is:txt:": [
+                    "@into_obj",
+                    "equal_to",
+                    "@noun"
+                  ]
+                },
+                {
+                  "Not:": {
+                    "ProvidesStorage obj:": {
+                      "FromText:": "@into_obj"
+                    }
+                  }
+                }
+              ]
+            },
+            [
               {
-                "AllTrue:": [
+                "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
+              },
+              {
+                "Set:from:": [
+                  "@response",
                   {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "storing into"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      "@into_obj",
-                      "equal_to",
-                      "@noun"
-                    ]
-                  },
-                  {
-                    "Not:": {
-                      "AllowsStorage obj:": {
-                        "FromText:": "@into_obj"
-                      }
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can only store to storage",
+                        "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
+                      ]
                     }
                   }
                 ]
-              },
-              [
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "reach down",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can only store when allowed",
-                          "{the: .from_obj|capitalize!} is closed."
-                        ]
-                      }
-                    }
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "storing into"
+                  ]
+                },
+                {
+                  "KindOf:is:": [
+                    "@into_obj",
+                    "actors"
                   ]
                 }
               ]
+            },
+            [
+              {
+                "Comment:": [
+                  "If the target noun were owned by reaching actor then the actor would be the lca.",
+                  "By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+                ]
+              },
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't store people's possessions",
+                        "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."
+                      ]
+                    }
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]

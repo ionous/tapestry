@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Move Object",
         [
           {
@@ -24,179 +24,73 @@
       ]
     },
     {
-      "Extend pattern:withRules:": [
-        "Move Object",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+      "Rule for:do:": [
+        "before move object",
+        {
+          "If:do:": [
+            {
+              "Not:": {
+                "KindOf:is:": [
+                  "@obj",
+                  "things"
+                ]
+              }
+            },
+            {
+              "Set:from:": [
+                "@response",
                 {
-                  "If:do:else:": [
-                    {
-                      "Is empty:": "@obj"
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@response",
-                          {
-                            "FromText:": {
-                              "Say response:with:": [
-                                "You can't move nothing.",
-                                "You can't move nothing."
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    ],
-                    {
-                      "If:do:else:": [
-                        {
-                          "Not:": {
-                            "KindOf:is:": [
-                              "@obj",
-                              "things"
-                            ]
-                          }
-                        },
-                        [
-                          {
-                            "Set:from:": [
-                              "@response",
-                              {
-                                "FromText:": {
-                                  "Say response:with:": [
-                                    "You can only move things.",
-                                    "You can only move things."
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        ],
-                        {
-                          "Finally do:": [
-                            {
-                              "If:do:": [
-                                {
-                                  "Object:field:": [
-                                    "@obj",
-                                    "worn"
-                                  ]
-                                },
-                                [
-                                  {
-                                    "Set:from:": [
-                                      {
-                                        "Object:field:": [
-                                          "@obj",
-                                          "not worn"
-                                        ]
-                                      },
-                                      {
-                                        "FromBool:": true
-                                      }
-                                    ]
-                                  }
-                                ]
-                              ]
-                            },
-                            {
-                              "If:do:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@dest",
-                                    "other_than",
-                                    {
-                                      "ParentOf obj:": {
-                                        "FromText:": "@obj"
-                                      }
-                                    }
-                                  ]
-                                },
-                                [
-                                  {
-                                    "Relate:to:via:": [
-                                      "@dest",
-                                      "@obj",
-                                      "whereabouts"
-                                    ]
-                                  }
-                                ]
-                              ]
-                            },
-                            {
-                              "Set:from:": [
-                                "@response",
-                                {
-                                  "FromText:": {
-                                    "Say response:with:": [
-                                      "okay",
-                                      ""
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "FromText:": {
+                    "Say response:with:": [
+                      "You can only move things.",
+                      "You can only move things."
+                    ]
+                  }
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "Remove from play",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          }
-        ],
+      "Rule for:do:": [
+        "before move object",
         {
-          "Nothing": true
-        },
-        []
+          "If:do:": [
+            {
+              "Is empty:": "@obj"
+            },
+            {
+              "Set:from:": [
+                "@response",
+                {
+                  "FromText:": {
+                    "Say response:with:": [
+                      "You can't move nothing.",
+                      "You can't move nothing."
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
-        "Remove from play",
+      "Rule for:do:": [
+        "move object",
         [
           {
-            "PatternRule:do:": [
-              true,
+            "If:do:": [
+              {
+                "Object:field:": [
+                  "@obj",
+                  "worn"
+                ]
+              },
               [
-                {
-                  "If:do:": [
-                    {
-                      "Is empty:": "@from"
-                    },
-                    [
-                      {
-                        "Log:value:": [
-                          "debug",
-                          {
-                            "FromText:": "You can't remove nothing from play."
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                },
                 {
                   "Set:from:": [
                     {
@@ -209,15 +103,45 @@
                       "FromBool:": true
                     }
                   ]
-                },
+                }
+              ]
+            ]
+          },
+          {
+            "If:do:": [
+              {
+                "Cmp:is:txt:": [
+                  "@dest",
+                  "other_than",
+                  {
+                    "ParentOf obj:": {
+                      "FromText:": "@obj"
+                    }
+                  }
+                ]
+              },
+              [
                 {
                   "Relate:to:via:": [
-                    "",
-                    "@from",
+                    "@dest",
+                    "@obj",
                     "whereabouts"
                   ]
                 }
               ]
+            ]
+          },
+          {
+            "Set:from:": [
+              "@response",
+              {
+                "FromText:": {
+                  "Say response:with:": [
+                    "okay",
+                    ""
+                  ]
+                }
+              }
             ]
           }
         ]
@@ -227,7 +151,69 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
+        "Remove from play",
+        [
+          {
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        [
+          {
+            "If:do:": [
+              {
+                "Is empty:": "@from"
+              },
+              [
+                {
+                  "Log:value:": [
+                    "debug",
+                    {
+                      "FromText:": "You can't remove nothing from play."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Set:from:": [
+              {
+                "Object:field:": [
+                  "@obj",
+                  "not worn"
+                ]
+              },
+              {
+                "FromBool:": true
+              }
+            ]
+          },
+          {
+            "Relate:to:via:": [
+              "",
+              "@from",
+              "whereabouts"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "--": [
+        "a low level command to move the object and set its wearable status.",
+        "It doesn't check for wearable nor for any other permissions."
+      ],
+      "Define pattern:requires:provides:do:": [
         "Wear object",
         [
           {
@@ -246,77 +232,61 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "This is pretty low level. For instance, it doesnt check wearable."
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Wear object",
         [
           {
-            "PatternRule:do:": [
-              true,
+            "If:do:": [
+              {
+                "Not:": {
+                  "Cmp:is:txt:": [
+                    {
+                      "HolderOf obj:": {
+                        "FromText:": "@obj"
+                      }
+                    },
+                    "equal_to",
+                    "@actor"
+                  ]
+                }
+              },
               [
                 {
-                  "If:do:": [
+                  "MoveObject obj:dest:": [
                     {
-                      "Not:": {
-                        "Cmp:is:txt:": [
-                          {
-                            "HolderOf obj:": {
-                              "FromText:": "@obj"
-                            }
-                          },
-                          "equal_to",
-                          "@actor"
-                        ]
-                      }
+                      "FromText:": "@obj"
                     },
-                    [
-                      {
-                        "MoveObject obj:dest:": [
-                          {
-                            "FromText:": "@obj"
-                          },
-                          {
-                            "FromText:": "@actor"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "If:do:": [
                     {
-                      "Cmp:is:txt:": [
-                        {
-                          "HolderOf obj:": {
-                            "FromText:": "@obj"
-                          }
-                        },
-                        "equal_to",
-                        "@actor"
+                      "FromText:": "@actor"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "If:do:": [
+              {
+                "Cmp:is:txt:": [
+                  {
+                    "HolderOf obj:": {
+                      "FromText:": "@obj"
+                    }
+                  },
+                  "equal_to",
+                  "@actor"
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    {
+                      "Object:field:": [
+                        "@obj",
+                        "not worn"
                       ]
                     },
-                    [
-                      {
-                        "Set:from:": [
-                          {
-                            "Object:field:": [
-                              "@obj",
-                              "not worn"
-                            ]
-                          },
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
+                    {
+                      "FromBool:": true
+                    }
                   ]
                 }
               ]

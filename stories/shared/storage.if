@@ -1,7 +1,8 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "--": "Returns true if an object allows items to be stored inside it or on top of it.",
+      "Define pattern:requires:provides:do:": [
         "provides storage",
         [
           {
@@ -14,64 +15,73 @@
         {
           "Bool:": "success"
         },
-        []
+        {
+          "--": "by default, the answer is no.",
+          "Set:from:": [
+            "@success",
+            {
+              "FromBool:": false
+            }
+          ]
+        }
       ]
     },
     {
-      "Comment:": "Does the object allow items to be stored inside or on top of it? "
+      "Rule for:do:": [
+        "provides storage",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "supporters"
+              ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@success",
+                  {
+                    "FromBool:": true
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "provides storage",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "supporters"
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "containers"
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+            },
+            [
               {
-                "KindOf:is:": [
-                  "@obj",
-                  "containers"
+                "Set:from:": [
+                  "@success",
+                  {
+                    "FromBool:": true
+                  }
                 ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "--": "Returns true if the object provide storage, and if its contents can be seen from outside.",
+      "Define pattern:requires:provides:do:": [
         "shows storage",
         [
           {
@@ -84,49 +94,39 @@
         {
           "Bool:": "success"
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "Does the object provide storage, and can that storage be seen from outside? "
-    },
-    {
-      "Extend pattern:withRules:": [
-        "shows storage",
-        [
-          {
-            "PatternRule:do:": [
+        {
+          "If:do:": [
+            {
+              "ProvidesStorage obj:": {
+                "FromText:": "@obj"
+              }
+            },
+            [
               {
-                "ProvidesStorage obj:": {
-                  "FromText:": "@obj"
-                }
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": {
-                        "Not:": {
-                          "FullyOpaque obj:": {
-                            "FromText:": "@obj"
-                          }
+                "Set:from:": [
+                  "@success",
+                  {
+                    "FromBool:": {
+                      "Not:": {
+                        "FullyOpaque obj:": {
+                          "FromText:": "@obj"
                         }
                       }
                     }
-                  ]
-                }
-              ]
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "--": "Return a list containing any visible contents.",
+      "Define pattern:requires:provides:do:": [
         "visible storage",
         [
           {
@@ -139,87 +139,76 @@
         {
           "TextList:": "out"
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "Return a list containing any visible contents."
-    },
-    {
-      "Extend pattern:withRules:": [
-        "visible storage",
-        [
-          {
-            "PatternRule:do:": [
+        {
+          "If:do:": [
+            {
+              "ShowsStorage obj:": {
+                "FromText:": "@obj"
+              }
+            },
+            [
               {
-                "ShowsStorage obj:": {
-                  "FromText:": "@obj"
-                }
-              },
-              [
-                {
-                  "Repeating across:as:do:": [
+                "Repeating across:as:do:": [
+                  {
+                    "FromTextList:": {
+                      "ChildrenOf obj:": {
+                        "FromText:": "@obj"
+                      }
+                    }
+                  },
+                  "it",
+                  [
                     {
-                      "FromTextList:": {
-                        "ChildrenOf obj:": {
-                          "FromText:": "@obj"
-                        }
-                      }
-                    },
-                    "it",
-                    [
-                      {
-                        "If:do:": [
+                      "If:do:": [
+                        {
+                          "Not:": {
+                            "AnyTrue:": [
+                              {
+                                "Cmp:is:txt:": [
+                                  "@it",
+                                  "equal_to",
+                                  {
+                                    "Object:field:": [
+                                      "player",
+                                      "pawn"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "Object:field:": [
+                                  "@it",
+                                  "scenery"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        [
                           {
-                            "Not:": {
-                              "AnyTrue:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@it",
-                                    "equal_to",
-                                    {
-                                      "Object:field:": [
-                                        "player",
-                                        "pawn"
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Object:field:": [
-                                    "@it",
-                                    "scenery"
-                                  ]
-                                }
-                              ]
-                            }
-                          },
-                          [
-                            {
-                              "Push:into:": [
-                                {
-                                  "FromText:": "@it"
-                                },
-                                "@out"
-                              ]
-                            }
-                          ]
+                            "Push:into:": [
+                              {
+                                "FromText:": "@it"
+                              },
+                              "@out"
+                            ]
+                          }
                         ]
-                      }
-                    ]
+                      ]
+                    }
                   ]
-                }
-              ]
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "allows storage",
         [
           {
@@ -232,66 +221,58 @@
         {
           "Bool:": "success"
         },
-        []
+        {
+          "--": "by default, if an object provides storage, it allows storage.",
+          "If:do:": [
+            {
+              "ProvidesStorage obj:": {
+                "FromText:": "@obj"
+              }
+            },
+            {
+              "Set:from:": [
+                "@success",
+                {
+                  "FromBool:": true
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
-      "Comment:": "Returns true when the storage can be accessed."
-    },
-    {
-      "Extend pattern:withRules:": [
+      "--": "closed containers prevent storage.",
+      "Rule for:do:": [
         "allows storage",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "KindOf:is:": [
-                      "@obj",
-                      "containers"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "closed"
-                    ]
-                  }
-                ]
-              },
-              [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": false
-                    }
+                  "KindOf:is:": [
+                    "@obj",
+                    "containers"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@obj",
+                    "closed"
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "ProvidesStorage obj:": {
-                  "FromText:": "@obj"
-                }
-              },
-              [
+            },
+            {
+              "Set:from:": [
+                "@success",
                 {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
+                  "FromBool:": false
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     }
   ]

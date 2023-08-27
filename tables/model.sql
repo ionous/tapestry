@@ -88,10 +88,21 @@ create table mdl_rel( relKind int not null, oneKind int not null, otherKind int 
  */
 create table mdl_rev( domain text not null, oneWord text, otherWord text, at text );
 /* 
- * the scope of a rule can be narrower than its uses kind ( or target )
- * fix? can target (kind of nouns the rule applies to) be moved to filter? 
+ * the rules for a given kind of pattern within the specified domain are executed in increase rank, 
+ * and within each rank, by last declared rule first ( largest row id. )
+ + stop and jump describe the default handling of rules following a match:
+ * stop controls whether processing terminates (1) or whether it moves to the next phase (0); 
+ * jump controls when that transition takes place:
+ *   2: transitions after processing all matching rules;
+ *   1: transitions after processing the current element;
+ *   0: transitions immediately;
+ * there are various ways to change the desired stop/jump for an individual rule at runtime;
+ * ( ex. setting the cancel flag; using the continue keyword; ... )
+ * however the overall stop/jump for a set of rules can only stay the same or trigger sooner.
+ * prog is a slice of rt.Execute statements.
+ * updates hints whether there are any counters in the prog that need updating.
  */
-create table mdl_rule( domain text not null, kind int not null, name text, rank int, prog blob, at text );
+create table mdl_rule( domain text not null, kind int not null, name text, rank int, stop int, jump int, updates int, prog blob, at text );
 /* 
  * initial values for the fields of nouns;
  * note: currently, the scope of the value is the same as the noun.

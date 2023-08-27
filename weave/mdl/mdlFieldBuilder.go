@@ -132,7 +132,6 @@ func (fs *fieldSet) writeFieldSet(pen *Pen, kid kindInfo, cache classCache) (err
 			}
 		}
 	}
-
 	return
 }
 
@@ -151,13 +150,6 @@ func (fs *FieldInfo) validate(ft FieldType) (err error) {
 		err = errutil.New("missing name")
 	} else if len(fs.Affinity) == 0 {
 		err = errutil.New("missing affinity")
-	} else {
-		switch ft {
-		case PatternResults:
-			if fs.Init != nil {
-				err = errutil.New("pattern returns currently don't support initial values")
-			}
-		}
 	}
 	return
 }

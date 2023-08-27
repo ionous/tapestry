@@ -5,18 +5,35 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
+// a linked list of scopes:
+// if a variable isnt found in the first scope, the next is searched, and so on.
 type Chain struct {
 	rt.Scope
 	next  *Chain
 	depth int // counts the number of pushed scopes; not accurate if the scopes contain other scopes.
 }
 
+const MaxDepth = 25
+
 func MakeChain(top rt.Scope) Chain {
 	return Chain{Scope: top}
 }
 
+// rewrite the current scope as the passed scope
+// returns the previous scope
+// ( used for function calls; they "hide" all variables from the caller stack )
+func (s *Chain) ReplaceScope(top rt.Scope) Chain {
+	prev, next := *s, MakeChain(top)
+	*s = next
+	return prev
+}
+
+func (s *Chain) RestoreScope(c Chain) {
+	*s = c
+}
+
 func (s *Chain) PushScope(top rt.Scope) {
-	if s.depth > MaxStack {
+	if s.depth > MaxDepth {
 		panic("scope overflow")
 	}
 	clone := *s // save the values before they are overwritten

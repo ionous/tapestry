@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "--": "Determines whether an actor can manipulate some specific object.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "can handle",
         [
           {
@@ -31,44 +31,42 @@
         {
           "Text:": "response"
         },
-        []
+        {
+          "--": "no default rules"
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "can handle",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Cmp:is:txt:": [
-                  {
-                    "ParentOf obj:": {
-                      "FromText:": "@noun"
-                    }
-                  },
-                  "other_than",
-                  "@actor"
-                ]
-              },
-              [
+        {
+          "If:do:": [
+            {
+              "Cmp:is:txt:": [
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can only use possessions",
-                          "{we:|capitalize!} haven't got {those:.noun}!"
-                        ]
-                      }
-                    }
-                  ]
+                  "ParentOf obj:": {
+                    "FromText:": "@noun"
+                  }
+                },
+                "other_than",
+                "@actor"
+              ]
+            },
+            {
+              "Set:from:": [
+                "@response",
+                {
+                  "FromText:": {
+                    "Say response:with:": [
+                      "can only use possessions",
+                      "{we:|capitalize!} haven't got {those:.noun}!"
+                    ]
+                  }
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     }
   ]

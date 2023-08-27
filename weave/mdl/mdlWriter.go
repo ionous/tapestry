@@ -28,7 +28,7 @@ type Log func(fmt string, parts ...any)
 func eatDuplicates(l Log, e error) (err error) {
 	if e == nil || !errors.Is(e, Duplicate) {
 		err = e
-	} else {
+	} else if l != nil {
 		l(e.Error())
 	}
 	return
@@ -874,26 +874,33 @@ func (pen *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) 
 	if kid.domain != pen.domain {
 		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
 			Conflict, field, kid.name, kid.domain, pen.domain)
-	} else if e := pen.addField(kid, cls, field, aff); e != nil {
-		err = eatDuplicates(pen.warn, e)
-	} else if res, e := pen.db.Exec(`
+	} else {
+		// sneaky: if a result duplicates an existing field ( ie. a parameter )
+		// no problem: we return that parameter.
+		// tbd: possibly itd be better to flag this as a conflict;
+		// noting that "collate groups" currently relies on sharing
+		e := pen.addField(kid, cls, field, aff)
+		if e := eatDuplicates(pen.warn, e); e != nil {
+			err = e
+		} else if res, e := pen.db.Exec(`
 		update mdl_pat
 		set result=?2
 		where kind = ?1 and result is null
 		`, kid.id, field); e != nil {
-		err = e
-	} else if rows, e := res.RowsAffected(); e != nil {
-		err = e
-	} else if rows == 0 {
-		err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
-			field, kid.name, pen.domain)
+			err = e
+		} else if rows, e := res.RowsAffected(); e != nil {
+			err = e
+		} else if rows == 0 {
+			err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
+				field, kid.name, pen.domain)
+		}
 	}
 	return
 }
 
-var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "name", "rank", "prog", "at")
+var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "name", "rank", "stop", "jump", "updates", "prog", "at")
 
-func (pen *Pen) addRule(pattern, target kindInfo, name string, rank int, prog string) (err error) {
+func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump int, updates bool, prog string) (err error) {
 	// fix name needs to check for conflicts;
 	// unique withing domain?
 	_, err = pen.db.Exec(mdl_rule,
@@ -904,6 +911,9 @@ func (pen *Pen) addRule(pattern, target kindInfo, name string, rank int, prog st
 			Valid:  len(name) > 0,
 		},
 		rank,
+		stop,
+		jump,
+		updates,
 		prog,
 		pen.at)
 	return

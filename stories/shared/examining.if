@@ -138,7 +138,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Print description",
         [
           {
@@ -151,79 +151,76 @@
         {
           "Nothing": true
         },
-        []
+        {
+          "--": "no default rules"
+        }
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
-        "Print description",
-        [
-          {
-            "Text:initially:": [
-              "description",
-              {
-                "Object:field:": [
-                  "@obj",
-                  "description"
-                ]
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Not:": {
-                  "Is empty:": "@description"
+      "Rule for:do:": [
+        "print description",
+        {
+          "If:do:": [
+            {
+              "Not:": {
+                "PrintParticulars obj:": {
+                  "FromText:": "@obj"
                 }
-              },
-              [
+              }
+            },
+            {
+              "Say response:with:": [
+                "unremarkable description",
+                "{We!|make_title_case!} see nothing special about {the: .obj}."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "print description",
+        "standard description printing rule",
+        {
+          "If:assuming:do:": [
+            {
+              "Not:": {
+                "Is empty:": "@description"
+              }
+            },
+            {
+              "Arg:from:": [
+                "description",
                 {
-                  "Print:": "@description"
-                },
-                {
-                  "PrintParticulars obj:": {
-                    "FromText:": "@obj"
+                  "FromText:": {
+                    "Object:field:": [
+                      "@obj",
+                      "description"
+                    ]
                   }
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "If:do:": [
-                    {
-                      "Not:": {
-                        "PrintParticulars obj:": {
-                          "FromText:": "@obj"
-                        }
-                      }
-                    },
-                    [
-                      {
-                        "Say response:with:": [
-                          "unremarkable description",
-                          "{We!|make_title_case!} see nothing special about {the: .obj}."
-                        ]
-                      }
-                    ]
-                  ]
+            },
+            [
+              {
+                "Print:": "@description"
+              },
+              {
+                "PrintParticulars obj:": {
+                  "FromText:": "@obj"
                 }
-              ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Print particulars",
         [
           {
@@ -236,30 +233,59 @@
         {
           "Bool:": "success"
         },
-        []
+        {
+          "--": "no default rules"
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:named:do:": [
         "Print particulars",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "supporters"
-                ]
-              },
-              [
+        "the print containers contents rule",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "containers"
+              ]
+            },
+            {
+              "If:do:else:": [
                 {
+                  "PrintInlineStorage obj:": {
+                    "FromText:": "@obj"
+                  }
+                },
+                {
+                  "Set:from:": [
+                    "@success",
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                },
+                {
+                  "--": "if the player isn't in the container.",
                   "If:do:": [
                     {
-                      "PrintInlineStorage obj:": {
-                        "FromText:": "@obj"
-                      }
+                      "Cmp:is:txt:": [
+                        "@obj",
+                        "other_than",
+                        {
+                          "ContainerOf obj:": {
+                            "FromText:": "player"
+                          }
+                        }
+                      ]
                     },
                     [
+                      {
+                        "Say response:with:": [
+                          "empty container description",
+                          "{The: .obj|capitalize!} {are: .obj} empty."
+                        ]
+                      },
                       {
                         "Set:from:": [
                           "@success",
@@ -272,72 +298,42 @@
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "containers"
-                ]
-              },
-              [
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "Print particulars",
+        "the print supporter contents rule",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "supporters"
+              ]
+            },
+            {
+              "If:do:": [
                 {
-                  "If:do:else:": [
+                  "PrintInlineStorage obj:": {
+                    "FromText:": "@obj"
+                  }
+                },
+                {
+                  "Set:from:": [
+                    "@success",
                     {
-                      "PrintInlineStorage obj:": {
-                        "FromText:": "@obj"
-                      }
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ],
-                    {
-                      "--": "if the player isn't in the container.",
-                      "If:do:": [
-                        {
-                          "Cmp:is:txt:": [
-                            "@obj",
-                            "other_than",
-                            {
-                              "ContainerOf obj:": {
-                                "FromText:": "player"
-                              }
-                            }
-                          ]
-                        },
-                        [
-                          {
-                            "Say response:with:": [
-                              "empty container description",
-                              "{The: .obj|capitalize!} {are: .obj} empty."
-                            ]
-                          },
-                          {
-                            "Set:from:": [
-                              "@success",
-                              {
-                                "FromBool:": true
-                              }
-                            ]
-                          }
-                        ]
-                      ]
+                      "FromBool:": true
                     }
                   ]
                 }
               ]
-            ]
-          }
-        ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -348,6 +344,14 @@
         "examining test",
         "Kitchenette",
         [
+          {
+            "PrintDescription obj:": {
+              "FromText:": "mortar"
+            }
+          },
+          {
+            "Expect output:": "In the mortar is a pestle."
+          },
           {
             "PrintDescription obj:": {
               "FromText:": "blender"
@@ -363,14 +367,6 @@
           },
           {
             "Expect output:": "Your aunt's very own witches hat, a Halloween favorite."
-          },
-          {
-            "PrintDescription obj:": {
-              "FromText:": "mortar"
-            }
-          },
-          {
-            "Expect output:": "In the mortar is a pestle."
           },
           {
             "PrintDescription obj:": {

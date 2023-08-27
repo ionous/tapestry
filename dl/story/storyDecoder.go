@@ -60,7 +60,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 						for i, p := range sig.Params {
 							arg := args[i]
 							var val assign.Assignment
-							if e := decode(assign.Assignment_Slot{&val}, arg, reg); e != nil {
+							if e := decode(assign.Assignment_Slot{Value: &val}, arg, reg); e != nil {
 								err = e
 								break
 							}

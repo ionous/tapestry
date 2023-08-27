@@ -126,135 +126,136 @@
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "can reach",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "retrieving from"
-                    ]
-                  }
-                ]
-              },
-              [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "CanReach actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "taking"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    }
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "retrieving from"
                   ]
                 }
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "CanReach actor:action:noun:": [
+                        {
+                          "FromText:": "@actor"
+                        },
+                        {
+                          "FromText:": "taking"
+                        },
+                        {
+                          "FromText:": "@noun"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "can use",
-        [
-          {
-            "PatternRule:do:": [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "retrieving from"
+                  ]
+                }
+              ]
+            },
+            [
               {
-                "AllTrue:": [
+                "Set:from:": [
+                  "@response",
                   {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "retrieving from"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "ParentOf obj:": {
+                    "FromText:": {
+                      "CanUse actor:action:noun:": [
+                        {
+                          "FromText:": "@actor"
+                        },
+                        {
+                          "FromText:": "taking"
+                        },
+                        {
                           "FromText:": "@noun"
                         }
-                      },
-                      "other_than",
-                      "@other_noun"
-                    ]
+                      ]
+                    }
                   }
                 ]
-              },
-              [
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "can use",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@response",
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "retrieving from"
+                  ]
+                },
+                {
+                  "Cmp:is:txt:": [
                     {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't retrieve what's not inside",
-                          "But {they:.noun} {arent: .noun} there now."
-                        ]
+                      "ParentOf obj:": {
+                        "FromText:": "@noun"
                       }
-                    }
+                    },
+                    "other_than",
+                    "@other_noun"
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+            },
+            [
               {
-                "AllTrue:": [
+                "Set:from:": [
+                  "@response",
                   {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "retrieving from"
-                    ]
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't retrieve what's not inside",
+                        "But {they:.noun} {arent: .noun} there now."
+                      ]
+                    }
                   }
                 ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "CanUse actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "taking"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]

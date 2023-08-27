@@ -146,17 +146,15 @@
                     ]
                   },
                   {
-                    "Term:name:type:repeats:": [
+                    "Term:type:repeats:": [
                       "requires",
-                      "params",
                       "field_definition",
                       true
                     ]
                   },
                   {
-                    "Term:name:type:optional:repeats:": [
+                    "Term:type:optional:repeats:": [
                       "provides",
-                      "locals",
                       "field_definition",
                       true,
                       true
@@ -1032,11 +1030,8 @@
           ]
         },
         {
-          "--": [
-            "Change the behavior of an existing pattern."
-          ],
           "Spec:slots:groups:with flow:": [
-            "extend_pattern",
+            "rule_provides",
             [
               "story_statement",
               "execute"
@@ -1044,29 +1039,19 @@
             "patterns",
             {
               "Flow:uses:": [
-                "extend",
+                "rule",
                 [
                   {
                     "Term:name:type:": [
-                      "pattern",
+                      "for",
                       "pattern_name",
                       "text_eval"
                     ]
                   },
                   {
-                    "Term:name:type:optional:repeats:": [
+                    "Term:type:repeats:": [
                       "provides",
-                      "locals",
                       "field_definition",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                      "with_rules",
-                      "rules",
-                      "pattern_rule",
                       true
                     ]
                   }
@@ -1255,31 +1240,22 @@
                     ]
                   },
                   {
-                    "Term:name:type:repeats:": [
+                    "Term:type:repeats:": [
                       "requires",
-                      "params",
                       "field_definition",
                       true
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "result",
-                      "field_definition"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
+                    "Term:type:repeats:": [
                       "provides",
-                      "locals",
                       "field_definition",
-                      true,
                       true
                     ]
                   },
                   {
                     "Term:name:type:repeats:": [
-                      "with",
+                      "do",
                       "macro_statements",
                       "execute",
                       true
@@ -1354,120 +1330,29 @@
                     ]
                   },
                   {
-                    "Term:name:type:repeats:": [
+                    "Term:type:repeats:": [
                       "requires",
-                      "params",
                       "field_definition",
                       true
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "result",
-                      "field_definition"
+                    "Term:type:repeats:": [
+                      "provides",
+                      "field_definition",
+                      true
                     ]
                   },
                   {
                     "Term:name:type:optional:repeats:": [
-                      "provides",
-                      "locals",
-                      "field_definition",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                      "with_rules",
-                      "rules",
-                      "pattern_rule",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "pattern_flags",
-            "patterns",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:label:": [
-                      "before",
-                      "continue before"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "after",
-                      "continue after"
-                    ]
-                  },
-                  {
-                    "Option:": "terminate"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Rule",
-          "Spec:groups:with flow:": [
-            "pattern_rule",
-            "patterns",
-            {
-              "Flow phrase:uses:": [
-                "When {conditions are met$guard}{continue$flags}, then: {$does}",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "guard",
-                      "bool_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "flags",
-                      "pattern_flags",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
                       "do",
                       "exe",
                       "execute",
+                      true,
                       true
                     ]
                   }
                 ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "pattern_type",
-            "patterns",
-            {
-              "Str uses:": [
-                {
-                  "Option:": "patterns"
-                },
-                {
-                  "Option:": "actions"
-                },
-                {
-                  "Option:": "events"
-                }
               ]
             }
           ]

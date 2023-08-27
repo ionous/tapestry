@@ -2,11 +2,11 @@ package testpat
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
 )
@@ -27,29 +27,25 @@ func (run *Runtime) GetField(object, field string) (ret g.Value, err error) {
 	return
 }
 
+// fix? follows from qna, but isnt an exact copy:
+// improving the way inits work would probably help...
 func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals []g.Value) (ret g.Value, err error) {
-	// create a container to hold results of args, locals, and the pending return value
 	if kind, e := run.GetKindByName(name); e != nil {
 		err = e
 	} else if rec, e := safe.FillRecord(run, kind.NewRecord(), keys, vals); e != nil {
 		err = e
-	} else if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
+	} else if field, e := pattern.GetResultField(run, kind); e != nil {
 		err = e
 	} else {
-		res := pattern.NewResults(rec, labels.Strings(), aff)
-		oldScope := run.Stack.ReplaceScope(res)
-		// ignores the initialization of locals during testing...
-		if rules, e := run.GetRules(rec.Kind().Name(), ""); e != nil {
+		oldScope := run.Chain.ReplaceScope(scope.FromRecord(rec))
+		if rules, e := run.GetRules(name); e != nil {
 			err = e
-		} else if e := res.ApplyRules(run, rules); e != nil {
+		} else if res, e := rules.Call(run, rec, field); e != nil {
 			err = e
 		} else {
-			ret, err = res.GetResult()
-			if !res.ComputedResult() {
-				err = errutil.Fmt("%w calling %s test pattern %q", rt.NoResult, aff, rec.Kind().Name())
-			}
+			ret, err = res.GetResult(aff)
 		}
-		run.ReplaceScope(oldScope)
+		run.Chain.RestoreScope(oldScope)
 	}
 	return
 }

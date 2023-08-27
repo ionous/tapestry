@@ -46,14 +46,14 @@ func TestReduce(t *testing.T) {
 	}
 	//
 	lt := testpat.Runtime{
-		testpat.Map{
+		Map: testpat.Map{
 			"reduce": &reduceRecords,
 		},
-		testutil.Runtime{
+		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Stack: []rt.Scope{
+			Chain: scope.MakeChain(
 				scope.FromRecord(locals),
-			},
+			),
 		},
 	}
 	if e := reduce.Execute(&lt); e != nil {
@@ -83,7 +83,7 @@ var reduceRecords = testpat.Pattern{
 	Return: "out",
 	Labels: []string{"in", "out"},
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(
+		Exe: core.MakeActivity(
 			&assign.SetValue{
 				Target: core.Variable("out"),
 				Value: &assign.FromText{Value: &core.Join{

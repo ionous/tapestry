@@ -5,85 +5,77 @@
         "countOf",
         [
           {
-            "Define pattern:requires:result:withRules:": [
+            "Define pattern:requires:provides:do:": [
               "magic symbols",
-              [
-                {
-                  "Nothing": true
-                }
-              ],
               {
                 "Nothing": true
               },
-              []
+              {
+                "Nothing": true
+              },
+              {
+                "Print:": "o"
+              }
             ]
           },
           {
-            "Extend pattern:withRules:": [
+            "Rule for:do:": [
               "magic symbols",
-              [
-                {
-                  "PatternRule:do:": [
-                    {
-                      "CountOf:num:": [
-                        {
-                          "Every": true
-                        },
-                        2
-                      ]
-                    },
-                    [
+              {
+                "If:do:": [
+                  {
+                    "CountOf:num:": [
                       {
-                        "Print:": "*"
-                      }
+                        "After": true
+                      },
+                      5
                     ]
-                  ]
-                },
-                {
-                  "PatternRule:do:": [
-                    {
-                      "CountOf:num:": [
-                        {
-                          "At": true
-                        },
-                        3
-                      ]
-                    },
-                    [
+                  },
+                  {
+                    "Print:": "x"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Rule for:do:": [
+              "magic symbols",
+              {
+                "If:do:": [
+                  {
+                    "CountOf:num:": [
                       {
-                        "Print:": "-"
-                      }
+                        "At": true
+                      },
+                      3
                     ]
-                  ]
-                },
-                {
-                  "PatternRule:do:": [
-                    {
-                      "CountOf:num:": [
-                        {
-                          "After": true
-                        },
-                        5
-                      ]
-                    },
-                    [
+                  },
+                  {
+                    "Print:": "-"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Rule for:do:": [
+              "magic symbols",
+              {
+                "If:do:": [
+                  {
+                    "CountOf:num:": [
                       {
-                        "Print:": "x"
-                      }
+                        "Every": true
+                      },
+                      2
                     ]
-                  ]
-                },
-                {
-                  "PatternRule:do:": [
-                    true,
-                    [
-                      {
-                        "Print:": "o"
-                      }
-                    ]
-                  ]
-                }
-              ]
+                  },
+                  {
+                    "Print:": "*"
+                  }
+                ]
+              }
             ]
           }
         ],
@@ -96,11 +88,9 @@
                 }
               },
               "i",
-              [
-                {
-                  "MagicSymbols": true
-                }
-              ]
+              {
+                "MagicSymbols": true
+              }
             ]
           },
           {

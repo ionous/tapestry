@@ -30,7 +30,7 @@
       ]
     },
     {
-      "Define macro:requires:result:with:": [
+      "Define macro:requires:provides:do:": [
         "carrying something",
         [
           {

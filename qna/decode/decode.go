@@ -38,9 +38,14 @@ func (d *Decoder) DecodeFilter(b []byte) (ret rt.BoolEval, err error) {
 	return
 }
 
-func (d *Decoder) DecodeProg(b []byte) (ret assign.Prog, err error) {
-	if e := core.Decode(&ret, b, d.signatures); e != nil {
-		err = e
+func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
+	if len(b) > 0 {
+		var act rt.Execute_Slice
+		if e := core.Decode(&act, b, d.signatures); e != nil {
+			err = e
+		} else {
+			ret = act
+		}
 	}
 	return
 }

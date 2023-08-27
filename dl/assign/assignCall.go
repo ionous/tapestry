@@ -48,9 +48,9 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (g.Value, error) {
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	name := lang.Normalize(op.PatternName)
 	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
-		err = cmdError(op, e)
+		err = CommandError{Cmd: op, Ctx: e.Error()} // stops internal errors from leaking out
 	} else if v, e := run.Call(name, aff, k, v); e != nil && !errors.Is(e, rt.NoResult) {
-		err = cmdError(op, e)
+		err = CommandError{Cmd: op, Ctx: e.Error()} // stops internal errors from leaking out
 	} else {
 		ret = v
 	}

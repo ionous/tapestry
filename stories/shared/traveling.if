@@ -193,127 +193,134 @@
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "can use",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "traveling"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "closed"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "locked"
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "traveling"
+                  ]
+                },
+                {
+                  "Not:": {
+                    "KindOf:is:": [
+                      "@other_noun",
+                      "rooms"
                     ]
                   }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't travel through locked doors",
-                          "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
-                        ]
-                      }
-                    }
-                  ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+            },
+            [
               {
-                "AllTrue:": [
+                "Set:from:": [
+                  "@response",
                   {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "traveling"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "closed"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't travel through closed doors",
-                          "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "--": "can only travel to valid destinations",
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "traveling"
-                    ]
-                  },
-                  {
-                    "Not:": {
-                      "KindOf:is:": [
-                        "@other_noun",
-                        "rooms"
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can only travel to a destination",
+                        "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
                       ]
                     }
                   }
                 ]
-              },
-              [
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "can use",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can only travel to a destination",
-                          "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
-                        ]
-                      }
-                    }
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "traveling"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "closed"
                   ]
                 }
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't travel through closed doors",
+                        "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
+                      ]
+                    }
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "can use",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "traveling"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "closed"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@noun",
+                    "locked"
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't travel through locked doors",
+                        "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        }
       ]
     }
   ]

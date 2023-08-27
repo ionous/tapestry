@@ -72,6 +72,10 @@
             }
           },
           {
+            "--": [
+              "FIX: there are suddenly spaces after open",
+              "i suspect it might be from the ul indentation somehow...."
+            ],
             "Expect output:": [
               "You are carrying:",
               "  - a book of secrets (closed and locked)",

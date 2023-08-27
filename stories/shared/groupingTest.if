@@ -17,10 +17,10 @@
           },
           {
             "Comment:": [
-              "fix? the rules for deciding whether something starts with a vowel ( and therefore should use indefinite article 'an' ) ",
+              "fix? the rules for deciding whether something starts with a vowel ( and therefore should use indefinite article 'an' )",
               "are defined by the \"starts with vowel\" pattern. so, even though, we've explicitly said \"an x\" in the declaration: that doesn't matter.",
               "ImportNouns() doesn't see the \"an\" as being special, and so doesn't get assign the noun a customized indefinite article.",
-              "( Inform also has this issue. ) ",
+              "( Inform also has this issue. )",
               "Potentially, the importer could call the \"starts with vowel\" pattern, and when true store the article.",
               "Or, maybe we could store the (various) articles used when defining the noun, sort through them, and pick the most reasonable one -- always storing that regardless.",
               "saying only ever \"the X\" , for example, would be remembered, but wouldn't alter the set of indefinite articles."
@@ -43,26 +43,19 @@
               "no grouping",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
-                          true,
-                          [
-                            {
-                              "--": [
-                                "For patterns which return a value, assigning a return value ends the pattern matching.",
-                                "So end this pattern and block out the default handler."
-                              ],
-                              "Set:from:": [
-                                "@grouping",
-                                {
-                                  "FromRecord:": "@grouping"
-                                }
-                              ]
-                            }
-                          ]
+                        "--": [
+                          "For patterns which return a value, assigning a return value ends the pattern matching.",
+                          "So end this pattern and block out the default handler."
+                        ],
+                        "Set:from:": [
+                          "@grouping",
+                          {
+                            "FromRecord:": "@grouping"
+                          }
                         ]
                       }
                     ]
@@ -123,11 +116,11 @@
               "custom few",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:isExactly:": [
                               "@obj",
@@ -196,11 +189,11 @@
                   "--": ""
                 },
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "print several",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "AllTrue:": [
                               {
@@ -274,11 +267,11 @@
               "x custom replacement",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -387,11 +380,11 @@
               "custom fancy phrase",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -479,11 +472,11 @@
                   "--": ""
                 },
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "print grouped object",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -548,11 +541,11 @@
               "custom parenthetical",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -587,11 +580,11 @@
                   "--": ""
                 },
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "print grouped object",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -636,11 +629,11 @@
               "custom parenthetical articles",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",
@@ -705,11 +698,11 @@
               "x custom unnamed parenthetical",
               [
                 {
-                  "Extend pattern:withRules:": [
+                  "Rule for:do:": [
                     "assign grouping",
                     [
                       {
-                        "PatternRule:do:": [
+                        "If:do:": [
                           {
                             "KindOf:is:": [
                               "@obj",

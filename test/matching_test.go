@@ -7,7 +7,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
@@ -25,14 +24,14 @@ func TestMatching(t *testing.T) {
 	locals := kinds.NewRecord("locals")
 	//
 	lt := testpat.Runtime{
-		testpat.Map{
+		Map: testpat.Map{
 			"match groups": &matchGroups,
 		},
-		testutil.Runtime{
+		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Stack: []rt.Scope{
+			Chain: scope.MakeChain(
 				scope.FromRecord(locals),
-			},
+			),
 		},
 	}
 

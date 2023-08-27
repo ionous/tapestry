@@ -12,7 +12,7 @@ func TestStack(t *testing.T) {
 	for _, n := range names {
 		mocks[n] = &mockScope{name: n}
 	}
-	var stack Stack
+	stack := MakeChain(Empty{})
 
 	// push and pop scopes onto the stack
 	// we expect to hear these counts back

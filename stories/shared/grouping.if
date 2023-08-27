@@ -2,26 +2,20 @@
   "Tapestry:": [
     {
       "--": "Returns a list of the objects partitioned into groups.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "make groups",
         [
           {
             "TextList:": "objs"
           }
         ],
-        {
-          "RecordList:kind:": [
-            "groups",
-            "object group"
-          ]
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "make groups",
         [
+          {
+            "RecordList:kind:": [
+              "groups",
+              "object group"
+            ]
+          },
           {
             "RecordList:kind:": [
               "groupings",
@@ -31,28 +25,23 @@
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Map:fromList:using:": [
-                    "@groupings",
-                    {
-                      "FromTextList:": "@objs"
-                    },
-                    "assign grouping"
-                  ]
-                },
-                {
-                  "Reduce into:fromList:using:": [
-                    "@groups",
-                    {
-                      "FromRecordList:": "@groupings"
-                    },
-                    "collate groups"
-                  ]
-                }
-              ]
+          	"--": "for each object, create an object group",
+            "Map:fromList:using:": [
+              "@groupings",
+              {
+                "FromTextList:": "@objs"
+              },
+              "assign grouping"
+            ]
+          },
+          {
+          	"--": "remove any duplicate seeming groups",
+            "Reduce into:fromList:using:": [
+              "@groups",
+              {
+                "FromRecordList:": "@groupings"
+              },
+              "collate groups"
             ]
           }
         ]
@@ -62,7 +51,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "assign grouping",
         [
           {
@@ -73,129 +62,116 @@
           }
         ],
         {
-          "Record:kind:": [
+          "Record:kind:initially:": [
             "grouping",
-            "grouping"
+            "grouping",
+            {
+              "Groupings name:": {
+                "FromText:": "@obj"
+              }
+            }
           ]
         },
-        []
+        {
+          "--": "no default rules"
+        }
       ]
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:do:": [
         "assign grouping",
-        [
-          {
-            "Record:kind:initially:": [
-              "grouping",
-              "grouping",
-              {
-                "Groupings name:": {
-                  "FromText:": "@obj"
+        {
+          "If:do:else:": [
+            {
+              "AllTrue:": [
+                {
+                  "Object:field:": [
+                    "@obj",
+                    "counted"
+                  ]
+                },
+                {
+                  "Is empty:": {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "label"
+                        }
+                      ]
+                    ]
+                  }
                 }
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
+              ]
+            },
+            [
               {
-                "AllTrue:": [
+                "--": "unless already grouped, use print several for unnamed counted nouns.",
+                "Set:from:": [
                   {
-                    "Object:field:": [
-                      "@obj",
-                      "counted"
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "label"
+                        }
+                      ]
                     ]
                   },
                   {
-                    "Is empty:": {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "label"
-                          }
-                        ]
-                      ]
+                    "FromText:": {
+                      "KindOf:": "@obj"
                     }
                   }
                 ]
               },
-              [
-                {
-                  "--": "unless already grouped, use print several for unnamed counted nouns.",
-                  "Set:from:": [
-                    {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "label"
-                          }
-                        ]
+              {
+                "Set:from:": [
+                  {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "is hide label"
+                        }
                       ]
-                    },
-                    {
-                      "FromText:": {
-                        "KindOf:": "@obj"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "Set:from:": [
-                    {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "is hide label"
-                          }
-                        ]
+                    ]
+                  },
+                  {
+                    "FromBool:": true
+                  }
+                ]
+              },
+              {
+                "Set:from:": [
+                  {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "is hide objects"
+                        }
                       ]
-                    },
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                },
-                {
-                  "Set:from:": [
-                    {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "is hide objects"
-                          }
-                        ]
-                      ]
-                    },
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Set:from:": [
-                    "@grouping",
-                    {
-                      "FromRecord:": "@grouping"
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+                    ]
+                  },
+                  {
+                    "FromBool:": true
+                  }
+                ]
+              }
+            ],
+            {
+              "Finally do:": {
+                "Set:from:": [
+                  "@grouping",
+                  {
+                    "FromRecord:": "@grouping"
+                  }
+                ]
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -253,7 +229,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "match groups",
         [
           {
@@ -272,15 +248,17 @@
         {
           "Bool:": "matching"
         },
-        []
+        {
+          "--": "no default rules"
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "match groups",
         [
           {
-            "PatternRule:do:": [
+            "If:do:else:": [
               {
                 "AnyTrue:": [
                   {
@@ -318,125 +296,125 @@
                     }
                   ]
                 }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+              ],
               {
-                "AllTrue:": [
+                "If:do:": [
                   {
-                    "Cmp:is:txt:": [
+                    "AllTrue:": [
                       {
-                        "Variable:dot:": [
-                          "first",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                        "Cmp:is:txt:": [
+                          {
+                            "Variable:dot:": [
+                              "first",
+                              [
+                                {
+                                  "AtField:": "label"
+                                }
+                              ]
+                            ]
+                          },
+                          "equal_to",
+                          {
+                            "Variable:dot:": [
+                              "second",
+                              [
+                                {
+                                  "AtField:": "label"
+                                }
+                              ]
+                            ]
+                          }
                         ]
                       },
-                      "equal_to",
                       {
-                        "Variable:dot:": [
-                          "second",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                        "Cmp:is:txt:": [
+                          {
+                            "Variable:dot:": [
+                              "first",
+                              [
+                                {
+                                  "AtField:": "hide label"
+                                }
+                              ]
+                            ]
+                          },
+                          "equal_to",
+                          {
+                            "Variable:dot:": [
+                              "second",
+                              [
+                                {
+                                  "AtField:": "hide label"
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Cmp:is:txt:": [
+                          {
+                            "Variable:dot:": [
+                              "first",
+                              [
+                                {
+                                  "AtField:": "hide size"
+                                }
+                              ]
+                            ]
+                          },
+                          "equal_to",
+                          {
+                            "Variable:dot:": [
+                              "second",
+                              [
+                                {
+                                  "AtField:": "hide size"
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Cmp:is:txt:": [
+                          {
+                            "Variable:dot:": [
+                              "first",
+                              [
+                                {
+                                  "AtField:": "hide objects"
+                                }
+                              ]
+                            ]
+                          },
+                          "equal_to",
+                          {
+                            "Variable:dot:": [
+                              "second",
+                              [
+                                {
+                                  "AtField:": "hide objects"
+                                }
+                              ]
+                            ]
+                          }
                         ]
                       }
                     ]
                   },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "Variable:dot:": [
-                          "first",
-                          [
-                            {
-                              "AtField:": "hide label"
-                            }
-                          ]
-                        ]
-                      },
-                      "equal_to",
-                      {
-                        "Variable:dot:": [
-                          "second",
-                          [
-                            {
-                              "AtField:": "hide label"
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "Variable:dot:": [
-                          "first",
-                          [
-                            {
-                              "AtField:": "hide size"
-                            }
-                          ]
-                        ]
-                      },
-                      "equal_to",
-                      {
-                        "Variable:dot:": [
-                          "second",
-                          [
-                            {
-                              "AtField:": "hide size"
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "Variable:dot:": [
-                          "first",
-                          [
-                            {
-                              "AtField:": "hide objects"
-                            }
-                          ]
-                        ]
-                      },
-                      "equal_to",
-                      {
-                        "Variable:dot:": [
-                          "second",
-                          [
-                            {
-                              "AtField:": "hide objects"
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@matching",
+                  [
                     {
-                      "FromBool:": true
+                      "Set:from:": [
+                        "@matching",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
                     }
                   ]
-                }
-              ]
+                ]
+              }
             ]
           }
         ]
@@ -447,7 +425,7 @@
     },
     {
       "--": "Adds a grouping to a collated list of groupings, and returns the new list.",
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "collate groups",
         [
           {
@@ -463,19 +441,14 @@
             ]
           }
         ],
-        {
-          "RecordList:kind:": [
-            "groups",
-            "object group"
-          ]
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "collate groups",
         [
+          {
+          	"--": "the returned value is the same variable as the second parameter",
+            "RecordList:kind:": [
+              "groups",
+              "object group"
+            ]
+          },
           {
             "Number:": "idx"
           },
@@ -491,229 +464,222 @@
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
+            "Comment:": "find the index of the matching group"
+          },
+          {
+            "Repeating across:as:do:": [
+              {
+                "FromRecordList:": "@groups"
+              },
+              "el",
               [
                 {
-                  "Comment:": "find the index of the matching group"
-                },
-                {
-                  "Repeating across:as:do:": [
+                  "If:do:": [
                     {
-                      "FromRecordList:": "@groups"
-                    },
-                    "el",
-                    [
-                      {
-                        "If:do:": [
-                          {
-                            "MatchGroups first:second:": [
-                              {
-                                "FromRecord:": "@grouping"
-                              },
-                              {
-                                "FromRecord:": {
-                                  "Variable:dot:": [
-                                    "el",
-                                    [
-                                      {
-                                        "AtField:": "grouping"
-                                      }
-                                    ]
-                                  ]
-                                }
-                              }
-                            ]
-                          },
-                          [
-                            {
-                              "Set:from:": [
-                                "@idx",
-                                {
-                                  "FromNumber:": "@index"
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Comment:": [
-                    "if there wasn't an existing group matching the object's settings:",
-                    "create a new group."
-                  ]
-                },
-                {
-                  "If:do:else:": [
-                    {
-                      "Cmp:is:num:": [
-                        "@idx",
-                        "equal_to",
-                        0
-                      ]
-                    },
-                    [
-                      {
-                        "Push:into:": [
-                          {
-                            "FromText:": {
-                              "Variable:dot:": [
-                                "grouping",
-                                [
-                                  {
-                                    "AtField:": "name"
-                                  }
-                                ]
-                              ]
-                            }
-                          },
-                          "@names"
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          {
+                      "MatchGroups first:second:": [
+                        {
+                          "FromRecord:": "@grouping"
+                        },
+                        {
+                          "FromRecord:": {
                             "Variable:dot:": [
-                              "group",
-                              [
-                                {
-                                  "AtField:": "objects"
-                                }
-                              ]
-                            ]
-                          },
-                          {
-                            "FromTextList:": "@names"
-                          }
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          {
-                            "Variable:dot:": [
-                              "group",
+                              "el",
                               [
                                 {
                                   "AtField:": "grouping"
                                 }
                               ]
                             ]
-                          },
-                          {
-                            "FromRecord:": "@grouping"
                           }
-                        ]
-                      },
-                      {
-                        "Push:into:": [
-                          {
-                            "FromRecord:": "@group"
-                          },
-                          "@groups"
-                        ]
-                      }
-                    ],
-                    {
-                      "Finally do:": [
-                        {
-                          "Comment:": [
-                            "found a matching group?",
-                            "unpack it, add the object name to it, then pack it up again."
-                          ]
-                        },
-                        {
-                          "Set:from:": [
-                            "@group",
-                            {
-                              "FromRecord:": {
-                                "Variable:dot:": [
-                                  "groups",
-                                  [
-                                    {
-                                      "AtIndex:": "@idx"
-                                    }
-                                  ]
-                                ]
-                              }
-                            }
-                          ]
-                        },
-                        {
-                          "Set:from:": [
-                            "@names",
-                            {
-                              "FromTextList:": {
-                                "Variable:dot:": [
-                                  "group",
-                                  [
-                                    {
-                                      "AtField:": "objects"
-                                    }
-                                  ]
-                                ]
-                              }
-                            }
-                          ]
-                        },
-                        {
-                          "Push:into:": [
-                            {
-                              "FromText:": {
-                                "Variable:dot:": [
-                                  "grouping",
-                                  [
-                                    {
-                                      "AtField:": "name"
-                                    }
-                                  ]
-                                ]
-                              }
-                            },
-                            "@names"
-                          ]
-                        },
-                        {
-                          "Set:from:": [
-                            {
-                              "Variable:dot:": [
-                                "group",
-                                [
-                                  {
-                                    "AtField:": "objects"
-                                  }
-                                ]
-                              ]
-                            },
-                            {
-                              "FromTextList:": "@names"
-                            }
-                          ]
-                        },
-                        {
-                          "Set:from:": [
-                            {
-                              "Variable:dot:": [
-                                "groups",
-                                [
-                                  {
-                                    "AtIndex:": "@idx"
-                                  }
-                                ]
-                              ]
-                            },
-                            {
-                              "FromRecord:": "@group"
-                            }
-                          ]
                         }
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Set:from:": [
+                          "@idx",
+                          {
+                            "FromNumber:": "@index"
+                          }
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
+            ]
+          },
+          {
+            "Comment:": [
+              "if there wasn't an existing group matching the object's settings:",
+              "create a new group."
+            ]
+          },
+          {
+            "If:do:else:": [
+              {
+                "Cmp:is:num:": [
+                  "@idx",
+                  "equal_to",
+                  0
+                ]
+              },
+              [
+                {
+                  "Push:into:": [
+                    {
+                      "FromText:": {
+                        "Variable:dot:": [
+                          "grouping",
+                          [
+                            {
+                              "AtField:": "name"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "@names"
+                  ]
+                },
+                {
+                  "Set:from:": [
+                    {
+                      "Variable:dot:": [
+                        "group",
+                        [
+                          {
+                            "AtField:": "objects"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "FromTextList:": "@names"
+                    }
+                  ]
+                },
+                {
+                  "Set:from:": [
+                    {
+                      "Variable:dot:": [
+                        "group",
+                        [
+                          {
+                            "AtField:": "grouping"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "FromRecord:": "@grouping"
+                    }
+                  ]
+                },
+                {
+                  "Push:into:": [
+                    {
+                      "FromRecord:": "@group"
+                    },
+                    "@groups"
+                  ]
+                }
+              ],
+              {
+                "Finally do:": [
+                  {
+                    "Comment:": [
+                      "found a matching group?",
+                      "unpack it, add the object name to it, then pack it up again."
+                    ]
+                  },
+                  {
+                    "Set:from:": [
+                      "@group",
+                      {
+                        "FromRecord:": {
+                          "Variable:dot:": [
+                            "groups",
+                            [
+                              {
+                                "AtIndex:": "@idx"
+                              }
+                            ]
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Set:from:": [
+                      "@names",
+                      {
+                        "FromTextList:": {
+                          "Variable:dot:": [
+                            "group",
+                            [
+                              {
+                                "AtField:": "objects"
+                              }
+                            ]
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Push:into:": [
+                      {
+                        "FromText:": {
+                          "Variable:dot:": [
+                            "grouping",
+                            [
+                              {
+                                "AtField:": "name"
+                              }
+                            ]
+                          ]
+                        }
+                      },
+                      "@names"
+                    ]
+                  },
+                  {
+                    "Set:from:": [
+                      {
+                        "Variable:dot:": [
+                          "group",
+                          [
+                            {
+                              "AtField:": "objects"
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "FromTextList:": "@names"
+                      }
+                    ]
+                  },
+                  {
+                    "Set:from:": [
+                      {
+                        "Variable:dot:": [
+                          "groups",
+                          [
+                            {
+                              "AtIndex:": "@idx"
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "FromRecord:": "@group"
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]

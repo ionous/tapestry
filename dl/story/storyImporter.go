@@ -57,7 +57,8 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 	return
 }
 
-// post-processing hooks
+// post-processing hooks:
+// after the story has been read we run an encoder on it to visit every node.
 func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
 	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{

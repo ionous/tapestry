@@ -73,88 +73,30 @@ func (op *SayMe) Marshal(m jsn.Marshaler) (err error) {
 	return
 }
 
+// the rules defined last run first
 var SayPattern = testpat.Pattern{
 	Name:   "say me",
 	Labels: []string{"num"},
 	Fields: []g.Field{
 		{Name: "num", Affinity: "number", Type: ""},
 	},
-	Rules: []rt.Rule{
-		{Name: "default", Execute: SayIt("Not between 1 and 3.")},
-		{Name: "3b", Filter: &MatchNumber{3}, Execute: SayIt("San!")},
-		{Name: "3a", Filter: &MatchNumber{3}, Execute: SayIt("Three!")},
-		{Name: "2", Filter: &MatchNumber{2}, Execute: SayIt("Two!")},
-		{Name: "1", Filter: &MatchNumber{1}, Execute: SayIt("One!")},
-	},
-}
-
-var SayHelloGoodbye = core.MakeActivity(
-	&core.ChooseBranch{
-		If: B(true),
-		Exe: core.MakeActivity(&core.PrintText{
-			Text: T("hello"),
-		}),
-		Else: &core.ChooseNothingElse{Exe: core.MakeActivity(&core.PrintText{
-			Text: T("goodbye"),
-		}),
+	Rules: []rt.Rule{{
+		Name: "default", Exe: SayIt("Not between 1 and 3."),
+	}, {
+		Name: "3b", Exe: []rt.Execute{&core.ChooseBranch{
+			If: &MatchNumber{3}, Exe: SayIt("San!")},
 		},
-	})
-
-var SayHelloGoodbyeData = `{
-  "type": "activity",
-  "value": {
-    "$EXE": [{
-        "type": "execute",
-        "value": {
-          "type": "choose_action",
-          "value": {
-            "$DO": {
-              "type": "activity",
-              "value": {
-                "$EXE": [{
-                    "type": "execute",
-                    "value": {
-                      "type": "say",
-                      "value": {
-                        "$TEXT": {
-                          "type": "text_eval",
-                          "value": {
-                            "type": "text_value",
-                            "value": {
-                              "$TEXT": {
-                                "type": "text",
-                                "value": "hello"
-                              }}}}}}}]}},
-            "$ELSE": {
-              "type": "brancher",
-              "value": {
-                "type": "choose_nothing_else",
-                "value": {
-                  "$DO": {
-                    "type": "activity",
-                    "value": {
-                      "$EXE": [
-                        {
-                          "type": "execute",
-                          "value": {
-                            "type": "say",
-                            "value": {
-                              "$TEXT": {
-                                "type": "text_eval",
-                                "value": {
-                                  "type": "text_value",
-                                  "value": {
-                                    "$TEXT": {
-                                      "type": "text",
-                                      "value": "goodbye"
-                                    }}}}}}}]}}}}},
-            "$IF": {
-              "type": "bool_eval",
-              "value": {
-                "type": "bool_value",
-                "value": {
-                  "$BOOL": {
-                    "type": "bool",
-                    "value": "$TRUE"
-                  }}}}}}}]}}
-`
+	}, {
+		Name: "3a", Exe: []rt.Execute{&core.ChooseBranch{
+			If: &MatchNumber{3}, Exe: SayIt("Three!")},
+		},
+	}, {
+		Name: "2", Exe: []rt.Execute{&core.ChooseBranch{
+			If: &MatchNumber{2}, Exe: SayIt("Two!")},
+		},
+	}, {
+		Name: "1", Exe: []rt.Execute{&core.ChooseBranch{
+			If: &MatchNumber{1}, Exe: SayIt("One!")},
+		},
+	}},
+}

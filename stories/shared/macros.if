@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Define macro:requires:result:with:": [
+      "Define macro:requires:provides:do:": [
         "inheriting something",
         [
           {
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "Define macro:requires:result:with:": [
+      "Define macro:requires:provides:do:": [
         "carrying something",
         [
           {
@@ -60,7 +60,7 @@
       ]
     },
     {
-      "Define macro:requires:result:with:": [
+      "Define macro:requires:provides:do:": [
         "wearing something",
         [
           {
@@ -110,7 +110,7 @@
     },
     {
       "--": "might be a room or a container",
-      "Define macro:requires:result:with:": [
+      "Define macro:requires:provides:do:": [
         "containing something",
         [
           {
@@ -170,7 +170,7 @@
       ]
     },
     {
-      "Define macro:requires:result:with:": [
+      "Define macro:requires:provides:do:": [
         "supporting something",
         [
           {

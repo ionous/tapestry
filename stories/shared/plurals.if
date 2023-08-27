@@ -14,7 +14,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print plural name",
         [
           {
@@ -27,48 +27,31 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "It says the plural of the target's name. "
-    },
-    {
-      "Extend pattern:withRules:": [
-        "print plural name",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Cmp:is:txt:": [
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "printed plural name"
-                    ]
-                  },
-                  "other_than",
-                  ""
-                ]
-              },
-              [
+        {
+          "--": "It says the plural of the target's name.",
+          "If:do:else:": [
+            {
+              "Cmp:is:txt:": [
                 {
-                  "Say:": "{.obj.printed_plural_name}"
-                }
+                  "Object:field:": [
+                    "@obj",
+                    "printed plural name"
+                  ]
+                },
+                "other_than",
+                ""
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say:": "{print_name:.obj|pluralize!}"
-                }
-              ]
-            ]
-          }
-        ]
+            },
+            {
+              "Say:": "{.obj.printed_plural_name}"
+            },
+            {
+              "Finally do:": {
+                "Say:": "{print_name:.obj|pluralize!}"
+              }
+            }
+          ]
+        }
       ]
     },
     {

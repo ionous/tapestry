@@ -30,7 +30,7 @@
         [
           {
             "Comment:": [
-              "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ",
+              "The story engine automagically calls \"print name\" when the name of an object is used in a template. ",
               "ex. { .someObject }"
             ]
           },
@@ -47,7 +47,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print name",
         [
           {
@@ -60,19 +60,13 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "print name",
         [
           {
             "--": [
               "if the object doesn't exist, use 'print nothing'.",
               "( by default, that will try to write: 'nowhere', 'nobody', or 'nothing'. )"
             ],
-            "PatternRule:do:": [
+            "If:do:else:": [
               {
                 "Not:": {
                   "Is valid:": "@obj"
@@ -84,85 +78,82 @@
                     "FromText:": "@obj"
                   }
                 }
-              ]
-            ]
-          },
-          {
-            "--": "if the object was given an explicit 'printed name', print that.",
-            "PatternRule:do:": [
+              ],
               {
-                "Cmp:is:txt:": [
+                "--": "if the object was given an explicit 'printed name', print that.",
+                "If:do:else:": [
                   {
-                    "Object:field:": [
-                      "@obj",
-                      "printed name"
+                    "Cmp:is:txt:": [
+                      {
+                        "Object:field:": [
+                          "@obj",
+                          "printed name"
+                        ]
+                      },
+                      "other_than",
+                      ""
                     ]
                   },
-                  "other_than",
-                  ""
-                ]
-              },
-              [
-                {
-                  "Print:": {
-                    "Object:field:": [
-                      "@obj",
-                      "printed name"
+                  [
+                    {
+                      "Print:": {
+                        "Object:field:": [
+                          "@obj",
+                          "printed name"
+                        ]
+                      }
+                    },
+                    {
+                      "Mention obj:": {
+                        "FromText:": "@obj"
+                      }
+                    }
+                  ],
+                  {
+                    "--": [
+                      "if the object is publicly named, print the original name of the object;",
+                      "privately named objects skip this rule."
+                    ],
+                    "If:do:else:": [
+                      {
+                        "Object:field:": [
+                          "@obj",
+                          "publicly named"
+                        ]
+                      },
+                      [
+                        {
+                          "Print:": {
+                            "NameOf:": "@obj"
+                          }
+                        },
+                        {
+                          "Mention obj:": {
+                            "FromText:": "@obj"
+                          }
+                        }
+                      ],
+                      {
+                        "--": "if nothing else was printed, print the singular name of the kind: 'room', 'container', etc.",
+                        "Finally do:": [
+                          {
+                            "Print:": {
+                              "Singular of:": {
+                                "KindOf:": "@obj"
+                              }
+                            }
+                          },
+                          {
+                            "Mention obj:": {
+                              "FromText:": "@obj"
+                            }
+                          }
+                        ]
+                      }
                     ]
                   }
-                },
-                {
-                  "Mention obj:": {
-                    "FromText:": "@obj"
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "--": [
-              "if the object is publicly named, print the original name of the object;",
-              "privately named objects skip this rule."
-            ],
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "publicly named"
                 ]
-              },
-              [
-                {
-                  "Print:": {
-                    "NameOf:": "@obj"
-                  }
-                },
-                {
-                  "Mention obj:": {
-                    "FromText:": "@obj"
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "--": "if nothing else was printed, print the singular name of the kind: 'room', 'container', etc.",
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": {
-                    "Singular of:": {
-                      "KindOf:": "@obj"
-                    }
-                  }
-                },
-                {
-                  "Mention obj:": {
-                    "FromText:": "@obj"
-                  }
-                }
-              ]
+              }
             ]
           }
         ]
@@ -172,7 +163,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Print nothing",
         [
           {
@@ -190,63 +181,56 @@
         {
           "Nothing": true
         },
-        []
+        {
+          "Print:": "nothing"
+        }
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:named:do:": [
         "Print nothing",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:nothing:": [
-                  "@obj",
-                  "actors",
-                  true
-                ]
-              },
-              [
-                {
-                  "Print:": "nobody"
-                }
+        "print nowhere rule",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:nothing:": [
+                "@obj",
+                "rooms",
+                true
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:nothing:": [
-                  "@obj",
-                  "rooms",
-                  true
-                ]
-              },
-              [
-                {
-                  "Print:": "nowhere"
-                }
+            },
+            {
+              "Print:": "nowhere"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "Print nothing",
+        "print nobody rule",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:nothing:": [
+                "@obj",
+                "actors",
+                true
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": "nothing"
-                }
-              ]
-            ]
-          }
-        ]
+            },
+            {
+              "Print:": "nobody"
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "mention",
         [
           {
@@ -259,62 +243,54 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "mention",
-        [
-          {
-            "PatternRule:do:": [
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "things"
+              ]
+            },
+            [
               {
-                "KindOf:is:": [
-                  "@obj",
-                  "things"
+                "Set:from:": [
+                  {
+                    "Object:field:": [
+                      "@obj",
+                      "mentioned"
+                    ]
+                  },
+                  {
+                    "FromBool:": true
+                  }
                 ]
               },
-              [
-                {
-                  "Set:from:": [
-                    {
-                      "Object:field:": [
-                        "@obj",
-                        "mentioned"
+              {
+                "Set:from:": [
+                  {
+                    "Object:field:": [
+                      "settings",
+                      "mentions"
+                    ]
+                  },
+                  {
+                    "FromNumber:": {
+                      "Inc:by:": [
+                        1,
+                        {
+                          "Object:field:": [
+                            "settings",
+                            "mentions"
+                          ]
+                        }
                       ]
-                    },
-                    {
-                      "FromBool:": true
                     }
-                  ]
-                },
-                {
-                  "Set:from:": [
-                    {
-                      "Object:field:": [
-                        "settings",
-                        "mentions"
-                      ]
-                    },
-                    {
-                      "FromNumber:": {
-                        "Inc:by:": [
-                          1,
-                          {
-                            "Object:field:": [
-                              "settings",
-                              "mentions"
-                            ]
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]

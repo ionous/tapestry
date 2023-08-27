@@ -97,7 +97,7 @@ func (pen *Pen) AddTestRule(pattern string, rank int, prog string) (err error) {
 		err = e
 	} else {
 		var name any = nil
-		_, err = pen.db.Exec(mdl_rule, domain, kid.id, name, rank, prog, at)
+		_, err = pen.db.Exec(mdl_rule, domain, kid.id, name, rank, 0, 0, 0, prog, at)
 	}
 	return
 }

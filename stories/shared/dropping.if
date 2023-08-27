@@ -131,11 +131,64 @@
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
+        "can reach",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "dropping"
+                  ]
+                },
+                {
+                  "Cmp:is:txt:": [
+                    {
+                      "ParentOf obj:": {
+                        "FromText:": "@actor"
+                      }
+                    },
+                    "equal_to",
+                    {
+                      "LocationOf obj:": {
+                        "FromText:": "@noun"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
+              },
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't drop what's already there",
+                        "{The: .noun|capitalize!} {are: .noun} already here."
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
         "can reach",
         [
           {
-            "PatternRule:do:": [
+            "If:do:": [
               {
                 "AllTrue:": [
                   {
@@ -154,69 +207,19 @@
                   }
                 ]
               },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't drop yourself",
-                          "{We:|capitalize!} lack the dexterity."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
               {
-                "AllTrue:": [
+                "Set:from:": [
+                  "@response",
                   {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "dropping"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "ParentOf obj:": {
-                          "FromText:": "@actor"
-                        }
-                      },
-                      "equal_to",
-                      {
-                        "LocationOf obj:": {
-                          "FromText:": "@noun"
-                        }
-                      }
-                    ]
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't drop yourself",
+                        "{We:|capitalize!} lack the dexterity."
+                      ]
+                    }
                   }
                 ]
-              },
-              [
-                {
-                  "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
-                },
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't drop what's already there",
-                          "{The: .noun|capitalize!} {are: .noun} already here.\""
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
+              }
             ]
           }
         ]

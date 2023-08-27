@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "parser bounds",
         [
           {
@@ -11,103 +11,83 @@
             ]
           }
         ],
-        {
-          "TextList:": "bounds"
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "parser bounds",
         [
           {
-            "TextList:": "queue"
+            "TextList:initially:": [
+              "bounds",
+              {
+                "List ofText:": "@obj"
+              }
+            ]
+          },
+          {
+            "TextList:initially:": [
+              "queue",
+              {
+                "List ofText:": "@obj"
+              }
+            ]
           }
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
+            "Repeating:do:": [
+              {
+                "Cmp:is:num:": [
+                  {
+                    "Len:": {
+                      "FromTextList:": "@queue"
+                    }
+                  },
+                  "greater_than",
+                  0
+                ]
+              },
               [
                 {
-                  "Push:into:atFront:": [
-                    {
-                      "FromText:": "@obj"
-                    },
-                    "@bounds",
-                    true
-                  ]
-                },
-                {
-                  "Push:into:": [
-                    {
-                      "FromText:": "@obj"
-                    },
-                    "@queue"
-                  ]
-                },
-                {
-                  "Repeating:do:": [
-                    {
-                      "Cmp:is:num:": [
-                        {
-                          "Len:": {
-                            "FromTextList:": "@queue"
-                          }
-                        },
-                        "greater_than",
-                        0
-                      ]
-                    },
+                  "Erasing:atFront:as:do:": [
+                    "@queue",
+                    true,
+                    "enc",
                     [
                       {
-                        "Erasing:atFront:as:do:": [
-                          "@queue",
-                          true,
-                          "enc",
+                        "Repeating across:as:do:": [
+                          {
+                            "FromTextList:": {
+                              "ChildrenOf obj:": {
+                                "FromText:": "@enc"
+                              }
+                            }
+                          },
+                          "kid",
                           [
                             {
-                              "Repeating across:as:do:": [
+                              "Push:into:": [
                                 {
-                                  "FromTextList:": {
-                                    "ChildrenOf obj:": {
-                                      "FromText:": "@enc"
+                                  "FromText:": "@kid"
+                                },
+                                "@bounds"
+                              ]
+                            },
+                            {
+                              "If:do:": [
+                                {
+                                  "Not:": {
+                                    "FullyOpaque obj:": {
+                                      "FromText:": "@kid"
                                     }
                                   }
                                 },
-                                "kid",
                                 [
+                                  {
+                                    "Comment:": "add this kid for additional processing"
+                                  },
                                   {
                                     "Push:into:": [
                                       {
                                         "FromText:": "@kid"
                                       },
-                                      "@bounds"
-                                    ]
-                                  },
-                                  {
-                                    "If:do:": [
-                                      {
-                                        "Not:": {
-                                          "FullyOpaque obj:": {
-                                            "FromText:": "@kid"
-                                          }
-                                        }
-                                      },
-                                      [
-                                        {
-                                          "Comment:": "add this kid for additional processing"
-                                        },
-                                        {
-                                          "Push:into:": [
-                                            {
-                                              "FromText:": "@kid"
-                                            },
-                                            "@queue"
-                                          ]
-                                        }
-                                      ]
+                                      "@queue"
                                     ]
                                   }
                                 ]

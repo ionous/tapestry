@@ -66,7 +66,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "is player",
         [
           {
@@ -83,69 +83,72 @@
       ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:named:do:": [
         "is player",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "agents"
-                ]
-              },
-              [
+        "play from agent",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "agents"
+              ]
+            },
+            {
+              "Set:from:": [
+                "@success",
                 {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": {
-                        "Cmp:is:txt:": [
-                          "@obj",
-                          "equal_to",
-                          {
-                            "IdOf:": "player"
-                          }
-                        ]
+                  "FromBool:": {
+                    "Cmp:is:txt:": [
+                      "@obj",
+                      "equal_to",
+                      {
+                        "IdOf:": "player"
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "actors"
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": {
-                        "Cmp:is:txt:": [
-                          "@obj",
-                          "equal_to",
-                          {
-                            "Object:field:": [
-                              "player",
-                              "pawn"
-                            ]
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "is player",
+        "player from actor",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@obj",
+                "actors"
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@success",
+                  {
+                    "FromBool:": {
+                      "Cmp:is:txt:": [
+                        "@obj",
+                        "equal_to",
+                        {
+                          "Object:field:": [
+                            "player",
+                            "pawn"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
@@ -169,15 +172,14 @@
       "--": ""
     },
     {
-        "Interpret alias:asNoun:": [
-          [
-            "me",
-            "myself",
-            "self"
-          ],
-          "player"
-        ]
-      
+      "Interpret alias:asNoun:": [
+        [
+          "me",
+          "myself",
+          "self"
+        ],
+        "player"
+      ]
     }
   ]
 }

@@ -31,7 +31,7 @@ var assignGrouping = testpat.Pattern{
 		{Name: "out", Affinity: affine.Record, Type: "group settings"},
 	},
 	Rules: []rt.Rule{
-		{Execute: []rt.Execute{
+		{Exe: []rt.Execute{
 			&assign.SetValue{
 				Target: core.Variable("out", "name"),
 				Value:  &assign.FromText{Value: core.Variable("in")}},

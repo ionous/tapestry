@@ -3,8 +3,8 @@
     {
       "Comment:": [
         "\"Cloak of Darkness\" has been implemented by most interactive fiction engines.",
-        "It contains a few of the essential features needed for IF games: ",
-        "descriptions of rooms, their contents, and connections; customized user interactions; ",
+        "It contains a few of the essential features needed for IF games:",
+        "descriptions of rooms, their contents, and connections; customized user interactions;",
         "darkness and the control of light; scoring; and more."
       ]
     },
@@ -38,7 +38,7 @@
             "Heading:from:via:and:otherRoom:": [
               "north",
               "the foyer",
-              "the entrance ",
+              "the entrance",
               "arriving_at",
               "nowhere"
             ]

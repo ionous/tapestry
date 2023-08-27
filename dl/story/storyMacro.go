@@ -25,12 +25,9 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			pb := mdl.NewPatternSubtype(name.String(), kindsOf.Macro)
-			addFields(pb, mdl.PatternLocals, op.Locals)
-			addFields(pb, mdl.PatternParameters, op.Params)
-			addOptionalField(pb, mdl.PatternResults, op.Result)
-			pb.AppendRule(mdl.Rule{Prog: assign.Prog{
-				Exe: op.MacroStatements,
-			}})
+			addRequiredFields(pb, op.Requires)
+			addProvidingFields(pb, op.Provides)
+			pb.AppendRule(0, rt.Rule{Exe: op.MacroStatements})
 			err = cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
 			})

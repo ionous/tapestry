@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
-	"github.com/ionous/errutil"
 )
 
 var AllSlats = append(
@@ -31,9 +30,7 @@ func Registry() composer.TypeRegistry {
 }
 
 func CompactDecode(msg json.RawMessage) (ret StoryFile, err error) {
-	errutil.Panic = true
 	err = Decode(&ret, msg, AllSignatures)
-	errutil.Panic = false
 	return
 }
 

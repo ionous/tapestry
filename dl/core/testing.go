@@ -17,3 +17,17 @@ func MakeArgs(as ...assign.Assignment) (ret []assign.Arg) {
 	}
 	return
 }
+
+// for tests
+func MakeRule(filter rt.BoolEval, exe ...rt.Execute) (ret rt.Rule) {
+	if filter == nil {
+		ret.Exe = exe
+	} else {
+		ret = rt.Rule{Exe: []rt.Execute{
+			&ChooseBranch{
+				If:  filter,
+				Exe: exe,
+			}}}
+	}
+	return
+}

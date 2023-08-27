@@ -5,10 +5,10 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/test/debug"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
@@ -33,33 +33,12 @@ func TestFactorial(t *testing.T) {
 				Fields: []g.Field{
 					{Name: "num", Affinity: affine.Number},
 				},
-				Rules: []rt.Rule{{
-					Execute: core.MakeActivity(
-						&assign.SetValue{
-							Target: core.Variable("num"),
-							Value: &assign.FromNumber{Value: &core.ProductOf{
-								A: core.Variable("num"),
-								B: &assign.CallPattern{
-									PatternName: P("factorial"),
-									Arguments: []assign.Arg{{
-										Name: "num",
-										Value: &assign.FromNumber{Value: &core.DiffOf{
-											A: core.Variable("num"),
-											B: I(1),
-										}}}}}}}}),
-				}, {
-					Filter: &core.CompareNum{
-						A:  core.Variable("num"),
-						Is: core.Equal,
-						B:  I(0),
-					},
-					Execute: core.MakeActivity(
-						&assign.SetValue{
-							Target: core.Variable("num"),
-							Value:  &assign.FromNumber{Value: I(1)}},
-					),
-				}}},
-		}}
+				Rules: []rt.Rule{
+					{Exe: debug.FactorialDefaultRule},
+					{Exe: debug.FactorialDecreaseRule},
+				},
+			}}}
+
 	// determine the factorial of the number 3
 	det := assign.CallPattern{
 		PatternName: P("factorial"),

@@ -81,7 +81,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "A",
         [
           {
@@ -94,40 +94,27 @@
         {
           "Nothing": true
         },
-        null
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "A",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "PrintArticle obj:name:": [
-                    {
-                      "FromText:": "@noun"
-                    },
-                    {
-                      "FromText:": {
-                        "Say:": "{.noun}"
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "PrintArticle obj:name:": [
+            {
+            	"--": "pass the noun",
+              "FromText:": "@noun"
+            },
+            {
+              "FromText:": {
+              	"--": "and the name of the noun ( implicitly calls 'print name' ).",
+                "Say:": "{.noun}"
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "The",
         [
           {
@@ -140,36 +127,21 @@
         {
           "Nothing": true
         },
-        null
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "The",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "PrintArticle article:obj:name:": [
-                    {
-                      "FromText:": "the"
-                    },
-                    {
-                      "FromText:": "@noun"
-                    },
-                    {
-                      "FromText:": {
-                        "Say:": "{.noun}"
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
+        {
+          "PrintArticle article:obj:name:": [
+            {
+              "FromText:": "the"
+            },
+            {
+              "FromText:": "@noun"
+            },
+            {
+              "FromText:": {
+                "Say:": "{.noun}"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -178,7 +150,7 @@
         "For example: 'an apple', 'a bear', 'some honey.'",
         "Uses properties about the noun, indefinite articles, vowels, etc. to determine what to say."
       ],
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Print article",
         [
           {
@@ -196,131 +168,107 @@
             ]
           },
           {
-            "--": [
-              "the text to print for the object's name.",
-              "( allowing the caller to specify this is meant to enhance the pattern's flexibility. )"
-            ],
+            "--": "the object's printed name.",
             "Text:": "name"
           }
         ],
         {
           "Nothing": true
         },
-        null
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Print article",
         [
           {
-            "PatternRule:do:": [
+            "If:do:else:": [
               {
                 "Not:": {
                   "Is valid:": "@obj"
                 }
               },
-              [
-                {
-                  "PrintNothing:": {
-                    "FromText:": "@obj"
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
               {
-                "Object:field:": [
-                  "@obj",
-                  "proper named"
-                ]
+                "PrintNothing:": {
+                  "FromText:": "@obj"
+                }
               },
-              [
-                {
-                  "Comment:": "by definition proper named objects have no article."
-                },
-                {
-                  "Say:": "{.name}"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
               {
-                "Cmp:is:txt:": [
-                  "@article",
-                  "other_than",
-                  ""
-                ]
-              },
-              [
-                {
-                  "Say:": "{.article} {.name}"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Cmp:is:txt:": [
+                "If:do:else:": [
                   {
                     "Object:field:": [
                       "@obj",
-                      "indefinite article"
+                      "proper named"
                     ]
                   },
-                  "other_than",
-                  ""
+                  [
+                    {
+                      "Comment:": "by definition proper named objects have no article."
+                    },
+                    {
+                      "Say:": "{.name}"
+                    }
+                  ],
+                  {
+                    "If:do:else:": [
+                      {
+                        "Cmp:is:txt:": [
+                          "@article",
+                          "other_than",
+                          ""
+                        ]
+                      },
+                      {
+                        "Say:": "{.article} {.name}"
+                      },
+                      {
+                        "If:do:else:": [
+                          {
+                            "Cmp:is:txt:": [
+                              {
+                                "Object:field:": [
+                                  "@obj",
+                                  "indefinite article"
+                                ]
+                              },
+                              "other_than",
+                              ""
+                            ]
+                          },
+                          {
+                            "Say:": "{.obj.indefinite_article} {.name}"
+                          },
+                          {
+                            "If:do:else:": [
+                              {
+                                "Object:field:": [
+                                  "@obj",
+                                  "plural named"
+                                ]
+                              },
+                              {
+                                "Say:": "some {.name}"
+                              },
+                              {
+                                "If:do:else:": [
+                                  {
+                                    "StartsWithVowel text:": {
+                                      "FromText:": "@name"
+                                    }
+                                  },
+                                  {
+                                    "Say:": "an {.name}"
+                                  },
+                                  {
+                                    "Finally do:": {
+                                      "Say:": "a {.name}"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 ]
-              },
-              [
-                {
-                  "Say:": "{.obj.indefinite_article} {.name}"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "plural named"
-                ]
-              },
-              [
-                {
-                  "Say:": "some {.name}"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "StartsWithVowel text:": {
-                  "FromText:": "@name"
-                }
-              },
-              [
-                {
-                  "Say:": "an {.name}"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say:": "a {.name}"
-                }
-              ]
+              }
             ]
           }
         ]

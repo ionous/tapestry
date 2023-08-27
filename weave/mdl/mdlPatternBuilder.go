@@ -1,8 +1,8 @@
 package mdl
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
@@ -35,10 +35,8 @@ func (p *Pattern) Parent() string {
 }
 
 type Rule struct {
-	Name   string
-	Target string // TEMP
-	Rank   int
-	Prog   assign.Prog
+	rt.Rule
+	Rank int
 }
 
 func NewPatternBuilder(name string) *PatternBuilder {
@@ -86,12 +84,8 @@ func (b *PatternBuilder) AddParam(fn FieldInfo) {
 
 // defers execution; so no return value.
 // expects target class name to be normalized.
-func (b *PatternBuilder) AppendRule(rs Rule) {
-	b.rules = append(b.rules, rs)
-}
-
-func (b *PatternBuilder) AppendRules(rs []Rule) {
-	b.rules = append(b.rules, rs...)
+func (b *PatternBuilder) AppendRule(rank int, rule rt.Rule) {
+	b.rules = append(b.rules, Rule{Rank: rank, Rule: rule})
 }
 
 func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
@@ -110,12 +104,12 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 			} else {
 				for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
 					rule := pat.rules[pat.ruleOfs]
-					if tgt, e := pen.findOptionalKind(rule.Target); e != nil {
+					if prog, e := marshalprog(rule.Exe); e != nil {
 						err = e
-						break
-					} else if out, e := marshalop(&rule.Prog); e != nil {
-						err = e
-					} else if e := pen.addRule(kid, tgt, rule.Name, rule.Rank, out); e != nil {
+					} else if e := pen.addRule(kid,
+						rule.Name, rule.Rank,
+						rule.Stop, int(rule.Jump),
+						rule.Updates, prog); e != nil {
 						err = e
 						break
 					}

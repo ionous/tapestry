@@ -1,23 +1,62 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print inline objects",
+        {
+          "TextList:": "objs"
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "Print:": {
+            "Commas do:": [
+              {
+                "Repeating across:as:do:": [
+                  {
+                    "FromRecordList:": {
+                      "MakeGroups objs:": {
+                        "FromTextList:": "@objs"
+                      }
+                    }
+                  },
+                  "group",
+                  [
+                    {
+                      "Print:": {
+                        "Spaces do:": [
+                          {
+                            "PrintGroup group:": {
+                              "FromRecord:": "@group"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "print block list",
         [
           {
             "TextList:": "objs"
           }
         ],
-        {
-          "Nothing": true
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print inline objects",
         [
+          {
+            "Nothing": true
+          },
           {
             "RecordList:kind:initially:": [
               "groups",
@@ -30,120 +69,40 @@
             ]
           }
         ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": {
-                    "Commas do:": [
-                      {
-                        "Repeating across:as:do:": [
+        {
+          "Print:": {
+            "Rows do:": [
+              {
+                "Repeating across:as:do:": [
+                  {
+                    "FromRecordList:": "@groups"
+                  },
+                  "group",
+                  [
+                    {
+                      "Print:": {
+                        "Row do:": [
                           {
-                            "FromRecordList:": "@groups"
-                          },
-                          "group",
-                          [
-                            {
-                              "Print:": {
-                                "Spaces do:": [
-                                  {
-                                    "PrintGroup group:": {
-                                      "FromRecord:": "@group"
-                                    }
-                                  }
-                                ]
-                              }
+                            "PrintGroup group:": {
+                              "FromRecord:": "@group"
                             }
-                          ]
+                          }
                         ]
                       }
-                    ]
-                  }
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "print block list",
-        [
-          {
-            "TextList:": "objs"
-          }
-        ],
-        {
-          "Nothing": true
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print block list",
-        [
-          {
-            "RecordList:kind:initially:": [
-              "groups",
-              "object group",
-              {
-                "MakeGroups objs:": {
-                  "FromTextList:": "@objs"
-                }
+                    }
+                  ]
+                ]
               }
             ]
           }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": {
-                    "Rows do:": [
-                      {
-                        "Repeating across:as:do:": [
-                          {
-                            "FromRecordList:": "@groups"
-                          },
-                          "group",
-                          [
-                            {
-                              "Print:": {
-                                "Row do:": [
-                                  {
-                                    "PrintGroup group:": {
-                                      "FromRecord:": "@group"
-                                    }
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            ]
-          }
-        ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print object",
         [
           {
@@ -153,19 +112,10 @@
             ]
           }
         ],
-        {
-          "Nothing": true
-        },
-        []
-      ]
-    },
-    {
-      "Comment:": "Say the object's name ( and some object details. ) "
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print object",
         [
+          {
+            "Nothing": true
+          },
           {
             "Number:initially:": [
               "inline depth",
@@ -185,7 +135,71 @@
         ],
         [
           {
-            "PatternRule:do:": [
+            "Say:": "{.obj}"
+          }
+        ]
+      ]
+    },
+    {
+      "Comment:": "Say the object's name ( and some object details. )"
+    },
+    {
+      "Rule for:do:": [
+        "print object",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:num:": [
+                    "@inline_depth",
+                    "greater_than",
+                    0
+                  ]
+                },
+                {
+                  "Cmp:is:num:": [
+                    "@inline_depth",
+                    "greater_than",
+                    "@block_depth"
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Print:": {
+                  "Spaces do:": [
+                    {
+                      "A noun:": {
+                        "FromText:": "@obj"
+                      }
+                    },
+                    {
+                      "Print:": {
+                        "Brackets do:": [
+                          {
+                            "PrintDetails obj:": {
+                              "FromText:": "@obj"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "print object",
+        [
+          {
+            "If:do:": [
               {
                 "AllTrue:": [
                   {
@@ -212,62 +226,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:num:": [
-                      "@inline_depth",
-                      "greater_than",
-                      0
-                    ]
-                  },
-                  {
-                    "Cmp:is:num:": [
-                      "@inline_depth",
-                      "greater_than",
-                      "@block_depth"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Print:": {
-                    "Spaces do:": [
-                      {
-                        "A noun:": {
-                          "FromText:": "@obj"
-                        }
-                      },
-                      {
-                        "Print:": {
-                          "Brackets do:": [
-                            {
-                              "PrintDetails obj:": {
-                                "FromText:": "@obj"
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Say:": "{.obj}"
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -276,7 +234,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print one block",
         [
           {
@@ -286,16 +244,10 @@
             ]
           }
         ],
-        {
-          "Nothing": true
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print one block",
         [
+          {
+            "Nothing": true
+          },
           {
             "TextList:initially:": [
               "kids",
@@ -325,43 +277,36 @@
         ],
         [
           {
-            "PatternRule:do:": [
-              true,
-              [
+            "Print:": {
+              "Spaces do:": [
                 {
-                  "Print:": {
-                    "Spaces do:": [
-                      {
-                        "A noun:": {
-                          "FromText:": "@obj"
-                        }
-                      },
-                      {
-                        "PrintStatus obj:isEmpty:": [
-                          {
-                            "FromText:": "@obj"
-                          },
-                          {
-                            "FromBool:": {
-                              "Not:": "@has_kids"
-                            }
-                          }
-                        ]
-                      }
-                    ]
+                  "A noun:": {
+                    "FromText:": "@obj"
                   }
                 },
                 {
-                  "If:do:": [
-                    "@has_kids",
-                    [
-                      {
-                        "PrintBlockList objs:": {
-                          "FromTextList:": "@kids"
-                        }
+                  "PrintStatus obj:isEmpty:": [
+                    {
+                      "FromText:": "@obj"
+                    },
+                    {
+                      "FromBool:": {
+                        "Not:": "@has_kids"
                       }
-                    ]
+                    }
                   ]
+                }
+              ]
+            }
+          },
+          {
+            "If:do:": [
+              "@has_kids",
+              [
+                {
+                  "PrintBlockList objs:": {
+                    "FromTextList:": "@kids"
+                  }
                 }
               ]
             ]
@@ -373,8 +318,58 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print inline storage",
+        {
+          "Text:kind:": [
+            "obj",
+            "object"
+          ]
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "If:assuming:do:": [
+            {
+              "Cmp:is:num:": [
+                {
+                  "Len:": {
+                    "FromTextList:": "@kids"
+                  }
+                },
+                "greater_than",
+                0
+              ]
+            },
+            {
+              "Arg:from:": [
+                "kids",
+                {
+                  "FromTextList:": {
+                    "VisibleStorage obj:": {
+                      "FromText:": "@obj"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "Say response:with:": [
+                "inline storage",
+                "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "print details",
         [
           {
             "Text:kind:": [
@@ -383,16 +378,10 @@
             ]
           }
         ],
-        {
-          "Bool:": "success"
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print inline storage",
         [
+          {
+            "Nothing": true
+          },
           {
             "TextList:initially:": [
               "kids",
@@ -404,58 +393,6 @@
             ]
           }
         ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Cmp:is:num:": [
-                  {
-                    "Len:": {
-                      "FromTextList:": "@kids"
-                    }
-                  },
-                  "greater_than",
-                  0
-                ]
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "inline storage",
-                    "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
-                  ]
-                },
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "print details",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          }
-        ],
-        {
-          "Nothing": true
-        },
         []
       ]
     },
@@ -463,174 +400,148 @@
       "Comment:": "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
     },
     {
-      "Extend pattern:provides:withRules:": [
+      "Rule for:do:": [
         "print details",
-        [
-          {
-            "TextList:initially:": [
-              "kids",
-              {
-                "VisibleStorage obj:": {
-                  "FromText:": "@obj"
-                }
-              }
-            ]
-          }
-        ],
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:num:": [
-                      {
-                        "Len:": {
-                          "FromTextList:": "@kids"
-                        }
-                      },
-                      "greater_than",
-                      0
-                    ]
-                  }
-                ]
-              },
-              [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Say response:with:": [
-                    "on which are",
-                    "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                  "KindOf:is:": [
+                    "@obj",
+                    "containers"
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+            },
+            [
               {
-                "AllTrue:": [
-                  {
-                    "KindOf:is:": [
-                      "@obj",
-                      "containers"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "closed"
-                    ]
-                  }
+                "Say response:with:": [
+                  "empty container",
+                  "empty"
                 ]
-              },
-              [
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "print details",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Say response:with:": [
-                    "closed container",
+                  "KindOf:is:": [
+                    "@obj",
+                    "containers"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@obj",
                     "closed"
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
+            },
+            [
               {
-                "AllTrue:": [
-                  {
-                    "KindOf:is:": [
-                      "@obj",
-                      "containers"
-                    ]
-                  }
+                "Say response:with:": [
+                  "closed container",
+                  "closed"
                 ]
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "empty container",
-                    "empty"
-                  ]
-                }
-              ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "Define pattern:requires:result:withRules:": [
-        "print status",
-        [
-          {
-            "Text:kind:": [
-              "obj",
-              "object"
-            ]
-          },
-          {
-            "Bool:": "is empty"
-          }
-        ],
+      "Rule for:do:": [
+        "print details",
         {
-          "Bool:": "skip"
-        },
-        []
-      ]
-    },
-    {
-      "Comment:": "extra information about an object useful for inventorying ( usually appearing inside brackets )"
-    },
-    {
-      "Extend pattern:withRules:": [
-        "print status",
-        [
-          {
-            "PatternRule:do:": [
-              true,
-              [
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Print:": {
-                    "Spaces do:": [
-                      {
-                        "Print:": {
-                          "Brackets do:": [
-                            {
-                              "Print:": {
-                                "Commas do:": [
-                                  {
-                                    "PrintInnerStatus obj:isEmpty:": [
-                                      {
-                                        "FromText:": "@obj"
-                                      },
-                                      {
-                                        "FromBool:": "@is_empty"
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        }
+                  "Cmp:is:num:": [
+                    {
+                      "Len:": {
+                        "FromTextList:": "@kids"
                       }
-                    ]
-                  }
+                    },
+                    "greater_than",
+                    0
+                  ]
                 }
               ]
+            },
+            [
+              {
+                "Say response:with:": [
+                  "on which are",
+                  "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "--": "extra information about an object useful for inventorying ( usually appearing inside brackets )",
+      "Define pattern:requires:provides:do:": [
+        "print status",
+        [
+          {
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          },
+          {
+            "Bool:": "is empty"
+          }
+        ],
+        {
+          "Bool:": "skip"
+        },
+        {
+          "Print:": {
+            "Brackets do:": [
+              {
+                "Print:": {
+                  "Commas do:": [
+                    {
+                      "PrintInnerStatus obj:isEmpty:": [
+                        {
+                          "FromText:": "@obj"
+                        },
+                        {
+                          "FromBool:": "@is_empty"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "--:": " called via \"print status\" to add spacing and comma-and separators",
+      "Define pattern:requires:provides:do:": [
         "print inner status",
         [
           {
@@ -650,113 +561,118 @@
       ]
     },
     {
-      "Comment:": "usually called via \"print status\" to add spacing and comma-and separators "
+      "Rule for:do:": [
+        "print inner status",
+        {
+          "If:do:": [
+            {
+              "Object:field:": [
+                "@obj",
+                "locked"
+              ]
+            },
+            {
+              "Say response:with:": [
+                "locked status",
+                "{if .obj.closed and .obj.locked}locked{end}"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "print inner status",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "lit"
-                ]
-              },
-              [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
                 {
-                  "Say response:with:": [
-                    "lit status",
-                    "providing light"
+                  "Object:field:": [
+                    "@obj",
+                    "transparent"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@obj",
+                    "unopenable"
                   ]
                 }
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "worn"
-                ]
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "worn status",
-                    "being worn"
-                  ]
-                }
+            },
+            {
+              "Say response:with:": [
+                "transparent status",
+                "{if .is_empty}empty{end}"
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "openable"
-                ]
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "openable status",
-                    "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
-                  ]
-                }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "print inner status",
+        {
+          "If:do:": [
+            {
+              "Object:field:": [
+                "@obj",
+                "openable"
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "transparent"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "unopenable"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "transparent status",
-                    "{if .is_empty}empty{end}"
-                  ]
-                }
+            },
+            {
+              "Say response:with:": [
+                "openable status",
+                "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "locked"
-                ]
-              },
-              [
-                {
-                  "Say response:with:": [
-                    "locked status",
-                    "{if .obj.closed and .obj.locked}locked{end}"
-                  ]
-                }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "print inner status",
+        {
+          "If:do:": [
+            {
+              "Object:field:": [
+                "@obj",
+                "worn"
               ]
-            ]
-          }
-        ]
+            },
+            {
+              "Say response:with:": [
+                "worn status",
+                "being worn"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "print inner status",
+        {
+          "If:do:": [
+            {
+              "Object:field:": [
+                "@obj",
+                "lit"
+              ]
+            },
+            {
+              "Say response:with:": [
+                "lit status",
+                "providing light"
+              ]
+            }
+          ]
+        }
       ]
     }
   ]

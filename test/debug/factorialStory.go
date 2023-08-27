@@ -23,23 +23,20 @@ var FactorialStory = &story.StoryFile{
 		},
 		&story.DefinePattern{
 			PatternName: T("factorial"),
-			Params: []story.FieldDefinition{
+			Requires: []story.FieldDefinition{
 				&story.NumberField{
 					Markup: UserComment("just one argument, a number called 'num'"),
 					Name:   "num",
 				}},
-			Result: &story.NumberField{
+			Provides: []story.FieldDefinition{&story.NumberField{
 				Markup: UserComment("the result uses the same variable as the pattern input does"),
 				Name:   "num",
-			},
-			Rules: []story.PatternRule{{
-				Markup: UserComment("rules within a set of rules are evaluated top to bottom"),
-				Guard:  FactorialIsZero,
-				Exe:    FactorialUseOne,
-			}, {
-				Guard: &core.Always{},
-				Exe:   FactorialMulMinusOne,
 			}},
+			Exe: FactorialDefaultRule,
+		},
+		&story.RuleForPattern{
+			PatternName: T("factorial"),
+			Exe:         FactorialDecreaseRule,
 		}},
 }
 
@@ -72,16 +69,23 @@ var FactorialMulMinusOne = []rt.Execute{
 		}}},
 }
 
-// at 0, use the number 1
-var FactorialUseOne = []rt.Execute{
+// override the default behavior:
+var FactorialDecreaseRule = []rt.Execute{
+	&core.ChooseBranch{
+		If: &core.CompareNum{
+			Markup: UserComment("above zero, subtract one"),
+			A:      core.Variable("num"),
+			Is:     core.GreaterThan,
+			B:      F(0)},
+		Exe: FactorialMulMinusOne,
+	},
+}
+
+// the default rule: use the number 1
+var FactorialDefaultRule = []rt.Execute{
 	&assign.SetValue{
+		Markup: UserComment("by default, return one"),
 		Target: core.Variable("num"),
 		Value:  &assign.FromNumber{Value: I(1)},
 	},
 }
-
-var FactorialIsZero = &core.CompareNum{
-	Markup: UserComment("so, when we've reached 0..."),
-	A:      core.Variable("num"),
-	Is:     core.Equal,
-	B:      F(0)}

@@ -26,8 +26,11 @@ type NounInfo struct {
 }
 
 type RuleData struct {
-	Name string
-	Prog []byte // a serialized assign.Prog
+	Name    string
+	Stop    bool
+	Jump    int
+	Updates bool
+	Prog    []byte // a serialized assign.Prog
 }
 
 type Query interface {

@@ -1,7 +1,12 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "--": [
+        "Provides a way to describe a generic group of objects.",
+        "By default, it prints the group size in words, then prints the plural name of the target.",
+        "( It's similar to Inform's \"Printing a number of something.\" )"
+      ],
+      "Define pattern:requires:provides:do:": [
         "print several",
         [
           {
@@ -20,56 +25,36 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Comment:": [
-        "Provides a way to describe a generic group of objects. ",
-        "By default, it prints the group size in words, then prints the plural name of the target. ",
-        "( It's similar to Inform's \"Printing a number of something.\" )"
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "print several",
-        [
+        
           {
-            "PatternRule:do:": [
-              true,
-              [
+            "Print:": {
+              "Spaces do:": [
                 {
-                  "Print:": {
-                    "Spaces do:": [
+                  "Say:": "{print_num_word: .group_size}"
+                },
+                {
+                  "If:do:else:": [
+                    {
+                      "Is empty:": "@label"
+                    },
+                    [
                       {
-                        "Say:": "{print_num_word: .group_size}"
-                      },
-                      {
-                        "If:do:else:": [
-                          {
-                            "Is empty:": "@label"
-                          },
-                          [
-                            {
-                              "Say:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
-                            }
-                          ],
-                          {
-                            "Finally do:": [
-                              {
-                                "Say:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
-                              }
-                            ]
-                          }
-                        ]
+                        "Say:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
                       }
-                    ]
-                  }
+                    ],
+                    {
+                      "Finally do:": [
+                        {
+                          "Say:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
-            ]
+            }
           }
-        ]
+        
       ]
     },
     {
@@ -79,7 +64,7 @@
       "Test:withScene:do:": [
         "print several",
         [
-        	{
+          {
             "Declare:": "The books are things."
           }
         ],

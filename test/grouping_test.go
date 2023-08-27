@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -29,9 +28,9 @@ func TestGrouping(t *testing.T) {
 		Runtime: testutil.Runtime{
 			Kinds:     &kinds,
 			ObjectMap: objs,
-			Stack: []rt.Scope{
+			Chain: scope.MakeChain(
 				scope.FromRecord(locals),
-			},
+			),
 		},
 		Map: testpat.Map{
 			"assign grouping": &assignGrouping,

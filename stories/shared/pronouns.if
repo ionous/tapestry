@@ -1,7 +1,11 @@
 {
   "Tapestry:": [
     {
-      "Define pattern:requires:result:withRules:": [
+      "--:": [
+        "We refers to the player.",
+        "As with all the customizable grammar, we use the plural for the name of pattern."
+      ],
+      "Define pattern:requires:provides:do:": [
         "We",
         [
           {
@@ -11,37 +15,21 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
-    },
-    {
-      "Extend pattern:withRules:": [
-        "We",
-        [
+        
           {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": "you"
-                }
-              ]
-            ]
+            "Print:": "you"
           }
-        ]
+        
       ]
     },
     {
       "--": ""
     },
     {
-      "Comment:": "they, [we], [ey], it. "
+      "Comment:": "they, [we], [ey], it."
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "They",
         [
           {
@@ -54,46 +42,31 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "They",
-        [
-          {
-            "PatternRule:do:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "plural named"
-                ]
-              },
-              [
-                {
-                  "Print:": "they"
-                }
+        {
+          "If:do:else:": [
+            {
+              "Object:field:": [
+                "@noun",
+                "plural named"
               ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
-                  "Print:": "it"
-                }
-              ]
-            ]
-          }
-        ]
+            },
+            {
+              "Print:": "they"
+            },
+            {
+              "Finally do:": {
+                "Print:": "it"
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "Those",
         [
           {
@@ -106,39 +79,24 @@
         {
           "Nothing": true
         },
-        []
-      ]
-    },
-    {
-      "Extend pattern:withRules:": [
-        "Those",
-        [
-          {
-            "PatternRule:do:": [
+        {
+            "If:do:else:": [
               {
                 "Object:field:": [
                   "@noun",
                   "plural named"
                 ]
               },
-              [
-                {
-                  "Print:": "these"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
+              {
+                "Print:": "these"
+              },
+              {
+                "Finally do:": {
                   "Print:": "that"
                 }
-              ]
+              }
             ]
           }
-        ]
       ]
     }
   ]

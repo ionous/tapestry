@@ -181,82 +181,85 @@
       "--": ""
     },
     {
-      "Extend pattern:withRules:": [
+      "Rule for:do:": [
         "can reach",
-        [
-          {
-            "PatternRule:do:": [
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "searching"
+                  ]
+                },
+                {
+                  "FullyOpaque obj:": {
+                    "FromText:": "@noun"
+                  }
+                }
+              ]
+            },
+            [
               {
-                "AllTrue:": [
+                "Set:from:": [
+                  "@response",
                   {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "searching"
-                    ]
-                  },
-                  {
-                    "Not:": {
-                      "ProvidesStorage obj:": {
-                        "FromText:": "@noun"
-                      }
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't search opaque objects",
+                        "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+                      ]
                     }
                   }
                 ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can only search storage",
-                          "{we!|capitalize!} find nothing of interest."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
+              }
             ]
-          },
-          {
-            "PatternRule:do:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "searching"
-                    ]
-                  },
-                  {
-                    "FullyOpaque obj:": {
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "can reach",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@action",
+                    "equal_to",
+                    "searching"
+                  ]
+                },
+                {
+                  "Not:": {
+                    "ProvidesStorage obj:": {
                       "FromText:": "@noun"
                     }
                   }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Say response:with:": [
-                          "can't search opaque objects",
-                          "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
-                        ]
-                      }
-                    }
-                  ]
                 }
               ]
+            },
+            [
+              {
+                "Set:from:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can only search storage",
+                        "{we!|capitalize!} find nothing of interest."
+                      ]
+                    }
+                  }
+                ]
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     }
   ]

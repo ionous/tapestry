@@ -14,13 +14,13 @@
         ]
       ]
     },
-		{
+    {
       "Rule for:do:": [
         "someone inventorying",
         {
           "Say response:with:": [
-          	"someone takes inventory",
-          	"{the:.actor|capitalize!} looks through their possessions."
+            "someone takes inventory",
+            "{the:.actor|capitalize!} looks through their possessions."
           ]
         }
       ]
@@ -40,7 +40,7 @@
       "--": ""
     },
     {
-      "Define pattern:requires:result:withRules:": [
+      "Define pattern:requires:provides:do:": [
         "print inventory",
         [
           {
@@ -50,16 +50,10 @@
             ]
           }
         ],
-        {
-          "Nothing": true
-        },
-        []
-      ]
-    },
-    {
-      "Extend pattern:provides:withRules:": [
-        "print inventory",
         [
+          {
+            "Nothing": true
+          },
           {
             "TextList:initially:": [
               "kids",
@@ -73,7 +67,7 @@
         ],
         [
           {
-            "PatternRule:do:": [
+            "If:do:else:": [
               {
                 "Cmp:is:num:": [
                   {
@@ -97,20 +91,15 @@
                     "FromTextList:": "@kids"
                   }
                 }
-              ]
-            ]
-          },
-          {
-            "PatternRule:do:": [
-              true,
-              [
-                {
+              ],
+              {
+                "Finally do:": {
                   "Say response:with:": [
                     "carrying nothing",
                     "{we:|capitalize!} {are:.actor} carrying nothing."
                   ]
                 }
-              ]
+              }
             ]
           }
         ]

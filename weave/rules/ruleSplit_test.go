@@ -10,10 +10,14 @@ import (
 )
 
 func TestFindTree(t *testing.T) {
-	if n := core.FindBranch(debugTree); n != tree {
+	if n := core.PickTree(branchingBlock); n != tree {
 		t.Fatal("expected to find the branching tree")
-	} else if n := core.FindBranch(impureTree); n != nil {
-		t.Fatal("should 1have rejected the branching tree")
+	} else if n := core.PickTree(blockWithDebugLogs); n != tree {
+		t.Fatal("expected to find the branching tree")
+	} else if n := core.PickTree(blockWithTail); n != nil {
+		t.Fatal("should have rejected the branching tree")
+	} else if n := core.PickTree(blockWithSiblingBranches); n != nil {
+		t.Fatal("should have rejected the sibling branches")
 	}
 }
 
@@ -35,10 +39,24 @@ var terminalTree = &core.ChooseBranch{
 	},
 }
 
-var debugTree = []rt.Execute{
+// a block that consists only of branching statements
+var branchingBlock = []rt.Execute{
+	tree,
+}
+
+// a block with some extraneous debug logs
+var blockWithDebugLogs = []rt.Execute{
 	&debug.DebugLog{},
 	tree,
 	&debug.DebugLog{},
 }
 
-var impureTree = append(debugTree, &core.PrintText{})
+// the branching block but has some non-branching trailing statements
+// ( so its not really a pure set of rules )
+var blockWithTail = append(blockWithDebugLogs, &core.PrintText{})
+
+// two sibling blocks -- these should be considered as non-branching.
+var blockWithSiblingBranches = []rt.Execute{
+	tree,
+	tree,
+}

@@ -31,13 +31,13 @@ func TestMapStrings(t *testing.T) {
 	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Reverse)(nil))
 	locals := kinds.NewRecord("locals") // a record.
 	lt := testpat.Runtime{
-		testpat.Map{
+		Map: testpat.Map{
 			"reverse": &reverseText,
 		},
-		testutil.Runtime{
-			Stack: []rt.Scope{
+		Runtime: testutil.Runtime{
+			Chain: scope.MakeChain(
 				scope.FromRecord(locals),
-			},
+			),
 			Kinds: &kinds,
 		},
 	}
@@ -90,14 +90,14 @@ func TestMapRecords(t *testing.T) {
 	}
 	//
 	lt := testpat.Runtime{
-		testpat.Map{
+		Map: testpat.Map{
 			"reverse": &reverseField,
 		},
-		testutil.Runtime{
+		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Stack: []rt.Scope{
+			Chain: scope.MakeChain(
 				scope.FromRecord(locals),
-			},
+			),
 		},
 	}
 	if e := remapRecords.Execute(&lt); e != nil && !errors.Is(e, rt.NoResult) {
@@ -142,7 +142,7 @@ var reverseText = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(
+		Exe: core.MakeActivity(
 			&assign.SetValue{
 				Target: core.Variable("out"),
 				Value:  &assign.FromText{Value: &core.MakeReversed{Text: core.Variable("in")}}},
@@ -156,7 +156,7 @@ var reverseField = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(
+		Exe: core.MakeActivity(
 			&assign.SetValue{
 				Target: core.Variable("out", "name"),
 				Value:  &assign.FromText{Value: &core.MakeReversed{Text: core.Variable("in", "name")}}},
