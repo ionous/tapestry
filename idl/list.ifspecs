@@ -409,7 +409,7 @@
             "Combine all of the values in a list into a single value.",
             "The designated pattern is called with two parameters:",
             "  1. each element of the list; and,",
-            "  2. the value being combined."
+            "  2. the value being combined.",
             "And, that pattern is expected to return the newly updated value."
           ],
           "Spec:slots:with flow:": [
