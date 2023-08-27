@@ -21,6 +21,10 @@ func (c ChunkWriter) WriteString(s string) (ret int, err error) {
 	return WriteString(c.Writer, s)
 }
 
+func (c ChunkWriter) Close() error {
+	return xClose(c.Writer)
+}
+
 // WriteString helper mimics io.WriteString, invoking w.WriteString if it implements it
 // otherwise falling back to WriteRune, if it implements it or Write otherwise.
 // using io.WriteString is generally enough because the formatting layers use ChunkWriter which use this.

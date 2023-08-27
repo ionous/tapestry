@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
-	"github.com/ionous/errutil"
 )
 
 // Execute writes text to the runtime's current writer.
@@ -19,9 +18,10 @@ func (op *PrintText) Execute(run rt.Runtime) (err error) {
 	return
 }
 
+// collect all text written during this function and return it as a value
 func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	var buf bytes.Buffer
-	if v, e := writeSpan(run, &buf, op.Exe, &buf); e != nil {
+	if v, e := writeSpan(run, &buf, op.Exe, &writer.ChunkWriter{Writer: &buf}); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -30,8 +30,8 @@ func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
-	span := print.NewSpanner() // separate writes with spaces
-	if v, e := writeSpan(run, span, op.Exe, span.ChunkOutput()); e != nil {
+	var span print.Spanner
+	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -41,7 +41,7 @@ func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.Parens()
-	if v, e := writeSpan(run, span, op.Exe, span.ChunkOutput()); e != nil {
+	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -50,8 +50,8 @@ func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
-	span := print.NewSpanner() // separate punctuation with spaces
-	if v, e := writeSpan(run, span, op.Exe, print.Slash(span.ChunkOutput())); e != nil {
+	var span print.Spanner // separate punctuation with spaces
+	if v, e := writeSpan(run, &span, op.Exe, print.Slash(span.ChunkOutput())); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -60,8 +60,8 @@ func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *CommaText) GetText(run rt.Runtime) (ret g.Value, err error) {
-	span := print.NewSpanner() // separate punctuation with spaces
-	if v, e := writeSpan(run, span, op.Exe, print.AndSeparator(span.ChunkOutput())); e != nil {
+	var span print.Spanner // separate punctuation with spaces
+	if v, e := writeSpan(run, &span, op.Exe, print.AndSeparator(span.ChunkOutput())); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -71,43 +71,21 @@ func (op *CommaText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 type stringer interface{ String() string }
 
-// s - access to what was written
-// op - for reporting errors
-// act - activity that presumably generates some output
-// w - output target with any needed filters, etc.
-// returns the output of "s" as a value
-func writeSpan(run rt.Runtime, s stringer, act []rt.Execute, w writer.Output) (ret g.Value, err error) {
+func writeSpan(run rt.Runtime, buf stringer, act []rt.Execute, out writer.OutputCloser) (ret g.Value, err error) {
 	if len(act) == 0 {
 		ret = g.Empty
 	} else {
-		ret, err = WriteSpan(run, w, s, func() error {
-			return safe.RunAll(run, act)
-		})
-	}
-	return
-}
-
-func WriteSpan(run rt.Runtime, w writer.Output, s stringer, cb func() error) (ret g.Value, err error) {
-	was := run.SetWriter(w)
-	ex := cb()
-	run.SetWriter(was)
-	if e := errutil.Append(ex, writer.Close(w)); e != nil {
-		err = e
-	} else {
-		if res := s.String(); len(res) > 0 {
-			ret = g.StringOf(res)
-		} else if hack := safe.HackTillTemplatesCanEvaluatePatternTypes; hack != nil {
-			// we didn't accumulate any text during execution
-			// but perhaps we ran a pattern that returned text.
-			// to get rid of this, we'd examine (at runtime or compile time) the futures calls
-			// and switch on execute patterns vs text patterns
-			// an example is { .Lantern } which says the name
-			// vs. { pluralize: .Lantern } which returns the pluralized name.
-			ret = hack
-			safe.HackTillTemplatesCanEvaluatePatternTypes = nil
+		prev := run.SetWriter(out)
+		if e := safe.RunAll(run, act); e != nil {
+			err = e
+		} else if e := out.Close(); e != nil {
+			err = e
+		} else if str := buf.String(); len(str) > 0 {
+			ret = g.StringOf(str)
 		} else {
-			ret = g.Empty // if the res was empty, it might have intentionally been empty
+			ret = safe.GetTemplateText()
 		}
+		run.SetWriter(prev)
 	}
 	return
 }

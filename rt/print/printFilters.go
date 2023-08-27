@@ -10,12 +10,12 @@ import (
 
 // Parens buffers writer.Output, grouping a stream of writes.
 // Close adds the closing paren.
-func Parens() *BracketSpanner {
-	return &BracketSpanner{open: "(", close: ")"}
+func Parens() BracketSpanner {
+	return BracketSpanner{open: "(", close: ")"}
 }
 
-func Brackets(open, close string) *BracketSpanner {
-	return &BracketSpanner{open: open, close: close}
+func Brackets(open, close string) BracketSpanner {
+	return BracketSpanner{open: open, close: close}
 }
 
 type BracketSpanner struct {
@@ -49,7 +49,7 @@ func (p *BracketSpanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 }
 
 // Capitalize filters writer.Output, capitalizing the first string.
-func Capitalize(out writer.Output) writer.Output {
+func Capitalize(out writer.Output) writer.ChunkOutput {
 	f := &Filter{
 		First: func(c writer.Chunk) (int, error) {
 			cap := lang.Capitalize(c.String())
@@ -63,7 +63,7 @@ func Capitalize(out writer.Output) writer.Output {
 }
 
 // TitleCase filters writer.Output, capitalizing every write.
-func TitleCase(out writer.Output) writer.Output {
+func TitleCase(out writer.Output) writer.ChunkOutput {
 	f := &Filter{
 		Rest: func(c writer.Chunk) (int, error) {
 			cap := lang.Capitalize(c.String())
@@ -74,7 +74,7 @@ func TitleCase(out writer.Output) writer.Output {
 }
 
 // Lowercase filters writer.Output, lowering every string.
-func Lowercase(out writer.Output) writer.Output {
+func Lowercase(out writer.Output) writer.ChunkOutput {
 	f := &Filter{
 		Rest: func(c writer.Chunk) (int, error) {
 			cap := strings.ToLower(c.String())
@@ -85,7 +85,7 @@ func Lowercase(out writer.Output) writer.Output {
 }
 
 // Slash filters writer.Output, separating writes with a slash.
-func Slash(out writer.Output) writer.Output {
+func Slash(out writer.Output) writer.ChunkOutput {
 	f := &Filter{
 		First: func(c writer.Chunk) (int, error) {
 			return c.WriteTo(out)

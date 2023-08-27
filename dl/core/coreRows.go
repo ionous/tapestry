@@ -11,7 +11,7 @@ import (
 func (op *Row) GetText(run rt.Runtime) (ret g.Value, err error) {
 	// use brackets to establish a span inside the li
 	span := print.Brackets("<li>", "</li>")
-	if v, e := writeSpan(run, span, op.Exe, span.ChunkOutput()); e != nil {
+	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v

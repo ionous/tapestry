@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -27,15 +27,25 @@ func (op *RenderPattern) GetNumber(run rt.Runtime) (g.Value, error) {
 // expressions are text patterns... so for now adapt via text
 // ideally could generate the buffer based on the pattern type at assembly type
 func (op *RenderPattern) GetText(run rt.Runtime) (ret g.Value, err error) {
-	var buf bytes.Buffer
-	if v, e := core.WriteSpan(run, &buf, &buf, func() error {
-		_, e := op.render(run, affine.None)
-		return e
-	}); e != nil {
+	if v, e := op.getText(run); e != nil {
 		err = CmdError(op, e)
 	} else {
 		ret = v
 	}
+	return
+}
+
+func (op *RenderPattern) getText(run rt.Runtime) (ret g.Value, err error) {
+	var buf bytes.Buffer
+	prev := run.SetWriter(&buf)
+	if _, e := op.render(run, affine.None); e != nil {
+		err = e
+	} else if str := buf.String(); len(str) > 0 {
+		ret = g.StringOf(str)
+	} else {
+		ret = safe.GetTemplateText()
+	}
+	run.SetWriter(prev)
 	return
 }
 
