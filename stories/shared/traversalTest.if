@@ -76,6 +76,23 @@
         ],
         [
           {
+            "Print:": {
+              "DirectionThrough room:door:": [
+                {
+                  "FromText:": "foyer"
+                },
+                {
+                  "FromText:": "curtain"
+                }
+              ]
+            }
+          },
+          {
+            "Expect output:": [
+              "south"
+            ]
+          },
+          {
             "Looking actor:": {
               "FromText:": {
                 "Object:field:": [

@@ -89,6 +89,72 @@
           }
         ]
       ]
+    },
+    {
+      "--": "given a door, find the named direction it represents, if any.",
+      "Define pattern:requires:provides:do:": [
+        "direction through",
+        [
+          {
+            "Text:kind:": [
+              "room",
+              "room"
+            ]
+          },
+          {
+            "Text:kind:": [
+              "door",
+              "door"
+            ]
+          }
+        ],
+        {
+          "--": "one of the fields of compass",
+          "Text:": "direction"
+        },
+        {
+          "Repeating across:as:do:": [
+            {
+              "FromTextList:": {
+                "Fields of:": "compasses"
+              }
+            },
+            "compass dir",
+            {
+              "If:do:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@door",
+                    "equal_to",
+                    {
+                      "Object:field:dot:": [
+                        "@room",
+                        "compass",
+                        {
+                          "AtField:": "@compass dir"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                [
+                  {
+                    "Set:from:": [
+                      "@direction",
+                      {
+                        "FromText:": "@compass dir"
+                      }
+                    ]
+                  },
+                  {
+                    "Break": true
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

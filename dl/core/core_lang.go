@@ -2462,6 +2462,109 @@ func During_Marshal(m jsn.Marshaler, val *During) (err error) {
 	return
 }
 
+// FieldsOfKind List of the field names of a kind.
+type FieldsOfKind struct {
+	KindName rt.TextEval `if:"label=of"`
+	Markup   map[string]any
+}
+
+// User implemented slots:
+var _ rt.TextListEval = (*FieldsOfKind)(nil)
+
+func (*FieldsOfKind) Compose() composer.Spec {
+	return composer.Spec{
+		Name: FieldsOfKind_Type,
+		Uses: composer.Type_Flow,
+		Lede: "fields",
+	}
+}
+
+const FieldsOfKind_Type = "fields_of_kind"
+const FieldsOfKind_Field_KindName = "$KIND_NAME"
+
+func (op *FieldsOfKind) Marshal(m jsn.Marshaler) error {
+	return FieldsOfKind_Marshal(m, op)
+}
+
+type FieldsOfKind_Slice []FieldsOfKind
+
+func (op *FieldsOfKind_Slice) GetType() string { return FieldsOfKind_Type }
+
+func (op *FieldsOfKind_Slice) Marshal(m jsn.Marshaler) error {
+	return FieldsOfKind_Repeats_Marshal(m, (*[]FieldsOfKind)(op))
+}
+
+func (op *FieldsOfKind_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *FieldsOfKind_Slice) SetSize(cnt int) {
+	var els []FieldsOfKind
+	if cnt >= 0 {
+		els = make(FieldsOfKind_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *FieldsOfKind_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return FieldsOfKind_Marshal(m, &(*op)[i])
+}
+
+func FieldsOfKind_Repeats_Marshal(m jsn.Marshaler, vals *[]FieldsOfKind) error {
+	return jsn.RepeatBlock(m, (*FieldsOfKind_Slice)(vals))
+}
+
+func FieldsOfKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FieldsOfKind) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = FieldsOfKind_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type FieldsOfKind_Flow struct{ ptr *FieldsOfKind }
+
+func (n FieldsOfKind_Flow) GetType() string      { return FieldsOfKind_Type }
+func (n FieldsOfKind_Flow) GetLede() string      { return "fields" }
+func (n FieldsOfKind_Flow) GetFlow() interface{} { return n.ptr }
+func (n FieldsOfKind_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FieldsOfKind); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func FieldsOfKind_Optional_Marshal(m jsn.Marshaler, pv **FieldsOfKind) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = FieldsOfKind_Marshal(m, *pv)
+	} else if !enc {
+		var v FieldsOfKind
+		if err = FieldsOfKind_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func FieldsOfKind_Marshal(m jsn.Marshaler, val *FieldsOfKind) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(FieldsOfKind_Flow{val}); err == nil {
+		e0 := m.MarshalKey("of", FieldsOfKind_Field_KindName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.KindName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", FieldsOfKind_Field_KindName))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // HasDominion
 type HasDominion struct {
 	Name   string `if:"label=_,type=text"`
@@ -6611,6 +6714,7 @@ var Slats = []composer.Composer{
 	(*Comparison)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
+	(*FieldsOfKind)(nil),
 	(*HasDominion)(nil),
 	(*IdOf)(nil),
 	(*Includes)(nil),
@@ -6676,6 +6780,7 @@ var Signatures = map[uint64]interface{}{
 	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
 	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
+	2224842870997259213:  (*FieldsOfKind)(nil),      /* text_list_eval=Fields of: */
 	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
 	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */

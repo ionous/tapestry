@@ -615,6 +615,26 @@
             }
           ]
         },
+            {
+          "--": "List of the field names of a kind.",
+          "Spec:slots:groups:with flow:": [
+            "fields_of_kind",
+            "text_list_eval",
+            "kinds",
+            {
+              "Flow:uses:": [
+              	"fields",
+                {
+                  "Term:name:type:": [
+                    "of",
+                    "kind_name",
+                    "text_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         {
           "Spec:slots:groups:with flow:": [
             "has_dominion",

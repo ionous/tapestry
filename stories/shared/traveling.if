@@ -5,11 +5,11 @@
         "Traveling takes one argument: the door to travel through.",
         "Future: allow directions too"
       ],
-      "Define action:requires:provides:": [
+      "Define action:requires:": [
         "traveling",
         [
           {
-            "--": "the actor traveling s( ex. the player. )",
+            "--": "the actor traveling somewhere ( ex. the player. )",
             "Text:kind:": [
               "actor",
               "actor"
@@ -22,10 +22,15 @@
               "door"
             ]
           }
-        ],
+        ]
+      ]
+    },
+    {
+      "Rule for:provides:": [
+        "traveling",
         [
           {
-            "--": "Determine the destination from the door.",
+            "--": "Extract the destination from the door.",
             "Text:kind:initially:": [
               "destination",
               "room",
@@ -33,6 +38,26 @@
                 "Object:field:": [
                   "@noun",
                   "destination"
+                ]
+              }
+            ]
+          },
+          {
+            "--": "Determine the direction, if any, traveling through the door.",
+            "Text:initially:": [
+              "direction",
+              {
+                "DirectionThrough room:door:": [
+                  {
+                    "FromText:": {
+                      "ParentOf:": {
+                        "FromText:": "@actor"
+                      }
+                    }
+                  },
+                  {
+                    "FromText:": "@noun"
+                  }
                 ]
               }
             ]

@@ -212,7 +212,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	// fix: pre-transform field
 	if field := lang.Normalize(rawField); len(field) == 0 {
-		err = errutil.Fmt("requested an empty %q", target)
+		err = errutil.Fmt("requested an empty field of %q", target)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story
 		if obj, e := run.getObjectInfo(target); e != nil {
@@ -226,23 +226,6 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		default:
 			err = errutil.Fmt("GetField: unknown target %q (with field %q)", target, rawField)
 			// not one of the predefined options?
-		case meta.Response:
-			if flag, e := run.options.Option(meta.PrintResponseNames); e != nil {
-				err = e
-			} else if flag.Affinity() == affine.Bool && flag.Bool() {
-				// fix? hen response are printed inline, they get munged together
-				// manually add some spacing.
-				ret = g.StringOf(field + ". ")
-			} else if k, e := run.getKind(kindsOf.Response.String()); e != nil {
-				err = errutil.New("couldnt find response table", e)
-			} else if len(k.init) == 0 {
-				err = errutil.New("response table was empty")
-			} else if i := k.FieldIndex(field); i < 0 {
-				// ^ fix: this is an in-order search; have a custom cached lookup for responses?
-				err = g.UnknownResponse(rawField)
-			} else {
-				ret, err = k.init[i].GetAssignedValue(run)
-			}
 
 		case meta.Counter:
 			ret, err = run.getCounter(field)
@@ -252,6 +235,18 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 				err = run.reportError(e)
 			} else {
 				ret = g.BoolOf(b)
+			}
+
+		case meta.FieldsOfKind:
+			if k, e := run.getKind(field); e != nil {
+				err = run.reportError(e)
+			} else {
+				var fs []string
+				for i, cnt := 0, k.NumField(); i < cnt; i++ {
+					f := k.Field(i)
+					fs = append(fs, f.Name)
+				}
+				ret = g.StringsOf(fs)
 			}
 
 		case meta.ObjectId:
@@ -315,6 +310,23 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			b := run.currentPatterns.runningPattern(field)
 			ret = g.IntOf(b)
 
+		case meta.Response:
+			if flag, e := run.options.Option(meta.PrintResponseNames); e != nil {
+				err = e
+			} else if flag.Affinity() == affine.Bool && flag.Bool() {
+				// fix? hen response are printed inline, they get munged together
+				// manually add some spacing.
+				ret = g.StringOf(field + ". ")
+			} else if k, e := run.getKind(kindsOf.Response.String()); e != nil {
+				err = errutil.New("couldnt find response table", e)
+			} else if len(k.init) == 0 {
+				err = errutil.New("response table was empty")
+			} else if i := k.FieldIndex(field); i < 0 {
+				// ^ fix: this is an in-order search; have a custom cached lookup for responses?
+				err = g.UnknownResponse(rawField)
+			} else {
+				ret, err = k.init[i].GetAssignedValue(run)
+			}
 		case meta.Variables:
 			ret, err = run.scope.FieldByName(field)
 		}
