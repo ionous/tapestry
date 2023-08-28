@@ -107,7 +107,7 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 			dec.customSlot(dec, slot, msg)
 			dec.Error(e)
 		} else if op, e := ReadOp(msg); e != nil {
-			dec.Error(e)
+			dec.Error(errutil.Fmt("couldnt read op %s %w", msg, e))
 		} else if v, e := dec.NewFromSignature(Hash(op.Sig, slot.GetType())); e != nil {
 			dec.Error(e)
 		} else {
