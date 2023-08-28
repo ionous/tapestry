@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "Test:withScene:do:": [
-        "countOf",
+        "x countOf",
         [
           {
             "Define pattern:requires:provides:do:": [
