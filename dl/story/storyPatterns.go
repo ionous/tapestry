@@ -81,14 +81,17 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 		if act, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {
-			act := lang.Normalize(act.String())
-			for i := 0; i < event.NumPhases; i++ {
-				phase := event.Phase(i)
-				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
-				addFields(pb, mdl.PatternLocals, op.Provides) // rules add more locals, never results
-				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
-					return w.Pin().AddPattern(pb.Pattern)
-				})
+			if k, e := w.Pin().GetKind(lang.Normalize(act.String())); e != nil {
+				err = e // ^ verify the kind exists
+			} else {
+				for i := 0; i < event.NumPhases; i++ {
+					phase := event.Phase(i)
+					pb := mdl.NewPatternSubtype(phase.PatternName(k), phase.PatternKind())
+					addFields(pb, mdl.PatternLocals, op.Provides) // rules add more locals, never results
+					err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+						return w.Pin().AddPattern(pb.Pattern)
+					})
+				}
 			}
 		}
 		return
@@ -189,9 +192,10 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 	} else {
 		pat, rank := prefix.Name, prefix.Rank
 		if k, e := w.GetKindByName(pat); e != nil {
-			err = errutil.New("finding base pattern", e)
+			err = errutil.Fmt("finding base pattern %q %q %s", pat, rule, e)
 		} else if canFilterActor := rules.CanFilterActor(k); prefix.ExcludesPlayer && !canFilterActor {
-			err = errutil.New("only actor events can filter by actor")
+			rules.CanFilterActor(k)
+			err = errutil.Fmt("only actor events can filter by actor for pattern %q rule %q", pat, rule)
 		} else {
 			updates := rules.DoesUpdate(exe)
 			// term := rules.DoesTerminate(exe)
