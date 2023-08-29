@@ -60,7 +60,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 func (d *Domain) schedule(at string, when Phase, what ScheduledCallback) (err error) {
 	if d.currPhase < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
-	} else if d.currPhase <= when {
+	} else if d.currPhase < when {
 		if d.cat.SuspendSchedule > 0 {
 			err = errutil.Fmt("cant process %s in %s, scheduling is suspended", when, d.currPhase)
 		} else {
