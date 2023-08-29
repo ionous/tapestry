@@ -4,117 +4,95 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 type FieldDefinition interface {
-	FieldInfo() mdl.FieldInfo
+	FieldInfo(rt.Runtime) (mdl.FieldInfo, error)
 }
 
-func (op *NothingField) FieldInfo() (_ mdl.FieldInfo) {
+func (op *NothingField) FieldInfo(run rt.Runtime) (_ mdl.FieldInfo, _ error) {
 	return
 }
 
-func (op *AspectField) FieldInfo() mdl.FieldInfo {
+func (op *AspectField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	// inform gives these the name "<noun> condition"
 	// while tapestry relies on the name and class of the aspect to be the same.
 	// we could only do that with an after the fact reduction, and with some additional mdl data.
 	// ( ex. in case the same aspect is assigned twice, or twice at difference depths )
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Aspect),
-		Class:    lang.Normalize(op.Aspect),
-		Affinity: affine.Text,
-	}
+	return defineField(run, op.Aspect, op.Aspect, affine.Text, nil)
 }
 
-func (op *BoolField) FieldInfo() mdl.FieldInfo {
+func (op *BoolField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromBool{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.Bool,
-		Init:     init,
-	}
+	return defineField(run, op.Name, op.Type, affine.Bool, init)
 }
 
-func (op *NumberField) FieldInfo() mdl.FieldInfo {
+func (op *NumberField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumber{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.Number,
-		Init:     init,
-	}
+	return defineField(run, op.Name, op.Type, affine.Number, init)
 }
 
-func (op *TextField) FieldInfo() mdl.FieldInfo {
+func (op *TextField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromText{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.Text,
-		Init:     init,
-	}
-
+	return defineField(run, op.Name, op.Type, affine.Text, init)
 }
 
-func (op *RecordField) FieldInfo() mdl.FieldInfo {
+func (op *RecordField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecord{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.Record,
-		Init:     init,
-	}
+	return defineField(run, op.Name, op.Type, affine.Record, init)
 }
 
-func (op *NumListField) FieldInfo() mdl.FieldInfo {
+func (op *NumListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumList{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.NumList,
-		Init:     init,
-	}
+	return defineField(run, op.Name, op.Type, affine.NumList, init)
 }
 
-func (op *TextListField) FieldInfo() mdl.FieldInfo {
+func (op *TextListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromTextList{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.TextList,
-		Init:     init,
-	}
+	return defineField(run, op.Name, op.Type, affine.TextList, init)
 }
 
-func (op *RecordListField) FieldInfo() mdl.FieldInfo {
+func (op *RecordListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecordList{Value: i}
 	}
-	return mdl.FieldInfo{
-		Name:     lang.Normalize(op.Name),
-		Class:    lang.Normalize(op.Type),
-		Affinity: affine.RecordList,
-		Init:     init,
+	return defineField(run, op.Name, op.Type, affine.RecordList, init)
+}
+
+func defineField(run rt.Runtime, name, cls rt.TextEval, aff affine.Affinity, init rt.Assignment) (ret mdl.FieldInfo, err error) {
+	if name, e := safe.GetText(run, name); e != nil {
+		err = e
+	} else if cls, e := safe.GetOptionalText(run, cls, ""); e != nil {
+		err = e
+	} else {
+		ret = mdl.FieldInfo{
+			Name:     lang.Normalize(name.String()),
+			Class:    lang.Normalize(cls.String()),
+			Affinity: aff,
+			Init:     init,
+		}
 	}
+	return
 }

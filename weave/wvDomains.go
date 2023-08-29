@@ -61,10 +61,14 @@ func (d *Domain) schedule(at string, when Phase, what ScheduledCallback) (err er
 	if d.currPhase < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
 	} else if d.currPhase <= when {
-		d.scheduling[when] = append(d.scheduling[when], memento{what, at, when, nil})
+		if d.cat.SuspendSchedule > 0 {
+			err = errutil.Fmt("cant process %s in %s, scheduling is suspended", when, d.currPhase)
+		} else {
+			d.scheduling[when] = append(d.scheduling[when], memento{what, at, when, nil})
+		}
 	} else {
 		w := Weaver{Catalog: d.cat, Domain: d.name, Phase: d.currPhase, Runtime: d.cat.run}
-		if e := what(&w); errors.Is(e, mdl.Missing) {
+		if e := what(&w); errors.Is(e, mdl.Missing) && (d.cat.SuspendSchedule == 0) {
 			d.suspended = append(d.suspended, memento{what, at, when, e})
 		} else {
 			err = e

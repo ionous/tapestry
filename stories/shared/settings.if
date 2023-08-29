@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Declare:": "Settings are kinds of object."
+      "Declare:": "Settings are kinds of kinds."
     },
     {
       "--": "Settings is a global singleton for controlling various gameplay options.",

@@ -25,12 +25,16 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			pb := mdl.NewPatternSubtype(name.String(), kindsOf.Macro)
-			addRequiredFields(pb, op.Requires)
-			addProvidingFields(pb, op.Provides)
-			pb.AppendRule(0, rt.Rule{Exe: op.MacroStatements})
-			err = cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) error {
-				return w.Pin().AddPattern(pb.Pattern)
-			})
+			if e := addRequiredFields(w, pb, op.Requires); e != nil {
+				err = e
+			} else if e := addProvidingFields(w, pb, op.Provides); e != nil {
+				err = e
+			} else {
+				pb.AppendRule(0, rt.Rule{Exe: op.MacroStatements})
+				err = cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) error {
+					return w.Pin().AddPattern(pb.Pattern)
+				})
+			}
 		}
 		return
 	})
@@ -38,8 +42,11 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
 func (op *CallMacro) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireNouns, func(w *weave.Weaver) error {
-		return op.Execute(w)
+	return cat.Schedule(weave.RequireNouns, func(w *weave.Weaver) (err error) {
+		cat.SuspendSchedule++
+		err = op.Execute(w)
+		cat.SuspendSchedule--
+		return
 	})
 }
 

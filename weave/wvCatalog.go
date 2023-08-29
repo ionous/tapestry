@@ -20,6 +20,8 @@ type Catalog struct {
 	*mdl.Modeler     // db output
 	Env          Env // generic storage for command processing
 
+	SuspendSchedule int // hack until promises are available
+
 	// cleanup? seems redundant to have three views of the same domain
 	domains        map[string]*Domain
 	processing     DomainStack

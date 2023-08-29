@@ -211,7 +211,7 @@
                     "Term:name:type:": [
                       "_",
                       "aspect",
-                      "text"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -232,14 +232,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },
@@ -530,20 +530,20 @@
             "language",
             {
               "Flow:phrase:uses:": [
-                "make",
+                "define",
                 "The opposite of {$word} is the {$opposite}.",
                 [
                   {
                     "Term:name:type:": [
                       "_",
                       "word",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:type:": [
                       "opposite",
-                      "text"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -565,20 +565,20 @@
             "language",
             {
               "Flow:phrase:uses:": [
-                "make",
+                "define",
                 "The plural of {$singular} is {$plural}.",
                 [
                   {
                     "Term:name:type:": [
                       "_",
                       "singular",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:type:": [
                       "plural",
-                      "text"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -898,14 +898,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },
@@ -934,14 +934,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },
@@ -1379,14 +1379,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },
@@ -1415,14 +1415,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },
@@ -1709,14 +1709,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },
@@ -1745,14 +1745,14 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "kind",
                       "type",
-                      "text",
+                      "text_eval",
                       true
                     ]
                   },

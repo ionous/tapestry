@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Declare:": "Objects are kinds of kind."
+      "Declare:": "Objects are kinds of kinds."
     },
     {
       "Define kind:fields:": [
@@ -12,9 +12,6 @@
           },
           {
             "Text:": "indefinite article"
-          },
-          {
-            "Text:": "grouping label"
           },
           {
             "Aspect:": "noun types"
@@ -93,6 +90,10 @@
           },
           {
             "Aspect:": "wearability"
+          },
+          {
+          	"--": "for printing locale description.",
+            "Text:": "grouping label"
           }
         ]
       ]

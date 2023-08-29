@@ -29,20 +29,24 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 		} else {
 			name := lang.Normalize(name.String())
 			pb := mdl.NewPatternBuilder(name)
-			addRequiredFields(pb, op.Requires)
-			addProvidingFields(pb, op.Provides)
-			if len(op.Exe) > 0 {
-				pb.AppendRule(0, rt.Rule{
-					Name:    fmt.Sprintf("the default %s rule", name),
-					Exe:     op.Exe,
-					Updates: rules.DoesUpdate(op.Exe),
-					// Stop/Jump is 0/0 by default;
-					// and so is the rule Rank
+			if e := addRequiredFields(w, pb, op.Requires); e != nil {
+				err = e
+			} else if e := addProvidingFields(w, pb, op.Provides); e != nil {
+				err = e
+			} else {
+				if len(op.Exe) > 0 {
+					pb.AppendRule(0, rt.Rule{
+						Name:    fmt.Sprintf("the default %s rule", name),
+						Exe:     op.Exe,
+						Updates: rules.DoesUpdate(op.Exe),
+						// Stop/Jump is 0/0 by default;
+						// and so is the rule Rank
+					})
+				}
+				err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+					return w.Pin().AddPattern(pb.Pattern)
 				})
 			}
-			err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
-				return w.Pin().AddPattern(pb.Pattern)
-			})
 		}
 		return
 	})
@@ -61,11 +65,16 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 			for i := 0; i < event.NumPhases; i++ {
 				phase := event.Phase(i)
 				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
-				addRequiredFields(pb, op.Requires)
-				addFields(pb, mdl.PatternLocals, op.Provides) // note: actions dont have an explicit return
-				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
-					return w.Pin().AddPattern(pb.Pattern)
-				})
+				// note: actions dont have an explicit return
+				if e := addRequiredFields(w, pb, op.Requires); e != nil {
+					err = e
+				} else if e := addFields(w, pb, mdl.PatternLocals, op.Provides); e != nil {
+					err = e
+				} else {
+					err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+						return w.Pin().AddPattern(pb.Pattern)
+					})
+				}
 			}
 		}
 		return
@@ -87,10 +96,13 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 				for i := 0; i < event.NumPhases; i++ {
 					phase := event.Phase(i)
 					pb := mdl.NewPatternSubtype(phase.PatternName(k), phase.PatternKind())
-					addFields(pb, mdl.PatternLocals, op.Provides) // rules add more locals, never results
-					err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
-						return w.Pin().AddPattern(pb.Pattern)
-					})
+					if e := addFields(w, pb, mdl.PatternLocals, op.Provides); e != nil {
+						err = e
+					} else {
+						err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+							return w.Pin().AddPattern(pb.Pattern)
+						})
+					}
 				}
 			}
 		}
@@ -253,36 +265,45 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 	return
 }
 
-func addRequiredFields(pb *mdl.PatternBuilder, fields []FieldDefinition) {
-	addFields(pb, mdl.PatternParameters, fields)
+func addRequiredFields(run rt.Runtime, pb *mdl.PatternBuilder, fields []FieldDefinition) (err error) {
+	return addFields(run, pb, mdl.PatternParameters, fields)
 }
 
 // assumes the first field ( if any ) is the return value
 // i'm sure i'll come to hate this, but for now i like that it simplifies specification
-func addProvidingFields(pb *mdl.PatternBuilder, fields []FieldDefinition) {
+func addProvidingFields(run rt.Runtime, pb *mdl.PatternBuilder, fields []FieldDefinition) (err error) {
 	if len(fields) > 0 {
-		addOptionalField(pb, mdl.PatternResults, fields[0])
-		addFields(pb, mdl.PatternLocals, fields[1:])
+		if e := addOptionalField(run, pb, mdl.PatternResults, fields[0]); e != nil {
+			err = e
+		} else if e := addFields(run, pb, mdl.PatternLocals, fields[1:]); e != nil {
+			err = e
+		}
 	}
+	return
 }
 
-func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) {
+func addOptionalField(run rt.Runtime, pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) (err error) {
 	if field != nil {
 		var empty mdl.FieldInfo // the Nothing type generates a blank field info
-		if f := field.FieldInfo(); f != empty {
+		if f, e := field.FieldInfo(run); e != nil {
+			err = errutil.Append(err, e)
+		} else if f != empty {
 			pb.AddField(ft, f)
 		}
 	}
 	return
 }
 
-func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinition) {
+func addFields(run rt.Runtime, pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinition) (err error) {
 	// fix; should probably be an error if nothing is used for locals
 	// or if nothing exists in a list of more than one nothing parameter
 	for _, field := range fields {
 		var empty mdl.FieldInfo // the Nothing type generates a blank field info
-		if f := field.FieldInfo(); f != empty {
+		if f, e := field.FieldInfo(run); e != nil {
+			err = errutil.Append(err, e)
+		} else if f != empty {
 			pb.AddField(ft, f)
 		}
 	}
+	return
 }

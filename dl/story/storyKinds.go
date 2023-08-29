@@ -59,7 +59,9 @@ func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
 			for _, field := range op.Fields {
 				// bools here become implicit aspects.
 				// ( vs. bool pattern vars which stay bools -- see reduceProps )
-				if el := field.FieldInfo(); el.Affinity != affine.Bool {
+				if el, e := field.FieldInfo(w); e != nil {
+					err = errutil.Append(err, e)
+				} else if el.Affinity != affine.Bool {
 					fields.AddField(el)
 				} else {
 					fields.AddAspect(el.Name)

@@ -14,7 +14,7 @@ import (
 
 // AspectField
 type AspectField struct {
-	Aspect string `if:"label=_,type=text"`
+	Aspect rt.TextEval `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -105,7 +105,7 @@ func AspectField_Marshal(m jsn.Marshaler, val *AspectField) (err error) {
 	if err = m.MarshalBlock(AspectField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AspectField_Field_Aspect)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Aspect)
+			e0 = rt.TextEval_Marshal(m, &val.Aspect)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AspectField_Field_Aspect))
@@ -117,8 +117,8 @@ func AspectField_Marshal(m jsn.Marshaler, val *AspectField) (err error) {
 
 // BoolField
 type BoolField struct {
-	Name      string      `if:"label=_,type=text"`
-	Type      string      `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval `if:"label=_"`
+	Type      rt.TextEval `if:"label=kind,optional"`
 	Initially rt.BoolEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -212,14 +212,14 @@ func BoolField_Marshal(m jsn.Marshaler, val *BoolField) (err error) {
 	if err = m.MarshalBlock(BoolField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", BoolField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", BoolField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", BoolField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", BoolField_Field_Type))
@@ -2532,8 +2532,8 @@ func FieldDefinition_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FieldDefini
 
 // MakeOpposite The opposite of east is west.
 type MakeOpposite struct {
-	Word     string `if:"label=_,type=text"`
-	Opposite string `if:"label=opposite,type=text"`
+	Word     rt.TextEval `if:"label=_"`
+	Opposite rt.TextEval `if:"label=opposite"`
 	Markup   map[string]any
 }
 
@@ -2545,7 +2545,7 @@ func (*MakeOpposite) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MakeOpposite_Type,
 		Uses: composer.Type_Flow,
-		Lede: "make",
+		Lede: "define",
 	}
 }
 
@@ -2600,7 +2600,7 @@ func MakeOpposite_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakeOpposite) 
 type MakeOpposite_Flow struct{ ptr *MakeOpposite }
 
 func (n MakeOpposite_Flow) GetType() string      { return MakeOpposite_Type }
-func (n MakeOpposite_Flow) GetLede() string      { return "make" }
+func (n MakeOpposite_Flow) GetLede() string      { return "define" }
 func (n MakeOpposite_Flow) GetFlow() interface{} { return n.ptr }
 func (n MakeOpposite_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*MakeOpposite); ok {
@@ -2626,14 +2626,14 @@ func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
 	if err = m.MarshalBlock(MakeOpposite_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeOpposite_Field_Word)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Word)
+			e0 = rt.TextEval_Marshal(m, &val.Word)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MakeOpposite_Field_Word))
 		}
 		e1 := m.MarshalKey("opposite", MakeOpposite_Field_Opposite)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Opposite)
+			e1 = rt.TextEval_Marshal(m, &val.Opposite)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakeOpposite_Field_Opposite))
@@ -2646,8 +2646,8 @@ func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
 // MakePlural The plural of person is people.
 // The plural of person is persons.
 type MakePlural struct {
-	Singular string `if:"label=_,type=text"`
-	Plural   string `if:"label=plural,type=text"`
+	Singular rt.TextEval `if:"label=_"`
+	Plural   rt.TextEval `if:"label=plural"`
 	Markup   map[string]any
 }
 
@@ -2659,7 +2659,7 @@ func (*MakePlural) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MakePlural_Type,
 		Uses: composer.Type_Flow,
-		Lede: "make",
+		Lede: "define",
 	}
 }
 
@@ -2714,7 +2714,7 @@ func MakePlural_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakePlural) (err
 type MakePlural_Flow struct{ ptr *MakePlural }
 
 func (n MakePlural_Flow) GetType() string      { return MakePlural_Type }
-func (n MakePlural_Flow) GetLede() string      { return "make" }
+func (n MakePlural_Flow) GetLede() string      { return "define" }
 func (n MakePlural_Flow) GetFlow() interface{} { return n.ptr }
 func (n MakePlural_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*MakePlural); ok {
@@ -2740,14 +2740,14 @@ func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
 	if err = m.MarshalBlock(MakePlural_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakePlural_Field_Singular)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Singular)
+			e0 = rt.TextEval_Marshal(m, &val.Singular)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MakePlural_Field_Singular))
 		}
 		e1 := m.MarshalKey("plural", MakePlural_Field_Plural)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Plural)
+			e1 = rt.TextEval_Marshal(m, &val.Plural)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakePlural_Field_Plural))
@@ -3499,8 +3499,8 @@ func NothingField_Marshal(m jsn.Marshaler, val *NothingField) (err error) {
 
 // NumListField
 type NumListField struct {
-	Name      string         `if:"label=_,type=text"`
-	Type      string         `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval    `if:"label=_"`
+	Type      rt.TextEval    `if:"label=kind,optional"`
 	Initially rt.NumListEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -3594,14 +3594,14 @@ func NumListField_Marshal(m jsn.Marshaler, val *NumListField) (err error) {
 	if err = m.MarshalBlock(NumListField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumListField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NumListField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", NumListField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NumListField_Field_Type))
@@ -3620,8 +3620,8 @@ func NumListField_Marshal(m jsn.Marshaler, val *NumListField) (err error) {
 
 // NumberField
 type NumberField struct {
-	Name      string        `if:"label=_,type=text"`
-	Type      string        `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval   `if:"label=_"`
+	Type      rt.TextEval   `if:"label=kind,optional"`
 	Initially rt.NumberEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -3715,14 +3715,14 @@ func NumberField_Marshal(m jsn.Marshaler, val *NumberField) (err error) {
 	if err = m.MarshalBlock(NumberField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumberField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NumberField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", NumberField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NumberField_Field_Type))
@@ -4056,8 +4056,8 @@ func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 
 // RecordField
 type RecordField struct {
-	Name      string        `if:"label=_,type=text"`
-	Type      string        `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval   `if:"label=_"`
+	Type      rt.TextEval   `if:"label=kind,optional"`
 	Initially rt.RecordEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -4151,14 +4151,14 @@ func RecordField_Marshal(m jsn.Marshaler, val *RecordField) (err error) {
 	if err = m.MarshalBlock(RecordField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RecordField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RecordField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", RecordField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordField_Field_Type))
@@ -4177,8 +4177,8 @@ func RecordField_Marshal(m jsn.Marshaler, val *RecordField) (err error) {
 
 // RecordListField
 type RecordListField struct {
-	Name      string            `if:"label=_,type=text"`
-	Type      string            `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval       `if:"label=_"`
+	Type      rt.TextEval       `if:"label=kind,optional"`
 	Initially rt.RecordListEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -4272,14 +4272,14 @@ func RecordListField_Marshal(m jsn.Marshaler, val *RecordListField) (err error) 
 	if err = m.MarshalBlock(RecordListField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RecordListField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RecordListField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", RecordListField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordListField_Field_Type))
@@ -6052,8 +6052,8 @@ func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err err
 
 // TextField
 type TextField struct {
-	Name      string      `if:"label=_,type=text"`
-	Type      string      `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval `if:"label=_"`
+	Type      rt.TextEval `if:"label=kind,optional"`
 	Initially rt.TextEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -6147,14 +6147,14 @@ func TextField_Marshal(m jsn.Marshaler, val *TextField) (err error) {
 	if err = m.MarshalBlock(TextField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TextField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TextField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", TextField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TextField_Field_Type))
@@ -6173,8 +6173,8 @@ func TextField_Marshal(m jsn.Marshaler, val *TextField) (err error) {
 
 // TextListField
 type TextListField struct {
-	Name      string          `if:"label=_,type=text"`
-	Type      string          `if:"label=kind,optional,type=text"`
+	Name      rt.TextEval     `if:"label=_"`
+	Type      rt.TextEval     `if:"label=kind,optional"`
 	Initially rt.TextListEval `if:"label=initially,optional"`
 	Markup    map[string]any
 }
@@ -6268,14 +6268,14 @@ func TextListField_Marshal(m jsn.Marshaler, val *TextListField) (err error) {
 	if err = m.MarshalBlock(TextListField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TextListField_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TextListField_Field_Name))
 		}
 		e1 := m.MarshalKey("kind", TextListField_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TextListField_Field_Type))
@@ -6428,6 +6428,10 @@ var Signatures = map[uint64]interface{}{
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
 	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
+	12949514552590649363: (*MakeOpposite)(nil),         /* execute=Define:opposite: */
+	5688318111906346127:  (*MakeOpposite)(nil),         /* story_statement=Define:opposite: */
+	16375064846040326258: (*MakePlural)(nil),           /* execute=Define:plural: */
+	12640732630499152662: (*MakePlural)(nil),           /* story_statement=Define:plural: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
 	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
@@ -6438,10 +6442,6 @@ var Signatures = map[uint64]interface{}{
 	85958334792709048:    (*StoryAlias)(nil),           /* story_statement=Interpret alias:asNoun: */
 	2895546536328156972:  (*StoryDirective)(nil),       /* execute=Interpret:with: */
 	6001249499689096432:  (*StoryDirective)(nil),       /* story_statement=Interpret:with: */
-	6624124429048254998:  (*MakeOpposite)(nil),         /* execute=Make:opposite: */
-	12130342806058120266: (*MakeOpposite)(nil),         /* story_statement=Make:opposite: */
-	14758176820705861311: (*MakePlural)(nil),           /* execute=Make:plural: */
-	8107023930195182683:  (*MakePlural)(nil),           /* story_statement=Make:plural: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
 	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */
