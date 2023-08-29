@@ -6,7 +6,7 @@
         [
           {
             "Declare:": [
-              "The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Outside are rooms.",
+              "The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.",
               "You are in the Lobby.",
               "The faux door is a door in the Lobby."
             ]
@@ -45,7 +45,7 @@
               "North",
               "the foyer",
               "connecting_to",
-              "the outside"
+              "the street"
             ]
           },
           {
@@ -70,11 +70,28 @@
               "South",
               "the basement",
               "arriving_at",
-              "the outside"
+              "the street"
             ]
           }
         ],
         [
+          {
+            "Print:": {
+              "DoorVia room:direction:": [
+                {
+                  "FromText:": "foyer"
+                },
+                {
+                  "FromText:": "south"
+                }
+              ]
+            }
+          },
+          {
+            "Expect output:": [
+              "curtain"
+            ]
+          },
           {
             "Print:": {
               "DirectionThrough room:door:": [
@@ -87,6 +104,7 @@
               ]
             }
           },
+
           {
             "Expect output:": [
               "south"
@@ -109,7 +127,7 @@
             ]
           },
           {
-            "Traveling actor:noun:": [
+            "Traveling actor:door:": [
               {
                 "FromText:": {
                   "Object:field:": [
@@ -127,7 +145,7 @@
             "Expect output:": "It doesn't lead anywhere."
           },
           {
-            "Traveling actor:noun:": [
+            "Traveling actor:door:": [
               {
                 "FromText:": {
                   "Object:field:": [
@@ -163,7 +181,7 @@
             "Expect output:": "You open the double doors."
           },
           {
-            "Traveling actor:noun:": [
+            "Traveling actor:door:": [
               {
                 "FromText:": {
                   "Object:field:": [
@@ -181,6 +199,26 @@
             "Expect output:": [
               "Foyer.",
               "You can see a curtain."
+            ]
+          },
+          {
+            "Going actor:direction:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromText:": "south"
+              }
+            ]
+          },
+          {
+            "Expect output:": [
+              "Cloak Room."
             ]
           }
         ]

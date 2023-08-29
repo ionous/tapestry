@@ -2,8 +2,8 @@
   "Tapestry:": [
     {
       "--": [
-        "Traveling takes one argument: the door to travel through.",
-        "Future: allow directions too"
+        "Traveling takes the actor moving, and the door for them to travel through.",
+        "FIX: optionally pass the direction so that it doesnt have to find it twice when 'going'"
       ],
       "Define action:requires:": [
         "traveling",
@@ -18,7 +18,7 @@
           {
             "--": "the door being traveled through",
             "Text:kind:": [
-              "noun",
+              "door",
               "door"
             ]
           }
@@ -36,7 +36,7 @@
               "room",
               {
                 "Object:field:": [
-                  "@noun",
+                  "@door",
                   "destination"
                 ]
               }
@@ -56,7 +56,7 @@
                     }
                   },
                   {
-                    "FromText:": "@noun"
+                    "FromText:": "@door"
                   }
                 ]
               }
@@ -89,7 +89,7 @@
                         "FromText:": "traveling"
                       },
                       {
-                        "FromText:": "@noun"
+                        "FromText:": "@door"
                       }
                     ]
                   }
@@ -121,7 +121,7 @@
                             "FromText:": "traveling"
                           },
                           {
-                            "FromText:": "@noun"
+                            "FromText:": "@door"
                           },
                           {
                             "FromText:": "@destination"
@@ -185,7 +185,7 @@
         {
           "Say response:with:": [
             "someone else travels",
-            "{The: .actor|capitalize!} went through {the: .noun}."
+            "{The: .actor|capitalize!} went through {the: .door}."
           ]
         }
       ]
@@ -249,7 +249,7 @@
                     "FromText:": {
                       "Say response:with:": [
                         "can only travel to a destination",
-                        "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
+                        "{They: .door|capitalize!} {dont:.door} lead anywhere."
                       ]
                     }
                   }

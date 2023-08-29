@@ -41,8 +41,8 @@ func (m MyBounds) GetPlayerBounds(n string) (ret Bounds, err error) {
 	switch n {
 	case "":
 		ret = m.SearchBounds
-	case "self":
-		ret = m.SelfBounds
+	case "player":
+		ret = m.PlayerBounds
 	default:
 		err = errutil.New("unknown bounds", n)
 	}
@@ -57,7 +57,7 @@ func (m MyBounds) IsPlural(word string) bool {
 	return word != inflect.Singularize(word)
 }
 
-func (m MyBounds) SelfBounds(v NounVisitor) (ret bool) {
+func (m MyBounds) PlayerBounds(v NounVisitor) (ret bool) {
 	n := MyNoun{MyObject: myself}
 	return v(n)
 }

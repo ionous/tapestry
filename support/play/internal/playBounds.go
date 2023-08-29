@@ -33,12 +33,7 @@ func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 		); e != nil && !errors.Is(e, rt.NoResult) {
 			log.Println(e)
 		} else {
-			for _, k := range kids.Strings() {
-				if ok := cb(MakeNoun(pt, k)); ok {
-					ret = ok
-					break
-				}
-			}
+			ret = pt.visitStrings(cb, kids)
 		}
 		return
 	}
@@ -49,6 +44,16 @@ func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 func (pt *Playtime) selfBounded() (ret parser.Bounds, err error) {
 	ret = func(cb parser.NounVisitor) (ret bool) {
 		return cb(&Noun{pt, pt.player})
+	}
+	return
+}
+
+func (pt *Playtime) visitStrings(cb parser.NounVisitor, kids g.Value) (ret bool) {
+	for _, k := range kids.Strings() {
+		if ok := cb(MakeNoun(pt, k)); ok {
+			ret = ok
+			break
+		}
 	}
 	return
 }

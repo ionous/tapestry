@@ -52,7 +52,7 @@ func reverse(s ...Scanner) Scanner {
 // attempts to match the specified noun to that player object,
 // absorbs all the words that were used to match the player.
 func self() Scanner {
-	return &Eat{&Focus{"self", &Noun{}}}
+	return &Eat{&Focus{"player", &Noun{}}}
 }
 
 // note: we use things to exclude directions

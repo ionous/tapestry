@@ -311,7 +311,7 @@
         {
           "--": "allows the player to refer to a noun by one or more other terms.",
           "Spec:slots:with flow:": [
-            "story_alias",
+            "define_alias",
             [
               "execute",
               "story_statement"
@@ -321,17 +321,17 @@
                 "interpret",
                 [
                   {
-                    "Term:name:type:repeats:": [
+                    "Term:name:type:": [
                       "alias",
                       "names",
-                      "text",
-                      true
+                      "text_list_eval"
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "as_noun",
-                      "text"
+                    "Term:name:type:": [
+                      "as",
+                      "noun_name",
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1001,26 +1001,6 @@
                   {
                     "Term:type:": [
                       "other_kind",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with flow:": [
-            "paired_action",
-            "events",
-            {
-              "Flow phrase:uses:": [
-                "two {$kinds} ( the noun and other noun )",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "kinds",
                       "text_eval"
                     ]
                   }

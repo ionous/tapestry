@@ -874,38 +874,38 @@ func ScannerMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ScannerMaker) 
 	return
 }
 
-// Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).
-type Self struct {
+// Scope adjusts the scope of the parser scanner
+type Scope struct {
 	Player string `if:"label=_,type=text"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ ScannerMaker = (*Self)(nil)
+var _ ScannerMaker = (*Scope)(nil)
 
-func (*Self) Compose() composer.Spec {
+func (*Scope) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Self_Type,
+		Name: Scope_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Self_Type = "self"
-const Self_Field_Player = "$PLAYER"
+const Scope_Type = "scope"
+const Scope_Field_Player = "$PLAYER"
 
-func (op *Self) Marshal(m jsn.Marshaler) error {
-	return Self_Marshal(m, op)
+func (op *Scope) Marshal(m jsn.Marshaler) error {
+	return Scope_Marshal(m, op)
 }
 
-type Self_Slice []Self
+type Scope_Slice []Scope
 
-func (op *Self_Slice) GetType() string { return Self_Type }
+func (op *Scope_Slice) GetType() string { return Scope_Type }
 
-func (op *Self_Slice) Marshal(m jsn.Marshaler) error {
-	return Self_Repeats_Marshal(m, (*[]Self)(op))
+func (op *Scope_Slice) Marshal(m jsn.Marshaler) error {
+	return Scope_Repeats_Marshal(m, (*[]Scope)(op))
 }
 
-func (op *Self_Slice) GetSize() (ret int) {
+func (op *Scope_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -914,62 +914,62 @@ func (op *Self_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *Self_Slice) SetSize(cnt int) {
-	var els []Self
+func (op *Scope_Slice) SetSize(cnt int) {
+	var els []Scope
 	if cnt >= 0 {
-		els = make(Self_Slice, cnt)
+		els = make(Scope_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *Self_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Self_Marshal(m, &(*op)[i])
+func (op *Scope_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Scope_Marshal(m, &(*op)[i])
 }
 
-func Self_Repeats_Marshal(m jsn.Marshaler, vals *[]Self) error {
-	return jsn.RepeatBlock(m, (*Self_Slice)(vals))
+func Scope_Repeats_Marshal(m jsn.Marshaler, vals *[]Scope) error {
+	return jsn.RepeatBlock(m, (*Scope_Slice)(vals))
 }
 
-func Self_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Self) (err error) {
+func Scope_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Scope) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Self_Repeats_Marshal(m, pv)
+		err = Scope_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type Self_Flow struct{ ptr *Self }
+type Scope_Flow struct{ ptr *Scope }
 
-func (n Self_Flow) GetType() string      { return Self_Type }
-func (n Self_Flow) GetLede() string      { return Self_Type }
-func (n Self_Flow) GetFlow() interface{} { return n.ptr }
-func (n Self_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Self); ok {
+func (n Scope_Flow) GetType() string      { return Scope_Type }
+func (n Scope_Flow) GetLede() string      { return Scope_Type }
+func (n Scope_Flow) GetFlow() interface{} { return n.ptr }
+func (n Scope_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Scope); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func Self_Optional_Marshal(m jsn.Marshaler, pv **Self) (err error) {
+func Scope_Optional_Marshal(m jsn.Marshaler, pv **Scope) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Self_Marshal(m, *pv)
+		err = Scope_Marshal(m, *pv)
 	} else if !enc {
-		var v Self
-		if err = Self_Marshal(m, &v); err == nil {
+		var v Scope
+		if err = Scope_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
+func Scope_Marshal(m jsn.Marshaler, val *Scope) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Self_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Self_Field_Player)
+	if err = m.MarshalBlock(Scope_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Scope_Field_Player)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Player)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Self_Field_Player))
+			m.Error(errutil.New(e0, "in flow at", Scope_Field_Player))
 		}
 		m.EndBlock()
 	}
@@ -1092,7 +1092,7 @@ var Slats = []composer.Composer{
 	(*Noun)(nil),
 	(*Retarget)(nil),
 	(*Reverse)(nil),
-	(*Self)(nil),
+	(*Scope)(nil),
 	(*Words)(nil),
 }
 
@@ -1104,6 +1104,6 @@ var Signatures = map[uint64]interface{}{
 	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */
 	7324699817922923089:  (*Retarget)(nil),  /* scanner_maker=Retarget: */
 	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
-	5951604050986778367:  (*Self)(nil),      /* scanner_maker=Self: */
+	2998488178381148379:  (*Scope)(nil),     /* scanner_maker=Scope: */
 	10728359537834940094: (*AllOf)(nil),     /* scanner_maker=Sequence: */
 }

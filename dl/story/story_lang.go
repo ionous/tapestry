@@ -899,6 +899,119 @@ func DefineAction_Marshal(m jsn.Marshaler, val *DefineAction) (err error) {
 	return
 }
 
+// DefineAlias allows the player to refer to a noun by one or more other terms.
+type DefineAlias struct {
+	Names    rt.TextListEval `if:"label=alias"`
+	NounName rt.TextEval     `if:"label=as"`
+	Markup   map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*DefineAlias)(nil)
+var _ StoryStatement = (*DefineAlias)(nil)
+
+func (*DefineAlias) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineAlias_Type,
+		Uses: composer.Type_Flow,
+		Lede: "interpret",
+	}
+}
+
+const DefineAlias_Type = "define_alias"
+const DefineAlias_Field_Names = "$NAMES"
+const DefineAlias_Field_NounName = "$NOUN_NAME"
+
+func (op *DefineAlias) Marshal(m jsn.Marshaler) error {
+	return DefineAlias_Marshal(m, op)
+}
+
+type DefineAlias_Slice []DefineAlias
+
+func (op *DefineAlias_Slice) GetType() string { return DefineAlias_Type }
+
+func (op *DefineAlias_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineAlias_Repeats_Marshal(m, (*[]DefineAlias)(op))
+}
+
+func (op *DefineAlias_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineAlias_Slice) SetSize(cnt int) {
+	var els []DefineAlias
+	if cnt >= 0 {
+		els = make(DefineAlias_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineAlias_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineAlias_Marshal(m, &(*op)[i])
+}
+
+func DefineAlias_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineAlias) error {
+	return jsn.RepeatBlock(m, (*DefineAlias_Slice)(vals))
+}
+
+func DefineAlias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineAlias) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineAlias_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineAlias_Flow struct{ ptr *DefineAlias }
+
+func (n DefineAlias_Flow) GetType() string      { return DefineAlias_Type }
+func (n DefineAlias_Flow) GetLede() string      { return "interpret" }
+func (n DefineAlias_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineAlias_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineAlias); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineAlias_Optional_Marshal(m jsn.Marshaler, pv **DefineAlias) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineAlias_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineAlias
+		if err = DefineAlias_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineAlias_Marshal(m jsn.Marshaler, val *DefineAlias) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineAlias_Flow{val}); err == nil {
+		e0 := m.MarshalKey("alias", DefineAlias_Field_Names)
+		if e0 == nil {
+			e0 = rt.TextListEval_Marshal(m, &val.Names)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineAlias_Field_Names))
+		}
+		e1 := m.MarshalKey("as", DefineAlias_Field_NounName)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.NounName)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineAlias_Field_NounName))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineFields Add properties to a kind
 type DefineFields struct {
 	Kind   rt.TextEval       `if:"label=kind"`
@@ -3955,105 +4068,6 @@ func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
 	return
 }
 
-// PairedAction
-type PairedAction struct {
-	Kinds  rt.TextEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*PairedAction) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PairedAction_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const PairedAction_Type = "paired_action"
-const PairedAction_Field_Kinds = "$KINDS"
-
-func (op *PairedAction) Marshal(m jsn.Marshaler) error {
-	return PairedAction_Marshal(m, op)
-}
-
-type PairedAction_Slice []PairedAction
-
-func (op *PairedAction_Slice) GetType() string { return PairedAction_Type }
-
-func (op *PairedAction_Slice) Marshal(m jsn.Marshaler) error {
-	return PairedAction_Repeats_Marshal(m, (*[]PairedAction)(op))
-}
-
-func (op *PairedAction_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PairedAction_Slice) SetSize(cnt int) {
-	var els []PairedAction
-	if cnt >= 0 {
-		els = make(PairedAction_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PairedAction_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PairedAction_Marshal(m, &(*op)[i])
-}
-
-func PairedAction_Repeats_Marshal(m jsn.Marshaler, vals *[]PairedAction) error {
-	return jsn.RepeatBlock(m, (*PairedAction_Slice)(vals))
-}
-
-func PairedAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PairedAction) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PairedAction_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PairedAction_Flow struct{ ptr *PairedAction }
-
-func (n PairedAction_Flow) GetType() string      { return PairedAction_Type }
-func (n PairedAction_Flow) GetLede() string      { return PairedAction_Type }
-func (n PairedAction_Flow) GetFlow() interface{} { return n.ptr }
-func (n PairedAction_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PairedAction); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PairedAction_Optional_Marshal(m jsn.Marshaler, pv **PairedAction) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PairedAction_Marshal(m, *pv)
-	} else if !enc {
-		var v PairedAction
-		if err = PairedAction_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PairedAction_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PairedAction_Field_Kinds)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Kinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PairedAction_Field_Kinds))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // RecordField
 type RecordField struct {
 	Name      rt.TextEval   `if:"label=_"`
@@ -5346,119 +5360,6 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 	return
 }
 
-// StoryAlias allows the player to refer to a noun by one or more other terms.
-type StoryAlias struct {
-	Names  []string `if:"label=alias,type=text"`
-	AsNoun string   `if:"label=as_noun,type=text"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*StoryAlias)(nil)
-var _ StoryStatement = (*StoryAlias)(nil)
-
-func (*StoryAlias) Compose() composer.Spec {
-	return composer.Spec{
-		Name: StoryAlias_Type,
-		Uses: composer.Type_Flow,
-		Lede: "interpret",
-	}
-}
-
-const StoryAlias_Type = "story_alias"
-const StoryAlias_Field_Names = "$NAMES"
-const StoryAlias_Field_AsNoun = "$AS_NOUN"
-
-func (op *StoryAlias) Marshal(m jsn.Marshaler) error {
-	return StoryAlias_Marshal(m, op)
-}
-
-type StoryAlias_Slice []StoryAlias
-
-func (op *StoryAlias_Slice) GetType() string { return StoryAlias_Type }
-
-func (op *StoryAlias_Slice) Marshal(m jsn.Marshaler) error {
-	return StoryAlias_Repeats_Marshal(m, (*[]StoryAlias)(op))
-}
-
-func (op *StoryAlias_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *StoryAlias_Slice) SetSize(cnt int) {
-	var els []StoryAlias
-	if cnt >= 0 {
-		els = make(StoryAlias_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *StoryAlias_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return StoryAlias_Marshal(m, &(*op)[i])
-}
-
-func StoryAlias_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryAlias) error {
-	return jsn.RepeatBlock(m, (*StoryAlias_Slice)(vals))
-}
-
-func StoryAlias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryAlias) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = StoryAlias_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type StoryAlias_Flow struct{ ptr *StoryAlias }
-
-func (n StoryAlias_Flow) GetType() string      { return StoryAlias_Type }
-func (n StoryAlias_Flow) GetLede() string      { return "interpret" }
-func (n StoryAlias_Flow) GetFlow() interface{} { return n.ptr }
-func (n StoryAlias_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*StoryAlias); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func StoryAlias_Optional_Marshal(m jsn.Marshaler, pv **StoryAlias) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = StoryAlias_Marshal(m, *pv)
-	} else if !enc {
-		var v StoryAlias
-		if err = StoryAlias_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func StoryAlias_Marshal(m jsn.Marshaler, val *StoryAlias) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(StoryAlias_Flow{val}); err == nil {
-		e0 := m.MarshalKey("alias", StoryAlias_Field_Names)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Names)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", StoryAlias_Field_Names))
-		}
-		e1 := m.MarshalKey("as_noun", StoryAlias_Field_AsNoun)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.AsNoun)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", StoryAlias_Field_AsNoun))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // StoryBreak a command with a signature of the comment marker metadata.
 // a cheat to allows nodes that have only a comment marker and no actual command.
 // see also: debug.do_nothing
@@ -6306,6 +6207,7 @@ var Slats = []composer.Composer{
 	(*CycleText)(nil),
 	(*DeclareStatement)(nil),
 	(*DefineAction)(nil),
+	(*DefineAlias)(nil),
 	(*DefineFields)(nil),
 	(*DefineKinds)(nil),
 	(*DefineMacro)(nil),
@@ -6332,7 +6234,6 @@ var Slats = []composer.Composer{
 	(*NumberField)(nil),
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
-	(*PairedAction)(nil),
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
@@ -6344,7 +6245,6 @@ var Slats = []composer.Composer{
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
 	(*StoppingText)(nil),
-	(*StoryAlias)(nil),
 	(*StoryBreak)(nil),
 	(*StoryDirective)(nil),
 	(*StoryFile)(nil),
@@ -6361,7 +6261,6 @@ var Signatures = map[uint64]interface{}{
 	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
 	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
 	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
 	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
@@ -6438,8 +6337,8 @@ var Signatures = map[uint64]interface{}{
 	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
 	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
 	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
-	18076782925803178620: (*StoryAlias)(nil),           /* execute=Interpret alias:asNoun: */
-	85958334792709048:    (*StoryAlias)(nil),           /* story_statement=Interpret alias:asNoun: */
+	10612153415886771360: (*DefineAlias)(nil),          /* execute=Interpret alias:as: */
+	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
 	2895546536328156972:  (*StoryDirective)(nil),       /* execute=Interpret:with: */
 	6001249499689096432:  (*StoryDirective)(nil),       /* story_statement=Interpret:with: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */

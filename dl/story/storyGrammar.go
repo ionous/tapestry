@@ -6,23 +6,27 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // Execute - called by the macro runtime during weave.
-func (op *StoryAlias) Execute(macro rt.Runtime) error {
+func (op *DefineAlias) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
-func (op *StoryAlias) Weave(cat *weave.Catalog) (err error) {
+func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-		name := lang.Normalize(op.AsNoun)
-		if n, e := w.GetClosestNoun(name); e != nil {
+		if name, e := safe.GetText(w, op.NounName); e != nil {
+			err = e
+		} else if names, e := safe.GetTextList(w, op.Names); e != nil {
+			err = e
+		} else if n, e := w.GetClosestNoun(lang.Normalize(name.String())); e != nil {
 			err = e
 		} else {
 			pen := w.Pin()
-			for _, a := range op.Names {
+			for _, a := range names.Strings() {
 				if a := lang.Normalize(a); len(a) > 0 {
 					if e := pen.AddName(n, a, -1); e != nil {
 						err = e

@@ -1,0 +1,58 @@
+{
+  "Tapestry:": [
+    {
+      "--": [
+        "Going takes the actor moving, and the direction for them to move.",
+        "The standard behavior finds a door in the specified direction and uses 'traveling' to move through it."
+      ],
+      "Define action:requires:": [
+        "going",
+        [
+          {
+            "--": "the actor moving somewhere ( ex. the player. )",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "the direction being moved ( ex. north. )",
+            "Text:kind:": [
+              "direction",
+              "direction"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "going",
+        "going is traveling",
+        {
+          "Traveling actor:door:": [
+            {
+              "FromText:": "@actor"
+            },
+            {
+              "FromText:": {
+                "DoorVia room:direction:": [
+                  {
+                    "FromText:": {
+                      "ParentOf:": {
+                        "FromText:": "@actor"
+                      }
+                    }
+                  },
+                  {
+                    "FromText:": "@direction"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

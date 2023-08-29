@@ -66,11 +66,17 @@ func (pt *Playtime) IsPlural(word string) bool {
 
 var lastLocation string // debugging only
 
+// fix: PlayerBounds, PlayerLocale and ObjectBounds might be better delegated to script.
+// it would use the same bits as "locationBounded", only all the bounds requests would use it.
+// the script would switch on the passed string similar to this --
+// ( one string and assume that the parser always refers to whatever actor in the global player variable )
+// that would probably narrow the dependency on rt -- maybe just to a "call" that could be configured with rt externally.
+// ( the "Scope" command could request the named pattern to ensure it exists. )
 func (pt *Playtime) GetPlayerBounds(where string) (ret parser.Bounds, err error) {
 	switch where {
 	case "":
 		ret, err = pt.GetPlayerLocale()
-	case "self":
+	case "player":
 		ret, err = pt.selfBounded() // only includes the player's pawn
 	default:
 		err = errutil.New("unknown player bounds", where)

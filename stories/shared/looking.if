@@ -1028,9 +1028,24 @@
           "Nothing": true
         },
         {
-          "Say response:with:": [
-            "you can also see",
-            "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .first_mention}also {end}see {print_inline_objects: .children}."
+          "If:do:": [
+            {
+              "Cmp:is:num:": [
+                {
+                  "Len:": {
+                    "FromTextList:": "@children"
+                  }
+                },
+                "greater_than",
+                0
+              ]
+            },
+            {
+              "Say response:with:": [
+                "you can also see",
+                "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .first_mention}also {end}see {print_inline_objects: .children}."
+              ]
+            }
           ]
         }
       ]

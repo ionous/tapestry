@@ -173,9 +173,9 @@
           ]
         },
         {
-          "--": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).",
+          "--": "adjusts the scope of the parser scanner",
           "Spec:slots:with flow:": [
-            "self",
+            "scope",
             "scanner_maker",
             {
               "Flow uses:": [

@@ -8,7 +8,7 @@ import (
 type ScannerMaker interface{ MakeScanner() parser.Scanner }
 
 func (op *Action) MakeScanner() parser.Scanner {
-	return &parser.Action{op.Action}
+	return &parser.Action{Name: op.Action}
 }
 
 func (op *AllOf) MakeScanner() (ret parser.Scanner) {
@@ -16,7 +16,7 @@ func (op *AllOf) MakeScanner() (ret parser.Scanner) {
 		ret = els[0].MakeScanner()
 	} else {
 		ls := reduce(els)
-		ret = &parser.AllOf{ls}
+		ret = &parser.AllOf{Match: ls}
 	}
 	return
 }
@@ -26,7 +26,7 @@ func (op *AnyOf) MakeScanner() (ret parser.Scanner) {
 		ret = els[0].MakeScanner()
 	} else {
 		ls := reduce(els)
-		ret = &parser.AnyOf{ls}
+		ret = &parser.AnyOf{Match: ls}
 	}
 	return
 }
@@ -34,23 +34,23 @@ func (op *AnyOf) MakeScanner() (ret parser.Scanner) {
 func (op *Noun) MakeScanner() parser.Scanner {
 	var fs parser.Filters
 	if k := op.Kind; len(k) > 0 {
-		fs = parser.Filters{&parser.HasClass{k}}
+		fs = parser.Filters{&parser.HasClass{Name: k}}
 	}
-	return &parser.Noun{fs}
+	return &parser.Noun{Filters: fs}
 }
 
 func (op *Retarget) MakeScanner() parser.Scanner {
 	ls := reduce(op.Span)
-	return &parser.Target{ls}
+	return &parser.Target{Match: ls}
 }
 
 func (op *Reverse) MakeScanner() parser.Scanner {
 	ls := reduce(op.Reverses)
-	return &parser.Reverse{ls}
+	return &parser.Reverse{Match: ls}
 }
 
-func (op *Self) MakeScanner() parser.Scanner {
-	return &parser.Eat{&parser.Focus{"self", &parser.Noun{}}}
+func (op *Scope) MakeScanner() parser.Scanner {
+	return &parser.Eat{Scanner: &parser.Focus{Where: op.Player, What: &parser.Noun{}}}
 }
 
 func (op *Words) MakeScanner() parser.Scanner {

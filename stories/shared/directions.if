@@ -21,9 +21,15 @@
         "define compass",
         [
           {
+            "--": "a unique name for this direction. ex. north.",
             "Text:": "direction"
           },
           {
+            "--": "an optional short name. additional names can be added using aliases.",
+            "Text:": "short"
+          },
+          {
+            "--": "directions come in pairs. each should have a unique opposite direction.",
             "Text:": "opposite"
           }
         ],
@@ -57,14 +63,36 @@
                 ]
               }
             ]
+          },
+          {
+            "If:do:": [
+              {
+                "Not:": {
+                  "Is empty:": "@short"
+                }
+              },
+              {
+                "Interpret alias:as:": [
+                  {
+                    "List ofText:": [
+                      "@short"
+                    ]
+                  },
+                  "@direction"
+                ]
+              }
+            ]
           }
         ]
       ]
     },
     {
-      "DefineCompass direction:opposite:": [
+      "DefineCompass direction:short:opposite:": [
         {
           "FromText:": "north"
+        },
+        {
+          "FromText:": "n"
         },
         {
           "FromText:": "south"
@@ -72,9 +100,12 @@
       ]
     },
     {
-      "DefineCompass direction:opposite:": [
+      "DefineCompass direction:short:opposite:": [
         {
           "FromText:": "east"
+        },
+        {
+          "FromText:": "e"
         },
         {
           "FromText:": "west"
@@ -82,9 +113,12 @@
       ]
     },
     {
-      "DefineCompass direction:opposite:": [
+      "DefineCompass direction:short:opposite:": [
         {
           "FromText:": "south"
+        },
+        {
+          "FromText:": "s"
         },
         {
           "FromText:": "north"
@@ -92,9 +126,12 @@
       ]
     },
     {
-      "DefineCompass direction:opposite:": [
+      "DefineCompass direction:short:opposite:": [
         {
           "FromText:": "west"
+        },
+        {
+          "FromText:": "w"
         },
         {
           "FromText:": "east"
@@ -102,9 +139,12 @@
       ]
     },
     {
-      "DefineCompass direction:opposite:": [
+      "DefineCompass direction:short:opposite:": [
         {
           "FromText:": "up"
+        },
+        {
+          "FromText:": "u"
         },
         {
           "FromText:": "down"
@@ -112,12 +152,41 @@
       ]
     },
     {
-      "DefineCompass direction:opposite:": [
+      "DefineCompass direction:short:opposite:": [
         {
           "FromText:": "down"
         },
         {
+          "FromText:": "d"
+        },
+        {
           "FromText:": "up"
+        }
+      ]
+    },
+    {
+      "DefineCompass direction:short:opposite:": [
+        {
+          "FromText:": "inside"
+        },
+        {
+          "FromText:": "in"
+        },
+        {
+          "FromText:": "outside"
+        }
+      ]
+    },
+    {
+      "DefineCompass direction:short:opposite:": [
+        {
+          "FromText:": "outside"
+        },
+        {
+          "FromText:": "out"
+        },
+        {
+          "FromText:": "inside"
         }
       ]
     },
@@ -138,7 +207,7 @@
       ]
     },
     {
-      "--": "given a door, find the named direction it represents, if any.",
+      "--": "given a room and its door, find the named direction it represents, if any.",
       "Define pattern:requires:provides:do:": [
         "direction through",
         [
@@ -166,7 +235,7 @@
                 "Fields of:": "compasses"
               }
             },
-            "compass dir",
+            "dir",
             {
               "If:do:": [
                 {
@@ -178,7 +247,7 @@
                         "@room",
                         "compass",
                         {
-                          "AtField:": "@compass dir"
+                          "AtField:": "@dir"
                         }
                       ]
                     }
@@ -189,7 +258,7 @@
                     "Set:from:": [
                       "@direction",
                       {
-                        "FromText:": "@compass dir"
+                        "FromText:": "@dir"
                       }
                     ]
                   },
@@ -198,6 +267,48 @@
                   }
                 ]
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "--": "given a room and direction, find the matching door ( if any. )",
+      "Define pattern:requires:provides:do:": [
+        "door via",
+        [
+          {
+            "Text:kind:": [
+              "room",
+              "room"
+            ]
+          },
+          {
+            "Text:kind:": [
+              "direction",
+              "direction"
+            ]
+          }
+        ],
+        {
+          "Text:kind:": [
+            "door",
+            "door"
+          ]
+        },
+        {
+          "Set:from:": [
+            "@door",
+            {
+              "FromText:": {
+                "Object:field:dot:": [
+                  "@room",
+                  "compass",
+                  {
+                    "AtField:": "@direction"
+                  }
+                ]
+              }
             }
           ]
         }

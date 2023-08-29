@@ -13,7 +13,7 @@
               {
                 "Sequence:": [
                   {
-                    "Self:": "player"
+                    "Scope:": "player"
                   },
                   {
                     "One noun:": "things"
@@ -32,7 +32,7 @@
                     "One word:": "to"
                   },
                   {
-                    "Self:": "player"
+                    "Scope:": "player"
                   },
                   {
                     "Action:": "examining"

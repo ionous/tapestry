@@ -45,6 +45,7 @@
               },
               [
                 {
+                  "--": "process the queue",
                   "Erasing:atFront:as:do:": [
                     "@queue",
                     true,
@@ -97,6 +98,20 @@
                         ]
                       }
                     ]
+                  ]
+                },
+                {
+                  "--": [
+                    "add the directions to scope",
+                    "todo: implement 'continue' and put this in a separate, fallthrough, rule"
+                  ],
+                  "Push:into:": [
+                    {
+                      "FromTextList:": {
+                        "KindsOf:": "directions"
+                      }
+                    },
+                    "@bounds"
                   ]
                 }
               ]
