@@ -73,7 +73,6 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 					err = e
 				} else {
 					run := play.NewPlaytime(rx)
-
 					parser := play.NewParser(run, grammar)
 					//
 					if len(testString) > 0 {

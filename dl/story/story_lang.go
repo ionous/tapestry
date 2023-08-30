@@ -1238,6 +1238,119 @@ func DefineKinds_Marshal(m jsn.Marshaler, val *DefineKinds) (err error) {
 	return
 }
 
+// DefineLeadingGrammar starts a parser scanner.
+type DefineLeadingGrammar struct {
+	Lede   []string               `if:"label=_,type=text"`
+	Scans  []grammar.ScannerMaker `if:"label=with"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*DefineLeadingGrammar)(nil)
+var _ StoryStatement = (*DefineLeadingGrammar)(nil)
+
+func (*DefineLeadingGrammar) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineLeadingGrammar_Type,
+		Uses: composer.Type_Flow,
+		Lede: "interpret",
+	}
+}
+
+const DefineLeadingGrammar_Type = "define_leading_grammar"
+const DefineLeadingGrammar_Field_Lede = "$LEDE"
+const DefineLeadingGrammar_Field_Scans = "$SCANS"
+
+func (op *DefineLeadingGrammar) Marshal(m jsn.Marshaler) error {
+	return DefineLeadingGrammar_Marshal(m, op)
+}
+
+type DefineLeadingGrammar_Slice []DefineLeadingGrammar
+
+func (op *DefineLeadingGrammar_Slice) GetType() string { return DefineLeadingGrammar_Type }
+
+func (op *DefineLeadingGrammar_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineLeadingGrammar_Repeats_Marshal(m, (*[]DefineLeadingGrammar)(op))
+}
+
+func (op *DefineLeadingGrammar_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineLeadingGrammar_Slice) SetSize(cnt int) {
+	var els []DefineLeadingGrammar
+	if cnt >= 0 {
+		els = make(DefineLeadingGrammar_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineLeadingGrammar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineLeadingGrammar_Marshal(m, &(*op)[i])
+}
+
+func DefineLeadingGrammar_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineLeadingGrammar) error {
+	return jsn.RepeatBlock(m, (*DefineLeadingGrammar_Slice)(vals))
+}
+
+func DefineLeadingGrammar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineLeadingGrammar) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineLeadingGrammar_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineLeadingGrammar_Flow struct{ ptr *DefineLeadingGrammar }
+
+func (n DefineLeadingGrammar_Flow) GetType() string      { return DefineLeadingGrammar_Type }
+func (n DefineLeadingGrammar_Flow) GetLede() string      { return "interpret" }
+func (n DefineLeadingGrammar_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineLeadingGrammar_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineLeadingGrammar); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineLeadingGrammar_Optional_Marshal(m jsn.Marshaler, pv **DefineLeadingGrammar) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineLeadingGrammar_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineLeadingGrammar
+		if err = DefineLeadingGrammar_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineLeadingGrammar_Marshal(m jsn.Marshaler, val *DefineLeadingGrammar) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineLeadingGrammar_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", DefineLeadingGrammar_Field_Lede)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineLeadingGrammar_Field_Lede))
+		}
+		e1 := m.MarshalKey("with", DefineLeadingGrammar_Field_Scans)
+		if e1 == nil {
+			e1 = grammar.ScannerMaker_Repeats_Marshal(m, &val.Scans)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineLeadingGrammar_Field_Scans))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineMacro Declare a function which can produce statements about the game world.
 // They are processed at import time, and they cannot call patterns
 // nor can patterns -- which are processed during play -- call macros.
@@ -1366,6 +1479,119 @@ func DefineMacro_Marshal(m jsn.Marshaler, val *DefineMacro) (err error) {
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", DefineMacro_Field_MacroStatements))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineNamedGrammar starts a parser scanner.
+type DefineNamedGrammar struct {
+	Name   string                 `if:"label=name,type=text"`
+	Scans  []grammar.ScannerMaker `if:"label=with"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*DefineNamedGrammar)(nil)
+var _ StoryStatement = (*DefineNamedGrammar)(nil)
+
+func (*DefineNamedGrammar) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineNamedGrammar_Type,
+		Uses: composer.Type_Flow,
+		Lede: "interpret",
+	}
+}
+
+const DefineNamedGrammar_Type = "define_named_grammar"
+const DefineNamedGrammar_Field_Name = "$NAME"
+const DefineNamedGrammar_Field_Scans = "$SCANS"
+
+func (op *DefineNamedGrammar) Marshal(m jsn.Marshaler) error {
+	return DefineNamedGrammar_Marshal(m, op)
+}
+
+type DefineNamedGrammar_Slice []DefineNamedGrammar
+
+func (op *DefineNamedGrammar_Slice) GetType() string { return DefineNamedGrammar_Type }
+
+func (op *DefineNamedGrammar_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineNamedGrammar_Repeats_Marshal(m, (*[]DefineNamedGrammar)(op))
+}
+
+func (op *DefineNamedGrammar_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineNamedGrammar_Slice) SetSize(cnt int) {
+	var els []DefineNamedGrammar
+	if cnt >= 0 {
+		els = make(DefineNamedGrammar_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineNamedGrammar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineNamedGrammar_Marshal(m, &(*op)[i])
+}
+
+func DefineNamedGrammar_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineNamedGrammar) error {
+	return jsn.RepeatBlock(m, (*DefineNamedGrammar_Slice)(vals))
+}
+
+func DefineNamedGrammar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineNamedGrammar) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineNamedGrammar_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineNamedGrammar_Flow struct{ ptr *DefineNamedGrammar }
+
+func (n DefineNamedGrammar_Flow) GetType() string      { return DefineNamedGrammar_Type }
+func (n DefineNamedGrammar_Flow) GetLede() string      { return "interpret" }
+func (n DefineNamedGrammar_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineNamedGrammar_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineNamedGrammar); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineNamedGrammar_Optional_Marshal(m jsn.Marshaler, pv **DefineNamedGrammar) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineNamedGrammar_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineNamedGrammar
+		if err = DefineNamedGrammar_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineNamedGrammar_Marshal(m jsn.Marshaler, val *DefineNamedGrammar) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineNamedGrammar_Flow{val}); err == nil {
+		e0 := m.MarshalKey("name", DefineNamedGrammar_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineNamedGrammar_Field_Name))
+		}
+		e1 := m.MarshalKey("with", DefineNamedGrammar_Field_Scans)
+		if e1 == nil {
+			e1 = grammar.ScannerMaker_Repeats_Marshal(m, &val.Scans)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineNamedGrammar_Field_Scans))
 		}
 		m.EndBlock()
 	}
@@ -5456,119 +5682,6 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 	return
 }
 
-// StoryDirective starts a parser scanner.
-type StoryDirective struct {
-	Lede   []string               `if:"label=_,type=text"`
-	Scans  []grammar.ScannerMaker `if:"label=with"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*StoryDirective)(nil)
-var _ StoryStatement = (*StoryDirective)(nil)
-
-func (*StoryDirective) Compose() composer.Spec {
-	return composer.Spec{
-		Name: StoryDirective_Type,
-		Uses: composer.Type_Flow,
-		Lede: "interpret",
-	}
-}
-
-const StoryDirective_Type = "story_directive"
-const StoryDirective_Field_Lede = "$LEDE"
-const StoryDirective_Field_Scans = "$SCANS"
-
-func (op *StoryDirective) Marshal(m jsn.Marshaler) error {
-	return StoryDirective_Marshal(m, op)
-}
-
-type StoryDirective_Slice []StoryDirective
-
-func (op *StoryDirective_Slice) GetType() string { return StoryDirective_Type }
-
-func (op *StoryDirective_Slice) Marshal(m jsn.Marshaler) error {
-	return StoryDirective_Repeats_Marshal(m, (*[]StoryDirective)(op))
-}
-
-func (op *StoryDirective_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *StoryDirective_Slice) SetSize(cnt int) {
-	var els []StoryDirective
-	if cnt >= 0 {
-		els = make(StoryDirective_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *StoryDirective_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return StoryDirective_Marshal(m, &(*op)[i])
-}
-
-func StoryDirective_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryDirective) error {
-	return jsn.RepeatBlock(m, (*StoryDirective_Slice)(vals))
-}
-
-func StoryDirective_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryDirective) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = StoryDirective_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type StoryDirective_Flow struct{ ptr *StoryDirective }
-
-func (n StoryDirective_Flow) GetType() string      { return StoryDirective_Type }
-func (n StoryDirective_Flow) GetLede() string      { return "interpret" }
-func (n StoryDirective_Flow) GetFlow() interface{} { return n.ptr }
-func (n StoryDirective_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*StoryDirective); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func StoryDirective_Optional_Marshal(m jsn.Marshaler, pv **StoryDirective) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = StoryDirective_Marshal(m, *pv)
-	} else if !enc {
-		var v StoryDirective
-		if err = StoryDirective_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func StoryDirective_Marshal(m jsn.Marshaler, val *StoryDirective) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(StoryDirective_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", StoryDirective_Field_Lede)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", StoryDirective_Field_Lede))
-		}
-		e1 := m.MarshalKey("with", StoryDirective_Field_Scans)
-		if e1 == nil {
-			e1 = grammar.ScannerMaker_Repeats_Marshal(m, &val.Scans)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", StoryDirective_Field_Scans))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // StoryFile top level node, currently just for blockly might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
 	StoryStatements []StoryStatement `if:"label=_"`
@@ -6210,7 +6323,9 @@ var Slats = []composer.Composer{
 	(*DefineAlias)(nil),
 	(*DefineFields)(nil),
 	(*DefineKinds)(nil),
+	(*DefineLeadingGrammar)(nil),
 	(*DefineMacro)(nil),
+	(*DefineNamedGrammar)(nil),
 	(*DefineNounTraits)(nil),
 	(*DefineNouns)(nil),
 	(*DefineOtherRelatives)(nil),
@@ -6246,7 +6361,6 @@ var Slats = []composer.Composer{
 	(*ShuffleText)(nil),
 	(*StoppingText)(nil),
 	(*StoryBreak)(nil),
-	(*StoryDirective)(nil),
 	(*StoryFile)(nil),
 	(*Test)(nil),
 	(*TestName)(nil),
@@ -6339,8 +6453,10 @@ var Signatures = map[uint64]interface{}{
 	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
 	10612153415886771360: (*DefineAlias)(nil),          /* execute=Interpret alias:as: */
 	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
-	2895546536328156972:  (*StoryDirective)(nil),       /* execute=Interpret:with: */
-	6001249499689096432:  (*StoryDirective)(nil),       /* story_statement=Interpret:with: */
+	16304045397725596887: (*DefineNamedGrammar)(nil),   /* execute=Interpret name:with: */
+	8001652437005351387:  (*DefineNamedGrammar)(nil),   /* story_statement=Interpret name:with: */
+	2895546536328156972:  (*DefineLeadingGrammar)(nil), /* execute=Interpret:with: */
+	6001249499689096432:  (*DefineLeadingGrammar)(nil), /* story_statement=Interpret:with: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
 	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */

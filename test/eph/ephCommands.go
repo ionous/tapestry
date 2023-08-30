@@ -57,13 +57,12 @@ func (op *BeginDomain) Assert(cat *weave.Catalog) (err error) {
 
 // Directives
 type Directives struct {
-	Name      string
 	Directive grammar.Directive
 }
 
 func (op *Directives) Assert(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
-		return w.Pin().AddGrammar(op.Name, &op.Directive)
+		return w.Pin().AddGrammar(op.Directive.Name, &op.Directive)
 	})
 }
 

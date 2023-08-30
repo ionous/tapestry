@@ -319,7 +319,7 @@ func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 
 // Directive starts a parser scanner.
 type Directive struct {
-	Lede   []string       `if:"label=_,type=text"`
+	Name   string         `if:"label=name,type=text"`
 	Scans  []ScannerMaker `if:"label=with"`
 	Markup map[string]any
 }
@@ -336,7 +336,7 @@ func (*Directive) Compose() composer.Spec {
 }
 
 const Directive_Type = "directive"
-const Directive_Field_Lede = "$LEDE"
+const Directive_Field_Name = "$NAME"
 const Directive_Field_Scans = "$SCANS"
 
 func (op *Directive) Marshal(m jsn.Marshaler) error {
@@ -410,12 +410,12 @@ func Directive_Optional_Marshal(m jsn.Marshaler, pv **Directive) (err error) {
 func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Directive_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Directive_Field_Lede)
+		e0 := m.MarshalKey("name", Directive_Field_Name)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Directive_Field_Lede))
+			m.Error(errutil.New(e0, "in flow at", Directive_Field_Name))
 		}
 		e1 := m.MarshalKey("with", Directive_Field_Scans)
 		if e1 == nil {
@@ -1098,7 +1098,7 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
-	3954853544935742221:  (*Directive)(nil), /* grammar_maker=Interpret:with: */
+	6454124700650096920:  (*Directive)(nil), /* grammar_maker=Interpret name:with: */
 	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */
 	16418039705711067622: (*AnyOf)(nil),     /* scanner_maker=One of: */
 	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */

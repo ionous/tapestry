@@ -342,7 +342,7 @@
         {
           "--": "starts a parser scanner.",
           "Spec:slots:with flow:": [
-            "story_directive",
+            "define_leading_grammar",
             [
               "execute",
               "story_statement"
@@ -357,6 +357,37 @@
                       "lede",
                       "text",
                       true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "with",
+                      "scans",
+                      "scanner_maker",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+          {
+          "--": "starts a parser scanner.",
+          "Spec:slots:with flow:": [
+            "define_named_grammar",
+            [
+              "execute",
+              "story_statement"
+            ],
+            {
+              "Flow:uses:": [
+                "interpret",
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
                     ]
                   },
                   {

@@ -25,7 +25,6 @@
             }
           ]
         },
-       
         {
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
@@ -77,11 +76,9 @@
                 "interpret",
                 [
                   {
-                    "Term:name:type:repeats:": [
-                      "_",
-                      "lede",
-                      "text",
-                      true
+                    "Term:type:": [
+                      "name",
+                      "text"
                     ]
                   },
                   {

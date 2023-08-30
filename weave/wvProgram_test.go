@@ -16,10 +16,10 @@ func TestGrammar(t *testing.T) {
 	defer dt.Close()
 	dt.MakeDomain(dd("b"),
 		&eph.Directives{
-			Name: `jump/skip/hop`,
 			Directive: grammar.Directive{
-				Lede: []string{"jump", "skip", "hop"},
+				Name: `jump/skip/hop`,
 				Scans: []grammar.ScannerMaker{
+					&grammar.Words{Words: []string{"jump", "skip", "hop"}},
 					&grammar.Action{Action: "jumping"},
 				},
 			},
@@ -30,9 +30,9 @@ func TestGrammar(t *testing.T) {
 	} else if out, e := dt.ReadGrammar(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		`b:jump/skip/hop:{"Interpret:with:":[["jump","skip","hop"],[{"Action:":"jumping"}]]}`,
+		`b:{"Interpret name:with:":["jump/skip/hop",[{"One word:":["jump","skip","hop"]},{"Action:":"jumping"}]]}`,
 	}); len(diff) > 0 {
-		t.Log(pretty.Sprint(out))
+		t.Log("got:", pretty.Sprint(out))
 		t.Fatal(diff)
 	}
 }

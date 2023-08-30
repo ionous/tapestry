@@ -54,7 +54,7 @@ func ReadFields(db *sql.DB) ([]string, error) {
 // domain, input, serialized program
 func ReadGrammar(db *sql.DB) ([]string, error) {
 	return tables.QueryStrings(db, `
-  select domain ||':'|| name ||':'|| prog
+  select domain ||':'|| prog
 	from mdl_grammar`)
 }
 

@@ -40,18 +40,37 @@ func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 }
 
 // Execute - called by the macro runtime during weave.
-func (op *StoryDirective) Execute(macro rt.Runtime) error {
+func (op *DefineLeadingGrammar) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
 // an ugly way to ensure that grammar ( and therefore the runtime )
 // isnt dependent on story / weave
-func (op *StoryDirective) Weave(cat *weave.Catalog) (err error) {
+func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 	// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 	name := strings.Join(op.Lede, "/")
+	words := &grammar.Words{Words: op.Lede}
+	scans := append([]grammar.ScannerMaker{words}, op.Scans...)
 	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(name, &grammar.Directive{
-			Lede:  op.Lede,
+			Name:  name,
+			Scans: scans,
+		})
+	})
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *DefineNamedGrammar) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+// an ugly way to ensure that grammar ( and therefore the runtime )
+// isnt dependent on story / weave
+func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
+	name := lang.Normalize(op.Name)
+	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
+		return w.Pin().AddGrammar(name, &grammar.Directive{
+			Name:  name,
 			Scans: op.Scans,
 		})
 	})
