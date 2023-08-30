@@ -1,7 +1,6 @@
 package cmdcheck
 
 import (
-	"bytes"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -19,13 +18,13 @@ type CheckOutput struct {
 }
 
 func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
-	var buf bytes.Buffer
+	var buf strings.Builder
 	prevWriter := run.SetWriter(print.NewLineSentences(markup.ToText(&buf)))
 	//
 	if prevDomain, e := run.ActivateDomain(t.Domain); e != nil {
 		err = e
 	} else {
-		if e := safe.RunAll(&checker{run, &buf, 0}, t.Test); e != nil {
+		if e := safe.RunAll(&checker{run, &buf}, t.Test); e != nil {
 			err = errutil.Fmt("NG!  %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect && len(t.Expect) > 0 {
 			if eol := '\n'; strings.ContainsRune(res, eol) || strings.ContainsRune(t.Expect, eol) {
@@ -45,15 +44,14 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 
 type checker struct {
 	rt.Runtime
-	buf     *bytes.Buffer
-	lastOut int
+	buf *strings.Builder
 }
 
 func (c *checker) GetAccumulatedOutput() (ret []string) {
-	b := c.buf.Bytes()
-	if cnt := len(b); cnt > c.lastOut {
-		ret = strings.FieldsFunc(string(b[c.lastOut:]), func(r rune) bool { return r == newline })
-		c.lastOut = cnt
+	str := c.buf.String()
+	if cnt := len(str); cnt > 0 {
+		ret = strings.FieldsFunc(str, func(r rune) bool { return r == newline })
+		c.buf.Reset()
 	}
 	return
 }
