@@ -8,6 +8,7 @@ const (
 	Counter        = "$counter"   // sequence counter
 	Domain         = "$scene"     // returns whether a named domain is active
 	FieldsOfKind   = "$fields"    // names of the fields of a kind as a text list
+	ObjectAliases  = "$alias"     // similar to object name but returns a list of names
 	ObjectId       = "$object"    // returns the unique object id from a object name
 	ObjectKind     = "$kind"      // type of a game object
 	ObjectKinds    = "$ancestry"  // ancestor of an object's type ( a text list, root at the start )

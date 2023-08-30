@@ -26,7 +26,7 @@ type Query struct {
 	nounInfo,
 	nounName,
 	nounValues,
-	nounIsNamed,
+	nounAliases,
 	nounsByKind,
 	oppositeOf,
 	patternOf,
@@ -169,13 +169,13 @@ func (q *Query) NounInfo(name string) (ret query.NounInfo, err error) {
 	return
 }
 
-func (q *Query) NounIsNamed(id, name string) (ret bool, err error) {
-	return scanOne(q.nounIsNamed, id, name)
-}
-
 // return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )
 func (q *Query) NounName(id string) (ret string, err error) {
 	return scanString(q.nounName, id)
+}
+
+func (q *Query) NounNames(id string) (ret []string, err error) {
+	return scanStrings(q.nounAliases, id)
 }
 
 // interpreting the value is left to the caller ( re: field affinity )
@@ -371,13 +371,13 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			limit 1`,
 		),
 		// does a noun have some specific name?
-		nounIsNamed: ps.Prep(db,
-			`select 1
+		nounAliases: ps.Prep(db,
+			`select my.name
 			from mdl_name my
 			join active_nouns ns
 				using (noun)
 			where ns.name=?1
-			and my.name=?2`,
+			order by my.name`,
 		),
 		// given the fullname of a noun, find the best short name
 		nounName: ps.Prep(db,

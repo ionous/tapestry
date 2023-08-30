@@ -2,17 +2,20 @@ package internal
 
 import (
 	"log"
+	"sort"
 
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 type Noun struct {
-	run *Playtime
+	run rt.Runtime
 	id  string
 }
 
-func MakeNoun(run *Playtime, name string) *Noun {
+func MakeNoun(run rt.Runtime, name string) *Noun {
 	return &Noun{run, lang.Normalize(name)}
 }
 
@@ -25,8 +28,16 @@ func (n *Noun) HasPlural(s string) bool {
 	return n.HasClass(s)
 }
 
-func (n *Noun) HasName(s string) bool {
-	return n.run.HasName(n.String(), s)
+func (n *Noun) HasName(name string) (okay bool) {
+	if name == n.id {
+		okay = true
+	} else if ugh, e := n.run.GetField(meta.ObjectAliases, n.id); e == nil {
+		ick := ugh.Strings()
+		if i := sort.SearchStrings(ick, name); i < len(ick) && ick[i] == name {
+			okay = true
+		}
+	}
+	return
 }
 
 func (n *Noun) HasClass(s string) (ret bool) {

@@ -13,7 +13,7 @@ type Focus struct {
 
 //
 func (a *Focus) Scan(ctx Context, _ Bounds, cs Cursor) (ret Result, err error) {
-	if bounds, e := ctx.GetPlayerBounds(a.Where); e != nil {
+	if bounds, e := ctx.GetBounds("", a.Where); e != nil {
 		err = e
 	} else {
 		ret, err = a.What.Scan(ctx, bounds, cs)
@@ -45,7 +45,7 @@ func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err
 		} else if obj, ok := last.(ResolvedNoun); !ok {
 			err = errutil.Fmt("expected an object, got %T", last)
 			break
-		} else if bounds, e := ctx.GetObjectBounds(obj.NounInstance.String()); e != nil {
+		} else if bounds, e := ctx.GetBounds(obj.NounInstance.String(), ""); e != nil {
 			err = e
 			break
 		} else {

@@ -1,15 +1,13 @@
 package parser
 
 type Context interface {
-	// return true if the passed word is a plural word.
-	IsPlural(word string) bool
 	// the range of the player's known universe.
 	// string names are defined by the "Focus" parts of a Scanner grammar.
 	// for example, maybe "held" for objects held by the player.
 	// the empty string is used as the default range when no focus has been declared.
-	GetPlayerBounds(string) (Bounds, error)
-	// ex. take from a container
-	GetObjectBounds(string) (Bounds, error)
+	GetBounds(who, where string) (Bounds, error)
+	// return true if the passed word is a plural word.
+	IsPlural(word string) bool
 }
 
 // Bounds encapsulates some set of objects.

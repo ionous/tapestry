@@ -37,20 +37,21 @@ func (m MyBounds) Many(rs ...rune) (ret []NounInstance) {
 	return
 }
 
-func (m MyBounds) GetPlayerBounds(n string) (ret Bounds, err error) {
-	switch n {
-	case "":
-		ret = m.SearchBounds
-	case "player":
-		ret = m.PlayerBounds
+func (m MyBounds) GetBounds(who, where string) (ret Bounds, err error) {
+	switch who {
 	default:
-		err = errutil.New("unknown bounds", n)
+		ret = m.SearchBounds
+	case "":
+		switch where {
+		case "":
+			ret = m.SearchBounds
+		case "player":
+			ret = m.PlayerBounds
+		default:
+			err = errutil.New("unknown bounds", who, where)
+		}
 	}
 	return
-}
-
-func (m MyBounds) GetObjectBounds(string) (Bounds, error) {
-	return m.SearchBounds, nil
 }
 
 func (m MyBounds) IsPlural(word string) bool {
@@ -181,7 +182,7 @@ func TestBounds(t *testing.T) {
 func matching(ctx Context, phrase string) (ret Result, err error) {
 	match := &Noun{}
 	words := strings.Fields(phrase)
-	if bounds, e := ctx.GetPlayerBounds(""); e != nil {
+	if bounds, e := ctx.GetBounds("", ""); e != nil {
 		err = e
 	} else {
 		ret, err = match.Scan(ctx, bounds, Cursor{Words: words})
@@ -192,7 +193,7 @@ func matching(ctx Context, phrase string) (ret Result, err error) {
 func matchingFilter(ctx Context, phrase, attr, class string) (ret Result, err error) {
 	match := &Noun{Filters{&HasAttr{attr}, &HasClass{class}}}
 	words := strings.Fields(phrase)
-	if bounds, e := ctx.GetPlayerBounds(""); e != nil {
+	if bounds, e := ctx.GetBounds("", ""); e != nil {
 		err = e
 	} else {
 		ret, err = match.Scan(ctx, bounds, Cursor{Words: words})

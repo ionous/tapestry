@@ -26,7 +26,7 @@ type Result struct {
 
 func (p *Parser) Step(words string) (ret *Result, err error) {
 	pt := p.pt
-	if bounds, e := pt.GetPlayerLocale(); e != nil {
+	if bounds, e := pt.GetBounds("", ""); e != nil {
 		err = e
 	} else {
 		cursor := parser.Cursor{Words: strings.Fields(words)}
@@ -79,7 +79,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 					// or maybe get passed lists of objects hrmm.
 					// send these nouns to the runtime
 					nouns := res.Objects()
-					if e := pt.Play(act.Name, "player", nouns); e != nil {
+					if e := pt.Play(act.Name, nouns); e != nil {
 						err = errutil.New(e, "for", res)
 					} else {
 						ret = &Result{

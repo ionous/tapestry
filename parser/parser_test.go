@@ -137,7 +137,7 @@ func innerParse(log Log, ctx Context, match Scanner, in []string, goals []Goal) 
 		err = errutil.New("expected some goals")
 	} else {
 		goal, goals := goals[0], goals[1:]
-		if bounds, e := ctx.GetPlayerBounds(""); e != nil {
+		if bounds, e := ctx.GetBounds("", ""); e != nil {
 			err = e
 		} else if res, e := match.Scan(ctx, bounds, Cursor{Words: in}); e != nil {
 			// on error:

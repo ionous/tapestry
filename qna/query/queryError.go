@@ -39,11 +39,11 @@ func (q QueryNone) NounInfo(name string) (ret NounInfo, err error) {
 	return
 }
 
-func (q QueryNone) NounIsNamed(id, name string) (ret bool, err error) {
+func (q QueryNone) NounName(id string) (ret string, err error) {
 	return
 }
 
-func (q QueryNone) NounName(id string) (ret string, err error) {
+func (q QueryNone) NounNames(id string) (ret []string, err error) {
 	return
 }
 

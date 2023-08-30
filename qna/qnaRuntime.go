@@ -50,12 +50,6 @@ func (run *Runner) reportError(e error) error {
 	return e
 }
 
-// used by the parser to determine if a noun in a scope has a given name
-// tbd: can this be refactored so that play time can ask it directly?
-func (run *Runner) NounIsNamed(noun, name string) (bool, error) {
-	return run.query.NounIsNamed(noun, name)
-}
-
 func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 	if prev, e := run.query.ActivateDomain(domain); e != nil {
 		err = run.reportError(e)
@@ -247,6 +241,13 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 					fs = append(fs, f.Name)
 				}
 				ret = g.StringsOf(fs)
+			}
+
+		case meta.ObjectAliases:
+			if ns, e := run.getObjectNames(field); e != nil {
+				err = run.reportError(e)
+			} else {
+				ret = g.StringsOf(ns)
 			}
 
 		case meta.ObjectId:

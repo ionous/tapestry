@@ -19,22 +19,22 @@ type MyContext struct {
 	Log
 }
 
-func (m MyContext) GetPlayerBounds(n string) (ret Bounds, err error) {
-	if s, ok := m.Player[n]; ok {
-		m.Log.Log("asking for bounds", n)
-		ret = s
-	} else {
-		ret = m.SearchBounds
-	}
-	return
-}
-
-func (m MyContext) GetObjectBounds(n string) (ret Bounds, err error) {
-	if s, ok := m.Other[n]; ok {
-		m.Log.Log("asking for bounds", n)
-		ret = s
-	} else {
-		err = errutil.New("unknown bounds", n)
+func (m MyContext) GetBounds(who, where string) (ret Bounds, err error) {
+	switch who {
+	case "":
+		if s, ok := m.Player[where]; ok {
+			m.Log.Log("asking for bounds", who, where)
+			ret = s
+		} else {
+			ret = m.SearchBounds
+		}
+	default:
+		if s, ok := m.Other[who]; ok {
+			m.Log.Log("asking for bounds", who, where)
+			ret = s
+		} else {
+			err = errutil.New("unknown bounds", who, where)
+		}
 	}
 	return
 }

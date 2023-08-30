@@ -49,6 +49,8 @@ func (op *Reverse) MakeScanner() parser.Scanner {
 	return &parser.Reverse{Match: ls}
 }
 
+// tbd: i wonder if this should have children ( like any/one of )
+// rather than being "inline"
 func (op *Scope) MakeScanner() parser.Scanner {
 	return &parser.Eat{Scanner: &parser.Focus{Where: op.Player, What: &parser.Noun{}}}
 }

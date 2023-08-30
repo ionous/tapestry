@@ -43,78 +43,62 @@
                   0
                 ]
               },
-              [
-                {
-                  "--": "process the queue",
-                  "Erasing:atFront:as:do:": [
-                    "@queue",
-                    true,
-                    "enc",
-                    [
-                      {
-                        "Repeating across:as:do:": [
-                          {
-                            "FromTextList:": {
-                              "ChildrenOf obj:": {
-                                "FromText:": "@enc"
-                              }
-                            }
-                          },
-                          "kid",
-                          [
-                            {
-                              "Push:into:": [
-                                {
-                                  "FromText:": "@kid"
-                                },
-                                "@bounds"
-                              ]
-                            },
-                            {
-                              "If:do:": [
-                                {
-                                  "Not:": {
-                                    "FullyOpaque obj:": {
-                                      "FromText:": "@kid"
-                                    }
-                                  }
-                                },
-                                [
-                                  {
-                                    "Comment:": "add this kid for additional processing"
-                                  },
-                                  {
-                                    "Push:into:": [
-                                      {
-                                        "FromText:": "@kid"
-                                      },
-                                      "@queue"
-                                    ]
-                                  }
-                                ]
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "--": [
-                    "add the directions to scope",
-                    "todo: implement 'continue' and put this in a separate, fallthrough, rule"
-                  ],
-                  "Push:into:": [
+              {
+                "--": "process the queue",
+                "Erasing:atFront:as:do:": [
+                  "@queue",
+                  true,
+                  "enc",
+                  [
                     {
-                      "FromTextList:": {
-                        "KindsOf:": "directions"
-                      }
-                    },
-                    "@bounds"
+                      "Repeating across:as:do:": [
+                        {
+                          "FromTextList:": {
+                            "ChildrenOf obj:": {
+                              "FromText:": "@enc"
+                            }
+                          }
+                        },
+                        "kid",
+                        [
+                          {
+                            "Push:into:": [
+                              {
+                                "FromText:": "@kid"
+                              },
+                              "@bounds"
+                            ]
+                          },
+                          {
+                            "If:do:": [
+                              {
+                                "Not:": {
+                                  "FullyOpaque obj:": {
+                                    "FromText:": "@kid"
+                                  }
+                                }
+                              },
+                              [
+                                {
+                                  "Comment:": "add this kid for additional processing"
+                                },
+                                {
+                                  "Push:into:": [
+                                    {
+                                      "FromText:": "@kid"
+                                    },
+                                    "@queue"
+                                  ]
+                                }
+                              ]
+                            ]
+                          }
+                        ]
+                      ]
+                    }
                   ]
-                }
-              ]
+                ]
+              }
             ]
           }
         ]
