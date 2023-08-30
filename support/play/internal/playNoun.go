@@ -10,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
+// these are created by the survey
 type Noun struct {
 	run rt.Runtime
 	id  string

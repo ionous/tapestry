@@ -68,17 +68,16 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 					w = print.NewLineSentences(&bufferedText)
 				}
 				d := decode.NewDecoder(tapestry.AllSignatures)
-				rx := qna.NewRuntimeOptions(w, query, d, opts)
-				if _, e := rx.ActivateDomain(domain); e != nil {
+				run := qna.NewRuntimeOptions(w, query, d, opts)
+				if _, e := run.ActivateDomain(domain); e != nil {
 					err = e
 				} else {
-					run := play.NewPlaytime(rx)
-					parser := play.NewParser(run, grammar)
+					play := play.NewPlaytime(run, grammar)
 					//
 					if len(testString) > 0 {
 						for _, cmd := range strings.Split(testString, ";") {
 							fmt.Println(prompt, cmd)
-							step(parser, cmd, !jsonMode)
+							step(play, cmd, !jsonMode)
 						}
 					} else {
 						reader := bufio.NewReader(os.Stdin)
@@ -90,7 +89,7 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 								break
 							} else {
 								words := in[:len(in)-1] // strip the newline.
-								step(parser, words, !jsonMode)
+								step(play, words, !jsonMode)
 
 								if jsonMode {
 									// take buffered text and write it out
@@ -115,7 +114,7 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 	return
 }
 
-func step(p *play.Parser, s string, pad bool) {
+func step(p *play.Playtime, s string, pad bool) {
 	if res, e := p.Step(s); e != nil {
 		log.Println("error:", e)
 	} else if res != nil && pad {

@@ -13,7 +13,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Bounds struct {
+// the survey creates bounds: areas of the world containing sets of nouns.
+type Survey struct {
 	run          rt.Runtime
 	focus        string
 	bounds       string // name of pattern
@@ -21,14 +22,14 @@ type Bounds struct {
 	lastLocation string // debugging only
 }
 
-func MakeDefaultBounds(run rt.Runtime) Bounds {
-	return MakeBounds(run, "player", "parser bounds", "whereabouts")
+func MakeDefaultSurveyor(run rt.Runtime) Survey {
+	return MakeSurveyor(run, "player", "parser bounds", "whereabouts")
 }
 
 // todo: the "patter" refers to bounds for the player
 // ideally all of the bounds functions would be in script
 // and neither "player" nor "relation" would live here.
-func MakeBounds(run rt.Runtime, player, pattern, relation string) Bounds {
+func MakeSurveyor(run rt.Runtime, player, pattern, relation string) Survey {
 	pat, e := run.GetKindByName(pattern)
 	if e != nil || !pat.Implements(kindsOf.Pattern.String()) {
 		panic(errutil.Sprintf("couldn't find bounds query %q", pattern, e))
@@ -37,7 +38,7 @@ func MakeBounds(run rt.Runtime, player, pattern, relation string) Bounds {
 	if e != nil || !rel.Implements(kindsOf.Relation.String()) {
 		panic(errutil.Sprintf("couldn't find relation %q", relation, e))
 	}
-	return Bounds{
+	return Survey{
 		run:      run,
 		focus:    player,
 		bounds:   pat.Name(),
@@ -47,13 +48,13 @@ func MakeBounds(run rt.Runtime, player, pattern, relation string) Bounds {
 
 // return the common name of the focal object
 // ex. player
-func (s *Bounds) GetFocus() string {
+func (s *Survey) GetFocus() string {
 	return s.focus
 }
 
 // return the id of the focal object
 // ex. self
-func (s *Bounds) GetFocalObject() (g.Value, error) {
+func (s *Survey) GetFocalObject() (g.Value, error) {
 	return s.run.GetField(s.focus, "pawn")
 }
 
@@ -63,7 +64,7 @@ func (s *Bounds) GetFocalObject() (g.Value, error) {
 // ( one string and assume that the parser always refers to whatever actor in the global player variable )
 // that would probably narrow the dependency on rt -- maybe just to a "call" that could be configured with rt externally.
 // ( the "Scope" command could request the named pattern to ensure it exists. )
-func (s *Bounds) GetBounds(who, where string) (ret parser.Bounds, err error) {
+func (s *Survey) GetBounds(who, where string) (ret parser.Bounds, err error) {
 	run := s.run
 	switch who {
 	case "", s.focus:
@@ -90,13 +91,13 @@ func (s *Bounds) GetBounds(who, where string) (ret parser.Bounds, err error) {
 
 // fix: this assumes all objects are emsy
 // add containment, whatever...
-func (s *Bounds) getObjectBounds(obj string) parser.Bounds {
+func (s *Survey) getObjectBounds(obj string) parser.Bounds {
 	return func(cb parser.NounVisitor) (ret bool) {
 		return
 	}
 }
 
-func (s *Bounds) getLocale() (ret parser.Bounds, err error) {
+func (s *Survey) getLocale() (ret parser.Bounds, err error) {
 	run := s.run
 	if pawn, e := s.GetFocalObject(); e != nil {
 		err = e
@@ -120,7 +121,7 @@ func (s *Bounds) getLocale() (ret parser.Bounds, err error) {
 // note: play has to attach to some specifics of a particular runtime to work
 // ex. childrenOf, transparentOf, etc.
 // enc is the enclosureOf the player
-func (s *Bounds) locationBounded(enc string) parser.Bounds {
+func (s *Survey) locationBounded(enc string) parser.Bounds {
 	run := s.run
 	return func(cb parser.NounVisitor) (ret bool) {
 		if kids, e := run.Call(
@@ -139,7 +140,7 @@ func (s *Bounds) locationBounded(enc string) parser.Bounds {
 
 // we have a custom compass bounds because otherwise
 // going a direction ( ex. "> north" ) is going to be super slow
-func (s *Bounds) compassBounds() (ret parser.Bounds) {
+func (s *Survey) compassBounds() (ret parser.Bounds) {
 	run := s.run
 	return func(cb parser.NounVisitor) (ret bool) {
 		if kids, e := run.GetField(meta.ObjectsOfKind, "directions"); e != nil {
@@ -153,13 +154,13 @@ func (s *Bounds) compassBounds() (ret parser.Bounds) {
 
 // return bounds which includes only the player agent and nothing else.
 // fix: why this is the agent and not the pawn?
-func (s *Bounds) selfBounded() (ret parser.Bounds) {
+func (s *Survey) selfBounded() (ret parser.Bounds) {
 	return func(cb parser.NounVisitor) (ret bool) {
 		return cb(&Noun{s.run, s.focus})
 	}
 }
 
-func (s *Bounds) visitStrings(cb parser.NounVisitor, kids g.Value) (ret bool) {
+func (s *Survey) visitStrings(cb parser.NounVisitor, kids g.Value) (ret bool) {
 	run := s.run
 	for _, k := range kids.Strings() {
 		if ok := cb(MakeNoun(run, k)); ok {

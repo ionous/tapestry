@@ -1,11 +1,20 @@
 package parser
 
 type Context interface {
+	Surveyor
+	Language
+}
+
+//
+type Surveyor interface {
 	// the range of the player's known universe.
 	// string names are defined by the "Focus" parts of a Scanner grammar.
 	// for example, maybe "held" for objects held by the player.
 	// the empty string is used as the default range when no focus has been declared.
 	GetBounds(who, where string) (Bounds, error)
+}
+
+type Language interface {
 	// return true if the passed word is a plural word.
 	IsPlural(word string) bool
 }

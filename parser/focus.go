@@ -13,6 +13,7 @@ type Focus struct {
 
 //
 func (a *Focus) Scan(ctx Context, _ Bounds, cs Cursor) (ret Result, err error) {
+	// focus ignores the passed bounds, and establishes a new set
 	if bounds, e := ctx.GetBounds("", a.Where); e != nil {
 		err = e
 	} else {
