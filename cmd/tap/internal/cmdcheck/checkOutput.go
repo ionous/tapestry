@@ -17,6 +17,7 @@ type CheckOutput struct {
 	Test   []rt.Execute
 }
 
+// takes a play time so that it can run parser commands when requeted
 func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	var buf strings.Builder
 	prevWriter := run.SetWriter(print.NewLineSentences(markup.ToText(&buf)))

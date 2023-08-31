@@ -1,6 +1,7 @@
 package debug
 
 import (
+	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -54,6 +55,8 @@ func compareAtLast(match, input []string) (err error) {
 			if h := input[i]; w != h {
 				e := errutil.Fmt("line %v mismatched. wanted '%v' have '%v'", i, w, h)
 				err = errutil.Append(err, e)
+			} else if LogLevel.Str <= LoggingLevel_Debug {
+				log.Println("~ ", w)
 			}
 		}
 	}

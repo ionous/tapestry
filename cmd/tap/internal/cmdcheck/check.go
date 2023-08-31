@@ -6,14 +6,14 @@ import (
 	"os"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
@@ -24,9 +24,11 @@ import (
 func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]interface{}) (ret int, err error) {
 	if e := tables.CreateRun(db); e != nil {
 		err = e
-	} else if qdb, e := qdb.NewQueries(db, true); e != nil {
+	} else if query, e := qdb.NewQueries(db, true); e != nil {
 		err = e
-	} else if checks, e := qdb.ReadChecks(actuallyJustThisOne); e != nil {
+	} else if grammar, e := play.MakeGrammar(db); e != nil {
+		err = e
+	} else if checks, e := query.ReadChecks(actuallyJustThisOne); e != nil {
 		err = e
 	} else if len(checks) == 0 {
 		err = errutil.New("no matching checks found")
@@ -36,8 +38,11 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 				log.Println("ignoring", check.Name)
 			} else {
 				log.Println("-- Checking:", check.Name, check.Domain)
-
-				if e := checkOne(qdb, check, options, signatures, &ret); e != nil {
+				w := print.NewLineSentences(markup.ToText(os.Stdout))
+				d := decode.NewDecoder(signatures)
+				run := qna.NewRuntimeOptions(w, query, d, options)
+				play := play.NewPlaytime(run, grammar)
+				if e := checkOne(d, play, check, &ret); e != nil {
 					e := errutil.New(e, "during", check.Name)
 					err = errutil.Append(err, e)
 					log.Println(e)
@@ -50,25 +55,23 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 	return
 }
 
-func checkOne(qdb *qdb.Query, check query.CheckData, options qna.Options, signatures []map[uint64]interface{}, pret *int) (err error) {
-	var act rt.Execute_Slice
-	// FIX: shouldnt this be core.Decode -- look at query Decoder instead
-	// story shouldnt be needed for any runtime like stuff; only import->weave.
-	if e := story.Decode(&act, check.Prog, signatures); e != nil {
+func checkOne(d *decode.Decoder, play *play.Playtime, check query.CheckData, pret *int) (err error) {
+	if act, e := d.DecodeProg(check.Prog); e != nil {
 		err = e
 	} else if expect, e := readLegacyExpectation(check); e != nil {
 		err = e
 	} else {
-		w := print.NewLineSentences(markup.ToText(os.Stdout))
-		d := decode.NewDecoder(signatures)
-		run := qna.NewRuntimeOptions(w, qdb, d, options)
 		t := CheckOutput{
 			Name:   check.Name,
 			Domain: check.Domain,
 			Expect: expect,
 			Test:   act,
 		}
-		err = t.RunTest(run)
+		debug.Stepper = func(words string) (err error) {
+			_, err = play.Step(words)
+			return
+		}
+		err = t.RunTest(play)
 		(*pret)++
 	}
 	return

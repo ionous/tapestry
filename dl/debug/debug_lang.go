@@ -527,6 +527,109 @@ func ExpectText_Marshal(m jsn.Marshaler, val *ExpectText) (err error) {
 	return
 }
 
+// Fabricate fake input as if the player had typed it themselves.
+// only works while running checks.
+type Fabricate struct {
+	Text   rt.TextEval `if:"label=input"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*Fabricate)(nil)
+
+func (*Fabricate) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Fabricate_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Fabricate_Type = "fabricate"
+const Fabricate_Field_Text = "$TEXT"
+
+func (op *Fabricate) Marshal(m jsn.Marshaler) error {
+	return Fabricate_Marshal(m, op)
+}
+
+type Fabricate_Slice []Fabricate
+
+func (op *Fabricate_Slice) GetType() string { return Fabricate_Type }
+
+func (op *Fabricate_Slice) Marshal(m jsn.Marshaler) error {
+	return Fabricate_Repeats_Marshal(m, (*[]Fabricate)(op))
+}
+
+func (op *Fabricate_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Fabricate_Slice) SetSize(cnt int) {
+	var els []Fabricate
+	if cnt >= 0 {
+		els = make(Fabricate_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Fabricate_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Fabricate_Marshal(m, &(*op)[i])
+}
+
+func Fabricate_Repeats_Marshal(m jsn.Marshaler, vals *[]Fabricate) error {
+	return jsn.RepeatBlock(m, (*Fabricate_Slice)(vals))
+}
+
+func Fabricate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Fabricate) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Fabricate_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Fabricate_Flow struct{ ptr *Fabricate }
+
+func (n Fabricate_Flow) GetType() string      { return Fabricate_Type }
+func (n Fabricate_Flow) GetLede() string      { return Fabricate_Type }
+func (n Fabricate_Flow) GetFlow() interface{} { return n.ptr }
+func (n Fabricate_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Fabricate); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Fabricate_Optional_Marshal(m jsn.Marshaler, pv **Fabricate) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Fabricate_Marshal(m, *pv)
+	} else if !enc {
+		var v Fabricate
+		if err = Fabricate_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Fabricate_Marshal(m jsn.Marshaler, val *Fabricate) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Fabricate_Flow{val}); err == nil {
+		e0 := m.MarshalKey("input", Fabricate_Field_Text)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Fabricate_Field_Text))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // LoggingLevel requires a predefined string.
 type LoggingLevel struct {
 	Str string
@@ -619,6 +722,7 @@ var Slats = []composer.Composer{
 	(*Expect)(nil),
 	(*ExpectOutput)(nil),
 	(*ExpectText)(nil),
+	(*Fabricate)(nil),
 	(*LoggingLevel)(nil),
 }
 
@@ -628,5 +732,6 @@ var Signatures = map[uint64]interface{}{
 	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
 	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
+	12332403919453206336: (*Fabricate)(nil),    /* execute=Fabricate input: */
 	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
 }
