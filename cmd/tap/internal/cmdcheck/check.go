@@ -68,6 +68,8 @@ func checkOne(d *decode.Decoder, play *play.Playtime, check query.CheckData, pre
 			Test:   act,
 		}
 		debug.Stepper = func(words string) (err error) {
+			// FIX: errors for step are getting fmt.Println in playTime.go
+			// so expect output can't test for errors ( and on error looks a bit borken )
 			_, err = play.Step(words)
 			return
 		}
