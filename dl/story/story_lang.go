@@ -1601,7 +1601,6 @@ func DefineNamedGrammar_Marshal(m jsn.Marshaler, val *DefineNamedGrammar) (err e
 // DefineNounTraits
 type DefineNounTraits struct {
 	Nouns  rt.TextListEval `if:"label=nouns"`
-	Kind   rt.TextEval     `if:"label=as,optional"`
 	Traits rt.TextListEval `if:"label=traits"`
 	Markup map[string]any
 }
@@ -1620,7 +1619,6 @@ func (*DefineNounTraits) Compose() composer.Spec {
 
 const DefineNounTraits_Type = "define_noun_traits"
 const DefineNounTraits_Field_Nouns = "$NOUNS"
-const DefineNounTraits_Field_Kind = "$KIND"
 const DefineNounTraits_Field_Traits = "$TRAITS"
 
 func (op *DefineNounTraits) Marshal(m jsn.Marshaler) error {
@@ -1701,19 +1699,12 @@ func DefineNounTraits_Marshal(m jsn.Marshaler, val *DefineNounTraits) (err error
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineNounTraits_Field_Nouns))
 		}
-		e1 := m.MarshalKey("as", DefineNounTraits_Field_Kind)
+		e1 := m.MarshalKey("traits", DefineNounTraits_Field_Traits)
 		if e1 == nil {
-			e1 = rt.TextEval_Optional_Marshal(m, &val.Kind)
+			e1 = rt.TextListEval_Marshal(m, &val.Traits)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefineNounTraits_Field_Kind))
-		}
-		e2 := m.MarshalKey("traits", DefineNounTraits_Field_Traits)
-		if e2 == nil {
-			e2 = rt.TextListEval_Marshal(m, &val.Traits)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", DefineNounTraits_Field_Traits))
+			m.Error(errutil.New(e1, "in flow at", DefineNounTraits_Field_Traits))
 		}
 		m.EndBlock()
 	}
@@ -6413,8 +6404,6 @@ var Signatures = map[uint64]interface{}{
 	17004191702311840201: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:provides:do: */
 	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
 	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
-	11310404142062902510: (*DefineNounTraits)(nil),     /* execute=Define nouns:as:traits: */
-	15286672803702417298: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:as:traits: */
 	9839172640820177073:  (*DefineRelatives)(nil),      /* execute=Define nouns:relativeTo:otherNouns: */
 	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
 	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */

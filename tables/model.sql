@@ -8,12 +8,6 @@
  */ 
 create table mdl_check( domain text not null, name text, value blob, affinity text, prog blob, at text, primary key( domain, name ));
 /* 
- * initialization for fields of kinds.
- * the value ( an Assignment ) is defined when the field is defined; 
- * meaning there's no separate domain or origin(at). 
- */ 
-create table mdl_default( field int not null, value blob, primary key( field ) );
-/* 
  * pairs of domain name and (domain) dependencies. 
  * domain names are considered globally unique.
  * a domain can have multiple direct parents; 
@@ -104,9 +98,10 @@ create table mdl_rev( domain text not null, oneWord text, otherWord text, at tex
  */
 create table mdl_rule( domain text not null, kind int not null, name text, rank int, stop int, jump int, updates int, prog blob, at text );
 /* 
- * initial values for the fields of nouns;
- * note: currently, the scope of the value is the same as the noun.
- * ( ie. one value per noun per field; not values that change as new domains are activated. )
+ * initial values for fields.
+ * noun might be 0; in which case its a default value for the entire kind.
+ * the scope of the value is the same as the noun or kind; that is the values are global: the same across all scenes.
  * dot contains sub field names separated by full stops.
+ * provisional values can be refined during weave.
  */
-create table mdl_value( noun int not null, field int not null, dot string, value blob, at text, primary key( noun, field, dot ));
+create table mdl_value( noun int not null, field int not null, dot string, value blob, provisional int, at text, primary key( noun, field, dot ));

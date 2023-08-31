@@ -121,7 +121,7 @@ func (fs *fieldSet) writeFieldSet(pen *Pen, kid kindInfo, cache classCache) (err
 			if e := eatDuplicates(pen.warn, e); e != nil {
 				err = e
 			} else if field.Init != nil {
-				e := pen.addDefault(kid, field.Name, field.Init)
+				e := pen.addDefaultValue(kid, field.Name, field.Init)
 				if e := eatDuplicates(pen.warn, e); e != nil {
 					err = e
 				}

@@ -85,9 +85,14 @@
             ]
           },
           {
-            "Define nouns:as:traits:": [
+            "Define nouns:as:": [
               "@things",
-              "things",
+              "things"
+            ]
+          },
+          {
+            "Define nouns:traits:": [
+              "@things",
               [
                 "wearable",
                 "worn"

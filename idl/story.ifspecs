@@ -898,14 +898,6 @@
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "as",
-                      "kind",
-                      "text_eval",
-                      true
-                    ]
-                  },
-                  {
                     "Term:type:": [
                       "traits",
                       "text_list_eval"

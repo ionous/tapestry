@@ -152,57 +152,6 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 	return
 }
 
-var mdl_default = tables.Insert("mdl_default", "field", "value")
-
-// the pattern half of Start; domain, kind, field are a pointer into Field
-func (pen *Pen) addDefault(kid kindInfo, field string, v assign.Assignment) (err error) {
-	if out, e := marshalAssignment(v); e != nil {
-		err = e
-	} else {
-		domain := pen.domain
-		var prev struct {
-			id     int
-			domain string
-			aff    affine.Affinity
-			out    *string
-		}
-		if e := pen.db.QueryRow(`
-		select mf.rowid, domain, affinity, value
-		from mdl_field mf
-		left join mdl_default md
-			on(md.field = mf.rowid)
-		where mf.kind = ?1
-		and mf.field = ?2`, kid.id, field).Scan(&prev.id, &prev.domain, &prev.aff, &prev.out); e == sql.ErrNoRows {
-			err = errutil.Fmt("%w field in assignment %q of kind %q in domain %q",
-				Missing, field, kid.name, domain)
-		} else if e != nil {
-			err = e
-		} else {
-			if domain != prev.domain {
-				// currently assuming that fields are initialized in the same domain as they are declared
-				// that wont always be true... ex. derived classes or constraints
-				err = errutil.Fmt("%w new assignment for field %q of kind %q differs in domain; was %q now %q.",
-					Conflict, field, kid.name, prev.domain, domain)
-			} else if prev.out != nil {
-				if out == *prev.out {
-					pen.warn("%w assignment for field %q of kind %q in domain %q",
-						Duplicate, field, kid.name, domain)
-				} else {
-					err = errutil.Fmt("%w new assignment for field %q of kind %q differs",
-						Conflict, field, kid.name)
-				}
-			} else if aff := assign.GetAffinity(v); aff != prev.aff {
-				err = errutil.Fmt("%w mismatched assignment for field %q of kind %q; field is %s, assignment was %s",
-					Conflict, field, kid.name,
-					prev.aff, aff)
-			} else {
-				_, err = pen.db.Exec(mdl_default, prev.id, out)
-			}
-		}
-	}
-	return
-}
-
 var mdl_domain = tables.Insert("mdl_domain", "domain", "requires", "at")
 
 // pairs of domain name and (domain) dependencies
@@ -919,10 +868,6 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 	return
 }
 
-// note: values are written per noun, not per domain
-// fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
-var mdl_value = tables.Insert("mdl_value", "noun", "field", "dot", "value", "at")
-
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: assumes noun is an exact name
 func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err error) {
@@ -941,6 +886,22 @@ func (pen *Pen) AddPathValue(noun, path string, value literal.LiteralValue) (err
 		err = pen.addFieldValue(noun, path, assign.Literal(value))
 	} else {
 		err = pen.addPathValue(noun, parts, value)
+	}
+	return
+}
+
+type ProvisionalAssignment struct {
+	assign.Assignment
+}
+type ProvisionalLiteral struct {
+	literal.LiteralValue
+}
+
+func isProvisional(a any) (okay bool) {
+	if _, ok := a.(ProvisionalAssignment); ok {
+		okay = true
+	} else if _, ok := a.(ProvisionalLiteral); ok {
+		okay = true
 	}
 	return
 }

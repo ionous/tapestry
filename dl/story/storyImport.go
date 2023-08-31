@@ -44,41 +44,17 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
-		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
-			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
-		} else {
+		} else if traits := traits.Strings(); len(traits) > 0 {
 			pen := w.Pin()
 			names := nouns.Strings()
-			if kind, e := grok.StripArticle(kind.String()); e != nil {
-				err = e
-			} else {
-				//
-				for i, name := range names {
-					if name, e := grok.StripArticle(name); e != nil {
+			for _, t := range traits {
+				t := lang.Normalize(t)
+				for _, n := range names {
+					if e := pen.AddFieldValue(n, t, truly()); e != nil {
 						err = errutil.Append(err, e)
-					} else {
-						n := lang.Normalize(name)
-						names[i] = n // replace for the traits loop
-						//
-						if len(kind) > 0 {
-							if e := pen.AddNoun(n, name, kind); e != nil {
-								err = errutil.Append(err, e)
-							}
-						}
-					}
-				}
-
-			}
-			if traits := traits.Strings(); len(traits) > 0 && err == nil {
-				for _, t := range traits {
-					t := lang.Normalize(t)
-					for _, n := range names {
-						if e := pen.AddFieldValue(n, t, truly()); e != nil {
-							err = errutil.Append(err, e)
-							break // out of the traits to the next noun
-						}
+						break // out of the traits to the next noun
 					}
 				}
 			}

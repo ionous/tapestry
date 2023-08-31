@@ -112,13 +112,14 @@ func ReadLocals(db *sql.DB) ([]string, error) {
 	// the original order was per domain, and then in dependency order withing that domain
 	//  wonder if itd be enough to simply go by kind id since the order of writing should follow
 	return tables.QueryStrings(db, `
-	select mk.domain ||':'|| mk.kind ||':'|| mf.field ||':'|| ma.value
-	from mdl_default ma
+	select mk.domain ||':'|| mk.kind ||':'|| mf.field ||':'|| mv.value
+	from mdl_value mv
 	join mdl_field mf 
-		on(ma.field = mf.rowid)
+		on(mv.field = mf.rowid)
 	join mdl_kind mk 
 		on(mf.kind = mk.rowid)
-	order by mk.rowid, mf.rowid, ma.rowid`)
+	where not mv.noun
+	order by mk.rowid, mf.rowid, mv.rowid`)
 }
 
 // domain, noun, name, rank

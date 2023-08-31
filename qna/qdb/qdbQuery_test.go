@@ -434,7 +434,7 @@ func mdlValue(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.Pin(domain, at).AddTestValue(noun, field, value); e != nil {
+		if e := m.Pin(domain, at).AddTestValue(noun, false, field, value); e != nil {
 			err = e
 			break
 		}

@@ -269,7 +269,7 @@ func TestPatternConflictingInit(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := testweave.OkayError(t, e, `Conflict mismatched assignment for field "n" of kind "p"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `mismatched affinity`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }

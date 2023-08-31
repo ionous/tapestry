@@ -335,14 +335,14 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// every field of a given kind, and its initial assignment if any.
 		// ( interestingly the order by seems to generate a shorter query than without )
 		fieldsOf: ps.Prep(db,
-			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type, ma.value
+			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type, mv.value
 			from active_kinds ks  -- search for the kind in question
 			join mdl_field mf
 				using (kind)
 			left join mdl_kind mk  -- search for the kind of type 
 				on (mk.rowid = mf.type)
-			left join mdl_default ma
-				on (ma.field = mf.rowid)
+			left join mdl_value mv
+				on (mv.field = mf.rowid and mv.noun = 0)
 			where ks.name = ?1
 			order by mf.rowid`,
 		),

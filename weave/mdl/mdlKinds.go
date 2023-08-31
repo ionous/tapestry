@@ -52,6 +52,10 @@ type kindInfo struct {
 	_fullpath string
 }
 
+func (ki *kindInfo) ownerInfo() ownerInfo {
+	return ownerInfo{kind: ki.id, debugName: ki.name}
+}
+
 func (ki *kindInfo) class() classInfo {
 	return classInfo{id: ki.id, name: ki.name, fullpath: ki.fullpath()}
 }
