@@ -23,7 +23,7 @@
     },
     {
       "Rule for:named:do:": [
-        "before dropping",
+        "instead of dropping",
         "the standard dropping checks",
         [
           {

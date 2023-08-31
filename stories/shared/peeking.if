@@ -23,7 +23,7 @@
     },
     {
       "Rule for:do:": [
-        "before peeking",
+        "instead of peeking",
         {
           "If:assuming:do:": [
             {

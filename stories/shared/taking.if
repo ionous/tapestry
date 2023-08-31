@@ -23,7 +23,7 @@
     },
     {
       "Rule for:do:": [
-        "before taking",
+        "instead of taking",
         {
           "If:assuming:do:": [
             {

@@ -92,7 +92,7 @@
     {
       "--": "The noun won't change if the 'guard' value is set and the noun has that trait.",
       "Rule for:do:": [
-        "before state changing",
+        "instead of state changing",
         {
           "If:do:": [
             {
@@ -127,7 +127,7 @@
     {
       "--": "The noun won't change if it already has the desired trait.",
       "Rule for:do:": [
-        "before state changing",
+        "instead of state changing",
         {
           "If:do:": [
             {

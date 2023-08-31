@@ -67,7 +67,7 @@
     },
     {
       "Rule for:named:do:": [
-        "before traveling",
+        "instead of traveling",
         "standard traveling checks",
         {
           "If:assuming:do:else:": [

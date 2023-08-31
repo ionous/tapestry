@@ -23,7 +23,7 @@
     },
     {
       "Rule for:named:do:": [
-        "before opening",
+        "instead of opening",
         "the standard opening checks",
         [
           {
@@ -177,7 +177,7 @@
     },
     {
       "Rule for:named:do:": [
-        "before closing",
+        "instead of closing",
         "the standard closing checks",
         [
           {
@@ -310,7 +310,7 @@
     },
     {
       "Rule for:kind:do:": [
-        "before state changing",
+        "instead of state changing",
         "openers",
         {
           "If:do:": [

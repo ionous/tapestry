@@ -61,7 +61,7 @@
     },
     {
       "Rule for:named:do:": [
-        "before attacking",
+        "instead of attacking",
         "standard attacking checks",
         {
           "If:assuming:do:": [

@@ -23,7 +23,7 @@
     },
     {
       "Rule for:do:": [
-        "before searching",
+        "instead of searching",
         {
           "If:assuming:do:": [
             {

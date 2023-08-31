@@ -4,8 +4,8 @@ type eventPrefix int
 
 //go:generate stringer -type=eventPrefix -linecomment
 const (
-	instead eventPrefix = iota // instead of
-	before
+	before  eventPrefix = iota
+	instead             // instead of
 	after
 	report
 	//

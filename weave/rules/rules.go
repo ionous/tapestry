@@ -72,16 +72,16 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 		pattern := name
 
 		switch prefix {
+		case before:
+			// by default before falls through
+			stop, jump = true, rt.JumpLater
 		case instead:
 			pattern = event.BeforePhase.PatternName(short)
-			stop, jump = true, rt.JumpNow
-		case before:
-			// because jump is used for checking if things are valid
-			// JumpNow makes most sense, even if, symmetrically JumpLater would make sense.
 			stop, jump = true, rt.JumpNow
 		default:
 			stop, jump = false, rt.JumpNow
 		case after:
+			// by default after falls through
 			stop, jump = false, rt.JumpLater
 		case report:
 			pattern = event.AfterPhase.PatternName(short)

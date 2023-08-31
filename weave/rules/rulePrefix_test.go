@@ -33,8 +33,8 @@ func TestPrefixing(t *testing.T) {
 
 	var (
 		at      = 0
-		instead = rules.Ranks[0]
-		before  = rules.Ranks[1]
+		before  = rules.Ranks[0]
+		instead = rules.Ranks[1]
 		after   = rules.Ranks[2]
 		report  = rules.Ranks[3]
 	)
@@ -96,9 +96,9 @@ func TestPrefixing(t *testing.T) {
 	t.Run("now what!?", func(t *testing.T) {
 		if e := match(t, &ks, "misc", "misc", 0); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "before misc", "misc", -10); e != nil {
+		} else if e := match(t, &ks, "before misc", "misc", before); e != nil {
 			t.Fatal(e)
-		} else if e := match(t, &ks, "after misc", "misc", 10); e != nil {
+		} else if e := match(t, &ks, "after misc", "misc", after); e != nil {
 			t.Fatal(e)
 		} else if e := fail(t, &ks, "instead of misc"); e != nil {
 			t.Fatal(e)
