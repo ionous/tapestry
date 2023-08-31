@@ -8,7 +8,7 @@ import (
 // For instance, searching only though held objects.
 type Focus struct {
 	Where string
-	What  Scanner
+	Match Scanner
 }
 
 //
@@ -17,19 +17,19 @@ func (a *Focus) Scan(ctx Context, _ Bounds, cs Cursor) (ret Result, err error) {
 	if bounds, e := ctx.GetBounds("", a.Where); e != nil {
 		err = e
 	} else {
-		ret, err = a.What.Scan(ctx, bounds, cs)
+		ret, err = a.Match.Scan(ctx, bounds, cs)
 	}
 	return
 }
 
-// Target changes the bounds of its first scanner in response to the results of its last scanner.
-// Generally, this means that the last scanner should be Noun{}.
-type Target struct {
+// Refine changes the bounds of its first scanner in response to the results of its last scanner.
+// Generally, this means that the preceding scanner should be Noun{}.
+type Refine struct {
 	Match []Scanner
 }
 
 //
-func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err error) {
+func (a *Refine) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err error) {
 	first, rest := a.Match[0], a.Match[1:]
 	errorDepth := -1
 	err = Underflow{Depth(start.Pos)} // not completely sure what a good default error is here...

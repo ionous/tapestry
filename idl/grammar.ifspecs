@@ -28,11 +28,10 @@
         {
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
-            "all_of",
+            "sequence",
             "scanner_maker",
             {
-              "Flow:uses:": [
-                "sequence",
+              "Flow uses:": [
                 {
                   "Term:name:type:repeats:": [
                     "_",
@@ -48,7 +47,7 @@
         {
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
-            "any_of",
+            "choose_one",
             "scanner_maker",
             {
               "Flow:uses:": [
@@ -84,7 +83,7 @@
                   {
                     "Term:name:type:repeats:": [
                       "with",
-                      "scans",
+                      "series",
                       "scanner_maker",
                       true
                     ]
@@ -123,16 +122,16 @@
           ]
         },
         {
-          "--": "makes a parser scanner.",
+          "--": "Change to the bounds of the most recent result.",
           "Spec:slots:with flow:": [
-            "retarget",
+            "refine",
             "scanner_maker",
             {
               "Flow uses:": [
                 {
                   "Term:name:type:repeats:": [
-                    "_",
-                    "span",
+                    "sequence",
+                    "series",
                     "scanner_maker",
                     true
                   ]
@@ -142,7 +141,7 @@
           ]
         },
         {
-          "--": "makes a parser scanner.",
+          "--": "Swap the first and last matching results.",
           "Spec:slots:with flow:": [
             "reverse",
             "scanner_maker",
@@ -170,9 +169,9 @@
           ]
         },
         {
-          "--": "adjusts the scope of the parser scanner",
+          "--": "Select a specific set of bounds for the scanner.",
           "Spec:slots:with flow:": [
-            "scope",
+            "focus",
             "scanner_maker",
             {
               "Flow uses:": [
@@ -181,6 +180,14 @@
                     "_",
                     "player",
                     "text"
+                  ]
+                },
+                {
+                  "Term:name:type:repeats:": [
+                    "sequence",
+                    "series",
+                    "scanner_maker",
+                    true
                   ]
                 }
               ]

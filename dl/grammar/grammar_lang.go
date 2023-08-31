@@ -111,142 +111,39 @@ func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
 	return
 }
 
-// AllOf makes a parser scanner.
-type AllOf struct {
-	Series []ScannerMaker `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ScannerMaker = (*AllOf)(nil)
-
-func (*AllOf) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AllOf_Type,
-		Uses: composer.Type_Flow,
-		Lede: "sequence",
-	}
-}
-
-const AllOf_Type = "all_of"
-const AllOf_Field_Series = "$SERIES"
-
-func (op *AllOf) Marshal(m jsn.Marshaler) error {
-	return AllOf_Marshal(m, op)
-}
-
-type AllOf_Slice []AllOf
-
-func (op *AllOf_Slice) GetType() string { return AllOf_Type }
-
-func (op *AllOf_Slice) Marshal(m jsn.Marshaler) error {
-	return AllOf_Repeats_Marshal(m, (*[]AllOf)(op))
-}
-
-func (op *AllOf_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AllOf_Slice) SetSize(cnt int) {
-	var els []AllOf
-	if cnt >= 0 {
-		els = make(AllOf_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AllOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AllOf_Marshal(m, &(*op)[i])
-}
-
-func AllOf_Repeats_Marshal(m jsn.Marshaler, vals *[]AllOf) error {
-	return jsn.RepeatBlock(m, (*AllOf_Slice)(vals))
-}
-
-func AllOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AllOf) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AllOf_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AllOf_Flow struct{ ptr *AllOf }
-
-func (n AllOf_Flow) GetType() string      { return AllOf_Type }
-func (n AllOf_Flow) GetLede() string      { return "sequence" }
-func (n AllOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n AllOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AllOf); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AllOf_Optional_Marshal(m jsn.Marshaler, pv **AllOf) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AllOf_Marshal(m, *pv)
-	} else if !enc {
-		var v AllOf
-		if err = AllOf_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AllOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AllOf_Field_Series)
-		if e0 == nil {
-			e0 = ScannerMaker_Repeats_Marshal(m, &val.Series)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AllOf_Field_Series))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// AnyOf makes a parser scanner.
-type AnyOf struct {
+// ChooseOne makes a parser scanner.
+type ChooseOne struct {
 	Options []ScannerMaker `if:"label=of"`
 	Markup  map[string]any
 }
 
 // User implemented slots:
-var _ ScannerMaker = (*AnyOf)(nil)
+var _ ScannerMaker = (*ChooseOne)(nil)
 
-func (*AnyOf) Compose() composer.Spec {
+func (*ChooseOne) Compose() composer.Spec {
 	return composer.Spec{
-		Name: AnyOf_Type,
+		Name: ChooseOne_Type,
 		Uses: composer.Type_Flow,
 		Lede: "one",
 	}
 }
 
-const AnyOf_Type = "any_of"
-const AnyOf_Field_Options = "$OPTIONS"
+const ChooseOne_Type = "choose_one"
+const ChooseOne_Field_Options = "$OPTIONS"
 
-func (op *AnyOf) Marshal(m jsn.Marshaler) error {
-	return AnyOf_Marshal(m, op)
+func (op *ChooseOne) Marshal(m jsn.Marshaler) error {
+	return ChooseOne_Marshal(m, op)
 }
 
-type AnyOf_Slice []AnyOf
+type ChooseOne_Slice []ChooseOne
 
-func (op *AnyOf_Slice) GetType() string { return AnyOf_Type }
+func (op *ChooseOne_Slice) GetType() string { return ChooseOne_Type }
 
-func (op *AnyOf_Slice) Marshal(m jsn.Marshaler) error {
-	return AnyOf_Repeats_Marshal(m, (*[]AnyOf)(op))
+func (op *ChooseOne_Slice) Marshal(m jsn.Marshaler) error {
+	return ChooseOne_Repeats_Marshal(m, (*[]ChooseOne)(op))
 }
 
-func (op *AnyOf_Slice) GetSize() (ret int) {
+func (op *ChooseOne_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -255,62 +152,62 @@ func (op *AnyOf_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *AnyOf_Slice) SetSize(cnt int) {
-	var els []AnyOf
+func (op *ChooseOne_Slice) SetSize(cnt int) {
+	var els []ChooseOne
 	if cnt >= 0 {
-		els = make(AnyOf_Slice, cnt)
+		els = make(ChooseOne_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *AnyOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AnyOf_Marshal(m, &(*op)[i])
+func (op *ChooseOne_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ChooseOne_Marshal(m, &(*op)[i])
 }
 
-func AnyOf_Repeats_Marshal(m jsn.Marshaler, vals *[]AnyOf) error {
-	return jsn.RepeatBlock(m, (*AnyOf_Slice)(vals))
+func ChooseOne_Repeats_Marshal(m jsn.Marshaler, vals *[]ChooseOne) error {
+	return jsn.RepeatBlock(m, (*ChooseOne_Slice)(vals))
 }
 
-func AnyOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AnyOf) (err error) {
+func ChooseOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ChooseOne) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AnyOf_Repeats_Marshal(m, pv)
+		err = ChooseOne_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type AnyOf_Flow struct{ ptr *AnyOf }
+type ChooseOne_Flow struct{ ptr *ChooseOne }
 
-func (n AnyOf_Flow) GetType() string      { return AnyOf_Type }
-func (n AnyOf_Flow) GetLede() string      { return "one" }
-func (n AnyOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n AnyOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AnyOf); ok {
+func (n ChooseOne_Flow) GetType() string      { return ChooseOne_Type }
+func (n ChooseOne_Flow) GetLede() string      { return "one" }
+func (n ChooseOne_Flow) GetFlow() interface{} { return n.ptr }
+func (n ChooseOne_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ChooseOne); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func AnyOf_Optional_Marshal(m jsn.Marshaler, pv **AnyOf) (err error) {
+func ChooseOne_Optional_Marshal(m jsn.Marshaler, pv **ChooseOne) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AnyOf_Marshal(m, *pv)
+		err = ChooseOne_Marshal(m, *pv)
 	} else if !enc {
-		var v AnyOf
-		if err = AnyOf_Marshal(m, &v); err == nil {
+		var v ChooseOne
+		if err = ChooseOne_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
+func ChooseOne_Marshal(m jsn.Marshaler, val *ChooseOne) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AnyOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("of", AnyOf_Field_Options)
+	if err = m.MarshalBlock(ChooseOne_Flow{val}); err == nil {
+		e0 := m.MarshalKey("of", ChooseOne_Field_Options)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Options)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AnyOf_Field_Options))
+			m.Error(errutil.New(e0, "in flow at", ChooseOne_Field_Options))
 		}
 		m.EndBlock()
 	}
@@ -320,7 +217,7 @@ func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 // Directive starts a parser scanner.
 type Directive struct {
 	Name   string         `if:"label=name,type=text"`
-	Scans  []ScannerMaker `if:"label=with"`
+	Series []ScannerMaker `if:"label=with"`
 	Markup map[string]any
 }
 
@@ -337,7 +234,7 @@ func (*Directive) Compose() composer.Spec {
 
 const Directive_Type = "directive"
 const Directive_Field_Name = "$NAME"
-const Directive_Field_Scans = "$SCANS"
+const Directive_Field_Series = "$SERIES"
 
 func (op *Directive) Marshal(m jsn.Marshaler) error {
 	return Directive_Marshal(m, op)
@@ -417,12 +314,123 @@ func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Directive_Field_Name))
 		}
-		e1 := m.MarshalKey("with", Directive_Field_Scans)
+		e1 := m.MarshalKey("with", Directive_Field_Series)
 		if e1 == nil {
-			e1 = ScannerMaker_Repeats_Marshal(m, &val.Scans)
+			e1 = ScannerMaker_Repeats_Marshal(m, &val.Series)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Directive_Field_Scans))
+			m.Error(errutil.New(e1, "in flow at", Directive_Field_Series))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// Focus Select a specific set of bounds for the scanner.
+type Focus struct {
+	Player string         `if:"label=_,type=text"`
+	Series []ScannerMaker `if:"label=sequence"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ ScannerMaker = (*Focus)(nil)
+
+func (*Focus) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Focus_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Focus_Type = "focus"
+const Focus_Field_Player = "$PLAYER"
+const Focus_Field_Series = "$SERIES"
+
+func (op *Focus) Marshal(m jsn.Marshaler) error {
+	return Focus_Marshal(m, op)
+}
+
+type Focus_Slice []Focus
+
+func (op *Focus_Slice) GetType() string { return Focus_Type }
+
+func (op *Focus_Slice) Marshal(m jsn.Marshaler) error {
+	return Focus_Repeats_Marshal(m, (*[]Focus)(op))
+}
+
+func (op *Focus_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Focus_Slice) SetSize(cnt int) {
+	var els []Focus
+	if cnt >= 0 {
+		els = make(Focus_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Focus_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Focus_Marshal(m, &(*op)[i])
+}
+
+func Focus_Repeats_Marshal(m jsn.Marshaler, vals *[]Focus) error {
+	return jsn.RepeatBlock(m, (*Focus_Slice)(vals))
+}
+
+func Focus_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Focus) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Focus_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Focus_Flow struct{ ptr *Focus }
+
+func (n Focus_Flow) GetType() string      { return Focus_Type }
+func (n Focus_Flow) GetLede() string      { return Focus_Type }
+func (n Focus_Flow) GetFlow() interface{} { return n.ptr }
+func (n Focus_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Focus); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Focus_Optional_Marshal(m jsn.Marshaler, pv **Focus) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Focus_Marshal(m, *pv)
+	} else if !enc {
+		var v Focus
+		if err = Focus_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Focus_Marshal(m jsn.Marshaler, val *Focus) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Focus_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Focus_Field_Player)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Player)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Focus_Field_Player))
+		}
+		e1 := m.MarshalKey("sequence", Focus_Field_Series)
+		if e1 == nil {
+			e1 = ScannerMaker_Repeats_Marshal(m, &val.Series)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Focus_Field_Series))
 		}
 		m.EndBlock()
 	}
@@ -601,38 +609,38 @@ func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
 	return
 }
 
-// Retarget makes a parser scanner.
-type Retarget struct {
-	Span   []ScannerMaker `if:"label=_"`
+// Refine Change to the bounds of the most recent result.
+type Refine struct {
+	Series []ScannerMaker `if:"label=sequence"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ ScannerMaker = (*Retarget)(nil)
+var _ ScannerMaker = (*Refine)(nil)
 
-func (*Retarget) Compose() composer.Spec {
+func (*Refine) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Retarget_Type,
+		Name: Refine_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Retarget_Type = "retarget"
-const Retarget_Field_Span = "$SPAN"
+const Refine_Type = "refine"
+const Refine_Field_Series = "$SERIES"
 
-func (op *Retarget) Marshal(m jsn.Marshaler) error {
-	return Retarget_Marshal(m, op)
+func (op *Refine) Marshal(m jsn.Marshaler) error {
+	return Refine_Marshal(m, op)
 }
 
-type Retarget_Slice []Retarget
+type Refine_Slice []Refine
 
-func (op *Retarget_Slice) GetType() string { return Retarget_Type }
+func (op *Refine_Slice) GetType() string { return Refine_Type }
 
-func (op *Retarget_Slice) Marshal(m jsn.Marshaler) error {
-	return Retarget_Repeats_Marshal(m, (*[]Retarget)(op))
+func (op *Refine_Slice) Marshal(m jsn.Marshaler) error {
+	return Refine_Repeats_Marshal(m, (*[]Refine)(op))
 }
 
-func (op *Retarget_Slice) GetSize() (ret int) {
+func (op *Refine_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -641,69 +649,69 @@ func (op *Retarget_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *Retarget_Slice) SetSize(cnt int) {
-	var els []Retarget
+func (op *Refine_Slice) SetSize(cnt int) {
+	var els []Refine
 	if cnt >= 0 {
-		els = make(Retarget_Slice, cnt)
+		els = make(Refine_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *Retarget_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Retarget_Marshal(m, &(*op)[i])
+func (op *Refine_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Refine_Marshal(m, &(*op)[i])
 }
 
-func Retarget_Repeats_Marshal(m jsn.Marshaler, vals *[]Retarget) error {
-	return jsn.RepeatBlock(m, (*Retarget_Slice)(vals))
+func Refine_Repeats_Marshal(m jsn.Marshaler, vals *[]Refine) error {
+	return jsn.RepeatBlock(m, (*Refine_Slice)(vals))
 }
 
-func Retarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Retarget) (err error) {
+func Refine_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Refine) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Retarget_Repeats_Marshal(m, pv)
+		err = Refine_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type Retarget_Flow struct{ ptr *Retarget }
+type Refine_Flow struct{ ptr *Refine }
 
-func (n Retarget_Flow) GetType() string      { return Retarget_Type }
-func (n Retarget_Flow) GetLede() string      { return Retarget_Type }
-func (n Retarget_Flow) GetFlow() interface{} { return n.ptr }
-func (n Retarget_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Retarget); ok {
+func (n Refine_Flow) GetType() string      { return Refine_Type }
+func (n Refine_Flow) GetLede() string      { return Refine_Type }
+func (n Refine_Flow) GetFlow() interface{} { return n.ptr }
+func (n Refine_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Refine); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func Retarget_Optional_Marshal(m jsn.Marshaler, pv **Retarget) (err error) {
+func Refine_Optional_Marshal(m jsn.Marshaler, pv **Refine) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Retarget_Marshal(m, *pv)
+		err = Refine_Marshal(m, *pv)
 	} else if !enc {
-		var v Retarget
-		if err = Retarget_Marshal(m, &v); err == nil {
+		var v Refine
+		if err = Refine_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
+func Refine_Marshal(m jsn.Marshaler, val *Refine) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Retarget_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Retarget_Field_Span)
+	if err = m.MarshalBlock(Refine_Flow{val}); err == nil {
+		e0 := m.MarshalKey("sequence", Refine_Field_Series)
 		if e0 == nil {
-			e0 = ScannerMaker_Repeats_Marshal(m, &val.Span)
+			e0 = ScannerMaker_Repeats_Marshal(m, &val.Series)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Retarget_Field_Span))
+			m.Error(errutil.New(e0, "in flow at", Refine_Field_Series))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// Reverse makes a parser scanner.
+// Reverse Swap the first and last matching results.
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
 	Markup   map[string]any
@@ -874,38 +882,38 @@ func ScannerMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ScannerMaker) 
 	return
 }
 
-// Scope adjusts the scope of the parser scanner
-type Scope struct {
-	Player string `if:"label=_,type=text"`
+// Sequence makes a parser scanner.
+type Sequence struct {
+	Series []ScannerMaker `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ ScannerMaker = (*Scope)(nil)
+var _ ScannerMaker = (*Sequence)(nil)
 
-func (*Scope) Compose() composer.Spec {
+func (*Sequence) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Scope_Type,
+		Name: Sequence_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Scope_Type = "scope"
-const Scope_Field_Player = "$PLAYER"
+const Sequence_Type = "sequence"
+const Sequence_Field_Series = "$SERIES"
 
-func (op *Scope) Marshal(m jsn.Marshaler) error {
-	return Scope_Marshal(m, op)
+func (op *Sequence) Marshal(m jsn.Marshaler) error {
+	return Sequence_Marshal(m, op)
 }
 
-type Scope_Slice []Scope
+type Sequence_Slice []Sequence
 
-func (op *Scope_Slice) GetType() string { return Scope_Type }
+func (op *Sequence_Slice) GetType() string { return Sequence_Type }
 
-func (op *Scope_Slice) Marshal(m jsn.Marshaler) error {
-	return Scope_Repeats_Marshal(m, (*[]Scope)(op))
+func (op *Sequence_Slice) Marshal(m jsn.Marshaler) error {
+	return Sequence_Repeats_Marshal(m, (*[]Sequence)(op))
 }
 
-func (op *Scope_Slice) GetSize() (ret int) {
+func (op *Sequence_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -914,62 +922,62 @@ func (op *Scope_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *Scope_Slice) SetSize(cnt int) {
-	var els []Scope
+func (op *Sequence_Slice) SetSize(cnt int) {
+	var els []Sequence
 	if cnt >= 0 {
-		els = make(Scope_Slice, cnt)
+		els = make(Sequence_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *Scope_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Scope_Marshal(m, &(*op)[i])
+func (op *Sequence_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Sequence_Marshal(m, &(*op)[i])
 }
 
-func Scope_Repeats_Marshal(m jsn.Marshaler, vals *[]Scope) error {
-	return jsn.RepeatBlock(m, (*Scope_Slice)(vals))
+func Sequence_Repeats_Marshal(m jsn.Marshaler, vals *[]Sequence) error {
+	return jsn.RepeatBlock(m, (*Sequence_Slice)(vals))
 }
 
-func Scope_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Scope) (err error) {
+func Sequence_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Sequence) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Scope_Repeats_Marshal(m, pv)
+		err = Sequence_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type Scope_Flow struct{ ptr *Scope }
+type Sequence_Flow struct{ ptr *Sequence }
 
-func (n Scope_Flow) GetType() string      { return Scope_Type }
-func (n Scope_Flow) GetLede() string      { return Scope_Type }
-func (n Scope_Flow) GetFlow() interface{} { return n.ptr }
-func (n Scope_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Scope); ok {
+func (n Sequence_Flow) GetType() string      { return Sequence_Type }
+func (n Sequence_Flow) GetLede() string      { return Sequence_Type }
+func (n Sequence_Flow) GetFlow() interface{} { return n.ptr }
+func (n Sequence_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Sequence); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func Scope_Optional_Marshal(m jsn.Marshaler, pv **Scope) (err error) {
+func Sequence_Optional_Marshal(m jsn.Marshaler, pv **Sequence) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Scope_Marshal(m, *pv)
+		err = Sequence_Marshal(m, *pv)
 	} else if !enc {
-		var v Scope
-		if err = Scope_Marshal(m, &v); err == nil {
+		var v Sequence
+		if err = Sequence_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func Scope_Marshal(m jsn.Marshaler, val *Scope) (err error) {
+func Sequence_Marshal(m jsn.Marshaler, val *Sequence) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Scope_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Scope_Field_Player)
+	if err = m.MarshalBlock(Sequence_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Sequence_Field_Series)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Player)
+			e0 = ScannerMaker_Repeats_Marshal(m, &val.Series)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Scope_Field_Player))
+			m.Error(errutil.New(e0, "in flow at", Sequence_Field_Series))
 		}
 		m.EndBlock()
 	}
@@ -1086,24 +1094,24 @@ var Slots = []interface{}{
 
 var Slats = []composer.Composer{
 	(*Action)(nil),
-	(*AllOf)(nil),
-	(*AnyOf)(nil),
+	(*ChooseOne)(nil),
 	(*Directive)(nil),
+	(*Focus)(nil),
 	(*Noun)(nil),
-	(*Retarget)(nil),
+	(*Refine)(nil),
 	(*Reverse)(nil),
-	(*Scope)(nil),
+	(*Sequence)(nil),
 	(*Words)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
 	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
+	1756442538083378424:  (*Focus)(nil),     /* scanner_maker=Focus:sequence: */
 	6454124700650096920:  (*Directive)(nil), /* grammar_maker=Interpret name:with: */
 	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */
-	16418039705711067622: (*AnyOf)(nil),     /* scanner_maker=One of: */
+	16418039705711067622: (*ChooseOne)(nil), /* scanner_maker=One of: */
 	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */
-	7324699817922923089:  (*Retarget)(nil),  /* scanner_maker=Retarget: */
+	11402479949132197621: (*Refine)(nil),    /* scanner_maker=Refine sequence: */
 	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
-	2998488178381148379:  (*Scope)(nil),     /* scanner_maker=Scope: */
-	10728359537834940094: (*AllOf)(nil),     /* scanner_maker=Sequence: */
+	10728359537834940094: (*Sequence)(nil),  /* scanner_maker=Sequence: */
 }

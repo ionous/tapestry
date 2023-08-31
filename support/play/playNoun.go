@@ -41,8 +41,8 @@ func (n *Noun) HasName(name string) (okay bool) {
 	return
 }
 
-func (n *Noun) HasClass(s string) (ret bool) {
-	if ok, e := safe.IsKindOf(n.run, n.String(), lang.Normalize(s)); e != nil {
+func (n *Noun) HasClass(s string) (ret bool) { // fix: pre-normalize during weave
+	if ok, e := safe.IsKindOf(n.run, n.id, lang.Normalize(s)); e != nil {
 		log.Println("parser error", e)
 	} else {
 		ret = ok

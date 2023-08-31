@@ -11,17 +11,7 @@ func (op *Action) MakeScanner() parser.Scanner {
 	return &parser.Action{Name: op.Action}
 }
 
-func (op *AllOf) MakeScanner() (ret parser.Scanner) {
-	if els := op.Series; len(els) == 1 {
-		ret = els[0].MakeScanner()
-	} else {
-		ls := reduce(els)
-		ret = &parser.AllOf{Match: ls}
-	}
-	return
-}
-
-func (op *AnyOf) MakeScanner() (ret parser.Scanner) {
+func (op *ChooseOne) MakeScanner() (ret parser.Scanner) {
 	if els := op.Options; len(els) == 1 {
 		ret = els[0].MakeScanner()
 	} else {
@@ -29,6 +19,13 @@ func (op *AnyOf) MakeScanner() (ret parser.Scanner) {
 		ret = &parser.AnyOf{Match: ls}
 	}
 	return
+}
+
+// tbd: i wonder if this should have children ( like any/one of )
+// rather than being "inline"
+func (op *Focus) MakeScanner() parser.Scanner {
+	ls := makeSequence(op.Series)
+	return &parser.Focus{Where: op.Player, Match: ls}
 }
 
 func (op *Noun) MakeScanner() parser.Scanner {
@@ -39,9 +36,9 @@ func (op *Noun) MakeScanner() parser.Scanner {
 	return &parser.Noun{Filters: fs}
 }
 
-func (op *Retarget) MakeScanner() parser.Scanner {
-	ls := reduce(op.Span)
-	return &parser.Target{Match: ls}
+func (op *Refine) MakeScanner() parser.Scanner {
+	ls := reduce(op.Series)
+	return &parser.Refine{Match: ls}
 }
 
 func (op *Reverse) MakeScanner() parser.Scanner {
@@ -49,15 +46,22 @@ func (op *Reverse) MakeScanner() parser.Scanner {
 	return &parser.Reverse{Match: ls}
 }
 
-// tbd: i wonder if this should have children ( like any/one of )
-// rather than being "inline"
-func (op *Scope) MakeScanner() parser.Scanner {
-	return &parser.Eat{Scanner: &parser.Focus{Where: op.Player, What: &parser.Noun{}}}
+func (op *Sequence) MakeScanner() (ret parser.Scanner) {
+	return makeSequence(op.Series)
 }
 
 func (op *Words) MakeScanner() parser.Scanner {
 	// returns an "any of" with individual word matches
 	return parser.Words(op.Words)
+}
+
+func makeSequence(els []ScannerMaker) (ret parser.Scanner) {
+	if len(els) == 1 {
+		ret = els[0].MakeScanner()
+	} else {
+		ret = &parser.AllOf{Match: reduce(els)}
+	}
+	return
 }
 
 func reduce(els []ScannerMaker) []parser.Scanner {

@@ -172,13 +172,14 @@
       "--": ""
     },
     {
+    	"--": "self is the actor",
       "Interpret alias:as:": [
         [
           "me",
           "myself",
           "self"
         ],
-        "player"
+        "self"
       ]
     }
   ]

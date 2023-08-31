@@ -53,8 +53,8 @@ func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 	scans := append([]grammar.ScannerMaker{words}, op.Scans...)
 	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(name, &grammar.Directive{
-			Name:  name,
-			Scans: scans,
+			Name:   name,
+			Series: scans,
 		})
 	})
 }
@@ -70,8 +70,8 @@ func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := lang.Normalize(op.Name)
 	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(name, &grammar.Directive{
-			Name:  name,
-			Scans: op.Scans,
+			Name:   name,
+			Series: op.Scans,
 		})
 	})
 }

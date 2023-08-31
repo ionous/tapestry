@@ -309,7 +309,7 @@
               {
                 "Sequence:": [
                   {
-                    "Retarget:": [
+                    "Refine sequence:": [
                       {
                         "One noun:": "things"
                       },
@@ -378,13 +378,17 @@
               {
                 "Sequence:": [
                   {
-                    "Scope:": "compass"
-                  },
-                  {
-                    "One noun:": "directions"
-                  },
-                  {
-                    "Action:": "going"
+                    "Focus:sequence:": [
+                      "compass",
+                      [
+                        {
+                          "One noun:": "directions"
+                        },
+                        {
+                          "Action:": "going"
+                        }
+                      ]
+                    ]
                   }
                 ]
               },
@@ -408,13 +412,17 @@
         "going a direction",
         [
           {
-            "Scope:": "compass"
-          },
-          {
-            "One noun:": "directions"
-          },
-          {
-            "Action:": "going"
+            "Focus:sequence:": [
+              "compass",
+              [
+                {
+                  "One noun:": "directions"
+                },
+                {
+                  "Action:": "going"
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -712,7 +720,7 @@
               {
                 "Sequence:": [
                   {
-                    "Retarget:": [
+                    "Refine sequence:": [
                       {
                         "One noun:": "things"
                       },
@@ -946,7 +954,7 @@
               {
                 "Sequence:": [
                   {
-                    "Retarget:": [
+                    "Refine sequence:": [
                       {
                         "One noun:": "things"
                       },

@@ -8,7 +8,7 @@ var Scanners = []Scanner{
 	(*Multi)(nil),
 	(*Noun)(nil),
 	(*Reverse)(nil),
-	(*Target)(nil),
+	(*Refine)(nil),
 	(*Word)(nil),
 }
 

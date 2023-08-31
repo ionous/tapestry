@@ -13,29 +13,17 @@
               {
                 "Sequence:": [
                   {
-                    "Scope:": "player"
-                  },
-                  {
-                    "One noun:": "things"
-                  },
-                  {
-                    "Action:": "examining"
-                  }
-                ]
-              },
-              {
-                "Sequence:": [
-                  {
-                    "One noun:": "things"
-                  },
-                  {
-                    "One word:": "to"
-                  },
-                  {
-                    "Scope:": "player"
-                  },
-                  {
-                    "Action:": "examining"
+                    "Focus:sequence:": [
+                      "player",
+                      [
+                        {
+                          "One noun:": "things"
+                        },
+                        {
+                          "Action:": "examining"
+                        }
+                      ]
+                    ]
                   }
                 ]
               },
@@ -98,7 +86,7 @@
           {
             "--": "the actor the noun is being shown to",
             "Text:kind:": [
-              "other noun",
+              "other actor",
               "actor"
             ]
           }
@@ -107,7 +95,7 @@
     },
     {
       "Rule for:do:": [
-        "before showing",
+        "instead of showing",
         [
           {
             "If:assuming:do:else:": [
@@ -132,7 +120,7 @@
                           "FromText:": "@noun"
                         },
                         {
-                          "FromText:": "@other_noun"
+                          "FromText:": "@other_actor"
                         }
                       ]
                     }
@@ -164,7 +152,7 @@
                               "FromText:": "showing"
                             },
                             {
-                              "FromText:": "@other_noun"
+                              "FromText:": "@other_actor"
                             }
                           ]
                         }
@@ -195,7 +183,7 @@
               "FromText:": "@noun"
             },
             {
-              "FromText:": "@other_noun"
+              "FromText:": "@other_actor"
             }
           ]
         }
@@ -218,9 +206,38 @@
         {
           "Say response:with:": [
             "player shows",
-            "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+            "{the: .other_actor|capitalize!} {are: .other_actor} unimpressed."
           ]
         }
+      ]
+    },
+    {
+      "Rule for:named:do:": [
+        "instead of showing",
+        "examine when showing to yourself",
+        [
+          {
+            "If:do:": [
+              {
+                "Cmp:is:txt:": [
+                  "@actor",
+                  "equal_to",
+                  "@other_actor"
+                ]
+              },
+              {
+                "Examining actor:noun:": [
+                  {
+                    "FromText:": "@actor"
+                  },
+                  {
+                    "FromText:": "@noun"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       ]
     }
   ]

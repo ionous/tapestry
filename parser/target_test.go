@@ -10,7 +10,7 @@ import (
 var takeGrammar = allOf(
 	words("get"), anyOf(
 		allOf(
-			&Target{[]Scanner{things(), words("from", "off"), thing()}},
+			&Refine{[]Scanner{things(), words("from", "off"), thing()}},
 			&Action{"Remove"}),
 		allOf(
 			things(),

@@ -9,7 +9,7 @@ import (
 )
 
 var dropGrammar = allOf(words("drop"), anyOf(
-	allOf(&Focus{Where: "held", What: things()}, &Action{"Drop"}),
+	allOf(&Focus{Where: "held", Match: things()}, &Action{"Drop"}),
 ))
 
 type MyContext struct {

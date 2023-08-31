@@ -8,6 +8,6 @@ type Commands struct {
 	*Focus
 	*Multi
 	*Noun
-	*Target
+	*Refine
 	*Word
 }

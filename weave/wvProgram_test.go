@@ -18,7 +18,7 @@ func TestGrammar(t *testing.T) {
 		&eph.Directives{
 			Directive: grammar.Directive{
 				Name: `jump/skip/hop`,
-				Scans: []grammar.ScannerMaker{
+				Series: []grammar.ScannerMaker{
 					&grammar.Words{Words: []string{"jump", "skip", "hop"}},
 					&grammar.Action{Action: "jumping"},
 				},
