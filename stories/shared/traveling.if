@@ -143,6 +143,24 @@
       ]
     },
     {
+      "Rule for:do:": [
+        "instead of traveling",
+        {
+          "If:do:": [
+            {
+              "Is empty:": "@destination"
+            },
+            {
+              "Say response:with:": [
+                "can only travel to a destination",
+                "{They: .door|capitalize!} {dont:.door} lead anywhere."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "--": ""
     },
     {
@@ -216,49 +234,6 @@
     },
     {
       "--": ""
-    },
-    {
-      "Rule for:do:": [
-        "can use",
-        {
-          "If:do:": [
-            {
-              "AllTrue:": [
-                {
-                  "Cmp:is:txt:": [
-                    "@action",
-                    "equal_to",
-                    "traveling"
-                  ]
-                },
-                {
-                  "Not:": {
-                    "KindOf:is:": [
-                      "@other_noun",
-                      "rooms"
-                    ]
-                  }
-                }
-              ]
-            },
-            [
-              {
-                "Set:from:": [
-                  "@response",
-                  {
-                    "FromText:": {
-                      "Say response:with:": [
-                        "can only travel to a destination",
-                        "{They: .door|capitalize!} {dont:.door} lead anywhere."
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
-          ]
-        }
-      ]
     },
     {
       "Rule for:do:": [

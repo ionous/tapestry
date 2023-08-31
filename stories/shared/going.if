@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "--": [
-        "Going takes the actor moving, and the direction for them to move.",
+        "Going takes the actor who is moving, and a direction for them to move.",
         "The standard behavior finds a door in the specified direction and uses 'traveling' to move through it."
       ],
       "Define action:requires:": [
@@ -26,29 +26,60 @@
       ]
     },
     {
+      "--": "movement from room to room is always via a connecting door",
+      "Rule for:provides:": [
+        "going",
+        {
+          "Text:kind:initially:": [
+            "door",
+            "doors",
+            {
+              "DoorVia room:direction:": [
+                {
+                  "FromText:": {
+                    "ParentOf:": {
+                      "FromText:": "@actor"
+                    }
+                  }
+                },
+                {
+                  "FromText:": "@direction"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "Rule for:named:do:": [
         "going",
-        "going is traveling",
+        "going becomes traveling",
         {
           "Traveling actor:door:": [
             {
               "FromText:": "@actor"
             },
             {
-              "FromText:": {
-                "DoorVia room:direction:": [
-                  {
-                    "FromText:": {
-                      "ParentOf:": {
-                        "FromText:": "@actor"
-                      }
-                    }
-                  },
-                  {
-                    "FromText:": "@direction"
-                  }
-                ]
-              }
+              "FromText:": "@door"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "instead of going",
+        {
+          "If:do:": [
+            {
+              "Is empty:": "@door"
+            },
+            {
+              "Say response:with:": [
+                "missing room connection",
+                "{We:|capitalize!} can't go that way."
+              ]
             }
           ]
         }
