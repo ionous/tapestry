@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/support/play"
+	"git.sr.ht/~ionous/tapestry/support/player"
 	"github.com/ionous/errutil"
 )
 
@@ -29,7 +29,7 @@ func main() {
 	opt := qna.NewOptions()
 	opt.SetOption(meta.JsonMode, generic.BoolOf(json))
 
-	if cnt, e := play.PlayGame(inFile, testString, domain, json); e != nil {
+	if cnt, e := player.PlayGame(inFile, testString, domain, json); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")

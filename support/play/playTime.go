@@ -1,4 +1,4 @@
-package internal
+package play
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 // Playtime - adapts the qna.Runner rt.Runtime to the parser
 // this is VERY rudimentary.
 type Playtime struct {
-	run     rt.Runtime
+	rt.Runtime
 	grammar parser.Scanner
 	survey  Survey
 	// state    int or something
@@ -22,7 +22,7 @@ type Playtime struct {
 
 func NewPlaytime(run rt.Runtime, grammar parser.Scanner) *Playtime {
 	survey := MakeDefaultSurveyor(run)
-	return &Playtime{run: run, grammar: grammar, survey: survey}
+	return &Playtime{Runtime: run, grammar: grammar, survey: survey}
 }
 
 type Result struct {
@@ -30,38 +30,7 @@ type Result struct {
 	Nouns  []string
 }
 
-// step the world by running some command
-// future: to differentiate b/t system actions and "timed" actions,
-// consider using naming convention: ex. @save (mud style), or #save
-func (pt *Playtime) Play(act string, args []string) (err error) {
-	// temp patch to new:
-	// should instead raise a parsing event with the nouns and the action name
-	// ( possibly -- probably send in the player since it would be needed for bounds still )
-	if actor, e := pt.survey.GetFocalObject(); e != nil {
-		err = e
-	} else {
-		// insert the player in front of the other args.
-		vs := make([]g.Value, len(args)+1)
-		vs[0] = actor
-		for i, n := range args {
-			vs[i+1] = g.StringOf(n)
-		}
-		_, err = pt.run.Call(act, affine.None, nil, vs)
-	}
-	return
-}
-
-func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
-	if bounds, e := pt.survey.GetBounds("", ""); e != nil {
-		err = e
-	} else {
-		ctx := (*parserContext)(pt)
-		cursor := parser.Cursor{Words: strings.Fields(words)}
-		ret, err = pt.grammar.Scan(ctx, bounds, cursor)
-	}
-	return
-}
-
+// advance time
 func (pt *Playtime) Step(words string) (ret *Result, err error) {
 	switch res, e := pt.scan(words); e.(type) {
 	default:
@@ -112,7 +81,7 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 				// or maybe get passed lists of objects hrmm.
 				// send these nouns to the runtime
 				nouns := res.Objects()
-				if e := pt.Play(act.Name, nouns); e != nil {
+				if e := pt.play(act.Name, nouns); e != nil {
 					err = errutil.New(e, "for", res)
 				} else {
 					ret = &Result{
@@ -138,3 +107,35 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 	} // end err
 	return
 } // end func
+
+func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
+	if bounds, e := pt.survey.GetBounds("", ""); e != nil {
+		err = e
+	} else {
+		ctx := (*parserContext)(pt)
+		cursor := parser.Cursor{Words: strings.Fields(words)}
+		ret, err = pt.grammar.Scan(ctx, bounds, cursor)
+	}
+	return
+}
+
+// execute a command command
+// future: to differentiate b/t system actions and "timed" actions,
+// consider using naming convention: ex. @save (mud style), or #save
+func (pt *Playtime) play(act string, args []string) (err error) {
+	// temp patch to new:
+	// should instead raise a parsing event with the nouns and the action name
+	// ( possibly -- probably send in the player since it would be needed for bounds still )
+	if actor, e := pt.survey.GetFocalObject(); e != nil {
+		err = e
+	} else {
+		// insert the player in front of the other args.
+		vs := make([]g.Value, len(args)+1)
+		vs[0] = actor
+		for i, n := range args {
+			vs[i+1] = g.StringOf(n)
+		}
+		_, err = pt.Runtime.Call(act, affine.None, nil, vs)
+	}
+	return
+}

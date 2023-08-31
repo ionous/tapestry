@@ -1,4 +1,4 @@
-package play
+package player
 
 import (
 	"bufio"
@@ -18,7 +18,7 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/print"
-	play "git.sr.ht/~ionous/tapestry/support/play/internal"
+	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"git.sr.ht/~ionous/tapestry/web/markup"

@@ -1,4 +1,4 @@
-package internal
+package play
 
 import "git.sr.ht/~ionous/tapestry/parser"
 
@@ -12,6 +12,6 @@ func (pt *parserContext) GetBounds(who, where string) (parser.Bounds, error) {
 
 func (pt *parserContext) IsPlural(word string) bool {
 	p := (*Playtime)(pt)
-	pl := p.run.SingularOf(word)
+	pl := p.Runtime.SingularOf(word)
 	return len(pl) > 0 && pl != word
 }

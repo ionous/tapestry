@@ -9,7 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/support/play"
+	"git.sr.ht/~ionous/tapestry/support/player"
 	"github.com/ionous/errutil"
 )
 
@@ -24,7 +24,7 @@ func goPlay(ctx context.Context, cmd *base.Command, args []string) (err error) {
 			opts.SetOption(meta.JsonMode, g.BoolOf(true))
 		}
 
-		if cnt, e := play.PlayWithOptions(cfg.inFile, cfg.testString, cfg.scene, opts); e != nil {
+		if cnt, e := player.PlayWithOptions(cfg.inFile, cfg.testString, cfg.scene, opts); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {
 				log.Panic("mismatched")

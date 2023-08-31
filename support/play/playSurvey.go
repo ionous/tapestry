@@ -1,14 +1,14 @@
-package internal
+package play
 
 import (
 	"errors"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
@@ -30,19 +30,20 @@ func MakeDefaultSurveyor(run rt.Runtime) Survey {
 // ideally all of the bounds functions would be in script
 // and neither "player" nor "relation" would live here.
 func MakeSurveyor(run rt.Runtime, player, pattern, relation string) Survey {
-	pat, e := run.GetKindByName(pattern)
-	if e != nil || !pat.Implements(kindsOf.Pattern.String()) {
-		panic(errutil.Sprintf("couldn't find bounds query %q", pattern, e))
-	}
-	rel, e := run.GetKindByName(relation)
-	if e != nil || !rel.Implements(kindsOf.Relation.String()) {
-		panic(errutil.Sprintf("couldn't find relation %q", relation, e))
-	}
+	// if we validate upfront we have to activate the domain(s) before creating the surveyor
+	// pat, e := run.GetKindByName(pattern)
+	// if e != nil || !pat.Implements(kindsOf.Pattern.String()) {
+	// 	panic(errutil.Sprintf("couldn't find bounds query %s", e))
+	// }
+	// rel, e := run.GetKindByName(relation)
+	// if e != nil || !rel.Implements(kindsOf.Relation.String()) {
+	// 	panic(errutil.Sprintf("couldn't find relation %s", e))
+	// }
 	return Survey{
 		run:      run,
 		focus:    player,
-		bounds:   pat.Name(),
-		relation: rel.Name(),
+		bounds:   lang.Normalize(pattern),
+		relation: lang.Normalize(relation),
 	}
 }
 

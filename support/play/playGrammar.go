@@ -1,4 +1,4 @@
-package internal
+package play
 
 import (
 	"database/sql"
@@ -33,7 +33,7 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 	); e != nil {
 		err = e
 	} else {
-		ret = &parser.AnyOf{xs}
+		ret = &parser.AnyOf{Match: xs}
 	}
 	return
 }
