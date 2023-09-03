@@ -24,7 +24,7 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.MacroName); e != nil {
 			err = e
 		} else {
-			pb := mdl.NewPatternSubtype(name.String(), kindsOf.Macro)
+			pb := mdl.NewPatternSubtype(name.String(), kindsOf.Macro.String())
 			if e := addRequiredFields(w, pb, op.Requires); e != nil {
 				err = e
 			} else if e := addProvidingFields(w, pb, op.Provides); e != nil {

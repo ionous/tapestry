@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"github.com/ionous/errutil"
 )
 
@@ -54,45 +55,48 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 	prefix := eventPrefix(prefixIndex)
 	if k, e := w.GetKindByName(short); e != nil {
 		err = e
-	} else if events := kindsOf.Event.String(); k.Implements(events) {
-		// block "before before traveling"
-		// maybe eventually "first before traveling" or something like that.
-		err = errutil.Fmt("can't have %q %s", name, events)
-	} else if actions := kindsOf.Action.String(); !k.Implements(actions) {
-		switch prefix {
-		case instead, report:
-			err = errutil.Fmt("%q isn't a kind of %s and doesn't support %q", short, actions, prefix)
-		default:
-			// ex. "before normal pattern", return "normal pattern"
-			ret = RuleInfo{Name: short, Rank: prefix.rank()}
-		}
 	} else {
-		var stop bool // stopping before the action happens is considered a cancel.
-		var jump rt.Jump
-		pattern := name
-
-		switch prefix {
-		case before:
-			// by default before falls through
-			stop, jump = true, rt.JumpLater
-		case instead:
-			pattern = event.BeforePhase.PatternName(short)
-			stop, jump = true, rt.JumpNow
+		switch pattern.Categorize(k) {
 		default:
-			stop, jump = false, rt.JumpNow
-		case after:
-			// by default after falls through
-			stop, jump = false, rt.JumpLater
-		case report:
-			pattern = event.AfterPhase.PatternName(short)
-			stop, jump = true, rt.JumpNow
-		}
-		ret = RuleInfo{
-			Name:           pattern,
-			Rank:           prefix.rank(),
-			Stop:           stop,
-			Jump:           jump,
-			ExcludesPlayer: excludesPlayer,
+			err = errutil.Fmt("can't have %q event", name)
+
+		case pattern.Calls:
+			switch prefix {
+			case instead, report:
+				err = errutil.Fmt("%q isn't a kind of %s and doesn't support %q", short, kindsOf.Action, prefix)
+			default:
+				// ex. "before normal pattern", return "normal pattern"
+				ret = RuleInfo{Name: short, Rank: prefix.rank()}
+			}
+
+		case pattern.Sends:
+			var stop bool // stopping before the action happens is considered a cancel.
+			var jump rt.Jump
+			pattern := name
+
+			switch prefix {
+			case before:
+				// by default before falls through
+				stop, jump = true, rt.JumpLater
+			case instead:
+				pattern = event.BeforePhase.PatternName(short)
+				stop, jump = true, rt.JumpNow
+			default:
+				stop, jump = false, rt.JumpNow
+			case after:
+				// by default after falls through
+				stop, jump = false, rt.JumpLater
+			case report:
+				pattern = event.AfterPhase.PatternName(short)
+				stop, jump = true, rt.JumpNow
+			}
+			ret = RuleInfo{
+				Name:           pattern,
+				Rank:           prefix.rank(),
+				Stop:           stop,
+				Jump:           jump,
+				ExcludesPlayer: excludesPlayer,
+			}
 		}
 	}
 	return

@@ -15,17 +15,15 @@ func TestPrefixing(t *testing.T) {
 	type Misc struct{ Patterns }
 	//
 	type Actions struct{ Patterns }
-	type Events struct{ Patterns }
 	//
 	type Testing struct{ Actions }
-	type BeforeTesting struct{ Events }
-	type AfterTesting struct{ Events }
+	type BeforeTesting struct{ Testing }
+	type AfterTesting struct{ Testing }
 
 	ks.AddKinds(
 		(*Patterns)(nil),
 		(*Misc)(nil),
 		(*Actions)(nil),
-		(*Events)(nil),
 		(*Testing)(nil),
 		(*BeforeTesting)(nil),
 		(*AfterTesting)(nil),

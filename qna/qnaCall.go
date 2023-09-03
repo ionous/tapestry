@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -21,25 +20,19 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	} else if rec, e := safe.FillRecord(run, pat.NewRecord(), keys, vals); e != nil {
 		err = e
 	} else {
-		// Call is being used as a side effect to initialize records
-		if pat.Implements(kindsOf.Record.String()) {
-			if aff != affine.Record {
-				err = errutil.Fmt("attempting to call a record %q with affine %q", name, aff)
-			} else {
-				ret = g.RecordOf(rec)
-			}
-		} else if pat.Implements(kindsOf.Event.String()) {
-			err = errutil.Fmt("attempting to call an event  %q directly", name)
-		} else if !pat.Implements(kindsOf.Action.String()) {
-			// note: this doesnt positively affirm kindsOf.Pattern:
-			// some tests use golang structs as faux patterns.
+		switch pattern.Categorize(pat.Kind) {
+		case pattern.Initializes:
+			ret = g.RecordOf(rec)
+		case pattern.Calls:
 			ret, err = run.call(rec, pat, aff)
-		} else {
+		case pattern.Sends:
 			if len(vals) <= 0 {
-				err = errutil.Fmt("attempting to call an event %q with no target  %q", name, aff)
+				err = errutil.Fmt("attempting to call an action %q with no target  %q", name, aff)
 			} else {
 				ret, err = run.send(name, rec, vals[0])
 			}
+		default:
+			err = errutil.Fmt("attempting to call %q directly", name)
 		}
 	}
 	return

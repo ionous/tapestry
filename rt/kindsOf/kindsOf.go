@@ -7,21 +7,21 @@ type Kinds int
 //go:generate stringer -type=Kinds -linecomment
 const None Kinds = 0 //
 
+// note: iota increases even when not specified so every kind has a unique bit;
+// re-specifying it combines with earlier kinds to indicate sub-types.
 const (
-	Aspect   Kinds = 1 << iota // aspects
-	Kind                       // kinds
-	Pattern                    // patterns
-	Record                     // records
-	Relation                   // relations
-	Response                   // responses
-	// subtypes of pattern:
-	Action Kinds = Pattern | 1<<iota // actions
-	Event                            // events
-	Macro                            // macros
+	Aspect   Kinds = 1 << iota         // aspects
+	Kind                               // kinds
+	Pattern                            // patterns
+	Record                             // records
+	Relation                           // relations
+	Response                           // responses
+	Macro    Kinds = Pattern | 1<<iota // macros
+	Action   Kinds = Pattern | 1<<iota // actions
 )
 
 var DefaultKinds = []Kinds{
-	Aspect, Kind, Pattern, Record, Relation, Response, Action, Event, Macro,
+	Aspect, Kind, Pattern, Record, Relation, Response, Action, Macro,
 }
 
 func (k Kinds) Parent() (ret Kinds) {

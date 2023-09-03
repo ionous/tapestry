@@ -40,20 +40,17 @@ type Rule struct {
 }
 
 func NewPatternBuilder(name string) *PatternBuilder {
-	return NewPatternSubtype(name, kindsOf.Pattern)
+	return NewPatternSubtype(name, kindsOf.Pattern.String())
 }
 
-func NewPatternSubtype(name string, parent kindsOf.Kinds) *PatternBuilder {
-	if (parent & kindsOf.Pattern) == 0 {
-		panic("subtype not a pattern")
-	}
+func NewPatternSubtype(name string, parent string) *PatternBuilder {
 	return &PatternBuilder{
 		Pattern: Pattern{
 			// tbd: feels like it'd be best to have spec flag names that need normalization,
 			// and convert all the names at load time ( probably storing the original somewhere )
 			// ( ex. store the normalized names in the meta data )
 			name:   lang.Normalize(name),
-			parent: parent.String(),
+			parent: parent,
 		}}
 }
 

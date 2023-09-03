@@ -3,6 +3,7 @@ package generic
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"golang.org/x/exp/slices"
 )
 
 // we bake it down for faster, easier indexed access.
@@ -47,18 +48,12 @@ func (k *Kind) NewRecord() *Record {
 
 // Ancestor list, root towards the start; the name of this kind at the end.
 func (k *Kind) Path() (ret []string) {
-	ret = append(ret, k.path...) // copies the slice
+	ret = append(ret, k.path...) // copies the slice so it cant be mucked with.
 	return
 }
 
-func (k *Kind) Implements(i string) (ret bool) {
-	for _, p := range k.path {
-		if i == p {
-			ret = true
-			break
-		}
-	}
-	return
+func (k *Kind) Implements(parent string) bool {
+	return slices.Contains(k.path, parent)
 }
 
 func (k *Kind) Name() (ret string) {

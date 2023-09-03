@@ -61,19 +61,26 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 		if act, e := safe.GetText(w, op.Action); e != nil {
 			err = e
 		} else {
-			act := lang.Normalize(act.String())
-			for i := 0; i < event.NumPhases; i++ {
-				phase := event.Phase(i)
-				pb := mdl.NewPatternSubtype(phase.PatternName(act), phase.PatternKind())
-				// note: actions dont have an explicit return
-				if e := addRequiredFields(w, pb, op.Requires); e != nil {
-					err = e
-				} else if e := addFields(w, pb, mdl.PatternLocals, op.Provides); e != nil {
-					err = e
-				} else {
-					err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+			act := mdl.NewPatternSubtype(lang.Normalize(act.String()), kindsOf.Action.String())
+			// note: actions dont have an explicit return
+			if e := addRequiredFields(w, act, op.Requires); e != nil {
+				err = e
+			} else if e := addFields(w, act, mdl.PatternLocals, op.Provides); e != nil {
+				err = e
+			} else if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+				return w.Pin().AddPattern(act.Pattern)
+			}); e != nil {
+				err = e
+			} else {
+				// derive the before and after phases
+				for _, phase := range []event.Phase{event.BeforePhase, event.AfterPhase} {
+					pb := mdl.NewPatternSubtype(phase.PatternName(act.Name()), act.Name())
+					if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
 						return w.Pin().AddPattern(pb.Pattern)
-					})
+					}); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}
@@ -89,21 +96,16 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
 		if act, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
+		} else if act, e := w.Pin().GetKind(lang.Normalize(act.String())); e != nil {
+			err = e // ^ verify the kind exists
 		} else {
-			if k, e := w.Pin().GetKind(lang.Normalize(act.String())); e != nil {
-				err = e // ^ verify the kind exists
+			pb := mdl.NewPatternSubtype(act, kindsOf.Action.String())
+			if e := addFields(w, pb, mdl.PatternLocals, op.Provides); e != nil {
+				err = e
 			} else {
-				for i := 0; i < event.NumPhases; i++ {
-					phase := event.Phase(i)
-					pb := mdl.NewPatternSubtype(phase.PatternName(k), phase.PatternKind())
-					if e := addFields(w, pb, mdl.PatternLocals, op.Provides); e != nil {
-						err = e
-					} else {
-						err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
-							return w.Pin().AddPattern(pb.Pattern)
-						})
-					}
-				}
+				err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+					return w.Pin().AddPattern(pb.Pattern)
+				})
 			}
 		}
 		return
@@ -222,7 +224,7 @@ func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.E
 				filters = append(filters, filter)
 			}
 			// by default: all event handlers are filtered to the player and the innermost target.
-			eventLike := k.Implements(kindsOf.Event.String()) || k.Implements(kindsOf.Action.String())
+			eventLike := k.Implements(kindsOf.Action.String())
 			if eventLike {
 				// if the focus of the event involves an actor;
 				// then we automatically filter for the player

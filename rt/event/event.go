@@ -2,7 +2,6 @@ package event
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
 // name of the optional event target parameter
@@ -94,18 +93,6 @@ func (p Phase) String() (ret string) {
 // return that full, unique name:  ex. "begin traveling"
 func (p Phase) PatternName(action string) string {
 	return p.prefix() + action
-}
-
-// event phases are represented by patterns of different sub-types.
-// ( used to determine when the call to a pattern needs to trigger a full-fledged event )
-func (p Phase) PatternKind() (ret kindsOf.Kinds) {
-	// fix these are reserved; can fix after all the old event handling is gone.
-	if p == TargetPhase {
-		ret = kindsOf.Action
-	} else {
-		ret = kindsOf.Event
-	}
-	return
 }
 
 // determines the order to visit objects for a particular phase.
