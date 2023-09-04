@@ -4,19 +4,19 @@ import "strings"
 
 type Grokker interface {
 	// if the passed words starts with a determiner,
-	// return the number of words in  that match.
+	// return the number of words that matched.
 	FindArticle(Span) (Article, error)
 
 	// if the passed words starts with a kind,
-	// return the number of words in  that match.
+	// return the number of words that matched.
 	FindKind(Span) (Match, error)
 
 	// if the passed words starts with a trait,
-	// return the number of words in  that match.
+	// return the number of words that matched.
 	FindTrait(Span) (Match, error)
 
 	// if the passed words starts with a macro,
-	// return information about that match
+	// return information about that match.
 	FindMacro(Span) (Macro, error)
 }
 
@@ -40,18 +40,22 @@ type Macro struct {
 }
 
 type Results struct {
-	Sources []Noun
-	Targets []Noun // usually just one, except for nxm relations
-	Macro   Macro
+	Primary   []Name
+	Secondary []Name // usually just one, except for nxm relations
+	Macro     Macro
 }
 
-type Noun struct {
+type Name struct {
 	Article Article
-	Name    Span
+	Span    Span
 	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
 	Traits  []Match
 	Kinds   []Match // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
+}
+
+func (n *Name) String() string {
+	return n.Span.String()
 }
 
 // Match - generic interface so Grokker implementations can track their own backchannel data.
@@ -66,6 +70,15 @@ type Match interface {
 func MatchLen(m Match) (ret int) {
 	if m != nil {
 		ret = m.NumWords()
+	}
+	return
+}
+
+// returns the string of a match;
+// empty if the match is nil.
+func MatchString(m Match) (ret string) {
+	if m != nil {
+		ret = m.String()
 	}
 	return
 }

@@ -46,19 +46,21 @@ var known = info{
 	macros: groktest.PanicMacros(
 		// source carries/ is carrying the targets
 		// reverse would be: targets are carried by the source.
-		"carried by", "carry", grok.Macro_ManyTargets, true, //
-		"carrying", "carry", grok.Macro_ManyTargets, false, //
+		"carried by", "carry", grok.Macro_ManySecondary, true, //
+		"carrying", "carry", grok.Macro_ManySecondary, false, //
 		// source contains the targets
 		// the targets are in the source ( rhs macro )
 		// in the source are the targets ( lhs macro; re-reversed )
-		"in", "contain", grok.Macro_ManyTargets, true,
+		"in", "contain", grok.Macro_ManySecondary, true,
 		// kinds:
-		"kinds of", "inherit", grok.Macro_SourcesOnly, false, // for "are kinds of containers"
-		"a kind of", "inherit", grok.Macro_SourcesOnly, false, // for "a kind of container"
+		"kinds of", "inherit", grok.Macro_PrimaryOnly, false, // for "are kinds of containers"
+		"a kind of", "inherit", grok.Macro_PrimaryOnly, false, // for "a kind of container"
+		// kind values
+		"usually", "implies", grok.Macro_PrimaryOnly, false, // for "are usually closed"
 		// source supports/is supporting the targets
 		// so, "targets are on source" is reversed ( rhs macro )
 		// and, "on source are targets" ( lhs macro; re-reversed )
-		"on", "support", grok.Macro_ManyTargets, true,
+		"on", "support", grok.Macro_ManySecondary, true,
 		//
 		"suspicious of", "suspect", grok.Macro_ManyMany, false,
 	),

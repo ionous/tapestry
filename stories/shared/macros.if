@@ -1,6 +1,22 @@
 {
   "Tapestry:": [
+  	 {
+  	 	"--": "ex. kinds are usually traits",
+      "Define macro:requires:provides:do:": [
+        "implies something",
+        [
+          {
+            "Text:": "kind"
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        []
+      ]
+    },
     {
+    	"--": "ex. kinds are kinds of something.",
       "Define macro:requires:provides:do:": [
         "inheriting something",
         [

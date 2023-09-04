@@ -208,20 +208,20 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 	} else {
 		var flag grok.MacroType
 		if numFields == 1 {
-			flag = grok.Macro_SourcesOnly
+			flag = grok.Macro_PrimaryOnly
 		} else {
 			a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
 			if a == affine.Text {
 				if b == affine.Text {
 					err = errutil.New("one one not supported?")
 				} else if b == affine.TextList {
-					flag = grok.Macro_ManyTargets
+					flag = grok.Macro_ManySecondary
 				} else {
 					err = errutil.New("unexpected aff", b)
 				}
 			} else if a == affine.TextList {
 				if b == affine.Text {
-					flag = grok.Macro_ManySources
+					flag = grok.Macro_ManyPrimary
 				} else if b == affine.TextList {
 					flag = grok.Macro_ManyMany
 				} else {

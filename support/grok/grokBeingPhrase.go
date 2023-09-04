@@ -20,7 +20,7 @@ Hack:
 		err = e
 	} else {
 		// our nouns.
-		sources, targets := &out.Sources, &out.Targets
+		sources, targets := &out.Primary, &out.Secondary
 		// try to find a macro after the traits:
 		afterRightLede := rhs[rightLede.WordCount:]
 		if macro, e := known.FindMacro(afterRightLede); e != nil {
@@ -37,7 +37,7 @@ Hack:
 					goto Hack
 				}
 				err = errutil.Fmt("couldnt parse right hand side: %q", Span(afterRightLede).String())
-			} else if e := grokNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
+			} else if e := grokNouns(known, &out.Primary, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
 			}
 		} else {
@@ -46,12 +46,12 @@ Hack:
 			postMacro := afterRightLede[macro.Match.NumWords():]
 			var lhsFlag, rhsFlag genFlag
 			switch macro.Type {
-			case Macro_SourcesOnly:
+			case Macro_PrimaryOnly:
 				lhsFlag = AllowMany | AllowAnonymous
-			case Macro_ManySources:
+			case Macro_ManyPrimary:
 				lhsFlag = AllowMany | OnlyNamed
 				rhsFlag = OnlyOne | AllowAnonymous
-			case Macro_ManyTargets:
+			case Macro_ManySecondary:
 				lhsFlag = OnlyOne | AllowAnonymous
 				rhsFlag = AllowMany | OnlyNamed
 			case Macro_ManyMany:
@@ -84,7 +84,7 @@ Hack:
 					} else if postMacroTraits.WordCount > 0 {
 						postMacroTraits.applyTraits(*sources)
 					} else if len(postMacro) > 0 {
-						if macro.Type != Macro_SourcesOnly {
+						if macro.Type != Macro_PrimaryOnly {
 							err = errutil.New("unconsumed words", Span(postMacro).String())
 						} else {
 							// hack part 2 for "are a kind of"

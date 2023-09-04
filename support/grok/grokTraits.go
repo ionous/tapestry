@@ -17,7 +17,7 @@ func (ts *TraitSet) kinds() (ret []Match) {
 	return ret
 }
 
-func (ts *TraitSet) applyTraits(out []Noun) {
+func (ts *TraitSet) applyTraits(out []Name) {
 	if hasKind := ts.hasKind(); hasKind || len(ts.Traits) > 0 {
 		for i := range out {
 			if hasKind {

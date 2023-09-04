@@ -1,11 +1,19 @@
 package grok
 
-// how many sources and how many targets are expected
+// the expected amount of names on the left and right hand sides of a macro phrase.
+// ( which side is primary and which side is secondary is fairly arbitrary;
+//   it depends on the definition of the phrase. )
 type MacroType int
 
 const (
-	Macro_SourcesOnly MacroType = iota
-	Macro_ManySources
-	Macro_ManyTargets
+	// used for "<sources> are kinds of <name of kind>"
+	// where the name of the kind is considered a property of the source.
+	// ex. `Devices are a kind of prop.`
+	Macro_PrimaryOnly MacroType = iota
+	// ex. `In the coffin are some coins, a notebook, and the gripping hand.`
+	Macro_ManyPrimary
+	// ex. `Some coins, a notebook, and the gripping hand are in the coffin.`
+	Macro_ManySecondary
+	// ex. `Hector and Maria are suspicious of Santa and Santana.`
 	Macro_ManyMany
 )

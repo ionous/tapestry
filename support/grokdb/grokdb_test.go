@@ -56,6 +56,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		carry
 		contain
 		inherit
+		implies
 		support
 		suspect
 		// domain string
@@ -83,6 +84,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		carry, domain, "carry", "", idPath(macros),
 		contain, domain, "contain", "", idPath(macros),
 		inherit, domain, "inherit", "", idPath(macros),
+		implies, domain, "implies", "", idPath(macros),
 		support, domain, "support", "", idPath(macros),
 		suspect, domain, "suspect", "", idPath(macros),
 	); e != nil {
@@ -96,23 +98,26 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, traits, "transparent", "bool",
 		domain, traits, "fixed in place", "bool",
 		// macros:
-		domain, carry, "source", "text",
-		domain, carry, "targets", "text_list",
+		domain, carry, "primary", "text",
+		domain, carry, "secondary", "text_list",
 		domain, carry, "error", "text",
 		//
-		domain, contain, "source", "text",
-		domain, contain, "targets", "text_list",
+		domain, contain, "primary", "text",
+		domain, contain, "secondary", "text_list",
 		domain, contain, "error", "text",
 		//
-		domain, inherit, "sources", "text_list",
+		domain, inherit, "primary", "text_list",
 		domain, inherit, "error", "text",
+
+		domain, implies, "primary", "text_list",
+		domain, implies, "error", "text",
 		//
-		domain, support, "source", "text",
-		domain, support, "targets", "text_list",
+		domain, support, "primary", "text",
+		domain, support, "secondary", "text_list",
 		domain, support, "error", "text",
 		// suspicion: many-to-many
-		domain, suspect, "sources", "text_list",
-		domain, suspect, "targets", "text_list",
+		domain, suspect, "primary", "text_list",
+		domain, suspect, "secondary", "text_list",
 		domain, suspect, "error", "text",
 	); e != nil {
 		err = e
@@ -122,6 +127,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		carry, "error",
 		contain, "error",
 		inherit, "error",
+		implies, "error",
 		support, "error",
 		suspect, "error",
 	); e != nil {
@@ -129,11 +135,12 @@ func setupDB(name string) (ret *sql.DB, err error) {
 	} else if e := testdb.Ins(db, []string{"mdl_phrase",
 		"domain", "macro", "phrase", "reversed"},
 		//
-		domain, carry, "carried by", true, // ex. source carrying targets
-		domain, carry, "carrying", false, // ex. source carrying targets
+		domain, carry, "carried by", true, // ex. primary carrying secondary
+		domain, carry, "carrying", false, // ex. primary carrying secondary
 		domain, contain, "in", true,
 		domain, inherit, "kinds of", false, // for "are kinds of containers"
 		domain, inherit, "a kind of", false, // ex. "a kind of container"
+		domain, implies, "usually", false, // ex. "usually closed"
 		domain, support, "on", true, // on the x are the w,y,z
 		domain, suspect, "suspicious of", false,
 	); e != nil {

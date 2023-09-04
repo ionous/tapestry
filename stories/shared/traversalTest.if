@@ -201,6 +201,15 @@
               "You can see a curtain."
             ]
           },
+           {
+          	"--": "test moving south as if the player typed the input",
+            "Fabricate input:": "take curtain"
+          },
+          {
+            "Expect output:": [
+              "It is fixed in place."
+            ]
+          },
           {
           	"--": "test moving south as if the player typed the input",
             "Fabricate input:": "south"

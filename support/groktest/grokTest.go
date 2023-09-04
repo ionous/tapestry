@@ -19,7 +19,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `Devices are a kind of prop.`,
 			result: map[string]any{
 				"macro": "inherit",
-				"sources": []map[string]any{
+				"primary": []map[string]any{
 					{
 						"kinds": []string{"prop"},
 						"name":  "Devices",
@@ -28,18 +28,30 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			},
 		},
 		{
+			test: `Devices are usually closed.`,
+			result: map[string]any{
+				"macro": "implies",
+				"primary": []map[string]any{
+					{
+						"name":   "Devices",
+						"traits": []string{"closed"},
+					},
+				},
+			},
+		},
+		{
 			// note: in inform...	 §4.14. Duplicates
 			// "Two circles are in the Lab."
 			// it only works if "circles" is a known kind
-			// otherwise, it assumes "two circles" is a name.
+			// otherwise, it assumes "two circles" is the complete name of a single noun.
 			test: `Two things are in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"count": 2,
 					"kinds": []string{"things"},
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the",
 					"name": "kitchen",
 				}},
@@ -50,10 +62,10 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `Hershel is carrying scissors and a pen.`,
 			result: map[string]any{
 				"macro": "carry",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"name": "Hershel",
 				}},
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"name": "scissors",
 				}, {
 					"det":  "a",
@@ -66,10 +78,10 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The scissors and a pen are carried by Hershel.`,
 			result: map[string]any{
 				"macro": "carry",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"name": "Hershel",
 				}},
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":  "the",
 					"name": "scissors",
 				}, {
@@ -83,7 +95,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The bottle is closed.`,
 			result: map[string]any{
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "the",
 					"name":   "bottle",
 					"traits": []string{"closed"},
@@ -94,7 +106,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The tree is fixed in place.`,
 			result: map[string]any{
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "the",
 					"name":   "tree",
 					"traits": []string{"fixed in place"},
@@ -105,7 +117,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The bottle is a transparent, open, container.`,
 			result: map[string]any{
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "the",
 					"name":   "bottle",
 					"kinds":  []string{"container"},
@@ -117,7 +129,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The box and the top are closed containers.`,
 			result: map[string]any{
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "the",
 					"name":   "box",
 					"traits": []string{"closed"},
@@ -134,7 +146,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The container called the sarcophagus is open.`,
 			result: map[string]any{
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "the", // note: this is the bit closes to the noun
 					"name":   "sarcophagus",
 					"exact":  true,
@@ -149,7 +161,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `A casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":   "a",
 					"name":  "casket",
 					"kinds": []string{"container"},
@@ -162,7 +174,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `A casket is a kind of closed container.`,
 			result: map[string]any{
 				"macro": "inherit",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "a",
 					"name":   "casket",
 					"traits": []string{"closed"},
@@ -178,7 +190,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The closed casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":   "the",
 					"name":  "closed casket",
 					"kinds": []string{"container"},
@@ -197,7 +209,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `Buckets and baskets are kinds of container.`,
 			result: map[string]any{
 				"macro": "inherit",
-				"sources": []map[string]any{
+				"primary": []map[string]any{
 					{
 						"kinds": []string{"container"},
 						"name":  "Buckets",
@@ -217,13 +229,13 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The unhappy man is in the closed bottle.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det": "the",
-					// giving properties to the rhs and right targets isnt permitted:
+					// giving properties to the rhs and right secondary isnt permitted:
 					// tbd: but it might be possible...
 					"name": "unhappy man",
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the",
 					"name": "closed bottle",
 				}},
@@ -233,13 +245,13 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The coffin is a closed container in the antechamber.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":    "the",
 					"name":   "coffin",
 					"traits": []string{"closed"},
 					"kinds":  []string{"container"},
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the",
 					"name": "antechamber",
 				}},
@@ -250,12 +262,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The bottle is openable in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":    "the",
 					"traits": []string{"openable"},
 					"name":   "bottle",
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the",
 					"name": "kitchen",
 				}},
@@ -268,13 +280,13 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The thing called the stake is on the supporter called the altar.`,
 			result: map[string]any{
 				"macro": "support",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":   "the",
 					"name":  "stake",
 					"exact": true,
 					"kinds": []string{"thing"},
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":   "the",
 					"name":  "altar",
 					"exact": true,
@@ -290,11 +302,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `A closed openable container called the trunk is in the lobby.`,
 			result: map[string]any{
 				"macro": "contain",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the",
 					"name": "lobby",
 				}},
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":    "the", // closest to the trunk
 					"name":   "trunk",
 					"exact":  true,
@@ -303,17 +315,17 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 			},
 		},
-		// multiple sources:
+		// multiple primary:
 		// "is" left of the macro "in".
 		{
 			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: map[string]any{
 				"macro": "contain",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the", // closest to the coffin
 					"name": "coffin",
 				}},
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":  "some",
 					"name": "coins",
 				}, {
@@ -325,16 +337,16 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 			},
 		},
-		// multiple sources with a leading macro
+		// multiple primary with a leading macro
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":  "the", // lowercase, the closest to the trunk
 					"name": "coffin",
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "some",
 					"name": "coins",
 				}, {
@@ -351,11 +363,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":  "the",
 					"name": "lobby",
 				}},
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"kinds": []string{"supporter"},
 				}, {
 					"kinds": []string{"container"},
@@ -367,12 +379,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `Hector and Maria are suspicious of Santa and Santana.`,
 			result: map[string]any{
 				"macro": "suspect",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"name": "Hector",
 				}, {
 					"name": "Maria",
 				}},
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"name": "Santa",
 				}, {
 					"name": "Santana",
@@ -384,12 +396,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The bottle in the kitchen is openable.`,
 			skip: map[string]any{
 				"macro": "contain",
-				"sources": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":    "the",
 					"traits": []string{"openable"},
 					"name":   "bottle",
 				}},
-				"targets": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":  "the",
 					"name": "kitchen",
 				}},

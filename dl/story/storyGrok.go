@@ -39,8 +39,8 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 					if res, e := w.GrokSpan(span); e != nil {
 						err = errutil.Fmt("%w reading of %v b/c %v", mdl.Missing, span.String(), e)
 					} else {
-						if strings.HasPrefix(res.Macro.Name, "inherit") {
-							// handle"kinds of"
+						if strings.HasPrefix(res.Macro.Name, "inherit") || strings.HasPrefix(res.Macro.Name, "implies") {
+							// handle "kinds of"
 							// alt, could maybe look at the number of fields of the macro
 							// it'd be amazing to handle all of validate and genNouns in macros
 							// (so no decisions are needed here ) but dont think that's easily possible.
@@ -61,31 +61,32 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 }
 
 func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
-	if len(res.Targets) != 0 {
+	if len(res.Secondary) != 0 {
 		err = errutil.Fmt("%q only expected sources", res.Macro.Name)
 	} else {
 		pen := w.Pin()
-		for _, src := range res.Sources {
-			// two forms: one where the kind is already known to be a kind;
+		for _, src := range res.Primary {
+			// fix? grok returns one of two two forms:
+			// one where the kind is already known to be a kind;
 			// and one where its seen as a generic name.
-			if grok.MatchLen(src.Name) == 0 {
-				if len(src.Kinds) != 2 {
-					err = errutil.Fmt("%q expected a single kind per source", res.Macro.Name)
+			if grok.MatchLen(src.Span) == 0 {
+				if kinds := len(src.Kinds); kinds == 0 {
+					err = errutil.Fmt("%q expected a primary kind", res.Macro.Name)
+				} else if kinds > 2 {
+					err = errutil.Fmt("%q expected no more than two kinds", res.Macro.Name)
+					break
 				} else {
-					kind := lang.Normalize(src.Kinds[0].String())
-					ancestor := lang.Normalize(src.Kinds[1].String())
-					if e := pen.AddKind(kind, ancestor); e != nil {
+					if e := grokKind(pen, src.Kinds[0], optionalLast(src.Kinds[1:]), src.Traits); e != nil {
 						err = e
 						break
 					}
 				}
 			} else {
-				if len(src.Kinds) != 1 {
-					err = errutil.Fmt("%q allow a single kind per source", res.Macro.Name)
+				if kinds := len(src.Kinds); kinds > 1 {
+					err = errutil.Fmt("%q expects no more than a single kind per source.", res.Macro.Name)
+					break
 				} else {
-					kind := lang.Normalize(src.Name.String())
-					ancestor := lang.Normalize(src.Kinds[0].String())
-					if e := pen.AddKind(kind, ancestor); e != nil {
+					if e := grokKind(pen, src.Span, optionalLast(src.Kinds), src.Traits); e != nil {
 						err = e
 						break
 					}
@@ -96,14 +97,37 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 	return
 }
 
+func optionalLast(list []grok.Match) (ret grok.Match) {
+	if cnt := len(list); cnt > 0 {
+		ret = list[cnt-1]
+	}
+	return
+}
+
+func grokKind(pen *mdl.Pen, k, a grok.Match, traits []grok.Match) (err error) {
+	kind := lang.Normalize(grok.MatchString(k))
+	ancestor := lang.Normalize(grok.MatchString(a))
+	if e := pen.AddKind(kind, ancestor); e != nil {
+		err = e
+	} else {
+		for _, t := range traits {
+			t := lang.Normalize(t.String())
+			if e := pen.AddDefaultValue(kind, t, truly()); e != nil {
+				err = errutil.Append(err, e)
+			}
+		}
+	}
+	return
+}
+
 func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {
-	if multiSrc, e := validSources(res.Sources, res.Macro.Type); e != nil {
+	if multiSrc, e := validSources(res.Primary, res.Macro.Type); e != nil {
 		err = e
-	} else if multiTgt, e := validTargets(res.Targets, res.Macro.Type); e != nil {
+	} else if multiTgt, e := validTargets(res.Secondary, res.Macro.Type); e != nil {
 		err = e
-	} else if src, e := genNouns(w, res.Sources, multiSrc); e != nil {
+	} else if src, e := genNouns(w, res.Primary, multiSrc); e != nil {
 		err = e
-	} else if tgt, e := genNouns(w, res.Targets, multiTgt); e != nil {
+	} else if tgt, e := genNouns(w, res.Secondary, multiTgt); e != nil {
 		err = e
 	} else {
 		// note: some phrases "the box is open" dont have macros.
@@ -131,26 +155,26 @@ func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {
 }
 
 // for logging errors
-func reduceNouns(ns []grok.Noun) (ret string) {
+func reduceNouns(ns []grok.Name) (ret string) {
 	var s strings.Builder
 	for i, n := range ns {
 		if i > 1 {
 			s.WriteString(", ")
 		}
-		s.WriteString(n.Name.String())
-
+		s.WriteString(n.String())
 	}
 	return s.String()
 }
 
-func validSources(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) {
+// validate that the number of parsed primary names is as expected
+func validSources(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) {
 	switch mtype {
-	case grok.Macro_SourcesOnly, grok.Macro_ManySources, grok.Macro_ManyMany:
+	case grok.Macro_PrimaryOnly, grok.Macro_ManyPrimary, grok.Macro_ManyMany:
 		if cnt := len(ns); cnt == 0 {
 			err = errutil.New("expected at least one source noun")
 		}
 		multi = true
-	case grok.Macro_ManyTargets:
+	case grok.Macro_ManySecondary:
 		if cnt := len(ns); cnt > 1 {
 			err = errutil.New("expected exactly one noun, have:", reduceNouns(ns))
 		}
@@ -160,17 +184,18 @@ func validSources(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) 
 	return
 }
 
-func validTargets(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) {
+// validate that the number of parsed secondary names is as expected
+func validTargets(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) {
 	switch mtype {
-	case grok.Macro_SourcesOnly:
+	case grok.Macro_PrimaryOnly:
 		if cnt := len(ns); cnt != 0 {
 			err = errutil.New("didn't expect any target nouns")
 		}
-	case grok.Macro_ManySources:
+	case grok.Macro_ManyPrimary:
 		if cnt := len(ns); cnt > 1 {
 			err = errutil.New("expected at most one target noun")
 		}
-	case grok.Macro_ManyTargets, grok.Macro_ManyMany:
+	case grok.Macro_ManySecondary, grok.Macro_ManyMany:
 		// any number okay
 		multi = true
 	default:
@@ -201,7 +226,7 @@ func getCustomArticle(article grok.Article) (ret string) {
 }
 
 // add nouns and values
-func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err error) {
+func genNouns(w *weave.Weaver, ns []grok.Name, multi bool) (ret g.Value, err error) {
 	names := make([]string, 0, len(ns))
 	for _, n := range ns {
 		if n.Article.Count > 0 {
@@ -233,9 +258,9 @@ func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err err
 	return
 }
 
-func importNamedNoun(pen *mdl.Pen, n grok.Noun) (ret string, err error) {
+func importNamedNoun(pen *mdl.Pen, n grok.Name) (ret string, err error) {
 	var noun string
-	fullName := n.Name.String()
+	fullName := n.String()
 	if name := lang.Normalize(fullName); name == "you" {
 		// tdb: the current thought is that "the player" should be a variable;
 		// currently its an "agent".
@@ -307,7 +332,7 @@ func importNamedNoun(pen *mdl.Pen, n grok.Noun) (ret string, err error) {
 // - uses "triangle" as an alias and printed name for each of the new nouns
 // - flags them all as "counted.
 // - ensures "triangle/s" are things
-func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error) {
+func importCountedNoun(w *weave.Weaver, noun grok.Name) (ret []string, err error) {
 	// ..kindOrKinds string, article grok.Article, traits []grok.Match
 	if cnt := noun.Article.Count; cnt > 0 {
 		// generate unique names for each of the counted nouns.
@@ -315,18 +340,13 @@ func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error
 		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
 		// and when you pick up one cat now you have two object stacks, both referring to the kind cats
 		// an empty stack acts like no object, and gets collected in some fashion.
-		var name string
-		parent := "thing"
-		if len(noun.Name) == 0 {
+		name, parent := noun.String(), "thing"
+		if len(name) == 0 {
 			name = noun.Kinds[0].String()
-			parent = "thing"
-		} else {
+		} else if len(noun.Kinds) > 0 {
 			// ex. ""An empire apple, a pen, and two triangles are props in the lab."
 			// fix: grok should return that as an object *called* two triangles, not something counted.
-			name = noun.Name.String()
-			if len(noun.Kinds) > 0 {
-				parent = noun.Kinds[0].String()
-			}
+			parent = noun.Kinds[0].String()
 		}
 		name = lang.Normalize(name)
 

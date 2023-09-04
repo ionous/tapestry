@@ -140,6 +140,8 @@ func (f *fieldInfo) class() classInfo {
 	return f.cls
 }
 
+// turn a trait boolean value into an aspect text value ( containing the name of the trait )
+// or, for all other types of values, return the passed assignment back to the caller.
 func (f *fieldInfo) rewriteTrait(name string, value assign.Assignment) (ret assign.Assignment, err error) {
 	if name == f.name {
 		ret = value
@@ -150,7 +152,7 @@ func (f *fieldInfo) rewriteTrait(name string, value assign.Assignment) (ret assi
 		case *assign.FromBool:
 			switch b := v.Value.(type) {
 			default:
-				err = errutil.Fmt("trait's only support literal bools, got %T", value)
+				err = errutil.Fmt("traits only support literal bools, got %T", value)
 			case *literal.BoolValue:
 				if !b.Value {
 					err = errutil.New("opposite trait assignment not supported")

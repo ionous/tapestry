@@ -5,7 +5,7 @@ import "github.com/ionous/errutil"
 // `In](ws: the coffin> are <some coins, a notebook, and a gripping hand.)`,
 func macroPhrase(known Grokker, macro Macro, ws []Word) (ret Results, err error) {
 	out := Results{Macro: macro}
-	sources, targets := &out.Sources, &out.Targets
+	sources, targets := &out.Primary, &out.Secondary
 	at, cnt := 0, len(ws)
 	for ; at < cnt; at++ {
 		if w := ws[at]; w.equals(keywords.is) || w.equals(keywords.are) {

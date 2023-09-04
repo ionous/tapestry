@@ -4,8 +4,8 @@ import "git.sr.ht/~ionous/tapestry/support/grok"
 
 func resultMap(in grok.Results) map[string]any {
 	m := make(map[string]any)
-	nounsIntoMap(m, "sources", in.Sources)
-	nounsIntoMap(m, "targets", in.Targets)
+	nounsIntoMap(m, "primary", in.Primary)
+	nounsIntoMap(m, "secondary", in.Secondary)
 	macroIntoMap(m, "macro", in.Macro)
 	return m
 }
@@ -17,7 +17,7 @@ func traitSetMap(ts grok.TraitSet) map[string]any {
 	return m
 }
 
-func nounsIntoMap(m map[string]any, field string, ns []grok.Noun) {
+func nounsIntoMap(m map[string]any, field string, ns []grok.Name) {
 	if len(ns) > 0 {
 		out := make([]map[string]any, len(ns))
 		for i, n := range ns {
@@ -27,9 +27,9 @@ func nounsIntoMap(m map[string]any, field string, ns []grok.Noun) {
 	}
 }
 
-func nounToMap(n grok.Noun) map[string]any {
+func nounToMap(n grok.Name) map[string]any {
 	m := make(map[string]any)
-	matchIntoMap(m, "name", n.Name)
+	matchIntoMap(m, "name", n.Span)
 	matchIntoMap(m, "det", n.Article.Match)
 	matchesIntoMap(m, "traits", n.Traits)
 	matchesIntoMap(m, "kinds", n.Kinds)

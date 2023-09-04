@@ -868,6 +868,16 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 	return
 }
 
+// the top level fields of kinds can hold runtime evaluated assignments.
+func (pen *Pen) AddDefaultValue(kind, field string, value assign.Assignment) (err error) {
+	if kind, e := pen.findRequiredKind(kind); e != nil {
+		err = e
+	} else {
+		err = pen.addDefaultValue(kind, field, value)
+	}
+	return
+}
+
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: assumes noun is an exact name
 func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err error) {
