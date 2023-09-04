@@ -166,6 +166,7 @@
                 }
               ],
               {
+                "--": "not in darkness",
                 "Finally do:": [
                   {
                     "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
@@ -397,11 +398,13 @@
                 "@ceiling"
               ]
             },
-            [
-              {
-                "Say:": "{.ceiling}"
-              }
-            ],
+            {
+              "--": [
+                "when the room is the ceiling, print the plain room name.",
+                "( use the room variable because it has the most knowledge of the subtype. )"
+              ],
+              "Say:": "{.room}"
+            },
             {
               "Finally do:": [
                 {
