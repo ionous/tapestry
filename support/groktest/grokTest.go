@@ -28,6 +28,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			},
 		},
 		{
+			// note: "Devices are fixed in place" will parse properly
+			// but storyGrok will assume that the name "devices" refers to a noun
+			// and ( probably, hopefully ) some error will occur.
+			// I like that usually specifically indicates and separates kinds from nouns --
+			// im not sure the other certainties (never, always) are really needed:
+			// if so: the "final" field for mdl_value, mdl_value_kind could be used.
 			test: `Devices are usually closed.`,
 			result: map[string]any{
 				"macro": "implies",
