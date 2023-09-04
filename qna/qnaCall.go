@@ -20,7 +20,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	} else if rec, e := safe.FillRecord(run, pat.NewRecord(), keys, vals); e != nil {
 		err = e
 	} else {
-		switch pattern.Categorize(pat.Kind) {
+		switch pattern.Categorize(pat) {
 		case pattern.Initializes:
 			ret = g.RecordOf(rec)
 		case pattern.Calls:
@@ -38,14 +38,15 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	return
 }
 
-func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (ret g.Value, err error) {
-	if field, e := pattern.GetResultField(run, kind.Kind); e != nil {
+func (run *Runner) call(rec *g.Record, kind *g.Kind, aff affine.Affinity) (ret g.Value, err error) {
+	if field, e := pattern.GetResultField(run, kind); e != nil {
 		err = e
 	} else {
 		name := kind.Name()
 		oldScope := run.scope.ReplaceScope(scope.FromRecord(rec))
 		run.currentPatterns.startedPattern(name)
-		if e := kind.recordInit(run, rec); e != nil {
+
+		if initRecord(run, rec); e != nil {
 			err = e
 		} else if rules, e := run.getRules(name); e != nil {
 			err = e
@@ -61,12 +62,21 @@ func (run *Runner) call(rec *g.Record, kind cachedKind, aff affine.Affinity) (re
 }
 
 func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, err error) {
-	callState := run.saveCallState()
-	if path, e := run.newPathForTarget(tgt); e != nil {
+	// fix? setup the base state first since that's where most initialization lives
+	// however, it's not satisfying to move from "action", to "before action", back to "action" again
+	// tbd: add an explicit middle pattern ( "is action" )
+	callState := run.saveCallState(rec)
+	if e := initRecord(run, rec); e != nil {
 		err = e
+	} else if path, e := run.newPathForTarget(tgt); e != nil {
+		err = e // ^ the bubble capture chain
 	} else if evtObj, e := newEventRecord(run, event.Object, tgt); e != nil {
-		err = e // ^ create the "event" object sent to each event phase pattern.
+		err = e // ^ create the "event object" sent to each event phase pattern.
 	} else {
+		// BUT SCOPE!
+		if initRecord(run, rec); e != nil {
+			err = e
+		}
 		var canceled bool
 		for prevRec, i := rec, 0; i < event.NumPhases; i++ {
 			phase := event.Phase(i)
@@ -113,16 +123,28 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 // the action pattern declaration implies that the initial set of field sare the same
 // ( even though the author can extend those patterns with non-overlapping locals )
 // fix: backdoor record creation to slice the values across?
-func (run *Runner) newPhase(k cachedKind, src *g.Record) (ret *g.Record, err error) {
-	dst, srcKind := k.NewRecord(), src.Kind()
-	_ = run.scope.ReplaceScope(scope.FromRecord(dst)) // assumes the caller handles scope restoration
+func (run *Runner) newPhase(k *g.Kind, src *g.Record) (ret *g.Record, err error) {
+	dst := k.NewRecord()
+	_ = run.scope.ReplaceScope(scope.FromRecord(dst))
+	if e := copyPhase(src, dst); e != nil {
+		err = e
+	} else if e := initRecord(run, dst); e != nil {
+		err = e
+	} else {
+		ret = dst
+	}
+	return
+}
 
-	i := 0
-	// copy until the fields are mismatched
-	for srcCnt, dstCnt := srcKind.NumField(), k.NumField(); i < srcCnt && i < dstCnt; i++ {
-		if srcKind.Field(i) != k.Field(i) {
+func copyPhase(src *g.Record, dst *g.Record) (err error) {
+	srcKind, dstKind := src.Kind(), dst.Kind()
+	for i, srcCnt, dstCnt := 0, srcKind.NumField(), dstKind.NumField(); i < srcCnt && i < dstCnt; i++ {
+		// copy until the fields are mismatched
+		if srcKind.Field(i) != dstKind.Field(i) {
 			break
-		} else if src.HasValue(i) { // no need to copy fields that were never set
+		} else if src.HasValue(i) {
+			// only copy fields that were set
+			// (ex. from a previous phase, or via an argument to Call )
 			if v, e := src.GetIndexedField(i); e != nil {
 				err = e
 				break
@@ -130,22 +152,7 @@ func (run *Runner) newPhase(k cachedKind, src *g.Record) (ret *g.Record, err err
 				err = e
 				break
 			}
-		} else if initCnt := len(k.init); i < initCnt { // init any unset fieds
-			if e := k.initIndex(run, dst, i); e != nil {
-				err = e
-				break
-			}
 		}
-	}
-	// init any remaining fields
-	for initCnt := len(k.init); i < initCnt; i++ {
-		if e := k.initIndex(run, dst, i); e != nil {
-			err = e
-			break
-		}
-	}
-	if err == nil {
-		ret = dst
 	}
 	return
 }

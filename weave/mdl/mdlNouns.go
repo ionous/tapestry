@@ -17,10 +17,6 @@ type nounInfo struct {
 	fullpath string // full path of kind
 }
 
-func (n *nounInfo) ownerInfo() ownerInfo {
-	return ownerInfo{noun: n.id, kind: n.kid, debugName: n.name}
-}
-
 func (n *nounInfo) class() classInfo {
 	return classInfo{
 		id:       n.kid,

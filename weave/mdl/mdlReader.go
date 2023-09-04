@@ -113,12 +113,11 @@ func ReadLocals(db *sql.DB) ([]string, error) {
 	//  wonder if itd be enough to simply go by kind id since the order of writing should follow
 	return tables.QueryStrings(db, `
 	select mk.domain ||':'|| mk.kind ||':'|| mf.field ||':'|| mv.value
-	from mdl_value mv
+	from mdl_value_kind mv
 	join mdl_field mf 
 		on(mv.field = mf.rowid)
 	join mdl_kind mk 
 		on(mf.kind = mk.rowid)
-	where not mv.noun
 	order by mk.rowid, mf.rowid, mv.rowid`)
 }
 

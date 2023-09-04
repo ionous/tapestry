@@ -14,72 +14,75 @@ func (e NotImplemented) Error() string {
 	return string(e)
 }
 
-func (q QueryNone) IsDomainActive(name string) (ret bool, err error) {
+func (q QueryNone) IsDomainActive(name string) (_ bool, _ error) {
 	return
 }
 
-func (q QueryNone) ActivateDomain(name string) (ret string, err error) {
+func (q QueryNone) ActivateDomain(name string) (_ string, err error) {
 	err = NotImplemented(q)
 	return
 }
 
-func (q QueryNone) ReadChecks(actuallyJustThisOne string) (ret []CheckData, err error) {
+func (q QueryNone) ReadChecks(actuallyJustThisOne string) (_ []CheckData, _ error) {
 	return
 }
 
-func (q QueryNone) FieldsOf(kind string) (ret []FieldData, err error) {
+func (q QueryNone) FieldsOf(kind string) (_ []FieldData, _ error) {
 	return
 }
 
-func (q QueryNone) KindOfAncestors(kind string) (ret []string, err error) {
+func (q QueryNone) KindOfAncestors(kind string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) NounInfo(name string) (ret NounInfo, err error) {
+func (q QueryNone) KindValues(id string) (_ []ValueData, _ error) {
+	return
+}
+func (q QueryNone) NounInfo(name string) (_ NounInfo, _ error) {
 	return
 }
 
-func (q QueryNone) NounName(id string) (ret string, err error) {
+func (q QueryNone) NounName(id string) (_ string, _ error) {
 	return
 }
 
-func (q QueryNone) NounNames(id string) (ret []string, err error) {
+func (q QueryNone) NounNames(id string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) NounValues(id, field string) (ret []string, err error) {
+func (q QueryNone) NounValues(id, field string) (_ []ValueData, _ error) {
 	return
 }
 
-func (q QueryNone) NounsByKind(kind string) (ret []string, err error) {
+func (q QueryNone) NounsByKind(kind string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) OppositeOf(kind string) (ret string, err error) {
+func (q QueryNone) OppositeOf(kind string) (_ string, _ error) {
 	return
 }
 
-func (q QueryNone) PluralToSingular(plural string) (ret string, err error) {
+func (q QueryNone) PluralToSingular(plural string) (_ string, _ error) {
 	return
 }
 
-func (q QueryNone) PluralFromSingular(singular string) (ret string, err error) {
+func (q QueryNone) PluralFromSingular(singular string) (_ string, _ error) {
 	return
 }
 
-func (q QueryNone) PatternLabels(pat string) (ret []string, err error) {
+func (q QueryNone) PatternLabels(pat string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) RulesFor(pat string) (ret []RuleData, err error) {
+func (q QueryNone) RulesFor(pat string) (_ []RuleData, _ error) {
 	return
 }
 
-func (q QueryNone) ReciprocalsOf(rel, id string) (ret []string, err error) {
+func (q QueryNone) ReciprocalsOf(rel, id string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) RelativesOf(rel, id string) (ret []string, err error) {
+func (q QueryNone) RelativesOf(rel, id string) (_ []string, _ error) {
 	return
 }
 

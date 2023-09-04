@@ -17,15 +17,7 @@ func MakePath(path ...string) string {
 	return strings.Join(path, ".")
 }
 
-// the owner of a value
-// noun can be zero for default values of kind
-type ownerInfo struct {
-	kind, noun int64
-	debugName  string
-}
-
 func (pen *Pen) addDefaultValue(kind kindInfo, name string, value assign.Assignment) (err error) {
-	interim := isProvisional(value)
 	if field, e := pen.findField(kind.class(), name); e != nil {
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
@@ -35,13 +27,12 @@ func (pen *Pen) addDefaultValue(kind kindInfo, name string, value assign.Assignm
 	} else if out, e := marshalAssignment(value); e != nil {
 		err = e
 	} else {
-		err = pen.addValue(kind.ownerInfo(), interim, field, field.name, "", out)
+		err = pen.addKindValue(kind, isFinal(value), field, out)
 	}
 	return
 }
 
 func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err error) {
-	interim := isProvisional(value)
 	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else if field, e := pen.findField(noun.class(), name); e != nil {
@@ -53,13 +44,13 @@ func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err e
 	} else if out, e := marshalAssignment(value); e != nil {
 		err = e
 	} else {
-		err = pen.addValue(noun.ownerInfo(), interim, field, field.name, "", out)
+		err = pen.addNounValue(noun, isFinal(value), field, field.name, "", out)
 	}
 	return
 }
 
+// dot values are required to be literals.
 func (pen *Pen) addPathValue(noun string, parts []string, value literal.LiteralValue) (err error) {
-	interim := isProvisional(value)
 	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else if outer, inner, e := pen.digField(noun, parts); e != nil {
@@ -72,13 +63,15 @@ func (pen *Pen) addPathValue(noun string, parts []string, value literal.LiteralV
 	} else if out, e := marshalout(value); e != nil {
 		err = e
 	} else {
-		root, dot := parts[0], strings.Join(parts[1:], ".")
-		err = pen.addValue(noun.ownerInfo(), interim, outer, root, dot, out)
+		field, dot := parts[0], strings.Join(parts[1:], ".")
+		err = pen.addNounValue(noun, isFinal(value), outer, field, dot, out)
 	}
 	return
 }
 
-func (pen *Pen) addValue(owner ownerInfo, interim bool, outer fieldInfo, root, dot, value string) (err error) {
+// writing to fields inside a record is permitted so long as the record itself has not been written to.
+// overwriting a field with a record is allowed from another domain.
+func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, dot, value string) (err error) {
 	opt := sql.NullString{
 		String: dot,
 		Valid:  len(dot) > 0,
@@ -105,25 +98,25 @@ func (pen *Pen) addValue(owner ownerInfo, interim bool, outer fieldInfo, root, d
 		   (1 == instr(case when   @3   is null then "." else '.' ||   @3   || '.' end, 
 		               case when mv.dot is null then "." else '.' || mv.dot || '.' end))
 		)`,
-		owner.noun, outer.id, opt,
+		noun.id, outer.id, opt,
 	); e != nil {
 		err = errutil.New("database error", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.dot.String != dot {
 			err = errutil.Fmt(`%w writing value for %s, had value for %s.`,
-				Conflict, debugJoin(owner.debugName, root, dot), debugJoin(owner.debugName, root, prev.dot.String))
+				Conflict, debugJoin(noun.name, field, dot), debugJoin(noun.name, field, prev.dot.String))
 		} else if prev.value != value {
 			err = errutil.Fmt(`%w mismatched value for %s.`,
-				Conflict, debugJoin(owner.debugName, root, dot))
+				Conflict, debugJoin(noun.name, field, dot))
 		} else {
 			err = errutil.Fmt(`%w value for %s.`,
-				Duplicate, debugJoin(owner.debugName, root, dot))
+				Duplicate, debugJoin(noun.name, field, dot))
 		}
 		return
 	}, &prev.dot, &prev.value); e != nil {
 		err = eatDuplicates(pen.warn, e)
 	} else {
-		if _, e := pen.db.Exec(mdl_value, owner.noun, outer.id, opt, value, interim, pen.at); e != nil {
+		if _, e := pen.db.Exec(mdl_value, noun.id, outer.id, opt, value, final, pen.at); e != nil {
 			err = e
 		}
 	}
@@ -132,7 +125,50 @@ func (pen *Pen) addValue(owner ownerInfo, interim bool, outer fieldInfo, root, d
 
 // note: values are written per noun, not per domain
 // fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
-var mdl_value = tables.Insert("mdl_value", "noun", "field", "dot", "value", "provisional", "at")
+var mdl_value = tables.Insert("mdl_value", "noun", "field", "dot", "value", "final", "at")
+
+// writing to fields inside a record is permitted so long as the record itself has not been written to.
+// overwriting a field with a record is allowed from another domain.
+func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value string) (err error) {
+
+	// search for existing paths which conflict:
+	// could be the same path, or could be a record written as a whole
+	// now being written as a part; or vice versa.
+	// OR the exact match ( ex. a duplicate )
+	var prev struct {
+		value string
+	}
+	// find cases where the new path starts a previous path,
+	// or a previous path starts the new path.
+	// instr(X,Y) - searches X for Y.
+	if rows, e := pen.db.Query(`
+		select mv.value 
+		from mdl_value_kind mv 
+		where mv.kind = @1
+		and mv.field = @2`,
+		kind.id, field.id,
+	); e != nil {
+		err = errutil.New("database error", e)
+	} else if e := tables.ScanAll(rows, func() (err error) {
+		if prev.value != value {
+			err = errutil.Fmt(`%w mismatched value for %s.`,
+				Conflict, debugJoin(kind.name, field.name, ""))
+		} else {
+			err = errutil.Fmt(`%w value for %s.`,
+				Duplicate, debugJoin(kind.name, field.name, ""))
+		}
+		return
+	}, &prev.value); e != nil {
+		err = eatDuplicates(pen.warn, e)
+	} else {
+		if _, e := pen.db.Exec(mdl_value_kind, kind.id, field.id, value, final, pen.at); e != nil {
+			err = e
+		}
+	}
+	return
+}
+
+var mdl_value_kind = tables.Insert("mdl_value_kind", "kind", "field", "value", "final", "at")
 
 func debugJoin(noun, field, path string) string {
 	var b strings.Builder

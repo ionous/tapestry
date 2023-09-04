@@ -18,7 +18,6 @@ type FieldData struct {
 	Name     string
 	Affinity affine.Affinity
 	Class    string
-	Init     []byte // a serialized assign.Assignment
 }
 
 type NounInfo struct {
@@ -30,21 +29,29 @@ type RuleData struct {
 	Stop    bool
 	Jump    int
 	Updates bool
-	Prog    []byte // a serialized assign.Prog
+	Prog    []byte // a serialized rt.Execute_Slice
+}
+
+type ValueData struct {
+	Field string
+	Path  string
+	Value []byte // a serialized assignment or literal
 }
 
 type Query interface {
 	IsDomainActive(name string) (bool, error)
 	ActivateDomain(name string) (string, error)
 	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
+	// every field exclusive to the passed kind
 	FieldsOf(kind string) ([]FieldData, error)
 	KindOfAncestors(kind string) ([]string, error)
+	KindValues(id string) ([]ValueData, error)
 	NounInfo(name string) (NounInfo, error)
 	NounName(id string) (string, error)
 	NounNames(id string) ([]string, error)
 	// a single field can contain a set of recursive spare values;
 	// so this returns pairs of path, value.
-	NounValues(id, field string) ([]string, error)
+	NounValues(id, field string) ([]ValueData, error)
 	NounsByKind(kind string) ([]string, error)
 	PluralToSingular(plural string) (string, error)
 	PluralFromSingular(singular string) (string, error)

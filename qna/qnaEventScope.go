@@ -6,6 +6,7 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
+// create the "event object" containing the event name, target, interrupt and cancel status
 func newEventRecord(run rt.Runtime, name string, tgt g.Value) (ret *g.Record, err error) {
 	if eventFields == nil {
 		eventFields = make([]g.Field, event.NumFields)
@@ -28,4 +29,5 @@ func newEventRecord(run rt.Runtime, name string, tgt g.Value) (ret *g.Record, er
 	return
 }
 
+// cache of the event object fields as described in package event
 var eventFields []g.Field

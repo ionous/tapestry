@@ -897,11 +897,11 @@ type ProvisionalLiteral struct {
 	literal.LiteralValue
 }
 
-func isProvisional(a any) (okay bool) {
+func isFinal(a any) (okay bool) {
 	if _, ok := a.(ProvisionalAssignment); ok {
 		okay = true
 	} else if _, ok := a.(ProvisionalLiteral); ok {
 		okay = true
 	}
-	return
+	return !okay
 }

@@ -98,10 +98,27 @@ create table mdl_rev( domain text not null, oneWord text, otherWord text, at tex
  */
 create table mdl_rule( domain text not null, kind int not null, name text, rank int, stop int, jump int, updates int, prog blob, at text );
 /* 
- * initial values for fields.
- * noun might be 0; in which case its a default value for the entire kind.
- * the scope of the value is the same as the noun or kind; that is the values are global: the same across all scenes.
- * dot contains sub field names separated by full stops.
- * provisional values can be refined during weave.
+ * scene independent default values for fields.
+ * field can come from any of the specified kind's ancestor.
+ * non-final values can be refined during weave.
+ *
+ * dots address fields of records; sub-fields of sub-records use dots separated by full stops. 
+ * if dot is empty, the value is an assign.Assignment;
+ * if dot exists, the value is a literal.Value.
+ *
+ * weave stops any noun field with a dot from being written 
+ * if one of its kinds has *anything* specified for that field.
  */
-create table mdl_value( noun int not null, field int not null, dot string, value blob, provisional int, at text, primary key( noun, field, dot ));
+create table mdl_value( noun int not null, field int not null, dot string, value blob, final int, at text );
+
+/* 
+ * scene independent default values for nouns.
+ * field can come from any of the specified kind's ancestor.
+ * non-final values can be refined during weave.
+ *
+ * while records dont support sub-addressing here
+ * ( and therefore 'dot' doesnt exist )
+ * this follows he same rule as mdl_value:
+ * no dot means values are assign.Assignment.
+ */
+create table mdl_value_kind( kind int not null, field int not null, value blob, final int, at text );

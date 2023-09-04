@@ -1,12 +1,13 @@
 package qna
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -16,12 +17,12 @@ func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
 	} else if cached, e := run.getKind(name); e != nil {
 		err = e
 	} else {
-		ret = cached.Kind
+		ret = cached
 	}
 	return
 }
 
-func (run *Runner) getKindOf(kn, kt string) (ret cachedKind, err error) {
+func (run *Runner) getKindOf(kn, kt string) (ret *g.Kind, err error) {
 	if ck, e := run.getKind(kn); e != nil {
 		err = e
 	} else if !ck.Implements(kt) {
@@ -32,29 +33,29 @@ func (run *Runner) getKindOf(kn, kt string) (ret cachedKind, err error) {
 	return
 }
 
-func (run *Runner) getKind(k string) (ret cachedKind, err error) {
+func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
 	if c, e := run.values.cache(func() (ret any, err error) {
 		ret, err = run.buildKind(k)
 		return
 	}, "kinds", k); e != nil {
 		err = e
 	} else {
-		ret = c.(cachedKind)
+		ret = c.(*g.Kind)
 	}
 	return
 }
 
-func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
+func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 	if path, e := run.query.KindOfAncestors(k); e != nil {
 		err = errutil.Fmt("error while getting kind %q, %w", k, e)
-	} else if fs, e := run.getFieldSet(k, path); e != nil {
+	} else if fs, e := run.getFields(k, path); e != nil {
 		err = errutil.Fmt("error while building kind %q, %w", k, e)
 	} else {
 		// fix? kinds and fields can be zero for both empty kinds and non-existent kinds
 		// this tries to figure out which is which to properly report errors
-		// ideally, this could be done at query time.
+		// ideally, this could be done at query time ( they should be the lowest N rows )
 		var okay bool
-		if len(path) > 0 || len(fs.fields) > 0 {
+		if len(path) > 0 || len(fs) > 0 {
 			okay = true
 		} else {
 			for _, x := range kindsOf.DefaultKinds {
@@ -71,67 +72,26 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 			// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
 			//   and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
 			kinds := generic.Kinds(run)
-			kind := g.NewKind(kinds, k, path, fs.fields)
-			ret = cachedKind{kind, fs.init}
+			kind := g.NewKind(kinds, k, path, fs)
+			ret = kind
 		}
 	}
 	return
 }
 
-type cachedKind struct {
-	*g.Kind
-	init []rt.Assignment
-}
-
-// fix? probably would make more sense if this happened when the record was created instead of after.
-// to do that though, the "args" and "locals" would have to be separate
-// ( so that args can be put into scope for locals to see. )
-func (k cachedKind) recordInit(run rt.Runtime, rec *g.Record) (err error) {
-	for i := range k.init {
-		if e := k.initIndex(run, rec, i); e != nil {
-			err = e
-			break
-		}
-	}
-	return
-}
-
-func (k cachedKind) initIndex(run rt.Runtime, rec *g.Record, fieldIndex int) (err error) {
-	if init := k.init[fieldIndex]; init != nil {
-		ft := k.Field(fieldIndex)
-		if src, e := init.GetAssignedValue(run); e != nil {
-			err = errutil.New("error determining local", k.Name(), ft.Name, e)
-		} else if val, e := safe.AutoConvert(run, ft, src); e != nil {
-			err = e
-		} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
-			err = errutil.New("error setting local", k.Name(), ft.Name, e)
-		}
-	}
-	return
-}
-
-type fieldSet struct {
-	fields []g.Field       // the kind's own fields are first, the root fields are last
-	init   []rt.Assignment // fix? move this into g.Kinds ( probably as a callback Init()g.Value to avoid dependency on package rt )
-}
-
-// get the fields and initialization settings of a hierarchy
+// fields for a full hierarchy
 // fields for kinds are "flattened" so all of the info for a hierarchy is duplicated in each kind
-// tbd if that makes sense or not, but its how things are for now.
-func (run *Runner) getFieldSet(kind string, path []string) (ret fieldSet, err error) {
-	var out fieldSet
+func (run *Runner) getFields(kind string, path []string) (ret []g.Field, err error) {
+	var out []g.Field
 	for next, i := kind, len(path); ; {
-		if fs, e := run.getFields(next); e != nil {
+		if fs, e := run.getUncachedFields(next); e != nil {
 			err = e
 			break
 		} else {
-			if cnt := len(fs.init); cnt > 0 {
-				if out.init == nil {
-					out.init = make([]rt.Assignment, len(out.fields))
-				}
-				out.init = append(out.init, fs.init...)
+			for _, f := range fs {
+				f := g.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class}
+				out = append(out, f)
 			}
-			out.fields = append(out.fields, fs.fields...)
 		}
 		// do while
 		if i--; i >= 0 {
@@ -146,41 +106,90 @@ func (run *Runner) getFieldSet(kind string, path []string) (ret fieldSet, err er
 	return
 }
 
-func (run *Runner) getFields(kind string) (ret fieldSet, err error) {
+// cached fields exclusive to a kind
+func (run *Runner) getUncachedFields(kind string) (ret []query.FieldData, err error) {
 	if c, e := run.values.cache(func() (ret any, err error) {
-		ret, err = run.getUncachedFields(kind)
+		ret, err = run.query.FieldsOf(kind)
 		return
 	}, "fields", kind); e != nil {
 		err = e
 	} else {
-		ret = c.(fieldSet)
+		ret = c.([]query.FieldData)
 	}
 	return
 }
 
-// get the fields and initialization settings of a single kind
-func (run *Runner) getUncachedFields(kind string) (ret fieldSet, err error) {
-	if fs, e := run.query.FieldsOf(kind); e != nil {
-		err = e
-	} else {
-		fields := make([]g.Field, len(fs))
-		var init []rt.Assignment // init is so often empty, only allocate on demand.
-		for i, f := range fs {
-			fields[i] = g.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class}
-			if prog := f.Init; len(prog) > 0 {
-				if val, e := run.decode.DecodeAssignment(f.Affinity, prog); e != nil {
-					err = errutil.New("error while decoding", f.Name, e)
+// cached initialization exclusive to a kind
+func (run *Runner) getKindValues(kind *g.Kind) (ret []kindValue, err error) {
+	name := kind.Name()
+	if c, e := run.values.cache(func() (ret any, err error) {
+		if kv, e := run.query.KindValues(name); e != nil {
+			err = e
+		} else {
+			prev := -1
+			ks := make([]kindValue, len(kv))
+			for i, el := range kv {
+				if len(el.Path) > 0 {
+					err = errutil.New("unexpected dot in field", name, el.Field)
+				} else if f, at := findNextField(kind, el.Field, prev); at < 0 {
+					err = errutil.New("unknown field", name, el.Field)
+					break
+				} else if v, e := run.decode.DecodeAssignment(f.Affinity, el.Value); e != nil {
+					err = errutil.New("error decoding field", name, el.Field, e)
 					break
 				} else {
-					if init == nil {
-						init = make([]rt.Assignment, len(fs))
-					}
-					init[i] = val
+					ks[i] = kindValue{ /*f: f, */ i: at, val: v}
 				}
 			}
+			ret = ks
 		}
-		if err == nil {
-			ret.fields, ret.init = fields, init
+		return
+	}, "init", name); e != nil {
+		err = e
+	} else {
+		ret, _ = c.([]kindValue) // can also be nil
+	}
+	return
+}
+
+func findNextField(k *g.Kind, name string, prev int) (ret g.Field, next int) {
+	next = -1 // provisionally
+	for i, cnt := prev+1, k.NumField(); i < cnt; i++ {
+		if f := k.Field(i); f.Name == name {
+			ret, next = f, i
+			break
+		}
+	}
+	return
+}
+
+type kindValue struct {
+	i   int // index in kind
+	val assign.Assignment
+}
+
+// only inits if the field is unset
+func (kv *kindValue) initValue(run rt.Runtime, rec *g.Record) (err error) {
+	if !rec.HasValue(kv.i) {
+		if val, e := kv.val.GetAssignedValue(run); e != nil {
+			err = e
+		} else if e := rec.SetIndexedField(kv.i, val); e != nil {
+			err = e
+		}
+	}
+	return
+}
+
+// assumes the record in in scope so it can read from its own values when needed
+func initRecord(run *Runner, rec *g.Record) (err error) {
+	if vs, e := run.getKindValues(rec.Kind()); e != nil {
+		err = e
+	} else {
+		for _, kv := range vs {
+			if e := kv.initValue(run, rec); e != nil {
+				err = e
+				break
+			}
 		}
 	}
 	return

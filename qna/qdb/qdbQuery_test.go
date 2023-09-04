@@ -191,7 +191,8 @@ func TestQueries(t *testing.T) {
 		t.Fatal(kindOfApple, e)
 	} else if kindOfTable, e := q.NounKind("table"); e != nil || kindOfTable != "" {
 		t.Fatal(kindOfTable, e) // should be blank because the table is out of scope
-	} else */if pairs, e := q.NounValues("apple", aspect); e != nil || !reflect.DeepEqual(pairs, []string{"", "brief"}) {
+	} else */if pairs, e := q.NounValues("apple", aspect); e != nil ||
+		!reflect.DeepEqual(pairs, []query.ValueData{{Field: aspect, Value: []byte("brief")}}) {
 		t.Fatal("the aspect's current value should be the value 'brief'", pairs, e)
 	} else if pairs, e := q.NounValues("table", aspect); e != nil || pairs != nil {
 		t.Fatal(pairs, e) // should be out of scope

@@ -23,6 +23,7 @@ type Query struct {
 	checks,
 	fieldsOf,
 	kindOfAncestors,
+	kindValues,
 	nounInfo,
 	nounName,
 	nounValues,
@@ -150,7 +151,7 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 		err = tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, field)
 			return
-		}, &field.Name, &field.Affinity, &field.Class, &field.Init)
+		}, &field.Name, &field.Affinity, &field.Class)
 	}
 	return
 }
@@ -159,6 +160,20 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 // ex. for doors that might be: kinds, objects, things, props, openers.
 func (q *Query) KindOfAncestors(kind string) ([]string, error) {
 	return scanStrings(q.kindOfAncestors, kind)
+}
+
+func (q *Query) KindValues(id string) (ret []query.ValueData, err error) {
+	if rows, e := q.kindValues.Query(id); e != nil {
+		err = e
+	} else {
+		var field string
+		var value []byte
+		err = tables.ScanAll(rows, func() (_ error) {
+			ret = append(ret, query.ValueData{Field: field, Value: value})
+			return
+		}, &field, &value)
+	}
+	return
 }
 
 // given a name, find a noun ( and some useful other context )
@@ -180,14 +195,14 @@ func (q *Query) NounNames(id string) (ret []string, err error) {
 
 // interpreting the value is left to the caller ( re: field affinity )
 // returns pairs of path, (marshaled) value
-func (q *Query) NounValues(id, field string) (ret []string, err error) {
+func (q *Query) NounValues(id, field string) (ret []query.ValueData, err error) {
 	if rows, e := q.nounValues.Query(id, field); e != nil {
 		err = e
 	} else {
 		var path sql.NullString
-		var value string
+		var value []byte
 		err = tables.ScanAll(rows, func() (_ error) {
-			ret = append(ret, path.String, value)
+			ret = append(ret, query.ValueData{Field: field, Path: path.String, Value: value})
 			return
 		}, &path, &value)
 	}
@@ -332,17 +347,15 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			from active_domains
 			where domain = ?1`,
 		),
-		// every field of a given kind, and its initial assignment if any.
-		// ( interestingly the order by seems to generate a shorter query than without )
+		// every field exclusive to the passed kind
+		// fix:  store the id of the kind and pass it back in...
 		fieldsOf: ps.Prep(db,
-			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type, mv.value
+			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type
 			from active_kinds ks  -- search for the kind in question
 			join mdl_field mf
 				using (kind)
 			left join mdl_kind mk  -- search for the kind of type 
 				on (mk.rowid = mf.type)
-			left join mdl_value mv
-				on (mv.field = mf.rowid and mv.noun = 0)
 			where ks.name = ?1
 			order by mf.rowid`,
 		),
@@ -356,6 +369,28 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 								 ',' || mk.rowid || ',' )
 			where ks.name = ?1
 			order by mk.rowid`,
+		),
+		// this *isnt* hierarchical, it's all the inits for the kind
+		// ( which in the table can include base classes )
+		kindValues: ps.Prep(db,
+			`select mf.field, mv.value
+			from active_kinds ks    -- the kinds in scope
+			join mdl_value_kind mv
+				using(kind)
+			join mdl_field mf
+				on (mf.rowid = mv.field)
+			where ks.name = ?1
+			order by mf.rowid, mv.final`,
+		),
+		// maybe unneeded now that domains are activated one by one?
+		// newPairsFromChanges: ps.Prep(db,
+		// 	newPairsFromChanges,
+		// ),
+		newPairsFromNames: ps.Prep(db,
+			newPairsFromNames,
+		),
+		newPairsFromDomain: ps.Prep(db,
+			newPairsFromDomain,
 		),
 		// given a short name, find the noun's fullname.
 		// we filter out parser understandings (which have ranks < 0)
@@ -397,6 +432,18 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				using (kind)
 			where ks.name=?1`, // order?
 		),
+		// query the db for the value(s) of a given field for a given noun
+		// fix: future, we will want to save values to a "run_value" table and union those in here.
+		nounValues: ps.Prep(db,
+			`select mv.dot, mv.value
+			from mdl_value mv
+			join active_nouns ns
+				using (noun)
+			join mdl_field mf
+				on (mf.rowid = mv.field)
+			where (ns.name = ?1) and (mf.field = ?2) and (mv.noun = ns.noun)
+			order by length(mv.dot), mv.final`,
+		),
 		oppositeOf: ps.Prep(db,
 			`select otherWord
 			from active_rev
@@ -432,16 +479,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				using (domain)
 			where one=?
 			limit 1`,
-		),
-		// maybe unneeded now that domains are activated one by one?
-		// newPairsFromChanges: ps.Prep(db,
-		// 	newPairsFromChanges,
-		// ),
-		newPairsFromNames: ps.Prep(db,
-			newPairsFromNames,
-		),
-		newPairsFromDomain: ps.Prep(db,
-			newPairsFromDomain,
 		),
 		// given the "right side" of some related nouns, return the left side noun(s).
 		// for the sake of backwards compat with printing, names are returned in alphabetical order.
@@ -479,18 +516,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				--  mu.rowid * (case when mu.rank > 0 then 1 else -1 end)
 				mu.rowid desc
 			`,
-		),
-		// query the db for the value(s) of a given field for a given noun
-		// fix: future, we will want to save values to a "run_value" table and union those in here.
-		nounValues: ps.Prep(db,
-			`select mv.dot, mv.value
-			from mdl_value mv
-			join active_nouns ns
-				using (noun)
-			join mdl_field mf
-				on (mf.rowid = mv.field)
-			where ns.name = ?1 and mf.field = ?2
-			order by length(mv.dot)`,
 		),
 	}
 	if e := ps.Err(); e != nil {

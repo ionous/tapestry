@@ -103,7 +103,7 @@ func (pen *Pen) AddTestRule(pattern string, rank int, prog string) (err error) {
 }
 
 // unmarshaled version of AddValue for testing.
-func (pen *Pen) AddTestValue(noun string, provisional bool, path, out string) (err error) {
+func (pen *Pen) AddTestValue(noun string, final bool, path, out string) (err error) {
 	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else {
@@ -112,7 +112,7 @@ func (pen *Pen) AddTestValue(noun string, provisional bool, path, out string) (e
 			err = e // for testing, we accept any inner most affinity ( so long as the parts were resolvable )
 		} else {
 			root, dot := parts[0], strings.Join(parts[1:], ".")
-			err = pen.addValue(noun.ownerInfo(), provisional, outer, root, dot, out)
+			err = pen.addNounValue(noun, final, outer, root, dot, out)
 		}
 	}
 	return
