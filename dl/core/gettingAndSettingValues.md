@@ -2,11 +2,11 @@
 
 Because (global) objects are such a key feature of interactive stories, for every variable statement there is a corresponding object statement. ex: GetFromVar, GetFromObj.
 
-( Note that hey have separate naming scopes, and nothing stops an author from having a local variable with the same name as an object. )
+( They have separate naming scopes, and nothing stops an author from having a local variable with the same name as an object. )
 
-To simplify setting values, there's a common "AssignedValue" that can swap between all of the common inputs: bool, number, text, list, and record. ( Currently, swaps don't support swapping between slots, so each eval has been wrapped in a flow. )
+To simplify setting values, there's a common "AssignedValue" that can swap between all of the common inputs: bool, number, text, list, and record. 
 
-Lists and records are values not objects, they are not shared. Every variable ( and every object or record field ) is unique. Assign always means copy.
+Lists and records are values, not objects, and they're values aren't shared across variables. The value of every variable ( including the value held by every field of an object or record ) is unique. Assign means copy.
 
 ## List handling
 
@@ -14,7 +14,7 @@ List mutation operates on variables; list manipulation on evals; indexing relies
 
 ## Auto conversion 
 
-The goal should be to auto-convert between different types of value as best as possible; warning the author on mismatch. For example: int -> bool, etc.
+The goal should be to auto-convert between different types of value as best as possible; warning the author on mismatch. For example: int -> bool, etc. 
 
 TBD: maybe some auto-conversions list->bool ( is empty ) should be allowed and encouraged?
 
@@ -26,11 +26,9 @@ For now at least, lists must be explicitly appended to. TBD: about sparse lists,
 
 Object fields an be given expressions in story declarations, new expressions can't be assigned to object fields at runtime. Similarly, records cannot hold expressions. Expressions are not values, they only produce values. ( Some future version of Tapestry could perhaps grow to support this. )
 
-
 # Object vs kinds 
 
 Ideally, i think objects would be singletons of a kind and interchangeable with functions that talk about kinds. Tapestry isn't there yet.
-
 
 # FAQ
 
@@ -54,12 +52,8 @@ This is somewhat a legacy of interactive fiction: authors expect to be able to r
 
 ### Why is object not its own type ( the way bool, number, text, list, and record are )? 
 
-Exposing an object value would imply that object values -- like all of the other values -- could be stored directly in records. But, objects are globally unique. Storing references to them makes sense, storing the actual objects less so.
+All values are unique and assignment means copy. Objects on the other hand are globally unique. Exposing an object as a value would contradict one of those two foundations. Storing references to objects as values makes sense, storing the actual objects as values less so.
 
-### Why aren't records ( and lists ) first class objects? If they were, couldn't objects then just be records with user-defined names?
+### Why aren't records ( and lists ) first class objects? ( And if they were, could objects be records with user-defined names? )
 
-In my opinion, its easier for people -- especially for non-programmers -- to conceive of variables as completely unique values than to consider the idea that two different variables might point to the same value. 
-
-However, people of all technical levels get by in javascript and lua just fine; so maybe it's _more_ confusing that shared values don't exist. ( And certainly, the current naive version -- which doesn't identify temporaries, doesn't have copy-on-write, etc. -- is much less efficient than otherwise. )
-
-There might be some wiggle room for revisiting this in a future edition of Tapestry.
+In my opinion it's easier for people -- especially for non-programmers -- to conceive of variables as completely unique values than to consider that two different variables might refer to the same value. Keeping records and lists as unique values supports that idea, however it does come with some expense. The current runtime -- which doesn't identify temporaries, doesn't have copy-on-write, etc. -- is much less efficient than if values could be shared. ( There might be some wiggle room for revisiting this in some future edition of Tapestry. )
