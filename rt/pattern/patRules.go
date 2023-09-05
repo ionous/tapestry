@@ -1,6 +1,8 @@
 package pattern
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
@@ -21,16 +23,13 @@ func (rs *RuleSet) AddRule(rule rt.Rule) {
 // assumes rec is already in scope and initialized
 func (rs *RuleSet) Call(run rt.Runtime, rec *g.Record, resultField int) (res Result, err error) {
 	stopJump := stopJump{jump: rt.JumpLater}
-	for i, rule := range rs.rules {
-		if ranRule, e := rs.tryRule(run, i); e != nil {
+	for i := range rs.rules {
+		if res, e := rs.tryRule(run, i); e != nil {
 			err = e
 			break
 		} else {
-			// if there's a return value, it must be set for the pattern to be considered done.
-			if ranRule && (resultField < 0 || rec.HasValue(resultField)) {
-				stopJump.ranRule(rule.Stop, rule.Jump)
-			}
-			if stopJump.jump == rt.JumpNow {
+			gotResult := resultField < 0 || rec.HasValue(resultField)
+			if done, e := stopJump.update(res, nil, gotResult); e != nil || done {
 				break
 			}
 		}
@@ -61,32 +60,24 @@ func (rs *RuleSet) Send(run rt.Runtime, evtObj *g.Record, chain []string) (okay 
 	return
 }
 
+// event handlers dont have return values, so whenever they match it may be the end
+// ( depending on values in the db determined during weave based on phase )
 func (rs *RuleSet) send(run rt.Runtime, evtObj *g.Record, stopJump *stopJump) (err error) {
-	for i, rule := range rs.rules {
-		if ranRule, e := rs.tryRule(run, i); e != nil {
+	for i := range rs.rules {
+		if res, e := rs.tryRule(run, i); e != nil {
 			err = e
 			break
-		} else {
-			// event handlers dont have return values, so when they match it may be the end
-			// ( depending on values in the db determined during weave based on phase )
-			if ranRule {
-				stopJump.ranRule(rule.Stop, rule.Jump)
-			}
-			if e := stopJump.mergeEvent(evtObj); e != nil {
-				err = e
-				break
-			} else if stopJump.jump == rt.JumpNow {
-				break
-			}
+		} else if done, e := stopJump.update(res, evtObj, true); e != nil || done {
+			break
 		}
 	}
 	return
 }
 
-func (rs *RuleSet) tryRule(run rt.Runtime, i int) (okay bool, err error) {
+func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 	var pushes int
 	var prog []rt.Execute
-	rule := rs.rules[i]
+	rule := rs.rules[i] // copies
 	// scan for the first matching case
 	// if none apply then the rule isn't considered to have been run
 	if tree := core.PickTree(rule.Exe); tree == nil {
@@ -97,10 +88,30 @@ func (rs *RuleSet) tryRule(run rt.Runtime, i int) (okay bool, err error) {
 		prog = branch
 	}
 	if err == nil && prog != nil {
-		if e := safe.RunAll(run, prog); e != nil {
+		var ri core.DoInterrupt
+		switch e := safe.RunAll(run, prog); {
+		case e == nil:
+			ret = stopJump{
+				runCount: 1,
+				jump:     rule.Jump,
+				stop:     rule.Stop,
+			}
+		case errors.As(e, &ri):
+			if ri.KeepGoing {
+				ret = stopJump{
+					runCount: 1,
+					jump:     rt.JumpLater,
+					stop:     false,
+				}
+			} else {
+				ret = stopJump{
+					runCount: 1,
+					jump:     rt.JumpNow,
+					stop:     true,
+				}
+			}
+		default:
 			err = e
-		} else {
-			okay = true
 		}
 	}
 	safe.PopSeveral(run, pushes)

@@ -14,22 +14,20 @@ type stopJump struct {
 
 // after a rule has matched; combine its desired stop/jump with the current set
 // it can only become more strict, not less.
-func (n *stopJump) ranRule(stop bool, jump rt.Jump) {
-	n.mergeStop(stop)
-	n.mergeJump(jump)
-	n.runCount++
-}
-
-func (n *stopJump) mergeStop(stop bool) {
-	if stop && !n.stop {
-		n.stop = true
+// if there's a return value, it must be set for the pattern to be considered done.
+func (n *stopJump) update(status stopJump, evtObj *g.Record, result bool) (done bool, err error) {
+	if result && status.runCount > 0 {
+		n.mergeStop(status.stop)
+		n.mergeJump(status.jump)
+		n.runCount++
 	}
-}
-
-func (n *stopJump) mergeJump(jump rt.Jump) {
-	if jump < n.jump {
-		n.jump = jump
+	if evtObj != nil {
+		err = n.mergeEvent(evtObj)
 	}
+	if err == nil {
+		done = n.jump == rt.JumpNow
+	}
+	return
 }
 
 // when now is false, delegates the jump behavior to interrupt
@@ -45,6 +43,18 @@ func (n *stopJump) interrupt(now bool) {
 		n.mergeJump(rt.JumpNow)
 	} else {
 		n.mergeJump(rt.JumpNext)
+	}
+}
+
+func (n *stopJump) mergeStop(stop bool) {
+	if stop && !n.stop {
+		n.stop = true
+	}
+}
+
+func (n *stopJump) mergeJump(jump rt.Jump) {
+	if jump < n.jump {
+		n.jump = jump
 	}
 }
 
