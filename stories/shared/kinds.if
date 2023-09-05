@@ -20,9 +20,21 @@
             "Aspect:": "private names"
           },
           {
+            "Aspect:": "tangibleness"
+          },
+          {
             "Text:": "printed name"
           }
         ]
+      ]
+    },
+    {
+      "Define traits:as:": [
+        [
+          "intangible",
+          "tangible"
+        ],
+        "tangibleness"
       ]
     },
     {
@@ -52,7 +64,7 @@
       "--": ""
     },
     {
-      "Declare:": "Things are kinds of object."
+      "Declare:": "Things are kinds of object. Things are usually tangible."
     },
     {
       "Declare:": "Possessiveness is a kind of aspect."
@@ -92,7 +104,7 @@
             "Aspect:": "wearability"
           },
           {
-          	"--": "for printing locale description.",
+            "--": "for printing locale description.",
             "Text:": "grouping label"
           }
         ]

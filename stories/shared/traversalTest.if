@@ -104,7 +104,6 @@
               ]
             }
           },
-
           {
             "Expect output:": [
               "south"
@@ -201,8 +200,8 @@
               "You can see a curtain."
             ]
           },
-           {
-          	"--": "test moving south as if the player typed the input",
+          {
+            "--": "test moving south as if the player typed the input",
             "Fabricate input:": "take curtain"
           },
           {
@@ -211,12 +210,30 @@
             ]
           },
           {
-          	"--": "test moving south as if the player typed the input",
+            "--": "test moving south as if the player typed the input",
             "Fabricate input:": "south"
           },
           {
             "Expect output:": [
               "Cloak Room."
+            ]
+          },
+          {
+            "--": "test taking a direction",
+            "Fabricate input:": "take north"
+          },
+          {
+            "Expect output:": [
+              "You should name something more substantial."
+            ]
+          },
+          {
+            "--": "test looking north",
+            "Fabricate input:": "x n"
+          },
+          {
+            "Expect output:": [
+              "You see nothing unexpected in that direction."
             ]
           }
         ]

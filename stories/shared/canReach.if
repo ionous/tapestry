@@ -18,7 +18,7 @@
             "--": "the target the agent is trying to reach",
             "Text:kind:": [
               "noun",
-              "thing"
+              "object"
             ]
           },
           {
@@ -26,9 +26,9 @@
           }
         ],
         [
-        {
-          "Text:": "response"
-        },
+          {
+            "Text:": "response"
+          },
           {
             "Text:kind:": [
               "i",
@@ -399,6 +399,34 @@
             ]
           }
         ]
+      ]
+    },
+    {
+      "Rule for:do:": [
+        "before can reach",
+        {
+          "If:do:": [
+            {
+              "Object:field:": [
+                "@noun",
+                "intangible"
+              ]
+            },
+            {
+              "Set:from:": [
+                "@response",
+                {
+                  "FromText:": {
+                    "Say response:with:": [
+                      "require substance",
+                      "You should name something more substantial."
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {

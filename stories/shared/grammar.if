@@ -22,7 +22,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "taking"
@@ -49,7 +49,7 @@
                     "One word:": "off"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "deactivating"
@@ -62,7 +62,7 @@
                     "One word:": "off"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "closing"
@@ -72,7 +72,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "One of:": [
@@ -123,7 +123,7 @@
                     "One word:": "up"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "closing"
@@ -133,7 +133,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "closing"
@@ -161,7 +161,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "removing"
@@ -181,7 +181,7 @@
         "drop",
         [
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "One of:": [
@@ -197,7 +197,7 @@
                     ]
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "storing into"
@@ -232,7 +232,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "traveling"
@@ -258,7 +258,7 @@
         ],
         [
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "Action:": "examining"
@@ -299,7 +299,7 @@
                     ]
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "traveling"
@@ -311,7 +311,7 @@
                   {
                     "Refine sequence:": [
                       {
-                        "One noun:": "things"
+                        "One noun:": "objects"
                       },
                       {
                         "One word:": [
@@ -320,7 +320,7 @@
                         ]
                       },
                       {
-                        "One noun:": "things"
+                        "One noun:": "objects"
                       }
                     ]
                   },
@@ -332,7 +332,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "taking"
@@ -368,7 +368,7 @@
                     ]
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "traveling"
@@ -395,7 +395,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "traveling"
@@ -410,21 +410,24 @@
     {
       "Interpret name:with:": [
         "going a direction",
-        [
-          {
-            "Focus:sequence:": [
-              "compass",
-              [
-                {
-                  "One noun:": "directions"
-                },
-                {
-                  "Action:": "going"
-                }
-              ]
+        {
+        	"--":  [
+        		"even though the directions are in scope by default",
+        		"since we cant go directly to any other kind of object",
+        		"focusing on the compass speeds the parser."
+        	],
+          "Focus:sequence:": [
+            "compass",
+            [
+              {
+                "One noun:": "directions"
+              },
+              {
+                "Action:": "going"
+              }
             ]
-          }
-        ]
+          ]
+        }
       ]
     },
     {
@@ -452,7 +455,7 @@
         "insert",
         [
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "One word:": [
@@ -461,7 +464,7 @@
             ]
           },
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "Action:": "storing into"
@@ -487,7 +490,7 @@
                     "One word:": "at"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "examining"
@@ -506,7 +509,7 @@
                     ]
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "searching"
@@ -519,7 +522,7 @@
                     "One word:": "under"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "peeking"
@@ -529,7 +532,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "examining"
@@ -560,7 +563,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "opening"
@@ -587,7 +590,7 @@
                     "One word:": "up"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "taking"
@@ -597,7 +600,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "One word:": "up"
@@ -627,7 +630,7 @@
                     "One word:": "on"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "wearing"
@@ -637,7 +640,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "One of:": [
@@ -652,7 +655,7 @@
                             ]
                           },
                           {
-                            "One noun:": "things"
+                            "One noun:": "objects"
                           },
                           {
                             "Action:": "storing into"
@@ -669,7 +672,7 @@
                               {
                                 "Sequence:": [
                                   {
-                                    "One noun:": "things"
+                                    "One noun:": "objects"
                                   },
                                   {
                                     "Action:": "storing into"
@@ -700,7 +703,7 @@
         "read",
         [
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "Action:": "examining"
@@ -722,13 +725,13 @@
                   {
                     "Refine sequence:": [
                       {
-                        "One noun:": "things"
+                        "One noun:": "objects"
                       },
                       {
                         "One word:": "from"
                       },
                       {
-                        "One noun:": "things"
+                        "One noun:": "objects"
                       }
                     ]
                   },
@@ -740,7 +743,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "removing"
@@ -760,7 +763,7 @@
         "search",
         [
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "Action:": "searching"
@@ -789,7 +792,7 @@
                     "One word:": "on"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "activating"
@@ -802,7 +805,7 @@
                     "One word:": "off"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "deactivating"
@@ -812,7 +815,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "One of:": [
@@ -860,7 +863,7 @@
                     "One word:": "off"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "deactivating"
@@ -873,7 +876,7 @@
                     "One word:": "up"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "closing"
@@ -883,7 +886,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "One of:": [
@@ -944,7 +947,7 @@
                     "One word:": "off"
                   },
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "removing"
@@ -956,7 +959,7 @@
                   {
                     "Refine sequence:": [
                       {
-                        "One noun:": "things"
+                        "One noun:": "objects"
                       },
                       {
                         "One word:": [
@@ -965,7 +968,7 @@
                         ]
                       },
                       {
-                        "One noun:": "things"
+                        "One noun:": "objects"
                       }
                     ]
                   },
@@ -977,7 +980,7 @@
               {
                 "Sequence:": [
                   {
-                    "One noun:": "things"
+                    "One noun:": "objects"
                   },
                   {
                     "Action:": "taking"
@@ -1016,7 +1019,7 @@
         ],
         [
           {
-            "One noun:": "things"
+            "One noun:": "objects"
           },
           {
             "Action:": "wearing"

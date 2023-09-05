@@ -29,84 +29,77 @@
       ]
     },
     {
-      "Rule for:do:": [
-        "before retrieving from",
-        [
-          {
-            "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
-          },
-          {
-            "If:assuming:do:else:": [
-              {
-                "Not:": {
-                  "Is empty:": "@result"
-                }
-              },
-              {
-                "Arg:from:": [
-                  "result",
-                  {
-                    "FromText:": {
-                      "CanReach actor:action:noun:": [
-                        {
-                          "FromText:": "@actor"
-                        },
-                        {
-                          "FromText:": "retrieving from"
-                        },
-                        {
-                          "FromText:": "@noun"
-                        }
-                      ]
-                    }
+      "--": "can we reach the noun we are attempting to retrieve?",
+      "Rule for:named:do:": [
+        "instead of retrieving from",
+        "the standard retrieving checks",
+        {
+          "If:assuming:do:else:": [
+            {
+              "Not:": {
+                "Is empty:": "@result"
+              }
+            },
+            {
+              "Arg:from:": [
+                "result",
+                {
+                  "FromText:": {
+                    "CanReach actor:action:noun:": [
+                      {
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "retrieving from"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      }
+                    ]
                   }
-                ]
-              },
-              [
+                }
+              ]
+            },
+            {
+              "Print:": "@result"
+            },
+            {
+              "If:assuming:do:": [
+                {
+                  "Not:": {
+                    "Is empty:": "@result"
+                  }
+                },
+                {
+                  "Arg:from:": [
+                    "result",
+                    {
+                      "FromText:": {
+                        "CanUse actor:action:noun:otherNoun:": [
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "retrieving from"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@other_noun"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
                 {
                   "Print:": "@result"
                 }
-              ],
-              {
-                "If:assuming:do:": [
-                  {
-                    "Not:": {
-                      "Is empty:": "@result"
-                    }
-                  },
-                  {
-                    "Arg:from:": [
-                      "result",
-                      {
-                        "FromText:": {
-                          "CanUse actor:action:noun:otherNoun:": [
-                            {
-                              "FromText:": "@actor"
-                            },
-                            {
-                              "FromText:": "retrieving from"
-                            },
-                            {
-                              "FromText:": "@noun"
-                            },
-                            {
-                              "FromText:": "@other_noun"
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  [
-                    {
-                      "Print:": "@result"
-                    }
-                  ]
-                ]
-              }
-            ]
-          }
-        ]
+              ]
+            }
+          ]
+        }
       ]
     },
     {

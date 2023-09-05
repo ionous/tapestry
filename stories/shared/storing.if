@@ -29,128 +29,113 @@
       ]
     },
     {
-      "Rule for:do:": [
-        "before storing into",
-        [
-          {
-            "Log:value:": [
-              "debug",
-              {
-                "FromText:": {
-                  "Say:": "{.actor} storing {the:.noun} to {the:.other_noun}."
-                }
+      "Rule for:named:do:": [
+        "instead of storing into",
+        "the standard storing checks",
+        {
+          "If:assuming:do:else:": [
+            {
+              "Not:": {
+                "Is empty:": "@response"
               }
-            ]
-          },
-          {
-            "If:assuming:do:else:": [
-              {
-                "Not:": {
-                  "Is empty:": "@response"
-                }
-              },
-              {
-                "Arg:from:": [
-                  "response",
-                  {
-                    "FromText:": {
-                      "CanHandle actor:action:noun:otherNoun:": [
-                        {
-                          "FromText:": "@actor"
-                        },
-                        {
-                          "FromText:": "storing into"
-                        },
-                        {
-                          "FromText:": "@noun"
-                        },
-                        {
-                          "FromText:": "@other_noun"
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              [
+            },
+            {
+              "Arg:from:": [
+                "response",
                 {
-                  "Print:": "@response"
-                }
-              ],
-              {
-                "If:assuming:do:else:": [
-                  {
-                    "Not:": {
-                      "Is empty:": "@response"
-                    }
-                  },
-                  {
-                    "Arg:from:": [
-                      "response",
+                  "FromText:": {
+                    "CanHandle actor:action:noun:otherNoun:": [
                       {
-                        "FromText:": {
-                          "CanReach actor:action:noun:": [
-                            {
-                              "FromText:": "@actor"
-                            },
-                            {
-                              "FromText:": "storing into"
-                            },
-                            {
-                              "FromText:": "@other_noun"
-                            }
-                          ]
-                        }
+                        "FromText:": "@actor"
+                      },
+                      {
+                        "FromText:": "storing into"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      },
+                      {
+                        "FromText:": "@other_noun"
                       }
                     ]
-                  },
-                  [
+                  }
+                }
+              ]
+            },
+            [
+              {
+                "Print:": "@response"
+              }
+            ],
+            {
+              "If:assuming:do:else:": [
+                {
+                  "Not:": {
+                    "Is empty:": "@response"
+                  }
+                },
+                {
+                  "Arg:from:": [
+                    "response",
+                    {
+                      "FromText:": {
+                        "CanReach actor:action:noun:": [
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "storing into"
+                          },
+                          {
+                            "FromText:": "@other_noun"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Print:": "@response"
+                },
+                {
+                  "If:assuming:do:": [
+                    {
+                      "Not:": {
+                        "Is empty:": "@response"
+                      }
+                    },
+                    {
+                      "Arg:from:": [
+                        "response",
+                        {
+                          "FromText:": {
+                            "CanUse actor:action:noun:otherNoun:": [
+                              {
+                                "FromText:": "@actor"
+                              },
+                              {
+                                "FromText:": "storing into"
+                              },
+                              {
+                                "FromText:": "@noun"
+                              },
+                              {
+                                "FromText:": "@other_noun"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
                     {
                       "Print:": "@response"
                     }
-                  ],
-                  {
-                    "If:assuming:do:": [
-                      {
-                        "Not:": {
-                          "Is empty:": "@response"
-                        }
-                      },
-                      {
-                        "Arg:from:": [
-                          "response",
-                          {
-                            "FromText:": {
-                              "CanUse actor:action:noun:otherNoun:": [
-                                {
-                                  "FromText:": "@actor"
-                                },
-                                {
-                                  "FromText:": "storing into"
-                                },
-                                {
-                                  "FromText:": "@noun"
-                                },
-                                {
-                                  "FromText:": "@other_noun"
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      },
-                      [
-                        {
-                          "Print:": "@response"
-                        }
-                      ]
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {

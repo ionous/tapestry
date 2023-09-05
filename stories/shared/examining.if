@@ -12,10 +12,10 @@
             ]
           },
           {
-            "--": "the thing being activated",
+            "--": "the object being examined. ( ex. a thing or direction. )",
             "Text:kind:": [
               "noun",
-              "thing"
+              "object"
             ]
           }
         ]
@@ -92,6 +92,28 @@
                     "Print:": "@response"
                   }
                 ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "--": "check if the player is examining a direction and respond accordingly.",
+      "Rule for:do:": [
+        "instead of examining",
+        {
+          "If:do:": [
+            {
+              "KindOf:is:": [
+                "@noun",
+                "directions"
+              ]
+            },
+            {
+              "Say response:with:": [
+                "examine directions",
+                "You see nothing unexpected in that direction."
               ]
             }
           ]

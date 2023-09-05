@@ -103,6 +103,32 @@
           }
         ]
       ]
+    },
+    {
+      "--": [
+        "add all the directions into the bounds.",
+        "they act as global objects available in every location."
+      ],
+      "Rule for:named:do:": [
+        "parser bounds",
+        "The directions are everywhere and nowhere rule.",
+        [
+          {
+            "Push:into:": [
+              {
+                "FromTextList:": {
+                  "KindsOf:": "directions"
+                }
+              },
+              "@bounds"
+            ]
+          },
+          {
+            "--": "keep processing other rules.",
+            "Continue": true
+          }
+        ]
+      ]
     }
   ]
 }

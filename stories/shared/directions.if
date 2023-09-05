@@ -6,7 +6,7 @@
         "Every direction is a both a noun, and a field of the compass.",
         "New directions are defined with the 'DefineCompass' macro."
       ],
-      "Declare:": "Compasses are kinds of records. Directions are kinds of kinds."
+      "Declare:": "Compasses are kinds of records. Directions are kinds of objects."
     },
     {
       "Define kind:fields:": [
