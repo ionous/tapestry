@@ -26,7 +26,7 @@
       ]
     },
     {
-      "Rule for:provides:": [
+      "Define rule:provides:": [
         "traveling",
         [
           {
@@ -66,7 +66,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of traveling",
         "standard traveling checks",
         {
@@ -143,7 +143,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of traveling",
         {
           "If:do:": [
@@ -164,7 +164,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "traveling",
         {
           "If:assuming:do:": [
@@ -198,7 +198,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone traveling",
         {
           "Say response:with:": [
@@ -209,7 +209,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report traveling",
         {
           "PrintVantage where:inDarkness:": [
@@ -236,7 +236,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can use",
         {
           "If:do:": [
@@ -277,7 +277,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can use",
         {
           "If:do:": [

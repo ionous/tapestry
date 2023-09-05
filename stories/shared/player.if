@@ -83,7 +83,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "is player",
         "play from agent",
         {
@@ -115,7 +115,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "is player",
         "player from actor",
         {

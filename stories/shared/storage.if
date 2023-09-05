@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "provides storage",
         {
           "If:do:": [
@@ -52,7 +52,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "provides storage",
         {
           "If:do:": [
@@ -243,7 +243,7 @@
     },
     {
       "--": "closed containers prevent storage.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "allows storage",
         {
           "If:do:": [

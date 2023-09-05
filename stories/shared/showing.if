@@ -94,7 +94,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of showing",
         [
           {
@@ -172,7 +172,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "showing",
         {
           "ReportShowing actor:noun:otherNoun:": [
@@ -190,7 +190,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone showing",
         {
           "Say response:with:": [
@@ -201,7 +201,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report showing",
         {
           "Say response:with:": [
@@ -212,7 +212,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of showing",
         "examine when showing to yourself",
         [

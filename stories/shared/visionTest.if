@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Rule for:do:": [
+            "Define rule:do:": [
               "Print news of light",
               {
                 "Print:": "The light, it burns."

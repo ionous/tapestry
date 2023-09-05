@@ -37,7 +37,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can handle",
         {
           "If:do:": [

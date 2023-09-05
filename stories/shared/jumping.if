@@ -32,7 +32,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone jumping",
         {
           "Say response:with:": [
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report jumping",
         {
           "Say response:with:": [

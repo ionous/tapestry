@@ -26,7 +26,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "someone looking",
         {
           "Say response:with:": [
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "looking",
         "the standard looking action",
         {
@@ -720,7 +720,7 @@
     },
     {
       "--": "this prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author.",
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print object description",
         "print mentioned supporters",
         {
@@ -756,7 +756,7 @@
         "scenery supports are supporters the author has set as 'scenery'",
         "presumably because they mentioned the supporter in the room description."
       ],
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print object description",
         "print scenery supporters",
         {
@@ -787,7 +787,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print object description",
         "print initial impression",
         {
@@ -821,7 +821,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print object description",
         {
           "If:do:": [
@@ -913,7 +913,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print impression of",
         {
           "If:do:": [
@@ -967,7 +967,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "Print impression of",
         {
           "If:do:": [

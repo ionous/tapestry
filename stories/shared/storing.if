@@ -29,7 +29,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of storing into",
         "the standard storing checks",
         {
@@ -139,7 +139,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "storing into",
         "the standard storing action",
         {
@@ -179,7 +179,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone storing into",
         {
           "Say response:with:": [
@@ -190,7 +190,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report storing into",
         {
           "Say response:with:": [
@@ -204,7 +204,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can handle",
         {
           "If:do:": [
@@ -252,7 +252,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can handle",
         {
           "If:do:": [
@@ -301,7 +301,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         {
           "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
@@ -349,7 +349,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         {
           "If:do:": [
@@ -401,7 +401,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         {
           "If:do:": [

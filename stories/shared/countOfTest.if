@@ -19,7 +19,7 @@
             ]
           },
           {
-            "Rule for:do:": [
+            "Define rule:do:": [
               "magic symbols",
               {
                 "If:do:": [
@@ -39,7 +39,7 @@
             ]
           },
           {
-            "Rule for:do:": [
+            "Define rule:do:": [
               "magic symbols",
               {
                 "If:do:": [
@@ -59,7 +59,7 @@
             ]
           },
           {
-            "Rule for:do:": [
+            "Define rule:do:": [
               "magic symbols",
               {
                 "If:do:": [

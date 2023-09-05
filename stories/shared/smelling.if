@@ -46,7 +46,7 @@
     },
     {
       "--": "Sniffing means smelling the current location.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "sniffing",
         {
           "Smelling actor:noun:": [
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "smelling",
         {
           "If:assuming:do:else:": [
@@ -165,7 +165,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone smelling",
         {
           "Say response:with:": [
@@ -176,7 +176,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report smelling",
         {
           "Say response:with:": [

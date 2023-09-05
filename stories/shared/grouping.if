@@ -78,7 +78,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "assign grouping",
         {
           "If:do:else:": [
@@ -254,7 +254,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "match groups",
         [
           {

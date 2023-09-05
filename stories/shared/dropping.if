@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of dropping",
         "the standard dropping checks",
         [
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "dropping",
         "the standard dropping action",
         {
@@ -106,7 +106,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone dropping",
         {
           "Say response:with:": [
@@ -117,7 +117,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report dropping",
         {
           "Say response:with:": [
@@ -131,7 +131,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -184,7 +184,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         [
           {

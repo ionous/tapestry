@@ -39,7 +39,7 @@
     },
     {
       "--": "Assuming all the rules before now passed, give the noun the desired trait.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "state changing",
         {
           "Set:from:": [
@@ -58,7 +58,7 @@
     },
     {
       "--": "Print the results of the change.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report state changing",
         {
           "Say response:with:": [
@@ -70,7 +70,7 @@
     },
     {
       "--": "Print the results of the change.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report state changing",
         {
           "If:do:": [
@@ -91,7 +91,7 @@
     },
     {
       "--": "The noun won't change if the 'guard' value is set and the noun has that trait.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of state changing",
         {
           "If:do:": [
@@ -126,7 +126,7 @@
     },
     {
       "--": "The noun won't change if it already has the desired trait.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of state changing",
         {
           "If:do:": [

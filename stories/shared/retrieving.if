@@ -30,7 +30,7 @@
     },
     {
       "--": "can we reach the noun we are attempting to retrieve?",
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of retrieving from",
         "the standard retrieving checks",
         {
@@ -103,7 +103,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "retrieving from",
         "the standard retrieving action",
         {
@@ -119,7 +119,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -164,7 +164,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can use",
         {
           "If:do:": [
@@ -206,7 +206,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can use",
         {
           "If:do:": [

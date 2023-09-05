@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of peeking",
         {
           "If:assuming:do:": [
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone peeking",
         {
           "Say response:with:": [
@@ -75,7 +75,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report peeking",
         {
           "Say response:with:": [

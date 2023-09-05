@@ -24,7 +24,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "before move object",
         {
           "If:do:": [
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "before move object",
         {
           "If:do:": [
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "move object",
         [
           {

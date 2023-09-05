@@ -402,7 +402,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "before can reach",
         {
           "If:do:": [
@@ -430,7 +430,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "before can reach",
         {
           "If:do:": [
@@ -515,7 +515,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach up",
         {
           "If:do:": [
@@ -555,7 +555,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach up",
         [
           {
@@ -638,7 +638,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         {
           "If:do:": [
@@ -685,7 +685,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         [
           {

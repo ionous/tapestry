@@ -41,7 +41,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "after adjusting light",
         {
           "Set:from:": [
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "adjusting light",
         "discovered the light",
         {
@@ -72,17 +72,17 @@
                 }
               ]
             },
-            [
-              {
-                "PrintNewsOfLight": true
+            {
+              "PrintNewsOfLight actor:": {
+              	"FromText:": "@actor"
               }
-            ]
+            }
           ]
         }
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "adjusting light",
         "discovered the dark",
         {
@@ -95,11 +95,11 @@
                 }
               ]
             },
-            [
-              {
-                "PrintNewsOfDarkness": true
+            {
+              "PrintNewsOfDarkness actor:": {
+              	"FromText:": "@actor"
               }
-            ]
+            }
           ]
         }
       ]
@@ -110,11 +110,12 @@
     {
       "Define pattern:requires:provides:do:": [
         "Print news of darkness",
-        [
-          {
-            "Nothing": true
-          }
-        ],
+        {
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
         {
           "Nothing": true
         },
@@ -132,22 +133,18 @@
     {
       "Define pattern:requires:provides:do:": [
         "Print news of light",
-        [
-          {
-            "Nothing": true
-          }
-        ],
+        {
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
         {
           "Nothing": true
         },
         {
           "PrintVantage where:": {
-            "FromText:": {
-              "Object:field:": [
-                "player",
-                "pawn"
-              ]
-            }
+            "FromText:": "@actor"
           }
         }
       ]

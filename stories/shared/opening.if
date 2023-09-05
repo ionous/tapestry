@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of opening",
         "the standard opening checks",
         [
@@ -98,7 +98,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "someone opening",
         {
           "If:do:": [
@@ -120,7 +120,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "opening",
         "the standard opening action",
         {
@@ -176,7 +176,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of closing",
         "the standard closing checks",
         [
@@ -252,7 +252,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "someone closing",
         {
           "If:do:": [
@@ -274,7 +274,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "closing",
         "the standard closing action",
         {
@@ -309,7 +309,7 @@
       "--": ""
     },
     {
-      "Rule for:kind:do:": [
+      "Define rule:kind:do:": [
         "instead of state changing",
         "openers",
         {
@@ -355,7 +355,7 @@
       ]
     },
     {
-      "Rule for:kind:do:": [
+      "Define rule:kind:do:": [
         "report state changing",
         "containers",
         {

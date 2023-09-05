@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "Define pattern:requires:provides:do:": [
-        "parser bounds",
+        "survey bounds",
         [
           {
             "Text:kind:": [
@@ -109,25 +109,19 @@
         "add all the directions into the bounds.",
         "they act as global objects available in every location."
       ],
-      "Rule for:named:do:": [
-        "parser bounds",
+      "Define rule:named:do:": [
+        "survey bounds, then continue",
         "The directions are everywhere and nowhere rule.",
-        [
-          {
-            "Push:into:": [
-              {
-                "FromTextList:": {
-                  "KindsOf:": "directions"
-                }
-              },
-              "@bounds"
-            ]
-          },
-          {
-            "--": "keep processing other rules.",
-            "Continue": true
-          }
-        ]
+        {
+          "Push:into:": [
+            {
+              "FromTextList:": {
+                "KindsOf:": "directions"
+              }
+            },
+            "@bounds"
+          ]
+        }
       ]
     }
   ]

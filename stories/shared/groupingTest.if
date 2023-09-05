@@ -43,7 +43,7 @@
               "no grouping",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {
@@ -116,7 +116,7 @@
               "custom few",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {
@@ -189,7 +189,7 @@
                   "--": ""
                 },
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "print several",
                     [
                       {
@@ -267,7 +267,7 @@
               "x custom replacement",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {
@@ -380,7 +380,7 @@
               "custom fancy phrase",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {
@@ -436,7 +436,7 @@
                   "--": ""
                 },
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "after print group",
                     {
                       "If:do:": [
@@ -472,7 +472,7 @@
                   "--": ""
                 },
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "print grouped object",
                     [
                       {
@@ -541,7 +541,7 @@
               "custom parenthetical",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {
@@ -580,7 +580,7 @@
                   "--": ""
                 },
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "print grouped object",
                     [
                       {
@@ -629,7 +629,7 @@
               "custom parenthetical articles",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {
@@ -698,7 +698,7 @@
               "x custom unnamed parenthetical",
               [
                 {
-                  "Rule for:do:": [
+                  "Define rule:do:": [
                     "assign grouping",
                     [
                       {

@@ -42,7 +42,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "kissing",
         {
           "If:assuming:do:else:": [
@@ -118,7 +118,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can use",
         {
           "If:do:": [
@@ -158,7 +158,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can use",
         [
           {
@@ -210,7 +210,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone kissing",
         {
           "Say response:with:": [
@@ -221,7 +221,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report kissing",
         {
           "Say response:with:": [

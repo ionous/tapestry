@@ -27,7 +27,7 @@
     },
     {
       "--": "movement from room to room is always via a connecting door",
-      "Rule for:provides:": [
+      "Define rule:provides:": [
         "going",
         {
           "Text:kind:initially:": [
@@ -52,7 +52,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "going",
         "going becomes traveling",
         {
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of going",
         {
           "If:do:": [

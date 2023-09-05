@@ -23,7 +23,7 @@ type Survey struct {
 }
 
 func MakeDefaultSurveyor(run rt.Runtime) Survey {
-	return MakeSurveyor(run, "player", "parser bounds", "whereabouts")
+	return MakeSurveyor(run, "player", "survey bounds", "whereabouts")
 }
 
 // todo: the "patter" refers to bounds for the player

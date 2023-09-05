@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of searching",
         {
           "If:assuming:do:": [
@@ -67,7 +67,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone searching",
         {
           "Say response:with:": [
@@ -79,7 +79,7 @@
     },
     {
       "--": "handle the player if all else fails",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report searching",
         {
           "Say response:with:": [
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "report searching",
         "the player finds something",
         {
@@ -181,7 +181,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -221,7 +221,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [

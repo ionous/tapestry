@@ -1042,11 +1042,11 @@
             "patterns",
             {
               "Flow:uses:": [
-                "rule",
+                "define",
                 [
                   {
                     "Term:name:type:": [
-                      "for",
+                      "rule",
                       "pattern_name",
                       "text_eval"
                     ]
@@ -1079,11 +1079,11 @@
             "patterns",
             {
               "Flow:uses:": [
-                "rule",
+                "define",
                 [
                   {
                     "Term:name:type:": [
-                      "for",
+                      "rule",
                       "pattern_name",
                       "text_eval"
                     ]
@@ -1123,11 +1123,11 @@
             "patterns",
             {
               "Flow:uses:": [
-                "rule",
+                "define",
                 [
                   {
                     "Term:name:type:": [
-                      "for",
+                      "rule",
                       "pattern_name",
                       "text_eval"
                     ]
@@ -1174,11 +1174,11 @@
             "patterns",
             {
               "Flow:uses:": [
-                "rule",
+                "define",
                 [
                   {
                     "Term:name:type:": [
-                      "for",
+                      "rule",
                       "pattern_name",
                       "text_eval"
                     ]

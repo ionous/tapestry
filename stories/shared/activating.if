@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of activating",
         "the standard activating checks",
         [
@@ -96,7 +96,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "activating",
         "the standard activating action",
         {
@@ -152,7 +152,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of deactivating",
         "the standard deactivating checks",
         {
@@ -226,7 +226,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "deactivating",
         "the standard deactivating action",
         {

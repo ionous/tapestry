@@ -202,7 +202,7 @@ type ruleKind struct {
 
 func weaveRule(w *weave.Weaver, pat, rule string, filter rt.BoolEval, exe []rt.Execute) (err error) {
 	if prefix, e := rules.ReadName(w, lang.Normalize(pat)); e != nil {
-		err = errutil.New("determining prefix", e)
+		err = e // needs to return bare error for missing.
 	} else {
 		pat, rank := prefix.Name, prefix.Rank
 		if k, e := w.GetKindByName(pat); e != nil {

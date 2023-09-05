@@ -60,7 +60,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "instead of attacking",
         "standard attacking checks",
         {
@@ -100,7 +100,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "attacking",
         "standard attacking rule",
         {
@@ -109,7 +109,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone attacking",
         {
           "Say response:with:": [
@@ -120,7 +120,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report attacking",
         {
           "Say response:with:": [

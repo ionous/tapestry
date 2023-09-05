@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "examining",
         "the standard examining checks",
         {
@@ -100,7 +100,7 @@
     },
     {
       "--": "check if the player is examining a direction and respond accordingly.",
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of examining",
         {
           "If:do:": [
@@ -125,7 +125,7 @@
         "the player's examination gets handled in the standard examining action.",
         "for other actors, we use report to say what they have done."
       ],
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone examining",
         {
           "If:do:": [
@@ -146,7 +146,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "examining",
         "standard examining action",
         {
@@ -179,7 +179,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print description",
         {
           "If:do:": [
@@ -201,7 +201,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print description",
         "standard description printing rule",
         {
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "Print particulars",
         "the print containers contents rule",
         {
@@ -326,7 +326,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "Print particulars",
         "the print supporter contents rule",
         {

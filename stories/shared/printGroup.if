@@ -164,7 +164,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print group",
         "label without size",
         {
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print group",
         "size of group",
         {
@@ -284,7 +284,7 @@
       ]
     },
     {
-      "Rule for:named:do:": [
+      "Define rule:named:do:": [
         "print group",
         "ungrouped objects",
         {
@@ -342,7 +342,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print group",
         {
           "Log:value:": [

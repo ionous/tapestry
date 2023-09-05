@@ -144,7 +144,7 @@
       "Comment:": "Say the object's name ( and some object details. )"
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print object",
         {
           "If:do:": [
@@ -195,7 +195,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print object",
         [
           {
@@ -400,7 +400,7 @@
       "Comment:": "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print details",
         {
           "If:do:": [
@@ -427,7 +427,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print details",
         {
           "If:do:": [
@@ -460,7 +460,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print details",
         {
           "If:do:": [
@@ -561,7 +561,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print inner status",
         {
           "If:do:": [
@@ -582,7 +582,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print inner status",
         {
           "If:do:": [
@@ -613,7 +613,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print inner status",
         {
           "If:do:": [
@@ -634,7 +634,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print inner status",
         {
           "If:do:": [
@@ -655,7 +655,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "print inner status",
         {
           "If:do:": [

@@ -4643,7 +4643,7 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 // RuleForKind Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForKind struct {
-	PatternName rt.TextEval  `if:"label=for"`
+	PatternName rt.TextEval  `if:"label=rule"`
 	KindName    rt.TextEval  `if:"label=kind"`
 	Exactly     rt.BoolEval  `if:"label=exactly,optional"`
 	RuleName    rt.TextEval  `if:"label=named,optional"`
@@ -4659,7 +4659,7 @@ func (*RuleForKind) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RuleForKind_Type,
 		Uses: composer.Type_Flow,
-		Lede: "rule",
+		Lede: "define",
 	}
 }
 
@@ -4717,7 +4717,7 @@ func RuleForKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleForKind) (e
 type RuleForKind_Flow struct{ ptr *RuleForKind }
 
 func (n RuleForKind_Flow) GetType() string      { return RuleForKind_Type }
-func (n RuleForKind_Flow) GetLede() string      { return "rule" }
+func (n RuleForKind_Flow) GetLede() string      { return "define" }
 func (n RuleForKind_Flow) GetFlow() interface{} { return n.ptr }
 func (n RuleForKind_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*RuleForKind); ok {
@@ -4741,7 +4741,7 @@ func RuleForKind_Optional_Marshal(m jsn.Marshaler, pv **RuleForKind) (err error)
 func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RuleForKind_Flow{val}); err == nil {
-		e0 := m.MarshalKey("for", RuleForKind_Field_PatternName)
+		e0 := m.MarshalKey("rule", RuleForKind_Field_PatternName)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.PatternName)
 		}
@@ -4784,7 +4784,7 @@ func RuleForKind_Marshal(m jsn.Marshaler, val *RuleForKind) (err error) {
 // RuleForNoun Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForNoun struct {
-	PatternName rt.TextEval  `if:"label=for"`
+	PatternName rt.TextEval  `if:"label=rule"`
 	NounName    rt.TextEval  `if:"label=noun"`
 	RuleName    rt.TextEval  `if:"label=named,optional"`
 	Exe         []rt.Execute `if:"label=do"`
@@ -4799,7 +4799,7 @@ func (*RuleForNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RuleForNoun_Type,
 		Uses: composer.Type_Flow,
-		Lede: "rule",
+		Lede: "define",
 	}
 }
 
@@ -4856,7 +4856,7 @@ func RuleForNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleForNoun) (e
 type RuleForNoun_Flow struct{ ptr *RuleForNoun }
 
 func (n RuleForNoun_Flow) GetType() string      { return RuleForNoun_Type }
-func (n RuleForNoun_Flow) GetLede() string      { return "rule" }
+func (n RuleForNoun_Flow) GetLede() string      { return "define" }
 func (n RuleForNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n RuleForNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*RuleForNoun); ok {
@@ -4880,7 +4880,7 @@ func RuleForNoun_Optional_Marshal(m jsn.Marshaler, pv **RuleForNoun) (err error)
 func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RuleForNoun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("for", RuleForNoun_Field_PatternName)
+		e0 := m.MarshalKey("rule", RuleForNoun_Field_PatternName)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.PatternName)
 		}
@@ -4918,7 +4918,7 @@ func RuleForNoun_Marshal(m jsn.Marshaler, val *RuleForNoun) (err error) {
 // By default, rules with filters continue on to the next rule automatically.
 // Because event listeners have filters they continue to the next listener unless specifically stopped.
 type RuleForPattern struct {
-	PatternName rt.TextEval  `if:"label=for"`
+	PatternName rt.TextEval  `if:"label=rule"`
 	RuleName    rt.TextEval  `if:"label=named,optional"`
 	Exe         []rt.Execute `if:"label=do"`
 	Markup      map[string]any
@@ -4932,7 +4932,7 @@ func (*RuleForPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RuleForPattern_Type,
 		Uses: composer.Type_Flow,
-		Lede: "rule",
+		Lede: "define",
 	}
 }
 
@@ -4988,7 +4988,7 @@ func RuleForPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleForPatte
 type RuleForPattern_Flow struct{ ptr *RuleForPattern }
 
 func (n RuleForPattern_Flow) GetType() string      { return RuleForPattern_Type }
-func (n RuleForPattern_Flow) GetLede() string      { return "rule" }
+func (n RuleForPattern_Flow) GetLede() string      { return "define" }
 func (n RuleForPattern_Flow) GetFlow() interface{} { return n.ptr }
 func (n RuleForPattern_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*RuleForPattern); ok {
@@ -5012,7 +5012,7 @@ func RuleForPattern_Optional_Marshal(m jsn.Marshaler, pv **RuleForPattern) (err 
 func RuleForPattern_Marshal(m jsn.Marshaler, val *RuleForPattern) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RuleForPattern_Flow{val}); err == nil {
-		e0 := m.MarshalKey("for", RuleForPattern_Field_PatternName)
+		e0 := m.MarshalKey("rule", RuleForPattern_Field_PatternName)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.PatternName)
 		}
@@ -5040,7 +5040,7 @@ func RuleForPattern_Marshal(m jsn.Marshaler, val *RuleForPattern) (err error) {
 
 // RuleProvides
 type RuleProvides struct {
-	PatternName rt.TextEval       `if:"label=for"`
+	PatternName rt.TextEval       `if:"label=rule"`
 	Provides    []FieldDefinition `if:"label=provides"`
 	Markup      map[string]any
 }
@@ -5053,7 +5053,7 @@ func (*RuleProvides) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RuleProvides_Type,
 		Uses: composer.Type_Flow,
-		Lede: "rule",
+		Lede: "define",
 	}
 }
 
@@ -5108,7 +5108,7 @@ func RuleProvides_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RuleProvides) 
 type RuleProvides_Flow struct{ ptr *RuleProvides }
 
 func (n RuleProvides_Flow) GetType() string      { return RuleProvides_Type }
-func (n RuleProvides_Flow) GetLede() string      { return "rule" }
+func (n RuleProvides_Flow) GetLede() string      { return "define" }
 func (n RuleProvides_Flow) GetFlow() interface{} { return n.ptr }
 func (n RuleProvides_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*RuleProvides); ok {
@@ -5132,7 +5132,7 @@ func RuleProvides_Optional_Marshal(m jsn.Marshaler, pv **RuleProvides) (err erro
 func RuleProvides_Marshal(m jsn.Marshaler, val *RuleProvides) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RuleProvides_Flow{val}); err == nil {
-		e0 := m.MarshalKey("for", RuleProvides_Field_PatternName)
+		e0 := m.MarshalKey("rule", RuleProvides_Field_PatternName)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.PatternName)
 		}
@@ -6424,6 +6424,24 @@ var Signatures = map[uint64]interface{}{
 	13361645062989794537: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality oneToOne: */
 	2570506749320892411:  (*DefineOtherRelatives)(nil), /* execute=Define relativeTo:nouns:otherNouns: */
 	16389453623741136831: (*DefineOtherRelatives)(nil), /* story_statement=Define relativeTo:nouns:otherNouns: */
+	10393873004445566457: (*RuleForPattern)(nil),       /* execute=Define rule:do: */
+	18093984368234904277: (*RuleForPattern)(nil),       /* story_statement=Define rule:do: */
+	6144114745580995665:  (*RuleForKind)(nil),          /* execute=Define rule:kind:do: */
+	12136992210577308757: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:do: */
+	12497780268362777975: (*RuleForKind)(nil),          /* execute=Define rule:kind:exactly:do: */
+	10538385905361340595: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:do: */
+	10044089009426244136: (*RuleForKind)(nil),          /* execute=Define rule:kind:exactly:named:do: */
+	11666026550766211860: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:named:do: */
+	14253827009100247466: (*RuleForKind)(nil),          /* execute=Define rule:kind:named:do: */
+	2951940010570883790:  (*RuleForKind)(nil),          /* story_statement=Define rule:kind:named:do: */
+	589486870138010946:   (*RuleForPattern)(nil),       /* execute=Define rule:named:do: */
+	2007307886252117326:  (*RuleForPattern)(nil),       /* story_statement=Define rule:named:do: */
+	5341208345720564107:  (*RuleForNoun)(nil),          /* execute=Define rule:noun:do: */
+	4344965134492972319:  (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:do: */
+	12048342630397883580: (*RuleForNoun)(nil),          /* execute=Define rule:noun:named:do: */
+	16133739979148445504: (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:named:do: */
+	16815703800760921520: (*RuleProvides)(nil),         /* execute=Define rule:provides: */
+	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
 	5110919797933301972:  (*DefineScene)(nil),          /* story_statement=Define scene:dependsOn:with: */
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
 	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
@@ -6463,24 +6481,6 @@ var Signatures = map[uint64]interface{}{
 	5153309692795646250:  (*RecordListField)(nil),      /* field_definition=RecordList:initially: */
 	15479801779125468947: (*RecordListField)(nil),      /* field_definition=RecordList:kind: */
 	17384295137903978384: (*RecordListField)(nil),      /* field_definition=RecordList:kind:initially: */
-	15471847624221143333: (*RuleForPattern)(nil),       /* execute=Rule for:do: */
-	5691084228856271265:  (*RuleForPattern)(nil),       /* story_statement=Rule for:do: */
-	938756285616980517:   (*RuleForKind)(nil),          /* execute=Rule for:kind:do: */
-	16646221460438913289: (*RuleForKind)(nil),          /* story_statement=Rule for:kind:do: */
-	10882184547042038019: (*RuleForKind)(nil),          /* execute=Rule for:kind:exactly:do: */
-	12713479648610369743: (*RuleForKind)(nil),          /* story_statement=Rule for:kind:exactly:do: */
-	9392894978887212612:  (*RuleForKind)(nil),          /* execute=Rule for:kind:exactly:named:do: */
-	15490214038101962512: (*RuleForKind)(nil),          /* story_statement=Rule for:kind:exactly:named:do: */
-	2337098170631462782:  (*RuleForKind)(nil),          /* execute=Rule for:kind:named:do: */
-	12374695652310029234: (*RuleForKind)(nil),          /* story_statement=Rule for:kind:named:do: */
-	7388742198509115006:  (*RuleForPattern)(nil),       /* execute=Rule for:named:do: */
-	16114040939072484954: (*RuleForPattern)(nil),       /* story_statement=Rule for:named:do: */
-	5961726239343816143:  (*RuleForNoun)(nil),          /* execute=Rule for:noun:do: */
-	9209820952942420835:  (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:do: */
-	244103529869767696:   (*RuleForNoun)(nil),          /* execute=Rule for:noun:named:do: */
-	17931239271906416164: (*RuleForNoun)(nil),          /* story_statement=Rule for:noun:named:do: */
-	6379682438544458700:  (*RuleProvides)(nil),         /* execute=Rule for:provides: */
-	17193433418172088968: (*RuleProvides)(nil),         /* story_statement=Rule for:provides: */
 	12945074305202371477: (*SayResponse)(nil),          /* execute=Say response:with: */
 	7921553818502082370:  (*SayResponse)(nil),          /* text_eval=Say response:with: */
 	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */

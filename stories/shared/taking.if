@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "instead of taking",
         {
           "If:assuming:do:": [
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "taking",
         {
           "If:assuming:do:": [
@@ -101,7 +101,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report someone taking",
         {
           "Say response:with:": [
@@ -112,7 +112,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "report taking",
         {
           "Say response:with:": [
@@ -126,7 +126,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -167,7 +167,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -209,7 +209,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -250,7 +250,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -291,7 +291,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [
@@ -337,7 +337,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach up",
         {
           "If:do:": [
@@ -385,7 +385,7 @@
       "--": ""
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         {
           "If:do:": [
@@ -430,7 +430,7 @@
       ]
     },
     {
-      "Rule for:do:": [
+      "Define rule:do:": [
         "reach down",
         [
           {
