@@ -1,0 +1,36 @@
+{
+  "Tapestry:": [
+    {
+      "--": "run after every action to complete the turn.",
+      "Define pattern:requires:provides:do:": [
+        "pass time",
+        {
+          "--": "the player",
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "--": "no default rule"
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "pass time, then continue",
+        "the adjust light rule",
+        {
+          "AdjustingLight actor:": 
+            {
+              "FromText:": "@actor"
+            }
+          
+        }
+      ]
+    }
+  ]
+}

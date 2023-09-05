@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
@@ -27,17 +26,10 @@ type RuleInfo struct {
 // to various naming conventions and pattern definitions
 // to determine the intended pattern name, rank, and termination behavior.
 // for example: "instead of x", "before x", "after x", "report x".
-func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
-	short := name
-	prefixIndex := numPrefixes // preliminary
-	for i := 0; i < numPrefixes; i++ {
-		p := eventPrefix(i).String()
-		if strings.HasPrefix(name, p+" ") {
-			short = name[len(p)+1:]
-			prefixIndex = i
-			break
-		}
-	}
+func ReadName(w g.Kinds, phrase string) (ret RuleInfo, err error) {
+	name, suffix := findSuffix(phrase)
+	// return name sans any prefix, and any prefix the name had.
+	short, prefix := findPrefix(name)
 	// fix: probably want some sort of "try prefix/suffix" that attempts to chop the parts
 	// but restores them if it cant find them --
 	// maybe see grok -- it does that sort of partial matching
@@ -52,7 +44,6 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 		short = next
 	}
 
-	prefix := eventPrefix(prefixIndex)
 	if k, e := w.GetKindByName(short); e != nil {
 		err = e
 	} else {
@@ -70,32 +61,28 @@ func ReadName(w g.Kinds, name string) (ret RuleInfo, err error) {
 			}
 
 		case pattern.Sends:
-			var stop bool // stopping before the action happens is considered a cancel.
-			var jump rt.Jump
-			pattern := name
-
-			switch prefix {
-			case before:
-				// by default before falls through
-				stop, jump = true, rt.JumpLater
-			case instead:
-				pattern = event.BeforePhase.PatternName(short)
-				stop, jump = true, rt.JumpNow
-			default:
-				stop, jump = false, rt.JumpNow
-			case after:
-				// by default after falls through
-				stop, jump = false, rt.JumpLater
-			case report:
-				pattern = event.AfterPhase.PatternName(short)
-				stop, jump = true, rt.JumpNow
-			}
+			pattern := prefix.eventName(name, short)
+			stop, jump := prefix.stopJump()
 			ret = RuleInfo{
 				Name:           pattern,
 				Rank:           prefix.rank(),
 				Stop:           stop,
 				Jump:           jump,
 				ExcludesPlayer: excludesPlayer,
+			}
+		}
+		// suffix will override any stop/jump settings
+		if err == nil {
+			switch suffix {
+			case jumps:
+				ret.Stop = false
+				ret.Jump = rt.JumpNow
+			case stops:
+				ret.Stop = true
+				ret.Jump = rt.JumpNow
+			case continues:
+				ret.Stop = false
+				ret.Jump = rt.JumpLater
 			}
 		}
 	}
