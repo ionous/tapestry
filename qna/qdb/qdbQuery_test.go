@@ -211,9 +211,9 @@ func TestQueries(t *testing.T) {
 	} else if got, e := q.RulesFor(pattern); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(got, []query.RuleData{
-		{Name: "1", Prog: []byte("prog1")},
-		{Name: "2", Prog: []byte("prog2")},
-		{Name: "3", Prog: []byte("prog3")},
+		{Name: "rule 1", Prog: []byte("prog1")},
+		{Name: "rule 2", Prog: []byte("prog2")},
+		{Name: "rule 3", Prog: []byte("prog3")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else /*if got, e := q.Relation(relation); e != nil {

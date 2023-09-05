@@ -88,6 +88,7 @@ func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 		prog = branch
 	}
 	if err == nil && prog != nil {
+		// println("- ", rule.Name)
 		var ri core.DoInterrupt
 		switch e := safe.RunAll(run, prog); {
 		case e == nil:

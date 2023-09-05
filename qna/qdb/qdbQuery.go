@@ -502,7 +502,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
-			`select coalesce(mu.name, mu.rowid), mu.stop, mu.jump, mu.updates, mu.prog
+			`select coalesce(mu.name, 'rule ' || mu.rowid), mu.stop, mu.jump, mu.updates, mu.prog
 			from active_domains 
 			join mdl_rule mu
 				using (domain)

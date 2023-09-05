@@ -24,11 +24,13 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 		case pattern.Initializes:
 			ret = g.RecordOf(rec)
 		case pattern.Calls:
+			// println("call: ", name)
 			ret, err = run.call(rec, pat, aff)
 		case pattern.Sends:
 			if len(vals) <= 0 {
 				err = errutil.Fmt("attempting to call an action %q with no target  %q", name, aff)
 			} else {
+				// println("send: ", name)
 				ret, err = run.send(name, rec, vals[0])
 			}
 		default:
