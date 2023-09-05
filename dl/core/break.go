@@ -17,6 +17,6 @@ func (*Break) Execute(rt.Runtime) error {
 	return DoInterrupt{KeepGoing: false}
 }
 
-func (*Next) Execute(rt.Runtime) error {
+func (*Continue) Execute(rt.Runtime) error {
 	return DoInterrupt{KeepGoing: true}
 }

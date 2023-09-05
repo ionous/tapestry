@@ -102,7 +102,10 @@
           ]
         },
         {
-          "--": "In a repeating loop, exit the loop.",
+          "--": [
+            "In a repeating loop, exit the loop;",
+            "or, in a rule, stop processing rules."
+          ],
           "Spec:slots:groups:with flow:": [
             "break",
             "execute",
@@ -285,10 +288,9 @@
           ]
         },
         {
-          "--": 
-          [ 
-          		"An if statement.",
-          		"The provided local fields are evaluated before the if test itself."
+          "--": [
+            "An if statement.",
+            "The provided local fields are evaluated before the if test itself."
           ],
           "Spec:slots:groups:with flow:": [
             "choose_branch",
@@ -615,7 +617,7 @@
             }
           ]
         },
-            {
+        {
           "--": "List of the field names of a kind.",
           "Spec:slots:groups:with flow:": [
             "fields_of_kind",
@@ -623,7 +625,7 @@
             "kinds",
             {
               "Flow:uses:": [
-              	"fields",
+                "fields",
                 {
                   "Term:name:type:": [
                     "of",
@@ -1054,9 +1056,12 @@
           ]
         },
         {
-          "--": "In a repeating loop, try the next iteration of the loop.",
+          "--": [
+            "In a repeating loop, try the next iteration of the loop;",
+            "or, in a rule, continue to the next rule."
+          ],
           "Spec:slots:groups:with flow:": [
-            "next",
+            "continue",
             "execute",
             "flow",
             {

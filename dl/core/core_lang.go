@@ -573,7 +573,8 @@ func Brancher_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Brancher) (err err
 	return
 }
 
-// Break In a repeating loop, exit the loop.
+// Break In a repeating loop, exit the loop;
+// or, in a rule, stop processing rules.
 type Break struct {
 	Markup map[string]any
 }
@@ -2243,6 +2244,100 @@ func Comparison_Repeats_Marshal(m jsn.Marshaler, vals *[]Comparison) error {
 func Comparison_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comparison) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Comparison_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+// Continue In a repeating loop, try the next iteration of the loop;
+// or, in a rule, continue to the next rule.
+type Continue struct {
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*Continue)(nil)
+
+func (*Continue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Continue_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Continue_Type = "continue"
+
+func (op *Continue) Marshal(m jsn.Marshaler) error {
+	return Continue_Marshal(m, op)
+}
+
+type Continue_Slice []Continue
+
+func (op *Continue_Slice) GetType() string { return Continue_Type }
+
+func (op *Continue_Slice) Marshal(m jsn.Marshaler) error {
+	return Continue_Repeats_Marshal(m, (*[]Continue)(op))
+}
+
+func (op *Continue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Continue_Slice) SetSize(cnt int) {
+	var els []Continue
+	if cnt >= 0 {
+		els = make(Continue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Continue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Continue_Marshal(m, &(*op)[i])
+}
+
+func Continue_Repeats_Marshal(m jsn.Marshaler, vals *[]Continue) error {
+	return jsn.RepeatBlock(m, (*Continue_Slice)(vals))
+}
+
+func Continue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Continue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Continue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Continue_Flow struct{ ptr *Continue }
+
+func (n Continue_Flow) GetType() string      { return Continue_Type }
+func (n Continue_Flow) GetLede() string      { return Continue_Type }
+func (n Continue_Flow) GetFlow() interface{} { return n.ptr }
+func (n Continue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Continue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Continue_Optional_Marshal(m jsn.Marshaler, pv **Continue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Continue_Marshal(m, *pv)
+	} else if !enc {
+		var v Continue
+		if err = Continue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Continue_Marshal(m jsn.Marshaler, val *Continue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Continue_Flow{val}); err == nil {
+		m.EndBlock()
 	}
 	return
 }
@@ -4457,99 +4552,6 @@ func Newline_Marshal(m jsn.Marshaler, val *Newline) (err error) {
 	return
 }
 
-// Next In a repeating loop, try the next iteration of the loop.
-type Next struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*Next)(nil)
-
-func (*Next) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Next_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Next_Type = "next"
-
-func (op *Next) Marshal(m jsn.Marshaler) error {
-	return Next_Marshal(m, op)
-}
-
-type Next_Slice []Next
-
-func (op *Next_Slice) GetType() string { return Next_Type }
-
-func (op *Next_Slice) Marshal(m jsn.Marshaler) error {
-	return Next_Repeats_Marshal(m, (*[]Next)(op))
-}
-
-func (op *Next_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Next_Slice) SetSize(cnt int) {
-	var els []Next
-	if cnt >= 0 {
-		els = make(Next_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Next_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Next_Marshal(m, &(*op)[i])
-}
-
-func Next_Repeats_Marshal(m jsn.Marshaler, vals *[]Next) error {
-	return jsn.RepeatBlock(m, (*Next_Slice)(vals))
-}
-
-func Next_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Next) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Next_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Next_Flow struct{ ptr *Next }
-
-func (n Next_Flow) GetType() string      { return Next_Type }
-func (n Next_Flow) GetLede() string      { return Next_Type }
-func (n Next_Flow) GetFlow() interface{} { return n.ptr }
-func (n Next_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Next); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Next_Optional_Marshal(m jsn.Marshaler, pv **Next) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Next_Marshal(m, *pv)
-	} else if !enc {
-		var v Next
-		if err = Next_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Next_Marshal(m jsn.Marshaler, val *Next) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Next_Flow{val}); err == nil {
-		m.EndBlock()
-	}
-	return
-}
-
 // Not Returns the opposite value.
 type Not struct {
 	Test   rt.BoolEval `if:"label=_"`
@@ -6712,6 +6714,7 @@ var Slats = []composer.Composer{
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
 	(*Comparison)(nil),
+	(*Continue)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
 	(*FieldsOfKind)(nil),
@@ -6733,7 +6736,6 @@ var Slats = []composer.Composer{
 	(*NameOf)(nil),
 	(*Never)(nil),
 	(*Newline)(nil),
-	(*Next)(nil),
 	(*Not)(nil),
 	(*ObjectExists)(nil),
 	(*Pluralize)(nil),
@@ -6773,6 +6775,7 @@ var Signatures = map[uint64]interface{}{
 	3980368314252876379:  (*CompareText)(nil),       /* bool_eval=Cmp:is:txt: */
 	18319016698864768677: (*CommaText)(nil),         /* text_eval=Commas do: */
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
+	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */
 	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
 	3530384008651052276:  (*DiffOf)(nil),            /* number_eval=Dec: */
 	10788210406716082593: (*DiffOf)(nil),            /* number_eval=Dec:by: */
@@ -6810,7 +6813,6 @@ var Signatures = map[uint64]interface{}{
 	4934610559616542639:  (*ProductOf)(nil),         /* number_eval=Mul:by: */
 	15519818243985955688: (*NameOf)(nil),            /* text_eval=NameOf: */
 	1310533520550597035:  (*Never)(nil),             /* bool_eval=Never */
-	13242431772773468478: (*Next)(nil),              /* execute=Next */
 	3572677870333466638:  (*Not)(nil),               /* bool_eval=Not: */
 	2793972640309351788:  (*ChooseNum)(nil),         /* number_eval=Num if:then: */
 	1916074756917320013:  (*ChooseNum)(nil),         /* number_eval=Num if:then:else: */

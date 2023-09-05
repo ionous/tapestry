@@ -49,7 +49,7 @@ func TestLoopNext(t *testing.T) {
 						&Break{},
 					),
 				},
-				&Next{},
+				&Continue{},
 				&assign.SetValue{
 					Target: Variable("j"),
 					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("j"), B: I(1)}}},
