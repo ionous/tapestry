@@ -83,38 +83,36 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 // fields for kinds are "flattened" so all of the info for a hierarchy is duplicated in each kind
 func (run *Runner) getFields(kind string, path []string) (ret []g.Field, err error) {
 	var out []g.Field
-	for next, i := kind, len(path); ; {
-		if fs, e := run.getUncachedFields(next); e != nil {
+	for _, kind := range path {
+		if fs, e := run.getExclusiveFields(kind); e != nil {
 			err = e
 			break
 		} else {
-			for _, f := range fs {
-				f := g.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class}
-				out = append(out, f)
-			}
-		}
-		// do while
-		if i--; i >= 0 {
-			next = path[i] // root is at the start, and we visit it last.
-		} else {
-			break
+			out = append(out, fs...)
 		}
 	}
 	if err == nil {
-		ret = out
+		// fix? would probably make more sense if kindOfAncestors included the kind
+		if fs, e := run.getExclusiveFields(kind); e != nil {
+			err = e
+		} else {
+			ret = append(out, fs...)
+		}
 	}
 	return
 }
 
 // cached fields exclusive to a kind
-func (run *Runner) getUncachedFields(kind string) (ret []query.FieldData, err error) {
+func (run *Runner) getExclusiveFields(kind string) (ret []g.Field, err error) {
 	if c, e := run.values.cache(func() (ret any, err error) {
-		ret, err = run.query.FieldsOf(kind)
-		return
+		return run.query.FieldsOf(kind)
 	}, "fields", kind); e != nil {
 		err = e
 	} else {
-		ret = c.([]query.FieldData)
+		fs := c.([]query.FieldData)
+		for _, f := range fs {
+			ret = append(ret, g.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class})
+		}
 	}
 	return
 }
