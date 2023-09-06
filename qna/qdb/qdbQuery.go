@@ -56,35 +56,29 @@ func (q *Query) IsDomainActive(name string) (okay bool, err error) {
 // changing domains can establish new relations ( abandoning now conflicting ones )
 // and cause nouns to fall out of scope
 // returns the previous domain name
-func (q *Query) ActivateDomain(name string) (ret string, err error) {
+func (q *Query) ActivateDomains(name string) (retEnds, retBegins []string, err error) {
 	if name == q.domain {
-		ret = q.domain
+		// do nothing.
 	} else if tx, e := q.db.Begin(); e != nil {
 		err = e
-	} else if len(name) == 0 {
-		was := q.domain
-		q.domain = ""
-		q.activation += 1
-		if e := resetDomain(q.db, true); e != nil {
+	} else {
+		// tbd: it might be better to deactivate outside when the end events are called.
+		act := q.activation + 1
+		if ends, e := scanStrings(q.domainDeactivate, name); e != nil {
+			err = e
+		} else if e := q.deactive(ends); e != nil {
+			err = e
+		} else if begins, e := scanStrings(q.domainActivate, name); e != nil {
+			err = e
+		} else if e := q.activate(act, begins); e != nil {
 			err = e
 		} else {
-			ret = was
-		}
-	} else {
-		act := q.activation + 1
-		if de, e := scanStrings(q.domainDeactivate, name); e != nil {
-			err = e
-		} else if e := q.deactive(de); e != nil {
-			err = e
-		} else if re, e := scanStrings(q.domainActivate, name); e != nil {
-			err = e
-		} else if e := q.activate(act, re); e != nil {
-			err = e
+			q.domain, q.activation = name, act
+			retEnds, retBegins = ends, begins
 		}
 
-		// so we can rollback on any error.
+		// rollback on any error.
 		if err == nil {
-			q.domain, q.activation, ret = name, act, q.domain
 			err = tx.Commit()
 		} else if e := tx.Rollback(); e != nil {
 			err = errutil.Append(err, e)
@@ -275,7 +269,7 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func resetDomain(db *sql.DB, reset bool) (err error) {
+func resetDomains(db *sql.DB, reset bool) (err error) {
 	if reset {
 		_, err = db.Exec(`delete from run_domain; delete from run_pair`)
 	}
@@ -285,7 +279,7 @@ func resetDomain(db *sql.DB, reset bool) (err error) {
 func NewQueries(db *sql.DB, reset bool) (ret *Query, err error) {
 	if e := tables.CreateRun(db); e != nil {
 		err = e
-	} else if e := resetDomain(db, reset); e != nil {
+	} else if e := resetDomains(db, reset); e != nil {
 		err = e
 	} else {
 		ret, err = newQueries(db)

@@ -22,7 +22,7 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	var buf strings.Builder
 	prevWriter := run.SetWriter(print.NewLineSentences(markup.ToText(&buf)))
 	//
-	if prevDomain, e := run.ActivateDomain(t.Domain); e != nil {
+	if e := run.ActivateDomain(t.Domain); e != nil {
 		err = e
 	} else {
 		if e := safe.RunAll(&checker{run, &buf}, t.Test); e != nil {
@@ -35,7 +35,7 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 			}
 		}
 		// restore even on a test mismatch
-		if _, e := run.ActivateDomain(prevDomain); e != nil {
+		if e := run.ActivateDomain(""); e != nil {
 			err = errutil.Append(err, errutil.New("couldnt restore domain", e))
 		}
 	}

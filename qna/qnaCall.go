@@ -25,7 +25,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 			ret = g.RecordOf(rec)
 		case pattern.Calls:
 			// println("call: ", name)
-			ret, err = run.call(rec, pat, aff)
+			ret, err = run.call(pat, rec, aff)
 		case pattern.Sends:
 			if len(vals) <= 0 {
 				err = errutil.Fmt("attempting to call an action %q with no target  %q", name, aff)
@@ -40,7 +40,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	return
 }
 
-func (run *Runner) call(rec *g.Record, kind *g.Kind, aff affine.Affinity) (ret g.Value, err error) {
+func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g.Value, err error) {
 	if field, e := pattern.GetResultField(run, kind); e != nil {
 		err = e
 	} else {

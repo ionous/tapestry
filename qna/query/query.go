@@ -40,7 +40,7 @@ type ValueData struct {
 
 type Query interface {
 	IsDomainActive(name string) (bool, error)
-	ActivateDomain(name string) (string, error)
+	ActivateDomains(name string) (prev, next []string, err error)
 	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
 	// every field exclusive to the passed kind
 	FieldsOf(kind string) ([]FieldData, error)

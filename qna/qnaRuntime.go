@@ -50,12 +50,33 @@ func (run *Runner) reportError(e error) error {
 	return e
 }
 
-func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
-	if prev, e := run.query.ActivateDomain(domain); e != nil {
+func (run *Runner) ActivateDomain(domain string) (err error) {
+	if ends, begins, e := run.query.ActivateDomains(domain); e != nil {
 		err = run.reportError(e)
 	} else {
+		// fix? the domain is already out of scope
+		// might want to rewind one by one just after running each end event
+		// ( begin has a similar issue if some subdomain sets a different value say than its parent )
+		if e := run.notify(ends, "ends"); e != nil {
+			err = e
+		}
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
-		ret = prev
+		if e := run.notify(begins, "begins"); e != nil {
+			err = errutil.Append(err, e)
+		}
+	}
+	return
+}
+
+func (run *Runner) notify(ds []string, evt string) (err error) {
+	for _, d := range ds {
+		name := d + " " + evt
+		if pat, e := run.getKind(name); e == nil {
+			if _, e := run.call(pat, pat.NewRecord(), affine.None); e != nil {
+				err = errutil.Append(err, run.reportError(e))
+				break
+			}
+		}
 	}
 	return
 }

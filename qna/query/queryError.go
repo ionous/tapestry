@@ -18,7 +18,7 @@ func (q QueryNone) IsDomainActive(name string) (_ bool, _ error) {
 	return
 }
 
-func (q QueryNone) ActivateDomain(name string) (_ string, err error) {
+func (q QueryNone) ActivateDomains(name string) (_, _ []string, err error) {
 	err = NotImplemented(q)
 	return
 }

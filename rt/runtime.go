@@ -23,7 +23,7 @@ type Runtime interface {
 	// ActivateDomain - objects are grouped into potentially hierarchical "domains".
 	// de/activating makes those groups hidden/visible to the runtime.
 	// Domain hierarchy is defined at assembly time.
-	ActivateDomain(name string) (ret string, err error)
+	ActivateDomain(name string) error
 	// GetKindByName  -record manipulation.
 	GetKindByName(name string) (*g.Kind, error)
 	// Call - run the pattern defined by the passed record.

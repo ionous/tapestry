@@ -69,7 +69,7 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 				}
 				d := decode.NewDecoder(tapestry.AllSignatures)
 				run := qna.NewRuntimeOptions(w, query, d, opts)
-				if _, e := run.ActivateDomain(domain); e != nil {
+				if e := run.ActivateDomain(domain); e != nil {
 					err = e
 				} else {
 					play := play.NewPlaytime(run, grammar)

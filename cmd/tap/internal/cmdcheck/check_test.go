@@ -49,4 +49,4 @@ type checkTester struct {
 	writer.Sink
 }
 
-func (c *checkTester) ActivateDomain(string) (prev string, err error) { return }
+func (c *checkTester) ActivateDomain(string) (_ error) { return }

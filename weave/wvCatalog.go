@@ -137,7 +137,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 		d := cat.pendingDomains[found]
 		cat.pendingDomains = append(cat.pendingDomains[:found], cat.pendingDomains[found+1:]...)
 
-		if _, e := cat.run.ActivateDomain(d.name); e != nil {
+		if e := cat.run.ActivateDomain(d.name); e != nil {
 			err = e
 		} else if e := cat.findRivals(); e != nil {
 			err = e

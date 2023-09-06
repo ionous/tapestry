@@ -31,7 +31,7 @@ func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
 
 // For testing: returns a list of active domains and their activation count.
 func (q *QueryTest) InnerActivate(name string) (ret []string, err error) {
-	if _, e := q.ActivateDomain(name); e != nil {
+	if _, _, e := q.ActivateDomains(name); e != nil {
 		err = e
 	} else if els, e := scanStrings(q.scan); e != nil {
 		err = errutil.New("couldnt scan", name, e)

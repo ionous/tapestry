@@ -222,7 +222,7 @@ func TestQueries(t *testing.T) {
 		kind, kind, tables.ONE_TO_MANY,
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
-	} else */if _, e := q.ActivateDomain(subDomain); e != nil {
+	} else */if _, _, e := q.ActivateDomains(subDomain); e != nil {
 		t.Fatal("ActivateDomain", e) // enable the sub domain again to get reasonable pairs
 		// note: we never previously fully activated a domain, so prev is empty.
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||
