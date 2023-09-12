@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Declare:": "You are carrying the flower and the knife."
+            "Declare:": "You are wearing the flower. You are carrying the knife."
           },
           {
             "Declare:": "The purse is in the kitchen."

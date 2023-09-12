@@ -6,10 +6,11 @@
         "Kitchenette",
         [
           {
-            "Declare:": "You are carrying the coffee, the coin, the clutch, the knife, and the flower."
-          },
-          {
-            "Declare:": "Mildred is in the kitchen."
+            "Declare:": [
+            	"Mildred is in the kitchen.",
+            	"You are carrying the coffee, the coin, the clutch, and the knife.",
+            	"You are wearing the flower."
+            ]
           }
         ],
         [

@@ -4,14 +4,13 @@
       "Test:dependsOn:withScene:do:": [
         "base vis",
         "Kitchenette",
-        [
-          {
-            "Define nouns:traits:": [
-              "settings",
-              "verbose"
-            ]
-          }
-        ],
+        {
+        	"--": "set to verbose so that the printing the room multiple times doesn't honor 'mentioned' status.",
+          "Define nouns:traits:": [
+            "settings",
+            "verbose"
+          ]
+        },
         [
           {
             "Comment:": "Say the list of visible objects from one of several vantage points."
@@ -163,7 +162,7 @@
         "look object description",
         "kitchenette",
         [
-        	{
+          {
             "PrintObjectDescription obj:locale:": [
               {
                 "FromText:": "shelf"
@@ -189,7 +188,6 @@
           {
             "Expect output:": "A pointed black hat lies discarded on the floor under a dusty shelf."
           },
-          
           {
             "PrintObjectDescription obj:locale:": [
               {
@@ -210,9 +208,16 @@
       "--": ""
     },
     {
-      "Test:dependsOn:do:": [
+      "Test:dependsOn:withScene:do:": [
         "printing vantages",
         "Kitchenette",
+        {
+        	"--": "set to verbose so that the printing the room multiple times doesn't honor 'mentioned' status.",
+          "Define nouns:traits:": [
+            "settings",
+            "verbose"
+          ]
+        },
         [
           {
             "PrintVantage where:inDarkness:": [
