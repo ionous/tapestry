@@ -23,7 +23,7 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 		fieldData := kind.Field(fieldIndex)
 		if fieldData.Name == field {
 			// the field we found is the name we asked for: its a normal field.
-			err = run.setFieldCache(obj, fieldData, newValue)
+			err = run.writeNounValue(obj, fieldData, newValue)
 		} else {
 			// when the name differs, we must have found the aspect for a trait.
 			// FIX: should we transform the value so that it has type of the aspect?
@@ -36,7 +36,7 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 			} else {
 				// set the aspect to the value of the requested trait
 				traitValue := g.StringFrom(trait, fieldData.Type)
-				err = run.setFieldCache(obj, fieldData, traitValue)
+				err = run.writeNounValue(obj, fieldData, traitValue)
 			}
 		}
 	}
@@ -53,7 +53,7 @@ func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret g.Value
 		err = g.UnknownField(obj.String(), field)
 	} else {
 		fieldData := kind.Field(fieldIndex)
-		if v, e := run.getFieldCache(obj, fieldData); e != nil {
+		if v, e := run.readNounValue(obj, fieldData); e != nil {
 			err = e
 		} else if fieldData.Name == field {
 			// the field we found is the name we asked for:
@@ -70,7 +70,7 @@ func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret g.Value
 	return
 }
 
-func (run *Runner) setFieldCache(obj query.NounInfo, field g.Field, val g.Value) (err error) {
+func (run *Runner) writeNounValue(obj query.NounInfo, field g.Field, val g.Value) (err error) {
 	// fix: convert when appropriate.
 	if aff := val.Affinity(); aff != field.Affinity {
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
@@ -83,7 +83,7 @@ func (run *Runner) setFieldCache(obj query.NounInfo, field g.Field, val g.Value)
 
 // return the (cached) value of a noun's field
 // if the noun's field contains an assignment it's evaluated each time.
-func (run *Runner) getFieldCache(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
+func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
 	if c, e := run.nounValues.cache(func() (ret any, err error) {
 		if vs, e := run.query.NounValues(obj.Id, field.Name); e != nil {
 			err = e

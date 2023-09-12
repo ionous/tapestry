@@ -34,8 +34,8 @@ type Runner struct {
 	query  query.Query
 	decode decoder.Decoder
 
-	values     cache
-	nounValues cache
+	values     cache // other values are not kept across domains
+	nounValues cache // nounValues are kept across domains
 	counters
 	options Options
 	//
