@@ -8,8 +8,8 @@
             "Declare:": [
               "Mildred is an actor.",
               "An empire apple, and a pen are props.",
-              "The flower is a wearable, worn thing.",
-              "The headlamp is a lit, wearable, worn thing.",
+              "The flower is a wearable thing.",
+              "The headlamp is a lit, wearable thing.",
               "The flashlight is a lit thing.",
               "The book of wisdom is an openable, open container.",
               "The book of secrets is an openable, closed, locked container.",

@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
-  	 {
-  	 	"--": "ex. kinds are usually traits",
+    {
+      "--": "ex. kinds are usually traits",
       "Define macro:requires:provides:do:": [
         "implies something",
         [
@@ -16,7 +16,7 @@
       ]
     },
     {
-    	"--": "ex. kinds are kinds of something.",
+      "--": "ex. kinds are kinds of something.",
       "Define macro:requires:provides:do:": [
         "inheriting something",
         [
@@ -59,6 +59,15 @@
             "Define nouns:as:": [
               "@things",
               "things"
+            ]
+          },
+          {
+            "--": "needed to ensure the worn nouns become carried when using sub-domain assignments",
+            "Define nouns:traits:": [
+              "@things",
+              [
+                "not worn"
+              ]
             ]
           },
           {
@@ -152,6 +161,15 @@
             ]
           },
           {
+            "--": "needed to ensure the worn nouns become carried when using sub-domain assignments",
+            "Define nouns:traits:": [
+              "@things",
+              [
+                "not worn"
+              ]
+            ]
+          },
+          {
             "If:do:": [
               {
                 "Not:": {
@@ -209,6 +227,15 @@
             "Define nouns:as:": [
               "@things",
               "things"
+            ]
+          },
+          {
+            "--": "needed to ensure the worn nouns become carried when using sub-domain assignments",
+            "Define nouns:traits:": [
+              "@things",
+              [
+                "not worn"
+              ]
             ]
           },
           {
