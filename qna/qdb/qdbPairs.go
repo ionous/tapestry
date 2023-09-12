@@ -49,8 +49,8 @@ select domain, relKind, oneNoun, otherNoun, cardinality
 )` + relatePair
 
 // used for dynamic changes to relationships between nouns
-// fix? this doesnt change to see whether the nouns are compatible with the relation
-// ex. if oneNoun is compatible with mdl_rel.oneKind; for now, the caller does that instead...
+// fix? this doesnt check to see whether the nouns are compatible with the relation
+// ex. if oneNoun is compatible with mdl_rel.oneKind; the caller does that instead...
 // ( see also: Runner.RelateTo )
 var newPairsFromNames = `
 with newPairs as (

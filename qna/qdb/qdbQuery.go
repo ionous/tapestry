@@ -87,8 +87,6 @@ func (q *Query) ActivateDomains(name string) (retEnds, retBegins []string, err e
 	return
 }
 
-// tbd: what if certain kinds of changes could happen automatically
-// while others would need to be in an "on enter/exit" style event handlers
 func (q *Query) deactive(domains []string) (err error) {
 	for i, cnt := 0, len(domains); i < cnt; i++ {
 		d := domains[cnt-i-1] // work backwards from leaf to root
@@ -103,8 +101,6 @@ func (q *Query) deactive(domains []string) (err error) {
 	return
 }
 
-// tbd: what if certain kinds of changes could happen automatically
-// while others would need to be in an "on enter/exit" style event handlers
 func (q *Query) activate(act int, domains []string) (err error) {
 	for i, cnt := 0, len(domains); i < cnt; i++ {
 		d := domains[i]
@@ -112,10 +108,10 @@ func (q *Query) activate(act int, domains []string) (err error) {
 			err = e
 			break
 		} else if _, e := q.newPairsFromDomain.Exec(d); e != nil {
-			// fix: this replaced newPairsFromChanges b/c it didnt handle the case where,
-			// if multiple domains are being activated at once,
-			// that the more derived domain should clear conflicting pairs
-			// instead: every listed pair in the all the new domains get set.
+			// fix? this replaced newPairsFromChanges.
+			// it tried to handle multiple domains at once but
+			// didnt handle conflicts between multiple newly activating domains.
+			// applying one domain at a time solves that problem.
 			err = e
 			break
 		}
