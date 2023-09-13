@@ -152,7 +152,9 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 	return
 }
 
-var mdl_domain = tables.Insert("mdl_domain", "domain", "requires", "at")
+// when elements are missing sometimes the same domain requirement pair gets inserted twice
+// fix? for now this ignores the duplicate values.
+var mdl_domain = tables.InsertWith("mdl_domain", "on conflict do nothing", "domain", "requires", "at")
 
 // pairs of domain name and (domain) dependencies
 // fix: are we forcing/checking parent domains to exist before writing?
@@ -880,7 +882,7 @@ func (pen *Pen) AddDefaultValue(kind, field string, value assign.Assignment) (er
 
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: assumes noun is an exact name
-func (pen *Pen) AddFieldValue(noun, field string, value assign.Assignment) (err error) {
+func (pen *Pen) AddInitialValue(noun, field string, value assign.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
 		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {

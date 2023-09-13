@@ -24,11 +24,55 @@
         "pass time, then continue",
         "the adjust light rule",
         {
-          "AdjustingLight actor:": 
+          "AdjustingLight actor:": {
+            "FromText:": "@actor"
+          }
+        }
+      ]
+    },
+    {
+      "--": "run when a player first starts a new story.",
+      "Define pattern:requires:provides:do:": [
+        "start game",
+        {
+          "--": "the player",
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "--": "no default rule"
+        }
+      ]
+    },
+    {
+    	"--": [
+    		"determine the initial lighting status",
+    		"( doesn't print any status since the room description will. )"
+    	],
+      "Define rule:named:do:": [
+        "start game, then continue",
+        "the setup light rule",
+        {
+          "Set:from:": [
             {
-              "FromText:": "@actor"
+              "Object:field:": [
+                "@actor",
+                "not in darkness"
+              ]
+            },
+            {
+              "FromBool:": {
+                "ContainsLight spot:": {
+                  "FromText:": "@actor"
+                }
+              }
             }
-          
+          ]
         }
       ]
     }

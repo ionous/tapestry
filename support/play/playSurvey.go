@@ -53,10 +53,10 @@ func (s *Survey) GetFocus() string {
 	return s.focus
 }
 
-// return the id of the focal object
-// ex. self
-func (s *Survey) GetFocalObject() (g.Value, error) {
-	return s.run.GetField(s.focus, "pawn")
+// return the id of the focal object; returns nil on error; ex. self
+func (s *Survey) GetFocalObject() (ret g.Value) {
+	ret, _ = s.run.GetField(s.focus, "pawn")
+	return
 }
 
 // fix: PlayerBounds, PlayerLocale and ObjectBounds might be better delegated to scris.
@@ -100,9 +100,9 @@ func (s *Survey) getObjectBounds(obj string) parser.Bounds {
 
 func (s *Survey) getLocale() (ret parser.Bounds, err error) {
 	run := s.run
-	if pawn, e := s.GetFocalObject(); e != nil {
-		err = e
-	} else if res, e := run.ReciprocalsOf(pawn.String(), s.relation); e != nil {
+	if actor := s.GetFocalObject(); actor == nil {
+		err = errutil.New("couldnt get focal object")
+	} else if res, e := run.ReciprocalsOf(actor.String(), s.relation); e != nil {
 		err = e
 	} else {
 		var where = "nowhere!"

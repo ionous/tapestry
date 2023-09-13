@@ -354,16 +354,13 @@
       ]
     },
     {
-      "--": "FIX: Certainties aren't implemented"
-    },
-    {
       "--": ""
     },
     {
       "Declare:": "Supporters are kinds of prop."
     },
     {
-      "Declare:": "Rooms are kinds of object."
+      "Declare:": "Rooms are kinds of object. Rooms are usually lit."
     },
     {
       "--": "generates 'is visited' and 'not visited'",

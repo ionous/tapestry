@@ -52,7 +52,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			for _, t := range traits {
 				t := lang.Normalize(t)
 				for _, n := range names {
-					if e := pen.AddFieldValue(n, t, truly()); e != nil {
+					if e := w.AddInitialValue(pen, n, t, truly()); e != nil {
 						err = errutil.Append(err, e)
 						break // out of the traits to the next noun
 					}
@@ -148,7 +148,7 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 						err = errutil.Append(err, e)
 					} else if noun, e := pen.GetClosestNoun(lang.Normalize(name)); e != nil {
 						err = errutil.Append(err, e)
-					} else if e := pen.AddFieldValue(noun, field, value); e != nil {
+					} else if e := w.AddInitialValue(pen, noun, field, value); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}

@@ -1,9 +1,12 @@
 {
   "Tapestry:": [
     {
-      "Test:dependsOn:do:": [
+      "Test:dependsOn:withScene:do:": [
         "status printing test",
         "thingaverse",
+        {
+        	"Declare:": "The flashlight is lit."
+        },
         [
           {
             "Say:": "{the: .flower}: {print_status:.flower}."

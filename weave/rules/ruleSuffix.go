@@ -6,28 +6,29 @@ import (
 
 // words that can follow a rule name
 // ex. "taking then continue"
-type eventSuffix int
+type Suffix int
 
-//go:generate stringer -type=eventSuffix -linecomment
+//go:generate stringer -type=Suffix -linecomment
 const (
-	continues eventSuffix = iota // continue
-	stops                        // stop
-	jumps                        // jump
+	Continues Suffix = iota // then continue
+	Stops                   // then stop
+	Jumps                   // then jump
+	Begins                  // begins
+	Ends                    // end
 	//
 	numSuffixes = iota
 )
 
-const suffixSeparator = " then "
-
 // return name sans any suffix, and any suffix the name had.
 // ( i believe names have been normalized by this point )
-func findSuffix(name string) (short string, suffix eventSuffix) {
+func findSuffix(name string) (short string, suffix Suffix) {
 	short, suffix = name, numSuffixes // provisional
-	if i := strings.LastIndex(name, suffixSeparator); i > 0 {
-		first, rest := name[:i], name[i+len(suffixSeparator):]
-		for i := 0; i < numSuffixes; i++ {
-			if p := eventSuffix(i); p.String() == rest {
-				short, suffix = first, p
+	for i := 0; i < numSuffixes; i++ {
+		n := Suffix(i)
+		if str := n.String(); strings.HasSuffix(name, str) {
+			// the suffix string doesnt have the padding space so check that manually
+			if end := len(name) - len(str) - 1; end > 0 && name[end] == ' ' {
+				short, suffix = name[:end], n
 				break
 			}
 		}

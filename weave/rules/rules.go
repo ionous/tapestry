@@ -7,7 +7,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
@@ -16,17 +18,49 @@ import (
 
 type RuleInfo struct {
 	Name           string // name of the pattern / kind
-	Rank           int    // smaller ranked rules run first
+	Label          string
+	Rank           int // smaller ranked rules run first
 	Stop           bool
 	Jump           rt.Jump
 	ExcludesPlayer bool // true if the rule should apply to all actors
 }
 
-// match an author specified pattern reference
-// to various naming conventions and pattern definitions
-// to determine the intended pattern name, rank, and termination behavior.
-// for example: "instead of x", "before x", "after x", "report x".
-func ReadName(w g.Kinds, phrase string) (ret RuleInfo, err error) {
+type RuleName struct {
+	Short, Long, Label string
+	Prefix             Prefix
+	Suffix             Suffix
+	ExcludesPlayer     bool // true if the rule should apply to all actors
+}
+
+func (n RuleName) IsDomainEvent() bool {
+	return n.Suffix == Begins || n.Suffix == Ends
+}
+
+// instead and report are grouped with before and after respectively
+func (n RuleName) EventName() (ret string) {
+	if n.IsDomainEvent() {
+		var s strings.Builder
+		s.WriteString(n.Short)
+		s.WriteRune(' ')
+		s.WriteString(n.Suffix.String())
+		ret = s.String()
+	} else {
+		switch n.Prefix {
+		case When:
+			ret = n.Short
+		case Instead:
+			ret = event.BeforePhase.PatternName(n.Short)
+		case Report:
+			ret = event.AfterPhase.PatternName(n.Short)
+		default:
+			ret = n.Long
+		}
+	}
+	return
+}
+
+func ReadPhrase(phrase, label string) (ret RuleName) {
+	phrase, label = lang.Normalize(phrase), lang.Normalize(label)
 	name, suffix := findSuffix(phrase)
 	// return name sans any prefix, and any prefix the name had.
 	short, prefix := findPrefix(name)
@@ -43,47 +77,77 @@ func ReadName(w g.Kinds, phrase string) (ret RuleInfo, err error) {
 		}
 		short = next
 	}
+	return RuleName{
+		Short:  short,
+		Long:   name,
+		Label:  label,
+		Prefix: prefix,
+		Suffix: suffix,
+	}
+}
 
-	if k, e := w.GetKindByName(short); e != nil {
-		err = e
+func (n RuleName) GetRuleInfo(ks g.Kinds) (ret RuleInfo, err error) {
+	if n.IsDomainEvent() {
+		ret, err = n.ruleForDomain()
+	} else {
+		ret, err = n.ruleForPattern(ks)
+	}
+	return
+}
+
+func (n RuleName) ruleForDomain() (ret RuleInfo, err error) {
+	ret = RuleInfo{
+		Name: n.EventName(),
+		Jump: rt.JumpLater,
+	}
+	return
+}
+
+// match an author specified pattern reference
+// to various naming conventions and pattern definitions
+// to determine the intended pattern name, rank, and termination behavior.
+// for example: "instead of x", "before x", "after x", "report x".
+func (n RuleName) ruleForPattern(ks g.Kinds) (ret RuleInfo, err error) {
+	if k, e := ks.GetKindByName(n.Short); e != nil {
+		err = e // ^ the base pattern
 	} else {
 		switch pattern.Categorize(k) {
 		default:
-			err = errutil.Fmt("can't have %q event", name)
+			err = errutil.Fmt("can't have a %q event", n.Short)
 
 		case pattern.Calls:
-			switch prefix {
-			case instead, report:
-				err = errutil.Fmt("%q isn't a kind of %s and doesn't support %q", short, kindsOf.Action, prefix)
+			switch n.Prefix {
+			case Instead, Report:
+				err = errutil.Fmt("%q isn't a kind of %s and doesn't support %q", n.Short, kindsOf.Action, n.Prefix)
 			default:
 				// ex. "before normal pattern", return "normal pattern"
-				ret = RuleInfo{Name: short, Rank: prefix.rank()}
+				ret = RuleInfo{Name: n.Short, Rank: n.Prefix.rank()}
 			}
 
 		case pattern.Sends:
-			pattern := prefix.eventName(name, short)
-			stop, jump := prefix.stopJump()
+			stop, jump := n.Prefix.stopJump()
 			ret = RuleInfo{
-				Name:           pattern,
-				Rank:           prefix.rank(),
+				Name:           n.EventName(),
+				Rank:           n.Prefix.rank(),
 				Stop:           stop,
 				Jump:           jump,
-				ExcludesPlayer: excludesPlayer,
+				ExcludesPlayer: n.ExcludesPlayer,
 			}
 		}
 		// suffix will override any stop/jump settings
 		if err == nil {
-			switch suffix {
-			case jumps:
+			switch n.Suffix {
+			case Jumps:
 				ret.Stop = false
 				ret.Jump = rt.JumpNow
-			case stops:
+			case Stops:
 				ret.Stop = true
 				ret.Jump = rt.JumpNow
-			case continues:
+			case Continues:
 				ret.Stop = false
 				ret.Jump = rt.JumpLater
 			}
+			ret.Label = n.Label
 		}
 	}
 	return

@@ -244,7 +244,7 @@ func (op *Values) Assert(cat *weave.Catalog) error {
 		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
 			err = e
 		} else if field, path := op.Field, op.Path; len(path) == 0 {
-			err = pen.AddFieldValue(n, field, assign.Literal(op.Value))
+			err = pen.AddInitialValue(n, field, assign.Literal(op.Value))
 		} else {
 			path := append(path, field)
 			err = pen.AddPathValue(n, mdl.MakePath(path...), op.Value)

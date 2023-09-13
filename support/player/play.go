@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -72,9 +73,11 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 				if e := run.ActivateDomain(domain); e != nil {
 					err = e
 				} else {
-					play := play.NewPlaytime(run, grammar)
-					//
-					if len(testString) > 0 {
+					survey := play.MakeDefaultSurveyor(run)
+					play := play.NewPlaytime(run, survey, grammar)
+					if _, e := play.Call("start game", affine.None, nil, []g.Value{survey.GetFocalObject()}); e != nil {
+						err = e
+					} else if len(testString) > 0 {
 						for _, cmd := range strings.Split(testString, ";") {
 							fmt.Println(prompt, cmd)
 							step(play, cmd, !jsonMode)

@@ -30,11 +30,11 @@ func TestPrefixing(t *testing.T) {
 	)
 
 	var (
-		at      = 0
 		before  = rules.Ranks[0]
 		instead = rules.Ranks[1]
-		after   = rules.Ranks[2]
-		report  = rules.Ranks[3]
+		at      = rules.Ranks[2]
+		after   = rules.Ranks[3]
+		report  = rules.Ranks[4]
 	)
 
 	// test misc:
@@ -112,11 +112,11 @@ func TestPrefixing(t *testing.T) {
 
 type logger interface{ Logf(fmt string, args ...any) }
 
-func failDoubles(l logger, ks *testutil.Kinds, test string) (err error) {
+func failDoubles(l logger, ks *testutil.Kinds, phrase string) (err error) {
 	xs := []string{"before", "after", "report"}
 	for i := range xs {
 		for j := range xs {
-			s := strings.Join([]string{xs[i], xs[j], test}, " ")
+			s := strings.Join([]string{xs[i], xs[j], phrase}, " ")
 			if e := fail(l, ks, s); e != nil {
 				err = errutil.Append(err, e)
 			}
@@ -125,24 +125,26 @@ func failDoubles(l logger, ks *testutil.Kinds, test string) (err error) {
 	return
 }
 
-func fail(l logger, ks *testutil.Kinds, test string) (err error) {
-	if _, e := rules.ReadName(ks, test); e == nil {
-		err = errutil.New("expected failure for", test)
+func fail(l logger, ks *testutil.Kinds, phrase string) (err error) {
+	n := rules.ReadPhrase(phrase, "")
+	if _, e := n.RuleForPattern(ks); e == nil {
+		err = errutil.New("expected failure for", phrase)
 	} else {
-		l.Logf("ok: %q failed with %s", test, e)
+		l.Logf("ok: %q failed with %s", phrase, e)
 	}
 	return
 }
 
-func match(l logger, ks *testutil.Kinds, test, name string, rank int) (err error) {
-	if p, e := rules.ReadName(ks, test); e != nil {
+func match(l logger, ks *testutil.Kinds, phrase, name string, rank int) (err error) {
+	n := rules.ReadPhrase(phrase, "")
+	if p, e := n.RuleForPattern(ks); e != nil {
 		err = e
 	} else if p.Name != name {
-		err = errutil.Fmt("test %q: got name %q wanted %q", test, p.Name, name)
+		err = errutil.Fmt("test %q: got name %q wanted %q", phrase, p.Name, name)
 	} else if p.Rank != rank {
-		err = errutil.Fmt("test %q: got rank %d wanted %d", test, p.Rank, rank)
+		err = errutil.Fmt("test %q: got rank %d wanted %d", phrase, p.Rank, rank)
 	} else {
-		l.Logf("ok %q got %q rank %d", test, p.Name, p.Rank)
+		l.Logf("ok %q got %q rank %d", phrase, p.Name, p.Rank)
 	}
 	return
 }

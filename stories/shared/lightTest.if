@@ -83,6 +83,93 @@
           }
         ]
       ]
+    },
+    {
+      "Test:dependsOn:withScene:do:": [
+        "the gloom",
+        "Kitchenette",
+        [
+          {
+            "Declare:": "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."
+          },
+          {
+            "Define rule:noun:do:": [
+              "activating",
+              "flashlight",
+              {
+                "If:do:else:": [
+                  {
+                    "Object:field:": [
+                      "flashlight",
+                      "lit"
+                    ]
+                  },
+                  {
+                    "Say:": "You turn on the flashlight shooting a beam of light into the gloom."
+                  },
+                  {
+                    "Finally do:": {
+                      "Say:": "It's already lit."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "deactivating",
+              "flashlight",
+              {
+                "If:do:else:": [
+                  {
+                    "Object:field:": [
+                      "flashlight",
+                      "unlit"
+                    ]
+                  },
+                  {
+                    "Say:": "Reluctantly, you extinguish your sole source of light."
+                  },
+                  {
+                    "Finally do:": {
+                      "Say:": "It's already off."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+          	"--": [
+          		"fix: have to manually start the game for tests.",
+          		"maybe an option of some sort, or a scan for Fabricate input"
+          	],
+            "StartGame actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
+          },
+          {
+            "Fabricate input:": "look"
+          },
+          {
+            "Expect output:": [
+              "Darkness.",
+              "It is pitch dark, and you can't see a thing."
+            ]
+          },
+          {
+            "Fabricate input:": "switch on the flashlight"
+          }
+        ]
+      ]
     }
   ]
 }

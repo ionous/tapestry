@@ -21,7 +21,7 @@ func (pen *Pen) addDefaultValue(kind kindInfo, name string, value assign.Assignm
 	if field, e := pen.findField(kind.class(), name); e != nil {
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
-		err = errutil.New("can't assign trait to noun")
+		err = errutil.Fmt("can't assign trait %q to kind %q", name, kind.name)
 	} else if aff := assign.GetAffinity(value); aff != field.aff {
 		err = errutil.Fmt("mismatched affinity, cant assign %s to %s", aff, field.aff)
 	} else if out, e := marshalAssignment(value); e != nil {
@@ -41,12 +41,24 @@ func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err e
 		err = errutil.New("can't assign trait to noun")
 	} else if aff := assign.GetAffinity(value); aff != field.aff {
 		err = errutil.Fmt("mismatched affinity, cant assign %s to %s", aff, field.aff)
+	} else if noun.domain != pen.domain {
+		err = DomainValueError{noun.name, field.name, value}
 	} else if out, e := marshalAssignment(value); e != nil {
 		err = e
 	} else {
 		err = pen.addNounValue(noun, isFinal(value), field, field.name, "", out)
 	}
 	return
+}
+
+type DomainValueError struct {
+	Noun, Field string
+	Value       assign.Assignment
+}
+
+func (e DomainValueError) Error() string {
+	return errutil.Sprint("initial values for noun %q (%q) must be in the same domain as its declaration.",
+		e.Noun, e.Field)
 }
 
 // dot values are required to be literals.
@@ -115,6 +127,13 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		return
 	}, &prev.dot, &prev.value); e != nil {
 		err = eatDuplicates(pen.warn, e)
+	} else if noun.domain != pen.domain {
+		// this to simplify domain management (ex. would have to check rival values)
+		// and avoids questions about what happens to values at the *end* of domain
+		// (ex. do the values revert back to their previous dynamic value?
+		//  or, are they forced to the values at the start of the parent scene, etc. )
+		err = errutil.Fmt("assignments to noun %q (at %q) must be in the domain %q, was %q",
+			noun.name, field, noun.domain, pen.domain)
 	} else {
 		if _, e := pen.db.Exec(mdl_value, noun.id, outer.id, opt, value, final, pen.at); e != nil {
 			err = e
@@ -130,7 +149,6 @@ var mdl_value = tables.Insert("mdl_value", "noun", "field", "dot", "value", "fin
 // writing to fields inside a record is permitted so long as the record itself has not been written to.
 // overwriting a field with a record is allowed from another domain.
 func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value string) (err error) {
-
 	// search for existing paths which conflict:
 	// could be the same path, or could be a record written as a whole
 	// now being written as a part; or vice versa.
@@ -160,10 +178,12 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 		return
 	}, &prev.value); e != nil {
 		err = eatDuplicates(pen.warn, e)
-	} else {
-		if _, e := pen.db.Exec(mdl_value_kind, kind.id, field.id, value, final, pen.at); e != nil {
-			err = e
-		}
+	} else if field.domain != pen.domain {
+		// this to simplify domain management (ex. would have to check rival values)
+		err = errutil.Fmt("the domain of the assignment (%s) must match the field %q domain (%s)",
+			pen.domain, field.name, field.domain)
+	} else if _, e := pen.db.Exec(mdl_value_kind, kind.id, field.id, value, final, pen.at); e != nil {
+		err = e
 	}
 	return
 }

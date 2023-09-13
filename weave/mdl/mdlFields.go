@@ -130,10 +130,11 @@ using(name)
 }
 
 type fieldInfo struct {
-	id   int64
-	name string
-	cls  classInfo
-	aff  affine.Affinity
+	id     int64
+	name   string
+	domain string
+	cls    classInfo
+	aff    affine.Affinity
 }
 
 func (f *fieldInfo) class() classInfo {
@@ -197,6 +198,7 @@ func (pen *Pen) findField(kind classInfo, field string) (ret fieldInfo, err erro
 with allTraits as (	
 	select mk.rowid as kind,   -- id of the aspect,
 				 field as name,      -- name of trait 
+				 mf.domain,          -- domain of the field
 	       mk.kind as aspect,  -- name of aspect
 	       mk.domain           -- name of originating domain
 	from mdl_field mf 
@@ -208,8 +210,8 @@ with allTraits as (
 -- all fields of the targeted kind:
 , fieldsInKind as (
 	select mf.rowid as id,
-				 mk.domain,            -- domain of kind 
 				 field as name,        -- field name 
+				 mf.domain,            -- domain name of the field 
 				 affinity,             -- affinity 
 				 mt.rowid as typeId,   -- type of the field 
 				 mt.kind as typeName,  -- name of that type 
@@ -223,13 +225,13 @@ with allTraits as (
 )
 -- fields in the target kind
 -- if the field isnt a record; the type info (id,name,path) can be null
-select id, name, affinity, coalesce(typeId,0), coalesce(typeName, ''), coalesce(fullpath, '')
-from fieldsInKind
+select id, name, kf.domain, affinity, coalesce(typeId,0), coalesce(typeName, ''), coalesce(fullpath, '')
+from fieldsInKind kf
 where name = @fieldName 
 union all
 
 -- traits in the target kind: return the aspect
-select id, ma.aspect, 'text', 0, "", ""
+select id, ma.aspect, ma.domain, 'text', 0, "", ""
 from allTraits ma
 join fieldsInKind fk
 	on (ma.kind = fk.typeId)
@@ -237,7 +239,7 @@ where ma.name = @fieldName`,
 		sql.Named("aspects", pen.paths.aspectPath),
 		sql.Named("ancestry", kind.fullpath),
 		sql.Named("fieldName", field)).
-		Scan(&ret.id, &ret.name, &ret.aff, &ret.cls.id, &ret.cls.name, &ret.cls.fullpath); e != nil {
+		Scan(&ret.id, &ret.name, &ret.domain, &ret.aff, &ret.cls.id, &ret.cls.name, &ret.cls.fullpath); e != nil {
 		if e == sql.ErrNoRows {
 			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind.name, pen.domain)
 		} else {

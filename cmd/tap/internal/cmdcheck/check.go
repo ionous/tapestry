@@ -41,7 +41,8 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 				w := print.NewLineSentences(markup.ToText(os.Stdout))
 				d := decode.NewDecoder(signatures)
 				run := qna.NewRuntimeOptions(w, query, d, options)
-				play := play.NewPlaytime(run, grammar)
+				survey := play.MakeDefaultSurveyor(run)
+				play := play.NewPlaytime(run, survey, grammar)
 				if e := checkOne(d, play, check, &ret); e != nil {
 					e := errutil.New(e, "during", check.Name)
 					err = errutil.Append(err, e)

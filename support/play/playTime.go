@@ -20,8 +20,7 @@ type Playtime struct {
 	// state    int or something
 }
 
-func NewPlaytime(run rt.Runtime, grammar parser.Scanner) *Playtime {
-	survey := MakeDefaultSurveyor(run)
+func NewPlaytime(run rt.Runtime, survey Survey, grammar parser.Scanner) *Playtime {
 	return &Playtime{Runtime: run, grammar: grammar, survey: survey}
 }
 
@@ -126,8 +125,8 @@ func (pt *Playtime) play(act string, args []string) (err error) {
 	// temp patch to new:
 	// should instead raise a parsing event with the nouns and the action name
 	// ( possibly -- probably send in the player since it would be needed for bounds still )
-	if actor, e := pt.survey.GetFocalObject(); e != nil {
-		err = e
+	if actor := pt.survey.GetFocalObject(); actor == nil {
+		err = errutil.New("couldnt get focal object")
 	} else {
 		// insert the player in front of the other args.
 		vs := make([]g.Value, len(args)+1)
@@ -135,7 +134,11 @@ func (pt *Playtime) play(act string, args []string) (err error) {
 		for i, n := range args {
 			vs[i+1] = g.StringOf(n)
 		}
-		_, err = pt.Runtime.Call(act, affine.None, nil, vs)
+		if _, e := pt.Runtime.Call(act, affine.None, nil, vs); e != nil {
+			err = e
+		} else if _, e := pt.Runtime.Call("pass time", affine.None, nil, vs[:1]); e != nil {
+			err = e
+		}
 	}
 	return
 }

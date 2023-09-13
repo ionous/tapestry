@@ -237,7 +237,7 @@ func genNouns(w *weave.Weaver, ns []grok.Name, multi bool) (ret g.Value, err err
 				names = append(names, ns...)
 			}
 		} else {
-			if name, e := importNamedNoun(w.Pin(), n); e != nil {
+			if name, e := importNamedNoun(w, w.Pin(), n); e != nil {
 				err = e
 				break
 			} else {
@@ -258,7 +258,7 @@ func genNouns(w *weave.Weaver, ns []grok.Name, multi bool) (ret g.Value, err err
 	return
 }
 
-func importNamedNoun(pen *mdl.Pen, n grok.Name) (ret string, err error) {
+func importNamedNoun(w *weave.Weaver, pen *mdl.Pen, n grok.Name) (ret string, err error) {
 	var noun string
 	fullName := n.String()
 	if name := lang.Normalize(fullName); name == "you" {
@@ -301,11 +301,11 @@ func importNamedNoun(pen *mdl.Pen, n grok.Name) (ret string, err error) {
 	// add articles:
 	if err == nil {
 		if isProper(n.Article, fullName) {
-			if e := pen.AddFieldValue(noun, "proper named", truly()); e != nil {
+			if e := w.AddInitialValue(pen, noun, "proper named", truly()); e != nil {
 				err = e
 			}
 		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := pen.AddFieldValue(noun, "indefinite article", text(a, "")); e != nil {
+			if e := w.AddInitialValue(pen, noun, "indefinite article", text(a, "")); e != nil {
 				err = e
 			}
 		}
@@ -314,7 +314,7 @@ func importNamedNoun(pen *mdl.Pen, n grok.Name) (ret string, err error) {
 	if err == nil {
 		for _, t := range n.Traits {
 			t := lang.Normalize(t.String())
-			if e := pen.AddFieldValue(noun, t, truly()); e != nil {
+			if e := w.AddInitialValue(pen, noun, t, truly()); e != nil {
 				err = errutil.Append(err, e)
 				break // out of the traits to the next noun
 			}
@@ -375,15 +375,15 @@ func importCountedNoun(w *weave.Weaver, noun grok.Name) (ret []string, err error
 				} else if e := pen.AddName(n, kind, -1); e != nil {
 					err = e // ^ so that typing "triangle" means "triangles-1"
 					break
-				} else if e := pen.AddFieldValue(n, "counted", truly()); e != nil {
+				} else if e := w.AddInitialValue(pen, n, "counted", truly()); e != nil {
 					err = e
 					break
-				} else if e := pen.AddFieldValue(n, "printed name", text(kind, "")); e != nil {
+				} else if e := w.AddInitialValue(pen, n, "printed name", text(kind, "")); e != nil {
 					err = e // so that printing "triangles-1" yields "triangle"
 					break   // FIX: itd make a lot more sense to have a default value for the kind
 				} else {
 					for _, t := range noun.Traits {
-						if e := pen.AddFieldValue(n, t.String(), truly()); e != nil {
+						if e := w.AddInitialValue(pen, n, t.String(), truly()); e != nil {
 							err = e
 							break Loop
 						}

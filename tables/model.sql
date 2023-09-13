@@ -98,27 +98,27 @@ create table mdl_rev( domain text not null, oneWord text, otherWord text, at tex
  */
 create table mdl_rule( domain text not null, kind int not null, name text, rank int, stop int, jump int, updates int, prog blob, at text );
 /* 
- * scene independent default values for fields.
- * field can come from any of the specified kind's ancestor.
+ * initial values for nouns.
+ * initial values can only be specified in the noun's originating domain;
+ * changes to those values for other domains are rewritten as commands on the domain start event.
  * non-final values can be refined during weave.
  *
  * dots address fields of records; sub-fields of sub-records use dots separated by full stops. 
  * if dot is empty, the value is an assign.Assignment;
  * if dot exists, the value is a literal.Value.
- *
- * weave stops any noun field with a dot from being written 
- * if one of its kinds has *anything* specified for that field.
  */
 create table mdl_value( noun int not null, field int not null, dot string, value blob, final int, at text );
 
 /* 
- * scene independent default values for nouns.
- * field can come from any of the specified kind's ancestor.
+ * default values for kinds.
+ * field can come from any of the kind's ancestors
+ * ( ex. 'things' can be portable; while a decedent like 'doors' can be fixed in place. )
  * non-final values can be refined during weave.
+ * ( ex. nouns specified with capital names can be flagged as 'proper named', but an author can say otherwise. )
+ * defaults can only be specified in the same domain as the field's declaration.
+ + ( avoids ambiguity between scenes; the author can declare a descendant kind to workaround. )
  *
- * while records dont support sub-addressing here
- * ( and therefore 'dot' doesnt exist )
- * this follows he same rule as mdl_value:
- * no dot means values are assign.Assignment.
+ * while records dont support sub-addressing here ( and therefore 'dot' doesnt exist )
+ * this follows he same rule as mdl_value: no dot means values are assign.Assignment.
  */
 create table mdl_value_kind( kind int not null, field int not null, value blob, final int, at text );

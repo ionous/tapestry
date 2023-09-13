@@ -3,17 +3,38 @@ package weave
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
 type Domain struct {
-	name       string
-	cat        *Catalog
-	currPhase  Phase                     // updated during weave, ends at NumPhases
-	scheduling [RequireAll + 1][]memento // separates commands into phases
-	suspended  []memento                 // for missing definitions
+	name          string
+	cat           *Catalog
+	currPhase     Phase                     // updated during weave, ends at NumPhases
+	scheduling    [RequireAll + 1][]memento // separates commands into phases
+	suspended     []memento                 // for missing definitions
+	initialValues initialValues             // all of type assign.SetValue
+}
+
+type initialValue struct {
+	noun, field string
+	val         assign.Assignment
+}
+
+type initialValues []rt.Execute
+
+func (in initialValues) add(noun, field string, val assign.Assignment) initialValues {
+	return append(in, &assign.SetValue{
+		Target: &assign.ObjectRef{
+			Name:  &literal.TextValue{Value: noun},
+			Field: &literal.TextValue{Value: field},
+		},
+		Value: val,
+	})
 }
 
 type memento struct {
@@ -21,6 +42,25 @@ type memento struct {
 	at    string
 	phase Phase
 	err   error
+}
+
+func (d *Domain) writeInitialValues() (err error) {
+	if len(d.initialValues) > 0 {
+		domainName := d.name
+		eventName := domainName + " " + "begins"
+		pin := d.cat.Modeler.Pin(domainName, "")
+		pb := mdl.NewPatternBuilder(eventName)
+		pb.AppendRule(0, rt.Rule{
+			Name: "initial value rule",
+			Exe:  d.initialValues,
+		})
+		if e := pin.AddPattern(pb.Pattern); e != nil {
+			err = e
+		} else {
+			d.initialValues = nil
+		}
+	}
+	return
 }
 
 func (d *Domain) Name() string {
@@ -102,11 +142,7 @@ func (d *Domain) runPhase(w *Weaver) (err error) {
 	return
 }
 
-// tbd: the suspended mnd flush model is a little low bar.
-// it'd be better to categorize individual statements -- even from macros
-// and trigger them as their needs are satisfied; how exactly? not sure.
-// the big mish mash are patterns,params,locals, and returns --
-// which need to be written in a specific order.
+// when ignore is false, report any suspended errors
 func (d *Domain) flush(ignore bool) (err error) {
 	w := Weaver{Catalog: d.cat, Domain: d.name, Runtime: d.cat.run}
 	redo := struct {
@@ -127,13 +163,12 @@ Loop:
 			redo.cnt, redo.err = 0, nil
 
 		case errors.Is(e, mdl.Missing):
-			// append to rack all that are missing
+			// append all that are missing
 			redo.err = errutil.Append(redo.err, e)
 			// add redo elements back into the list
 			next.err = e
 			d.suspended = append(d.suspended, next)
-			// might still have statements to try?
-			// keep going
+			// keep going when there are statements to try
 			if redo.cnt = redo.cnt + 1; redo.cnt > len(d.suspended) {
 				// if we have visited every suspended element
 				// an haven't progressed; we're done.
@@ -149,5 +184,9 @@ Loop:
 			err = errutil.Append(err, e)
 		}
 	}
+	if err == nil && len(d.suspended) == 0 {
+		err = d.writeInitialValues()
+	}
+
 	return
 }

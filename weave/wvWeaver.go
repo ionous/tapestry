@@ -1,6 +1,9 @@
 package weave
 
 import (
+	"errors"
+
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -26,6 +29,19 @@ func (w *Weaver) MatchArticle(ws []string) (ret int, err error) {
 
 func (w *Weaver) Pin() *mdl.Pen {
 	return w.Catalog.Modeler.Pin(w.Domain, w.At)
+}
+
+func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value assign.Assignment) (err error) {
+	// a little annoying this wrap;
+	// best that can be done without something like promises i think
+	var u mdl.DomainValueError
+	if e := pen.AddInitialValue(noun, field, value); !errors.As(e, &u) {
+		err = e // nil or unexpected error.
+	} else {
+		d := w.Catalog.domains[w.Domain]
+		d.initialValues = d.initialValues.add(u.Noun, u.Field, u.Value)
+	}
+	return
 }
 
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
