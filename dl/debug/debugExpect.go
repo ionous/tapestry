@@ -45,18 +45,30 @@ func compareOutput(run rt.Runtime, match []string) (err error) {
 	return
 }
 
-func compareLines(match, input []string) (err error) {
-	if want, have := len(match), len(input); want != have {
+func compareLines(want, have []string) (err error) {
+	if wcnt, hcnt := len(want), len(have); wcnt > hcnt {
 		err = errutil.New("expected", want, "lines, have", have,
-			"wanted:", strings.Join(match, "; "), "have:", strings.Join(input, "; "))
+			"wanted:", strings.Join(want, "; "), "have:", strings.Join(have, "; "))
 	} else {
-		for i, w := range match {
-			if h := input[i]; w != h {
-				e := errutil.Fmt("line %v mismatched. wanted '%v' have '%v'", i, w, h)
+		//
+		var elided bool
+		for i, cnt := 0, len(want); i < cnt; i++ {
+			w, h := want[i], have[i]
+			if elided = strings.HasSuffix(w, "..."); elided {
+				// only want to match up to the ellipses
+				if max := len(w) - 3; len(h) >= max {
+					w, h = w[:max], h[:max]
+				}
+			}
+			if w != h {
+				e := errutil.Fmt("line %v mismatched. wanted '%v' have '%v'", i, want[i], have[i])
 				err = errutil.Append(err, e)
 			} else if LogLevel.Str <= LoggingLevel_Debug {
-				log.Println("~ ", w)
+				log.Println("~ ", want[i])
 			}
+		}
+		if hcnt > wcnt && !elided {
+			err = errutil.New("unexpected trailing text:", have[wcnt:])
 		}
 	}
 	return
