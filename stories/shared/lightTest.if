@@ -94,10 +94,10 @@
           },
           {
             "Define rule:noun:do:": [
-              "activating",
+              "after activating",
               "flashlight",
               {
-                "If:do:else:": [
+                "Set:from:": [
                   {
                     "Object:field:": [
                       "flashlight",
@@ -105,12 +105,7 @@
                     ]
                   },
                   {
-                    "Say:": "You turn on the flashlight shooting a beam of light into the gloom."
-                  },
-                  {
-                    "Finally do:": {
-                      "Say:": "It's already lit."
-                    }
+                    "FromBool:": true
                   }
                 ]
               }
@@ -118,10 +113,10 @@
           },
           {
             "Define rule:noun:do:": [
-              "deactivating",
+              "after deactivating",
               "flashlight",
               {
-                "If:do:else:": [
+                "Set:from:": [
                   {
                     "Object:field:": [
                       "flashlight",
@@ -129,12 +124,7 @@
                     ]
                   },
                   {
-                    "Say:": "Reluctantly, you extinguish your sole source of light."
-                  },
-                  {
-                    "Finally do:": {
-                      "Say:": "It's already off."
-                    }
+                    "FromBool:": true
                   }
                 ]
               }
@@ -143,10 +133,10 @@
         ],
         [
           {
-          	"--": [
-          		"fix: have to manually start the game for tests.",
-          		"maybe an option of some sort, or a scan for Fabricate input"
-          	],
+            "--": [
+              "fix: have to manually start the game for tests.",
+              "maybe an option of some sort, or a scan for Fabricate input"
+            ],
             "StartGame actor:": {
               "FromText:": {
                 "Object:field:": [
@@ -166,7 +156,14 @@
             ]
           },
           {
-            "Fabricate input:": "switch on the flashlight"
+            "Fabricate input:": "switch on flashlight"
+          },
+          {
+            "Expect output:": [ 
+            	"You switch on the flashlight.",
+            	"Kitchen."
+            	"Your Aunt Fiona's kitchen...",
+            ]
           }
         ]
       ]
