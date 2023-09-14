@@ -3,15 +3,13 @@
     {
       "Define action:requires:provides:": [
         "looking",
-        [
-          {
-            "--": "the actor looking ( ex. the player. )",
-            "Text:kind:": [
-              "actor",
-              "actor"
-            ]
-          }
-        ],
+        {
+          "--": "the actor looking ( ex. the player. )",
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
         {
           "Text:kind:initially:": [
             "location",
