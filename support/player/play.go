@@ -13,6 +13,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -80,7 +81,10 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 					} else if len(testString) > 0 {
 						for _, cmd := range strings.Split(testString, ";") {
 							fmt.Println(prompt, cmd)
-							step(play, cmd, !jsonMode)
+							if !step(play, cmd, !jsonMode) {
+								// some sort of thing about ending early if so?
+								break
+							}
 						}
 					} else {
 						reader := bufio.NewReader(os.Stdin)
@@ -92,7 +96,9 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 								break
 							} else {
 								words := in[:len(in)-1] // strip the newline.
-								step(play, words, !jsonMode)
+								if !step(play, words, !jsonMode) {
+									break
+								}
 
 								if jsonMode {
 									// take buffered text and write it out
@@ -117,10 +123,22 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 	return
 }
 
-func step(p *play.Playtime, s string, pad bool) {
-	if res, e := p.Step(s); e != nil {
+func step(p *play.Playtime, s string, pad bool) (done bool) {
+	res, e := p.Step(s)
+	switch e := e.(type) {
+	case nil:
+		if res != nil && pad {
+			fmt.Println()
+		}
+	case game.Signal:
+		switch e {
+		case game.SignalQuit:
+			done = true
+		default:
+			log.Println("unhandled:", e)
+		}
+	default:
 		log.Println("error:", e)
-	} else if res != nil && pad {
-		fmt.Println()
 	}
+	return
 }

@@ -8,7 +8,9 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// used for fabricate to trigger a forward step of the parser
+// a callback so fabricate can trigger a step of the parser;
+// fabricate will error if this is nil/unset.
+// ( see also: cmdcheck )
 var Stepper func(words string) error
 
 func (op *Fabricate) Execute(run rt.Runtime) (err error) {
