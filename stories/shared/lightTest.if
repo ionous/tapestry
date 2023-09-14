@@ -161,8 +161,8 @@
           {
             "Expect output:": [ 
             	"You switch on the flashlight.",
-            	"Kitchen."
-            	"Your Aunt Fiona's kitchen...",
+            	"Kitchen.",
+            	"Your Aunt Fiona's kitchen..."
             ]
           }
         ]
