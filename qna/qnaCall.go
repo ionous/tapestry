@@ -24,15 +24,20 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 		case pattern.Initializes:
 			ret = g.RecordOf(rec)
 		case pattern.Calls:
-			// println("call: ", name)
 			ret, err = run.call(pat, rec, aff)
 		case pattern.Sends:
-			if len(vals) <= 0 {
-				err = errutil.Fmt("attempting to call an action %q with no target  %q", name, aff)
-			} else {
-				// println("send: ", name)
-				ret, err = run.send(name, rec, vals[0])
+			// this search isnt great; especially since its looking for "noun" instead of "target"
+			// putting target first might be best -- but would need some rework of parser and of explicit calls
+			var target int
+			if i := pat.FieldIndex("noun"); i >= 0 {
+				target = i
 			}
+			if tgt, e := rec.GetIndexedField(target); e != nil {
+				err = e
+			} else {
+				ret, err = run.send(name, rec, tgt)
+			}
+
 		default:
 			err = errutil.Fmt("attempting to call %q directly", name)
 		}
@@ -47,7 +52,6 @@ func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g
 		name := kind.Name()
 		oldScope := run.scope.ReplaceScope(scope.FromRecord(rec))
 		run.currentPatterns.startedPattern(name)
-
 		if initRecord(run, rec); e != nil {
 			err = e
 		} else if rules, e := run.getRules(name); e != nil {
@@ -75,7 +79,8 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 	} else if evtObj, e := newEventRecord(run, event.Object, tgt); e != nil {
 		err = e // ^ create the "event object" sent to each event phase pattern.
 	} else {
-		// BUT SCOPE!
+		// fix: shouldnt this be in scope so that it can pull from its sibling variables during initialization?
+		// ex. locals from parameters.
 		if initRecord(run, rec); e != nil {
 			err = e
 		}
