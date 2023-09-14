@@ -259,7 +259,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -306,7 +306,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {

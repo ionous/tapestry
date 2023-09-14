@@ -28,7 +28,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@matching",
                     {
                       "FromBool:": true
@@ -46,7 +46,7 @@
                   },
                   [
                     {
-                      "Set:from:": [
+                      "Set:value:": [
                         "@matching",
                         {
                           "FromBool:": false
@@ -64,7 +64,7 @@
                       },
                       [
                         {
-                          "Set:from:": [
+                          "Set:value:": [
                             "@matching",
                             {
                               "FromBool:": true

@@ -53,7 +53,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@response",
                 {
                   "FromText:": {

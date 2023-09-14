@@ -44,7 +44,7 @@
       "Define rule:do:": [
         "after adjusting light",
         {
-          "Set:from:": [
+          "Set:value:": [
             {
               "Object:field:": [
                 "@actor",

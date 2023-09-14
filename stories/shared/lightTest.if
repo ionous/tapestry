@@ -6,16 +6,9 @@
         "Kitchenette",
         [
           {
-            "Set:from:": [
-              {
-                "Object:field:": [
-                  "Kitchen",
-                  "unlit"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "Kitchen",
+              "unlit"
             ]
           },
           {
@@ -25,16 +18,9 @@
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Set:from:": [
-              {
-                "Object:field:": [
-                  "Kitchen",
-                  "lit"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "Kitchen",
+              "lit"
             ]
           },
           {
@@ -44,16 +30,9 @@
             "Expect output:": "ok: The cabinet has light."
           },
           {
-            "Set:from:": [
-              {
-                "Object:field:": [
-                  "cabinet",
-                  "closed"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "cabinet",
+              "closed"
             ]
           },
           {
@@ -63,16 +42,9 @@
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Set:from:": [
-              {
-                "Object:field:": [
-                  "matches",
-                  "lit"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "matches",
+              "lit"
             ]
           },
           {
@@ -97,16 +69,9 @@
               "after activating",
               "flashlight",
               {
-                "Set:from:": [
-                  {
-                    "Object:field:": [
-                      "flashlight",
-                      "lit"
-                    ]
-                  },
-                  {
-                    "FromBool:": true
-                  }
+                "Set:trait:": [
+                  "flashlight",
+                  "lit"
                 ]
               }
             ]
@@ -116,16 +81,9 @@
               "after deactivating",
               "flashlight",
               {
-                "Set:from:": [
-                  {
-                    "Object:field:": [
-                      "flashlight",
-                      "unlit"
-                    ]
-                  },
-                  {
-                    "FromBool:": true
-                  }
+                "Set:trait:": [
+                  "flashlight",
+                  "unlit"
                 ]
               }
             ]
@@ -159,10 +117,10 @@
             "Fabricate input:": "switch on flashlight"
           },
           {
-            "Expect output:": [ 
-            	"You switch on the flashlight.",
-            	"Kitchen.",
-            	"Your Aunt Fiona's kitchen..."
+            "Expect output:": [
+              "You switch on the flashlight.",
+              "Kitchen.",
+              "Your Aunt Fiona's kitchen..."
             ]
           }
         ]

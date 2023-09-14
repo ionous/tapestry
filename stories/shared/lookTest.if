@@ -66,7 +66,7 @@
             "Comment:": "Close the cabinet door, and its list of visible objects should change."
           },
           {
-            "Set:from:": [
+            "Set:value:": [
               {
                 "Object:field:": [
                   "cabinet",
@@ -122,7 +122,7 @@
             "Comment:": "Open the cabinet again, and validate the number of visible objects again."
           },
           {
-            "Set:from:": [
+            "Set:value:": [
               {
                 "Object:field:": [
                   "cabinet",
@@ -252,7 +252,7 @@
             ]
           },
           {
-            "Set:from:": [
+            "Set:value:": [
               {
                 "Object:field:": [
                   "cabinet",

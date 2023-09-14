@@ -107,7 +107,7 @@
             [
               {
                 "--": "unless already grouped, use print several for unnamed counted nouns.",
-                "Set:from:": [
+                "Set:value:": [
                   {
                     "Variable:dot:": [
                       "grouping",
@@ -126,7 +126,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   {
                     "Variable:dot:": [
                       "grouping",
@@ -143,7 +143,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   {
                     "Variable:dot:": [
                       "grouping",
@@ -162,7 +162,7 @@
             ],
             {
               "Finally do:": {
-                "Set:from:": [
+                "Set:value:": [
                   "@grouping",
                   {
                     "FromRecord:": "@grouping"
@@ -289,7 +289,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@matching",
                     {
                       "FromBool:": false
@@ -405,7 +405,7 @@
                   },
                   [
                     {
-                      "Set:from:": [
+                      "Set:value:": [
                         "@matching",
                         {
                           "FromBool:": true
@@ -496,7 +496,7 @@
                     },
                     [
                       {
-                        "Set:from:": [
+                        "Set:value:": [
                           "@idx",
                           {
                             "FromNumber:": "@index"
@@ -543,7 +543,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     {
                       "Variable:dot:": [
                         "group",
@@ -560,7 +560,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     {
                       "Variable:dot:": [
                         "group",
@@ -594,7 +594,7 @@
                     ]
                   },
                   {
-                    "Set:from:": [
+                    "Set:value:": [
                       "@group",
                       {
                         "FromRecord:": {
@@ -611,7 +611,7 @@
                     ]
                   },
                   {
-                    "Set:from:": [
+                    "Set:value:": [
                       "@names",
                       {
                         "FromTextList:": {
@@ -645,7 +645,7 @@
                     ]
                   },
                   {
-                    "Set:from:": [
+                    "Set:value:": [
                       {
                         "Variable:dot:": [
                           "group",
@@ -662,7 +662,7 @@
                     ]
                   },
                   {
-                    "Set:from:": [
+                    "Set:value:": [
                       {
                         "Variable:dot:": [
                           "groups",

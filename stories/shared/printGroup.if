@@ -329,7 +329,7 @@
               		"this is the only rule that sets success",
               		"doing so blocks the other rules from running."
               	],
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": true

@@ -149,7 +149,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -191,7 +191,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -232,7 +232,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -273,7 +273,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -316,7 +316,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -364,7 +364,7 @@
                 "Comment:": "Reaching up to take the noun, means the noun contains the actor."
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -412,7 +412,7 @@
                   "If the target noun were owned by the reaching actor then the actor would be the lca.",
                   "By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach."
                 ],
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -462,7 +462,7 @@
               },
               {
                 "--": "Reaching down to take the noun, means the noun contains the actor.",
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {

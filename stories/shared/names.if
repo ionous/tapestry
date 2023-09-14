@@ -253,7 +253,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   {
                     "Object:field:": [
                       "@obj",
@@ -266,7 +266,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   {
                     "Object:field:": [
                       "settings",

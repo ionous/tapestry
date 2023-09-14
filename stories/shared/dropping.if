@@ -166,7 +166,7 @@
                 "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -208,7 +208,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {

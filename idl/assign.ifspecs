@@ -28,7 +28,7 @@
           ]
         },
         {
-          "--": "Store a value into a local variable ( or pattern argument. )",
+          "--": "Store a value into a variable or object.",
           "Spec:slots:with flow:": [
             "set_value",
             "execute",
@@ -44,10 +44,67 @@
                     ]
                   },
                   {
-                    "Term:name:type:": [
-                      "from",
+                    "Term:type:": [
                       "value",
                       "assignment"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Set the state of an object.",
+          "Spec:slots:with flow:": [
+            "set_trait",
+            "execute",
+            {
+              "Flow:uses:": [
+                "set",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "trait",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [ 
+          	"Copy from one stored value to another.",
+          	"Requires that the type of the two values match exactly"
+          ],
+          "Spec:slots:with flow:": [
+            "copy_value",
+            "execute",
+            {
+              "Flow:uses:": [
+                "copy",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "address"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "from",
+                      "source",
+                      "address"
                     ]
                   }
                 ]

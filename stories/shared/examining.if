@@ -280,7 +280,7 @@
                   }
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -309,7 +309,7 @@
                         ]
                       },
                       {
-                        "Set:from:": [
+                        "Set:value:": [
                           "@success",
                           {
                             "FromBool:": true
@@ -345,7 +345,7 @@
                   }
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@success",
                     {
                       "FromBool:": true

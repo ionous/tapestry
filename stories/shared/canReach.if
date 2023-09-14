@@ -59,7 +59,7 @@
         ],
         [
           {
-            "Set:from:": [
+            "Set:value:": [
               "@i",
               {
                 "FromText:": "@actor"
@@ -86,7 +86,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@next",
                     {
                       "FromText:": {
@@ -141,7 +141,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 "@reach_error",
                                 {
                                   "FromNumber:": {
@@ -153,7 +153,7 @@
                               ]
                             },
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 "@reach_response",
                                 {
                                   "FromText:": "@response"
@@ -173,7 +173,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@i",
                     {
                       "FromText:": "@next"
@@ -195,7 +195,7 @@
             ]
           },
           {
-            "Set:from:": [
+            "Set:value:": [
               "@i",
               {
                 "FromText:": "@noun"
@@ -211,7 +211,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@lca",
                     {
                       "FromNumber:": {
@@ -247,7 +247,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@next",
                     {
                       "FromText:": {
@@ -293,7 +293,7 @@
                     },
                     [
                       {
-                        "Set:from:": [
+                        "Set:value:": [
                           "@dig_error",
                           {
                             "FromText:": "@response"
@@ -310,7 +310,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@i",
                     {
                       "FromText:": "@next"
@@ -337,7 +337,7 @@
                   "Comment:": "No lca ever found? That's the most important error."
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@response",
                     {
                       "FromText:": {
@@ -364,7 +364,7 @@
                       "Comment:": "There is an error reaching up from the actor towards the lca."
                     },
                     {
-                      "Set:from:": [
+                      "Set:value:": [
                         "@response",
                         {
                           "FromText:": "@reach_response"
@@ -384,7 +384,7 @@
                           "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
                         },
                         {
-                          "Set:from:": [
+                          "Set:value:": [
                             "@response",
                             {
                               "FromText:": "@dig_error"
@@ -413,7 +413,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@response",
                 {
                   "FromText:": {
@@ -454,7 +454,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -537,7 +537,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -577,7 +577,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -668,7 +668,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@response",
                 {
                   "FromText:": {
@@ -707,7 +707,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {

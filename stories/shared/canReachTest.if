@@ -99,16 +99,9 @@
             "Expect output:": "okay: reached outside the open cabinet."
           },
           {
-            "Set:from:": [
-              {
-                "Object:field:": [
-                  "espresso machine",
-                  "open"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "espresso machine",
+              "open"
             ]
           },
           {
@@ -153,16 +146,9 @@
             "Expect output:": "okay: reached inside the open espresso machine."
           },
           {
-            "Set:from:": [
-              {
-                "Object:field:": [
-                  "cabinet",
-                  "closed"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "cabinet",
+              "closed"
             ]
           },
           {

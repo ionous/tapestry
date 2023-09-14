@@ -231,7 +231,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -280,7 +280,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -332,7 +332,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@response",
                 {
                   "FromText:": {
@@ -383,7 +383,7 @@
                 "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {
@@ -430,7 +430,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@response",
                   {
                     "FromText:": {

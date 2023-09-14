@@ -17,7 +17,7 @@
         },
         {
           "--": "by default, the answer is no.",
-          "Set:from:": [
+          "Set:value:": [
             "@success",
             {
               "FromBool:": false
@@ -39,7 +39,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": true
@@ -64,7 +64,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": true
@@ -103,7 +103,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": {
@@ -230,7 +230,7 @@
               }
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@success",
                 {
                   "FromBool:": true
@@ -264,7 +264,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@success",
                 {
                   "FromBool:": false

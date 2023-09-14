@@ -34,7 +34,7 @@
                   "Comment:": "a room is the top of line."
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@result",
                     {
                       "FromBool:": true
@@ -68,7 +68,7 @@
                   },
                   [
                     {
-                      "Set:from:": [
+                      "Set:value:": [
                         "@result",
                         {
                           "FromBool:": true
@@ -78,7 +78,7 @@
                   ],
                   {
                     "Finally do:": {
-                      "Set:from:": [
+                      "Set:value:": [
                         "@result",
                         {
                           "FromBool:": false
@@ -128,7 +128,7 @@
         ],
         {
           "--": "normally the parent is just the parent.",
-          "Set:from:": [
+          "Set:value:": [
             "@result",
             {
               "FromText:": "@parent"
@@ -152,7 +152,7 @@
                 "Comment:": "for example: if our object is a closed, opaque, container, dont return anything."
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@result",
                   {
                     "FromText:": ""
@@ -199,7 +199,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@obj",
                   {
                     "FromText:": {
@@ -258,7 +258,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@ceiling",
                     {
                       "FromText:": "@spot"
@@ -266,7 +266,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@spot",
                     {
                       "FromText:": {
@@ -320,7 +320,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 "@result",
                                 {
                                   "FromBool:": true

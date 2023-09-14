@@ -37,7 +37,7 @@
               }
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@response",
                 {
                   "FromText:": {
@@ -62,7 +62,7 @@
               "Is empty:": "@obj"
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@response",
                 {
                   "FromText:": {
@@ -92,7 +92,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     {
                       "Object:field:": [
                         "@obj",
@@ -132,7 +132,7 @@
             ]
           },
           {
-            "Set:from:": [
+            "Set:value:": [
               "@response",
               {
                 "FromText:": {
@@ -183,7 +183,7 @@
             ]
           },
           {
-            "Set:from:": [
+            "Set:value:": [
               {
                 "Object:field:": [
                   "@obj",
@@ -277,7 +277,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     {
                       "Object:field:": [
                         "@obj",

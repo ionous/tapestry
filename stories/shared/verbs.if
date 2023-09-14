@@ -16,7 +16,7 @@
           "Text:": "result"
         },
         {
-          "Set:from:": [
+          "Set:value:": [
             "@result",
             {
               "FromText:": "@verb"

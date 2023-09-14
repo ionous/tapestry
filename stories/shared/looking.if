@@ -260,7 +260,7 @@
               "@in_darkness",
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     {
                       "Object:field:": [
                         "settings",
@@ -276,7 +276,7 @@
               {
                 "Finally do:": [
                   {
-                    "Set:from:": [
+                    "Set:value:": [
                       {
                         "Object:field:": [
                           "@room",
@@ -837,7 +837,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": true
@@ -990,7 +990,7 @@
                 }
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": true
@@ -1067,7 +1067,7 @@
         },
         [
           {
-            "Set:from:": [
+            "Set:value:": [
               {
                 "Object:field:": [
                   "settings",
@@ -1089,7 +1089,7 @@
               "it",
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     {
                       "Object:field:": [
                         "@it",

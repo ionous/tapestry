@@ -578,6 +578,119 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 	return
 }
 
+// CopyValue Copy from one stored value to another.
+// Requires that the type of the two values match exactly
+type CopyValue struct {
+	Target Address `if:"label=_"`
+	Source Address `if:"label=from"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*CopyValue)(nil)
+
+func (*CopyValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: CopyValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "copy",
+	}
+}
+
+const CopyValue_Type = "copy_value"
+const CopyValue_Field_Target = "$TARGET"
+const CopyValue_Field_Source = "$SOURCE"
+
+func (op *CopyValue) Marshal(m jsn.Marshaler) error {
+	return CopyValue_Marshal(m, op)
+}
+
+type CopyValue_Slice []CopyValue
+
+func (op *CopyValue_Slice) GetType() string { return CopyValue_Type }
+
+func (op *CopyValue_Slice) Marshal(m jsn.Marshaler) error {
+	return CopyValue_Repeats_Marshal(m, (*[]CopyValue)(op))
+}
+
+func (op *CopyValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *CopyValue_Slice) SetSize(cnt int) {
+	var els []CopyValue
+	if cnt >= 0 {
+		els = make(CopyValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *CopyValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return CopyValue_Marshal(m, &(*op)[i])
+}
+
+func CopyValue_Repeats_Marshal(m jsn.Marshaler, vals *[]CopyValue) error {
+	return jsn.RepeatBlock(m, (*CopyValue_Slice)(vals))
+}
+
+func CopyValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CopyValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = CopyValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type CopyValue_Flow struct{ ptr *CopyValue }
+
+func (n CopyValue_Flow) GetType() string      { return CopyValue_Type }
+func (n CopyValue_Flow) GetLede() string      { return "copy" }
+func (n CopyValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n CopyValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*CopyValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func CopyValue_Optional_Marshal(m jsn.Marshaler, pv **CopyValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = CopyValue_Marshal(m, *pv)
+	} else if !enc {
+		var v CopyValue
+		if err = CopyValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func CopyValue_Marshal(m jsn.Marshaler, val *CopyValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(CopyValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", CopyValue_Field_Target)
+		if e0 == nil {
+			e0 = Address_Marshal(m, &val.Target)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CopyValue_Field_Target))
+		}
+		e1 := m.MarshalKey("from", CopyValue_Field_Source)
+		if e1 == nil {
+			e1 = Address_Marshal(m, &val.Source)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", CopyValue_Field_Source))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 const Dot_Type = "dot"
 
 var Dot_Optional_Marshal = Dot_Marshal
@@ -1489,10 +1602,122 @@ func ObjectRef_Marshal(m jsn.Marshaler, val *ObjectRef) (err error) {
 	return
 }
 
-// SetValue Store a value into a local variable ( or pattern argument. )
+// SetTrait Set the state of an object.
+type SetTrait struct {
+	Target rt.TextEval `if:"label=_"`
+	Trait  rt.TextEval `if:"label=trait"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*SetTrait)(nil)
+
+func (*SetTrait) Compose() composer.Spec {
+	return composer.Spec{
+		Name: SetTrait_Type,
+		Uses: composer.Type_Flow,
+		Lede: "set",
+	}
+}
+
+const SetTrait_Type = "set_trait"
+const SetTrait_Field_Target = "$TARGET"
+const SetTrait_Field_Trait = "$TRAIT"
+
+func (op *SetTrait) Marshal(m jsn.Marshaler) error {
+	return SetTrait_Marshal(m, op)
+}
+
+type SetTrait_Slice []SetTrait
+
+func (op *SetTrait_Slice) GetType() string { return SetTrait_Type }
+
+func (op *SetTrait_Slice) Marshal(m jsn.Marshaler) error {
+	return SetTrait_Repeats_Marshal(m, (*[]SetTrait)(op))
+}
+
+func (op *SetTrait_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *SetTrait_Slice) SetSize(cnt int) {
+	var els []SetTrait
+	if cnt >= 0 {
+		els = make(SetTrait_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *SetTrait_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return SetTrait_Marshal(m, &(*op)[i])
+}
+
+func SetTrait_Repeats_Marshal(m jsn.Marshaler, vals *[]SetTrait) error {
+	return jsn.RepeatBlock(m, (*SetTrait_Slice)(vals))
+}
+
+func SetTrait_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SetTrait) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = SetTrait_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type SetTrait_Flow struct{ ptr *SetTrait }
+
+func (n SetTrait_Flow) GetType() string      { return SetTrait_Type }
+func (n SetTrait_Flow) GetLede() string      { return "set" }
+func (n SetTrait_Flow) GetFlow() interface{} { return n.ptr }
+func (n SetTrait_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*SetTrait); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func SetTrait_Optional_Marshal(m jsn.Marshaler, pv **SetTrait) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = SetTrait_Marshal(m, *pv)
+	} else if !enc {
+		var v SetTrait
+		if err = SetTrait_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(SetTrait_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", SetTrait_Field_Target)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Target)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", SetTrait_Field_Target))
+		}
+		e1 := m.MarshalKey("trait", SetTrait_Field_Trait)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Trait)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", SetTrait_Field_Trait))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// SetValue Store a value into a variable or object.
 type SetValue struct {
 	Target Address    `if:"label=_"`
-	Value  Assignment `if:"label=from"`
+	Value  Assignment `if:"label=value"`
 	Markup map[string]any
 }
 
@@ -1589,7 +1814,7 @@ func SetValue_Marshal(m jsn.Marshaler, val *SetValue) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", SetValue_Field_Target))
 		}
-		e1 := m.MarshalKey("from", SetValue_Field_Value)
+		e1 := m.MarshalKey("value", SetValue_Field_Value)
 		if e1 == nil {
 			e1 = Assignment_Marshal(m, &val.Value)
 		}
@@ -1731,6 +1956,7 @@ var Slats = []composer.Composer{
 	(*AtField)(nil),
 	(*AtIndex)(nil),
 	(*CallPattern)(nil),
+	(*CopyValue)(nil),
 	(*FromBool)(nil),
 	(*FromNumList)(nil),
 	(*FromNumber)(nil),
@@ -1739,6 +1965,7 @@ var Slats = []composer.Composer{
 	(*FromText)(nil),
 	(*FromTextList)(nil),
 	(*ObjectRef)(nil),
+	(*SetTrait)(nil),
 	(*SetValue)(nil),
 	(*VariableRef)(nil),
 }
@@ -1747,6 +1974,7 @@ var Signatures = map[uint64]interface{}{
 	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
 	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
 	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
+	12187184211547847098: (*CopyValue)(nil),      /* execute=Copy:from: */
 	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
 	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
 	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
@@ -1778,7 +2006,8 @@ var Signatures = map[uint64]interface{}{
 	13722223890291796107: (*ObjectRef)(nil),      /* record_list_eval=Object:field:dot: */
 	15784348372409109382: (*ObjectRef)(nil),      /* text_eval=Object:field:dot: */
 	11516059561048599401: (*ObjectRef)(nil),      /* text_list_eval=Object:field:dot: */
-	7241459153126815557:  (*SetValue)(nil),       /* execute=Set:from: */
+	3109912816783629323:  (*SetTrait)(nil),       /* execute=Set:trait: */
+	3912570011939708664:  (*SetValue)(nil),       /* execute=Set:value: */
 	13692207992970428220: (*VariableRef)(nil),    /* address=Variable: */
 	17908519799628660539: (*VariableRef)(nil),    /* bool_eval=Variable: */
 	11022385456290008164: (*VariableRef)(nil),    /* num_list_eval=Variable: */

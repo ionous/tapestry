@@ -42,7 +42,7 @@
       "Define rule:do:": [
         "state changing",
         {
-          "Set:from:": [
+          "Set:value:": [
             {
               "Object:field:": [
                 "@noun",

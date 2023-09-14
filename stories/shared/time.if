@@ -58,7 +58,7 @@
         "start game, then continue",
         "the setup light rule",
         {
-          "Set:from:": [
+          "Set:value:": [
             {
               "Object:field:": [
                 "@actor",
@@ -75,6 +75,6 @@
           ]
         }
       ]
-    }
+    } 
   ]
 }

@@ -51,7 +51,7 @@
                           "For patterns which return a value, assigning a return value ends the pattern matching.",
                           "So end this pattern and block out the default handler."
                         ],
-                        "Set:from:": [
+                        "Set:value:": [
                           "@grouping",
                           {
                             "FromRecord:": "@grouping"
@@ -129,7 +129,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -146,7 +146,7 @@
                               ]
                             },
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -163,7 +163,7 @@
                               ]
                             },
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -280,7 +280,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -297,7 +297,7 @@
                               ]
                             },
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -314,7 +314,7 @@
                               ]
                             },
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -393,7 +393,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -410,7 +410,7 @@
                               ]
                             },
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -554,7 +554,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -642,7 +642,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -711,7 +711,7 @@
                           },
                           [
                             {
-                              "Set:from:": [
+                              "Set:value:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",

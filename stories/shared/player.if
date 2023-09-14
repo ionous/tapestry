@@ -95,7 +95,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@success",
                 {
                   "FromBool:": {
@@ -128,7 +128,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@success",
                   {
                     "FromBool:": {

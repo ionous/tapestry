@@ -48,7 +48,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@parent",
                 {
                   "FromText:": {
@@ -67,7 +67,7 @@
             },
             {
               "Finally do:": {
-                "Set:from:": [
+                "Set:value:": [
                   "@parent",
                   {
                     "FromText:": {
@@ -123,7 +123,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@obj",
                     {
                       "FromText:": {
@@ -158,7 +158,7 @@
           "TextList:": "kids"
         },
         {
-          "Set:from:": [
+          "Set:value:": [
             "@kids",
             {
               "FromTextList:": {
@@ -220,7 +220,7 @@
                   },
                   [
                     {
-                      "Set:from:": [
+                      "Set:value:": [
                         "@room",
                         {
                           "FromText:": "@search"
@@ -234,7 +234,7 @@
                 ]
               },
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@search",
                   {
                     "FromText:": {
@@ -313,7 +313,7 @@
         ],
         [
           {
-            "Set:from:": [
+            "Set:value:": [
               "@o1",
               {
                 "FromText:": "@object"
@@ -328,7 +328,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@o2",
                     {
                       "FromText:": "@other_object"
@@ -351,7 +351,7 @@
                           [
                             {
                               "--": "Success!",
-                              "Set:from:": [
+                              "Set:value:": [
                                 "@ancestor",
                                 {
                                   "FromText:": "@o2"
@@ -365,7 +365,7 @@
                         ]
                       },
                       {
-                        "Set:from:": [
+                        "Set:value:": [
                           "@o2",
                           {
                             "FromText:": {
@@ -412,7 +412,7 @@
                   ]
                 },
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@o1",
                     {
                       "FromText:": {
@@ -498,7 +498,7 @@
         ],
         [
           {
-            "Set:from:": [
+            "Set:value:": [
               "@up",
               {
                 "FromText:": "@obj"
@@ -511,7 +511,7 @@
               [
                 {
                   "--": "Step up immediately, indirect implies objects dont hold themselves.",
-                  "Set:from:": [
+                  "Set:value:": [
                     "@up",
                     {
                       "FromText:": {
@@ -568,7 +568,7 @@
                     [
                       {
                         "--": "Success!",
-                        "Set:from:": [
+                        "Set:value:": [
                           "@is_ancestor",
                           {
                             "FromBool:": true
@@ -652,7 +652,7 @@
               ]
             },
             {
-              "Set:from:": [
+              "Set:value:": [
                 "@location",
                 {
                   "FromText:": "@parent"
@@ -704,7 +704,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@supporter",
                   {
                     "FromText:": "@parent"
@@ -761,7 +761,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@container",
                     {
                       "FromText:": "@parent"
@@ -816,7 +816,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@owner",
                     {
                       "FromText:": "@parent"
@@ -863,7 +863,7 @@
         ],
         [
           {
-            "Set:from:": [
+            "Set:value:": [
               "@parent",
               {
                 "FromText:": {
@@ -894,7 +894,7 @@
               },
               [
                 {
-                  "Set:from:": [
+                  "Set:value:": [
                     "@carrier",
                     {
                       "FromText:": "@parent"
@@ -964,7 +964,7 @@
             },
             [
               {
-                "Set:from:": [
+                "Set:value:": [
                   "@wearer",
                   {
                     "FromText:": "@parent"

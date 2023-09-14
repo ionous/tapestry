@@ -255,7 +255,7 @@
                 },
                 [
                   {
-                    "Set:from:": [
+                    "Set:value:": [
                       "@direction",
                       {
                         "FromText:": "@dir"
@@ -297,7 +297,7 @@
           ]
         },
         {
-          "Set:from:": [
+          "Set:value:": [
             "@door",
             {
               "FromText:": {
