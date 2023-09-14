@@ -144,7 +144,11 @@
         },
         {
           "PrintVantage where:": {
-            "FromText:": "@actor"
+            "FromText:":  {
+              "LocationOf obj:": {
+                "FromText:": "@actor"
+              }
+            }
           }
         }
       ]
