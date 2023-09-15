@@ -15,6 +15,15 @@
         },
         {
           "Spec:slots:with flow:": [
+            "end_game",
+            "execute",
+            {
+              "Flow uses:": []
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
             "save_game",
             "execute",
             {

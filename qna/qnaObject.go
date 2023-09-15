@@ -104,7 +104,7 @@ func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value
 			if v, e := safe.GetAssignment(run, c); e != nil {
 				err = e
 			} else {
-				ret, err = safe.AutoConvert(run, field, v)
+				ret, err = safe.RectifyText(run, field, v)
 			}
 		default:
 			err = errutil.Fmt("unexpected type in object cache %T for noun %q field %q", c, obj.Id, field.Name)

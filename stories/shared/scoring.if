@@ -1,0 +1,184 @@
+{
+  "Tapestry:": [
+    {
+      "Define scene:dependsOn:with:": [
+        "scoring",
+        "tapestry",
+        [
+          {
+            "Define kind:fields:": [
+              "globals",
+              [
+                {
+                  "Number:": "score"
+                },
+                {
+                  "--": [
+                    "The max score acts like a hint to the player.",
+                    "The standard rules don't stop the score from growing larger than the max score",
+                    "and nothing happens when the score reaches the max score."
+                  ],
+                  "Number:": "max score"
+                },
+                {
+                  "Aspect:": "score notification"
+                }
+              ]
+            ]
+          },
+          {
+            "Define traits:as:": [
+              [
+                "score notification on",
+                "score notification off"
+              ],
+              "score notification"
+            ]
+          },
+          {
+            "--": [
+              "blocks the no score rule from happening.",
+              "alt: could replace the default rule or response."
+            ],
+            "Define rule:do:": [
+              "requesting the score",
+              {
+                "Say response:with:": [
+                  "announce the score",
+                  "{if .story.playing}So far, {we!} have{else}In that game {we!}{end} scored {.story.score} out of a possible {.story.max_score} points, in {.story.turn_count} {if .story.turn_count > 1}turns{else}turn{end}."
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Test:dependsOn:do:": [
+        "no score",
+        "tapestry",
+        [
+          {
+            "Fabricate input:": "score"
+          },
+          {
+            "Expect output:": "This isn't a competition."
+          }
+        ]
+      ]
+    },
+    {
+      "Test:dependsOn:do:": [
+        "mid game score",
+        "scoring",
+        [
+          {
+            "--": [
+              "fix: have to manually start the game for tests."
+            ],
+            "StartGame actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
+          },
+             {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "max score"
+                ]
+              },
+              {
+              	"FromNumber:": 50
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "score"
+                ]
+              },
+              {
+              	"FromNumber:": 23
+              }
+            ]
+          },
+          {
+            "Fabricate input:": "score"
+          },
+          {
+            "Expect output:": "So far, you have scored 23 out of a possible 50 points, in 1 turn."
+          }
+        ]
+      ]
+    },
+    {
+      "Test:dependsOn:do:": [
+        "post game score",
+        "scoring",
+        [
+          {
+            "--": "simulate the end of game state.",
+            "Set:trait:": [
+              "story",
+              "finished"
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "max score"
+                ]
+              },
+              {
+              	"FromNumber:": 100
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "score"
+                ]
+              },
+              {
+              	"FromNumber:": 100
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "turn count"
+                ]
+              },
+              {
+              	"FromNumber:": 7
+              }
+            ]
+          },
+          {
+            "Fabricate input:": "score"
+          },
+          {
+            "Expect output:": "In that game you scored 100 out of a possible 100 points, in 7 turns."
+          }
+        ]
+      ]
+    }
+  ]
+}

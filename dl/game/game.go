@@ -29,6 +29,15 @@ func (*QuitGame) Execute(run rt.Runtime) error {
 	return SignalQuit
 }
 
+// placeholder for ending the game.
+// not 100% clear if this will ultimately be a script action, or just launch script actions:
+// traditionally prints `*** The End ***`, with an optionally customizable message.
+// shifts the parser state ( maybe based on the game state )
+// and a prompt containing the parser state options.
+func (*EndGame) Execute(run rt.Runtime) error {
+	return SignalQuit
+}
+
 func (*RestoreGame) Execute(run rt.Runtime) error {
 	return errutil.New("restore not implemented")
 }

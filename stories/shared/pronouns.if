@@ -15,11 +15,9 @@
         {
           "Nothing": true
         },
-        
-          {
-            "Print:": "you"
-          }
-        
+        {
+          "Print:": "you"
+        }
       ]
     },
     {
@@ -80,23 +78,23 @@
           "Nothing": true
         },
         {
-            "If:do:else:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "plural named"
-                ]
-              },
-              {
-                "Print:": "these"
-              },
-              {
-                "Finally do:": {
-                  "Print:": "that"
-                }
+          "If:do:else:": [
+            {
+              "Object:field:": [
+                "@noun",
+                "plural named"
+              ]
+            },
+            {
+              "Print:": "these"
+            },
+            {
+              "Finally do:": {
+                "Print:": "that"
               }
-            ]
-          }
+            }
+          ]
+        }
       ]
     }
   ]

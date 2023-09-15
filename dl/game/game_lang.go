@@ -7,6 +7,99 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
+// EndGame
+type EndGame struct {
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*EndGame)(nil)
+
+func (*EndGame) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EndGame_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const EndGame_Type = "end_game"
+
+func (op *EndGame) Marshal(m jsn.Marshaler) error {
+	return EndGame_Marshal(m, op)
+}
+
+type EndGame_Slice []EndGame
+
+func (op *EndGame_Slice) GetType() string { return EndGame_Type }
+
+func (op *EndGame_Slice) Marshal(m jsn.Marshaler) error {
+	return EndGame_Repeats_Marshal(m, (*[]EndGame)(op))
+}
+
+func (op *EndGame_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EndGame_Slice) SetSize(cnt int) {
+	var els []EndGame
+	if cnt >= 0 {
+		els = make(EndGame_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EndGame_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EndGame_Marshal(m, &(*op)[i])
+}
+
+func EndGame_Repeats_Marshal(m jsn.Marshaler, vals *[]EndGame) error {
+	return jsn.RepeatBlock(m, (*EndGame_Slice)(vals))
+}
+
+func EndGame_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EndGame) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = EndGame_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EndGame_Flow struct{ ptr *EndGame }
+
+func (n EndGame_Flow) GetType() string      { return EndGame_Type }
+func (n EndGame_Flow) GetLede() string      { return EndGame_Type }
+func (n EndGame_Flow) GetFlow() interface{} { return n.ptr }
+func (n EndGame_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EndGame); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EndGame_Optional_Marshal(m jsn.Marshaler, pv **EndGame) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EndGame_Marshal(m, *pv)
+	} else if !enc {
+		var v EndGame
+		if err = EndGame_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EndGame_Marshal(m jsn.Marshaler, val *EndGame) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(EndGame_Flow{val}); err == nil {
+		m.EndBlock()
+	}
+	return
+}
+
 // PrintVersion
 type PrintVersion struct {
 	Markup map[string]any
@@ -473,6 +566,7 @@ func UndoTurn_Marshal(m jsn.Marshaler, val *UndoTurn) (err error) {
 }
 
 var Slats = []composer.Composer{
+	(*EndGame)(nil),
 	(*PrintVersion)(nil),
 	(*QuitGame)(nil),
 	(*RestoreGame)(nil),
@@ -481,6 +575,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	16491573187911416422: (*EndGame)(nil),      /* execute=EndGame */
 	16069653899165369674: (*PrintVersion)(nil), /* execute=PrintVersion */
 	13962506025236193050: (*QuitGame)(nil),     /* execute=QuitGame */
 	8293164373151279469:  (*RestoreGame)(nil),  /* execute=RestoreGame */

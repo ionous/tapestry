@@ -31,7 +31,7 @@ func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (r
 					break
 				} else if at < 0 {
 					break
-				} else if convertedVal, e := AutoConvert(run, kind.Field(at), val); e != nil {
+				} else if convertedVal, e := RectifyText(run, kind.Field(at), val); e != nil {
 					err = e
 					break
 				} else if e := rec.SetIndexedField(at, convertedVal); e != nil {

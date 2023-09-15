@@ -3,6 +3,17 @@
     {
       "Interpret:with:": [
         [
+          "quit",
+          "q"
+        ],
+        {
+          "Action:": "requesting to quit"
+        }
+      ]
+    },
+    {
+      "Interpret:with:": [
+        [
           "carry",
           "hold"
         ],
@@ -411,11 +422,11 @@
       "Interpret name:with:": [
         "going a direction",
         {
-        	"--":  [
-        		"even though the directions are in scope by default",
-        		"since we cant go directly to any other kind of object",
-        		"focusing on the compass speeds the parser."
-        	],
+          "--": [
+            "even though the directions are in scope by default",
+            "since we cant go directly to any other kind of object",
+            "focusing on the compass speeds the parser."
+          ],
           "Focus:sequence:": [
             "compass",
             [

@@ -1,0 +1,138 @@
+{
+  "Tapestry:": [
+    {
+      "Declare:": "Globals are kinds of kinds."
+    },
+    {
+      "Define nouns:as:": [
+        "story",
+        "globals"
+      ]
+    },
+    {
+      "--": "a copy of the story globals from the previous turn.",
+      "Define nouns:as:": [
+        "last known",
+        "globals"
+      ]
+    },
+    {
+      "Define kind:fields:": [
+        "globals",
+        [
+          {
+            "Number:initially:": [
+              "turn count",
+              1
+            ]
+          },
+          {
+            "Aspect:": "play state"
+          }
+        ]
+      ]
+    },
+    {
+      "--": [
+        "inform has 'finished' and 'finished finally' (possibly from historical if)",
+        "tapestry uses 'failed' and 'finished' as rough equivalents."
+      ],
+      "Define traits:as:": [
+        [
+          "starting",
+          "playing",
+          "finished",
+          "failed"
+        ],
+        "play state"
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "after start game",
+        "the change play state rule",
+        {
+          "Set:trait:": [
+            "story",
+            "playing"
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "pass time, then continue",
+        "the update score rule",
+        {
+          "--": "copy all the values from the current story globals to the last known globals",
+          "Repeating across:as:do:": [
+            {
+              "FromTextList:": {
+                "Fields of:": "globals"
+              }
+            },
+            "field name",
+            {
+              "Copy:from:": [
+                {
+                  "Object:field:": [
+                    "last known",
+                    "@field name"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "story",
+                    "@field name"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Interpret:with:": [
+        "score",
+        [
+          {
+            "Action:": "requesting the score"
+          }
+        ]
+      ]
+    },
+    {
+      "--": [
+        "Even unscored games support printing the score.",
+        "By default it says the story doesn't have a score."
+      ],
+      "Define action:requires:": [
+        "requesting the score",
+        [
+          {
+            "--": [
+              "the player's actor.",
+              "required by all parser actions, even if it isn't needed here."
+            ],
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define rule:do:": [
+        "requesting the score",
+        {
+          "Say response:with:": [
+            "The no score rule",
+            "This isn't a competition."
+          ]
+        }
+      ]
+    }
+  ]
+}

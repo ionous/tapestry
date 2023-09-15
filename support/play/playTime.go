@@ -122,22 +122,22 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 // future: to differentiate b/t system actions and "timed" actions,
 // consider using naming convention: ex. @save (mud style), or #save
 func (pt *Playtime) play(act string, args []string) (err error) {
-	// temp patch to new:
-	// should instead raise a parsing event with the nouns and the action name
-	// ( possibly -- probably send in the player since it would be needed for bounds still )
-	if actor := pt.survey.GetFocalObject(); actor == nil {
+	// fix: raise a parsing event with the nouns and the action name
+	if focus := pt.survey.GetFocalObject(); focus == nil {
 		err = errutil.New("couldnt get focal object")
 	} else {
-		// insert the player in front of the other args.
 		vs := make([]g.Value, len(args)+1)
-		vs[0] = actor
+		vs[0] = focus // presumably the player's actor
 		for i, n := range args {
 			vs[i+1] = g.StringOf(n)
 		}
 		if _, e := pt.Runtime.Call(act, affine.None, nil, vs); e != nil {
 			err = e
-		} else if _, e := pt.Runtime.Call("pass time", affine.None, nil, vs[:1]); e != nil {
-			err = e
+		} else if !strings.HasPrefix(act, "requesting ") {
+			// meta actions are defined as those with start with the string "requesting ..."
+			if _, e := pt.Runtime.Call("pass time", affine.None, nil, vs[:1]); e != nil {
+				err = e
+			}
 		}
 	}
 	return

@@ -1,6 +1,7 @@
 package assign
 
 import (
+	"strconv"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -84,6 +85,31 @@ func (ref *RefValue) SetValue(run rt.Runtime, newValue g.Value) (err error) {
 }
 
 // FIX: convert and warn instead of error on field affinity checks
+func (src *RootValue) ConvertValue(run rt.Runtime, out affine.Affinity) (ret g.Value, err error) {
+	if v, e := src.getValue(run); e != nil {
+		err = e
+	} else {
+		switch aff := v.Affinity(); {
+		case aff == out:
+			ret = v
+
+		case out == affine.Text && aff == affine.Bool:
+			ret = g.StringOf(strconv.FormatBool(v.Bool()))
+
+		case out == affine.Text && aff == affine.Number:
+			ret = g.StringOf(strconv.FormatFloat(v.Float(), 'g', -1, 64))
+
+		default:
+			if e := safe.Check(v, aff); e != nil {
+				err = errutil.New("get checked value failed", src.RefValue.String(), e)
+			} else {
+				ret = v
+			}
+		}
+	}
+	return
+}
+
 func (src *RootValue) GetCheckedValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	if v, e := src.getValue(run); e != nil {
 		err = e

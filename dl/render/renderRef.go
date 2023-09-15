@@ -96,7 +96,7 @@ func (op *RenderRef) renderRef(run rt.Runtime, hint affine.Affinity) (ret g.Valu
 	} else if tv, e := assign.ResolveName(run, name.String(), path); e != nil {
 		err = errutil.New("resolving", name, "with path", path, e)
 	} else {
-		ret, err = tv.GetCheckedValue(run, hint)
+		ret, err = tv.ConvertValue(run, hint)
 	}
 	return
 }

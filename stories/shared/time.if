@@ -45,15 +45,16 @@
           "Nothing": true
         },
         {
-          "--": "no default rule"
+          "--": "no default rule",
+          "Continue": true
         }
       ]
     },
     {
-    	"--": [
-    		"determine the initial lighting status",
-    		"( doesn't print any status since the room description will. )"
-    	],
+      "--": [
+        "determine the initial lighting status",
+        "( doesn't print any status since the room description will. )"
+      ],
       "Define rule:named:do:": [
         "start game, then continue",
         "the setup light rule",
@@ -75,6 +76,46 @@
           ]
         }
       ]
-    } 
+    },
+    {
+      "Define action:requires:": [
+        "requesting to quit",
+        [
+          {
+            "--": [
+              "the player's actor.",
+              "required by all parser actions, even if it isn't needed here."
+            ],
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "requesting to quit",
+        "the game over rule",
+        {
+          "Set:value:": [
+            {
+              "Object:field:": [
+                "@actor",
+                "not in darkness"
+              ]
+            },
+            {
+              "FromBool:": {
+                "ContainsLight spot:": {
+                  "FromText:": "@actor"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
