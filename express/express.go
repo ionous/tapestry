@@ -318,15 +318,15 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 	case types.Operator:
 		switch fn {
 		case types.MUL:
-			err = c.buildTwo(&core.ProductOf{})
+			err = c.buildTwo(&core.MultiplyValue{})
 		case types.QUO:
-			err = c.buildTwo(&core.QuotientOf{})
+			err = c.buildTwo(&core.DivideValue{})
 		case types.REM:
-			err = c.buildTwo(&core.RemainderOf{})
+			err = c.buildTwo(&core.ModValue{})
 		case types.ADD:
-			err = c.buildTwo(&core.SumOf{})
+			err = c.buildTwo(&core.AddValue{})
 		case types.SUB:
-			err = c.buildTwo(&core.DiffOf{})
+			err = c.buildTwo(&core.SubtractValue{})
 
 		case types.EQL:
 			err = c.buildCompare(core.Comparison_EqualTo)

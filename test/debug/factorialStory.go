@@ -60,9 +60,9 @@ var FactorialCheck = []rt.Execute{
 var FactorialMulMinusOne = []rt.Execute{
 	&assign.SetValue{
 		Target: core.Variable("num"),
-		Value: &assign.FromNumber{Value: &core.ProductOf{
+		Value: &assign.FromNumber{Value: &core.MultiplyValue{
 			A: core.Variable("num"),
-			B: &core.DiffOf{
+			B: &core.SubtractValue{
 				A: core.Variable("num"),
 				B: I(1),
 			},

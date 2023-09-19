@@ -538,12 +538,12 @@
         {
           "--": "Subtract two numbers.",
           "Spec:slots:groups:with flow:": [
-            "diff_of",
+            "subtract_value",
             "number_eval",
             "math",
             {
               "Flow:uses:": [
-                "dec",
+                "subtract",
                 [
                   {
                     "Term:name:type:": [
@@ -553,11 +553,10 @@
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "by",
+                    "Term:name:type:": [
+                      "value",
                       "b",
-                      "number_eval",
-                      true
+                      "number_eval"
                     ]
                   }
                 ]
@@ -1179,12 +1178,12 @@
         {
           "--": "Multiply two numbers.",
           "Spec:slots:groups:with flow:": [
-            "product_of",
+            "multiply_value",
             "number_eval",
             "math",
             {
               "Flow:uses:": [
-                "mul",
+                "multiply",
                 [
                   {
                     "Term:name:type:": [
@@ -1195,7 +1194,7 @@
                   },
                   {
                     "Term:name:type:": [
-                      "by",
+                      "value",
                       "b",
                       "number_eval"
                     ]
@@ -1208,12 +1207,12 @@
         {
           "--": "Divide one number by another.",
           "Spec:slots:groups:with flow:": [
-            "quotient_of",
+            "divide_value",
             "number_eval",
             "math",
             {
               "Flow:uses:": [
-                "div",
+                "divide",
                 [
                   {
                     "Term:name:type:": [
@@ -1224,7 +1223,7 @@
                   },
                   {
                     "Term:name:type:": [
-                      "by",
+                      "value",
                       "b",
                       "number_eval"
                     ]
@@ -1237,7 +1236,7 @@
         {
           "--": "Divide one number by another, and return the remainder.",
           "Spec:slots:groups:with flow:": [
-            "remainder_of",
+            "mod_value",
             "number_eval",
             "math",
             {
@@ -1253,9 +1252,95 @@
                   },
                   {
                     "Term:name:type:": [
-                      "by",
+                      "value",
                       "b",
                       "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "abs_value",
+            "number_eval",
+            "math",
+            {
+              "Flow:uses:": [
+                "absolute",
+                {
+                  "Term:type:": [
+                  	"value",
+                    "number_eval"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Increase a number, and return the new value of the number.",
+          "Spec:slots:groups:with flow:": [
+            "increment",
+            [
+              "number_eval",
+              "execute"
+            ],
+            "math",
+            {
+              "Flow:uses:": [
+                "increase",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "address"
+                    ]
+                  },
+                  {
+                    "--": "if not specified, increments by 1.",
+                    "Term:name:type:optional:": [
+                      "by",
+                      "value",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Decrease a number, and return the new value of the number.",
+          "Spec:slots:groups:with flow:": [
+            "decrement",
+            [
+              "number_eval",
+              "execute"
+            ],
+            "math",
+            {
+              "Flow:uses:": [
+                "decrease",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "address"
+                    ]
+                  },
+                  {
+                    "--": "if not specified, decrements by 1.",
+                    "Term:name:type:optional:": [
+                      "by",
+                      "value",
+                      "number_eval",
+                      true
                     ]
                   }
                 ]
@@ -1413,12 +1498,12 @@
         {
           "--": "Add two numbers.",
           "Spec:slots:groups:with flow:": [
-            "sum_of",
+            "add_value",
             "number_eval",
             "math",
             {
               "Flow:uses:": [
-                "inc",
+                "add",
                 [
                   {
                     "Term:name:type:": [
@@ -1428,11 +1513,10 @@
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "by",
+                    "Term:name:type:": [
+                      "value",
                       "b",
-                      "number_eval",
-                      true
+                      "number_eval"
                     ]
                   }
                 ]

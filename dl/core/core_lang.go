@@ -10,6 +10,221 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// AbsValue
+type AbsValue struct {
+	Value  rt.NumberEval `if:"label=value"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumberEval = (*AbsValue)(nil)
+
+func (*AbsValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AbsValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "absolute",
+	}
+}
+
+const AbsValue_Type = "abs_value"
+const AbsValue_Field_Value = "$VALUE"
+
+func (op *AbsValue) Marshal(m jsn.Marshaler) error {
+	return AbsValue_Marshal(m, op)
+}
+
+type AbsValue_Slice []AbsValue
+
+func (op *AbsValue_Slice) GetType() string { return AbsValue_Type }
+
+func (op *AbsValue_Slice) Marshal(m jsn.Marshaler) error {
+	return AbsValue_Repeats_Marshal(m, (*[]AbsValue)(op))
+}
+
+func (op *AbsValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *AbsValue_Slice) SetSize(cnt int) {
+	var els []AbsValue
+	if cnt >= 0 {
+		els = make(AbsValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *AbsValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return AbsValue_Marshal(m, &(*op)[i])
+}
+
+func AbsValue_Repeats_Marshal(m jsn.Marshaler, vals *[]AbsValue) error {
+	return jsn.RepeatBlock(m, (*AbsValue_Slice)(vals))
+}
+
+func AbsValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AbsValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = AbsValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type AbsValue_Flow struct{ ptr *AbsValue }
+
+func (n AbsValue_Flow) GetType() string      { return AbsValue_Type }
+func (n AbsValue_Flow) GetLede() string      { return "absolute" }
+func (n AbsValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n AbsValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AbsValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func AbsValue_Optional_Marshal(m jsn.Marshaler, pv **AbsValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = AbsValue_Marshal(m, *pv)
+	} else if !enc {
+		var v AbsValue
+		if err = AbsValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func AbsValue_Marshal(m jsn.Marshaler, val *AbsValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(AbsValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("value", AbsValue_Field_Value)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.Value)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", AbsValue_Field_Value))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// AddValue Add two numbers.
+type AddValue struct {
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=value"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumberEval = (*AddValue)(nil)
+
+func (*AddValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AddValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "add",
+	}
+}
+
+const AddValue_Type = "add_value"
+const AddValue_Field_A = "$A"
+const AddValue_Field_B = "$B"
+
+func (op *AddValue) Marshal(m jsn.Marshaler) error {
+	return AddValue_Marshal(m, op)
+}
+
+type AddValue_Slice []AddValue
+
+func (op *AddValue_Slice) GetType() string { return AddValue_Type }
+
+func (op *AddValue_Slice) Marshal(m jsn.Marshaler) error {
+	return AddValue_Repeats_Marshal(m, (*[]AddValue)(op))
+}
+
+func (op *AddValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *AddValue_Slice) SetSize(cnt int) {
+	var els []AddValue
+	if cnt >= 0 {
+		els = make(AddValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *AddValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return AddValue_Marshal(m, &(*op)[i])
+}
+
+func AddValue_Repeats_Marshal(m jsn.Marshaler, vals *[]AddValue) error {
+	return jsn.RepeatBlock(m, (*AddValue_Slice)(vals))
+}
+
+func AddValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AddValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = AddValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type AddValue_Flow struct{ ptr *AddValue }
+
+func (n AddValue_Flow) GetType() string      { return AddValue_Type }
+func (n AddValue_Flow) GetLede() string      { return "add" }
+func (n AddValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n AddValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AddValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func AddValue_Optional_Marshal(m jsn.Marshaler, pv **AddValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = AddValue_Marshal(m, *pv)
+	} else if !enc {
+		var v AddValue
+		if err = AddValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func AddValue_Marshal(m jsn.Marshaler, val *AddValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(AddValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", AddValue_Field_A)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.A)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", AddValue_Field_A))
+		}
+		e1 := m.MarshalKey("value", AddValue_Field_B)
+		if e1 == nil {
+			e1 = rt.NumberEval_Marshal(m, &val.B)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", AddValue_Field_B))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // AllTrue Returns true if all of the evaluations are true.
 type AllTrue struct {
 	Test   []rt.BoolEval `if:"label=_"`
@@ -2342,41 +2557,42 @@ func Continue_Marshal(m jsn.Marshaler, val *Continue) (err error) {
 	return
 }
 
-// DiffOf Subtract two numbers.
-type DiffOf struct {
-	A      rt.NumberEval `if:"label=_"`
-	B      rt.NumberEval `if:"label=by,optional"`
+// Decrement Decrease a number, and return the new value of the number.
+type Decrement struct {
+	Target assign.Address `if:"label=_"`
+	Value  rt.NumberEval  `if:"label=by,optional"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.NumberEval = (*DiffOf)(nil)
+var _ rt.NumberEval = (*Decrement)(nil)
+var _ rt.Execute = (*Decrement)(nil)
 
-func (*DiffOf) Compose() composer.Spec {
+func (*Decrement) Compose() composer.Spec {
 	return composer.Spec{
-		Name: DiffOf_Type,
+		Name: Decrement_Type,
 		Uses: composer.Type_Flow,
-		Lede: "dec",
+		Lede: "decrease",
 	}
 }
 
-const DiffOf_Type = "diff_of"
-const DiffOf_Field_A = "$A"
-const DiffOf_Field_B = "$B"
+const Decrement_Type = "decrement"
+const Decrement_Field_Target = "$TARGET"
+const Decrement_Field_Value = "$VALUE"
 
-func (op *DiffOf) Marshal(m jsn.Marshaler) error {
-	return DiffOf_Marshal(m, op)
+func (op *Decrement) Marshal(m jsn.Marshaler) error {
+	return Decrement_Marshal(m, op)
 }
 
-type DiffOf_Slice []DiffOf
+type Decrement_Slice []Decrement
 
-func (op *DiffOf_Slice) GetType() string { return DiffOf_Type }
+func (op *Decrement_Slice) GetType() string { return Decrement_Type }
 
-func (op *DiffOf_Slice) Marshal(m jsn.Marshaler) error {
-	return DiffOf_Repeats_Marshal(m, (*[]DiffOf)(op))
+func (op *Decrement_Slice) Marshal(m jsn.Marshaler) error {
+	return Decrement_Repeats_Marshal(m, (*[]Decrement)(op))
 }
 
-func (op *DiffOf_Slice) GetSize() (ret int) {
+func (op *Decrement_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -2385,69 +2601,181 @@ func (op *DiffOf_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *DiffOf_Slice) SetSize(cnt int) {
-	var els []DiffOf
+func (op *Decrement_Slice) SetSize(cnt int) {
+	var els []Decrement
 	if cnt >= 0 {
-		els = make(DiffOf_Slice, cnt)
+		els = make(Decrement_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *DiffOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return DiffOf_Marshal(m, &(*op)[i])
+func (op *Decrement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Decrement_Marshal(m, &(*op)[i])
 }
 
-func DiffOf_Repeats_Marshal(m jsn.Marshaler, vals *[]DiffOf) error {
-	return jsn.RepeatBlock(m, (*DiffOf_Slice)(vals))
+func Decrement_Repeats_Marshal(m jsn.Marshaler, vals *[]Decrement) error {
+	return jsn.RepeatBlock(m, (*Decrement_Slice)(vals))
 }
 
-func DiffOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DiffOf) (err error) {
+func Decrement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Decrement) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = DiffOf_Repeats_Marshal(m, pv)
+		err = Decrement_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type DiffOf_Flow struct{ ptr *DiffOf }
+type Decrement_Flow struct{ ptr *Decrement }
 
-func (n DiffOf_Flow) GetType() string      { return DiffOf_Type }
-func (n DiffOf_Flow) GetLede() string      { return "dec" }
-func (n DiffOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n DiffOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*DiffOf); ok {
+func (n Decrement_Flow) GetType() string      { return Decrement_Type }
+func (n Decrement_Flow) GetLede() string      { return "decrease" }
+func (n Decrement_Flow) GetFlow() interface{} { return n.ptr }
+func (n Decrement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Decrement); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func DiffOf_Optional_Marshal(m jsn.Marshaler, pv **DiffOf) (err error) {
+func Decrement_Optional_Marshal(m jsn.Marshaler, pv **Decrement) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = DiffOf_Marshal(m, *pv)
+		err = Decrement_Marshal(m, *pv)
 	} else if !enc {
-		var v DiffOf
-		if err = DiffOf_Marshal(m, &v); err == nil {
+		var v Decrement
+		if err = Decrement_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func DiffOf_Marshal(m jsn.Marshaler, val *DiffOf) (err error) {
+func Decrement_Marshal(m jsn.Marshaler, val *Decrement) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(DiffOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", DiffOf_Field_A)
+	if err = m.MarshalBlock(Decrement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Decrement_Field_Target)
+		if e0 == nil {
+			e0 = assign.Address_Marshal(m, &val.Target)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Decrement_Field_Target))
+		}
+		e1 := m.MarshalKey("by", Decrement_Field_Value)
+		if e1 == nil {
+			e1 = rt.NumberEval_Optional_Marshal(m, &val.Value)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Decrement_Field_Value))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DivideValue Divide one number by another.
+type DivideValue struct {
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=value"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumberEval = (*DivideValue)(nil)
+
+func (*DivideValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DivideValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "divide",
+	}
+}
+
+const DivideValue_Type = "divide_value"
+const DivideValue_Field_A = "$A"
+const DivideValue_Field_B = "$B"
+
+func (op *DivideValue) Marshal(m jsn.Marshaler) error {
+	return DivideValue_Marshal(m, op)
+}
+
+type DivideValue_Slice []DivideValue
+
+func (op *DivideValue_Slice) GetType() string { return DivideValue_Type }
+
+func (op *DivideValue_Slice) Marshal(m jsn.Marshaler) error {
+	return DivideValue_Repeats_Marshal(m, (*[]DivideValue)(op))
+}
+
+func (op *DivideValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DivideValue_Slice) SetSize(cnt int) {
+	var els []DivideValue
+	if cnt >= 0 {
+		els = make(DivideValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DivideValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DivideValue_Marshal(m, &(*op)[i])
+}
+
+func DivideValue_Repeats_Marshal(m jsn.Marshaler, vals *[]DivideValue) error {
+	return jsn.RepeatBlock(m, (*DivideValue_Slice)(vals))
+}
+
+func DivideValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DivideValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DivideValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DivideValue_Flow struct{ ptr *DivideValue }
+
+func (n DivideValue_Flow) GetType() string      { return DivideValue_Type }
+func (n DivideValue_Flow) GetLede() string      { return "divide" }
+func (n DivideValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n DivideValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DivideValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DivideValue_Optional_Marshal(m jsn.Marshaler, pv **DivideValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DivideValue_Marshal(m, *pv)
+	} else if !enc {
+		var v DivideValue
+		if err = DivideValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DivideValue_Marshal(m jsn.Marshaler, val *DivideValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DivideValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", DivideValue_Field_A)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.A)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", DiffOf_Field_A))
+			m.Error(errutil.New(e0, "in flow at", DivideValue_Field_A))
 		}
-		e1 := m.MarshalKey("by", DiffOf_Field_B)
+		e1 := m.MarshalKey("value", DivideValue_Field_B)
 		if e1 == nil {
-			e1 = rt.NumberEval_Optional_Marshal(m, &val.B)
+			e1 = rt.NumberEval_Marshal(m, &val.B)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DiffOf_Field_B))
+			m.Error(errutil.New(e1, "in flow at", DivideValue_Field_B))
 		}
 		m.EndBlock()
 	}
@@ -2970,6 +3298,119 @@ func Includes_Marshal(m jsn.Marshaler, val *Includes) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Includes_Field_Part))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// Increment Increase a number, and return the new value of the number.
+type Increment struct {
+	Target assign.Address `if:"label=_"`
+	Value  rt.NumberEval  `if:"label=by,optional"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumberEval = (*Increment)(nil)
+var _ rt.Execute = (*Increment)(nil)
+
+func (*Increment) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Increment_Type,
+		Uses: composer.Type_Flow,
+		Lede: "increase",
+	}
+}
+
+const Increment_Type = "increment"
+const Increment_Field_Target = "$TARGET"
+const Increment_Field_Value = "$VALUE"
+
+func (op *Increment) Marshal(m jsn.Marshaler) error {
+	return Increment_Marshal(m, op)
+}
+
+type Increment_Slice []Increment
+
+func (op *Increment_Slice) GetType() string { return Increment_Type }
+
+func (op *Increment_Slice) Marshal(m jsn.Marshaler) error {
+	return Increment_Repeats_Marshal(m, (*[]Increment)(op))
+}
+
+func (op *Increment_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Increment_Slice) SetSize(cnt int) {
+	var els []Increment
+	if cnt >= 0 {
+		els = make(Increment_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Increment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Increment_Marshal(m, &(*op)[i])
+}
+
+func Increment_Repeats_Marshal(m jsn.Marshaler, vals *[]Increment) error {
+	return jsn.RepeatBlock(m, (*Increment_Slice)(vals))
+}
+
+func Increment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Increment) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Increment_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Increment_Flow struct{ ptr *Increment }
+
+func (n Increment_Flow) GetType() string      { return Increment_Type }
+func (n Increment_Flow) GetLede() string      { return "increase" }
+func (n Increment_Flow) GetFlow() interface{} { return n.ptr }
+func (n Increment_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Increment); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Increment_Optional_Marshal(m jsn.Marshaler, pv **Increment) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Increment_Marshal(m, *pv)
+	} else if !enc {
+		var v Increment
+		if err = Increment_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Increment_Marshal(m jsn.Marshaler, val *Increment) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Increment_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Increment_Field_Target)
+		if e0 == nil {
+			e0 = assign.Address_Marshal(m, &val.Target)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Increment_Field_Target))
+		}
+		e1 := m.MarshalKey("by", Increment_Field_Value)
+		if e1 == nil {
+			e1 = rt.NumberEval_Optional_Marshal(m, &val.Value)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Increment_Field_Value))
 		}
 		m.EndBlock()
 	}
@@ -4263,6 +4704,230 @@ func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
 	return
 }
 
+// ModValue Divide one number by another, and return the remainder.
+type ModValue struct {
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=value"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumberEval = (*ModValue)(nil)
+
+func (*ModValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ModValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "mod",
+	}
+}
+
+const ModValue_Type = "mod_value"
+const ModValue_Field_A = "$A"
+const ModValue_Field_B = "$B"
+
+func (op *ModValue) Marshal(m jsn.Marshaler) error {
+	return ModValue_Marshal(m, op)
+}
+
+type ModValue_Slice []ModValue
+
+func (op *ModValue_Slice) GetType() string { return ModValue_Type }
+
+func (op *ModValue_Slice) Marshal(m jsn.Marshaler) error {
+	return ModValue_Repeats_Marshal(m, (*[]ModValue)(op))
+}
+
+func (op *ModValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ModValue_Slice) SetSize(cnt int) {
+	var els []ModValue
+	if cnt >= 0 {
+		els = make(ModValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ModValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ModValue_Marshal(m, &(*op)[i])
+}
+
+func ModValue_Repeats_Marshal(m jsn.Marshaler, vals *[]ModValue) error {
+	return jsn.RepeatBlock(m, (*ModValue_Slice)(vals))
+}
+
+func ModValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ModValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ModValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ModValue_Flow struct{ ptr *ModValue }
+
+func (n ModValue_Flow) GetType() string      { return ModValue_Type }
+func (n ModValue_Flow) GetLede() string      { return "mod" }
+func (n ModValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n ModValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ModValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ModValue_Optional_Marshal(m jsn.Marshaler, pv **ModValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ModValue_Marshal(m, *pv)
+	} else if !enc {
+		var v ModValue
+		if err = ModValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ModValue_Marshal(m jsn.Marshaler, val *ModValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ModValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ModValue_Field_A)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.A)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ModValue_Field_A))
+		}
+		e1 := m.MarshalKey("value", ModValue_Field_B)
+		if e1 == nil {
+			e1 = rt.NumberEval_Marshal(m, &val.B)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ModValue_Field_B))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// MultiplyValue Multiply two numbers.
+type MultiplyValue struct {
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=value"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumberEval = (*MultiplyValue)(nil)
+
+func (*MultiplyValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: MultiplyValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "multiply",
+	}
+}
+
+const MultiplyValue_Type = "multiply_value"
+const MultiplyValue_Field_A = "$A"
+const MultiplyValue_Field_B = "$B"
+
+func (op *MultiplyValue) Marshal(m jsn.Marshaler) error {
+	return MultiplyValue_Marshal(m, op)
+}
+
+type MultiplyValue_Slice []MultiplyValue
+
+func (op *MultiplyValue_Slice) GetType() string { return MultiplyValue_Type }
+
+func (op *MultiplyValue_Slice) Marshal(m jsn.Marshaler) error {
+	return MultiplyValue_Repeats_Marshal(m, (*[]MultiplyValue)(op))
+}
+
+func (op *MultiplyValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *MultiplyValue_Slice) SetSize(cnt int) {
+	var els []MultiplyValue
+	if cnt >= 0 {
+		els = make(MultiplyValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *MultiplyValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return MultiplyValue_Marshal(m, &(*op)[i])
+}
+
+func MultiplyValue_Repeats_Marshal(m jsn.Marshaler, vals *[]MultiplyValue) error {
+	return jsn.RepeatBlock(m, (*MultiplyValue_Slice)(vals))
+}
+
+func MultiplyValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MultiplyValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = MultiplyValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type MultiplyValue_Flow struct{ ptr *MultiplyValue }
+
+func (n MultiplyValue_Flow) GetType() string      { return MultiplyValue_Type }
+func (n MultiplyValue_Flow) GetLede() string      { return "multiply" }
+func (n MultiplyValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n MultiplyValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*MultiplyValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func MultiplyValue_Optional_Marshal(m jsn.Marshaler, pv **MultiplyValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = MultiplyValue_Marshal(m, *pv)
+	} else if !enc {
+		var v MultiplyValue
+		if err = MultiplyValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func MultiplyValue_Marshal(m jsn.Marshaler, val *MultiplyValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(MultiplyValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", MultiplyValue_Field_A)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.A)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", MultiplyValue_Field_A))
+		}
+		e1 := m.MarshalKey("value", MultiplyValue_Field_B)
+		if e1 == nil {
+			e1 = rt.NumberEval_Marshal(m, &val.B)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", MultiplyValue_Field_B))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // NameOf Full name of the object.
 type NameOf struct {
 	Object rt.TextEval `if:"label=_"`
@@ -5169,342 +5834,6 @@ func PrintText_Marshal(m jsn.Marshaler, val *PrintText) (err error) {
 	return
 }
 
-// ProductOf Multiply two numbers.
-type ProductOf struct {
-	A      rt.NumberEval `if:"label=_"`
-	B      rt.NumberEval `if:"label=by"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.NumberEval = (*ProductOf)(nil)
-
-func (*ProductOf) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ProductOf_Type,
-		Uses: composer.Type_Flow,
-		Lede: "mul",
-	}
-}
-
-const ProductOf_Type = "product_of"
-const ProductOf_Field_A = "$A"
-const ProductOf_Field_B = "$B"
-
-func (op *ProductOf) Marshal(m jsn.Marshaler) error {
-	return ProductOf_Marshal(m, op)
-}
-
-type ProductOf_Slice []ProductOf
-
-func (op *ProductOf_Slice) GetType() string { return ProductOf_Type }
-
-func (op *ProductOf_Slice) Marshal(m jsn.Marshaler) error {
-	return ProductOf_Repeats_Marshal(m, (*[]ProductOf)(op))
-}
-
-func (op *ProductOf_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ProductOf_Slice) SetSize(cnt int) {
-	var els []ProductOf
-	if cnt >= 0 {
-		els = make(ProductOf_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ProductOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ProductOf_Marshal(m, &(*op)[i])
-}
-
-func ProductOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ProductOf) error {
-	return jsn.RepeatBlock(m, (*ProductOf_Slice)(vals))
-}
-
-func ProductOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ProductOf) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ProductOf_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ProductOf_Flow struct{ ptr *ProductOf }
-
-func (n ProductOf_Flow) GetType() string      { return ProductOf_Type }
-func (n ProductOf_Flow) GetLede() string      { return "mul" }
-func (n ProductOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n ProductOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ProductOf); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ProductOf_Optional_Marshal(m jsn.Marshaler, pv **ProductOf) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ProductOf_Marshal(m, *pv)
-	} else if !enc {
-		var v ProductOf
-		if err = ProductOf_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ProductOf_Marshal(m jsn.Marshaler, val *ProductOf) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ProductOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ProductOf_Field_A)
-		if e0 == nil {
-			e0 = rt.NumberEval_Marshal(m, &val.A)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ProductOf_Field_A))
-		}
-		e1 := m.MarshalKey("by", ProductOf_Field_B)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.B)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ProductOf_Field_B))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// QuotientOf Divide one number by another.
-type QuotientOf struct {
-	A      rt.NumberEval `if:"label=_"`
-	B      rt.NumberEval `if:"label=by"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.NumberEval = (*QuotientOf)(nil)
-
-func (*QuotientOf) Compose() composer.Spec {
-	return composer.Spec{
-		Name: QuotientOf_Type,
-		Uses: composer.Type_Flow,
-		Lede: "div",
-	}
-}
-
-const QuotientOf_Type = "quotient_of"
-const QuotientOf_Field_A = "$A"
-const QuotientOf_Field_B = "$B"
-
-func (op *QuotientOf) Marshal(m jsn.Marshaler) error {
-	return QuotientOf_Marshal(m, op)
-}
-
-type QuotientOf_Slice []QuotientOf
-
-func (op *QuotientOf_Slice) GetType() string { return QuotientOf_Type }
-
-func (op *QuotientOf_Slice) Marshal(m jsn.Marshaler) error {
-	return QuotientOf_Repeats_Marshal(m, (*[]QuotientOf)(op))
-}
-
-func (op *QuotientOf_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *QuotientOf_Slice) SetSize(cnt int) {
-	var els []QuotientOf
-	if cnt >= 0 {
-		els = make(QuotientOf_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *QuotientOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return QuotientOf_Marshal(m, &(*op)[i])
-}
-
-func QuotientOf_Repeats_Marshal(m jsn.Marshaler, vals *[]QuotientOf) error {
-	return jsn.RepeatBlock(m, (*QuotientOf_Slice)(vals))
-}
-
-func QuotientOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]QuotientOf) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = QuotientOf_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type QuotientOf_Flow struct{ ptr *QuotientOf }
-
-func (n QuotientOf_Flow) GetType() string      { return QuotientOf_Type }
-func (n QuotientOf_Flow) GetLede() string      { return "div" }
-func (n QuotientOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n QuotientOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*QuotientOf); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func QuotientOf_Optional_Marshal(m jsn.Marshaler, pv **QuotientOf) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = QuotientOf_Marshal(m, *pv)
-	} else if !enc {
-		var v QuotientOf
-		if err = QuotientOf_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func QuotientOf_Marshal(m jsn.Marshaler, val *QuotientOf) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(QuotientOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", QuotientOf_Field_A)
-		if e0 == nil {
-			e0 = rt.NumberEval_Marshal(m, &val.A)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", QuotientOf_Field_A))
-		}
-		e1 := m.MarshalKey("by", QuotientOf_Field_B)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.B)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", QuotientOf_Field_B))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// RemainderOf Divide one number by another, and return the remainder.
-type RemainderOf struct {
-	A      rt.NumberEval `if:"label=_"`
-	B      rt.NumberEval `if:"label=by"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.NumberEval = (*RemainderOf)(nil)
-
-func (*RemainderOf) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RemainderOf_Type,
-		Uses: composer.Type_Flow,
-		Lede: "mod",
-	}
-}
-
-const RemainderOf_Type = "remainder_of"
-const RemainderOf_Field_A = "$A"
-const RemainderOf_Field_B = "$B"
-
-func (op *RemainderOf) Marshal(m jsn.Marshaler) error {
-	return RemainderOf_Marshal(m, op)
-}
-
-type RemainderOf_Slice []RemainderOf
-
-func (op *RemainderOf_Slice) GetType() string { return RemainderOf_Type }
-
-func (op *RemainderOf_Slice) Marshal(m jsn.Marshaler) error {
-	return RemainderOf_Repeats_Marshal(m, (*[]RemainderOf)(op))
-}
-
-func (op *RemainderOf_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RemainderOf_Slice) SetSize(cnt int) {
-	var els []RemainderOf
-	if cnt >= 0 {
-		els = make(RemainderOf_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RemainderOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RemainderOf_Marshal(m, &(*op)[i])
-}
-
-func RemainderOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RemainderOf) error {
-	return jsn.RepeatBlock(m, (*RemainderOf_Slice)(vals))
-}
-
-func RemainderOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RemainderOf) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RemainderOf_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type RemainderOf_Flow struct{ ptr *RemainderOf }
-
-func (n RemainderOf_Flow) GetType() string      { return RemainderOf_Type }
-func (n RemainderOf_Flow) GetLede() string      { return "mod" }
-func (n RemainderOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n RemainderOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RemainderOf); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RemainderOf_Optional_Marshal(m jsn.Marshaler, pv **RemainderOf) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RemainderOf_Marshal(m, *pv)
-	} else if !enc {
-		var v RemainderOf
-		if err = RemainderOf_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RemainderOf_Marshal(m jsn.Marshaler, val *RemainderOf) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(RemainderOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RemainderOf_Field_A)
-		if e0 == nil {
-			e0 = rt.NumberEval_Marshal(m, &val.A)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RemainderOf_Field_A))
-		}
-		e1 := m.MarshalKey("by", RemainderOf_Field_B)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.B)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RemainderOf_Field_B))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Row Group text into a single line <li> as part of a list of lines.
 // See also: 'rows'.
 type Row struct {
@@ -6113,41 +6442,41 @@ func SpanText_Marshal(m jsn.Marshaler, val *SpanText) (err error) {
 	return
 }
 
-// SumOf Add two numbers.
-type SumOf struct {
+// SubtractValue Subtract two numbers.
+type SubtractValue struct {
 	A      rt.NumberEval `if:"label=_"`
-	B      rt.NumberEval `if:"label=by,optional"`
+	B      rt.NumberEval `if:"label=value"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.NumberEval = (*SumOf)(nil)
+var _ rt.NumberEval = (*SubtractValue)(nil)
 
-func (*SumOf) Compose() composer.Spec {
+func (*SubtractValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: SumOf_Type,
+		Name: SubtractValue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "inc",
+		Lede: "subtract",
 	}
 }
 
-const SumOf_Type = "sum_of"
-const SumOf_Field_A = "$A"
-const SumOf_Field_B = "$B"
+const SubtractValue_Type = "subtract_value"
+const SubtractValue_Field_A = "$A"
+const SubtractValue_Field_B = "$B"
 
-func (op *SumOf) Marshal(m jsn.Marshaler) error {
-	return SumOf_Marshal(m, op)
+func (op *SubtractValue) Marshal(m jsn.Marshaler) error {
+	return SubtractValue_Marshal(m, op)
 }
 
-type SumOf_Slice []SumOf
+type SubtractValue_Slice []SubtractValue
 
-func (op *SumOf_Slice) GetType() string { return SumOf_Type }
+func (op *SubtractValue_Slice) GetType() string { return SubtractValue_Type }
 
-func (op *SumOf_Slice) Marshal(m jsn.Marshaler) error {
-	return SumOf_Repeats_Marshal(m, (*[]SumOf)(op))
+func (op *SubtractValue_Slice) Marshal(m jsn.Marshaler) error {
+	return SubtractValue_Repeats_Marshal(m, (*[]SubtractValue)(op))
 }
 
-func (op *SumOf_Slice) GetSize() (ret int) {
+func (op *SubtractValue_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -6156,69 +6485,69 @@ func (op *SumOf_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *SumOf_Slice) SetSize(cnt int) {
-	var els []SumOf
+func (op *SubtractValue_Slice) SetSize(cnt int) {
+	var els []SubtractValue
 	if cnt >= 0 {
-		els = make(SumOf_Slice, cnt)
+		els = make(SubtractValue_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *SumOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SumOf_Marshal(m, &(*op)[i])
+func (op *SubtractValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return SubtractValue_Marshal(m, &(*op)[i])
 }
 
-func SumOf_Repeats_Marshal(m jsn.Marshaler, vals *[]SumOf) error {
-	return jsn.RepeatBlock(m, (*SumOf_Slice)(vals))
+func SubtractValue_Repeats_Marshal(m jsn.Marshaler, vals *[]SubtractValue) error {
+	return jsn.RepeatBlock(m, (*SubtractValue_Slice)(vals))
 }
 
-func SumOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SumOf) (err error) {
+func SubtractValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SubtractValue) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SumOf_Repeats_Marshal(m, pv)
+		err = SubtractValue_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type SumOf_Flow struct{ ptr *SumOf }
+type SubtractValue_Flow struct{ ptr *SubtractValue }
 
-func (n SumOf_Flow) GetType() string      { return SumOf_Type }
-func (n SumOf_Flow) GetLede() string      { return "inc" }
-func (n SumOf_Flow) GetFlow() interface{} { return n.ptr }
-func (n SumOf_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SumOf); ok {
+func (n SubtractValue_Flow) GetType() string      { return SubtractValue_Type }
+func (n SubtractValue_Flow) GetLede() string      { return "subtract" }
+func (n SubtractValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n SubtractValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*SubtractValue); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func SumOf_Optional_Marshal(m jsn.Marshaler, pv **SumOf) (err error) {
+func SubtractValue_Optional_Marshal(m jsn.Marshaler, pv **SubtractValue) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SumOf_Marshal(m, *pv)
+		err = SubtractValue_Marshal(m, *pv)
 	} else if !enc {
-		var v SumOf
-		if err = SumOf_Marshal(m, &v); err == nil {
+		var v SubtractValue
+		if err = SubtractValue_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func SumOf_Marshal(m jsn.Marshaler, val *SumOf) (err error) {
+func SubtractValue_Marshal(m jsn.Marshaler, val *SubtractValue) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SumOf_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SumOf_Field_A)
+	if err = m.MarshalBlock(SubtractValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", SubtractValue_Field_A)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.A)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SumOf_Field_A))
+			m.Error(errutil.New(e0, "in flow at", SubtractValue_Field_A))
 		}
-		e1 := m.MarshalKey("by", SumOf_Field_B)
+		e1 := m.MarshalKey("value", SubtractValue_Field_B)
 		if e1 == nil {
-			e1 = rt.NumberEval_Optional_Marshal(m, &val.B)
+			e1 = rt.NumberEval_Marshal(m, &val.B)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", SumOf_Field_B))
+			m.Error(errutil.New(e1, "in flow at", SubtractValue_Field_B))
 		}
 		m.EndBlock()
 	}
@@ -6694,6 +7023,8 @@ var Slots = []interface{}{
 }
 
 var Slats = []composer.Composer{
+	(*AbsValue)(nil),
+	(*AddValue)(nil),
 	(*AllTrue)(nil),
 	(*Always)(nil),
 	(*AnyTrue)(nil),
@@ -6715,12 +7046,14 @@ var Slats = []composer.Composer{
 	(*CompareText)(nil),
 	(*Comparison)(nil),
 	(*Continue)(nil),
-	(*DiffOf)(nil),
+	(*Decrement)(nil),
+	(*DivideValue)(nil),
 	(*During)(nil),
 	(*FieldsOfKind)(nil),
 	(*HasDominion)(nil),
 	(*IdOf)(nil),
 	(*Includes)(nil),
+	(*Increment)(nil),
 	(*IsEmpty)(nil),
 	(*IsExactKindOf)(nil),
 	(*IsKindOf)(nil),
@@ -6733,6 +7066,8 @@ var Slats = []composer.Composer{
 	(*MakeTitleCase)(nil),
 	(*MakeUppercase)(nil),
 	(*Matches)(nil),
+	(*ModValue)(nil),
+	(*MultiplyValue)(nil),
 	(*NameOf)(nil),
 	(*Never)(nil),
 	(*Newline)(nil),
@@ -6742,16 +7077,13 @@ var Slats = []composer.Composer{
 	(*PrintNum)(nil),
 	(*PrintNumWord)(nil),
 	(*PrintText)(nil),
-	(*ProductOf)(nil),
-	(*QuotientOf)(nil),
-	(*RemainderOf)(nil),
 	(*Row)(nil),
 	(*Rows)(nil),
 	(*Singularize)(nil),
 	(*SlashText)(nil),
 	(*Softline)(nil),
 	(*SpanText)(nil),
-	(*SumOf)(nil),
+	(*SubtractValue)(nil),
 	(*TriggerCycle)(nil),
 	(*TriggerOnce)(nil),
 	(*TriggerSwitch)(nil),
@@ -6760,6 +7092,8 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
+	9652861807756732392:  (*AbsValue)(nil),          /* number_eval=Absolute value: */
+	6415467136316515808:  (*AddValue)(nil),          /* number_eval=Add:value: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */
 	8082607244820951444:  (*AllTrue)(nil),           /* bool_eval=AllTrue: */
 	1979437068831463006:  (*Always)(nil),            /* bool_eval=Always */
@@ -6777,9 +7111,11 @@ var Signatures = map[uint64]interface{}{
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
 	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */
 	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
-	3530384008651052276:  (*DiffOf)(nil),            /* number_eval=Dec: */
-	10788210406716082593: (*DiffOf)(nil),            /* number_eval=Dec:by: */
-	15996371593171599094: (*QuotientOf)(nil),        /* number_eval=Div:by: */
+	1765941604351725175:  (*Decrement)(nil),         /* execute=Decrease: */
+	16337634811621251476: (*Decrement)(nil),         /* number_eval=Decrease: */
+	906537561468635208:   (*Decrement)(nil),         /* execute=Decrease:by: */
+	7249930857706662977:  (*Decrement)(nil),         /* number_eval=Decrease:by: */
+	14212233424935015742: (*DivideValue)(nil),       /* number_eval=Divide:value: */
 	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
 	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
@@ -6795,8 +7131,10 @@ var Signatures = map[uint64]interface{}{
 	16551038912311542599: (*ChooseBranch)(nil),      /* execute=If:do: */
 	11846460753008131314: (*ChooseBranch)(nil),      /* brancher=If:do:else: */
 	9882017885672780228:  (*ChooseBranch)(nil),      /* execute=If:do:else: */
-	11335666314438122404: (*SumOf)(nil),             /* number_eval=Inc: */
-	425597877445155633:   (*SumOf)(nil),             /* number_eval=Inc:by: */
+	3419326304120453839:  (*Increment)(nil),         /* execute=Increase: */
+	5814330157137261092:  (*Increment)(nil),         /* number_eval=Increase: */
+	9916665856596995152:  (*Increment)(nil),         /* execute=Increase:by: */
+	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
 	17183768313478169229: (*ObjectExists)(nil),      /* bool_eval=Is valid: */
 	10106284345457008764: (*Join)(nil),              /* text_eval=Join parts: */
@@ -6809,8 +7147,8 @@ var Signatures = map[uint64]interface{}{
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
 	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */
-	3739424143354382333:  (*RemainderOf)(nil),       /* number_eval=Mod:by: */
-	4934610559616542639:  (*ProductOf)(nil),         /* number_eval=Mul:by: */
+	734548188050460137:   (*ModValue)(nil),          /* number_eval=Mod:value: */
+	17515508702665594117: (*MultiplyValue)(nil),     /* number_eval=Multiply:value: */
 	15519818243985955688: (*NameOf)(nil),            /* text_eval=NameOf: */
 	1310533520550597035:  (*Never)(nil),             /* bool_eval=Never */
 	3572677870333466638:  (*Not)(nil),               /* bool_eval=Not: */
@@ -6831,6 +7169,7 @@ var Signatures = map[uint64]interface{}{
 	13377280423859122588: (*SlashText)(nil),         /* text_eval=Slashes do: */
 	14637971099620461998: (*SpanText)(nil),          /* text_eval=Spaces do: */
 	10180508752412200934: (*CallTerminal)(nil),      /* text_eval=Stopping:over: */
+	6622046790206362641:  (*SubtractValue)(nil),     /* number_eval=Subtract:value: */
 	10878271994667616824: (*MakeTitleCase)(nil),     /* text_eval=Title: */
 	2711869841453509536:  (*CallTrigger)(nil),       /* bool_eval=Trigger:on:num: */
 	9953804072544503126:  (*ChooseText)(nil),        /* text_eval=Txt if:then: */

@@ -275,7 +275,7 @@
                   },
                   {
                     "FromNumber:": {
-                      "Inc:by:": [
+                      "Add:value:": [
                         1,
                         {
                           "Object:field:": [

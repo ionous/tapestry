@@ -54,9 +54,9 @@ func TestExpressions(t *testing.T) {
 	t.Run("math", func(t *testing.T) {
 		if e := testExpression(
 			"(5+6)*(1+2)",
-			&core.ProductOf{
-				A: &core.SumOf{A: F(5), B: F(6)},
-				B: &core.SumOf{A: F(1), B: F(2)},
+			&core.MultiplyValue{
+				A: &core.AddValue{A: F(5), B: F(6)},
+				B: &core.AddValue{A: F(1), B: F(2)},
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -101,7 +101,7 @@ func TestExpressions(t *testing.T) {
 	})
 	t.Run("binary", func(t *testing.T) {
 		if e := testExpression(".A.num * .b.num",
-			&core.ProductOf{
+			&core.MultiplyValue{
 				A: renderRef("A", "num"),
 				B: renderRef("b", "num"),
 			}); e != nil {

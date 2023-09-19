@@ -19,32 +19,32 @@ func TestMath(t *testing.T) {
 		return
 	}
 	t.Run("Add", func(t *testing.T) {
-		if e := match(11, &SumOf{A: I(1), B: I(10)}); e != nil {
+		if e := match(11, &AddValue{A: I(1), B: I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Sub", func(t *testing.T) {
-		if e := match(-9, &DiffOf{A: I(1), B: I(10)}); e != nil {
+		if e := match(-9, &SubtractValue{A: I(1), B: I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Mul", func(t *testing.T) {
-		if e := match(200, &ProductOf{A: I(20), B: I(10)}); e != nil {
+		if e := match(200, &MultiplyValue{A: I(20), B: I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Div", func(t *testing.T) {
-		if e := match(2, &QuotientOf{A: I(20), B: I(10)}); e != nil {
+		if e := match(2, &DivideValue{A: I(20), B: I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Div By Zero", func(t *testing.T) {
-		if e := match(0, &QuotientOf{A: I(20), B: I(0)}); e == nil {
+		if e := match(0, &DivideValue{A: I(20), B: I(0)}); e == nil {
 			t.Fatal("expected error")
 		}
 	})
 	t.Run("Mod", func(t *testing.T) {
-		if e := match(1, &RemainderOf{A: I(3), B: I(2)}); e != nil {
+		if e := match(1, &ModValue{A: I(3), B: I(2)}); e != nil {
 			t.Fatal(e)
 		}
 	})
