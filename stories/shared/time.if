@@ -1,6 +1,6 @@
 {
   "Tapestry:": [
-    {
+  	{
       "--": "run after every action to complete the turn.",
       "Define pattern:requires:provides:do:": [
         "pass time",
@@ -15,7 +15,8 @@
           "Nothing": true
         },
         {
-          "--": "no default rule"
+          "--": "no default rule",
+          "Continue": true
         }
       ]
     },

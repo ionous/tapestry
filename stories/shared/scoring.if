@@ -37,7 +37,66 @@
           },
           {
             "--": [
-              "blocks the no score rule from happening.",
+              "inform puts this last of all things using:",
+              "The notify score changes rule is listed last in the turn sequence rulebook."
+            ],
+            "Define rule:do:": [
+              "pass time, then continue",
+              {
+                "If:assuming:do:": [
+                  {
+                    "AllTrue:": [
+                      {
+                        "Object:field:": [
+                          "story",
+                          "score notification on"
+                        ]
+                      },
+                      {
+                        "Cmp:is:num:": [
+                          "@change",
+                          "other_than",
+                          0
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Arg:from:": [
+                      "change",
+                      {
+                        "FromNumber:": {
+                          "Subtract:value:": [
+                            {
+                              "Object:field:": [
+                                "story",
+                                "score"
+                              ]
+                            },
+                            {
+                              "Object:field:": [
+                                "last known",
+                                "score"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Say response:with:": [
+                      "notify score changed",
+                      "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} points."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "--": [
+              "blocks the default no score rule from happening.",
               "alt: could replace the default rule or response."
             ],
             "Define rule:do:": [
@@ -45,7 +104,122 @@
               {
                 "Say response:with:": [
                   "announce the score",
-                  "{if .story.playing}So far, {we!} have{else}In that game {we!}{end} scored {.story.score} out of a possible {.story.max_score} points, in {.story.turn_count} {if .story.turn_count > 1}turns{else}turn{end}."
+                  "{if .story.playing}So far {we!} have{else}In that game {we!}{end} scored {.story.score} {if .story.max_score}out of a possible {.story.max_score} {end}points, in {.story.turn_count} {if .story.turn_count > 1}turns{else}turn{end}."
+                ]
+              }
+            ]
+          },
+          {
+            "--": "An action to enable or disable printing changes to a player's score before the start of each new turn.",
+            "Define action:requires:": [
+              "requesting score notifications",
+              [
+                {
+                  "Text:kind:": [
+                    "actor",
+                    "actor"
+                  ]
+                },
+                {
+                  "Bool:": "notify"
+                }
+              ]
+            ]
+          },
+          {
+            "Define rule:named:do:": [
+              "requesting score notifications",
+              "the change score notification rule",
+              {
+                "If:do:else:": [
+                  "@notify",
+                  {
+                    "Set:trait:": [
+                      "story",
+                      "score notification on"
+                    ]
+                  },
+                  {
+                    "Finally do:": {
+                      "Set:trait:": [
+                        "story",
+                        "score notification off"
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Define rule:do:": [
+              "report requesting score notifications",
+              {
+                "Say response:with:": [
+                  "report score notification mode",
+                  "Score notification {if .story.score_notification_on}on{else}off{end}."
+                ]
+              }
+            ]
+          },
+          {
+            "Interpret:with:": [
+              "notify",
+              {
+                "One of:": [
+                  {
+                    "Sequence:": [
+                      {
+                        "One word:": "off"
+                      },
+                      {
+                        "Action:args:": [
+                          "requesting score notifications",
+                          {
+                            "Arg:from:": [
+                              "notify",
+                              {
+                                "FromBool:": false
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Sequence:": [
+                      {
+                        "One word:": "on"
+                      },
+                      {
+                        "Action:args:": [
+                          "requesting score notifications",
+                          {
+                            "Arg:from:": [
+                              "notify",
+                              {
+                                "FromBool:": true
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Action:args:": [
+                      "requesting score notifications",
+                      {
+                        "Arg:from:": [
+                          "notify",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 ]
               }
             ]
@@ -85,7 +259,7 @@
               }
             }
           },
-             {
+          {
             "Set:value:": [
               {
                 "Object:field:": [
@@ -94,7 +268,7 @@
                 ]
               },
               {
-              	"FromNumber:": 50
+                "FromNumber:": 50
               }
             ]
           },
@@ -107,7 +281,7 @@
                 ]
               },
               {
-              	"FromNumber:": 23
+                "FromNumber:": 23
               }
             ]
           },
@@ -115,7 +289,7 @@
             "Fabricate input:": "score"
           },
           {
-            "Expect output:": "So far, you have scored 23 out of a possible 50 points, in 1 turn."
+            "Expect output:": "So far you have scored 23 out of a possible 50 points, in 1 turn."
           }
         ]
       ]
@@ -141,7 +315,7 @@
                 ]
               },
               {
-              	"FromNumber:": 100
+                "FromNumber:": 100
               }
             ]
           },
@@ -154,7 +328,7 @@
                 ]
               },
               {
-              	"FromNumber:": 100
+                "FromNumber:": 100
               }
             ]
           },
@@ -167,7 +341,7 @@
                 ]
               },
               {
-              	"FromNumber:": 7
+                "FromNumber:": 7
               }
             ]
           },
@@ -176,6 +350,99 @@
           },
           {
             "Expect output:": "In that game you scored 100 out of a possible 100 points, in 7 turns."
+          }
+        ]
+      ]
+    },
+    {
+      "Test:dependsOn:withScene:do:": [
+        "score notification",
+        [
+          "scoring",
+          "kitchenette"
+        ],
+        [
+          {
+            "Declare:": "You are carrying the flashlight. The flashlight is unlit."
+          },
+          {
+            "Define rule:noun:do:": [
+              "after activating",
+              "flashlight",
+              {
+                "--": "set the score directly.",
+                "Set:value:": [
+                  {
+                    "Object:field:": [
+                      "story",
+                      "score"
+                    ]
+                  },
+                  {
+                    "FromNumber:": 50
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "after deactivating",
+              "flashlight",
+              {
+                "--": "or, change it by a relative number.",
+                "Decrease:by:": [
+                  {
+                    "Object:field:": [
+                      "story",
+                      "score"
+                    ]
+                  },
+                  5
+                ]
+              }
+            ]
+          }
+        ],
+        [
+        	{
+            "--": [
+              "fix: have to manually start the game for tests."
+            ],
+            "StartGame actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
+          },
+          {
+            "Fabricate input:": "switch on flashlight"
+          },
+          {
+            "Expect output:": [
+              "You switch on the flashlight.",
+              "Your score has just gone up by fifty points."
+            ]
+          },
+          {
+            "Fabricate input:": "switch off flashlight"
+          },
+          {
+            "Expect output:": [
+              "You switch off the flashlight.",
+              "Your score has just gone down by five points."
+            ]
+          },
+          {
+            "Fabricate input:": "score"
+          },
+          {
+            "Expect output:": [
+              "So far you have scored 45 points, in 3 turns."
+            ]
           }
         ]
       ]

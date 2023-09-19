@@ -60,36 +60,53 @@
       ]
     },
     {
+      "--": [
+        "this updates 'last known' so anything comparing",
+        "'story' and 'last known' has to happen in an earlier phase."
+      ],
       "Define rule:named:do:": [
-        "pass time, then continue",
-        "the update score rule",
-        {
-          "--": "copy all the values from the current story globals to the last known globals",
-          "Repeating across:as:do:": [
-            {
-              "FromTextList:": {
-                "Fields of:": "globals"
-              }
-            },
-            "field name",
-            {
-              "Copy:from:": [
-                {
-                  "Object:field:": [
-                    "last known",
-                    "@field name"
-                  ]
-                },
-                {
-                  "Object:field:": [
-                    "story",
-                    "@field name"
-                  ]
+        "after pass time",
+        "the update turn rule",
+        [
+          {
+            "--": [
+              "copy everything from the current story variables to the last known variables;",
+              "then, update the turn count."
+            ],
+            "Repeating across:as:do:": [
+              {
+                "FromTextList:": {
+                  "Fields of:": "globals"
                 }
+              },
+              "field name",
+              {
+                "Copy:from:": [
+                  {
+                    "Object:field:": [
+                      "last known",
+                      "@field name"
+                    ]
+                  },
+                  {
+                    "Object:field:": [
+                      "story",
+                      "@field name"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Increase:": {
+              "Object:field:": [
+                "story",
+                "turn count"
               ]
             }
-          ]
-        }
+          }
+        ]
       ]
     },
     {
