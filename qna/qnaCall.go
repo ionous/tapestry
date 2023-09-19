@@ -26,8 +26,9 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 		case pattern.Calls:
 			ret, err = run.call(pat, rec, aff)
 		case pattern.Sends:
-			// this search isnt great; especially since its looking for "noun" instead of "target"
-			// putting target first might be best -- but would need some rework of parser and of explicit calls
+			// fix: this search isnt great; especially since its looking for "noun" instead of "target"
+			// putting target first might be best, or renaming noun to target
+			// but would need some rework of parser and of any explicit calls to the action
 			var target int
 			if i := pat.FieldIndex("noun"); i >= 0 {
 				target = i

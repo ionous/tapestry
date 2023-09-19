@@ -9,6 +9,8 @@ import (
 // FillRecord fill the passed record with the arguments named by keys and values
 // keys are optional, but if they exist must match the order of fields in the record;
 // there doesnt have to be be a key for every field; they can be sparse.
+// if there are more values than keys, this assumes the first few values are indexed
+// ( keys are right justified )
 // returns the passed record if there's no error
 func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (ret *g.Record, err error) {
 	if nk, nv := len(keys), len(vals); nv < nk {

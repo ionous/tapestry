@@ -28,7 +28,7 @@ var AllSlats = [][]composer.Composer{
 	game.Slats,
 }
 
-var AllSignatures = []map[uint64]interface{}{
+var AllSignatures = []map[uint64]any{
 	assign.Signatures,
 	core.Signatures,
 	debug.Signatures,
