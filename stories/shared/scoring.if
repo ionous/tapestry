@@ -100,7 +100,7 @@
               "alt: could replace the default rule or response."
             ],
             "Define rule:do:": [
-              "requesting the score",
+              "request the score",
               {
                 "Say response:with:": [
                   "announce the score",
@@ -111,55 +111,41 @@
           },
           {
             "--": "An action to enable or disable printing changes to a player's score before the start of each new turn.",
-            "Define action:requires:": [
-              "requesting score notifications",
+            "Define pattern:requires:provides:do:": [
+              "request score notifications",
+              {
+                "Bool:": "notify"
+              },
+              {
+              	"Nothing": true
+              },
               [
                 {
-                  "Text:kind:": [
-                    "actor",
-                    "actor"
+                  "If:do:else:": [
+                    "@notify",
+                    {
+                      "Set:trait:": [
+                        "story",
+                        "score notification on"
+                      ]
+                    },
+                    {
+                      "Finally do:": {
+                        "Set:trait:": [
+                          "story",
+                          "score notification off"
+                        ]
+                      }
+                    }
                   ]
                 },
                 {
-                  "Bool:": "notify"
+                  "Say response:with:": [
+                    "report score notification mode",
+                    "Score notification {if .story.score_notification_on}on{else}off{end}."
+                  ]
                 }
               ]
-            ]
-          },
-          {
-            "Define rule:named:do:": [
-              "requesting score notifications",
-              "the change score notification rule",
-              {
-                "If:do:else:": [
-                  "@notify",
-                  {
-                    "Set:trait:": [
-                      "story",
-                      "score notification on"
-                    ]
-                  },
-                  {
-                    "Finally do:": {
-                      "Set:trait:": [
-                        "story",
-                        "score notification off"
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "Define rule:do:": [
-              "report requesting score notifications",
-              {
-                "Say response:with:": [
-                  "report score notification mode",
-                  "Score notification {if .story.score_notification_on}on{else}off{end}."
-                ]
-              }
             ]
           },
           {
@@ -174,7 +160,7 @@
                       },
                       {
                         "Action:args:": [
-                          "requesting score notifications",
+                          "request score notifications",
                           {
                             "Arg:from:": [
                               "notify",
@@ -194,7 +180,7 @@
                       },
                       {
                         "Action:args:": [
-                          "requesting score notifications",
+                          "request score notifications",
                           {
                             "Arg:from:": [
                               "notify",
@@ -209,7 +195,7 @@
                   },
                   {
                     "Action:args:": [
-                      "requesting score notifications",
+                      "request score notifications",
                       {
                         "Arg:from:": [
                           "notify",
@@ -405,7 +391,7 @@
           }
         ],
         [
-        	{
+          {
             "--": [
               "fix: have to manually start the game for tests."
             ],

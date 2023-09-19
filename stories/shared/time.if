@@ -1,6 +1,6 @@
 {
   "Tapestry:": [
-  	{
+    {
       "--": "run after every action to complete the turn.",
       "Define pattern:requires:provides:do:": [
         "pass time",
@@ -79,28 +79,16 @@
       ]
     },
     {
-      "Define action:requires:": [
-        "requesting to quit",
-        [
-          {
-            "--": [
-              "the player's actor.",
-              "required by all parser actions, even if it isn't needed here."
-            ],
-            "Text:kind:": [
-              "actor",
-              "actor"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "Define rule:named:do:": [
-        "requesting to quit",
-        "the game over rule",
+      "Define pattern:requires:provides:do:": [
+        "request to quit",
         {
-        	"QuitGame": true
+          "Nothing": true
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "QuitGame": true
         }
       ]
     }

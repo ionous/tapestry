@@ -122,25 +122,34 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 // future: to differentiate b/t system actions and "timed" actions,
 // consider using naming convention: ex. @save (mud style), or #save
 func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err error) {
-	// fix: raise a parsing event with the nouns and the action name
-	if focus := pt.survey.GetFocalObject(); focus == nil {
-		err = errutil.New("couldnt get focal object")
-	} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
-		err = e
-	} else {
-		// the actor ( and any nouns ) need to precede the "keyed" fields.
-		els := make([]g.Value, 1, 1+len(nouns)+len(vs))
-		els[0] = focus // presumably the player's actor
-		for _, n := range nouns {
-			els = append(els, g.StringOf(n))
-		}
-		els = append(els, vs...)
-		if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
+	if outOfWorld := strings.HasPrefix(act, "request "); outOfWorld {
+		if len(nouns) != 0 {
+			// fix: check at weave?
+			err = errutil.New("out of world actions don't expect any nouns")
+		} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
 			err = e
-		} else if !strings.HasPrefix(act, "requesting ") {
-			// meta actions are defined as those with start with the string "requesting ..."
-			if _, e := pt.Runtime.Call("pass time", affine.None, nil, els[:1]); e != nil {
+		} else {
+			_, err = pt.Runtime.Call(act, affine.None, ks, vs)
+		}
+	} else {
+		// fix: raise a parsing event with the nouns and the action name
+		if focus := pt.survey.GetFocalObject(); focus == nil {
+			err = errutil.New("couldnt get focal object")
+		} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
+			err = e
+		} else {
+			// the actor ( and any nouns ) need to precede the "keyed" fields.
+			els := make([]g.Value, 1, 1+len(nouns)+len(vs))
+			els[0] = focus // presumably the player's actor
+			for _, n := range nouns {
+				els = append(els, g.StringOf(n))
+			}
+			els = append(els, vs...)
+			if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
 				err = e
+			} else {
+				// meta actions are defined as those with start with the string "requesting ..."
+				_, err = pt.Runtime.Call("pass time", affine.None, nil, els[:1])
 			}
 		}
 	}
