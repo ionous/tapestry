@@ -1,7 +1,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -58,7 +57,7 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 }
 
 // post-processing hooks:
-// after the story has been read we run an encoder on it to visit every node.
+// after the story has been read we run an encoder to visit every node.
 func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
 	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
@@ -72,18 +71,20 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 				return
 			},
 		},
-		assign.CallPattern_Type: chart.KeyMap{
-			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
-				if flow, ok := b.(jsn.FlowBlock); !ok {
-					err = errutil.Fmt("trying to import something other than a flow")
-				} else if _, ok := flow.GetFlow().(*assign.CallPattern); !ok {
-					err = errutil.Fmt("trying to import something other unexpected")
-				} else {
-					// k.WriteEphemera(ImportCall(op))
-				}
-				return
-			},
-		},
+		// validate the pattern exists?
+		// assign.CallPattern_Type: chart.KeyMap{
+		// 	chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
+		// 		if flow, ok := b.(jsn.FlowBlock); !ok {
+		// 			err = errutil.Fmt("trying to import something other than a flow")
+		// 		} else if _, ok := flow.GetFlow().(*assign.CallPattern); !ok {
+		// 			err = errutil.Fmt("trying to import something other unexpected")
+		// 		} else {
+		// 			...
+		// 		}
+		// 		return
+		// 	},
+		// },
+		// validate the referenced action exists.
 		grammar.Action_Type: chart.KeyMap{
 			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
@@ -91,7 +92,7 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 				} else if op, ok := flow.GetFlow().(*grammar.Action); !ok {
 					err = errutil.Fmt("trying to import something other unexpected")
 				} else {
-					err = importAction(cat, op)
+					err = importActionRef(cat, op)
 				}
 				return
 			},

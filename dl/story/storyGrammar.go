@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -76,11 +75,18 @@ func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-// scheduled by importStory
-// verifies that a pattern exists for this action
-func importAction(cat *weave.Catalog, op *grammar.Action) error {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
-		act := lang.Normalize(op.Action) // todo: a simpler way of handling references
-		return w.Pin().ExtendPattern(mdl.NewPatternBuilder(act).Pattern)
-	})
+// scheduled by importStory: verifies a pattern exists for this action
+func importActionRef(cat *weave.Catalog, op *grammar.Action) error {
+	// fix: the post import doesn't keep track of domains
+	// everything gets referenced from "tapestry",
+	// and actions which are declared and referenced from other domains fail.
+	//
+	// return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	// 	act := lang.Normalize(op.Action) // todo: a simpler way of handling references
+	// 	if e := w.Pin().ExtendPattern(mdl.NewPatternBuilder(act).Pattern); e != nil {
+	// 		err = errutil.Fmt("%w while validating grammar", e)
+	// 	}
+	// 	return
+	// })
+	return nil
 }
