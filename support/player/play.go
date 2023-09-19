@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"database/sql"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -81,7 +82,7 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 					} else if len(testString) > 0 {
 						for _, cmd := range strings.Split(testString, ";") {
 							fmt.Println(prompt, cmd)
-							if !step(play, cmd, !jsonMode) {
+							if step(play, cmd, !jsonMode) {
 								// some sort of thing about ending early if so?
 								break
 							}
@@ -90,16 +91,15 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 						reader := bufio.NewReader(os.Stdin)
 						for {
 							if len(prompt) > 0 {
-								fmt.Printf(prompt)
+								fmt.Print(prompt)
 							}
 							if in, _ := reader.ReadString('\n'); len(in) <= 1 {
 								break
 							} else {
 								words := in[:len(in)-1] // strip the newline.
-								if !step(play, words, !jsonMode) {
+								if step(play, words, !jsonMode) {
 									break
 								}
-
 								if jsonMode {
 									// take buffered text and write it out
 									// fix? possibly splitting newlines into array entries?
@@ -124,21 +124,18 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 }
 
 func step(p *play.Playtime, s string, pad bool) (done bool) {
-	res, e := p.Step(s)
-	switch e := e.(type) {
-	case nil:
-		if res != nil && pad {
-			fmt.Println()
-		}
-	case game.Signal:
-		switch e {
+	var sig game.Signal
+	if res, e := p.Step(s); errors.As(e, &sig) {
+		switch sig {
 		case game.SignalQuit:
 			done = true
 		default:
-			log.Println("unhandled:", e)
+			log.Println("unhandled signal:", e)
 		}
-	default:
+	} else if e != nil {
 		log.Println("error:", e)
+	} else if res != nil && pad {
+		fmt.Println()
 	}
 	return
 }
