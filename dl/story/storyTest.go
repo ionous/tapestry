@@ -13,12 +13,12 @@ func (op *Test) Execute(macro rt.Runtime) error {
 }
 
 func (op *Test) Weave(cat *weave.Catalog) (err error) {
-	if name := lang.Normalize(op.TestName.String()); len(name) == 0 {
+	if name := lang.Normalize(op.TestName); len(name) == 0 {
 		errutil.New("test has empty name")
 	} else {
 		var req []string
-		if n := op.DependsOn.String(); len(n) > 0 {
-			req = []string{n}
+		for _, n := range op.SceneNames {
+			req = append(req, lang.Normalize(n))
 		}
 		if e := cat.DomainStart(name, req); e != nil {
 			err = e

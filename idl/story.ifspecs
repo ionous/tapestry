@@ -42,15 +42,18 @@
             {
               "Flow uses:": [
                 {
-                  "Term:name:": [
+                  "Term:name:type:": [
                     "_",
-                    "test_name"
+                    "test_name",
+                    "text"
                   ]
                 },
                 {
-                  "Term:type:optional:": [
+                  "Term:name:type:optional:repeats:": [
                     "depends_on",
-                    "test_name",
+                    "scene_names",
+                    "text",
+                    true,
                     true
                   ]
                 },
@@ -69,21 +72,6 @@
                     "exe",
                     "execute",
                     true
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "test_name",
-            {
-              "Str uses:": [
-                {
-                  "Option:label:": [
-                    "current_test",
-                    "the test"
                   ]
                 }
               ]
