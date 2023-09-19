@@ -69,24 +69,24 @@ func words(s ...string) (ret Scanner) {
 }
 
 var lookGrammar = allOf(words("look", "l"), anyOf(
-	allOf(&Action{"Look"}),
-	allOf(words("at"), noun(), &Action{"Examine"}),
+	allOf(&Action{Name: "Look"}),
+	allOf(words("at"), noun(), &Action{Name: "Examine"}),
 	// before "look inside", since inside is also direction.
-	allOf(noun(&HasClass{"directions"}), &Action{"Examine"}),
-	allOf(words("to"), noun(&HasClass{"directions"}), &Action{"Examine"}),
-	allOf(words("inside", "in", "into", "through", "on"), noun(), &Action{"Search"}),
-	allOf(words("under"), noun(), &Action{"LookUnder"}),
+	allOf(noun(&HasClass{"directions"}), &Action{Name: "Examine"}),
+	allOf(words("to"), noun(&HasClass{"directions"}), &Action{Name: "Examine"}),
+	allOf(words("inside", "in", "into", "through", "on"), noun(), &Action{Name: "Search"}),
+	allOf(words("under"), noun(), &Action{Name: "LookUnder"}),
 ))
 
 var pickGrammar = allOf(words("pick"), anyOf(
-	allOf(words("up"), things(), &Action{"Take"}),
-	allOf(things(), words("up"), &Action{"Take"}),
+	allOf(words("up"), things(), &Action{Name: "Take"}),
+	allOf(things(), words("up"), &Action{Name: "Take"}),
 ))
 
 var showGrammar = allOf(words("show"), anyOf(
-	allOf(noun(), words("to"), self(), &Action{"Examine"}),
-	allOf(noun(), words("to"), actor(), &Action{"Show"}),
-	allOf(reverse(actor(), noun()), &Action{"Show"}),
+	allOf(noun(), words("to"), self(), &Action{Name: "Examine"}),
+	allOf(noun(), words("to"), actor(), &Action{Name: "Show"}),
+	allOf(reverse(actor(), noun()), &Action{Name: "Show"}),
 ))
 
 func makeObject(name string, kinds ...string) *MyObject {

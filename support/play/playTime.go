@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -17,7 +18,6 @@ type Playtime struct {
 	rt.Runtime
 	grammar parser.Scanner
 	survey  Survey
-	// state    int or something
 }
 
 func NewPlaytime(run rt.Runtime, survey Survey, grammar parser.Scanner) *Playtime {
@@ -80,8 +80,8 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 				// or maybe get passed lists of objects hrmm.
 				// send these nouns to the runtime
 				nouns := res.Objects()
-				if e := pt.play(act.Name, nouns); e != nil {
-					err = errutil.New(e, "for", res)
+				if e := pt.play(act.Name, nouns, act.Args); e != nil {
+					err = errutil.Fmt("%w for %v", e, res)
 				} else {
 					ret = &Result{
 						Action: act.Name,
@@ -121,21 +121,25 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 // execute a command command
 // future: to differentiate b/t system actions and "timed" actions,
 // consider using naming convention: ex. @save (mud style), or #save
-func (pt *Playtime) play(act string, args []string) (err error) {
+func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err error) {
 	// fix: raise a parsing event with the nouns and the action name
 	if focus := pt.survey.GetFocalObject(); focus == nil {
 		err = errutil.New("couldnt get focal object")
+	} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
+		err = e
 	} else {
-		vs := make([]g.Value, len(args)+1)
-		vs[0] = focus // presumably the player's actor
-		for i, n := range args {
-			vs[i+1] = g.StringOf(n)
+		// the actor ( and any nouns ) need to precede the "keyed" fields.
+		els := make([]g.Value, 1, 1+len(nouns)+len(vs))
+		els[0] = focus // presumably the player's actor
+		for _, n := range nouns {
+			els = append(els, g.StringOf(n))
 		}
-		if _, e := pt.Runtime.Call(act, affine.None, nil, vs); e != nil {
+		els = append(els, vs...)
+		if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
 			err = e
 		} else if !strings.HasPrefix(act, "requesting ") {
 			// meta actions are defined as those with start with the string "requesting ..."
-			if _, e := pt.Runtime.Call("pass time", affine.None, nil, vs[:1]); e != nil {
+			if _, e := pt.Runtime.Call("pass time", affine.None, nil, els[:1]); e != nil {
 				err = e
 			}
 		}

@@ -19,6 +19,15 @@
                       "action",
                       "text"
                     ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "args",
+                      "arguments",
+                      "arg",
+                      true,
+                      true
+                    ]
                   }
                 ]
               ]

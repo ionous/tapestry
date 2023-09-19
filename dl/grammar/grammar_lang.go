@@ -2,6 +2,7 @@
 package grammar
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -10,8 +11,9 @@ import (
 
 // Action makes a parser scanner producing a script defined action.
 type Action struct {
-	Action string `if:"label=_,type=text"`
-	Markup map[string]any
+	Action    string       `if:"label=_,type=text"`
+	Arguments []assign.Arg `if:"label=args,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -27,6 +29,7 @@ func (*Action) Compose() composer.Spec {
 
 const Action_Type = "action"
 const Action_Field_Action = "$ACTION"
+const Action_Field_Arguments = "$ARGUMENTS"
 
 func (op *Action) Marshal(m jsn.Marshaler) error {
 	return Action_Marshal(m, op)
@@ -105,6 +108,13 @@ func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Action_Field_Action))
+		}
+		e1 := m.MarshalKey("args", Action_Field_Arguments)
+		if e1 == nil {
+			e1 = assign.Arg_Optional_Repeats_Marshal(m, &val.Arguments)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Action_Field_Arguments))
 		}
 		m.EndBlock()
 	}
@@ -1106,6 +1116,7 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
+	967998274944030280:   (*Action)(nil),    /* scanner_maker=Action:args: */
 	1756442538083378424:  (*Focus)(nil),     /* scanner_maker=Focus:sequence: */
 	6454124700650096920:  (*Directive)(nil), /* grammar_maker=Interpret name:with: */
 	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */

@@ -3,7 +3,9 @@ package play
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -22,7 +24,9 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 		order by rowid`,
 		func() (err error) {
 			var d grammar.Directive
-			if e := cin.Decode(&d, prog, cin.Signatures{grammar.Signatures}); e != nil {
+			if e := cin.NewDecoder(cin.Signatures{grammar.Signatures, assign.Signatures, literal.Signatures}).
+				SetSlotDecoder(literal.CompactSlotDecoder).
+				Decode(&d, prog); e != nil {
 				err = e
 			} else {
 				x := d.MakeScanners()

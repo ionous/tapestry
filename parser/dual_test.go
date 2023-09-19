@@ -9,8 +9,8 @@ import (
 
 // note, in reality burn would use only held things.
 var burnGrammar = allOf(words("burn", "light"), anyOf(
-	allOf(things(), &Action{"Burn"}),
-	allOf(things(), words("with"), things(), &Action{"Burn"}),
+	allOf(things(), &Action{Name: "Burn"}),
+	allOf(things(), words("with"), things(), &Action{Name: "Burn"}),
 ))
 
 func TestDual(t *testing.T) {

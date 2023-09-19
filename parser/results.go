@@ -13,7 +13,7 @@ type Result interface {
 }
 
 type ResolvedAction struct {
-	Name string
+	*Action
 }
 
 // ResolvedActor

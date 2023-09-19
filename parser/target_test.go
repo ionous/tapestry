@@ -11,10 +11,10 @@ var takeGrammar = allOf(
 	words("get"), anyOf(
 		allOf(
 			&Refine{[]Scanner{things(), words("from", "off"), thing()}},
-			&Action{"Remove"}),
+			&Action{Name: "Remove"}),
 		allOf(
 			things(),
-			&Action{"Take"}),
+			&Action{Name: "Take"}),
 	),
 )
 
