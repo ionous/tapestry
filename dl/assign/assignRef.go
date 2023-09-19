@@ -99,6 +99,9 @@ func (src *RootValue) ConvertValue(run rt.Runtime, out affine.Affinity) (ret g.V
 		case out == affine.Text && aff == affine.Number:
 			ret = g.StringOf(strconv.FormatFloat(v.Float(), 'g', -1, 64))
 
+		case out == affine.Bool:
+			ret = g.BoolOf(safe.Truthy(v))
+
 		default:
 			if e := safe.Check(v, aff); e != nil {
 				err = errutil.New("get checked value failed", src.RefValue.String(), e)

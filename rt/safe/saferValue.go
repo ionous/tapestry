@@ -28,3 +28,23 @@ func RectifyText(run rt.Runtime, ft g.Field, val g.Value) (ret g.Value, err erro
 	}
 	return
 }
+
+func Truthy(v g.Value) (ret bool) {
+	switch aff := v.Affinity(); aff {
+	case affine.Bool:
+		ret = v.Bool()
+
+	case affine.Number:
+		ret = v.Int() > 0
+
+	case affine.Text:
+		ret = v.String() != ""
+
+	case affine.Record:
+		ret = true
+
+	case affine.TextList, affine.NumList, affine.RecordList:
+		ret = v.Len() > 0
+	}
+	return
+}
