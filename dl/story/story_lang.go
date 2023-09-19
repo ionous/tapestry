@@ -5844,8 +5844,8 @@ func StoryStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryStateme
 
 // Test Create a scene
 type Test struct {
-	TestName       TestName         `if:"label=_"`
-	DependsOn      TestName         `if:"label=depends_on,optional"`
+	TestName       string           `if:"label=_,type=text"`
+	SceneNames     []string         `if:"label=depends_on,optional,type=text"`
 	TestStatements []StoryStatement `if:"label=with_scene,optional"`
 	Exe            []rt.Execute     `if:"label=do"`
 	Markup         map[string]any
@@ -5864,7 +5864,7 @@ func (*Test) Compose() composer.Spec {
 
 const Test_Type = "test"
 const Test_Field_TestName = "$TEST_NAME"
-const Test_Field_DependsOn = "$DEPENDS_ON"
+const Test_Field_SceneNames = "$SCENE_NAMES"
 const Test_Field_TestStatements = "$TEST_STATEMENTS"
 const Test_Field_Exe = "$EXE"
 
@@ -5941,17 +5941,17 @@ func Test_Marshal(m jsn.Marshaler, val *Test) (err error) {
 	if err = m.MarshalBlock(Test_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Test_Field_TestName)
 		if e0 == nil {
-			e0 = TestName_Marshal(m, &val.TestName)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.TestName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Test_Field_TestName))
 		}
-		e1 := m.MarshalKey("depends_on", Test_Field_DependsOn)
+		e1 := m.MarshalKey("depends_on", Test_Field_SceneNames)
 		if e1 == nil {
-			e1 = TestName_Optional_Marshal(m, &val.DependsOn)
+			e1 = prim.Text_Unboxed_Optional_Repeats_Marshal(m, &val.SceneNames)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Test_Field_DependsOn))
+			m.Error(errutil.New(e1, "in flow at", Test_Field_SceneNames))
 		}
 		e2 := m.MarshalKey("with_scene", Test_Field_TestStatements)
 		if e2 == nil {
@@ -5968,89 +5968,6 @@ func Test_Marshal(m jsn.Marshaler, val *Test) (err error) {
 			m.Error(errutil.New(e3, "in flow at", Test_Field_Exe))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-// TestName requires a predefined or user-specified string.
-type TestName struct {
-	Str string
-}
-
-func (op *TestName) String() string {
-	return op.Str
-}
-
-const TestName_CurrentTest = "$CURRENT_TEST"
-
-func (*TestName) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        TestName_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-		Choices: []string{
-			TestName_CurrentTest,
-		},
-		Strings: []string{
-			"current_test",
-		},
-	}
-}
-
-const TestName_Type = "test_name"
-
-func (op *TestName) Marshal(m jsn.Marshaler) error {
-	return TestName_Marshal(m, op)
-}
-
-func TestName_Optional_Marshal(m jsn.Marshaler, val *TestName) (err error) {
-	var zero TestName
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = TestName_Marshal(m, val)
-	}
-	return
-}
-
-func TestName_Marshal(m jsn.Marshaler, val *TestName) (err error) {
-	return m.MarshalValue(TestName_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type TestName_Slice []TestName
-
-func (op *TestName_Slice) GetType() string { return TestName_Type }
-
-func (op *TestName_Slice) Marshal(m jsn.Marshaler) error {
-	return TestName_Repeats_Marshal(m, (*[]TestName)(op))
-}
-
-func (op *TestName_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *TestName_Slice) SetSize(cnt int) {
-	var els []TestName
-	if cnt >= 0 {
-		els = make(TestName_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *TestName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TestName_Marshal(m, &(*op)[i])
-}
-
-func TestName_Repeats_Marshal(m jsn.Marshaler, vals *[]TestName) error {
-	return jsn.RepeatBlock(m, (*TestName_Slice)(vals))
-}
-
-func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = TestName_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -6354,7 +6271,6 @@ var Slats = []composer.Composer{
 	(*StoryBreak)(nil),
 	(*StoryFile)(nil),
 	(*Test)(nil),
-	(*TestName)(nil),
 	(*TextField)(nil),
 	(*TextListField)(nil),
 }
@@ -6371,7 +6287,6 @@ var Signatures = map[uint64]interface{}{
 	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
 	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
 	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
-	11670818074991137908: (*TestName)(nil),             /* TestName: */
 	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
 	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),            /* field_definition=Bool: */
