@@ -19,11 +19,16 @@
                     "and nothing happens when the score reaches the max score."
                   ],
                   "Number:": "max score"
-                },
-                {
-                  "Aspect:": "score notification"
                 }
               ]
+            ]
+          },
+          {
+            "Define kind:fields:": [
+              "settings",
+              {
+                "Aspect:": "score notification"
+              }
             ]
           },
           {
@@ -48,7 +53,7 @@
                     "AllTrue:": [
                       {
                         "Object:field:": [
-                          "story",
+                          "settings",
                           "score notification on"
                         ]
                       },
@@ -117,7 +122,7 @@
                 "Bool:": "notify"
               },
               {
-              	"Nothing": true
+                "Nothing": true
               },
               [
                 {
@@ -125,14 +130,14 @@
                     "@notify",
                     {
                       "Set:trait:": [
-                        "story",
+                        "settings",
                         "score notification on"
                       ]
                     },
                     {
                       "Finally do:": {
                         "Set:trait:": [
-                          "story",
+                          "settings",
                           "score notification off"
                         ]
                       }
@@ -142,7 +147,7 @@
                 {
                   "Say response:with:": [
                     "report score notification mode",
-                    "Score notification {if .story.score_notification_on}on{else}off{end}."
+                    "Score notification {if .settings.score_notification_on}on{else}off{end}."
                   ]
                 }
               ]

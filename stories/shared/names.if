@@ -269,7 +269,7 @@
                 "Set:value:": [
                   {
                     "Object:field:": [
-                      "settings",
+                      "story",
                       "mentions"
                     ]
                   },
@@ -279,7 +279,7 @@
                         1,
                         {
                           "Object:field:": [
-                            "settings",
+                            "story",
                             "mentions"
                           ]
                         }

@@ -32,31 +32,6 @@
         ],
         "abbreviated room descriptions"
       ]
-    },
-    {
-      "--": [
-        "fix? wouldn't these settings make more sense as part of the player?",
-        "or some global game data block, rather than settings configuration"
-      ],
-      "Define kind:fields:": [
-        "Settings",
-        [
-          {
-            "Bool:": "darkness witnessed"
-          }
-        ]
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Settings",
-        [
-          {
-            "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
-            "Number:": "mentions"
-          }
-        ]
-      ]
     }
   ]
 }

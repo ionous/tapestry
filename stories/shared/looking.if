@@ -145,7 +145,7 @@
                             },
                             {
                               "Object:field:": [
-                                "settings",
+                                "story",
                                 "not darkness witnessed"
                               ]
                             }
@@ -263,7 +263,7 @@
                   "Set:value:": [
                     {
                       "Object:field:": [
-                        "settings",
+                        "story",
                         "is darkness witnessed"
                       ]
                     },
@@ -528,7 +528,7 @@
               "previous mentions",
               {
                 "Object:field:": [
-                  "settings",
+                  "story",
                   "mentions"
                 ]
               }
@@ -672,7 +672,7 @@
                     "equal_to",
                     {
                       "Object:field:": [
-                        "settings",
+                        "story",
                         "mentions"
                       ]
                     }
@@ -1070,7 +1070,7 @@
             "Set:value:": [
               {
                 "Object:field:": [
-                  "settings",
+                  "story",
                   "mentions"
                 ]
               },

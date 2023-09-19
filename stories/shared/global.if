@@ -28,6 +28,13 @@
           },
           {
             "Aspect:": "play state"
+          },
+          {
+            "Bool:": "darkness witnessed"
+          },
+          {
+            "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
+            "Number:": "mentions"
           }
         ]
       ]
