@@ -99,21 +99,7 @@
         "requesting to quit",
         "the game over rule",
         {
-          "Set:value:": [
-            {
-              "Object:field:": [
-                "@actor",
-                "not in darkness"
-              ]
-            },
-            {
-              "FromBool:": {
-                "ContainsLight spot:": {
-                  "FromText:": "@actor"
-                }
-              }
-            }
-          ]
+        	"QuitGame": true
         }
       ]
     }
