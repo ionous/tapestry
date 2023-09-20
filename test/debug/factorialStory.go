@@ -16,10 +16,8 @@ func UserComment(s string) map[string]any {
 var FactorialStory = &story.StoryFile{
 	StoryStatements: []story.StoryStatement{
 		&story.Test{
-			TestName: story.TestName{
-				Str: "factorial",
-			},
-			Exe: FactorialCheck,
+			TestName: "factorial",
+			Exe:      FactorialCheck,
 		},
 		&story.DefinePattern{
 			PatternName: T("factorial"),
