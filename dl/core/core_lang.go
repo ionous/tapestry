@@ -2557,10 +2557,11 @@ func Continue_Marshal(m jsn.Marshaler, val *Continue) (err error) {
 	return
 }
 
-// Decrement Decrease a number, and return the new value of the number.
+// Decrement Decrease the value of a number held in by a variable or object field.
+// Returns the new value of the number.
 type Decrement struct {
 	Target assign.Address `if:"label=_"`
-	Value  rt.NumberEval  `if:"label=by,optional"`
+	Step   rt.NumberEval  `if:"label=by,optional"`
 	Markup map[string]any
 }
 
@@ -2578,7 +2579,7 @@ func (*Decrement) Compose() composer.Spec {
 
 const Decrement_Type = "decrement"
 const Decrement_Field_Target = "$TARGET"
-const Decrement_Field_Value = "$VALUE"
+const Decrement_Field_Step = "$STEP"
 
 func (op *Decrement) Marshal(m jsn.Marshaler) error {
 	return Decrement_Marshal(m, op)
@@ -2658,12 +2659,144 @@ func Decrement_Marshal(m jsn.Marshaler, val *Decrement) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Decrement_Field_Target))
 		}
-		e1 := m.MarshalKey("by", Decrement_Field_Value)
+		e1 := m.MarshalKey("by", Decrement_Field_Step)
 		if e1 == nil {
-			e1 = rt.NumberEval_Optional_Marshal(m, &val.Value)
+			e1 = rt.NumberEval_Optional_Marshal(m, &val.Step)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Decrement_Field_Value))
+			m.Error(errutil.New(e1, "in flow at", Decrement_Field_Step))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DecrementAspect Increases the value of a trait held by an object aspect.
+// Returns the new value of the trait.
+type DecrementAspect struct {
+	Target rt.TextEval   `if:"label=_"`
+	Aspect rt.TextEval   `if:"label=aspect"`
+	Step   rt.NumberEval `if:"label=by,optional"`
+	Wrap   rt.BoolEval   `if:"label=wrap,optional"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.TextEval = (*DecrementAspect)(nil)
+var _ rt.Execute = (*DecrementAspect)(nil)
+
+func (*DecrementAspect) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DecrementAspect_Type,
+		Uses: composer.Type_Flow,
+		Lede: "decrease",
+	}
+}
+
+const DecrementAspect_Type = "decrement_aspect"
+const DecrementAspect_Field_Target = "$TARGET"
+const DecrementAspect_Field_Aspect = "$ASPECT"
+const DecrementAspect_Field_Step = "$STEP"
+const DecrementAspect_Field_Wrap = "$WRAP"
+
+func (op *DecrementAspect) Marshal(m jsn.Marshaler) error {
+	return DecrementAspect_Marshal(m, op)
+}
+
+type DecrementAspect_Slice []DecrementAspect
+
+func (op *DecrementAspect_Slice) GetType() string { return DecrementAspect_Type }
+
+func (op *DecrementAspect_Slice) Marshal(m jsn.Marshaler) error {
+	return DecrementAspect_Repeats_Marshal(m, (*[]DecrementAspect)(op))
+}
+
+func (op *DecrementAspect_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DecrementAspect_Slice) SetSize(cnt int) {
+	var els []DecrementAspect
+	if cnt >= 0 {
+		els = make(DecrementAspect_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DecrementAspect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DecrementAspect_Marshal(m, &(*op)[i])
+}
+
+func DecrementAspect_Repeats_Marshal(m jsn.Marshaler, vals *[]DecrementAspect) error {
+	return jsn.RepeatBlock(m, (*DecrementAspect_Slice)(vals))
+}
+
+func DecrementAspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DecrementAspect) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DecrementAspect_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DecrementAspect_Flow struct{ ptr *DecrementAspect }
+
+func (n DecrementAspect_Flow) GetType() string      { return DecrementAspect_Type }
+func (n DecrementAspect_Flow) GetLede() string      { return "decrease" }
+func (n DecrementAspect_Flow) GetFlow() interface{} { return n.ptr }
+func (n DecrementAspect_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DecrementAspect); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DecrementAspect_Optional_Marshal(m jsn.Marshaler, pv **DecrementAspect) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DecrementAspect_Marshal(m, *pv)
+	} else if !enc {
+		var v DecrementAspect
+		if err = DecrementAspect_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DecrementAspect_Marshal(m jsn.Marshaler, val *DecrementAspect) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DecrementAspect_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", DecrementAspect_Field_Target)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Target)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DecrementAspect_Field_Target))
+		}
+		e1 := m.MarshalKey("aspect", DecrementAspect_Field_Aspect)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Aspect)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DecrementAspect_Field_Aspect))
+		}
+		e2 := m.MarshalKey("by", DecrementAspect_Field_Step)
+		if e2 == nil {
+			e2 = rt.NumberEval_Optional_Marshal(m, &val.Step)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DecrementAspect_Field_Step))
+		}
+		e3 := m.MarshalKey("wrap", DecrementAspect_Field_Wrap)
+		if e3 == nil {
+			e3 = rt.BoolEval_Optional_Marshal(m, &val.Wrap)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", DecrementAspect_Field_Wrap))
 		}
 		m.EndBlock()
 	}
@@ -3304,10 +3437,11 @@ func Includes_Marshal(m jsn.Marshaler, val *Includes) (err error) {
 	return
 }
 
-// Increment Increase a number, and return the new value of the number.
+// Increment Increases the value of a number held in by a variable or object field.
+// Returns the new value of the number.
 type Increment struct {
 	Target assign.Address `if:"label=_"`
-	Value  rt.NumberEval  `if:"label=by,optional"`
+	Step   rt.NumberEval  `if:"label=by,optional"`
 	Markup map[string]any
 }
 
@@ -3325,7 +3459,7 @@ func (*Increment) Compose() composer.Spec {
 
 const Increment_Type = "increment"
 const Increment_Field_Target = "$TARGET"
-const Increment_Field_Value = "$VALUE"
+const Increment_Field_Step = "$STEP"
 
 func (op *Increment) Marshal(m jsn.Marshaler) error {
 	return Increment_Marshal(m, op)
@@ -3405,12 +3539,144 @@ func Increment_Marshal(m jsn.Marshaler, val *Increment) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Increment_Field_Target))
 		}
-		e1 := m.MarshalKey("by", Increment_Field_Value)
+		e1 := m.MarshalKey("by", Increment_Field_Step)
 		if e1 == nil {
-			e1 = rt.NumberEval_Optional_Marshal(m, &val.Value)
+			e1 = rt.NumberEval_Optional_Marshal(m, &val.Step)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Increment_Field_Value))
+			m.Error(errutil.New(e1, "in flow at", Increment_Field_Step))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// IncrementAspect Increases the value of a trait held by an object aspect.
+// Returns the new value of the trait.
+type IncrementAspect struct {
+	Target rt.TextEval   `if:"label=_"`
+	Aspect rt.TextEval   `if:"label=aspect"`
+	Step   rt.NumberEval `if:"label=by,optional"`
+	Wrap   rt.BoolEval   `if:"label=wrap,optional"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.TextEval = (*IncrementAspect)(nil)
+var _ rt.Execute = (*IncrementAspect)(nil)
+
+func (*IncrementAspect) Compose() composer.Spec {
+	return composer.Spec{
+		Name: IncrementAspect_Type,
+		Uses: composer.Type_Flow,
+		Lede: "increase",
+	}
+}
+
+const IncrementAspect_Type = "increment_aspect"
+const IncrementAspect_Field_Target = "$TARGET"
+const IncrementAspect_Field_Aspect = "$ASPECT"
+const IncrementAspect_Field_Step = "$STEP"
+const IncrementAspect_Field_Wrap = "$WRAP"
+
+func (op *IncrementAspect) Marshal(m jsn.Marshaler) error {
+	return IncrementAspect_Marshal(m, op)
+}
+
+type IncrementAspect_Slice []IncrementAspect
+
+func (op *IncrementAspect_Slice) GetType() string { return IncrementAspect_Type }
+
+func (op *IncrementAspect_Slice) Marshal(m jsn.Marshaler) error {
+	return IncrementAspect_Repeats_Marshal(m, (*[]IncrementAspect)(op))
+}
+
+func (op *IncrementAspect_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *IncrementAspect_Slice) SetSize(cnt int) {
+	var els []IncrementAspect
+	if cnt >= 0 {
+		els = make(IncrementAspect_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *IncrementAspect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return IncrementAspect_Marshal(m, &(*op)[i])
+}
+
+func IncrementAspect_Repeats_Marshal(m jsn.Marshaler, vals *[]IncrementAspect) error {
+	return jsn.RepeatBlock(m, (*IncrementAspect_Slice)(vals))
+}
+
+func IncrementAspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IncrementAspect) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = IncrementAspect_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type IncrementAspect_Flow struct{ ptr *IncrementAspect }
+
+func (n IncrementAspect_Flow) GetType() string      { return IncrementAspect_Type }
+func (n IncrementAspect_Flow) GetLede() string      { return "increase" }
+func (n IncrementAspect_Flow) GetFlow() interface{} { return n.ptr }
+func (n IncrementAspect_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*IncrementAspect); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func IncrementAspect_Optional_Marshal(m jsn.Marshaler, pv **IncrementAspect) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = IncrementAspect_Marshal(m, *pv)
+	} else if !enc {
+		var v IncrementAspect
+		if err = IncrementAspect_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func IncrementAspect_Marshal(m jsn.Marshaler, val *IncrementAspect) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(IncrementAspect_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", IncrementAspect_Field_Target)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Target)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", IncrementAspect_Field_Target))
+		}
+		e1 := m.MarshalKey("aspect", IncrementAspect_Field_Aspect)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Aspect)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", IncrementAspect_Field_Aspect))
+		}
+		e2 := m.MarshalKey("by", IncrementAspect_Field_Step)
+		if e2 == nil {
+			e2 = rt.NumberEval_Optional_Marshal(m, &val.Step)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", IncrementAspect_Field_Step))
+		}
+		e3 := m.MarshalKey("wrap", IncrementAspect_Field_Wrap)
+		if e3 == nil {
+			e3 = rt.BoolEval_Optional_Marshal(m, &val.Wrap)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", IncrementAspect_Field_Wrap))
 		}
 		m.EndBlock()
 	}
@@ -7047,6 +7313,7 @@ var Slats = []composer.Composer{
 	(*Comparison)(nil),
 	(*Continue)(nil),
 	(*Decrement)(nil),
+	(*DecrementAspect)(nil),
 	(*DivideValue)(nil),
 	(*During)(nil),
 	(*FieldsOfKind)(nil),
@@ -7054,6 +7321,7 @@ var Slats = []composer.Composer{
 	(*IdOf)(nil),
 	(*Includes)(nil),
 	(*Increment)(nil),
+	(*IncrementAspect)(nil),
 	(*IsEmpty)(nil),
 	(*IsExactKindOf)(nil),
 	(*IsKindOf)(nil),
@@ -7113,6 +7381,14 @@ var Signatures = map[uint64]interface{}{
 	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
 	1765941604351725175:  (*Decrement)(nil),         /* execute=Decrease: */
 	16337634811621251476: (*Decrement)(nil),         /* number_eval=Decrease: */
+	13259725831972112539: (*DecrementAspect)(nil),   /* execute=Decrease:aspect: */
+	9604047801594713852:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect: */
+	11515881376122775668: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by: */
+	1589765377795283065:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by: */
+	7582461992298069038:  (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by:wrap: */
+	3797620178237829057:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by:wrap: */
+	11733807746068469187: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:wrap: */
+	1489939604737037046:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:wrap: */
 	906537561468635208:   (*Decrement)(nil),         /* execute=Decrease:by: */
 	7249930857706662977:  (*Decrement)(nil),         /* number_eval=Decrease:by: */
 	14212233424935015742: (*DivideValue)(nil),       /* number_eval=Divide:value: */
@@ -7133,6 +7409,14 @@ var Signatures = map[uint64]interface{}{
 	9882017885672780228:  (*ChooseBranch)(nil),      /* execute=If:do:else: */
 	3419326304120453839:  (*Increment)(nil),         /* execute=Increase: */
 	5814330157137261092:  (*Increment)(nil),         /* number_eval=Increase: */
+	11043224857467493683: (*IncrementAspect)(nil),   /* execute=Increase:aspect: */
+	1296309673842091672:  (*IncrementAspect)(nil),   /* text_eval=Increase:aspect: */
+	4473637830475551932:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by: */
+	18328024260427443133: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by: */
+	4383890181096103478:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by:wrap: */
+	16469117746066804197: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by:wrap: */
+	4349655702226447963:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:wrap: */
+	8832752015703729730:  (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:wrap: */
 	9916665856596995152:  (*Increment)(nil),         /* execute=Increase:by: */
 	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */

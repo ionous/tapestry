@@ -7,6 +7,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -80,14 +82,14 @@ func (op *ModValue) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *Increment) Execute(run rt.Runtime) (err error) {
-	if _, e := inc(run, op.Target, op.Value, 1.0); e != nil {
+	if _, e := inc(run, op.Target, op.Step, 1.0); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
 func (op *Increment) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := inc(run, op.Target, op.Value, 1.0); e != nil {
+	if v, e := inc(run, op.Target, op.Step, 1.0); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -96,17 +98,71 @@ func (op *Increment) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *Decrement) Execute(run rt.Runtime) (err error) {
-	if _, e := inc(run, op.Target, op.Value, -1.0); e != nil {
+	if _, e := inc(run, op.Target, op.Step, -1.0); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
 func (op *Decrement) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := inc(run, op.Target, op.Value, -1.0); e != nil {
+	if v, e := inc(run, op.Target, op.Step, -1.0); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
+	}
+	return
+}
+
+func (op *IncrementAspect) Execute(run rt.Runtime) (err error) {
+	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, incTrait); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
+
+func (op *IncrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, incTrait); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *DecrementAspect) Execute(run rt.Runtime) (err error) {
+	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, decTrait); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
+
+func (op *DecrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, decTrait); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func incTrait(curr, step, max int, wrap bool) (ret int) {
+	if next := curr + step; next < max {
+		ret = next
+	} else if !wrap {
+		ret = max - 1 // saturate
+	} else {
+		ret = next % max
+	}
+	return
+}
+
+func decTrait(curr, step, max int, wrap bool) (ret int) {
+	if next := curr - step; next >= 0 {
+		ret = next
+	} else if !wrap {
+		ret = 0 // clip
+	} else {
+		ret = max + (next % max) // -1 % 5= -1; 5 + (-1 % 5) = 4
 	}
 	return
 }
@@ -135,6 +191,37 @@ func inc(run rt.Runtime, tgt assign.Address, val rt.NumberEval, dir float64) (re
 			err = e
 		} else {
 			ret = v
+		}
+	}
+	return
+}
+
+func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval, wraps rt.BoolEval,
+	update func(curr, step, max int, wrap bool) int) (ret g.Value, err error) {
+	if tgt, e := safe.GetText(run, target); e != nil {
+		err = e
+	} else if field, e := safe.GetText(run, aspect); e != nil {
+		err = e
+	} else if step, e := safe.GetOptionalNumber(run, steps, 1); e != nil {
+		err = e
+	} else if wrap, e := safe.GetOptionalBool(run, wraps, true); e != nil {
+		err = e
+	} else if obj, e := run.GetField(meta.ObjectId, tgt.String()); e != nil {
+		err = e
+	} else if currTrait, e := run.GetField(obj.String(), field.String()); e != nil {
+		err = e
+	} else if aspect, e := run.GetKindByName(field.String()); e != nil {
+		err = e
+	} else if !aspect.Implements(kindsOf.Aspect.String()) {
+		err = errutil.Fmt("field %q is not an aspect", field.String())
+	} else {
+		prev := aspect.FieldIndex(currTrait.String())
+		index := update(prev, step.Int(), aspect.NumField(), wrap.Bool())
+		newTrait := g.StringOf(aspect.Field(index).Name)
+		if e := run.SetField(obj.String(), field.String(), newTrait); e != nil {
+			err = e
+		} else {
+			ret = newTrait
 		}
 	}
 	return

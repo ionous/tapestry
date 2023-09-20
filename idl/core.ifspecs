@@ -1272,7 +1272,7 @@
                 "absolute",
                 {
                   "Term:type:": [
-                  	"value",
+                    "value",
                     "number_eval"
                   ]
                 }
@@ -1281,7 +1281,10 @@
           ]
         },
         {
-          "--": "Increase a number, and return the new value of the number.",
+          "--": [
+            "Increases the value of a number held in by a variable or object field.",
+            "Returns the new value of the number."
+          ],
           "Spec:slots:groups:with flow:": [
             "increment",
             [
@@ -1304,7 +1307,7 @@
                     "--": "if not specified, increments by 1.",
                     "Term:name:type:optional:": [
                       "by",
-                      "value",
+                      "step",
                       "number_eval",
                       true
                     ]
@@ -1315,7 +1318,10 @@
           ]
         },
         {
-          "--": "Decrease a number, and return the new value of the number.",
+          "--": [
+            "Decrease the value of a number held in by a variable or object field.",
+            "Returns the new value of the number."
+          ],
           "Spec:slots:groups:with flow:": [
             "decrement",
             [
@@ -1338,8 +1344,110 @@
                     "--": "if not specified, decrements by 1.",
                     "Term:name:type:optional:": [
                       "by",
-                      "value",
+                      "step",
                       "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Increases the value of a trait held by an object aspect.",
+            "Returns the new value of the trait."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "increment_aspect",
+            [
+              "text_eval",
+              "execute"
+            ],
+            "math",
+            {
+              "Flow:uses:": [
+                "increase",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "aspect",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "--": "if not specified, increments by a single step.",
+                    "Term:name:type:optional:": [
+                      "by",
+                      "step",
+                      "number_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "--": "if not specified, wraps.",
+                    "Term:type:optional:": [
+                      "wrap",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Increases the value of a trait held by an object aspect.",
+            "Returns the new value of the trait."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "decrement_aspect",
+            [
+              "text_eval",
+              "execute"
+            ],
+            "math",
+            {
+              "Flow:uses:": [
+                "decrease",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "target",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "aspect",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "--": "if not specified, increments by a single step.",
+                    "Term:name:type:optional:": [
+                      "by",
+                      "step",
+                      "number_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "--": "if not specified, wraps.",
+                    "Term:type:optional:": [
+                      "wrap",
+                      "bool_eval",
                       true
                     ]
                   }

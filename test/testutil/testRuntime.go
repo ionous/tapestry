@@ -41,7 +41,11 @@ func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 			}
 		}
 	default:
-		err = g.UnknownField(target, field)
+		if a, ok := x.ObjectMap[target]; !ok {
+			err = g.UnknownField(target, field)
+		} else {
+			err = a.SetNamedField(field, value)
+		}
 	}
 	return
 }
