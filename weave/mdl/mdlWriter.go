@@ -640,7 +640,7 @@ func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
 
 func (pen *Pen) AddPattern(pat Pattern) (err error) {
 	if e := pat.writePattern(pen, true); e != nil {
-		err = errutil.Fmt("add pattern %w in pattern %q domain %q", e, pat.name, pen.domain)
+		err = errutil.Fmt("%w adding pattern %q domain %q", e, pat.name, pen.domain)
 	}
 	return
 }
@@ -649,7 +649,7 @@ func (pen *Pen) ExtendPattern(pat Pattern) (err error) {
 	if pat.parent != kindsOf.Pattern.String() {
 		err = errutil.Fmt("extend pattern %q didn't expect a newly defined parent %q", pat.name, pat.parent)
 	} else if e := pat.writePattern(pen, false); e != nil {
-		err = errutil.Fmt("extend pattern %w in pattern %q domain %q", e, pat.name, pen.domain)
+		err = errutil.Fmt("%w extending pattern %q domain %q", e, pat.name, pen.domain)
 	}
 	return
 }
