@@ -263,7 +263,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 			},
 		},
-		// note, this is allowed even though it implis something different than what is written:
+		// note, this is allowed even though it implies something different than what is written:
 		{
 			test: `The bottle is openable in the kitchen.`,
 			result: map[string]any{
@@ -348,11 +348,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: map[string]any{
 				"macro": "contain",
-				"secondary": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the", // lowercase, the closest to the trunk
 					"name": "coffin",
 				}},
-				"primary": []map[string]any{{
+				"secondary": []map[string]any{{
 					"det":  "some",
 					"name": "coins",
 				}, {
@@ -369,11 +369,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
 				"macro": "contain",
-				"secondary": []map[string]any{{
+				"primary": []map[string]any{{
 					"det":  "the",
 					"name": "lobby",
 				}},
-				"primary": []map[string]any{{
+				"secondary": []map[string]any{{
 					"kinds": []string{"supporter"},
 				}, {
 					"kinds": []string{"container"},
