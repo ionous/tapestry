@@ -1395,7 +1395,7 @@
                   {
                     "--": "if not specified, wraps.",
                     "Term:type:optional:": [
-                      "wrap",
+                      "clamp",
                       "bool_eval",
                       true
                     ]
@@ -1446,7 +1446,7 @@
                   {
                     "--": "if not specified, wraps.",
                     "Term:type:optional:": [
-                      "wrap",
+                      "clamp",
                       "bool_eval",
                       true
                     ]

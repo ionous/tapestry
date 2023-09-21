@@ -2677,7 +2677,7 @@ type DecrementAspect struct {
 	Target rt.TextEval   `if:"label=_"`
 	Aspect rt.TextEval   `if:"label=aspect"`
 	Step   rt.NumberEval `if:"label=by,optional"`
-	Wrap   rt.BoolEval   `if:"label=wrap,optional"`
+	Clamp  rt.BoolEval   `if:"label=clamp,optional"`
 	Markup map[string]any
 }
 
@@ -2697,7 +2697,7 @@ const DecrementAspect_Type = "decrement_aspect"
 const DecrementAspect_Field_Target = "$TARGET"
 const DecrementAspect_Field_Aspect = "$ASPECT"
 const DecrementAspect_Field_Step = "$STEP"
-const DecrementAspect_Field_Wrap = "$WRAP"
+const DecrementAspect_Field_Clamp = "$CLAMP"
 
 func (op *DecrementAspect) Marshal(m jsn.Marshaler) error {
 	return DecrementAspect_Marshal(m, op)
@@ -2791,12 +2791,12 @@ func DecrementAspect_Marshal(m jsn.Marshaler, val *DecrementAspect) (err error) 
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", DecrementAspect_Field_Step))
 		}
-		e3 := m.MarshalKey("wrap", DecrementAspect_Field_Wrap)
+		e3 := m.MarshalKey("clamp", DecrementAspect_Field_Clamp)
 		if e3 == nil {
-			e3 = rt.BoolEval_Optional_Marshal(m, &val.Wrap)
+			e3 = rt.BoolEval_Optional_Marshal(m, &val.Clamp)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", DecrementAspect_Field_Wrap))
+			m.Error(errutil.New(e3, "in flow at", DecrementAspect_Field_Clamp))
 		}
 		m.EndBlock()
 	}
@@ -3557,7 +3557,7 @@ type IncrementAspect struct {
 	Target rt.TextEval   `if:"label=_"`
 	Aspect rt.TextEval   `if:"label=aspect"`
 	Step   rt.NumberEval `if:"label=by,optional"`
-	Wrap   rt.BoolEval   `if:"label=wrap,optional"`
+	Clamp  rt.BoolEval   `if:"label=clamp,optional"`
 	Markup map[string]any
 }
 
@@ -3577,7 +3577,7 @@ const IncrementAspect_Type = "increment_aspect"
 const IncrementAspect_Field_Target = "$TARGET"
 const IncrementAspect_Field_Aspect = "$ASPECT"
 const IncrementAspect_Field_Step = "$STEP"
-const IncrementAspect_Field_Wrap = "$WRAP"
+const IncrementAspect_Field_Clamp = "$CLAMP"
 
 func (op *IncrementAspect) Marshal(m jsn.Marshaler) error {
 	return IncrementAspect_Marshal(m, op)
@@ -3671,12 +3671,12 @@ func IncrementAspect_Marshal(m jsn.Marshaler, val *IncrementAspect) (err error) 
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", IncrementAspect_Field_Step))
 		}
-		e3 := m.MarshalKey("wrap", IncrementAspect_Field_Wrap)
+		e3 := m.MarshalKey("clamp", IncrementAspect_Field_Clamp)
 		if e3 == nil {
-			e3 = rt.BoolEval_Optional_Marshal(m, &val.Wrap)
+			e3 = rt.BoolEval_Optional_Marshal(m, &val.Clamp)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", IncrementAspect_Field_Wrap))
+			m.Error(errutil.New(e3, "in flow at", IncrementAspect_Field_Clamp))
 		}
 		m.EndBlock()
 	}
@@ -7385,10 +7385,10 @@ var Signatures = map[uint64]interface{}{
 	9604047801594713852:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect: */
 	11515881376122775668: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by: */
 	1589765377795283065:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by: */
-	7582461992298069038:  (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by:wrap: */
-	3797620178237829057:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by:wrap: */
-	11733807746068469187: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:wrap: */
-	1489939604737037046:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:wrap: */
+	10691394634979399555: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by:clamp: */
+	16351892255943407142: (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by:clamp: */
+	16567257087826189312: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:clamp: */
+	7498537354592687963:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:clamp: */
 	906537561468635208:   (*Decrement)(nil),         /* execute=Decrease:by: */
 	7249930857706662977:  (*Decrement)(nil),         /* number_eval=Decrease:by: */
 	14212233424935015742: (*DivideValue)(nil),       /* number_eval=Divide:value: */
@@ -7413,10 +7413,10 @@ var Signatures = map[uint64]interface{}{
 	1296309673842091672:  (*IncrementAspect)(nil),   /* text_eval=Increase:aspect: */
 	4473637830475551932:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by: */
 	18328024260427443133: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by: */
-	4383890181096103478:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by:wrap: */
-	16469117746066804197: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by:wrap: */
-	4349655702226447963:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:wrap: */
-	8832752015703729730:  (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:wrap: */
+	1150598923989934235:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by:clamp: */
+	16465259325356451354: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by:clamp: */
+	4522630356185077352:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:clamp: */
+	705264554644415287:   (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:clamp: */
 	9916665856596995152:  (*Increment)(nil),         /* execute=Increase:by: */
 	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */

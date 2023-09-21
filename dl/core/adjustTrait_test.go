@@ -44,7 +44,7 @@ func TestAdjustTraits(t *testing.T) {
 		Target: core.T("msg"),
 		Aspect: core.T("neatness"),
 		Step:   core.I(5),
-		Wrap:   core.B(false),
+		Clamp:  core.B(true),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "trampled" {
@@ -68,7 +68,7 @@ func TestAdjustTraits(t *testing.T) {
 		Target: core.T("msg"),
 		Aspect: core.T("neatness"),
 		Step:   core.I(5),
-		Wrap:   core.B(false),
+		Clamp:  core.B(true),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "neat" {

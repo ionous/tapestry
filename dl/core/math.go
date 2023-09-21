@@ -114,14 +114,14 @@ func (op *Decrement) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *IncrementAspect) Execute(run rt.Runtime) (err error) {
-	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, incTrait); e != nil {
+	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, incTrait); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
 func (op *IncrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, incTrait); e != nil {
+	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, incTrait); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -130,14 +130,14 @@ func (op *IncrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *DecrementAspect) Execute(run rt.Runtime) (err error) {
-	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, decTrait); e != nil {
+	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, decTrait); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
 func (op *DecrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Wrap, decTrait); e != nil {
+	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, decTrait); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -145,10 +145,10 @@ func (op *DecrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func incTrait(curr, step, max int, wrap bool) (ret int) {
+func incTrait(curr, step, max int, clamp bool) (ret int) {
 	if next := curr + step; next < max {
 		ret = next
-	} else if !wrap {
+	} else if clamp {
 		ret = max - 1 // saturate
 	} else {
 		ret = next % max
@@ -156,10 +156,10 @@ func incTrait(curr, step, max int, wrap bool) (ret int) {
 	return
 }
 
-func decTrait(curr, step, max int, wrap bool) (ret int) {
+func decTrait(curr, step, max int, clamp bool) (ret int) {
 	if next := curr - step; next >= 0 {
 		ret = next
-	} else if !wrap {
+	} else if clamp {
 		ret = 0 // clip
 	} else {
 		ret = max + (next % max) // -1 % 5= -1; 5 + (-1 % 5) = 4
@@ -196,7 +196,7 @@ func inc(run rt.Runtime, tgt assign.Address, val rt.NumberEval, dir float64) (re
 	return
 }
 
-func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval, wraps rt.BoolEval,
+func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval, clamps rt.BoolEval,
 	update func(curr, step, max int, wrap bool) int) (ret g.Value, err error) {
 	if tgt, e := safe.GetText(run, target); e != nil {
 		err = e
@@ -204,7 +204,7 @@ func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval
 		err = e
 	} else if step, e := safe.GetOptionalNumber(run, steps, 1); e != nil {
 		err = e
-	} else if wrap, e := safe.GetOptionalBool(run, wraps, true); e != nil {
+	} else if clamp, e := safe.GetOptionalBool(run, clamps, false); e != nil {
 		err = e
 	} else if obj, e := run.GetField(meta.ObjectId, tgt.String()); e != nil {
 		err = e
@@ -216,7 +216,7 @@ func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval
 		err = errutil.Fmt("field %q is not an aspect", field.String())
 	} else {
 		prev := aspect.FieldIndex(currTrait.String())
-		index := update(prev, step.Int(), aspect.NumField(), wrap.Bool())
+		index := update(prev, step.Int(), aspect.NumField(), clamp.Bool())
 		newTrait := g.StringOf(aspect.Field(index).Name)
 		if e := run.SetField(obj.String(), field.String(), newTrait); e != nil {
 			err = e
