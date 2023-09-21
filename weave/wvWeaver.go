@@ -9,6 +9,7 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"github.com/ionous/errutil"
 )
 
 type Weaver struct {
@@ -47,13 +48,12 @@ func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value assign.
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
 	if bare, e := grok.StripArticle(name); e != nil {
 		err = e
+	} else if n := lang.Normalize(bare); len(n) == 0 {
+		err = errutil.New("empty name")
+	} else if n, e := w.Pin().GetClosestNoun(n); e != nil {
+		err = e
 	} else {
-		n := lang.Normalize(bare)
-		if n, e := w.Pin().GetClosestNoun(n); e != nil {
-			err = e
-		} else {
-			ret = n
-		}
+		ret = n
 	}
 	return
 }
