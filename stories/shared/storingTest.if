@@ -24,7 +24,7 @@
                         "Print:": "Fail to store something into an actor:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -54,7 +54,7 @@
                         "Print:": "Fail to store something into a closed container:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -84,7 +84,7 @@
                         "Print:": "Fail to store something into something nested:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -114,7 +114,7 @@
                         "Print:": "Okay, store something into an open container:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -144,7 +144,7 @@
                         "Print:": "Okay, store something onto a supporter:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -174,7 +174,7 @@
                         "Print:": "Fail to store something worn:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -204,7 +204,7 @@
                         "Print:": "Fail to store something not held:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -234,7 +234,7 @@
                         "Print:": "Okay, store something into something held:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -264,7 +264,7 @@
                         "Print:": "Fail to store something to somewhere unreachable:<br>"
                       },
                       {
-                        "StoringInto actor:noun:otherNoun:": [
+                        "Storing actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [

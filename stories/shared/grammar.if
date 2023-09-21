@@ -211,7 +211,7 @@
                     "One noun:": "objects"
                   },
                   {
-                    "Action:": "storing into"
+                    "Action:": "storing"
                   }
                 ]
               },
@@ -478,7 +478,7 @@
             "One noun:": "objects"
           },
           {
-            "Action:": "storing into"
+            "Action:": "storing"
           }
         ]
       ]
@@ -669,7 +669,7 @@
                             "One noun:": "objects"
                           },
                           {
-                            "Action:": "storing into"
+                            "Action:": "storing"
                           }
                         ]
                       },
@@ -686,7 +686,7 @@
                                     "One noun:": "objects"
                                   },
                                   {
-                                    "Action:": "storing into"
+                                    "Action:": "storing"
                                   }
                                 ]
                               },

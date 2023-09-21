@@ -1,8 +1,9 @@
 {
   "Tapestry:": [
     {
+    	"--": "storing is used for both inserting something into a container and for placing something onto a supporter.",
       "Define action:requires:": [
-        "storing into",
+        "storing",
         [
           {
             "--": "the actor storing something ( ex. the player. )",
@@ -30,7 +31,7 @@
     },
     {
       "Define rule:named:do:": [
-        "instead of storing into",
+        "instead of storing",
         "the standard storing checks",
         {
           "If:assuming:do:else:": [
@@ -49,7 +50,7 @@
                         "FromText:": "@actor"
                       },
                       {
-                        "FromText:": "storing into"
+                        "FromText:": "storing"
                       },
                       {
                         "FromText:": "@noun"
@@ -84,7 +85,7 @@
                             "FromText:": "@actor"
                           },
                           {
-                            "FromText:": "storing into"
+                            "FromText:": "storing"
                           },
                           {
                             "FromText:": "@other_noun"
@@ -114,7 +115,7 @@
                                 "FromText:": "@actor"
                               },
                               {
-                                "FromText:": "storing into"
+                                "FromText:": "storing"
                               },
                               {
                                 "FromText:": "@noun"
@@ -140,7 +141,7 @@
     },
     {
       "Define rule:named:do:": [
-        "storing into",
+        "storing",
         "the standard storing action",
         {
           "If:assuming:do:": [
@@ -180,7 +181,7 @@
     },
     {
       "Define rule:do:": [
-        "report someone storing into",
+        "report someone storing",
         {
           "Say response:with:": [
             "someone stores",
@@ -191,7 +192,7 @@
     },
     {
       "Define rule:do:": [
-        "report storing into",
+        "report storing",
         {
           "Say response:with:": [
             "player stores",
@@ -214,7 +215,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "storing into"
+                    "storing"
                   ]
                 },
                 {
@@ -262,7 +263,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "storing into"
+                    "storing"
                   ]
                 },
                 {
@@ -312,7 +313,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "storing into"
+                    "storing"
                   ]
                 },
                 {
@@ -359,7 +360,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "storing into"
+                    "storing"
                   ]
                 },
                 {
@@ -411,7 +412,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "storing into"
+                    "storing"
                   ]
                 },
                 {
