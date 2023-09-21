@@ -118,9 +118,7 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 	return
 }
 
-// execute a command command
-// future: to differentiate b/t system actions and "timed" actions,
-// consider using naming convention: ex. @save (mud style), or #save
+// execute a command
 func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err error) {
 	if outOfWorld := strings.HasPrefix(act, "request "); outOfWorld {
 		if len(nouns) != 0 {
@@ -135,6 +133,8 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 		// fix: raise a parsing event with the nouns and the action name
 		if focus := pt.survey.GetFocalObject(); focus == nil {
 			err = errutil.New("couldnt get focal object")
+		} else if e := raiseRunAction(pt, focus, act, nouns); e != nil {
+			err = e
 		} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
 			err = e
 		} else {
@@ -152,6 +152,25 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 				_, err = pt.Runtime.Call("pass time", affine.None, nil, els[:1])
 			}
 		}
+	}
+	return
+}
+
+// generic catch all action
+func raiseRunAction(run rt.Runtime, actor g.Value, act string, nouns []string) (err error) {
+	keys := []string{"actor", "action", "first noun", "second noun"}
+	values := []g.Value{actor, g.StringOf(act), nounIndex(nouns, 0), nounIndex(nouns, 1)}
+	if _, e := run.Call("running action", affine.None, keys, values); e != nil {
+		err = e
+	}
+	return
+}
+
+func nounIndex(nouns []string, i int) (ret g.Value) {
+	if i < len(nouns) {
+		ret = g.StringOf(nouns[i])
+	} else {
+		ret = g.Empty
 	}
 	return
 }

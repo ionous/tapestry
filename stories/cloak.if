@@ -2,20 +2,20 @@
   "Tapestry:": [
     {
       "Comment:": [
-        "\"Cloak of Darkness\" has been implemented by most interactive fiction engines.",
-        "It contains a few of the essential features needed for IF games:",
-        "descriptions of rooms, their contents, and connections; customized user interactions;",
-        "darkness and the control of light; scoring; and more."
+        "\"Cloak of Darkness\" is a story, originally told by Roger Firth, which has been implemented in many if systems over the years. It contains some essential features used by interactive fiction including: descriptions of rooms, their contents, and connections, darkness and the control of light, scoring, and more."
       ]
     },
     {
       "Define scene:dependsOn:with:": [
-        "Cloak of Darkness",
-        "scoring",
+        "cloak",
+        [
+          "tapestry",
+          "scoring"
+        ],
         [
           {
             "Define value:of:as:": [
-              "maximum score",
+              "max score",
               "story",
               {
                 "FromNumber:": 2
@@ -23,24 +23,419 @@
             ]
           },
           {
-            "Declare:": "Foyer of the Opera House is a room.  You are in the foyer."
+            "Declare:": "The Foyer of the Opera House is a room. You are in the foyer."
           },
           {
             "Define value:of:as:": [
               "description",
               "the Foyer",
               {
-                "FromText:": "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. \nThe entrance from the street is to the north, and there are doorways south and west."
+                "FromText:": [
+                  "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and west."
+                ]
               }
             ]
           },
           {
+          	"--": "fix: its not ideal that we have to explicitly declare these. the flip side, is that if we implicitly declare these, then they'd have to use the full names or 'foyer' would generate something different than 'foyer of the opera house.'",
+            "Declare:": "The street is a room. The entrance is a door."
+          },
+          {
             "Heading:from:via:and:otherRoom:": [
               "north",
-              "the foyer",
+              "the Foyer",
               "the entrance",
               "arriving_at",
-              "nowhere"
+              "the street"
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "instead of traveling",
+              "entrance",
+              {
+                "Say:": "You've only just arrived, and besides, the weather outside is terrible."
+              }
+            ]
+          },
+          {
+            "Heading:from:and:otherRoom:": [
+              "west",
+              "the Foyer",
+              "connecting_to",
+              "the Cloakroom"
+            ]
+          },
+          {
+            "Declare:": "The Cloakroom is a room. In the Cloakroom is a supporter called the small brass hook. The hook is scenery."
+          },
+          {
+            "Define value:of:as:": [
+              "description",
+              "Cloakroom",
+              {
+                "FromText:": "In the Opera's better days the walls of this small room must have been lined with coat hooks. Now, only one remains. The exit is a door to the east."
+              }
+            ]
+          },
+          {
+            "Interpret alias:as:": [
+              "peg",
+              "hook"
+            ]
+          },
+          {
+            "Define value:of:as:": [
+              "description",
+              "the hook",
+              {
+                "FromText:": "A brass hook,{if childrenOf: .hook} with {print_inline_storage: .hook} hanging on it{else} screwed into the wall{end}."
+              }
+            ]
+          },
+          {
+            "Declare:": "The bar is a room. The bar is unlit. The scrawled message is scenery in the bar."
+          },
+          {
+            "Define value:of:as:": [
+              "printed name",
+              "the bar",
+              {
+                "FromText:": "Foyer Bar"
+              }
+            ]
+          },
+          {
+            "--": "The Bar"
+          },
+          {
+            "Define value:of:as:": [
+              "description",
+              "the bar",
+              {
+                "FromText:": "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
+              }
+            ]
+          },
+          {
+            "Interpret alias:as:": [
+              [
+                "floor",
+                "sawdust"
+              ],
+              "message"
+            ]
+          },
+          {
+            "Define traits:as:": [
+              [
+                "neat",
+                "scuffed",
+                "trampled"
+              ],
+              "neatness"
+            ]
+          },
+          {
+            "Define kind:fields:": [
+              "messages",
+              {
+                "Aspect:": "neatness"
+              }
+            ]
+          },
+          {
+            "Declare:": "Messages are a kind of thing. The scrawled message is a message."
+          },
+          {
+            "Define rule:noun:do:": [
+              "instead of examining",
+              "message",
+              [
+                {
+                  "Increase:": {
+                    "Object:field:": [
+                      "story",
+                      "score"
+                    ]
+                  }
+                },
+                {
+                  "Say:": "The message, neatly marked in the sawdust, reads..."
+                },
+                {
+                  "EndGame": true
+                }
+              ]
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "instead of examining",
+              "message",
+              {
+                "If:do:": [
+                  {
+                    "Object:field:": [
+                      "message",
+                      "trampled"
+                    ]
+                  },
+                  [
+                    {
+                      "Say:": "The message has been carelessly trampled, making it difficult to read. You can just distinguish the words..."
+                    },
+                    {
+                      "--": "FIX -- dont have a way to indicate failure, and cant provide a final phrase",
+                      "EndGame": true
+                    }
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "Define rule:do:": [
+              "instead of traveling",
+              {
+                "If:do:": [
+                  {
+                    "AllTrue:": [
+                      {
+                        "Cmp:is:txt:": [
+                          {
+                            "LocationOf obj:": {
+                              "FromText:": "@actor"
+                            }
+                          },
+                          "equal_to",
+                          "the bar"
+                        ]
+                      },
+                      {
+                        "Object:field:": [
+                          "the bar",
+                          "dark"
+                        ]
+                      },
+                      {
+                        "Cmp:is:txt:": [
+                          "@destination",
+                          "other_than",
+                          "the foyer"
+                        ]
+                      }
+                    ]
+                  },
+                  [
+                    {
+                      "Set:trait:": [
+                        "message",
+                        "trampled"
+                      ]
+                    },
+                    {
+                      "Say:": "Blundering around in the dark isn't a good idea!"
+                    }
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "Define rule:do:": [
+              "instead of running action",
+              {
+                "If:do:": [
+                  {
+                    "AllTrue:": [
+                      {
+                        "Cmp:is:txt:": [
+                          {
+                            "LocationOf obj:": {
+                              "FromText:": "@actor"
+                            }
+                          },
+                          "equal_to",
+                          "the bar"
+                        ]
+                      },
+                      {
+                        "Cmp:is:txt:": [
+                          "@action",
+                          "other_than",
+                          "going"
+                        ]
+                      },
+                      {
+                        "Object:field:": [
+                          "the bar",
+                          "dark"
+                        ]
+                      }
+                    ]
+                  },
+                  [
+                    {
+                      "--": "increase neatness, clamp so that it doesn't go past 'trampled'",
+                      "Increase:aspect:clamp:": [
+                        "message",
+                        "neatness",
+                        true
+                      ]
+                    },
+                    {
+                      "Say:": "In the dark? You could easily disturb something."
+                    }
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "--": "The cloak of darkness."
+          },
+          {
+            "Declare:": "You are wearing a velvet cloak."
+          },
+          {
+            "Interpret alias:as:": [
+              [
+                "dark",
+                "black",
+                "satin"
+              ],
+              "cloak"
+            ]
+          },
+          {
+            "Define value:of:as:": [
+              "description",
+              "the cloak",
+              {
+                "FromText:": "A handsome cloak made of velvet trimmed with satin. Its blackness is so deep that it seems to suck light from the room."
+              }
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "taking",
+              "cloak",
+              {
+                "Set:trait:": [
+                  "bar",
+                  "dark"
+                ]
+              }
+            ]
+          },
+          {
+            "--": "FIX: generic way to capture is/not in possession",
+            "Define rule:noun:do:": [
+              "dropping",
+              "cloak",
+              {
+                "Set:trait:": [
+                  "bar",
+                  "lit"
+                ]
+              }
+            ]
+          },
+          {
+            "--": [
+              "FIX: this looks like the wrong verb, but its not.",
+              "whats the target of storing?"
+            ],
+            "Define rule:noun:do:": [
+              "storing",
+              "cloak",
+              [
+                {
+                  "Set:trait:": [
+                    "bar",
+                    "lit"
+                  ]
+                },
+                {
+                  "Increase:": {
+                    "Object:field:": [
+                      "story",
+                      "score"
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "instead of dropping",
+              "cloak",
+              {
+                "If:do:": [
+                  {
+                    "Cmp:is:txt:": [
+                      {
+                        "LocationOf obj:": {
+                          "FromText:": "@actor"
+                        }
+                      },
+                      "other_than",
+                      "cloakroom"
+                    ]
+                  },
+                  {
+                    "Say:": "This isn't the best place to leave such a nice piece of clothing."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Define rule:noun:do:": [
+              "instead of storing",
+              "cloak",
+              {
+                "If:do:": [
+                  {
+                    "Cmp:is:txt:": [
+                      {
+                        "LocationOf obj:": {
+                          "FromText:": "@actor"
+                        }
+                      },
+                      "other_than",
+                      "cloakroom"
+                    ]
+                  },
+                  {
+                    "Say:": "This isn't the best place to leave such a nice piece of clothing."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Interpret:with:": [
+              "hang",
+              [
+                {
+                  "One noun:": "objects"
+                },
+                {
+                  "One word:": [
+                    "on",
+                    "onto"
+                  ]
+                },
+                {
+                  "One noun:": "objects"
+                },
+                {
+                  "Action:": "storing"
+                }
+              ]
             ]
           }
         ]

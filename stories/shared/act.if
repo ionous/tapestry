@@ -1,6 +1,38 @@
 {
   "Tapestry:": [
     {
+      "--": [
+        "Generic action run by the parser before the specific one selected by the player.",
+        "Exists to support filtering for multiple actions simultaneously."
+      ],
+      "Define action:requires:": [
+        "running action",
+        [
+          {
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text:": "action"
+          },
+          {
+            "Text:kind:": [
+              "first noun",
+              "thing"
+            ]
+          },
+          {
+            "Text:kind:": [
+              "second noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
       "--": "State changing alters the state of a noun by changing a trait.",
       "Define action:requires:": [
         "state changing",
