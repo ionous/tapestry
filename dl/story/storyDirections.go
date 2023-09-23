@@ -145,7 +145,8 @@ func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir MapDire
 		pen := w.Pin()
 		generateExit := len(exitDoor) == 0
 		if generateExit { // ex. "lobby-up-door"
-			exitDoor = room + "-" + dir + "-door"
+			exitDoor = strings.Replace(room, " ", "-", -1) + "-" +
+				strings.Replace(dir, " ", "-", -1) + "-door"
 		}
 		// -- Refs(nounOf(room, "rooms")))// verify the current room
 		// -- Refs(nounOf(otherRoom, "rooms")))// verify the target room
