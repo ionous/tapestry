@@ -87,13 +87,13 @@ func TestChart(t *testing.T) {
 			`BOO/0 "blix" "blox" UnlessStatement/3`); e != nil {
 			t.Fatal(e)
 		}
-		// test if-elsif chains
-		if e := testChart(t, "{if boo?}a{elsif beep?}b{end}",
+		// test if-elseIf chains
+		if e := testChart(t, "{if boo?}a{elseIf beep?}b{end}",
 			`BOO/0 "a" BEEP/0 "b" IfStatement/2 IfStatement/3`); e != nil {
 			t.Fatal(e)
 		}
-		// test if-elsif with empty leading if
-		if e := testChart(t, "{if boo?}{elsif beep?}b{end}",
+		// test if-elseIf with empty leading if
+		if e := testChart(t, "{if boo?}{elseIf beep?}b{end}",
 			`BOO/0 Span/0 BEEP/0 "b" IfStatement/2 IfStatement/3`); e != nil {
 			t.Fatal(e)
 		}

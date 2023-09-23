@@ -202,7 +202,7 @@ func branchParser(p *TemplateParser, v Directive) (ret State, err error) {
 				}
 			}))
 		}
-	case "elsif", "otherwiseIf":
+	case "elseIf", "otherwiseIf":
 		if e := ExpectedExpression(v); e != nil {
 			err = e
 		} else {
@@ -227,7 +227,7 @@ var builtin = map[string]types.BuiltinType{
 	"shuffle": types.Shuffle,
 	//
 	"if":          types.IfStatement,
-	"elsif":       types.IfStatement,
+	"elseIf":      types.IfStatement,
 	"otherwiseIf": types.IfStatement,
 	"unless":      types.UnlessStatement,
 }
