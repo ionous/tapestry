@@ -43,7 +43,7 @@ func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals [
 		} else if res, e := rules.Call(run, rec, field); e != nil {
 			err = e
 		} else {
-			ret, err = res.GetResult(aff)
+			ret, err = res.GetResult(run, aff)
 		}
 		run.Chain.RestoreScope(oldScope)
 	}

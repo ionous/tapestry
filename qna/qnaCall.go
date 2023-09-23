@@ -60,7 +60,7 @@ func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g
 		} else if res, e := rules.Call(run, rec, field); e != nil {
 			err = e
 		} else {
-			ret, err = res.GetResult(aff)
+			ret, err = res.GetResult(run, aff)
 		}
 		run.currentPatterns.stoppedPattern(name)
 		run.scope.RestoreScope(oldScope)

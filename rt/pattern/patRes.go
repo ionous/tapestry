@@ -35,7 +35,7 @@ type Result struct {
 	hasResult bool
 }
 
-func (res *Result) GetResult(aff affine.Affinity) (ret g.Value, err error) {
+func (res *Result) GetResult(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	rec, field, okay := res.rec, res.field, res.hasResult
 	if field < 0 {
 		// no result field, but we still might be checking for whether it had any matching rules.
@@ -47,9 +47,9 @@ func (res *Result) GetResult(aff affine.Affinity) (ret g.Value, err error) {
 	} else {
 		// get the value *or* a default.
 		if v, e := rec.GetIndexedField(field); e != nil {
-			err = errutil.New("error trying to get return value", e)
-		} else if e := safe.Check(v, aff); e != nil {
-			err = errutil.New("error trying to get return value", e)
+			err = errutil.New("error getting result", e)
+		} else if v, e := safe.ConvertValue(run, v, aff); e != nil {
+			err = errutil.New("error checking result", e)
 		} else {
 			// the caller expects nothing but we have a return value.
 			// other than passing data back to templates in a hack...

@@ -1,6 +1,8 @@
 package safe
 
 import (
+	"strconv"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -46,5 +48,30 @@ func Truthy(v g.Value) (ret bool) {
 	case affine.TextList, affine.NumList, affine.RecordList:
 		ret = v.Len() > 0
 	}
+	return
+}
+
+func ConvertValue(run rt.Runtime, val g.Value, out affine.Affinity) (ret g.Value, err error) {
+	switch aff := val.Affinity(); {
+	case aff == out:
+		ret = val
+
+	case out == affine.Text && aff == affine.Bool:
+		ret = g.StringOf(strconv.FormatBool(val.Bool()))
+
+	case out == affine.Text && aff == affine.Number:
+		ret = g.StringOf(strconv.FormatFloat(val.Float(), 'g', -1, 64))
+
+	case out == affine.Bool:
+		ret = g.BoolOf(Truthy(val))
+
+	default:
+		if e := Check(val, aff); e != nil {
+			err = e
+		} else {
+			ret = val
+		}
+	}
+
 	return
 }
