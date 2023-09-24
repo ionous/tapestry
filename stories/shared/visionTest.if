@@ -6,6 +6,7 @@
         "Kitchenette",
         [
           {
+            "--": "fix: i think the news doesnt need a full pattern. but we need to be able to replace responses.",
             "Define rule:do:": [
               "Print news of light",
               {
@@ -16,44 +17,93 @@
         ],
         [
           {
-            "Comment:": "Verify that we start not in darkness."
+            "Comment:": "Initialize the story as if we had started a game."
           },
           {
-            "Expect:": {
-              "Not:": {
-                "Object:field:": [
-                  "self",
-                  "is in darkness"
-                ]
-              }
-            }
-          },
-          {
-            "Comment:": [
-              "First change the kitchen lighting, and then evaluate the light.",
-              "Verify the game prints the arrival of darkness."
-            ]
-          },
-          {
-            "Set:value:": [
-              {
-                "Object:field:": [
-                  "kitchen",
-                  "unlit"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
-            ]
-          },
-          {
-            "AdjustingLight actor:": {
+            "--": [
+              "fix: have to manually start the game for tests.",
+              "maybe an option of some sort, or a scan for Fabricate input"
+            ],
+            "StartGame actor:": {
               "FromText:": {
                 "Object:field:": [
                   "player",
                   "pawn"
                 ]
+              }
+            }
+          },
+          {
+            "--": "update should set the actor to is illuminated",
+            "Expect:": {
+              "Object:field:dot:": [
+                "self",
+                "lighting",
+                {
+                  "AtField:": "is illuminated"
+                }
+              ]
+            }
+          },
+          {
+            "--": "update should set the story's cache",
+            "Expect:": {
+              "Object:field:": [
+                "story",
+                "is illuminated"
+              ]
+            }
+          },
+          {
+            "--": "asking through the pattern should also be fine.",
+            "Expect:": {
+              "Illuminates actor:": {
+                "FromText:": "self"
+              }
+            }
+          },
+          {
+            "Comment:": [
+              "Change the kitchen lighting, update time, and verify the game prints the arrival of darkness."
+            ]
+          },
+          {
+            "Set:trait:": [
+              "kitchen",
+              "unlit"
+            ]
+          },
+          {
+            "PassTime": true
+          },
+          {
+            "--": "update should set the actor to not is illuminated",
+            "Expect:": {
+              "Object:field:dot:": [
+                "self",
+                "lighting",
+                {
+                  "AtField:": "not illuminated"
+                }
+              ]
+            }
+          },
+          {
+            "--": "update should set the story to not is illuminated",
+            "Expect:": {
+              "Object:field:": [
+                "story",
+                "not illuminated"
+              ]
+            }
+          },
+          {
+            "--": "asking through the pattern should also be fine.",
+            "Expect:": {
+              "Not:": {
+                "Illuminates actor:": {
+                  "FromText:": "self"
+                }
               }
             }
           },
@@ -61,51 +111,19 @@
             "Expect output:": "It is now pitch dark in here!"
           },
           {
-            "Expect:": {
-              "Object:field:": [
-                "self",
-                "is in darkness"
-              ]
-            }
-          },
-          {
             "Comment:": "Verify that light breaks forth in a glorious wonder."
           },
           {
-            "Set:value:": [
-              {
-                "Object:field:": [
-                  "kitchen",
-                  "lit"
-                ]
-              },
-              {
-                "FromBool:": true
-              }
+            "Set:trait:": [
+              "kitchen",
+              "lit"
             ]
           },
           {
-            "AdjustingLight actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
-              }
-            }
+            "PassTime": true
           },
           {
             "Expect output:": "The light, it burns."
-          },
-          {
-            "Expect:": {
-              "Not:": {
-                "Object:field:": [
-                  "self",
-                  "is in darkness"
-                ]
-              }
-            }
           }
         ]
       ]

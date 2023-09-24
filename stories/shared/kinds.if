@@ -322,33 +322,11 @@
       "--": ""
     },
     {
-      "Declare:": "Illumination is a kind of aspect."
-    },
-    {
-      "Define traits:as:": [
-        [
-          "unlit",
-          "lit"
-        ],
-        "illumination"
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Things",
-        [
-          {
-            "Aspect:": "illumination"
-          }
-        ]
-      ]
-    },
-    {
       "Define kind:fields:": [
         "Rooms",
         [
           {
-            "Aspect:": "illumination"
+            "Aspect:": "radiance"
           }
         ]
       ]

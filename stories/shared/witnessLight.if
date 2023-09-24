@@ -1,0 +1,207 @@
+{
+  "Tapestry:": [
+    {
+      "Comment:": [
+        "Used at the end of the turn to decide if the player has been plunged into darkness or thrust into the light."
+      ]
+    },
+    {
+      "--": "print news of light or darkness as needed.",
+      "Define pattern:requires:provides:do:": [
+        "witness light",
+        {
+          "Nothing": true
+        },
+        [
+          {
+            "Text:kind:initially:": [
+              "actor",
+              "actor",
+              {
+                "Object:field:": [
+                  "story",
+                  "actor"
+                ]
+              }
+            ]
+          },
+          {
+            "Bool:initially:": [
+              "same actor",
+              {
+                "Cmp:is:txt:": [
+                  "@actor",
+                  "equal_to",
+                  {
+                    "Object:field:": [
+                      "last known",
+                      "actor"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Bool:initially:": [
+              "same location",
+              {
+                "Cmp:is:txt:": [
+                  {
+                    "Object:field:": [
+                      "story",
+                      "location"
+                    ]
+                  },
+                  "equal_to",
+                  {
+                    "Object:field:": [
+                      "last known",
+                      "location"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Bool:initially:": [
+              "was illuminated",
+              {
+                "Object:field:": [
+                  "last known",
+                  "is illuminated"
+                ]
+              }
+            ]
+          },
+          {
+            "Bool:initially:": [
+              "now illuminated",
+              {
+                "Object:field:": [
+                  "story",
+                  "is illuminated"
+                ]
+              }
+            ]
+          }
+        ],
+        {
+          "--": "allow after actions",
+          "Continue": true
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "witness light",
+        "discovered the light",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                "@same_actor",
+                "@same_location",
+                "@now_illuminated",
+                {
+                  "Not:": "@was_illuminated"
+                }
+              ]
+            },
+            {
+              "PrintNewsOfLight actor:": {
+                "FromText:": "@actor"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "witness light",
+        "discovered the dark",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                "@same_actor",
+                "@same_location",
+                "@was_illuminated",
+                {
+                  "Not:": "@now_illuminated"
+                }
+              ]
+            },
+            {
+              "PrintNewsOfDarkness actor:": {
+                "FromText:": "@actor"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "Print news of darkness",
+        {
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "Say response:with:": [
+            "darkness has fallen",
+            "<p>It is now pitch dark in here!"
+          ]
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "Print news of light",
+        {
+          "Text:kind:": [
+            "actor",
+            "actor"
+          ]
+        },
+        {
+          "Nothing": true
+        },
+        [
+          {
+            "Say:": "<p>"
+          },
+          {
+            "PrintVantage where:darkness:": [
+              {
+                "FromText:": {
+                  "LocationOf obj:": {
+                    "FromText:": "@actor"
+                  }
+                }
+              },
+              {
+                "--": "since this is news of light, we know the actor isn't in the dark.",
+                "FromBool:": false
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}

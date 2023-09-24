@@ -1,6 +1,7 @@
 {
   "Tapestry:": [
     {
+      "--": "tbd: can this and should this be made into an action?",
       "Define pattern:requires:provides:do:": [
         "Move Object",
         [
@@ -20,7 +21,10 @@
         {
           "Text:": "response"
         },
-        []
+        {
+          "--": "allow after rules to run.",
+          "Continue": true
+        }
       ]
     },
     {
@@ -73,6 +77,32 @@
                   }
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "after move object",
+        "update story movement.",
+        {
+          "--": "note: if move object were an event, we wouldnt have to explicitly test for the story actor here, because the handler would be filtered to the player implicitly.",
+          "If:do:": [
+            {
+              "Cmp:is:txt:": [
+                "@obj",
+                "equal_to",
+                {
+                  "Object:field:": [
+                    "story",
+                    "actor"
+                  ]
+                }
+              ]
+            },
+            {
+              "UpdateStory": true
             }
           ]
         }
@@ -211,7 +241,7 @@
     {
       "--": [
         "a low level command to move the object and set its wearable status.",
-        "It doesn't check for wearable nor for any other permissions."
+        "It doesn't check wearable or other permissions."
       ],
       "Define pattern:requires:provides:do:": [
         "Wear object",

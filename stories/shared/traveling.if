@@ -212,7 +212,7 @@
       "Define rule:do:": [
         "report traveling",
         {
-          "PrintVantage where:inDarkness:": [
+          "PrintVantage where:darkness:": [
             {
               "FromText:": {
                 "ParentOf obj:": {
@@ -221,11 +221,13 @@
               }
             },
             {
+              "--": "manually specify the status of lighting.",
               "FromBool:": {
-                "Object:field:": [
-                  "@actor",
-                  "is in darkness"
-                ]
+                "Not:": {
+                  "Illuminates actor:": {
+                    "FromText:": "@actor"
+                  }
+                }
               }
             }
           ]

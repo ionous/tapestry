@@ -39,17 +39,22 @@
         "looking",
         "the standard looking action",
         {
-          "PrintVantage where:inDarkness:": [
+          "PrintVantage where:darkness:verbosity:": [
             {
               "FromText:": "@location"
             },
             {
               "FromBool:": {
-                "Object:field:": [
-                  "@actor",
-                  "is in darkness"
-                ]
+                "Not:": {
+                  "Illuminates actor:": {
+                    "FromText:": "@actor"
+                  }
+                }
               }
+            },
+            {
+              "--": "when explicitly looking, always use the verbose mode.",
+              "FromText:": "verbose"
             }
           ]
         }
@@ -63,14 +68,32 @@
         "Print vantage",
         [
           {
+            "--": "can be an actor or, for testing, a room or some other object.",
             "Text:kind:": [
               "where",
               "object"
             ]
           },
           {
-            "--": "for testing, darkness gets passed in as a flag.",
-            "Bool:": "in darkness"
+            "--": [
+              "darkness status should be manually specified;"
+            ],
+            "Bool:": "darkness"
+          },
+          {
+            "--": [
+              "one of the verbosity traits.",
+              "if not specified, uses the setting's verbosity."
+            ],
+            "Text:initially:": [
+              "verbosity",
+              {
+                "Object:field:": [
+                  "settings",
+                  "verbosity"
+                ]
+              }
+            ]
           }
         ],
         [
@@ -101,21 +124,11 @@
         ],
         [
           {
-            "Log:value:": [
-              "debug",
-              {
-                "FromText:": {
-                  "Say:": "print vantage: from:{.where}"
-                }
-              }
-            ]
-          },
-          {
             "SetEverythingUnmentioned": true
           },
           {
             "If:do:else:": [
-              "@in_darkness",
+              "@darkness",
               [
                 {
                   "PrintDarkHeader room:": {
@@ -130,16 +143,18 @@
                     {
                       "AnyTrue:": [
                         {
-                          "Object:field:": [
-                            "settings",
+                          "Cmp:is:txt:": [
+                            "@verbosity",
+                            "equal_to",
                             "verbose"
                           ]
                         },
                         {
                           "AllTrue:": [
                             {
-                              "Object:field:": [
-                                "settings",
+                              "Cmp:is:txt:": [
+                                "@verbosity",
+                                "equal_to",
                                 "brief"
                               ]
                             },
@@ -164,7 +179,7 @@
                 }
               ],
               {
-                "--": "not in darkness",
+                "--": "when illuminate",
                 "Finally do:": [
                   {
                     "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
@@ -195,16 +210,18 @@
                       {
                         "AnyTrue:": [
                           {
-                            "Object:field:": [
-                              "settings",
+                            "Cmp:is:txt:": [
+                              "@verbosity",
+                              "equal_to",
                               "verbose"
                             ]
                           },
                           {
                             "AllTrue:": [
                               {
-                                "Object:field:": [
-                                  "settings",
+                                "Cmp:is:txt:": [
+                                  "@verbosity",
+                                  "equal_to",
                                   "brief"
                                 ]
                               },
@@ -257,7 +274,7 @@
           },
           {
             "If:do:else:": [
-              "@in_darkness",
+              "@darkness",
               [
                 {
                   "Set:value:": [

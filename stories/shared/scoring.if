@@ -109,7 +109,7 @@
               {
                 "Say response:with:": [
                   "announce the score",
-                  "{if .story.playing}So far {we!} have{else}In that game {we!}{end} scored {.story.score} {if .story.max_score}out of a possible {.story.max_score} {end}points, in {.story.turn_count} {if .story.turn_count > 1}turns{else}turn{end}."
+                  "{if .Story.playing}So far {we!} have{else}In that game {we!}{end} scored {.Story.score} {if .Story.max_score}out of a possible {.Story.max_score} {end}points, in {.Story.turn_count} {if .Story.turn_count > 1}turns{else}turn{end}."
                 ]
               }
             ]
@@ -223,6 +223,20 @@
         "no score",
         "tapestry",
         [
+        	{
+            "--": [
+              "fix: have to manually start the game for tests.",
+              "maybe an option of some sort, or a scan for Fabricate input"
+            ],
+            "StartGame actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
+          },
           {
             "Fabricate input:": "score"
           },

@@ -1,0 +1,270 @@
+{
+  "Tapestry:": [
+    {
+      "Declare:": "Globals are kinds of kinds."
+    },
+    {
+      "Define nouns:as:": [
+        "story",
+        "globals"
+      ]
+    },
+    {
+      "--": "a copy of the story globals from the previous turn.",
+      "Define nouns:as:": [
+        "last known",
+        "globals"
+      ]
+    },
+    {
+      "Define kind:fields:": [
+        "globals",
+        [
+          {
+            "Number:initially:": [
+              "turn count",
+              1
+            ]
+          },
+          {
+            "Aspect:": "play state"
+          },
+          {
+            "--": [
+              "the actor controlled by the player.",
+              "needs to be updated whenever the pawn is changed."
+            ],
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": [
+              "the room or container of the player's actor.",
+              "needs to be updated whenever the player is moved."
+            ],
+            "Text:kind:": [
+              "location",
+              "object"
+            ]
+          },
+          {
+            "--": [
+              "is the story location illuminated?",
+              "determined by 'update story'."
+            ],
+            "Aspect:": "illumination"
+          },
+          {
+            "--": "has the player ever seen a dark room description.",
+            "Bool:": "darkness witnessed"
+          },
+          {
+            "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
+            "Number:": "mentions"
+          }
+        ]
+      ]
+    },
+    {
+      "--": [
+        "inform has 'finished' and 'finished finally' (possibly from historical if)",
+        "tapestry uses 'failed' and 'finished' as rough equivalents."
+      ],
+      "Define traits:as:": [
+        [
+          "starting",
+          "playing",
+          "finished",
+          "failed"
+        ],
+        "play state"
+      ]
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "update story",
+        [
+          {
+            "--": "reuse the current story actor if a specific actor isnt provided.",
+            "Text:kind:initially:": [
+              "actor",
+              "actor",
+              {
+                "Object:field:": [
+                  "story",
+                  "actor"
+                ]
+              }
+            ]
+          },
+          {
+            "Bool:": "refresh"
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        [
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "actor"
+                ]
+              },
+              {
+                "FromText:": "@actor"
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "location"
+                ]
+              },
+              {
+                "FromText:": {
+                  "LocationOf obj:": {
+                    "FromText:": "@actor"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Object:field:": [
+                  "story",
+                  "is illuminated"
+                ]
+              },
+              {
+                "FromBool:": {
+                  "Illuminates actor:refresh:": [
+                    {
+                      "FromText:": "@actor"
+                    },
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": "copy everything from the current story variables to the last known variables.",
+      "Define pattern:requires:provides:do:": [
+        "update last known status",
+        {
+          "Nothing": true
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "Repeating across:as:do:": [
+            {
+              "FromTextList:": {
+                "Fields of:": "globals"
+              }
+            },
+            "field",
+            {
+              "Copy:from:": [
+                {
+                  "Object:field:": [
+                    "last known",
+                    "@field"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "story",
+                    "@field"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "after start game",
+        "the change play state rule",
+        {
+          "Set:trait:": [
+            "story",
+            "playing"
+          ]
+        }
+      ]
+    },
+    {
+      "--": [
+        "updates 'last known' story state. anything comparing",
+        "'story' and 'last known' has to happen in an earlier phase."
+      ],
+      "Define rule:named:do:": [
+        "after pass time, then continue",
+        "the update turn rule",
+        [
+          {
+            "UpdateLastKnownStatus": true
+          },
+          {
+            "Increase:": {
+              "Object:field:": [
+                "story",
+                "turn count"
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "Interpret:with:": [
+        "score",
+        [
+          {
+            "Action:": "request the score"
+          }
+        ]
+      ]
+    },
+    {
+      "--": [
+        "Even unscored games support printing the score.",
+        "By default it says the story doesn't have a score."
+      ],
+      "Define pattern:requires:provides:do:": [
+        "request the score",
+        {
+          "Nothing": true
+        },
+        {
+          "Nothing": true
+        },
+        {
+          "Say response:with:": [
+            "The no score rule",
+            "This isn't a competition."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -5,29 +5,28 @@
       "Define pattern:requires:provides:do:": [
         "pass time",
         {
-          "--": "the player",
-          "Text:kind:": [
-            "actor",
-            "actor"
-          ]
+        	"Nothing": true
         },
         {
           "Nothing": true
         },
-        {
-          "--": "no default rule",
-          "Continue": true
-        }
+        [
+          {
+            "UpdateStory": true
+          },
+          {
+            "--": "allow after rules to run, if any.",
+            "Continue": true
+          }
+        ]
       ]
     },
     {
       "Define rule:named:do:": [
-        "pass time, then continue",
-        "the adjust light rule",
+        "after pass time, then continue",
+        "witness light",
         {
-          "AdjustingLight actor:": {
-            "FromText:": "@actor"
-          }
+          "WitnessLight": true
         }
       ]
     },
@@ -45,37 +44,20 @@
         {
           "Nothing": true
         },
-        {
-          "--": "no default rule",
-          "Continue": true
-        }
-      ]
-    },
-    {
-      "--": [
-        "determine the initial lighting status",
-        "( doesn't print any status since the room description will. )"
-      ],
-      "Define rule:named:do:": [
-        "start game, then continue",
-        "the setup light rule",
-        {
-          "Set:value:": [
-            {
-              "Object:field:": [
-                "@actor",
-                "not in darkness"
-              ]
-            },
-            {
-              "FromBool:": {
-                "ContainsLight spot:": {
-                  "FromText:": "@actor"
-                }
-              }
+        [
+          {
+            "UpdateStory actor:": {
+              "FromText:": "@actor"
             }
-          ]
-        }
+          },
+          {
+            "UpdateLastKnownStatus": true
+          },
+          {
+            "--": "allow 'after start game' rules.",
+            "Continue": true
+          }
+        ]
       ]
     },
     {

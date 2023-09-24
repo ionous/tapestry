@@ -438,10 +438,11 @@
               "AllTrue:": [
                 "@requires_light",
                 {
-                  "Object:field:": [
-                    "@actor",
-                    "is in darkness"
-                  ]
+                  "Not:": {
+                    "Illuminates actor:": {
+                      "FromText:": "@actor"
+                    }
+                  }
                 }
               ]
             },
@@ -450,7 +451,7 @@
                 "Comment:": [
                   "Used to determine whether an action needing light can proceed.",
                   "Returns some response text if the action is blocked.",
-                  "Relies on the player's \"is in darkness\" which gets calculated once per turn ( in \"adjusting light.\" )"
+                  "Relies on has light."
                 ]
               },
               {

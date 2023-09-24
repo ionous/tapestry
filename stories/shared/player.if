@@ -15,21 +15,9 @@
     {
       "Define kind:fields:": [
         "Agents",
-        [
-          {
-            "Text:": "pawn"
-          }
-        ]
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Actors",
-        [
-          {
-            "Bool:": "in darkness"
-          }
-        ]
+        {
+          "Text:": "pawn"
+        }
       ]
     },
     {
@@ -172,7 +160,7 @@
       "--": ""
     },
     {
-    	"--": "self is the actor",
+      "--": "self is the actor",
       "Interpret alias:as:": [
         [
           "me",

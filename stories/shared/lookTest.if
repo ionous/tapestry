@@ -1,16 +1,9 @@
 {
   "Tapestry:": [
     {
-      "Test:dependsOn:withScene:do:": [
+      "Test:dependsOn:do:": [
         "base vis",
         "Kitchenette",
-        {
-        	"--": "set to verbose so that the printing the room multiple times doesn't honor 'mentioned' status.",
-          "Define nouns:traits:": [
-            "settings",
-            "verbose"
-          ]
-        },
         [
           {
             "Comment:": "Say the list of visible objects from one of several vantage points."
@@ -208,24 +201,20 @@
       "--": ""
     },
     {
-      "Test:dependsOn:withScene:do:": [
+      "Test:dependsOn:do:": [
         "printing vantages",
         "Kitchenette",
-        {
-        	"--": "set to verbose so that the printing the room multiple times doesn't honor 'mentioned' status.",
-          "Define nouns:traits:": [
-            "settings",
-            "verbose"
-          ]
-        },
         [
           {
-            "PrintVantage where:inDarkness:": [
+            "PrintVantage where:darkness:verbosity:": [
               {
                 "FromText:": "cabinet"
               },
               {
                 "FromBool:": true
+              },
+              {
+                "FromText:": "verbose"
               }
             ]
           },
@@ -236,9 +225,17 @@
             ]
           },
           {
-            "PrintVantage where:": {
-              "FromText:": "cabinet"
-            }
+            "PrintVantage where:darkness:verbosity:": [
+              {
+                "FromText:": "cabinet"
+              },
+              {
+                "FromBool:": false
+              },
+              {
+                "FromText:": "verbose"
+              }
+            ]
           },
           {
             "Expect output:": [
@@ -265,9 +262,17 @@
             ]
           },
           {
-            "PrintVantage where:": {
-              "FromText:": "cabinet"
-            }
+            "PrintVantage where:darkness:verbosity:": [
+              {
+                "FromText:": "cabinet"
+              },
+              {
+                "FromBool:": false
+              },
+              {
+                "FromText:": "verbose"
+              }
+            ]
           },
           {
             "Expect output:": [
@@ -287,9 +292,17 @@
             ]
           },
           {
-            "PrintVantage where:": {
-              "FromText:": "cabinet"
-            }
+            "PrintVantage where:darkness:verbosity:": [
+              {
+                "FromText:": "cabinet"
+              },
+              {
+                "FromBool:": false
+              },
+              {
+                "FromText:": "verbose"
+              }
+            ]
           },
           {
             "Expect output:": [

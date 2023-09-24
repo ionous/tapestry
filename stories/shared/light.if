@@ -1,6 +1,43 @@
 {
   "Tapestry:": [
     {
+      "Declare:": "Radiance is a kind of aspect."
+    },
+    {
+      "Define traits:as:": [
+        [
+          "unlit",
+          "lit"
+        ],
+        "radiance"
+      ]
+    },
+    {
+      "--": [
+        "Radiance determines whether something produces light."
+      ],
+      "Define kind:fields:": [
+        "Things",
+        [
+          {
+            "Aspect:": "radiance"
+          }
+        ]
+      ]
+    },
+    {
+      "Declare:": "Illumination is a kind of aspect."
+    },
+    {
+      "Define traits:as:": [
+        [
+          "not illuminated",
+          "is illuminated"
+        ],
+        "illumination"
+      ]
+    },
+    {
       "--": [
         "Returns true if light gets stopped when passing from inside an object to outside an object.",
         " Note that \"lit\" objects emit light from all of their surfaces,",
@@ -220,16 +257,203 @@
     },
     {
       "--": [
-        "Returns true if the passed spot is illuminated ",
-        "( because of its own light, or because of the light of some nearby object. )",
-        "This roughly correlates to Inform's \"offers light\" routine."
+        "returns true if the actor is not in darkness."
+      ],
+      "Define pattern:requires:provides:do:": [
+        "Illuminates",
+        [
+          {
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Bool:": [
+              "refresh"
+            ]
+          }
+        ],
+        {
+          "Bool:": "result"
+        },
+        [
+          {
+            "UpdateLighting actor:refresh:": [
+              {
+                "FromText:": "@actor"
+              },
+              {
+                "FromBool:": "@refresh"
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              "@result",
+              {
+                "FromBool:": {
+                  "Object:field:dot:": [
+                    "@actor",
+                    "lighting",
+                    {
+                      "AtField:": "is illuminated"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Declare:": "A lighting status is a kind of record."
+    },
+    {
+      "Define kind:fields:": [
+        "actors",
+        {
+          "Record:kind:": [
+            "lighting",
+            "lighting status"
+          ]
+        }
+      ]
+    },
+    {
+      "Define kind:fields:": [
+        "lighting status",
+        [
+          {
+            "Number:": "last turn"
+          },
+          {
+            "Aspect:": "illumination"
+          }
+        ]
+      ]
+    },
+    {
+      "--": [
+        "ensure an actor's lighting status is up to date."
+      ],
+      "Define pattern:requires:provides:do:": [
+        "update lighting",
+        [
+          {
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": "true if the lighting status needs updating",
+            "Bool:": "refresh"
+          }
+        ],
+        {
+          "--": "returns nothing",
+          "Nothing": true
+        },
+        [
+          {
+            "Expect:": {
+              "--": [
+                "verify we are trying to update the lighting of a valid actor.",
+                "( was start game called? )"
+              ],
+              "Not:": {
+                "Is empty:": "@actor"
+              }
+            }
+          },
+          {
+            "If:do:": [
+              {
+                "AnyTrue:": [
+                  "@refresh",
+                  {
+                    "Cmp:is:num:": [
+                      {
+                        "Object:field:": [
+                          "story",
+                          "turn count"
+                        ]
+                      },
+                      "greater_than",
+                      {
+                        "Object:field:dot:": [
+                          "@actor",
+                          "lighting",
+                          {
+                            "AtField:": "last turn"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:value:": [
+                    {
+                      "Object:field:": [
+                        "@actor",
+                        "lighting"
+                      ]
+                    },
+                    {
+                      "FromRecord:": {
+                        "LightingStatus lastTurn:illumination:": [
+                          {
+                            "FromNumber:": {
+                              "Object:field:": [
+                                "story",
+                                "turn count"
+                              ]
+                            }
+                          },
+                          {
+                            "--": [
+                              "bug: can only specify the 'aspect' which means we have to manually specify the text",
+                              "i'm not even sure i like the auto generated aspects, especially in records."
+                            ],
+                            "FromText:": {
+                              "Txt if:then:else:": [
+                                {
+                                  "ContainsLight object:": {
+                                    "FromText:": "@actor"
+                                  }
+                                },
+                                "is illuminated",
+                                "not illuminated"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": [
+        "Determine whether the passed object is lit.",
+        "An object can be lit because it provides its own light, or because some nearby object has light."
       ],
       "Define pattern:requires:provides:do:": [
         "contains light",
         [
           {
             "Text:kind:": [
-              "spot",
+              "object",
               "object"
             ]
           }
@@ -247,13 +471,11 @@
         ],
         [
           {
-            "Comment:": "Determine the ceiling, and add it to the queue for processing."
-          },
-          {
+            "--": "determine the ceiling.",
             "Repeating:do:": [
               {
                 "Not:": {
-                  "Is empty:": "@spot"
+                  "Is empty:": "@object"
                 }
               },
               [
@@ -261,17 +483,17 @@
                   "Set:value:": [
                     "@ceiling",
                     {
-                      "FromText:": "@spot"
+                      "FromText:": "@object"
                     }
                   ]
                 },
                 {
                   "Set:value:": [
-                    "@spot",
+                    "@object",
                     {
                       "FromText:": {
                         "TransparentOf obj:": {
-                          "FromText:": "@spot"
+                          "FromText:": "@object"
                         }
                       }
                     }
@@ -281,6 +503,7 @@
             ]
           },
           {
+            "--": "add the ceiling for processing.",
             "Push:into:": [
               {
                 "FromText:": "@ceiling"

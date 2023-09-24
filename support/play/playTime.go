@@ -148,8 +148,7 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 			if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
 				err = e
 			} else {
-				// meta actions are defined as those with start with the string "requesting ..."
-				_, err = pt.Runtime.Call("pass time", affine.None, nil, els[:1])
+				_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
 			}
 		}
 	}

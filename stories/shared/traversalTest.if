@@ -78,6 +78,21 @@
           }
         ],
         [
+        	
+          {
+            "--": [
+              "fix: have to manually start the game for tests.",
+              "maybe an option of some sort, or a scan for Fabricate input"
+            ],
+            "StartGame actor:": {
+              "FromText:": {
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
+              }
+            }
+          },
           {
             "Print:": {
               "DoorVia room:direction:": [
