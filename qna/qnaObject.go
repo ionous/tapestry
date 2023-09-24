@@ -101,6 +101,7 @@ func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value
 			ret = c
 		case rt.Assignment:
 			// evaluate the assignment to get the current value
+			// tbd: should there be a "this" pushed into scope?
 			if v, e := safe.GetAssignment(run, c); e != nil {
 				err = e
 			} else {
