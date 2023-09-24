@@ -24,7 +24,7 @@
                         "Print:": "Fail to retrieve from something closed:<br>"
                       },
                       {
-                        "RetrievingFrom actor:noun:otherNoun:": [
+                        "Retrieving actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -54,7 +54,7 @@
                         "Print:": "Okay, retrieve from supporter:<br>"
                       },
                       {
-                        "RetrievingFrom actor:noun:otherNoun:": [
+                        "Retrieving actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -87,7 +87,7 @@
                         "Print:": "Okay, retrieve from container:<br>"
                       },
                       {
-                        "RetrievingFrom actor:noun:otherNoun:": [
+                        "Retrieving actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -117,7 +117,7 @@
                         "Print:": "Fail to retrieve incorrectly:<br>"
                       },
                       {
-                        "RetrievingFrom actor:noun:otherNoun:": [
+                        "Retrieving actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [
@@ -144,7 +144,7 @@
                         "Print:": "Fail to steal:<br>"
                       },
                       {
-                        "RetrievingFrom actor:noun:otherNoun:": [
+                        "Retrieving actor:noun:otherNoun:": [
                           {
                             "FromText:": {
                               "Object:field:": [

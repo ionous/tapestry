@@ -336,7 +336,7 @@
                     ]
                   },
                   {
-                    "Action:": "retrieving from"
+                    "Action:": "retrieving"
                   }
                 ]
               },
@@ -747,7 +747,7 @@
                     ]
                   },
                   {
-                    "Action:": "retrieving from"
+                    "Action:": "retrieving"
                   }
                 ]
               },

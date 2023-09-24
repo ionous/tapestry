@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "Define action:requires:": [
-        "retrieving from",
+        "retrieving",
         [
           {
             "--": "the actor activating ( ex. the player. ) something",
@@ -31,7 +31,7 @@
     {
       "--": "can we reach the noun we are attempting to retrieve?",
       "Define rule:named:do:": [
-        "instead of retrieving from",
+        "instead of retrieving",
         "the standard retrieving checks",
         {
           "If:assuming:do:else:": [
@@ -50,7 +50,7 @@
                         "FromText:": "@actor"
                       },
                       {
-                        "FromText:": "retrieving from"
+                        "FromText:": "retrieving"
                       },
                       {
                         "FromText:": "@noun"
@@ -80,7 +80,7 @@
                             "FromText:": "@actor"
                           },
                           {
-                            "FromText:": "retrieving from"
+                            "FromText:": "retrieving"
                           },
                           {
                             "FromText:": "@noun"
@@ -104,7 +104,7 @@
     },
     {
       "Define rule:named:do:": [
-        "retrieving from",
+        "retrieving",
         "the standard retrieving action",
         {
           "Taking actor:noun:": [
@@ -129,7 +129,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "retrieving from"
+                    "retrieving"
                   ]
                 }
               ]
@@ -174,7 +174,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "retrieving from"
+                    "retrieving"
                   ]
                 }
               ]
@@ -216,7 +216,7 @@
                   "Cmp:is:txt:": [
                     "@action",
                     "equal_to",
-                    "retrieving from"
+                    "retrieving"
                   ]
                 },
                 {
