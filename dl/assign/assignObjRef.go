@@ -14,9 +14,9 @@ func (op *ObjectRef) GetObjectName(run rt.Runtime) (ret string, err error) {
 	// note: ObjectText can return a valid empty string; and here i think we want to error
 	// so doing this manually.
 	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
+		err = CmdErrorCtx(op, "get object text", e)
 	} else if id, e := run.GetField(meta.ObjectId, name.String()); e != nil {
-		err = cmdError(op, e)
+		err = CmdErrorCtx(op, "get object name", e)
 	} else {
 		ret = id.String()
 	}
@@ -25,7 +25,7 @@ func (op *ObjectRef) GetObjectName(run rt.Runtime) (ret string, err error) {
 
 func (op *ObjectRef) GetFieldName(run rt.Runtime) (ret string, err error) {
 	if name, e := safe.GetText(run, op.Field); e != nil {
-		err = cmdError(op, e)
+		err = CmdErrorCtx(op, "get field text", e)
 	} else {
 		ret = name.String()
 	}
@@ -50,58 +50,28 @@ func (op *ObjectRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *ObjectRef) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.Number); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
+func (op *ObjectRef) GetNumber(run rt.Runtime) (g.Value, error) {
+	return op.getValue(run, affine.Number)
 }
 
-func (op *ObjectRef) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.Text); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
+func (op *ObjectRef) GetText(run rt.Runtime) (g.Value, error) {
+	return op.getValue(run, affine.Text)
 }
 
-func (op *ObjectRef) GetRecord(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.Record); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
+func (op *ObjectRef) GetRecord(run rt.Runtime) (g.Value, error) {
+	return op.getValue(run, affine.Record)
 }
 
-func (op *ObjectRef) GetNumList(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.NumList); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
+func (op *ObjectRef) GetNumList(run rt.Runtime) (g.Value, error) {
+	return op.getValue(run, affine.NumList)
 }
 
-func (op *ObjectRef) GetTextList(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.TextList); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
+func (op *ObjectRef) GetTextList(run rt.Runtime) (g.Value, error) {
+	return op.getValue(run, affine.TextList)
 }
 
-func (op *ObjectRef) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.RecordList); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
+func (op *ObjectRef) GetRecordList(run rt.Runtime) (g.Value, error) {
+	return op.getValue(run, affine.RecordList)
 }
 
 func (op *ObjectRef) getValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
@@ -109,6 +79,9 @@ func (op *ObjectRef) getValue(run rt.Runtime, aff affine.Affinity) (ret g.Value,
 		err = e
 	} else {
 		ret, err = src.GetCheckedValue(run, aff)
+	}
+	if err != nil {
+		err = CmdErrorCtx(op, "get value of "+aff.String(), err)
 	}
 	return
 }

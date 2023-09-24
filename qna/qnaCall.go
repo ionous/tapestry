@@ -53,7 +53,7 @@ func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g
 		name := kind.Name()
 		oldScope := run.scope.ReplaceScope(scope.FromRecord(rec))
 		run.currentPatterns.startedPattern(name)
-		if initRecord(run, rec); e != nil {
+		if e := initRecord(run, rec); e != nil {
 			err = e
 		} else if rules, e := run.getRules(name); e != nil {
 			err = e

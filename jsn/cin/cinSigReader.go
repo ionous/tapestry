@@ -119,7 +119,7 @@ func (s *sigReader) readParam(r rune) (err error) {
 	switch {
 	case r == eof:
 		if len(s.buf)+len(s.currLabel) != 0 {
-			err = errutil.New("arguments should always end with a separator")
+			err = errutil.New("arguments should always end with a separator", s.cmd, s.currLabel)
 		}
 	// a colon indicates the end of an argument name
 	case r == ':':

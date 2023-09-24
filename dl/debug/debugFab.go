@@ -3,6 +3,7 @@ package debug
 import (
 	"log"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -14,6 +15,13 @@ import (
 var Stepper func(words string) error
 
 func (op *Fabricate) Execute(run rt.Runtime) (err error) {
+	if e := op.fabricate(run); e != nil {
+		err = assign.CmdError(op, e)
+	}
+	return
+}
+
+func (op *Fabricate) fabricate(run rt.Runtime) (err error) {
 	if Stepper == nil {
 		err = errutil.New("no parser set for the fabricator")
 	} else if words, e := safe.GetText(run, op.Text); e != nil {

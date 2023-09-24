@@ -32,7 +32,7 @@ func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
 	} else if !condition.Bool() {
-		err = errutil.New("expectation failed")
+		err = errutil.New("expectation failed", op.Markup["comment"])
 	}
 	return
 }

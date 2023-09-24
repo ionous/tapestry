@@ -227,7 +227,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	// fix: pre-transform field
 	if field := lang.Normalize(rawField); len(field) == 0 {
-		err = errutil.Fmt("requested an empty field of %q", target)
+		err = errutil.Fmt("GetField given an empty field for target %q", target)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story
 		if obj, e := run.getObjectInfo(target); e != nil {
