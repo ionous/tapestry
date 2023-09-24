@@ -36,7 +36,8 @@ func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // returns the author specified name for the indicated object.
-// returns an error if there is no such object; returns the empty string for an empty request.
+// returns an error if there is no such object;
+// returns the empty string for an empty request.
 func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if id, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)

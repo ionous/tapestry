@@ -12,7 +12,7 @@ const (
 	ObjectId       = "$object"    // returns the unique object id from a object name
 	ObjectKind     = "$kind"      // type of a game object
 	ObjectKinds    = "$ancestry"  // ancestor of an object's type ( a text list, root at the start )
-	ObjectName     = "$name"      // given a noun, return the name declared by the author
+	ObjectName     = "$name"      // given a noun, return the friendly name declared by the author
 	ObjectsOfKind  = "$instances" // all objects of a given kind
 	Option         = "$flags"     // get/set various runtime options ( see below )
 	PatternLabels  = "$labels"    // strings of the parameter names, the last is the return
