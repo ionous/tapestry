@@ -143,7 +143,7 @@
             ]
           },
           {
-            "Traveling actor:door:": [
+            "Traveling actor:noun:": [
               {
                 "FromText:": {
                   "Object:field:": [
@@ -161,7 +161,7 @@
             "Expect output:": "It doesn't lead anywhere."
           },
           {
-            "Traveling actor:door:": [
+            "Traveling actor:noun:": [
               {
                 "FromText:": {
                   "Object:field:": [
@@ -197,7 +197,7 @@
             "Expect output:": "You open the double doors."
           },
           {
-            "Traveling actor:door:": [
+            "Traveling actor:noun:": [
               {
                 "FromText:": {
                   "Object:field:": [

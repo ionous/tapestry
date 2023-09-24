@@ -18,7 +18,7 @@
           {
             "--": "the door being traveled through",
             "Text:kind:": [
-              "door",
+              "noun",
               "door"
             ]
           }
@@ -36,7 +36,7 @@
               "room",
               {
                 "Object:field:": [
-                  "@door",
+                  "@noun",
                   "destination"
                 ]
               }
@@ -56,7 +56,7 @@
                     }
                   },
                   {
-                    "FromText:": "@door"
+                    "FromText:": "@noun"
                   }
                 ]
               }
@@ -89,7 +89,7 @@
                         "FromText:": "traveling"
                       },
                       {
-                        "FromText:": "@door"
+                        "FromText:": "@noun"
                       }
                     ]
                   }
@@ -121,7 +121,7 @@
                             "FromText:": "traveling"
                           },
                           {
-                            "FromText:": "@door"
+                            "FromText:": "@noun"
                           },
                           {
                             "FromText:": "@destination"
@@ -153,7 +153,7 @@
             {
               "Say response:with:": [
                 "can only travel to a destination",
-                "{They: .door|capitalize!} {dont:.door} lead anywhere."
+                "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
               ]
             }
           ]
@@ -203,7 +203,7 @@
         {
           "Say response:with:": [
             "someone else travels",
-            "{The: .actor|capitalize!} went through {the: .door}."
+            "{The: .actor|capitalize!} went through {the: .noun}."
           ]
         }
       ]
