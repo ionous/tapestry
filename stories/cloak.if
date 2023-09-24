@@ -37,8 +37,8 @@
             ]
           },
           {
-          	"--": "fix: its not ideal that we have to explicitly declare these. the flip side, is that if we implicitly declare these, then they'd have to use the full names or 'foyer' would generate something different than 'foyer of the opera house.'",
-            "Declare:": "The street is a room. The entrance is a door."
+            "--": "fix: its not ideal that we have to explicitly declare these. the flip side, is that if we implicitly declare these, then they'd have to use the full names or 'foyer' would generate something different than 'foyer of the opera house.'",
+            "Declare:": "The street is a room. The entrance is a scenery door."
           },
           {
             "Heading:from:via:and:otherRoom:": [
@@ -54,7 +54,7 @@
               "instead of traveling",
               "entrance",
               {
-                "Say:": "You've only just arrived, and besides, the weather outside is terrible."
+                "Say:": "You've only just arrived and besides the weather outside is terrible."
               }
             ]
           },
@@ -89,8 +89,19 @@
               "description",
               "the hook",
               {
-                "FromText:": "A brass hook,{if childrenOf: .hook} with {print_inline_storage: .hook} hanging on it{else} screwed into the wall{end}."
+                "FromText:": "A brass hook{if children_of: .hook} with {children_of: .hook | print_inline_objects!} hanging on it{else} screwed into the wall{end}."
               }
+            ]
+          },
+          {
+            "--": "The Bar"
+          },
+          {
+            "Heading:from:and:otherRoom:": [
+              "south",
+              "the Foyer",
+              "connecting_to",
+              "the bar"
             ]
           },
           {
@@ -104,9 +115,6 @@
                 "FromText:": "Foyer Bar"
               }
             ]
-          },
-          {
-            "--": "The Bar"
           },
           {
             "Define value:of:as:": [
@@ -186,7 +194,7 @@
                       "Say:": "The message has been carelessly trampled, making it difficult to read. You can just distinguish the words..."
                     },
                     {
-                      "--": "FIX -- dont have a way to indicate failure, and cant provide a final phrase",
+                      "--": "fix -- dont have a way to indicate failure, and cant provide a final phrase",
                       "EndGame": true
                     }
                   ]
@@ -196,7 +204,7 @@
           },
           {
             "Define rule:do:": [
-              "instead of traveling",
+              "instead of going",
               {
                 "If:do:": [
                   {
@@ -204,25 +212,33 @@
                       {
                         "Cmp:is:txt:": [
                           {
-                            "LocationOf obj:": {
-                              "FromText:": "@actor"
-                            }
+                            "Object:field:": [
+                              "story",
+                              "location"
+                            ]
                           },
                           "equal_to",
-                          "the bar"
+                          {
+                            "IdOf:": "bar"
+                          }
                         ]
                       },
                       {
                         "Object:field:": [
-                          "the bar",
-                          "dark"
+                          "bar",
+                          "unlit"
                         ]
                       },
                       {
+                      	"--": [
+                      		"this is unsatisfying",
+                      		"would love to say 'destination' other than 'foyer'",
+                      		"but destination comes from door, and if there is no door there's no destination."
+                      	],
                         "Cmp:is:txt:": [
-                          "@destination",
+                          "@direction",
                           "other_than",
-                          "the foyer"
+                          "north"
                         ]
                       }
                     ]
@@ -252,12 +268,15 @@
                       {
                         "Cmp:is:txt:": [
                           {
-                            "LocationOf obj:": {
-                              "FromText:": "@actor"
-                            }
+                            "Object:field:": [
+                              "story",
+                              "location"
+                            ]
                           },
                           "equal_to",
-                          "the bar"
+                          {
+                            "IdOf:": "bar"
+                          }
                         ]
                       },
                       {
@@ -269,8 +288,8 @@
                       },
                       {
                         "Object:field:": [
-                          "the bar",
-                          "dark"
+                          "bar",
+                          "unlit"
                         ]
                       }
                     ]
@@ -324,7 +343,7 @@
               {
                 "Set:trait:": [
                   "bar",
-                  "dark"
+                  "unlit"
                 ]
               }
             ]
@@ -343,12 +362,8 @@
             ]
           },
           {
-            "--": [
-              "FIX: this looks like the wrong verb, but its not.",
-              "whats the target of storing?"
-            ],
             "Define rule:noun:do:": [
-              "storing",
+              "after storing",
               "cloak",
               [
                 {
@@ -377,9 +392,10 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "LocationOf obj:": {
-                          "FromText:": "@actor"
-                        }
+                        "Object:field:": [
+                          "story",
+                          "location"
+                        ]
                       },
                       "other_than",
                       "cloakroom"
@@ -401,9 +417,10 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "LocationOf obj:": {
-                          "FromText:": "@actor"
-                        }
+                        "Object:field:": [
+                          "story",
+                          "location"
+                        ]
                       },
                       "other_than",
                       "cloakroom"
