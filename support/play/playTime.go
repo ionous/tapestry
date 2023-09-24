@@ -133,22 +133,26 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 		// fix: raise a parsing event with the nouns and the action name
 		if focus := pt.survey.GetFocalObject(); focus == nil {
 			err = errutil.New("couldnt get focal object")
-		} else if e := raiseRunAction(pt, focus, act, nouns); e != nil {
+		} else if ok, e := raiseRunAction(pt, focus, act, nouns); e != nil {
 			err = e
-		} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
-			err = e
+		} else if !ok {
+			_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
 		} else {
-			// the actor ( and any nouns ) need to precede the "keyed" fields.
-			els := make([]g.Value, 1, 1+len(nouns)+len(vs))
-			els[0] = focus // presumably the player's actor
-			for _, n := range nouns {
-				els = append(els, g.StringOf(n))
-			}
-			els = append(els, vs...)
-			if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
+			if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
 				err = e
 			} else {
-				_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
+				// the actor ( and any nouns ) need to precede the "keyed" fields.
+				els := make([]g.Value, 1, 1+len(nouns)+len(vs))
+				els[0] = focus // presumably the player's actor
+				for _, n := range nouns {
+					els = append(els, g.StringOf(n))
+				}
+				els = append(els, vs...)
+				if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
+					err = e
+				} else {
+					_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
+				}
 			}
 		}
 	}
@@ -156,11 +160,13 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 }
 
 // generic catch all action
-func raiseRunAction(run rt.Runtime, actor g.Value, act string, nouns []string) (err error) {
+func raiseRunAction(run rt.Runtime, actor g.Value, act string, nouns []string) (okay bool, err error) {
 	keys := []string{"actor", "action", "first noun", "second noun"}
 	values := []g.Value{actor, g.StringOf(act), nounIndex(nouns, 0), nounIndex(nouns, 1)}
-	if _, e := run.Call("running action", affine.None, keys, values); e != nil {
+	if v, e := run.Call("running action", affine.None, keys, values); e != nil {
 		err = e
+	} else {
+		okay = v.Bool()
 	}
 	return
 }
