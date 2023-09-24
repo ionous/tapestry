@@ -43,6 +43,9 @@ func (op *ObjectRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else if errors.As(e, &u) && u.IsUnknownField() {
 		// asking for a boolean field that doesn't exist?
 		// we allow this so that any object can support trait requests
+		// fix: this should somehow validate that there is such a trait however
+		// [ ex. return "inapplicable trait" instead of "unknown field" ]
+		// bonus points for determining this during weave when using literals
 		ret = g.False
 	} else {
 		err = cmdError(op, e)
