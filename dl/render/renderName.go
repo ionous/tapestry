@@ -43,14 +43,17 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 			// trying to print a variable? what kind?
 			switch aff := v.Affinity(); aff {
 			default:
-				err = errutil.Fmt("variable %q is %s not text or object", op.Name, aff)
+				err = errutil.Fmt("can't render name of variable %q a %s", op.Name, aff)
+
+			case affine.Bool:
+				str := strconv.FormatBool(v.Bool())
+				ret = g.StringOf(str)
 
 			case affine.Number:
 				str := strconv.FormatFloat(v.Float(), 'g', -1, 64)
 				ret = g.StringOf(str)
 
 			case affine.Text:
-
 				// if there's no type, just assume the author was asking for the variable's text
 				// if the string is empty: allow it to print nothing... backwards compat for printing nil objects
 				if str, kind := v.String(), v.Type(); len(kind) == 0 || len(str) == 0 {
