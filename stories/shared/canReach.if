@@ -438,11 +438,11 @@
               "AllTrue:": [
                 "@requires_light",
                 {
-                  "Not:": {
-                    "Illuminates actor:": {
-                      "FromText:": "@actor"
-                    }
-                  }
+                  "--": "we know this rule is for the player, so we can rely the illumination cache.",
+                  "Object:field:": [
+                    "@actor",
+                    "not illuminated"
+                  ]
                 }
               ]
             },

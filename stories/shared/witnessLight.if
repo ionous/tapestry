@@ -6,7 +6,10 @@
       ]
     },
     {
-      "--": "print news of light or darkness as needed.",
+      "--": [
+        "print news of light or darkness as needed.",
+        "(namely, is the player in the same location as last turn, are they controlling the same actor as before, and has the lighting changed.)"
+      ],
       "Define pattern:requires:provides:do:": [
         "witness light",
         {
@@ -14,23 +17,16 @@
         },
         [
           {
-            "Text:kind:initially:": [
-              "actor",
-              "actor",
-              {
-                "Object:field:": [
-                  "story",
-                  "actor"
-                ]
-              }
-            ]
-          },
-          {
             "Bool:initially:": [
               "same actor",
               {
                 "Cmp:is:txt:": [
-                  "@actor",
+                  {
+                    "Object:field:": [
+                      "story",
+                      "actor"
+                    ]
+                  },
                   "equal_to",
                   {
                     "Object:field:": [
@@ -110,9 +106,7 @@
               ]
             },
             {
-              "PrintNewsOfLight actor:": {
-                "FromText:": "@actor"
-              }
+              "PrintNewsOfLight": true
             }
           ]
         }
@@ -135,9 +129,7 @@
               ]
             },
             {
-              "PrintNewsOfDarkness actor:": {
-                "FromText:": "@actor"
-              }
+              "PrintNewsOfDarkness": true
             }
           ]
         }
@@ -150,10 +142,7 @@
       "Define pattern:requires:provides:do:": [
         "Print news of darkness",
         {
-          "Text:kind:": [
-            "actor",
-            "actor"
-          ]
+          "Nothing": true
         },
         {
           "Nothing": true
@@ -173,10 +162,7 @@
       "Define pattern:requires:provides:do:": [
         "Print news of light",
         {
-          "Text:kind:": [
-            "actor",
-            "actor"
-          ]
+          "Nothing": true
         },
         {
           "Nothing": true
@@ -186,19 +172,14 @@
             "Say:": "<p>"
           },
           {
-            "PrintVantage where:darkness:": [
-              {
-                "FromText:": {
-                  "LocationOf obj:": {
-                    "FromText:": "@actor"
-                  }
-                }
-              },
-              {
-                "--": "since this is news of light, we know the actor isn't in the dark.",
-                "FromBool:": false
+            "PrintVantage where:": {
+              "FromText:": {
+                "Object:field:": [
+                  "story",
+                  "location"
+                ]
               }
-            ]
+            }
           }
         ]
       ]

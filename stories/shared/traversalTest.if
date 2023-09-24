@@ -14,8 +14,8 @@
           {
             "--": "fix: this should have made the doors 'plural named' automatically.",
             "Declare:": [
-            	"The double doors are plural named, closed, and openable doors.",
-            	"The curtain is a door."
+              "The double doors are plural named, closed, and openable doors.",
+              "The curtain is a door."
             ]
           },
           {
@@ -78,7 +78,6 @@
           }
         ],
         [
-        	
           {
             "--": [
               "fix: have to manually start the game for tests.",
@@ -131,8 +130,8 @@
             "Looking actor:": {
               "FromText:": {
                 "Object:field:": [
-                  "player",
-                  "pawn"
+                  "story",
+                  "actor"
                 ]
               }
             }
@@ -148,8 +147,8 @@
               {
                 "FromText:": {
                   "Object:field:": [
-                    "player",
-                    "pawn"
+                    "story",
+                    "actor"
                   ]
                 }
               },
@@ -166,8 +165,8 @@
               {
                 "FromText:": {
                   "Object:field:": [
-                    "player",
-                    "pawn"
+                    "story",
+                    "actor"
                   ]
                 }
               },

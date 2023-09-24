@@ -42,7 +42,7 @@
           {
             "--": [
               "the room or container of the player's actor.",
-              "needs to be updated whenever the player is moved."
+              "updated by 'move object' when the player is moved."
             ],
             "Text:kind:": [
               "location",

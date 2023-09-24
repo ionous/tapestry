@@ -107,7 +107,7 @@
     {
       "--": [
         "add all the directions into the bounds.",
-        "they act as global objects available in every location."
+        "they act as global objects available everywhere."
       ],
       "Define rule:named:do:": [
         "survey bounds, then continue",

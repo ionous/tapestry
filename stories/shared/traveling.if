@@ -212,22 +212,25 @@
       "Define rule:do:": [
         "report traveling",
         {
+        	"--": [
+        		"move object updates the story location and lighting",
+        		"so we don't have to calculate those again."
+        	],
           "PrintVantage where:darkness:": [
             {
               "FromText:": {
-                "ParentOf obj:": {
-                  "FromText:": "@actor"
-                }
+                "Object:field:": [
+                  "story",
+                  "location"
+                ]
               }
             },
             {
-              "--": "manually specify the status of lighting.",
               "FromBool:": {
-                "Not:": {
-                  "Illuminates actor:": {
-                    "FromText:": "@actor"
-                  }
-                }
+                "Object:field:": [
+                  "story",
+                  "not illuminated"
+                ]
               }
             }
           ]

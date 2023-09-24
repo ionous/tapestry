@@ -1,24 +1,13 @@
 {
   "Tapestry:": [
     {
-      "Define action:requires:provides:": [
+      "Define action:requires:": [
         "looking",
         {
           "--": "the actor looking ( ex. the player. )",
           "Text:kind:": [
             "actor",
             "actor"
-          ]
-        },
-        {
-          "Text:kind:initially:": [
-            "location",
-            "object",
-            {
-              "LocationOf obj:": {
-                "FromText:": "@actor"
-              }
-            }
           ]
         }
       ]
@@ -39,17 +28,22 @@
         "looking",
         "the standard looking action",
         {
+          "--": "we know this rule is for the player, so we can the story values.",
           "PrintVantage where:darkness:verbosity:": [
             {
-              "FromText:": "@location"
+              "FromText:": {
+                "Object:field:": [
+                  "story",
+                  "location"
+                ]
+              }
             },
             {
               "FromBool:": {
-                "Not:": {
-                  "Illuminates actor:": {
-                    "FromText:": "@actor"
-                  }
-                }
+                "Object:field:": [
+                  "story",
+                  "not illuminated"
+                ]
               }
             },
             {

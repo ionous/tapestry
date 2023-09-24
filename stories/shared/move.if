@@ -162,18 +162,12 @@
             ]
           },
           {
-            "Set:value:": [
-              "@response",
-              {
-                "FromText:": {
-                  "Say response:with:": [
-                    "okay",
-                    ""
-                  ]
-                }
-              }
-            ]
+          	"--": [
+          		"fix: doesnt set 'okay' response so that it can fall through to the after rules.",
+          		"move would be better as an action... patterns should probably use different names from before/after -- maybe first/last"
+          	]
           }
+          
         ]
       ]
     },

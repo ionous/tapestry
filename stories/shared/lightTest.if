@@ -59,7 +59,7 @@
     {
       "Test:dependsOn:withScene:do:": [
         "the gloom",
-        "Kitchenette",
+        "kitchenette",
         [
           {
             "Declare:": "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."
