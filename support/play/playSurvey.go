@@ -74,6 +74,8 @@ func (s *Survey) GetBounds(who, where string) (ret parser.Bounds, err error) {
 			ret, err = s.getLocale()
 		case "compass":
 			ret = s.compassBounds()
+		case "debugging":
+			ret = s.debugBounds()
 		case s.focus:
 			ret = s.selfBounded() // only includes the player's pawn
 		default:
@@ -145,6 +147,18 @@ func (s *Survey) compassBounds() (ret parser.Bounds) {
 	run := s.run
 	return func(cb parser.NounVisitor) (ret bool) {
 		if kids, e := run.GetField(meta.ObjectsOfKind, "directions"); e != nil {
+			log.Println(e)
+		} else {
+			ret = s.visitStrings(cb, kids)
+		}
+		return
+	}
+}
+
+func (s *Survey) debugBounds() (ret parser.Bounds) {
+	run := s.run
+	return func(cb parser.NounVisitor) (ret bool) {
+		if kids, e := run.GetField(meta.ObjectsOfKind, "objects"); e != nil {
 			log.Println(e)
 		} else {
 			ret = s.visitStrings(cb, kids)
