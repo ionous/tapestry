@@ -92,7 +92,7 @@
                   {
                     "Say response:with:": [
                       "notify score changed",
-                      "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} points."
+                      "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} {if .change > 1}points{else}point{end}."
                     ]
                   }
                 ]
@@ -382,15 +382,12 @@
               "flashlight",
               {
                 "--": "or, change it by a relative number.",
-                "Decrease:by:": [
-                  {
-                    "Object:field:": [
-                      "story",
-                      "score"
-                    ]
-                  },
-                  5
-                ]
+                "Decrease:": {
+                  "Object:field:": [
+                    "story",
+                    "score"
+                  ]
+                }
               }
             ]
           }
@@ -424,7 +421,7 @@
           {
             "Expect output:": [
               "You switch off the flashlight.",
-              "Your score has just gone down by five points."
+              "Your score has just gone down by one point."
             ]
           },
           {
@@ -432,7 +429,7 @@
           },
           {
             "Expect output:": [
-              "So far you have scored 45 points, in 3 turns."
+              "So far you have scored 49 points, in 3 turns."
             ]
           }
         ]
