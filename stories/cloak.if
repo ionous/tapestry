@@ -13,6 +13,24 @@
           "scoring"
         ],
         [
+        	{
+            "Define value:of:as:": [
+              "title",
+              "story",
+              {
+                "FromText:": "The Cloak of Darkness"
+              }
+            ]
+          },
+          {
+            "Define value:of:as:": [
+              "headline",
+              "story",
+              {
+                "FromText:": "An example story"
+              }
+            ]
+          },
           {
             "Define value:of:as:": [
               "max score",
