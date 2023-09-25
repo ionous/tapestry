@@ -89,6 +89,7 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 						}
 					} else {
 						reader := bufio.NewReader(os.Stdin)
+					Out:
 						for {
 							if len(prompt) > 0 {
 								fmt.Print(prompt)
@@ -97,21 +98,23 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 								break
 							} else {
 								words := in[:len(in)-1] // strip the newline.
-								if step(play, words, !jsonMode) {
-									break
-								}
-								if jsonMode {
-									// take buffered text and write it out
-									// fix? possibly splitting newlines into array entries?
-									// fix? right now serve turns this into play commands
-									// but as/if we add more... we should do it in here
-									// including probably hijacking the log output
-									var out js.Builder
-									out.Brace(js.Obj, func(inner *js.Builder) {
-										inner.Q("out").R(js.Colon).Q(bufferedText.String())
-									})
-									_, _ = io.WriteString(os.Stdout, out.String())
-									bufferedText.Reset()
+								for _, cmd := range strings.Split(words, ";") {
+									if step(play, cmd, !jsonMode) {
+										break Out
+									}
+									if jsonMode {
+										// take buffered text and write it out
+										// fix? possibly splitting newlines into array entries?
+										// fix? right now serve turns this into play commands
+										// but as/if we add more... we should do it in here
+										// including probably hijacking the log output
+										var out js.Builder
+										out.Brace(js.Obj, func(inner *js.Builder) {
+											inner.Q("out").R(js.Colon).Q(bufferedText.String())
+										})
+										_, _ = io.WriteString(os.Stdout, out.String())
+										bufferedText.Reset()
+									}
 								}
 							}
 						}
