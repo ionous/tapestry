@@ -1,9 +1,12 @@
 package debug
 
 import (
+	"errors"
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -32,7 +35,20 @@ func (op *Fabricate) fabricate(run rt.Runtime) (err error) {
 			log.Println("> ", words)
 		}
 		if len(words) > 0 {
-			err = Stepper(words)
+			var quit bool
+			for _, cmd := range strings.Split(words, ";") {
+				if quit {
+					err = errutil.New("game was quit")
+				} else {
+					var sig game.Signal
+					if e := Stepper(cmd); errors.As(e, &sig) && sig == game.SignalQuit {
+						quit = true
+					} else if e != nil {
+						err = e
+						break
+					}
+				}
+			}
 		}
 	}
 	return

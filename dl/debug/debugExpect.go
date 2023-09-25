@@ -1,10 +1,12 @@
 package debug
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -32,7 +34,11 @@ func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
 	} else if !condition.Bool() {
-		err = errutil.New("expectation failed", op.Markup["comment"])
+		str, ok := op.Markup[markup.Comment]
+		if !ok {
+			str = fmt.Sprintf("%v", op.Value)
+		}
+		err = errutil.New("expectation failed", str)
 	}
 	return
 }
