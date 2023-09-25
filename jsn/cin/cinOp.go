@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 	"github.com/ionous/errutil"
 )
 
@@ -80,7 +81,7 @@ func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 			if e := json.Unmarshal(v, &value); e != nil {
 				err = errutil.New("couldnt read markup at", k, e)
 			} else if key := k[len(markupMarker):]; len(key) == 0 {
-				out.AddMarkup("comment", value)
+				out.AddMarkup(markup.Comment, value)
 			} else {
 				out.AddMarkup(key, value)
 			}
@@ -96,7 +97,7 @@ func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 		// in the case that there was no command but there was a comment marker
 		// let the command *be* the comment marker
 		if len(out.Sig) == 0 {
-			if _, ok := out.Markup["comment"]; ok {
+			if _, ok := out.Markup[markup.Comment]; ok {
 				out.Sig = markupMarker
 			}
 		}

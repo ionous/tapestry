@@ -6,10 +6,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 )
 
 func UserComment(s string) map[string]any {
-	return map[string]any{"comment": s}
+	return map[string]any{markup.Comment: s}
 }
 
 // a program that can check factorials

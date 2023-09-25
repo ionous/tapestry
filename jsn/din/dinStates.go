@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 	"github.com/ionous/errutil"
 )
 
@@ -78,7 +79,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 					if *ptr == nil {
 						*ptr = make(map[string]any)
 					}
-					(*ptr)["comment"] = d.Id
+					(*ptr)[markup.Comment] = d.Id
 				}
 			}
 			dec.Machine.Markout = nil

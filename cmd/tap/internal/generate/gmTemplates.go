@@ -5,8 +5,8 @@ import (
 	"strings"
 	"text/template"
 
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 
@@ -37,7 +37,7 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		},
 		"UserComment": func(block *spec.TypeSpec) (ret []string) {
 			if commentBlock != block {
-				blockComment = composer.UserComment(block.Markup)
+				blockComment = markup.UserComment(block.Markup)
 				commentBlock = block
 			}
 			return blockComment

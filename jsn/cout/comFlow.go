@@ -1,5 +1,7 @@
 package cout
 
+import "git.sr.ht/~ionous/tapestry/rt/markup"
+
 type comFlow struct {
 	sig    Sig
 	params []any
@@ -49,7 +51,7 @@ func (cf *comFlow) finalize() (ret map[string]any) {
 			}
 		}
 		for k, v := range cf.markup {
-			if k == "comment" {
+			if k == markup.Comment {
 				// { "--": "here's a story of a lovely comment, which was writing up some very lovely words." }
 				m[markupMarker] = v
 			} else {

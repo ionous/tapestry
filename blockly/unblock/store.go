@@ -7,6 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 	"github.com/ionous/errutil"
 )
 
@@ -56,11 +57,11 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *B
 			lines := strings.FieldsFunc(c.Text, func(r rune) bool { return r == newline })
 			switch len(lines) {
 			case 0:
-				(*ptr)["comment"] = ""
+				(*ptr)[markup.Comment] = ""
 			case 1:
-				(*ptr)["comment"] = lines[0]
+				(*ptr)[markup.Comment] = lines[0]
 			default:
-				(*ptr)["comment"] = lines
+				(*ptr)[markup.Comment] = lines
 			}
 		}
 	}

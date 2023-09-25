@@ -1,8 +1,13 @@
-package composer
+package markup
+
+const (
+	Comment  = "comment"
+	Template = "template"
+)
 
 // read a user comment from markup, normalizing it as an array of strings
 func UserComment(markup map[string]any) (ret []string) {
-	switch cmt := markup["comment"].(type) {
+	switch cmt := markup[Comment].(type) {
 	case string:
 		ret = []string{cmt}
 	case []string:

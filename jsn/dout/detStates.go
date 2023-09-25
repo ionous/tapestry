@@ -3,9 +3,9 @@ package dout
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/rt/markup"
 	"github.com/ionous/errutil"
 )
 
@@ -55,7 +55,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(typeName string, _ jsn.FlowBlock) bool {
 		var id string // fix: separate "id" from "comment"?
 		if ptr := m.Markout; ptr != nil {
-			if lines := composer.UserComment(*ptr); len(lines) > 0 {
+			if lines := markup.UserComment(*ptr); len(lines) > 0 {
 				id = strings.Join(lines, "\n")
 			}
 			m.Markout = nil
