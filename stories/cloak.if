@@ -476,6 +476,161 @@
                 }
               ]
             ]
+          },
+          {
+            "Test:do:": [
+              "cloak of dropping",
+              [
+                {
+                  "--": [
+                    "fix: have to manually start the game for tests.",
+                    "maybe an option of some sort, or a scan for Fabricate input"
+                  ],
+                  "StartGame actor:quietly:": [
+                    {
+                      "FromText:": {
+                        "Object:field:": [
+                          "player",
+                          "pawn"
+                        ]
+                      }
+                    },
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                },
+                {
+                  "Fabricate input:": "e; drop cloak; w; s; x message"
+                },
+                {
+                  "Expect:": {
+                    "Object:field:": [
+                      "story",
+                      "completed"
+                    ]
+                  }
+                },
+                {
+                  "Expect:": {
+                    "Cmp:is:num:": [
+                      {
+                        "Object:field:": [
+                          "story",
+                          "score"
+                        ]
+                      },
+                      "equal_to",
+                      1
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "Test:do:": [
+              "cloak of perfection",
+              [
+                {
+                  "--": [
+                    "fix: have to manually start the game for tests.",
+                    "maybe an option of some sort, or a scan for Fabricate input"
+                  ],
+                  "StartGame actor:quietly:": [
+                    {
+                      "FromText:": {
+                        "Object:field:": [
+                          "player",
+                          "pawn"
+                        ]
+                      }
+                    },
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                },
+                {
+                  "Fabricate input:": "e; take off cloak; put cloak on hook; w; s; x message"
+                },
+                {
+                  "Expect:": {
+                    "Object:field:": [
+                      "story",
+                      "completed"
+                    ]
+                  }
+                },
+                {
+                  "Expect:": {
+                    "Cmp:is:num:": [
+                      {
+                        "Object:field:": [
+                          "story",
+                          "score"
+                        ]
+                      },
+                      "equal_to",
+                      2
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "Test:do:": [
+              "cloak of failure",
+              [
+                {
+                  "--": [
+                    "fix: have to manually start the game for tests.",
+                    "maybe an option of some sort, or a scan for Fabricate input"
+                  ],
+                  "StartGame actor:quietly:": [
+                    {
+                      "FromText:": {
+                        "Object:field:": [
+                          "player",
+                          "pawn"
+                        ]
+                      }
+                    },
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                },
+                {
+                  "Fabricate input:": "s; jump; jump; n; e; drop cloak; w; s; x message"
+                },
+                {
+                  "--": "game should be finished, but not completed.",
+                  "Expect:": {
+                    "Object:field:": [
+                      "story",
+                      "concluded"
+                    ]
+                  }
+                },
+                {
+                  "--": "and you should have scored nothing for dropping the cloak.",
+                  "Expect:": {
+                    "Cmp:is:num:": [
+                      {
+                        "Object:field:": [
+                          "story",
+                          "score"
+                        ]
+                      },
+                      "equal_to",
+                      0
+                    ]
+                  }
+                }
+              ]
+            ]
           }
         ]
       ]

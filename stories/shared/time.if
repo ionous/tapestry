@@ -178,15 +178,33 @@
           "Nothing": true
         },
         [
-        	{
-        		"Print:": "<b>"
-        	},
+          {
+            "Set:trait:": [
+              "story",
+              {
+                "Txt if:then:else:": [
+                  {
+                    "Not:": "@finally"
+                  },
+                  "concluded",
+                  "completed"
+                ]
+              }
+            ]
+          },
+          {
+            "--": "fix: some sort of indention block. ul/ol use bullets, numbers.",
+            "Print:": "<p><b>"
+          },
           {
             "Print:": "@saying"
           },
           {
-        		"Print:": "</b>"
-        	},
+            "Print:": "</b><p>"
+          },
+          {
+            "RequestTheScore": true
+          },
           {
             "--": "maybe send 'finally' to quit game?",
             "QuitGame": true

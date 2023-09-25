@@ -93,14 +93,14 @@
     {
       "--": [
         "inform has 'finished' and 'finished finally' (possibly from historical if)",
-        "tapestry uses 'failed' and 'finished' as rough equivalents."
+        "tapestry uses 'concluded' and 'completed' as rough respective equivalents."
       ],
       "Define traits:as:": [
         [
           "starting",
           "playing",
-          "finished",
-          "failed"
+          "concluded",
+          "completed"
         ],
         "play state"
       ]

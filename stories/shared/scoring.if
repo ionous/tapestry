@@ -109,7 +109,7 @@
               {
                 "Say response:with:": [
                   "announce the score",
-                  "{if .Story.playing}So far {we!} have{else}In that game {we!}{end} scored {.Story.score} {if .Story.max_score}out of a possible {.Story.max_score} {end}points, in {.Story.turn_count} {if .Story.turn_count > 1}turns{else}turn{end}."
+                  "{if .Story.playing}So far, in{else}In{end} {.Story.turn_count} {if .Story.turn_count > 1}turns{else}turn{end}, {we!}{if .Story.playing} have{end} scored {.Story.score} {if .Story.max_score}out of a possible {.Story.max_score} {end}points."
                 ]
               }
             ]
@@ -297,7 +297,7 @@
             "Fabricate input:": "score"
           },
           {
-            "Expect output:": "So far you have scored 23 out of a possible 50 points, in 1 turn."
+            "Expect output:": "So far, in 1 turn, you have scored 23 out of a possible 50 points."
           }
         ]
       ]
@@ -311,7 +311,7 @@
             "--": "simulate the end of game state.",
             "Set:trait:": [
               "story",
-              "finished"
+              "completed"
             ]
           },
           {
@@ -357,7 +357,7 @@
             "Fabricate input:": "score"
           },
           {
-            "Expect output:": "In that game you scored 100 out of a possible 100 points, in 7 turns."
+            "Expect output:": "In 7 turns, you scored 100 out of a possible 100 points."
           }
         ]
       ]
@@ -448,7 +448,7 @@
           },
           {
             "Expect output:": [
-              "So far you have scored 49 points, in 3 turns."
+              "So far, in 3 turns, you have scored 49 points."
             ]
           }
         ]
