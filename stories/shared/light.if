@@ -358,11 +358,11 @@
         },
         [
           {
+            "--": [
+              "verify we are trying to update the lighting of a valid actor.",
+              "( was start game called? )"
+            ],
             "Expect:": {
-              "--": [
-                "verify we are trying to update the lighting of a valid actor.",
-                "( was start game called? )"
-              ],
               "Not:": {
                 "Is empty:": "@actor"
               }

@@ -216,24 +216,7 @@
         		"move object updates the story location and lighting",
         		"so we don't have to calculate those again."
         	],
-          "PrintVantage where:darkness:": [
-            {
-              "FromText:": {
-                "Object:field:": [
-                  "story",
-                  "location"
-                ]
-              }
-            },
-            {
-              "FromBool:": {
-                "Object:field:": [
-                  "story",
-                  "not illuminated"
-                ]
-              }
-            }
-          ]
+          "PrintVantage": true
         }
       ]
     },

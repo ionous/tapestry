@@ -91,25 +91,26 @@
         ],
         [
           {
-            "--": [
-              "fix: have to manually start the game for tests.",
-              "maybe an option of some sort, or a scan for Fabricate input"
-            ],
-            "StartGame actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
+            "StartGame actor:quietly:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromBool:": true
               }
-            }
+            ]
           },
           {
             "Fabricate input:": "look"
           },
           {
             "Expect output:": [
-              "Darkness.",
+              "**Darkness**",
               "It is pitch dark, and you can't see a thing."
             ]
           },
@@ -119,7 +120,7 @@
           {
             "Expect output:": [
               "You switch on the flashlight.",
-              "Kitchen.",
+              "**Kitchen**",
               "Your Aunt Fiona's kitchen..."
             ]
           }

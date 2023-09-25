@@ -169,17 +169,11 @@
         },
         [
           {
-            "Say:": "<p>"
+            "P": true
           },
           {
-            "PrintVantage where:": {
-              "FromText:": {
-                "Object:field:": [
-                  "story",
-                  "location"
-                ]
-              }
-            }
+          	"--": "bug? if you print vantage in a say statement the newline between the room name and the description collapses.",
+            "PrintVantage": true
           }
         ]
       ]

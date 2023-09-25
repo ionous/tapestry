@@ -5,7 +5,7 @@
       "Define pattern:requires:provides:do:": [
         "pass time",
         {
-        	"Nothing": true
+          "Nothing": true
         },
         {
           "Nothing": true
@@ -34,13 +34,24 @@
       "--": "run when a player first starts a new story.",
       "Define pattern:requires:provides:do:": [
         "start game",
-        {
-          "--": "the player",
-          "Text:kind:": [
-            "actor",
-            "actor"
-          ]
-        },
+        [
+          {
+            "--": "the player",
+            "Text:kind:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "--": [
+              "when true, suppress the banner text.",
+              "(useful for tests)."
+            ],
+            "Bool:": [
+              "quietly"
+            ]
+          }
+        ],
         {
           "Nothing": true
         },
@@ -51,6 +62,7 @@
             }
           },
           {
+            "--": "copy our initial story data into the last known data",
             "UpdateLastKnownStatus": true
           },
           {
@@ -58,6 +70,70 @@
             "Continue": true
           }
         ]
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "after start game, then continue",
+        "the go start playing rule",
+        [
+          {
+            "Increase:": {
+              "Object:field:": [
+                "story",
+                "turn count"
+              ]
+            }
+          },
+          {
+            "Set:trait:": [
+              "story",
+              "playing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "after start game, then continue",
+        "the print first room rule",
+        {
+          "If:do:": [
+            {
+              "Not:": "@quietly"
+            },
+            [
+              {
+                "--": "separate the banner from the vantage (if any)",
+                "P": true
+              },
+              {
+                "PrintVantage": true
+              },
+              {
+                "--": "separate the look from the command line",
+                "P": true
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "before start game, then continue",
+        "the print banner rule",
+        {
+          "If:do:": [
+            {
+              "Not:": "@quietly"
+            },
+            {
+              "PrintTheBanner": true
+            }
+          ]
+        }
       ]
     },
     {

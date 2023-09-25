@@ -7,7 +7,7 @@
         [
           {
             "Define kind:fields:": [
-              "globals",
+              "story data",
               [
                 {
                   "Number:": "score"
@@ -223,19 +223,20 @@
         "no score",
         "tapestry",
         [
-        	{
-            "--": [
-              "fix: have to manually start the game for tests.",
-              "maybe an option of some sort, or a scan for Fabricate input"
-            ],
-            "StartGame actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
+          {
+            "StartGame actor:quietly:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromBool:": true
               }
-            }
+            ]
           },
           {
             "Fabricate input:": "score"
@@ -252,17 +253,19 @@
         "scoring",
         [
           {
-            "--": [
-              "fix: have to manually start the game for tests."
-            ],
-            "StartGame actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
+            "StartGame actor:quietly:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromBool:": true
               }
-            }
+            ]
           },
           {
             "Set:value:": [
@@ -408,17 +411,19 @@
         ],
         [
           {
-            "--": [
-              "fix: have to manually start the game for tests."
-            ],
-            "StartGame actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
+            "StartGame actor:quietly:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromBool:": true
               }
-            }
+            ]
           },
           {
             "Fabricate input:": "switch on flashlight"

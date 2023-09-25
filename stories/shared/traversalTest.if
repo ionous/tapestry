@@ -79,18 +79,19 @@
         ],
         [
           {
-            "--": [
-              "fix: have to manually start the game for tests.",
-              "maybe an option of some sort, or a scan for Fabricate input"
-            ],
-            "StartGame actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
+            "StartGame actor:quietly:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromBool:": true
               }
-            }
+            ]
           },
           {
             "Print:": {
@@ -138,7 +139,7 @@
           },
           {
             "Expect output:": [
-              "Lobby.",
+              "**Lobby**",
               "You can see some double doors and a faux door."
             ]
           },
@@ -213,7 +214,7 @@
           },
           {
             "Expect output:": [
-              "Foyer.",
+              "**Foyer**",
               "You can see a curtain."
             ]
           },
@@ -232,7 +233,7 @@
           },
           {
             "Expect output:": [
-              "Cloak Room."
+              "**Cloak Room**"
             ]
           },
           {

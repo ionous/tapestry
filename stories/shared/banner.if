@@ -1,0 +1,20 @@
+{
+  "Tapestry:": [
+    {
+      "Define pattern:requires:provides:do:": [
+        "print the banner",
+        {
+          "Nothing": true
+        },
+        {
+          "Nothing": true
+        },
+        [
+          {
+            "Say:": "<p><b>{.story.title}</b><wbr>{.story.headline}{if .story.author} by {.story.author}{end}<wbr>{if .story.version}Version {.story.version}<wbr>{end}"
+          }
+        ]
+      ]
+    }
+  ]
+}

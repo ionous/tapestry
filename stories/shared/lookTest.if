@@ -206,26 +206,7 @@
         "Kitchenette",
         [
           {
-            "PrintVantage where:darkness:verbosity:": [
-              {
-                "FromText:": "cabinet"
-              },
-              {
-                "FromBool:": true
-              },
-              {
-                "FromText:": "verbose"
-              }
-            ]
-          },
-          {
-            "Expect output:": [
-              "Darkness.",
-              "It is pitch dark, and you can't see a thing."
-            ]
-          },
-          {
-            "PrintVantage where:darkness:verbosity:": [
+            "PrintVantage location:illuminated:verbosity:": [
               {
                 "FromText:": "cabinet"
               },
@@ -239,7 +220,26 @@
           },
           {
             "Expect output:": [
-              "Kitchen (in the cabinet).",
+              "**Darkness**",
+              "It is pitch dark, and you can't see a thing."
+            ]
+          },
+          {
+            "PrintVantage location:illuminated:verbosity:": [
+              {
+                "FromText:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              },
+              {
+                "FromText:": "verbose"
+              }
+            ]
+          },
+          {
+            "Expect output:": [
+              "**Kitchen** (in the cabinet)",
               "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.",
               "A pointed black hat lies discarded on the floor under a dusty shelf.",
               "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
@@ -262,12 +262,12 @@
             ]
           },
           {
-            "PrintVantage where:darkness:verbosity:": [
+            "PrintVantage location:illuminated:verbosity:": [
               {
                 "FromText:": "cabinet"
               },
               {
-                "FromBool:": false
+                "FromBool:": true
               },
               {
                 "FromText:": "verbose"
@@ -276,7 +276,7 @@
           },
           {
             "Expect output:": [
-              "The cabinet.",
+              "**The cabinet**",
               "Beneath your feet is a bright and shiny hook.",
               "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
             ]
@@ -292,12 +292,12 @@
             ]
           },
           {
-            "PrintVantage where:darkness:verbosity:": [
+            "PrintVantage location:illuminated:verbosity:": [
               {
                 "FromText:": "cabinet"
               },
               {
-                "FromBool:": false
+                "FromBool:": true
               },
               {
                 "FromText:": "verbose"
@@ -306,7 +306,7 @@
           },
           {
             "Expect output:": [
-              "The cabinet.",
+              "**The cabinet**",
               "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
             ]
           }

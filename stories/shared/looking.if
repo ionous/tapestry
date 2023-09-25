@@ -29,28 +29,10 @@
         "the standard looking action",
         {
           "--": "we know this rule is for the player, so we can the story values.",
-          "PrintVantage where:darkness:verbosity:": [
-            {
-              "FromText:": {
-                "Object:field:": [
-                  "story",
-                  "location"
-                ]
-              }
-            },
-            {
-              "FromBool:": {
-                "Object:field:": [
-                  "story",
-                  "not illuminated"
-                ]
-              }
-            },
-            {
-              "--": "when explicitly looking, always use the verbose mode.",
-              "FromText:": "verbose"
-            }
-          ]
+          "PrintVantage verbosity:": {
+            "--": "when explicitly looking, always use the verbose mode.",
+            "FromText:": "verbose"
+          }
         }
       ]
     },
@@ -62,22 +44,40 @@
         "Print vantage",
         [
           {
-            "--": "can be an actor or, for testing, a room or some other object.",
-            "Text:kind:": [
-              "where",
-              "object"
+            "--": [
+              "A room or some other object capable of containing (or supporting) an actor.",
+              "If not specified, uses the current story location."
+            ],
+            "Text:kind:initially:": [
+              "location",
+              "object",
+              {
+                "Object:field:": [
+                  "story",
+                  "location"
+                ]
+              }
             ]
           },
           {
             "--": [
-              "darkness status should be manually specified;"
+              "Whether the location is illuminated or not.",
+              "If not specified, uses the current story illumination."
             ],
-            "Bool:": "darkness"
+            "Bool:initially:": [
+              "illuminated",
+              {
+                "Object:field:": [
+                  "story",
+                  "is illuminated"
+                ]
+              }
+            ]
           },
           {
             "--": [
-              "one of the verbosity traits.",
-              "if not specified, uses the setting's verbosity."
+              "One of the verbosity traits.",
+              "If not specified, uses the setting's verbosity."
             ],
             "Text:initially:": [
               "verbosity",
@@ -99,7 +99,7 @@
               "enclosures",
               {
                 "TransparentList obj:": {
-                  "FromText:": "@where"
+                  "FromText:": "@location"
                 }
               }
             ]
@@ -110,7 +110,7 @@
               "object",
               {
                 "CurrentRoom obj:": {
-                  "FromText:": "@where"
+                  "FromText:": "@location"
                 }
               }
             ]
@@ -122,15 +122,14 @@
           },
           {
             "If:do:else:": [
-              "@darkness",
+              {
+                "Not:": "@illuminated"
+              },
               [
                 {
                   "PrintDarkHeader room:": {
                     "FromText:": "@room"
                   }
-                },
-                {
-                  "Comment:": "fix? if \"thedark\" was an object, darkness witnessed could be \"thedark.visited.\" ( same as below )"
                 },
                 {
                   "If:do:": [
@@ -179,7 +178,8 @@
                     "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
                   },
                   {
-                    "PrintLocaleTitle room:enclosures:": [
+                    "--": "ex. Lobby",
+                    "PrintLocaleTitle locale:enclosures:": [
                       {
                         "FromText:": "@room"
                       },
@@ -189,15 +189,14 @@
                     ]
                   },
                   {
+                    "--": "ex. (in the bottle)",
                     "PrintLocaleSubtitle enclosures:": {
                       "FromTextList:": "@enclosures"
                     }
                   },
                   {
-                    "Print:": "."
-                  },
-                  {
-                    "Comment:": "(b/c we dont have a newline op yet, we use fullstop instead.)"
+                    "--": "Line break",
+                    "Br": true
                   },
                   {
                     "If:do:": [
@@ -244,12 +243,12 @@
                             "it",
                             [
                               {
-                                "PrintLocaleDescription where:viewpoint:room:": [
+                                "PrintLocaleDescription locale:viewpoint:room:": [
                                   {
                                     "FromText:": "@it"
                                   },
                                   {
-                                    "FromText:": "@where"
+                                    "FromText:": "@location"
                                   },
                                   {
                                     "FromText:": "@room"
@@ -268,7 +267,9 @@
           },
           {
             "If:do:else:": [
-              "@darkness",
+              {
+                "Not:": "@illuminated"
+              },
               [
                 {
                   "Set:value:": [
@@ -326,7 +327,7 @@
         {
           "Say response:with:": [
             "the darkness",
-            "Darkness."
+            "<b>Darkness</b><br>"
           ]
         }
       ]
@@ -360,64 +361,69 @@
       "--": ""
     },
     {
+      "--": [
+        "Print a header for the named location.",
+        "For example: `The lobby`",
+        "This is used as part of printing the vantage point when entering a new location, or when the player asks to 'look'"
+      ],
       "Define pattern:requires:provides:do:": [
         "Print locale title",
         [
           {
+            "--": "The location to print the title for.",
             "Text:kind:": [
-              "room",
-              "room"
+              "locale",
+              "object"
             ]
           },
           {
+            "--": [
+              "A nested list of objects ( if any ) containing or supporting the locale.",
+              "If there is a list of enclosures, it should progress from inner most to outer most object; the last object is often a room."
+            ],
             "TextList:": "enclosures"
           }
         ],
-        [
-          {
-            "Nothing": true
-          },
-          {
-            "Text:kind:initially:": [
-              "ceiling",
-              "object",
-              {
-                "Variable:dot:": [
-                  "enclosures",
-                  [
-                    {
-                      "AtIndex:": {
-                        "Len:": {
-                          "FromTextList:": "@enclosures"
-                        }
-                      }
-                    }
-                  ]
-                ]
-              }
-            ]
-          }
-        ],
         {
-          "If:do:else:": [
+          "Nothing": true
+        },
+        {
+          "If:assuming:do:else:": [
             {
               "Cmp:is:txt:": [
-                "@room",
+                "@locale",
                 "equal_to",
                 "@ceiling"
               ]
             },
             {
-              "--": [
-                "when the room is the ceiling, print the plain room name.",
-                "( use the room variable because it has the most knowledge of the subtype. )"
-              ],
-              "Say:": "{.room}"
+              "--": "the ceiling is the last (outermost) object in the list of enclosures.",
+              "Arg:from:": [
+                "ceiling",
+                {
+                  "FromText:": {
+                    "Variable:dot:": [
+                      "enclosures",
+                      {
+                        "AtIndex:": {
+                          "Len:": {
+                            "FromTextList:": "@enclosures"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
             },
             {
+              "Say:": "<b>{.locale}</b>"
+            },
+            {
+              "--": "The top most object is contained somewhere in the locale.",
               "Finally do:": [
                 {
-                  "Say:": "{The: .ceiling|capitalize!}"
+                  "Say:": "<b>{The: .ceiling|capitalize!}</b>"
                 }
               ]
             }
@@ -429,13 +435,17 @@
       "--": ""
     },
     {
+      "--": [
+        "Print a list of enclosures to provide context for a player who is located inside of some number of containers,or on top of some number of supporters, etc.",
+        "The locale subtitle is usually written directly after the locale title on the same line.",
+        "For example: `The lobby (in a bottle)`",
+        "This is used as part of printing the vantage point when entering a new location, or when the player asks to 'look'"
+      ],
       "Define pattern:requires:provides:do:": [
         "Print locale subtitle",
-        [
-          {
-            "TextList:": "enclosures"
-          }
-        ],
+        {
+          "TextList:": "enclosures"
+        },
         [
           {
             "Nothing": true
@@ -503,7 +513,7 @@
         [
           {
             "Text:kind:": [
-              "where",
+              "locale",
               "object"
             ]
           },
@@ -529,7 +539,7 @@
               "kids",
               {
                 "ChildrenOf obj:": {
-                  "FromText:": "@where"
+                  "FromText:": "@locale"
                 }
               }
             ]
@@ -554,7 +564,7 @@
             "If:do:": [
               {
                 "Cmp:is:txt:": [
-                  "@where",
+                  "@locale",
                   "equal_to",
                   "@room"
                 ]
@@ -662,12 +672,12 @@
           {
             "CanAlsoSee where:here:children:firstMention:": [
               {
-                "FromText:": "@where"
+                "FromText:": "@locale"
               },
               {
                 "FromBool:": {
                   "Cmp:is:txt:": [
-                    "@where",
+                    "@locale",
                     "equal_to",
                     "@room"
                   ]

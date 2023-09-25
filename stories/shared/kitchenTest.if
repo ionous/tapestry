@@ -1,31 +1,36 @@
 {
   "Tapestry:": [
     {
-    	"--": "this is a little painfully exact; but maybe is good for now.",
+      "--": "this is a little painfully exact; but maybe is good for now.",
       "Test:dependsOn:do:": [
         "kitchen play",
         "kitchenette",
         [
-        	{
+          {
             "--": [
               "fix: have to manually start the game for tests.",
               "maybe an option of some sort, or a scan for Fabricate input"
             ],
-            "StartGame actor:": {
-              "FromText:": {
-                "Object:field:": [
-                  "player",
-                  "pawn"
-                ]
+            "StartGame actor:quietly:": [
+              {
+                "FromText:": {
+                  "Object:field:": [
+                    "player",
+                    "pawn"
+                  ]
+                }
+              },
+              {
+                "FromBool:": true
               }
-            }
+            ]
           },
           {
             "Fabricate input:": "look"
           },
           {
             "Expect output:": [
-              "Kitchen.",
+              "**Kitchen**",
               "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.",
               "A pointed black hat lies discarded on the floor under a dusty shelf.",
               "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
