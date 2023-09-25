@@ -357,7 +357,7 @@
             {
               "Say response:with:": [
                 "inline storage",
-                "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
+                "<p>{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
               ]
             }
           ]

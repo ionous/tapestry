@@ -79,7 +79,8 @@
               "One of the verbosity traits.",
               "If not specified, uses the setting's verbosity."
             ],
-            "Text:initially:": [
+            "Text:kind:initially:": [
+              "verbosity",
               "verbosity",
               {
                 "Object:field:": [
@@ -771,9 +772,8 @@
     },
     {
       "--": [
-        "this flags 'scenery supporters' as 'mentioned' so that the 'print mentioned supporters' rule will print their contents.",
-        "scenery supports are supporters the author has set as 'scenery'",
-        "presumably because they mentioned the supporter in the room description."
+        "This flags 'scenery supporters' as 'mentioned' so that the 'print mentioned supporters' rule will print their contents.",
+        "Scenery supporters are any supporters which the author has set as 'scenery'. Presumably the author mentioned the supporter in the room description, but since the objects can be placed or removed from the supporter during play -- those objects cant be described in the room's description, so we print them here."
       ],
       "Define rule:named:do:": [
         "print object description",
