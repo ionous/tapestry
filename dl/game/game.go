@@ -9,7 +9,7 @@ import (
 // used by play/step to switch take some action as a side-effect a command
 type Signal int
 
-//go:generate stringer -type=Signal
+//go:generate stringer -type=Signal -trimprefix=Signal
 const (
 	SignalUnknown Signal = iota
 	SignalQuit
@@ -26,15 +26,6 @@ func (*PrintVersion) Execute(run rt.Runtime) error {
 // returns SignalQuit
 // any prompting of the user ( ie. are you sure? ) should happen *before* quit is called.
 func (*QuitGame) Execute(run rt.Runtime) error {
-	return SignalQuit
-}
-
-// placeholder for ending the game.
-// not 100% clear if this will ultimately be a script action, or just launch script actions:
-// traditionally prints `*** The End ***`, with an optionally customizable message.
-// shifts the parser state ( maybe based on the game state )
-// and a prompt containing the parser state options.
-func (*EndGame) Execute(run rt.Runtime) error {
 	return SignalQuit
 }
 
