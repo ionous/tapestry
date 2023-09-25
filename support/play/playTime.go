@@ -65,6 +65,7 @@ func (pt *Playtime) Step(words string) (ret *Result, err error) {
 	// "you can't see any such thing"
 	case parser.UnknownObject:
 		fmt.Println(e)
+		fmt.Println() // command break
 
 	case nil:
 		switch res := res.(type) {
