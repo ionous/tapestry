@@ -13,7 +13,7 @@
           "scoring"
         ],
         [
-        	{
+          {
             "Define value:of:as:": [
               "title",
               "story",
@@ -49,7 +49,7 @@
               "the Foyer",
               {
                 "FromText:": [
-                  "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and west."
+                  "You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and east."
                 ]
               }
             ]
@@ -78,7 +78,7 @@
           },
           {
             "Heading:from:and:otherRoom:": [
-              "west",
+              "east",
               "the Foyer",
               "connecting_to",
               "the Cloakroom"
@@ -92,7 +92,7 @@
               "description",
               "Cloakroom",
               {
-                "FromText:": "In the Opera's better days the walls of this small room must have been lined with coat hooks. Now, only one remains. The exit is a door to the east."
+                "FromText:": "In the Opera's better days the walls of this small room must have been lined with coat hooks. Now, only one remains. The exit is a door to the west."
               }
             ]
           },
@@ -187,10 +187,13 @@
                   }
                 },
                 {
-                  "Say:": "The message, neatly marked in the sawdust, reads..."
+                  "Say:": "The message, {if .message.neat}neatly {end}marked in the sawdust, reads..."
                 },
                 {
-                  "EndGame": true
+                  "--": "Uses the default end game message.",
+                  "EndGame finally:": {
+                    "FromBool:": true
+                  }
                 }
               ]
             ]
@@ -212,8 +215,9 @@
                       "Say:": "The message has been carelessly trampled, making it difficult to read. You can just distinguish the words..."
                     },
                     {
-                      "--": "fix -- dont have a way to indicate failure, and cant provide a final phrase",
-                      "EndGame": true
+                      "EndGame saying:": {
+                        "FromText:": "You have lost"
+                      }
                     }
                   ]
                 ]
@@ -248,11 +252,11 @@
                         ]
                       },
                       {
-                      	"--": [
-                      		"this is unsatisfying",
-                      		"would love to say 'destination' other than 'foyer'",
-                      		"but destination comes from door, and if there is no door there's no destination."
-                      	],
+                        "--": [
+                          "this is unsatisfying",
+                          "would love to say 'destination' other than 'foyer'",
+                          "but destination comes from door, and if there is no door there's no destination."
+                        ],
                         "Cmp:is:txt:": [
                           "@direction",
                           "other_than",

@@ -40,6 +40,12 @@
             "Text:": "version"
           },
           {
+            "Text:initially:": [
+              "ending message",
+              "The End"
+            ]
+          },
+          {
             "--": "the turn count is zero until the game startup sequence has completed, and then its set to one for the player's first input.",
             "Number:": "turn count"
           },

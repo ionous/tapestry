@@ -45,14 +45,14 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (g.Value, error) {
 	return op.determine(run, affine.RecordList)
 }
 
+// note: at one point this would unwrap errors so that callers couldn't see them
+// i no longer am sure why. doing stops game.Signals(s) ( ex SignalQuit ) from reaching the parser.
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	name := lang.Normalize(op.PatternName)
 	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
-		// stops internal errors from leaking out
-		err = CmdErrorCtx(op, name, errutil.New(e.Error()))
+		err = CmdErrorCtx(op, name, e)
 	} else if v, e := run.Call(name, aff, k, v); e != nil && !errors.Is(e, rt.NoResult) {
-		// stops internal errors from leaking out
-		err = CmdErrorCtx(op, name, errutil.New(e.Error()))
+		err = CmdErrorCtx(op, name, e)
 	} else {
 		ret = v
 	}

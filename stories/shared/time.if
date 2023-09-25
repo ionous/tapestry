@@ -137,6 +137,7 @@
       ]
     },
     {
+      "--": "a parser action, which calls the low level request to quit.",
       "Define pattern:requires:provides:do:": [
         "request to quit",
         {
@@ -148,6 +149,49 @@
         {
           "QuitGame": true
         }
+      ]
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "end game",
+        [
+          {
+            "--": [
+              "A placeholder. Eventually, when finally is true, the game is completely over. Otherwise, the game can be (eventually) restarted."
+            ],
+            "Bool:": "finally"
+          },
+          {
+            "--": "can be assigned 'Say' to use a template",
+            "Text:initially:": [
+              "saying",
+              {
+                "Object:field:": [
+                  "story",
+                  "ending message"
+                ]
+              }
+            ]
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        [
+        	{
+        		"Print:": "<b>"
+        	},
+          {
+            "Print:": "@saying"
+          },
+          {
+        		"Print:": "</b>"
+        	},
+          {
+            "--": "maybe send 'finally' to quit game?",
+            "QuitGame": true
+          }
+        ]
       ]
     }
   ]

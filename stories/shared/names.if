@@ -230,6 +230,7 @@
       "--": ""
     },
     {
+      "--": "make a note that the named object has been mentioned in the story output.",
       "Define pattern:requires:provides:do:": [
         "mention",
         [
