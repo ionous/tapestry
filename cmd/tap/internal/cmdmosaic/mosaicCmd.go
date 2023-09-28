@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaic"
@@ -19,6 +20,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// exported to package main in cmd/tap
 var CmdMosaic = &base.Command{
 	Run:       runMosaic,
 	Flag:      buildFlags(),
@@ -77,30 +79,29 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 
 		} else {
 			// web and dev start a custom server to listen for incoming requests
-			// and send unknown url requests to the vite backend
+			// and send unknown url requests to the vite server
 			listenTo, _ := mosaicFlags.listen.GetPort(8080)
 			requestFrom, _ := mosaicFlags.request.GetPort(3000)
 			log.Println("using story files from:", dir)
 			log.Println("listening to:", listenTo)
 			log.Println("requesting from:", requestFrom)
 			log.Printf("browse to: http://localhost:%d/mosaic/\n", listenTo)
-			if viteBackend, e := url.Parse(web.Endpoint(requestFrom, "localhost")); e != nil {
-				log.Fatal(e)
-			} else {
-				// anything not handled by "mux" gets sent to the vite backend.
-				vite := httputil.NewSingleHostReverseProxy(viteBackend)
-				mux.Handle("/", web.MethodHandler{
-					http.MethodGet: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-						log.Println(req.Method, req.RequestURI)
-						vite.ServeHTTP(w, req)
-					}),
-					http.MethodPost: mosaic.HandleCommands(cfg),
-				})
 
-			}
+			// anything not handled by "mux" gets sent to the vite server.
+			vite := httputil.NewSingleHostReverseProxy(&url.URL{
+				Scheme: "http",
+				Host:   "localhost:" + strconv.Itoa(listenTo),
+			})
+			mux.Handle("/", web.MethodHandler{
+				http.MethodGet: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+					log.Println(req.Method, req.RequestURI)
+					vite.ServeHTTP(w, req)
+				}),
+				http.MethodPost: mosaic.HandleCommands(cfg),
+			})
 
 			if mosaic.BuildConfig != mosaic.Prod {
-				log.Println("don't forget to run the backend:")
+				log.Println("don't forget to run the vite web server")
 				log.Println("in the directory tapestry/www type 'npm run dev'.")
 			}
 

@@ -31,7 +31,5 @@ type Options int
 const (
 	// flag to print response names ( instead of values )
 	PrintResponseNames Options = iota
-	// flag to output text as json ( instead of plain text )
-	JsonMode
 	NumOptions
 )

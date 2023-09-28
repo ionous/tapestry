@@ -22,6 +22,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdidlb"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdplay"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdserve"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdweave"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
 	"github.com/ionous/errutil"
@@ -126,6 +127,7 @@ func invoke(cmd *base.Command, args []string) (err error) {
 	// 	if cfg.ExperimentErr != nil {
 	// 		base.Fatalf("go: %v", cfg.ExperimentErr)
 	// 	}
+
 	// }
 
 	// // Set environment (GOOS, GOARCH, etc) explicitly.
@@ -184,6 +186,7 @@ func init() {
 		cmdidlb.CmdIdl,
 		cmdmosaic.CmdMosaic,
 		cmdplay.CmdPlay,
+		cmdserve.CmdServe,
 		cmdweave.CmdWeave,
 	}
 }

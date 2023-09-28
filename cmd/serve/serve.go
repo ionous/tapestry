@@ -1,5 +1,4 @@
-// The content server provides access to a pre-built story database.
-// It optionally builds story files into the database and runs unit tests on them.
+// Runs external applications, and pipes http input to stdin; stdout to http output.
 package main
 
 // go run serve.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db

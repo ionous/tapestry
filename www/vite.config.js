@@ -5,16 +5,14 @@ import vue from "@vitejs/plugin-vue";
 // https://vitejs.dev/config/
 export default defineConfig(({ command /*, mode, ssrBuild*/ }) => {
   const build = command === "build";
+  const backend = build ? "wails://wails" : "http://localhost:8080";
   return {
     plugins: [vue()],
     // exposes the specified object as a global to the app
     define: {
       appcfg: JSON.stringify({
-        // run by cmd/serve. somebody has to fix these names.
-        // plus that person should probably make these the same port.
-        live: build ? "wails://wails" : "http://localhost:8088",
-        // run by cmd/mosaic.
-        mosaic: build ? "wails://wails" : "http://localhost:8080",
+        shuttle: backend + "/shuttle/",
+        mosaic: backend,
       }),
     },
     server: {
@@ -24,8 +22,8 @@ export default defineConfig(({ command /*, mode, ssrBuild*/ }) => {
       chunkSizeWarningLimit: 825, // in kb; see notes on blockly below.
       rollupOptions: {
         input: {
-          // a terrible name for playing the game.
-          live: resolve(__dirname, "live/index.html"),
+          // backend for playing the game.
+          play: resolve(__dirname, "play/index.html"),
           // the editor.
           mosaic: resolve(__dirname, "mosaic/index.html"),
         },

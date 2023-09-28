@@ -49,49 +49,56 @@ export default {
     const prompt= ref(null); // template ref 
     const container= ref(null);
 
-    const io= new Io(appcfg.live+"/io/", (msgs)=>{
-      for (const msg of msgs) {
-        for (const k in msg) {
-          const v= msg[k];
-          switch (k) {
-            case "Play log:":
-              console.info("log:", v);
-              logging.value.push(v);
-              setTimeout(()=> {
-                const el= container.value;
-                el.scrollIntoView(false);
-              });
-            break;
-            case "Play out:":
-              narration.value.push(v);
-              setTimeout(()=> {
-                const el= container.value;
-                el.scrollIntoView(false);
-              });
-            break;
-            case "Play mode:":
-              console.warn("mode:", v);
-              playing.value= (v === 'play');
-              switch (v) {
-                case 'asm':
-                  logging.value= [];
-                  narration.value= [];
-                break 
-                case 'play':
-                break
-                case 'complete':
-                break;
-                case 'error':
-                break;
-              }
-            break;
-            default:
-              console.error("unknown command", k);
-            break;
-          }
-        }
-      }
+    function addToNarration(msg) {
+      narration.value.push(msg);
+      setTimeout(()=> {
+        const el= container.value;
+        el.scrollIntoView(false);
+      });
+    }
+    // by default, sends commands to http://localhost:8080/shuttle/
+    const io= new Io(appcfg.shuttle, (msg)=>{
+      addToNarration(msg);
+      // for (const msg of msgs) {
+      //   for (const k in msg) {
+      //     const v= msg[k];
+      //     switch (k) {
+      //       case "Play log:":
+      //         console.info("log:", v);
+      //         logging.value.push(v);
+      //         setTimeout(()=> {
+      //           const el= container.value;
+      //           el.scrollIntoView(false);
+      //         });
+      //       break;
+      //       case "Play out:":
+      //          addToNarration(msg);
+      //       break;
+      //       case "Play mode:":
+      //         console.warn("mode:", v);
+      //         playing.value= (v === 'play');
+      //         switch (v) {
+      //           case 'asm':
+      //             logging.value= [];
+      //             narration.value= [];
+      //           break
+      //           case 'play':
+      //           break
+      //           case 'complete':
+      //           break;
+      //           case 'error':
+      //           break;
+      //         }
+      //       break;
+      //       default:
+      //         console.error("unknown command", k);
+      //       break;
+      //     }
+      //   }
+      // }
     });
+    // fix: add a button? read from the path or query string?
+    io.send({cmd: {"$restart": "cloak"}});
     const onkey= (evt) => {
       // console.log("key", evt.key);
       const ignore= (evt.metaKey || evt.ctrlKey || evt.altKey);
@@ -129,9 +136,7 @@ export default {
         console.log("onPrompt");
         narration.value.push("> "+ txt);
         // fix? tapestry commands?
-        io.send({
-          cmd: txt,
-        });
+        io.send({in: txt});
       }
     }
   }

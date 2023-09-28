@@ -20,10 +20,6 @@ func goPlay(ctx context.Context, cmd *base.Command, args []string) (err error) {
 		debug.LogLevel = lvl
 		opts := qna.NewOptions()
 		opts.SetOption(meta.PrintResponseNames, g.BoolOf(cfg.responses))
-		if cfg.json {
-			opts.SetOption(meta.JsonMode, g.BoolOf(true))
-		}
-
 		if cnt, e := player.PlayWithOptions(cfg.inFile, cfg.testString, cfg.scene, opts); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {

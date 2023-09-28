@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import Live from './Live.vue'         // contains the router-view
+import Play from './Play.vue'         // contains the router-view
 
-const app= createApp(Live).
-  mount('#live');
+const app= createApp(Play).
+  mount('#play');

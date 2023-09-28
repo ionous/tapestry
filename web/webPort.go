@@ -1,4 +1,4 @@
-package mosaic
+package web
 
 import (
 	"strconv"
@@ -18,12 +18,12 @@ func (p Port) String() string {
 }
 
 func (p *Port) Set(s string) (err error) {
-	if s == "false" {
-		*p = 0 // same as if nothing was specified
+	if len(s) == 0 || s == "false" {
+		*p = -1 // returns the default port and false
 	} else if s == "true" {
-		*p = 1
+		*p = 1 // returns the default port and true
 	} else if i, e := strconv.Atoi(s); e != nil {
-		err = e
+		err = e // not a number?
 	} else if !portIsValid(i) {
 		err = errutil.New("expected a port in the range 1024-49151. got", i)
 	} else {
@@ -33,16 +33,16 @@ func (p *Port) Set(s string) (err error) {
 }
 
 func portIsValid(i int) bool {
-	return i == 0 || i == 1 || (i >= 1024 && i < 49152)
+	return i >= 1024 && i < 49152
 }
 
-func (p Port) GetPort(defaultPort int) (ret int, wasSet bool) {
-	if n := p.Int(); n == 0 || !portIsValid(n) {
-		ret, wasSet = defaultPort, false
-	} else if n == 1 {
-		ret, wasSet = defaultPort, true
+func (p Port) GetPort(defaultPort int) (ret int, wasValid bool) {
+	if n := p.Int(); n == 1 {
+		ret, wasValid = defaultPort, true
+	} else if !portIsValid(n) {
+		ret, wasValid = defaultPort, false
 	} else {
-		ret, wasSet = n, true
+		ret, wasValid = n, true
 	}
 	return
 }
