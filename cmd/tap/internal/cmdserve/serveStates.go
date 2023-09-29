@@ -90,6 +90,7 @@ func restart(w http.ResponseWriter, ctx serverContext, scene string) (ret State,
 			ret = State{
 				Name: "Playing " + scene,
 				HandleInput: func(w http.ResponseWriter, words string) (ret State, err error) {
+					log.Println(">", words)
 					buf.Reset()
 					for _, word := range strings.Split(words, ";") {
 						// returns true if quit
