@@ -26,7 +26,7 @@ export default class TextRender {
   }
   // handles opening and closing tags
   writeTag(tag, open)  {
-    // there are a possible operations:
+    // there are a few possible operations:
     // 1. write a standalone tag: ex. newline, or hr.
     // 2. open a tag
     // 3. close a tag

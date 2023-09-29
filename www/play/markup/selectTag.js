@@ -8,7 +8,7 @@ const fs= {
 };
 
 const permit= [
-  "b", "strong", "mark", "i", "em", "cite", "li", "ul", "ol", "u", "s"
+  "b", "i", "li", "ul", "ol", "u", "s"
 ];
 
 // return false or the data to generate html.

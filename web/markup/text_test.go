@@ -29,7 +29,7 @@ func TestMarkup(t *testing.T) {
 		"nadipiscing <i>elit</i>",
 		"nadipiscing *elit*",
 		// 7. strike
-		"nadipiscing <s>elit</strike>",
+		"nadipiscing <s>elit</s>",
 		"nadipiscing ~~elit~~",
 		// 8. underline
 		"nadipiscing <u>elit</u>",

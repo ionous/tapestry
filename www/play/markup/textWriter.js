@@ -5,7 +5,7 @@ import TextRender from './textRender.js'
 const opening = "opening";
 const closing = "closing";
 
-class Context {
+class TextWriter {
   constructor() {
     this.buf = ""; // temporary storage while parsing strings
     this.tag = "";  // a subset of buf while checking for tags
@@ -43,7 +43,7 @@ class Context {
 }
 
 export default function writeText(msg) {
-  const c= new Context();
+  const c= new TextWriter();
   let next= states.readingText;
   for (const q of msg) {
     next= next(c, q);

@@ -11,9 +11,9 @@
 // - Unordered lists: each row in the list starts with some uniform marker, ex. a bullet.
 //
 // The custom html elements include:
-// <b>, <strong>, or <mark> - bold text
-// <i>, <em>, or <cite> - italic text
-// <s>, or <strike> - strikethrough
+// <b>   - bold text
+// <i>   - italic text
+// <s>   - strikethrough
 // <u>   - underlined text
 // <hr>  - horizontal divider
 // <br>  - new line
@@ -21,8 +21,10 @@
 // <wbr> - soft-newline
 // <ol></ul> - ordered list
 // <ul></ul> - unordered list
-///
+// <li></li> - line item in a list
+//
 // Unknown tags are left as is.
 // Attributes on tags are not supported.
-//
+// Nested tags are okay, while Interleaved tags are not supported.
+// ie. <b><i></i></b> is fine; <b><i></b></i> will cause trouble.
 package markup

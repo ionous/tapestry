@@ -32,7 +32,6 @@ var Formats = Formatting{
 // Tabwidth - how many spaces should list indentation generate
 var Tabwidth = 2
 
-//
 const (
 	// Starts a new line of text.
 	Newline = '\n'
@@ -47,15 +46,15 @@ const (
 func (fs *Formatting) Select(tag string) (ret Format, okay bool) {
 	okay = true // provisionally
 	switch tag {
-	case "b", "strong", "mark":
+	case "b":
 		ret = fs.Bold
 	case "hr":
 		ret = fs.Divider
-	case "i", "em", "cite":
+	case "i":
 		ret = fs.Italic
 	case "li":
 		ret = fs.Item
-	case "s", "strike":
+	case "s":
 		ret = fs.Strike
 	case "u":
 		ret = fs.Underline
