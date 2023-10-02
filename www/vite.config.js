@@ -25,7 +25,7 @@ export default defineConfig(({ command /*, mode, ssrBuild*/ }) => {
           // backend for playing the game.
           play: resolve(__dirname, "play/index.html"),
           // the editor.
-          mosaic: resolve(__dirname, "mosaic/index.html"),
+          mosaic: resolve(__dirname, "index.html"),
         },
         output: {
           // this splits the individual node modules into separate outputs
