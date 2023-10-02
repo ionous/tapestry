@@ -1,6 +1,7 @@
 _
 .vscode
 .idea
+.godot
 __debug_bin
 node_modules
 cmd/asm/asm
@@ -28,3 +29,4 @@ www/dist
 *.go_
 cmd/tap/tap.db
 _temp
+.sconsign.dblite

@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+import os
+import sys
+
+# in the godot-cpp directory:
+# scons platform=windows use_mingw=true -j4 custom_api_file=.\gdextension\extension_api.json
+env = SConscript("godot-cpp/SConstruct")
+
+# For reference:
+# - CCFLAGS are compilation flags shared between C and C++
+# - CFLAGS are for C-specific compilation flags
+# - CXXFLAGS are for C++-specific compilation flags
+# - CPPFLAGS are for pre-processor flags
+# - CPPDEFINES are for pre-processor defines
+# - LINKFLAGS are for linking flags
+
+# MOD-stravis: force mingw; doesnt seem to work
+#env["use_mingw"] = True
+# not sure this is working either:
+#env.Append(LINKFLAGS=["-fuse-ld=lld"])
+
+# tweak this if you want to use different folders, or more folders, to store your source code in.
+env.Append(CPPPATH=["src/"])
+sources = Glob("src/*.cpp")
+
+if env["platform"] == "macos":
+    library = env.SharedLibrary(
+        "../demo/bin/libtapestry.{}.{}.framework/libtapestry.{}.{}".format(
+            env["platform"], env["target"], env["platform"], env["target"]
+        ),
+        source=sources,
+    )
+else:
+    library = env.SharedLibrary(
+        "../demo/bin/libtapestry{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        source=sources,
+    )
+
+#----------------------------
+# maybe some better ways... go needs the GOCACHE and it gets that from LOCALAPPDATA
+# 'go env' lists them all
+def modify_targets(target, source, env):
+    '''
+    tell scons about the .h file output; probably not necessary. just experimenting.
+    target and source are arrays of SCons.Node.FS.File
+    ex. [src\taplib.a] [src\taplib.go]
+    '''
+    target.append(os.path.join("src", "taplib.h"))
+    return target, source
+
+goBuild = Builder(action='go build -o $TARGET -buildmode=c-archive $SOURCE', emitter=modify_targets)
+env["ENV"]["GOCACHE"] = os.path.join(os.environ['LOCALAPPDATA'], "go-build")
+
+env.Append(BUILDERS={'GoBuild': goBuild})
+golib = env.GoBuild("src/taplib.a", "src/taplib.go")
+env.Depends("src\\tapext.o", golib)    # tell scons that to compile tapext, it needs the go output
+env.Append(LIBS=File('src/taplib.a'))  # tell the linker to use our output file
+
+#----------------------------
+Default(library)

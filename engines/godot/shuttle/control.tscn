@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3 uid="uid://3nvxhpth5y6h"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_cdutg"]
+[ext_resource type="Script" path="res://textInput.gd" id="2_k0atx"]
+[ext_resource type="Script" path="res://HTTPRequest.gd" id="3_5y2th"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cdutg")
+
+[node name="background" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.247059, 0.247059, 0.247059, 1)
+
+[node name="controls" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="controls"]
+layout_mode = 2
+
+[node name="top bar" type="HBoxContainer" parent="controls/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="controls/VBoxContainer/top bar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "title text"
+horizontal_alignment = 1
+
+[node name="InputOutput" type="Control" parent="controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="controls/VBoxContainer/InputOutput"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextOutput" type="RichTextLabel" parent="controls/VBoxContainer/InputOutput/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 10
+focus_mode = 2
+fit_content = true
+scroll_active = false
+selection_enabled = true
+
+[node name="TextInput" type="LineEdit" parent="controls/VBoxContainer"]
+layout_mode = 2
+caret_blink = true
+script = ExtResource("2_k0atx")
+
+[node name="Shuttle" type="HTTPRequest" parent="."]
+script = ExtResource("3_5y2th")
+
+[connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/InputOutput/ScrollContainer/TextOutput" method="_on_text_input_text_submitted"]
+[connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="_on_text_submitted"]
+[connection signal="request_completed" from="Shuttle" to="Shuttle" method="_on_request_completed"]

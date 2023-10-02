@@ -1,4 +1,4 @@
-package cmdserve
+package shuttle
 
 import (
 	"bytes"
@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"net/http"
 	"path/filepath"
 	"strings"
 
@@ -25,15 +24,15 @@ import (
 
 type State struct {
 	Name          string
-	HandleInput   func(w http.ResponseWriter, in string) (State, error)
-	HandleCommand func(w http.ResponseWriter, cmd map[string]any) (State, error)
+	HandleInput   func(w io.Writer, in string) (State, error)
+	HandleCommand func(w io.Writer, cmd map[string]any) (State, error)
 }
 
 func unexpectedCommand(cmd map[string]any) error {
 	return errutil.New("unexpected or unknown command", cmd)
 }
 
-func newServerContext(inFile string, opts qna.Options) (ret serverContext, err error) {
+func NewContext(inFile string, opts qna.Options) (ret Context, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
@@ -45,7 +44,7 @@ func newServerContext(inFile string, opts qna.Options) (ret serverContext, err e
 	} else if grammar, e := play.MakeGrammar(db); e != nil {
 		err = e
 	} else {
-		ret = serverContext{
+		ret = Context{
 			inFile:  inFile,
 			db:      db,
 			query:   query,
@@ -58,7 +57,7 @@ func newServerContext(inFile string, opts qna.Options) (ret serverContext, err e
 }
 
 // do we really need all these things?
-type serverContext struct {
+type Context struct {
 	inFile  string
 	db      *sql.DB
 	query   *qdb.Query
@@ -67,12 +66,45 @@ type serverContext struct {
 	decoder *decode.Decoder
 }
 
-func (s *serverContext) Close() {
+func (s *Context) Close() {
 	log.Println("closing game db")
 	s.db.Close()
 }
 
-func restart(w http.ResponseWriter, ctx serverContext, scene string) (ret State, err error) {
+// maybe also "$weave", "$shutdown" ...
+// not a system level command, so pass to the current state (if any)
+func Post(w io.Writer, ctx Context, state State, msg any) (ret State, err error) {
+	switch msg := msg.(type) {
+	case string:
+		if h := state.HandleInput; h == nil {
+			err = errutil.New("invalid input state", state.Name)
+		} else if next, e := h(w, msg); e != nil {
+			err = e
+		} else if len(next.Name) > 0 {
+			ret = next
+		}
+	case map[string]any:
+		if scene, ok := msg["$restart"].(string); ok {
+			if next, e := Restart(w, ctx, scene); e != nil {
+				err = e
+			} else {
+				ret = next
+			}
+		} else {
+
+			if h := state.HandleCommand; h == nil {
+				err = errutil.New("invalid command state", state.Name)
+			} else if next, e := h(w, msg); e != nil {
+				err = e
+			} else if len(next.Name) > 0 {
+				ret = next
+			}
+		}
+	}
+	return
+}
+
+func Restart(w io.Writer, ctx Context, scene string) (ret State, err error) {
 	log.Println("*** shuttle restart requested ***", scene)
 	var buf bytes.Buffer // fix: maybe it'd be better if Step() handled the text
 	run := qna.NewRuntimeOptions(&buf, ctx.query, ctx.decoder, ctx.opts)
@@ -89,7 +121,7 @@ func restart(w http.ResponseWriter, ctx serverContext, scene string) (ret State,
 			// return the playing state:
 			ret = State{
 				Name: "Playing " + scene,
-				HandleInput: func(w http.ResponseWriter, words string) (ret State, err error) {
+				HandleInput: func(w io.Writer, words string) (ret State, err error) {
 					log.Println(">", words)
 					buf.Reset()
 					for _, word := range strings.Split(words, ";") {
@@ -112,21 +144,20 @@ func stateGameOver() State {
 	log.Println("*** game over ***")
 	return State{
 		Name: "stateGameOver",
-		HandleInput: func(w http.ResponseWriter, in string) (_ State, err error) {
+		HandleInput: func(w io.Writer, in string) (_ State, err error) {
 			err = errutil.New("game over")
 			return
 		},
-		HandleCommand: func(w http.ResponseWriter, cmd map[string]any) (_ State, err error) {
+		HandleCommand: func(w io.Writer, cmd map[string]any) (_ State, err error) {
 			err = errutil.New("game over")
 			return
 		},
 	}
 }
 
-func writePlainText(w http.ResponseWriter, str string) {
+func writePlainText(w io.Writer, str string) {
 	//log.Println("RETURNING", str)
 	_, _ = io.WriteString(w, str)
-	w.Header().Set("Content-Type", "plain/text")
 }
 
 func step(p *play.Playtime, s string) (done bool) {
