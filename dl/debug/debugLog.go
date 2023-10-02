@@ -1,15 +1,11 @@
 package debug
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/generic"
-	"github.com/ionous/errutil"
-	"github.com/kr/pretty"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 // LogLevel controls how much debugging to print
@@ -23,26 +19,6 @@ func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	if v, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = CmdError(op, e)
 	} else {
-		var i interface{}
-		switch a := v.Affinity(); a {
-		case affine.Bool:
-			i = v.Bool()
-		case affine.Number:
-			i = v.Float()
-		case affine.NumList:
-			i = v.Floats()
-		case affine.Text:
-			i = v.String()
-		case affine.TextList:
-			i = v.Strings()
-		case affine.Record:
-			i = pretty.Sprint(generic.RecordToValue(v.Record()))
-		case affine.RecordList:
-			i = pretty.Sprint(generic.RecordsToValue(v.Records()))
-		default:
-			e := errutil.New("unknown affinity", a)
-			err = CmdError(op, e)
-		}
 		global := LogLevel.Index()
 		level := op.LogLevel.Index()
 		if err == nil && ((global >= 0 && level >= global) || (global < 0 && level != 0)) {
@@ -51,7 +27,7 @@ func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 			}
 			txt := op.LogLevel.Compose().Strings[level]
 			header := strings.Repeat("#", 1+level)
-			log.Println(header, txt, i)
+			log.Println(header, txt, Stringify(v))
 		}
 	}
 	return

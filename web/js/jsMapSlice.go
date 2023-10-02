@@ -7,13 +7,15 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// used when reading json to preserve the specified order of keys
+// "no way to preserve the order of map keys"
 // https://github.com/golang/go/issues/27179
+type MapSlice []MapItem
+
 type MapItem struct {
 	Key string
 	Msg json.RawMessage
 }
-
-type MapSlice []MapItem
 
 // returns a valid pointer into the slice, or nil if not found
 func (om MapSlice) Find(k string) (ret *MapItem, okay bool) {

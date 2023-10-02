@@ -83,7 +83,7 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 		} else {
 			// set the aspect to the value of the requested trait
 			if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
-				err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
+				err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s", field, val.Affinity())
 			} else {
 				d.values[i] = StringFrom(field, ft.Type)
 			}

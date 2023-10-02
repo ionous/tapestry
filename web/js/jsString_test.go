@@ -8,7 +8,7 @@ import (
 
 func TestString(t *testing.T) {
 	var out js.Builder
-	out.X(`a
+	out.Str(`a
 b`)
 
 	if val := out.String(); val != `a\nb` {
