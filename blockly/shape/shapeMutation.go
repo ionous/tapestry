@@ -21,7 +21,7 @@ func (w *ShapeWriter) writeMutator(out *js.Builder, blockType *spec.TypeSpec, fl
 			Q(bconst.MutatorName(blockType.Name)).
 			R(js.Comma).
 			Kv("style", "logic_blocks").R(js.Comma).
-			Q("inputsInline").R(js.Colon).S("false").R(js.Comma).
+			Q("inputsInline").R(js.Colon).Raw("false").R(js.Comma).
 			If(true, func(args *js.Builder) {
 				w.writeMuiMsgArgs(args, blockType, flow)
 			})

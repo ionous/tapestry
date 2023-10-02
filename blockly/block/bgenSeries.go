@@ -26,7 +26,7 @@ func (m *bgen) newSeries(term string, inputs *js.Builder) *chart.StateMix {
 			// writes: `"term#"`:{"block":{`
 			inputs.
 				Brace(js.Quotes, func(q *js.Builder) {
-					q.X(term).N(cnt - 1)
+					q.Str(term).N(cnt - 1)
 				}).
 				R(js.Colon).R(open).
 				Q("block").

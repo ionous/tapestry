@@ -85,7 +85,7 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	if len(colour) == 0 {
 		colour = bconst.DefaultColor
 	}
-	partial.Q("colour").S(`:"%{BKY_`).S(colour).S(`}"`)
+	partial.Q("colour").Raw(`:"%{BKY_`).Raw(colour).Raw(`}"`)
 
 	// comment
 	if cmt := comment(blockType.Markup); len(cmt) > 0 {
@@ -169,12 +169,12 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 								fn(w, out, fd.term, fd.typeSpec)
 								// write optional, and repeating status
 								if fd.term.Optional {
-									out.R(js.Comma).Q("optional").R(js.Colon).S("true")
+									out.R(js.Comma).Q("optional").R(js.Colon).Raw("true")
 								}
 								// if we are stack, we want to force a non-repeating input; one stack can already handle multiple blocks.
 								// fix? we dont handle the case of a stack of one element; not sure that it exists in practice.
 								if !fd.slot.Stack && fd.term.Repeats {
-									out.R(js.Comma).Q("repeats").R(js.Colon).S("true")
+									out.R(js.Comma).Q("repeats").R(js.Colon).Raw("true")
 								}
 							})
 						}
