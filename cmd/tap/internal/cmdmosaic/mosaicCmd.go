@@ -85,12 +85,12 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 			log.Println("using story files from:", dir)
 			log.Println("listening to:", listenTo)
 			log.Println("requesting from:", requestFrom)
-			log.Printf("browse to: http://localhost:%d/mosaic/\n", listenTo)
+			log.Printf("browse to: http://localhost:%d/\n", listenTo)
 
 			// anything not handled by "mux" gets sent to the vite server.
 			vite := httputil.NewSingleHostReverseProxy(&url.URL{
 				Scheme: "http",
-				Host:   "localhost:" + strconv.Itoa(listenTo),
+				Host:   "localhost:" + strconv.Itoa(requestFrom),
 			})
 			mux.Handle("/", web.MethodHandler{
 				http.MethodGet: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
