@@ -1,7 +1,6 @@
 package shape_test
 
 import (
-	"bytes"
 	_ "embed"
 	"encoding/json"
 	"io/fs"
@@ -11,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/idl"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -21,10 +21,10 @@ import (
 func TestBlocklyTypes(t *testing.T) {
 	if str, e := shape.FromSpecs(idl.Specs); e != nil {
 		t.Fatal(e)
-	} else if out, e := indent(str); e != nil {
+	} else if !json.Valid([]byte(str)) {
 		t.Fatal(e)
 	} else {
-		t.Log(out)
+		t.Log(str)
 	}
 }
 
@@ -113,9 +113,8 @@ func TestStoryFileShape(t *testing.T) {
 		w := shape.ShapeWriter{ts}
 		w.WriteShape(&out, x)
 		//
-		if str, e := indent(out.String()); e != nil {
-			t.Fatal(e, str)
-		} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
+		str := jsn.Indent(out.String())
+		if diff := pretty.Diff(str, expect); len(diff) > 0 {
 			t.Log(str)
 			t.Fatal("ng", diff)
 		}
@@ -178,21 +177,10 @@ func TestStoryTextShape(t *testing.T) {
 		w := shape.ShapeWriter{ts}
 		w.WriteShape(&out, x)
 		//
-		if str, e := indent(out.String()); e != nil {
-			t.Fatal(e, str)
-		} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
+		str := jsn.Indent(out.String())
+		if diff := pretty.Diff(str, expect); len(diff) > 0 {
 			t.Log(str)
 			t.Fatal("ng", diff)
 		}
 	}
-}
-
-func indent(str string) (ret string, err error) {
-	var indent bytes.Buffer
-	if e := json.Indent(&indent, []byte(str), "", "  "); e != nil {
-		ret = str
-	} else {
-		ret = indent.String()
-	}
-	return
 }

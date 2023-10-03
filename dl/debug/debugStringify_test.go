@@ -1,17 +1,15 @@
 package debug_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 
 	_ "embed"
 
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
-	"github.com/ionous/errutil"
 )
 
 //go:embed fruity.json
@@ -55,7 +53,7 @@ func TestStringify(t *testing.T) {
 	if rec, e := l1.GetRecord(run); e != nil {
 		t.Fatal(e)
 	} else if x := debug.Stringify(rec); x != fruityJson {
-		t.Fatal(indent(x))
+		t.Fatal(jsn.Indent(x))
 	}
 	// other
 	rec := kinds.NewRecord("rec",
@@ -65,16 +63,6 @@ func TestStringify(t *testing.T) {
 		"bool", "is bool", // ugh. auto-aspect conversion
 	)
 	if x := debug.Stringify(g.RecordOf(rec)); x != recordyJson {
-		t.Fatal(indent(x))
+		t.Fatal(jsn.Indent(x))
 	}
-}
-
-func indent(str string) (ret string) {
-	var indent bytes.Buffer
-	if e := json.Indent(&indent, []byte(str), "", "  "); e != nil {
-		ret = errutil.Sprint("couldnt indent", e)
-	} else {
-		ret = indent.String()
-	}
-	return
 }

@@ -1,7 +1,6 @@
 package box_test
 
 import (
-	"bytes"
 	"encoding/json"
 	"testing"
 
@@ -12,21 +11,9 @@ import (
 func TestToolbox(t *testing.T) {
 	if str, e := box.FromSpecs(idl.Specs); e != nil {
 		t.Fatal(e)
-	} else if out, e := indent(str); e != nil {
-		t.Log(out)
-		t.Fatal(e)
+	} else if !json.Valid([]byte(str)) {
+		t.Fatal(str)
 	} else {
-		t.Log(out)
+		t.Log(str)
 	}
-}
-
-func indent(str string) (ret string, err error) {
-	var indent bytes.Buffer
-	if e := json.Indent(&indent, []byte(str), "", "  "); e != nil {
-		ret = str
-		err = e
-	} else {
-		ret = indent.String()
-	}
-	return
 }
