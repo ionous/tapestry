@@ -19,8 +19,7 @@ func CopyValue(val Value) (ret Value) {
 		ret = val
 
 	case affine.Record:
-		vs := copyRecord(val.Record())
-		ret = RecordOf(vs)
+		ret = copyRecord(val)
 
 	case affine.NumList:
 		vs := copyFloats(val.Floats())
@@ -45,23 +44,33 @@ func CopyValue(val Value) (ret Value) {
 func copyRecords(src []*Record) []*Record {
 	out := make([]*Record, len(src))
 	for i, el := range src {
-		cpy := copyRecord(el)
-		out[i] = cpy
+		out[i] = copyRecordValues(el)
 	}
 	return out
 }
 
-// assumes in value is a record.
-// panics on error because it assumes all records are copyable.
-func copyRecord(v *Record) (ret *Record) {
-	cnt := v.kind.NumField()
-	values := make([]Value, cnt)
-	for i := 0; i < cnt; i++ {
-		if el, e := v.GetIndexedField(i); e != nil {
-			panic(e)
-		} else {
-			values[i] = CopyValue(el)
-		}
+func copyRecord(v Value) (ret Value) {
+	if rec := v.Record(); rec == nil {
+		ret = v
+	} else {
+		out := copyRecordValues(rec)
+		ret = RecordOf(out)
 	}
-	return &Record{kind: v.kind, values: values}
+	return
+}
+
+// panics on error because it assumes all records are copyable.
+func copyRecordValues(src *Record) (ret *Record) {
+	if src != nil {
+		values := make([]Value, len(src.values))
+		for i, v := range src.values {
+			// if a value hasn't been accessed, it might still be at its default value
+			// skip copying it, the new record will also have the default value for that field
+			if v != nil {
+				values[i] = CopyValue(v)
+			}
+		}
+		ret = &Record{kind: src.kind, values: values}
+	}
+	return
 }

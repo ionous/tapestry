@@ -9,9 +9,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type Kinds interface {
+	GetKindByName(name string) (*g.Kind, error)
+}
+
 // LiteralValue marks script constants.
 type LiteralValue interface {
-	GetLiteralValue(g.Kinds) (g.Value, error)
+	GetLiteralValue(Kinds) (g.Value, error)
 }
 
 // String uses strconv.FormatBool.
@@ -19,7 +23,7 @@ func (op *BoolValue) String() string {
 	return strconv.FormatBool(op.Value)
 }
 
-func (op *BoolValue) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
+func (op *BoolValue) GetLiteralValue(Kinds) (ret g.Value, _ error) {
 	ret = g.BoolFrom(op.Value, op.Kind)
 	return
 }
@@ -44,7 +48,7 @@ func (op *NumValue) String() string {
 	return strconv.FormatFloat(op.Value, 'g', -1, 64)
 }
 
-func (op *NumValue) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
+func (op *NumValue) GetLiteralValue(Kinds) (ret g.Value, _ error) {
 	ret = g.FloatOf(op.Value)
 	return
 }
@@ -59,7 +63,7 @@ func (op *TextValue) String() string {
 	return op.Value
 }
 
-func (op *TextValue) GetLiteralValue(kinds g.Kinds) (ret g.Value, _ error) {
+func (op *TextValue) GetLiteralValue(kinds Kinds) (ret g.Value, _ error) {
 	ret = g.StringFrom(op.Value, op.Kind)
 	return
 }
@@ -69,7 +73,7 @@ func (op *TextValue) GetText(run rt.Runtime) (g.Value, error) {
 	return op.GetLiteralValue(run)
 }
 
-func (op *NumValues) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
+func (op *NumValues) GetLiteralValue(Kinds) (ret g.Value, _ error) {
 	// fix? would copying be better?
 	ret = g.FloatsOf(op.Values)
 	return
@@ -80,7 +84,7 @@ func (op *NumValues) GetNumList(run rt.Runtime) (g.Value, error) {
 	return op.GetLiteralValue(run)
 }
 
-func (op *TextValues) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
+func (op *TextValues) GetLiteralValue(Kinds) (ret g.Value, _ error) {
 	// fix? would copying be better?
 	ret = g.StringsOf(op.Values)
 	return
@@ -91,7 +95,7 @@ func (op *TextValues) GetTextList(run rt.Runtime) (ret g.Value, _ error) {
 	return op.GetLiteralValue(run)
 }
 
-func (op *RecordValue) GetLiteralValue(kinds g.Kinds) (ret g.Value, err error) {
+func (op *RecordValue) GetLiteralValue(kinds Kinds) (ret g.Value, err error) {
 	return op.Cache.GetRecord(kinds, op.Kind, op.Fields)
 }
 
@@ -100,7 +104,7 @@ func (op *RecordValue) GetRecord(run rt.Runtime) (g.Value, error) {
 	return op.GetLiteralValue(run)
 }
 
-func (op *RecordList) GetLiteralValue(kinds g.Kinds) (g.Value, error) {
+func (op *RecordList) GetLiteralValue(kinds Kinds) (g.Value, error) {
 	return op.Cache.GetRecords(kinds, op.Kind, op.Records)
 }
 
@@ -115,7 +119,7 @@ func (op *FieldList) String() (ret string) {
 }
 
 // unimplemented: panics.
-func (op *FieldList) GetLiteralValue(g.Kinds) (g.Value, error) {
+func (op *FieldList) GetLiteralValue(Kinds) (g.Value, error) {
 	panic("field values should only be used in record literals")
 }
 

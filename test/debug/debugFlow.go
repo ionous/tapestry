@@ -25,7 +25,6 @@ func (n Flow) GetFlow() interface{} {
 	return n.op
 }
 
-func (n Flow) SetFlow(i interface{}) (okay bool) {
+func (n Flow) SetFlow(i interface{}) bool {
 	panic("not implemented... probably use reflection")
-	return false
 }

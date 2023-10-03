@@ -35,9 +35,9 @@ func TestMatching(t *testing.T) {
 		},
 	}
 
-	if a, e := locals.GetNamedField("a"); e != nil {
+	if a, e := lt.FieldByName("a"); e != nil {
 		t.Fatal(e)
-	} else if b, e := locals.GetNamedField("b"); e != nil {
+	} else if b, e := lt.FieldByName("b"); e != nil {
 		t.Fatal(e)
 	} else {
 		a, b := a.Record(), b.Record()
@@ -51,8 +51,8 @@ func TestMatching(t *testing.T) {
 		{
 			if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("matched", res)
 			}
 		}
 		// different labels shouldnt match
@@ -61,8 +61,8 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != false {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != false {
+				t.Fatal("different labels shouldn't match")
 			}
 		}
 		// same labels should match
@@ -71,8 +71,8 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("same labels should match")
 			}
 		}
 		// many fields should match
@@ -87,8 +87,8 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("many fields should match")
 			}
 		}
 		// names shouldnt be involved
@@ -97,8 +97,8 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("names shouldnt matter")
 			}
 		}
 	}

@@ -11,7 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
-func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, err error) {
+func newListTime(src []string, p testpat.Map) (ret rt.Runtime, err error) {
 	var kinds testutil.Kinds
 	type Locals struct{ Source []string }
 	kinds.AddKinds((*Locals)(nil))
@@ -28,7 +28,6 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, e
 		err = e
 	} else {
 		ret = &lt
-		vals = locals
 	}
 	return
 }

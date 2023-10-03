@@ -17,7 +17,7 @@ const (
 )
 
 func Categorize(k *g.Kind) (ret Category) {
-	switch path := k.Path(); len(path) {
+	switch path := g.Path(k); len(path) {
 	case 2: // <record>(0) name; <pattern>(0) name
 		switch base := path[0]; base {
 		case kindsOf.Record.String():

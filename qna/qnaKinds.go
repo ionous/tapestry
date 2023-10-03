@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/generic"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
@@ -34,6 +33,7 @@ func (run *Runner) getKindOf(kn, kt string) (ret *g.Kind, err error) {
 }
 
 func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
+	run.ensureBaseKinds()
 	if c, e := run.values.cache(func() (ret any, err error) {
 		ret, err = run.buildKind(k)
 		return
@@ -45,59 +45,48 @@ func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
 	return
 }
 
-func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
-	if path, e := run.query.KindOfAncestors(k); e != nil {
-		err = errutil.Fmt("error while getting kind %q, %w", k, e)
-	} else if fs, e := run.getFields(k, path); e != nil {
-		err = errutil.Fmt("error while building kind %q, %w", k, e)
-	} else {
-		// fix? kinds and fields can be zero for both empty kinds and non-existent kinds
-		// this tries to figure out which is which to properly report errors
-		// ideally, this could be done at query time ( they should be the lowest N rows )
-		var okay bool
-		if len(path) > 0 || len(fs) > 0 {
-			okay = true
-		} else {
-			for _, x := range kindsOf.DefaultKinds {
-				if k == x.String() {
-					okay = true
-					break
+// tbd: maybe macros and actions shouldnt have the parent  "pattern";
+// it would simplify this, and re: Categorize the base shouldnt be needed anymore.
+func (run *Runner) ensureBaseKinds() {
+	key := makeKey("kinds", kindsOf.Kind.String())
+	if _, ok := run.values[key]; !ok {
+		for _, k := range kindsOf.DefaultKinds {
+			var err error
+			var kind *g.Kind
+			// note: responses have fields, even though the other base kinds dont
+			if fs, e := run.getExclusiveFields(k.String()); e != nil {
+				err = errutil.Fmt("error while building kind %q, %w", k, e)
+			} else {
+				var parent *g.Kind
+				if p := k.Parent().String(); len(p) > 0 {
+					parent, err = run.getKind(p)
+				}
+				if err == nil {
+					kind = g.NewKind(run, k.String(), parent, fs, nil)
 				}
 			}
-		}
-		if !okay {
-			err = errutil.Fmt("unknown kind %q", k)
-		} else {
-			// fix? this is maybe a little odd... because when the domain changes, so will the kinds
-			// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
-			//   and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
-			kinds := generic.Kinds(run)
-			kind := g.NewKind(kinds, k, path, fs)
-			ret = kind
+			key := makeKey("kinds", k.String())
+			run.values[key] = cachedValue{kind, err}
 		}
 	}
 	return
 }
 
-// fields for a full hierarchy
-// fields for kinds are "flattened" so all of the info for a hierarchy is duplicated in each kind
-func (run *Runner) getFields(kind string, path []string) (ret []g.Field, err error) {
-	var out []g.Field
-	for _, kind := range path {
-		if fs, e := run.getExclusiveFields(kind); e != nil {
-			err = e
-			break
-		} else {
-			out = append(out, fs...)
-		}
-	}
-	if err == nil {
-		// fix? would probably make more sense if kindOfAncestors included the kind
-		if fs, e := run.getExclusiveFields(kind); e != nil {
-			err = e
-		} else {
-			ret = append(out, fs...)
-		}
+// gofmt will add extra lines if the "fix" comment below is here. :'(
+func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
+	// fix? this is maybe a little odd... because when the domain changes, so will the kinds
+	// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
+	//	and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
+	if path, e := run.query.KindOfAncestors(k); e != nil {
+		err = errutil.Fmt("error while getting kind %q, %w", k, e)
+	} else if cnt := len(path); cnt == 0 {
+		err = errutil.Fmt("invalid kind %q", k)
+	} else if parent, e := run.GetKindByName(path[cnt-1]); e != nil {
+		err = e
+	} else if fs, e := run.getExclusiveFields(k); e != nil {
+		err = errutil.Fmt("error while building kind %q, %w", k, e)
+	} else {
+		ret = g.NewKind(run, k, parent, fs, makeAspects(run, fs))
 	}
 	return
 }
@@ -187,6 +176,25 @@ func initRecord(run *Runner, rec *g.Record) (err error) {
 			if e := kv.initValue(run, rec); e != nil {
 				err = e
 				break
+			}
+		}
+	}
+	return
+}
+
+func makeAspects(kinds kinds, fields []g.Field) (ret []g.Aspect) {
+	for _, ft := range fields {
+		if g.IsAspectLike(ft) {
+			if a, e := kinds.GetKindByName(ft.Type); e == nil {
+				if g.Base(a) == kindsOf.Aspect.String() {
+					cnt := a.NumField()
+					ts := make([]string, cnt)
+					for i := 0; i < cnt; i++ {
+						t := a.Field(i)
+						ts[i] = t.Name
+					}
+					ret = append(ret, g.Aspect{Name: a.Name(), Traits: ts})
+				}
 			}
 		}
 	}

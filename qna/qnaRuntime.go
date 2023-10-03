@@ -292,7 +292,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if k, e := run.GetKindByName(ok.Kind); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(k.Path())
+				ret = g.StringsOf(g.Path(k))
 			}
 
 		// given a noun, return the name declared by the author

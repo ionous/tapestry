@@ -26,11 +26,11 @@ func NewDefaultValue(ks Kinds, aff affine.Affinity, cls string) (ret Value, err 
 	case affine.NumList:
 		ret = FloatsFrom(nil, cls)
 
-	case affine.Text:
+	case affine.Text: //fix!
 		var defaultValue string
 		if len(cls) > 0 {
 			if ak, e := ks.GetKindByName(cls); e == nil {
-				if ak.Implements(kindsOf.Aspect.String()) {
+				if Base(ak) == kindsOf.Aspect.String() {
 					trait := ak.Field(0) // get the default trait.
 					defaultValue = trait.Name
 				}

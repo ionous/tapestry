@@ -6,31 +6,32 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// variant implements the Value interface.
 // every primitive value is its own unique instance.
 // records are as pointers, and lists as pointers to slices;
-// their data is therefore shared across refValues.
+// their data is therefore shared across variants.
 // pointers to slices allows for in-place grow, append, etc.
-type refValue struct {
+type variant struct {
 	a affine.Affinity
 	t string
-	i interface{}
+	i any
 }
 
-var _ Value = (*refValue)(nil)
+var _ Value = (*variant)(nil)
 
-func (n refValue) Affinity() affine.Affinity {
+func (n variant) Affinity() affine.Affinity {
 	return n.a
 }
 
-func (n refValue) Type() string {
+func (n variant) Type() string {
 	return n.t
 }
 
-func (n refValue) Bool() bool {
+func (n variant) Bool() bool {
 	return n.i.(bool)
 }
 
-func (n refValue) Float() (ret float64) {
+func (n variant) Float() (ret float64) {
 	// see also: MakeLiteral
 	switch v := n.i.(type) {
 	case float64:
@@ -47,7 +48,7 @@ func (n refValue) Float() (ret float64) {
 	return
 }
 
-func (n refValue) Int() (ret int) {
+func (n variant) Int() (ret int) {
 	switch v := n.i.(type) {
 	case int:
 		ret = v
@@ -63,30 +64,30 @@ func (n refValue) Int() (ret int) {
 	return
 }
 
-func (n refValue) String() string {
+func (n variant) String() string {
 	return n.i.(string)
 }
 
-func (n refValue) Record() *Record {
+func (n variant) Record() *Record {
 	return n.i.(*Record)
 }
 
-func (n refValue) Floats() (ret []float64) {
+func (n variant) Floats() (ret []float64) {
 	vp := n.i.(*[]float64)
 	return *vp
 }
 
-func (n refValue) Strings() (ret []string) {
+func (n variant) Strings() (ret []string) {
 	vp := n.i.(*[]string)
 	return *vp
 }
 
-func (n refValue) Records() (ret []*Record) {
+func (n variant) Records() (ret []*Record) {
 	vp := n.i.(*[]*Record)
 	return *vp
 }
 
-func (n refValue) Len() (ret int) {
+func (n variant) Len() (ret int) {
 	switch vp := n.i.(type) {
 	case string:
 		ret = len(vp)
@@ -102,7 +103,7 @@ func (n refValue) Len() (ret int) {
 	return
 }
 
-func (n refValue) Index(i int) (ret Value) {
+func (n variant) Index(i int) (ret Value) {
 	switch vp := n.i.(type) {
 	case *[]float64:
 		ret = FloatFrom((*vp)[i], n.t)
@@ -116,24 +117,32 @@ func (n refValue) Index(i int) (ret Value) {
 	return
 }
 
-func (n refValue) FieldByName(f string) (ret Value, err error) {
+func (n variant) FieldByName(f string) (ret Value, err error) {
 	name := lang.Normalize(f)
-	if v, e := n.Record().GetNamedField(name); e != nil {
-		err = e
+	if rec := n.Record(); rec == nil {
+		err = errutil.Fmt("get field %q of nil record %q", name, n.Type())
 	} else {
-		ret = v
+		if v, e := rec.GetNamedField(name); e != nil {
+			err = e
+		} else {
+			ret = v
+		}
 	}
 	return
 }
 
-func (n refValue) SetFieldByName(f string, v Value) (err error) {
-	rec := n.Record()
+func (n variant) SetFieldByName(f string, v Value) (err error) {
 	name := lang.Normalize(f)
-	newVal := CopyValue(v)
-	return rec.SetNamedField(name, newVal)
+	if rec := n.Record(); rec == nil {
+		err = errutil.Fmt("set field %q of nil record %q", name, n.Type())
+	} else {
+		newVal := CopyValue(v)
+		err = rec.SetNamedField(name, newVal)
+	}
+	return
 }
 
-func (n refValue) SetIndex(i int, v Value) (err error) {
+func (n variant) SetIndex(i int, v Value) (err error) {
 	switch vp := n.i.(type) {
 	case *[]float64:
 		(*vp)[i] = v.Float()
@@ -146,8 +155,10 @@ func (n refValue) SetIndex(i int, v Value) (err error) {
 	case *[]*Record:
 		if n.t != v.Type() {
 			err = errutil.New("record types dont match")
+		} else if rec := v.Record(); rec == nil {
+			err = errutil.New("record lists dont allow null values")
 		} else {
-			n := copyRecord(v.Record())
+			n := copyRecordValues(rec)
 			(*vp)[i] = n
 		}
 	default:
@@ -157,7 +168,7 @@ func (n refValue) SetIndex(i int, v Value) (err error) {
 }
 
 // Slices copies a chunk out of a list
-func (n refValue) Slice(i, j int) (ret Value, err error) {
+func (n variant) Slice(i, j int) (ret Value, err error) {
 	if i < 0 {
 		err = Underflow{i, 0}
 	} else if cnt := n.Len(); j > cnt {
@@ -186,7 +197,7 @@ func (n refValue) Slice(i, j int) (ret Value, err error) {
 }
 
 // Splice replaces a range of values
-func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
+func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
 	if i < 0 {
 		err = Underflow{i, 0}
 	} else if cnt := n.Len(); j > cnt {
@@ -219,6 +230,8 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 			vp := n.i.(*[]*Record)
 			if n.t != add.Type() {
 				err = errutil.New("record types dont match")
+			} else if src, e := normalizeRecords(add); e != nil {
+				err = e // // make a list out of one or more records from add
 			} else {
 				els := (*vp)
 				// move the record pointers
@@ -226,8 +239,7 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 				// only one list will have the pointers at a time
 				cut := make([]*Record, j-i)
 				copy(cut, els[i:j])
-				// make a list out of one or more records from add
-				ins := copyRecords(normalizeRecords(add))
+				ins := copyRecords(src)
 				// read from els before adding to els to avoid stomping overlapping memory.
 				(*vp) = append(els[:i], append(ins, els[j:]...)...)
 				// return our cut pointers
@@ -240,7 +252,7 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 	return
 }
 
-func (n refValue) Appends(add Value) (err error) {
+func (n variant) Appends(add Value) (err error) {
 	switch n.a {
 	case affine.NumList:
 		vp := n.i.(*[]float64)
@@ -260,8 +272,10 @@ func (n refValue) Appends(add Value) (err error) {
 		vp := n.i.(*[]*Record)
 		if n.t != add.Type() {
 			err = errutil.New("record types dont match")
+		} else if els, e := normalizeRecords(add); e != nil {
+			err = e
 		} else {
-			ins := copyRecords(normalizeRecords(add))
+			ins := copyRecords(els)
 			(*vp) = append((*vp), ins...)
 		}
 

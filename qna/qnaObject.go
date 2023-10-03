@@ -84,18 +84,22 @@ func (run *Runner) writeNounValue(obj query.NounInfo, field g.Field, val g.Value
 // return the (cached) value of a noun's field
 // if the noun's field contains an assignment it's evaluated each time.
 func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
+	// first, build a cache value:
 	if c, e := run.nounValues.cache(func() (ret any, err error) {
+		// a record can have multiple path/values
 		if vs, e := run.query.NounValues(obj.Id, field.Name); e != nil {
 			err = e
 		} else if len(vs) > 0 {
 			ret, err = run.readFields(field, vs)
 		} else {
+			// if the noun had no values; the kind might have default values.
 			ret, err = run.readKindField(obj, field)
 		}
 		return
 	}, obj.Domain, obj.Id, field.Name); e != nil {
 		err = e
 	} else {
+		// then, unpack the cached value:
 		switch c := c.(type) {
 		case g.Value:
 			ret = c
@@ -122,9 +126,8 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 		err = errutil.New("couldnt find field %q in kind %q", field.Name, k.Name)
 	} else {
 		var found bool
-		next, path := k, k.Path() // most derived on rhs
 	FindField:
-		for i, cnt := 0, len(path); i < cnt; i++ {
+		for next := k; next != nil; next = next.Parent() {
 			if kv, e := run.getKindValues(next); e != nil {
 				err = e
 				break
@@ -138,9 +141,6 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 						ret, found = el.val, true
 						break FindField // don!
 					}
-				}
-				if next, err = run.getKind(path[cnt-i-1]); err != nil {
-					break
 				}
 			}
 		}
@@ -172,41 +172,49 @@ func (run *Runner) readFields(field g.Field, vals []query.ValueData) (ret any, e
 	return
 }
 
+// autocreates default sub records if need be.
 func readRecord(run *Runner, rec *g.Record, vs []query.ValueData) (err error) {
 	for _, vd := range vs {
-		// scan through path for each part of the name
-		for path := vd.Path; len(path) > 0; {
-			// get the next part ( and the rest of the string )
-			part, rest := dotscan(path)
-			k := rec.Kind() // has aff if needed
-			if i := k.FieldIndex(part); i < 0 {
-				err = errutil.New("error")
-			} else {
-
-				if len(rest) == 0 {
-					field := k.Field(i)
-					// FIX: how does fieldType actually get recorded!?!
-					if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
-						err = e
-					} else if v, e := l.GetLiteralValue(run); e != nil {
-						err = e
-					} else {
-						err = rec.SetIndexedField(i, v)
-					}
-					break // all done regardless
+		if e := readRecordPart(run, rec, vd); e != nil {
+			err = errutil.Append(err, e)
+		}
+	}
+	return
+}
+func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) {
+	// scan through path for each part of the name
+	for path := vd.Path; len(path) > 0 && err == nil; {
+		// get the next part ( and the rest of the string )
+		part, rest := dotscan(path)
+		k := rec.Kind() // has aff if needed
+		if i := k.FieldIndex(part); i < 0 {
+			err = errutil.New("unexpected error reading record %q part %q", k.Name(), part)
+		} else {
+			if len(rest) == 0 {
+				field := k.Field(i)
+				// FIX: how does fieldType actually get recorded!?!
+				if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
+					err = e
+				} else if v, e := l.GetLiteralValue(run); e != nil {
+					err = e
 				} else {
-					// a part ending with a dot is a record:
-					// the Get() will auto-create the value --
-					// fix, future: this is questionable requires rec to know Kinds.
-					// the caller could surely handle that ( ex. Dotted and this ) when needed.
-					if v, e := rec.GetIndexedField(i); e != nil {
+					err = rec.SetIndexedField(i, v)
+				}
+				break // all done regardless
+			} else {
+				// a part ending with a dot is a record:
+				if v, e := rec.GetIndexedField(i); e != nil {
+					err = e
+				} else if v.Affinity() != affine.Record {
+					err = errutil.New("error")
+				} else {
+					path = rest
+					if next := v.Record(); next != nil {
+						rec = next
+					} else if k, e := run.GetKindByName(v.Type()); e != nil {
 						err = e
-						break
-					} else if v.Affinity() != affine.Record {
-						err = errutil.New("error")
-						break
 					} else {
-						rec, path = v.Record(), rest
+						rec = k.NewRecord()
 					}
 				}
 			}

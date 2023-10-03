@@ -23,6 +23,7 @@ type Value interface {
 	// return this value as a string, or panic if the value isn't a string.
 	String() string
 	// return this value as a record, or panic if the value isn't a record.
+	// warning: can return a nil.
 	Record() *Record
 	// return this value as a slice of floats, or panic if this isn't a float slice.
 	// note: while primitive values support both ints and floats, slices can only be floats.

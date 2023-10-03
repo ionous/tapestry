@@ -3,14 +3,13 @@ package generic_test
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
 )
 
-func (n *recordTest) NewKind(name string, path []string, fields []g.Field) (ret *g.Kind) {
-	k := g.NewKind(n, name, path, fields)
+func (n *recordTest) NewKind(name string, fields []g.Field, aspects []g.Aspect) (ret *g.Kind) {
+	k := g.NewKind(n, name, nil, fields, aspects)
 	n.ks = append(n.ks, k)
 	return k
 }
@@ -51,16 +50,14 @@ type recordTest struct {
 
 func newRecordAccessTest() *recordTest {
 	rt := new(recordTest)
-	rt.NewKind("a", []string{kindsOf.Aspect.String()}, []g.Field{
-		{"x", affine.Bool, "" /*"trait"*/},
-		{"w", affine.Bool, "" /*"trait"*/},
-		{"y", affine.Bool, "" /*"trait"*/},
-	})
-	ks := rt.NewKind("Ks", nil, []g.Field{
+	ks := rt.NewKind("Ks", []g.Field{
 		{"d", affine.Number, "" /*"float64"*/},
 		{"t", affine.Text, "" /*"string"*/},
 		{"a", affine.Text, "a"},
-	})
+	}, []g.Aspect{
+		{"a", []string{"x", "w", "y"}},
+	},
+	)
 	rt.vars = map[string]*g.Record{
 		"boop": ks.NewRecord(),
 		"beep": ks.NewRecord(),

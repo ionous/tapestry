@@ -46,7 +46,7 @@ func popTest(front bool, amt int, src ...string) []string {
 			},
 		}),
 	}
-	if run, _, e := newListTime(src, nil); e != nil {
+	if run, e := newListTime(src, nil); e != nil {
 		panic(e)
 	} else {
 		for i := 0; i < amt; i++ {
