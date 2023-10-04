@@ -4,8 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 )
 
-// Value represents any one of the built in types.
-// It's similar to reflect.Value in golang's standard library.
+// Value represents any one of Tapestry's built in types.
 type Value interface {
 	// identifies the general category of the value.
 	Affinity() affine.Affinity
@@ -20,7 +19,8 @@ type Value interface {
 	Float() float64
 	// return this value as an int, or panic if the value isn't a number.
 	Int() int
-	// return this value as a string, or panic if the value isn't a string.
+	// return this value as a string; it doesn't panic.
+	// for non-string values, similar to package reflect, it returns a string of the form "<type value>".
 	String() string
 	// return this value as a record, or panic if the value isn't a record.
 	// warning: can return a nil.

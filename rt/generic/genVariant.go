@@ -1,6 +1,8 @@
 package generic
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
@@ -64,8 +66,13 @@ func (n variant) Int() (ret int) {
 	return
 }
 
-func (n variant) String() string {
-	return n.i.(string)
+func (n variant) String() (ret string) {
+	if a, ok := n.i.(string); ok {
+		ret = a
+	} else {
+		ret = fmt.Sprintf("<%T %v>", n.i, n.i)
+	}
+	return
 }
 
 func (n variant) Record() *Record {
