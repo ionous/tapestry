@@ -29,9 +29,6 @@ func (op *ListSortText) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
-
-	// check for diry everywher
-
 	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if els, e := root.GetCheckedValue(run, affine.NumList); e != nil {

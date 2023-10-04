@@ -19,11 +19,11 @@ func eraseIndex(run rt.Runtime,
 	target assign.Address,
 	atIndex rt.NumberEval,
 ) (ret g.Value, err error) {
-	if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
-		err = e
-	} else if root, e := assign.GetRootValue(run, target); e != nil {
+	if root, e := assign.GetRootValue(run, target); e != nil {
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
+		err = e
+	} else if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
 		err = e
 	} else if startOne, e := safe.GetNumber(run, atIndex); e != nil {
 		err = e

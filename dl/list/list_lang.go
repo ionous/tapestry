@@ -1232,9 +1232,12 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 	return
 }
 
-// ListReduce Combine all of the values in a list into the targeted value.
+// ListReduce Combine all of the values in a list into a single value.
 // The designated pattern is called with two parameters:
-// 'in' ( each element of the list ) and 'out' ( ex. a record ).
+//  1. each element of the list; and,
+//  2. the value being combined.
+//
+// And, that pattern is expected to return the newly updated value.
 type ListReduce struct {
 	Target      assign.Address    `if:"label=into"`
 	List        assign.Assignment `if:"label=from_list"`

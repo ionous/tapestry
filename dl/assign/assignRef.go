@@ -88,7 +88,7 @@ func (src *RootValue) ConvertValue(run rt.Runtime, out affine.Affinity) (ret g.V
 	if val, e := src.getValue(run); e != nil {
 		err = e
 	} else if res, e := safe.ConvertValue(run, val, out); e != nil {
-		err = errutil.New("get checked value failed", src.RefValue.String(), e)
+		err = errutil.New("convert value failed", src.RefValue.String(), e)
 	} else {
 		ret = res
 	}
