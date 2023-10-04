@@ -26,21 +26,36 @@ type Aspect struct {
 	Traits []string
 }
 
-// NewKind -
-func NewKind(kinds Kinds, name string, parent *Kind, fields []Field) *Kind {
-	return newKind(kinds, name, parent, fields, nil)
-}
-
 // a record without a named kind
 func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {
 	return newKind(kinds, "", nil, fields, nil).NewRecord()
 }
 
+// NewKind -
+func NewKind(kinds Kinds, name string, parent *Kind, fields []Field) *Kind {
+	return newKind(kinds, name, parent, fields, nil)
+}
+
+// when kinds are created via this method,
+// the traits of any aspect fields act like separate boolean fields;
+// without it, only the aspect text field itself exists.
+// ex. if the list of fields contains a "colour" aspect with traits "red", "blue", "green"
+// then the returned kind will respond to "colour", "red", "blue", and "green";
+// with NewKind() it would respond only to "colour", the r,b,g fields wouldn't exist.
+// its a bit of leaky abstraction because boolean traits are used only by objects.
+func NewKindWithTraits(kinds Kinds, name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
+	return newKind(kinds, name, parent, fields, aspects)
+}
+
 func newKind(kinds Kinds, name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
 	if parent != nil { // fix? field lists are stored "flat" to simplify copy, record, etc.
 		// have to copy or they can share memory, and bad things happen with other kinds.
-		fields = append(append([]Field(nil), parent.fields...), fields...)
-		aspects = append(append([]Aspect(nil), parent.aspects...), aspects...)
+		if len(parent.fields) > 0 {
+			fields = append(append([]Field(nil), parent.fields...), fields...)
+		}
+		if len(parent.aspects) > 0 {
+			aspects = append(append([]Aspect(nil), parent.aspects...), aspects...)
+		}
 	}
 	return &Kind{kinds: kinds, name: name, parent: parent, fields: fields, aspects: aspects}
 }

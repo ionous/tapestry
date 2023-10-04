@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
@@ -99,7 +100,9 @@ func (ks *Kinds) makeKind(name string, pfs *[]g.Field) (ret *g.Kind, err error) 
 		}
 	}
 	if err == nil {
-		ret = g.NewKindWithTraits(ks, name, parent, *pfs)
+		fields := *pfs
+		traits := aspects.MakeAspects(ks, fields)
+		ret = g.NewKindWithTraits(ks, name, parent, fields, traits)
 	}
 	return
 }

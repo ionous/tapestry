@@ -49,15 +49,14 @@ type recordTest struct {
 
 func newRecordAccessTest() *recordTest {
 	n := new(recordTest)
-	n.addKind(g.NewKind(n, "a", nil,
-		testutil.MakeFieldsFromTraits([]string{
-			"x", "w", "y",
-		})))
 	ks := n.addKind(g.NewKindWithTraits(n, "Ks", nil, []g.Field{
 		{"d", affine.Number, "" /*"float64"*/},
 		{"t", affine.Text, "" /*"string"*/},
 		{"a", affine.Text, "a"},
-	}))
+	}, []g.Aspect{{
+		Name:   "a",
+		Traits: []string{"x", "w", "y"},
+	}}))
 	n.vars = map[string]*g.Record{
 		"boop": ks.NewRecord(),
 		"beep": ks.NewRecord(),

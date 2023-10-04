@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
@@ -89,8 +90,10 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 		// we never actually use the field values of the kind:
 		// instead we pull individual defaults from the db.
 		// because of that, weave generates reasonable default values for kinds with traits
+
 		if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
-			ret = g.NewKindWithTraits(run, k, parent, fields)
+			traits := aspects.MakeAspects(run, fields)
+			ret = g.NewKindWithTraits(run, k, parent, fields, traits)
 		} else {
 			ret = g.NewKind(run, k, parent, fields)
 		}
