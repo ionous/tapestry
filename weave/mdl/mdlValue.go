@@ -210,7 +210,7 @@ func marshalAssignment(val assign.Assignment, wantAff affine.Affinity) (ret stri
 		val = a.Assignment
 	}
 	if aff := assign.GetAffinity(val); aff != wantAff {
-		err = errutil.Fmt("assignment is %s not %s", aff, wantAff)
+		err = errutil.Fmt("mismatched assignment, wanted %s not %s", aff, wantAff)
 	} else {
 		// strip off the From section to avoid serializing redundant info
 		switch v := val.(type) {
@@ -243,7 +243,7 @@ func marshalLiteral(val literal.LiteralValue, wantAff affine.Affinity) (ret stri
 		val = a.LiteralValue
 	}
 	if aff := literal.GetAffinity(val); aff != wantAff {
-		err = errutil.Fmt("literal is %s not %s", aff, wantAff)
+		err = errutil.Fmt("mismatched literal, wanted %s not %s", aff, wantAff)
 	} else {
 		ret, err = marshalout(val)
 	}

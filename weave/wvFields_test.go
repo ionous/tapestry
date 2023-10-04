@@ -179,7 +179,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 		&eph.Kinds{Kind: "m"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := testweave.OkayError(t, e, `Missing kind "m" in domain "a" trying to write field "t"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Missing kind "m" in domain "a" trying to find field "t"`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
