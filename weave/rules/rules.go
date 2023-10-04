@@ -16,10 +16,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Kinds interface {
-	GetKindByName(name string) (*g.Kind, error)
-}
-
 type RuleInfo struct {
 	Name           string // name of the pattern / kind
 	Label          string
@@ -90,7 +86,7 @@ func ReadPhrase(phrase, label string) (ret RuleName) {
 	}
 }
 
-func (n RuleName) GetRuleInfo(ks Kinds) (ret RuleInfo, err error) {
+func (n RuleName) GetRuleInfo(ks g.Kinds) (ret RuleInfo, err error) {
 	if n.IsDomainEvent() {
 		ret, err = n.ruleForDomain()
 	} else {
@@ -111,7 +107,7 @@ func (n RuleName) ruleForDomain() (ret RuleInfo, err error) {
 // to various naming conventions and pattern definitions
 // to determine the intended pattern name, rank, and termination behavior.
 // for example: "instead of x", "before x", "after x", "report x".
-func (n RuleName) ruleForPattern(ks Kinds) (ret RuleInfo, err error) {
+func (n RuleName) ruleForPattern(ks g.Kinds) (ret RuleInfo, err error) {
 	if k, e := ks.GetKindByName(n.Short); e != nil {
 		err = e // ^ the base pattern
 	} else {

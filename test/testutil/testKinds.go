@@ -63,7 +63,7 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	} else {
 		if name == kindsOf.Aspect.String() {
 			// special base for aspects
-			ret = g.NewKind(ks, name, nil, nil)
+			ret = g.NewKind(name, nil, nil)
 		} else {
 			if k, e := ks.makeAspect(name); e != nil {
 				err = e
@@ -101,8 +101,7 @@ func (ks *Kinds) makeKind(name string, pfs *[]g.Field) (ret *g.Kind, err error) 
 	}
 	if err == nil {
 		fields := *pfs
-		traits := aspects.MakeAspects(ks, fields)
-		ret = g.NewKindWithTraits(ks, name, parent, fields, traits)
+		ret = g.NewKindWithTraits(name, parent, fields, aspects.MakeAspects(ks, fields))
 	}
 	return
 }
@@ -115,7 +114,7 @@ func (ks *Kinds) makeAspect(name string) (ret *g.Kind, err error) {
 				break
 			} else {
 				// create the kind from the stored fields
-				ret = g.NewKind(ks, a.Name, parent, MakeFieldsFromTraits(a.Traits))
+				ret = g.NewKind(a.Name, parent, MakeFieldsFromTraits(a.Traits))
 				break
 			}
 		}

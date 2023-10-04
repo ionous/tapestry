@@ -63,7 +63,7 @@ func (run *Runner) ensureBaseKinds() {
 					parent, err = run.getKind(p)
 				}
 				if err == nil {
-					kind = g.NewKind(run, k.String(), parent, fs)
+					kind = g.NewKind(k.String(), parent, fs)
 				}
 			}
 			key := makeKey("kinds", k.String())
@@ -93,9 +93,9 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 
 		if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
 			traits := aspects.MakeAspects(run, fields)
-			ret = g.NewKindWithTraits(run, k, parent, fields, traits)
+			ret = g.NewKindWithTraits(k, parent, fields, traits)
 		} else {
-			ret = g.NewKind(run, k, parent, fields)
+			ret = g.NewKind(k, parent, fields)
 		}
 	}
 	return

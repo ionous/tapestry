@@ -25,10 +25,9 @@ func TestSort(t *testing.T) {
 	lt := testutil.Runtime{
 		Kinds:     &kinds,
 		ObjectMap: objs,
-		Chain: scope.MakeChain(
-			scope.FromRecord(locals),
-		),
 	}
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
+
 	// create a new value of type "locals" containing "Objects:objectNames"
 	for key, obj := range objs {
 		if e := obj.SetNamedField("key", g.StringOf(key)); e != nil {

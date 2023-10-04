@@ -15,16 +15,13 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, err error) {
 	var kinds testutil.Kinds
 	type Locals struct{ Source []string }
 	kinds.AddKinds((*Locals)(nil))
-	locals := kinds.NewRecord("locals")
 	lt := testpat.Runtime{
 		Map: p,
 		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Chain: scope.MakeChain(
-				scope.FromRecord(locals),
-			),
 		}}
-	if e := locals.SetNamedField("source", g.StringsOf(src)); e != nil {
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, kinds.NewRecord("locals")))
+	if e := lt.SetFieldByName("source", g.StringsOf(src)); e != nil {
 		err = e
 	} else {
 		ret = &lt

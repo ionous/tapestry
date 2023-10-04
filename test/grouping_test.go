@@ -27,9 +27,6 @@ func TestGrouping(t *testing.T) {
 		Runtime: testutil.Runtime{
 			Kinds:     &kinds,
 			ObjectMap: objs,
-			Chain: scope.MakeChain(
-				scope.FromRecord(locals),
-			),
 		},
 		Map: testpat.Map{
 			"assign grouping": &assignGrouping,
@@ -37,6 +34,8 @@ func TestGrouping(t *testing.T) {
 			"match groups":    &matchGroups,
 		},
 	}
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
+
 	// generate one GroupSettings record for each object
 	if e := runGroupTogther.Execute(&lt); e != nil {
 		t.Fatal("groupTogther", e)

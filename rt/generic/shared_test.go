@@ -49,7 +49,7 @@ type recordTest struct {
 
 func newRecordAccessTest() *recordTest {
 	n := new(recordTest)
-	ks := n.addKind(g.NewKindWithTraits(n, "Ks", nil, []g.Field{
+	ks := n.addKind(g.NewKindWithTraits("Ks", nil, []g.Field{
 		{"d", affine.Number, "" /*"float64"*/},
 		{"t", affine.Text, "" /*"string"*/},
 		{"a", affine.Text, "a"},

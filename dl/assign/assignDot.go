@@ -97,7 +97,23 @@ func (dot DotField) Peek(run rt.Runtime, val g.Value) (ret g.Value, err error) {
 	} else if el, e := val.FieldByName(string(dot)); e != nil {
 		err = e
 	} else {
-		ret = el
+		// backwards compat: records used to produce default values internally
+		// now we have to do that manually
+		if aff != affine.Record || el != nil {
+			ret = el
+		} else if k, e := run.GetKindByName(el.Type()); e != nil {
+			err = e
+		} else if rec := val.Record(); rec == nil {
+			err = errutil.New("can't peek a nil value; how'd we get here?")
+		} else {
+			// use the record interface to avoid a copy.
+			newVal := g.RecordOf(k.NewRecord())
+			if e := rec.SetNamedField(string(dot), newVal); e != nil {
+				err = e
+			} else {
+				ret = newVal
+			}
+		}
 	}
 	return
 }

@@ -5,9 +5,14 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+// Kinds database
+// this isnt used by package generic, but its a common enough interface for tests and the runtime
+type Kinds interface {
+	GetKindByName(n string) (*Kind, error)
+}
+
 //
 type Kind struct {
-	kinds     Kinds
 	name      string // keeping name *and* path makes debugging easier
 	parent    *Kind
 	fields    []Field
@@ -27,13 +32,13 @@ type Aspect struct {
 }
 
 // a record without a named kind
-func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {
-	return newKind(kinds, "", nil, fields, nil).NewRecord()
+func NewAnonymousRecord(fields []Field) *Record {
+	return newKind("", nil, fields, nil).NewRecord()
 }
 
 // NewKind -
-func NewKind(kinds Kinds, name string, parent *Kind, fields []Field) *Kind {
-	return newKind(kinds, name, parent, fields, nil)
+func NewKind(name string, parent *Kind, fields []Field) *Kind {
+	return newKind(name, parent, fields, nil)
 }
 
 // when kinds are created via this method,
@@ -43,11 +48,11 @@ func NewKind(kinds Kinds, name string, parent *Kind, fields []Field) *Kind {
 // then the returned kind will respond to "colour", "red", "blue", and "green";
 // with NewKind() it would respond only to "colour", the r,b,g fields wouldn't exist.
 // its a bit of leaky abstraction because boolean traits are used only by objects.
-func NewKindWithTraits(kinds Kinds, name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
-	return newKind(kinds, name, parent, fields, aspects)
+func NewKindWithTraits(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
+	return newKind(name, parent, fields, aspects)
 }
 
-func newKind(kinds Kinds, name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
+func newKind(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
 	if parent != nil { // fix? field lists are stored "flat" to simplify copy, record, etc.
 		// have to copy or they can share memory, and bad things happen with other kinds.
 		if len(parent.fields) > 0 {
@@ -57,7 +62,7 @@ func newKind(kinds Kinds, name string, parent *Kind, fields []Field, aspects []A
 			aspects = append(append([]Aspect(nil), parent.aspects...), aspects...)
 		}
 	}
-	return &Kind{kinds: kinds, name: name, parent: parent, fields: fields, aspects: aspects}
+	return &Kind{name: name, parent: parent, fields: fields, aspects: aspects}
 }
 
 func (k *Kind) NewRecord() *Record {
@@ -65,10 +70,10 @@ func (k *Kind) NewRecord() *Record {
 	rec := &Record{kind: k, values: make([]Value, len(k.fields))}
 	// set the default values for aspects?
 	// alt: determine it on GetIndexedValue as per other defaults
-	for _, a := range k.aspects {
-		i := k.FieldIndex(a.Name)
-		rec.values[i] = StringFrom(a.Traits[0], a.Name)
-	}
+	// for _, a := range k.aspects {
+	// 	i := k.FieldIndex(a.Name)
+	// 	rec.values[i] = StringFrom(a.Traits[0], a.Name)
+	// }
 	return rec
 }
 

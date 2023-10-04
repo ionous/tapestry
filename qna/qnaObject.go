@@ -147,7 +147,7 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 		if !found {
 			// note: this doesnt properly determine the default trait for an aspect
 			// weave works around this by providing the correct default value in the db
-			ret, err = g.NewDefaultValue(run, field.Affinity, field.Type)
+			ret, err = g.NewDefaultValue(field.Affinity, field.Type)
 		}
 	}
 	return
@@ -183,6 +183,7 @@ func readRecord(run *Runner, rec *g.Record, vs []query.ValueData) (err error) {
 	}
 	return
 }
+
 func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) {
 	// scan through path for each part of the name
 	for path := vd.Path; len(path) > 0 && err == nil; {
@@ -192,9 +193,9 @@ func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) 
 		if i := k.FieldIndex(part); i < 0 {
 			err = errutil.New("unexpected error reading record %q part %q", k.Name(), part)
 		} else {
+			field := k.Field(i)
 			if len(rest) == 0 {
-				field := k.Field(i)
-				// FIX: how does fieldType actually get recorded!?!
+				// fix: how does fieldType actually get recorded!?!
 				if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
 					err = e
 				} else if v, e := l.GetLiteralValue(run); e != nil {
@@ -203,17 +204,19 @@ func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) 
 					err = rec.SetIndexedField(i, v)
 				}
 				break // all done regardless
+			} else if field.Affinity != affine.Record {
+				err = errutil.New("error")
 			} else {
-				// a part ending with a dot is a record:
-				if v, e := rec.GetIndexedField(i); e != nil {
-					err = e
-				} else if v.Affinity() != affine.Record {
-					err = errutil.New("error")
+				path = rest // provisionally
+				if rec.HasValue(i) {
+					if next, e := rec.GetIndexedField(i); e != nil {
+						err = e
+					} else {
+						rec = next.Record()
+					}
 				} else {
-					path = rest
-					if next := v.Record(); next != nil {
-						rec = next
-					} else if k, e := run.GetKindByName(v.Type()); e != nil {
+					// fix: is this good? or should we error?
+					if k, e := run.GetKindByName(field.Type); e != nil {
 						err = e
 					} else {
 						rec = k.NewRecord()

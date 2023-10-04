@@ -34,12 +34,10 @@ func TestMapStrings(t *testing.T) {
 			"reverse": &reverseText,
 		},
 		Runtime: testutil.Runtime{
-			Chain: scope.MakeChain(
-				scope.FromRecord(locals),
-			),
 			Kinds: &kinds,
 		},
 	}
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
 	if e := locals.SetNamedField("fruits", g.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
 		t.Fatal(e)
 	} else if e := remapStrings.Execute(&lt); e != nil {
@@ -94,11 +92,9 @@ func TestMapRecords(t *testing.T) {
 		},
 		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Chain: scope.MakeChain(
-				scope.FromRecord(locals),
-			),
 		},
 	}
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
 	if e := remapRecords.Execute(&lt); e != nil && !errors.Is(e, rt.NoResult) {
 		t.Fatal(e)
 	} else if val, e := locals.GetNamedField("results"); e != nil {

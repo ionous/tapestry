@@ -44,16 +44,33 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	return
 }
 
-// GetIndexedField can't ask for traits, only their aspects.
-// panics if out of range.
+// GetIndexedField panics if out of range.
+// note: traits are never indexed fields ( although their aspect is )
+// fix? GetIndexedField writes defaults into the record if there was no value.
 func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	// is the stored value valid? return it
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv
-	} else if nv, e := NewDefaultValue(d.kind.kinds, ft.Affinity, ft.Type); e != nil {
-		err = e
 	} else {
-		ret, d.values[i] = nv, nv
+		// first try set up default aspects
+		if ft.Affinity == affine.Text && ft.Name == ft.Type {
+			for _, a := range d.kind.aspects {
+				if a.Name == ft.Name {
+					// first trait:
+					nv := StringFrom(a.Traits[0], a.Name)
+					ret, d.values[i] = nv, nv
+					break
+				}
+			}
+		}
+		// fallback to other fields:
+		if ret == nil {
+			if nv, e := NewDefaultValue(ft.Affinity, ft.Type); e != nil {
+				err = e
+			} else {
+				ret, d.values[i] = nv, nv
+			}
+		}
 	}
 	return
 }

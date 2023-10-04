@@ -36,13 +36,13 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 			// maybe this type could live in the db.
 			const el, index, first, last = 0, 1, 2, 3
 			itAff, itType := affine.Element(vs.Affinity()), vs.Type()
-			ls := g.NewAnonymousRecord(run, []g.Field{
+			ls := g.NewAnonymousRecord([]g.Field{
 				{Name: it, Affinity: itAff, Type: itType},
 				{Name: "index", Affinity: affine.Number},
 				{Name: "first", Affinity: affine.Bool},
 				{Name: "last", Affinity: affine.Bool},
 			})
-			run.PushScope(scope.FromRecord(ls))
+			run.PushScope(scope.FromRecord(run, ls))
 			for i := 0; i < cnt; i++ {
 				at := vs.Index(i)
 				if e := ls.SetIndexedField(el, at); e != nil {
