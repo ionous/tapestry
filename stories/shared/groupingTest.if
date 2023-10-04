@@ -152,7 +152,7 @@
                                     "grouping",
                                     [
                                       {
-                                        "AtField:": "is hide label"
+                                        "AtField:": "hide label"
                                       }
                                     ]
                                   ]
@@ -169,7 +169,7 @@
                                     "grouping",
                                     [
                                       {
-                                        "AtField:": "is hide size"
+                                        "AtField:": "hide size"
                                       }
                                     ]
                                   ]
@@ -203,7 +203,7 @@
                                 ]
                               },
                               {
-                                "Cmp:is:num:": [
+                                "Is:matching:num:": [
                                   "@group_size",
                                   "greater_than",
                                   1
@@ -303,7 +303,7 @@
                                     "grouping",
                                     [
                                       {
-                                        "AtField:": "is hide size"
+                                        "AtField:": "hide size"
                                       }
                                     ]
                                   ]
@@ -320,7 +320,7 @@
                                     "grouping",
                                     [
                                       {
-                                        "AtField:": "is hide objects"
+                                        "AtField:": "hide objects"
                                       }
                                     ]
                                   ]
@@ -416,7 +416,7 @@
                                     "grouping",
                                     [
                                       {
-                                        "AtField:": "is hide size"
+                                        "AtField:": "hide size"
                                       }
                                     ]
                                   ]
@@ -441,7 +441,7 @@
                     {
                       "If:do:": [
                         {
-                          "Cmp:is:txt:": [
+                          "Is:matching:text:": [
                             {
                               "Variable:dot:": [
                                 "group",

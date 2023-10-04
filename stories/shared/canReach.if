@@ -230,7 +230,7 @@
                 {
                   "If:do:": [
                     {
-                      "Cmp:is:num:": [
+                      "Is:matching:num:": [
                         "@lca",
                         "greater_than",
                         0
@@ -326,7 +326,7 @@
           {
             "If:do:else:": [
               {
-                "Cmp:is:num:": [
+                "Is:matching:num:": [
                   "@lca",
                   "equal_to",
                   0
@@ -353,7 +353,7 @@
               {
                 "If:do:else:": [
                   {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       "@reach_error",
                       "less_than",
                       "@lca"
@@ -659,7 +659,7 @@
                 },
                 {
                   "Not:": {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@into_obj",
                       "equal_to",
                       "@noun"

@@ -109,13 +109,13 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		err = errutil.New("database error", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.dot.String != dot {
-			err = errutil.Fmt(`%w writing value for %s, had value for %s.`,
+			err = errutil.Fmt(`%w writing noun value for %s, had value for %s.`,
 				Conflict, debugJoin(noun.name, field, dot), debugJoin(noun.name, field, prev.dot.String))
 		} else if prev.value != value {
-			err = errutil.Fmt(`%w mismatched value for %s.`,
+			err = errutil.Fmt(`%w mismatched noun value for %s.`,
 				Conflict, debugJoin(noun.name, field, dot))
 		} else {
-			err = errutil.Fmt(`%w value for %s.`,
+			err = errutil.Fmt(`%w noun value for %s.`,
 				Duplicate, debugJoin(noun.name, field, dot))
 		}
 		return
@@ -163,17 +163,19 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 	); e != nil {
 		err = errutil.New("database error", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
-		if prev.value != value {
-			err = errutil.Fmt(`%w mismatched value for %s.`,
-				Conflict, debugJoin(kind.name, field.name, ""))
-		} else {
-			err = errutil.Fmt(`%w value for %s.`,
-				Duplicate, debugJoin(kind.name, field.name, ""))
+		if prev.final {
+			if prev.value != value {
+				err = errutil.Fmt(`%w mismatched kind value for %s.`,
+					Conflict, debugJoin(kind.name, field.name, ""))
+			} else {
+				err = errutil.Fmt(`%w kind value for %s.`,
+					Duplicate, debugJoin(kind.name, field.name, ""))
+			}
 		}
 		return
 	}, &prev.value, &prev.final); e != nil {
 		err = eatDuplicates(pen.warn, e)
-	} else if field.domain != pen.domain && prev.final {
+	} else if field.domain != pen.domain {
 		// this to simplify domain management (ex. would have to check rival values)
 		err = errutil.Fmt("the domain of the assignment (%s) must match the field %q domain (%s)",
 			pen.domain, field.name, field.domain)
@@ -208,7 +210,7 @@ func marshalAssignment(val assign.Assignment, wantAff affine.Affinity) (ret stri
 		val = a.Assignment
 	}
 	if aff := assign.GetAffinity(val); aff != wantAff {
-		err = errutil.Fmt("affinity is %s not %s", aff, wantAff)
+		err = errutil.Fmt("assignment is %s not %s", aff, wantAff)
 	} else {
 		// strip off the From section to avoid serializing redundant info
 		switch v := val.(type) {
@@ -241,7 +243,7 @@ func marshalLiteral(val literal.LiteralValue, wantAff affine.Affinity) (ret stri
 		val = a.LiteralValue
 	}
 	if aff := literal.GetAffinity(val); aff != wantAff {
-		err = errutil.Fmt("affinity is %s not %s", aff, wantAff)
+		err = errutil.Fmt("literal is %s not %s", aff, wantAff)
 	} else {
 		ret, err = marshalout(val)
 	}

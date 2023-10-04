@@ -185,7 +185,7 @@
                 {
                   "AnyTrue:": [
                     {
-                      "Cmp:is:num:": [
+                      "Is:matching:num:": [
                         {
                           "Len:": {
                             "FromTextList:": "@names"

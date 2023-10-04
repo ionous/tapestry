@@ -29,15 +29,6 @@
       "Declare:": "Illumination is a kind of aspect."
     },
     {
-      "Define traits:as:": [
-        [
-          "not illuminated",
-          "is illuminated"
-        ],
-        "illumination"
-      ]
-    },
-    {
       "--": [
         "Returns true if light gets stopped when passing from inside an object to outside an object.",
         " Note that \"lit\" objects emit light from all of their surfaces,",
@@ -297,7 +288,7 @@
                     "@actor",
                     "lighting",
                     {
-                      "AtField:": "is illuminated"
+                      "AtField:": "illuminated"
                     }
                   ]
                 }
@@ -329,7 +320,7 @@
             "Number:": "last turn"
           },
           {
-            "Aspect:": "illumination"
+            "Bool:": "illuminated"
           }
         ]
       ]
@@ -374,7 +365,7 @@
                 "AnyTrue:": [
                   "@refresh",
                   {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       {
                         "Object:field:": [
                           "story",
@@ -406,7 +397,7 @@
                     },
                     {
                       "FromRecord:": {
-                        "LightingStatus lastTurn:illumination:": [
+                        "LightingStatus lastTurn:illuminated:": [
                           {
                             "FromNumber:": {
                               "Object:field:": [
@@ -416,20 +407,10 @@
                             }
                           },
                           {
-                            "--": [
-                              "bug: can only specify the 'aspect' which means we have to manually specify the text",
-                              "i'm not even sure i like the auto generated aspects, especially in records."
-                            ],
-                            "FromText:": {
-                              "Txt if:then:else:": [
-                                {
-                                  "ContainsLight object:": {
-                                    "FromText:": "@actor"
-                                  }
-                                },
-                                "is illuminated",
-                                "not illuminated"
-                              ]
+                            "FromBool:": {
+                              "ContainsLight object:": {
+                                "FromText:": "@actor"
+                              }
                             }
                           }
                         ]
@@ -514,7 +495,7 @@
           {
             "Repeating:do:": [
               {
-                "Cmp:is:num:": [
+                "Is:matching:num:": [
                   {
                     "Len:": {
                       "FromTextList:": "@queue"
@@ -559,7 +540,7 @@
                               {
                                 "AnyTrue:": [
                                   {
-                                    "Cmp:is:txt:": [
+                                    "Is:matching:text:": [
                                       "@it",
                                       "equal_to",
                                       "@ceiling"
@@ -576,7 +557,7 @@
                               },
                               [
                                 {
-                                  "Comment:": "Any children of our ceiling will be considered for their light contributions, even if the ceiling wouldn't transmit that light outward."
+                                  "Comment:": "Any children of our ceiling will be considered for their light contributions."
                                 },
                                 {
                                   "Push:into:": [

@@ -459,12 +459,48 @@
         {
           "--": "True if eq,ne,gt,lt,ge,le two numbers.",
           "Spec:slots:groups:with flow:": [
+            "compare_value",
+            "bool_eval",
+            "logic",
+            {
+              "Flow:uses:": [
+                "is",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "a",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "matching",
+                      "is",
+                      "comparison"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "value",
+                      "b",
+                      "assignment"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "True if eq,ne,gt,lt,ge,le two numbers.",
+          "Spec:slots:groups:with flow:": [
             "compare_num",
             "bool_eval",
             "logic",
             {
               "Flow:uses:": [
-                "cmp",
+                "is",
                 [
                   {
                     "Term:name:type:": [
@@ -474,7 +510,8 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "matching",
                       "is",
                       "comparison"
                     ]
@@ -508,7 +545,7 @@
             "logic",
             {
               "Flow:uses:": [
-                "cmp",
+                "is",
                 [
                   {
                     "Term:name:type:": [
@@ -518,14 +555,15 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "matching",
                       "is",
                       "comparison"
                     ]
                   },
                   {
                     "Term:name:type:": [
-                      "txt",
+                      "text",
                       "b",
                       "text_eval"
                     ]

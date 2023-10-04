@@ -77,7 +77,7 @@
               "is the story location illuminated?",
               "determined by 'update story'."
             ],
-            "Aspect:": "illumination"
+            "Bool:": "illuminated"
           },
           {
             "--": "has the player ever seen a dark room description.",

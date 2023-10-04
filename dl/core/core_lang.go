@@ -2128,7 +2128,7 @@ func CommaText_Marshal(m jsn.Marshaler, val *CommaText) (err error) {
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
 	A         rt.NumberEval `if:"label=_"`
-	Is        Comparison    `if:"label=is"`
+	Is        Comparison    `if:"label=matching"`
 	B         rt.NumberEval `if:"label=num"`
 	Tolerance float64       `if:"label=within,optional,type=number"`
 	Markup    map[string]any
@@ -2141,7 +2141,7 @@ func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CompareNum_Type,
 		Uses: composer.Type_Flow,
-		Lede: "cmp",
+		Lede: "is",
 	}
 }
 
@@ -2198,7 +2198,7 @@ func CompareNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CompareNum) (err
 type CompareNum_Flow struct{ ptr *CompareNum }
 
 func (n CompareNum_Flow) GetType() string      { return CompareNum_Type }
-func (n CompareNum_Flow) GetLede() string      { return "cmp" }
+func (n CompareNum_Flow) GetLede() string      { return "is" }
 func (n CompareNum_Flow) GetFlow() interface{} { return n.ptr }
 func (n CompareNum_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CompareNum); ok {
@@ -2229,7 +2229,7 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CompareNum_Field_A))
 		}
-		e1 := m.MarshalKey("is", CompareNum_Field_Is)
+		e1 := m.MarshalKey("matching", CompareNum_Field_Is)
 		if e1 == nil {
 			e1 = Comparison_Marshal(m, &val.Is)
 		}
@@ -2258,8 +2258,8 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 // CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
 type CompareText struct {
 	A      rt.TextEval `if:"label=_"`
-	Is     Comparison  `if:"label=is"`
-	B      rt.TextEval `if:"label=txt"`
+	Is     Comparison  `if:"label=matching"`
+	B      rt.TextEval `if:"label=text"`
 	Markup map[string]any
 }
 
@@ -2270,7 +2270,7 @@ func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CompareText_Type,
 		Uses: composer.Type_Flow,
-		Lede: "cmp",
+		Lede: "is",
 	}
 }
 
@@ -2326,7 +2326,7 @@ func CompareText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CompareText) (e
 type CompareText_Flow struct{ ptr *CompareText }
 
 func (n CompareText_Flow) GetType() string      { return CompareText_Type }
-func (n CompareText_Flow) GetLede() string      { return "cmp" }
+func (n CompareText_Flow) GetLede() string      { return "is" }
 func (n CompareText_Flow) GetFlow() interface{} { return n.ptr }
 func (n CompareText_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CompareText); ok {
@@ -2357,19 +2357,140 @@ func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CompareText_Field_A))
 		}
-		e1 := m.MarshalKey("is", CompareText_Field_Is)
+		e1 := m.MarshalKey("matching", CompareText_Field_Is)
 		if e1 == nil {
 			e1 = Comparison_Marshal(m, &val.Is)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CompareText_Field_Is))
 		}
-		e2 := m.MarshalKey("txt", CompareText_Field_B)
+		e2 := m.MarshalKey("text", CompareText_Field_B)
 		if e2 == nil {
 			e2 = rt.TextEval_Marshal(m, &val.B)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", CompareText_Field_B))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// CompareValue True if eq,ne,gt,lt,ge,le two numbers.
+type CompareValue struct {
+	A      assign.Assignment `if:"label=_"`
+	Is     Comparison        `if:"label=matching"`
+	B      assign.Assignment `if:"label=value"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.BoolEval = (*CompareValue)(nil)
+
+func (*CompareValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: CompareValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "is",
+	}
+}
+
+const CompareValue_Type = "compare_value"
+const CompareValue_Field_A = "$A"
+const CompareValue_Field_Is = "$IS"
+const CompareValue_Field_B = "$B"
+
+func (op *CompareValue) Marshal(m jsn.Marshaler) error {
+	return CompareValue_Marshal(m, op)
+}
+
+type CompareValue_Slice []CompareValue
+
+func (op *CompareValue_Slice) GetType() string { return CompareValue_Type }
+
+func (op *CompareValue_Slice) Marshal(m jsn.Marshaler) error {
+	return CompareValue_Repeats_Marshal(m, (*[]CompareValue)(op))
+}
+
+func (op *CompareValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *CompareValue_Slice) SetSize(cnt int) {
+	var els []CompareValue
+	if cnt >= 0 {
+		els = make(CompareValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *CompareValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return CompareValue_Marshal(m, &(*op)[i])
+}
+
+func CompareValue_Repeats_Marshal(m jsn.Marshaler, vals *[]CompareValue) error {
+	return jsn.RepeatBlock(m, (*CompareValue_Slice)(vals))
+}
+
+func CompareValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CompareValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = CompareValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type CompareValue_Flow struct{ ptr *CompareValue }
+
+func (n CompareValue_Flow) GetType() string      { return CompareValue_Type }
+func (n CompareValue_Flow) GetLede() string      { return "is" }
+func (n CompareValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n CompareValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*CompareValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func CompareValue_Optional_Marshal(m jsn.Marshaler, pv **CompareValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = CompareValue_Marshal(m, *pv)
+	} else if !enc {
+		var v CompareValue
+		if err = CompareValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func CompareValue_Marshal(m jsn.Marshaler, val *CompareValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(CompareValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", CompareValue_Field_A)
+		if e0 == nil {
+			e0 = assign.Assignment_Marshal(m, &val.A)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CompareValue_Field_A))
+		}
+		e1 := m.MarshalKey("matching", CompareValue_Field_Is)
+		if e1 == nil {
+			e1 = Comparison_Marshal(m, &val.Is)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", CompareValue_Field_Is))
+		}
+		e2 := m.MarshalKey("value", CompareValue_Field_B)
+		if e2 == nil {
+			e2 = assign.Assignment_Marshal(m, &val.B)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", CompareValue_Field_B))
 		}
 		m.EndBlock()
 	}
@@ -7310,6 +7431,7 @@ var Slats = []composer.Composer{
 	(*CommaText)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
+	(*CompareValue)(nil),
 	(*Comparison)(nil),
 	(*Continue)(nil),
 	(*Decrement)(nil),
@@ -7372,9 +7494,6 @@ var Signatures = map[uint64]interface{}{
 	9570569845423374482:  (*Break)(nil),             /* execute=Break */
 	11322251195672034522: (*BufferText)(nil),        /* text_eval=Buffers do: */
 	8695677004499439692:  (*Capitalize)(nil),        /* text_eval=Capitalize: */
-	5770232330560742655:  (*CompareNum)(nil),        /* bool_eval=Cmp:is:num: */
-	3133023233294705026:  (*CompareNum)(nil),        /* bool_eval=Cmp:is:num:within: */
-	3980368314252876379:  (*CompareText)(nil),       /* bool_eval=Cmp:is:txt: */
 	18319016698864768677: (*CommaText)(nil),         /* text_eval=Commas do: */
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
 	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */
@@ -7421,6 +7540,10 @@ var Signatures = map[uint64]interface{}{
 	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
 	17183768313478169229: (*ObjectExists)(nil),      /* bool_eval=Is valid: */
+	4986574662941955696:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num: */
+	6471221873898876231:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num:within: */
+	2616749751052919401:  (*CompareText)(nil),       /* bool_eval=Is:matching:text: */
+	7216474174347601443:  (*CompareValue)(nil),      /* bool_eval=Is:matching:value: */
 	10106284345457008764: (*Join)(nil),              /* text_eval=Join parts: */
 	16037301925772243654: (*Join)(nil),              /* text_eval=Join:parts: */
 	16305715626122315047: (*KindOf)(nil),            /* text_eval=KindOf: */

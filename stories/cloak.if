@@ -232,7 +232,7 @@
                   {
                     "AllTrue:": [
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:text:": [
                           {
                             "Object:field:": [
                               "story",
@@ -257,7 +257,7 @@
                           "would love to say 'destination' other than 'foyer'",
                           "but destination comes from door, and if there is no door there's no destination."
                         ],
-                        "Cmp:is:txt:": [
+                        "Is:matching:text:": [
                           "@direction",
                           "other_than",
                           "north"
@@ -288,7 +288,7 @@
                   {
                     "AllTrue:": [
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:text:": [
                           {
                             "Object:field:": [
                               "story",
@@ -302,7 +302,7 @@
                         ]
                       },
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:text:": [
                           "@action",
                           "other_than",
                           "going"
@@ -412,7 +412,7 @@
               {
                 "If:do:": [
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       {
                         "Object:field:": [
                           "story",
@@ -437,7 +437,7 @@
               {
                 "If:do:": [
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       {
                         "Object:field:": [
                           "story",
@@ -513,7 +513,7 @@
                 },
                 {
                   "Expect:": {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       {
                         "Object:field:": [
                           "story",
@@ -564,7 +564,7 @@
                 },
                 {
                   "Expect:": {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       {
                         "Object:field:": [
                           "story",
@@ -617,7 +617,7 @@
                 {
                   "--": "and you should have scored nothing for dropping the cloak.",
                   "Expect:": {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       {
                         "Object:field:": [
                           "story",

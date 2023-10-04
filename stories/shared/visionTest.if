@@ -20,6 +20,41 @@
             "Comment:": "Initialize the story as if we had started a game."
           },
           {
+            "--": "expect that the kitchen is lit.",
+            "Expect:": {
+              "Object:field:": [
+                "kitchen",
+                "lit"
+              ]
+            }
+          },
+          {
+            "--": "check that the outermost light source is the kitchen.",
+            "Expect:": {
+              "Is:matching:value:": [
+                {
+                  "FromText:": {
+                    "TransparentOf obj:": {
+                      "FromText:": "self"
+                    }
+                  }
+                },
+                "equal_to",
+                {
+                  "FromText:": "kitchen"
+                }
+              ]
+            }
+          },
+          {
+            "--": "verify the low level call to see the kitchen lighting.",
+            "Expect:": {
+              "ContainsLight object:": {
+                "FromText:": "self"
+              }
+            }
+          },
+          {
             "StartGame actor:quietly:": [
               {
                 "FromText:": {
@@ -35,19 +70,19 @@
             ]
           },
           {
-            "--": "update should set the actor to is illuminated",
+            "--": "start game should set the actor to is illuminated.",
             "Expect:": {
               "Object:field:dot:": [
                 "self",
                 "lighting",
                 {
-                  "AtField:": "is illuminated"
+                  "AtField:": "illuminated"
                 }
               ]
             }
           },
           {
-            "--": "update should set the story's cache",
+            "--": "start game should set the story's cache.",
             "Expect:": {
               "Object:field:": [
                 "story",
@@ -56,7 +91,7 @@
             }
           },
           {
-            "--": "asking through the pattern should also be fine.",
+            "--": "and asking through the illuminates pattern should be fine.",
             "Expect:": {
               "Illuminates actor:": {
                 "FromText:": "self"
@@ -78,15 +113,17 @@
             "PassTime": true
           },
           {
-            "--": "update should set the actor to not is illuminated",
+            "--": "update should clear actor illuminated",
             "Expect:": {
-              "Object:field:dot:": [
-                "self",
-                "lighting",
-                {
-                  "AtField:": "not illuminated"
-                }
-              ]
+              "Not:": {
+                "Object:field:dot:": [
+                  "self",
+                  "lighting",
+                  {
+                    "AtField:": "illuminated"
+                  }
+                ]
+              }
             }
           },
           {

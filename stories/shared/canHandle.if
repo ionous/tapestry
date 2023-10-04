@@ -42,7 +42,7 @@
         {
           "If:do:": [
             {
-              "Cmp:is:txt:": [
+              "Is:matching:text:": [
                 {
                   "ParentOf obj:": {
                     "FromText:": "@noun"

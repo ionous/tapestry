@@ -87,7 +87,7 @@
                 "@success",
                 {
                   "FromBool:": {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@obj",
                       "equal_to",
                       {
@@ -120,7 +120,7 @@
                   "@success",
                   {
                     "FromBool:": {
-                      "Cmp:is:txt:": [
+                      "Is:matching:text:": [
                         "@obj",
                         "equal_to",
                         {

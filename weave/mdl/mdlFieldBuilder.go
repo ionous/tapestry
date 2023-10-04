@@ -26,7 +26,6 @@ type FieldBuilder struct {
 type Fields struct {
 	kind string
 	fieldSet
-	aspects []string
 }
 
 // supports enough slot for patterns
@@ -49,51 +48,15 @@ func (b *FieldBuilder) AddField(fn FieldInfo) {
 	b.fields[PatternLocals] = append(b.fields[PatternLocals], fn)
 }
 
-// creates not/is implicit aspects
-// tbd: would it be nicer to support single trait kinds?
-// not_aspect would instead be: Not{IsTrait{PositiveName}}
-func (b *FieldBuilder) AddAspect(ak string) {
-	b.aspects = append(b.aspects, ak)
-}
-
 func (fs *Fields) writeFields(pen *Pen) (err error) {
 	if kind, e := pen.findRequiredKind(fs.kind); e != nil {
 		err = e
 	} else if cache, e := fs.fieldSet.cache(pen); e != nil {
 		err = e
-	} else if e := fs.fieldSet.writeFieldSet(pen, kind, cache); e != nil {
+	} else if e := fs.rewriteObjectFields(pen, kind, &cache); e != nil {
 		err = e
 	} else {
-		// add defaults
-		if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); !isObject {
-			for _, f := range fs.fieldSet.fields[PatternLocals] {
-				if f.Aspect {
-					traits := cache[f.getClass()]
-					if trait, e := pen.findDefaultTrait(traits.class()); e != nil {
-						err = e
-						break
-					} else if e := pen.addDefaultValue(kind, f.Name, ProvisionalAssignment{
-						&assign.FromText{Value: &literal.TextValue{
-							Value: trait,
-						}}}); e != nil {
-						err = e
-						break
-					}
-				}
-			}
-		}
-		// generate implicit aspects
-		if err == nil {
-			for _, ak := range fs.aspects {
-				if cls, e := pen.addAspect(ak, sliceOf.String("not "+ak, "is "+ak)); e != nil {
-					err = e
-					break
-				} else if e := pen.addField(kind, cls, ak, affine.Text); e != nil {
-					err = e
-					break
-				}
-			}
-		}
+		err = fs.fieldSet.writeFieldSet(pen, kind, cache)
 	}
 	if err != nil {
 		err = errutil.Fmt("%w in pattern %q domain %q", err, fs.kind, pen.domain)
@@ -101,9 +64,55 @@ func (fs *Fields) writeFields(pen *Pen) (err error) {
 	return
 }
 
+func (fs *Fields) rewriteObjectFields(pen *Pen, kind kindInfo, cache *classCache) (err error) {
+	// rewrite object fields
+	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
+		for i := range fs.fields[PatternLocals] {
+			field := &fs.fields[PatternLocals][i]
+			var defaultTrait string
+			// give explicit aspects a default
+			if field.Aspect && field.Init == nil {
+				aspect := (*cache)[field.getClass()]
+				defaultTrait, err = pen.findDefaultTrait(aspect.class())
+			} else if field.Affinity == affine.Bool && len(field.Class) == 0 {
+				// rewrite bool fields as implicit aspects
+				ak := field.Name
+				aspect, e := pen.addAspect(ak, sliceOf.String("not "+ak, "is "+ak))
+				if e := eatDuplicates(pen.warn, e); e != nil {
+					err = e
+					break
+				} else {
+					*field = FieldInfo{
+						Name:     ak,
+						Class:    ak,
+						Affinity: affine.Text,
+					}
+					defaultTrait = "not " + ak
+					cache.store(ak, aspect)
+				}
+			}
+			if len(defaultTrait) > 0 && field.Init == nil {
+				field.Init = ProvisionalAssignment{
+					&assign.FromText{Value: &literal.TextValue{
+						Value: defaultTrait,
+					}}}
+			}
+		}
+	}
+	return
+}
+
+// indexed by class name
 // future: wrap up the in progress field set with a "promise"
 // to avoid looking up the same info repeatedly
 type classCache map[string]kindInfo
+
+func (p *classCache) store(name string, cls kindInfo) {
+	if *p == nil {
+		*p = make(classCache)
+	}
+	(*p)[name] = cls
+}
 
 // for patterns, waits to create the pattern after all fields are known
 // that ensures that "extend pattern" (to add locals) happens after define pattern (for parameters and locals)
@@ -116,14 +125,11 @@ func (fs *fieldSet) cache(pen *Pen) (ret classCache, err error) {
 				if cls, e := pen.findOptionalKind(clsName); e != nil {
 					err = e
 				} else {
-					if ret == nil {
-						ret = make(classCache)
-					}
-					ret[clsName] = cls
+					ret.store(clsName, cls)
 				}
 			}
 			if err != nil {
-				err = errutil.Fmt("%w trying to write field %q", err, field.Name)
+				err = errutil.Fmt("%w trying to find field %q", err, field.Name)
 				break
 			}
 		}
@@ -138,6 +144,8 @@ func (fs *fieldSet) writeFieldSet(pen *Pen, kid kindInfo, cache classCache) (err
 		pen.addResult,
 		pen.addField,
 	}
+
+Out:
 	for ft, fields := range fs.fields {
 		call := out[ft]
 		for _, field := range fields {
@@ -153,7 +161,7 @@ func (fs *fieldSet) writeFieldSet(pen *Pen, kid kindInfo, cache classCache) (err
 			}
 			if err != nil {
 				err = errutil.Fmt("%w trying to write field %q", err, field.Name)
-				break
+				break Out
 			}
 		}
 	}

@@ -47,31 +47,33 @@ func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err err
 	domain, at := pen.domain, pen.at
 	if kid, e := pen.addKind(aspect, kindsOf.Aspect.String()); e != nil {
 		err = e // ^ hrm.
-	} else if strings.Count(kid.fullpath(), ",") != 3 {
-		// tbd: could loosen this; for now it simplifies writing the aspects;
-		// no need to check for conflicting fields if there's no derivation
-		// doesn't stop someone from adding derivation later though ...
-		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
-	} else if existingTraits, e := tables.QueryStrings(pen.db, `
+	} else {
+		if strings.Count(kid.fullpath(), ",") != 3 {
+			// tbd: could loosen this; for now it simplifies writing the aspects;
+			// no need to check for conflicting fields if there's no derivation
+			// doesn't stop someone from adding derivation later though ...
+			err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
+		} else if existingTraits, e := tables.QueryStrings(pen.db, `
 			select mf.field	
 			from mdl_field mf 
 			where mf.kind = ?1
 			order by mf.rowid`, kid.id); e != nil {
-		err = errutil.New("database error", e)
-	} else if len(existingTraits) > 0 {
-		// fix? doesn't stop someone from adding new traits later though....
-		// field builder could check that it only builds kindsOf.Kind
-		if slices.Compare(traits, existingTraits) != 0 {
-			err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
-		}
-	} else if kid.domain != domain {
-		err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
-			aspect, kid.domain, domain)
-	} else {
-		for _, t := range traits {
-			if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
-				err = errutil.New("database error", e)
-				break
+			err = errutil.New("database error", e)
+		} else if len(existingTraits) > 0 {
+			// fix? doesn't stop someone from adding new traits later though....
+			// field builder could check that it only builds kindsOf.Kind
+			if slices.Compare(traits, existingTraits) != 0 {
+				err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
+			}
+		} else if kid.domain != domain {
+			err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
+				aspect, kid.domain, domain)
+		} else {
+			for _, t := range traits {
+				if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
+					err = errutil.New("database error", e)
+					break
+				}
 			}
 		}
 		if err == nil {
@@ -911,14 +913,4 @@ type ProvisionalAssignment struct {
 }
 type ProvisionalLiteral struct {
 	literal.LiteralValue
-}
-
-func isFinal(a any) bool {
-	var provisional bool
-	if _, ok := a.(ProvisionalAssignment); ok {
-		provisional = true
-	} else if _, ok := a.(ProvisionalLiteral); ok {
-		provisional = true
-	}
-	return !provisional
 }

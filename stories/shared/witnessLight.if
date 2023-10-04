@@ -20,7 +20,7 @@
             "Bool:initially:": [
               "same actor",
               {
-                "Cmp:is:txt:": [
+                "Is:matching:text:": [
                   {
                     "Object:field:": [
                       "story",
@@ -42,7 +42,7 @@
             "Bool:initially:": [
               "same location",
               {
-                "Cmp:is:txt:": [
+                "Is:matching:text:": [
                   {
                     "Object:field:": [
                       "story",

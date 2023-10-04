@@ -63,18 +63,16 @@
         {
           "If:do:": [
             {
-              "AllTrue:": [
-                {
-                  "Variable:dot:": [
-                    "grouping",
-                    [
-                      {
-                        "AtField:": "not hide objects"
-                      }
-                    ]
+              "Not:": {
+                "Variable:dot:": [
+                  "grouping",
+                  [
+                    {
+                      "AtField:": "hide objects"
+                    }
                   ]
-                }
-              ]
+                ]
+              }
             },
             [
               {
@@ -83,14 +81,16 @@
               {
                 "If:do:else:": [
                   {
-                    "Variable:dot:": [
-                      "grouping",
-                      [
-                        {
-                          "AtField:": "not hide size"
-                        }
+                    "Not:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "hide size"
+                          }
+                        ]
                       ]
-                    ]
+                    }
                   },
                   [
                     {
@@ -176,20 +176,22 @@
                     "grouping",
                     [
                       {
-                        "AtField:": "is hide size"
+                        "AtField:": "hide size"
                       }
                     ]
                   ]
                 },
                 {
-                  "Variable:dot:": [
-                    "grouping",
-                    [
-                      {
-                        "AtField:": "not hide label"
-                      }
+                  "Not:": {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "hide label"
+                        }
+                      ]
                     ]
-                  ]
+                  }
                 }
               ]
             },
@@ -216,18 +218,16 @@
         {
           "If:do:": [
             {
-              "AllTrue:": [
-                {
-                  "Variable:dot:": [
-                    "grouping",
-                    [
-                      {
-                        "AtField:": "not hide size"
-                      }
-                    ]
+              "Not:": {
+                "Variable:dot:": [
+                  "grouping",
+                  [
+                    {
+                      "AtField:": "hide size"
+                    }
                   ]
-                }
-              ]
+                ]
+              }
             },
             {
               "PrintSeveral obj:groupSize:label:": [
@@ -235,11 +235,9 @@
                   "FromText:": {
                     "Variable:dot:": [
                       "objs",
-                      [
-                        {
-                          "AtIndex:": 1
-                        }
-                      ]
+                      {
+                        "AtIndex:": 1
+                      }
                     ]
                   }
                 },
@@ -256,24 +254,20 @@
                       {
                         "Variable:dot:": [
                           "grouping",
-                          [
-                            {
-                              "AtField:": "not hide label"
-                            }
-                          ]
+                          {
+                            "AtField:": "hide label"
+                          }
                         ]
                       },
+                      "",
                       {
                         "Variable:dot:": [
                           "grouping",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                          {
+                            "AtField:": "label"
+                          }
                         ]
-                      },
-                      ""
+                      }
                     ]
                   }
                 }
@@ -325,10 +319,10 @@
                 }
               },
               {
-              	"--": [
-              		"this is the only rule that sets success",
-              		"doing so blocks the other rules from running."
-              	],
+                "--": [
+                  "this is the only rule that sets success",
+                  "doing so blocks the other rules from running."
+                ],
                 "Set:value:": [
                   "@success",
                   {

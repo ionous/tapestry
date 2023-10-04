@@ -125,7 +125,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "kissing"
@@ -166,14 +166,14 @@
               {
                 "AllTrue:": [
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@action",
                       "equal_to",
                       "kissing"
                     ]
                   },
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@actor",
                       "equal_to",
                       "@noun"

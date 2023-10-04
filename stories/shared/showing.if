@@ -219,7 +219,7 @@
           {
             "If:do:": [
               {
-                "Cmp:is:txt:": [
+                "Is:matching:text:": [
                   "@actor",
                   "equal_to",
                   "@other_actor"

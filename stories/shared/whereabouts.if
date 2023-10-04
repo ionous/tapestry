@@ -248,7 +248,7 @@
               {
                 "If:do:": [
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@search",
                       "equal_to",
                       "@obj"
@@ -342,7 +342,7 @@
                       {
                         "If:do:": [
                           {
-                            "Cmp:is:txt:": [
+                            "Is:matching:text:": [
                               "@o1",
                               "equal_to",
                               "@o2"
@@ -379,7 +379,7 @@
                       {
                         "If:do:else:": [
                           {
-                            "Cmp:is:txt:": [
+                            "Is:matching:text:": [
                               "@o2",
                               "equal_to",
                               "@other_object"
@@ -393,7 +393,7 @@
                           {
                             "If:do:": [
                               {
-                                "Cmp:is:txt:": [
+                                "Is:matching:text:": [
                                   "@o2",
                                   "equal_to",
                                   ""
@@ -426,7 +426,7 @@
                 {
                   "If:do:else:": [
                     {
-                      "Cmp:is:txt:": [
+                      "Is:matching:text:": [
                         "@o1",
                         "equal_to",
                         "@object"
@@ -441,7 +441,7 @@
                     {
                       "If:do:": [
                         {
-                          "Cmp:is:txt:": [
+                          "Is:matching:text:": [
                             "@o1",
                             "equal_to",
                             ""
@@ -525,7 +525,7 @@
                 {
                   "If:do:else:": [
                     {
-                      "Cmp:is:txt:": [
+                      "Is:matching:text:": [
                         "@up",
                         "equal_to",
                         "@obj"
@@ -540,7 +540,7 @@
                     {
                       "If:do:": [
                         {
-                          "Cmp:is:txt:": [
+                          "Is:matching:text:": [
                             "@up",
                             "equal_to",
                             ""
@@ -559,7 +559,7 @@
                 {
                   "If:do:": [
                     {
-                      "Cmp:is:txt:": [
+                      "Is:matching:text:": [
                         "@up",
                         "equal_to",
                         "@root"

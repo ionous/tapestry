@@ -25,7 +25,7 @@
         ],
         [
           {
-          	"--": "for each object, create an object group",
+            "--": "for each object, create an object group",
             "Map:fromList:using:": [
               "@groupings",
               {
@@ -35,7 +35,7 @@
             ]
           },
           {
-          	"--": "remove any duplicate seeming groups",
+            "--": "remove any duplicate seeming groups",
             "Reduce into:fromList:using:": [
               "@groups",
               {
@@ -111,11 +111,9 @@
                   {
                     "Variable:dot:": [
                       "grouping",
-                      [
-                        {
-                          "AtField:": "label"
-                        }
-                      ]
+                      {
+                        "AtField:": "label"
+                      }
                     ]
                   },
                   {
@@ -130,11 +128,9 @@
                   {
                     "Variable:dot:": [
                       "grouping",
-                      [
-                        {
-                          "AtField:": "is hide label"
-                        }
-                      ]
+                      {
+                        "AtField:": "hide label"
+                      }
                     ]
                   },
                   {
@@ -147,11 +143,9 @@
                   {
                     "Variable:dot:": [
                       "grouping",
-                      [
-                        {
-                          "AtField:": "is hide objects"
-                        }
-                      ]
+                      {
+                        "AtField:": "hide objects"
+                      }
                     ]
                   },
                   {
@@ -302,102 +296,98 @@
                   {
                     "AllTrue:": [
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:text:": [
                           {
                             "Variable:dot:": [
                               "first",
-                              [
-                                {
-                                  "AtField:": "label"
-                                }
-                              ]
+                              {
+                                "AtField:": "label"
+                              }
                             ]
                           },
                           "equal_to",
                           {
                             "Variable:dot:": [
                               "second",
-                              [
-                                {
-                                  "AtField:": "label"
-                                }
-                              ]
+                              {
+                                "AtField:": "label"
+                              }
                             ]
                           }
                         ]
                       },
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:value:": [
                           {
-                            "Variable:dot:": [
-                              "first",
-                              [
+                            "FromBool:": {
+                              "Variable:dot:": [
+                                "first",
                                 {
                                   "AtField:": "hide label"
                                 }
                               ]
-                            ]
+                            }
                           },
                           "equal_to",
                           {
-                            "Variable:dot:": [
-                              "second",
-                              [
+                            "FromBool:": {
+                              "Variable:dot:": [
+                                "second",
                                 {
                                   "AtField:": "hide label"
                                 }
                               ]
-                            ]
+                            }
                           }
                         ]
                       },
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:value:": [
                           {
-                            "Variable:dot:": [
-                              "first",
-                              [
+                            "FromBool:": {
+                              "Variable:dot:": [
+                                "first",
                                 {
                                   "AtField:": "hide size"
                                 }
                               ]
-                            ]
+                            }
                           },
                           "equal_to",
                           {
-                            "Variable:dot:": [
-                              "second",
-                              [
+                            "FromBool:": {
+                              "Variable:dot:": [
+                                "second",
                                 {
                                   "AtField:": "hide size"
                                 }
                               ]
-                            ]
+                            }
                           }
                         ]
                       },
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:value:": [
                           {
-                            "Variable:dot:": [
-                              "first",
-                              [
+                            "FromBool:": {
+                              "Variable:dot:": [
+                                "first",
                                 {
                                   "AtField:": "hide objects"
                                 }
                               ]
-                            ]
+                            }
                           },
                           "equal_to",
                           {
-                            "Variable:dot:": [
-                              "second",
-                              [
+                            "FromBool:": {
+                              "Variable:dot:": [
+                                "second",
                                 {
                                   "AtField:": "hide objects"
                                 }
                               ]
-                            ]
+                            }
                           }
                         ]
                       }
@@ -443,7 +433,7 @@
         ],
         [
           {
-          	"--": "the returned value is the same variable as the second parameter",
+            "--": "the returned value is the same variable as the second parameter",
             "RecordList:kind:": [
               "groups",
               "object group"
@@ -518,7 +508,7 @@
           {
             "If:do:else:": [
               {
-                "Cmp:is:num:": [
+                "Is:matching:num:": [
                   "@idx",
                   "equal_to",
                   0

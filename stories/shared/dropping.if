@@ -138,14 +138,14 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "dropping"
                   ]
                 },
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     {
                       "ParentOf obj:": {
                         "FromText:": "@actor"
@@ -192,14 +192,14 @@
               {
                 "AllTrue:": [
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@action",
                       "equal_to",
                       "dropping"
                     ]
                   },
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       "@actor",
                       "equal_to",
                       "@noun"

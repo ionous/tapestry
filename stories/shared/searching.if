@@ -103,7 +103,7 @@
             {
               "If:assuming:do:else:": [
                 {
-                  "Cmp:is:num:": [
+                  "Is:matching:num:": [
                     {
                       "Len:": {
                         "FromTextList:": "@items"
@@ -188,7 +188,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "searching"
@@ -228,7 +228,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "searching"

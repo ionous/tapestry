@@ -151,14 +151,14 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:num:": [
+                  "Is:matching:num:": [
                     "@inline_depth",
                     "greater_than",
                     0
                   ]
                 },
                 {
-                  "Cmp:is:num:": [
+                  "Is:matching:num:": [
                     "@inline_depth",
                     "greater_than",
                     "@block_depth"
@@ -203,14 +203,14 @@
               {
                 "AllTrue:": [
                   {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       "@block_depth",
                       "greater_than",
                       0
                     ]
                   },
                   {
-                    "Cmp:is:num:": [
+                    "Is:matching:num:": [
                       "@block_depth",
                       "greater_than",
                       "@inline_depth"
@@ -262,7 +262,7 @@
             "Bool:initially:": [
               "has kids",
               {
-                "Cmp:is:num:": [
+                "Is:matching:num:": [
                   {
                     "Len:": {
                       "FromTextList:": "@kids"
@@ -332,7 +332,7 @@
         {
           "If:assuming:do:": [
             {
-              "Cmp:is:num:": [
+              "Is:matching:num:": [
                 {
                   "Len:": {
                     "FromTextList:": "@kids"
@@ -467,7 +467,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:num:": [
+                  "Is:matching:num:": [
                     {
                       "Len:": {
                         "FromTextList:": "@kids"

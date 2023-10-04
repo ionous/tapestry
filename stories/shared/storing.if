@@ -212,7 +212,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "storing"
@@ -260,14 +260,14 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "storing"
                   ]
                 },
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     {
                       "WearerOf obj:": {
                         "FromText:": "@noun"
@@ -310,14 +310,14 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "storing"
                   ]
                 },
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@into_obj",
                     "equal_to",
                     "@noun"
@@ -357,14 +357,14 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "storing"
                   ]
                 },
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@into_obj",
                     "equal_to",
                     "@noun"
@@ -409,7 +409,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "storing"
