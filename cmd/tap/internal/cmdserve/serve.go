@@ -2,7 +2,6 @@ package cmdserve
 
 import (
 	"context"
-	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -11,18 +10,18 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/support/shuttle"
 	"git.sr.ht/~ionous/tapestry/web"
-	"github.com/ionous/errutil"
 )
 
 func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (ret int, err error) {
-	if serverContext, e := newServerContext(inFile, opts); e != nil {
+	if ctx, e := shuttle.NewContext(inFile, opts); e != nil {
 		err = e
 	} else {
-		defer serverContext.Close()
+		defer ctx.Close()
 		mux := http.NewServeMux()
 		// our main command service:
-		mux.HandleFunc("/shuttle/", newServer("shuttle", serverContext))
+		mux.HandleFunc("/shuttle/", newServer("shuttle", ctx))
 		// create a proxy for the web apps ( does nothing if requestFrom port is zero )
 		if requestFrom != 0 {
 			proxyToVite(mux, requestFrom)
@@ -54,45 +53,25 @@ func proxyToVite(mux *http.ServeMux, port int) {
 	})
 }
 
-func newServer(path string, serverContext serverContext) http.HandlerFunc {
-	var state State
+func newServer(path string, ctx shuttle.Context) http.HandlerFunc {
+	var state shuttle.State
 	return web.HandleResource(&web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			if name == path {
 				ret = &web.Wrapper{
 					// client sent a command
-					Posts: func(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-						if msg, e := Decode(r); e != nil {
+					Posts: func(_ context.Context, r io.Reader, w http.ResponseWriter) (err error) {
+
+						// FIX: how to set proper context!?
+						// wont it sometimes be json?
+						w.Header().Set("Content-Type", "plain/text")
+
+						if msg, e := shuttle.Decode(r); e != nil {
 							err = e
-						} else {
-							switch msg := msg.(type) {
-							case string:
-								if h := state.HandleInput; h == nil {
-									err = errutil.New("invalid input state", state.Name)
-								} else if next, e := h(w, msg); e != nil {
-									err = e
-								} else if len(next.Name) > 0 {
-									state = next
-								}
-							case map[string]any:
-								// maybe also "$weave", "$shutdown" ...
-								if scene, ok := msg["$restart"].(string); ok {
-									if next, e := restart(w, serverContext, scene); e != nil {
-										err = e
-									} else {
-										state = next
-									}
-								} else {
-									// not a system level command, so pass to the current state (if any)
-									if h := state.HandleCommand; h == nil {
-										err = errutil.New("invalid command state", state.Name)
-									} else if next, e := h(w, msg); e != nil {
-										err = e
-									} else if len(next.Name) > 0 {
-										state = next
-									}
-								}
-							}
+						} else if n, e := shuttle.Post(w, ctx, state, msg); e != nil {
+							err = e
+						} else if len(n.Name) > 0 {
+							state = n
 						}
 						return
 					},
@@ -100,25 +79,4 @@ func newServer(path string, serverContext serverContext) http.HandlerFunc {
 			}
 			return
 		}})
-}
-
-// read a request from the client
-// see Play.vue... example: io.send({in: txt});
-func Decode(r io.Reader) (ret any, err error) {
-	var msg struct {
-		Input   string         `json:"in"`
-		Command map[string]any `json:"cmd"`
-	}
-	dec := json.NewDecoder(r)
-	// decode an array value (Message)
-	if e := dec.Decode(&msg); e != nil {
-		err = e
-	} else if len(msg.Command) > 0 {
-		ret = msg.Command
-	} else if len(msg.Input) > 0 {
-		ret = msg.Input
-	} else {
-		err = errutil.New("unknown or empty input")
-	}
-	return
 }
