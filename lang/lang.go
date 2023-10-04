@@ -120,6 +120,16 @@ func Fields(s string) []string {
 	return strings.FieldsFunc(s, IsSpace)
 }
 
+func Join(els []string) string {
+	return strings.Join(els, " ")
+}
+
+// given a normalized phrase, return the first word
+// ( exists to try to break up dependence on space as the separator of words )
+func FirstWord(s string) string {
+	return strings.Split(s, " ")[0]
+}
+
 // Normalize lowercases the passed string, trims spaces, and eats some kinds of punctuation.
 // Ascii underscores (_) are treated as whitespace, ascii dashes (-) are kept; all other unicode punctuation gets removed.
 // Whitespace gets removed at the front and end of the strings;

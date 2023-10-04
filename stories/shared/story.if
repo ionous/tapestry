@@ -77,11 +77,11 @@
               "is the story location illuminated?",
               "determined by 'update story'."
             ],
-            "Bool:": "illuminated"
+            "Bool:": "is illuminated"
           },
           {
             "--": "has the player ever seen a dark room description.",
-            "Bool:": "darkness witnessed"
+            "Bool:": "is darkness witnessed"
           },
           {
             "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",

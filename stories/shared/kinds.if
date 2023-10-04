@@ -344,11 +344,9 @@
       "--": "generates 'is visited' and 'not visited'",
       "Define kind:fields:": [
         "Rooms",
-        [
-          {
-            "Bool:": "visited"
-          }
-        ]
+        {
+          "Bool:": "is visited"
+        }
       ]
     },
     {

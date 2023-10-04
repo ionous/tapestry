@@ -75,20 +75,24 @@ func (fs *Fields) rewriteObjectFields(pen *Pen, kind kindInfo, cache *classCache
 				aspect := (*cache)[field.getClass()]
 				defaultTrait, err = pen.findDefaultTrait(aspect.class())
 			} else if field.Affinity == affine.Bool && len(field.Class) == 0 {
-				// rewrite bool fields as implicit aspects
-				ak := field.Name
-				aspect, e := pen.addAspect(ak, sliceOf.String("not "+ak, "is "+ak))
-				if e := eatDuplicates(pen.warn, e); e != nil {
-					err = e
-					break
-				} else {
-					*field = FieldInfo{
-						Name:     ak,
-						Class:    ak,
-						Affinity: affine.Text,
+				// rewrite Bool: "is something" to an affinity with the opposite "not something" available.
+				if parts := lang.Fields(field.Name); len(parts) > 0 && parts[0] == "is" {
+					parts[0] = "not"
+					defaultTrait = lang.Join(parts)
+					// rewrite bool fields as implicit aspects
+					ak := lang.Join(append(parts[1:], "aspect"))
+					aspect, e := pen.addAspect(ak, sliceOf.String(defaultTrait, field.Name))
+					if e := eatDuplicates(pen.warn, e); e != nil {
+						err = e
+						break
+					} else {
+						*field = FieldInfo{
+							Name:     ak,
+							Class:    ak,
+							Affinity: affine.Text,
+						}
+						cache.store(ak, aspect)
 					}
-					defaultTrait = "not " + ak
-					cache.store(ak, aspect)
 				}
 			}
 			if len(defaultTrait) > 0 && field.Init == nil {
