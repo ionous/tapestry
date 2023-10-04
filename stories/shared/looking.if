@@ -69,7 +69,7 @@
               {
                 "Object:field:": [
                   "story",
-                  "is illuminated"
+                  "illuminated"
                 ]
               }
             ]
@@ -277,7 +277,7 @@
                     {
                       "Object:field:": [
                         "story",
-                        "is darkness witnessed"
+                        "darkness witnessed"
                       ]
                     },
                     {
@@ -293,7 +293,7 @@
                       {
                         "Object:field:": [
                           "@room",
-                          "is visited"
+                          "visited"
                         ]
                       },
                       {

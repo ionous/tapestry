@@ -86,7 +86,7 @@
             "Expect:": {
               "Object:field:": [
                 "story",
-                "is illuminated"
+                "illuminated"
               ]
             }
           },

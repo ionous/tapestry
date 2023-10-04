@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
-	"github.com/ionous/sliceOf"
 )
 
 type FieldInfo struct {
@@ -69,26 +68,27 @@ func (fs *Fields) rewriteImplicitAspects(pen *Pen, kind kindInfo, cache *classCa
 	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
 		for i := range fs.fields[PatternLocals] {
 			field := &fs.fields[PatternLocals][i]
-			// rewrite Bool: "is something" to an affinity with the opposite "not something" available.
+			// rewrite Bool: "something" to an affinity with the opposite "not something" available.
+			// i originally wanted to limit or force these into the format "is something"
+			// but that screws with grok, sentences would have to be: "the noun is is something"
 			if field.Affinity == affine.Bool && len(field.Class) == 0 {
-				if parts := lang.Fields(field.Name); len(parts) > 0 && parts[0] == "is" {
-					parts[0] = "not"
-					bestTrait := lang.Join(parts)
-					// rewrite bool fields as implicit aspects
-					ak := lang.Join(append(parts[1:], "aspect"))
-					aspect, e := pen.addAspect(ak, sliceOf.String(bestTrait, field.Name))
-					if e := eatDuplicates(pen.warn, e); e != nil {
-						err = e
-						break
-					} else {
-						*field = FieldInfo{
-							Name:     ak,
-							Class:    ak,
-							Affinity: affine.Text,
-							Init:     field.Init,
-						}
-						cache.store(ak, aspect)
+				// default trait is the unset version
+				defaultTrait := lang.Join([]string{"not", field.Name})
+				traits := []string{defaultTrait, field.Name}
+				// rewrite bool fields as implicit aspects
+				aspect := lang.Join([]string{field.Name, "aspect"})
+				cls, e := pen.addAspect(aspect, traits)
+				if e := eatDuplicates(pen.warn, e); e != nil {
+					err = e
+					break
+				} else {
+					*field = FieldInfo{
+						Name:     aspect,
+						Class:    aspect,
+						Affinity: affine.Text,
+						Init:     field.Init,
 					}
+					cache.store(aspect, cls)
 				}
 			}
 		}
