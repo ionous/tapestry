@@ -77,11 +77,7 @@ func TestMatching(t *testing.T) {
 		}
 		// many fields should match
 		{
-			if e := testutil.SetRecord(a, "innumerable", "is innumerable"); e != nil {
-				t.Fatal(e)
-			} else if e := testutil.SetRecord(b, "is innumerable", true); e != nil {
-				t.Fatal(e)
-			} else if e := testutil.SetRecord(a, "group options", "objects with articles"); e != nil {
+			if e := testutil.SetRecord(a, "group options", "objects with articles"); e != nil {
 				t.Fatal(e)
 			} else if e := testutil.SetRecord(b, "group options", "objects with articles"); e != nil {
 				t.Fatal(e)

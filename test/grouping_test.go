@@ -58,7 +58,6 @@ func TestGrouping(t *testing.T) {
 			    "settings": {
 			      "name": "apple",
 			      "label": "",
-			      "innumerable": "not innumerable",
 			      "group options": "without objects"
 			    },
 			    "objects": [
@@ -70,7 +69,6 @@ func TestGrouping(t *testing.T) {
 			    "settings": {
 			      "name": "thing-1",
 			      "label": "thingies",
-			      "innumerable": "not innumerable",
 			      "group options": "without objects"
 			    },
 			    "objects": [

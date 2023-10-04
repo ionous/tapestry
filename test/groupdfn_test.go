@@ -18,11 +18,6 @@ func TestKindsForType(t *testing.T) {
 	} else if diff := pretty.Diff(ks.Builder, testutil.KindBuilder{
 		Parents: nil,
 		Aspects: []g.Aspect{{
-			Name: "innumerable",
-			Traits: []string{
-				"not innumerable",
-				"is innumerable",
-			}}, {
 			Name: "group options",
 			Traits: []string{
 				"without objects",
@@ -35,12 +30,11 @@ func TestKindsForType(t *testing.T) {
 			},
 			"grouped objects": {
 				{Name: "settings", Affinity: "record", Type: "group settings"},
-				{Name: "objects", Affinity: "text_list", Type: ""},
+				{Name: "objects", Affinity: "text_list"},
 			},
 			"group settings": {
-				{Name: "name", Affinity: "text", Type: ""},
-				{Name: "label", Affinity: "text", Type: ""},
-				{Name: "innumerable", Affinity: "text", Type: "innumerable"},
+				{Name: "name", Affinity: "text"},
+				{Name: "label", Affinity: "text"},
 				{Name: "group options", Affinity: "text", Type: "group options"},
 			},
 		}}); len(diff) > 0 {

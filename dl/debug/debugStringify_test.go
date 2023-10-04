@@ -60,7 +60,7 @@ func TestStringify(t *testing.T) {
 		"string", "text",
 		"strings", []string{"a", "b", "the end"},
 		"float", 23.2,
-		"bool", "is bool", // ugh. auto-aspect conversion
+		"bool", true,
 	)
 	if x := debug.Stringify(g.RecordOf(rec)); x != recordyJson {
 		t.Fatal(jsn.Indent(x))

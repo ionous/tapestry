@@ -2,7 +2,6 @@ package generic
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -26,17 +25,8 @@ func NewDefaultValue(ks Kinds, aff affine.Affinity, cls string) (ret Value, err 
 	case affine.NumList:
 		ret = FloatsFrom(nil, cls)
 
-	case affine.Text: //fix!
-		var defaultValue string
-		if len(cls) > 0 {
-			if ak, e := ks.GetKindByName(cls); e == nil {
-				if Base(ak) == kindsOf.Aspect.String() {
-					trait := ak.Field(0) // get the default trait.
-					defaultValue = trait.Name
-				}
-			}
-		}
-		ret = StringFrom(defaultValue, cls)
+	case affine.Text:
+		ret = StringFrom("", cls)
 
 	case affine.TextList:
 		ret = StringsFrom(nil, cls)

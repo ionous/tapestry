@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/test/tag"
 	"github.com/ionous/errutil"
 )
 
@@ -62,8 +61,8 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 		ret = k // we created the kind already
 	} else {
 		if name == kindsOf.Aspect.String() {
-			// special empty kind of aspect
-			ret = g.NewKind(ks, name, nil, nil, nil)
+			// special base for aspects
+			ret = g.NewKind(ks, name, nil, nil)
 		} else {
 			if k, e := ks.makeAspect(name); e != nil {
 				err = e
@@ -100,18 +99,7 @@ func (ks *Kinds) makeKind(name string, pfs *[]g.Field) (ret *g.Kind, err error) 
 		}
 	}
 	if err == nil {
-		var as []g.Aspect
-		for _, f := range *pfs {
-			if g.IsAspectLike(f) {
-				for _, a := range ks.Builder.Aspects {
-					if a.Name == f.Name {
-						as = append(as, a)
-						break
-					}
-				}
-			}
-		}
-		ret = g.NewKind(ks, name, parent, *pfs, as)
+		ret = g.NewKindWithTraits(ks, name, parent, *pfs)
 	}
 	return
 }
@@ -123,16 +111,19 @@ func (ks *Kinds) makeAspect(name string) (ret *g.Kind, err error) {
 				err = e
 				break
 			} else {
-				var fs []g.Field
-				for _, t := range a.Traits {
-					f := g.Field{Name: t, Affinity: affine.Text, Type: t}
-					fs = append(fs, f)
-				}
 				// create the kind from the stored fields
-				ret = g.NewKind(ks, a.Name, parent, fs, nil)
+				ret = g.NewKind(ks, a.Name, parent, MakeFieldsFromTraits(a.Traits))
 				break
 			}
 		}
+	}
+	return
+}
+
+func MakeFieldsFromTraits(ts []string) (ret []g.Field) {
+	for _, t := range ts {
+		f := g.Field{Name: t, Affinity: affine.Text, Type: t}
+		ret = append(ret, f)
 	}
 	return
 }
@@ -165,22 +156,8 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 		default:
 			panic(errutil.Sprint("unknown kind", k))
 
-		case r.Bool: // trait for an aspect
-			tags := tag.ReadTag(f.Tag)
-			if _, ok := tags.Find("bool"); ok {
-				b.Aff, b.Type = affine.Bool, k.String()
-			} else {
-				// the name of the aspect is the name of the field and its class
-				aspect := lang.MixedCaseToSpaces(f.Name)
-				b.Aff, b.Type = affine.Text, aspect
-				kb.Aspects = append(kb.Aspects, g.Aspect{
-					Name: aspect,
-					Traits: []string{
-						"not " + aspect,
-						"is " + aspect,
-					},
-				})
-			}
+		case r.Bool:
+			b.Aff = affine.Bool
 
 		case r.String:
 			// note: text type indicates kind, not golang type

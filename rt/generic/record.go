@@ -50,26 +50,10 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	// is the stored value valid? return it
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv
+	} else if nv, e := NewDefaultValue(d.kind.kinds, ft.Affinity, ft.Type); e != nil {
+		err = e
 	} else {
-		// first try create default aspects
-		if IsAspectLike(ft) {
-			for _, a := range d.kind.aspects {
-				if a.Name == ft.Name {
-					// first trait:
-					nv := StringFrom(a.Traits[0], a.Name)
-					ret, d.values[i] = nv, nv
-					break
-				}
-			}
-		}
-		// fallback to other fields:
-		if ret == nil {
-			if nv, e := NewDefaultValue(d.kind.kinds, ft.Affinity, ft.Type); e != nil {
-				err = e
-			} else {
-				ret, d.values[i] = nv, nv
-			}
-		}
+		ret, d.values[i] = nv, nv
 	}
 	return
 }

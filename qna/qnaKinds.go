@@ -62,7 +62,7 @@ func (run *Runner) ensureBaseKinds() {
 					parent, err = run.getKind(p)
 				}
 				if err == nil {
-					kind = g.NewKind(run, k.String(), parent, fs, nil)
+					kind = g.NewKind(run, k.String(), parent, fs)
 				}
 			}
 			key := makeKey("kinds", k.String())
@@ -81,12 +81,16 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 		err = errutil.Fmt("error while getting kind %q, %w", k, e)
 	} else if cnt := len(path); cnt == 0 {
 		err = errutil.Fmt("invalid kind %q", k)
-	} else if parent, e := run.GetKindByName(path[cnt-1]); e != nil {
+	} else if parent, e := run.getKind(path[cnt-1]); e != nil {
 		err = e
-	} else if fs, e := run.getExclusiveFields(k); e != nil {
+	} else if fields, e := run.getExclusiveFields(k); e != nil {
 		err = errutil.Fmt("error while building kind %q, %w", k, e)
 	} else {
-		ret = g.NewKind(run, k, parent, fs, makeAspects(run, fs))
+		if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
+			ret = g.NewKindWithTraits(run, k, parent, fields)
+		} else {
+			ret = g.NewKind(run, k, parent, fields)
+		}
 	}
 	return
 }
@@ -176,25 +180,6 @@ func initRecord(run *Runner, rec *g.Record) (err error) {
 			if e := kv.initValue(run, rec); e != nil {
 				err = e
 				break
-			}
-		}
-	}
-	return
-}
-
-func makeAspects(kinds kinds, fields []g.Field) (ret []g.Aspect) {
-	for _, ft := range fields {
-		if g.IsAspectLike(ft) {
-			if a, e := kinds.GetKindByName(ft.Type); e == nil {
-				if g.Base(a) == kindsOf.Aspect.String() {
-					cnt := a.NumField()
-					ts := make([]string, cnt)
-					for i := 0; i < cnt; i++ {
-						t := a.Field(i)
-						ts[i] = t.Name
-					}
-					ret = append(ret, g.Aspect{Name: a.Name(), Traits: ts})
-				}
 			}
 		}
 	}

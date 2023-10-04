@@ -8,8 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (n *recordTest) NewKind(name string, fields []g.Field, aspects []g.Aspect) (ret *g.Kind) {
-	k := g.NewKind(n, name, nil, fields, aspects)
+func (n *recordTest) addKind(k *g.Kind) (ret *g.Kind) {
 	n.ks = append(n.ks, k)
 	return k
 }
@@ -49,18 +48,19 @@ type recordTest struct {
 }
 
 func newRecordAccessTest() *recordTest {
-	rt := new(recordTest)
-	ks := rt.NewKind("Ks", []g.Field{
+	n := new(recordTest)
+	n.addKind(g.NewKind(n, "a", nil,
+		testutil.MakeFieldsFromTraits([]string{
+			"x", "w", "y",
+		})))
+	ks := n.addKind(g.NewKindWithTraits(n, "Ks", nil, []g.Field{
 		{"d", affine.Number, "" /*"float64"*/},
 		{"t", affine.Text, "" /*"string"*/},
 		{"a", affine.Text, "a"},
-	}, []g.Aspect{
-		{"a", []string{"x", "w", "y"}},
-	},
-	)
-	rt.vars = map[string]*g.Record{
+	}))
+	n.vars = map[string]*g.Record{
 		"boop": ks.NewRecord(),
 		"beep": ks.NewRecord(),
 	}
-	return rt
+	return n
 }
