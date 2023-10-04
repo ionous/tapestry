@@ -49,6 +49,7 @@ func WeavePath(srcPath, outFile string) (err error) {
 					log.Writer(),
 					qx,
 					decode.NewDecoder(story.AllSignatures),
+					nil,
 					qna.NewOptions(),
 				)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)

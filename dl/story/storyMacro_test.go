@@ -37,6 +37,7 @@ func TestMacros(t *testing.T) {
 		log.Writer(),
 		qx,
 		decode.NewDecoder(story.AllSignatures),
+		nil,
 		qna.NewOptions(),
 	)
 	cat := weave.NewCatalogWithWarnings(db, run, mdl.LogWarning)

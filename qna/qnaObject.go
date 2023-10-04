@@ -26,9 +26,6 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 			err = run.writeNounValue(obj, fieldData, newValue)
 		} else {
 			// when the name differs, we must have found the aspect for a trait.
-			// FIX: should we transform the value so that it has type of the aspect?
-			// FIX: records dont have opposite day so this seems ... unfair.
-			// FIX: im also curious about aspects that only have one trait, or blank ( nothing ).
 			if aff := newValue.Affinity(); aff != affine.Bool {
 				err = errutil.New("can only set a trait with booleans, have", aff)
 			} else if trait, e := oppositeDay(run, fieldData.Name, field, newValue.Bool()); e != nil {
@@ -36,7 +33,11 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 			} else {
 				// set the aspect to the value of the requested trait
 				traitValue := g.StringFrom(trait, fieldData.Type)
-				err = run.writeNounValue(obj, fieldData, traitValue)
+				if e := run.writeNounValue(obj, fieldData, traitValue); e != nil {
+					err = e
+				} else if run.notify != nil {
+					run.notify.ChangedState(obj.Id, fieldData.Name, field)
+				}
 			}
 		}
 	}

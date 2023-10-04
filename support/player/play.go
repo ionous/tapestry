@@ -51,7 +51,7 @@ func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret i
 		} else {
 			w := print.NewLineSentences(markup.ToText(os.Stdout))
 			d := decode.NewDecoder(tapestry.AllSignatures)
-			run := qna.NewRuntimeOptions(w, query, d, opts)
+			run := qna.NewRuntimeOptions(w, query, d, nil, opts)
 			if e := run.ActivateDomain(domain); e != nil {
 				err = e
 			} else {
