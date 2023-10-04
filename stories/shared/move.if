@@ -90,7 +90,7 @@
           "--": "note: if move object were an event, we wouldnt have to explicitly test for the story actor here, because the handler would be filtered to the player implicitly.",
           "If:do:": [
             {
-              "Cmp:is:txt:": [
+              "Is:matching:text:": [
                 "@obj",
                 "equal_to",
                 {
@@ -140,7 +140,7 @@
           {
             "If:do:": [
               {
-                "Cmp:is:txt:": [
+                "Is:matching:text:": [
                   "@dest",
                   "other_than",
                   {
@@ -261,7 +261,7 @@
             "If:do:": [
               {
                 "Not:": {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     {
                       "HolderOf obj:": {
                         "FromText:": "@obj"
@@ -289,7 +289,7 @@
           {
             "If:do:": [
               {
-                "Cmp:is:txt:": [
+                "Is:matching:text:": [
                   {
                     "HolderOf obj:": {
                       "FromText:": "@obj"

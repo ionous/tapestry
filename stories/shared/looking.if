@@ -69,7 +69,7 @@
               {
                 "Object:field:": [
                   "story",
-                  "is illuminated"
+                  "illuminated"
                 ]
               }
             ]
@@ -137,7 +137,7 @@
                     {
                       "AnyTrue:": [
                         {
-                          "Cmp:is:txt:": [
+                          "Is:matching:text:": [
                             "@verbosity",
                             "equal_to",
                             "verbose"
@@ -146,7 +146,7 @@
                         {
                           "AllTrue:": [
                             {
-                              "Cmp:is:txt:": [
+                              "Is:matching:text:": [
                                 "@verbosity",
                                 "equal_to",
                                 "brief"
@@ -204,7 +204,7 @@
                       {
                         "AnyTrue:": [
                           {
-                            "Cmp:is:txt:": [
+                            "Is:matching:text:": [
                               "@verbosity",
                               "equal_to",
                               "verbose"
@@ -213,7 +213,7 @@
                           {
                             "AllTrue:": [
                               {
-                                "Cmp:is:txt:": [
+                                "Is:matching:text:": [
                                   "@verbosity",
                                   "equal_to",
                                   "brief"
@@ -277,7 +277,7 @@
                     {
                       "Object:field:": [
                         "story",
-                        "is darkness witnessed"
+                        "darkness witnessed"
                       ]
                     },
                     {
@@ -293,7 +293,7 @@
                       {
                         "Object:field:": [
                           "@room",
-                          "is visited"
+                          "visited"
                         ]
                       },
                       {
@@ -391,7 +391,7 @@
         {
           "If:assuming:do:else:": [
             {
-              "Cmp:is:txt:": [
+              "Is:matching:text:": [
                 "@locale",
                 "equal_to",
                 "@ceiling"
@@ -483,7 +483,7 @@
                 {
                   "If:do:": [
                     {
-                      "Cmp:is:txt:": [
+                      "Is:matching:text:": [
                         "@it",
                         "equal_to",
                         "@ceiling"
@@ -564,7 +564,7 @@
           {
             "If:do:": [
               {
-                "Cmp:is:txt:": [
+                "Is:matching:text:": [
                   "@locale",
                   "equal_to",
                   "@room"
@@ -604,7 +604,7 @@
                       "Not:": {
                         "AnyTrue:": [
                           {
-                            "Cmp:is:txt:": [
+                            "Is:matching:text:": [
                               "@it",
                               "equal_to",
                               "@viewpoint"
@@ -677,7 +677,7 @@
               },
               {
                 "FromBool:": {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@locale",
                     "equal_to",
                     "@room"
@@ -689,7 +689,7 @@
               },
               {
                 "FromBool:": {
-                  "Cmp:is:num:": [
+                  "Is:matching:num:": [
                     "@previous_mentions",
                     "equal_to",
                     {
@@ -945,7 +945,7 @@
                   ]
                 },
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     {
                       "ParentOf obj:": {
                         "FromText:": "@obj"
@@ -1052,7 +1052,7 @@
         {
           "If:do:": [
             {
-              "Cmp:is:num:": [
+              "Is:matching:num:": [
                 {
                   "Len:": {
                     "FromTextList:": "@children"

@@ -31,7 +31,7 @@
           "--": "It says the plural of the target's name.",
           "If:do:else:": [
             {
-              "Cmp:is:txt:": [
+              "Is:matching:text:": [
                 {
                   "Object:field:": [
                     "@obj",

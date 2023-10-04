@@ -107,7 +107,7 @@ func Post(w io.Writer, ctx Context, state State, msg any) (ret State, err error)
 func Restart(w io.Writer, ctx Context, scene string) (ret State, err error) {
 	log.Println("*** shuttle restart requested ***", scene)
 	var buf bytes.Buffer // fix: maybe it'd be better if Step() handled the text
-	run := qna.NewRuntimeOptions(&buf, ctx.query, ctx.decoder, ctx.opts)
+	run := qna.NewRuntimeOptions(&buf, ctx.query, ctx.decoder, nil, ctx.opts)
 	if e := run.ActivateDomain(scene); e != nil {
 		err = e
 	} else {

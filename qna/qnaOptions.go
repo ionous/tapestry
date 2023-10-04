@@ -14,19 +14,13 @@ type Options struct {
 
 var optionTypes = [meta.NumOptions]affine.Affinity{affine.Bool}
 
-type emptyKinds struct{}
-
-func (emptyKinds) GetKindByName(string) (*g.Kind, error) {
-	return nil, errutil.New("no kinds supported")
-}
-
 func NewOptions() Options {
 	var staticAssert [1]struct{}
 	_ = staticAssert[int(meta.NumOptions)-len(optionTypes)]
 	//
 	out := make(map[string]g.Value)
 	for opt := meta.Options(0); opt < meta.NumOptions; opt++ {
-		if v, e := g.NewDefaultValue(emptyKinds{}, optionTypes[int(opt)], ""); e == nil {
+		if v, e := g.NewDefaultValue(optionTypes[int(opt)], ""); e == nil {
 			n := opt.String()
 			out[n] = v
 		}

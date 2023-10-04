@@ -317,7 +317,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@trait",
                     "equal_to",
                     "open"
@@ -363,7 +363,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@trait",
                     "equal_to",
                     "open"
@@ -393,7 +393,7 @@
             {
               "If:assuming:do:": [
                 {
-                  "Cmp:is:num:": [
+                  "Is:matching:num:": [
                     {
                       "Len:": {
                         "FromTextList:": "@concealed_items"

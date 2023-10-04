@@ -29,15 +29,13 @@ func TestMatching(t *testing.T) {
 		},
 		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Chain: scope.MakeChain(
-				scope.FromRecord(locals),
-			),
 		},
 	}
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
 
-	if a, e := locals.GetNamedField("a"); e != nil {
+	if a, e := lt.FieldByName("a"); e != nil {
 		t.Fatal(e)
-	} else if b, e := locals.GetNamedField("b"); e != nil {
+	} else if b, e := lt.FieldByName("b"); e != nil {
 		t.Fatal(e)
 	} else {
 		a, b := a.Record(), b.Record()
@@ -51,8 +49,8 @@ func TestMatching(t *testing.T) {
 		{
 			if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("matched", res)
 			}
 		}
 		// different labels shouldnt match
@@ -61,8 +59,8 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != false {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != false {
+				t.Fatal("different labels shouldn't match")
 			}
 		}
 		// same labels should match
@@ -71,24 +69,20 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("same labels should match")
 			}
 		}
 		// many fields should match
 		{
-			if e := testutil.SetRecord(a, "innumerable", "is innumerable"); e != nil {
-				t.Fatal(e)
-			} else if e := testutil.SetRecord(b, "is innumerable", true); e != nil {
-				t.Fatal(e)
-			} else if e := testutil.SetRecord(a, "group options", "objects with articles"); e != nil {
+			if e := testutil.SetRecord(a, "group options", "objects with articles"); e != nil {
 				t.Fatal(e)
 			} else if e := testutil.SetRecord(b, "group options", "objects with articles"); e != nil {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("many fields should match")
 			}
 		}
 		// names shouldnt be involved
@@ -97,8 +91,8 @@ func TestMatching(t *testing.T) {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)
-			} else if ok.Bool() != true {
-				t.Fatal(e)
+			} else if res := ok.Bool(); res != true {
+				t.Fatal("names shouldnt matter")
 			}
 		}
 	}

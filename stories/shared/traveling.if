@@ -231,7 +231,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "traveling"
@@ -272,7 +272,7 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@action",
                     "equal_to",
                     "traveling"

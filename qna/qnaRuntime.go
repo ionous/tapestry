@@ -16,10 +16,20 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, options Options) *Runner {
+// Callbacks for when important system level changes occur
+type Notifier interface {
+	// Starting(domains[]string)
+	// Ending(domains[]string)
+	ChangedState(noun, aspect, trait string)
+	// ChangedRelative()
+	// ChangedValue()
+}
+
+func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, n Notifier, options Options) *Runner {
 	run := &Runner{
 		query:      q,
 		decode:     d,
+		notify:     n,
 		values:     make(cache),
 		nounValues: make(cache),
 		counters:   make(counters),
@@ -33,6 +43,7 @@ func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, options Op
 type Runner struct {
 	query  query.Query
 	decode decoder.Decoder
+	notify Notifier
 
 	values     cache // other values are not kept across domains
 	nounValues cache // nounValues are kept across domains
@@ -57,18 +68,19 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 		// fix? the domain is already out of scope
 		// might want to rewind one by one just after running each end event
 		// ( begin has a similar issue if some subdomain sets a different value say than its parent )
-		if e := run.notify(ends, "ends"); e != nil {
+		if e := run.domainChanged(ends, "ends"); e != nil {
 			err = e
 		}
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
-		if e := run.notify(begins, "begins"); e != nil {
+		if e := run.domainChanged(begins, "begins"); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
-func (run *Runner) notify(ds []string, evt string) (err error) {
+// shift to notifier?
+func (run *Runner) domainChanged(ds []string, evt string) (err error) {
 	for _, d := range ds {
 		name := d + " " + evt
 		if pat, e := run.getKind(name); e == nil {
@@ -292,7 +304,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if k, e := run.GetKindByName(ok.Kind); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(k.Path())
+				ret = g.StringsOf(g.Path(k))
 			}
 
 		// given a noun, return the name declared by the author

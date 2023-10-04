@@ -60,7 +60,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 					ret = v
 				} else if k, e := run.GetKindByName(kind); e != nil {
 					err = e
-				} else if k.Path()[0] != kindsOf.Kind.String() {
+				} else if b := g.Base(k); b != kindsOf.Kind.String() {
 					ret = v
 				} else {
 					ret, err = op.getPrintedValue(run, str, kind)

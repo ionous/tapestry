@@ -19,16 +19,15 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
 	pat := lang.Normalize(op.PatternName)
-	if src, e := safe.GetAssignment(run, op.List); e != nil {
-		err = e
-	} else if !affine.IsList(src.Affinity()) {
-		err = errutil.New("not a list")
-	} else if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if tgt, e := root.GetList(run); e != nil {
 		err = e
+	} else if src, e := safe.GetAssignment(run, op.List); e != nil {
+		err = e
+	} else if !affine.IsList(src.Affinity()) {
+		err = errutil.New("not a list")
 	} else {
-
 		var changes int
 		aff := affine.Element(tgt.Affinity())
 		for it := g.ListIt(src); it.HasNext() && err == nil; {

@@ -83,7 +83,7 @@
                 "--": "if the object was given an explicit 'printed name', print that.",
                 "If:do:else:": [
                   {
-                    "Cmp:is:txt:": [
+                    "Is:matching:text:": [
                       {
                         "Object:field:": [
                           "@obj",

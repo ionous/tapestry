@@ -59,7 +59,7 @@ func (op *TextValue) String() string {
 	return op.Value
 }
 
-func (op *TextValue) GetLiteralValue(kinds g.Kinds) (ret g.Value, _ error) {
+func (op *TextValue) GetLiteralValue(g.Kinds) (ret g.Value, _ error) {
 	ret = g.StringFrom(op.Value, op.Kind)
 	return
 }

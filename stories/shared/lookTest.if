@@ -96,7 +96,7 @@
           },
           {
             "Expect:": {
-              "Cmp:is:num:": [
+              "Is:matching:num:": [
                 {
                   "Len:": {
                     "FromTextList:": {
@@ -129,7 +129,7 @@
           },
           {
             "Expect:": {
-              "Cmp:is:num:": [
+              "Is:matching:num:": [
                 {
                   "Len:": {
                     "FromTextList:": {

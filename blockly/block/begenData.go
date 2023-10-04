@@ -94,7 +94,7 @@ func (b *blockData) writeTo(out *js.Builder) {
 			icons.Q("comment").R(js.Colon).Brace(js.Obj, func(com *js.Builder) {
 				com.
 					Kv("text", cmt).R(js.Comma).
-					Q("pinned").R(js.Colon).S(js.False).R(js.Comma).
+					Q("pinned").R(js.Colon).Raw(js.False).R(js.Comma).
 					Q("height").R(js.Colon).N(80).R(js.Comma).
 					Q("width").R(js.Colon).N(280)
 			})
@@ -119,6 +119,6 @@ func comment(m map[string]any) (ret string) {
 // helper to write a key:object where the object {} contains some arbitrary contents.
 func writeContents(out *js.Builder, key string, contents *js.Builder) {
 	out.R(js.Comma).Q(key).R(js.Colon).Brace(js.Obj, func(out *js.Builder) {
-		out.S(contents.String())
+		out.Raw(contents.String())
 	})
 }

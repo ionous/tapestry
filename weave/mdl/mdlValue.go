@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -22,12 +23,10 @@ func (pen *Pen) addDefaultValue(kind kindInfo, name string, value assign.Assignm
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
 		err = errutil.Fmt("can't assign trait %q to kind %q", name, kind.name)
-	} else if aff := assign.GetAffinity(value); aff != field.aff {
-		err = errutil.Fmt("mismatched affinity, cant assign %s to %s", aff, field.aff)
-	} else if out, e := marshalAssignment(value); e != nil {
+	} else if out, provisional, e := marshalAssignment(value, field.aff); e != nil {
 		err = e
 	} else {
-		err = pen.addKindValue(kind, isFinal(value), field, out)
+		err = pen.addKindValue(kind, !provisional, field, out)
 	}
 	return
 }
@@ -39,14 +38,12 @@ func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err e
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
 		err = errutil.New("can't assign trait to noun")
-	} else if aff := assign.GetAffinity(value); aff != field.aff {
-		err = errutil.Fmt("mismatched affinity, cant assign %s to %s", aff, field.aff)
+	} else if out, provisional, e := marshalAssignment(value, field.aff); e != nil {
+		err = e
 	} else if noun.domain != pen.domain {
 		err = DomainValueError{noun.name, field.name, value}
-	} else if out, e := marshalAssignment(value); e != nil {
-		err = e
 	} else {
-		err = pen.addNounValue(noun, isFinal(value), field, field.name, "", out)
+		err = pen.addNounValue(noun, !provisional, field, field.name, "", out)
 	}
 	return
 }
@@ -69,14 +66,11 @@ func (pen *Pen) addPathValue(noun string, parts []string, value literal.LiteralV
 		err = e
 	} else if end := len(parts) - 1; parts[end] != inner.name {
 		err = errutil.New("can't add traits to records of nouns")
-	} else if aff := literal.GetAffinity(value); aff != inner.aff {
-		err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
-			aff, inner.aff, inner.name, noun.kind)
-	} else if out, e := marshalout(value); e != nil {
+	} else if out, provisional, e := marshalLiteral(value, inner.aff); e != nil {
 		err = e
 	} else {
 		field, dot := parts[0], strings.Join(parts[1:], ".")
-		err = pen.addNounValue(noun, isFinal(value), outer, field, dot, out)
+		err = pen.addNounValue(noun, !provisional, outer, field, dot, out)
 	}
 	return
 }
@@ -115,13 +109,13 @@ func (pen *Pen) addNounValue(noun nounInfo, final bool, outer fieldInfo, field, 
 		err = errutil.New("database error", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
 		if prev.dot.String != dot {
-			err = errutil.Fmt(`%w writing value for %s, had value for %s.`,
+			err = errutil.Fmt(`%w writing noun value for %s, had value for %s.`,
 				Conflict, debugJoin(noun.name, field, dot), debugJoin(noun.name, field, prev.dot.String))
 		} else if prev.value != value {
-			err = errutil.Fmt(`%w mismatched value for %s.`,
+			err = errutil.Fmt(`%w mismatched noun value for %s.`,
 				Conflict, debugJoin(noun.name, field, dot))
 		} else {
-			err = errutil.Fmt(`%w value for %s.`,
+			err = errutil.Fmt(`%w noun value for %s.`,
 				Duplicate, debugJoin(noun.name, field, dot))
 		}
 		return
@@ -155,12 +149,13 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 	// OR the exact match ( ex. a duplicate )
 	var prev struct {
 		value string
+		final bool
 	}
 	// find cases where the new path starts a previous path,
 	// or a previous path starts the new path.
 	// instr(X,Y) - searches X for Y.
 	if rows, e := pen.db.Query(`
-		select mv.value 
+		select mv.value, mv.final
 		from mdl_value_kind mv 
 		where mv.kind = @1
 		and mv.field = @2`,
@@ -168,15 +163,17 @@ func (pen *Pen) addKindValue(kind kindInfo, final bool, field fieldInfo, value s
 	); e != nil {
 		err = errutil.New("database error", e)
 	} else if e := tables.ScanAll(rows, func() (err error) {
-		if prev.value != value {
-			err = errutil.Fmt(`%w mismatched value for %s.`,
-				Conflict, debugJoin(kind.name, field.name, ""))
-		} else {
-			err = errutil.Fmt(`%w value for %s.`,
-				Duplicate, debugJoin(kind.name, field.name, ""))
+		if prev.final {
+			if prev.value != value {
+				err = errutil.Fmt(`%w mismatched kind value for %s.`,
+					Conflict, debugJoin(kind.name, field.name, ""))
+			} else {
+				err = errutil.Fmt(`%w kind value for %s.`,
+					Duplicate, debugJoin(kind.name, field.name, ""))
+			}
 		}
 		return
-	}, &prev.value); e != nil {
+	}, &prev.value, &prev.final); e != nil {
 		err = eatDuplicates(pen.warn, e)
 	} else if field.domain != pen.domain {
 		// this to simplify domain management (ex. would have to check rival values)
@@ -205,26 +202,50 @@ func debugJoin(noun, field, path string) string {
 }
 
 // matches with decode.parseEval
-func marshalAssignment(val assign.Assignment) (ret string, err error) {
+func marshalAssignment(val assign.Assignment, wantAff affine.Affinity) (ret string, provisional bool, err error) {
 	// questionable: since we know the type of the field
 	// storing the assignment wrapper is redundant.
-	switch v := val.(type) {
-	case *assign.FromBool:
-		ret, err = marshalout(v.Value)
-	case *assign.FromNumber:
-		ret, err = marshalout(v.Value)
-	case *assign.FromText:
-		ret, err = marshalout(v.Value)
-	case *assign.FromRecord:
-		ret, err = marshalout(v.Value)
-	case *assign.FromNumList:
-		ret, err = marshalout(v.Value)
-	case *assign.FromTextList:
-		ret, err = marshalout(v.Value)
-	case *assign.FromRecordList:
-		ret, err = marshalout(v.Value)
-	default:
-		err = errutil.New("unknown type")
+	if a, ok := val.(ProvisionalAssignment); ok {
+		provisional = true
+		val = a.Assignment
+	}
+	if aff := assign.GetAffinity(val); aff != wantAff {
+		err = errutil.Fmt("mismatched assignment, wanted %s not %s", aff, wantAff)
+	} else {
+		// strip off the From section to avoid serializing redundant info
+		switch v := val.(type) {
+		case *assign.FromBool:
+			ret, err = marshalout(v.Value)
+		case *assign.FromNumber:
+			ret, err = marshalout(v.Value)
+		case *assign.FromText:
+			ret, err = marshalout(v.Value)
+		case *assign.FromRecord:
+			ret, err = marshalout(v.Value)
+		case *assign.FromNumList:
+			ret, err = marshalout(v.Value)
+		case *assign.FromTextList:
+			ret, err = marshalout(v.Value)
+		case *assign.FromRecordList:
+			ret, err = marshalout(v.Value)
+		default:
+			err = errutil.New("unknown type")
+		}
+	}
+	return
+}
+
+func marshalLiteral(val literal.LiteralValue, wantAff affine.Affinity) (ret string, provisional bool, err error) {
+	// questionable: since we know the type of the field
+	// storing the assignment wrapper is redundant.
+	if a, ok := val.(ProvisionalLiteral); ok {
+		provisional = true
+		val = a.LiteralValue
+	}
+	if aff := literal.GetAffinity(val); aff != wantAff {
+		err = errutil.Fmt("mismatched literal, wanted %s not %s", aff, wantAff)
+	} else {
+		ret, err = marshalout(val)
 	}
 	return
 }

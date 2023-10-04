@@ -40,7 +40,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 				log.Printf("-- Checking: %q\n", check.Name)
 				w := print.NewLineSentences(markup.ToText(os.Stdout))
 				d := decode.NewDecoder(signatures)
-				run := qna.NewRuntimeOptions(w, query, d, options)
+				run := qna.NewRuntimeOptions(w, query, d, nil, options)
 				survey := play.MakeDefaultSurveyor(run)
 				play := play.NewPlaytime(run, survey, grammar)
 				if e := checkOne(d, play, check, &ret); e != nil {

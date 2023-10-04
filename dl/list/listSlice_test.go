@@ -1,8 +1,9 @@
 package list_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/dl/core"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
@@ -57,7 +58,7 @@ func TestSlices(t *testing.T) {
 }
 
 func slice(start, end int, src []string) (ret string) {
-	if run, _, e := newListTime(src, nil); e != nil {
+	if run, e := newListTime(src, nil); e != nil {
 		ret = e.Error()
 	} else {
 		ret = joinText(run, &list.ListSlice{

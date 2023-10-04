@@ -1,11 +1,13 @@
 package list_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"strconv"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/core"
+
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -50,7 +52,7 @@ func pushBack(src []string, ins ...string) (ret string, err error) {
 	return push(src, false, ins)
 }
 func push(src []string, front bool, ins []string) (ret string, err error) {
-	if run, vals, e := newListTime(src, nil); e != nil {
+	if run, e := newListTime(src, nil); e != nil {
 		err = e
 	} else if e := safe.Run(run, &list.ListPush{
 		Target: core.Variable("source"),
@@ -58,7 +60,7 @@ func push(src []string, front bool, ins []string) (ret string, err error) {
 		AtEdge: B(front)},
 	); e != nil {
 		err = e
-	} else if strs, e := vals.GetNamedField("source"); e != nil {
+	} else if strs, e := run.GetField(meta.Variables, "source"); e != nil {
 		err = e
 	} else {
 		strs := strs.Strings()

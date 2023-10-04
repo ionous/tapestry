@@ -51,11 +51,9 @@ func TestReduce(t *testing.T) {
 		},
 		Runtime: testutil.Runtime{
 			Kinds: &kinds,
-			Chain: scope.MakeChain(
-				scope.FromRecord(locals),
-			),
 		},
 	}
+	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
 	if e := reduce.Execute(&lt); e != nil {
 		t.Fatal(e)
 	} else if res, e := locals.GetNamedField("results"); e != nil {

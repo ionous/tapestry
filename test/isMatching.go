@@ -12,7 +12,7 @@ import (
 type MatchGroups struct {
 	A       GroupSettings
 	B       GroupSettings
-	Matches bool `if:"bool"`
+	Matches bool
 }
 
 // a pattern for matching groups --
@@ -35,12 +35,6 @@ var matchGroups = testpat.Pattern{
 				A:  core.Variable("a", "label"),
 				Is: core.Unequal,
 				B:  core.Variable("b", "label"),
-			}, matches(false)),
-		core.MakeRule(
-			&core.CompareText{
-				A:  core.Variable("a", "innumerable"),
-				Is: core.Unequal,
-				B:  core.Variable("b", "innumerable"),
 			}, matches(false)),
 		core.MakeRule(
 			&core.CompareText{

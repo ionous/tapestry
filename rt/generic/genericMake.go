@@ -39,6 +39,12 @@ func IntFrom(v int, subtype string) Value {
 	return makeValue(affine.Number, subtype, v)
 }
 
+// returns a nil record of the specified type
+func RecordFrom(subtype string) Value {
+	var n *Record
+	return makeValue(affine.Record, subtype, n)
+}
+
 func StringsFrom(vs []string, subtype string) (ret Value) {
 	if a := affine.TextList; vs != nil {
 		ret = makeValue(a, subtype, &vs)
@@ -68,6 +74,6 @@ func RecordsFrom(vs []*Record, subtype string) (ret Value) {
 	return
 }
 
-func makeValue(a affine.Affinity, subtype string, i interface{}) refValue {
-	return refValue{a: a, i: i, t: subtype}
+func makeValue(a affine.Affinity, subtype string, i any) variant {
+	return variant{a: a, i: i, t: subtype}
 }

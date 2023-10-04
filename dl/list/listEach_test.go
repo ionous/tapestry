@@ -61,7 +61,7 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 			Exe: core.MakeActivity(&Write{&out, T("x")}),
 		},
 	}
-	if lt, _, e := newListTime(src, nil); e != nil {
+	if lt, e := newListTime(src, nil); e != nil {
 		t.Fatal(e)
 	} else if e := each.Execute(lt); e != nil {
 		t.Fatal(src, e)

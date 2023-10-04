@@ -6,9 +6,9 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/test/tag"
 	"github.com/ionous/errutil"
 )
 
@@ -18,12 +18,11 @@ type Kinds struct {
 }
 
 type KindMap map[string]*g.Kind
-type FieldMap map[string]*[]g.Field // kind name to fields
-type AspectMap map[string]bool
+type FieldMap map[string]*[]g.Field // kind name to fields; pointers are used to block recursion
 type ParentMap map[string]string
 
 type KindBuilder struct {
-	Aspects AspectMap
+	Aspects []g.Aspect
 	Fields  FieldMap
 	Parents ParentMap
 }
@@ -62,30 +61,71 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	if k, ok := ks.Kinds[name]; ok {
 		ret = k // we created the kind already
 	} else {
-		b := ks.Builder
-		if fs, ok := b.Fields[name]; !ok {
-			err = errutil.Fmt("unknown kind %q", name)
+		if name == kindsOf.Aspect.String() {
+			// special base for aspects
+			ret = g.NewKind(name, nil, nil)
 		} else {
+			if k, e := ks.makeAspect(name); e != nil {
+				err = e
+			} else if k != nil {
+				ret = k
+			} else if fs, ok := ks.Builder.Fields[name]; !ok {
+				err = errutil.Fmt("unknown kind %q", name)
+			} else {
+				if k, e := ks.makeKind(name, fs); e != nil {
+					err = e
+				} else {
+					ret = k
+				}
+			}
+		}
+		// cache the return
+		if ret != nil {
 			if ks.Kinds == nil {
 				ks.Kinds = make(KindMap)
 			}
-			var path []string
-			if p, ok := b.Parents[name]; ok {
-				if k, e := ks.GetKindByName(p); e != nil {
-					panic(e)
-				} else {
-					path = k.Path()
-				}
-			}
-			// magic field for aspects
-			if b.Aspects[name] {
-				path = append(path, kindsOf.Aspect.String())
-			}
-			// create the kind from the stored fields
-			k := g.NewKind(ks, name, path, *fs)
-			ks.Kinds[name] = k
-			ret = k
+			ks.Kinds[name] = ret
 		}
+	}
+	return
+}
+
+func (ks *Kinds) makeKind(name string, pfs *[]g.Field) (ret *g.Kind, err error) {
+	var parent *g.Kind
+	if p, ok := ks.Builder.Parents[name]; ok {
+		if k, e := ks.GetKindByName(p); e != nil {
+			err = e
+		} else {
+			parent = k
+		}
+	}
+	if err == nil {
+		fields := *pfs
+		ret = g.NewKindWithTraits(name, parent, fields, aspects.MakeAspects(ks, fields))
+	}
+	return
+}
+
+func (ks *Kinds) makeAspect(name string) (ret *g.Kind, err error) {
+	for _, a := range ks.Builder.Aspects {
+		if a.Name == name {
+			if parent, e := ks.GetKindByName(kindsOf.Aspect.String()); e != nil {
+				err = e
+				break
+			} else {
+				// create the kind from the stored fields
+				ret = g.NewKind(a.Name, parent, MakeFieldsFromTraits(a.Traits))
+				break
+			}
+		}
+	}
+	return
+}
+
+func MakeFieldsFromTraits(ts []string) (ret []g.Field) {
+	for _, t := range ts {
+		f := g.Field{Name: t, Affinity: affine.Text, Type: t}
+		ret = append(ret, f)
 	}
 	return
 }
@@ -96,7 +136,6 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 	rstringer := r.TypeOf((*stringer)(nil)).Elem()
 	if kb.Fields == nil {
 		kb.Fields = make(FieldMap)
-		kb.Aspects = make(AspectMap)
 		kb.Parents = make(ParentMap)
 	}
 
@@ -105,7 +144,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 	if kb.Fields[name] != nil {
 		return
 	}
-	pfields := new([]g.Field)
+	pfields := new([]g.Field) // pointers are used to block recursion
 	kb.Fields[name] = pfields
 
 	for i, cnt := 0, t.NumField(); i < cnt; i++ {
@@ -119,21 +158,8 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 		default:
 			panic(errutil.Sprint("unknown kind", k))
 
-		case r.Bool: // trait for an aspect
-			tags := tag.ReadTag(f.Tag)
-			if _, ok := tags.Find("bool"); ok {
-				b.Aff, b.Type = affine.Bool, k.String()
-			} else {
-				// the name of the aspect is the name of the field and its class
-				aspect := lang.MixedCaseToSpaces(f.Name)
-				b.Aff, b.Type = affine.Text, aspect
-				kb.Fields[aspect] = &([]g.Field{
-					// false first.
-					{Name: "not " + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
-					{Name: "is " + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
-				})
-				kb.Aspects[aspect] = true
-			}
+		case r.Bool:
+			b.Aff = affine.Bool
 
 		case r.String:
 			// note: text type indicates kind, not golang type
@@ -191,7 +217,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 				panic("unknown enum")
 			}
 			x := r.New(fieldType).Elem()
-			var traits []g.Field
+			var traits []string
 			for j := int64(0); j < 25; j++ {
 				x.SetInt(j)
 				trait := x.Interface().(stringer).String()
@@ -200,10 +226,12 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 					break
 				}
 				name := lang.MixedCaseToSpaces(trait)
-				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool /*, Type: "trait"*/})
+				traits = append(traits, name)
 			}
-			kb.Fields[aspect] = &traits
-			kb.Aspects[aspect] = true
+			kb.Aspects = append(kb.Aspects, g.Aspect{
+				Name:   aspect,
+				Traits: traits,
+			})
 		}
 		if len(b.Aff) > 0 {
 			name := lang.MixedCaseToSpaces(f.Name)

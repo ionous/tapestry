@@ -33,7 +33,7 @@
           {
             "Repeating:do:": [
               {
-                "Cmp:is:num:": [
+                "Is:matching:num:": [
                   {
                     "Len:": {
                       "FromTextList:": "@queue"

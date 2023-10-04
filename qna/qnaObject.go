@@ -26,9 +26,6 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 			err = run.writeNounValue(obj, fieldData, newValue)
 		} else {
 			// when the name differs, we must have found the aspect for a trait.
-			// FIX: should we transform the value so that it has type of the aspect?
-			// FIX: records dont have opposite day so this seems ... unfair.
-			// FIX: im also curious about aspects that only have one trait, or blank ( nothing ).
 			if aff := newValue.Affinity(); aff != affine.Bool {
 				err = errutil.New("can only set a trait with booleans, have", aff)
 			} else if trait, e := oppositeDay(run, fieldData.Name, field, newValue.Bool()); e != nil {
@@ -36,7 +33,11 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 			} else {
 				// set the aspect to the value of the requested trait
 				traitValue := g.StringFrom(trait, fieldData.Type)
-				err = run.writeNounValue(obj, fieldData, traitValue)
+				if e := run.writeNounValue(obj, fieldData, traitValue); e != nil {
+					err = e
+				} else if run.notify != nil {
+					run.notify.ChangedState(obj.Id, fieldData.Name, field)
+				}
 			}
 		}
 	}
@@ -84,18 +85,22 @@ func (run *Runner) writeNounValue(obj query.NounInfo, field g.Field, val g.Value
 // return the (cached) value of a noun's field
 // if the noun's field contains an assignment it's evaluated each time.
 func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
+	// first, build a cache value:
 	if c, e := run.nounValues.cache(func() (ret any, err error) {
+		// a record can have multiple path/values
 		if vs, e := run.query.NounValues(obj.Id, field.Name); e != nil {
 			err = e
 		} else if len(vs) > 0 {
 			ret, err = run.readFields(field, vs)
 		} else {
+			// if the noun had no values; the kind might have default values.
 			ret, err = run.readKindField(obj, field)
 		}
 		return
 	}, obj.Domain, obj.Id, field.Name); e != nil {
 		err = e
 	} else {
+		// then, unpack the cached value:
 		switch c := c.(type) {
 		case g.Value:
 			ret = c
@@ -122,9 +127,8 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 		err = errutil.New("couldnt find field %q in kind %q", field.Name, k.Name)
 	} else {
 		var found bool
-		next, path := k, k.Path() // most derived on rhs
 	FindField:
-		for i, cnt := 0, len(path); i < cnt; i++ {
+		for next := k; next != nil; next = next.Parent() {
 			if kv, e := run.getKindValues(next); e != nil {
 				err = e
 				break
@@ -139,13 +143,12 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 						break FindField // don!
 					}
 				}
-				if next, err = run.getKind(path[cnt-i-1]); err != nil {
-					break
-				}
 			}
 		}
 		if !found {
-			ret, err = g.NewDefaultValue(run, field.Affinity, field.Type)
+			// note: this doesnt properly determine the default trait for an aspect
+			// weave works around this by providing the correct default value in the db
+			ret, err = g.NewDefaultValue(field.Affinity, field.Type)
 		}
 	}
 	return
@@ -172,41 +175,52 @@ func (run *Runner) readFields(field g.Field, vals []query.ValueData) (ret any, e
 	return
 }
 
+// autocreates default sub records if need be.
 func readRecord(run *Runner, rec *g.Record, vs []query.ValueData) (err error) {
 	for _, vd := range vs {
-		// scan through path for each part of the name
-		for path := vd.Path; len(path) > 0; {
-			// get the next part ( and the rest of the string )
-			part, rest := dotscan(path)
-			k := rec.Kind() // has aff if needed
-			if i := k.FieldIndex(part); i < 0 {
+		if e := readRecordPart(run, rec, vd); e != nil {
+			err = errutil.Append(err, e)
+		}
+	}
+	return
+}
+
+func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) {
+	// scan through path for each part of the name
+	for path := vd.Path; len(path) > 0 && err == nil; {
+		// get the next part ( and the rest of the string )
+		part, rest := dotscan(path)
+		k := rec.Kind() // has aff if needed
+		if i := k.FieldIndex(part); i < 0 {
+			err = errutil.New("unexpected error reading record %q part %q", k.Name(), part)
+		} else {
+			field := k.Field(i)
+			if len(rest) == 0 {
+				// fix: how does fieldType actually get recorded!?!
+				if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
+					err = e
+				} else if v, e := l.GetLiteralValue(run); e != nil {
+					err = e
+				} else {
+					err = rec.SetIndexedField(i, v)
+				}
+				break // all done regardless
+			} else if field.Affinity != affine.Record {
 				err = errutil.New("error")
 			} else {
-
-				if len(rest) == 0 {
-					field := k.Field(i)
-					// FIX: how does fieldType actually get recorded!?!
-					if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
-						err = e
-					} else if v, e := l.GetLiteralValue(run); e != nil {
+				path = rest // provisionally
+				if rec.HasValue(i) {
+					if next, e := rec.GetIndexedField(i); e != nil {
 						err = e
 					} else {
-						err = rec.SetIndexedField(i, v)
+						rec = next.Record()
 					}
-					break // all done regardless
 				} else {
-					// a part ending with a dot is a record:
-					// the Get() will auto-create the value --
-					// fix, future: this is questionable requires rec to know Kinds.
-					// the caller could surely handle that ( ex. Dotted and this ) when needed.
-					if v, e := rec.GetIndexedField(i); e != nil {
+					// fix: is this good? or should we error?
+					if k, e := run.GetKindByName(field.Type); e != nil {
 						err = e
-						break
-					} else if v.Affinity() != affine.Record {
-						err = errutil.New("error")
-						break
 					} else {
-						rec, path = v.Record(), rest
+						rec = k.NewRecord()
 					}
 				}
 			}

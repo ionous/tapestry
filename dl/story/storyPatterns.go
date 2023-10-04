@@ -138,7 +138,7 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 			}
 			if err == nil {
 				if e := weaveRule(w, rule, nil, op.Exe); e != nil {
-					err = errutil.Fmt("%w weaving a rule", e)
+					err = errutil.Fmt("%w weaving a rule for a pattern", e)
 				}
 			}
 		}
@@ -169,7 +169,7 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 				B:  &literal.TextValue{Value: noun},
 			}
 			if e := weaveRule(w, rule, filter, op.Exe); e != nil {
-				err = errutil.Fmt("%w weaving a rule", e)
+				err = errutil.Fmt("%w weaving a rule for a noun", e)
 			}
 		}
 		return
@@ -206,7 +206,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 				}
 			}
 			if e := weaveRule(w, rule, filter, op.Exe); e != nil {
-				err = errutil.Fmt("%w weaving a rule", e)
+				err = errutil.Fmt("%w weaving a rule for a kind", e)
 			}
 		}
 		return

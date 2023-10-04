@@ -18,7 +18,7 @@ func newEventRecord(run rt.Runtime, name string, tgt g.Value) (ret *g.Record, er
 			}
 		}
 	}
-	out := g.NewAnonymousRecord(run, eventFields)
+	out := g.NewAnonymousRecord(eventFields)
 	if e := out.SetIndexedField(event.Name.Index(), g.StringOf(name)); e != nil {
 		err = e
 	} else if e := out.SetIndexedField(event.Target.Index(), tgt); e != nil {

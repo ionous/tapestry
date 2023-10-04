@@ -14,6 +14,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
+	"golang.org/x/exp/slices"
 )
 
 type Pen struct {
@@ -44,32 +45,35 @@ func (pen *Pen) AddAspect(aspect string, traits []string) (err error) {
 
 func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err error) {
 	domain, at := pen.domain, pen.at
-	var existingTraits int
 	if kid, e := pen.addKind(aspect, kindsOf.Aspect.String()); e != nil {
 		err = e // ^ hrm.
-	} else if strings.Count(kid.fullpath(), ",") != 3 {
-		// tbd: could loosen this; for now it simplifies writing the aspects;
-		// no need to check for conflicting fields if there's no derivation
-		// doesn't stop someone from adding derivation later though ...
-		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
-	} else if e := pen.db.QueryRow(`
-			select count(*) 
+	} else {
+		if strings.Count(kid.fullpath(), ",") != 3 {
+			// tbd: could loosen this; for now it simplifies writing the aspects;
+			// no need to check for conflicting fields if there's no derivation
+			// doesn't stop someone from adding derivation later though ...
+			err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
+		} else if existingTraits, e := tables.QueryStrings(pen.db, `
+			select mf.field	
 			from mdl_field mf 
 			where mf.kind = ?1
-			`, kid.id).Scan(&existingTraits); e != nil {
-		err = errutil.New("database error", e)
-	} else if existingTraits > 0 {
-		// fix? doesn't stop someone from adding new traits later though....
-		// field builder could check that it only builds kindsOf.Kind
-		err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
-	} else if kid.domain != domain {
-		err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
-			aspect, kid.domain, domain)
-	} else {
-		for _, t := range traits {
-			if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
-				err = errutil.New("database error", e)
-				break
+			order by mf.rowid`, kid.id); e != nil {
+			err = errutil.New("database error", e)
+		} else if len(existingTraits) > 0 {
+			// fix? doesn't stop someone from adding new traits later though....
+			// field builder could check that it only builds kindsOf.Kind
+			if slices.Compare(traits, existingTraits) != 0 {
+				err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
+			}
+		} else if kid.domain != domain {
+			err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
+				aspect, kid.domain, domain)
+		} else {
+			for _, t := range traits {
+				if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
+					err = errutil.New("database error", e)
+					break
+				}
 			}
 		}
 		if err == nil {
@@ -329,10 +333,12 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 				switch name {
 				case kindsOf.Aspect.String():
 					err = updatePath(res, parent.fullpath(), &pen.paths.aspectPath)
-				case kindsOf.Pattern.String():
-					err = updatePath(res, parent.fullpath(), &pen.paths.patternPath)
+				case kindsOf.Kind.String():
+					err = updatePath(res, parent.fullpath(), &pen.paths.kindsPath)
 				case kindsOf.Macro.String():
 					err = updatePath(res, parent.fullpath(), &pen.paths.macroPath)
+				case kindsOf.Pattern.String():
+					err = updatePath(res, parent.fullpath(), &pen.paths.patternPath)
 				default:
 					// super hacky..... hmmm...
 					// if we've declared a new kind of a pattern:
@@ -907,13 +913,4 @@ type ProvisionalAssignment struct {
 }
 type ProvisionalLiteral struct {
 	literal.LiteralValue
-}
-
-func isFinal(a any) (okay bool) {
-	if _, ok := a.(ProvisionalAssignment); ok {
-		okay = true
-	} else if _, ok := a.(ProvisionalLiteral); ok {
-		okay = true
-	}
-	return !okay
 }

@@ -54,6 +54,11 @@ func NewPatternSubtype(name string, parent string) *PatternBuilder {
 		}}
 }
 
+// the order here determines the grouping of the fields in the db:
+// parameters, results, and locals
+// PatternLocals gets reused (by FieldBuilder) for the fields of normal kinds
+// ( those dont have the first two groups of parameters )
+//
 //go:generate stringer -type=FieldType -linecomment
 const (
 	PatternParameters FieldType = iota // pattern parameters

@@ -59,7 +59,7 @@ func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWrite
 		Contents json.RawMessage `json:"contents"`
 	}
 	dec := json.NewDecoder(r)
-	if e := dec.Decode(&els); err != nil {
+	if e := dec.Decode(&els); e != nil {
 		err = e
 	} else {
 		root := d.String()

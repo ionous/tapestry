@@ -19,10 +19,6 @@ type GroupSettings struct {
 	// objects with the same label are considered to be in the same group.
 	// ex. "scrabble tiles"
 	Label string
-	// by default groups are numerable:
-	// the group is prefixed by the number of items in the group.
-	// ex. five scrabble tiles.
-	Innumerable bool
 	// whether and how to print objects.
 	GroupOptions
 }

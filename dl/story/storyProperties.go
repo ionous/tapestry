@@ -17,11 +17,7 @@ func (op *NothingField) FieldInfo(run rt.Runtime) (_ mdl.FieldInfo, _ error) {
 	return
 }
 
-func (op *AspectField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	// inform gives these the name "<noun> condition"
-	// while tapestry relies on the name and class of the aspect to be the same.
-	// we could only do that with an after the fact reduction, and with some additional mdl data.
-	// ( ex. in case the same aspect is assigned twice, or twice at difference depths )
+func (op *AspectField) FieldInfo(run rt.Runtime) (ret mdl.FieldInfo, err error) {
 	return defineField(run, op.Aspect, op.Aspect, affine.Text, nil)
 }
 

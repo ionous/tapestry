@@ -42,7 +42,7 @@ func ResolveName(run rt.Runtime, name string, path DottedPath) (ret RootValue, e
 			// no such variable? try as an object:
 			if v, e := tryAsObject(run, name, path); g.IsUnknown(e) {
 				err = g.UnknownName(name)
-			} else if err != nil {
+			} else if e != nil {
 				err = e
 			} else {
 				ret = v

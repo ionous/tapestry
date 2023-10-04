@@ -17,7 +17,7 @@ func buildFlags() (flags flag.FlagSet) {
 	var inPath string
 	var outPath string
 	if home, e := os.UserHomeDir(); e == nil {
-		inPath = filepath.Join(home, "Documents", "Tapestry", "stories", "shared")
+		inPath = filepath.Join(home, "Documents", "Tapestry", "stories")
 		outPath = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 	}
 	flags.StringVar(&weaveFlags.srcPath, "in", inPath, `input file or directory name.`)

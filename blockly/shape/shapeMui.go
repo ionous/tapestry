@@ -68,12 +68,12 @@ func (w *ShapeWriter) writeMuiTerm(args *js.Builder, term spec.TermSpec, termTyp
 				}
 				field.
 					Kv("type", bconst.FieldNumber).R(js.Comma).
-					Q("min").R(js.Colon).S(min).R(js.Comma).
-					Q("precision").R(js.Colon).S(one).R(js.Comma).
+					Q("min").R(js.Colon).Raw(min).R(js.Comma).
+					Q("precision").R(js.Colon).Raw(one).R(js.Comma).
 					// unique name needed for blockly undo
 					Q("name").R(js.Colon).Brace(js.Quotes,
 					func(val *js.Builder) {
-						val.X(name).R(js.Score).S("edit")
+						val.Str(name).R(js.Score).Raw("edit")
 					})
 			})
 
@@ -86,7 +86,7 @@ func (w *ShapeWriter) writeMuiTerm(args *js.Builder, term spec.TermSpec, termTyp
 					// unique name needed for blockly undo:
 					Q("name").R(js.Colon).Brace(js.Quotes,
 					func(val *js.Builder) {
-						val.X(name).R(js.Score).S("edit")
+						val.Str(name).R(js.Score).Raw("edit")
 					})
 			})
 	}

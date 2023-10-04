@@ -7,10 +7,10 @@ import (
 
 func SetRecord(d *g.Record, pairs ...interface{}) (err error) {
 	for i, cnt := 0, len(pairs); i < cnt; i = i + 2 {
-		if n, ok := pairs[0].(string); !ok {
+		if n, ok := pairs[i].(string); !ok {
 			err = errutil.New("couldnt convert field")
 		} else {
-			if v, e := ValueOf(pairs[1]); e != nil {
+			if v, e := ValueOf(pairs[i+1]); e != nil {
 				err = errutil.New("couldnt convert value", e)
 				break
 			} else if e := d.SetNamedField(n, v); e != nil {

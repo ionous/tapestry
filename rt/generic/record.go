@@ -25,7 +25,7 @@ func (d *Record) HasValue(i int) (ret bool) {
 	return d.values[i] != nil
 }
 
-// GetNamedField picks out a value from this record.
+// GetNamedField picks a value or trait from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	// note: the field is a trait when the field that was found doesnt match the field requested
 	k := d.kind
@@ -44,23 +44,28 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	return
 }
 
-// GetIndexedField generates nil values for fields if needed;
-// can't ask for traits, only their aspects.
+// GetIndexedField panics if out of range.
+// note: traits are never indexed fields ( although their aspect is )
+// fix? GetIndexedField writes defaults into the record if there was no value.
 func (d *Record) GetIndexedField(i int) (ret Value, err error) {
+	// is the stored value valid? return it
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv
 	} else {
-		if ft.isAspectLike() {
-			// if we're asking for an aspect, the default value will be the string of its first trait
-			if ka, e := d.kind.kinds.GetKindByName(ft.Type); e != nil {
-				err = e
-			} else {
-				aspect, firstTrait := ka.Name(), ka.Field(0) // first trait is the default
-				nv := StringFrom(firstTrait.Name, aspect)
-				ret, d.values[i] = nv, nv
+		// first try set up default aspects
+		if ft.Affinity == affine.Text && ft.Name == ft.Type {
+			for _, a := range d.kind.aspects {
+				if a.Name == ft.Name {
+					// first trait:
+					nv := StringFrom(a.Traits[0], a.Name)
+					ret, d.values[i] = nv, nv
+					break
+				}
 			}
-		} else {
-			if nv, e := NewDefaultValue(d.kind.kinds, ft.Affinity, ft.Type); e != nil {
+		}
+		// fallback to other fields:
+		if ret == nil {
+			if nv, e := NewDefaultValue(ft.Affinity, ft.Type); e != nil {
 				err = e
 			} else {
 				ret, d.values[i] = nv, nv
@@ -83,7 +88,7 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 		} else {
 			// set the aspect to the value of the requested trait
 			if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
-				err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
+				err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s", field, val.Affinity())
 			} else {
 				d.values[i] = StringFrom(field, ft.Type)
 			}

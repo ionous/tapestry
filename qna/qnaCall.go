@@ -33,7 +33,9 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 			if i := pat.FieldIndex("noun"); i >= 0 {
 				target = i
 			}
-			if tgt, e := rec.GetIndexedField(target); e != nil {
+			if !rec.HasValue(target) {
+				err = errutil.New("no target value specified")
+			} else if tgt, e := rec.GetIndexedField(target); e != nil {
 				err = e
 			} else {
 				ret, err = run.send(name, rec, tgt)
@@ -51,7 +53,7 @@ func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g
 		err = e
 	} else {
 		name := kind.Name()
-		oldScope := run.scope.ReplaceScope(scope.FromRecord(rec))
+		oldScope := run.scope.ReplaceScope(scope.FromRecord(run, rec))
 		run.currentPatterns.startedPattern(name)
 		if e := initRecord(run, rec); e != nil {
 			err = e
@@ -133,7 +135,7 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 // fix: backdoor record creation to slice the values across?
 func (run *Runner) newPhase(k *g.Kind, src *g.Record) (ret *g.Record, err error) {
 	dst := k.NewRecord()
-	_ = run.scope.ReplaceScope(scope.FromRecord(dst))
+	_ = run.scope.ReplaceScope(scope.FromRecord(run, dst))
 	if e := copyPhase(src, dst); e != nil {
 		err = e
 	} else if e := initRecord(run, dst); e != nil {

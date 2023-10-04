@@ -2,58 +2,108 @@ package generic
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"golang.org/x/exp/slices"
 )
 
-// we bake it down for faster, easier indexed access.
+// Kinds database
+// this isnt used by package generic, but its a common enough interface for tests and the runtime
+type Kinds interface {
+	GetKindByName(n string) (*Kind, error)
+}
+
+//
 type Kind struct {
-	kinds   Kinds
-	name    string // keeping name *and* path makes debugging easier
-	path    []string
-	fields  []Field // currently, stored flat. fix? save some space and search through the hierarchy?
-	traits  []trait
-	lastOne int // one-based index of last field
+	name      string // keeping name *and* path makes debugging easier
+	parent    *Kind
+	fields    []Field
+	aspects   []Aspect
+	lastField int // cache of last accessed field
 }
 
 type Field struct {
 	Name     string
 	Affinity affine.Affinity
-	Type     string // ex. kind for text types ( future? "aspect", "trait", "float64", ... )
+	Type     string // ex. kind for text types
 }
 
-// see also eph.AspectParm
-func (ft *Field) isAspectLike() bool {
-	return ft.Affinity == affine.Text && ft.Name == ft.Type
-}
-
-// NewKind -
-// path is a list of ancestors from least specific to most
-// the passed name is added to the end of the passed path automatically
-// ex. kinds, objects, things, props, openers.
-func NewKind(kinds Kinds, name string, path []string, fields []Field) *Kind {
-	fullpath := append(path, name)
-	return &Kind{kinds: kinds, name: name, path: fullpath, fields: fields}
+type Aspect struct {
+	Name   string // matches the field name
+	Traits []string
 }
 
 // a record without a named kind
-func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {
-	return NewKind(kinds, "", nil, fields).NewRecord()
+func NewAnonymousRecord(fields []Field) *Record {
+	return newKind("", nil, fields, nil).NewRecord()
+}
+
+// NewKind -
+func NewKind(name string, parent *Kind, fields []Field) *Kind {
+	return newKind(name, parent, fields, nil)
+}
+
+// when kinds are created via this method,
+// the traits of any aspect fields act like separate boolean fields;
+// without it, only the aspect text field itself exists.
+// ex. if the list of fields contains a "colour" aspect with traits "red", "blue", "green"
+// then the returned kind will respond to "colour", "red", "blue", and "green";
+// with NewKind() it would respond only to "colour", the r,b,g fields wouldn't exist.
+// its a bit of leaky abstraction because boolean traits are used only by objects.
+func NewKindWithTraits(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
+	return newKind(name, parent, fields, aspects)
+}
+
+func newKind(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
+	if parent != nil { // fix? field lists are stored "flat" to simplify copy, record, etc.
+		// have to copy or they can share memory, and bad things happen with other kinds.
+		if len(parent.fields) > 0 {
+			fields = append(append([]Field(nil), parent.fields...), fields...)
+		}
+		if len(parent.aspects) > 0 {
+			aspects = append(append([]Aspect(nil), parent.aspects...), aspects...)
+		}
+	}
+	return &Kind{name: name, parent: parent, fields: fields, aspects: aspects}
 }
 
 func (k *Kind) NewRecord() *Record {
 	// we make a bunch of nil value placeholders which we fill by caching on demand.
-	return &Record{kind: k, values: make([]Value, len(k.fields))}
+	rec := &Record{kind: k, values: make([]Value, len(k.fields))}
+	// set the default values for aspects?
+	// alt: determine it on GetIndexedValue as per other defaults
+	// for _, a := range k.aspects {
+	// 	i := k.FieldIndex(a.Name)
+	// 	rec.values[i] = StringFrom(a.Traits[0], a.Name)
+	// }
+	return rec
+}
+
+func Base(k *Kind) string {
+	for ; k.parent != nil; k = k.parent {
+	}
+	return k.name
 }
 
 // Ancestor list, root towards the start; the name of this kind at the end.
-func (k *Kind) Path() (ret []string) {
-	ret = append(ret, k.path...) // copies the slice so it cant be mucked with.
+func Path(k *Kind) (ret []string) {
+	for ; k != nil; k = k.parent {
+		ret = append(ret, k.name)
+	}
+	slices.Reverse(ret)
 	return
 }
 
-func (k *Kind) Implements(parent string) bool {
-	return slices.Contains(k.path, parent)
+func (k *Kind) Parent() (ret *Kind) {
+	return k.parent
+}
+
+func (k *Kind) Implements(name string) (okay bool) {
+	for ; k != nil; k = k.parent {
+		if k.name == name {
+			okay = true
+			break
+		}
+	}
+	return
 }
 
 func (k *Kind) Name() (ret string) {
@@ -64,9 +114,8 @@ func (k *Kind) NumField() int {
 	return len(k.fields)
 }
 
-// 0 indexed
-func (k *Kind) Field(i int) Field {
-	k.lastOne = i + 1
+// panics if out of range
+func (k *Kind) Field(i int) (ret Field) {
 	return k.fields[i]
 }
 
@@ -74,23 +123,24 @@ func (k *Kind) Field(i int) Field {
 // for traits, it returns the index of its associated aspect.
 // returns -1 if no matching field was found
 func (k *Kind) FieldIndex(n string) (ret int) {
-	if prev := k.lastOne - 1; prev >= 0 && k.fields[prev].Name == n {
+	if prev := k.lastField; prev >= 0 && prev < len(k.fields) && k.fields[prev].Name == n {
 		ret = prev
 	} else {
-		k.ensureTraits()
-		if aspect := findAspect(n, k.traits); len(aspect) > 0 {
-			ret = k.fieldIndex(aspect)
-		} else {
-			ret = k.fieldIndex(n)
+		ret = -1 // provisionally
+		if i := findTrait(n, k.aspects); i >= 0 {
+			n = k.aspects[i].Name
 		}
-		k.lastOne = ret + 1
+		if i := findField(n, k.fields); i >= 0 {
+			ret = i
+		}
+		k.lastField = ret
 	}
 	return
 }
 
-func (k *Kind) fieldIndex(field string) (ret int) {
+func findField(field string, fields []Field) (ret int) {
 	ret = -1 // provisionally
-	for i, f := range k.fields {
+	for i, f := range fields {
 		if f.Name == field {
 			ret = i
 			break
@@ -99,24 +149,16 @@ func (k *Kind) fieldIndex(field string) (ret int) {
 	return
 }
 
-func (k *Kind) ensureTraits() {
-	if k.traits == nil {
-		var ts []trait
-		for _, ft := range k.fields {
-			if ft.isAspectLike() {
-				// if this fails, we are likely to return an error through GetIndexedField at some point so...
-				if aspect, e := k.kinds.GetKindByName(ft.Type); e == nil {
-					if aok := aspect.Implements(kindsOf.Aspect.String()); aok {
-						ts = makeTraits(aspect, ts)
-					}
-				}
+// find aspect from trait name in a sorted list of traits
+func findTrait(trait string, aspects []Aspect) (ret int) {
+	ret = -1 // provisionally
+	for i, a := range aspects {
+		for _, t := range a.Traits {
+			if trait == t {
+				ret = i
+				break
 			}
 		}
-		if len(ts) == 0 {
-			ts = make([]trait, 0)
-		} else {
-			sortTraits(ts)
-		}
-		k.traits = ts
 	}
+	return
 }

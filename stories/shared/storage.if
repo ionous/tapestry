@@ -164,7 +164,7 @@
                           "Not:": {
                             "AnyTrue:": [
                               {
-                                "Cmp:is:txt:": [
+                                "Is:matching:text:": [
                                   "@it",
                                   "equal_to",
                                   {

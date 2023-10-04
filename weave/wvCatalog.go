@@ -51,6 +51,7 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 				log.Writer(),
 				qx,
 				dec,
+				nil,
 				qna.NewOptions(),
 			)
 		}

@@ -1,11 +1,13 @@
 package mdl
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
-	"github.com/ionous/sliceOf"
 )
 
 type FieldInfo struct {
@@ -21,7 +23,6 @@ type FieldBuilder struct {
 type Fields struct {
 	kind string
 	fieldSet
-	aspects []string
 }
 
 // supports enough slot for patterns
@@ -44,31 +45,17 @@ func (b *FieldBuilder) AddField(fn FieldInfo) {
 	b.fields[PatternLocals] = append(b.fields[PatternLocals], fn)
 }
 
-// creates not/is implicit aspects
-// tbd: would it be nicer to support single trait kinds?
-// not_aspect would instead be: Not{IsTrait{PositiveName}}
-func (b *FieldBuilder) AddAspect(ak string) {
-	b.aspects = append(b.aspects, ak)
-}
-
 func (fs *Fields) writeFields(pen *Pen) (err error) {
 	if kind, e := pen.findRequiredKind(fs.kind); e != nil {
 		err = e
 	} else if cache, e := fs.fieldSet.cache(pen); e != nil {
 		err = e
+	} else if e := fs.rewriteImplicitAspects(pen, kind, &cache); e != nil {
+		err = e
 	} else if e := fs.fieldSet.writeFieldSet(pen, kind, cache); e != nil {
 		err = e
-	} else {
-		// generate implicit aspects
-		for _, ak := range fs.aspects {
-			if cls, e := pen.addAspect(ak, sliceOf.String("not "+ak, "is "+ak)); e != nil {
-				err = e
-				break
-			} else if e := pen.addField(kind, cls, ak, affine.Text); e != nil {
-				err = e
-				break
-			}
-		}
+	} else if e := fs.writeDefaultTraits(pen, kind, cache); e != nil {
+		err = e
 	}
 	if err != nil {
 		err = errutil.Fmt("%w in pattern %q domain %q", err, fs.kind, pen.domain)
@@ -76,9 +63,75 @@ func (fs *Fields) writeFields(pen *Pen) (err error) {
 	return
 }
 
+// rewrite object fields
+func (fs *Fields) rewriteImplicitAspects(pen *Pen, kind kindInfo, cache *classCache) (err error) {
+	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
+		for i := range fs.fields[PatternLocals] {
+			field := &fs.fields[PatternLocals][i]
+			// rewrite Bool: "something" to an affinity with the opposite "not something" available.
+			// i originally wanted to limit or force these into the format "is something"
+			// but that screws with grok, sentences would have to be: "the noun is is something"
+			if field.Affinity == affine.Bool && len(field.Class) == 0 {
+				// default trait is the unset version
+				defaultTrait := lang.Join([]string{"not", field.Name})
+				traits := []string{defaultTrait, field.Name}
+				// rewrite bool fields as implicit aspects
+				aspect := lang.Join([]string{field.Name, "aspect"})
+				cls, e := pen.addAspect(aspect, traits)
+				if e := eatDuplicates(pen.warn, e); e != nil {
+					err = e
+					break
+				} else {
+					*field = FieldInfo{
+						Name:     aspect,
+						Class:    aspect,
+						Affinity: affine.Text,
+						Init:     field.Init,
+					}
+					cache.store(aspect, cls)
+				}
+			}
+		}
+	}
+	return
+}
+
+// give aspect fields a provisional default
+func (fs *Fields) writeDefaultTraits(pen *Pen, kind kindInfo, cache classCache) (err error) {
+	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
+		for i := range fs.fields[PatternLocals] {
+			field := &fs.fields[PatternLocals][i]
+			if field.isAspectLike() {
+				aspect := cache[field.getClass()]
+				if strings.HasSuffix(aspect.fullpath(), pen.paths.aspectPath) {
+					if defaultTrait, e := pen.findDefaultTrait(aspect.class()); e != nil {
+						err = e
+						break
+					} else if e := pen.addDefaultValue(kind, field.Name, ProvisionalAssignment{
+						&assign.FromText{Value: &literal.TextValue{
+							Value: defaultTrait,
+						}}}); e != nil {
+						err = e
+						break
+					}
+				}
+			}
+		}
+	}
+	return
+}
+
+// indexed by class name
 // future: wrap up the in progress field set with a "promise"
 // to avoid looking up the same info repeatedly
 type classCache map[string]kindInfo
+
+func (p *classCache) store(name string, cls kindInfo) {
+	if *p == nil {
+		*p = make(classCache)
+	}
+	(*p)[name] = cls
+}
 
 // for patterns, waits to create the pattern after all fields are known
 // that ensures that "extend pattern" (to add locals) happens after define pattern (for parameters and locals)
@@ -91,14 +144,11 @@ func (fs *fieldSet) cache(pen *Pen) (ret classCache, err error) {
 				if cls, e := pen.findOptionalKind(clsName); e != nil {
 					err = e
 				} else {
-					if ret == nil {
-						ret = make(classCache)
-					}
-					ret[clsName] = cls
+					ret.store(clsName, cls)
 				}
 			}
 			if err != nil {
-				err = errutil.Fmt("%w trying to write field %q", err, field.Name)
+				err = errutil.Fmt("%w trying to find field %q", err, field.Name)
 				break
 			}
 		}
@@ -113,6 +163,8 @@ func (fs *fieldSet) writeFieldSet(pen *Pen, kid kindInfo, cache classCache) (err
 		pen.addResult,
 		pen.addField,
 	}
+
+Out:
 	for ft, fields := range fs.fields {
 		call := out[ft]
 		for _, field := range fields {
@@ -128,14 +180,19 @@ func (fs *fieldSet) writeFieldSet(pen *Pen, kid kindInfo, cache classCache) (err
 			}
 			if err != nil {
 				err = errutil.Fmt("%w trying to write field %q", err, field.Name)
-				break
+				break Out
 			}
 		}
 	}
 	return
 }
 
-// shortcut: if we specify a field name for a record and no class, we'll expect the class to be the name.
+func (fs *FieldInfo) isAspectLike() (ret bool) {
+	return fs.Affinity == affine.Text && fs.Name == fs.Class
+}
+
+// shortcut: if we specify a field name for a record and no class,
+// we'll expect the class to be the name.
 func (fs *FieldInfo) getClass() (ret string) {
 	if cls := fs.Class; len(cls) > 0 {
 		ret = cls

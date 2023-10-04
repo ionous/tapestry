@@ -106,84 +106,20 @@
           {
             "--": "for printing locale description.",
             "Text:": "grouping label"
-          }
-        ]
-      ]
-    },
-    {
-      "Declare:": "Scenery status is a kind of aspect."
-    },
-    {
-      "Define traits:as:": [
-        [
-          "not scenery",
-          "scenery"
-        ],
-        "scenery status"
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Things",
-        [
+          },
           {
-            "Aspect:": "scenery status"
-          }
-        ]
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Things",
-        [
+            "Bool:": "scenery"
+          },
           {
             "Text:": "initial appearance"
-          }
-        ]
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Things",
-        [
+          },
           {
-            "Aspect:": "mentionable"
-          }
-        ]
-      ]
-    },
-    {
-      "Declare:": "Mentionable is a kind of aspect."
-    },
-    {
-      "Define traits:as:": [
-        [
-          "not mentioned",
-          "mentioned"
-        ],
-        "mentionable"
-      ]
-    },
-    {
-      "Define kind:fields:": [
-        "Things",
-        [
+            "Bool:": "mentioned"
+          },
           {
-            "Aspect:": "handleable"
+            "Bool:": "handled"
           }
         ]
-      ]
-    },
-    {
-      "Declare:": "Handleable is a kind of aspect."
-    },
-    {
-      "Define traits:as:": [
-        [
-          "not handled",
-          "handled"
-        ],
-        "handleable"
       ]
     },
     {
@@ -282,18 +218,6 @@
       "Declare:": "Containers are kinds of opener."
     },
     {
-      "Declare:": "Enterability is a kind of aspect."
-    },
-    {
-      "Define traits:as:": [
-        [
-          "enterable",
-          "not enterable"
-        ],
-        "enterability"
-      ]
-    },
-    {
       "Declare:": "Opacity is a kind of aspect."
     },
     {
@@ -310,10 +234,10 @@
         "Containers",
         [
           {
-            "Aspect:": "enterability"
+            "Aspect:": "opacity"
           },
           {
-            "Aspect:": "opacity"
+            "Bool:": "enterable"
           }
         ]
       ]
@@ -344,11 +268,9 @@
       "--": "generates 'is visited' and 'not visited'",
       "Define kind:fields:": [
         "Rooms",
-        [
-          {
-            "Bool:": "visited"
-          }
-        ]
+        {
+          "Bool:": "visited"
+        }
       ]
     },
     {

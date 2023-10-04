@@ -114,14 +114,14 @@ func (op *Decrement) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *IncrementAspect) Execute(run rt.Runtime) (err error) {
-	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, incTrait); e != nil {
+	if _, e := adjustAspect(run, op.Target, op.Aspect, op.Step, op.Clamp, incTrait); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
 func (op *IncrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, incTrait); e != nil {
+	if v, e := adjustAspect(run, op.Target, op.Aspect, op.Step, op.Clamp, incTrait); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -130,14 +130,14 @@ func (op *IncrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *DecrementAspect) Execute(run rt.Runtime) (err error) {
-	if _, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, decTrait); e != nil {
+	if _, e := adjustAspect(run, op.Target, op.Aspect, op.Step, op.Clamp, decTrait); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
 func (op *DecrementAspect) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := adjustTrait(run, op.Target, op.Aspect, op.Step, op.Clamp, decTrait); e != nil {
+	if v, e := adjustAspect(run, op.Target, op.Aspect, op.Step, op.Clamp, decTrait); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -196,7 +196,8 @@ func inc(run rt.Runtime, tgt assign.Address, val rt.NumberEval, dir float64) (re
 	return
 }
 
-func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval, clamps rt.BoolEval,
+// where aspect is the name of the aspect.
+func adjustAspect(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval, clamps rt.BoolEval,
 	update func(curr, step, max int, wrap bool) int) (ret g.Value, err error) {
 	if tgt, e := safe.GetText(run, target); e != nil {
 		err = e
@@ -212,7 +213,7 @@ func adjustTrait(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval
 		err = e
 	} else if aspect, e := run.GetKindByName(field.String()); e != nil {
 		err = e
-	} else if !aspect.Implements(kindsOf.Aspect.String()) {
+	} else if g.Base(aspect) != kindsOf.Aspect.String() {
 		err = errutil.Fmt("field %q is not an aspect", field.String())
 	} else {
 		prev := aspect.FieldIndex(currTrait.String())

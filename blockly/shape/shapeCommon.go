@@ -10,7 +10,7 @@ import (
 // "append" b/c preceeded by a comma if needed
 func appendString(out *js.Builder, s string) {
 	if len(s) > 0 {
-		out.R(js.Comma).S(s)
+		out.R(js.Comma).Raw(s)
 	}
 }
 

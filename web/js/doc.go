@@ -1,4 +1,4 @@
-// Package js provides a simple string builder for json-like data.
-// Useful when writing json directly is easier than first composing
-// go data structures and then writing those out using go's package json/encoding.
+// Package js provides some simple json utilities:
+// MapSlice, for preserving map key order when unmarshaling,
+// and Builder for writing json-like data without marshaling.
 package js

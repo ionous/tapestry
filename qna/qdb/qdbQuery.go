@@ -370,7 +370,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			join mdl_field mf
 				on (mf.rowid = mv.field)
 			where ks.name = ?1
-			order by mf.rowid, mv.final`,
+			order by mf.rowid, mv.final desc`,
 		),
 		// maybe unneeded now that domains are activated one by one?
 		// newPairsFromChanges: ps.Prep(db,
@@ -432,7 +432,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			join mdl_field mf
 				on (mf.rowid = mv.field)
 			where (ns.name = ?1) and (mf.field = ?2) and (mv.noun = ns.noun)
-			order by length(mv.dot), mv.final`,
+			order by length(mv.dot), mv.final desc`,
 		),
 		oppositeOf: ps.Prep(db,
 			`select otherWord

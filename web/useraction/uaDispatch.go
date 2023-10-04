@@ -1,4 +1,3 @@
-// Package useraction: handle long running os level actions initiated from the browser.
 package useraction
 
 import (

@@ -1,8 +1,10 @@
 package list_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 
 	"git.sr.ht/~ionous/tapestry/dl/list"
 )
@@ -66,7 +68,7 @@ func TestSplices(t *testing.T) {
 
 func splice(src []string, start, cnt int, ins ...string) (ret string, err error) {
 	// copy the src string so we can muck with it
-	if run, vals, e := newListTime(append([]string{}, src...), nil); e != nil {
+	if run, e := newListTime(append([]string{}, src...), nil); e != nil {
 		err = e
 	} else {
 		rub := joinText(run, &list.ListSplice{
@@ -75,7 +77,7 @@ func splice(src []string, start, cnt int, ins ...string) (ret string, err error)
 			Remove: I(cnt),
 			Insert: FromTs(ins)},
 		)
-		if strs, e := vals.GetNamedField("source"); e != nil {
+		if strs, e := run.GetField(meta.Variables, "source"); e != nil {
 			err = e
 		} else {
 			next := joinStrings(strs.Strings()) // get the variable set by splice

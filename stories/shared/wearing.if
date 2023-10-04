@@ -201,14 +201,14 @@
             {
               "AllTrue:": [
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@trait",
                     "equal_to",
                     "not worn"
                   ]
                 },
                 {
-                  "Cmp:is:txt:": [
+                  "Is:matching:text:": [
                     "@actor",
                     "other_than",
                     {

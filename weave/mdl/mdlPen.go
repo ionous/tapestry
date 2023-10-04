@@ -22,6 +22,7 @@ func NewModelerWithWarnings(db *sql.DB, warn Log) (ret *Modeler, err error) {
 		warn: warn,
 		paths: &paths{
 			aspectPath:  uncached,
+			kindsPath:   uncached,
 			macroPath:   uncached,
 			patternPath: uncached,
 		},
@@ -39,7 +40,7 @@ type Modeler struct {
 
 type paths struct {
 	// some ugly caching:
-	aspectPath, macroPath, patternPath string // ex. ',4,'
+	aspectPath, kindsPath, macroPath, patternPath string // ex. ',4,'
 }
 
 // set to something that wont match until its set properly.

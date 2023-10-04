@@ -20,7 +20,7 @@ func TestLog(t *testing.T) {
 	}
 	if e := lo.Execute(nil); e != nil {
 		t.Fatal(e)
-	} else if got := b.String(); !strings.HasSuffix(got, " ##### error hello\n") {
+	} else if got := b.String(); !strings.HasSuffix(got, " ##### error \"hello\"\n") {
 		t.Fatalf("got %q", got)
 	}
 }

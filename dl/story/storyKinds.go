@@ -1,7 +1,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -61,10 +60,8 @@ func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
 				// ( vs. bool pattern vars which stay bools -- see reduceProps )
 				if el, e := field.FieldInfo(w); e != nil {
 					err = errutil.Append(err, e)
-				} else if el.Affinity != affine.Bool {
-					fields.AddField(el)
 				} else {
-					fields.AddAspect(el.Name)
+					fields.AddField(el)
 				}
 			}
 			if err == nil {

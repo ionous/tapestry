@@ -63,7 +63,7 @@ func readMsgs(msgs <-chan play.PlayMessage, wait bool) (retCnt int, retStr strin
 					a.R(js.Comma)
 				}
 				str, _ := Marshal(msg)
-				a.S(str)
+				a.Raw(str)
 				retCnt++
 				wait = false
 			}

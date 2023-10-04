@@ -58,7 +58,7 @@
                         ]
                       },
                       {
-                        "Cmp:is:num:": [
+                        "Is:matching:num:": [
                           "@change",
                           "other_than",
                           0

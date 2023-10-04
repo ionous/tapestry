@@ -17,12 +17,12 @@ var runCollateGroups = list.ListReduce{
 
 // pattern:
 type CollateGroups struct {
-	// args:
+	// args
 	Settings  GroupSettings  // constant input
 	Collation GroupCollation // accumulator; FIX: this should be []GroupedObjects -- no need for the wrapping structure.
 
 	// locals
-	Found bool `if:"bool"`
+	Found bool
 	Group GroupedObjects
 }
 

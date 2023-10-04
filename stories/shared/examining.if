@@ -291,7 +291,7 @@
                   "--": "if the player isn't in the container.",
                   "If:do:": [
                     {
-                      "Cmp:is:txt:": [
+                      "Is:matching:text:": [
                         "@obj",
                         "other_than",
                         {

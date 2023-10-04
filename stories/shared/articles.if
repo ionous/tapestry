@@ -207,7 +207,7 @@
                   {
                     "If:do:else:": [
                       {
-                        "Cmp:is:txt:": [
+                        "Is:matching:text:": [
                           "@article",
                           "other_than",
                           ""
@@ -219,7 +219,7 @@
                       {
                         "If:do:else:": [
                           {
-                            "Cmp:is:txt:": [
+                            "Is:matching:text:": [
                               {
                                 "Object:field:": [
                                   "@obj",

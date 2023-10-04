@@ -15,9 +15,9 @@ func (op *SetValue) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *SetValue) setValue(run rt.Runtime) (err error) {
-	if newValue, e := safe.GetAssignment(run, op.Value); e != nil {
-		err = e
-	} else if ref, e := GetReference(run, op.Target); e != nil {
+	if ref, e := GetReference(run, op.Target); e != nil {
+		err = e // note: things are easier to debug if this grabs the target frst
+	} else if newValue, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
 	} else if e := ref.SetValue(run, newValue); e != nil {
 		err = e

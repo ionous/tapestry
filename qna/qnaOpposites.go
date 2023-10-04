@@ -5,9 +5,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type kinds interface {
+	GetKindByName(name string) (*g.Kind, error)
+}
+
 // for a given aspect and one of its traits, find the opposite trait
 // returns error if there is no such aspect, trait, or opposite value.
-func oppositeDay(ks g.Kinds, aspect, trait string, b bool) (ret string, err error) {
+func oppositeDay(ks kinds, aspect, trait string, b bool) (ret string, err error) {
 	if b {
 		ret = trait
 	} else if k, e := ks.GetKindByName(aspect); e != nil {
