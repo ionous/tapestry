@@ -48,7 +48,8 @@ func newKind(kinds Kinds, name string, parent *Kind, fields []Field, aspects []A
 func (k *Kind) NewRecord() *Record {
 	// we make a bunch of nil value placeholders which we fill by caching on demand.
 	rec := &Record{kind: k, values: make([]Value, len(k.fields))}
-	// set the default values for aspects
+	// set the default values for aspects?
+	// alt: determine it on GetIndexedValue as per other defaults
 	for _, a := range k.aspects {
 		i := k.FieldIndex(a.Name)
 		rec.values[i] = StringFrom(a.Traits[0], a.Name)

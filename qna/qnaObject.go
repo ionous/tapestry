@@ -145,6 +145,8 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 			}
 		}
 		if !found {
+			// note: this doesnt properly determine the default trait for an aspect
+			// weave works around this by providing the correct default value in the db
 			ret, err = g.NewDefaultValue(run, field.Affinity, field.Type)
 		}
 	}

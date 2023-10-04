@@ -1,8 +1,11 @@
 package mdl
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
 	"github.com/ionous/sliceOf"
@@ -12,6 +15,8 @@ type FieldInfo struct {
 	Name, Class string
 	Affinity    affine.Affinity
 	Init        assign.Assignment
+	Aspect      bool // temp: i think the better thing is to set Class to "aspects"
+	// but need to check the ramifications
 }
 
 type FieldBuilder struct {
@@ -59,14 +64,34 @@ func (fs *Fields) writeFields(pen *Pen) (err error) {
 	} else if e := fs.fieldSet.writeFieldSet(pen, kind, cache); e != nil {
 		err = e
 	} else {
+		// add defaults
+		if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); !isObject {
+			for _, f := range fs.fieldSet.fields[PatternLocals] {
+				if f.Aspect {
+					traits := cache[f.getClass()]
+					if trait, e := pen.findDefaultTrait(traits.class()); e != nil {
+						err = e
+						break
+					} else if e := pen.addDefaultValue(kind, f.Name, ProvisionalAssignment{
+						&assign.FromText{Value: &literal.TextValue{
+							Value: trait,
+						}}}); e != nil {
+						err = e
+						break
+					}
+				}
+			}
+		}
 		// generate implicit aspects
-		for _, ak := range fs.aspects {
-			if cls, e := pen.addAspect(ak, sliceOf.String("not "+ak, "is "+ak)); e != nil {
-				err = e
-				break
-			} else if e := pen.addField(kind, cls, ak, affine.Text); e != nil {
-				err = e
-				break
+		if err == nil {
+			for _, ak := range fs.aspects {
+				if cls, e := pen.addAspect(ak, sliceOf.String("not "+ak, "is "+ak)); e != nil {
+					err = e
+					break
+				} else if e := pen.addField(kind, cls, ak, affine.Text); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 	}

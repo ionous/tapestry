@@ -86,6 +86,9 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 	} else if fields, e := run.getExclusiveFields(k); e != nil {
 		err = errutil.Fmt("error while building kind %q, %w", k, e)
 	} else {
+		// we never actually use the field values of the kind:
+		// instead we pull individual defaults from the db.
+		// because of that, weave generates reasonable default values for kinds with traits
 		if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
 			ret = g.NewKindWithTraits(run, k, parent, fields)
 		} else {

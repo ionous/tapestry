@@ -192,6 +192,15 @@ func (pen *Pen) digField(noun nounInfo, path []string) (retout, retin fieldInfo,
 
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
+func (pen *Pen) findDefaultTrait(kind classInfo) (ret string, err error) {
+	err = pen.db.QueryRow(`select field 
+		from mdl_field where kind = ?1`,
+		kind.id).Scan(&ret)
+	return
+}
+
+// check that the kind can store the requested value at the passed field
+// returns the name of the field ( in case the originally specified field was a trait )
 func (pen *Pen) findField(kind classInfo, field string) (ret fieldInfo, err error) {
 	if e := pen.db.QueryRow(` 
 -- all possible traits:

@@ -2,9 +2,13 @@ package generic
 
 import "git.sr.ht/~ionous/tapestry/affine"
 
-// a bit of leaky abstraction: aspects are used only by objects
-// when the aspect list exists, requests for traits of those aspects act like boolean fields
-// without it, kinds can still have aspects, but only as text field enumerations.
+// when kinds are created via this method,
+// the traits of any aspect fields act like separate boolean fields;
+// without it, only the aspect text field itself exists.
+// ex. if the list of fields contains a "colour" aspect with traits "red", "blue", "green"
+// then the returned kind will respond to "colour", "red", "blue", and "green";
+// with NewKind() it would respond only to "colour", the r,b,g fields wouldn't exist.
+// its a bit of leaky abstraction because boolean traits are used only by objects.
 func NewKindWithTraits(kinds Kinds, name string, parent *Kind, fields []Field) *Kind {
 	return newKind(kinds, name, parent, fields, makeAspects(kinds, fields))
 }
