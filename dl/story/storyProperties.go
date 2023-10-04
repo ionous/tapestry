@@ -18,10 +18,7 @@ func (op *NothingField) FieldInfo(run rt.Runtime) (_ mdl.FieldInfo, _ error) {
 }
 
 func (op *AspectField) FieldInfo(run rt.Runtime) (ret mdl.FieldInfo, err error) {
-	if ret, err = defineField(run, op.Aspect, op.Aspect, affine.Text, nil); err == nil {
-		ret.Aspect = true
-	}
-	return
+	return defineField(run, op.Aspect, op.Aspect, affine.Text, nil)
 }
 
 func (op *BoolField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {

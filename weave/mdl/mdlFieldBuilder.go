@@ -15,8 +15,6 @@ type FieldInfo struct {
 	Name, Class string
 	Affinity    affine.Affinity
 	Init        assign.Assignment
-	Aspect      bool // temp: i think the better thing is to set Class to "aspects"
-	// but need to check the ramifications
 }
 
 type FieldBuilder struct {
@@ -53,10 +51,12 @@ func (fs *Fields) writeFields(pen *Pen) (err error) {
 		err = e
 	} else if cache, e := fs.fieldSet.cache(pen); e != nil {
 		err = e
-	} else if e := fs.rewriteObjectFields(pen, kind, &cache); e != nil {
+	} else if e := fs.rewriteImplicitAspects(pen, kind, &cache); e != nil {
 		err = e
-	} else {
-		err = fs.fieldSet.writeFieldSet(pen, kind, cache)
+	} else if e := fs.fieldSet.writeFieldSet(pen, kind, cache); e != nil {
+		err = e
+	} else if e := fs.writeDefaultTraits(pen, kind, cache); e != nil {
+		err = e
 	}
 	if err != nil {
 		err = errutil.Fmt("%w in pattern %q domain %q", err, fs.kind, pen.domain)
@@ -64,24 +64,19 @@ func (fs *Fields) writeFields(pen *Pen) (err error) {
 	return
 }
 
-func (fs *Fields) rewriteObjectFields(pen *Pen, kind kindInfo, cache *classCache) (err error) {
-	// rewrite object fields
+// rewrite object fields
+func (fs *Fields) rewriteImplicitAspects(pen *Pen, kind kindInfo, cache *classCache) (err error) {
 	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
 		for i := range fs.fields[PatternLocals] {
 			field := &fs.fields[PatternLocals][i]
-			var defaultTrait string
-			// give explicit aspects a default
-			if field.Aspect && field.Init == nil {
-				aspect := (*cache)[field.getClass()]
-				defaultTrait, err = pen.findDefaultTrait(aspect.class())
-			} else if field.Affinity == affine.Bool && len(field.Class) == 0 {
-				// rewrite Bool: "is something" to an affinity with the opposite "not something" available.
+			// rewrite Bool: "is something" to an affinity with the opposite "not something" available.
+			if field.Affinity == affine.Bool && len(field.Class) == 0 {
 				if parts := lang.Fields(field.Name); len(parts) > 0 && parts[0] == "is" {
 					parts[0] = "not"
-					defaultTrait = lang.Join(parts)
+					bestTrait := lang.Join(parts)
 					// rewrite bool fields as implicit aspects
 					ak := lang.Join(append(parts[1:], "aspect"))
-					aspect, e := pen.addAspect(ak, sliceOf.String(defaultTrait, field.Name))
+					aspect, e := pen.addAspect(ak, sliceOf.String(bestTrait, field.Name))
 					if e := eatDuplicates(pen.warn, e); e != nil {
 						err = e
 						break
@@ -90,16 +85,36 @@ func (fs *Fields) rewriteObjectFields(pen *Pen, kind kindInfo, cache *classCache
 							Name:     ak,
 							Class:    ak,
 							Affinity: affine.Text,
+							Init:     field.Init,
 						}
 						cache.store(ak, aspect)
 					}
 				}
 			}
-			if len(defaultTrait) > 0 && field.Init == nil {
-				field.Init = ProvisionalAssignment{
-					&assign.FromText{Value: &literal.TextValue{
-						Value: defaultTrait,
-					}}}
+		}
+	}
+	return
+}
+
+// give aspect fields a provisional default
+func (fs *Fields) writeDefaultTraits(pen *Pen, kind kindInfo, cache classCache) (err error) {
+	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
+		for i := range fs.fields[PatternLocals] {
+			field := &fs.fields[PatternLocals][i]
+			if field.isAspectLike() {
+				aspect := cache[field.getClass()]
+				if strings.HasSuffix(aspect.fullpath(), pen.paths.aspectPath) {
+					if defaultTrait, e := pen.findDefaultTrait(aspect.class()); e != nil {
+						err = e
+						break
+					} else if e := pen.addDefaultValue(kind, field.Name, ProvisionalAssignment{
+						&assign.FromText{Value: &literal.TextValue{
+							Value: defaultTrait,
+						}}}); e != nil {
+						err = e
+						break
+					}
+				}
 			}
 		}
 	}
@@ -172,7 +187,12 @@ Out:
 	return
 }
 
-// shortcut: if we specify a field name for a record and no class, we'll expect the class to be the name.
+func (fs *FieldInfo) isAspectLike() (ret bool) {
+	return fs.Affinity == affine.Text && fs.Name == fs.Class
+}
+
+// shortcut: if we specify a field name for a record and no class,
+// we'll expect the class to be the name.
 func (fs *FieldInfo) getClass() (ret string) {
 	if cls := fs.Class; len(cls) > 0 {
 		ret = cls
