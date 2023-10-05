@@ -3,6 +3,75 @@ package rt
 
 import "git.sr.ht/~ionous/tapestry/jsn"
 
+const Assignment_Type = "assignment"
+
+var Assignment_Optional_Marshal = Assignment_Marshal
+
+type Assignment_Slot struct{ Value *Assignment }
+
+func (at Assignment_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+func (at Assignment_Slot) GetType() string              { return Assignment_Type }
+func (at Assignment_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Assignment_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(Assignment)
+	return
+}
+
+func Assignment_Marshal(m jsn.Marshaler, ptr *Assignment) (err error) {
+	slot := Assignment_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type Assignment_Slice []Assignment
+
+func (op *Assignment_Slice) GetType() string { return Assignment_Type }
+
+func (op *Assignment_Slice) Marshal(m jsn.Marshaler) error {
+	return Assignment_Repeats_Marshal(m, (*[]Assignment)(op))
+}
+
+func (op *Assignment_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Assignment_Slice) SetSize(cnt int) {
+	var els []Assignment
+	if cnt >= 0 {
+		els = make(Assignment_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Assignment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Assignment_Marshal(m, &(*op)[i])
+}
+
+func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) error {
+	return jsn.RepeatBlock(m, (*Assignment_Slice)(vals))
+}
+
+func Assignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assignment) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Assignment_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 const BoolEval_Type = "bool_eval"
 
 var BoolEval_Optional_Marshal = BoolEval_Marshal
@@ -556,6 +625,7 @@ func TextListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListEval) 
 }
 
 var Slots = []interface{}{
+	(*Assignment)(nil),
 	(*BoolEval)(nil),
 	(*Execute)(nil),
 	(*NumListEval)(nil),

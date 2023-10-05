@@ -2,7 +2,6 @@ package decoder
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -10,7 +9,7 @@ import (
 // Decoder transforms the raw bytes pulled from a query into in-memory commands.
 type Decoder interface {
 	DecodeField(a affine.Affinity, b []byte, fieldType string) (literal.LiteralValue, error)
-	DecodeAssignment(affine.Affinity, []byte) (assign.Assignment, error)
+	DecodeAssignment(affine.Affinity, []byte) (rt.Assignment, error)
 	DecodeProg([]byte) ([]rt.Execute, error)
 }
 
@@ -32,7 +31,7 @@ func (d DecodeNone) DecodeField(affine.Affinity, []byte, string) (_ literal.Lite
 	return
 }
 
-func (d DecodeNone) DecodeAssignment(affine.Affinity, []byte) (_ assign.Assignment, err error) {
+func (d DecodeNone) DecodeAssignment(affine.Affinity, []byte) (_ rt.Assignment, err error) {
 	err = NotImplemented(d)
 	return
 }

@@ -15,6 +15,8 @@ func Stringify(v g.Value) (ret string) {
 
 func stringifyValue(out *js.Builder, v g.Value) {
 	switch a := v.Affinity(); a {
+	case affine.None:
+		out.Str(js.Null)
 	case affine.Bool:
 		el := v.Bool()
 		out.B(el)

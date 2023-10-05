@@ -35,8 +35,8 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 				traitValue := g.StringFrom(trait, fieldData.Type)
 				if e := run.writeNounValue(obj, fieldData, traitValue); e != nil {
 					err = e
-				} else if run.notify != nil {
-					run.notify.ChangedState(obj.Id, fieldData.Name, field)
+				} else if notify := run.notify.ChangedState; notify != nil {
+					notify(obj.Id, fieldData.Name, field)
 				}
 			}
 		}

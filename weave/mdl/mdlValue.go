@@ -18,7 +18,7 @@ func MakePath(path ...string) string {
 	return strings.Join(path, ".")
 }
 
-func (pen *Pen) addDefaultValue(kind kindInfo, name string, value assign.Assignment) (err error) {
+func (pen *Pen) addDefaultValue(kind kindInfo, name string, value rt.Assignment) (err error) {
 	if field, e := pen.findField(kind.class(), name); e != nil {
 		err = e
 	} else if value, e := field.rewriteTrait(name, value); e != nil {
@@ -31,7 +31,7 @@ func (pen *Pen) addDefaultValue(kind kindInfo, name string, value assign.Assignm
 	return
 }
 
-func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err error) {
+func (pen *Pen) addFieldValue(noun, name string, value rt.Assignment) (err error) {
 	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else if field, e := pen.findField(noun.class(), name); e != nil {
@@ -50,7 +50,7 @@ func (pen *Pen) addFieldValue(noun, name string, value assign.Assignment) (err e
 
 type DomainValueError struct {
 	Noun, Field string
-	Value       assign.Assignment
+	Value       rt.Assignment
 }
 
 func (e DomainValueError) Error() string {
@@ -202,7 +202,7 @@ func debugJoin(noun, field, path string) string {
 }
 
 // matches with decode.parseEval
-func marshalAssignment(val assign.Assignment, wantAff affine.Affinity) (ret string, provisional bool, err error) {
+func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, provisional bool, err error) {
 	// questionable: since we know the type of the field
 	// storing the assignment wrapper is redundant.
 	if a, ok := val.(ProvisionalAssignment); ok {

@@ -533,7 +533,7 @@ func RenderResponse_Marshal(m jsn.Marshaler, val *RenderResponse) (err error) {
 
 // RenderValue Pull a value from an assignment of unknown affinity.
 type RenderValue struct {
-	Value  assign.Assignment `if:"label=_"`
+	Value  rt.Assignment `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -623,7 +623,7 @@ func RenderValue_Marshal(m jsn.Marshaler, val *RenderValue) (err error) {
 	if err = m.MarshalBlock(RenderValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderValue_Field_Value)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.Value)
+			e0 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderValue_Field_Value))

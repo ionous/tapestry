@@ -75,7 +75,7 @@ func (s *serverContext) Close() {
 func restart(w http.ResponseWriter, ctx serverContext, scene string) (ret State, err error) {
 	log.Println("*** shuttle restart requested ***", scene)
 	var buf bytes.Buffer // fix: maybe it'd be better if Step() handled the text
-	run := qna.NewRuntimeOptions(&buf, ctx.query, ctx.decoder, nil, ctx.opts)
+	run := qna.NewRuntimeOptions(&buf, ctx.query, ctx.decoder, qna.Notifier{}, ctx.opts)
 	if e := run.ActivateDomain(scene); e != nil {
 		err = e
 	} else {

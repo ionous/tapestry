@@ -2,7 +2,6 @@
 package debug
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -12,8 +11,8 @@ import (
 
 // DebugLog Debug log.
 type DebugLog struct {
-	LogLevel LoggingLevel      `if:"label=_"`
-	Value    assign.Assignment `if:"label=value"`
+	LogLevel LoggingLevel  `if:"label=_"`
+	Value    rt.Assignment `if:"label=value"`
 	Markup   map[string]any
 }
 
@@ -112,7 +111,7 @@ func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
 		}
 		e1 := m.MarshalKey("value", DebugLog_Field_Value)
 		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.Value)
+			e1 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", DebugLog_Field_Value))

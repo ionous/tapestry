@@ -53,27 +53,28 @@ func proxyToVite(mux *http.ServeMux, port int) {
 	})
 }
 
-func newServer(path string, ctx shuttle.Context) http.HandlerFunc {
+func newServer(path string, ctx shuttle.Shuttle) http.HandlerFunc {
 	var state shuttle.State
 	return web.HandleResource(&web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			if name == path {
 				ret = &web.Wrapper{
-					// client sent a command
-					Posts: func(_ context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-
-						// FIX: how to set proper context!?
-						// wont it sometimes be json?
-						w.Header().Set("Content-Type", "plain/text")
-
-						if msg, e := shuttle.Decode(r); e != nil {
-							err = e
-						} else if n, e := shuttle.Post(w, ctx, state, msg); e != nil {
-							err = e
-						} else if len(n.Name) > 0 {
-							state = n
+					Finds: func(endpoint string) (ret web.Resource) {
+						return &web.Wrapper{
+							// client sent a command
+							Posts: func(_ context.Context, r io.Reader, w http.ResponseWriter) (err error) {
+								// FIX: how to set proper context!?
+								// wont it sometimes be json?
+								w.Header().Set("Content-Type", "plain/text")
+								// FIX: READ FROM R OR PASS IT
+								if next, e := shuttle.Post(w, ctx, state, endpoint, nil); e != nil {
+									err = e
+								} else if len(next.Name) > 0 {
+									state = next
+								}
+								return
+							},
 						}
-						return
 					},
 				}
 			}

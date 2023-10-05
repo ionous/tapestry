@@ -47,12 +47,10 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 		} else if qx, e := qdb.NewQueries(db, false); e != nil {
 			panic(e)
 		} else {
-			run = qna.NewRuntimeOptions(
+			run = qna.NewRuntime(
 				log.Writer(),
 				qx,
 				dec,
-				nil,
-				qna.NewOptions(),
 			)
 		}
 	}

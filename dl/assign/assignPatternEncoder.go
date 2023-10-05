@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // rewrite pattern calls to look like commands
@@ -25,7 +26,7 @@ func EncodePattern(m jsn.Marshaler, op *CallPattern) (err error) {
 			if e := m.MarshalKey(argName, argName); e != nil {
 				err = e
 				break
-			} else if e := Assignment_Marshal(m, &arg.Value); e != nil {
+			} else if e := rt.Assignment_Marshal(m, &arg.Value); e != nil {
 				err = e
 				break
 			}

@@ -3,6 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func B(b bool) *literal.BoolValue       { return &literal.BoolValue{Value: b} }
@@ -11,13 +12,13 @@ func F(n float64) *literal.NumValue     { return &literal.NumValue{Value: n} }
 func T(s string) *literal.TextValue     { return &literal.TextValue{Value: s} }
 func Tx(s, t string) *literal.TextValue { return &literal.TextValue{Value: s, Kind: t} }
 
-func text(value, kind string) assign.Assignment {
+func text(value, kind string) rt.Assignment {
 	return &assign.FromText{
 		Value: Tx(value, kind),
 	}
 }
 
-func truly() assign.Assignment {
+func truly() rt.Assignment {
 	return &assign.FromBool{
 		Value: B(true),
 	}

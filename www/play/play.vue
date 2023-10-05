@@ -98,7 +98,7 @@ export default {
       // }
     });
     // fix: add a button? read from the path or query string?
-    io.send({cmd: {"$restart": "cloak"}});
+    io.post("restart", "cloak");
     const onkey= (evt) => {
       // console.log("key", evt.key);
       const ignore= (evt.metaKey || evt.ctrlKey || evt.altKey);
@@ -136,7 +136,7 @@ export default {
         console.log("onPrompt");
         narration.value.push("> "+ txt);
         // fix? tapestry commands?
-        io.send({in: txt});
+        io.post("input", txt);
       }
     }
   }

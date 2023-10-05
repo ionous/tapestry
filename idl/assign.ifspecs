@@ -18,15 +18,7 @@
             }
           ]
         },
-        {
-          "--": "Reads from evals in a uniform manner for common functions.",
-          "Spec:with slot:": [
-            "assignment",
-            {
-              "Slot": true
-            }
-          ]
-        },
+        
         {
           "--": "Store a value into a variable or object.",
           "Spec:slots:with flow:": [
@@ -297,7 +289,29 @@
           ]
         },
         {
-          "--": "Assigns the calculated boolean value.",
+          "--": [
+          	"Adapts an execute statement to an assignment.",
+          	"Used internally for package shuttle."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "from_exe",
+            "assignment",
+            "internal",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "exe",
+                    "execute"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Calculates a boolean value.",
           "Spec:slots:with flow:": [
             "from_bool",
             "assignment",
@@ -315,7 +329,7 @@
           ]
         },
         {
-          "--": "Assigns the calculated number.",
+          "--": "Calculates a number.",
           "Spec:slots:with flow:": [
             "from_number",
             "assignment",
@@ -333,7 +347,7 @@
           ]
         },
         {
-          "--": "Assigns the calculated piece of text.",
+          "--": "Calculates a text string.",
           "Spec:slots:with flow:": [
             "from_text",
             "assignment",
@@ -351,7 +365,7 @@
           ]
         },
         {
-          "--": "Assigns the calculated record.",
+          "--": "Calculates a record.",
           "Spec:slots:with flow:": [
             "from_record",
             "assignment",
@@ -369,7 +383,7 @@
           ]
         },
         {
-          "--": "Assigns the calculated numbers.",
+          "--": "Calculates a list of numbers.",
           "Spec:slots:with flow:": [
             "from_num_list",
             "assignment",
@@ -387,7 +401,7 @@
           ]
         },
         {
-          "--": "Assigns the calculated pieces of text.",
+          "--": "Calculates a list of text strings.",
           "Spec:slots:with flow:": [
             "from_text_list",
             "assignment",
@@ -405,7 +419,7 @@
           ]
         },
         {
-          "--": "Assigns the calculated records.",
+          "--": "Calculates a list of records.",
           "Spec:slots:with flow:": [
             "from_record_list",
             "assignment",

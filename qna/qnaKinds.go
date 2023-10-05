@@ -1,7 +1,6 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -162,7 +161,7 @@ func findNextField(k *g.Kind, name string, prev int) (ret g.Field, next int) {
 
 type kindValue struct {
 	i   int // index in kind
-	val assign.Assignment
+	val rt.Assignment
 }
 
 // only inits if the field is unset

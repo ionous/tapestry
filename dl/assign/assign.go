@@ -9,9 +9,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// todo: cleanup
-type Assignment = rt.Assignment
-
+func (op *FromExe) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
+	err = safe.Run(run, op.Exe)
+	return // what should we return...?
+}
 func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetBool(run, op.Value)
 }
@@ -34,9 +35,11 @@ func (op *FromRecordList) GetAssignedValue(run rt.Runtime) (ret g.Value, err err
 	return safe.GetRecordList(run, op.Value)
 }
 
-func GetAffinity(a Assignment) (ret affine.Affinity) {
+func GetAffinity(a rt.Assignment) (ret affine.Affinity) {
 	if a != nil {
 		switch a.(type) {
+		case *FromExe:
+			ret = affine.None
 		case *FromBool:
 			ret = affine.Bool
 		case *FromNumber:
@@ -60,7 +63,7 @@ func GetAffinity(a Assignment) (ret affine.Affinity) {
 
 // turn a literal into an assignment
 // ( whats's the right package for this function? )
-func Literal(v literal.LiteralValue) (ret Assignment) {
+func Literal(v literal.LiteralValue) (ret rt.Assignment) {
 	switch v := v.(type) {
 	case *literal.BoolValue:
 		ret = &FromBool{Value: v}

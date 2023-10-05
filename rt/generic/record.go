@@ -53,6 +53,8 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 		ret = fv
 	} else {
 		// first try set up default aspects
+		// fix? i dont love this, but it does make sense that enumeration have the least value as a default
+		// note: qna objects aren't represented by records, so they dont hit this
 		if ft.Affinity == affine.Text && ft.Name == ft.Type {
 			for _, a := range d.kind.aspects {
 				if a.Name == ft.Name {
