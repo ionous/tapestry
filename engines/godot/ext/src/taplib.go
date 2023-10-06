@@ -32,7 +32,7 @@ func post(endpoint, msg string) (ret string, err error) {
 	var buf strings.Builder
 	if n, e := getShuttle(); e != nil {
 		err = e
-	} else if e := n.Post(&buf, endpoint, msg); e != nil {
+	} else if e := n.Post(&buf, endpoint, []byte(msg)); e != nil {
 		err = e
 	} else {
 		ret = buf.String()

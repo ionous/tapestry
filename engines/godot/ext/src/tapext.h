@@ -9,7 +9,7 @@ class Tapestry : public Node {
 	GDCLASS(Tapestry, Node)
 
 public:
-	static Variant post( const String & json_string );
+	static Variant post( const String& endpoint, const String &json );
 
 protected:
 	static void _bind_methods();

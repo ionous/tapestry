@@ -15,7 +15,7 @@ import (
 )
 
 func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (ret int, err error) {
-	if serverContext, e := newServerContext(inFile, opts); e != nil {
+	if ctx, e := shuttle.NewShuttle(inFile, opts); e != nil {
 		err = e
 	} else {
 		defer ctx.Close()
@@ -53,8 +53,7 @@ func proxyToVite(mux *http.ServeMux, port int) {
 	})
 }
 
-func newServer(path string, serverContext serverContext) http.HandlerFunc {
-	var state State
+func newServer(path string, ctx shuttle.Shuttle) http.HandlerFunc {
 	return web.HandleResource(&web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			if name == path {
@@ -67,7 +66,7 @@ func newServer(path string, serverContext serverContext) http.HandlerFunc {
 								if raw, e := io.ReadAll(r); e != nil {
 									err = e
 								} else {
-									err = shuttle.Post(w, ctx, endpoint, raw)
+									err = ctx.Post(w, endpoint, raw)
 								}
 								return
 							},
