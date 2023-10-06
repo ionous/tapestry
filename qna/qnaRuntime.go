@@ -68,20 +68,23 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 	if ends, begins, e := run.query.ActivateDomains(domain); e != nil {
 		err = run.reportError(e)
 	} else {
-		// fix? the domain is already out of scope
-		// might want to rewind one by one just after running each end event
-		// ( begin has a similar issue if some subdomain sets a different value say than its parent )
-		if e := run.domainChanged(ends, "ends"); e != nil {
-			err = e
-		} else if notify := run.notify.EndedScene; notify != nil {
-			notify(ends)
+		if len(ends) > 0 {
+			// fix? the domain is already out of scope
+			// might want to rewind one by one just after running each end event
+			// ( begin has a similar issue if some subdomain sets a different value say than its parent )
+			if e := run.domainChanged(ends, "ends"); e != nil {
+				err = errutil.Append(err, e)
+			} else if notify := run.notify.EndedScene; notify != nil {
+				notify(ends)
+			}
 		}
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
-		if e := run.domainChanged(begins, "begins"); e != nil {
-			err = errutil.Append(err, e)
-		} else if notify := run.notify.StartedScene; notify != nil {
-			notify(begins)
-
+		if len(begins) > 0 {
+			if e := run.domainChanged(begins, "begins"); e != nil {
+				err = errutil.Append(err, e)
+			} else if notify := run.notify.StartedScene; notify != nil {
+				notify(begins)
+			}
 		}
 	}
 	return

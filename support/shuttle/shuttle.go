@@ -21,7 +21,6 @@ type Shuttle struct {
 	query   *qdb.Query
 	opts    qna.Options
 	decoder *decode.Decoder
-	buf     strings.Builder
 	play    *play.Playtime
 	out     Collector
 }
@@ -49,12 +48,6 @@ func (c *Shuttle) Restart(scene string) (ret *play.Playtime, err error) {
 	return
 }
 
-func (c *Shuttle) ConsumeOutput() string {
-	out := c.buf.String()
-	c.buf.Reset()
-	return out
-}
-
 // create the playtime if it doesnt exist
 func (c *Shuttle) EnsurePlay() (ret *play.Playtime, err error) {
 	if c.play != nil {
@@ -68,7 +61,7 @@ func (c *Shuttle) EnsurePlay() (ret *play.Playtime, err error) {
 			ChangedState:    c.out.onChangeState,
 			ChangedRelative: c.out.onChangeRel,
 		}
-		run := qna.NewRuntimeOptions(&c.buf, c.query, c.decoder, note, c.opts)
+		run := qna.NewRuntimeOptions(&c.out.buf, c.query, c.decoder, note, c.opts)
 		survey := play.MakeDefaultSurveyor(run)
 		play := play.NewPlaytime(run, survey, grammar)
 		c.play = play
@@ -84,7 +77,7 @@ type Collector struct {
 
 // returns and clears all events
 func (out *Collector) GetEvents() (ret []frame.Event) {
-	ret, out.events = out.events, nil
+	ret, out.events = out.flush(), nil
 	return
 }
 
@@ -107,10 +100,11 @@ func (out *Collector) onChangeRel(a, b, rel string) {
 func (out *Collector) addEvent(evt frame.Event) {
 	out.events = append(out.events, evt)
 }
-func (out *Collector) flush() {
+func (out *Collector) flush() []frame.Event {
 	if out.buf.Len() > 0 {
 		str := out.buf.String()
 		out.buf.Reset()
 		out.addEvent(&frame.FrameOutput{Text: str})
 	}
+	return out.events
 }

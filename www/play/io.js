@@ -27,7 +27,7 @@ export default class Io {
   // send a json command
   post(where, msg) {
     this.send(msg, where);
-  },
+  }
   send(cmd, where="") {
     // this._clearTimer();
 

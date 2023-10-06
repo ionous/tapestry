@@ -2,6 +2,7 @@
 ><div class="lv-prompt"
 ><label for="prompt">&gt; </label
 ><input 
+  id="prompt"
   class="lv-no-outline lv-blink"
   ref="input"
   name="prompt"

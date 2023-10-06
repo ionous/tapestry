@@ -15,7 +15,7 @@ import (
 )
 
 func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (ret int, err error) {
-	if ctx, e := shuttle.NewContext(inFile, opts); e != nil {
+	if ctx, e := shuttle.NewShuttle(inFile, opts); e != nil {
 		err = e
 	} else {
 		defer ctx.Close()
@@ -54,7 +54,6 @@ func proxyToVite(mux *http.ServeMux, port int) {
 }
 
 func newServer(path string, ctx shuttle.Shuttle) http.HandlerFunc {
-	var state shuttle.State
 	return web.HandleResource(&web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			if name == path {
@@ -63,14 +62,11 @@ func newServer(path string, ctx shuttle.Shuttle) http.HandlerFunc {
 						return &web.Wrapper{
 							// client sent a command
 							Posts: func(_ context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-								// FIX: how to set proper context!?
-								// wont it sometimes be json?
-								w.Header().Set("Content-Type", "plain/text")
-								// FIX: READ FROM R OR PASS IT
-								if next, e := shuttle.Post(w, ctx, state, endpoint, nil); e != nil {
+								w.Header().Set("Content-Type", "application/json")
+								if raw, e := io.ReadAll(r); e != nil {
 									err = e
-								} else if len(next.Name) > 0 {
-									state = next
+								} else {
+									err = shuttle.Post(w, ctx, endpoint, raw)
 								}
 								return
 							},
