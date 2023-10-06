@@ -22,12 +22,12 @@ type Domain struct {
 
 type initialValue struct {
 	noun, field string
-	val         assign.Assignment
+	val         rt.Assignment
 }
 
 type initialValues []rt.Execute
 
-func (in initialValues) add(noun, field string, val assign.Assignment) initialValues {
+func (in initialValues) add(noun, field string, val rt.Assignment) initialValues {
 	return append(in, &assign.SetValue{
 		Target: &assign.ObjectRef{
 			Name:  &literal.TextValue{Value: noun},

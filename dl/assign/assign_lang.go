@@ -80,8 +80,8 @@ func Address_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Address) (err error
 
 // Arg Runtime version of argument.
 type Arg struct {
-	Name   string     `if:"label=_,type=text"`
-	Value  Assignment `if:"label=from"`
+	Name   string        `if:"label=_,type=text"`
+	Value  rt.Assignment `if:"label=from"`
 	Markup map[string]any
 }
 
@@ -176,81 +176,12 @@ func Arg_Marshal(m jsn.Marshaler, val *Arg) (err error) {
 		}
 		e1 := m.MarshalKey("from", Arg_Field_Value)
 		if e1 == nil {
-			e1 = Assignment_Marshal(m, &val.Value)
+			e1 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Arg_Field_Value))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-const Assignment_Type = "assignment"
-
-var Assignment_Optional_Marshal = Assignment_Marshal
-
-type Assignment_Slot struct{ Value *Assignment }
-
-func (at Assignment_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at Assignment_Slot) GetType() string              { return Assignment_Type }
-func (at Assignment_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Assignment_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Assignment)
-	return
-}
-
-func Assignment_Marshal(m jsn.Marshaler, ptr *Assignment) (err error) {
-	slot := Assignment_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type Assignment_Slice []Assignment
-
-func (op *Assignment_Slice) GetType() string { return Assignment_Type }
-
-func (op *Assignment_Slice) Marshal(m jsn.Marshaler) error {
-	return Assignment_Repeats_Marshal(m, (*[]Assignment)(op))
-}
-
-func (op *Assignment_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Assignment_Slice) SetSize(cnt int) {
-	var els []Assignment
-	if cnt >= 0 {
-		els = make(Assignment_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Assignment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Assignment_Marshal(m, &(*op)[i])
-}
-
-func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) error {
-	return jsn.RepeatBlock(m, (*Assignment_Slice)(vals))
-}
-
-func Assignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assignment) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Assignment_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -760,14 +691,14 @@ func Dot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Dot) (err error) {
 	return
 }
 
-// FromBool Assigns the calculated boolean value.
+// FromBool Calculates a boolean value.
 type FromBool struct {
 	Value  rt.BoolEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromBool)(nil)
+var _ rt.Assignment = (*FromBool)(nil)
 
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
@@ -862,14 +793,117 @@ func FromBool_Marshal(m jsn.Marshaler, val *FromBool) (err error) {
 	return
 }
 
-// FromNumList Assigns the calculated numbers.
+// FromExe Adapts an execute statement to an assignment.
+// Used internally for package shuttle.
+type FromExe struct {
+	Exe    rt.Execute `if:"label=_"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Assignment = (*FromExe)(nil)
+
+func (*FromExe) Compose() composer.Spec {
+	return composer.Spec{
+		Name: FromExe_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const FromExe_Type = "from_exe"
+const FromExe_Field_Exe = "$EXE"
+
+func (op *FromExe) Marshal(m jsn.Marshaler) error {
+	return FromExe_Marshal(m, op)
+}
+
+type FromExe_Slice []FromExe
+
+func (op *FromExe_Slice) GetType() string { return FromExe_Type }
+
+func (op *FromExe_Slice) Marshal(m jsn.Marshaler) error {
+	return FromExe_Repeats_Marshal(m, (*[]FromExe)(op))
+}
+
+func (op *FromExe_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *FromExe_Slice) SetSize(cnt int) {
+	var els []FromExe
+	if cnt >= 0 {
+		els = make(FromExe_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *FromExe_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return FromExe_Marshal(m, &(*op)[i])
+}
+
+func FromExe_Repeats_Marshal(m jsn.Marshaler, vals *[]FromExe) error {
+	return jsn.RepeatBlock(m, (*FromExe_Slice)(vals))
+}
+
+func FromExe_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromExe) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = FromExe_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type FromExe_Flow struct{ ptr *FromExe }
+
+func (n FromExe_Flow) GetType() string      { return FromExe_Type }
+func (n FromExe_Flow) GetLede() string      { return FromExe_Type }
+func (n FromExe_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromExe_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromExe); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func FromExe_Optional_Marshal(m jsn.Marshaler, pv **FromExe) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = FromExe_Marshal(m, *pv)
+	} else if !enc {
+		var v FromExe
+		if err = FromExe_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func FromExe_Marshal(m jsn.Marshaler, val *FromExe) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(FromExe_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", FromExe_Field_Exe)
+		if e0 == nil {
+			e0 = rt.Execute_Marshal(m, &val.Exe)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", FromExe_Field_Exe))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// FromNumList Calculates a list of numbers.
 type FromNumList struct {
 	Value  rt.NumListEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromNumList)(nil)
+var _ rt.Assignment = (*FromNumList)(nil)
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -964,14 +998,14 @@ func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 	return
 }
 
-// FromNumber Assigns the calculated number.
+// FromNumber Calculates a number.
 type FromNumber struct {
 	Value  rt.NumberEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromNumber)(nil)
+var _ rt.Assignment = (*FromNumber)(nil)
 
 func (*FromNumber) Compose() composer.Spec {
 	return composer.Spec{
@@ -1066,14 +1100,14 @@ func FromNumber_Marshal(m jsn.Marshaler, val *FromNumber) (err error) {
 	return
 }
 
-// FromRecord Assigns the calculated record.
+// FromRecord Calculates a record.
 type FromRecord struct {
 	Value  rt.RecordEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromRecord)(nil)
+var _ rt.Assignment = (*FromRecord)(nil)
 
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
@@ -1168,14 +1202,14 @@ func FromRecord_Marshal(m jsn.Marshaler, val *FromRecord) (err error) {
 	return
 }
 
-// FromRecordList Assigns the calculated records.
+// FromRecordList Calculates a list of records.
 type FromRecordList struct {
 	Value  rt.RecordListEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromRecordList)(nil)
+var _ rt.Assignment = (*FromRecordList)(nil)
 
 func (*FromRecordList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1270,14 +1304,14 @@ func FromRecordList_Marshal(m jsn.Marshaler, val *FromRecordList) (err error) {
 	return
 }
 
-// FromText Assigns the calculated piece of text.
+// FromText Calculates a text string.
 type FromText struct {
 	Value  rt.TextEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromText)(nil)
+var _ rt.Assignment = (*FromText)(nil)
 
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
@@ -1372,14 +1406,14 @@ func FromText_Marshal(m jsn.Marshaler, val *FromText) (err error) {
 	return
 }
 
-// FromTextList Assigns the calculated pieces of text.
+// FromTextList Calculates a list of text strings.
 type FromTextList struct {
 	Value  rt.TextListEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ Assignment = (*FromTextList)(nil)
+var _ rt.Assignment = (*FromTextList)(nil)
 
 func (*FromTextList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1716,8 +1750,8 @@ func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
 
 // SetValue Store a value into a variable or object.
 type SetValue struct {
-	Target Address    `if:"label=_"`
-	Value  Assignment `if:"label=value"`
+	Target Address       `if:"label=_"`
+	Value  rt.Assignment `if:"label=value"`
 	Markup map[string]any
 }
 
@@ -1816,7 +1850,7 @@ func SetValue_Marshal(m jsn.Marshaler, val *SetValue) (err error) {
 		}
 		e1 := m.MarshalKey("value", SetValue_Field_Value)
 		if e1 == nil {
-			e1 = Assignment_Marshal(m, &val.Value)
+			e1 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", SetValue_Field_Value))
@@ -1947,7 +1981,6 @@ func VariableRef_Marshal(m jsn.Marshaler, val *VariableRef) (err error) {
 
 var Slots = []interface{}{
 	(*Address)(nil),
-	(*Assignment)(nil),
 	(*Dot)(nil),
 }
 
@@ -1958,6 +1991,7 @@ var Slats = []composer.Composer{
 	(*CallPattern)(nil),
 	(*CopyValue)(nil),
 	(*FromBool)(nil),
+	(*FromExe)(nil),
 	(*FromNumList)(nil),
 	(*FromNumber)(nil),
 	(*FromRecord)(nil),
@@ -1984,6 +2018,7 @@ var Signatures = map[uint64]interface{}{
 	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
 	13938609641525654217: (*CallPattern)(nil),    /* text_list_eval=Determine:args: */
 	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
+	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
 	15276643347016776669: (*FromNumList)(nil),    /* assignment=FromNumList: */
 	10386192108847008240: (*FromNumber)(nil),     /* assignment=FromNumber: */
 	8445595699766392240:  (*FromRecord)(nil),     /* assignment=FromRecord: */

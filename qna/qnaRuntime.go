@@ -16,15 +16,18 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Callbacks for when important system level changes occur
-type Notifier interface {
-	// Starting(domains[]string)
-	// Ending(domains[]string)
-	ChangedState(noun, aspect, trait string)
-	// ChangedRelative()
+// Callbacks for important system level changes
+type Notifier struct {
+	StartedScene    func(domains []string)
+	EndedScene      func(domains []string)
+	ChangedState    func(noun, aspect, trait string)
+	ChangedRelative func(a, b, rel string)
 	// ChangedValue()
 }
 
+func NewRuntime(w io.Writer, q query.Query, d decoder.Decoder) *Runner {
+	return NewRuntimeOptions(w, q, d, Notifier{}, NewOptions())
+}
 func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, n Notifier, options Options) *Runner {
 	run := &Runner{
 		query:      q,
@@ -65,15 +68,23 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 	if ends, begins, e := run.query.ActivateDomains(domain); e != nil {
 		err = run.reportError(e)
 	} else {
-		// fix? the domain is already out of scope
-		// might want to rewind one by one just after running each end event
-		// ( begin has a similar issue if some subdomain sets a different value say than its parent )
-		if e := run.domainChanged(ends, "ends"); e != nil {
-			err = e
+		if len(ends) > 0 {
+			// fix? the domain is already out of scope
+			// might want to rewind one by one just after running each end event
+			// ( begin has a similar issue if some subdomain sets a different value say than its parent )
+			if e := run.domainChanged(ends, "ends"); e != nil {
+				err = errutil.Append(err, e)
+			} else if notify := run.notify.EndedScene; notify != nil {
+				notify(ends)
+			}
 		}
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
-		if e := run.domainChanged(begins, "begins"); e != nil {
-			err = errutil.Append(err, e)
+		if len(begins) > 0 {
+			if e := run.domainChanged(begins, "begins"); e != nil {
+				err = errutil.Append(err, e)
+			} else if notify := run.notify.StartedScene; notify != nil {
+				notify(begins)
+			}
 		}
 	}
 	return
@@ -147,8 +158,10 @@ func (run *Runner) RelateTo(a, b, rel string) (err error) {
 			err = e
 		} else if _, e := run.getKindOf(nb.Kind, fb.Type); e != nil {
 			err = e
-		} else {
-			err = run.query.Relate(k.Name(), na.Id, nb.Id)
+		} else if e := run.query.Relate(k.Name(), na.Id, nb.Id); e != nil {
+			err = e
+		} else if notify := run.notify.ChangedRelative; notify != nil {
+			notify(a, b, rel)
 		}
 	}
 	return

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -101,7 +100,7 @@ func (d blocksFile) Post(ctx context.Context, r io.Reader, w http.ResponseWriter
 // save an individual file
 func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	var file story.StoryFile // mosaic hands back blocks
-	if raw, e := ioutil.ReadAll(r); e != nil {
+	if raw, e := io.ReadAll(r); e != nil {
 		err = e
 	} else if e := unblock.Decode(&file, "story_file", story.Registry(), raw); e != nil {
 		err = e

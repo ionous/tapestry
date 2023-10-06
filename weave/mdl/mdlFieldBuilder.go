@@ -7,13 +7,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
 type FieldInfo struct {
 	Name, Class string
 	Affinity    affine.Affinity
-	Init        assign.Assignment
+	Init        rt.Assignment
 }
 
 type FieldBuilder struct {

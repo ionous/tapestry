@@ -25,7 +25,10 @@ export default class Io {
   //   }
   }
   // send a json command
-  send(cmd) {
+  post(where, msg) {
+    this.send(msg, where);
+  }
+  send(cmd, where="") {
     // this._clearTimer();
 
     // we use promises to keep our get/send requests "serialized" --
@@ -33,7 +36,7 @@ export default class Io {
     // let msgCnt=0;
     this.sending= Promise.allSettled([/*this.getting, */this.sending]).then(()=>{
       // expects zero or more messages back
-      return http.post(this.endpoint, cmd).then((msgs) => {
+      return http.post(this.endpoint+where, cmd).then((msgs) => {
         // if (Array.isArray(msgs)) {
         //   this.msgcb(msgs);
         //   msgCnt= msgs.length;

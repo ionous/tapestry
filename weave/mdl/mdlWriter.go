@@ -877,7 +877,7 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 }
 
 // the top level fields of kinds can hold runtime evaluated assignments.
-func (pen *Pen) AddDefaultValue(kind, field string, value assign.Assignment) (err error) {
+func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err error) {
 	if kind, e := pen.findRequiredKind(kind); e != nil {
 		err = e
 	} else {
@@ -888,7 +888,7 @@ func (pen *Pen) AddDefaultValue(kind, field string, value assign.Assignment) (er
 
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: assumes noun is an exact name
-func (pen *Pen) AddInitialValue(noun, field string, value assign.Assignment) (err error) {
+func (pen *Pen) AddInitialValue(noun, field string, value rt.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
 		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
@@ -909,7 +909,7 @@ func (pen *Pen) AddPathValue(noun, path string, value literal.LiteralValue) (err
 }
 
 type ProvisionalAssignment struct {
-	assign.Assignment
+	rt.Assignment
 }
 type ProvisionalLiteral struct {
 	literal.LiteralValue

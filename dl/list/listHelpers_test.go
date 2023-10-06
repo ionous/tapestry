@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 var (
@@ -14,7 +15,7 @@ var (
 	W = core.W
 )
 
-func FromTs(vs []string) (ret assign.Assignment) {
+func FromTs(vs []string) (ret rt.Assignment) {
 	if len(vs) == 1 {
 		ret = &assign.FromText{Value: literal.T(vs[0])}
 	} else {

@@ -35,18 +35,17 @@ func (op *Fabricate) fabricate(run rt.Runtime) (err error) {
 			log.Println("> ", words)
 		}
 		if len(words) > 0 {
-			var quit bool
-			for _, cmd := range strings.Split(words, ";") {
-				if quit {
-					err = errutil.New("game was quit")
-				} else {
-					var sig game.Signal
-					if e := Stepper(cmd); errors.As(e, &sig) && sig == game.SignalQuit {
-						quit = true
-					} else if e != nil {
-						err = e
-						break
+			split := strings.Split(words, ";")
+			for len(split) > 0 {
+				var cmd string
+				cmd, split = split[0], split[1:]
+				if e := Stepper(cmd); e != nil {
+					var sig game.Signal // if the game was quit, override the error if output remains
+					if len(split) > 0 && errors.As(e, &sig) && sig == game.SignalQuit {
+						e = errutil.New("game was quit, but input remains", strings.Join(split, ";"))
 					}
+					err = e
+					break
 				}
 			}
 		}

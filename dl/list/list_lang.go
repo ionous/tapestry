@@ -525,10 +525,10 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List   assign.Assignment `if:"label=across"`
-	As     string            `if:"label=as,type=text"`
-	Exe    []rt.Execute      `if:"label=do"`
-	Else   core.Brancher     `if:"label=else,optional"`
+	List   rt.Assignment `if:"label=across"`
+	As     string        `if:"label=as,type=text"`
+	Exe    []rt.Execute  `if:"label=do"`
+	Else   core.Brancher `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -622,7 +622,7 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.List)
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListEach_Field_List))
@@ -655,8 +655,8 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 
 // ListFind Search a list for a specific value.
 type ListFind struct {
-	Value  assign.Assignment `if:"label=_"`
-	List   assign.Assignment `if:"label=in_list"`
+	Value  rt.Assignment `if:"label=_"`
+	List   rt.Assignment `if:"label=in_list"`
 	Markup map[string]any
 }
 
@@ -749,14 +749,14 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.Value)
+			e0 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListFind_Field_Value))
 		}
 		e1 := m.MarshalKey("in_list", ListFind_Field_List)
 		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.List)
+			e1 = rt.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListFind_Field_List))
@@ -770,9 +770,9 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 // The named pattern gets with with two parameters for each value in the list:
 // 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Target assign.Address    `if:"label=_"`
-	From   assign.Assignment `if:"label=from"`
-	Using  string            `if:"label=using,type=text"`
+	Target assign.Address `if:"label=_"`
+	From   rt.Assignment  `if:"label=from"`
+	Using  string         `if:"label=using,type=text"`
 	Markup map[string]any
 }
 
@@ -869,7 +869,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		}
 		e1 := m.MarshalKey("from", ListGather_Field_From)
 		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.From)
+			e1 = rt.Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
@@ -888,7 +888,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 
 // ListLen Determines the number of values in a list.
 type ListLen struct {
-	List   assign.Assignment `if:"label=_"`
+	List   rt.Assignment `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -979,7 +979,7 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.List)
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListLen_Field_List))
@@ -992,9 +992,9 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 // ListMap Transform the values from one list and place the results in another list.
 // The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	Target      assign.Address    `if:"label=_"`
-	List        assign.Assignment `if:"label=from_list"`
-	PatternName string            `if:"label=using,type=text"`
+	Target      assign.Address `if:"label=_"`
+	List        rt.Assignment  `if:"label=from_list"`
+	PatternName string         `if:"label=using,type=text"`
 	Markup      map[string]any
 }
 
@@ -1094,7 +1094,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		}
 		e1 := m.MarshalKey("from_list", ListMap_Field_List)
 		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.List)
+			e1 = rt.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListMap_Field_List))
@@ -1113,9 +1113,9 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 
 // ListPush Add a value to a list.
 type ListPush struct {
-	Value  assign.Assignment `if:"label=_"`
-	Target assign.Address    `if:"label=into"`
-	AtEdge rt.BoolEval       `if:"label=at_front,optional"`
+	Value  rt.Assignment  `if:"label=_"`
+	Target assign.Address `if:"label=into"`
+	AtEdge rt.BoolEval    `if:"label=at_front,optional"`
 	Markup map[string]any
 }
 
@@ -1208,7 +1208,7 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 	if err = m.MarshalBlock(ListPush_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListPush_Field_Value)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.Value)
+			e0 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListPush_Field_Value))
@@ -1239,9 +1239,9 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 //
 // And, that pattern is expected to return the newly updated value.
 type ListReduce struct {
-	Target      assign.Address    `if:"label=into"`
-	List        assign.Assignment `if:"label=from_list"`
-	PatternName string            `if:"label=using,type=text"`
+	Target      assign.Address `if:"label=into"`
+	List        rt.Assignment  `if:"label=from_list"`
+	PatternName string         `if:"label=using,type=text"`
 	Markup      map[string]any
 }
 
@@ -1341,7 +1341,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		}
 		e1 := m.MarshalKey("from_list", ListReduce_Field_List)
 		if e1 == nil {
-			e1 = assign.Assignment_Marshal(m, &val.List)
+			e1 = rt.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_List))
@@ -1469,9 +1469,9 @@ func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
 type ListSlice struct {
-	List   assign.Assignment `if:"label=_"`
-	Start  rt.NumberEval     `if:"label=start,optional"`
-	End    rt.NumberEval     `if:"label=end,optional"`
+	List   rt.Assignment `if:"label=_"`
+	Start  rt.NumberEval `if:"label=start,optional"`
+	End    rt.NumberEval `if:"label=end,optional"`
 	Markup map[string]any
 }
 
@@ -1566,7 +1566,7 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.List)
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSlice_Field_List))
@@ -1849,10 +1849,10 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 // If the remove count is missing, this removes all elements from the start to the end;
 // if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
-	Target assign.Address    `if:"label=_"`
-	Start  rt.NumberEval     `if:"label=start"`
-	Remove rt.NumberEval     `if:"label=remove"`
-	Insert assign.Assignment `if:"label=insert"`
+	Target assign.Address `if:"label=_"`
+	Start  rt.NumberEval  `if:"label=start"`
+	Remove rt.NumberEval  `if:"label=remove"`
+	Insert rt.Assignment  `if:"label=insert"`
 	Markup map[string]any
 }
 
@@ -1970,7 +1970,7 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 		}
 		e3 := m.MarshalKey("insert", ListSplice_Field_Insert)
 		if e3 == nil {
-			e3 = assign.Assignment_Marshal(m, &val.Insert)
+			e3 = rt.Assignment_Marshal(m, &val.Insert)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", ListSplice_Field_Insert))

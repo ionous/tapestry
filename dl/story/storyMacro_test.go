@@ -33,12 +33,10 @@ func TestMacros(t *testing.T) {
 	if e != nil {
 		panic(e)
 	}
-	run := qna.NewRuntimeOptions(
+	run := qna.NewRuntime(
 		log.Writer(),
 		qx,
 		decode.NewDecoder(story.AllSignatures),
-		nil,
-		qna.NewOptions(),
 	)
 	cat := weave.NewCatalogWithWarnings(db, run, mdl.LogWarning)
 	dt := testweave.NewWeaverCatalog(name, db, cat, true)

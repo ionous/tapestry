@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -146,7 +147,7 @@ func (f *fieldInfo) class() classInfo {
 
 // turn a trait boolean value into an aspect text value ( containing the name of the trait )
 // or, for all other types of values, return the passed assignment back to the caller.
-func (f *fieldInfo) rewriteTrait(name string, value assign.Assignment) (ret assign.Assignment, err error) {
+func (f *fieldInfo) rewriteTrait(name string, value rt.Assignment) (ret rt.Assignment, err error) {
 	if name == f.name {
 		ret = value
 	} else {

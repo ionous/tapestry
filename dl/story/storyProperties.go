@@ -22,7 +22,7 @@ func (op *AspectField) FieldInfo(run rt.Runtime) (ret mdl.FieldInfo, err error) 
 }
 
 func (op *BoolField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromBool{Value: i}
 	}
@@ -30,7 +30,7 @@ func (op *BoolField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 }
 
 func (op *NumberField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumber{Value: i}
 	}
@@ -38,7 +38,7 @@ func (op *NumberField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 }
 
 func (op *TextField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromText{Value: i}
 	}
@@ -46,7 +46,7 @@ func (op *TextField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 }
 
 func (op *RecordField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecord{Value: i}
 	}
@@ -54,7 +54,7 @@ func (op *RecordField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 }
 
 func (op *NumListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumList{Value: i}
 	}
@@ -62,7 +62,7 @@ func (op *NumListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 }
 
 func (op *TextListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromTextList{Value: i}
 	}
@@ -70,7 +70,7 @@ func (op *TextListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 }
 
 func (op *RecordListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
-	var init assign.Assignment
+	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecordList{Value: i}
 	}

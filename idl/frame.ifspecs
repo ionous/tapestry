@@ -1,0 +1,155 @@
+{
+  "--": "shuttle communication",
+  "Spec:with group:": [
+    "frame",
+    {
+      "Group contains:": [
+        {
+          "Spec:with flow:": [
+            "frame",
+            {
+              "Flow uses:": [
+                {
+                  "Term:type:": [
+                    "result",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:repeats:": [
+                    "events",
+                    "event",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "error",
+                    "text",
+                    true
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with slot:": [
+            "event",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "frame_output",
+            "event",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:": [
+                    "_",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "scene_started",
+            "event",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "domains",
+                    "text",
+                    true
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "scene_ended",
+            "event",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "domains",
+                    "text",
+                    true
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "state_changed",
+            "event",
+            {
+              "Flow uses:": [
+                {
+                  "Term:type:": [
+                    "noun",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "aspect",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "trait",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "pair_changed",
+            "event",
+            {
+              "Flow uses:": [
+                {
+                  "Term:type:": [
+                    "a",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "b",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "rel",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

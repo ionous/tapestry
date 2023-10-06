@@ -14,8 +14,8 @@ import (
 )
 
 //export Post
-func Post(msg string) (ret *C.char) {
-	res, e := post(msg)
+func Post(endpoint, msg string) (ret *C.char) {
+	res, e := post(endpoint, msg)
 	if e != nil {
 		res = e.Error()
 		println("error", res)
@@ -28,22 +28,14 @@ func Post(msg string) (ret *C.char) {
 	return
 }
 
-func post(msg string) (ret string, err error) {
+func post(endpoint, msg string) (ret string, err error) {
 	var buf strings.Builder
-	if ctx, e := getContext(); e != nil {
+	if n, e := getShuttle(); e != nil {
 		err = e
-	} else if strOrMap, e := shuttle.Decode(strings.NewReader(msg)); e != nil {
+	} else if e := n.Post(&buf, endpoint, msg); e != nil {
 		err = e
 	} else {
-		println("got str or map")
-		if next, e := shuttle.Post(&buf, ctx, state, strOrMap); e != nil {
-			err = e
-		} else {
-			ret = buf.String()
-			if len(next.Name) > 0 {
-				state = next
-			}
-		}
+		ret = buf.String()
 	}
 	return
 }
@@ -51,7 +43,8 @@ func post(msg string) (ret string, err error) {
 // go build -o taplib.so -buildmode=c-shared taplib.go
 func main() {}
 
-func getContext() (ret shuttle.Context, err error) {
+// fix: defer ctx.Close()
+func getShuttle() (ret shuttle.Shuttle, err error) {
 	if setup {
 		ret = savedCtx
 	} else {
@@ -59,10 +52,7 @@ func getContext() (ret shuttle.Context, err error) {
 		if home, e := os.UserHomeDir(); e == nil {
 			inFile = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 		}
-		opts := qna.NewOptions()
-		shuttle.NewContext(inFile, opts)
-		// defer ctx.Close()
-		if n, e := shuttle.NewContext(inFile, opts); e != nil {
+		if n, e := shuttle.NewShuttle(inFile, qna.NewOptions()); e != nil {
 			err = e
 		} else {
 			setup = true
@@ -73,7 +63,6 @@ func getContext() (ret shuttle.Context, err error) {
 	return
 }
 
-var savedCtx shuttle.Context
+var savedCtx shuttle.Shuttle
 var setup bool
-var state shuttle.State
 var lastResult unsafe.Pointer

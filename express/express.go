@@ -171,7 +171,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 }
 
 func unpackPatternArg(arg r.Value) render.RenderEval {
-	var out assign.Assignment
+	var out rt.Assignment
 	switch arg := arg.Interface().(type) {
 	default:
 		panic(errutil.Fmt("unknown argument type %T", arg))

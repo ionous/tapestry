@@ -15,7 +15,7 @@ import (
 )
 
 func serveWithOptions(inFile string, opts qna.Options, listenTo, requestFrom int) (ret int, err error) {
-	if ctx, e := shuttle.NewContext(inFile, opts); e != nil {
+	if serverContext, e := newServerContext(inFile, opts); e != nil {
 		err = e
 	} else {
 		defer ctx.Close()
@@ -53,27 +53,25 @@ func proxyToVite(mux *http.ServeMux, port int) {
 	})
 }
 
-func newServer(path string, ctx shuttle.Context) http.HandlerFunc {
-	var state shuttle.State
+func newServer(path string, serverContext serverContext) http.HandlerFunc {
+	var state State
 	return web.HandleResource(&web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			if name == path {
 				ret = &web.Wrapper{
-					// client sent a command
-					Posts: func(_ context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-
-						// FIX: how to set proper context!?
-						// wont it sometimes be json?
-						w.Header().Set("Content-Type", "plain/text")
-
-						if msg, e := shuttle.Decode(r); e != nil {
-							err = e
-						} else if n, e := shuttle.Post(w, ctx, state, msg); e != nil {
-							err = e
-						} else if len(n.Name) > 0 {
-							state = n
+					Finds: func(endpoint string) (ret web.Resource) {
+						return &web.Wrapper{
+							// client sent a command
+							Posts: func(_ context.Context, r io.Reader, w http.ResponseWriter) (err error) {
+								w.Header().Set("Content-Type", "application/json")
+								if raw, e := io.ReadAll(r); e != nil {
+									err = e
+								} else {
+									err = shuttle.Post(w, ctx, endpoint, raw)
+								}
+								return
+							},
 						}
-						return
 					},
 				}
 			}

@@ -72,7 +72,7 @@ func convertEval(txt rt.TextEval) (ret rt.TextEval, err error) {
 	return
 }
 
-func convertTextAssignment(str string) (ret assign.Assignment, err error) {
+func convertTextAssignment(str string) (ret rt.Assignment, err error) {
 	if txt, e := convertText(str); e != nil {
 		err = e
 	} else {

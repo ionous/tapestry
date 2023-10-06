@@ -2671,9 +2671,9 @@ func DefineTraits_Marshal(m jsn.Marshaler, val *DefineTraits) (err error) {
 
 // DefineValue Assign a starting value to the field of one or nouns.
 type DefineValue struct {
-	FieldName rt.TextEval       `if:"label=value"`
-	Nouns     rt.TextListEval   `if:"label=of"`
-	Value     assign.Assignment `if:"label=as"`
+	FieldName rt.TextEval     `if:"label=value"`
+	Nouns     rt.TextListEval `if:"label=of"`
+	Value     rt.Assignment   `if:"label=as"`
 	Markup    map[string]any
 }
 
@@ -2781,7 +2781,7 @@ func DefineValue_Marshal(m jsn.Marshaler, val *DefineValue) (err error) {
 		}
 		e2 := m.MarshalKey("as", DefineValue_Field_Value)
 		if e2 == nil {
-			e2 = assign.Assignment_Marshal(m, &val.Value)
+			e2 = rt.Assignment_Marshal(m, &val.Value)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", DefineValue_Field_Value))

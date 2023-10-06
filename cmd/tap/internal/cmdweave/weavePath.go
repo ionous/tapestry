@@ -45,12 +45,10 @@ func WeavePath(srcPath, outFile string) (err error) {
 			} else if qx, e := qdb.NewQueries(db, false); e != nil {
 				err = e
 			} else {
-				run := qna.NewRuntimeOptions(
+				run := qna.NewRuntime(
 					log.Writer(),
 					qx,
 					decode.NewDecoder(story.AllSignatures),
-					nil,
-					qna.NewOptions(),
 				)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				if e := cat.DomainStart("tapestry", nil); e != nil {

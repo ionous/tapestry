@@ -11,7 +11,7 @@ func MakeActivity(exe ...rt.Execute) []rt.Execute {
 }
 
 // turn a series of assignments ( FromX commands ) into a slice of arguments.
-func MakeArgs(as ...assign.Assignment) (ret []assign.Arg) {
+func MakeArgs(as ...rt.Assignment) (ret []assign.Arg) {
 	for _, a := range as {
 		ret = append(ret, assign.Arg{Value: a})
 	}

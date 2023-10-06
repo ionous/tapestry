@@ -24,6 +24,10 @@ func NewPlaytime(run rt.Runtime, survey Survey, grammar parser.Scanner) *Playtim
 	return &Playtime{Runtime: run, grammar: grammar, survey: survey}
 }
 
+func (p *Playtime) Survey() *Survey {
+	return &p.survey
+}
+
 type Result struct {
 	Action string
 	Nouns  []string

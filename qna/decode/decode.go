@@ -55,6 +55,15 @@ func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 // fix? merge somehow with express.newAssignment? with compact decoding.
 func parseEval(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
 	switch a {
+	case affine.None:
+		// why arent they all this?
+		var a rt.Assignment_Slot
+		if e := core.Decode(a, rawValue, signatures); e != nil {
+			err = e
+		} else {
+			ret = *a.Value
+		}
+
 	case affine.Bool:
 		var v rt.BoolEval
 		if e := core.Decode(rt.BoolEval_Slot{Value: &v}, rawValue, signatures); e != nil {

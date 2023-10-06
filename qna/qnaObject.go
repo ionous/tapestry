@@ -35,8 +35,12 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 				traitValue := g.StringFrom(trait, fieldData.Type)
 				if e := run.writeNounValue(obj, fieldData, traitValue); e != nil {
 					err = e
-				} else if run.notify != nil {
-					run.notify.ChangedState(obj.Id, fieldData.Name, field)
+				} else if notify := run.notify.ChangedState; notify != nil {
+					// tbd: filter for states that didnt actually change?
+					// maybe as a return from writeNounValue
+					// although to do so, we'd also have to generate the default
+					// ( and still might want to store if the value equals the default; but not notify )
+					notify(obj.Id, fieldData.Name, field)
 				}
 			}
 		}

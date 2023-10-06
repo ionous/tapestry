@@ -89,8 +89,8 @@ func tryPattern(m jsn.Marshaler, msg json.RawMessage, typeName string) (retSig s
 				var call []assign.Arg
 				for i, p := range sig.Params {
 					arg := args[i]
-					var val assign.Assignment
-					if e := decode(assign.Assignment_Slot{Value: &val}, arg, reg); e != nil {
+					var val rt.Assignment
+					if e := decode(rt.Assignment_Slot{Value: &val}, arg, reg); e != nil {
 						err = e
 						break
 					}

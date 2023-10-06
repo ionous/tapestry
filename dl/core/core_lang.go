@@ -2378,9 +2378,9 @@ func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
 
 // CompareValue True if eq,ne,gt,lt,ge,le two numbers.
 type CompareValue struct {
-	A      assign.Assignment `if:"label=_"`
-	Is     Comparison        `if:"label=matching"`
-	B      assign.Assignment `if:"label=value"`
+	A      rt.Assignment `if:"label=_"`
+	Is     Comparison    `if:"label=matching"`
+	B      rt.Assignment `if:"label=value"`
 	Markup map[string]any
 }
 
@@ -2473,7 +2473,7 @@ func CompareValue_Marshal(m jsn.Marshaler, val *CompareValue) (err error) {
 	if err = m.MarshalBlock(CompareValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CompareValue_Field_A)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.A)
+			e0 = rt.Assignment_Marshal(m, &val.A)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CompareValue_Field_A))
@@ -2487,7 +2487,7 @@ func CompareValue_Marshal(m jsn.Marshaler, val *CompareValue) (err error) {
 		}
 		e2 := m.MarshalKey("value", CompareValue_Field_B)
 		if e2 == nil {
-			e2 = assign.Assignment_Marshal(m, &val.B)
+			e2 = rt.Assignment_Marshal(m, &val.B)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", CompareValue_Field_B))
