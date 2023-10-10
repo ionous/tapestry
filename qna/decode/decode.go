@@ -56,12 +56,12 @@ func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 func parseEval(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
 	switch a {
 	case affine.None:
-		// why arent they all this?
-		var a rt.Assignment_Slot
-		if e := core.Decode(a, rawValue, signatures); e != nil {
+		// FIX: why dont they all use this simpler route?
+		var v rt.Assignment
+		if e := core.Decode(rt.Assignment_Slot{Value: &v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = *a.Value
+			ret = v
 		}
 
 	case affine.Bool:

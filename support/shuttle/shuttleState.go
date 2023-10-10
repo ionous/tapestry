@@ -69,7 +69,7 @@ func (c *Shuttle) Post(w io.Writer, endpoint string, msg json.RawMessage) (err e
 					f.Error = e.Error()
 				} else if v, e := a.GetAssignedValue(play); e != nil {
 					f.Error = e.Error()
-				} else {
+				} else if v != nil {
 					f.Result = debug.Stringify(v)
 				}
 				f.Events = c.out.GetEvents() // even on error

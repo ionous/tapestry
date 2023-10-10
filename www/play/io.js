@@ -26,6 +26,7 @@ export default class Io {
   }
   // send a json command
   post(where, msg) {
+    console.log("posting", where, msg);
     this.send(msg, where);
   }
   send(cmd, where="") {

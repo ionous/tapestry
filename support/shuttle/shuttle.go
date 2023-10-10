@@ -2,11 +2,14 @@ package shuttle
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
+	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -66,6 +69,19 @@ func (c *Shuttle) EnsurePlay() (ret *play.Playtime, err error) {
 		play := play.NewPlaytime(run, survey, grammar)
 		c.play = play
 		ret = play
+		var done bool
+		// fix? used for fabricate; maybe use options instead so that we can have multiple instances?
+		debug.Stepper = func(words string) (err error) {
+			// FIX: errors for step are getting fmt.Println in playTime.go
+			// so expect output can't test for errors ( and on error looks a bit borken )
+			var sig game.Signal
+			if _, e := play.Step(words); !done && errors.As(e, &sig) && sig == game.SignalQuit {
+				done = true // eat the quit signal on first return; fix? maybe do this on client?
+			} else if e != nil {
+				err = e
+			}
+			return
+		}
 	}
 	return
 }

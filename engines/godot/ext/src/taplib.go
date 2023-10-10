@@ -6,11 +6,13 @@ import "C"
 import (
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"unsafe"
 
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/support/shuttle"
+	"github.com/ionous/errutil"
 )
 
 //export Post
@@ -29,6 +31,11 @@ func Post(endpoint, msg string) (ret *C.char) {
 }
 
 func post(endpoint, msg string) (ret string, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = errutil.Fmt("Recovered %s:\n%s", r, debug.Stack())
+		}
+	}()
 	var buf strings.Builder
 	if n, e := getShuttle(); e != nil {
 		err = e
@@ -44,8 +51,8 @@ func post(endpoint, msg string) (ret string, err error) {
 func main() {}
 
 // fix: defer ctx.Close()
-func getShuttle() (ret shuttle.Shuttle, err error) {
-	if setup {
+func getShuttle() (ret *shuttle.Shuttle, err error) {
+	if savedCtx != nil {
 		ret = savedCtx
 	} else {
 		var inFile string
@@ -55,14 +62,12 @@ func getShuttle() (ret shuttle.Shuttle, err error) {
 		if n, e := shuttle.NewShuttle(inFile, qna.NewOptions()); e != nil {
 			err = e
 		} else {
-			setup = true
-			savedCtx = n
-			ret = n
+			savedCtx = &n
+			ret = savedCtx
 		}
 	}
 	return
 }
 
-var savedCtx shuttle.Shuttle
-var setup bool
+var savedCtx *shuttle.Shuttle
 var lastResult unsafe.Pointer

@@ -5,12 +5,9 @@ specifying `use_mingw=true` because i had problems using the msvc toolchain to c
 
 **building**
 
-
 `scons use_mingw=true`
 
-
 **prereqs**
-
 
 * go version 1.21  ( needed for pinning string pointers )
 
@@ -20,5 +17,4 @@ scons use_mingw=true custom_api_file=.\gdextension\extension_api.json
 ```
 
 * installing the vcredist might be necessary; i had some loading problems initially without it.
-
 

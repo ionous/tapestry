@@ -51,9 +51,9 @@ export default {
     }
     function processEvent(msg) {
       let out = "";
-      const cmd = Object.keys(msg)[0];
-      const body = msg[cmd];
-      switch (cmd) {
+      const sig = Object.keys(msg)[0];
+      const body = msg[sig];
+      switch (sig) {
         case "StateChanged noun:aspect:trait:":
           const [noun, aspect, trait] = body;
           console.log("state changed", noun, aspect, trait);
@@ -62,17 +62,21 @@ export default {
           out += body;
           break;
         default:
-          console.log("unhandled", cmd);
+          console.log("unhandled", sig);
       }
       return out;
     }
     // by default, sends commands to http://localhost:8080/shuttle/
     const io = new Io(appcfg.shuttle, (msgs) => {
       let out = "";
+      if (typeof msgs === 'string') {
+        console.error(msgs);
+        return;
+      }
       for (const msg of msgs) {
-        const cmd = Object.keys(msg)[0];
-        const body = msg[cmd];
-        if (cmd.endsWith("error:")) {
+        const sig = Object.keys(msg)[0];
+        const body = msg[sig];
+        if (sig.endsWith("error:")) {
           console.warn(body);
         } else {
           const [result, events] = body;
@@ -120,10 +124,15 @@ export default {
       logging, // story debugging
       prompt, // template ref
       container,
-      onPrompt(txt) {
+      onPrompt(text) {
         console.log("onPrompt");
-        narration.value.push("> " + txt);
-        io.post("", `{"Fabricate input:": "${txt}"}`);
+        narration.value.push("> " + text);
+        const msg = [{
+          "FromExe:": {
+            "Fabricate input:":text
+          }
+        }];
+        io.post("query", msg);
       },
     };
   },
