@@ -165,6 +165,18 @@ h1 .mk-cat-button:hover {
   top:0;
   background-color: black;
   color: white;
+  width: 100%;
+}
+.lv-status__title {
+  text-align: center;
+}
+.lv-status__room {
+  float:left;
+  margin-left: 5px;
+}
+.lv-status__score {
+  float:right;
+  margin-right: 5px;
 }
 .lv-story {
   margin-left: 0.25em;

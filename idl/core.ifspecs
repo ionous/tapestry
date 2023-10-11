@@ -680,10 +680,11 @@
             "bool_eval",
             "logic",
             {
-              "Flow uses:": [
+              "Flow:uses:": [
+              	"is",
                 {
                   "Term:name:type:": [
-                    "_",
+                    "domain",
                     "name",
                     "text"
                   ]

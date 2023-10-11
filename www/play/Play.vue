@@ -2,11 +2,21 @@
   <div ref="container">
     <lv-output class="lv-results" :lines="logging" />
     <div v-if="narration">
-      <lv-status /><lv-output class="lv-story" :lines="narration" /><lv-prompt
+      <lv-status 
+        :title="status.title"
+        :location="status.location"
+        :useScoring="status.useScoring"
+        :score="status.score"
+        :turns="status.turns"
+
+      />
+      <lv-output 
+        class="lv-story" 
+        :lines="narration" />
+      <lv-prompt
         enabled="playing"
         @changed="onPrompt"
-        ref="prompt"
-      />
+        ref="prompt" />
     </div>
   </div>
 </template>
@@ -32,12 +42,23 @@ new line`,
   `one line<br>then another<br><wbr>no blank lines<wbr>another new line<br><br>one blank line`,
 ]);
 
+class Status {
+  constructor() {
+    this.title= "game";
+    this.location= "nowhere";
+    this.useScoring= false;
+    this.score= 0;
+    this.turns= 0;
+  }
+}
+
 export default {
   components: { lvOutput, lvPrompt, lvStatus },
   // props: {},
   setup(/*props*/) {
     const logging = ref([]); //JSON.parse(junk));
     const narration = ref([]);
+    const status = ref(new Status());
     const playing = ref(false);
     const prompt = ref(null); // template ref
     const container = ref(null);
@@ -49,10 +70,18 @@ export default {
         el.scrollIntoView(false);
       });
     }
+    //  given a valid tapestry command, 
+    // return its signature and body in an array of two elements
+    function parseCommand(op) {
+      for (const k in op) {
+        if (k!== "--") {
+          return [k, op[k]];
+        }
+      }
+    }
     function processEvent(msg) {
       let out = "";
-      const sig = Object.keys(msg)[0];
-      const body = msg[sig];
+      const [ sig, body ] = parseCommand(msg);
       switch (sig) {
         case "StateChanged noun:aspect:trait:":
           const [noun, aspect, trait] = body;
@@ -67,30 +96,113 @@ export default {
       return out;
     }
     // by default, sends commands to http://localhost:8080/shuttle/
-    const io = new Io(appcfg.shuttle, (msgs) => {
+    const io = new Io(appcfg.shuttle, (msgs, calls) => {
       let out = "";
       if (typeof msgs === 'string') {
         console.error(msgs);
         return;
       }
-      for (const msg of msgs) {
-        const sig = Object.keys(msg)[0];
-        const body = msg[sig];
-        if (sig.endsWith("error:")) {
-          console.warn(body);
-        } else {
-          const [result, events] = body;
-          for (const evt of events) {
-            out += processEvent(evt);
+      for (let i=0; i< msgs.length; ++i) {
+        const msg = msgs[i];
+        const call = calls[i];
+        //
+        const [ sig, body ] = parseCommand(msg);
+        switch (sig) {
+          // fix: result and events should probably be optional;
+          // or, make two commands that satisfy some response interface
+          case "Frame result:events:error:":
+          {
+            const [_res, _evts, error] = body;
+            console.warn(error);
+            break;
           }
-        }
+          case "Frame result:events:":
+          {
+            const [result, events] = body;
+            if (events) {
+              for (const evt of events) {
+                out += processEvent(evt);
+              }
+            }
+            if (call) {
+              // ick: we debug.Stringify the results to support "any value"
+              // so we have to unpack that too.
+              const res = result? JSON.parse(result): "";
+              call(res);
+            }
+            break;
+          }
+          default:
+            console.log("unhandled", sig);
+        };
       }
       if (out.length) {
         addToNarration(out);
       }
     });
-    // fix: add a button? read from the path or query string?
-    io.post("restart", "cloak");
+    io.post("restart", "cloak").then(()=> {
+      // send a queries for title, score, etc.
+      io.query([{
+        "FromText:": {
+          "Object:field:": ["story", "title"]
+        }
+      },(title)=>{
+        status.value.title = title;
+      },{
+        "FromNumber:": {
+          "Num if:then:else:": [
+            { "Is domain:": "scoring" },
+            {"Object:field:": ["story", "score"]},
+            -1
+          ]
+        }
+      },(score)=>{
+        status.value.score = score;
+      },{
+        "FromNumber:": {
+          "Num if:then:else:": [
+            { "Is domain:": "scoring" },
+            {"Object:field:": ["story", "turn count"]},
+            -1
+          ]
+        }
+      },(turn)=>{
+        status.value.useScoring = turn >= 0;
+        status.value.turns = turn;
+      },{
+        // fix: what do you mean this is insane?
+        // it'd help if we could use the implicit pattern call decoder :/
+        // maybe change "print name" to some "get name"
+        // and, if possible, get rid of From(s)
+          "FromText:": {
+            "Buffers do:": {
+              "Determine:args:": [
+                "print_name", {
+                  "Arg:from:": [
+                    "obj", {
+                      "FromText:": {
+                        "Determine:args:": [
+                          "location_of", {
+                            "Arg:from:": [
+                              "obj", {
+                                "FromText:": {
+                                  "Object:field:": ["story", "actor"]
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+       },(loc)=>{
+        status.value.location = loc;
+      }]);
+    });
     const onkey = (evt) => {
       // console.log("key", evt.key);
       const ignore = evt.metaKey || evt.ctrlKey || evt.altKey;
@@ -113,15 +225,14 @@ export default {
     };
     onMounted(() => {
       document.body.addEventListener("keydown", onkey);
-      io.startPolling();
     });
     onUnmounted(() => {
       document.body.removeEventListener("keydown", onkey);
-      io.stopPolling();
     });
     return {
       narration, // story output
       logging, // story debugging
+      status,
       prompt, // template ref
       container,
       onPrompt(text) {
@@ -132,7 +243,7 @@ export default {
             "Fabricate input:":text
           }
         }];
-        io.post("query", msg);
+        io.query(msg, null);
       },
     };
   },

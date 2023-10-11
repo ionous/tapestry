@@ -3244,7 +3244,7 @@ func FieldsOfKind_Marshal(m jsn.Marshaler, val *FieldsOfKind) (err error) {
 
 // HasDominion
 type HasDominion struct {
-	Name   string `if:"label=_,type=text"`
+	Name   string `if:"label=domain,type=text"`
 	Markup map[string]any
 }
 
@@ -3255,6 +3255,7 @@ func (*HasDominion) Compose() composer.Spec {
 	return composer.Spec{
 		Name: HasDominion_Type,
 		Uses: composer.Type_Flow,
+		Lede: "is",
 	}
 }
 
@@ -3308,7 +3309,7 @@ func HasDominion_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]HasDominion) (e
 type HasDominion_Flow struct{ ptr *HasDominion }
 
 func (n HasDominion_Flow) GetType() string      { return HasDominion_Type }
-func (n HasDominion_Flow) GetLede() string      { return HasDominion_Type }
+func (n HasDominion_Flow) GetLede() string      { return "is" }
 func (n HasDominion_Flow) GetFlow() interface{} { return n.ptr }
 func (n HasDominion_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*HasDominion); ok {
@@ -3332,7 +3333,7 @@ func HasDominion_Optional_Marshal(m jsn.Marshaler, pv **HasDominion) (err error)
 func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(HasDominion_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", HasDominion_Field_Name)
+		e0 := m.MarshalKey("domain", HasDominion_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
@@ -7516,7 +7517,6 @@ var Signatures = map[uint64]interface{}{
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
 	2224842870997259213:  (*FieldsOfKind)(nil),      /* text_list_eval=Fields of: */
 	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
-	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
 	6524366950360243674:  (*ChooseBranch)(nil),      /* brancher=If:assuming:do: */
 	12195526980856142720: (*ChooseBranch)(nil),      /* execute=If:assuming:do: */
@@ -7538,6 +7538,7 @@ var Signatures = map[uint64]interface{}{
 	705264554644415287:   (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:clamp: */
 	9916665856596995152:  (*Increment)(nil),         /* execute=Increase:by: */
 	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
+	16720860407833961741: (*HasDominion)(nil),       /* bool_eval=Is domain: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
 	17183768313478169229: (*ObjectExists)(nil),      /* bool_eval=Is valid: */
 	4986574662941955696:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num: */
