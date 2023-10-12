@@ -159,13 +159,32 @@ h1 .mk-cat-button:hover {
    color: ghostwhite;
 }
 /**/
+.lv-play {
+  height:100%;
+}
+.lv-container {
+  display: grid;
+  grid-template-columns: 70% auto;
+  gap: 10px;
+  margin: 5px;
+  height: 100%;
+}
+.lv-container__play {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-rows: max-content 0.8fr max-content;
+}
+.lv-container__debug {
+  grid-column: 2;
+  grid-row: 1;
+}
 
 .lv-status {
-  position: sticky;
-  top:0;
   background-color: black;
   color: white;
-  width: 100%;
+  grid-column: 1;
+  grid-row: 1;
 }
 .lv-status__title {
   text-align: center;
@@ -179,12 +198,19 @@ h1 .mk-cat-button:hover {
   margin-right: 5px;
 }
 .lv-story {
-  margin-left: 0.25em;
+  grid-column: 1;
+  grid-row: 2;
+  overflow-y: scroll;
+  padding: 0.25em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
 }
 .lv-prompt {
   margin-top: 0.25em;
-  margin-left: 0.25em;
-
+  grid-column: 1;
+  grid-row: 3;
+ 
 }
 .lv-prompt input {
   width: 90%;

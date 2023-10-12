@@ -1,14 +1,20 @@
 <template>
-  <div ref="container">
-    <lv-output class="lv-results" :lines="logging" />
-    <div v-if="narration">
+  <div class="lv-container">
+    <div class="lv-container__debug">
+      <mk-folder
+        :folder="enclosure"
+        @fileSelected="onLeafObject"
+        @folderSelected="onEnclosingObject"
+    ></mk-folder>
+    </div>
+    <div class="lv-container__play" v-if="narration"
+      @click="onContainerClicked">
       <lv-status 
         :title="status.title"
         :location="status.location"
         :useScoring="status.useScoring"
         :score="status.score"
         :turns="status.turns"
-
       />
       <lv-output 
         class="lv-story" 
@@ -24,24 +30,16 @@
 import lvPrompt from "./Prompt.vue";
 import lvOutput from "./Output.vue";
 import lvStatus from "./Status.vue";
+
 import Io from "./io.js";
 import { ref, onMounted, onUnmounted } from "vue";
+//
+import ObjectCatalog from './objectCatalog.js'
+import mkFolder from '/mosaic/catalog/Folder.vue'
 
-const junk = JSON.stringify([
-  `<b>should write in bold</b>`,
-  `<div>should write the full tags</div>`,
-  `<i>should write the italics</i>`,
-  `<s>should strike</s>`,
-  `<b>should</s> skip a bad tag</b>`,
-  `<p>one<p>paragraph<p>then another.`,
-  `<strong>should close <em>trailing tags <strike>if needed`,
-  `<hr>`,
-  `<ol><li>one item</li><ul><li>second item</li></ul></ol>`,
-  `text with
-new line`,
-  `one line<br>then another<br><wbr>no blank lines<wbr>another new line<br><br>one blank line`,
-]);
+const objects = new ObjectCatalog();
 
+// move to its own file, and pass directly to lvStatus
 class Status {
   constructor() {
     this.title= "game";
@@ -53,22 +51,17 @@ class Status {
 }
 
 export default {
-  components: { lvOutput, lvPrompt, lvStatus },
+  components: { lvOutput, lvPrompt, lvStatus, mkFolder },
   // props: {},
   setup(/*props*/) {
-    const logging = ref([]); //JSON.parse(junk));
     const narration = ref([]);
     const status = ref(new Status());
     const playing = ref(false);
     const prompt = ref(null); // template ref
-    const container = ref(null);
+    const enclosure = ref(objects.root);
 
     function addToNarration(msg) {
       narration.value.push(msg);
-      setTimeout(() => {
-        const el = container.value;
-        el.scrollIntoView(false);
-      });
     }
     //  given a valid tapestry command, 
     // return its signature and body in an array of two elements
@@ -229,14 +222,37 @@ export default {
     onUnmounted(() => {
       document.body.removeEventListener("keydown", onkey);
     });
+    let first = true; 
     return {
       narration, // story output
-      logging, // story debugging
       status,
       prompt, // template ref
-      container,
+      enclosure,
+      onLeafObject(item) {
+      },
+      onEnclosingObject(folder) {
+        if (!folder.contents) {
+          folder.contents = folder.backup;
+          folder.backup = false;
+        } else {
+          folder.backup = folder.contents;
+          folder.contents = false;
+        }
+      },
+      onContainerClicked() {
+        const el = prompt.value;
+        if (el && el !== document.activeElement) {
+          el.setFocus();  
+        }
+      },
       onPrompt(text) {
         console.log("onPrompt");
+        if (!first) {
+          // patch for an errant space after the first set of text
+          // or there could always be a break
+          narration.value.push("<br>");
+        }
+        first = false;
         narration.value.push("> " + text);
         const msg = [{
           "FromExe:": {

@@ -22,9 +22,10 @@ export default {
   },
   computed: {
     name() {
-      const { file }= this;
+      const { file } = this;
       const ext= ".if";
-      return file && file.name.slice(0, -ext.length);
+      const name = file ? file.name : ""; 
+      return name.endsWith(ext) ? name.slice(0, -ext.length) : name;
     },
   },
   emits: ['activated'],

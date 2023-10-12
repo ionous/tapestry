@@ -16,6 +16,7 @@ export default {
   },
   updated() {
     this.$emit('updated');
+    this.$el.scrollTop = this.$el.scrollHeight;
   },
 }
 </script>

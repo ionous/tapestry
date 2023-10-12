@@ -50,16 +50,6 @@ export default class MockCatalog extends Cataloger {
     this.all= addAll(this.root, {}, mockCatalog, "");
   }
 
-  // future:takes a string, list, or none; if none saves all.
-  saveStories() {
-    const json= JSON.stringify(this.store, 0,2);
-    console.log("SAVED:", json);
-  }
-
-  findByPath(path) {
-    return this.all[path];
-  }
-
   // fix: should be path.
   loadFile(file) {
     const path= file.path;

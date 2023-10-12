@@ -22,7 +22,7 @@ export default {
     folder: CatalogFolder,
     depth: Number
   },
-  emits: ['activated','opened-file'],
+  emits: ['activated'],
   computed: {
     name() {
       const { folder }= this;
