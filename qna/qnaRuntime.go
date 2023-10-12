@@ -79,6 +79,9 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 			}
 		}
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
+		if len(domain) == 0 {
+			run.nounValues = make(cache)
+		}
 		if len(begins) > 0 {
 			if e := run.domainChanged(begins, "begins"); e != nil {
 				err = errutil.Append(err, e)
