@@ -6,7 +6,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// implements the flag.Value interface for reading ports from the commandline
+// implements the flag.Value interface for reading ports from the command line
+// by default will return the default port ( and true )
 type Port int
 
 func (p Port) Int() (ret int) {
@@ -36,13 +37,11 @@ func portIsValid(i int) bool {
 	return i >= 1024 && i < 49152
 }
 
-func (p Port) GetPort(defaultPort int) (ret int, wasValid bool) {
-	if n := p.Int(); n == 1 {
-		ret, wasValid = defaultPort, true
-	} else if !portIsValid(n) {
-		ret, wasValid = defaultPort, false
+func (p Port) GetPort(defaultPort int) (ret int, okay bool) {
+	if n := p.Int(); portIsValid(n) {
+		ret, okay = n, true
 	} else {
-		ret, wasValid = n, true
+		ret, okay = defaultPort, n >= 0
 	}
 	return
 }
