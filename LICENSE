@@ -1,0 +1,1241 @@
+The Tapestry story engine
+------------
+
+Tapestry is licensed under the BSD-3-Clause License.
+
+Copyright (c) 2020 by ionous (aka Simon Travis)
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Additional Go Language Licenses 
+-------------------
+
+### The Go license
+
+Some parts of the "tap" command-line tool are based on the "go" command-line tool and are licensed under Go's BSD style license which follows here. ( The Go standard and experimental libraries also use the same license. )
+
+Copyright (c) 2009 The Go Authors. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+   * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+   * Neither the name of Google Inc. nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+### package errutil
+
+Error handling helpers by ionous ( https://github.com/ionous/errutil ) licensed under the **MIT license.**
+
+Copyright (c) 2017 ionous
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+### package inflect 
+
+English language inflection rules by **Chris Farmiloe** with modifications by Simon Travis ( branched at https://github.com/ionous/inflect ) licensed under the **MIT license**.
+
+Copyright (c) 2021 Simon Travis
+
+Copyright (c) 2011 Chris Farmiloe
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### package go-sqlite3
+
+Sqlite3 driver for go using database/sql by **Yasuhiro Matsumoto** ( https://github.com/mattn/go-sqlite3 ) licensed under the **MIT license**.
+
+Copyright (c) 2014 Yasuhiro Matsumoto
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+### package num2words
+
+English language number printing by **Ivan Daniluk** ( branched at https://github.com/ionous/num2words ) licensed under the **MIT license**.
+
+Copyright (c) 2013 Ivan Daniluk
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### package pretty 
+
+Printing printing of go values by **Keith Rarick** ( https://github.com/kr/pretty ) licensed under the **MIT license**.
+
+Copyright 2012 Keith Rarick
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+### package sliceof
+
+Helper for creating slices by ionous ( https://github.com/ionous/sliceOf ) licensed under the **MIT license**. 
+
+Copyright (c) 2017 ionous
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+### package wails
+
+Web browser wrapper for multi-platform applications by **Lea Anthony** ( https://github.com/wailsapp/ ) licensed under the **MIT License**.
+
+Copyright (c) 2018-Present Lea Anthony
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+Editor Related Dependencies
+-------------------
+
+The mosaic editor and the web browser console app use [blockly](https://developers.google.com/blockly) and [vue.js](https://vuejs.org/) which are licensed under the Apache 2.0 and MIT licenses respectively. 
+
+
+### Blockly
+
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+
+### Vuejs
+
+MIT License
+
+Copyright (c) 2019 vuejs
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+### Development dependencies
+
+Development uses [Node.js](https://nodejs.org/) and a variety of modules as summarized below.  ( Thank you [license-checker](https://github.com/davglass/license-checker) )
+```
+├─ @babel/parser
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/babel/babel
+│  ├─ publisher: The Babel Team
+│  ├─ url: https://babel.dev/team
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@babel/parser
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@babel/parser/LICENSE
+├─ @jridgewell/sourcemap-codec
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jridgewell/sourcemap-codec
+│  ├─ publisher: Rich Harris
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@jridgewell/sourcemap-codec
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@jridgewell/sourcemap-codec/LICENSE
+├─ @vitejs/plugin-vue
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vitejs/vite
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vitejs/plugin-vue
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vitejs/plugin-vue/LICENSE
+├─ @vue/compiler-core
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-core
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-core/LICENSE
+├─ @vue/compiler-dom
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-dom
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-dom/LICENSE
+├─ @vue/compiler-sfc
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-sfc
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-sfc/LICENSE
+├─ @vue/compiler-ssr
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-ssr
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/compiler-ssr/LICENSE
+├─ @vue/devtools-api
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/vue-devtools
+│  ├─ publisher: Guillaume Chau
+│  └─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/devtools-api
+├─ @vue/reactivity-transform
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/reactivity-transform
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/reactivity-transform/LICENSE
+├─ @vue/reactivity
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/reactivity
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/reactivity/LICENSE
+├─ @vue/runtime-core
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/runtime-core
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/runtime-core/LICENSE
+├─ @vue/runtime-dom
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/runtime-dom
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/runtime-dom/LICENSE
+├─ @vue/server-renderer
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/server-renderer
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/server-renderer/LICENSE
+├─ @vue/shared
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/@vue/shared
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/@vue/shared/LICENSE
+├─ abab@2.0.6
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/jsdom/abab
+│  ├─ publisher: Jeff Carpenter
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/abab
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/abab/LICENSE.md
+├─ acorn-globals@4.3.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ForbesLindesay/acorn-globals
+│  ├─ publisher: ForbesLindesay
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/acorn-globals
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/acorn-globals/LICENSE
+├─ acorn-walk@6.2.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/acornjs/acorn
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/acorn-walk
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/acorn-walk/LICENSE
+├─ acorn@6.4.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/acornjs/acorn
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/acorn-globals/node_modules/acorn
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/acorn-globals/node_modules/acorn/LICENSE
+├─ acorn@7.4.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/acornjs/acorn
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/acorn
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/acorn/LICENSE
+├─ ajv@6.12.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ajv-validator/ajv
+│  ├─ publisher: Evgeny Poberezkin
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/ajv
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/ajv/LICENSE
+├─ array-equal@1.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/component/array-equal
+│  ├─ publisher: Jonathan Ong
+│  ├─ url: http://jongleberry.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/array-equal
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/array-equal/LICENSE
+├─ asn1@0.2.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/joyent/node-asn1
+│  ├─ publisher: Joyent
+│  ├─ url: joyent.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/asn1
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/asn1/LICENSE
+├─ assert-plus@1.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mcavage/node-assert-plus
+│  ├─ publisher: Mark Cavage
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/assert-plus
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/assert-plus/README.md
+├─ asynckit@0.4.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/alexindigo/asynckit
+│  ├─ publisher: Alex Indigo
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/asynckit
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/asynckit/LICENSE
+├─ aws-sign2@0.7.0
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/mikeal/aws-sign
+│  ├─ publisher: Mikeal Rogers
+│  ├─ url: http://www.futurealoof.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/aws-sign2
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/aws-sign2/LICENSE
+├─ aws4@1.12.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mhart/aws4
+│  ├─ publisher: Michael Hart
+│  ├─ url: https://github.com/mhart
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/aws4
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/aws4/LICENSE
+├─ bcrypt-pbkdf@1.0.2
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/joyent/node-bcrypt-pbkdf
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/bcrypt-pbkdf
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/bcrypt-pbkdf/LICENSE
+├─ blockly@8.0.5
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/google/blockly
+│  ├─ publisher: Neil Fraser
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/blockly
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/blockly/README.md
+├─ browser-process-hrtime@1.0.0
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/kumavis/browser-process-hrtime
+│  ├─ publisher: kumavis
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/browser-process-hrtime
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/browser-process-hrtime/LICENSE
+├─ caseless@0.12.0
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/mikeal/caseless
+│  ├─ publisher: Mikeal Rogers
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/caseless
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/caseless/LICENSE
+├─ combined-stream@1.0.8
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/felixge/node-combined-stream
+│  ├─ publisher: Felix Geisendörfer
+│  ├─ url: http://debuggable.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/combined-stream
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/combined-stream/License
+├─ core-util-is@1.0.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/isaacs/core-util-is
+│  ├─ publisher: Isaac Z. Schlueter
+│  ├─ url: http://blog.izs.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/core-util-is
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/core-util-is/LICENSE
+├─ cssom@0.3.8
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/NV/CSSOM
+│  ├─ publisher: Nikita Vasilyev
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/cssstyle/node_modules/cssom
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/cssstyle/node_modules/cssom/LICENSE.txt
+├─ cssom@0.4.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/NV/CSSOM
+│  ├─ publisher: Nikita Vasilyev
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/cssom
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/cssom/LICENSE.txt
+├─ cssstyle@2.3.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/cssstyle
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/cssstyle
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/cssstyle/LICENSE
+├─ csstype@3.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/frenic/csstype
+│  ├─ publisher: Fredrik Nicol
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/csstype
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/csstype/LICENSE
+├─ dashdash@1.14.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/trentm/node-dashdash
+│  ├─ publisher: Trent Mick
+│  ├─ url: http://trentm.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/dashdash
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/dashdash/LICENSE.txt
+├─ data-urls@1.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/data-urls
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/data-urls
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/data-urls/LICENSE.txt
+├─ deep-is@0.1.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/thlorenz/deep-is
+│  ├─ publisher: Thorsten Lorenz
+│  ├─ url: http://thlorenz.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/deep-is
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/deep-is/LICENSE
+├─ delayed-stream@1.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/felixge/node-delayed-stream
+│  ├─ publisher: Felix Geisendörfer
+│  ├─ url: http://debuggable.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/delayed-stream
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/delayed-stream/License
+├─ domexception@1.0.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/domexception
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/domexception
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/domexception/LICENSE.txt
+├─ ecc-jsbn@0.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/quartzjer/ecc-jsbn
+│  ├─ publisher: Jeremie Miller
+│  ├─ url: http://jeremie.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/ecc-jsbn
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/ecc-jsbn/LICENSE
+├─ esbuild-darwin-64@0.15.18
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/evanw/esbuild
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/esbuild-darwin-64
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/esbuild-darwin-64/README.md
+├─ esbuild@0.15.18
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/evanw/esbuild
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/esbuild
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/esbuild/LICENSE.md
+├─ escodegen@1.14.3
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/estools/escodegen
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/escodegen
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/escodegen/LICENSE.BSD
+├─ esprima@4.0.1
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/jquery/esprima
+│  ├─ publisher: Ariya Hidayat
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/esprima
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/esprima/LICENSE.BSD
+├─ estraverse@4.3.0
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/estools/estraverse
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/estraverse
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/estraverse/LICENSE.BSD
+├─ estree-walker@2.0.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/Rich-Harris/estree-walker
+│  ├─ publisher: Rich Harris
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/estree-walker
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/estree-walker/LICENSE
+├─ esutils@2.0.3
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/estools/esutils
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/esutils
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/esutils/LICENSE.BSD
+├─ extend@3.0.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/justmoon/node-extend
+│  ├─ publisher: Stefan Thomas
+│  ├─ url: http://www.justmoon.net
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/extend
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/extend/LICENSE
+├─ extsprintf@1.3.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/davepacheco/node-extsprintf
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/extsprintf
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/extsprintf/LICENSE
+├─ fast-deep-equal@3.1.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/epoberezkin/fast-deep-equal
+│  ├─ publisher: Evgeny Poberezkin
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/fast-deep-equal
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/fast-deep-equal/LICENSE
+├─ fast-json-stable-stringify@2.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/epoberezkin/fast-json-stable-stringify
+│  ├─ publisher: James Halliday
+│  ├─ url: http://substack.net
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/fast-json-stable-stringify
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/fast-json-stable-stringify/LICENSE
+├─ fast-levenshtein@2.0.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/hiddentao/fast-levenshtein
+│  ├─ publisher: Ramesh Nair
+│  ├─ url: http://www.hiddentao.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/fast-levenshtein
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/fast-levenshtein/LICENSE.md
+├─ forever-agent@0.6.1
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/mikeal/forever-agent
+│  ├─ publisher: Mikeal Rogers
+│  ├─ url: http://www.futurealoof.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/forever-agent
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/forever-agent/LICENSE
+├─ form-data@2.3.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/form-data/form-data
+│  ├─ publisher: Felix Geisendörfer
+│  ├─ url: http://debuggable.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/form-data
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/form-data/License
+├─ fsevents@2.3.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/fsevents/fsevents
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/fsevents
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/fsevents/LICENSE
+├─ function-bind@1.1.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/Raynos/function-bind
+│  ├─ publisher: Raynos
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/function-bind
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/function-bind/LICENSE
+├─ getpass@0.1.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/arekinath/node-getpass
+│  ├─ publisher: Alex Wilson
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/getpass
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/getpass/LICENSE
+├─ har-schema@2.0.0
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/ahmadnassri/har-schema
+│  ├─ publisher: Ahmad Nassri
+│  ├─ url: https://www.ahmadnassri.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/har-schema
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/har-schema/LICENSE
+├─ har-validator@5.1.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ahmadnassri/node-har-validator
+│  ├─ publisher: Ahmad Nassri
+│  ├─ url: https://www.ahmadnassri.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/har-validator
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/har-validator/LICENSE
+├─ has@1.0.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/tarruda/has
+│  ├─ publisher: Thiago de Arruda
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/has
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/has/LICENSE-MIT
+├─ html-encoding-sniffer@1.0.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/html-encoding-sniffer
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/html-encoding-sniffer
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/html-encoding-sniffer/LICENSE.txt
+├─ http-signature@1.2.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/joyent/node-http-signature
+│  ├─ publisher: Joyent, Inc
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/http-signature
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/http-signature/LICENSE
+├─ iconv-lite@0.4.24
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ashtuchkin/iconv-lite
+│  ├─ publisher: Alexander Shtuchkin
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/iconv-lite
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/iconv-lite/LICENSE
+├─ ip-regex@2.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/sindresorhus/ip-regex
+│  ├─ publisher: Sindre Sorhus
+│  ├─ url: sindresorhus.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/ip-regex
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/ip-regex/license
+├─ is-core-module@2.12.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/inspect-js/is-core-module
+│  ├─ publisher: Jordan Harband
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/is-core-module
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/is-core-module/LICENSE
+├─ is-typedarray@1.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/hughsk/is-typedarray
+│  ├─ publisher: Hugh Kennedy
+│  ├─ url: http://hughsk.io/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/is-typedarray
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/is-typedarray/LICENSE.md
+├─ isstream@0.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/rvagg/isstream
+│  ├─ publisher: Rod Vagg
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/isstream
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/isstream/LICENSE.md
+├─ jsbn@0.1.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/andyperlitch/jsbn
+│  ├─ publisher: Tom Wu
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/jsbn
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/jsbn/LICENSE
+├─ jsdom@15.2.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/jsdom
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/jsdom
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/jsdom/LICENSE.txt
+├─ json-schema-traverse@0.4.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/epoberezkin/json-schema-traverse
+│  ├─ publisher: Evgeny Poberezkin
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/json-schema-traverse
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/json-schema-traverse/LICENSE
+├─ json-schema@0.4.0
+│  ├─ licenses: (AFL-2.1 OR BSD-3-Clause)
+│  ├─ repository: https://github.com/kriszyp/json-schema
+│  ├─ publisher: Kris Zyp
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/json-schema
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/json-schema/LICENSE
+├─ json-stringify-safe@5.0.1
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/isaacs/json-stringify-safe
+│  ├─ publisher: Isaac Z. Schlueter
+│  ├─ url: http://blog.izs.me
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/json-stringify-safe
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/json-stringify-safe/LICENSE
+├─ jsprim@1.4.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/joyent/node-jsprim
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/jsprim
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/jsprim/LICENSE
+├─ levn@0.3.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/gkz/levn
+│  ├─ publisher: George Zahariev
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/levn
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/levn/LICENSE
+├─ lodash.sortby@4.7.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lodash/lodash
+│  ├─ publisher: John-David Dalton
+│  ├─ url: http://allyoucanleet.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/lodash.sortby
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/lodash.sortby/LICENSE
+├─ lodash@4.17.21
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lodash/lodash
+│  ├─ publisher: John-David Dalton
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/lodash
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/lodash/LICENSE
+├─ magic-string@0.30.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/rich-harris/magic-string
+│  ├─ publisher: Rich Harris
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/magic-string
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/magic-string/LICENSE
+├─ mime-db@1.52.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jshttp/mime-db
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/mime-db
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/mime-db/LICENSE
+├─ mime-types@2.1.35
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jshttp/mime-types
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/mime-types
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/mime-types/LICENSE
+├─ mosaic@0.0.0
+│  ├─ licenses: UNLICENSED
+│  ├─ private: true
+│  ├─ path: /Users/ionous/Dev/tapestry/www
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/README.md
+├─ nanoid@3.3.6
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ai/nanoid
+│  ├─ publisher: Andrey Sitnik
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/nanoid
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/nanoid/LICENSE
+├─ normalize.css@8.0.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/necolas/normalize.css
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/normalize.css
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/normalize.css/LICENSE.md
+├─ nwsapi@2.2.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/dperini/nwsapi
+│  ├─ publisher: Diego Perini
+│  ├─ url: http://www.iport.it/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/nwsapi
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/nwsapi/LICENSE
+├─ oauth-sign@0.9.0
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/mikeal/oauth-sign
+│  ├─ publisher: Mikeal Rogers
+│  ├─ url: http://www.futurealoof.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/oauth-sign
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/oauth-sign/LICENSE
+├─ optionator@0.8.3
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/gkz/optionator
+│  ├─ publisher: George Zahariev
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/optionator
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/optionator/LICENSE
+├─ parse5@5.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/inikulin/parse5
+│  ├─ publisher: Ivan Nikulin
+│  ├─ url: https://github.com/inikulin
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/parse5
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/parse5/README.md
+├─ path-parse@1.0.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jbgutierrez/path-parse
+│  ├─ publisher: Javier Blanco
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/path-parse
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/path-parse/LICENSE
+├─ performance-now@2.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/braveg1rl/performance-now
+│  ├─ publisher: Braveg1rl
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/performance-now
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/performance-now/license.txt
+├─ picocolors@1.0.0
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/alexeyraspopov/picocolors
+│  ├─ publisher: Alexey Raspopov
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/picocolors
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/picocolors/LICENSE
+├─ pn@1.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/cscott/node-pn
+│  ├─ publisher: C. Scott Ananian
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/pn
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/pn/README.md
+├─ postcss@8.4.26
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/postcss/postcss
+│  ├─ publisher: Andrey Sitnik
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/postcss
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/postcss/LICENSE
+├─ prelude-ls@1.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/gkz/prelude-ls
+│  ├─ publisher: George Zahariev
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/prelude-ls
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/prelude-ls/LICENSE
+├─ psl@1.9.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/lupomontero/psl
+│  ├─ publisher: Lupo Montero
+│  ├─ url: https://lupomontero.com/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/psl
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/psl/LICENSE
+├─ punycode@2.3.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/mathiasbynens/punycode.js
+│  ├─ publisher: Mathias Bynens
+│  ├─ url: https://mathiasbynens.be/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/punycode
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/punycode/LICENSE-MIT.txt
+├─ qs@6.5.3
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/ljharb/qs
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/qs
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/qs/LICENSE.md
+├─ request-promise-core@1.1.4
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/request/promise-core
+│  ├─ publisher: Nicolai Kamenzky
+│  ├─ url: https://github.com/analog-nico
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/request-promise-core
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/request-promise-core/LICENSE
+├─ request-promise-native@1.0.9
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/request/request-promise-native
+│  ├─ publisher: Nicolai Kamenzky
+│  ├─ url: https://github.com/analog-nico
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/request-promise-native
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/request-promise-native/LICENSE
+├─ request@2.88.2
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/request/request
+│  ├─ publisher: Mikeal Rogers
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/request
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/request/LICENSE
+├─ resolve@1.22.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/browserify/resolve
+│  ├─ publisher: James Halliday
+│  ├─ url: http://substack.net
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/resolve
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/resolve/LICENSE
+├─ rollup@2.79.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/rollup/rollup
+│  ├─ publisher: Rich Harris
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/rollup
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/rollup/LICENSE.md
+├─ safe-buffer@5.2.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/feross/safe-buffer
+│  ├─ publisher: Feross Aboukhadijeh
+│  ├─ url: https://feross.org
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/safe-buffer
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/safe-buffer/LICENSE
+├─ safer-buffer@2.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/ChALkeR/safer-buffer
+│  ├─ publisher: Nikita Skovoroda
+│  ├─ url: https://github.com/ChALkeR
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/safer-buffer
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/safer-buffer/LICENSE
+├─ saxes@3.1.11
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/lddubeau/saxes
+│  ├─ publisher: Louis-Dominique Dubeau
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/saxes
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/saxes/LICENSE
+├─ source-map-js@1.0.2
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/7rulnik/source-map-js
+│  ├─ publisher: Valentin 7rulnik Semirulnik
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/source-map-js
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/source-map-js/LICENSE
+├─ source-map@0.6.1
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/mozilla/source-map
+│  ├─ publisher: Nick Fitzgerald
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/source-map
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/source-map/LICENSE
+├─ sshpk@1.17.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/joyent/node-sshpk
+│  ├─ publisher: Joyent, Inc
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/sshpk
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/sshpk/LICENSE
+├─ stealthy-require@1.1.1
+│  ├─ licenses: ISC
+│  ├─ repository: https://github.com/analog-nico/stealthy-require
+│  ├─ publisher: Nicolai Kamenzky
+│  ├─ url: https://github.com/analog-nico
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/stealthy-require
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/stealthy-require/LICENSE
+├─ supports-preserve-symlinks-flag@1.0.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/inspect-js/node-supports-preserve-symlinks-flag
+│  ├─ publisher: Jordan Harband
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/supports-preserve-symlinks-flag
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/supports-preserve-symlinks-flag/LICENSE
+├─ symbol-tree@3.2.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/js-symbol-tree
+│  ├─ publisher: Joris van der Wel
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/symbol-tree
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/symbol-tree/LICENSE
+├─ tough-cookie@2.5.0
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/salesforce/tough-cookie
+│  ├─ publisher: Jeremy Stashewsky
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/request/node_modules/tough-cookie
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/request/node_modules/tough-cookie/LICENSE
+├─ tough-cookie@3.0.1
+│  ├─ licenses: BSD-3-Clause
+│  ├─ repository: https://github.com/salesforce/tough-cookie
+│  ├─ publisher: Jeremy Stashewsky
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/tough-cookie
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/tough-cookie/LICENSE
+├─ tr46@1.0.1
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/Sebmaster/tr46.js
+│  ├─ publisher: Sebastian Mayr
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/tr46
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/tr46/LICENSE.md
+├─ tunnel-agent@0.6.0
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/mikeal/tunnel-agent
+│  ├─ publisher: Mikeal Rogers
+│  ├─ url: http://www.futurealoof.com
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/tunnel-agent
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/tunnel-agent/LICENSE
+├─ tweetnacl@0.14.5
+│  ├─ licenses: Unlicense
+│  ├─ repository: https://github.com/dchest/tweetnacl-js
+│  ├─ publisher: TweetNaCl-js contributors
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/tweetnacl
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/tweetnacl/LICENSE
+├─ type-check@0.3.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/gkz/type-check
+│  ├─ publisher: George Zahariev
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/type-check
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/type-check/LICENSE
+├─ uri-js@4.4.1
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/garycourt/uri-js
+│  ├─ publisher: Gary Court
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/uri-js
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/uri-js/LICENSE
+├─ uuid@3.4.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/uuidjs/uuid
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/uuid
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/uuid/LICENSE.md
+├─ verror@1.10.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/davepacheco/node-verror
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/verror
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/verror/LICENSE
+├─ vite@3.2.7
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vitejs/vite
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/vite
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/vite/LICENSE.md
+├─ vue-router@4.2.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/router
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/vue-router
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/vue-router/LICENSE
+├─ vue@3.3.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/vuejs/core
+│  ├─ publisher: Evan You
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/vue
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/vue/LICENSE
+├─ w3c-hr-time@1.0.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/w3c-hr-time
+│  ├─ publisher: Timothy Gu
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/w3c-hr-time
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/w3c-hr-time/LICENSE.md
+├─ w3c-xmlserializer@1.1.2
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/w3c-xmlserializer
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/w3c-xmlserializer
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/w3c-xmlserializer/README.md
+├─ webidl-conversions@4.0.2
+│  ├─ licenses: BSD-2-Clause
+│  ├─ repository: https://github.com/jsdom/webidl-conversions
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/webidl-conversions
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/webidl-conversions/LICENSE.md
+├─ whatwg-encoding@1.0.5
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/whatwg-encoding
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/whatwg-encoding
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/whatwg-encoding/LICENSE.txt
+├─ whatwg-mimetype@2.3.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/whatwg-mimetype
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/whatwg-mimetype
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/whatwg-mimetype/LICENSE.txt
+├─ whatwg-url@7.1.0
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jsdom/whatwg-url
+│  ├─ publisher: Sebastian Mayr
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/whatwg-url
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/whatwg-url/LICENSE.txt
+├─ word-wrap@1.2.4
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/jonschlinkert/word-wrap
+│  ├─ publisher: Jon Schlinkert
+│  ├─ url: https://github.com/jonschlinkert
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/word-wrap
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/word-wrap/LICENSE
+├─ ws@7.5.9
+│  ├─ licenses: MIT
+│  ├─ repository: https://github.com/websockets/ws
+│  ├─ publisher: Einar Otto Stangvik
+│  ├─ url: http://2x.io
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/ws
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/ws/LICENSE
+├─ xml-name-validator@3.0.0
+│  ├─ licenses: Apache-2.0
+│  ├─ repository: https://github.com/jsdom/xml-name-validator
+│  ├─ publisher: Domenic Denicola
+│  ├─ url: https://domenic.me/
+│  ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/xml-name-validator
+│  └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/xml-name-validator/LICENSE.txt
+└─ xmlchars@2.2.0
+   ├─ licenses: MIT
+   ├─ repository: https://github.com/lddubeau/xmlchars
+   ├─ publisher: Louis-Dominique Dubeau
+   ├─ path: /Users/ionous/Dev/tapestry/www/node_modules/xmlchars
+   └─ licenseFile: /Users/ionous/Dev/tapestry/www/node_modules/xmlchars/LICENSE
+```
