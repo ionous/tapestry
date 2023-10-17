@@ -31,15 +31,6 @@
     {
       "Define traits:as:": [
         [
-          "intangible",
-          "tangible"
-        ],
-        "tangibleness"
-      ]
-    },
-    {
-      "Define traits:as:": [
-        [
           "common named",
           "proper named",
           "counted"
@@ -62,6 +53,19 @@
     },
     {
       "--": ""
+    },
+     {
+    	"--": [
+    			"An object must be tangible in order to touch or interact with it.", 
+    			"A 'thing' is, by definition, a tangible object."
+    		],
+      "Define traits:as:": [
+        [
+          "intangible",
+          "tangible"
+        ],
+        "tangibleness"
+      ]
     },
     {
       "Declare:": "Things are kinds of object. Things are usually tangible."
