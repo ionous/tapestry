@@ -1,0 +1,306 @@
+{
+  "Tapestry:": [
+    {
+      "--": "future: it'd be nice to separate this from main scripts. inject a domain dependency at weave time, or some sort of runtime 'attach domain'."
+    },
+    {
+      "Declare:": "A object collection is a kind of record."
+    },
+    {
+      "Define kind:fields:": [
+        "object collection",
+        [
+          {
+            "Text:": "id"
+          },
+          {
+            "Text:": "name"
+          },
+          {
+            "Text:": "kind"
+          },
+          {
+            "TextList:": "traits"
+          },
+          {
+            "RecordList:kind:": [
+              "kids",
+              "object collection"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "collect objects",
+        [
+          {
+            "--": "determine the contents of this object, and all its accessible children.",
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
+        [
+          {
+            "Record:kind:": [
+              "result",
+              "object collection"
+            ]
+          }
+        ],
+        [
+          {
+            "Set:value:": [
+              {
+                "Variable:dot:": [
+                  "result",
+                  [
+                    {
+                      "AtField:": "id"
+                    }
+                  ]
+                ]
+              },
+              {
+                "FromText:": {
+                  "IdOf:": "@obj"
+                }
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Variable:dot:": [
+                  "result",
+                  [
+                    {
+                      "AtField:": "name"
+                    }
+                  ]
+                ]
+              },
+              {
+                "FromText:": {
+                  "NameOf:": "@obj"
+                }
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Variable:dot:": [
+                  "result",
+                  [
+                    {
+                      "AtField:": "kind"
+                    }
+                  ]
+                ]
+              },
+              {
+                "FromText:": {
+                  "KindOf:": "@obj"
+                }
+              }
+            ]
+          },
+          {
+            "Set:value:": [
+              {
+                "Variable:dot:": [
+                  "result",
+                  [
+                    {
+                      "AtField:": "traits"
+                    }
+                  ]
+                ]
+              },
+              {
+                "FromTextList:": {
+                  "Object traits:": "@obj"
+                }
+              }
+            ]
+          },
+          {
+            "--": "if we can see into the object, collect its children",
+            "If:do:": [
+              {
+                "HasAccessibleChildren obj:": {
+                  "FromText:": "@obj"
+                }
+              },
+              {
+                "Repeating across:as:do:": [
+                  {
+                    "FromTextList:": {
+                      "ChildrenOf obj:": {
+                        "FromText:": "@obj"
+                      }
+                    }
+                  },
+                  "kid",
+                  {
+                    "Push:into:": [
+                      {
+                        "FromTextList:": {
+                          "CollectObjects obj:": {
+                          	"FromText:": "@kid"
+                          }
+                        }
+                      },
+                      {
+                        "Variable:dot:": [
+                          "result",
+                          [
+                            {
+                              "AtField:": "kids"
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "has accessible children",
+        [
+          {
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
+        {
+          "Bool:": "accessible"
+        },
+        {
+          "--": "the default rule considers all children to be accessible.",
+          "Set:value:": [
+            "@accessible",
+            {
+              "FromBool:": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "has accessible children",
+        "closed containers are inaccessible",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "KindOf:is:": [
+                    "@obj",
+                    "containers"
+                  ]
+                },
+                {
+                  "Object:field:": [
+                    "@obj",
+                    "closed"
+                  ]
+                }
+              ]
+            },
+            {
+              "Set:value:": [
+                "@accessible",
+                {
+                  "FromBool:": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Define pattern:requires:provides:do:": [
+        "is accessible",
+        [
+          {
+            "Text:kind:": [
+              "parent",
+              "object"
+            ]
+          },
+          {
+            "Text:kind:": [
+              "child",
+              "object"
+            ]
+          }
+        ],
+        {
+          "Bool:": "accessible"
+        },
+        {
+          "--": "the default rule considers all children to be accessible.",
+          "Set:value:": [
+            "@accessible",
+            {
+              "FromBool:": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:named:do:": [
+        "is accessible",
+        "carried objects are inaccessible",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "KindOf:is:": [
+                    "@parent",
+                    "actors"
+                  ]
+                },
+                {
+                  "Not:": {
+                    "Variable:dot:": [
+                      "child",
+                      {
+                        "AtField:": "worn"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Set:value:": [
+                "@accessible",
+                {
+                  "FromBool:": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

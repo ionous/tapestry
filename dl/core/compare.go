@@ -79,6 +79,8 @@ func compareValues(a, b g.Value, tolerance float64) (ret int, err error) {
 		if d := compareStrings(an, bn); d != 0 {
 			ret = d
 		} else {
+			// fix: need to report on the mismatch
+			// an optional log statement?
 			for i, cnt := 0, a.Kind().NumField(); i < cnt; i++ {
 				if d := compareBool(a.HasValue(i), b.HasValue(i)); d != 0 {
 					ret = d

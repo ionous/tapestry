@@ -125,7 +125,11 @@
       "--": ""
     },
     {
-      "--": "Return a list containing any visible contents.",
+      "--": [
+        "Return any object contents which need to be mentioned to the player.",
+        "Excludes the player's actor and scenery objects",
+        "and only includes the *direct* contents, not contents of contents."
+      ],
       "Define pattern:requires:provides:do:": [
         "visible storage",
         [

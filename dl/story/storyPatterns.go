@@ -193,7 +193,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 		} else if label, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
 			err = e
 		} else if rule := rules.ReadPhrase(phrase.String(), label.String()); rule.IsDomainEvent() {
-			err = errutil.New("can't target nouns for domain events")
+			err = errutil.New("can't target kinds for domain events")
 		} else {
 			var filter rt.BoolEval
 			if exact.Bool() {

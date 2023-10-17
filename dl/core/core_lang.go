@@ -5810,6 +5810,109 @@ func ObjectExists_Marshal(m jsn.Marshaler, val *ObjectExists) (err error) {
 	return
 }
 
+// ObjectTraits Returns all of the object's current traits as a list of text.
+type ObjectTraits struct {
+	Object rt.TextEval `if:"label=traits"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.TextListEval = (*ObjectTraits)(nil)
+
+func (*ObjectTraits) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ObjectTraits_Type,
+		Uses: composer.Type_Flow,
+		Lede: "object",
+	}
+}
+
+const ObjectTraits_Type = "object_traits"
+const ObjectTraits_Field_Object = "$OBJECT"
+
+func (op *ObjectTraits) Marshal(m jsn.Marshaler) error {
+	return ObjectTraits_Marshal(m, op)
+}
+
+type ObjectTraits_Slice []ObjectTraits
+
+func (op *ObjectTraits_Slice) GetType() string { return ObjectTraits_Type }
+
+func (op *ObjectTraits_Slice) Marshal(m jsn.Marshaler) error {
+	return ObjectTraits_Repeats_Marshal(m, (*[]ObjectTraits)(op))
+}
+
+func (op *ObjectTraits_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ObjectTraits_Slice) SetSize(cnt int) {
+	var els []ObjectTraits
+	if cnt >= 0 {
+		els = make(ObjectTraits_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ObjectTraits_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ObjectTraits_Marshal(m, &(*op)[i])
+}
+
+func ObjectTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]ObjectTraits) error {
+	return jsn.RepeatBlock(m, (*ObjectTraits_Slice)(vals))
+}
+
+func ObjectTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ObjectTraits) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ObjectTraits_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ObjectTraits_Flow struct{ ptr *ObjectTraits }
+
+func (n ObjectTraits_Flow) GetType() string      { return ObjectTraits_Type }
+func (n ObjectTraits_Flow) GetLede() string      { return "object" }
+func (n ObjectTraits_Flow) GetFlow() interface{} { return n.ptr }
+func (n ObjectTraits_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ObjectTraits); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ObjectTraits_Optional_Marshal(m jsn.Marshaler, pv **ObjectTraits) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ObjectTraits_Marshal(m, *pv)
+	} else if !enc {
+		var v ObjectTraits
+		if err = ObjectTraits_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ObjectTraits_Marshal(m jsn.Marshaler, val *ObjectTraits) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ObjectTraits_Flow{val}); err == nil {
+		e0 := m.MarshalKey("traits", ObjectTraits_Field_Object)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Object)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ObjectTraits_Field_Object))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // Pluralize Returns the plural form of a singular word. (ex. apples for apple. ).
 type Pluralize struct {
 	Text   rt.TextEval `if:"label=of"`
@@ -7464,6 +7567,7 @@ var Slats = []composer.Composer{
 	(*Newline)(nil),
 	(*Not)(nil),
 	(*ObjectExists)(nil),
+	(*ObjectTraits)(nil),
 	(*Pluralize)(nil),
 	(*PrintNum)(nil),
 	(*PrintNumWord)(nil),
@@ -7564,6 +7668,7 @@ var Signatures = map[uint64]interface{}{
 	1916074756917320013:  (*ChooseNum)(nil),         /* number_eval=Num if:then:else: */
 	18009133328614046007: (*PrintNumWord)(nil),      /* text_eval=Numeral words: */
 	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
+	15933580486837544843: (*ObjectTraits)(nil),      /* text_list_eval=Object traits: */
 	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
 	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
 	4512128922644282356:  (*PrintText)(nil),         /* execute=Print: */

@@ -30,10 +30,11 @@
     },
     {
       "--": [
-        "Returns true if light gets stopped when passing from inside an object to outside an object.",
-        " Note that \"lit\" objects emit light from all of their surfaces,",
+        "Returns true if light stops when passing from inside an object to outside an object.",
+        "Note that \"lit\" objects emit light from all of their surfaces,",
         "so while a closed box might not reveal a flashlight locked inside,",
-        "a glowing haunted treasure chest would illuminate its contents and the room it's in."
+        "a glowing haunted treasure chest would illuminate both its contents and the room where the treasure chest is located.",
+        "Actors are not considered fully opaque: carrying a lit torch will produce light."
       ],
       "Define pattern:requires:provides:do:": [
         "fully opaque",
@@ -125,6 +126,10 @@
       "--": ""
     },
     {
+    	"--": [
+    		"return the parent of an object if and only if that parent transmits light.",
+    		"usually used as part of 'transparent list' which returns a list of all transparent ancestors."
+    	],
       "Define pattern:requires:provides:do:": [
         "transparent of",
         [
@@ -196,7 +201,7 @@
       "--": ""
     },
     {
-      "--": "Return a list containing the object and all of its transparent parents.",
+      "--": "Return a list containing the object and all of its transparent ancestors.",
       "Define pattern:requires:provides:do:": [
         "transparent list",
         [

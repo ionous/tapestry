@@ -1,0 +1,220 @@
+{
+  "Tapestry:": [
+    {
+      "--": [
+        "this test is probably too sensitive to last for long.",
+        "maybe helpful for now at least"
+      ],
+      "Test:dependsOn:do:": [
+        "collect test",
+        "Kitchenette",
+        [
+          {
+            "Log:value:": [
+              "debug",
+              {
+                "FromRecordList:": {
+                  "CollectObjects:": {
+                    "FromText:": "counter"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "Expect:": {
+              "Is:matching:value:": [
+                {
+                  "FromRecordList:": {
+                    "CollectObjects:": {
+                      "FromText:": "counter"
+                    }
+                  }
+                },
+                "equal_to",
+                {
+                  "FromRecordList:": {
+                    "ObjectCollection id:name:kind:traits:kids:": [
+                      {
+                        "FromText:": "counter"
+                      },
+                      {
+                        "FromText:": "counter"
+                      },
+                      {
+                        "FromText:": "supporters"
+                      },
+                      {
+                        "FromTextList:": [
+                          "common named",
+                          "publicly named",
+                          "tangible",
+                          "singular named",
+                          "portable",
+                          "not worn",
+                          "not wearable",
+                          "not scenery",
+                          "not mentioned",
+                          "not handled",
+                          "unlit"
+                        ]
+                      },
+                      {
+                        "FromRecordList:": {
+                          "List ofRecords:ofType:": [
+                            [
+                              {
+                                "ObjectCollection id:name:kind:traits:": [
+                                  {
+                                    "FromText:": "blender"
+                                  },
+                                  {
+                                    "FromText:": "blender"
+                                  },
+                                  {
+                                    "FromText:": "containers"
+                                  },
+                                  {
+                                    "FromTextList:": [
+                                      "common named",
+                                      "publicly named",
+                                      "tangible",
+                                      "singular named",
+                                      "portable",
+                                      "not worn",
+                                      "not wearable",
+                                      "not scenery",
+                                      "not mentioned",
+                                      "not handled",
+                                      "unlit",
+                                      "open",
+                                      "unopenable",
+                                      "unlocked",
+                                      "lockable",
+                                      "opaque",
+                                      "not enterable"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "ObjectCollection id:name:kind:traits:": [
+                                  {
+                                    "FromText:": "espresso machine"
+                                  },
+                                  {
+                                    "FromText:": "espresso machine"
+                                  },
+                                  {
+                                    "FromText:": "containers"
+                                  },
+                                  {
+                                    "FromTextList:": [
+                                      "common named",
+                                      "publicly named",
+                                      "tangible",
+                                      "singular named",
+                                      "fixed in place",
+                                      "not worn",
+                                      "not wearable",
+                                      "not scenery",
+                                      "not mentioned",
+                                      "not handled",
+                                      "unlit",
+                                      "closed",
+                                      "unopenable",
+                                      "unlocked",
+                                      "lockable",
+                                      "opaque",
+                                      "not enterable"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "ObjectCollection id:name:kind:traits:kids:": [
+                                  {
+                                    "FromText:": "mortar"
+                                  },
+                                  {
+                                    "FromText:": "mortar"
+                                  },
+                                  {
+                                    "FromText:": "containers"
+                                  },
+                                  {
+                                    "FromTextList:": [
+                                      "common named",
+                                      "publicly named",
+                                      "tangible",
+                                      "singular named",
+                                      "portable",
+                                      "not worn",
+                                      "not wearable",
+                                      "not scenery",
+                                      "not mentioned",
+                                      "not handled",
+                                      "unlit",
+                                      "open",
+                                      "unopenable",
+                                      "unlocked",
+                                      "lockable",
+                                      "opaque",
+                                      "not enterable"
+                                    ]
+                                  },
+                                  {
+                                    "FromRecordList:": {
+                                      "List ofRecords:ofType:": [
+                                        [
+                                          {
+                                            "ObjectCollection id:name:kind:traits:": [
+                                              {
+                                                "FromText:": "pestle"
+                                              },
+                                              {
+                                                "FromText:": "pestle"
+                                              },
+                                              {
+                                                "FromText:": "things"
+                                              },
+                                              {
+                                                "FromTextList:": [
+                                                  "common named",
+                                                  "publicly named",
+                                                  "tangible",
+                                                  "singular named",
+                                                  "portable",
+                                                  "not worn",
+                                                  "not wearable",
+                                                  "not scenery",
+                                                  "not mentioned",
+                                                  "not handled",
+                                                  "unlit"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "object collection"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            ],
+                            "object collection"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  ]
+}

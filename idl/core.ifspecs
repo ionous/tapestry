@@ -681,7 +681,7 @@
             "logic",
             {
               "Flow:uses:": [
-              	"is",
+                "is",
                 {
                   "Term:name:type:": [
                     "domain",
@@ -1144,6 +1144,26 @@
                     ]
                   }
                 ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Returns all of the object's current traits as a list of text.",
+          "Spec:slots:groups:with flow:": [
+            "object_traits",
+            "text_list_eval",
+            "objects",
+            {
+              "Flow:uses:": [
+                "object",
+                {
+                  "Term:name:type:": [
+                    "traits",
+                    "object",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]

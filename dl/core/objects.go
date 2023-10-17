@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -47,6 +48,39 @@ func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else {
 		ret = v
+	}
+	return
+}
+
+func (op *ObjectTraits) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+	if ts, e := op.getTraits(run); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = g.StringsOf(ts)
+	}
+	return
+}
+
+func (op *ObjectTraits) getTraits(run rt.Runtime) (ret []string, err error) {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
+		err = e
+	} else if kind, e := run.GetField(meta.ObjectKind, obj.String()); e != nil {
+		err = e
+	} else if k, e := run.GetKindByName(kind.String()); e != nil {
+		err = e
+	} else {
+		for i, cnt := 0, k.NumField(); i < cnt; i++ {
+			if f := k.Field(i); f.Name == f.Type { // aspect like
+				if a, e := run.GetKindByName(f.Type); e == nil && a.Implements(kindsOf.Aspect.String()) {
+					if str, e := run.GetField(obj.String(), f.Name); e != nil {
+						err = e
+						break
+					} else {
+						ret = append(ret, str.String())
+					}
+				}
+			}
+		}
 	}
 	return
 }

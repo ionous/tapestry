@@ -35,7 +35,7 @@
             ]
           },
           {
-            "--": "remove any duplicate seeming groups",
+            "--": "remove any duplicate groups",
             "Reduce into:fromList:using:": [
               "@groups",
               {
