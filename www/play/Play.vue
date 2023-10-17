@@ -2,7 +2,7 @@
   <div class="lv-container">
     <div class="lv-container__debug">
       <mk-folder
-        :folder="enclosure"
+        :folder="objTree"
         @fileSelected="onLeafObject"
         @folderSelected="onEnclosingObject"
       ></mk-folder>
@@ -32,13 +32,11 @@ import lvOutput from "./Output.vue";
 import lvStatus from "./Status.vue";
 import Status from "./status.js";
 
-import Io from "./io.js";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, reactive } from "vue";
 //
 import ObjectCatalog from './objectCatalog.js'
 import mkFolder from '/mosaic/catalog/Folder.vue'
-
-import cmds from "./cmds.js";
+import Query from './query.js'
 
 const objCatalog = new ObjectCatalog();
 
@@ -49,102 +47,24 @@ export default {
     const narration = ref([]);
     const status = ref(new Status());
     const playing = ref(false);
-    const prompt = ref(null); // template ref
-    const enclosure = ref(objCatalog.root);
+    const prompt = ref(null); // template slot helper.
     const currentTraits = ref([]);
+    // replace the obj catalog's root with a vue reactive proxy
+    // so that when we change its children ( move between rooms )
+    // vue can see those changes.
+    // "ref" requires access through .value ( and works with primitives )
+    // the .value is basically(?) a reactive proxy -- so take your pick.
+    const reactiveRoot = reactive(objCatalog.root);
+    objCatalog.root = reactiveRoot;
 
-    function addToNarration(msg) {
-      narration.value.push(msg);
-    }
-    //  given a valid tapestry command, 
-    // return its signature and body in an array of two elements
-    function parseCommand(op) {
-      for (const k in op) {
-        if (k!== "--") {
-          return [k, op[k]];
-        }
-      }
-    }
-    function processEvent(msg) {
-      let out = "";
-      const [ sig, body ] = parseCommand(msg);
-      switch (sig) {
-        case "StateChanged noun:aspect:trait:":
-          const [noun, aspect, trait] = body;
-          console.log("state changed", noun, aspect, trait);
-          break;
-        case "FrameOutput:":
-          out += body;
-          break;
-        default:
-          console.log("unhandled", sig);
-      }
-      return out;
-    }
-    // by default, sends commands to http://localhost:8080/shuttle/
-    const io = new Io(appcfg.shuttle, (msgs, calls) => {
-      let out = "";
-      if (typeof msgs === 'string') {
-        console.error(msgs);
-        return;
-      }
-      for (let i=0; i< msgs.length; ++i) {
-        const msg = msgs[i];
-        const call = calls[i];
-        //
-        const [ sig, body ] = parseCommand(msg);
-        switch (sig) {
-          // fix: result and events should probably be optional;
-          // or, make two commands that satisfy some response interface
-          case "Frame result:events:error:":
-          {
-            const [_res, _evts, error] = body;
-            console.warn(error);
-            break;
-          }
-          case "Frame result:events:":
-          {
-            const [result, events] = body;
-            if (events) {
-              for (const evt of events) {
-                out += processEvent(evt);
-              }
-            }
-            if (call) {
-              // ick: we debug.Stringify the results to support "any value"
-              // so we have to unpack that too.
-              const res = result? JSON.parse(result): "";
-              call(res);
-            }
-            break;
-          }
-          default:
-            console.log("unhandled", sig);
-        };
-      }
-      if (out.length) {
-        addToNarration(out);
-      }
-    });
-    io.post("restart", "cloak").then(()=> {
-      io.query([
-      cmds.storyTitle, (title)=>{
-        status.value.title = title;
-      },
-      cmds.currentScore, (score)=>{
-        status.value.score = score;
-      },
-      cmds.currentTurn, (turn)=>{
-        status.value.useScoring = turn >= 0;
-        status.value.turns = turn;
-      },
-      cmds.locationName, (name)=>{
-        status.value.location = name;
-      },
-      cmds.currentObjects, (objs)=>{
-        enclosure.value = objCatalog.rebuild(objs);
-      }]);
-    });
+    const q = new Query({
+      shuttle: appcfg.shuttle, // url. by default, http://localhost:8080/shuttle/
+      objCatalog,
+      statusBar: status.value, 
+      narration: narration.value,
+    }); 
+    q.restart("cloak"); // a promise
+
     const onkey = (evt) => {
       // console.log("key", evt.key);
       const ignore = evt.metaKey || evt.ctrlKey || evt.altKey;
@@ -176,21 +96,21 @@ export default {
       narration, // story output
       status,
       prompt, // template ref
-      enclosure,
+      objTree: reactiveRoot,
       currentTraits,
       onLeafObject(item) {
         currentTraits.value = item.data.traits;
       },
-      onEnclosingObject(items) {
-        if (!items.contents) {
-          items.contents = items.backup;
-          items.backup = false;
-          currentTraits.values = item.data.traits;
-        } else {
-          items.backup = items.contents;
-          items.contents = false;
-          currentTraits.values = [];
-        }
+      onEnclosingObject(item) {
+        // opening and closing the object "folder" will cause problems with query event handling
+        // if (!item.contents) {
+        //   item.contents = item.backup;
+        //   item.backup = false;
+        // } else {
+        //   item.backup = item.contents;
+        //   item.contents = false;
+        // }
+        currentTraits.value = item.data.traits;
       },
       // clicking anywhere below the prompt should focus the prompt
       onContainerClicked() {
@@ -208,12 +128,7 @@ export default {
         }
         first = false;
         narration.value.push("> " + text);
-        const msg = [{
-          "FromExe:": {
-            "Fabricate input:":text
-          }
-        }];
-        io.query(msg, null);
+        q.input(text);
       },
     };
   },

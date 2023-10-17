@@ -27,7 +27,9 @@ const mockObjects = {
   }]
 };
 
-const kindOfLocale = ["containers", "supporters", "actors", "rooms"];
+// we assume that certain kinds have children
+// ( it'd be nice if the tree view hadn't made that decision from the start )
+const kindOfLocale = ["rooms", "containers", "supporters", "actors"];
 
 // recursively create an object tree
 function buildTree(all, parentId, one) {
@@ -43,10 +45,13 @@ function buildTree(all, parentId, one) {
     folder.contents = [];
     all[one.id] = folder;
     out = folder;
-    // recurse:
-    for (let i=0; i< one.kids.length; i++) {
-      let child = buildTree(all, one.id, one.kids[i]);
-      folder.contents.push(child);
+    // recurse ( even if its a room,
+    if (one.kids) {
+      for (let i=0; i< one.kids.length; i++) {
+        let child = buildTree(all, one.id, one.kids[i]);
+        folder.contents.push(child);
+        child.parentId = one.id;
+      }
     }
   }
   return out;
@@ -56,12 +61,20 @@ export default class ObjectCatalog extends Cataloger {
   constructor() {
     super();
     this.all = {};
-    this.root = buildTree(this.all, "", mockObjects);
+    // my tree control is ... odd
+    // among other behaviors: it hides the root folder
+    // and only displays its contents; fine but we actually want that.
+    this.root = new CatalogFolder("$root");
+    this.root.contents= [];
+    this.rebuild(mockObjects);
   }
-
+  get(id) {
+    return this.all[id];
+  }
   // objs is a json'd "object collection" ( from collect.if )
   rebuild(collection) {
-    this.root = buildTree(this.all, "", collection);
+    const root = buildTree(this.all, "", collection);
+    this.root.contents.splice(0, 1, root);
     return this.root;
   }
 };

@@ -45,9 +45,11 @@ export default {
       ]
     }
   },
-  storyTitle: {
-    "FromText:": {
-      "Object:field:": ["story", "title"]
+  fabricate(text) {
+    return {
+      "FromExe:": {
+        "Fabricate input:":text
+      }
     }
   },
   locationName: {
@@ -66,5 +68,10 @@ export default {
           ]
         }
       }
-   }
+   },
+   storyTitle: {
+    "FromText:": {
+      "Object:field:": ["story", "title"]
+    }
+  }
 }

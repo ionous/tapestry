@@ -16,7 +16,7 @@ export default class Io {
     });
   }
   // frames
-  query(msgCalls) {
+  query(...msgCalls) {
     if (msgCalls & 1) {
       throw new Error("expected an equal number of queries and calls");
     }
