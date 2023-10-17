@@ -5,17 +5,17 @@
         :folder="enclosure"
         @fileSelected="onLeafObject"
         @folderSelected="onEnclosingObject"
-    ></mk-folder>
+      ></mk-folder>
+      <b>Traits:</b>
+      <div class="lv-traits">
+        <span v-for="(trait,index) in currentTraits">{{index?", ":""}}{{trait}}</span>
+      </div>
     </div>
-    <div class="lv-container__play" v-if="narration"
+    <div class="lv-container__play" 
+      v-if="narration"
       @click="onContainerClicked">
       <lv-status 
-        :title="status.title"
-        :location="status.location"
-        :useScoring="status.useScoring"
-        :score="status.score"
-        :turns="status.turns"
-      />
+        :status="status"/>
       <lv-output 
         class="lv-story" 
         :lines="narration" />
@@ -30,6 +30,7 @@
 import lvPrompt from "./Prompt.vue";
 import lvOutput from "./Output.vue";
 import lvStatus from "./Status.vue";
+import Status from "./status.js";
 
 import Io from "./io.js";
 import { ref, onMounted, onUnmounted } from "vue";
@@ -37,18 +38,9 @@ import { ref, onMounted, onUnmounted } from "vue";
 import ObjectCatalog from './objectCatalog.js'
 import mkFolder from '/mosaic/catalog/Folder.vue'
 
-const objects = new ObjectCatalog();
+import cmds from "./cmds.js";
 
-// move to its own file, and pass directly to lvStatus
-class Status {
-  constructor() {
-    this.title= "game";
-    this.location= "nowhere";
-    this.useScoring= false;
-    this.score= 0;
-    this.turns= 0;
-  }
-}
+const objCatalog = new ObjectCatalog();
 
 export default {
   components: { lvOutput, lvPrompt, lvStatus, mkFolder },
@@ -58,7 +50,8 @@ export default {
     const status = ref(new Status());
     const playing = ref(false);
     const prompt = ref(null); // template ref
-    const enclosure = ref(objects.root);
+    const enclosure = ref(objCatalog.root);
+    const currentTraits = ref([]);
 
     function addToNarration(msg) {
       narration.value.push(msg);
@@ -134,66 +127,22 @@ export default {
       }
     });
     io.post("restart", "cloak").then(()=> {
-      // send a queries for title, score, etc.
-      io.query([{
-        "FromText:": {
-          "Object:field:": ["story", "title"]
-        }
-      },(title)=>{
+      io.query([
+      cmds.storyTitle, (title)=>{
         status.value.title = title;
-      },{
-        "FromNumber:": {
-          "Num if:then:else:": [
-            { "Is domain:": "scoring" },
-            {"Object:field:": ["story", "score"]},
-            -1
-          ]
-        }
-      },(score)=>{
+      },
+      cmds.currentScore, (score)=>{
         status.value.score = score;
-      },{
-        "FromNumber:": {
-          "Num if:then:else:": [
-            { "Is domain:": "scoring" },
-            {"Object:field:": ["story", "turn count"]},
-            -1
-          ]
-        }
-      },(turn)=>{
+      },
+      cmds.currentTurn, (turn)=>{
         status.value.useScoring = turn >= 0;
         status.value.turns = turn;
-      },{
-        // fix: what do you mean this is insane?
-        // it'd help if we could use the implicit pattern call decoder :/
-        // maybe change "print name" to some "get name"
-        // and, if possible, get rid of From(s)
-          "FromText:": {
-            "Buffers do:": {
-              "Determine:args:": [
-                "print_name", {
-                  "Arg:from:": [
-                    "obj", {
-                      "FromText:": {
-                        "Determine:args:": [
-                          "location_of", {
-                            "Arg:from:": [
-                              "obj", {
-                                "FromText:": {
-                                  "Object:field:": ["story", "actor"]
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-       },(loc)=>{
-        status.value.location = loc;
+      },
+      cmds.locationName, (name)=>{
+        status.value.location = name;
+      },
+      cmds.currentObjects, (objs)=>{
+        enclosure.value = objCatalog.rebuild(objs);
       }]);
     });
     const onkey = (evt) => {
@@ -228,17 +177,22 @@ export default {
       status,
       prompt, // template ref
       enclosure,
+      currentTraits,
       onLeafObject(item) {
+        currentTraits.value = item.data.traits;
       },
-      onEnclosingObject(folder) {
-        if (!folder.contents) {
-          folder.contents = folder.backup;
-          folder.backup = false;
+      onEnclosingObject(items) {
+        if (!items.contents) {
+          items.contents = items.backup;
+          items.backup = false;
+          currentTraits.values = item.data.traits;
         } else {
-          folder.backup = folder.contents;
-          folder.contents = false;
+          items.backup = items.contents;
+          items.contents = false;
+          currentTraits.values = [];
         }
       },
+      // clicking anywhere below the prompt should focus the prompt
       onContainerClicked() {
         const el = prompt.value;
         if (el && el !== document.activeElement) {

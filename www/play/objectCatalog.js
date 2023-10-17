@@ -30,7 +30,7 @@ const mockObjects = {
 const kindOfLocale = ["containers", "supporters", "actors", "rooms"];
 
 // recursively create an object tree
-function addTree(all, parentId, one) {
+function buildTree(all, parentId, one) {
   let out;
   if (kindOfLocale.indexOf(one.kind) == -1) {
     const item = new CatalogFile(one.name, parentId);
@@ -45,7 +45,7 @@ function addTree(all, parentId, one) {
     out = folder;
     // recurse:
     for (let i=0; i< one.kids.length; i++) {
-      let child = addTree(all, one.id, one.kids[i]);
+      let child = buildTree(all, one.id, one.kids[i]);
       folder.contents.push(child);
     }
   }
@@ -56,20 +56,12 @@ export default class ObjectCatalog extends Cataloger {
   constructor() {
     super();
     this.all = {};
-    this.root = addTree(this.all, "", mockObjects);
+    this.root = buildTree(this.all, "", mockObjects);
   }
 
-  loadFolder(folder) {
-    // TODO: build from all, and/or make some queries
-    // if (!folder.contents) {
-    //   const contents=[];
-    //   for (const k in this.all) {
-    //     const item= this.all[k];
-    //     if (item.dir == folder.path) {
-    //       contents.push(this.all[k]);
-    //     }
-    //   };
-    //   folder.contents= contents;
-    // }
+  // objs is a json'd "object collection" ( from collect.if )
+  rebuild(collection) {
+    this.root = buildTree(this.all, "", collection);
+    return this.root;
   }
 };
