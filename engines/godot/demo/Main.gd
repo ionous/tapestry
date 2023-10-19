@@ -1,30 +1,27 @@
 extends Control
 
-@onready var input : LineEdit = find_child("TextInput")
-@onready var output : RichTextLabel = find_child("TextOutput")
-@onready var scroll : ScrollContainer = find_child("ScrollContainer")
-@onready var tap : TapGame = find_child("TapGame")
+# name of the tapestry domain to play
+@export var scene_name : String
 
-var objects : TapObjectPool = TapObjectPool.new()
+@onready var _tap : TapGame = find_child("TapGame")
+@onready var _output : RichTextLabel = find_child("TextOutput")
+@onready var _scroll : ScrollContainer = find_child("ScrollContainer")
+#@onready var _input : LineEdit = find_child("TextInput")
 
-# Called when the node enters the scene tree for the first time.
+# When the node enters the scene tree for the first time.
 func _ready():
-	input.editable = true
-	input.text_submitted.connect(_on_input)
+	_tap.restart(scene_name)
 
-	# after everything is connected:
-	tap.restart("cloak", objects)
+# When the player has entered new text commands
+func _on_text_input(text: String):
+	_output.append_text("> " + text.replace("[", "[lb]") + "\n")
+	_tap.fabricate(text)
 
 # scroll to the end whenever the end changes
 # ( there's some sort of paint delay after append_text; but this works fine )
-var last_max 
+var _last_max 
 func _process(_delta):
-	var vbar = scroll.get_v_scroll_bar()
-	if last_max != vbar.max_value:
+	var vbar = _scroll.get_v_scroll_bar()
+	if _last_max != vbar.max_value:
 		vbar.value = vbar.max_value
-		last_max = vbar.max_value
-	
-func _on_input(text: String):
-	assert(input.editable)
-	output.append_text("> " + text.replace("[", "[lb]") + "\n")
-	tap.fabricate(text)
+		_last_max = vbar.max_value

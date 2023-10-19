@@ -15,8 +15,10 @@ signal root_changed(pool: TapObjectPool, new_root: TapObject)
 @onready var Queries = get_node("/root/TapQueries")
 const TapWriter = preload("res://TapWriter.gd")
 
-var _pool : TapObjectPool
-var _root : TapObject
+# Shared pool for all tapestry object references
+var _pool : TapObjectPool = TapObjectPool.new()
+# Top most object ( ex. the current room )
+var _root : TapObject 
 
 func _process(_delta):
 	if _root: # first frame it will be null
@@ -32,8 +34,7 @@ func _rebuild_pool(collection: Dictionary) -> void:
 	request_rebuild_signal()
 
 # restart
-func restart(scene: String, use_pool: TapObjectPool) -> void:
-	self._pool = use_pool
+func restart(scene: String) -> void:
 	# FIX: assumes synchronous....
 	# probably want to change to "await"
 	# so that users can interact with things, watch state changes, etc.

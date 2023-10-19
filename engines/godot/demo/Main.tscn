@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://hee6yggaco67"]
+[gd_scene load_steps=5 format=3 uid="uid://hee6yggaco67"]
 
-[ext_resource type="Script" path="res://Main.gd" id="1_cdutg"]
-[ext_resource type="Script" path="res://BannerScore.gd" id="2_68auu"]
-[ext_resource type="Script" path="res://textInput.gd" id="2_k0atx"]
-[ext_resource type="Script" path="res://ObjectTree.gd" id="4_01ss2"]
-[ext_resource type="Script" path="res://TapGame.gd" id="4_d3tnj"]
+[ext_resource type="Script" path="res://Main.gd" id="1_t545i"]
+[ext_resource type="Script" path="res://TapGame.gd" id="2_2sa6n"]
+[ext_resource type="Script" path="res://BannerScore.gd" id="3_up8gw"]
+[ext_resource type="Script" path="res://ObjectTree.gd" id="5_rugwi"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -13,7 +12,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_cdutg")
+script = ExtResource("1_t545i")
+scene_name = "cloak"
+
+[node name="TapGame" type="Node" parent="."]
+script = ExtResource("2_2sa6n")
 
 [node name="background" type="ColorRect" parent="."]
 visible = false
@@ -79,7 +82,7 @@ grow_horizontal = 0
 pivot_offset = Vector2(-3, 0)
 text = "right side"
 horizontal_alignment = 2
-script = ExtResource("2_68auu")
+script = ExtResource("3_up8gw")
 
 [node name="TextView" type="Control" parent="controls/VBoxContainer"]
 layout_mode = 2
@@ -105,7 +108,6 @@ selection_enabled = true
 [node name="TextInput" type="LineEdit" parent="controls/VBoxContainer"]
 layout_mode = 2
 caret_blink = true
-script = ExtResource("2_k0atx")
 
 [node name="margin" type="Control" parent="controls/VBoxContainer"]
 custom_minimum_size = Vector2(0, 3)
@@ -115,15 +117,14 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource("4_01ss2")
+script = ExtResource("5_rugwi")
 
-[node name="TapGame" type="Node" parent="."]
-script = ExtResource("4_d3tnj")
-
-[connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="_on_text_submitted"]
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/TextOutput" method="append_text"]
 [connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
 [connection signal="score_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="TapGame" to="controls/VBoxContainer/top bar/center" method="set_text"]
 [connection signal="turns_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_turns"]
+[connection signal="ready" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="grab_focus"]
+[connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="." method="_on_text_input"]
+[connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="clear" unbinds=1]
