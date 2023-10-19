@@ -6,10 +6,11 @@ extends RefCounted
 # [ alt: potentially we could keep an "off screen" scene of object nodes ]
 
 var id: String
+var name: String
 var parent: String
 var kind: String
 var traits: Array
-var kids: Array # strings
+var kids: Array # id strings
 
 func _init(_id):
 	self.id = _id

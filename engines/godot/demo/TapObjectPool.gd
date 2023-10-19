@@ -53,8 +53,10 @@ func ensure(id: String) -> TapObject:
 func rebuild(collection: Variant, parent: String = "") -> TapObject:
 	var obj = ensure(collection.id)
 	obj.parent = parent
+	obj.name = collection.name
 	obj.kind = collection.kind
 	obj.traits = collection.traits
+	obj.kids = [] # reset
 	var kids = collection.get("kids")
 	if kids:
 		for kid in kids:

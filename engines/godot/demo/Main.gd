@@ -4,16 +4,13 @@ extends Control
 @onready var output : RichTextLabel = find_child("TextOutput")
 @onready var scroll : ScrollContainer = find_child("ScrollContainer")
 @onready var tap : TapGame = find_child("TapGame")
+
 var objects : TapObjectPool = TapObjectPool.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	input.editable = true
 	input.text_submitted.connect(_on_input)
-	# objects.root_changed.connect
-	# tap.title_changed.connect
-	# tap.score_changed.connect
-	# tap.turns_changed.connect
 
 	# after everything is connected:
 	tap.restart("cloak", objects)

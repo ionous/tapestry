@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://hee6yggaco67"]
+[gd_scene load_steps=6 format=3 uid="uid://hee6yggaco67"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_cdutg"]
 [ext_resource type="Script" path="res://BannerScore.gd" id="2_68auu"]
 [ext_resource type="Script" path="res://textInput.gd" id="2_k0atx"]
+[ext_resource type="Script" path="res://ObjectTree.gd" id="4_01ss2"]
 [ext_resource type="Script" path="res://TapGame.gd" id="4_d3tnj"]
 
 [node name="Main" type="Control"]
@@ -24,27 +25,34 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.247059, 0.247059, 0.247059, 1)
 
-[node name="controls" type="MarginContainer" parent="."]
+[node name="controls" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+
+[node name="margin" type="Control" parent="controls"]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="controls"]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 5
 
-[node name="top bar" type="Control" parent="controls/VBoxContainer"]
+[node name="top bar" type="ColorRect" parent="controls/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
+color = Color(0, 0, 0, 1)
 
 [node name="left" type="Label" parent="controls/VBoxContainer/top bar"]
 layout_mode = 1
-offset_right = 62.0
+offset_left = 3.0
+offset_right = 65.0
 offset_bottom = 26.0
 text = "left side"
 
@@ -68,15 +76,16 @@ anchor_right = 1.0
 offset_left = -73.0
 offset_bottom = 26.0
 grow_horizontal = 0
+pivot_offset = Vector2(-3, 0)
 text = "right side"
 horizontal_alignment = 2
 script = ExtResource("2_68auu")
 
-[node name="InputOutput" type="Control" parent="controls/VBoxContainer"]
+[node name="TextView" type="Control" parent="controls/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="controls/VBoxContainer/InputOutput"]
+[node name="ScrollContainer" type="ScrollContainer" parent="controls/VBoxContainer/TextView"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,7 +93,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextOutput" type="RichTextLabel" parent="controls/VBoxContainer/InputOutput/ScrollContainer"]
+[node name="TextOutput" type="RichTextLabel" parent="controls/VBoxContainer/TextView/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 10
@@ -98,12 +107,23 @@ layout_mode = 2
 caret_blink = true
 script = ExtResource("2_k0atx")
 
+[node name="margin" type="Control" parent="controls/VBoxContainer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+
+[node name="ObjectTree" type="Tree" parent="controls"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_01ss2")
+
 [node name="TapGame" type="Node" parent="."]
 script = ExtResource("4_d3tnj")
 
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="_on_text_submitted"]
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
-[connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/InputOutput/ScrollContainer/TextOutput" method="append_text"]
+[connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/TextOutput" method="append_text"]
+[connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
 [connection signal="score_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="TapGame" to="controls/VBoxContainer/top bar/center" method="set_text"]
 [connection signal="turns_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_turns"]

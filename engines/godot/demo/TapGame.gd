@@ -10,12 +10,26 @@ signal score_changed(score: int)
 signal turns_changed(turns: int)
 signal location_changed(name: String)
 signal narration_changed(bb_text: String)
-signal root_changed(new_root: TapObject)
+signal root_changed(pool: TapObjectPool, new_root: TapObject)
 
 @onready var Queries = get_node("/root/TapQueries")
 const TapWriter = preload("res://TapWriter.gd")
 
 var _pool : TapObjectPool
+var _root : TapObject
+
+func _process(_delta):
+	if _root: # first frame it will be null
+		root_changed.emit(_pool, _root)
+		set_process(false)
+
+func request_rebuild_signal(yes: bool = true):
+	set_process(yes)
+
+# the nearby objects have changed rebuild them
+func _rebuild_pool(collection: Dictionary) -> void:
+	_root = _pool.rebuild(collection)
+	request_rebuild_signal()
 
 # restart
 func restart(scene: String, use_pool: TapObjectPool) -> void:
@@ -26,9 +40,7 @@ func restart(scene: String, use_pool: TapObjectPool) -> void:
 	self._post("restart", scene)
 	self._query([
 		Queries.StoryTitle, func(title:String): title_changed.emit(title),
-		Queries.CurrentScore, func(score:int): 
-			print("score", score)
-			score_changed.emit(score),
+		Queries.CurrentScore, func(score:int): score_changed.emit(score),
 		Queries.CurrentTurn, func(turn:int): turns_changed.emit(turn),
 		Queries.LocationName, func(named:String): location_changed.emit(named),
 		Queries.CurrentObjects, func(root:Dictionary): _rebuild_pool(root),
@@ -51,11 +63,6 @@ func fabricate(text: String) -> void:
 			Queries.LocationName, func(named:String): location_changed.emit(named),
 			Queries.CurrentObjects, func(root:Dictionary): _rebuild_pool(root),
 		])
-
-# the nearby objects have changed rebuild them
-func _rebuild_pool(collection: Dictionary) -> void:
-	var root = _pool.rebuild(collection)
-	root_changed.emit(root)
 
 # given a valid tapestry command:
 # return its signature and args in an array of two elements
@@ -157,11 +164,12 @@ func _process_event(evt: Variant) -> String:
 				if child:
 					var oldParent = _pool.get_by_id(child.parent)
 					if oldParent:
-						oldParent.erase(childId)
-					child.parentId = newParentId
+						oldParent.kids.erase(childId)
+					child.parent = newParentId
 					if newParentId:
 						var newParent = _pool.ensure(newParentId)
-						newParent.push_back(child.id)
+						newParent.kids.push_back(child.id)
+					request_rebuild_signal()
 
 		_:
 			print("unhandled event", sig)
