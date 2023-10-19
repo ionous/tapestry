@@ -1,7 +1,7 @@
-class_name TextWriter
+class_name TapWriter
 
 static func WriteText(text):
-	var w = TextWriter.new()
+	var w = TapWriter.new()
 	return w.writeText(text)
 	
 # tag types ( slightly easier to read then true/false)

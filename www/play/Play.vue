@@ -128,7 +128,7 @@ export default {
         }
         first = false;
         narration.value.push("> " + text);
-        q.input(text);
+        q.fabricate(text);
       },
     };
   },

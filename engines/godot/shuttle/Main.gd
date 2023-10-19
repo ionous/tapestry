@@ -4,7 +4,7 @@ extends Control
 @onready var input : LineEdit = find_child("TextInput")
 @onready var output : RichTextLabel = find_child("TextOutput")
 @onready var scroll : ScrollContainer = find_child("ScrollContainer")
-const TextWriter = preload("res://TextWriter.gd")
+const TapWriter = preload("res://TapWriter.gd")
 
 
 enum State { STARTING, PLAYING, WAITING, ENDED }
@@ -29,7 +29,7 @@ func _on_input(text):
 func _started(initialText):
 	assert(state == State.STARTING)
 	if state == State.STARTING:
-		var bb = TextWriter.WriteText(initialText + "<p>")
+		var bb = TapWriter.WriteText(initialText + "<p>")
 		output.append_text(bb)
 		input.editable = true
 		state = State.PLAYING
@@ -37,7 +37,7 @@ func _started(initialText):
 func _gotText(newText):
 	assert(state == State.WAITING)
 	if state == State.WAITING:
-		var bb = TextWriter.WriteText(newText + "<p>")
+		var bb = TapWriter.WriteText(newText + "<p>")
 		output.append_text(bb)
 		input.editable = true
 		state = State.PLAYING

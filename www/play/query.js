@@ -13,12 +13,24 @@ function parseCommand(op) {
 }
 
 // each msg implements the Event slot:
-// currently, the complete set is:
+// as of 2023-10-18, the complete set is:
 // FrameOutput, PairChanged, SceneEnded, SceneStarted, StateChanged
 function processEvent(objCatalog, msg) {
   let out = "";
   const [ sig, args ] = parseCommand(msg);
   switch (sig) {
+    // printed text; accumulates over multiple events
+    case "FrameOutput:":
+      out += args;
+      break;
+
+    // object state change
+    // fix: we need the prev state in order to be able to clear it
+    case "StateChanged noun:aspect:trait:":
+      const [noun, aspect, trait] = args;
+      console.log("state changed", noun, aspect, trait);
+      break;
+
     // relational change
     // fix: we dont get both sides of the relation change:
     // we only get new relations; fine for now.
@@ -52,15 +64,6 @@ function processEvent(objCatalog, msg) {
         }
       }
 
-    // object state change
-    case "StateChanged noun:aspect:trait:":
-      const [noun, aspect, trait] = args;
-      console.log("state changed", noun, aspect, trait);
-      break;
-    // printed text
-    case "FrameOutput:":
-      out += args;
-      break;
     default:
       console.log("unhandled", sig);
   }
@@ -115,7 +118,7 @@ export default class Query {
             break;
           }
           default:
-            console.log("unhandled", sig);
+            console.log("unhandled message", sig);
         };
       }
       if (out.length) {
@@ -149,14 +152,12 @@ export default class Query {
     });
   }
 
-  input(text) {
-    // uses events to track locations;
-    // alternatively, could query location of every frame and compare.
-    const self = "self"; // fix: kind of hacky that this is tied to self
+  fabricate(text) {
+    const player = "self"; // fix: kind of hacky that this is tied to self
     const io = this.io;
     const statusBar= this.statusBar;
     const objCatalog = this.objCatalog;
-    const prevLoc = objCatalog.get(self).parentId;
+    const prevLoc = objCatalog.get(player).parentId;
     return io.query(
       // send player input
       cmds.fabricate(text), null,
@@ -171,7 +172,7 @@ export default class Query {
       // if there is an event that changes the player's whereabouts
       // re-query location and objects
     ).then(()=> {
-      const newLoc = objCatalog.get(self).parentId;
+      const newLoc = objCatalog.get(player).parentId;
       return (prevLoc !== newLoc) &&
         io.query(
           cmds.locationName, (name) => {
