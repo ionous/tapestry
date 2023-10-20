@@ -10,27 +10,25 @@ signal score_changed(score: int)
 signal turns_changed(turns: int)
 signal location_changed(name: String)
 signal narration_changed(bb_text: String)
-signal root_changed(pool: TapObjectPool, new_root: TapObject)
+signal root_changed(id: String)
 
-@onready var Queries = get_node("/root/TapQueries")
-const TapWriter = preload("res://TapWriter.gd")
+# Create a pool of all known tapestry objects
+var pool = TapPool.new()
 
-# Shared pool for all tapestry object references
-var _pool : TapObjectPool = TapObjectPool.new()
 # Top most object ( ex. the current room )
 var _root : TapObject 
 
 func _process(_delta):
 	if _root: # first frame it will be null
-		root_changed.emit(_pool, _root)
+		root_changed.emit(_root.id)
 		set_process(false)
 
 func request_rebuild_signal(yes: bool = true):
 	set_process(yes)
 
 # the nearby objects have changed rebuild them
-func _rebuild_pool(collection: Dictionary) -> void:
-	_root = _pool.rebuild(collection)
+func _rebuildpool(collection: Dictionary) -> void:
+	_root = pool.rebuild(collection)
 	request_rebuild_signal()
 
 # restart
@@ -40,29 +38,29 @@ func restart(scene: String) -> void:
 	# so that users can interact with things, watch state changes, etc.
 	self._post("restart", scene)
 	self._query([
-		Queries.StoryTitle, func(title:String): title_changed.emit(title),
-		Queries.CurrentScore, func(score:int): score_changed.emit(score),
-		Queries.CurrentTurn, func(turn:int): turns_changed.emit(turn),
-		Queries.LocationName, func(named:String): location_changed.emit(named),
-		Queries.CurrentObjects, func(root:Dictionary): _rebuild_pool(root),
+		TapCommands.StoryTitle, func(title:String): title_changed.emit(title),
+		TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
+		TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
+		TapCommands.LocationName, func(named:String): location_changed.emit(named),
+		TapCommands.CurrentObjects, func(root:Dictionary): _rebuildpool(root),
 	])
 
 # player has typed some text
 func fabricate(text: String) -> void:
-	var player = _pool.ensure("self")
+	var player = pool.ensure("self")
 	var prevLoc = player.parent
 	self._query([
 		# send the player input; no particular response except to listen to events
-		Queries.Fabricate(text), null,
+		TapCommands.Fabricate(text), null,
 		# query for the new score and turn each frame
-		Queries.CurrentScore, func(score:int): score_changed.emit(score),
-		Queries.CurrentTurn, func(turn:int): turns_changed.emit(turn),
+		TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
+		TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
 	])
 	# todo: consider using events instead
 	if player.parent != prevLoc:
 		self._query([
-			Queries.LocationName, func(named:String): location_changed.emit(named),
-			Queries.CurrentObjects, func(root:Dictionary): _rebuild_pool(root),
+			TapCommands.LocationName, func(named:String): location_changed.emit(named),
+			TapCommands.CurrentObjects, func(root:Dictionary): _rebuildpool(root),
 		])
 
 # given a valid tapestry command:
@@ -77,14 +75,13 @@ func _parse_cmd(op: Variant) -> Array:
 
 # send cmds and their response handlers
 func _query(msgCalls: Array) -> void:
-	assert(msgCalls.size() & 1  == 0, "expected an equal number of queries and calls")
+	assert(msgCalls.size() & 1  == 0, "expected an equal number of pool and calls")
 	var sends = []
 	var calls = []
 	for i in range(0, msgCalls.size(), 2):
 		sends.push_back(msgCalls[i+0])
 		calls.push_back(msgCalls[i+1])
 	self._post("query", sends, calls)
-	
 
 func _post(endpoint: String, blob: Variant, calls: Array=[]):
 	var res = Tapestry.post(endpoint, JSON.stringify(blob))
@@ -161,14 +158,14 @@ func _process_event(evt: Variant) -> String:
 				var childId : String = args[1]     # b
 				var newParentId : String = args[0] # a
 				# remove from old parent:
-				var child = _pool.get_by_id(childId)
+				var child = pool.get_by_id(childId)
 				if child:
-					var oldParent = _pool.get_by_id(child.parent)
+					var oldParent = pool.get_by_id(child.parent)
 					if oldParent:
 						oldParent.kids.erase(childId)
 					child.parent = newParentId
 					if newParentId:
-						var newParent = _pool.ensure(newParentId)
+						var newParent = pool.ensure(newParentId)
 						newParent.kids.push_back(child.id)
 					request_rebuild_signal()
 

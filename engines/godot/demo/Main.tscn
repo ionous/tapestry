@@ -142,15 +142,15 @@ caret_blink = true
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 
-[node name="ObjectTree" type="Tree" parent="controls"]
+[node name="ObjectTree" type="Tree" parent="controls" node_paths=PackedStringArray("tap_game")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("5_rugwi")
+tap_game = NodePath("../../TapGame")
 
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/TextOutput" method="append_text"]
-[connection signal="root_changed" from="TapGame" to="TapGame/SceneViews" method="_on_tap_game_root_changed"]
 [connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
 [connection signal="score_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="TapGame" to="controls/VBoxContainer/top bar/center" method="set_text"]

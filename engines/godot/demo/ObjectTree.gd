@@ -1,10 +1,15 @@
 extends Tree
 
-func _on_tap_game_root_changed(pool:TapObjectPool, root:TapObject):
-	clear()
-	build(pool, null, root)
+@export var tap_game : TapGame
 
-func build(pool:TapObjectPool, parent:TreeItem, obj:TapObject):
+func _ready():
+	assert(tap_game, "tap game reference not set")
+
+func _on_tap_game_root_changed(id: String):
+	clear()
+	build(tap_game.pool, null, tap_game.pool.get_by_id(id))
+
+func build(pool: TapPool, parent: TreeItem, obj: TapObject):
 	var item = create_item(parent)
 	item.set_text(0, obj.name)
 	for k in obj.kids:

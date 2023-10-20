@@ -1,6 +1,24 @@
 extends Node
 # Tapestry command queries for title, score, and more.
 
+# --------------------------------------------------
+# generate a command using the passed player input
+# --------------------------------------------------
+func Fabricate(input: String) -> Dictionary:
+	return {
+		"FromExe:": {
+			"Fabricate input:":input
+		}
+	}
+
+# ---------------------------------------------------
+const StoryTitle =	{
+	"FromText:": {
+		"Object:field:": ["story", "title"]
+	}
+}
+
+# --------------------------------------------------
 const PlayerLocation = {
 	"FromText:": {
 		"Determine:args:": [
@@ -15,6 +33,7 @@ const PlayerLocation = {
 	]}
 }
 
+# --------------------------------------------------
 const CurrentObjects = {
 	"FromRecord:": {
 		"Determine:args:": [
@@ -25,6 +44,7 @@ const CurrentObjects = {
 	}
 }
 
+# --------------------------------------------------
 const CurrentScore = {
 	"FromNumber:": {
 	"Num if:then:else:": [
@@ -34,6 +54,7 @@ const CurrentScore = {
 	]}
 }
 
+# --------------------------------------------------
 const CurrentTurn = {
 	"FromNumber:": {
 		"Num if:then:else:": [
@@ -44,10 +65,11 @@ const CurrentTurn = {
 	}
 }
 
-# # fix: what do you mean this is insane?
-# # it'd help if we could use the implicit pattern call decoder :/
-# # maybe change "print name" to some "get name"
-# # and, if possible, get rid of From(s)
+# --------------------------------------------------
+# fix: what do you mean this is insane?
+# it'd help if we could use the implicit pattern call decoder :/
+# maybe change "print name" to some "get name"
+# and, if possible, get rid of From(s)
 const LocationName = {
 	"FromText:": {
 		"Buffers do:": {
@@ -62,16 +84,3 @@ const LocationName = {
 	}
 }
 
-const StoryTitle =	{
-	"FromText:": {
-		"Object:field:": ["story", "title"]
-	}
-}
-
-
-static func Fabricate(text: String) -> Dictionary:
-	return {
-		"FromExe:": {
-			"Fabricate input:":text
-		}
-	}

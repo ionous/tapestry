@@ -9,14 +9,13 @@ class_name AViewGroup
 var _last : ASceneView 
 
 func _ready():
-	var tap: TapGame = get_parent() as TapGame
-	assert(tap, "expected parent to be a TapGame")
-	if tap:
-		tap.root_changed.connect(func(_pool, new_root: TapObject): 
-			update_view(new_root.id))
+	var tap_game: TapGame = get_parent() as TapGame
+	assert(tap_game, "expected parent to be a TapGame")
+	if tap_game:
+		tap_game.root_changed.connect(update_view)
 
-func update_view(room_id: String):
-	var kids = self.find_children(room_id,"ASceneView", false)
+func update_view(id: String):
+	var kids = self.find_children(id,"ASceneView", false)
 	assert(kids.size() == 1)
 	if kids.size() > 0:
 		var view : ASceneView = kids[0]
