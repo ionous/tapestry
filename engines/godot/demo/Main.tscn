@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://hee6yggaco67"]
+[gd_scene load_steps=10 format=3 uid="uid://hee6yggaco67"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_t545i"]
 [ext_resource type="Script" path="res://TapGame.gd" id="2_2sa6n"]
 [ext_resource type="Script" path="res://BannerScore.gd" id="3_up8gw"]
+[ext_resource type="Script" path="res://AViewGroup.gd" id="4_1wcje"]
+[ext_resource type="Script" path="res://ASceneView.gd" id="5_pdos1"]
 [ext_resource type="Script" path="res://ObjectTree.gd" id="5_rugwi"]
+[ext_resource type="PackedScene" uid="uid://cbibqgabx76rm" path="res://views/Foyer.tscn" id="6_3yuk4"]
+[ext_resource type="PackedScene" uid="uid://dt8amcoawi80a" path="res://views/CloakRoom.tscn" id="7_iqq02"]
+[ext_resource type="PackedScene" uid="uid://cf4r8oyshoyxa" path="res://views/Bar.tscn" id="8_oive7"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -17,6 +22,22 @@ scene_name = "cloak"
 
 [node name="TapGame" type="Node" parent="."]
 script = ExtResource("2_2sa6n")
+
+[node name="SceneViews" type="Node" parent="TapGame" node_paths=PackedStringArray("view_target")]
+script = ExtResource("4_1wcje")
+view_target = NodePath("../../controls/VBoxContainer/TextView/TextBackground")
+
+[node name="foyer of the opera house" type="Node" parent="TapGame/SceneViews"]
+script = ExtResource("5_pdos1")
+scene = ExtResource("6_3yuk4")
+
+[node name="cloakroom" type="Node" parent="TapGame/SceneViews"]
+script = ExtResource("5_pdos1")
+scene = ExtResource("7_iqq02")
+
+[node name="bar" type="Node" parent="TapGame/SceneViews"]
+script = ExtResource("5_pdos1")
+scene = ExtResource("8_oive7")
 
 [node name="background" type="ColorRect" parent="."]
 visible = false
@@ -88,6 +109,14 @@ script = ExtResource("3_up8gw")
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="TextBackground" type="Control" parent="controls/VBoxContainer/TextView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="ScrollContainer" type="ScrollContainer" parent="controls/VBoxContainer/TextView"]
 layout_mode = 1
 anchors_preset = 15
@@ -121,6 +150,7 @@ script = ExtResource("5_rugwi")
 
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/TextOutput" method="append_text"]
+[connection signal="root_changed" from="TapGame" to="TapGame/SceneViews" method="_on_tap_game_root_changed"]
 [connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
 [connection signal="score_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="TapGame" to="controls/VBoxContainer/top bar/center" method="set_text"]
