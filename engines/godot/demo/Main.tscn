@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://TapGame.gd" id="2_2sa6n"]
 [ext_resource type="Script" path="res://BannerScore.gd" id="3_up8gw"]
 [ext_resource type="Script" path="res://AViewGroup.gd" id="4_1wcje"]
-[ext_resource type="Script" path="res://ASceneView.gd" id="5_pdos1"]
+[ext_resource type="Script" path="res://AViewScene.gd" id="4_vwcfp"]
 [ext_resource type="Script" path="res://ObjectTree.gd" id="5_rugwi"]
 [ext_resource type="PackedScene" uid="uid://cbibqgabx76rm" path="res://views/Foyer.tscn" id="6_3yuk4"]
 [ext_resource type="PackedScene" uid="uid://dt8amcoawi80a" path="res://views/CloakRoom.tscn" id="7_iqq02"]
@@ -28,15 +28,15 @@ script = ExtResource("4_1wcje")
 view_target = NodePath("../../controls/VBoxContainer/TextView/TextBackground")
 
 [node name="foyer of the opera house" type="Node" parent="TapGame/SceneViews"]
-script = ExtResource("5_pdos1")
+script = ExtResource("4_vwcfp")
 scene = ExtResource("6_3yuk4")
 
 [node name="cloakroom" type="Node" parent="TapGame/SceneViews"]
-script = ExtResource("5_pdos1")
+script = ExtResource("4_vwcfp")
 scene = ExtResource("7_iqq02")
 
 [node name="bar" type="Node" parent="TapGame/SceneViews"]
-script = ExtResource("5_pdos1")
+script = ExtResource("4_vwcfp")
 scene = ExtResource("8_oive7")
 
 [node name="background" type="ColorRect" parent="."]
@@ -142,12 +142,11 @@ caret_blink = true
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 
-[node name="ObjectTree" type="Tree" parent="controls" node_paths=PackedStringArray("tap_game")]
+[node name="ObjectTree" type="Tree" parent="controls"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("5_rugwi")
-tap_game = NodePath("../../TapGame")
 
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/TextOutput" method="append_text"]

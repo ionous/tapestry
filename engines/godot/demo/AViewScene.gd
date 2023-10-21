@@ -1,5 +1,5 @@
 extends Node
-class_name ASceneView 
+class_name AViewScene
 # Expects to have a parent node of AViewGroup with a valid scene_target
 
 @export var scene : PackedScene

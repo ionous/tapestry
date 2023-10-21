@@ -12,9 +12,6 @@ signal location_changed(name: String)
 signal narration_changed(bb_text: String)
 signal root_changed(id: String)
 
-# Create a pool of all known tapestry objects
-var pool = TapPool.new()
-
 # Top most object ( ex. the current room )
 var _root : TapObject 
 
@@ -28,7 +25,7 @@ func request_rebuild_signal(yes: bool = true):
 
 # the nearby objects have changed rebuild them
 func _rebuildpool(collection: Dictionary) -> void:
-	_root = pool.rebuild(collection)
+	_root = TapPool.rebuild(collection)
 	request_rebuild_signal()
 
 # restart
@@ -47,8 +44,8 @@ func restart(scene: String) -> void:
 
 # player has typed some text
 func fabricate(text: String) -> void:
-	var player = pool.ensure("self")
-	var prevLoc = player.parent
+	var player = TapPool.ensure("self")
+	var prevLoc = player.parentId
 	self._query([
 		# send the player input; no particular response except to listen to events
 		TapCommands.Fabricate(text), null,
@@ -57,7 +54,7 @@ func fabricate(text: String) -> void:
 		TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
 	])
 	# todo: consider using events instead
-	if player.parent != prevLoc:
+	if player.parentId != prevLoc:
 		self._query([
 			TapCommands.LocationName, func(named:String): location_changed.emit(named),
 			TapCommands.CurrentObjects, func(root:Dictionary): _rebuildpool(root),
@@ -157,16 +154,16 @@ func _process_event(evt: Variant) -> String:
 			if rel == "whereabouts":
 				var childId : String = args[1]     # b
 				var newParentId : String = args[0] # a
-				# remove from old parent:
-				var child = pool.get_by_id(childId)
+				# remove from old parentId:
+				var child = TapPool.get_by_id(childId)
 				if child:
-					var oldParent = pool.get_by_id(child.parent)
+					var oldParent = TapPool.get_by_id(child.parentId)
 					if oldParent:
-						oldParent.kids.erase(childId)
-					child.parent = newParentId
+						oldParent.childIds.erase(childId)
+					child.parentId = newParentId
 					if newParentId:
-						var newParent = pool.ensure(newParentId)
-						newParent.kids.push_back(child.id)
+						var newParent = TapPool.ensure(newParentId)
+						newParent.childIds.push_back(child.id)
 					request_rebuild_signal()
 
 		_:

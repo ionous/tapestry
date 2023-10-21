@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cf4r8oyshoyxa"]
+[gd_scene load_steps=2 format=3 uid="uid://cf4r8oyshoyxa"]
+
+[ext_resource type="Script" path="res://AnObjectControl.gd" id="1_oug4p"]
 
 [node name="Bar" type="ColorRect"]
 anchors_preset = 15
@@ -7,3 +9,72 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.509804, 0, 0.0745098, 1)
+
+[node name="#bar-north-door" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oug4p")
+
+[node name="PanelContainer" type="PanelContainer" parent="#bar-north-door"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 67.0
+offset_bottom = 20.0
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="#bar-north-door/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="#bar-north-door/PanelContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "door"
+
+[node name="the lit bar" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oug4p")
+object_id = "bar"
+include_traits = Array[String](["lit"])
+
+[node name="#scrawled message" type="Control" parent="the lit bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oug4p")
+
+[node name="PanelContainer" type="PanelContainer" parent="the lit bar/#scrawled message"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.5
+offset_top = -20.0
+offset_right = 33.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="the lit bar/#scrawled message/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="the lit bar/#scrawled message/PanelContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Message"

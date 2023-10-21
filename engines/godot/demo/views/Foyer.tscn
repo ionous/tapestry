@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cbibqgabx76rm"]
+[gd_scene load_steps=2 format=3 uid="uid://cbibqgabx76rm"]
+
+[ext_resource type="Script" path="res://AnObjectControl.gd" id="1_wesrh"]
 
 [node name="Foyer" type="ColorRect"]
 anchors_preset = 15
@@ -7,3 +9,42 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.278431, 0.305882, 1, 1)
+
+[node name="#foyer-of-the-opera-house-east-door" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wesrh")
+object_id = null
+optional = null
+include_traits = null
+exclude_traits = null
+contained = null
+include_ancestor = null
+exclude_ancestor = null
+
+[node name="#foyer-of-the-opera-house-south-door" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wesrh")
+object_id = null
+optional = null
+include_traits = null
+exclude_traits = null
+contained = null
+include_ancestor = null
+exclude_ancestor = null
+
+[node name="#entrance" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wesrh")
+object_id = null
+optional = null
+include_traits = null
+exclude_traits = null
+contained = null
+include_ancestor = null
+exclude_ancestor = null

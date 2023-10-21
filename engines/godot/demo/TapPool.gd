@@ -1,4 +1,3 @@
-class_name TapPool
 extends Node
 # A collection of references to tapestry objects and queries.
 # Intended to be used as singleton.
@@ -7,7 +6,7 @@ extends Node
 var _all = {}
 
 func get_by_id(id: String) -> TapObject:
-	return _all[id]
+	return _all.get(id)
 
 func ensure(id: String) -> TapObject:
 	var obj = _all.get(id)
@@ -17,16 +16,16 @@ func ensure(id: String) -> TapObject:
 	return obj
 
 # rebuild from the passed collection
-func rebuild(collection: Variant, parent: String = "") -> TapObject:
+func rebuild(collection: Variant, parentId: String = "") -> TapObject:
 	var obj = ensure(collection.id)
-	obj.parent = parent
+	obj.parentId = parentId
 	obj.name = collection.name
 	obj.kind = collection.kind
 	obj.traits = collection.traits
-	obj.kids = [] # reset
+	obj.childIds = [] # reset
 	var kids = collection.get("kids")
 	if kids:
 		for kid in kids:
 			var child = rebuild(kid, obj.id)
-			obj.kids.push_back(child.id)
+			obj.childIds.push_back(child.id)
 	return obj
