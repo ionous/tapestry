@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dt8amcoawi80a"]
+[gd_scene load_steps=3 format=3 uid="uid://dt8amcoawi80a"]
 
 [ext_resource type="Script" path="res://AnObjectControl.gd" id="1_mohyn"]
+[ext_resource type="Script" path="res://views/AnObjectLabel.gd" id="2_w0y8j"]
 
 [node name="CloakRoom" type="ColorRect"]
 anchors_preset = 15
@@ -12,20 +13,27 @@ color = Color(0.388235, 0.388235, 0.0313726, 1)
 
 [node name="#cloakroom-west-door" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mohyn")
 
 [node name="PanelContainer" type="PanelContainer" parent="#cloakroom-west-door"]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
 offset_right = 79.0
-offset_bottom = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="#cloakroom-west-door/PanelContainer"]
 layout_mode = 2
 text = "exit"
+script = ExtResource("2_w0y8j")
 
 [node name="#small brass hook" type="Control" parent="."]
 layout_mode = 1
@@ -55,24 +63,25 @@ layout_mode = 2
 text = "hook"
 horizontal_alignment = 1
 vertical_alignment = 1
+script = ExtResource("2_w0y8j")
 
 [node name="#velvet cloak" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mohyn")
 exclude_ancestor = "self"
 
 [node name="unhooked" type="Control" parent="#velvet cloak"]
-layout_mode = 2
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_mohyn")
 exclude_ancestor = "small brass hook"
 
@@ -83,10 +92,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -20.0
-offset_right = -61.0
-offset_bottom = 6.0
+offset_left = -79.0
+offset_top = -13.0
+offset_bottom = 27.0
 grow_horizontal = 0
 grow_vertical = 2
 
@@ -95,6 +103,7 @@ layout_mode = 2
 text = "unhooked"
 
 [node name="hooked" type="Control" parent="#velvet cloak"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,12 +114,18 @@ script = ExtResource("1_mohyn")
 include_ancestor = "small brass hook"
 
 [node name="PanelContainer" type="PanelContainer" parent="#velvet cloak/hooked"]
-layout_mode = 0
-offset_left = -100.0
-offset_right = -41.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -59.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="#velvet cloak/hooked/PanelContainer"]
 layout_mode = 2
 text = "hooked"
-horizontal_alignment = 2

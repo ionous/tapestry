@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cf4r8oyshoyxa"]
+[gd_scene load_steps=3 format=3 uid="uid://cf4r8oyshoyxa"]
 
 [ext_resource type="Script" path="res://AnObjectControl.gd" id="1_oug4p"]
+[ext_resource type="Script" path="res://views/AnObjectLabel.gd" id="2_hlaoh"]
 
 [node name="Bar" type="ColorRect"]
 anchors_preset = 15
@@ -36,6 +37,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "door"
+script = ExtResource("2_hlaoh")
 
 [node name="the lit bar" type="Control" parent="."]
 layout_mode = 1
@@ -78,3 +80,4 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Message"
+script = ExtResource("2_hlaoh")

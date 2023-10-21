@@ -9,6 +9,8 @@ var id: String
 # object_id, include_traits, exclude_traits, include_ancestor, exclude_ancestor
 var owner: Node
 
+# requires that the parent req(s) if any are valid
+# ( so for nodes, expects to be created in "enter tree" )
 func _init(owner_: Node):
 	owner = owner_
 	id = owner.object_id
@@ -17,18 +19,29 @@ func _init(owner_: Node):
 		if n.begins_with("#"):
 			id = n.right(-1)
 		else:
-			id = TapRequires.find_parent_id(owner.get_parent())
+			id = TapRequires.find_id(owner.get_parent())
 			if not id:
 				push_error("couldnt find object id for '%s'" % owner.name)
 
-static func find_parent_id(search: Node) -> String:
-	var out : String
+# find the nearest requirement object
+static func find_obj(search: Node) -> TapObject:
+	var pr = find_req(search)
+	return pr.get_object() if pr else ""
+
+# find the nearest requirement id
+static func find_id(search: Node) -> String:
+	var pr = find_req(search)
+	return pr.id if pr else ""
+
+# find the nearest requirement
+static func find_req(search: Node) -> TapRequires:
+	var out: TapRequires
 	while search:
 		var pr = search.get("requires") as TapRequires
 		if not pr:
 			search = search.get_parent()
 		else:
-			out = pr.id
+			out = pr
 			break
 	return out
 
@@ -66,7 +79,7 @@ func _exclude_traits(myobj: TapObject) -> bool:
 # false if the nearest TapRequired object_id isn't an ancestor
 func _contained(myobj: TapObject) -> bool:
 	var contained: bool = owner.get("contained")
-	return (not contained) or myobj.has_ancestor(TapRequires.find_parent_id(owner.get_parent()))
+	return (not contained) or myobj.has_ancestor(TapRequires.find_id(owner.get_parent()))
 
 # false if the include_ancestor is missing
 func _include_ancestor(myobj: TapObject) -> bool:
