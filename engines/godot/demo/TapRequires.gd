@@ -26,7 +26,7 @@ func _init(owner_: Node):
 # find the nearest requirement object
 static func find_obj(search: Node) -> TapObject:
 	var pr = find_req(search)
-	return pr.get_object() if pr else ""
+	return pr.get_object() if pr else null
 
 # find the nearest requirement id
 static func find_id(search: Node) -> String:

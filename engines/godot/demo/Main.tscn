@@ -25,7 +25,7 @@ script = ExtResource("2_2sa6n")
 
 [node name="SceneViews" type="Node" parent="TapGame" node_paths=PackedStringArray("view_target")]
 script = ExtResource("4_1wcje")
-view_target = NodePath("../../controls/VBoxContainer/TextView/TextBackground")
+view_target = NodePath("../../controls/VBoxContainer/SceneView")
 
 [node name="foyer of the opera house" type="Node" parent="TapGame/SceneViews"]
 script = ExtResource("4_vwcfp")
@@ -38,16 +38,6 @@ scene = ExtResource("7_iqq02")
 [node name="bar" type="Node" parent="TapGame/SceneViews"]
 script = ExtResource("4_vwcfp")
 scene = ExtResource("8_oive7")
-
-[node name="background" type="ColorRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.247059, 0.247059, 0.247059, 1)
 
 [node name="controls" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -105,27 +95,41 @@ text = "right side"
 horizontal_alignment = 2
 script = ExtResource("3_up8gw")
 
+[node name="SceneView" type="ColorRect" parent="controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0, 0.47451, 0.376471, 1)
+
 [node name="TextView" type="Control" parent="controls/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TextBackground" type="Control" parent="controls/VBoxContainer/TextView"]
+[node name="TextBackground" type="ColorRect" parent="controls/VBoxContainer/TextView"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.180392, 0.180392, 0.180392, 1)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="controls/VBoxContainer/TextView"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+layout_mode = 2
+offset_right = 855.0
+offset_bottom = 285.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextOutput" type="RichTextLabel" parent="controls/VBoxContainer/TextView/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="controls/VBoxContainer/TextView/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextOutput" type="RichTextLabel" parent="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 10
@@ -149,7 +153,7 @@ size_flags_horizontal = 3
 script = ExtResource("5_rugwi")
 
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
-[connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/TextOutput" method="append_text"]
+[connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer/TextOutput" method="append_text"]
 [connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
 [connection signal="score_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="TapGame" to="controls/VBoxContainer/top bar/center" method="set_text"]
