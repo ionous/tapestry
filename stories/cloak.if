@@ -360,7 +360,7 @@
           },
           {
             "Define rule:noun:do:": [
-              "taking",
+              "after taking",
               "cloak",
               {
                 "Set:trait:": [
@@ -373,7 +373,7 @@
           {
             "--": "FIX: generic way to capture is/not in possession",
             "Define rule:noun:do:": [
-              "dropping",
+              "after dropping",
               "cloak",
               {
                 "Set:trait:": [
