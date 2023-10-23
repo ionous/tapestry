@@ -132,6 +132,52 @@
     },
     {
       "Define rule:do:": [
+        "can handle",
+        {
+          "If:do:": [
+            {
+              "AllTrue:": [
+                {
+                  "Is:matching:text:": [
+                    "@action",
+                    "equal_to",
+                    "dropping"
+                  ]
+                },
+                {
+                  "Is:matching:text:": [
+                    {
+                      "WearerOf obj:": {
+                        "FromText:": "@noun"
+                      }
+                    },
+                    "equal_to",
+                    "@actor"
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Set:value:": [
+                  "@response",
+                  {
+                    "FromText:": {
+                      "Say response:with:": [
+                        "can't drop clothing",
+                        "{We:|capitalize!} would have to take {those:.noun} off first."
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Define rule:do:": [
         "can reach",
         {
           "If:do:": [

@@ -501,7 +501,7 @@
                   ]
                 },
                 {
-                  "Fabricate input:": "e; drop cloak; w; s; x message"
+                  "Fabricate input:": "e; take off cloak; drop cloak; w; s; x message"
                 },
                 {
                   "Expect:": {
