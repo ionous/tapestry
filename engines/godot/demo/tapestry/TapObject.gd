@@ -17,11 +17,25 @@ var childIds: Array # id strings
 func _init(_id):
 	self.id = _id
 
-# returns true if the passed id is the same as this object, or any ancestor
-func has_ancestor(ancestor_id: String) -> bool:
+# returns true if the passed id is the same as this object, or any parent
+func has_parent(parent_id: String) -> bool:
 	var search: TapObject = self
 	while search:
-		if search.id == ancestor_id:
+		if search.id == parent_id:
 			return true
 		search = TapPool.get_by_id(search.parentId)
 	return false
+
+# false if one of the includes is missing
+func includes(includes_traits: Array):
+	for include in includes_traits:
+		if not include in traits:
+			return false
+	return true
+
+# false if one of the excludes is present
+func excludes(excludes_traits: Array):
+	for exclude in excludes_traits:
+		if exclude in traits:
+			return false
+	return true

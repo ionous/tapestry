@@ -6,7 +6,7 @@ extends RefCounted
 var id: String
 
 # uses duck typing; expects owner to have:
-# object_id, include_traits, exclude_traits, include_ancestor, exclude_ancestor
+# object_id, include_traits, exclude_traits, include_parent, exclude_parent
 var owner: Node
 
 # requires that the parent req(s) if any are valid
@@ -53,40 +53,28 @@ func check_requirements() -> bool:
 	return (myobj and _include_traits(myobj) 
 				and _exclude_traits(myobj) 
 				and _contained(myobj)
-				and _include_ancestor(myobj)
-				and _exclude_ancestor(myobj))
+				and _include_parent(myobj)
+				and _exclude_parent(myobj))
 
 # false if one of the include_traits is missing
 func _include_traits(myobj: TapObject) -> bool:
-	var okay = true # provisionally
-	var includes: Array = owner.get("include_traits")
-	for include in includes:
-		if not include in myobj.traits:
-			okay = false
-			break
-	return okay
+	return myobj.includes(owner.get("include_traits"))
 
 # false if one of the exclude_traits is present
 func _exclude_traits(myobj: TapObject) -> bool:
-	var okay = true # provisionally
-	var excludes: Array = owner.get("exclude_traits")
-	for exclude in excludes:
-		if exclude in myobj.traits:
-			okay = false
-			break
-	return okay
+	return myobj.includes(owner.get("exclude_traits"))
 
-# false if the nearest TapRequired object_id isn't an ancestor
+# false if the nearest TapRequired object_id isn't an parent
 func _contained(myobj: TapObject) -> bool:
 	var contained: bool = owner.get("contained")
-	return (not contained) or myobj.has_ancestor(TapRequires.find_id(owner.get_parent()))
+	return (not contained) or myobj.has_parent(TapRequires.find_id(owner.get_parent()))
 
-# false if the include_ancestor is missing
-func _include_ancestor(myobj: TapObject) -> bool:
-	var include: String = owner.get("include_ancestor")
-	return (not include) or myobj.has_ancestor(include)
+# false if the include_parent is missing
+func _include_parent(myobj: TapObject) -> bool:
+	var include: String = owner.get("include_parent")
+	return (not include) or myobj.has_parent(include)
 
-# false if the exclude_ancestor is present
-func _exclude_ancestor(myobj: TapObject) -> bool:
-	var exclude: String = owner.get("exclude_ancestor")
-	return (not exclude) or not myobj.has_ancestor(exclude)
+# false if the exclude_parent is present
+func _exclude_parent(myobj: TapObject) -> bool:
+	var exclude: String = owner.get("exclude_parent")
+	return (not exclude) or not myobj.has_parent(exclude)

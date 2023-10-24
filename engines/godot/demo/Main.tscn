@@ -1,14 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://hee6yggaco67"]
+[gd_scene load_steps=11 format=3 uid="uid://hee6yggaco67"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_t545i"]
-[ext_resource type="Script" path="res://TapGame.gd" id="2_2sa6n"]
-[ext_resource type="Script" path="res://BannerScore.gd" id="3_up8gw"]
-[ext_resource type="Script" path="res://AViewGroup.gd" id="4_1wcje"]
-[ext_resource type="Script" path="res://AViewScene.gd" id="4_vwcfp"]
-[ext_resource type="Script" path="res://ObjectTree.gd" id="5_rugwi"]
+[ext_resource type="Script" path="res://tapestry/TapGame.gd" id="2_t32m6"]
+[ext_resource type="Script" path="res://controls/AViewGroup.gd" id="3_4wxdg"]
+[ext_resource type="Script" path="res://controls/AViewScene.gd" id="4_8q3vp"]
 [ext_resource type="PackedScene" uid="uid://cbibqgabx76rm" path="res://views/Foyer.tscn" id="6_3yuk4"]
 [ext_resource type="PackedScene" uid="uid://dt8amcoawi80a" path="res://views/CloakRoom.tscn" id="7_iqq02"]
+[ext_resource type="Script" path="res://game/BannerScore.gd" id="8_ctx8a"]
 [ext_resource type="PackedScene" uid="uid://cf4r8oyshoyxa" path="res://views/Bar.tscn" id="8_oive7"]
+[ext_resource type="Script" path="res://game/GameView.gd" id="9_wypj6"]
+[ext_resource type="Script" path="res://controls/ObjectTree.gd" id="10_4rgo2"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -21,22 +22,22 @@ script = ExtResource("1_t545i")
 scene_name = "cloak"
 
 [node name="TapGame" type="Node" parent="."]
-script = ExtResource("2_2sa6n")
+script = ExtResource("2_t32m6")
 
 [node name="SceneViews" type="Node" parent="TapGame" node_paths=PackedStringArray("view_target")]
-script = ExtResource("4_1wcje")
-view_target = NodePath("../../controls/VBoxContainer/SceneView")
+script = ExtResource("3_4wxdg")
+view_target = NodePath("../../controls/VBoxContainer/GameView")
 
 [node name="foyer of the opera house" type="Node" parent="TapGame/SceneViews"]
-script = ExtResource("4_vwcfp")
+script = ExtResource("4_8q3vp")
 scene = ExtResource("6_3yuk4")
 
 [node name="cloakroom" type="Node" parent="TapGame/SceneViews"]
-script = ExtResource("4_vwcfp")
+script = ExtResource("4_8q3vp")
 scene = ExtResource("7_iqq02")
 
 [node name="bar" type="Node" parent="TapGame/SceneViews"]
-script = ExtResource("4_vwcfp")
+script = ExtResource("4_8q3vp")
 scene = ExtResource("8_oive7")
 
 [node name="controls" type="HBoxContainer" parent="."]
@@ -93,12 +94,14 @@ grow_horizontal = 0
 pivot_offset = Vector2(-3, 0)
 text = "right side"
 horizontal_alignment = 2
-script = ExtResource("3_up8gw")
+script = ExtResource("8_ctx8a")
 
-[node name="SceneView" type="ColorRect" parent="controls/VBoxContainer"]
+[node name="GameView" type="ColorRect" parent="controls/VBoxContainer" node_paths=PackedStringArray("tap_game")]
 layout_mode = 2
 size_flags_vertical = 3
 color = Color(0, 0.47451, 0.376471, 1)
+script = ExtResource("9_wypj6")
+tap_game = NodePath("../../../TapGame")
 
 [node name="TextView" type="Control" parent="controls/VBoxContainer"]
 layout_mode = 2
@@ -150,7 +153,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource("5_rugwi")
+script = ExtResource("10_4rgo2")
 
 [connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer/TextOutput" method="append_text"]

@@ -1,4 +1,5 @@
 extends Tree
+# needs to be connected to the tapestry object so that it can listen for rebuild changes
 
 func _on_tap_game_root_changed(id: String):
 	clear()

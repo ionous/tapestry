@@ -1,5 +1,6 @@
 extends Node
 class_name AViewScene
+# Spawns and destroys sub-scenes based on the visibility of this scene.
 # Expects to have a parent node of AViewGroup with a valid scene_target
 
 @export var scene : PackedScene

@@ -1,4 +1,5 @@
 extends Label
+# helper to display score and turns in the "status" bar.
 
 var score = 0
 var turns = -1

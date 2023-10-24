@@ -5,3 +5,7 @@ class_name AnObjectLabel
 func _ready():
 	var obj: TapObject = TapRequires.find_obj(self)
 	self.set_text(obj.name if obj else "???")
+	pressed.connect(_pressed)
+
+func _pressed():
+	

@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-TapCommands="*res://TapCommands.gd"
-TapPool="*res://TapPool.gd"
+TapPool="*res://tapestry/TapPool.gd"
+TapCommands="*res://tapestry/TapCommands.gd"
 
 [dotnet]
 

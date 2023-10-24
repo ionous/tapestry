@@ -1,6 +1,6 @@
 extends Node
-# A collection of references to tapestry objects and queries.
-# Intended to be used as singleton.
+# A collection of references to tapestry objects.
+# Intended for use as a singleton.
 
 # dictionary key->[obj]
 var _all = {}

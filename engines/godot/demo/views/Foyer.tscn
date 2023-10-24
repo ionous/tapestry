@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cbibqgabx76rm"]
 
-[ext_resource type="Script" path="res://AnObjectControl.gd" id="1_wesrh"]
-[ext_resource type="Script" path="res://views/AnObjectLabel.gd" id="2_3serh"]
+[ext_resource type="Script" path="res://controls/AnObjectControl.gd" id="1_eb4a4"]
+[ext_resource type="Script" path="res://game/GameButton.gd" id="2_dyhje"]
 
 [node name="Foyer" type="ColorRect"]
 anchors_preset = 15
@@ -9,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.278431, 0.305882, 1, 1)
 
 [node name="#foyer-of-the-opera-house-east-door" type="Control" parent="."]
@@ -18,36 +19,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_wesrh")
-object_id = null
-optional = null
-include_traits = null
-exclude_traits = null
-contained = null
-include_ancestor = null
-exclude_ancestor = null
+mouse_filter = 2
+script = ExtResource("1_eb4a4")
 
-[node name="PanelContainer" type="PanelContainer" parent="#foyer-of-the-opera-house-east-door"]
+[node name="GameButton" type="Button" parent="#foyer-of-the-opera-house-east-door"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -67.0
+offset_left = -82.0
 offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="#foyer-of-the-opera-house-east-door/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="#foyer-of-the-opera-house-east-door/PanelContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "door"
-script = ExtResource("2_3serh")
+text = "east door"
+script = ExtResource("2_dyhje")
 
 [node name="#foyer-of-the-opera-house-south-door" type="Control" parent="."]
 layout_mode = 1
@@ -56,33 +44,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_wesrh")
-object_id = null
-optional = null
-include_traits = null
-exclude_traits = null
-contained = null
-include_ancestor = null
-exclude_ancestor = null
+mouse_filter = 2
+script = ExtResource("1_eb4a4")
 
-[node name="PanelContainer" type="PanelContainer" parent="#foyer-of-the-opera-house-south-door"]
+[node name="GameButton" type="Button" parent="#foyer-of-the-opera-house-south-door"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_top = -20.0
-offset_right = 67.0
+offset_right = 93.0
 offset_bottom = 20.0
 grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="#foyer-of-the-opera-house-south-door/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="#foyer-of-the-opera-house-south-door/PanelContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "door"
-script = ExtResource("2_3serh")
+text = "south door"
+script = ExtResource("2_dyhje")
 
 [node name="#entrance" type="Control" parent="."]
 layout_mode = 1
@@ -91,30 +66,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_wesrh")
-object_id = null
-optional = null
-include_traits = null
-exclude_traits = null
-contained = null
-include_ancestor = null
-exclude_ancestor = null
+mouse_filter = 2
+script = ExtResource("1_eb4a4")
 
-[node name="PanelContainer" type="PanelContainer" parent="#entrance"]
+[node name="GameButton" type="Button" parent="#entrance"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -33.5
-offset_right = 33.5
+offset_left = -46.0
+offset_right = 46.0
 offset_bottom = 40.0
 grow_horizontal = 2
-
-[node name="ColorRect" type="ColorRect" parent="#entrance/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="#entrance/PanelContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "enterance"
-script = ExtResource("2_3serh")
+text = "north door"
+script = ExtResource("2_dyhje")

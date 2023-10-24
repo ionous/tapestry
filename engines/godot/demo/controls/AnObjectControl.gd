@@ -13,15 +13,19 @@ class_name AnObjectControl
 @export var include_traits : Array[String]
 # if the object has any of the specified traits, the control will hide.
 @export var exclude_traits : Array[String]
-# when true, the nearest parent object_id must be an actual ancestor
+# when true, the nearest parent object_id must be an actual parent
 @export var contained : bool
-# when specified, the object must have the specified ancestor for the control to show.
-@export var include_ancestor : String
-# if the object has the specified ancestor, the control will hide.
-@export var exclude_ancestor : String
+# when specified, the object must have the specified parent for the control to show.
+@export var include_parent : String
+# if the object has the specified parent, the control will hide.
+@export var exclude_parent : String
 
 # runtime requirement helper
 var requires : TapRequires
+
+func _init():
+	# godot doesnt let you set default values for child classes :/ 
+	set_mouse_filter(MOUSE_FILTER_IGNORE)
 
 func _enter_tree():
 	requires = TapRequires.new(self)
