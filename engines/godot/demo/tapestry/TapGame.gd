@@ -12,63 +12,57 @@ signal location_changed(name: String)
 signal narration_changed(bb_text: String)
 signal root_changed(id: String)
 
-# Top most object ( ex. the current room )
-var _root : TapObject 
+var _root : TapObject               # top most object ( ex. the current room )
+var _frames : Array[TapFrame]       # data received from tapestry in _post; processed in _process
+var _gui : TapGui = TapGui.NewDefault() # helpers for user interaction during frame processing
+var _blocked : bool                  # block new tapestry requests while processing previous ones
 
-func _process(_delta):
-	if _root: # first frame it will be null
-		root_changed.emit(_root.id)
-		set_process(false)
+func _init():
+	set_process(false) # only runs when needed
 
-func request_rebuild_signal(yes: bool = true):
-	set_process(yes)
+# are tapestry commands allowed?
+func is_blocked() -> bool:
+	return _blocked
 
 # the nearby objects have changed rebuild them
-func _rebuildpool(collection: Dictionary) -> void:
+func _rebuild(collection: Dictionary) -> void:
 	_root = TapPool.rebuild(collection)
-	request_rebuild_signal()
 
 # restart
-func restart(scene: String) -> void:
+func restart(scene: String, gui: TapGui) -> void:
+	assert(not is_blocked())
 	# FIX: assumes synchronous....
 	# probably want to change to "await"
 	# so that users can interact with things, watch state changes, etc.
+	self._gui = gui if gui else TapGui.NewDefault()
 	self._post("restart", scene)
 	self._query([
 		TapCommands.StoryTitle, func(title:String): title_changed.emit(title),
 		TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
 		TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
 		TapCommands.LocationName, func(named:String): location_changed.emit(named),
-		TapCommands.CurrentObjects, func(root:Dictionary): _rebuildpool(root),
+		TapCommands.CurrentObjects, func(root:Dictionary):
+			_rebuild(root),
 	])
 
 # player has typed some text
 func fabricate(text: String) -> void:
+	assert(not is_blocked())
 	var player = TapPool.ensure("self")
 	var prevLoc = player.parentId
 	self._query([
 		# send the player input; no particular response except to listen to events
-		TapCommands.Fabricate(text), null,
+		TapCommands.Fabricate(text), func(_none):
+			if player.parentId != prevLoc:
+				self._query([
+					TapCommands.LocationName, func(named:String): location_changed.emit(named),
+					TapCommands.CurrentObjects, func(root:Dictionary): _rebuild(root),
+				]),
 		# query for the new score and turn each frame
 		TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
 		TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
 	])
-	# todo: consider using events instead
-	if player.parentId != prevLoc:
-		self._query([
-			TapCommands.LocationName, func(named:String): location_changed.emit(named),
-			TapCommands.CurrentObjects, func(root:Dictionary): _rebuildpool(root),
-		])
 
-# given a valid tapestry command:
-# return its signature and args in an array of two elements
-func _parse_cmd(op: Variant) -> Array:
-	var pair: Array
-	for k in op:
-		if k != "--":
-			pair = [k, op[k]]
-			break
-	return pair
 
 # send cmds and their response handlers
 func _query(msgCalls: Array) -> void:
@@ -80,80 +74,89 @@ func _query(msgCalls: Array) -> void:
 		calls.push_back(msgCalls[i+1])
 	self._post("query", sends, calls)
 
-func _post(endpoint: String, blob: Variant, calls: Array=[]):
-	var res = Tapestry.post(endpoint, JSON.stringify(blob))
-	if res:
-		var out = _handle_response(res, calls)
-		if out:
-			var bb = TapWriter.WriteText(out + "<p>")
-			narration_changed.emit(bb)
+# send cmds and queue response frames
+func _post(endpoint: String, blob: Variant, calls: Array= []):
+	var res: Array = Tapestry.post(endpoint, JSON.stringify(blob)) as Array
+	if res and res.size() > 0:
+		for i in res.size():
+			var cmd = TapCommands.Parse(res[i])
+			var callback = calls[i] if i < calls.size() else null
+			var frame = TapFrame.New( cmd.sig, cmd.body, callback )
+			_frames.push_back(frame)
+		_block_input(true)
 
-# msgs expects an array of pairs:
-# a tapestry command, and a handler to manage that command
-func _handle_response(msgs: Array, calls: Array) -> String:
+func _block_input(block: bool):
+	var was: bool = is_blocked()
+	_blocked = block
+	var now: bool = is_blocked()
+	if was != now:
+		_gui.block_input(now)
+		set_process(now) # make sure we wake back up again
+
+# process response frames
+func _process(_delta):
+	# we're going to await
+	# await might not finish before the next process
+	# so turn off process until we're done with the current set of frames
+	set_process(false)
+
 	var out: String = ""
-	for i in msgs.size():
-		var cmd = _parse_cmd(msgs[i])
-		var callback  = calls[i] if i < calls.size() else null
-		var sig = cmd[0]
-		var args = cmd[1]
-		match sig:
-			# TODO: look for "SceneStarted" containing the scene we want
-			"Frame result:events:error:":
-				# var res = args[0]; #-> results from a query
-				var events = args[1]
-				var err = args[2]
-				if events:
-					for evt in events:
-						out += _process_event(evt)
-				print("error", err) # trace out the error
+	while _frames.size():
+		var frames : Array[TapFrame] = _frames
+		_frames = []
+		for frame in frames:
+			if frame.error:
+				push_error(frame.error)
 
-			"Frame result:events:":
-				var result = args[0]  # result from a query
-				var events = args[1]
-				if events:
-					for evt in events:
-						out += _process_event(evt)
+			for evt in frame.events:
+				var cmd = TapCommands.Parse(evt)
+				var text: String = await handle_event(cmd)
+				out += text
+			frame.report_result()
 
-				if callback:
-					# ick: we debug.Stringify the results to support "any value"
-					# so we have to unpack that too.
-					var res = JSON.parse_string(result) if result else null
-					callback.call( res )
+	# we dont have good dirty checking,
+	# so broadcast this at the end of every frame
+	root_changed.emit(_root.id)
+	_block_input(false)
 
-			_:
-				push_error("unhandled message", sig)
-	return out
+	# hrmm... the text writer doesnt properly space trailing <p>
+	# it probably needs to be stateful ( and instance )
+	# and then maybe all this output return text could be cleaned up
+	var bb = TapWriter.ConvertToBB(out + "<p>")
+	narration_changed.emit(bb)
 
 
 # each evt is a Tapestry Event
 # as of 2023-10-18, the complete set is:
 # FrameOutput, PairChanged, SceneEnded, SceneStarted, StateChanged
-func _process_event(evt: Variant) -> String:
+func handle_event(cmd: TapCommands.Cmd) -> String:
 	var out  = ""
-	var cmd = _parse_cmd(evt)
-	var sig = cmd[0]
-	var args = cmd[1]
-	match sig:
+	match cmd.sig:
 		# printed text; accumulates over multiple events
 		"FrameOutput:":
-			out += args
+			# for the moment, we could skip empty <p> blocks
+			# and make every FrameOutput an event.
+			var text: String = cmd.body as String
+			if text != "<p>":
+				var bb = TapWriter.ConvertToBB(text)
+				await _gui.display_text(bb)
+			out += text
 
 		# fix: we need the prev state in order to be able to clear it
 		"StateChanged noun:aspect:trait:":
-			var noun = args[0]
-			var aspect = args[1]
-			var traitn = args[2] # doesn't like "trait"???
+			var noun = cmd.body[0]
+			var aspect = cmd.body[1]
+			var traitn = cmd.body[2] # doesn't like "trait"???
 			print("state changed: '", noun, "' '", aspect, "' '", traitn,"'")
 
 		# relational change
 		#  fix: we dont get both sides of the relation change:
 		#  we only get new relations; fine for now.
 		"PairChanged a:b:rel:":
-			var rel : String = args[2]
+			var rel : String = cmd.body[2]
 			if rel == "whereabouts":
-				var childId : String = args[1]     # b
-				var newParentId : String = args[0] # a
+				var childId : String = cmd.body[1]     # b
+				var newParentId : String = cmd.body[0] # a
 				# remove from old parentId:
 				var child = TapPool.get_by_id(childId)
 				if child:
@@ -164,9 +167,5 @@ func _process_event(evt: Variant) -> String:
 					if newParentId:
 						var newParent = TapPool.ensure(newParentId)
 						newParent.childIds.push_back(child.id)
-					request_rebuild_signal()
-
-		_:
-			print("unhandled event", sig)
 	return out
 

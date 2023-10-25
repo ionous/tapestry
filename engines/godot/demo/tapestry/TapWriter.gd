@@ -1,7 +1,7 @@
 class_name TapWriter
 # helper class to turn tapestry style text markup into bbcode.
 
-static func WriteText(text):
+static func ConvertToBB(text):
 	var w = TapWriter.new()
 	return w.writeText(text)
 	

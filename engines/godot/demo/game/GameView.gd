@@ -44,7 +44,7 @@ func _gui_input(event):
 
 # handle events from notify()
 func _on_event(evt: CustomEvent):
-	if evt.name == "clicked" and not _current:
+	if evt.name == "clicked" and not _current and not tap_game.is_blocked():
 		var objid = evt.object
 		print("got %s from %s" % [evt.name, objid ])
 		# each action has a name, and the kinds it can target
@@ -63,7 +63,7 @@ func _on_event(evt: CustomEvent):
 			var act = _actions[idx]
 			var text = act.format(objid)
 			tap_game.fabricate(text)
-			print(text) # should also go in console
+			print("Clicked Action: %s" % text) # should also go in console
 			close_popup()
 		)
 		pop.show()

@@ -1,6 +1,21 @@
 extends Node
 # Tapestry command queries for title, score, and more.
 
+class Cmd extends RefCounted:
+	var sig: String
+	var body: Variant # the content type depends on the signature
+	func _init(sig_: String, body_: Variant):
+		self.sig = sig_
+		self.body = body_
+
+# given a valid tapestry command:
+# return its signature and body
+func Parse(op: Variant) -> Cmd:
+	for k in op:
+		if k != "--":
+			return Cmd.new(k, op[k])
+	return null
+
 # --------------------------------------------------
 # generate a command using the passed player input
 # --------------------------------------------------

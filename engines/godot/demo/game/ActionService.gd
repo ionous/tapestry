@@ -1,6 +1,5 @@
 class_name ActionService
 
-
 class Action extends RefCounted:
 	var name: String
 	var kind: String # kind
@@ -51,7 +50,6 @@ static func get_multi_actions(_one_id: String, _other_id: String) -> Array[Actio
 	# var obj: TapObject = TapPool.get_by_id(object_id)
 	# fix: materialized path checks
 	return actions.filter(func(a): return a.other_kind != "")
-
 
 #################################################################
 # fix. in "alice", this would query the parser for actions
