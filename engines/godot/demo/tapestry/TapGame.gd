@@ -116,7 +116,8 @@ func _process(_delta):
 
 	# we dont have good dirty checking,
 	# so broadcast this at the end of every frame
-	root_changed.emit(_root.id)
+	if _root:
+		root_changed.emit(_root.id)
 	_block_input(false)
 
 	# hrmm... the text writer doesnt properly space trailing <p>

@@ -1,12 +1,14 @@
 extends Control
 
 # name of the tapestry domain to play
-@export var scene_name : String
+@export var story_name : String
+@export var message_box : PackedScene
 
 @onready var _tap : TapGame = find_child("TapGame")
 @onready var _output : RichTextLabel = find_child("TextOutput")
 @onready var _scroll : ScrollContainer = find_child("ScrollContainer")
 @onready var _input : LineEdit = find_child("TextInput")
+@onready var _view : Node = find_child("GameView")
 
 var _gui : TapGui = TapGui.new()
 
@@ -16,7 +18,8 @@ func _init():
 
 # When the node enters the scene tree for the first time.
 func _ready():
-	_tap.restart(scene_name, _gui)
+	_tap.restart(story_name, _gui)
+	pass
 
 # When the player has entered new text commands
 func _on_text_input(text: String):
@@ -36,4 +39,10 @@ func _block_input(blocked: bool) -> void:
 	_input.editable = not blocked
 
 func _display_text(text: String):
-	print("got some text %s" % text)
+	var box = message_box.instantiate()
+	box.dialog_text = text
+	var parent_rect: Rect2i= _view.get_rect();
+	var pos = parent_rect.position + (parent_rect.size - box.size) / 2;
+	self.add_child(box)
+	box.popup(Rect2i( pos, box.size ))
+	return box.popup_hide

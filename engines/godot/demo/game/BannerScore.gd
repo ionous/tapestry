@@ -22,5 +22,6 @@ func _process(_delta):
 		self.visible = false 
 	else:
 		set_text("%d / %d" % [ score, turns ] ) # godot compares to see if it changed....
+		self.visible = true
 	set_process(false)
 

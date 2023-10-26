@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://hee6yggaco67"]
+[gd_scene load_steps=13 format=3 uid="uid://hee6yggaco67"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_t545i"]
+[ext_resource type="PackedScene" uid="uid://gnf7vlib6w2j" path="res://game/MessageBox.tscn" id="2_o1ffh"]
 [ext_resource type="Script" path="res://tapestry/TapGame.gd" id="2_t32m6"]
 [ext_resource type="Script" path="res://controls/AViewGroup.gd" id="3_4wxdg"]
 [ext_resource type="Script" path="res://controls/AViewScene.gd" id="4_8q3vp"]
@@ -11,6 +12,8 @@
 [ext_resource type="Script" path="res://game/GameView.gd" id="9_wypj6"]
 [ext_resource type="Script" path="res://controls/ObjectTree.gd" id="10_4rgo2"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x27bm"]
+
 [node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -19,7 +22,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_t545i")
-scene_name = "cloak"
+story_name = "cloak"
+message_box = ExtResource("2_o1ffh")
 
 [node name="TapGame" type="Node" parent="."]
 script = ExtResource("2_t32m6")
@@ -57,6 +61,7 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+mouse_filter = 2
 theme_override_constants/separation = 5
 
 [node name="top bar" type="ColorRect" parent="controls/VBoxContainer"]
@@ -136,7 +141,7 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 10
-focus_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x27bm")
 fit_content = true
 scroll_active = false
 selection_enabled = true
