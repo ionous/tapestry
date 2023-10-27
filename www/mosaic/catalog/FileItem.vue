@@ -10,7 +10,6 @@
 <script>
 import mkCatalogButton from './CatalogButton.vue'
 import { CatalogFile } from './catalogItems.js'
-import { computed } from 'vue'
 import bemMixin from '/lib/bemMixin.js'
 
 export default {

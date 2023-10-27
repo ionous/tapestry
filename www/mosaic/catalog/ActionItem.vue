@@ -9,7 +9,6 @@
 </template>
 <script>
 import mkCatalogButton from './CatalogButton.vue'
-import { computed } from 'vue'
 import bemMixin from '/lib/bemMixin.js'
 
 export default {
