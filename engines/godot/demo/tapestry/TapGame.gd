@@ -13,8 +13,8 @@ signal narration_changed(bb_text: String)
 signal root_changed(id: String)
 
 var _root : TapObject               # top most object ( ex. the current room )
-var _frames : Array[TapFrame]       # data received from tapestry in _post; processed in _process
-var _gui : TapGui = TapGui.NewDefault() # helpers for user interaction during frame processing
+var _frames : Array[TapFrame]       # data received from tapestry in _post_to_endpoint; processed in _process
+var _story : TapStory = TapStory.NewDefault() # helpers for user interaction during frame processing
 var _blocked : bool                  # block new tapestry requests while processing previous ones
 
 func _init():
@@ -29,14 +29,14 @@ func _rebuild(collection: Dictionary) -> void:
 	_root = TapPool.rebuild(collection)
 
 # restart
-func restart(scene: String, gui: TapGui) -> void:
+func restart(scene: String, story: TapStory) -> void:
 	assert(not is_blocked())
 	# FIX: assumes synchronous....
 	# probably want to change to "await"
 	# so that users can interact with things, watch state changes, etc.
-	self._gui = gui if gui else TapGui.NewDefault()
-	self._post("restart", scene)
-	self._query([
+	self._story = story if story else TapStory.NewDefault()
+	self._post_to_endpoint("restart", scene)
+	self.post([
 		TapCommands.StoryTitle, func(title:String): title_changed.emit(title),
 		TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
 		TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
@@ -50,11 +50,11 @@ func fabricate(text: String) -> void:
 	assert(not is_blocked())
 	var player = TapPool.ensure("self")
 	var prevLoc = player.parentId
-	self._query([
+	self.post([
 		# send the player input; no particular response except to listen to events
 		TapCommands.Fabricate(text), func(_none):
 			if player.parentId != prevLoc:
-				self._query([
+				self.post([
 					TapCommands.LocationName, func(named:String): location_changed.emit(named),
 					TapCommands.CurrentObjects, func(root:Dictionary): _rebuild(root),
 				]),
@@ -65,17 +65,17 @@ func fabricate(text: String) -> void:
 
 
 # send cmds and their response handlers
-func _query(msgCalls: Array) -> void:
+func post(msgCalls: Array) -> void:
 	assert(msgCalls.size() & 1  == 0, "expected an equal number of pool and calls")
 	var sends = []
 	var calls = []
 	for i in range(0, msgCalls.size(), 2):
 		sends.push_back(msgCalls[i+0])
 		calls.push_back(msgCalls[i+1])
-	self._post("query", sends, calls)
+	self._post_to_endpoint("query", sends, calls)
 
 # send cmds and queue response frames
-func _post(endpoint: String, blob: Variant, calls: Array= []):
+func _post_to_endpoint(endpoint: String, blob: Variant, calls: Array= []):
 	var res: Array = Tapestry.post(endpoint, JSON.stringify(blob)) as Array
 	if res and res.size() > 0:
 		for i in res.size():
@@ -83,14 +83,14 @@ func _post(endpoint: String, blob: Variant, calls: Array= []):
 			var callback = calls[i] if i < calls.size() else null
 			var frame = TapFrame.New( cmd.sig, cmd.body, callback )
 			_frames.push_back(frame)
-		_block_input(true)
+		_starting_frame(true)
 
-func _block_input(block: bool):
+func _starting_frame(block: bool):
 	var was: bool = is_blocked()
 	_blocked = block
 	var now: bool = is_blocked()
 	if was != now:
-		_gui.block_input(now)
+		_story.starting_frame(now)
 		set_process(now) # make sure we wake back up again
 
 # process response frames
@@ -118,7 +118,7 @@ func _process(_delta):
 	# so broadcast this at the end of every frame
 	if _root:
 		root_changed.emit(_root.id)
-	_block_input(false)
+	_starting_frame(false)
 
 	# hrmm... the text writer doesnt properly space trailing <p>
 	# it probably needs to be stateful ( and instance )
@@ -135,12 +135,8 @@ func handle_event(cmd: TapCommands.Cmd) -> String:
 	match cmd.sig:
 		# printed text; accumulates over multiple events
 		"FrameOutput:":
-			# for the moment, we could skip empty <p> blocks
-			# and make every FrameOutput an event.
 			var text: String = cmd.body as String
-			if text != "<p>":
-				var bb = TapWriter.ConvertToBB(text)
-				await _gui.display_text(bb)
+			await _story.saying_text(text)
 			out += text
 
 		# fix: we need the prev state in order to be able to clear it
@@ -148,7 +144,7 @@ func handle_event(cmd: TapCommands.Cmd) -> String:
 			var noun = cmd.body[0]
 			var aspect = cmd.body[1]
 			var traitn = cmd.body[2] # doesn't like "trait"???
-			print("state changed: '", noun, "' '", aspect, "' '", traitn,"'")
+			await _story.changing_state(noun, aspect, trait)
 
 		# relational change
 		#  fix: we dont get both sides of the relation change:
@@ -159,14 +155,8 @@ func handle_event(cmd: TapCommands.Cmd) -> String:
 				var childId : String = cmd.body[1]     # b
 				var newParentId : String = cmd.body[0] # a
 				# remove from old parentId:
-				var child = TapPool.get_by_id(childId)
-				if child:
-					var oldParent = TapPool.get_by_id(child.parentId)
-					if oldParent:
-						oldParent.childIds.erase(childId)
-					child.parentId = newParentId
-					if newParentId:
-						var newParent = TapPool.ensure(newParentId)
-						newParent.childIds.push_back(child.id)
+				TapPool.reparent(newParentId, childId)
+				await _story.reparenting_objects(newParentId, childId)
+
 	return out
 

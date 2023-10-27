@@ -10,15 +10,17 @@ extends Control
 @onready var _input : LineEdit = find_child("TextInput")
 @onready var _view : Node = find_child("GameView")
 
-var _gui : TapGui = TapGui.new()
+var _story: TapStory = TapStory.new()
+const player: String  = "self"
 
 func _init():
-	_gui._display_text = self._display_text
-	_gui._block_input = self._block_input
+	_story._saying_text = self._saying_text
+	_story._starting_frame = self._starting_frame
+	_story._reparenting_objects = self._reparenting_objects
 
 # When the node enters the scene tree for the first time.
 func _ready():
-	_tap.restart(story_name, _gui)
+	_tap.restart(story_name, _story)
 	pass
 
 # When the player has entered new text commands
@@ -35,14 +37,24 @@ func _process(_delta):
 		vbar.value = vbar.max_value
 		_last_max = vbar.max_value
 
-func _block_input(blocked: bool) -> void: 
-	_input.editable = not blocked
+func _starting_frame(started: bool) -> void: 
+	# only editable *after* the story events have finished processing
+	_input.editable = not starting
 
-func _display_text(text: String):
-	var box = message_box.instantiate()
-	box.dialog_text = text
-	var parent_rect: Rect2i= _view.get_rect();
-	var pos = parent_rect.position + (parent_rect.size - box.size) / 2;
-	self.add_child(box)
-	box.popup(Rect2i( pos, box.size ))
-	return box.popup_hide
+func _reparenting_objects(pid: String, cid: String) -> Signal:
+	if cid == player:
+		pass
+		# issue a query
+
+func _saying_text(text: String) -> Signal:
+	if text != "<p>":
+		# fix: look at semantic tags like "title" for message box title.
+		var box = message_box.instantiate()
+		box.dialog_text = TapWriter.ConvertToBB(text)
+		var parent_rect: Rect2i= _view.get_rect();
+		var pos = parent_rect.position + (parent_rect.size - box.size) / 2;
+		self.add_child(box)
+		box.popup(Rect2i( pos, box.size ))
+		return box.popup_hide
+
+
