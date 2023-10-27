@@ -2,10 +2,6 @@ class_name TapGame
 extends Node
 # Communication between the game and Tapestry
 
-# did the root of the TapPool change?
-signal root_changed(id: String)
-
-var _root: TapObject               # top most object ( ex. the current room )
 var _frames: Array[TapFrame]       # data received from tapestry in _post_to_endpoint; processed in _process
 var _story: TapStory = TapStory.NewDefault() # helpers for user interaction during frame processing
 var _turn_running: bool            # block new tapestry requests while processing previous ones
@@ -85,12 +81,6 @@ func _process(_delta):
 		for evt in frame.events:
 			await _handle_event(TapCommands.Parse(evt))
 
-	# we dont have good dirty checking,
-	# so broadcast this at the end of every frame
-	query([TapCommands.CurrentObjects, func(objects: Dictionary):
-		_root = TapPool.rebuild(objects)
-		root_changed.emit(_root.id)
-	])
 	# done with frame.
 	_set_turn_running(false)
 

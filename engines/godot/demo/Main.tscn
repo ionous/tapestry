@@ -74,7 +74,6 @@ layout_mode = 1
 offset_left = 3.0
 offset_right = 65.0
 offset_bottom = 26.0
-text = "left side"
 
 [node name="center" type="Label" parent="controls/VBoxContainer/top bar"]
 layout_mode = 1
@@ -97,7 +96,6 @@ offset_left = -73.0
 offset_bottom = 26.0
 grow_horizontal = 0
 pivot_offset = Vector2(-3, 0)
-text = "right side"
 horizontal_alignment = 2
 script = ExtResource("8_ctx8a")
 
@@ -141,6 +139,7 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 10
+focus_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_x27bm")
 fit_content = true
 scroll_active = false
@@ -162,10 +161,11 @@ script = ExtResource("10_4rgo2")
 
 [connection signal="location_changed" from="." to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="." to="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer/TextOutput" method="append_text"]
+[connection signal="root_changed" from="." to="TapGame/SceneViews" method="_on_main_root_changed"]
+[connection signal="root_changed" from="." to="controls/ObjectTree" method="_on_main_root_changed"]
 [connection signal="score_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="." to="controls/VBoxContainer/top bar/center" method="set_text"]
 [connection signal="turns_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_turns"]
-[connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
 [connection signal="ready" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="grab_focus"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="." method="_on_text_input"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="clear" unbinds=1]
