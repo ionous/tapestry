@@ -72,28 +72,7 @@
         ]
       ]
     },
-    {
-      "Define rule:named:do:": [
-        "after start game, then continue",
-        "the go start playing rule",
-        [
-          {
-            "Increase:": {
-              "Object:field:": [
-                "story",
-                "turn count"
-              ]
-            }
-          },
-          {
-            "Set:trait:": [
-              "story",
-              "playing"
-            ]
-          }
-        ]
-      ]
-    },
+  
     {
       "Define rule:named:do:": [
         "after start game, then continue",
@@ -118,6 +97,29 @@
             ]
           ]
         }
+      ]
+    },
+    {
+    	"--": "fix: ordering of after rules",
+      "Define rule:named:do:": [
+        "after start game, then continue",
+        "the go start playing rule",
+        [
+          {
+            "Increase:": {
+              "Object:field:": [
+                "story",
+                "turn count"
+              ]
+            }
+          },
+          {
+            "Set:trait:": [
+              "story",
+              "playing"
+            ]
+          }
+        ]
       ]
     },
     {

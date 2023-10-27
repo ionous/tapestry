@@ -603,7 +603,17 @@
                   ]
                 },
                 {
-                  "Fabricate input:": "s; jump; jump; n; e; drop cloak; w; s; x message"
+                  "Fabricate input:": "s; jump; jump; n; e; take off cloak; drop cloak; w; s; x message"
+                },
+                {
+                  "Log:value:": [
+                    "info",
+                    {
+                      "FromText:": {
+                        "Say:": "story state: {.Story.play_state}"
+                      }
+                    }
+                  ]
                 },
                 {
                   "--": "game should be finished, but not completed.",
