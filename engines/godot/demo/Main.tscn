@@ -160,12 +160,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("10_4rgo2")
 
-[connection signal="location_changed" from="TapGame" to="controls/VBoxContainer/top bar/left" method="set_text"]
-[connection signal="narration_changed" from="TapGame" to="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer/TextOutput" method="append_text"]
+[connection signal="location_changed" from="." to="controls/VBoxContainer/top bar/left" method="set_text"]
+[connection signal="narration_changed" from="." to="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer/TextOutput" method="append_text"]
+[connection signal="score_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_score"]
+[connection signal="title_changed" from="." to="controls/VBoxContainer/top bar/center" method="set_text"]
+[connection signal="turns_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_turns"]
 [connection signal="root_changed" from="TapGame" to="controls/ObjectTree" method="_on_tap_game_root_changed"]
-[connection signal="score_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_score"]
-[connection signal="title_changed" from="TapGame" to="controls/VBoxContainer/top bar/center" method="set_text"]
-[connection signal="turns_changed" from="TapGame" to="controls/VBoxContainer/top bar/right" method="set_turns"]
 [connection signal="ready" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="grab_focus"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="." method="_on_text_input"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="clear" unbinds=1]

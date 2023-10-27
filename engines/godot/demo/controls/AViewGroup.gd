@@ -9,9 +9,10 @@ class_name AViewGroup
 var _last : AViewScene
 
 func _ready():
+	assert(view_target, "view target not set")
 	var tap_game: TapGame = get_parent() as TapGame
 	assert(tap_game, "expected parent to be a TapGame")
-	if tap_game:
+	if view_target and tap_game:
 		tap_game.root_changed.connect(update_view)
 
 func update_view(id: String):

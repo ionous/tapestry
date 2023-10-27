@@ -22,6 +22,7 @@ class CustomEvent extends RefCounted:
 signal custom_events(event: CustomEvent)
 
 func _ready():
+	assert(tap_game, "tap game reference not set")
 	set_mouse_filter(MOUSE_FILTER_STOP)
 	custom_events.connect(_on_event)
 
@@ -44,7 +45,7 @@ func _gui_input(event):
 
 # handle events from notify()
 func _on_event(evt: CustomEvent):
-	if evt.name == "clicked" and not _current and not tap_game.is_blocked():
+	if evt.name == "clicked" and not _current and not tap_game.is_running_turn():
 		var objid = evt.object
 		print("got %s from %s" % [evt.name, objid ])
 		# each action has a name, and the kinds it can target
