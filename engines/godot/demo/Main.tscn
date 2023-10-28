@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://hee6yggaco67"]
+[gd_scene load_steps=14 format=3 uid="uid://hee6yggaco67"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_t545i"]
 [ext_resource type="PackedScene" uid="uid://gnf7vlib6w2j" path="res://game/MessageBox.tscn" id="2_o1ffh"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cf4r8oyshoyxa" path="res://views/Bar.tscn" id="8_oive7"]
 [ext_resource type="Script" path="res://game/GameView.gd" id="9_wypj6"]
 [ext_resource type="Script" path="res://controls/ObjectTree.gd" id="10_4rgo2"]
+[ext_resource type="Script" path="res://ButtonBar.gd" id="11_jtnbw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x27bm"]
 
@@ -106,6 +107,16 @@ color = Color(0, 0.47451, 0.376471, 1)
 script = ExtResource("9_wypj6")
 tap_game = NodePath("../../../TapGame")
 
+[node name="ButtonBar" type="HBoxContainer" parent="controls/VBoxContainer" node_paths=PackedStringArray("tap_game")]
+custom_minimum_size = Vector2(1, 31)
+layout_mode = 2
+script = ExtResource("11_jtnbw")
+tap_game = NodePath("../../../TapGame")
+
+[node name="Button" type="Button" parent="controls/VBoxContainer/ButtonBar"]
+layout_mode = 2
+text = "inventory"
+
 [node name="TextView" type="Control" parent="controls/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -161,11 +172,12 @@ script = ExtResource("10_4rgo2")
 
 [connection signal="location_changed" from="." to="controls/VBoxContainer/top bar/left" method="set_text"]
 [connection signal="narration_changed" from="." to="controls/VBoxContainer/TextView/ScrollContainer/MarginContainer/TextOutput" method="append_text"]
-[connection signal="root_changed" from="." to="TapGame/SceneViews" method="_on_main_root_changed"]
-[connection signal="root_changed" from="." to="controls/ObjectTree" method="_on_main_root_changed"]
+[connection signal="room_changed" from="." to="TapGame/SceneViews" method="_on_main_room_changed"]
+[connection signal="room_changed" from="." to="controls/ObjectTree" method="_on_main_room_changed"]
 [connection signal="score_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_score"]
 [connection signal="title_changed" from="." to="controls/VBoxContainer/top bar/center" method="set_text"]
-[connection signal="turns_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_turns"]
+[connection signal="turn_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_turns"]
+[connection signal="turn_started" from="." to="controls/VBoxContainer/ButtonBar" method="_on_main_turn_started"]
 [connection signal="ready" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="grab_focus"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="." method="_on_text_input"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="clear" unbinds=1]

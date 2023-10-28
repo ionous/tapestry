@@ -8,7 +8,7 @@ class_name AViewGroup
 
 var _last : AViewScene
 
-func _on_main_root_changed(id: String):
+func _on_main_room_changed(id: String):
 	var kids = self.find_children(id,"AViewScene", false)
 	assert(kids.size() == 1)
 	if kids.size() > 0:

@@ -1,7 +1,7 @@
 extends Tree
 # needs to be connected to the tapestry object so that it can listen for rebuild changes
 
-func _on_main_root_changed(id: String):
+func _on_main_room_changed(id: String):
 	clear()
 	build(null, TapPool.get_by_id(id))
 

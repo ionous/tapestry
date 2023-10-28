@@ -30,7 +30,7 @@ class Action extends RefCounted:
 			return obj.includes(_includes) and obj.excludes(_excludes)
 		return false
 
-	func format(id: String) -> String:
+	func format(id: String = "") -> String:
 		# FIX! shouldnt send "fabricate" if we can send the actual action to call
 		# noting that ".play()" passes time
 		# so either, we have to duplicate those actions in TapCommand
@@ -39,7 +39,7 @@ class Action extends RefCounted:
 		return "%s %s" % [ _do, id ]
 
 static func get_player_actions() -> Array[Action]:
-	return actions.filter(func(a): return (a.other_kind == ""))
+	return actions.filter(func(a): return (a.kind == ""))
 
 static func get_object_actions(object_id: String) -> Array[Action]:
 	var obj: TapObject = TapPool.get_by_id(object_id)

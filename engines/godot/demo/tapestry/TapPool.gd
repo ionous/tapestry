@@ -5,6 +5,8 @@ extends Node
 # dictionary key->[obj]
 var _all = {}
 
+const player: String = "self"
+
 func get_by_id(id: String) -> TapObject:
 	return _all.get(id)
 

@@ -13,15 +13,23 @@ extends Control
 const player: String = "self"
 var _story: TapStory
 
-
-#
-signal title_changed(title: String)
-signal score_changed(score: int)
-signal turns_changed(turns: int)
+# the player's room ( or enclosure ) has changed
+signal room_changed(id: String)
+# the name of the player's room changed
+# fix? consolidate with room_changed
 signal location_changed(name: String)
+# the story title has changed
+signal title_changed(title: String)
+# sent at the start and end of every player interaction
+signal turn_started(started: bool)
+# the turn counter has incremented
+signal turn_changed(turns: int)
+# the game score has changed
+signal score_changed(score: int)
+# show the player some new story text
 signal narration_changed(bb_text: String)
-signal root_changed(id: String)
-
+#
+signal inventory_changed()
 
 # When the node enters the scene tree for the first time.
 func _ready():
@@ -49,11 +57,12 @@ func _process(_delta):
 
 var _turn_text: String # accumulate text over the turn
 
-func _starting_turn(turn_start: bool) -> void:
+# if not started, then finished.
+func _starting_turn(started: bool) -> void:
 	# only editable *after* the story events have finished processing
-	_input.editable = not turn_start
+	_input.editable = not started
 	# at the end of a turn:
-	if not turn_start:
+	if not started:
 		# flush accumulated text to the console:
 		var bb = TapWriter.ConvertToBB(_turn_text + "<p>")
 		_turn_text = ""
@@ -61,8 +70,9 @@ func _starting_turn(turn_start: bool) -> void:
 		# update the current score and turn
 		_tap.query([
 			TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
-			TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn)
+			TapCommands.CurrentTurn, func(turn:int): turn_changed.emit(turn)
 		])
+	turn_started.emit(started)
 
 # on start of the first scene, query the title, location, score, etc.
 func _changing_scenes(_scenes: Array, _started: bool):
@@ -79,21 +89,23 @@ func _changing_state(noun: String, _aspect: String, state: String):
 			TapCommands.StoryTitle, func(title:String): title_changed.emit(title),
 			TapCommands.LocationName, func(named:String): location_changed.emit(named),
 			TapCommands.CurrentScore, func(score:int): score_changed.emit(score),
-			TapCommands.CurrentTurn, func(turn:int): turns_changed.emit(turn),
+			TapCommands.CurrentTurn, func(turn:int): turn_changed.emit(turn),
 			TapCommands.CurrentObjects, func(objects: Dictionary):
 				var root = TapPool.rebuild(objects)
-				root_changed.emit(root.id)
+				room_changed.emit(root.id)
 		])
 
-func _reparenting_objects(_pid: String, cid: String): # -> void  or Signal
+func _reparenting_objects(pid: String, cid: String): # -> void  or Signal
 	# issue a query
-	if cid == player:
+	if pid == player:
+		inventory_changed.emit()
+	elif cid == player:
 		_tap.query([
 			TapCommands.StoryTitle, func(title:String): title_changed.emit(title),
 			TapCommands.LocationName, func(named:String): location_changed.emit(named),
 			TapCommands.CurrentObjects, func(objects: Dictionary):
 				var root = TapPool.rebuild(objects)
-				root_changed.emit(root.id)
+				room_changed.emit(root.id)
 		])
 
 func _saying_text(text: String): # -> void  or Signal
@@ -109,7 +121,7 @@ func _saying_text(text: String): # -> void  or Signal
 			if i > 0:
 				title = text.substr(3, i-3)
 				text =  text.substr(i+4)
-		text=  TapWriter.ConvertToBB(text).strip_edges()
+		text = TapWriter.ConvertToBB(text).strip_edges()
 		if text.length():
 			var box = message_box.instantiate()
 			box.title = title
