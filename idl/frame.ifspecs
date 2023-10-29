@@ -113,6 +113,12 @@
                 },
                 {
                   "Term:type:": [
+                    "prev",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
                     "trait",
                     "text"
                   ]

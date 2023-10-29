@@ -103,12 +103,13 @@ func _handle_event(cmd: TapCommands.Cmd):
 			await _story.changing_scenes(cmd.body as Array, false)
 
 		# fix: we need the prev state in order to be able to clear it
-		"StateChanged noun:aspect:trait:":
+		"StateChanged noun:aspect:prev:trait:":
 			var noun = cmd.body[0]
 			var aspect = cmd.body[1]
-			var state = cmd.body[2] # godot doesn't like you to use the word trait
-			# FIX: change the object traits in TapPool
-			await _story.changing_state(noun, aspect, state)
+			var prev = cmd.body[2]
+			var state = cmd.body[3] # godot doesn't like you to use the word trait
+			TapPool.change_state(noun, prev, state)
+			await _story.changing_state(noun, aspect, prev, state)
 
 		# relational change
 		#  fix: we dont get both sides of the relation change:

@@ -624,6 +624,7 @@ func SceneStarted_Marshal(m jsn.Marshaler, val *SceneStarted) (err error) {
 type StateChanged struct {
 	Noun   string `if:"label=noun,type=text"`
 	Aspect string `if:"label=aspect,type=text"`
+	Prev   string `if:"label=prev,type=text"`
 	Trait  string `if:"label=trait,type=text"`
 	Markup map[string]any
 }
@@ -641,6 +642,7 @@ func (*StateChanged) Compose() composer.Spec {
 const StateChanged_Type = "state_changed"
 const StateChanged_Field_Noun = "$NOUN"
 const StateChanged_Field_Aspect = "$ASPECT"
+const StateChanged_Field_Prev = "$PREV"
 const StateChanged_Field_Trait = "$TRAIT"
 
 func (op *StateChanged) Marshal(m jsn.Marshaler) error {
@@ -728,12 +730,19 @@ func StateChanged_Marshal(m jsn.Marshaler, val *StateChanged) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", StateChanged_Field_Aspect))
 		}
-		e2 := m.MarshalKey("trait", StateChanged_Field_Trait)
+		e2 := m.MarshalKey("prev", StateChanged_Field_Prev)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Marshal(m, &val.Trait)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.Prev)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", StateChanged_Field_Trait))
+			m.Error(errutil.New(e2, "in flow at", StateChanged_Field_Prev))
+		}
+		e3 := m.MarshalKey("trait", StateChanged_Field_Trait)
+		if e3 == nil {
+			e3 = prim.Text_Unboxed_Marshal(m, &val.Trait)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", StateChanged_Field_Trait))
 		}
 		m.EndBlock()
 	}
@@ -760,5 +769,5 @@ var Signatures = map[uint64]interface{}{
 	17021232753503984522: (*PairChanged)(nil),  /* event=PairChanged a:b:rel: */
 	14005264853352099464: (*SceneEnded)(nil),   /* event=SceneEnded: */
 	12902248384806780167: (*SceneStarted)(nil), /* event=SceneStarted: */
-	8020611754012510413:  (*StateChanged)(nil), /* event=StateChanged noun:aspect:trait: */
+	7027046405509259850:  (*StateChanged)(nil), /* event=StateChanged noun:aspect:prev:trait: */
 }

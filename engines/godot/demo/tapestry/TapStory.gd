@@ -32,8 +32,8 @@ func starting_turn(starting: bool) -> void:
 func changing_scenes(names: Array, started: bool): #-> Signal or nothing
 	return self._changing_scenes.call(names, started)
 
-func changing_state(noun: String, aspect: String, state: String): #-> Signal or nothing
-	return self._changing_state.call(noun, aspect, state)
+func changing_state(noun: String, aspect: String, prev: String, state: String): #-> Signal or nothing
+	return self._changing_state.call(noun, aspect, prev, state)
 
 func reparenting_objects(pid: String, cid: String): #-> Signal or nothing
 	return self._reparenting_objects.call(pid, cid)
@@ -47,8 +47,8 @@ static func NewDefault():
 		print("starting turn: %s" % starting)
 	story._changing_scenes = func(names: Array, started: bool):
 		print("changing scenes: %s %s" % [names, started])
-	story._changing_state = func(noun: String, aspect: String, state: String):
-		print("changing states: %s<-%s" % [noun, aspect, state])
+	story._changing_state = func(noun: String, aspect: String, prev: String, state: String):
+		print("changing states: %s<-%s" % [noun, aspect, prev, state])
 	story._reparenting_objects = func(pid: String, cid:String): 
 		print("reparenting objects: %s<-%s" % [pid, cid])
 	story._saying_text = func(text: String):

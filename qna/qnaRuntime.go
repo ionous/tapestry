@@ -20,7 +20,7 @@ import (
 type Notifier struct {
 	StartedScene    func(domains []string)
 	EndedScene      func(domains []string)
-	ChangedState    func(noun, aspect, trait string)
+	ChangedState    func(noun, aspect, oldState, newState string)
 	ChangedRelative func(a, b, rel string)
 	// ChangedValue()
 }

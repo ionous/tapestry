@@ -105,9 +105,9 @@ func (out *Collector) onEndScene(domains []string) {
 	out.flush()
 	out.addEvent(&frame.SceneEnded{Domains: domains})
 }
-func (out *Collector) onChangeState(noun, aspect, trait string) {
+func (out *Collector) onChangeState(noun, aspect, prev, trait string) {
 	out.flush()
-	out.addEvent(&frame.StateChanged{Noun: noun, Aspect: aspect, Trait: trait})
+	out.addEvent(&frame.StateChanged{Noun: noun, Aspect: aspect, Prev: prev, Trait: trait})
 }
 func (out *Collector) onChangeRel(a, b, rel string) {
 	out.flush()

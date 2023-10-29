@@ -33,14 +33,14 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 			} else {
 				// set the aspect to the value of the requested trait
 				traitValue := g.StringFrom(trait, fieldData.Type)
-				if e := run.writeNounValue(obj, fieldData, traitValue); e != nil {
+				if was, e := run.readNounValue(obj, fieldData); e != nil {
 					err = e
-				} else if notify := run.notify.ChangedState; notify != nil {
-					// tbd: filter for states that didnt actually change?
-					// maybe as a return from writeNounValue
-					// although to do so, we'd also have to generate the default
-					// ( and still might want to store if the value equals the default; but not notify )
-					notify(obj.Id, fieldData.Name, field)
+				} else if was := was.String(); was != trait {
+					if e := run.writeNounValue(obj, fieldData, traitValue); e != nil {
+						err = e
+					} else if notify := run.notify.ChangedState; notify != nil {
+						notify(obj.Id, fieldData.Name, was, field)
+					}
 				}
 			}
 		}

@@ -22,8 +22,7 @@ signal narration_changed(bb_text: String)
 # items have entered/left the player's inventory
 signal inventory_changed()
 # ui mode change
-signal changed_mode(combine:bool)
-
+signal selected_item(itemId: String)
 
 @onready var _tap_game : TapGame = find_child("TapGame")
 @onready var _output : RichTextLabel = find_child("TextOutput")
@@ -32,9 +31,7 @@ signal changed_mode(combine:bool)
 @onready var _game_view : Node = find_child("GameView")
 
 var _story: TapStory
-# could be an enum, along with "running turn" maybe
-var _combine_target: String 
-
+var _combine_target: String  # item id when combining items
 
 # When the node enters the scene tree for the first time.
 func _ready():
@@ -49,10 +46,14 @@ func _ready():
 func _set_combine_mode(itemId: String):
 	if itemId != _combine_target:
 		var combining = itemId != ""
+		# each control has its own active cursor :(
+		# and find_children doesnt seem to work across instanced boundaries :(
+		# so, buttons will still have the arrow cursor :(
 		var which = Input.CURSOR_CROSS if combining else Input.CURSOR_ARROW
-		Input.set_custom_mouse_cursor(null, which)
+		_game_view.mouse_default_cursor_shape = which 
+		Input.set_default_cursor_shape(which)
 		_combine_target = itemId
-		changed_mode.emit(combining)
+		selected_item.emit(itemId)
 
 # When the player has entered new text commands
 func _on_text_input(text: String):
@@ -72,15 +73,14 @@ func _on_clicked_item(itemId: String):
 		else:
 			# actions for each item, plus a custom "combine" mode
 			var els:Array = _build_actions(itemId)
-			#var obj = TapPool.get_by_id(itemId)
-			#if obj and obj.excludes(["worn"]):
-			# FIX: need to update the object traits
-			var combine: String = "%s %s" % [Icons.Combine, "Use"]
-			els.push_back([ combine, func(): _set_combine_mode(itemId) ])
+			var obj = TapPool.get_by_id(itemId)
+			if obj and obj.excludes(["worn"]):
+				var combine: String = "%s %s" % [Icons.Combine, "Use"]
+				els.push_back([ combine, func(): _set_combine_mode(itemId) ])
 			_game_view.show_popup(els)
 
 # from ButtonBar when clicking on a player action
-func _on_clicked_action(act: ActionService.Action):
+func _on_clicked_action(act: Action):
 	# block user input while running a turn
 	print("clicked %s" % [act.name])
 	if not _tap_game.is_running_turn():
@@ -89,11 +89,11 @@ func _on_clicked_action(act: ActionService.Action):
 # helper to build actions for items
 # tbd: move to action service....?
 func _build_actions(objId: String, otherId: String = ""):
-	var a: Array[ActionService.Action] = \
-		ActionService.get_object_actions(objId) if otherId == "" else  \
-		ActionService.get_multi_actions(objId, otherId)
+	var a: Array[Action] = \
+		Action.get_object_actions(objId) if otherId == "" else  \
+		Action.get_multi_actions(objId, otherId)
 
-	return a.map(func(act: ActionService.Action):
+	return a.map(func(act: Action):
 		# each icon has a text label and an "icon"
 		var icon = Icons.find_icon(act.name)
 		# fix: are there tooltips in godot?
@@ -101,7 +101,7 @@ func _build_actions(objId: String, otherId: String = ""):
 		return [label, func(): _on_action(act, objId, otherId)]
 	)
 
-func _on_action(act:ActionService.Action, objId: String, otherId:String):
+func _on_action(act:Action, objId: String, otherId:String):
 	var input = act.format(objId, otherId)
 	_tap_game.fabricate(input)
 	_set_combine_mode("") 
@@ -143,7 +143,7 @@ func _changing_scenes(_scenes: Array, _started: bool):
 		TapCommands.StoryTitle, func(title:String): title_changed.emit(title)
 	])
 
-func _changing_state(noun: String, _aspect: String, state: String):
+func _changing_state(noun: String, _aspect: String, _prev: String, state: String):
 	if noun == "story" and state == "playing":
 		_tap_game.query([
 			TapCommands.StoryTitle, func(title:String): title_changed.emit(title),

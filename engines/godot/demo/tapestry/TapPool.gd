@@ -17,9 +17,18 @@ func ensure(id: String) -> TapObject:
 		_all[id] = obj
 	return obj
 
+
 # change the parent-child rel
 # "reparent" is a function in Node.
-func change_hierarchy(newParentId, childId) -> void:
+func change_state(objId: String, prev: String, next: String) -> void:
+	var obj = get_by_id(objId)
+	if obj:
+		obj.traits.erase(prev)
+		obj.traits.push_back(next)
+
+# change the parent-child rel
+# "reparent" is a function in Node.
+func change_hierarchy(newParentId: String, childId: String) -> void:
 	var child = get_by_id(childId)
 	if child:
 		var oldParent = get_by_id(child.parentId)
