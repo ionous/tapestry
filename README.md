@@ -41,20 +41,16 @@ Tapestry is therefore inspired by the world of interactive fiction and owes a lo
 
 It is *not* a goal to attempt to match Inform's amazing natural language programming environment. ( Nor is it a goal to run on z-machines. )  It *is* however a goal to be able to play some "Inform-like" stories with similar results. The overriding goal is to *extend* interactive fiction to bring similar tools into any game genre.
 
-# Building the code
-
-Tapestry is written in [Go](https://golang.org/). It uses [sqlite3](https://www.sqlite.org/index.html) and the [best](https://en.wikipedia.org/wiki/Highlander_(film)) go-sqlite driver [requires](https://github.com/mattn/go-sqlite3/issues/467) cgo, so on windows you'll probably have to install gcc. ( i've used https://jmeubank.github.io/tdm-gcc/ with good success. )
-
 # Licenses
 
-All original source code for Tapestry is licensed under a BSD-3 license.  
+All original source code for Tapestry is licensed under a BSD-3 license.
 
-Additionally, Go and its libraries use a BSD style license; and, all existing third party Go language dependencies use the MIT license. Tapestry's mosaic editor and its web console use [Blockly](https://developers.google.com/blockly) and [Vue.js](https://vuejs.org/) which are licensed under the Apache 2.0 and MIT licenses respectively. Development of the editor and web console require [Node.js](https://nodejs.org/) and a variety of modules each of which use their own open source licenses. [Godot](https://godotengine.org/license/) is licensed under the MIT license.
+Tapestry is written primarily in [Go](https://go.dev/). Go and its libraries use a BSD style license. All existing third party Go language dependencies use the MIT license. Tapestry uses [SQLite](https://www.sqlite.org/) for data storage, SQLite is public domain. Tapestry's "Mosaic" editor and web console use [Blockly](https://developers.google.com/blockly) and [Vue.js](https://vuejs.org/) which are licensed under the Apache 2.0 and MIT licenses respectively. Development of the editor and web console require [Node.js](https://nodejs.org/) and a variety of modules each of which use their own open source licenses. [Godot](https://godotengine.org) is used for demonstrating 3D party engine integration. It uses an MIT license.
 
-The license for Tapestry, and the licenses for all its packages and dependencies, can be found in the Tapestry `LICENSE` file.
+Please see the Tapestry [LICENSE](https://git.sr.ht/~ionous/tapestry/tree/main/item/LICENSE) file for details.
 
 # Code of Conduct
 
-We believe that Black lives matter, and that queer and trans lives matter. In that spirit, if you are interested in contributing to the project: please refer to the `CODE_OF_CONDUCT.md`. While we have no control over the uses of Tapestry, or the stories created with it, we hope end users take the same goals to heart.
+We believe that Black lives matter, and that queer and trans lives matter. In that spirit, if you are interested in contributing to the project: please refer to the [CODE OF CONDUCT](https://git.sr.ht/~ionous/tapestry/tree/main/item/CODE_OF_CONDUCT.md). While we have no control over the uses of Tapestry, or the stories created with it, we hope end users take the same goals to heart.
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) 
