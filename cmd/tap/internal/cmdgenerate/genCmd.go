@@ -58,7 +58,7 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 			}
 			return
 		}); e != nil {
-			log.Fatalf("error generating %q: %v", path, e)
+			log.Fatalf("error generating %q from %q %v", path, genFlags.in, e)
 		}
 	}
 	return
