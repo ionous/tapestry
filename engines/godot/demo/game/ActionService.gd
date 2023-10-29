@@ -7,6 +7,7 @@ class Action extends RefCounted:
 	var _do: String
 	var _includes: Array[String]
 	var _excludes: Array[String]
+	var _filter: Callable
 
 	func _init(name_: String, noun_kind_: String= "", other_kind_: String= ""):
 		name = name_
@@ -21,22 +22,28 @@ class Action extends RefCounted:
 		_excludes.push_back(state)
 		return self
 
+	func filter(filter_: Callable) -> Action:
+		assert(not _filter)
+		_filter = filter_
+		return self
+
 	func do(x: String) -> Action:
 		self._do = x
 		return self
 
 	func matches(obj: TapObject) -> bool:
-		if (kind == obj.kind or kind == "things") and other_kind == "":
-			return obj.includes(_includes) and obj.excludes(_excludes)
+		if not _filter or _filter.call(obj):
+			if (kind == obj.kind or kind == "things") and other_kind == "":
+				return obj.includes(_includes) and obj.excludes(_excludes)
 		return false
 
-	func format(id: String = "") -> String:
+	func format(id: String = "", otherId: String = "") -> String:
 		# FIX! shouldnt send "fabricate" if we can send the actual action to call
 		# noting that ".play()" passes time
 		# so either, we have to duplicate those actions in TapCommand
 		# or we need to send a command like Fabricate:action:
 		# the latter might be better?
-		return "%s %s" % [ _do, id ]
+		return "%s %s %s" % [ _do, id, otherId ]
 
 static func get_player_actions() -> Array[Action]:
 	return actions.filter(func(a): return (a.kind == ""))
@@ -67,7 +74,18 @@ static var actions : Array[Action] = [
 	# world actions
 	Action.new("traveling", "doors").do("go"),
 	Action.new("examining", "things").do("x"),
-	Action.new("taking", "things").include("portable").do("take"),
+	Action.new("taking", "things")
+		.include("portable")
+			# dont offer to take things the player already has
+		.filter(func(obj:TapObject): return obj.parentId != TapPool.player)
+		.do("take"),
+
+	Action.new("removing", "things")
+		.include("worn")
+		.do("take off"),
+
+	Action.new("dropping", "things")
+		.do("drop"),
 
 	# multiple object actions
 	Action.new("storing", "things", "things").do("store"),

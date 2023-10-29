@@ -4,32 +4,12 @@ class_name GameView
 # things like GameButton look for this to handle interactivity.
 
 var _current : PopupMenu 
-var _actions : Array
 
 @export var tap_game : TapGame
 
-# children ( like GameButton ) send these to us via "notify()"
-class CustomEvent extends RefCounted:
-	var name: String
-	var object: String
-	var data: Variant
-
-	func _init( id_: String, event_: String, data_: Variant ):
-		self.object = id_
-		self.name = event_
-		self.data = data_
-
-signal custom_events(event: CustomEvent)
-
 func _ready():
-	assert(tap_game, "tap game reference not set")
+	assert(tap_game, "tap_game game reference not set")
 	set_mouse_filter(MOUSE_FILTER_STOP)
-	custom_events.connect(_on_event)
-
-# queue an event for processing
-func notify(obj: String, event: String, data: Variant = null):
-	var evt = CustomEvent.new(obj, event, data)
-	custom_events.emit(evt)
 
 func close_popup():
 	if _current:
@@ -43,30 +23,31 @@ func _gui_input(event):
 			print("clicked outside")
 			close_popup()
 
-# handle events from notify()
-func _on_event(evt: CustomEvent):
-	if evt.name == "clicked" and not _current and not tap_game.is_running_turn():
-		var objid = evt.object
-		print("got %s from %s" % [evt.name, objid ])
-		# each action has a name, and the kinds it can target
-		var pop: PopupMenu = PopupMenu.new()
-		_actions = ActionService.get_object_actions(objid )
-		for act in _actions:
-			# each icon has a text label and an "icon"
-			var icon = IconService.find_icon(act.name)
-			# fix: are there tooltips in godot?
-			var label = "%s %s" % [icon.icon, icon.label]
-			pop.add_item(label)
-
-		pop.position = get_global_mouse_position()
-		add_child(pop)
-		pop.index_pressed.connect(func(idx):
-			var act = _actions[idx]
-			var text = act.format(objid)
-			tap_game.fabricate(text)
-			print("Clicked Action: %s" % text) # should also go in console
-			close_popup()
-		)
-		pop.show()
-		_current= pop
-
+# called by other nodes to display an action bar
+# requires pairs of (label, callable)
+func show_popup(labelCalls: Array):
+	if tap_game.is_running_turn():
+		return
+	close_popup()
+	# build popup menu
+	var pop: PopupMenu = PopupMenu.new()
+	_current= pop
+	# add items, and record callbacks
+	var calls: Array[Callable] = [] 
+	for labelCall in labelCalls:
+		var label: String= labelCall[0]
+		var cb: Callable= labelCall[1]
+		calls.push_back(cb) 
+		pop.add_item(label)
+	# handle clicks:
+	pop.index_pressed.connect(func(idx):
+		var cb = calls[idx]
+		if cb:
+			cb.call()
+		close_popup()
+	)
+	# show popup
+	pop.position = get_global_mouse_position()
+	add_child(pop)
+	pop.show()
+	

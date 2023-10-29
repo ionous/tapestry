@@ -85,7 +85,6 @@ offset_left = -43.0
 offset_right = 43.0
 offset_bottom = 26.0
 grow_horizontal = 2
-text = "center side"
 horizontal_alignment = 1
 
 [node name="right" type="Label" parent="controls/VBoxContainer/top bar"]
@@ -178,6 +177,8 @@ script = ExtResource("10_4rgo2")
 [connection signal="title_changed" from="." to="controls/VBoxContainer/top bar/center" method="set_text"]
 [connection signal="turn_changed" from="." to="controls/VBoxContainer/top bar/right" method="set_turns"]
 [connection signal="turn_started" from="." to="controls/VBoxContainer/ButtonBar" method="_on_main_turn_started"]
+[connection signal="clicked_action" from="controls/VBoxContainer/ButtonBar" to="." method="_on_clicked_action"]
+[connection signal="clicked_item" from="controls/VBoxContainer/ButtonBar" to="." method="_on_clicked_item"]
 [connection signal="ready" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="grab_focus"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="." method="_on_text_input"]
 [connection signal="text_submitted" from="controls/VBoxContainer/TextInput" to="controls/VBoxContainer/TextInput" method="clear" unbinds=1]

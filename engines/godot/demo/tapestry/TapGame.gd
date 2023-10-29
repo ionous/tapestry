@@ -47,10 +47,12 @@ func query(msgCalls: Array):
 
 # execute a tapestry command that expects some change in game state.
 func _run_turn(endpoint: String, blob: Variant):
-	assert(not _turn_running)
-	var frames = _post(endpoint, blob)
-	_frames.append_array(frames)
-	_set_turn_running(true)
+	if _turn_running:
+		push_warning("cant start a new turn until after the current turn completes")
+	else:
+		var frames = _post(endpoint, blob)
+		_frames.append_array(frames)
+		_set_turn_running(true)
 
 func _set_turn_running(go: bool):
 	set_process(go) # make sure we wake up to process those frames
