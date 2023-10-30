@@ -34,15 +34,15 @@ func (p *TemplateParser) GetExpression() (ret postfix.Expression, err error) {
 // words { directive } words { directive }
 func (p *TemplateParser) NewRune(r rune) State {
 	var left LeftParser
-	return ParseChain(r, &left, Statement("after lhs in template", func(r rune) State {
+	return RunStep(r, &left, Statement("after lhs in template", func(r rune) State {
 		if text := left.GetText(); len(text) > 0 {
 			// println("got text", text)
 			p.pending.Append(quote(text))
 		}
-		return ParseChain(r, spaces, Statement("after lhs spacing", func(r rune) (ret State) {
+		return RunStep(r, spaces, Statement("after lhs spacing", func(r rune) (ret State) {
 			if r != eof {
 				var right RightParser
-				ret = ParseChain(r, &right, Statement("after rhs in template", func(r rune) (ret State) {
+				ret = RunStep(r, &right, Statement("after rhs in template", func(r rune) (ret State) {
 					if v, e := right.GetDirective(); e != nil {
 						p.err = e
 					} else {
@@ -93,7 +93,7 @@ func baseParser(p *TemplateParser, v Directive) (ret State, err error) {
 				err = e
 			} else {
 				t := MakeSubParser(sequenceParser, nil)
-				ret = MakeChain(&t, Statement("post sequence", func(r rune) (ret State) {
+				ret = Step(&t, Statement("post sequence", func(r rune) (ret State) {
 					if res, e := t.reduce(k); e != nil {
 						p.err = e
 					} else {
@@ -108,7 +108,7 @@ func baseParser(p *TemplateParser, v Directive) (ret State, err error) {
 				err = e
 			} else {
 				t := MakeSubParser(conditionParser, v.Expression)
-				ret = MakeChain(&t, Statement("after condition", func(r rune) (ret State) {
+				ret = Step(&t, Statement("after condition", func(r rune) (ret State) {
 					// 	if len(t.pending.list) > 0 {
 					// 		t.out.Append(t.pending.Reduce(types.Span))
 					// 	}
@@ -194,7 +194,7 @@ func branchParser(p *TemplateParser, v Directive) (ret State, err error) {
 			// which is the end of our branch; the types.IfStatement handler
 			// which is our parent, will get the next crack at the rune stream.
 			t := MakeSubParser(endingParser, nil)
-			ret = MakeChain(&t, StateExit("branch", func() {
+			ret = Step(&t, OnExit("branch", func() {
 				if res, e := t.reduce(types.Span); e != nil {
 					p.err = e
 				} else {
@@ -209,7 +209,7 @@ func branchParser(p *TemplateParser, v Directive) (ret State, err error) {
 			k := builtin[v.Key]
 			p.endSection(true)
 			t := MakeSubParser(branchParser, v.Expression)
-			ret = MakeChain(&t, StateExit("else", func() {
+			ret = Step(&t, OnExit("else", func() {
 				if res, e := t.reduce(k); e != nil {
 					p.err = e
 				} else {

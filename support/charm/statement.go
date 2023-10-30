@@ -1,7 +1,7 @@
 package charm
 
 // Statement functions behave as a State.
-// ( SelfStatement works the same, except that passes the state to its function as "self" and this does not )
+// ( Self works the same, except that passes the state to its function as "self" and this does not )
 func Statement(name string, closure func(rune) State) State {
 	return &funcState{name, closure}
 }

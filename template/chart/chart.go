@@ -10,12 +10,12 @@ import (
 type Runes = charm.Runes
 type State = charm.State
 
-var MakeChain = charm.MakeChain
-var MakeParallel = charm.MakeParallel
+var Step = charm.Step
+var Parallel = charm.Parallel
 var Parse = charm.Parse
-var ParseChain = charm.ParseChain
-var SelfStatement = charm.SelfStatement
-var StateExit = charm.StateExit
+var RunStep = charm.RunStep
+var Self = charm.Self
+var OnExit = charm.OnExit
 var Statement = charm.Statement
 
 var Terminal = charm.Terminal

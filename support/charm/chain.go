@@ -1,17 +1,17 @@
 package charm
 
-// ParseChain - run a sequence of of two states
+// RunStep - run a sequence of of two states
 // sending the current rune to the first state immediately
 // ( and returning that result )
-// see also: MakeChain()
-func ParseChain(r rune, first, last State) State {
-	return MakeChain(first, last).NewRune(r)
+// see also: Step()
+func RunStep(r rune, first, last State) State {
+	return Step(first, last).NewRune(r)
 }
 
-// MakeChain - construct a sequence of two states.
+// Step - construct a sequence of two states.
 // If the next rune is not handled by the first state or any of its returned states,
 // the rune is handed to the second state.
-func MakeChain(first, last State) State {
+func Step(first, last State) State {
 	return &chainParser{first, last}
 }
 

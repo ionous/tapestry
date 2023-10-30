@@ -19,7 +19,7 @@ func (p *PipeParser) StateName() string {
 // NewRune starts on the first character of an operand or opening sub-phrase.
 func (p *PipeParser) NewRune(r rune) State {
 	var expParser ExpressionParser
-	return ParseChain(r, &expParser, p.after(0, &expParser))
+	return RunStep(r, &expParser, p.after(0, &expParser))
 }
 
 func (p *PipeParser) GetExpression() (postfix.Expression, error) {
@@ -39,7 +39,7 @@ func (p *PipeParser) after(n int, expParser ExpressionState) State {
 				ret = Statement("post pipe", func(r rune) State {
 					// pass the existing expression into the call parser.
 					call := CallParser{arity: 1, out: xs}
-					return ParseChain(r, &call, p.after(cnt, &call))
+					return RunStep(r, &call, p.after(cnt, &call))
 				})
 			default:
 				p.xs = xs

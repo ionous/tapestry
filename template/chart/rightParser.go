@@ -19,7 +19,7 @@ func (p *RightParser) GetDirective() (Directive, error) {
 // NewRune starts on the first rune of directive content, after the opening bracket, trim, and leading whitespace.
 func (p *RightParser) NewRune(r rune) State {
 	dir := DirectiveParser{factory: p.factory}
-	return ParseChain(r, &dir, Statement("after rhs directive", func(r rune) (ret State) {
+	return RunStep(r, &dir, Statement("after rhs directive", func(r rune) (ret State) {
 		if v, e := dir.GetDirective(); e != nil {
 			p.err = e
 		} else {

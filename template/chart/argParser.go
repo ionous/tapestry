@@ -41,14 +41,14 @@ func (p *ArgParser) NewRune(r rune) State {
 	} else {
 		sub = new(SubdirParser)
 	}
-	return ParseChain(r, sub, Statement("continuing args", func(r rune) (ret State) {
+	return RunStep(r, sub, Statement("continuing args", func(r rune) (ret State) {
 		if exp, e := sub.GetExpression(); e != nil {
 			p.err = e
 		} else if len(exp) > 0 {
 			// doesn't shunt: operands are already in postfix order.
 			p.cnt, p.out = p.cnt+1, append(p.out, exp...)
 			if isSpace(r) {
-				ret = MakeChain(spaces, p) // loop...
+				ret = Step(spaces, p) // loop...
 			}
 		}
 		return

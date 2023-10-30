@@ -21,7 +21,7 @@ func (p *FieldParser) StateName() string {
 // NewRune starts on the dot of a new field.
 func (p *FieldParser) NewRune(r rune) (ret State) {
 	var id IdentParser
-	identChain := MakeChain(&id, Statement("post field", func(r rune) (ret State) {
+	identChain := Step(&id, Statement("post field", func(r rune) (ret State) {
 		// after we have parsed the identifier, check the incoming rune.
 		if n := id.Identifier(); len(n) > 0 {
 			p.fields = append(p.fields, n)

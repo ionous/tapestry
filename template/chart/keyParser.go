@@ -15,7 +15,7 @@ func (p *KeyParser) NewRune(r rune) (ret State) {
 	if isLetter(r) {
 		ret = p.runes.Accept(r, p)
 	} else if isSpace(r) {
-		ret = MakeChain(spaces, p.exp)
+		ret = Step(spaces, p.exp)
 	}
 	return
 }

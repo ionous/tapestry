@@ -31,11 +31,11 @@ func (p *BoolParser) GetBool() (ret bool, err error) {
 func (p *BoolParser) NewRune(r rune) (ret charm.State) {
 	switch r {
 	case 't':
-		ret = charm.ParseChain(r, MatchString("true"), charm.StateExit("matched", func() {
+		ret = charm.RunStep(r, MatchString("true"), charm.OnExit("matched", func() {
 			p.result = 1
 		}))
 	case 'f':
-		ret = charm.ParseChain(r, MatchString("false"), charm.StateExit("matched", func() {
+		ret = charm.RunStep(r, MatchString("false"), charm.OnExit("matched", func() {
 			p.result = -1
 		}))
 	}
@@ -44,7 +44,7 @@ func (p *BoolParser) NewRune(r rune) (ret charm.State) {
 
 func MatchString(str string) charm.State {
 	var i int // index in str
-	return charm.SelfStatement("match "+str, func(self charm.State, r rune) (ret charm.State) {
+	return charm.Self("match "+str, func(self charm.State, r rune) (ret charm.State) {
 		if i < len(str) { // returns nil once we've matched the whole string
 			if match, size := utf8.DecodeRuneInString(str[i:]); match == r {
 				ret = self

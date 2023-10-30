@@ -23,8 +23,8 @@ func (p *ExpressionParser) GetExpression() (postfix.Expression, error) {
 func (p *ExpressionParser) NewRune(r rune) State {
 	call := MakeCallParser(0, p.argFactory)
 	series := SeriesParser{}
-	para := MakeParallel("call or series",
-		MakeChain(&series, StateExit("series", func() {
+	para := Parallel("call or series",
+		Step(&series, OnExit("series", func() {
 			if x, e := series.GetExpression(); e != nil {
 				p.err = errutil.Append(p.err, e)
 			} else if len(x) > 0 {
@@ -32,7 +32,7 @@ func (p *ExpressionParser) NewRune(r rune) State {
 				// particularly an issue with ! which provisionally matches !=
 			}
 		})),
-		MakeChain(&call, StateExit("call", func() {
+		Step(&call, OnExit("call", func() {
 			if x, e := call.GetExpression(); e != nil {
 				p.err = errutil.Append(p.err, e)
 			} else if len(x) > 0 {

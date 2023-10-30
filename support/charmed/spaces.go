@@ -6,7 +6,7 @@ import (
 )
 
 // spaces eats whitespace
-var OptionalSpaces = charm.SelfStatement("spaces", func(self charm.State, r rune) (ret charm.State) {
+var OptionalSpaces = charm.Self("spaces", func(self charm.State, r rune) (ret charm.State) {
 	if IsSpace(r) {
 		ret = self
 	}

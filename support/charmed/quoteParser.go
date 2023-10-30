@@ -29,7 +29,7 @@ func (p *QuoteParser) GetString() (ret string, err error) {
 // scans until the matching quote marker is found
 func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
 	const escape = '\\'
-	return charm.SelfStatement("findMatchingQuote", func(self charm.State, r rune) (ret charm.State) {
+	return charm.Self("findMatchingQuote", func(self charm.State, r rune) (ret charm.State) {
 		switch {
 		case r == q:
 			// eats the ending quote

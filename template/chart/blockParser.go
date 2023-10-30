@@ -25,15 +25,15 @@ func (p *BlockParser) GetDirectives() ([]Directive, error) {
 // NewRune starts with the first character of a string.
 func (p *BlockParser) NewRune(r rune) State {
 	var left LeftParser
-	return ParseChain(r, &left, Statement("after lhs in block", func(r rune) State {
+	return RunStep(r, &left, Statement("after lhs in block", func(r rune) State {
 		if text := left.GetText(); len(text) > 0 {
 			d := Directive{Expression: quote(text)}
 			p.append(d)
 		}
-		return ParseChain(r, spaces, Statement("lhs spacing", func(r rune) (ret State) {
+		return RunStep(r, spaces, Statement("lhs spacing", func(r rune) (ret State) {
 			if r != eof {
 				right := RightParser{factory: p.factory}
-				ret = ParseChain(r, &right, Statement("after rhs in block", func(r rune) (ret State) {
+				ret = RunStep(r, &right, Statement("after rhs in block", func(r rune) (ret State) {
 					if v, e := right.GetDirective(); e != nil {
 						p.err = e
 					} else {

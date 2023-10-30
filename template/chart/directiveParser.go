@@ -37,15 +37,15 @@ func (p *DirectiveParser) NewRune(r rune) State {
 	keyp := KeyParser{exp: p.newExpressionParser()}
 	expp := p.newExpressionParser()
 	//
-	para := MakeParallel("key or expression",
-		MakeChain(expp, StateExit("expression", func() {
+	para := Parallel("key or expression",
+		Step(expp, OnExit("expression", func() {
 			if exp, e := expp.GetExpression(); e != nil {
 				p.err = errutil.Append(p.err, e)
 			} else if len(exp) > 0 {
 				p.out = Directive{Expression: exp} // last match wins
 			}
 		})),
-		MakeChain(&keyp, StateExit("key", func() {
+		Step(&keyp, OnExit("key", func() {
 			if d, e := keyp.GetDirective(); e != nil {
 				p.err = errutil.Append(p.err, e)
 			} else {

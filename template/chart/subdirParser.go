@@ -20,7 +20,7 @@ func (p *SubdirParser) NewRune(r rune) (ret State) {
 	switch {
 	case isOpenBracket(r):
 		var pipe PipeParser
-		ret = MakeChain(&pipe, Statement("after pipe", func(r rune) (ret State) {
+		ret = Step(&pipe, Statement("after pipe", func(r rune) (ret State) {
 			if !isCloseBracket(r) {
 				p.err = errutil.New("unclosed inner directive")
 			} else {
@@ -32,7 +32,7 @@ func (p *SubdirParser) NewRune(r rune) (ret State) {
 
 	default:
 		var op OperandParser
-		ret = ParseChain(r, &op, StateExit("subdir", func() {
+		ret = RunStep(r, &op, OnExit("subdir", func() {
 			p.exp, p.err = op.GetExpression()
 		}))
 	}
