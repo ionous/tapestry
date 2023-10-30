@@ -46,11 +46,11 @@ func TestSeq(t *testing.T) {
 		[]any{nil, nil, nil}); e != nil {
 		t.Fatal(e)
 	} else if e := matchSeq(t,
-		"nil values", `
+		"nil value trailing newline", `
   -
   -
   -
-`, /// generates bad indent
+`,
 		[]any{nil, nil, nil}); e != nil {
 		t.Fatal(e)
 	}
@@ -58,12 +58,12 @@ func TestSeq(t *testing.T) {
 
 func matchSeq(t *testing.T, name, str string, want any) (err error) {
 	if have, e := testSeq(str); e != nil {
-		err = e
+		err = errutil.Fmt("ng failed %q %v", name, e)
 	} else if d := pretty.Diff(want, have); len(d) != 0 {
-		pretty.Println(have)
-		err = errutil.Fmt("mismatched want: %v have: %v diff: %v", want, have, d)
+		err = errutil.Fmt("ng mismatched %q want: %v have: %v diff: %v",
+			name, want, have, d)
 	} else {
-		t.Logf("ok success: %T %v", have, have)
+		t.Logf("ok success: %q %T %v", name, have, have)
 	}
 	return
 }

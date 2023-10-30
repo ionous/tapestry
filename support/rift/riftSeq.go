@@ -47,7 +47,7 @@ func (p *Sequence) NewRune(r rune) (ret charm.State) {
 				// `-...\n5` is not okay,
 				p.values = append(p.values, Value{})
 				ret = p.NewRune(r)
-			} else if lede.Indent < p.indent {
+			} else if lede.Indent < p.indent && r != charm.Eof {
 				// FIX: de-indent to previous sequence
 				e := badIndent{lede.Indent, p.indent}
 				ret = charm.Error(e)
