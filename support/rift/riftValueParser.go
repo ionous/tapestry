@@ -60,7 +60,7 @@ func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 		// ahh the pain of negative numbers and sequences
 		ret = charm.Statement("dashing", func(next rune) (ret charm.State) {
 			// no space, then it must be a number `-5`
-			if next != Space {
+			if next != Space && next != Newline && next != charm.Eof {
 				ret = runInner(dashOrMinus, p, &numValue{}).NewRune(next)
 			} else {
 				// space, then a sub sequence `- 5`

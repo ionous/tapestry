@@ -38,6 +38,21 @@ func TestSeq(t *testing.T) {
   - 5
 `, []any{[]any{5.0}}); e != nil {
 		t.Fatal(e)
+	} else if e := matchSeq(t,
+		"nil values", `
+  -
+  -
+  -`,
+		[]any{nil, nil, nil}); e != nil {
+		t.Fatal(e)
+	} else if e := matchSeq(t,
+		"nil values", `
+  -
+  -
+  -
+`, /// generates bad indent
+		[]any{nil, nil, nil}); e != nil {
+		t.Fatal(e)
 	}
 }
 
@@ -54,8 +69,12 @@ func matchSeq(t *testing.T, name, str string, want any) (err error) {
 }
 
 func testSeq(str string) (ret []any, err error) {
-	var p rift.Sequence
-	if e := charm.Parse(charm.Step(rift.OptionalWhitespace(), &p), str); e != nil {
+	var p *rift.Sequence
+	ws := rift.OptionalWhitespace()
+	if e := charm.Parse(charm.Step(ws, charm.Statement("", func(r rune) (ret charm.State) {
+		p = rift.NewSequence(ws.Indent)
+		return p.NewRune(r)
+	})), str); e != nil {
 		err = e
 	} else if vs, e := p.GetSequence(); e != nil {
 		err = e

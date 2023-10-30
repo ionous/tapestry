@@ -16,6 +16,10 @@ type Sequence struct {
 	values []Value
 }
 
+func NewSequence(indent int) *Sequence {
+	return &Sequence{indent: indent}
+}
+
 func (p *Sequence) StateName() string {
 	return "sequence"
 }
@@ -33,31 +37,31 @@ func (p *Sequence) GetValue() (ret any, err error) {
 
 func (p *Sequence) NewRune(r rune) (ret charm.State) {
 	if r == SequenceDash {
-		lede := Whitespace{indent: p.indent}
+		lede := Whitespace{Indent: p.indent}
 		ret = charm.Step(&lede, charm.Statement("seq lede", func(r rune) (ret charm.State) {
 			// because some amount of whitespace is required
 			// if the indent is unchanged, we know we're on a new line,
 			// and all that's allowed is another sequence entry.
-			if lede.indent == p.indent {
+			if lede.Indent == p.indent {
 				//  `-...\n-` is okay, it indicates a blank value.
 				// `-...\n5` is not okay,
 				p.values = append(p.values, Value{})
 				ret = p.NewRune(r)
-			} else if lede.indent < p.indent {
+			} else if lede.Indent < p.indent {
 				// FIX: de-indent to previous sequence
-				e := badIndent{lede.indent, p.indent}
+				e := badIndent{lede.Indent, p.indent}
 				ret = charm.Error(e)
 			} else {
 				// some amount of indentation means a value.
 				// ( including possibly a sub-sequence )
-				value := ValueParser{indent: lede.indent}
+				value := ValueParser{indent: lede.Indent}
 				ret = charm.RunStep(r, &value, charm.Statement("seq value", func(r rune) (ret charm.State) {
 					if val, e := value.GetValue(); e != nil {
 						ret = charm.Error(e)
 					} else {
-						tail := Whitespace{indent: lede.indent}
+						tail := Whitespace{Indent: lede.Indent}
 						ret = charm.RunStep(r, &tail, charm.Statement("seq tail", func(r rune) (ret charm.State) {
-							_, lines := tail.GetTail()
+							_, lines := tail.GetSpacing()
 							if lines == 0 && r != charm.Eof {
 								e := errutil.New("invalid character after sequence value")
 								ret = charm.Error(e)

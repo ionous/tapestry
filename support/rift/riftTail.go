@@ -10,9 +10,9 @@ import (
 // that seems mildly interesting for end of line alignment of comments
 // but sticking to no tabs at all seems even better.
 type Whitespace struct {
-	indent    int
-	lineCount int
-	optional  bool // by default whitespace is required.
+	Indent   int
+	Lines    int
+	optional bool // by default whitespace is required.
 }
 
 func OptionalWhitespace() *Whitespace {
@@ -24,22 +24,24 @@ func (p *Whitespace) StateName() string {
 }
 
 func (p *Whitespace) IsEmpty() bool {
-	return p.indent+p.lineCount == 0
+	return p.Indent+p.Lines == 0
 }
 
-func (p *Whitespace) GetTail() (retDepth, retLines int) {
-	retDepth, retLines = p.indent, p.lineCount
+func (p *Whitespace) GetSpacing() (retDepth, retLines int) {
+	retDepth, retLines = p.Indent, p.Lines
 	return
 }
 
 // first character of the signature must be a letter
 func (p *Whitespace) NewRune(r rune) (ret charm.State) {
-	if r == Newline {
-		p.lineCount++
-		p.indent = 0
+	if r == charm.Eof {
+		p.Lines++ // treat it as an new
+	} else if r == Newline {
+		p.Lines++
+		p.Indent = 0
 		ret = p
 	} else if r == Space {
-		p.indent++
+		p.Indent++
 		ret = p
 	} else if !p.optional && r != charm.Eof && p.IsEmpty() {
 		e := errutil.New("expected whitespace")
