@@ -1,5 +1,7 @@
 package rift
 
+import "unicode"
+
 const (
 	InlineArraySeparator = ','
 	InlineArrayStop      = '.'
@@ -9,4 +11,13 @@ const (
 	SequenceDash = '-'
 	// keywords in a signature are separated by a colon
 	SignatureSeparator = ':'
+	// valid in words between colons
+	// ( as is space and any unicode letter )
+	SignatureConnector = '_'
+	Space              = ' '
+	Newline            = '\n'
 )
+
+func isSigWord(r rune) bool {
+	return r == SignatureConnector || unicode.IsLetter(r) || r == Space
+}

@@ -4,7 +4,6 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
-	"git.sr.ht/~ionous/tapestry/support/charmed"
 	"github.com/ionous/errutil"
 )
 
@@ -50,7 +49,7 @@ func (p *SigParser) body(r rune) (ret charm.State) {
 	if r == SignatureSeparator && !p.separator {
 		okay = true
 		p.separator = true
-	} else if r == '_' || unicode.IsLetter(r) || charmed.IsSpace(r) {
+	} else if isSigWord(r) {
 		okay = true
 		p.separator = false
 	}

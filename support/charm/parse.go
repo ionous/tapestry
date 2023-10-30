@@ -4,7 +4,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-const eof = rune(-1)
+const Eof = rune(-1)
 
 // Parse is the main function of chart.
 func Parse(first State, str string) (err error) {
@@ -28,7 +28,7 @@ func Parse(first State, str string) (err error) {
 	// fix: is this really needed?
 	// states have "Get()" so shouldnt they be able to finish there?
 	if err == nil && try != nil {
-		if fini := try.NewRune(eof); fini != nil {
+		if fini := try.NewRune(Eof); fini != nil {
 			if es, ok := fini.(errorState); ok {
 				err = es.err
 			} else {

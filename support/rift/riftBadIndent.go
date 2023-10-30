@@ -1,7 +1,7 @@
 package rift
 
 type badIndent struct {
-	depth int // number of spaces
+	have, want int // number of spaces
 }
 
 func (badIndent) Error() string {

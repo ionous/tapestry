@@ -44,7 +44,7 @@ func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
 				}
 				return
 			})
-		case r != Eof:
+		case r != charm.Eof:
 			ret = p.runes.Accept(r, self) // loop...
 		}
 		return

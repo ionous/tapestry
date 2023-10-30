@@ -2,62 +2,84 @@ package rift
 
 import (
 	"git.sr.ht/~ionous/tapestry/support/charm"
-	"git.sr.ht/~ionous/tapestry/support/charmed"
 	"github.com/ionous/errutil"
 )
 
 // a sequence of array values are specified with:
-// a dash, inline whitespace, the value, and a tail ( whitespace with newlines. )
-// assuming the tail is valid, loops back to itself to handle the next dash.
+// a dash, whitespace, the value, trailing whitespace.
+// then loops back to itself to handle the next dash.
 //
 // like yaml, whitespace can be any combination of ascii space or ascii tab:
 // https://yaml.org/spec/1.2.2/#white-space-characters
-type SeqParser struct {
-	expectedIndent int
-	values         []Value
+type Sequence struct {
+	indent int
+	values []Value
 }
 
-func (p *SeqParser) StateName() string {
+func (p *Sequence) StateName() string {
 	return "sequence"
 }
 
-func (p *SeqParser) GetValue() (ret []Value, err error) {
-	// if p.lineCount == 0 {
-	// 	err = errutil.New("expected a new line, none found")
-	// } else {
-	// 	retDepth, retLines = p.indent, p.lineCount
-	// }
+func (p *Sequence) GetSequence() (ret []Value, err error) {
 	ret = p.values
 	return
 }
 
-func (p *SeqParser) NewRune(r rune) (ret charm.State) {
+// implements valueState for sub-sequences
+func (p *Sequence) GetValue() (ret any, err error) {
+	ret = p.values
+	return
+}
+
+func (p *Sequence) NewRune(r rune) (ret charm.State) {
 	if r == SequenceDash {
-		ret = charm.Step(charmed.RequiredSpaces, charm.Statement("seq inline spaces", func(r rune) (ret charm.State) {
-			var value ValueParser
-			return charm.RunStep(r, &value, charm.Statement("seq value", func(r rune) (ret charm.State) {
-				if val, e := value.GetValue(); e != nil {
-					ret = charm.Error(e)
-				} else {
-					var tail TailParser
-					ret = charm.RunStep(r, &tail, charm.Statement("seq tail", func(r rune) (ret charm.State) {
-						if depth, lines := tail.GetTail(); lines > 0 && depth != p.expectedIndent {
-							e := badIndent{depth}
-							ret = charm.Error(e)
-						} else if lines == 0 && r != charmed.Eof {
-							e := errutil.New("expected a newline after a sequence value")
-							ret = charm.Error(e)
-						} else {
-							// since the tail didn't parse, we're at the rune *after* the tail
-							// for example, the next dash.... so loop.
-							p.values = append(p.values, val)
-							ret = p.NewRune(r)
-						}
-						return
-					}))
-				}
+		lede := Whitespace{indent: p.indent}
+		ret = charm.Step(&lede, charm.Statement("seq lede", func(r rune) (ret charm.State) {
+			// because some amount of whitespace is required
+			// if the indent is unchanged, we know we're on a new line,
+			// and all that's allowed is another sequence entry.
+			if lede.indent == p.indent {
+				//  `-...\n-` is okay, it indicates a blank value.
+				// `-...\n5` is not okay,
+				p.values = append(p.values, Value{})
+				ret = p.NewRune(r)
+			} else if lede.indent < p.indent {
+				// FIX: de-indent to previous sequence
+				e := badIndent{lede.indent, p.indent}
+				ret = charm.Error(e)
+			} else {
+				// some amount of indentation means a value.
+				// ( including possibly a sub-sequence )
+				value := ValueParser{indent: lede.indent}
+				ret = charm.RunStep(r, &value, charm.Statement("seq value", func(r rune) (ret charm.State) {
+					if val, e := value.GetValue(); e != nil {
+						ret = charm.Error(e)
+					} else {
+						tail := Whitespace{indent: lede.indent}
+						ret = charm.RunStep(r, &tail, charm.Statement("seq tail", func(r rune) (ret charm.State) {
+							_, lines := tail.GetTail()
+							if lines == 0 && r != charm.Eof {
+								e := errutil.New("invalid character after sequence value")
+								ret = charm.Error(e)
+							} else /* if lines > 0 && depth != p.indent {
+								// FIX: de-indent to previous sequence
+								e := badIndent{depth, p.indent}
+								ret = charm.Error(e)
+							} else */{
+								// loop! we're at the next non-whitespace char after a value;
+								// for example, the next dash of *this* sequence.
+								// ( note: a sub-sequence would have been handled *as* the value )
+								p.values = append(p.values, val)
+								ret = p.NewRune(r)
+							}
+							return
+						}))
+					}
+					return
+				}))
 				return
-			}))
+			}
+			return
 		}))
 	}
 	return
