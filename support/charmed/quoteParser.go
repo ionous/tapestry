@@ -1,36 +1,19 @@
-package chart
+package charmed
 
 import (
-	"git.sr.ht/~ionous/tapestry/template/postfix"
-	"git.sr.ht/~ionous/tapestry/template/types"
+	"git.sr.ht/~ionous/tapestry/support/charm"
 	"github.com/ionous/errutil"
 )
 
-// implements OperandState.
+// parses the rhs of a single line quoted string
+// user has to implement NewRune
 type QuoteParser struct {
-	runes Runes
+	runes charm.Runes
 	err   error
 }
 
 func (p *QuoteParser) StateName() string {
 	return "quotes"
-}
-
-// NewRune starts with the leading quote mark; it finishes just after the matching quote mark.
-func (p *QuoteParser) NewRune(r rune) (ret State) {
-	if isQuote(r) {
-		ret = p.scanQuote(r)
-	}
-	return
-}
-
-func (p *QuoteParser) GetOperand() (ret postfix.Function, err error) {
-	if r, e := p.GetString(); e != nil {
-		err = e
-	} else {
-		ret = types.Quote(r)
-	}
-	return
 }
 
 // GetString returns the text including its surrounding quote markers.
@@ -44,16 +27,16 @@ func (p *QuoteParser) GetString() (ret string, err error) {
 }
 
 // scans until the matching quote marker is found
-func (p *QuoteParser) scanQuote(q rune) (ret State) {
+func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
 	const escape = '\\'
-	return SelfStatement("findMatchingQuote", func(self State, r rune) (ret State) {
+	return charm.SelfStatement("findMatchingQuote", func(self charm.State, r rune) (ret charm.State) {
 		switch {
 		case r == q:
 			// eats the ending quote
-			ret = Terminal
+			ret = charm.Terminal
 
 		case r == escape:
-			ret = Statement("escape", func(r rune) (ret State) {
+			ret = charm.Statement("escape", func(r rune) (ret charm.State) {
 				if x, ok := escapes[r]; !ok {
 					p.err = errutil.Fmt("unknown escape sequence %q", r)
 				} else {
@@ -61,8 +44,7 @@ func (p *QuoteParser) scanQuote(q rune) (ret State) {
 				}
 				return
 			})
-
-		case r != eof:
+		case r != Eof:
 			ret = p.runes.Accept(r, self) // loop...
 		}
 		return

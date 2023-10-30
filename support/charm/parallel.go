@@ -1,4 +1,4 @@
-package chart
+package charm
 
 // MakeParallel region; run all of the passed states until they all return nil.
 func MakeParallel(name string, rs ...State) State {

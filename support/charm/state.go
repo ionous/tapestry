@@ -1,4 +1,4 @@
-package chart
+package charm
 
 type State interface {
 	// process the next element of the incoming data,

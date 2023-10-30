@@ -1,10 +1,9 @@
-package chart
+package charmed
 
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/template/postfix"
-	"git.sr.ht/~ionous/tapestry/template/types"
+	"git.sr.ht/~ionous/tapestry/support/charm"
 	"github.com/ionous/errutil"
 )
 
@@ -20,54 +19,38 @@ const (
 
 // implements OperandState.
 type NumParser struct {
-	runes  Runes
+	runes  charm.Runes
 	mode   FloatMode
-	negate negate
-}
-
-type negate bool
-
-func (n negate) mul(f float64) float64 {
-	if n {
-		f *= -1.0
-	}
-	return f
+	negate bool
 }
 
 func (*NumParser) StateName() string {
-	return "num parser"
+	return "Numbers"
 }
 
-func (p *NumParser) GetOperand() (ret postfix.Function, err error) {
-	if n, e := p.GetValue(); e != nil {
-		err = e
-	} else {
-		ret = types.Number(n)
-	}
-	return
-}
+// returns int64 or float64
+// func (p *NumParser) GetNumber() (ret any, err error) {
+// 	switch s := p.runes.String(); p.mode {
+// 	case Int10:
+// 		ret = fromInt(s, p.negate)
+// 	case Int16:
+// 		ret = fromHex(s)
+// 	case Float64:
+// 		ret = fromFloat(s, p.negate)
+// 	default:
+// 		err = errutil.Fmt("unknown number: '%v' is %v.", s, p.mode)
+// 	}
+// 	return
+// }
 
-func (p *NumParser) GetValue() (ret float64, err error) {
-	s := p.runes.String()
-	switch p.mode {
+func (p *NumParser) GetFloat() (ret float64, err error) {
+	switch s := p.runes.String(); p.mode {
 	case Int10:
-		if i, e := strconv.ParseInt(s, 10, 64); e != nil {
-			panic(e)
-		} else {
-			ret = p.negate.mul(float64(i))
-		}
-	case Int16: // chops out the 0x qualifier
-		if i, e := strconv.ParseInt(s[2:], 16, 64); e != nil {
-			panic(e)
-		} else {
-			ret = float64(i)
-		}
+		ret = float64(fromInt(s, p.negate))
+	case Int16:
+		ret = float64(fromHex(s))
 	case Float64:
-		if f, e := strconv.ParseFloat(s, 64); e != nil {
-			panic(e)
-		} else {
-			ret = p.negate.mul(f)
-		}
+		ret = fromFloat(s, p.negate)
 	default:
 		err = errutil.Fmt("unknown number: '%v' is %v.", s, p.mode)
 	}
@@ -76,7 +59,7 @@ func (p *NumParser) GetValue() (ret float64, err error) {
 
 // initial state of digit parsing.
 // note: this doesn't support leading with just a "."
-func (p *NumParser) NewRune(r rune) (ret State) {
+func (p *NumParser) NewRune(r rune) (ret charm.State) {
 	switch {
 	// in golang, leading +/- are unary operators;
 	// here, they are considered optional parts decimal numbers.
@@ -86,56 +69,56 @@ func (p *NumParser) NewRune(r rune) (ret State) {
 		p.negate = true
 		fallthrough
 	case r == '+':
-		ret = Statement("after lead plus", func(r rune) (ret State) {
-			if isNumber(r) {
+		ret = charm.Statement("after lead plus", func(r rune) (ret charm.State) {
+			if IsNumber(r) {
 				p.mode = Int10
-				ret = p.runes.Accept(r, Statement("num plus", p.leadingDigit))
+				ret = p.runes.Accept(r, charm.Statement("num plus", p.leadingDigit))
 			}
 			return
 		})
 	case r == '0':
 		// 0 can standalone; but, it might be followed by a hex qualifier.
 		p.mode = Int10
-		ret = p.runes.Accept(r, Statement("hex check", func(r rune) (ret State) {
+		ret = p.runes.Accept(r, charm.Statement("hex check", func(r rune) (ret charm.State) {
 			// https://golang.org/ref/spec#hex_literal
 			switch {
 			case r == 'x' || r == 'X':
 				p.mode = Pending
-				ret = p.runes.Accept(r, Statement("hex parse", func(r rune) (ret State) {
-					if isHex(r) {
+				ret = p.runes.Accept(r, charm.Statement("hex parse", func(r rune) (ret charm.State) {
+					if IsHex(r) {
 						p.mode = Int16
-						ret = p.runes.Accept(r, Statement("num hex", p.hexDigits))
+						ret = p.runes.Accept(r, charm.Statement("num hex", p.hexDigits))
 					}
 					return
 				}))
 			default:
 				// delegate to number and dot checking...
-				// in a statechart, it would be a super-state, and
+				// in a statecharmed, it would be a super-state, and
 				// x (above) would jump to a sibling of that super-state.
 				ret = p.leadingDigit(r)
 			}
 			return
 		}))
-	case isNumber(r):
+	case IsNumber(r):
 		// https://golang.org/ref/spec#float_lit
 		p.mode = Int10
-		ret = p.runes.Accept(r, Statement("num digits", p.leadingDigit))
+		ret = p.runes.Accept(r, charm.Statement("num digits", p.leadingDigit))
 	}
 	return
 }
 
 // a string of numbers, possibly followed by a decimal or exponent separator.
 // note: golang numbers can end in a pure ".", this does not allow that.
-func (p *NumParser) leadingDigit(r rune) (ret State) {
+func (p *NumParser) leadingDigit(r rune) (ret charm.State) {
 	switch {
-	case isNumber(r):
-		ret = p.runes.Accept(r, Statement("leading dig", p.leadingDigit))
+	case IsNumber(r):
+		ret = p.runes.Accept(r, charm.Statement("leading dig", p.leadingDigit))
 	case r == '.':
 		p.mode = Pending
-		ret = p.runes.Accept(r, Statement("decimal", func(r rune) (ret State) {
-			if isNumber(r) {
+		ret = p.runes.Accept(r, charm.Statement("decimal", func(r rune) (ret charm.State) {
+			if IsNumber(r) {
 				p.mode = Float64
-				ret = p.runes.Accept(r, Statement("decimal digits", p.leadingDigit))
+				ret = p.runes.Accept(r, charm.Statement("decimal digits", p.leadingDigit))
 			} else {
 				ret = p.tryExponent(r) // delegate to exponent checking,,,
 			}
@@ -149,20 +132,20 @@ func (p *NumParser) leadingDigit(r rune) (ret State) {
 
 // https://golang.org/ref/spec#exponent
 // exponent  = ( "e" | "E" ) [ "+" | "-" ] decimals
-func (p *NumParser) tryExponent(r rune) (ret State) {
+func (p *NumParser) tryExponent(r rune) (ret charm.State) {
 	switch {
 	case r == 'e' || r == 'E':
 		p.mode = Pending
-		ret = p.runes.Accept(r, Statement("exp", func(r rune) (ret State) {
+		ret = p.runes.Accept(r, charm.Statement("exp", func(r rune) (ret charm.State) {
 			switch {
-			case isNumber(r):
+			case IsNumber(r):
 				p.mode = Float64
-				ret = p.runes.Accept(r, Statement("exp decimal", p.decimals))
+				ret = p.runes.Accept(r, charm.Statement("exp decimal", p.decimals))
 			case r == '+' || r == '-':
-				ret = p.runes.Accept(r, Statement("exp power", func(r rune) (ret State) {
-					if isNumber(r) {
+				ret = p.runes.Accept(r, charm.Statement("exp power", func(r rune) (ret charm.State) {
+					if IsNumber(r) {
 						p.mode = Float64
-						ret = p.runes.Accept(r, Statement("exp num", p.decimals))
+						ret = p.runes.Accept(r, charm.Statement("exp num", p.decimals))
 					}
 					return
 				}))
@@ -174,17 +157,49 @@ func (p *NumParser) tryExponent(r rune) (ret State) {
 }
 
 // a chain of decimal digits 0-9
-func (p *NumParser) decimals(r rune) (ret State) {
-	if isNumber(r) {
-		ret = p.runes.Accept(r, Statement("decimals", p.decimals))
+func (p *NumParser) decimals(r rune) (ret charm.State) {
+	if IsNumber(r) {
+		ret = p.runes.Accept(r, charm.Statement("decimals", p.decimals))
 	}
 	return
 }
 
 // a chain of hex digits 0-9, a-f
-func (p *NumParser) hexDigits(r rune) (ret State) {
-	if isHex(r) {
-		ret = p.runes.Accept(r, Statement("hexDigits", p.hexDigits))
+func (p *NumParser) hexDigits(r rune) (ret charm.State) {
+	if IsHex(r) {
+		ret = p.runes.Accept(r, charm.Statement("hexDigits", p.hexDigits))
+	}
+	return
+}
+
+func fromInt(s string, negate bool) (ret int64) {
+	if i, e := strconv.ParseInt(s, 10, 64); e != nil {
+		panic(e)
+	} else if negate {
+		ret = -i
+	} else {
+		ret = i
+	}
+	return
+}
+
+func fromHex(s string) (ret int64) {
+	// hex string - chops out the 0x qualifier
+	if i, e := strconv.ParseInt(s[2:], 16, 64); e != nil {
+		panic(e)
+	} else {
+		ret = i // no negative for hex.
+	}
+	return
+}
+
+func fromFloat(s string, negate bool) (ret float64) {
+	if f, e := strconv.ParseFloat(s, 64); e != nil {
+		panic(e)
+	} else if negate {
+		ret = -f
+	} else {
+		ret = f
 	}
 	return
 }

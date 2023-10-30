@@ -34,7 +34,7 @@ func (p *TemplateParser) GetExpression() (ret postfix.Expression, err error) {
 // words { directive } words { directive }
 func (p *TemplateParser) NewRune(r rune) State {
 	var left LeftParser
-	return ParseChain(r, &left, Statement("after lhs", func(r rune) State {
+	return ParseChain(r, &left, Statement("after lhs in template", func(r rune) State {
 		if text := left.GetText(); len(text) > 0 {
 			// println("got text", text)
 			p.pending.Append(quote(text))
@@ -42,7 +42,7 @@ func (p *TemplateParser) NewRune(r rune) State {
 		return ParseChain(r, spaces, Statement("after lhs spacing", func(r rune) (ret State) {
 			if r != eof {
 				var right RightParser
-				ret = ParseChain(r, &right, Statement("after rhs", func(r rune) (ret State) {
+				ret = ParseChain(r, &right, Statement("after rhs in template", func(r rune) (ret State) {
 					if v, e := right.GetDirective(); e != nil {
 						p.err = e
 					} else {

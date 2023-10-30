@@ -1,7 +1,10 @@
-package chart
+package charmed
 
 import (
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/support/charm"
+	"github.com/ionous/errutil"
 )
 
 func TestQuotes(t *testing.T) {
@@ -28,8 +31,8 @@ func TestQuotes(t *testing.T) {
 
 func testQ(t *testing.T, str, want string) (ret interface{}, err error) {
 	t.Log("test:", str)
-	var p QuoteParser
-	if e := Parse(&p, str); e != nil {
+	var p quoteParser
+	if e := charm.Parse(&p, str); e != nil {
 		err = e
 	} else if got, e := p.GetString(); e != nil {
 		err = e
@@ -41,4 +44,23 @@ func testQ(t *testing.T, str, want string) (ret interface{}, err error) {
 		}
 	}
 	return str, err
+}
+
+func mismatched(want, got string) error {
+	return errutil.Fmt("want(%d): %s; != got(%d): %s.", len(want), want, len(got), got)
+}
+
+// for testing errors when we want to fail before the match is tested.
+const ignoreResult = "~~IGNORE~~"
+
+type quoteParser struct {
+	QuoteParser
+}
+
+// NewRune starts with the leading quote mark; it finishes just after the matching quote mark.
+func (p *QuoteParser) NewRune(r rune) (ret charm.State) {
+	if r == '\'' || r == '"' {
+		ret = p.ScanQuote(r)
+	}
+	return
 }

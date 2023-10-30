@@ -1,4 +1,4 @@
-package chart
+package charm
 
 // SelfStatement are States which pass a function pointer as the first argument to the state callback.
 // This allows closures to return themselves.

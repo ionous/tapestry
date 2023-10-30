@@ -1,8 +1,10 @@
-package chart
+package charmed
 
 import (
 	"math"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/support/charm"
 )
 
 func TestNum(t *testing.T) {
@@ -10,10 +12,10 @@ func TestNum(t *testing.T) {
 	// returns point of failure
 	run := func(str string) (val float64, err error) {
 		var p NumParser
-		if e := Parse(&p, str); e != nil {
+		if e := charm.Parse(&p, str); e != nil {
 			val = NaN
 			err = e
-		} else if v, e := p.GetValue(); e != nil {
+		} else if v, e := p.GetFloat(); e != nil {
 			err = e
 		} else {
 			val = v
@@ -83,10 +85,10 @@ func TestNum(t *testing.T) {
 				t.Fatal("expected success", e)
 				break
 			} else if test.endpoint > 0 {
-				if c, ok := e.(endpointError); !ok {
+				if c, ok := e.(charm.EndpointError); !ok {
 					t.Fatal("unexpected error", e)
 					break
-				} else if c.end != test.endpoint {
+				} else if c.End() != test.endpoint-1 {
 					t.Fatal("mismatched endpoint at", e)
 					break
 				}

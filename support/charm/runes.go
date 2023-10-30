@@ -1,4 +1,4 @@
-package chart
+package charm
 
 // Runes gathers runes for the parsing of string-like data.
 type Runes struct {

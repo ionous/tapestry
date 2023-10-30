@@ -1,9 +1,24 @@
-package chart
+package charmed
+
+import (
+	"git.sr.ht/~ionous/tapestry/support/charm"
+	"github.com/ionous/errutil"
+)
 
 // spaces eats whitespace
-var spaces = SelfStatement("spaces", func(self State, r rune) (ret State) {
-	if isSpace(r) {
+var OptionalSpaces = charm.SelfStatement("spaces", func(self charm.State, r rune) (ret charm.State) {
+	if IsSpace(r) {
 		ret = self
+	}
+	return
+})
+
+var RequiredSpaces = charm.Statement("spaces", func(r rune) (ret charm.State) {
+	if IsSpace(r) {
+		ret = OptionalSpaces
+	} else {
+		e := errutil.New("expected whitespace")
+		ret = charm.Error(e)
 	}
 	return
 })

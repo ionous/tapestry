@@ -1,10 +1,4 @@
-package chart
-
-// Action are states which always return nil.
-// see also: StateExit.
-func Action(name string, closure func()) State {
-	return &actionState{name, closure}
-}
+package charm
 
 type actionState struct {
 	name    string
@@ -21,12 +15,12 @@ func (s *actionState) NewRune(r rune) State {
 	return nil
 }
 
-// StateExit marks a terminating state for readability's sake.
+// StateExit provides a callback when a state ends
 func StateExit(name string, onExit func()) State {
 	return &actionState{"exit " + name, onExit}
 }
 
-// for the very next rune returns nil ( unhandled )
+// for the very next rune, return nil ( unhandled )
 var Terminal = Statement("terminal", func(rune) State {
 	return nil
 })
