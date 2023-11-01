@@ -25,7 +25,7 @@ func (p *SubdirParser) NewRune(r rune) (ret State) {
 				p.err = errutil.New("unclosed inner directive")
 			} else {
 				p.exp, p.err = pipe.GetExpression()
-				ret = Terminal // eat the closing bracket.
+				ret = Exit("first sub directive") // eat the closing bracket.
 			}
 			return
 		}))

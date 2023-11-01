@@ -10,15 +10,15 @@ import (
 type Runes = charm.Runes
 type State = charm.State
 
-var Step = charm.Step
+var Exit = charm.Exit
+var OnExit = charm.OnExit
 var Parallel = charm.Parallel
 var Parse = charm.Parse
 var RunStep = charm.RunStep
 var Self = charm.Self
-var OnExit = charm.OnExit
 var Statement = charm.Statement
+var Step = charm.Step
 
-var Terminal = charm.Terminal
 var spaces = charm.Optional(isSpace)
 
 // fix: apparently this is handling more than just bool
