@@ -14,7 +14,7 @@ type OperandParser struct {
 	OperandState
 }
 
-func (p *OperandParser) StateName() string {
+func (p *OperandParser) String() string {
 	return "operand parser"
 }
 

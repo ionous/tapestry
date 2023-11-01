@@ -18,7 +18,7 @@ func MakeArgParser(f ExpressionStateFactory) ArgParser {
 	return ArgParser{factory: f}
 }
 
-func (p *ArgParser) StateName() string {
+func (p *ArgParser) String() string {
 	return "arg parser"
 }
 

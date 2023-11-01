@@ -12,7 +12,7 @@ type PipeParser struct {
 	xs  postfix.Expression
 }
 
-func (p *PipeParser) StateName() string {
+func (p *PipeParser) String() string {
 	return "pipes"
 }
 

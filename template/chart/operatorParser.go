@@ -13,7 +13,7 @@ type OperatorParser struct {
 	ofs  int    // search offset with our operator list
 }
 
-func (p *OperatorParser) StateName() string {
+func (p *OperatorParser) String() string {
 	return "operators"
 }
 

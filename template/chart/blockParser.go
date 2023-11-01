@@ -13,7 +13,7 @@ type BlockParser struct {
 	factory ExpressionStateFactory // for testing.
 }
 
-func (p *BlockParser) StateName() string {
+func (p *BlockParser) String() string {
 	return "block parser"
 }
 

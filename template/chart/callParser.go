@@ -17,7 +17,7 @@ func MakeCallParser(a int, f ExpressionStateFactory) CallParser {
 	return CallParser{arity: a, argFactory: f}
 }
 
-func (p *CallParser) StateName() string {
+func (p *CallParser) String() string {
 	return "call parser"
 }
 

@@ -24,7 +24,7 @@ func MakeSubParser(d Delegate, xs postfix.Expression) TemplateParser {
 
 type Delegate func(*TemplateParser, Directive) (State, error)
 
-func (p *TemplateParser) StateName() string {
+func (p *TemplateParser) String() string {
 	return "templates"
 }
 func (p *TemplateParser) GetExpression() (ret postfix.Expression, err error) {

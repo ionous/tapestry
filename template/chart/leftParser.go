@@ -7,7 +7,7 @@ type LeftParser struct {
 	out          string
 }
 
-func (p *LeftParser) StateName() string {
+func (p *LeftParser) String() string {
 	return "left parser"
 }
 

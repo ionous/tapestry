@@ -19,7 +19,7 @@ var OnExit = charm.OnExit
 var Statement = charm.Statement
 
 var Terminal = charm.Terminal
-var spaces = charmed.Optional(isSpace)
+var spaces = charm.Optional(isSpace)
 
 // fix: apparently this is handling more than just bool
 // if it doesnt read a whole ident, or if it tries to return error ( instead of a nil function )

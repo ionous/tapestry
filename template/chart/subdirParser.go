@@ -12,7 +12,7 @@ type SubdirParser struct {
 	err error
 }
 
-func (p *SubdirParser) StateName() string {
+func (p *SubdirParser) String() string {
 	return "subdir"
 }
 

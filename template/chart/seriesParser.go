@@ -11,7 +11,7 @@ type SeriesParser struct {
 	out postfix.Shunt
 }
 
-func (p *SeriesParser) StateName() string {
+func (p *SeriesParser) String() string {
 	return "series"
 }
 

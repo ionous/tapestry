@@ -12,7 +12,7 @@ type ExpressionParser struct {
 	argFactory ExpressionStateFactory // for testing
 }
 
-func (p *ExpressionParser) StateName() string {
+func (p *ExpressionParser) String() string {
 	return "expression"
 }
 func (p *ExpressionParser) GetExpression() (postfix.Expression, error) {

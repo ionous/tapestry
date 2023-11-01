@@ -6,7 +6,7 @@ type KeyParser struct {
 	exp   ExpressionState
 }
 
-func (p *KeyParser) StateName() string {
+func (p *KeyParser) String() string {
 	return "keys"
 }
 

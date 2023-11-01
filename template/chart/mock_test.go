@@ -21,7 +21,7 @@ type AnyFactory struct{}
 // AnyParser reads letters.
 type AnyParser struct{ runes Runes }
 
-func (*EmptyParser) StateName() string {
+func (*EmptyParser) String() string {
 	return "empty"
 }
 
@@ -42,7 +42,7 @@ func (f *AnyFactory) NewExpressionState() ExpressionState {
 	return &AnyParser{}
 }
 
-func (*AnyParser) StateName() string {
+func (*AnyParser) String() string {
 	return "any"
 }
 

@@ -24,7 +24,7 @@ type DirectiveParser struct {
 	err     error
 }
 
-func (p *DirectiveParser) StateName() string {
+func (p *DirectiveParser) String() string {
 	return "directive parser"
 }
 

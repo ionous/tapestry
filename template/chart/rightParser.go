@@ -9,7 +9,7 @@ type RightParser struct {
 	factory ExpressionStateFactory // for testing.
 }
 
-func (p *RightParser) StateName() string {
+func (p *RightParser) String() string {
 	return "rhs"
 }
 func (p *RightParser) GetDirective() (Directive, error) {

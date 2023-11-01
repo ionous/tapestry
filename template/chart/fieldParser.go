@@ -14,7 +14,7 @@ type FieldParser struct {
 	pending bool
 }
 
-func (p *FieldParser) StateName() string {
+func (p *FieldParser) String() string {
 	return "fields"
 }
 

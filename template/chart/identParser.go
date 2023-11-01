@@ -4,7 +4,7 @@ type IdentParser struct {
 	runes Runes
 }
 
-func (p *IdentParser) StateName() string {
+func (p *IdentParser) String() string {
 	return "identifiers"
 }
 
