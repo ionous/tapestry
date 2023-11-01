@@ -33,7 +33,7 @@ func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
 		switch {
 		case r == q:
 			// eats the ending quote
-			ret = charm.Terminal
+			ret = charm.Exit("ending quote")
 
 		case r == escape:
 			ret = charm.Statement("escape", func(r rune) (ret charm.State) {
@@ -44,7 +44,11 @@ func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
 				}
 				return
 			})
-		case r != charm.Eof:
+		case r == charm.Eof:
+			e := errutil.New("unclosed quotes")
+			ret = charm.Error(e)
+
+		default:
 			ret = p.runes.Accept(r, self) // loop...
 		}
 		return

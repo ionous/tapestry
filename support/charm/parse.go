@@ -14,8 +14,8 @@ func Parse(first State, str string) (err error) {
 			// no states left to parse remaining input
 			err = EndpointError{str, i, try}
 			break
-		} else if n, ok := next.(errorState); ok {
-			err = n.err
+		} else if es, ok := next.(terminalState); ok {
+			err = errutil.Append(es.err, EndpointError{str, i, try})
 			break
 		} else {
 			try = next
@@ -29,8 +29,8 @@ func Parse(first State, str string) (err error) {
 	// states have "Get()" so shouldnt they be able to finish there?
 	if err == nil && try != nil {
 		if fini := try.NewRune(Eof); fini != nil {
-			if es, ok := fini.(errorState); ok {
-				err = es.err
+			if es, ok := fini.(terminalState); ok && es.err != nil {
+				err = errutil.Fmt("%s handling eof for %q", es.err, str)
 			} else {
 				// and if we are passing eof, shouldnt the states check for it and return nil?
 				// err = EndpointError{str, len(str), fini}
@@ -53,6 +53,6 @@ func (e EndpointError) End() int {
 }
 
 func (e EndpointError) Error() (ret string) {
-	return errutil.Sprintf("parsing `%s` ended in %T(%s) at index %d %q",
-		e.str, e.last, StateName(e.last), e.end, e.str[e.end:])
+	return errutil.Sprintf("parsing %q ended in %s at index %d %q",
+		e.str, StateName(e.last), e.end, e.str[e.end:])
 }
