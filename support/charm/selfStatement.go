@@ -13,7 +13,7 @@ type selfState struct {
 	closure func(State, rune) State
 }
 
-func (s *selfState) StateName() string {
+func (s *selfState) String() string {
 	return s.name
 }
 

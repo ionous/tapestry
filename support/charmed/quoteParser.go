@@ -12,7 +12,7 @@ type QuoteParser struct {
 	err   error
 }
 
-func (p *QuoteParser) StateName() string {
+func (p *QuoteParser) String() string {
 	return "quotes"
 }
 

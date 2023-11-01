@@ -24,7 +24,7 @@ type NumParser struct {
 	negate bool
 }
 
-func (*NumParser) StateName() string {
+func (*NumParser) String() string {
 	return "Numbers"
 }
 

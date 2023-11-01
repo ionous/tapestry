@@ -11,7 +11,7 @@ type funcState struct {
 	closure func(rune) State
 }
 
-func (s *funcState) StateName() string {
+func (s *funcState) String() string {
 	return s.name
 }
 

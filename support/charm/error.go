@@ -8,7 +8,7 @@ type errorState struct {
 	err error
 }
 
-func (e errorState) StateName() string {
+func (e errorState) String() string {
 	return "error state"
 }
 

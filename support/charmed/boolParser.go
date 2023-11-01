@@ -12,7 +12,7 @@ type BoolParser struct {
 	result int
 }
 
-func (p *BoolParser) StateName() string {
+func (p *BoolParser) String() string {
 	return "bools"
 }
 

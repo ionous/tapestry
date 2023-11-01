@@ -19,8 +19,8 @@ type chainParser struct {
 	next, last State
 }
 
-func (p *chainParser) StateName() string {
-	return "chain parser ('" + p.next.StateName() + "' '" + p.last.StateName() + "')"
+func (p *chainParser) String() string {
+	return "chain parser ('" + StateName(p.next) + "' '" + StateName(p.last) + "')"
 }
 
 // runs the each state ( and any of their returned states ) to completion

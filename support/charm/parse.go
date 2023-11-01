@@ -54,5 +54,5 @@ func (e EndpointError) End() int {
 
 func (e EndpointError) Error() (ret string) {
 	return errutil.Sprintf("parsing `%s` ended in %T(%s) at index %d %q",
-		e.str, e.last, e.last.StateName(), e.end, e.str[e.end:])
+		e.str, e.last, StateName(e.last), e.end, e.str[e.end:])
 }
