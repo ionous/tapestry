@@ -10,9 +10,9 @@ import (
 // that seems mildly interesting for end of line alignment of comments
 // but sticking to no tabs at all seems even better.
 type Whitespace struct {
-	Indent   int
-	Lines    int
-	required bool // by default whitespace is required.
+	Indent   int  // number of spaces since starting to read the current line.
+	Lines    int  // number of newlines encountered
+	required bool // errors unless if there's no whitespace ( eof is also okay )
 }
 
 func OptionalWhitespace() *Whitespace {
