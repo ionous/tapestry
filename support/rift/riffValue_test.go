@@ -9,16 +9,14 @@ import (
 	"github.com/kr/pretty"
 )
 
-func TestValue(t *testing.T) {
+func TestSimpleScalars(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret any, err error) {
-		var p rift.ValueParser
-		if e := charm.Parse(&p, str); e != nil {
-			err = errutil.Fmt("%v %q", e, str)
-		} else if v, e := p.GetValue(); e != nil {
+		var doc rift.Document
+		if e := charm.Parse(rift.NewValue(&doc, 0), str); e != nil {
 			err = errutil.Fmt("%v %q", e, str)
 		} else {
-			ret = v.Result
+			ret = doc.Value
 		}
 		return
 	}

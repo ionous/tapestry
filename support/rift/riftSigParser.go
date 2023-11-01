@@ -16,10 +16,6 @@ type SigParser struct {
 	separator bool
 }
 
-func (p *SigParser) StateName() string {
-	return "Signature"
-}
-
 // func (p *SigParser) Reset() string {
 // 	r := p.runes.String()
 // 	p.runes = charm.Runes{}

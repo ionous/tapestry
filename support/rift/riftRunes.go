@@ -16,6 +16,8 @@ const (
 	SignatureConnector = '_'
 	Space              = ' '
 	Newline            = '\n'
+	Tab                = '\t' // tab is considered invalid whitespace
+
 )
 
 func isSigWord(r rune) bool {

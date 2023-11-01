@@ -31,7 +31,7 @@ func TestSig(t *testing.T) {
 		if res, e := test(str); e != nil {
 			err = errutil.New(e, "for:", str)
 		} else if str != res {
-			err = errutil.New(str, "unexpected value", res)
+			err = errutil.New(str, "unexpected result", res)
 		} else {
 			t.Log("ok success:", str)
 		}

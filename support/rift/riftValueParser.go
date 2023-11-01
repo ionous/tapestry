@@ -3,83 +3,68 @@ package rift
 import (
 	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/charmed"
+	"github.com/ionous/errutil"
 )
 
 // parses the "right hand side" of a collection or map
 // assumes the next rune is at the start of the value: no leading whitespace.
 type ValueParser struct {
+	target CollectionTarget
 	indent int
-	inner  valueState
 }
 
-type Value struct {
-	Result any // can be nil
-	// comments
-	// line number
-	// etc.
+func NewValue(tgt CollectionTarget, indent int) charm.State {
+	return &ValueParser{target: tgt, indent: indent}
 }
 
-func (v *Value) Empty() bool {
-	// if we ever decided to allow an explicit 'null'
-	// empty would still mean: "nothing at all was specified"
-	return v.Result == nil
-}
-
-type valueState interface {
-	charm.State
-	GetValue() (any, error)
-}
-
-func (p *ValueParser) StateName() string {
-	return "values"
-}
-
-// returns the parsed result, or a nil result if no value was found
-func (p *ValueParser) GetValue() (ret Value, err error) {
-	if p.inner != nil {
-		if a, e := p.inner.GetValue(); e != nil {
-			err = e
-		} else {
-			ret = Value{Result: a}
-		}
-	}
-	return
-}
-
-// fix? see operand
 func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 	const dashOrMinus = SequenceDash
 	switch {
 	case r == InterpretedQuotes:
-		ret = runInner(r, p, &interpretedString{})
+		ret = p.runInner(r, &interpretedString{})
 	case charmed.IsNumber(r) || r == '+':
-		ret = runInner(r, p, &numValue{})
+		ret = p.runInner(r, &numValue{})
 	case r == 't' || r == 'f':
-		ret = runInner(r, p, &boolValue{})
+		ret = p.runInner(r, &boolValue{})
 	case r == dashOrMinus:
 		// ahh the pain of negative numbers and sequences
 		ret = charm.Statement("dashing", func(next rune) (ret charm.State) {
-			// no space, then it must be a number `-5`
+			// no space after the dash indicates a number `-5`
 			if next != Space && next != Newline && next != charm.Eof {
-				ret = runInner(dashOrMinus, p, &numValue{}).NewRune(next)
+				ret = p.runInner(dashOrMinus, &numValue{}).NewRune(next)
 			} else {
-				// space, then a sub sequence `- 5`
-				seq := Sequence{indent: p.indent}
-				ret = runInner(dashOrMinus, p, &seq).NewRune(next)
+				// a space after the dash is a subsequence `- 5`
+				ret = NewSequence(p.target, p.indent).
+					NewRune(dashOrMinus).
+					NewRune(next)
 			}
 			return
 		})
-
 	default:
-		// some other rune indicates either a nil value
-		// ( or some parsing error if no other state can handle the rune )
+		// note: implicit nil values dont reach here
+		// ex. for sequences, the sequence hits the indent of the next value first.
+		e := errutil.New("unexpected value")
+		ret = charm.Error(e)
 	}
 	return
 }
 
-func runInner(r rune, p *ValueParser, inner valueState) (ret charm.State) {
-	p.inner = inner
-	return inner.NewRune(r)
+// after finishing the inner state, write the value
+// ( alt: the value parsers could write to the target themselves:
+//   but this allows reusing the existing code )
+func (p *ValueParser) runInner(r rune, inner interface {
+	charm.State
+	GetValue() (any, error)
+}) charm.State {
+	return charm.RunStep(r, inner,
+		charm.Statement("write value", func(_ rune) (ret charm.State) {
+			if v, e := inner.GetValue(); e != nil {
+				ret = charm.Error(e)
+			} else if e := p.target.WriteValue(v); e != nil {
+				ret = charm.Error(e)
+			}
+			return
+		}))
 }
 
 type interpretedString struct{ charmed.QuoteParser }

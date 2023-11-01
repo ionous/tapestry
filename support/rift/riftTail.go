@@ -12,15 +12,11 @@ import (
 type Whitespace struct {
 	Indent   int
 	Lines    int
-	optional bool // by default whitespace is required.
+	required bool // by default whitespace is required.
 }
 
 func OptionalWhitespace() *Whitespace {
-	return &Whitespace{optional: true}
-}
-
-func (p *Whitespace) StateName() string {
-	return "whitespace"
+	return &Whitespace{}
 }
 
 func (p *Whitespace) IsEmpty() bool {
@@ -34,8 +30,9 @@ func (p *Whitespace) GetSpacing() (retDepth, retLines int) {
 
 // first character of the signature must be a letter
 func (p *Whitespace) NewRune(r rune) (ret charm.State) {
-	if r == charm.Eof {
-		p.Lines++ // treat it as an new
+	if r == Tab {
+		e := errutil.New("invalid tab")
+		ret = charm.Error(e)
 	} else if r == Newline {
 		p.Lines++
 		p.Indent = 0
@@ -43,7 +40,7 @@ func (p *Whitespace) NewRune(r rune) (ret charm.State) {
 	} else if r == Space {
 		p.Indent++
 		ret = p
-	} else if !p.optional && r != charm.Eof && p.IsEmpty() {
+	} else if p.required && r != charm.Eof && p.IsEmpty() {
 		e := errutil.New("expected whitespace")
 		ret = charm.Error(e)
 	}

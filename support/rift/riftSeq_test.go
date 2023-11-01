@@ -1,6 +1,7 @@
 package rift_test
 
 import (
+	"reflect"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
@@ -14,42 +15,47 @@ func TestSeq(t *testing.T) {
 		"a single value",
 		`- 5`, []any{5.0}); e != nil {
 		t.Fatal(e)
-	} else if e := matchSeq(t,
-		// fix? trailing space at the end fails
+	}
+	if e := matchSeq(t,
 		"a single with newline",
 		`- 5
 `, []any{5.0}); e != nil {
 		t.Fatal(e)
-	} else if e := matchSeq(t,
+	}
+	if e := matchSeq(t,
 		"consistent indents", `
-  - 5
-  - 10
-  - 12`,
+      - 5
+      - 10
+      - 12`,
 		[]any{5.0, 10.0, 12.0}); e != nil {
 		t.Fatal(e)
-	} else if e := matchSeq(t,
-		"nested sub sequence", `
-- - 5
+	}
+	if e := matchSeq(t,
+		"nested sub sequence",
+		`- - 5
 `, []any{[]any{5.0}}); e != nil {
 		t.Fatal(e)
-	} else if e := matchSeq(t,
+	}
+	if e := matchSeq(t,
 		"new line sub sequence", `
-- 
-  - 5
-`, []any{[]any{5.0}}); e != nil {
+    -
+      - 5
+    `, []any{[]any{5.0}}); e != nil {
 		t.Fatal(e)
-	} else if e := matchSeq(t,
+	}
+	if e := matchSeq(t,
 		"nil values", `
-  -
-  -
-  -`,
+      -
+      -
+      -`,
 		[]any{nil, nil, nil}); e != nil {
 		t.Fatal(e)
-	} else if e := matchSeq(t,
+	}
+	if e := matchSeq(t,
 		"nil value trailing newline", `
-  -
-  -
-  -
+-
+-
+-
 `,
 		[]any{nil, nil, nil}); e != nil {
 		t.Fatal(e)
@@ -69,55 +75,28 @@ func matchSeq(t *testing.T, name, str string, want any) (err error) {
 }
 
 func testSeq(str string) (ret []any, err error) {
-	var p *rift.Sequence
+	var doc rift.Document
 	ws := rift.OptionalWhitespace()
-	if e := charm.Parse(charm.Step(ws, charm.Statement("", func(r rune) (ret charm.State) {
-		p = rift.NewSequence(ws.Indent)
-		return p.NewRune(r)
+	if e := charm.Parse(charm.Step(ws, charm.Statement("test", func(r rune) (ret charm.State) {
+		return rift.NewSequence(&doc, ws.Indent).NewRune(r)
 	})), str); e != nil {
 		err = e
-	} else if vs, e := p.GetSequence(); e != nil {
-		err = e
 	} else {
-		ret = condense(vs)
+		ret = doc.Value.([]any) // panicing is a fine error for testing.
 	}
 	return
 }
 
-func condense(vs []rift.Value) []any {
-	out := make([]any, 0, len(vs))
-	for _, v := range vs {
-		el := v.Result
-		if sub, ok := el.([]rift.Value); ok {
-			el = condense(sub)
+// could be put in a charm helper package
+func init() {
+	charm.StateName = func(n charm.State) (ret string) {
+		if s, ok := n.(interface{ String() string }); ok {
+			ret = s.String()
+		} else if n == nil {
+			ret = "null"
+		} else {
+			ret = reflect.TypeOf(n).Elem().Name()
 		}
-		// splt comment only, but not nil
-		out = append(out, el)
+		return
 	}
-	return out
 }
-
-// if e := fails("a"); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := fails(" a"); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := fails("b "); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := fails("1a"); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := succeeds("a:"); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := succeeds("a:b:c:"); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := succeeds("and:more complex:keys_like_this:"); e != nil {
-// 	t.Fatal(e)
-// }
-// if e := fails("a:b::c:"); e != nil {
-// 	t.Fatal(e)
-// }
