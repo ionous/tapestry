@@ -9,9 +9,8 @@ import (
 // parses the "right hand side" of a collection or map
 // assumes the next rune is at the start of the value: no leading whitespace.
 type ValueParser struct {
-	hist   *History
-	indent int
-	inner  valueGetter
+	hist  *History
+	inner valueGetter
 }
 
 type valueGetter interface {
@@ -19,7 +18,7 @@ type valueGetter interface {
 }
 
 func NewValue(hist *History, indent int, writeBack func(v any) error) charm.State {
-	p := &ValueParser{hist: hist, indent: indent}
+	p := &ValueParser{hist: hist}
 	return hist.PushIndent(indent, p, func() (err error) {
 		if p.inner == nil {
 			err = errutil.New("no value found") // is this an error?
@@ -53,7 +52,7 @@ func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 				next := new(numValue)
 				ret = p.runInner(dashOrMinus, next, next).NewRune(r)
 			} else {
-				next := NewSequence(p.hist, p.indent, func(vs []any) (_ error) {
+				next := NewSequence(p.hist, p.hist.CurrentIndent(), func(vs []any) (_ error) {
 					p.inner = computedValue{vs}
 					return
 				})
@@ -64,7 +63,7 @@ func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 	default:
 		// note: implicit nil values dont reach here
 		// ex. for sequences, the sequence hits the indent of the next value first.
-		e := errutil.New("unexpected value")
+		e := errutil.New("unexpected value, maybe you're missing string quotes?")
 		ret = charm.Error(e)
 	}
 	return
@@ -72,11 +71,6 @@ func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 
 func (p *ValueParser) runInner(r rune, i valueGetter, c charm.State) charm.State {
 	p.inner = i
-	// on the first unhandled rune; pop ourselves
-	// we could wait till the parent is ready
-	// return charm.RunStep(r, c, charm.Statement("post value", func(next rune) charm.State {
-	// 	return charm.RunState(next, p.hist.PopIndent(p.indent))
-	// }))
 	return charm.RunState(r, c)
 }
 

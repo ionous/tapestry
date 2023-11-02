@@ -1,7 +1,5 @@
 package rift
 
-import "unicode"
-
 const (
 	InlineArraySeparator = ','
 	InlineArrayStop      = '.'
@@ -19,7 +17,3 @@ const (
 	Tab                = '\t' // tab is considered invalid whitespace
 
 )
-
-func isSigWord(r rune) bool {
-	return r == SignatureConnector || unicode.IsLetter(r) || r == Space
-}

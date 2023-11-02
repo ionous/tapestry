@@ -9,11 +9,22 @@ type History struct {
 	els []moment
 }
 
+// indent of the most recent history, or -1 if history is empty
+func (h *History) CurrentIndent() (ret int) {
+	if cnt := len(h.els); cnt == 0 {
+		ret = -1
+	} else {
+		top := h.els[cnt-1]
+		ret = top.indent
+	}
+	return
+}
+
 func (h *History) PushIndent(indent int, c charm.State, pop func() error) charm.State {
-	if cnt := len(h.els); cnt > 0 {
-		if prev := h.els[cnt-1].indent; prev > indent {
-			panic("indents should grow")
-		}
+	// fix? there are some +1s that probably need adding for colon and dash
+	// so this accepts equal indents right noww
+	if curr := h.CurrentIndent(); indent < curr {
+		panic("indents should grow")
 	}
 	h.els = append(h.els, moment{indent, c, pop})
 	return c

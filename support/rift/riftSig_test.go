@@ -11,11 +11,14 @@ import (
 func TestSig(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret string, err error) {
-		var p rift.SigParser
-		if e := charm.ParseEof(&p, str); e != nil {
+		var h rift.History
+		if e := charm.Parse(str, rift.NewSignature(&h, 0, func(str string) (_ error) {
+			ret = str
+			return
+		})); e != nil {
 			err = e
 		} else {
-			ret, err = p.Signature()
+			err = h.PopAll()
 		}
 		return
 	}

@@ -10,13 +10,12 @@ import (
 // then loops back to itself to handle the next dash.
 type Sequence struct {
 	h      *History
-	indent int
 	values []any // tbd: possibly a pointer to the slice?
 }
 
 // maybe h is a factory even?
 func NewSequence(h *History, indent int, writeBack func(vs []any) error) charm.State {
-	seq := &Sequence{h: h, indent: indent}
+	seq := &Sequence{h: h}
 	return h.PushIndent(indent, seq, func() error {
 		return writeBack(seq.values)
 	})
@@ -35,14 +34,14 @@ func (n *Sequence) NewRune(first rune) (ret charm.State) {
 		// cheating a bit here:
 		// if next is only whitespace or an eof
 		// there's no hook to write; so add it here.
-		// alt: we push back a pending state into the history
+		// alt: push back a pending state into the history, or track a bool
 		n.append(nil)
-		// padding is the space between the dash and any value
-		ret = RequireSpaces("padding", n.indent, func(padding int) (ret charm.State) {
+		startingIndent := n.h.CurrentIndent() // padding is the space between the dash and any value
+		ret = RequireSpaces("padding", startingIndent, func(padding int) (ret charm.State) {
 			switch {
 			// if the indent is less or equal,
 			// than we're a new line and the value was null
-			case padding <= n.indent:
+			case padding <= startingIndent:
 				ret = n.h.PopIndent(padding)
 			// an increased indentation means a value:
 			default:
@@ -55,7 +54,7 @@ func (n *Sequence) NewRune(first rune) (ret charm.State) {
 					// after value we require a newline:
 					return charm.RunState(r, RequireLines("tail", padding, func(tail int) (ret charm.State) {
 						switch {
-						case tail <= n.indent:
+						case tail <= startingIndent:
 							ret = n.h.PopIndent(tail)
 						default:
 							// the only valid increases are collections,
