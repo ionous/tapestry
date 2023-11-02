@@ -33,7 +33,7 @@ type Signature struct {
 // colons separate word parts
 func (sig *Signature) NewRune(r rune) (ret charm.State) {
 	switch {
-	case r == Space && !sig.isKeyPending():
+	case (r == Space || r == Newline) && !sig.isKeyPending():
 		break // done
 
 	case unicode.IsLetter(r):
@@ -61,10 +61,6 @@ func (sig *Signature) getSignature() (ret string, err error) {
 		ret = sig.out.String()
 	}
 	return
-}
-
-func (sig *Signature) isEmpty() bool {
-	return len(sig.pending) == 0 && sig.out.Len() == 0
 }
 
 func (sig *Signature) isKeyPending() bool {
