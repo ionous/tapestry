@@ -20,14 +20,17 @@ func (h *History) CurrentIndent() (ret int) {
 	return
 }
 
-func (h *History) PushIndent(indent int, c charm.State, pop func() error) charm.State {
+func (h *History) PushIndent(indent int, c charm.State, pop func() error) (ret charm.State) {
 	// fix? there are some +1s that probably need adding for colon and dash
-	// so this accepts equal indents right noww
+	// so this accepts equal indents right now
 	if curr := h.CurrentIndent(); indent < curr {
-		panic("indents should grow")
+		e := errutil.New("indents should grow")
+		ret = charm.Error(e)
+	} else {
+		h.els = append(h.els, moment{indent, c, pop})
+		ret = c
 	}
-	h.els = append(h.els, moment{indent, c, pop})
-	return c
+	return
 }
 
 func (h *History) PopAll() (err error) {
