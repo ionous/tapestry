@@ -1,6 +1,8 @@
 package rift
 
 import (
+	"unicode"
+
 	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/charmed"
 	"github.com/ionous/errutil"
@@ -8,7 +10,7 @@ import (
 
 // parses the "right hand side" of a collection or map
 // assumes the next rune is at the start of the value: no leading whitespace.
-type ValueParser struct {
+type Value struct {
 	hist  *History
 	inner valueGetter
 }
@@ -18,7 +20,7 @@ type valueGetter interface {
 }
 
 func NewValue(hist *History, indent int, writeBack func(v any) error) charm.State {
-	p := &ValueParser{hist: hist}
+	p := &Value{hist: hist}
 	return hist.PushIndent(indent, p, func() (err error) {
 		if p.inner == nil {
 			err = errutil.New("no value found") // is this an error?
@@ -31,7 +33,7 @@ func NewValue(hist *History, indent int, writeBack func(v any) error) charm.Stat
 	})
 }
 
-func (p *ValueParser) NewRune(r rune) (ret charm.State) {
+func (p *Value) NewRune(r rune) (ret charm.State) {
 	const dashOrMinus = SequenceDash
 	switch {
 	case r == InterpretedQuotes:
@@ -43,6 +45,17 @@ func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 	case r == 't' || r == 'f':
 		next := new(boolValue)
 		ret = p.runInner(r, next, next)
+
+	case unicode.IsLetter(r):
+		var hack int
+		if len(p.hist.els) > 1 {
+			hack = 1
+		}
+		ret = charm.RunState(r, NewMapping(p.hist, p.hist.CurrentIndent()+hack, func(vs MapValues) (_ error) {
+			p.inner = computedValue{vs}
+			return
+		}))
+
 	case r == dashOrMinus:
 		// ahh the pain of negative numbers and sequences
 		// no space indicates a number `-5`
@@ -69,7 +82,7 @@ func (p *ValueParser) NewRune(r rune) (ret charm.State) {
 	return
 }
 
-func (p *ValueParser) runInner(r rune, i valueGetter, c charm.State) charm.State {
+func (p *Value) runInner(r rune, i valueGetter, c charm.State) charm.State {
 	p.inner = i
 	return charm.RunState(r, c)
 }
