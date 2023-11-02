@@ -75,17 +75,19 @@ func TestSeq(t *testing.T) {
 	}
 }
 
-func testSeq(str string) (ret any) {
-	var h rift.History
-	if e := charm.Parse(str, rift.OptionalSpaces("test", 0, func(indent int) charm.State {
-		return rift.NewSequence(&h, indent, func(vs []any) (_ error) {
-			ret = vs
-			return
-		})
-	})); e != nil {
-		ret = e
-	} else if e := h.PopAll(); e != nil {
-		ret = e
+func testSeq(str string) func() (ret any) {
+	return func() (ret any) {
+		var h rift.History
+		if e := charm.Parse(str, rift.OptionalSpaces("test", 0, func(indent int) charm.State {
+			return rift.NewSequence(&h, indent, func(vs []any) (_ error) {
+				ret = vs
+				return
+			})
+		})); e != nil {
+			ret = e
+		} else if e := h.PopAll(); e != nil {
+			ret = e
+		}
+		return
 	}
-	return
 }

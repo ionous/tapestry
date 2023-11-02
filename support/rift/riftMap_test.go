@@ -9,7 +9,7 @@ import (
 
 func TestMap(t *testing.T) {
 	if e := match(t,
-		"a single value",
+		"single value",
 		testMap(
 			`name: "Sammy Sosa"`),
 		rift.MapValues{{
@@ -17,17 +17,59 @@ func TestMap(t *testing.T) {
 		}}); e != nil {
 		t.Fatal(e)
 	}
+	if e := match(t,
+		"several values",
+		testMap(
+			`name: "Sammy Sosa"
+hr:   63
+avg:  true`),
+		rift.MapValues{
+			{"name:", "Sammy Sosa"},
+			{"hr:", 63.0},
+			{"avg:", true},
+		}); e != nil {
+		t.Fatal(e)
+	}
+	if e := match(t,
+		"nested map",
+		testMap(
+			`name: "Sammy Sosa"
+hr:   63
+avg:  true`),
+		rift.MapValues{
+			{"name:", "Sammy Sosa"},
+			{"hr:", 63.0},
+			{"avg:", true},
+		}); e != nil {
+		t.Fatal(e)
+	}
+	// make sure we can also parse that block as a value
+	if e := match(t,
+		"nested value",
+		testValue(
+			`name: "Sammy Sosa"
+hr:   63
+avg:  true`),
+		rift.MapValues{
+			{"name:", "Sammy Sosa"},
+			{"hr:", 63.0},
+			{"avg:", true},
+		}); e != nil {
+		t.Fatal(e)
+	}
 }
 
-func testMap(str string) (ret any) {
-	var h rift.History
-	if e := charm.Parse(str, rift.NewMapping(&h, 0, func(vs rift.MapValues) (_ error) {
-		ret = vs
+func testMap(str string) func() any {
+	return func() (ret any) {
+		var h rift.History
+		if e := charm.Parse(str, rift.NewMapping(&h, 0, func(vs rift.MapValues) (_ error) {
+			ret = vs
+			return
+		})); e != nil {
+			ret = e
+		} else if e := h.PopAll(); e != nil {
+			ret = e
+		}
 		return
-	})); e != nil {
-		ret = e
-	} else if e := h.PopAll(); e != nil {
-		ret = e
 	}
-	return
 }

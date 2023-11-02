@@ -10,17 +10,21 @@ import (
 	"github.com/kr/pretty"
 )
 
-func match(t *testing.T, name string, have, want any) (err error) {
+func match(t *testing.T, name string, have func() any, want any) (err error) {
 	if strings.HasPrefix(name, `x `) {
 		// commenting out tests causes go fmt to replace spaces with tabs. *sigh*
 		t.Log("skipping", name)
-	} else if e, ok := have.(error); ok {
-		err = errutil.Fmt("ng failed %q %v", name, e)
-	} else if d := pretty.Diff(want, have); len(d) != 0 {
-		err = errutil.Fmt("ng mismatched %q want: %v have: %v diff: %v",
-			name, want, have, d)
 	} else {
-		t.Logf("ok success: %q %T %v", name, have, have)
+		have := have()
+		if e, ok := have.(error); ok {
+			err = errutil.Fmt("ng failed %q %v", name, e)
+		} else if d := pretty.Diff(want, have); len(d) != 0 {
+			t.Log("have:", pretty.Sprint(have))
+			err = errutil.Fmt("ng mismatched %q want: %v have: %v diff: %v",
+				name, want, have, d)
+		} else {
+			t.Logf("ok success: %q %T %v", name, have, have)
+		}
 	}
 	return
 }
