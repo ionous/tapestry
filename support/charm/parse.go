@@ -66,6 +66,6 @@ func (e EndpointError) End() int {
 }
 
 func (e EndpointError) Error() (ret string) {
-	return errutil.Sprintf("parsing %q ended in %s at index %d %q",
-		e.str, StateName(e.last), e.end, e.str[e.end:])
+	return errutil.Sprintf("%q ended at %q %d of %q",
+		StateName(e.last), e.str[e.end:], e.end, e.str)
 }
