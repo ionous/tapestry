@@ -33,32 +33,48 @@ type Signature struct {
 // colons separate word parts
 func (sig *Signature) NewRune(r rune) (ret charm.State) {
 	switch {
-	case (r == Space || r == Newline) && !sig.isKeyPending():
+	case r == Space && !sig.isKeyPending():
 		break // done
+
+	case r == Newline:
+		if sig.isKeyPending() {
+			e := errutil.New("keys can't span lines")
+			ret = charm.Error(e)
+		}
 
 	case unicode.IsLetter(r):
 		sig.append(r)
 		ret = sig
 
-	case r == SignatureSeparator:
-		if sig.isKeyPending() {
+	case r == SignatureSeparator: // aka, a colon
+		if !sig.isKeyPending() {
+			e := errutil.New("words in signatures should be separated by a single colon")
+			ret = charm.Error(e)
+		} else {
 			sig.append(r) // the signature includes the separator
 			sig.flushWord()
 			ret = sig
 		}
 
 	case r == Space || r == SignatureConnector || unicode.IsDigit(r):
-		sig.append(r)
-		ret = sig
+		if len(sig.pending) == 0 && sig.out.Len() == 0 {
+			e := errutil.New("signatures must start with a letter")
+			ret = charm.Error(e)
+		} else {
+			sig.append(r)
+			ret = sig
+		}
 	}
 	return
 }
 
+// resets the signature
 func (sig *Signature) getSignature() (ret string, err error) {
 	if len(sig.pending) > 0 {
 		err = errutil.New("Signature must end with a colon")
 	} else {
 		ret = sig.out.String()
+		sig.out.Reset()
 	}
 	return
 }

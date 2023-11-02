@@ -20,11 +20,10 @@ func NewMapping(h *History, indent int, writeBack func(vs MapValues) error) char
 		if sig, e := n.sig.getSignature(); e != nil {
 			err = e
 		} else {
-			vs := n.values
 			if len(sig) > 0 {
-				vs = vs.Append(sig, nil)
+				n.values = n.values.Append(sig, nil)
 			}
-			err = writeBack(vs)
+			err = writeBack(n.values)
 		}
 		return
 	})
@@ -41,7 +40,6 @@ func (n *Mapping) NewRune(first rune) charm.State {
 				err = errutil.New("missing signature") // this shouldnt be possible
 			} else {
 				n.values = n.values.Append(sig, val)
-				n.sig = Signature{} // reset for the next loop
 			}
 			return
 		}))
