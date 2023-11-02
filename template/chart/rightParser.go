@@ -25,7 +25,7 @@ func (p *RightParser) NewRune(r rune) State {
 		} else {
 			switch {
 			case isCloseBracket(r):
-				p.out, ret = v, Exit("finished right") // eat the trim bracket
+				p.out, ret = v, Finished("right") // eat the trim bracket
 
 			case isTrim(r):
 				ret = Statement("closing", func(r rune) (ret State) {

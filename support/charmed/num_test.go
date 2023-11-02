@@ -12,7 +12,7 @@ func TestNum(t *testing.T) {
 	// returns point of failure
 	run := func(str string) (val float64, err error) {
 		var p NumParser
-		if e := charm.Parse(&p, str); e != nil {
+		if e := charm.ParseEof(&p, str); e != nil {
 			val = NaN
 			err = e
 		} else if v, e := p.GetFloat(); e != nil {

@@ -1,9 +1,19 @@
 package charm
 
+// definition of states n the state chart
+//if State implements Stringer StateName() will use it.
 type State interface {
 	// process the next element of the incoming data,
 	// return the next state or nil when done.
 	NewRune(rune) State
+}
+
+// calls NewRune on state. sometimes this is a more convenient notation.
+func RunState(r rune, state State) (ret State) {
+	if state != nil {
+		ret = state.NewRune(r)
+	}
+	return
 }
 
 // nil represents unhandled runes
@@ -15,15 +25,9 @@ func Error(e error) State {
 	return terminalState{err: e}
 }
 
-// a next state after which nothing else can be parsed
-// but is not otherwise in error.
-func Quit() State {
-	return terminalState{err: nil}
-}
-
 // for the very next rune, return nil ( unhandled )
 // it may be the end of parsing, or some parent state might be taking over from here on out.
-func Exit(reason string) State {
+func Finished(reason string) State {
 	return Statement(reason, func(rune) (none State) {
 		return
 	})

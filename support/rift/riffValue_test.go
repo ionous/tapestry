@@ -12,11 +12,14 @@ import (
 func TestSimpleScalars(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret any, err error) {
-		var doc rift.Document
-		if e := charm.Parse(rift.NewValue(&doc, 0), str); e != nil {
+		var h rift.History
+		if e := charm.Parse(str, rift.NewValue(&h, 0, func(v any) (_ error) {
+			ret = v
+			return
+		})); e != nil {
 			err = errutil.Fmt("%v %q", e, str)
 		} else {
-			ret = doc.Value
+			err = h.PopAll()
 		}
 		return
 	}
@@ -25,7 +28,7 @@ func TestSimpleScalars(t *testing.T) {
 		if have, e := test(str); e != nil {
 			err = e
 		} else if d := pretty.Diff(want, have); len(d) != 0 {
-			err = errutil.Fmt("mismatched want: %s have: %s diff: %s", want, have, d)
+			err = errutil.Fmt("mismatched want: %v have: %v diff: %s", want, have, d)
 		} else {
 			t.Logf("ok success: %T %v", have, have)
 		}

@@ -32,8 +32,8 @@ func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
 	return charm.Self("findMatchingQuote", func(self charm.State, r rune) (ret charm.State) {
 		switch {
 		case r == q:
-			// eats the ending quote
-			ret = charm.Exit("ending quote")
+			// the next character will be unhandled
+			ret = charm.Finished("quotes")
 
 		case r == escape:
 			ret = charm.Statement("escape", func(r rune) (ret charm.State) {

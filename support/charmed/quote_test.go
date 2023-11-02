@@ -32,7 +32,7 @@ func TestQuotes(t *testing.T) {
 func testQ(t *testing.T, str, want string) (ret interface{}, err error) {
 	t.Log("test:", str)
 	var p quoteParser
-	if e := charm.Parse(&p, str); e != nil {
+	if e := charm.ParseEof(&p, str); e != nil {
 		err = e
 	} else if got, e := p.GetString(); e != nil {
 		err = e

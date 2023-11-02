@@ -23,7 +23,7 @@ func (p *LeftParser) NewRune(r rune) (ret State) {
 			if !isTrim(r) {
 				p.acceptSpaces()
 			} else {
-				ret = Exit("finished left") //end after eating this trim char
+				ret = Finished("left") //end after eating this trim char
 			}
 			p.out = string(p.text)
 			return
