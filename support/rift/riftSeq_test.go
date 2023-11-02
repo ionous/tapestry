@@ -2,6 +2,7 @@ package rift_test
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
@@ -53,17 +54,28 @@ func TestSeq(t *testing.T) {
 	}
 	if e := matchSeq(t,
 		"nil value trailing newline", `
--
--
--
+  -
+  -
+  -
 `,
 		[]any{nil, nil, nil}); e != nil {
+		t.Fatal(e)
+	}
+	if e := matchSeq(t,
+		"continuing sub sequence ", `
+    -
+      - 5
+    - 6
+    `, []any{[]any{5.0}, 6.0}); e != nil {
 		t.Fatal(e)
 	}
 }
 
 func matchSeq(t *testing.T, name, str string, want any) (err error) {
-	if have, e := testSeq(str); e != nil {
+	if strings.HasPrefix(name, `x `) {
+		// commenting out tests causes go fmt to replace spaces with tabs. *sigh*
+		t.Log("skipping", name)
+	} else if have, e := testSeq(str); e != nil {
 		err = errutil.Fmt("ng failed %q %v", name, e)
 	} else if d := pretty.Diff(want, have); len(d) != 0 {
 		err = errutil.Fmt("ng mismatched %q want: %v have: %v diff: %v",
@@ -75,14 +87,16 @@ func matchSeq(t *testing.T, name, str string, want any) (err error) {
 }
 
 func testSeq(str string) (ret []any, err error) {
-	var doc rift.Document
-	ws := rift.OptionalWhitespace()
-	if e := charm.Parse(charm.Step(ws, charm.Statement("test", func(r rune) (ret charm.State) {
-		return rift.NewSequence(&doc, ws.Indent).NewRune(r)
-	})), str); e != nil {
+	var h rift.History
+	if e := charm.Parse(str, rift.OptionalSpaces("test", 0, func(indent int) charm.State {
+		return rift.NewSequence(&h, indent, func(vs []any) (_ error) {
+			ret = vs
+			return
+		})
+	})); e != nil {
 		err = e
 	} else {
-		ret = doc.Value.([]any) // panicing is a fine error for testing.
+		err = h.PopAll()
 	}
 	return
 }

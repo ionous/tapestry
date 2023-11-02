@@ -12,7 +12,7 @@ func TestSig(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret string, err error) {
 		var p rift.SigParser
-		if e := charm.Parse(&p, str); e != nil {
+		if e := charm.ParseEof(&p, str); e != nil {
 			err = e
 		} else {
 			ret, err = p.Signature()

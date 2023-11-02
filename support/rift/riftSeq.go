@@ -9,66 +9,66 @@ import (
 // a dash, whitespace, the value, trailing whitespace.
 // then loops back to itself to handle the next dash.
 type Sequence struct {
+	h      *History
 	indent int
-	parent CollectionTarget
 	values []any // tbd: possibly a pointer to the slice?
 }
 
-func NewSequence(tgt CollectionTarget, indent int) *Sequence {
-	return &Sequence{parent: tgt, indent: indent}
+// maybe h is a factory even?
+func NewSequence(h *History, indent int, writeBack func(vs []any) error) charm.State {
+	seq := &Sequence{h: h, indent: indent}
+	return h.PushIndent(indent, seq, func() error {
+		return writeBack(seq.values)
+	})
 }
 
-func (p *Sequence) History(indent int) (ret CollectionTarget) {
-	if p.indent == indent {
-		ret = p
-	} else {
-		ret = p.parent
-	}
-	return
+func (n *Sequence) append(val any) {
+	n.values = append(n.values, val)
 }
 
-func (p *Sequence) WriteValue(val any) (_ error) {
-	p.values = append(p.values, val)
-	return
+func (n *Sequence) rewrite(val any) {
+	n.values[len(n.values)-1] = val
 }
 
-func (p *Sequence) NewRune(r rune) (ret charm.State) {
-	if r != SequenceDash {
-		p.parent.WriteValue(p.values)
-	} else {
-		lede := Whitespace{Indent: p.indent, required: true}
-		ret = charm.Step(&lede, charm.Statement("seq lede", func(r rune) (ret charm.State) {
-			// after a dash, the end of file means we're done
-			if r == charm.Eof {
-				p.WriteValue(nil)
-				ret = p.NewRune(r) // writes values
-			} else if lede.Indent <= p.indent {
-				// after a dash, the same or a lesser amount of whitespace than our own means
-				// we must have changed lines: we're either at a new sequence value, or some new parent value.
-				p.WriteValue(nil)
-				ret = PopHistory(p, lede.Indent).NewRune(r)
-			} else {
-				// an increased amount of indentation means a value.
-				// ( including possibly a sub-sequence )
-				ret = charm.RunStep(r, NewValue(p, lede.Indent), charm.Statement("seq value", func(r rune) (ret charm.State) {
-					var tail Whitespace
-					return charm.RunStep(r, &tail, charm.Statement("seq tail", func(r rune) (ret charm.State) {
-						if tail.Lines == 0 && r != charm.Eof { // there should be a newline after the value.
-							e := errutil.New("invalid character after sequence value")
+func (n *Sequence) NewRune(first rune) (ret charm.State) {
+	if first == SequenceDash {
+		// cheating a bit here:
+		// if next is only whitespace or an eof
+		// there's no hook to write; so add it here.
+		// alt: we push back a pending state into the history
+		n.append(nil)
+		// padding is the space between the dash and any value
+		ret = RequireSpaces("padding", n.indent, func(padding int) (ret charm.State) {
+			switch {
+			// if the indent is less or equal,
+			// than we're a new line and the value was null
+			case padding <= n.indent:
+				ret = n.h.PopIndent(padding)
+			// an increased indentation means a value:
+			default:
+				// first the value:
+				// note: the value can be a sub-sequence
+				ret = charm.Step(NewValue(n.h, padding, func(v any) (_ error) {
+					n.rewrite(v)
+					return
+				}), charm.Statement("after value", func(r rune) charm.State {
+					// after value we require a newline:
+					return charm.RunState(r, RequireLines("tail", padding, func(tail int) (ret charm.State) {
+						switch {
+						case tail <= n.indent:
+							ret = n.h.PopIndent(tail)
+						default:
+							// the only valid increases are collections,
+							// and after a collection, we should be at a less or equal indent.
+							e := errutil.New("invalid indentation")
 							ret = charm.Error(e)
-						} else {
-							// loop! we're at the next char after a value;
-							// by default, we assume the next dash of this same sequence
-							// ( a sub-sequence would have been handled as the value )
-							ret = p.NewRune(r)
 						}
 						return
 					}))
 				}))
-				return
 			}
 			return
-		}))
+		})
 	}
 	return
 }
