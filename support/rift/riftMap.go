@@ -24,7 +24,7 @@ func NewMapping(h *History, indent int, writeBack func(vs MapValues) error) char
 			if len(sig) > 0 {
 				vs = vs.Append(sig, nil)
 			}
-			writeBack(vs)
+			err = writeBack(vs)
 		}
 		return
 	})
