@@ -15,6 +15,7 @@ type Value struct {
 	inner valueGetter
 }
 
+// helper to adapt the number parser to rift
 type valueGetter interface {
 	GetValue() (ret any, err error)
 }
@@ -36,16 +37,22 @@ func NewValue(hist *History, indent int, writeBack func(v any) error) charm.Stat
 func (p *Value) NewRune(r rune) (ret charm.State) {
 	const dashOrMinus = SequenceDash
 	switch {
-	case r == InterpretedQuotes:
-		next := new(interpretedString)
-		ret = p.runInner(r, next, next)
+	case r == InterpretedString:
+		ret = charmed.ScanQuote(r, true, func(res string) {
+			p.inner = computedValue{res}
+		})
+
+	case r == RawString:
+		ret = charmed.ScanQuote(r, false, func(res string) {
+			p.inner = computedValue{res}
+		})
 
 	case charmed.IsNumber(r) || r == '+':
 		next := new(numValue)
 		ret = p.runInner(r, next, next)
 
 	case unicode.IsLetter(r):
-		// handle keys that might look like bools.
+		// might be a mapping, or might be a bool literal.
 		mapIndent := p.mapIndent()
 		ret = p.tryBool(r, func(partial string) charm.State {
 			next := NewMapping(p.hist, mapIndent, func(vs MapValues) (_ error) {
@@ -61,7 +68,7 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 	case r == dashOrMinus:
 		// ahh the pain of negative numbers and sequences
 		// no space indicates a number `-5`
-		// otherwise, its a sequence `- 5`
+		// otherwise, a sequence `- 5`
 		ret = charm.Statement("dashing", func(r rune) (ret charm.State) {
 			if r != Space && r != Newline {
 				next := new(numValue)
@@ -86,7 +93,7 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 }
 
 // hack: starting a map in a collection,
-// we expect the indent should be one more than the parent:
+// we expect the indent should be greater than the parent.
 //   - Field:
 //     Next: 5
 //
@@ -95,11 +102,12 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 //
 //	Next: 5
 //
-// but we don't want that extra indent for reading documents containing a single m
+// but we don't want that extra indent for reading documents containing a single value
+// tbd: after a key we should expect some amount of spaces,
+// maybe we can generate / pass in padding from the parent
 func (p *Value) mapIndent() int {
 	var hack int
 	if len(p.hist.els) > 1 {
-
 		hack = 1
 	}
 	return p.hist.CurrentIndent() + hack
@@ -143,6 +151,7 @@ func (p *Value) tryBool(r rune, makeNext func(str string) charm.State) (ret char
 	}).NewRune(r)
 }
 
+// a final value, ex. from a string or boolean.
 type computedValue struct{ v any }
 
 func (p computedValue) GetValue() (ret any, err error) {
@@ -150,21 +159,9 @@ func (p computedValue) GetValue() (ret any, err error) {
 	return
 }
 
-type interpretedString struct{ charmed.QuoteParser }
-
-func (p *interpretedString) GetValue() (ret any, err error) {
-	ret, err = p.GetString()
-	return
-}
-
-// NewRune starts with the leading quote mark; it finishes just after the matching quote mark.
-func (p *interpretedString) NewRune(r rune) (ret charm.State) {
-	if r == InterpretedQuotes {
-		ret = p.ScanQuote(r)
-	}
-	return
-}
-
+// a number --
+// note this is a little different than the other types
+// because there's no terminal value for it.
 type numValue struct{ charmed.NumParser }
 
 // fix? returns float64 because json does

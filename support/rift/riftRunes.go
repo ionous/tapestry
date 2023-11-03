@@ -3,17 +3,12 @@ package rift
 const (
 	InlineArraySeparator = ','
 	InlineArrayStop      = '.'
-	// interpreted strings are bookended with double quotes
-	InterpretedQuotes = '"'
-	// values in a sequence are prefixed by a dash ( and whitespace )
-	SequenceDash = '-'
-	// keywords in a signature are separated by a colon
-	SignatureSeparator = ':'
-	// valid in words between colons
-	// ( as is space and any unicode letter )
-	SignatureConnector = '_'
-	Space              = ' '
-	Newline            = '\n'
-	Tab                = '\t' // tab is considered invalid whitespace
-
+	InterpretedString    = '"' // interpreted strings are bookended with double quotes
+	Newline              = '\n'
+	RawString            = '`'
+	SequenceDash         = '-' // values in a sequence are prefixed by a dash ( and whitespace )
+	SignatureConnector   = '_' // valid in words between colons
+	SignatureSeparator   = ':' // keywords in a signature are separated by a colon
+	Space                = ' '
+	Tab                  = '\t' // tab is considered invalid whitespace
 )

@@ -1,55 +1,45 @@
 package charmed
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/support/charm"
 	"github.com/ionous/errutil"
 )
 
-// parses the rhs of a single line quoted string
-// user has to implement NewRune
-type QuoteParser struct {
-	runes charm.Runes
-	err   error
-}
-
-func (p *QuoteParser) String() string {
-	return "quotes"
-}
-
-// GetString returns the text including its surrounding quote markers.
-func (p *QuoteParser) GetString() (ret string, err error) {
-	if p.err != nil {
-		err = p.err
-	} else {
-		ret = p.runes.String()
-	}
-	return
-}
-
 // scans until the matching quote marker is found
-func (p *QuoteParser) ScanQuote(q rune) (ret charm.State) {
+func ScanQuote(q rune, useEscapes bool, onDone func(string)) (ret charm.State) {
 	const escape = '\\'
+	var out strings.Builder
 	return charm.Self("findMatchingQuote", func(self charm.State, r rune) (ret charm.State) {
 		switch {
 		case r == q:
-			// the next character will be unhandled
+			onDone(out.String())
 			ret = charm.Finished("quotes")
 
-		case r == escape:
+		case r == escape && useEscapes:
 			ret = charm.Statement("escape", func(r rune) (ret charm.State) {
 				if x, ok := escapes[r]; !ok {
-					p.err = errutil.Fmt("unknown escape sequence %q", r)
+					e := errutil.Fmt("unknown escape sequence %q", r)
+					ret = charm.Error(e)
 				} else {
-					ret = p.runes.Accept(x, self)
+					out.WriteRune(x)
+					ret = self // loop...
 				}
 				return
 			})
+
+		case r == '\n':
+			e := errutil.New("unexpected newline")
+			ret = charm.Error(e)
+
 		case r == charm.Eof:
-			e := errutil.New("unclosed quotes")
+			e := errutil.New("unexpected end of file")
 			ret = charm.Error(e)
 
 		default:
-			ret = p.runes.Accept(r, self) // loop...
+			out.WriteRune(r)
+			ret = self // loop...
 		}
 		return
 	})

@@ -31,10 +31,16 @@ func TestQuotes(t *testing.T) {
 
 func testQ(t *testing.T, str, want string) (ret interface{}, err error) {
 	t.Log("test:", str)
-	var p quoteParser
-	if e := charm.ParseEof(&p, str); e != nil {
-		err = e
-	} else if got, e := p.GetString(); e != nil {
+	var got string
+	p := charm.Statement("quote", func(r rune) (ret charm.State) {
+		if r == '\'' || r == '"' {
+			ret = ScanQuote(r, true, func(res string) {
+				got = res
+			})
+		}
+		return
+	})
+	if e := charm.ParseEof(p, str); e != nil {
 		err = e
 	} else if want != ignoreResult {
 		if got != want {
@@ -52,15 +58,3 @@ func mismatched(want, got string) error {
 
 // for testing errors when we want to fail before the match is tested.
 const ignoreResult = "~~IGNORE~~"
-
-type quoteParser struct {
-	QuoteParser
-}
-
-// NewRune starts with the leading quote mark; it finishes just after the matching quote mark.
-func (p *QuoteParser) NewRune(r rune) (ret charm.State) {
-	if r == '\'' || r == '"' {
-		ret = p.ScanQuote(r)
-	}
-	return
-}

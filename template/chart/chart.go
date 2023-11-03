@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/charmed"
 	"git.sr.ht/~ionous/tapestry/template/postfix"
 	"git.sr.ht/~ionous/tapestry/template/types"
+	"github.com/ionous/errutil"
 )
 
 type Runes = charm.Runes
@@ -52,22 +53,26 @@ func (p *NumParser) GetOperand() (ret postfix.Function, err error) {
 }
 
 type QuoteParser struct {
-	charmed.QuoteParser
+	err error
+	res string
 }
 
 // NewRune starts with the leading quote mark; it finishes just after the matching quote mark.
 func (p *QuoteParser) NewRune(r rune) (ret State) {
 	if isQuote(r) {
-		ret = p.ScanQuote(r)
+		p.err = errutil.New("unclosed quote")
+		ret = charmed.ScanQuote(r, true, func(res string) {
+			p.res, p.err = res, nil
+		})
 	}
 	return
 }
 
 func (p *QuoteParser) GetOperand() (ret postfix.Function, err error) {
-	if r, e := p.GetString(); e != nil {
-		err = e
+	if p.err != nil {
+		err = p.err
 	} else {
-		ret = types.Quote(r)
+		ret = types.Quote(p.res)
 	}
 	return
 }

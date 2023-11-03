@@ -9,7 +9,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func TestSimpleScalars(t *testing.T) {
+func TestScalars(t *testing.T) {
 	if e := match(t,
 		"number",
 		testValue(`5.4`),
@@ -27,6 +27,18 @@ func TestSimpleScalars(t *testing.T) {
 		"bool",
 		testValue(`true`),
 		true); e != nil {
+		t.Fatal(e)
+	}
+	if e := match(t,
+		"interpreted",
+		testValue(`"hello\\world"`),
+		`hello\world`); e != nil {
+		t.Fatal(e)
+	}
+	if e := match(t,
+		"raw",
+		testValue("`"+`hello\\world`+"`"),
+		`hello\\world`); e != nil {
 		t.Fatal(e)
 	}
 	// // something else
