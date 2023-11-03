@@ -48,8 +48,7 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 		})
 
 	case charmed.IsNumber(r) || r == '+':
-		next := new(numValue)
-		ret = p.runInner(r, next, next)
+		ret = p.tryNum().NewRune(r)
 
 	case unicode.IsLetter(r):
 		// might be a mapping, or might be a bool literal.
@@ -66,21 +65,17 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 		})
 
 	case r == dashOrMinus:
-		// ahh the pain of negative numbers and sequences
-		// no space indicates a number `-5`
-		// otherwise, a sequence `- 5`
+		// negative numbers or sequences
 		ret = charm.Statement("dashing", func(r rune) (ret charm.State) {
+			// no space indicates a number `-5`
 			if r != Space && r != Newline {
-				next := new(numValue)
-				ret = p.runInner(dashOrMinus, next, next).NewRune(r)
+				ret = p.tryNum()
 			} else {
-				next := NewSequence(p.hist, p.hist.CurrentIndent(), func(vs []any) (_ error) {
-					p.inner = computedValue{vs}
-					return
-				})
-				ret = next.NewRune(dashOrMinus).NewRune(r)
+				// a space indicates a sequence `- 5`
+				ret = p.trySequence()
 			}
-			return
+			// send the dash and the new character along to the num or seq
+			return ret.NewRune(dashOrMinus).NewRune(r)
 		})
 
 	default:
@@ -113,9 +108,17 @@ func (p *Value) mapIndent() int {
 	return p.hist.CurrentIndent() + hack
 }
 
-func (p *Value) runInner(r rune, i valueGetter, c charm.State) charm.State {
-	p.inner = i
-	return charm.RunState(r, c)
+func (p *Value) tryNum() charm.State {
+	num := new(numValue)
+	p.inner = num
+	return num
+}
+
+func (p *Value) trySequence() charm.State {
+	return NewSequence(p.hist, p.hist.CurrentIndent(), func(vs []any) (_ error) {
+		p.inner = computedValue{vs}
+		return
+	})
 }
 
 // if the passed rune might be start a bool value
