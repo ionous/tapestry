@@ -21,7 +21,7 @@ func innerParse(first State, str string) (ret State, err error) {
 			// no states left to parse remaining input
 			err = EndpointError{str, i, try}
 			break
-		} else if es, ok := next.(terminalState); ok {
+		} else if es, ok := next.(Terminal); ok {
 			err = errutil.Append(es.err, EndpointError{str, i, try})
 			break
 		} else {
@@ -42,7 +42,7 @@ func ParseEof(first State, str string) (err error) {
 		err = e
 	} else if last != nil {
 		if fini := last.NewRune(Eof); fini != nil {
-			if es, ok := fini.(terminalState); ok && es.err != nil {
+			if es, ok := fini.(Terminal); ok && es.err != nil {
 				err = errutil.Fmt("%s handling eof for %q", es.err, str)
 			} else {
 				// and if we are passing eof, shouldnt the states check for it and return nil?

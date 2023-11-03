@@ -20,11 +20,6 @@ func RunState(r rune, state State) (ret State) {
 // so this function always returns nil
 func Unhandled() State { return nil }
 
-// a next state indicating an terminal error
-func Error(e error) State {
-	return terminalState{err: e}
-}
-
 // for the very next rune, return nil ( unhandled )
 // it may be the end of parsing, or some parent state might be taking over from here on out.
 func Finished(reason string) State {

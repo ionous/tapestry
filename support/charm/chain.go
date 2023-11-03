@@ -36,7 +36,7 @@ func (p *chainParser) NewRune(r rune) (ret State) {
 	if next := p.next.NewRune(r); next == nil {
 		// out of next states, run the original last state
 		ret = p.last.NewRune(r)
-	} else if err, ok := next.(terminalState); ok {
+	} else if err, ok := next.(Terminal); ok {
 		// if the next state is an error state, return it now.
 		ret = err
 	} else {
