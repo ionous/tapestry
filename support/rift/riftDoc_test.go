@@ -7,9 +7,8 @@ import (
 )
 
 func TestDoc(t *testing.T) {
-	if e := match(t,
-		"multiple collections",
-		testValue(`
+	testValue(t,
+		"test multiple collections", `
 cartParams:
   - name: "Leg type"
     options:
@@ -18,7 +17,7 @@ cartParams:
   - name: "Leg width"
     options: 
       - "1.00 inches"
-      - "2.00 inches"`),
+      - "2.00 inches"`,
 		rift.MapValues{
 			{"cartParams:", []any{
 				rift.MapValues{{
@@ -39,56 +38,37 @@ cartParams:
 			},
 			},
 		},
-	); e != nil {
-		t.Fatal(e)
-	}
-}
-
-func TestNestedMap(t *testing.T) {
-	if e := match(t,
-		"nested map",
-		testValue(`
+		// -----------------------
+		"test nested map", `
 - Field:
-  Next: 5`), []any{
-			rift.MapValues{{
-				Key: "Field:", Value: nil,
-			}, {
-				Key: "Next:", Value: 5.0,
-			},
-			}}); e != nil {
-		t.Fatal(e)
-	}
-}
-
-func TestNestedMaps(t *testing.T) {
-	if e := match(t,
-		"nested maps",
-		testValue(`
+  Next: 5`,
+		[]any{
+			rift.MapValues{
+				{"Field:", nil},
+				{"Next:", 5.0},
+			}},
+		// -----------------------
+		"test nested maps", `
 - Field:
-    Next: 5`), []any{
-			rift.MapValues{{
-				Key: "Field:", Value: rift.MapValues{{
-					Key: "Next:", Value: 5.0,
+    Next: 5`,
+		[]any{
+			rift.MapValues{
+				{"Field:", rift.MapValues{
+					{"Next:", 5.0},
 				}},
-			}}}); e != nil {
-		t.Fatal(e)
-	}
-}
-
-// in yaml, inline nested maps are invalid
-// should they be here too?
-// to do, i think Value would need to examine history
-// either sniffing prior types or through a flag (ex. require newlines)
-// that it can send into NewMapping
-func TestMaybeBad(t *testing.T) {
-	if e := match(t,
-		"inline maps",
-		testValue(`- Field: Next: 5`), []any{
+			}},
+		// in yaml, inline nested maps are invalid
+		// should they be here too?
+		// to do, i think Value would need to examine history
+		// either sniffing prior types or through a flag (ex. require newlines)
+		// that it can send into NewMapping
+		"test inline maps", `
+- Field: Next: 5`,
+		[]any{
 			rift.MapValues{{
-				Key: "Field:", Value: rift.MapValues{{
-					Key: "Next:", Value: 5.0,
+				"Field:", rift.MapValues{{
+					"Next:", 5.0,
 				}},
-			}}}); e != nil {
-		t.Fatal(e)
-	}
+			}}},
+	)
 }

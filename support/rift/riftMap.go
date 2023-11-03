@@ -5,15 +5,15 @@ import (
 )
 
 type Mapping struct {
-	h      *History
+	doc    *Document
 	sig    Signature
 	values MapValues
 }
 
-// maybe h is a factory even?
-func NewMapping(h *History, indent int, writeBack func(vs MapValues) error) charm.State {
-	n := &Mapping{h: h}
-	return h.PushIndent(indent, n, func() (err error) {
+// maybe doc is a factory even?
+func NewMapping(doc *Document, indent int, writeBack func(vs MapValues) error) charm.State {
+	n := &Mapping{doc: doc}
+	return doc.PushIndent(indent, n, func() (err error) {
 		// see if there was a value-less key in the pipeline
 		// ex. "signature:<eof>"
 		if sig, e := n.sig.getSignature(); e != nil {
@@ -39,7 +39,7 @@ func (n *Mapping) NewRune(first rune) charm.State {
 			n.values.Add(sig, nil)
 			// note: the end of a signature is indicated by a colon and a space;
 			// we have to pass that to parseCollection because it requires at least one space.
-			ret = charm.RunState(space, parseCollection(n.h, func(val any) (_ error) {
+			ret = charm.RunState(space, parseCollection(n.doc, func(val any) (_ error) {
 				n.values[len(n.values)-1].Value = val // = n.values.Append(sig, val)
 				return
 			}))

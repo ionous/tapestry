@@ -3,63 +3,58 @@ package rift_test
 import (
 	"strings"
 	"testing"
+	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/rift"
 	"github.com/ionous/errutil"
 )
 
 func TestScalars(t *testing.T) {
-	if e := match(t,
-		"number",
-		testValue(`5.4`),
-		5.4); e != nil {
-		t.Fatal(e)
-	}
-	// string
-	if e := match(t,
-		"string",
-		testValue(`"5.4"`),
-		"5.4"); e != nil {
-		t.Fatal(e)
-	}
-	if e := match(t,
-		"bool",
-		testValue(`true`),
-		true); e != nil {
-		t.Fatal(e)
-	}
-	if e := match(t,
-		"interpreted",
-		testValue(`"hello\\world"`),
-		`hello\world`); e != nil {
-		t.Fatal(e)
-	}
-	if e := match(t,
-		"raw",
-		testValue("`"+`hello\\world`+"`"),
-		`hello\\world`); e != nil {
-		t.Fatal(e)
-	}
-	// // something else
-	// if e := testValue(`beep`).(error); e != nil {
-	// 	t.Log("ok failure:", e)
-	// }
+	testValue(t,
+		"test number", `5.4`, 5.4,
+		"test string", `"5.4"`, "5.4",
+		"test bool", `true`, true,
+
+		// ----------
+		"test interpreted",
+		`"hello\\world"`,
+		`hello\world`,
+
+		// ----------
+		"test raw",
+		"`"+`hello\\world`+"`",
+		`hello\\world`,
+
+		// -----
+		"test unquoted value",
+		"beep",
+		errutil.New("signature must end with a colon"),
+	)
 }
 
-// returns point of failure
-func testValue(str string) func() any {
-	str = strings.TrimSpace(str)
-	return func() (ret any) {
-		var h rift.History
-		if e := charm.Parse(str, rift.NewValue(&h, 0, func(v any) (_ error) {
-			ret = v
-			return
-		})); e != nil {
-			ret = errutil.Fmt("%v %q", e, str)
-		} else if e := h.PopAll(); e != nil {
-			ret = e
+//  name of test, input string, expected result
+// leading whitespace is trimmed
+func testValue(t *testing.T, nameInputExpect ...any) {
+	for i, cnt := 0, len(nameInputExpect); i < cnt; i += 3 {
+		name, input, expect := nameInputExpect[0+i].(string), nameInputExpect[1+i].(string), nameInputExpect[2+i]
+		if strings.HasPrefix(name, `x `) {
+			// commenting out tests causes go fmt to replace spaces with tabs. *sigh*
+			t.Log("skipping", name)
+		} else {
+			var res any
+			var doc rift.Document
+			str := strings.TrimLeftFunc(input, unicode.IsSpace)
+			if e := doc.Parse(str, rift.NewValue(&doc, 0, func(v any) (_ error) {
+				res = v
+				return
+			})); e != nil {
+				res = e
+			}
+			if e := compare(res, expect); e != nil {
+				t.Fatal("ng:", name, e)
+			} else {
+				t.Log("ok:", name)
+			}
 		}
-		return
 	}
 }

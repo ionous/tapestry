@@ -5,12 +5,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// all sequence and map parsing is the same:
+// all collection value handling is the same:
 // look for whitespace, check the indentation level to see if there was a null value,
 // read the value ( including sub-collections ) and find the next newline,
 // check the indentation to see if we're sticking with the same collection, or popping to a previous one.
-func parseCollection(h *History, onValue func(any) error) (ret charm.State) {
+func parseCollection(h *Document, onValue func(any) error) (ret charm.State) {
 	startingIndent := h.CurrentIndent() // padding is the space between the dash or colon and the value
+
 	return RequireSpaces("padding", startingIndent, func(padding int) (ret charm.State) {
 		switch {
 		// if the indent is less or equal,
@@ -21,6 +22,7 @@ func parseCollection(h *History, onValue func(any) error) (ret charm.State) {
 		default:
 			// read the value ( could be another collection )
 			ret = charm.Step(NewValue(h, padding, onValue), charm.Statement("after value", func(r rune) charm.State {
+
 				// after value we require a newline:
 				return charm.RunState(r, RequireLines("tail", padding, func(tail int) (ret charm.State) {
 					switch {

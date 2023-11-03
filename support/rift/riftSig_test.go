@@ -3,7 +3,6 @@ package rift_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/rift"
 	"github.com/ionous/errutil"
 )
@@ -11,14 +10,12 @@ import (
 func TestSig(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret string, err error) {
-		var h rift.History
-		if e := charm.Parse(str, rift.NewSignature(&h, 0, func(str string) (_ error) {
+		var doc rift.Document
+		if e := doc.Parse(str, rift.NewSignature(&doc, 0, func(str string) (_ error) {
 			ret = str
 			return
 		})); e != nil {
 			err = e
-		} else {
-			err = h.PopAll()
 		}
 		return
 	}

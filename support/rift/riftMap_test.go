@@ -1,103 +1,97 @@
 package rift_test
 
 import (
+	"strings"
 	"testing"
+	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/rift"
 )
 
 // keys that start with t or f need special handleing
-func TestBoolKeys(t *testing.T) {
-	if e := match(t,
-		"nested value",
-		testValue(`
+func TestMap(t *testing.T) {
+	testMap(t,
+		// -----------
+		"test keys with boolean names", `
 true: false
-false: true
-`),
+false: true`,
 		rift.MapValues{
 			{"true:", false},
 			{"false:", true},
-		}); e != nil {
-		t.Fatal(e)
-	}
-}
+		},
 
-func TestMap(t *testing.T) {
-	if e := match(t,
-		"single value",
-		testMap(
-			`name: "Sammy Sosa"`),
-		rift.MapValues{{
-			"name:", "Sammy Sosa",
-		}}); e != nil {
-		t.Fatal(e)
-	}
-	if e := match(t,
-		"several values",
-		testMap(
-			`name: "Sammy Sosa"
-hr:   63
-avg:  true`),
+		// -----------
+		"test single value", `
+name: "Sammy Sosa"`,
 		rift.MapValues{
 			{"name:", "Sammy Sosa"},
-			{"hr:", 63.0},
-			{"avg:", true},
-		}); e != nil {
-		t.Fatal(e)
-	}
-	if e := match(t,
-		"nested map",
-		testMap(
-			`name: "Sammy Sosa"
-hr:   63
-avg:  true`),
+		},
+		// -----------
+		"test split line", `
+name:
+  "Sammy Sosa"`,
 		rift.MapValues{
 			{"name:", "Sammy Sosa"},
-			{"hr:", 63.0},
-			{"avg:", true},
-		}); e != nil {
-		t.Fatal(e)
-	}
-	// make sure we can also parse that block as a value
-	if e := match(t,
-		"nested value",
-		testValue(`
+		},
+
+		// -----------
+		"test several values", `
 name: "Sammy Sosa"
 hr:   63
-avg:  true`),
+avg:  true`,
 		rift.MapValues{
 			{"name:", "Sammy Sosa"},
 			{"hr:", 63.0},
 			{"avg:", true},
-		}); e != nil {
-		t.Fatal(e)
-	}
-	// make sure we can also parse that block as a value
-	if e := match(t,
-		"nested value",
-		testValue(`
-true: false
-false: true`),
+		},
+		// -----------
+		"test nested map", `
+name: "Sammy Sosa"
+hr:   63
+avg:  true`,
 		rift.MapValues{
-			{"true:", false},
-			{"false:", true},
-		}); e != nil {
-		t.Fatal(e)
-	}
+			{"name:", "Sammy Sosa"},
+			{"hr:", 63.0},
+			{"avg:", true},
+		},
+	)
+
+	// make sure we can also parse that block as a value
+	testValue(t,
+		"test nested value", `
+name: "Sammy Sosa"
+hr:   63
+avg:  true`,
+		rift.MapValues{
+			{"name:", "Sammy Sosa"},
+			{"hr:", 63.0},
+			{"avg:", true},
+		})
 }
 
-func testMap(str string) func() any {
-	return func() (ret any) {
-		var h rift.History
-		if e := charm.Parse(str, rift.NewMapping(&h, 0, func(vs rift.MapValues) (_ error) {
-			ret = vs
-			return
-		})); e != nil {
-			ret = e
-		} else if e := h.PopAll(); e != nil {
-			ret = e
+// name of test, source string, expected result
+func testMap(t *testing.T, nameInputExpect ...any) {
+	for i, cnt := 0, len(nameInputExpect); i < cnt; i += 3 {
+		name, input, expect := nameInputExpect[0+i].(string), nameInputExpect[1+i].(string), nameInputExpect[2+i]
+		if strings.HasPrefix(name, `x `) {
+			// commenting out tests causes go fmt to replace spaces with tabs. *sigh*
+			t.Log("skipping", name)
+		} else {
+			var res any
+			var doc rift.Document
+			str := strings.TrimLeftFunc(input, unicode.IsSpace)
+			if e := doc.Parse(str, rift.NewMapping(&doc, 0, func(vs rift.MapValues) (_ error) {
+				res = vs
+				return
+			})); e != nil {
+				res = e
+			}
+			if e := compare(res, expect); e != nil {
+				t.Fatal("ng:", name, e)
+			} else {
+				t.Log("ok:", name)
+			}
+
 		}
-		return
 	}
 }

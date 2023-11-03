@@ -11,7 +11,7 @@ import (
 // parses the "right hand side" of a collection or map
 // assumes the next rune is at the start of the value: no leading whitespace.
 type Value struct {
-	hist  *History
+	doc   *Document
 	inner valueGetter
 }
 
@@ -20,9 +20,9 @@ type valueGetter interface {
 	GetValue() (ret any, err error)
 }
 
-func NewValue(hist *History, indent int, writeBack func(v any) error) charm.State {
-	p := &Value{hist: hist}
-	return hist.PushIndent(indent, p, func() (err error) {
+func NewValue(doc *Document, indent int, writeBack func(v any) error) charm.State {
+	p := &Value{doc: doc}
+	return doc.PushIndent(indent, p, func() (err error) {
 		if p.inner == nil {
 			err = errutil.New("no value found") // is this an error?
 		} else if v, e := p.inner.GetValue(); e != nil {
@@ -54,7 +54,7 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 		// might be a mapping, or might be a bool literal.
 		mapIndent := p.mapIndent()
 		ret = p.tryBool(r, func(partial string) charm.State {
-			next := NewMapping(p.hist, mapIndent, func(vs MapValues) (_ error) {
+			next := NewMapping(p.doc, mapIndent, func(vs MapValues) (_ error) {
 				p.inner = computedValue{vs}
 				return
 			})
@@ -102,10 +102,10 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 // maybe we can generate / pass in padding from the parent
 func (p *Value) mapIndent() int {
 	var hack int
-	if len(p.hist.els) > 1 {
+	if len(p.doc.els) > 1 {
 		hack = 1
 	}
-	return p.hist.CurrentIndent() + hack
+	return p.doc.CurrentIndent() + hack
 }
 
 func (p *Value) tryNum() charm.State {
@@ -115,7 +115,7 @@ func (p *Value) tryNum() charm.State {
 }
 
 func (p *Value) trySequence() charm.State {
-	return NewSequence(p.hist, p.hist.CurrentIndent(), func(vs []any) (_ error) {
+	return NewSequence(p.doc, p.doc.CurrentIndent(), func(vs []any) (_ error) {
 		p.inner = computedValue{vs}
 		return
 	})
