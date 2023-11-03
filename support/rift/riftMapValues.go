@@ -8,8 +8,8 @@ type MapValue struct {
 	Value any
 }
 
-func (m MapValues) Append(key string, val any) MapValues {
-	return append(m, MapValue{key, val})
+func (m *MapValues) Add(key string, val any) {
+	(*m) = append(*m, MapValue{key, val})
 }
 
 // returns a valid pointer into the slice, or nil if not found

@@ -56,7 +56,7 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 		// - Field:
 		//   Next: 5
 		// ... or...
-		// Field: <--- nested maps cant start on same line, must have a newline
+		// Field:
 		//   Next: 5
 		// but we don't want that extra indent for reading documents containing a single map
 		ret = charm.RunState(r, NewMapping(p.hist, p.hist.CurrentIndent()+hack, func(vs MapValues) (_ error) {

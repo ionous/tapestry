@@ -1,6 +1,7 @@
 package rift_test
 
 import (
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
@@ -36,6 +37,7 @@ func TestSimpleScalars(t *testing.T) {
 
 // returns point of failure
 func testValue(str string) func() any {
+	str = strings.TrimSpace(str)
 	return func() (ret any) {
 		var h rift.History
 		if e := charm.Parse(str, rift.NewValue(&h, 0, func(v any) (_ error) {
