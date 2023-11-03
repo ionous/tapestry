@@ -39,30 +39,24 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 	case r == InterpretedQuotes:
 		next := new(interpretedString)
 		ret = p.runInner(r, next, next)
+
 	case charmed.IsNumber(r) || r == '+':
 		next := new(numValue)
 		ret = p.runInner(r, next, next)
-	case r == 't' || r == 'f':
-		next := new(boolValue)
-		ret = p.runInner(r, next, next)
 
 	case unicode.IsLetter(r):
-		var hack int
-		if len(p.hist.els) > 1 {
-			hack = 1
-		}
-		// starting a map in a collection,
-		// we expect the indent should be one more than the parent:
-		// - Field:
-		//   Next: 5
-		// ... or...
-		// Field:
-		//   Next: 5
-		// but we don't want that extra indent for reading documents containing a single map
-		ret = charm.RunState(r, NewMapping(p.hist, p.hist.CurrentIndent()+hack, func(vs MapValues) (_ error) {
-			p.inner = computedValue{vs}
-			return
-		}))
+		// handle keys that might look like bools.
+		mapIndent := p.mapIndent()
+		ret = p.tryBool(r, func(partial string) charm.State {
+			next := NewMapping(p.hist, mapIndent, func(vs MapValues) (_ error) {
+				p.inner = computedValue{vs}
+				return
+			})
+			for _, r := range partial {
+				next = next.NewRune(r)
+			}
+			return next
+		})
 
 	case r == dashOrMinus:
 		// ahh the pain of negative numbers and sequences
@@ -81,6 +75,7 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 			}
 			return
 		})
+
 	default:
 		// note: implicit nil values dont reach here
 		// ex. for sequences, the sequence hits the indent of the next value first.
@@ -90,9 +85,62 @@ func (p *Value) NewRune(r rune) (ret charm.State) {
 	return
 }
 
+// hack: starting a map in a collection,
+// we expect the indent should be one more than the parent:
+//   - Field:
+//     Next: 5
+//
+// ... or...
+// Field:
+//
+//	Next: 5
+//
+// but we don't want that extra indent for reading documents containing a single m
+func (p *Value) mapIndent() int {
+	var hack int
+	if len(p.hist.els) > 1 {
+
+		hack = 1
+	}
+	return p.hist.CurrentIndent() + hack
+}
+
 func (p *Value) runInner(r rune, i valueGetter, c charm.State) charm.State {
 	p.inner = i
 	return charm.RunState(r, c)
+}
+
+// if the passed rune might be start a bool value
+// for example, `- trouble:` would match `- true` temporarily
+// and `- false:` would match `- false` runtil the colon.
+func (p *Value) tryBool(r rune, makeNext func(str string) charm.State) (ret charm.State) {
+	var match string
+	var res bool
+	if r == 't' {
+		match, res = "true", true
+	} else if r == 'f' {
+		match, res = "false", false
+	}
+	// a true parallel state would have been simpler in concept
+	// but would need signaling out of the parallel to interrupt it
+	// instead, this matches as much as it can and later re-runs whatever didnt match
+	return charmed.MatchString(match, func(r rune, at int) (ret charm.State) {
+		partial, matched := match[:at], at == len(match) && len(match) > 0
+		if !matched {
+			ret = makeNext(partial).NewRune(r)
+		} else {
+			// store the result early, in case we're at the end of the document.
+			p.inner = computedValue{res}
+			ret = charm.Statement("post bool", func(r rune) (ret charm.State) {
+				// the word "true" or "false" needs to check the rune after it
+				if r != Space && r != Newline {
+					ret = makeNext(partial).NewRune(r)
+				}
+				return
+			})
+		}
+		return
+	}).NewRune(r)
 }
 
 type computedValue struct{ v any }
@@ -114,13 +162,6 @@ func (p *interpretedString) NewRune(r rune) (ret charm.State) {
 	if r == InterpretedQuotes {
 		ret = p.ScanQuote(r)
 	}
-	return
-}
-
-type boolValue struct{ charmed.BoolParser }
-
-func (p *boolValue) GetValue() (ret any, err error) {
-	ret, err = p.GetBool()
 	return
 }
 

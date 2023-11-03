@@ -7,6 +7,22 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/rift"
 )
 
+// keys that start with t or f need special handleing
+func TestBoolKeys(t *testing.T) {
+	if e := match(t,
+		"nested value",
+		testValue(`
+true: false
+false: true
+`),
+		rift.MapValues{
+			{"true:", false},
+			{"false:", true},
+		}); e != nil {
+		t.Fatal(e)
+	}
+}
+
 func TestMap(t *testing.T) {
 	if e := match(t,
 		"single value",
@@ -46,14 +62,26 @@ avg:  true`),
 	// make sure we can also parse that block as a value
 	if e := match(t,
 		"nested value",
-		testValue(
-			`name: "Sammy Sosa"
+		testValue(`
+name: "Sammy Sosa"
 hr:   63
 avg:  true`),
 		rift.MapValues{
 			{"name:", "Sammy Sosa"},
 			{"hr:", 63.0},
 			{"avg:", true},
+		}); e != nil {
+		t.Fatal(e)
+	}
+	// make sure we can also parse that block as a value
+	if e := match(t,
+		"nested value",
+		testValue(`
+true: false
+false: true`),
+		rift.MapValues{
+			{"true:", false},
+			{"false:", true},
 		}); e != nil {
 		t.Fatal(e)
 	}
