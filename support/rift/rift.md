@@ -138,7 +138,7 @@ Comments begin with the `#` hash and continue to the end of a line. Comments can
 
 Internally, the comments for a given collection are stored as a unified "comment block" -- a string of continuous text generated in the following manner:
 
-Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the start of each entry in a collection is recorded with a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with vertical tab `\v`. Newlines (`\n`) separate comments whenever a tab does not.  _( **TBD**: preserve empty lines using `\n`? )_ The resulting block can then be trimmed of trailing newlines and tabs.
+Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the dash ( or signature ) of a collection is recorded as a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with vertical tab `\v`. Newlines (`\n`) separate comments whenever a tab does not.  _( **TBD**: preserve empty lines using `\n`? )_ The resulting block can then be trimmed of trailing newlines and tabs.
 
 For example, the following sequence results in the comment block: `# one\t# two\t# three\n# four\v# five`.
 

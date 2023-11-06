@@ -1,6 +1,9 @@
 package rift
 
-import "git.sr.ht/~ionous/tapestry/support/charm"
+import (
+	"git.sr.ht/~ionous/tapestry/support/charm"
+	"github.com/ionous/errutil"
+)
 
 type Document struct {
 	History
@@ -24,6 +27,13 @@ func (doc *Document) Parse(str string, c charm.State) (err error) {
 func CountSpaces(c *Cursor, next charm.State) charm.State {
 	return charm.Self("counting", func(self charm.State, r rune) (ret charm.State) {
 		switch r {
+
+		// these are always illegal:
+		// doing this at the outermost level protects all inner states.
+		case HTab, VTab:
+			e := errutil.New("invalid tab")
+			ret = charm.Error(e)
+
 		case Newline:
 			c.Row++
 			c.Col = 0

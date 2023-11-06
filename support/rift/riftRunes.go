@@ -10,5 +10,7 @@ const (
 	SignatureConnector   = '_' // valid in words between colons
 	SignatureSeparator   = ':' // keywords in a signature are separated by a colon
 	Space                = ' '
-	Tab                  = '\t' // tab is considered invalid whitespace
+	HTab                 = '\t' // tab is considered invalid whitespace
+	VTab                 = '\v' // vtab is used for commenting
+	Comment              = '#'
 )
