@@ -1,6 +1,9 @@
 package rift
 
 import (
+	"strings"
+	"unicode"
+
 	"git.sr.ht/~ionous/tapestry/support/charm"
 	"github.com/ionous/errutil"
 )
@@ -8,15 +11,14 @@ import (
 type Document struct {
 	History
 	Cursor
+	Value        any
+	Comments     strings.Builder
+	KeepComments bool
 }
 
-type Cursor struct {
-	Row, Col, Indent int // y, x, tab
-	indenting        bool
-}
-
-func (doc *Document) Parse(str string, c charm.State) (err error) {
-	if e := charm.Parse(str, CountSpaces(&doc.Cursor, c)); e != nil {
+func (doc *Document) ParseLines(str string, start charm.State) (err error) {
+	run := charm.Parallel("parse lines", FilterControlCodes(), UnhandledError(start), &doc.Cursor)
+	if e := charm.Parse(str, run); e != nil {
 		err = e
 	} else if e := doc.PopAll(); e != nil {
 		err = e
@@ -24,36 +26,43 @@ func (doc *Document) Parse(str string, c charm.State) (err error) {
 	return
 }
 
-func CountSpaces(c *Cursor, next charm.State) charm.State {
-	return charm.Self("counting", func(self charm.State, r rune) (ret charm.State) {
-		switch r {
+func (doc *Document) Pop() charm.State {
+	return doc.History.Pop(doc.Cursor.Col)
+}
 
-		// these are always illegal:
-		// doing this at the outermost level protects all inner states.
-		case HTab, VTab:
-			e := errutil.New("invalid tab")
-			ret = charm.Error(e)
+func (doc *Document) Document() *Document {
+	return doc
+}
 
-		case Newline:
-			c.Row++
-			c.Col = 0
-			c.indenting = true
+// fix: return error if already written
+func (doc *Document) WriteValue(val any) (_ error) {
+	doc.Value = val
+	return
+}
 
-		default:
-			c.Col++
-			if r != Space {
-				c.indenting = false
-			} else if c.indenting {
-				c.Indent++
-			}
-		}
-		next = next.NewRune(r)
-		switch next.(type) {
-		case nil, charm.Terminal:
-			ret = next
-		default:
-			ret = self
+func (doc *Document) CommentWriter() RuneWriter {
+	return &doc.Comments
+}
+
+// turns any unhandled states returned by the watched state into errors
+func UnhandledError(watch charm.State) charm.State {
+	return charm.Self("unhandled error", func(self charm.State, r rune) (ret charm.State) {
+		if next := watch.NewRune(r); next == nil {
+			ret = charm.Error(errutil.New("unhanded error in", charm.StateName(watch)))
+		} else {
+			ret, watch = self, next // keep checking until watch returns nil
 		}
 		return
+	})
+}
+
+// except for newline, control codes are considered invalid.
+func FilterControlCodes() charm.State {
+	return charm.Self("filter control codes", func(next charm.State, r rune) charm.State {
+		if r != Newline && unicode.IsControl(r) {
+			e := errutil.New("invalid character", int(r))
+			next = charm.Error(e)
+		}
+		return next
 	})
 }

@@ -11,18 +11,6 @@ import (
 // parses a dictionary key of ascii words separated by, and terminating with, a colon.
 // the words must start with a letter, but can contain spaces and underscores.
 // ex. `a:`, `a:b:`, `and:more complex:keys_like_this:`
-func NewSignature(hist *Document, indent int, writeBack func(string) error) charm.State {
-	var sig Signature
-	return hist.PushIndent(indent, &sig, func() (err error) {
-		if str, e := sig.getSignature(); e != nil {
-			err = e
-		} else {
-			err = writeBack(str)
-		}
-		return
-	})
-}
-
 type Signature struct {
 	out     strings.Builder
 	pending []rune
@@ -69,7 +57,7 @@ func (sig *Signature) NewRune(r rune) (ret charm.State) {
 }
 
 // resets the signature
-func (sig *Signature) getSignature() (ret string, err error) {
+func (sig *Signature) GetSignature() (ret string, err error) {
 	if len(sig.pending) > 0 {
 		err = errutil.New("signature must end with a colon")
 	} else {

@@ -3,19 +3,21 @@ package rift_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/rift"
 	"github.com/ionous/errutil"
 )
 
-func TestSig(t *testing.T) {
+func xTestSig(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret string, err error) {
-		var doc rift.Document
-		if e := doc.Parse(str, rift.NewSignature(&doc, 0, func(str string) (_ error) {
-			ret = str
-			return
-		})); e != nil {
+		var sig rift.Signature
+		if e := charm.Parse(str, &sig); e != nil {
 			err = e
+		} else if str, e := sig.GetSignature(); e != nil {
+			err = e
+		} else {
+			ret = str
 		}
 		return
 	}

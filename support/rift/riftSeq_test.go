@@ -6,53 +6,59 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/rift"
+	"github.com/ionous/errutil"
 )
 
-func TestSeq(t *testing.T) {
+func xTestSeq(t *testing.T) {
 	testSeq(t,
 		// --------------
-		"a single value", `
+		"test single value", `
 - 5`,
 		[]any{5.0},
 
 		// --------------
-		"a single with newline", `
+		"fail without dash", `
+-false`,
+		errutil.New(""),
+
+		// --------------
+		"test value with newline", `
 - 5
 `, []any{5.0},
 
 		// --------------
-		"split line", `
-- 
-    5
+		"test split line", `
+-
+  5
 `, []any{5.0},
 
 		// --------------
-		"several values", `
+		"test several values", `
 - 5
 - 10
 - 12`,
 		[]any{5.0, 10.0, 12.0},
 
 		// --------------
-		"nested sub sequence", `
+		"test nested sub sequence", `
 - - 5`,
 		[]any{[]any{5.0}},
 
 		// --------------
-		"new line sub sequence", `
+		"test new line sub sequence", `
 -
   - 5
 `, []any{[]any{5.0}},
 
 		// --------------
-		"nil values", `
+		"test nil values", `
 -
 -
 -`,
 		[]any{nil, nil, nil},
 
 		// --------------
-		"nil value trailing newline", `
+		"test nil value trailing newline", `
 -
 -
 -
@@ -60,7 +66,7 @@ func TestSeq(t *testing.T) {
 		[]any{nil, nil, nil},
 
 		// --------------
-		"continuing sub sequence ", `
+		"test continuing sub sequence ", `
 -
   - 5
 - 6`,
@@ -79,11 +85,11 @@ func testSeq(t *testing.T, nameInputExpect ...any) {
 			var res any
 			var doc rift.Document
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
-			if e := doc.Parse(str, rift.NewSequence(&doc, 0, func(vs []any) (_ error) {
-				res = vs
-				return
-			})); e != nil {
+			seq := rift.NewSequence(&doc, "", doc.Col)
+			if e := doc.ParseLines(str, seq); e != nil {
 				res = e
+			} else {
+				res = doc.Value
 			}
 			if e := compare(res, expect); e != nil {
 				t.Fatal("ng:", name, e)

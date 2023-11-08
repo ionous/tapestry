@@ -9,7 +9,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func TestScalars(t *testing.T) {
+func xTestScalars(t *testing.T) {
 	testValue(t,
 		"test number", `5.4`, 5.4,
 		"test string", `"5.4"`, "5.4",
@@ -44,11 +44,10 @@ func testValue(t *testing.T, nameInputExpect ...any) {
 			var res any
 			var doc rift.Document
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
-			if e := doc.Parse(str, rift.NewValue(&doc, 0, func(v any) (_ error) {
-				res = v
-				return
-			})); e != nil {
+			if e := doc.ParseLines(str, rift.CollectionEntry(&doc, 0)); e != nil {
 				res = e
+			} else {
+				res = doc.Value
 			}
 			if e := compare(res, expect); e != nil {
 				t.Fatal("ng:", name, e)

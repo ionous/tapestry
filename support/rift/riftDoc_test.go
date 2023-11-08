@@ -8,6 +8,7 @@ import (
 
 func TestDoc(t *testing.T) {
 	testValue(t,
+		// -----------------------
 		"test multiple collections", `
 cartParams:
   - name: "Leg type"
@@ -38,6 +39,7 @@ cartParams:
 			},
 			},
 		},
+
 		// -----------------------
 		"test nested map", `
 - Field:
@@ -47,6 +49,7 @@ cartParams:
 				{"Field:", nil},
 				{"Next:", 5.0},
 			}},
+
 		// -----------------------
 		"test nested maps", `
 - Field:
@@ -57,6 +60,8 @@ cartParams:
 					{"Next:", 5.0},
 				}},
 			}},
+
+		// -----------------------
 		// in yaml, inline nested maps are invalid
 		// should they be here too?
 		// to do, i think Value would need to examine history
