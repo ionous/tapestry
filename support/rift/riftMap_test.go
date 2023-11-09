@@ -6,6 +6,7 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/rift"
+	"git.sr.ht/~ionous/tapestry/support/rift/imap"
 )
 
 // keys that start with t or f need special handleing
@@ -15,7 +16,7 @@ func TestMap(t *testing.T) {
 		"Test keys with boolean names", `
 true: false
 false: true`,
-		rift.MapValues{
+		imap.ItemMap{
 			{"true:", false},
 			{"false:", true},
 		},
@@ -23,14 +24,14 @@ false: true`,
 		// -----------
 		"Test single value", `
 name: "Sammy Sosa"`,
-		rift.MapValues{
+		imap.ItemMap{
 			{"name:", "Sammy Sosa"},
 		},
 		// -----------
 		"Test split line", `
 name:
   "Sammy Sosa"`,
-		rift.MapValues{
+		imap.ItemMap{
 			{"name:", "Sammy Sosa"},
 		},
 
@@ -39,7 +40,7 @@ name:
 name: "Sammy Sosa"
 hr:   63
 avg:  true`,
-		rift.MapValues{
+		imap.ItemMap{
 			{"name:", "Sammy Sosa"},
 			{"hr:", 63.0},
 			{"avg:", true},
@@ -48,7 +49,7 @@ avg:  true`,
 		"Test map with nil value", `
 Field:
 Next: 5`,
-		rift.MapValues{
+		imap.ItemMap{
 			{"Field:", nil},
 			{"Next:", 5.0},
 		},
@@ -57,8 +58,8 @@ Next: 5`,
 		"Test nested maps", `
 Field:
   Next: 5`,
-		rift.MapValues{
-			{"Field:", rift.MapValues{
+		imap.ItemMap{
+			{"Field:", imap.ItemMap{
 				{"Next:", 5.0},
 			}},
 		},
@@ -71,8 +72,8 @@ Field:
 		// that it can send into NewMapping
 		"Test inline maps", `
 Field: Next: 5`,
-		rift.MapValues{{
-			"Field:", rift.MapValues{{
+		imap.ItemMap{{
+			"Field:", imap.ItemMap{{
 				"Next:", 5.0,
 			}},
 		}},
@@ -88,7 +89,7 @@ func testMap(t *testing.T, nameInputExpect ...any) {
 			t.Log("skipping", name)
 		} else {
 			var res any
-			var doc rift.Document
+			doc := rift.Document{MakeMake: imap.MakeBuilder}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			mapping := rift.NewMapping(&doc, "", 0)
 			if e := doc.ParseLines(str, rift.StartMapping(mapping)); e != nil {

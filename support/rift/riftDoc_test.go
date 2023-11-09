@@ -3,7 +3,7 @@ package rift_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/support/rift"
+	"git.sr.ht/~ionous/tapestry/support/rift/imap"
 )
 
 func TestDoc(t *testing.T) {
@@ -19,16 +19,16 @@ cartParams:
     options: 
       - "1.00 inches"
       - "2.00 inches"`,
-		rift.MapValues{
+		imap.ItemMap{
 			{"cartParams:", []any{
-				rift.MapValues{{
+				imap.ItemMap{{
 					"name:", "Leg type",
 				}, {
 					"options:", []any{
 						"Round",
 						"Square",
 					},
-				}}, rift.MapValues{{
+				}}, imap.ItemMap{{
 					"name:", "Leg width",
 				}, {
 					"options:", []any{
@@ -49,7 +49,7 @@ cartParams:
 - Field:
   Next: 5`,
 		[]any{
-			rift.MapValues{
+			imap.ItemMap{
 				{"Field:", nil},
 				{"Next:", 5.0},
 			}},
@@ -59,8 +59,8 @@ cartParams:
 - Field:
     Next: 5`,
 		[]any{
-			rift.MapValues{
-				{"Field:", rift.MapValues{
+			imap.ItemMap{
+				{"Field:", imap.ItemMap{
 					{"Next:", 5.0},
 				}},
 			}},
@@ -74,8 +74,8 @@ cartParams:
 		"Test inline maps", `
 - Field: Next: 5`,
 		[]any{
-			rift.MapValues{{
-				"Field:", rift.MapValues{{
+			imap.ItemMap{{
+				"Field:", imap.ItemMap{{
 					"Next:", 5.0,
 				}},
 			}}},

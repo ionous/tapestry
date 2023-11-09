@@ -4,6 +4,7 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
+	"git.sr.ht/~ionous/tapestry/support/rift/maps"
 	"github.com/ionous/errutil"
 )
 
@@ -12,6 +13,7 @@ type Document struct {
 	Cursor
 	Value any
 	CommentBlock
+	MakeMake maps.BuilderFactory
 }
 
 func (doc *Document) ParseLines(str string, start charm.State) (err error) {

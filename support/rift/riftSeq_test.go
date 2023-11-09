@@ -6,6 +6,7 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/rift"
+	"git.sr.ht/~ionous/tapestry/support/rift/imap"
 	"github.com/ionous/errutil"
 )
 
@@ -88,7 +89,7 @@ func testSeq(t *testing.T, nameInputExpect ...any) {
 			t.Log("skipping", name)
 		} else {
 			var res any
-			var doc rift.Document
+			doc := rift.Document{MakeMake: imap.MakeBuilder}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			seq := rift.NewSequence(&doc, "", doc.Col)
 			if e := doc.ParseLines(str, rift.StartSequence(seq)); e != nil {

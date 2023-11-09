@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
+	"git.sr.ht/~ionous/tapestry/support/rift/maps"
 	"github.com/ionous/errutil"
 )
 
@@ -12,7 +13,7 @@ type Mapping struct {
 	doc    *Document
 	depth  int
 	key    Signature
-	values MapValues
+	values maps.Builder
 	CommentBlock
 }
 
@@ -20,13 +21,15 @@ type Mapping struct {
 func NewMapping(parent Collection, header string, depth int) *Mapping {
 	doc := parent.Document()
 	c := &Mapping{doc: doc, depth: depth}
+	var reserve int
 	if doc.keepComments {
+		reserve = 1
 		c.keepComments = true
-		c.values = make(MapValues, 1)
 		if len(header) > 0 {
 			c.comments.WriteString(header)
 		}
 	}
+	c.values = doc.MakeMake(reserve)
 	return c
 }
 
@@ -40,7 +43,7 @@ func (c *Mapping) WriteValue(val any) (err error) {
 	if key, e := c.key.GetSignature(); e != nil {
 		err = e
 	} else {
-		c.values.Add(key, val)
+		c.values = c.values.Add(key, val)
 	}
 	return
 }
@@ -76,9 +79,9 @@ func (c *Mapping) FinalizeValue() (ret any, err error) {
 		// write the comment block
 		if c.keepComments {
 			comment := strings.TrimRightFunc(c.comments.String(), unicode.IsSpace)
-			c.values[0] = MapValue{Value: comment}
+			c.values = c.values.Add("", comment)
 		}
-		ret, c.values = c.values, nil
+		ret, c.values = c.values.Map(), nil
 	}
 	return
 }
