@@ -16,26 +16,29 @@ type Signature struct {
 	pending []rune
 }
 
+// for now defined as unicode is letter, but might be useful to be more lenient
+var isValidSignaturePrefix = unicode.IsLetter
+
 // first character of the signature must be a letter
 // subsequent characters of words can be letters, numbers, spaces, or "connectors" (underscore)
 // colons separate word parts
 func (sig *Signature) NewRune(r rune) (ret charm.State) {
 	switch {
-	case r == Space && !sig.isKeyPending():
+	case r == Space && !sig.IsKeyPending():
 		break // done
 
 	case r == Newline:
-		if sig.isKeyPending() {
+		if sig.IsKeyPending() {
 			e := errutil.New("keys can't span lines")
 			ret = charm.Error(e)
 		}
 
-	case unicode.IsLetter(r):
+	case isValidSignaturePrefix(r):
 		sig.append(r)
 		ret = sig
 
 	case r == SignatureSeparator: // aka, a colon
-		if !sig.isKeyPending() {
+		if !sig.IsKeyPending() {
 			e := errutil.New("words in signatures should be separated by a single colon")
 			ret = charm.Error(e)
 		} else {
@@ -67,7 +70,7 @@ func (sig *Signature) GetSignature() (ret string, err error) {
 	return
 }
 
-func (sig *Signature) isKeyPending() bool {
+func (sig *Signature) IsKeyPending() bool {
 	return len(sig.pending) > 0
 }
 

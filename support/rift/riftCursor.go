@@ -5,7 +5,7 @@ import (
 )
 
 type Cursor struct {
-	Row, Col int // y, x
+	Col, Row int // x,y
 }
 
 // update the cursor; errors on all control characters except Newline.

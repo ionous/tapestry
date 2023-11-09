@@ -1,7 +1,6 @@
 package rift
 
 import (
-	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
@@ -11,9 +10,8 @@ import (
 type Document struct {
 	History
 	Cursor
-	Value        any
-	Comments     strings.Builder
-	KeepComments bool
+	Value any
+	CommentBlock
 }
 
 func (doc *Document) ParseLines(str string, start charm.State) (err error) {
@@ -40,15 +38,11 @@ func (doc *Document) WriteValue(val any) (_ error) {
 	return
 }
 
-func (doc *Document) CommentWriter() RuneWriter {
-	return &doc.Comments
-}
-
 // turns any unhandled states returned by the watched state into errors
 func UnhandledError(watch charm.State) charm.State {
 	return charm.Self("unhandled error", func(self charm.State, r rune) (ret charm.State) {
 		if next := watch.NewRune(r); next == nil {
-			ret = charm.Error(errutil.New("unhanded error in", charm.StateName(watch)))
+			ret = charm.Error(errutil.Fmt("unexpected character %q(%d) during %s", r, r, charm.StateName(watch)))
 		} else {
 			ret, watch = self, next // keep checking until watch returns nil
 		}

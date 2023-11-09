@@ -17,9 +17,9 @@ func xTestSeq(t *testing.T) {
 		[]any{5.0},
 
 		// --------------
-		"fail without dash", `
+		"test fail without dash", `
 -false`,
-		errutil.New(""),
+		errutil.New("unexpected character 'f'"),
 
 		// --------------
 		"test value with newline", `
@@ -49,6 +49,11 @@ func xTestSeq(t *testing.T) {
 -
   - 5
 `, []any{[]any{5.0}},
+		// --------------
+		"test multiple sub values", `
+- -
+  - 5
+`, []any{[]any{nil, 5.0}},
 
 		// --------------
 		"test nil values", `
@@ -86,10 +91,12 @@ func testSeq(t *testing.T, nameInputExpect ...any) {
 			var doc rift.Document
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			seq := rift.NewSequence(&doc, "", doc.Col)
-			if e := doc.ParseLines(str, seq); e != nil {
+			if e := doc.ParseLines(str, rift.StartSequence(seq)); e != nil {
 				res = e
+			} else if val, e := seq.FinalizeValue(); e != nil {
+				res = e // calls finalize directly because the sequence was handled directly to parse,
 			} else {
-				res = doc.Value
+				res = val
 			}
 			if e := compare(res, expect); e != nil {
 				t.Fatal("ng:", name, e)

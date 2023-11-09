@@ -66,6 +66,7 @@ func (e EndpointError) End() int {
 }
 
 func (e EndpointError) Error() (ret string) {
-	return errutil.Sprintf("%q ended at %q %d of %q",
-		StateName(e.last), e.str[e.end:], e.end, e.str)
+	rest := e.str[e.end:]
+	return errutil.Sprintf("%q ended at %q, index %d, in %q",
+		StateName(e.last), rest, e.end, e.str)
 }

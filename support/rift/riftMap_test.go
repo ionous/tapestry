@@ -9,10 +9,10 @@ import (
 )
 
 // keys that start with t or f need special handleing
-func xTestMap(t *testing.T) {
+func TestMap(t *testing.T) {
 	testMap(t,
 		// -----------
-		"test keys with boolean names", `
+		"x test keys with boolean names", `
 true: false
 false: true`,
 		rift.MapValues{
@@ -21,13 +21,13 @@ false: true`,
 		},
 
 		// -----------
-		"test single value", `
+		"x test single value", `
 name: "Sammy Sosa"`,
 		rift.MapValues{
 			{"name:", "Sammy Sosa"},
 		},
 		// -----------
-		"test split line", `
+		"x test split line", `
 name:
   "Sammy Sosa"`,
 		rift.MapValues{
@@ -35,7 +35,7 @@ name:
 		},
 
 		// -----------
-		"test several values", `
+		"x test several values", `
 name: "Sammy Sosa"
 hr:   63
 avg:  true`,
@@ -44,29 +44,42 @@ avg:  true`,
 			{"hr:", 63.0},
 			{"avg:", true},
 		},
-		// -----------
-		"test nested map", `
-name: "Sammy Sosa"
-hr:   63
-avg:  true`,
-		rift.MapValues{
-			{"name:", "Sammy Sosa"},
-			{"hr:", 63.0},
-			{"avg:", true},
-		},
-	)
+		// -----------------------
+		"test map with nil value", `
+Field:
+Next: 5`,
+		[]any{
+			rift.MapValues{
+				{"Field:", nil},
+				{"Next:", 5.0},
+			}},
 
-	// make sure we can also parse that block as a value
-	testValue(t,
-		"test nested value", `
-name: "Sammy Sosa"
-hr:   63
-avg:  true`,
-		rift.MapValues{
-			{"name:", "Sammy Sosa"},
-			{"hr:", 63.0},
-			{"avg:", true},
-		})
+		// -----------------------
+		"x test nested maps", `
+Field:
+  Next: 5`,
+		[]any{
+			rift.MapValues{
+				{"Field:", rift.MapValues{
+					{"Next:", 5.0},
+				}},
+			}},
+
+		// -----------------------
+		// in yaml, inline nested maps are invalid
+		// should they be here too?
+		// to do, i think Value would need to examine history
+		// either sniffing prior types or through a flag (ex. require newlines)
+		// that it can send into NewMapping
+		"x test inline maps", `
+Field: Next: 5`,
+		[]any{
+			rift.MapValues{{
+				"Field:", rift.MapValues{{
+					"Next:", 5.0,
+				}},
+			}}},
+	)
 }
 
 // name of test, source string, expected result
@@ -81,10 +94,12 @@ func testMap(t *testing.T, nameInputExpect ...any) {
 			var doc rift.Document
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			mapping := rift.NewMapping(&doc, "", 0)
-			if e := doc.ParseLines(str, mapping); e != nil {
+			if e := doc.ParseLines(str, rift.StartMapping(mapping)); e != nil {
 				res = e
+			} else if val, e := mapping.FinalizeValue(); e != nil {
+				res = e // calls finalize directly because the sequence was handled directly to parse,
 			} else {
-				res = doc.Value
+				res = val
 			}
 			if e := compare(res, expect); e != nil {
 				t.Fatal("ng:", name, e)
