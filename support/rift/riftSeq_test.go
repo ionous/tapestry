@@ -9,61 +9,61 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func xTestSeq(t *testing.T) {
+func TestSeq(t *testing.T) {
 	testSeq(t,
 		// --------------
-		"test single value", `
+		"Test single value", `
 - 5`,
 		[]any{5.0},
 
 		// --------------
-		"test fail without dash", `
+		"Test fail without dash", `
 -false`,
 		errutil.New("unexpected character 'f'"),
 
 		// --------------
-		"test value with newline", `
+		"Test value with newline", `
 - 5
 `, []any{5.0},
 
 		// --------------
-		"test split line", `
+		"Test split line", `
 -
   5
 `, []any{5.0},
 
 		// --------------
-		"test several values", `
+		"Test several values", `
 - 5
 - 10
 - 12`,
 		[]any{5.0, 10.0, 12.0},
 
 		// --------------
-		"test nested sub sequence", `
+		"Test nested sub sequence", `
 - - 5`,
 		[]any{[]any{5.0}},
 
 		// --------------
-		"test new line sub sequence", `
+		"Test new line sub sequence", `
 -
   - 5
 `, []any{[]any{5.0}},
 		// --------------
-		"test multiple sub values", `
+		"Test multiple sub values", `
 - -
   - 5
 `, []any{[]any{nil, 5.0}},
 
 		// --------------
-		"test nil values", `
+		"Test nil values", `
 -
 -
 -`,
 		[]any{nil, nil, nil},
 
 		// --------------
-		"test nil value trailing newline", `
+		"Test nil value trailing newline", `
 -
 -
 -
@@ -71,7 +71,7 @@ func xTestSeq(t *testing.T) {
 		[]any{nil, nil, nil},
 
 		// --------------
-		"test continuing sub sequence ", `
+		"Test continuing sub sequence ", `
 -
   - 5
 - 6`,

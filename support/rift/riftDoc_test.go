@@ -6,10 +6,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/rift"
 )
 
-func xTestDoc(t *testing.T) {
+func TestDoc(t *testing.T) {
 	testValue(t,
 		// -----------------------
-		"x test multiple collections", `
+		"Test multiple collections", `
 cartParams:
   - name: "Leg type"
     options:
@@ -40,12 +40,12 @@ cartParams:
 			},
 		},
 		// --------------
-		"x test multiple sub values", `
+		"Test multiple sub values", `
 - -
   - 5
 `, []any{[]any{nil, 5.0}},
 		// -----------------------
-		"test map with nil value", `
+		"Test map with nil value", `
 - Field:
   Next: 5`,
 		[]any{
@@ -55,7 +55,7 @@ cartParams:
 			}},
 
 		// -----------------------
-		"x test nested maps", `
+		"Test nested maps", `
 - Field:
     Next: 5`,
 		[]any{
@@ -71,7 +71,7 @@ cartParams:
 		// to do, i think Value would need to examine history
 		// either sniffing prior types or through a flag (ex. require newlines)
 		// that it can send into NewMapping
-		"x test inline maps", `
+		"Test inline maps", `
 - Field: Next: 5`,
 		[]any{
 			rift.MapValues{{

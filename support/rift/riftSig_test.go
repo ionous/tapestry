@@ -8,7 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func xTestSig(t *testing.T) {
+func TestSig(t *testing.T) {
 	// returns point of failure
 	test := func(str string) (ret string, err error) {
 		var sig rift.Signature

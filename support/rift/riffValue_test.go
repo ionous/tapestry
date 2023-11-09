@@ -9,24 +9,24 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func xTestScalars(t *testing.T) {
+func TestScalars(t *testing.T) {
 	testValue(t,
-		"test number", `5.4`, 5.4,
-		"test string", `"5.4"`, "5.4",
-		"test bool", `true`, true,
+		"Test number", `5.4`, 5.4,
+		"Test string", `"5.4"`, "5.4",
+		"Test bool", `true`, true,
 
 		// ----------
-		"test interpreted",
+		"Test interpreted",
 		`"hello\\world"`,
 		`hello\world`,
 
 		// ----------
-		"test raw",
+		"Test raw",
 		"`"+`hello\\world`+"`",
 		`hello\\world`,
 
 		// -----
-		"test unquoted value",
+		"Test unquoted value",
 		"beep",
 		errutil.New("signature must end with a colon"),
 	)

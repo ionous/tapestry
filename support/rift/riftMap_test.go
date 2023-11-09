@@ -12,7 +12,7 @@ import (
 func TestMap(t *testing.T) {
 	testMap(t,
 		// -----------
-		"x test keys with boolean names", `
+		"Test keys with boolean names", `
 true: false
 false: true`,
 		rift.MapValues{
@@ -21,13 +21,13 @@ false: true`,
 		},
 
 		// -----------
-		"x test single value", `
+		"Test single value", `
 name: "Sammy Sosa"`,
 		rift.MapValues{
 			{"name:", "Sammy Sosa"},
 		},
 		// -----------
-		"x test split line", `
+		"Test split line", `
 name:
   "Sammy Sosa"`,
 		rift.MapValues{
@@ -35,7 +35,7 @@ name:
 		},
 
 		// -----------
-		"x test several values", `
+		"Test several values", `
 name: "Sammy Sosa"
 hr:   63
 avg:  true`,
@@ -45,25 +45,23 @@ avg:  true`,
 			{"avg:", true},
 		},
 		// -----------------------
-		"test map with nil value", `
+		"Test map with nil value", `
 Field:
 Next: 5`,
-		[]any{
-			rift.MapValues{
-				{"Field:", nil},
-				{"Next:", 5.0},
-			}},
+		rift.MapValues{
+			{"Field:", nil},
+			{"Next:", 5.0},
+		},
 
 		// -----------------------
-		"x test nested maps", `
+		"Test nested maps", `
 Field:
   Next: 5`,
-		[]any{
-			rift.MapValues{
-				{"Field:", rift.MapValues{
-					{"Next:", 5.0},
-				}},
+		rift.MapValues{
+			{"Field:", rift.MapValues{
+				{"Next:", 5.0},
 			}},
+		},
 
 		// -----------------------
 		// in yaml, inline nested maps are invalid
@@ -71,14 +69,13 @@ Field:
 		// to do, i think Value would need to examine history
 		// either sniffing prior types or through a flag (ex. require newlines)
 		// that it can send into NewMapping
-		"x test inline maps", `
+		"Test inline maps", `
 Field: Next: 5`,
-		[]any{
-			rift.MapValues{{
-				"Field:", rift.MapValues{{
-					"Next:", 5.0,
-				}},
-			}}},
+		rift.MapValues{{
+			"Field:", rift.MapValues{{
+				"Next:", 5.0,
+			}},
+		}},
 	)
 }
 
