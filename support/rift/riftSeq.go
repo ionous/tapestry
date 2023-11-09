@@ -3,6 +3,8 @@ package rift
 import (
 	"strings"
 	"unicode"
+
+	"git.sr.ht/~ionous/tapestry/support/charm"
 )
 
 // a sequence of array values are specified with:
@@ -41,6 +43,28 @@ func (c *Sequence) Document() *Document {
 func (c *Sequence) WriteValue(val any) (_ error) {
 	c.values = append(c.values, val)
 	return
+}
+
+// a state that can parse one dash - content pair
+// maybe push the returned thingy
+func (c *Sequence) NewEntry() charm.State {
+	ent := riftEntry{Collection: c, depth: c.depth + 2, pendingValue: computedValue{}}
+	next := charm.Statement("sequence", func(r rune) (ret charm.State) {
+		switch r {
+		case Hash:
+			// fix fix: header comments-- probably should live in collection entries, since its common to all
+			panic("not implemented")
+
+		case Dash:
+			// every sequence dash lives in the comment block as a vertical tab
+			c.comments.WriteRune(VTab)
+			// unlike map, we dont need to hand off the dash itself;
+			// only the runes after.
+			ret = ContentsLoop(&ent)
+		}
+		return
+	})
+	return c.Document().PushCallback(ent.depth, next, ent.finalizeEntry)
 }
 
 // used by parent collections to read the completed collection

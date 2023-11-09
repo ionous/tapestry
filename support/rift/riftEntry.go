@@ -7,27 +7,19 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// after a collection marker,
-// read the comment and value ( if either )
-//
-// [-] <inline spaces> ( <inline comment> | <value> )
-//
-//	<buffered comment>
-//	   <indented additional lines>
-//	<header comment>
-//	<value>
 func CollectionEntry(c Collection, depth int) charm.State {
 	doc := c.Document() // the entry starts with a nil value.
-	ent := riftEntry{Collection: c, indent: depth, pendingValue: computedValue{}}
-	return doc.PushCallback(depth, &ent, ent.finalizeEntry)
+	ent := riftEntry{Collection: c, depth: depth, pendingValue: computedValue{}}
+	return doc.PushCallback(depth, Contents(&ent), ent.finalizeEntry)
 }
 
+// represents the "contents" of an entry
 type riftEntry struct {
 	Collection
 	pendingValue   pendingValue
 	buffer, header strings.Builder
 	bufferedLines  int
-	indent         int
+	depth          int
 }
 
 func (ent *riftEntry) finalizeEntry() (err error) {
@@ -55,22 +47,40 @@ func (ent *riftEntry) writeHeader() (ret string, err error) {
 	return
 }
 
-// start reading the collection entry
-// ( the padding to the right of a collection marker )
-func (ent *riftEntry) NewRune(r rune) charm.State {
-	return charm.Self("padding", func(padding charm.State, r rune) (ret charm.State) {
+// parses contents and loops (by popping) after its done
+func ContentsLoop(ent *riftEntry) charm.State {
+	return charm.Step(Contents(ent),
+		charm.Self("after entry", func(afterEntry charm.State, r rune) (ret charm.State) {
+			switch r {
+			case Newline:
+				doc := ent.Document()
+				ret = NextIndent(doc.Pop)
+			}
+			return
+		}))
+}
+
+// the contents exist after a collection marker:
+//
+// [-] <inline spaces> ( <inline comment> | <value> )
+//	<buffered comment>
+//	   <indented additional lines>
+//	<header comment>
+//	<value>
+func Contents(ent *riftEntry) charm.State {
+	return charm.Self("contents", func(contents charm.State, r rune) (ret charm.State) {
 		switch r {
 		case Space:
-			ret = padding
+			ret = contents
 
 		case Hash:
 			// these use >= so that content can appear at column zero in documents
-			if doc := ent.Document(); doc.Col >= ent.indent {
-				ret = ReadComment(ent.Comments(), padding)
+			if doc := ent.Document(); doc.Col >= ent.depth {
+				ret = ReadComment(ent.Comments(), contents)
 			}
 		case Newline:
 			ret = NextIndent(func() (ret charm.State) {
-				if doc := ent.Document(); doc.Col >= ent.indent {
+				if doc := ent.Document(); doc.Col >= ent.depth {
 					ret = BufferRegion(ent, doc.Col)
 				} else {
 					ret = doc.Pop()
@@ -78,12 +88,12 @@ func (ent *riftEntry) NewRune(r rune) charm.State {
 				return
 			})
 		default:
-			if doc := ent.Document(); doc.Col >= ent.indent {
+			if doc := ent.Document(); doc.Col >= ent.depth {
 				ret = ValueOfEntry(ent, r)
 			}
 		}
 		return
-	}).NewRune(r)
+	})
 }
 
 // we are at the start of a line where comment buffering might occur.
