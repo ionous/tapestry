@@ -5,18 +5,18 @@ package orderedmap
 
 import "git.sr.ht/~ionous/tapestry/support/rift/maps"
 
-type sliceBuilder struct {
-	values OrderedMap
-}
-
 // return a builder which generates a ItemMap
-func MakeBuilder(reserve int) maps.Builder {
+func Build(reserve int) maps.Builder {
 	// orderedmap exposes New() but we shouldnt need the double dereference
 	// alt: the compiler might be smart enough to handle *New() as a non allocating copy
 	return sliceBuilder{values: OrderedMap{
 		values:     make(map[string]any),
 		escapeHTML: true,
 	}}
+}
+
+type sliceBuilder struct {
+	values OrderedMap
 }
 
 func (b sliceBuilder) Add(key string, val any) maps.Builder {

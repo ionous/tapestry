@@ -29,7 +29,7 @@ func NewMapping(parent Collection, header string, depth int) *Mapping {
 			c.comments.WriteString(header)
 		}
 	}
-	c.values = doc.MakeMake(reserve)
+	c.values = doc.MakeMap(reserve)
 	return c
 }
 

@@ -13,7 +13,7 @@ type Document struct {
 	Cursor
 	Value any
 	CommentBlock
-	MakeMake maps.BuilderFactory
+	MakeMap maps.BuilderFactory
 }
 
 func (doc *Document) ParseLines(str string, start charm.State) (err error) {

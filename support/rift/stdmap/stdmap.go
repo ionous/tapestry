@@ -4,7 +4,7 @@ import "git.sr.ht/~ionous/tapestry/support/rift/maps"
 
 type StdMap map[string]any
 
-func MakeMake(reserve int) maps.Builder {
+func Build(reserve int) maps.Builder {
 	return make(StdMap)
 }
 

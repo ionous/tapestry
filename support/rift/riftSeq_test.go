@@ -89,7 +89,7 @@ func testSeq(t *testing.T, nameInputExpect ...any) {
 			t.Log("skipping", name)
 		} else {
 			var res any
-			doc := rift.Document{MakeMake: imap.MakeBuilder}
+			doc := rift.Document{MakeMap: imap.Build}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			seq := rift.NewSequence(&doc, "", doc.Col)
 			if e := doc.ParseLines(str, rift.StartSequence(seq)); e != nil {

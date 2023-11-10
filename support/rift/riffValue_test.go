@@ -43,7 +43,7 @@ func testValue(t *testing.T, nameInputExpect ...any) {
 			t.Log("skipping", name)
 		} else {
 			var res any
-			doc := rift.Document{MakeMake: imap.MakeBuilder}
+			doc := rift.Document{MakeMap: imap.Build}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			if e := doc.ParseLines(str, rift.CollectionEntry(&doc, 0)); e != nil {
 				res = e
