@@ -1,0 +1,10 @@
+cartParams:
+  - name: "Leg type"
+    options:
+      - "Round"
+      - "Square"
+  - name: "Leg width"
+    options: 
+      - "1.00 inches"
+      - "2.00 inches"
+      
