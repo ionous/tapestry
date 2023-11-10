@@ -1,15 +1,21 @@
 {
+  "": "",
   "catalog:": [
+    null,
     {
+      "": "",
       "name:": "First item",
       "options:": [
+        null,
         "Round",
         "Square"
       ]
     },
     {
+      "": "",
       "name:": "Second item",
       "options:": [
+        null,
         "Big",
         "Small"
       ]
