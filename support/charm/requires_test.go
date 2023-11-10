@@ -23,9 +23,7 @@ func TestRequires(t *testing.T) {
 		return
 	}
 	if e := count(0, "a", AtleastOne(isSpace)); e != nil {
-		t.Log("ok: e")
-	} else {
-		t.Fatal("expected failure")
+		t.Fatal(e)
 	}
 	if e := count(0, "a", Optional(isSpace)); e != nil {
 		t.Fatal(e)

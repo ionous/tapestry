@@ -7,12 +7,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func CollectionEntry(c Collection, depth int) charm.State {
-	doc := c.Document() // the entry starts with a nil value.
-	ent := riftEntry{Collection: c, depth: depth, pendingValue: computedValue{}}
-	return doc.PushCallback(depth, Contents(&ent), ent.finalizeEntry)
-}
-
 // represents the "contents" of an entry
 type riftEntry struct {
 	Collection

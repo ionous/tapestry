@@ -92,7 +92,7 @@ func testMap(t *testing.T, nameInputExpect ...any) {
 			doc := rift.Document{MakeMap: imap.Build}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			mapping := rift.NewMapping(&doc, "", 0)
-			if e := doc.ParseLines(str, rift.StartMapping(mapping)); e != nil {
+			if e := doc.ReadLines(strings.NewReader(str), rift.StartMapping(mapping)); e != nil {
 				res = e
 			} else if val, e := mapping.FinalizeValue(); e != nil {
 				res = e // calls finalize directly because the sequence was handled directly to parse,

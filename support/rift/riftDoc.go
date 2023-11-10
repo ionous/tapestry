@@ -1,6 +1,7 @@
 package rift
 
 import (
+	"io"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
@@ -16,9 +17,9 @@ type Document struct {
 	MakeMap maps.BuilderFactory
 }
 
-func (doc *Document) ParseLines(str string, start charm.State) (err error) {
+func (doc *Document) ReadLines(src io.RuneReader, start charm.State) (err error) {
 	run := charm.Parallel("parse lines", FilterControlCodes(), UnhandledError(start), &doc.Cursor)
-	if e := charm.Parse(str, run); e != nil {
+	if e := charm.Read(src, run); e != nil {
 		err = e
 	} else if e := doc.PopAll(); e != nil {
 		err = e
@@ -38,6 +39,11 @@ func (doc *Document) Document() *Document {
 func (doc *Document) WriteValue(val any) (_ error) {
 	doc.Value = val
 	return
+}
+
+func (doc *Document) NewEntry() charm.State {
+	ent := riftEntry{Collection: doc, depth: 0, pendingValue: computedValue{}}
+	return doc.PushCallback(0, Contents(&ent), ent.finalizeEntry)
 }
 
 // turns any unhandled states returned by the watched state into errors

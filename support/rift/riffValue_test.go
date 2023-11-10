@@ -45,7 +45,7 @@ func testValue(t *testing.T, nameInputExpect ...any) {
 			var res any
 			doc := rift.Document{MakeMap: imap.Build}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
-			if e := doc.ParseLines(str, rift.CollectionEntry(&doc, 0)); e != nil {
+			if e := doc.ReadLines(strings.NewReader(str), doc.NewEntry()); e != nil {
 				res = e
 			} else {
 				res = doc.Value
