@@ -21,10 +21,10 @@ func (ent *riftEntry) finalizeEntry() (err error) {
 	if val, e := ent.pendingValue.FinalizeValue(); e != nil {
 		err = e
 	} else {
-		c.Comments().WriteString(ent.buffer.String())
-		c.Comments().WriteString(ent.header.String())
+		c.CommentWriter().WriteString(ent.buffer.String())
+		c.CommentWriter().WriteString(ent.header.String())
 		// fix: modify the signature to write the comment at the same time?
-		err = c.WriteValue(val)
+		err = c.writeValue(val)
 	}
 	return
 }
@@ -48,7 +48,7 @@ func ContentsLoop(ent *riftEntry) charm.State {
 			switch r {
 			case Newline:
 				doc := ent.Document()
-				ret = NextIndent(doc.Pop)
+				ret = NextIndent(doc.popToIndent)
 			}
 			return
 		}))
@@ -70,14 +70,14 @@ func Contents(ent *riftEntry) charm.State {
 		case Hash:
 			// these use >= so that content can appear at column zero in documents
 			if doc := ent.Document(); doc.Col >= ent.depth {
-				ret = ReadComment(ent.Comments(), contents)
+				ret = ReadComment(ent.CommentWriter(), contents)
 			}
 		case Newline:
 			ret = NextIndent(func() (ret charm.State) {
 				if doc := ent.Document(); doc.Col >= ent.depth {
 					ret = BufferRegion(ent, doc.Col)
 				} else {
-					ret = doc.Pop()
+					ret = doc.popToIndent()
 				}
 				return
 			})
@@ -116,7 +116,7 @@ func BufferRegion(ent *riftEntry, depth int) charm.State {
 						// the ideal multiline comment a single comment followed by indented lines
 						ret = IndentedComment(ent, doc.Col)
 					default:
-						ret = doc.Pop()
+						ret = doc.popToIndent()
 					}
 					return
 				}))
@@ -159,7 +159,7 @@ func HeaderRegion(ent *riftEntry, depth int) (ret charm.State) {
 				if doc := ent.Document(); doc.Col == depth {
 					ret = headerComment
 				} else {
-					ret = doc.Pop()
+					ret = doc.popToIndent()
 				}
 				return
 			}))

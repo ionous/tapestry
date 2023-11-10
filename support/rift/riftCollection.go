@@ -2,10 +2,14 @@ package rift
 
 import "git.sr.ht/~ionous/tapestry/support/charm"
 
+// abstraction for reading sets of values
+// implemented by documents, mappings, and sequences.
 type Collection interface {
+	// access to the owner of the collection
 	Document() *Document
-	WriteValue(any) error
-	Comments() CommentWriter
+	// access to writing comments into the collection
+	CommentWriter() CommentWriter
+	writeValue(any) error
 }
 
 func StartSequence(c *Sequence) charm.State {

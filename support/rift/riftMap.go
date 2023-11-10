@@ -20,16 +20,13 @@ type Mapping struct {
 // maybe doc is a factory even?
 func NewMapping(parent Collection, header string, depth int) *Mapping {
 	doc := parent.Document()
-	c := &Mapping{doc: doc, depth: depth}
-	var reserve int
-	if doc.keepComments {
-		reserve = 1
-		c.keepComments = true
+	c := &Mapping{doc: doc, depth: depth, values: doc.MakeMap(doc.keepCommentWriter)}
+	if doc.keepCommentWriter {
+		c.keepCommentWriter = true
 		if len(header) > 0 {
 			c.comments.WriteString(header)
 		}
 	}
-	c.values = doc.MakeMap(reserve)
 	return c
 }
 
@@ -39,7 +36,7 @@ func (c *Mapping) Document() *Document {
 
 // accept a new value ( errors if the key hasn't yet been determined )
 // fix: return error if the key already exists
-func (c *Mapping) WriteValue(val any) (err error) {
+func (c *Mapping) writeValue(val any) (err error) {
 	if key, e := c.key.GetSignature(); e != nil {
 		err = e
 	} else {
@@ -77,7 +74,7 @@ func (c *Mapping) FinalizeValue() (ret any, err error) {
 		err = errutil.New("signature must end with a colon")
 	} else {
 		// write the comment block
-		if c.keepComments {
+		if c.keepCommentWriter {
 			comment := strings.TrimRightFunc(c.comments.String(), unicode.IsSpace)
 			c.values = c.values.Add("", comment)
 		}

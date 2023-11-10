@@ -5,7 +5,9 @@ import (
 	"embed"
 	"encoding/json"
 	"io"
+	"log"
 	"path"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/support/rift"
@@ -22,7 +24,6 @@ var jsonData embed.FS
 const testFolder = "testdata"
 
 func TestFiles(t *testing.T) {
-
 	if files, e := riftData.ReadDir(testFolder); e != nil {
 		t.Fatal(e)
 	} else {
@@ -37,6 +38,7 @@ func TestFiles(t *testing.T) {
 			} else {
 				// reflect.DeepEqual
 				if diff := pretty.Diff(got, want); len(diff) > 0 {
+					log.Println(pretty.Sprint(got))
 					t.Fatal(riftName, diff)
 				} else {
 					t.Log("ok: ", riftName)
@@ -50,9 +52,12 @@ func readRift(filePath string) (ret any, err error) {
 	if fp, e := riftData.Open(filePath); e != nil {
 		err = e
 	} else {
-		src := bufio.NewReader(fp)
-		doc := rift.Document{MakeMap: stdmap.Build}
-		if e := doc.ReadLines(src, doc.NewEntry()); e != nil {
+		comments := rift.DiscardCommentWriter
+		if strings.Contains(strings.ToLower(filePath), "comments") {
+			comments = rift.KeepCommentWriter
+		}
+		doc := rift.NewDocument(stdmap.Build, comments)
+		if e := doc.ReadDoc(bufio.NewReader(fp)); e != nil {
 			err = e
 		} else {
 			ret = doc.Value

@@ -24,7 +24,7 @@ type Sequence struct {
 func NewSequence(parent Collection, header string, depth int) *Sequence {
 	doc := parent.Document()
 	c := &Sequence{doc: doc, depth: depth}
-	if doc.keepComments {
+	if doc.keepCommentWriter {
 		c.values = make([]any, 1)
 		if len(header) > 0 {
 			c.comments.WriteString(header)
@@ -40,7 +40,7 @@ func (c *Sequence) Document() *Document {
 	return c.doc
 }
 
-func (c *Sequence) WriteValue(val any) (_ error) {
+func (c *Sequence) writeValue(val any) (_ error) {
 	c.values = append(c.values, val)
 	return
 }
@@ -69,7 +69,7 @@ func (c *Sequence) NewEntry() charm.State {
 
 // used by parent collections to read the completed collection
 func (c *Sequence) FinalizeValue() (ret any, err error) {
-	if c.keepComments {
+	if c.keepCommentWriter {
 		comment := strings.TrimRightFunc(c.comments.String(), unicode.IsSpace)
 		c.values[0] = comment
 	}

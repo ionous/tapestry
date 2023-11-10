@@ -89,7 +89,7 @@ func testMap(t *testing.T, nameInputExpect ...any) {
 			t.Log("skipping", name)
 		} else {
 			var res any
-			doc := rift.Document{MakeMap: imap.Build}
+			doc := rift.Document{MakeMap: imap.Build, CommentBlock: rift.DiscardCommentWriter()}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
 			mapping := rift.NewMapping(&doc, "", 0)
 			if e := doc.ReadLines(strings.NewReader(str), rift.StartMapping(mapping)); e != nil {

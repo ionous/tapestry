@@ -6,16 +6,21 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/charm"
 )
 
+// the bits needed from go's missing string builder / generic writer interface
 type CommentWriter interface {
 	WriteRune(r rune) (int, error)
 	WriteString(s string) (int, error)
 }
-type NullComments struct{}
 
-var nullComments NullComments
+func KeepCommentWriter() CommentBlock {
+	return CommentBlock{keepCommentWriter: true}
+}
 
-func (NullComments) WriteRune(r rune) (_ int, _ error)     { return }
-func (NullComments) WriteString(s string) (_ int, _ error) { return }
+func DiscardCommentWriter() CommentBlock {
+	return CommentBlock{keepCommentWriter: false}
+}
+
+type CommentFactory func() CommentBlock
 
 // read everything until the end of the line as a comment.
 func ReadComment(out CommentWriter, eol charm.State) charm.State {
@@ -30,16 +35,26 @@ func ReadComment(out CommentWriter, eol charm.State) charm.State {
 	})
 }
 
+// dont copy a comments block with content
+// ( re: strings.Builder zero value )
 type CommentBlock struct {
-	keepComments bool
-	comments     strings.Builder
+	keepCommentWriter bool
+	comments          strings.Builder
 }
 
-func (b *CommentBlock) Comments() (ret CommentWriter) {
-	if b.keepComments {
+// implements Collection for aggregation
+func (b *CommentBlock) CommentWriter() (ret CommentWriter) {
+	if b.keepCommentWriter {
 		ret = &b.comments
 	} else {
-		ret = nullComments
+		ret = nullCommentWriter
 	}
 	return
 }
+
+type NullCommentWriter struct{}
+
+var nullCommentWriter NullCommentWriter
+
+func (NullCommentWriter) WriteRune(r rune) (_ int, _ error)     { return }
+func (NullCommentWriter) WriteString(s string) (_ int, _ error) { return }
