@@ -41,8 +41,7 @@ func NewValue(ent *riftEntry) charm.State {
 					ret = val.newNum()
 				} else {
 					// a space indicates a sequence `- 5`
-					doc := val.entry.Document()
-					ret = val.newSequence(doc.Col - 1)
+					ret = val.newSequence(ent.doc.Col - 1)
 				}
 				// send the dash and the new character along to the num or seq
 				return ret.NewRune(dashOrMinus).NewRune(r)
@@ -84,7 +83,7 @@ func (val *riftValue) newSequence(depth int) (ret charm.State) {
 	if header, e := val.entry.writeHeader(); e != nil {
 		ret = charm.Error(e)
 	} else {
-		sub := NewSequence(val.entry, header, depth)
+		sub := NewSequence(val.entry.doc, header, depth)
 		val.setPendingValue(sub)
 		ret = StartSequence(sub)
 	}
@@ -95,8 +94,8 @@ func (val *riftValue) newMapping() (ret charm.State) {
 	if header, e := val.entry.writeHeader(); e != nil {
 		ret = charm.Error(e)
 	} else {
-		doc := val.entry.Document()
-		sub := NewMapping(val.entry, header, doc.Col)
+		doc := val.entry.doc
+		sub := NewMapping(doc, header, doc.Col)
 		val.setPendingValue(sub)
 		ret = StartMapping(sub)
 	}

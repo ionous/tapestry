@@ -2,14 +2,11 @@ package rift
 
 import (
 	"strings"
-
-	"git.sr.ht/~ionous/tapestry/support/charm"
 )
 
 // the bits needed from go's missing string builder / generic writer interface
 type CommentWriter interface {
 	WriteRune(r rune) (int, error)
-	WriteString(s string) (int, error)
 }
 
 func KeepCommentWriter() CommentBlock {
@@ -20,23 +17,11 @@ func DiscardCommentWriter() CommentBlock {
 	return CommentBlock{keepComments: false}
 }
 
+// signature for functions which create comment blocks
 type CommentFactory func() CommentBlock
 
-// read everything until the end of the line as a comment.
-func ReadComment(out CommentWriter, eol charm.State) charm.State {
-	out.WriteRune(Hash)
-	return charm.Self("read comment", func(self charm.State, r rune) (ret charm.State) {
-		if r == Newline {
-			ret = eol
-		} else {
-			out.WriteRune(r)
-			ret = self
-		}
-		return
-	})
-}
-
-// dont copy a comments block with content
+// holds comments for a collection.
+// fyi: don't copy a comments block with content
 // ( re: strings.Builder zero value )
 type CommentBlock struct {
 	keepComments bool
@@ -53,9 +38,29 @@ func (b *CommentBlock) CommentWriter() (ret CommentWriter) {
 	return
 }
 
+// a "null device" for CommentWriter. it eats all writes.
 type NullCommentWriter struct{}
 
 var nullCommentWriter NullCommentWriter
 
-func (NullCommentWriter) WriteRune(r rune) (_ int, _ error)     { return }
-func (NullCommentWriter) WriteString(s string) (_ int, _ error) { return }
+func (NullCommentWriter) WriteRune(r rune) (_ int, _ error) { return }
+
+// a strings builder which trims write spaces
+type CommentBuffer struct {
+	buf    strings.Builder
+	spaces int
+}
+
+func (w *CommentBuffer) WriteRune(r rune) (_ int, _ error) {
+	if r == Space {
+		w.spaces++
+	} else {
+		w.spaces = 0
+	}
+	return w.buf.WriteRune(r)
+}
+
+func (w *CommentBuffer) String() string {
+	str := w.buf.String()
+	return str[:len(str)-w.spaces]
+}

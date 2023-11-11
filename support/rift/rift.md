@@ -132,12 +132,6 @@ Here are some examples:
            # that trailing comments like this are possible.
              # but, really. 
              # would you want to?
-
-- "fwiw" 
-		# the rules imply 
-           # that trailing comments like this are possible.
-             # but, really. 
-             # would you want to?
              
 - # padding comments live between a dash ( or signature ) and its contents.
   # they describe the entry just like a header comment would.
@@ -169,7 +163,7 @@ Here are some examples:
 
 This implementation stores the comments for each collection separately in its own "comment block". A comment block is a single string of continuous text generated in the following manner:
 
-Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the dash ( or signature ) of a collection is recorded as a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with carriage return (`\r`). Newlines (`\n`) separate comments whenever a tab does not.  _( **TBD**: preserve empty lines using `\n` )_ The resulting block can then be trimmed of trailing newlines, tabs, and returns.
+Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the dash ( or signature ) of a collection is recorded as a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with carriage return (`\r`). Newlines (`\n`) indicate comment placement whenever tab or carriage cannot. ( ex. the _absence_ of an inline trailing comment when there's trailing comment on the following line should be marked with a newline. )   _( **TBD**: preserve empty lines using `\n` )_ The resulting block can then be trimmed of trailing newlines, tabs, and returns.
 
 _( i really wanted to use vertical tab, but \v -- while valid in javascript -- it is technically illegal json. And, tapestry uses json as its primary format. )_
 

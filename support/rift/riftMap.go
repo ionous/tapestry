@@ -18,8 +18,7 @@ type Mapping struct {
 }
 
 // maybe doc is a factory even?
-func NewMapping(parent Collection, header string, depth int) *Mapping {
-	doc := parent.Document()
+func NewMapping(doc *Document, header string, depth int) *Mapping {
 	c := &Mapping{doc: doc, depth: depth, values: doc.MakeMap(doc.keepComments)}
 	if doc.keepComments {
 		c.keepComments = true
@@ -30,26 +29,24 @@ func NewMapping(parent Collection, header string, depth int) *Mapping {
 	return c
 }
 
-func (c *Mapping) Document() *Document {
-	return c.doc
-}
-
-// accept a new value ( errors if the key hasn't yet been determined )
-// fix: return error if the key already exists
-func (c *Mapping) writeValue(val any) (err error) {
-	if key, e := c.key.GetSignature(); e != nil {
-		err = e
-	} else {
-		c.values = c.values.Add(key, val)
-	}
-	return
-}
-
 // a state that can parse one key:value pair
 // maybe push the returned thingy
 // return doc.PushCallback(depth, STATE, ent.finalizeEntry)
 func (c *Mapping) NewEntry() charm.State {
-	ent := riftEntry{Collection: c, depth: c.depth + 2, pendingValue: computedValue{}}
+	ent := riftEntry{
+		doc:          c.doc,
+		depth:        c.depth + 2,
+		pendingValue: computedValue{},
+		addsValue: func(val any, comment string) (err error) {
+			if key, e := c.key.GetSignature(); e != nil {
+				err = e
+			} else {
+				c.values = c.values.Add(key, val)
+				c.comments.WriteString(comment)
+			}
+			return
+		},
+	}
 	next := charm.Statement("map entry", func(r rune) (ret charm.State) {
 		switch r {
 		case Hash:
@@ -65,7 +62,7 @@ func (c *Mapping) NewEntry() charm.State {
 			return
 		}
 	})
-	return c.Document().PushCallback(ent.depth, next, ent.finalizeEntry)
+	return c.doc.PushCallback(ent.depth, next, ent.finalizeEntry)
 }
 
 // used by parent collections to read the completed collection

@@ -25,7 +25,7 @@ const testFolder = "testdata"
 
 func TestFiles(t *testing.T) {
 	var focus string
-	// focus = "scalarEntryComment"
+	// focus = "scalarEntryComment2"
 	if files, e := riftData.ReadDir(testFolder); e != nil {
 		t.Fatal(e)
 	} else {
@@ -40,14 +40,13 @@ func TestFiles(t *testing.T) {
 			if got, e := readRift(riftName); e != nil {
 				t.Fatal(e)
 			} else if want, e := readJson(jsonName); e != nil {
-				b, _ := json.MarshalIndent(got, "", "  ")
-				t.Log(string(b))
 				t.Fatal(e)
 			} else {
 				// reflect.DeepEqual
 				if diff := pretty.Diff(got, want); len(diff) > 0 {
-					log.Println(pretty.Sprint(got))
-					t.Fatal(riftName, diff)
+					log.Println("ng: ", riftName)
+					log.Println("got: ", pretty.Sprint(got))
+					t.Fatal(diff)
 				} else {
 					t.Log("ok: ", riftName)
 				}

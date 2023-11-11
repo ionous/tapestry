@@ -21,8 +21,7 @@ type Sequence struct {
 // determining whether the dash is a minus sign, so the doc position isnt the real position
 // alt: create the sequence ahead of time, but would have to handle the push state timing
 // ( ex. maybe on first rune? ) and would still have to remember the initial position.
-func NewSequence(parent Collection, header string, depth int) *Sequence {
-	doc := parent.Document()
+func NewSequence(doc *Document, header string, depth int) *Sequence {
 	c := &Sequence{doc: doc, depth: depth}
 	if doc.keepComments {
 		c.keepComments = true
@@ -37,19 +36,19 @@ func NewSequence(parent Collection, header string, depth int) *Sequence {
 	return c
 }
 
-func (c *Sequence) Document() *Document {
-	return c.doc
-}
-
-func (c *Sequence) writeValue(val any) (_ error) {
-	c.values = append(c.values, val)
-	return
-}
-
 // a state that can parse one dash - content pair
 // maybe push the returned thingy
 func (c *Sequence) NewEntry() charm.State {
-	ent := riftEntry{Collection: c, depth: c.depth + 2, pendingValue: computedValue{}}
+	ent := riftEntry{
+		doc:          c.doc,
+		depth:        c.depth + 2,
+		pendingValue: computedValue{},
+		addsValue: func(val any, comment string) (_ error) {
+			c.values = append(c.values, val)
+			c.comments.WriteString(comment)
+			return
+		},
+	}
 	next := charm.Statement("sequence", func(r rune) (ret charm.State) {
 		switch r {
 		case Hash:
@@ -65,7 +64,7 @@ func (c *Sequence) NewEntry() charm.State {
 		}
 		return
 	})
-	return c.Document().PushCallback(ent.depth, next, ent.finalizeEntry)
+	return c.doc.PushCallback(ent.depth, next, ent.finalizeEntry)
 }
 
 // used by parent collections to read the completed collection

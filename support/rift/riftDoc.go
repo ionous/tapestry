@@ -19,11 +19,6 @@ func NewDocument(mapMaker maps.BuilderFactory, cmtMaker CommentFactory) *Documen
 	return &Document{MakeMap: mapMaker, CommentBlock: cmtMaker()}
 }
 
-// implements Collection interface; document returns itself
-func (doc *Document) Document() *Document {
-	return doc
-}
-
 // cant be called multiple times (fix?)
 func (doc *Document) ReadDoc(src io.RuneReader) error {
 	return doc.ReadLines(src, doc.NewEntry())
@@ -43,17 +38,20 @@ func (doc *Document) ReadLines(src io.RuneReader, start charm.State) (err error)
 
 // create an initial reader state
 func (doc *Document) NewEntry() charm.State {
-	ent := riftEntry{Collection: doc, depth: 0, pendingValue: computedValue{}}
+	ent := riftEntry{
+		doc:          doc,
+		depth:        0,
+		pendingValue: computedValue{},
+		addsValue: func(val any, comment string) (_ error) {
+			doc.Value = val // tbd: error if already written?
+			doc.comments.WriteString(comment)
+			return
+		},
+	}
 	return doc.PushCallback(0, Contents(&ent), ent.finalizeEntry)
 }
 
 // pop parser states up to the current indentation level
 func (doc *Document) popToIndent() charm.State {
 	return doc.History.Pop(doc.Cursor.Col)
-}
-
-// fix: return error if already written
-func (doc *Document) writeValue(val any) (_ error) {
-	doc.Value = val
-	return
 }
