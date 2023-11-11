@@ -13,17 +13,18 @@ type CommentWriter interface {
 }
 
 func KeepCommentWriter() CommentBlock {
-	return CommentBlock{keepCommentWriter: true}
+	return CommentBlock{keepComments: true}
 }
 
 func DiscardCommentWriter() CommentBlock {
-	return CommentBlock{keepCommentWriter: false}
+	return CommentBlock{keepComments: false}
 }
 
 type CommentFactory func() CommentBlock
 
 // read everything until the end of the line as a comment.
 func ReadComment(out CommentWriter, eol charm.State) charm.State {
+	out.WriteRune(Hash)
 	return charm.Self("read comment", func(self charm.State, r rune) (ret charm.State) {
 		if r == Newline {
 			ret = eol
@@ -38,13 +39,13 @@ func ReadComment(out CommentWriter, eol charm.State) charm.State {
 // dont copy a comments block with content
 // ( re: strings.Builder zero value )
 type CommentBlock struct {
-	keepCommentWriter bool
-	comments          strings.Builder
+	keepComments bool
+	comments     strings.Builder
 }
 
 // implements Collection for aggregation
 func (b *CommentBlock) CommentWriter() (ret CommentWriter) {
-	if b.keepCommentWriter {
+	if b.keepComments {
 		ret = &b.comments
 	} else {
 		ret = nullCommentWriter

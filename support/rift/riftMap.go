@@ -20,9 +20,9 @@ type Mapping struct {
 // maybe doc is a factory even?
 func NewMapping(parent Collection, header string, depth int) *Mapping {
 	doc := parent.Document()
-	c := &Mapping{doc: doc, depth: depth, values: doc.MakeMap(doc.keepCommentWriter)}
-	if doc.keepCommentWriter {
-		c.keepCommentWriter = true
+	c := &Mapping{doc: doc, depth: depth, values: doc.MakeMap(doc.keepComments)}
+	if doc.keepComments {
+		c.keepComments = true
 		if len(header) > 0 {
 			c.comments.WriteString(header)
 		}
@@ -74,7 +74,7 @@ func (c *Mapping) FinalizeValue() (ret any, err error) {
 		err = errutil.New("signature must end with a colon")
 	} else {
 		// write the comment block
-		if c.keepCommentWriter {
+		if c.keepComments {
 			comment := strings.TrimRightFunc(c.comments.String(), unicode.IsSpace)
 			c.values = c.values.Add("", comment)
 		}

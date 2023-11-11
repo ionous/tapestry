@@ -102,46 +102,79 @@ Indentation of the block is based on the position of the closing heredoc marker.
 _( **Note**: for the sake of round trip preservation, heredocs might be indicated by a custom string type. Alternatively -- or in addition -- they could be stored with their markers and helper functions could subslice out the formatted text. )_
 
 ### Comments
-Hate me forever, comments are preserved, are significant, and can introduce their own indentation level. Therefore, they must follow the collection flow ( and the price is that they can interfere with that flow. ) They are the most complicated part of this format.
+Hate me forever, comments are preserved, are significant, and introduce their own indentation rules. 
 
 **Rationale:** Comments are a good mechanism for communicating human intent. In [Tapestry](git.sr.ht/~ionous/tapestry), since story files can be edited by hand, edited in mosaic/blockly, or even extracted to present documentation: preserving those comments across different transformations matters. 
 
-Comments begin with the `#` hash and continue to the end of a line. Comments cannot appear within a scalar _( **TBD**: comma separated arrays split across lines might be an exception. )_ Here are some examples:
+Comments begin with the `#` hash and continue to the end of a line. Comments cannot appear within a scalar _( **TBD**: comma separated arrays split across lines might be an exception. )_ 
+
+Here are some examples:
 
 ```yaml
-- "scalar" # comments can trail a scalar.
-           # they establish a new indentation level
-           # which any related comment must follow.
+# header comments start at the indentation of the collection
+# and can continue at the same level of indentation.
+- "has a header comment"
 
-# comments can act as a "header" for elements of a collection.
-# but only at the indentation level of the collection.
-- "scalar"
+# for consistency with padding comments ( described below )
+  # nested indentation is allowed starting on the second line
+  # continuing on the third and after at the same depth.
+- "has a nested header comment"
 
-- # comments can also live in the "padding" between a dash or signature.
-  "scalar" 
+- "has a trailing comment" # trailing comments can follow a scalar value on the right
+	# continuing at an indentation that's the same or deeper than the value.
 
-- # comment attribution can be tricky. for example:
-  # is this considered padding? or,
-  # is this a header for the next sequence?
+- "has a nested trailing comment"
+	# this is a permissible trailing comment...
+	  # and nesting is allowed, 
+	  # even if it starts to look a bit ugly.
+
+- "fwiw" # the rules imply 
+           # that trailing comments like this are possible.
+             # but, really. 
+             # would you want to?
+
+- "fwiw" 
+		# the rules imply 
+           # that trailing comments like this are possible.
+             # but, really. 
+             # would you want to?
+             
+- # padding comments live between a dash ( or signature ) and its contents.
+  # they describe the entry just like a header comment would.
+  "contents" 
+
+# for entries with sub collections:
+- # exactly two lines in the padding yield one comment for the entry,
+  # and one comment for the first element of the sub collection.
+  first: "element"
+  
+- # nesting allows comments for the entry
+	  # to continue on a second line.
+	# header comments for the first element can then follow after
+	# with nesting (or not.)
   - "first element"
+
+- # HOWEVER padding comments
+  # CANNOT have more than two lines all
+  # LEFT ALIGNED because attribution is ambiguous
+  - "this will not work"
   
-  # more obviously, this is a header.
-  # we are above the element, and not inside the padding:
-  - "second element"
-  
-  # less obviously, this is a header for nothing.
-  # not "null", just literally nothing. no element at all.
+  # closing comments are valid.
+  # they act as header comments for nothing.
+  # not "null", just literally no element at all.
   # that's fine. i guess.
 ```
 
 #### Comment storage:
 
-Internally, the comments for a given collection are stored as a unified "comment block" -- a string of continuous text generated in the following manner:
+This implementation stores the comments for each collection separately in its own "comment block". A comment block is a single string of continuous text generated in the following manner:
 
-Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the dash ( or signature ) of a collection is recorded as a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with vertical tab `\v`. Newlines (`\n`) separate comments whenever a tab does not.  _( **TBD**: preserve empty lines using `\n`? )_ The resulting block can then be trimmed of trailing newlines and tabs.
+Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the dash ( or signature ) of a collection is recorded as a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with carriage return (`\r`). Newlines (`\n`) separate comments whenever a tab does not.  _( **TBD**: preserve empty lines using `\n` )_ The resulting block can then be trimmed of trailing newlines, tabs, and returns.
 
-For example, the following sequence results in the comment block: `# one\t# two\t# three\n# four\v# five`.
+_( i really wanted to use vertical tab, but \v -- while valid in javascript -- it is technically illegal json. And, tapestry uses json as its primary format. )_
 
+For example, the following sequence results in the comment block: `# one\t# two\t# three\n# four\f# five`.
+ 
 ```
 # one
 - # two
@@ -151,49 +184,6 @@ For example, the following sequence results in the comment block: `# one\t# two\
 - "other"
 ```
 
+Each comment block gets stored in the zeroth index of its sequence, the blank key of its mappings, or the comment field of its document. **This means all sequences are one-indexed.** _(TBD: arrays should probably be one-indexed as well for consistency's sake, and in case they are allowed comments later on.)_
 
-Each nested collection gets its own separate comment block. The block gets stored in the zeroth index of its sequence, the blank key of its mappings, or the comment field of its document. **This means all sequences are one-indexed.** _(TBD: arrays should probably be one-indexed as well for consistency's sake, and in case they are allowed comments later on.)_
-
-A program that wants to read ( or maintain ) comments can split or count by vertical tab to find the comments of particular elements.
-
-#### Comment splitting:
-
-Regarding what exactly marks the end of an "entry", there is no answer that's correct 100% of the time. 
-For instance:
-
-```yaml
-# does this text live as part of the document?
-# or is it stored in the comment block for the first sequence?
-- "do i have a header comment?"
-
-- # and while, presumably this comment is padding....
-  # does *this* comment live as part of that padding,
-  # or is it considered the start of the nested sequence?
-  - "first element"
-```
-
-To provide consistency, if not necessarily correct meaning, the default behavior is to continue the previous comment. A blank new line, or a change in indentation ( if permitted by the context ), can be used to enforce a particular interpretation.  
-
-```yaml
-# this a document comment.
-# this is also a document comment.
-
-# this is part of the sequence due to the intervening blank line.
-- "i've always wanted a header."
-
-- # this is padding,
-  # and this continues that padding.
-    # however, because *this* line has extra indentation:
-    # it indicates a comment that will wind up in the subsequent collection:
-    - "i've got one too!"
-    
-- # note that for scalar elements:
-    # a change in indentation doesn't mean anything.
-    # it's all padding.
-    5
-    
-- long key name: # that behavior is a bit weird
-    # but probably has to be allowed
-    # because of long key names.
-    5
-```
+A program that wants to read ( or maintain ) comments can split or count by return to find the comments of particular elements.

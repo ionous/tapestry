@@ -12,5 +12,5 @@ const (
 	SignatureConnector = '_' // valid in words between colons
 	SignatureSeparator = ':' // keywords in a signature are separated by a colon
 	Space              = ' '
-	VTab               = '\v' // vtab is used for commenting
+	Carriage           = '\r' // carriage return is used in comment blocks
 )

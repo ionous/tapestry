@@ -24,16 +24,24 @@ var jsonData embed.FS
 const testFolder = "testdata"
 
 func TestFiles(t *testing.T) {
+	var focus string
+	// focus = "scalarEntryComment"
 	if files, e := riftData.ReadDir(testFolder); e != nil {
 		t.Fatal(e)
 	} else {
 		for _, info := range files {
 			riftName := path.Join(testFolder, info.Name())
 			jsonName := riftName[:len(riftName)-4] + "json"
+			if len(focus) > 0 && !strings.Contains(riftName, focus) {
+				t.Log("skipping", riftName)
+				continue
+			}
 			//
 			if got, e := readRift(riftName); e != nil {
 				t.Fatal(e)
 			} else if want, e := readJson(jsonName); e != nil {
+				b, _ := json.MarshalIndent(got, "", "  ")
+				t.Log(string(b))
 				t.Fatal(e)
 			} else {
 				// reflect.DeepEqual
@@ -53,7 +61,7 @@ func readRift(filePath string) (ret any, err error) {
 		err = e
 	} else {
 		comments := rift.DiscardCommentWriter
-		if strings.Contains(strings.ToLower(filePath), "comments") {
+		if strings.Contains(strings.ToLower(filePath), "comment") {
 			comments = rift.KeepCommentWriter
 		}
 		doc := rift.NewDocument(stdmap.Build, comments)

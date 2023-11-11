@@ -31,6 +31,7 @@ func innerParse(first State, in io.RuneReader) (ret State, err error) {
 			}
 			break
 		} else {
+			buf.WriteRune(r)
 			if next := try.NewRune(r); next == nil {
 				// no states left to parse remaining input
 				err = EndpointError{buf.String(), i, try, "unknown state"}

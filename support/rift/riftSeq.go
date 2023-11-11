@@ -24,7 +24,8 @@ type Sequence struct {
 func NewSequence(parent Collection, header string, depth int) *Sequence {
 	doc := parent.Document()
 	c := &Sequence{doc: doc, depth: depth}
-	if doc.keepCommentWriter {
+	if doc.keepComments {
+		c.keepComments = true
 		c.values = make([]any, 1)
 		if len(header) > 0 {
 			c.comments.WriteString(header)
@@ -57,7 +58,7 @@ func (c *Sequence) NewEntry() charm.State {
 
 		case Dash:
 			// every sequence dash lives in the comment block as a vertical tab
-			c.comments.WriteRune(VTab)
+			c.comments.WriteRune(Carriage)
 			// unlike map, we dont need to hand off the dash itself;
 			// only the runes after.
 			ret = ContentsLoop(&ent)
@@ -69,7 +70,7 @@ func (c *Sequence) NewEntry() charm.State {
 
 // used by parent collections to read the completed collection
 func (c *Sequence) FinalizeValue() (ret any, err error) {
-	if c.keepCommentWriter {
+	if c.keepComments {
 		comment := strings.TrimRightFunc(c.comments.String(), unicode.IsSpace)
 		c.values[0] = comment
 	}
