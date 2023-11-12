@@ -68,7 +68,7 @@ func readRift(filePath string) (ret any, err error) {
 		doc := rift.NewDocument(stdmap.Build, comments)
 		if res, e := doc.ReadDoc(bufio.NewReader(fp)); e != nil {
 			err = e
-		} else if keepComments {
+		} else if len(res.Comment) > 0 {
 			ret = map[string]any{
 				"content": res.Content,
 				"comment": res.Comment,

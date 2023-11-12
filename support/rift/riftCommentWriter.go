@@ -30,6 +30,11 @@ func (w *CommentBuffer) WriteRune(r rune) (_ int, _ error) {
 	if r == Space {
 		w.spaces++
 	} else {
+		if r < Space && w.spaces > 0 {
+			s := w.String() // trim
+			w.buf.Reset()
+			w.buf.WriteString(s)
+		}
 		w.spaces = 0
 	}
 	return w.buf.WriteRune(r)
