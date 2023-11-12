@@ -30,7 +30,6 @@ Whitespace in documents is restricted to the ascii space and newline character; 
 ### Values
 Any **scalar**, **array**, **sequence**, **mapping**, or **heredoc**.
 
-
 ### Scalars
 
 * **bool**: `true`, or `false`.
@@ -115,7 +114,7 @@ Here are some examples:
 # and can continue at the same level of indentation.
 - "header example"
 
-# for consistency with padding comments ( described below )
+# for consistency with entry comments ( described below )
   # nested indentation is allowed starting on the second line.
   # is that good, i don't know.
 - "nested header example"
@@ -129,29 +128,40 @@ Here are some examples:
   
 - "inline and trailing" # a single inline comment
   # can be extended with normal
-  # trailing comments.
+  # trailing comments ( no nesting. )
 
 - # comments for nil values
-  # are treated as "padding"
+  # are handled as "entry" comments
   
-- # padding lives between a dash ( or signature ) and its value.
-  "padding example"
+- # comments describing this collection entry 
+    # start immediately after the dash ( or signature )
+		# they allow nesting to continue the comment.
+  "entry example"
   
-# for entries with a sub collections:
-- # exactly two lines of padding yield one comment for the entry,
-  # and one comment for the first element of the sub collection.
+# entries with a sub collections:
+
+- # without nesting, the first *line* describes the entry
+  # and anything else acts as a "header" for the the first element 
+  # of the sub-collection.
   sub:collection:with: "one element"
   
-- # nesting allows comments which describe the entry
-    # to continue on a second line.
-  # comments which describe the first element 
-  # follow after with nesting ( or not. )
-  - "first element"
+- 
+	# this is on the second line, so it describes the element.
+	sub:collection:with: "one element"
 
-- # HOWEVER padding followed by a value
-  # CANNOT have more than two lines 
-  # LEFT ALIGNED because attribution is ambiguous
-  - "this will not work"
+- # for consistency, the entry
+  	# can use nesting here.
+  # and, the header can also
+  	# use nesting here.
+  sub:collection:with: "one element"
+  
+
+-   # for consistency, the entry
+	  	# can use nesting here.
+	  # and, the header can also
+	  	# use nesting here.
+	  sub:collection:with: "one element"
+  
   
   # closing comments are valid.
   # they act as header comments for nothing.

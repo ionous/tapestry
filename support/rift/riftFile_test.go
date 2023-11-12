@@ -25,7 +25,7 @@ const testFolder = "testdata"
 
 func TestFiles(t *testing.T) {
 	var focus string
-	// focus = "scalarEntryComment2"
+	// focus = "inlineTrailing"
 	if files, e := riftData.ReadDir(testFolder); e != nil {
 		t.Fatal(e)
 	} else {
@@ -37,6 +37,7 @@ func TestFiles(t *testing.T) {
 				continue
 			}
 			//
+			t.Log("trying", riftName)
 			if got, e := readRift(riftName); e != nil {
 				t.Fatal(e)
 			} else if want, e := readJson(jsonName); e != nil {
@@ -59,15 +60,23 @@ func readRift(filePath string) (ret any, err error) {
 	if fp, e := riftData.Open(filePath); e != nil {
 		err = e
 	} else {
+		keepComments := strings.Contains(strings.ToLower(filePath), "comment")
 		comments := rift.DiscardCommentWriter
-		if strings.Contains(strings.ToLower(filePath), "comment") {
+		if keepComments {
 			comments = rift.KeepCommentWriter
 		}
 		doc := rift.NewDocument(stdmap.Build, comments)
-		if e := doc.ReadDoc(bufio.NewReader(fp)); e != nil {
+		if res, e := doc.ReadDoc(bufio.NewReader(fp)); e != nil {
 			err = e
+		} else if keepComments {
+			ret = map[string]any{
+				"content": res.Content,
+				"comment": res.Comment,
+			}
 		} else {
-			ret = doc.Value
+			ret = map[string]any{
+				"content": res.Content,
+			}
 		}
 	}
 	return

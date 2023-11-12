@@ -1,0 +1,4 @@
+# for consistency with entry comments ( described below )
+  # nested indentation is allowed starting on the second line.
+  # is that good, i don't know.
+"nested header example"

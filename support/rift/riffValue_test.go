@@ -45,10 +45,10 @@ func testValue(t *testing.T, nameInputExpect ...any) {
 			var res any
 			doc := rift.Document{MakeMap: imap.Build}
 			str := strings.TrimLeftFunc(input, unicode.IsSpace)
-			if e := doc.ReadLines(strings.NewReader(str), doc.NewEntry()); e != nil {
+			if got, e := doc.ReadDoc(strings.NewReader(str)); e != nil {
 				res = e
 			} else {
-				res = doc.Value
+				res = got.Content
 			}
 			if e := compare(res, expect); e != nil {
 				t.Fatal("ng:", name, e)

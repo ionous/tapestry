@@ -2,6 +2,8 @@ package rift
 
 import (
 	"io"
+	"strings"
+	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
 	"git.sr.ht/~ionous/tapestry/support/rift/maps"
@@ -10,18 +12,30 @@ import (
 type Document struct {
 	History
 	Cursor
-	Value any
+	value any
 	CommentBlock
 	MakeMap maps.BuilderFactory
+}
+
+type Result struct {
+	Content any
+	// document level comments
+	// sub-collection comments are stored with the sequence or mapping
+	Comment string
 }
 
 func NewDocument(mapMaker maps.BuilderFactory, cmtMaker CommentFactory) *Document {
 	return &Document{MakeMap: mapMaker, CommentBlock: cmtMaker()}
 }
 
-// cant be called multiple times (fix?)
-func (doc *Document) ReadDoc(src io.RuneReader) error {
-	return doc.ReadLines(src, doc.NewEntry())
+// has incorrect behavior if called multiple times
+func (doc *Document) ReadDoc(src io.RuneReader) (ret Result, err error) {
+	if e := doc.ReadLines(src, doc.NewEntry()); e != nil {
+		err = e
+	} else {
+		ret, err = doc.Finalize()
+	}
+	return
 }
 
 // slightly lower level access for reading explicit kinds of values
@@ -36,6 +50,16 @@ func (doc *Document) ReadLines(src io.RuneReader, start charm.State) (err error)
 	return
 }
 
+// ugly: if preserve comments is true,
+// { value, comment, error }
+func (doc *Document) Finalize() (ret Result, err error) {
+	ret.Content, doc.value = doc.value, nil
+	if doc.keepComments {
+		ret.Comment = strings.TrimRightFunc(doc.comments.String(), unicode.IsSpace)
+	}
+	return
+}
+
 // create an initial reader state
 func (doc *Document) NewEntry() charm.State {
 	ent := riftEntry{
@@ -43,7 +67,7 @@ func (doc *Document) NewEntry() charm.State {
 		depth:        0,
 		pendingValue: computedValue{},
 		addsValue: func(val any, comment string) (_ error) {
-			doc.Value = val // tbd: error if already written?
+			doc.value = val // tbd: error if already written?
 			doc.comments.WriteString(comment)
 			return
 		},
