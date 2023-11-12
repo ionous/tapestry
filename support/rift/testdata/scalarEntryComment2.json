@@ -1,4 +1,4 @@
 [
-	"\r\t\t# trailing comment\n# and some things\n# directly after",
-	5
+	"\t# a single inline comment\n# can be extended with normal\n# trailing comments.",
+	"inline and trailing" 
 ]

@@ -31,8 +31,7 @@ func (ent *riftEntry) finalizeEntry() (err error) {
 		head := ent.header.String()
 		tail := ent.tail.String()
 		if len(head) > 0 || len(tail) > 0 {
-			w.WriteRune(HTab)
-			w.WriteString(head)
+			w.WriteString(head) // padding
 			w.WriteRune(HTab)
 			w.WriteString(tail)
 		}
@@ -76,13 +75,11 @@ func Contents(ent *riftEntry) charm.State {
 		switch r {
 		case Space:
 			ret = contents
-
 		case Hash:
 			// these use >= so that content can appear at column zero in documents
 			if ent.doc.Col >= ent.depth {
 				ret = ReadComment(&ent.buffer, contents)
 			}
-
 		case Newline:
 			ret = NextIndent(func() (ret charm.State) {
 				if at := ent.doc.Col; at >= ent.depth {
@@ -92,7 +89,6 @@ func Contents(ent *riftEntry) charm.State {
 				}
 				return
 			})
-
 		default:
 			if ent.doc.Col >= ent.depth {
 				ret = ValueOfEntry(ent, r)
@@ -156,7 +152,6 @@ func IndentedComment(ent *riftEntry, depth int) (ret charm.State) {
 				}
 				return
 			}))
-
 		}
 		return
 	})
@@ -196,19 +191,30 @@ func ValueOfEntry(ent *riftEntry, r rune) (ret charm.State) {
 	return
 }
 
-// fix/share: almost exactly the same as the padding contents...
+// these are comments to the right of a known value.
 func InlineComment(ent *riftEntry) (ret charm.State) {
-	return charm.Self("trailing comments", func(inline charm.State, r rune) (ret charm.State) {
+	inlineIndent := -1
+	return charm.Self("inline comment", func(loop charm.State, r rune) (ret charm.State) {
 		switch r {
 		case Space: // eat spaces on the line after the value
-			ret = inline
+			ret = loop
 		case Hash: // an inline comment? read it; loop to us to handle the newline.
-			ret = ReadComment(&ent.tail, inline)
+			inlineIndent = ent.doc.Col
+			ret = ReadComment(&ent.tail, loop)
 		case Newline: // a newline ( regardless of whether there was a comment )
 			ret = NextIndent(func() (ret charm.State) {
-				// on the following line, trailing comments can appear at or deeper than the entry.
-				if at := ent.doc.Col; at >= ent.depth {
-					ret = TrailingComment(ent, at)
+				at := ent.doc.Col
+				// the trailing comment indent cant be deeper than its inline comment.
+				if (at >= ent.depth) && (inlineIndent < 0 || at <= inlineIndent) {
+					// when trailing comments are right aligned with the indent comment
+					// use nesting, otherwise use normal newlines.
+					var sep rune
+					if inlineIndent == at {
+						sep = Nestline
+					} else {
+						sep = Newline
+					}
+					ret = TrailingComment(ent, at, inlineIndent, sep)
 				} else {
 					ret = ent.popToIndent()
 				}
@@ -221,20 +227,22 @@ func InlineComment(ent *riftEntry) (ret charm.State) {
 
 // an optional comment can appear on the first line after a value
 // starts on something other than whitespace
-func TrailingComment(ent *riftEntry, depth int) charm.State {
-	return charm.Self("trailing", func(trailing charm.State, r rune) (ret charm.State) {
+// at the indent we want to stick with.
+func TrailingComment(ent *riftEntry, wantIndent, inlineIndent int, sep rune) charm.State {
+	return charm.Self("trailing comments", func(loop charm.State, r rune) (ret charm.State) {
 		switch r {
-		case Hash: // nested comments can appear at or deeper than the entry
-			ent.tail.WriteRune(Newline)
-			ret = ReadComment(&ent.tail, NextIndent(func() (ret charm.State) {
-				if at := ent.doc.Col; at >= ent.depth {
-					ret = NestedComment(ent, at)
+		case Hash:
+			ent.tail.WriteRune(sep)
+			ret = ReadComment(&ent.tail, loop)
+		case Newline:
+			ret = NextIndent(func() (ret charm.State) {
+				if at := ent.doc.Col; at == wantIndent {
+					ret = loop
 				} else {
 					ret = ent.popToIndent()
 				}
 				return
-			}))
-			return
+			})
 		}
 		return
 	})
@@ -242,21 +250,21 @@ func TrailingComment(ent *riftEntry, depth int) charm.State {
 
 // nested comments are fixed at the passed depth
 // starts on something other than whitespace
-func NestedComment(ent *riftEntry, depth int) charm.State {
-	return charm.Self("nested", func(nested charm.State, r rune) (ret charm.State) {
-		switch r {
-		case Hash: // loop at the same depth
-			ent.tail.WriteRune(Newline)
-			ret = ReadComment(&ent.tail, NextIndent(func() (ret charm.State) {
-				if ent.doc.Col == ent.depth {
-					ret = nested
-				} else {
-					ret = ent.popToIndent()
-				}
-				return
-			}))
-			return
-		}
-		return
-	})
-}
+// func NestedComment(ent *riftEntry, depth int) charm.State {
+// 	return charm.Self("nested", func(nested charm.State, r rune) (ret charm.State) {
+// 		switch r {
+// 		case Hash: // loop at the same depth
+// 			ent.tail.WriteRune(Newline)
+// 			ret = ReadComment(&ent.tail, NextIndent(func() (ret charm.State) {
+// 				if ent.doc.Col == ent.depth {
+// 					ret = nested
+// 				} else {
+// 					ret = ent.popToIndent()
+// 				}
+// 				return
+// 			}))
+// 			return
+// 		}
+// 		return
+// 	})
+// }

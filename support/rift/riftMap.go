@@ -22,9 +22,7 @@ func NewMapping(doc *Document, header string, depth int) *Mapping {
 	c := &Mapping{doc: doc, depth: depth, values: doc.MakeMap(doc.keepComments)}
 	if doc.keepComments {
 		c.keepComments = true
-		if len(header) > 0 {
-			c.comments.WriteString(header)
-		}
+		c.comments.WriteString(header)
 	}
 	return c
 }
@@ -43,6 +41,7 @@ func (c *Mapping) NewEntry() charm.State {
 			} else {
 				c.values = c.values.Add(key, val)
 				c.comments.WriteString(comment)
+				c.comments.WriteRune(Record)
 			}
 			return
 		},

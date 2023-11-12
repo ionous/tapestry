@@ -26,12 +26,7 @@ func NewSequence(doc *Document, header string, depth int) *Sequence {
 	if doc.keepComments {
 		c.keepComments = true
 		c.values = make([]any, 1)
-		if len(header) > 0 {
-			c.comments.WriteString(header)
-			if len(header) > 0 {
-				c.comments.WriteString(header)
-			}
-		}
+		c.comments.WriteString(header)
 	}
 	return c
 }
@@ -46,6 +41,7 @@ func (c *Sequence) NewEntry() charm.State {
 		addsValue: func(val any, comment string) (_ error) {
 			c.values = append(c.values, val)
 			c.comments.WriteString(comment)
+			c.comments.WriteRune(Record)
 			return
 		},
 	}
@@ -56,8 +52,6 @@ func (c *Sequence) NewEntry() charm.State {
 			panic("not implemented")
 
 		case Dash:
-			// every sequence dash lives in the comment block as a vertical tab
-			c.comments.WriteRune(Carriage)
 			// unlike map, we dont need to hand off the dash itself;
 			// only the runes after.
 			ret = ContentsLoop(&ent)

@@ -1,0 +1,3 @@
+- "trailing example"
+  # trailing comments continue at a consistent indentation
+  # right at, or after, the entry's indentation.

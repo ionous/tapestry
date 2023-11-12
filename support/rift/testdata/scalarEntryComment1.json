@@ -1,4 +1,7 @@
 [
-	"\r\t\t# trailing comment",
-	5
+	"\t# one trailing comment\r# right aligned\f\t# another trailing comment\f\t# and more",
+	5,
+	10,
+	11,
+	12
 ]

@@ -104,7 +104,7 @@ _( **Note**: for the sake of round trip preservation, heredocs might be indicate
 ### Comments
 Hate me forever, comments are preserved, are significant, and introduce their own indentation rules. 
 
-**Rationale:** Comments are a good mechanism for communicating human intent. In [Tapestry](git.sr.ht/~ionous/tapestry), since story files can be edited by hand, edited in mosaic/blockly, or even extracted to present documentation: preserving those comments across different transformations matters. 
+**Rationale:** Comments are a good mechanism for communicating human intent. And, in [Tapestry](git.sr.ht/~ionous/tapestry), since story files can be edited by hand, edited in mosaic/blockly, or even extracted to present documentation: preserving those comments across different transformations matter.
 
 Comments begin with the `#` hash and continue to the end of a line. Comments cannot appear within a scalar _( **TBD**: comma separated arrays split across lines might be an exception. )_ 
 
@@ -113,43 +113,43 @@ Here are some examples:
 ```yaml
 # header comments start at the indentation of the collection
 # and can continue at the same level of indentation.
-- "has a header comment"
+- "header example"
 
 # for consistency with padding comments ( described below )
-  # nested indentation is allowed starting on the second line
-  # continuing on the third and after at the same depth.
-- "has a nested header comment"
+  # nested indentation is allowed starting on the second line.
+  # is that good, i don't know.
+- "nested header example"
 
-- "has a trailing comment" # trailing comments can follow a scalar value on the right
-	# continuing at an indentation that's the same or deeper than the value.
+- "inline example"  # inline comments follow a value
+                    # continuing right aligned.
 
-- "has a nested trailing comment"
-	# this is a permissible trailing comment...
-	  # and nesting is allowed, 
-	  # even if it starts to look a bit ugly.
-
-- "fwiw" # the rules imply 
-           # that trailing comments like this are possible.
-             # but, really. 
-             # would you want to?
-             
-- # padding comments live between a dash ( or signature ) and its contents.
-  # they describe the entry just like a header comment would.
-  "contents" 
-
-# for entries with sub collections:
-- # exactly two lines in the padding yield one comment for the entry,
-  # and one comment for the first element of the sub collection.
-  first: "element"
+- "trailing example"
+  # trailing comments continue at a consistent indentation
+  # right at, or after, the entry's indentation.
   
-- # nesting allows comments for the entry
-	  # to continue on a second line.
-	# header comments for the first element can then follow after
-	# with nesting (or not.)
+- "inline and trailing" # a single inline comment
+  # can be extended with normal
+  # trailing comments.
+
+- # comments for nil values
+  # are treated as "padding"
+  
+- # padding lives between a dash ( or signature ) and its value.
+  "padding example"
+  
+# for entries with a sub collections:
+- # exactly two lines of padding yield one comment for the entry,
+  # and one comment for the first element of the sub collection.
+  sub:collection:with: "one element"
+  
+- # nesting allows comments which describe the entry
+    # to continue on a second line.
+  # comments which describe the first element 
+  # follow after with nesting ( or not. )
   - "first element"
 
-- # HOWEVER padding comments
-  # CANNOT have more than two lines all
+- # HOWEVER padding followed by a value
+  # CANNOT have more than two lines 
   # LEFT ALIGNED because attribution is ambiguous
   - "this will not work"
   
@@ -157,27 +157,23 @@ Here are some examples:
   # they act as header comments for nothing.
   # not "null", just literally no element at all.
   # that's fine. i guess.
+
+# here too. 
+# how confusing.
 ```
 
 #### Comment storage:
 
 This implementation stores the comments for each collection separately in its own "comment block". A comment block is a single string of continuous text generated in the following manner:
 
-Individual comments lines are stored when they are encountered. Each line gets trimmed of spaces, but hash marks are kept intact. Meanwhile, the dash ( or signature ) of a collection is recorded as a horizontal tab `\t`, values are ignored, trailing comments ( if any ) are indicated with an additional `\t`, and the end of each entry is indicated with carriage return (`\r`). Newlines (`\n`) indicate comment placement whenever tab or carriage cannot. ( ex. the _absence_ of an inline trailing comment when there's trailing comment on the following line should be marked with a newline. )   _( **TBD**: preserve empty lines using `\n` )_ The resulting block can then be trimmed of trailing newlines, tabs, and returns.
-
-_( i really wanted to use vertical tab, but \v -- while valid in javascript -- it is technically illegal json. And, tapestry uses json as its primary format. )_
-
-For example, the following sequence results in the comment block: `# one\t# two\t# three\n# four\f# five`.
- 
-```
-# one
-- # two
-  "value" # three
-          # four
-# five  
-- "other"
-```
+* Individual comments are stored as encountered. Each line gets trimmed of trailing spaces, hash marks are kept intact.  
+* A horizontal tab (`\t`) replaces the value of an entry.
+* Nested lines of a comment are indicated by a carriage return (`\r`); while other line breaks use line feed (`\n`). For these purposes, comments right aligned with an inline comment are considered nested; trailing comments are not. ( Therefore line feeds always preface trailing comment lines. )
+* To separate groups of comments, the end of each collection entry uses a form feed (`\f`). ( Putting it at the end, keeps the first header comment with the first entry. ) 
+* Fully blank lines are skipped.
+  
+The resulting block can then be trimmed of trailing whitespace. The tests have plenty of examples.
 
 Each comment block gets stored in the zeroth index of its sequence, the blank key of its mappings, or the comment field of its document. **This means all sequences are one-indexed.** _(TBD: arrays should probably be one-indexed as well for consistency's sake, and in case they are allowed comments later on.)_
 
-A program that wants to read ( or maintain ) comments can split or count by return to find the comments of particular elements.
+A program that wants to read ( or maintain ) comments can split or count by form feed to find the comments of particular elements. ( The particular escapes were chosen to work in json string literals. )
