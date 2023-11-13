@@ -132,7 +132,7 @@ Here are some examples:
 
 - # comments for nil values
   # are handled as "entry" comments
-  
+
 - # comments describing this collection entry 
     # start immediately after the dash ( or signature )
 		# they allow nesting to continue the comment.
@@ -154,29 +154,16 @@ Here are some examples:
   # and, the header can also
   	# use nesting here.
   sub:collection:with: "one element"
-  
 
--   # for consistency, the entry
-	  	# can use nesting here.
-	  # and, the header can also
-	  	# use nesting here.
-	  sub:collection:with: "one element"
-  
-  
-  # closing comments are valid.
-  # they act as header comments for nothing.
-  # not "null", just literally no element at all.
-  # that's fine. i guess.
-
-# here too. 
-# how confusing.
+# closing comments for a document.
+# presumably matching the indentation at the start.
 ```
 
 #### Comment storage:
 
 This implementation stores the comments for each collection separately in its own "comment block". A comment block is a single string of continuous text generated in the following manner:
 
-* Individual comments are stored as encountered. Each line gets trimmed of trailing spaces, hash marks are kept intact.  
+* Individual comments are stored as encountered. Each line gets trimmed of trailing spaces, hash marks are kept intact. ( Keeping the hash makes it more obvious how internal leading spaces are handled, and makes it easier to split comments out of their stored block of text. )
 * A horizontal tab (`\t`) replaces the value of an entry.
 * Nested lines of a comment are indicated by a carriage return (`\r`); while other line breaks use line feed (`\n`). For these purposes, comments right aligned with an inline comment are considered nested; trailing comments are not. ( Therefore line feeds always preface trailing comment lines. )
 * To separate groups of comments, the end of each collection entry uses a form feed (`\f`). ( Putting it at the end, keeps the first header comment with the first entry. ) 
