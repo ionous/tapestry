@@ -135,7 +135,7 @@ Here are some examples:
 
 - # comments describing this collection entry 
     # start immediately after the dash ( or signature )
-		# they allow nesting to continue the comment.
+    # they allow nesting to continue the comment.
   "entry example"
   
 # entries with a sub collections:
@@ -146,13 +146,13 @@ Here are some examples:
   sub:collection:with: "one element"
   
 - 
-	# this is on the second line, so it describes the element.
-	sub:collection:with: "one element"
+  # this is on the second line, so it describes the element.
+  sub:collection:with: "one element"
 
 - # for consistency, the entry
-  	# can use nesting here.
+    # can use nesting here.
   # and, the header can also
-  	# use nesting here.
+    # use nesting here.
   sub:collection:with: "one element"
 
 # closing comments for a document.
