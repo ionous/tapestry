@@ -23,21 +23,19 @@ func Read(in io.RuneReader, first State) (err error) {
 
 func innerParse(first State, in io.RuneReader) (ret State, err error) {
 	try := first
-	var buf strings.Builder // fix: some sort of sliding window for error would be nice
 	for i := 0; ; i++ {
 		if r, _, e := in.ReadRune(); e != nil {
 			if e != io.EOF {
-				err = errutil.Append(e, EndpointError{buf.String(), i, try, e.Error()})
+				err = errutil.Append(e, EndpointError{errContext(r, in), i, try, e.Error()})
 			}
 			break
 		} else {
-			buf.WriteRune(r)
 			if next := try.NewRune(r); next == nil {
 				// no states left to parse remaining input
-				err = EndpointError{buf.String(), i, try, "unknown state"}
+				err = EndpointError{errContext(r, in), i, try, "unknown state"}
 				break
 			} else if es, ok := next.(Terminal); ok {
-				err = EndpointError{buf.String(), i, try, es.err.Error()}
+				err = EndpointError{errContext(r, in), i, try, es.err.Error()}
 				break
 			} else {
 				try = next
@@ -48,6 +46,22 @@ func innerParse(first State, in io.RuneReader) (ret State, err error) {
 		ret = try
 	}
 	return
+}
+
+// on error, provide a bit of the input remaining
+// so that the user has an idea of where the error occurred
+func errContext(r rune, in io.RuneReader) (ret string) {
+	const size = 25
+	var b strings.Builder
+	b.WriteRune(r)
+	for i := 0; i < size; i++ {
+		if r, _, e := in.ReadRune(); e != nil {
+			break
+		} else {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
 }
 
 // ParseEof sends each rune of string to the passed state chart;
@@ -83,6 +97,6 @@ func (e EndpointError) End() int {
 }
 
 func (e EndpointError) Error() (ret string) {
-	return errutil.Sprintf("%s %q ended at index %d in %q",
+	return errutil.Sprintf("%s %q ended at index %d ...%q",
 		e.reason, StateName(e.last), e.end, e.str)
 }
