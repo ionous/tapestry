@@ -1,8 +1,8 @@
 {
   "content": [
-    "# extra indention\r# can use nesting here.",
+    "# test extra offsets from the collection marker\r# can use nesting here.",
     {
-      "": "# and, the header can also\r# use nesting here.",
+      "": "# so long as everything is aligned\r# its supposed to work fine.",
       "sub:collection:with:": "one element"
     }
   ]
