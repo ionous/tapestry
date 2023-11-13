@@ -30,10 +30,11 @@ func TestFiles(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		for _, info := range files {
-			riftName := path.Join(testFolder, info.Name())
+			shortName := info.Name()
+			riftName := path.Join(testFolder, shortName)
 			jsonName := riftName[:len(riftName)-4] + "json"
 			if (len(focus) > 0 && !strings.Contains(riftName, focus)) ||
-				strings.HasPrefix(riftName, "x_") {
+				strings.HasPrefix(shortName, "x_") {
 				t.Log("skipping", riftName)
 				continue
 			}
