@@ -46,20 +46,18 @@ func (c *Mapping) NewEntry() charm.State {
 			return
 		},
 	}
-	next := charm.Statement("map entry", func(r rune) (ret charm.State) {
+	next := charm.Self("map entry", func(self charm.State, r rune) (ret charm.State) {
 		switch r {
 		case Hash:
-			// fix fix: header comments
-			panic("not implemented")
-
+			ret = charm.RunState(r, HeaderRegion(&ent, c.depth, self))
 		default:
 			// key and after key:
 			ret = charm.RunStep(r, &c.key, charm.Statement("after key", func(r rune) charm.State {
 				// unlike sequence, we need to hand off the first character that isnt the key
 				return ContentsLoop(&ent).NewRune(r)
 			}))
-			return
 		}
+		return
 	})
 	return c.doc.PushCallback(ent.depth, next, ent.finalizeEntry)
 }

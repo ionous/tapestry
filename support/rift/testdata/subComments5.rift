@@ -1,0 +1,10 @@
+
+- sub:collection:with: "one element"
+    # this would be a trailing comment
+-
+  # closing comments are valid.
+  # they act as header comments for nothing.
+  # not "null", just literally no element at all.
+  # that's fine. i guess.
+
+  

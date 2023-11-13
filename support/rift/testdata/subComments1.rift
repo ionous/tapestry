@@ -1,0 +1,4 @@
+- # without nesting, the first *line* describes the entry
+  # and anything else acts as a "header" for the the first element 
+  # of the sub-collection.
+  sub:collection:with: "one element"

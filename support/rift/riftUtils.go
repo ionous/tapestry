@@ -11,7 +11,8 @@ import (
 func UnhandledError(watch charm.State) charm.State {
 	return charm.Self("unhandled error", func(self charm.State, r rune) (ret charm.State) {
 		if next := watch.NewRune(r); next == nil {
-			ret = charm.Error(errutil.Fmt("unexpected character %q(%d) during %s", r, r, charm.StateName(watch)))
+			ret = charm.Error(errutil.Fmt("unexpected character %q(%d) during %q", r, r,
+				charm.StateName(watch)))
 		} else {
 			ret, watch = self, next // keep checking until watch returns nil
 		}

@@ -1,0 +1,9 @@
+{
+  "content": [
+    "# without nesting, the first *line* describes the entry",
+    {
+      "": "# and anything else acts as a \"header\" for the the first element\n# of the sub-collection.",
+      "sub:collection:with:": "one element"
+    }
+  ]
+}

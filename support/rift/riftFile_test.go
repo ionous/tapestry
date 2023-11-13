@@ -25,29 +25,38 @@ const testFolder = "testdata"
 
 func TestFiles(t *testing.T) {
 	var focus string
-	// focus = "inlineTrailing"
+	// focus = "headerFooterComment3"
 	if files, e := riftData.ReadDir(testFolder); e != nil {
 		t.Fatal(e)
 	} else {
 		for _, info := range files {
 			riftName := path.Join(testFolder, info.Name())
 			jsonName := riftName[:len(riftName)-4] + "json"
-			if len(focus) > 0 && !strings.Contains(riftName, focus) {
+			if (len(focus) > 0 && !strings.Contains(riftName, focus)) ||
+				strings.HasPrefix(riftName, "x_") {
 				t.Log("skipping", riftName)
 				continue
 			}
 			//
 			t.Log("trying", riftName)
 			if got, e := readRift(riftName); e != nil {
-				t.Fatal(e)
+				t.Log("error", e)
+				t.Fail()
 			} else if want, e := readJson(jsonName); e != nil {
-				t.Fatal(e)
+				if a, e := json.MarshalIndent(got, "", " "); e != nil {
+					t.Fatal(e)
+				} else {
+					t.Log(string(a))
+				}
+				t.Fail()
+
 			} else {
 				// reflect.DeepEqual
 				if diff := pretty.Diff(got, want); len(diff) > 0 {
 					log.Println("ng: ", riftName)
 					log.Println("got: ", pretty.Sprint(got))
-					t.Fatal(diff)
+					t.Log(diff)
+					t.Fail()
 				} else {
 					t.Log("ok: ", riftName)
 				}

@@ -1,0 +1,7 @@
+{
+  "comment": "# header",
+  "content": {
+    "": "\f# footer",
+    "Mapping:value:": "here"
+  }
+}

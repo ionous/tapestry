@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
+	"github.com/ionous/errutil"
 )
 
 // a sequence of array values are specified with:
@@ -31,29 +32,39 @@ func NewSequence(doc *Document, header string, depth int) *Sequence {
 	return c
 }
 
+// map's empty value is guarded by a completed ke
+const emptyValue = errutil.Error("empty value")
+
 // a state that can parse one dash - content pair
 // maybe push the returned thingy
 func (c *Sequence) NewEntry() charm.State {
 	ent := riftEntry{
 		doc:          c.doc,
 		depth:        c.depth + 2,
-		pendingValue: computedValue{},
+		pendingValue: computedValue{emptyValue},
 		addsValue: func(val any, comment string) (_ error) {
-			c.values = append(c.values, val)
+			if val != emptyValue {
+				c.values = append(c.values, val)
+			}
 			c.comments.WriteString(comment)
 			c.comments.WriteRune(Record)
 			return
 		},
 	}
-	next := charm.Statement("sequence", func(r rune) (ret charm.State) {
+	next := charm.Self("sequence", func(self charm.State, r rune) (ret charm.State) {
 		switch r {
 		case Hash:
-			// fix fix: header comments-- probably should live in collection entries, since its common to all
-			panic("not implemented")
+			// this is in between sequence entries
+			// potentially, its a header comment for the next element
+			// if there is no element, it could be considered a tail
+			// of the parent container; it can have nesting.
 
+			ret = charm.RunState(r, HeaderRegion(&ent, c.depth, self))
 		case Dash:
 			// unlike map, we dont need to hand off the dash itself;
-			// only the runes after.
+			// only the runes after; also: map's nil value is guarded by a completed key
+			// for sequence we have to at least have a dash before we could have a value.
+			ent.pendingValue = computedValue{}
 			ret = ContentsLoop(&ent)
 		}
 		return

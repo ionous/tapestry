@@ -18,12 +18,17 @@ func (NullCommentWriter) WriteRune(r rune) (_ int, _ error) { return }
 
 // a strings builder which trims write spaces
 type CommentBuffer struct {
-	buf    strings.Builder
+	b      strings.Builder
 	spaces int
 }
 
+func (w *CommentBuffer) Reset() {
+	w.b.Reset()
+	w.spaces = 0
+}
+
 func (w *CommentBuffer) Len() int {
-	return w.buf.Len() - w.spaces
+	return w.b.Len() - w.spaces
 }
 
 func (w *CommentBuffer) WriteRune(r rune) (_ int, _ error) {
@@ -32,15 +37,15 @@ func (w *CommentBuffer) WriteRune(r rune) (_ int, _ error) {
 	} else {
 		if r < Space && w.spaces > 0 {
 			s := w.String() // trim
-			w.buf.Reset()
-			w.buf.WriteString(s)
+			w.b.Reset()
+			w.b.WriteString(s)
 		}
 		w.spaces = 0
 	}
-	return w.buf.WriteRune(r)
+	return w.b.WriteRune(r)
 }
 
 func (w *CommentBuffer) String() string {
-	str := w.buf.String()
+	str := w.b.String()
 	return str[:len(str)-w.spaces]
 }

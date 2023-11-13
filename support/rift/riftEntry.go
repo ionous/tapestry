@@ -51,7 +51,7 @@ func (ent *riftEntry) writeHeader() (ret string, err error) {
 		err = errutil.New("ambiguous multiline comment.")
 	} else {
 		ret = ent.head.String()
-		ent.head.buf.Reset()
+		ent.head.Reset()
 	}
 	return
 }
@@ -83,7 +83,7 @@ func Contents(ent *riftEntry) charm.State {
 		case Newline: // a blank line with no contents is the header.
 			ret = NextIndent(ent.doc, func(at int) (ret charm.State) {
 				if at >= ent.depth {
-					ret = HeaderRegion(ent, at)
+					ret = HeaderRegion(ent, at, NextValue(ent))
 				}
 				return
 			})
@@ -107,10 +107,10 @@ func ReadPadding(ent *riftEntry, depth int) charm.State {
 		switch {
 		case at == depth:
 			// the same indent means switch to header
-			ret = HeaderRegion(ent, depth)
+			ret = HeaderRegion(ent, depth, NextValue(ent))
 		case at > depth:
 			// a deeper indent means nesting ( after nesting, use the header at the original depth )
-			doc.Push(depth, HeaderRegion(ent, depth))
+			doc.Push(depth, HeaderRegion(ent, depth, NextValue(ent)))
 			ret = NestedComment(doc, &ent.pad)
 		}
 		return
@@ -119,11 +119,13 @@ func ReadPadding(ent *riftEntry, depth int) charm.State {
 
 // we're at the start of ... something
 // could be a value or a comment.
-func HeaderRegion(ent *riftEntry, depth int) charm.State {
+// fix: the reason we cant have the caller use "Step"
+// is that pop doesnt really. it doesnt break out of the parent / child
+func HeaderRegion(ent *riftEntry, depth int, next charm.State) charm.State {
 	return charm.Self("header", func(header charm.State, r rune) (ret charm.State) {
 		switch r {
 		default:
-			ret = ReadValue(ent, r)
+			ret = next.NewRune(r)
 		case Hash:
 			ret = ReadComment(&ent.head, header)
 		case Newline:

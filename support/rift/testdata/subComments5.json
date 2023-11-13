@@ -1,0 +1,10 @@
+{
+  "content": [
+    "\f# closing comments are valid.\n# they act as header comments for nothing.\n# not \"null\", just literally no element at all.\n# that's fine. i guess.",
+    {
+      "": "\t\n# this would be a trailing comment",
+      "sub:collection:with:": "one element"
+    },
+    null
+  ]
+}
