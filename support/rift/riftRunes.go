@@ -7,7 +7,8 @@ const (
 	Hash               = '#'  // comment marker
 	HTab               = '\t' // tab is considered invalid whitespace
 	InterpretedString  = '"'  // interpreted strings are bookended with double quotes
-	Nestline           = '\r' // carriage return indicates nested comments
+	CollectionMark     = '\r' // in comment blocks, represents the dash or key of a sequence
+	Nestline           = '\t' // in comment blocks, indicates nested comments
 	Newline            = '\n'
 	RawString          = '`'
 	Record             = '\f' // form feed is used to separate comment entries

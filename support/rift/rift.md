@@ -2,17 +2,29 @@ Purpose
 --------
 A simple yaml-like format that's close enough to use existing yaml highlighting ( in editors, etc. )
 
-
 Some major differences:
 
 * Comments are important.
 * String scalars must be quoted.
-* Multiline strings use heredocs and only heredocs.
+* Multiline strings use special heredocs ( and only heredocs. )
 * Except for string literals, tabs are always invalid whitespace.
-* No flow style ( although is an array syntax. )
+* No flow style ( although there is an array syntax. )
 * The order of maps matters.
 * No anchors or references.
 * Documents hold a single value.
+
+Status 
+----
+
+The go implementation can successfully read well-formed documents; it doesn't attempt to write documents. ( I might try to branch some existing yaml code for that. It'd be nice if it also worked as a "reformatter" to prettify existing files. )
+
+### Remaining features
+
+* heredocs defined but not supported yet.
+* arrays would be nice, but aren't implemented yet.
+* error reporting needs improvement.
+
+also see the issues page.
 
 Types
 ---
@@ -35,9 +47,11 @@ Any **scalar**, **array**, **sequence**, **mapping**, or **heredoc**.
 * **bool**: `true`, or `false`.
 * **raw string** ( backtick ): \`backslashes are backslashes.`
 * **interpreted string** ( double quotes ): "backslashes indicate escaped characters."
-* **number**: 64-bit int or float numbers optionally starting with `+`/`-`; floats can have exponents `[e|E][|+/-]...`; hex values can be specified with `0x`notation. _( **TBD**: may expand to support https://go.dev/ref/spec#Integer_literals, etc. as needed. )_ It is sad that due to comments hex colors cannot live as `#ffffff`.
+* **number**: 64-bit int or float numbers optionally starting with `+`/`-`; floats can have exponents `[e|E][|+/-]...`; hex values can be specified with `0x`notation. _( may expand to support https://go.dev/ref/spec#Integer_literals, etc. as needed. )_  _( **TBD**: the implementation currently produces floats, and only floats. that's to match json, but what's best? )_ 
 
 A scalar value always appears on a single line. There is no null keyword, null is implicit where no explicit value was provided.
+
+_( It is sad that hex colors can't live as `#ffffff`. Maybe it would have been cool to use lua style comments ( -- ) instead of yaml hashes. For now, comments are defined as a hash followed by a space while i keep thinking about it. )_
 
 ### Arrays
 An array is a list of comma separated scalars, ending with an optional fullstop: `1, 2, 3.` 
@@ -52,17 +66,27 @@ Additional entries in the same sequence start on the next line with the same ind
   - false
 ```
 
-As in `yaml`, whitespace after the dash can include newlines. The lack of differentiation between newline and space implies that nested sequences can be declared on one line. For example, `- - 5` is equivalent to the json `[[5]]`.
+As in `yaml`, whitespace after the dash can include newlines. And,that lack of differentiation between newline and space implies that nested sequences can be declared on one line. For example, `- - 5` is equivalent to the json `[[5]]`.
+
+Unlike `yaml`, if the value is on a line separate than the dash, two spaces of indentation are required. ( ie. Newlines and spaces are both whitespace, but depth of indentation still matters. ) This rule keeps values aligned.
+
+```
+  - "here"
+  - 
+    "there"
+```
 
 #### Mappings
-Mappings relate signatures to values in an ordered fashion.
-**Signatures** are words separated by colons, ending with a colon and whitespace. For example: `Hello:there: `. The first character of each word must be a (unicode) letter, subsequent characters can also include digits and underscores _( **TBD**: this is somewhat arbitrary; what does yaml do? )_
+Mappings relate keys to values in an ordered fashion.
 
-For the same reason that nested sequences can appear inline, mappings can. However, `yaml` does not allow this and it's probably bad style. For example: `Key: Nested: "some value"` is equivalent to the `json` `{"Key:": {"Nested:": "some value" }` 
+Keys are represented by **signatures**: a series of words separated by colons, that end with a colon and whitespace. For example: `Hello:there: `. The first character of each word must be a (unicode) letter, subsequent characters can also include digits and underscores _( **TBD**: this is somewhat arbitrary; what does yaml do? )_
+
+For the same reason that nested sequences can appear inline, mappings can. However, `yaml` does not allow this and it's probably bad style. For example: `Key: Nested: "some value"` is equivalent to the `json` `{"Key:": {"Nested:": "some value" }`. Like sequences, if the value of a mapping appears on the next line, two spaces of indentation are required.
 
 _( **Note**: [Tapestry](git.sr.ht/~ionous/tapestry) wants those colons so, for now, the interpretation of `key:` is `"key:"` not `"key"`. This feels like an implementation detail because implementations should know what kind of data they are reading anyway. )_
 
-### Heredocs
+#### Heredocs
+
 Heredocs provide multi-line strings wherever a scalar string is permitted ( but not in a multiline array, dear god. )
 
 There are two types, one for each string type:
@@ -88,7 +112,7 @@ Indentation of the block is based on the position of the closing heredoc marker.
 1234 spaces.
 """
 
-  - ```END
+  - ```<<<END
     i am a heredoc literal using a custom closing tag.
     this sentence is separated from the preceding with a newline.
      this appears on yet another line, with a single leading space.
@@ -98,14 +122,14 @@ Indentation of the block is based on the position of the closing heredoc marker.
     END
 ```
 
-_( **Note**: for the sake of round trip preservation, heredocs might be indicated by a custom string type. Alternatively -- or in addition -- they could be stored with their markers and helper functions could subslice out the formatted text. )_
+( _**TBD**: i'm quite taken with the way markdown tools allow syntax coloring of triple quote blocks by specifying a file type after the quotes. github's version allows other words to appear on the line after the file type separated by spaces -- so possibly something like ` ```yaml  END` would work. that doesn't decay well (ie. if someone didn't want to specify a file type.) so always requiring redirection markers might help. )_ 
 
 ### Comments
 Hate me forever, comments are preserved, are significant, and introduce their own indentation rules. 
 
 **Rationale:** Comments are a good mechanism for communicating human intent. And, in [Tapestry](git.sr.ht/~ionous/tapestry), since story files can be edited by hand, edited in mosaic/blockly, or even extracted to present documentation: preserving those comments across different transformations matter.
 
-Comments begin with the `#` hash and continue to the end of a line. Comments cannot appear within a scalar _( **TBD**: comma separated arrays split across lines might be an exception. )_ 
+Comments begin with the `#` hash, followed by a space, and continue to the end of a line. Comments cannot appear within a scalar _( **TBD**: comma separated arrays split across lines might be an exception. )_ 
 
 Here are some examples:
 
@@ -161,11 +185,11 @@ Here are some examples:
 
 #### Comment storage:
 
-This implementation stores the comments for each collection separately in its own "comment block". A comment block is a single string of continuous text generated in the following manner:
+This implementation stores the comments for each collection separately in its own "comment block" ( it _can_ also discard them entirely when needed. ) A comment block is a single string of continuous text generated in the following manner:
 
 * Individual comments are stored as encountered. Each line gets trimmed of trailing spaces, hash marks are kept intact. ( Keeping the hash makes it more obvious how internal leading spaces are handled, and makes it easier to split comments out of their stored block of text. )
-* A horizontal tab (`\t`) replaces the value of an entry.
-* Nested lines of a comment are indicated by a carriage return (`\r`); while other line breaks use line feed (`\n`). For these purposes, comments right aligned with an inline comment are considered nested; trailing comments are not. ( Therefore line feeds always preface trailing comment lines. )
+* A carriage return (`\r`) separates the comments before a collection marker ( dash or signature) from the comments after; effectively it replaces the value of an entry.
+* Nested lines of a comment are indicated by horizontal tabs (`\t`); other line breaks between comments use line feed (`\n`). For these purposes, comments right aligned with an inline comment are considered nested; trailing comments are not. ( Therefore line feeds always preface trailing comment lines. )
 * To separate groups of comments, the end of each collection entry uses a form feed (`\f`). ( Putting it at the end, keeps the first header comment with the first entry. ) 
 * Fully blank lines are skipped.
   

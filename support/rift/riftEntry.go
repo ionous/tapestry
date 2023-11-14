@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/support/charm"
-	"github.com/ionous/errutil"
 )
 
 // represents the "contents" of an entry
@@ -13,7 +12,6 @@ type riftEntry struct {
 	pendingValue    pendingValue
 	addsValue       func(val any, comment string) error
 	pad, head, tail CommentBuffer
-	bufferedLines   int
 	depth           int
 }
 
@@ -36,7 +34,7 @@ func (ent *riftEntry) finalizeEntry() (err error) {
 		}
 		if len(head) > 0 || len(tail) > 0 {
 			w.WriteString(head) // padding
-			w.WriteRune(HTab)
+			w.WriteRune(CollectionMark)
 			w.WriteString(tail)
 		}
 		err = ent.addsValue(val, w.String())
@@ -44,15 +42,10 @@ func (ent *riftEntry) finalizeEntry() (err error) {
 	return
 }
 
-// fix: can this be made internal
-// even evaluating the pendingValue might be better
+// fix: is this still in use?
 func (ent *riftEntry) writeHeader() (ret string, err error) {
-	if ent.bufferedLines > 1 {
-		err = errutil.New("ambiguous multiline comment.")
-	} else {
-		ret = ent.head.String()
-		ent.head.Reset()
-	}
+	ret = ent.head.String()
+	ent.head.Reset()
 	return
 }
 
@@ -119,8 +112,6 @@ func ReadPadding(ent *riftEntry, depth int) charm.State {
 
 // we're at the start of ... something
 // could be a value or a comment.
-// fix: the reason we cant have the caller use "Step"
-// is that pop doesnt really. it doesnt break out of the parent / child
 func HeaderRegion(ent *riftEntry, depth int, next charm.State) charm.State {
 	return charm.Self("header", func(header charm.State, r rune) (ret charm.State) {
 		switch r {

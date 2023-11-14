@@ -29,19 +29,19 @@ func (*NumParser) String() string {
 }
 
 // returns int64 or float64
-// func (p *NumParser) GetNumber() (ret any, err error) {
-// 	switch s := p.runes.String(); p.mode {
-// 	case Int10:
-// 		ret = fromInt(s, p.negate)
-// 	case Int16:
-// 		ret = fromHex(s)
-// 	case Float64:
-// 		ret = fromFloat(s, p.negate)
-// 	default:
-// 		err = errutil.Fmt("unknown number: '%v' is %v.", s, p.mode)
-// 	}
-// 	return
-// }
+func (p *NumParser) GetNumber() (ret any, err error) {
+	switch s := p.runes.String(); p.mode {
+	case Int10:
+		ret = fromInt(s, p.negate)
+	case Int16:
+		ret = fromHex(s)
+	case Float64:
+		ret = fromFloat(s, p.negate)
+	default:
+		err = errutil.Fmt("unknown number: '%v' is %v.", s, p.mode)
+	}
+	return
+}
 
 func (p *NumParser) GetFloat() (ret float64, err error) {
 	switch s := p.runes.String(); p.mode {

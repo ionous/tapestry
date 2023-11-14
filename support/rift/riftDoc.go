@@ -39,7 +39,7 @@ func (doc *Document) ReadDoc(src io.RuneReader) (ret Result, err error) {
 }
 
 // slightly lower level access for reading explicit kinds of values
-// cant be called multiple times (fix?)
+// calling this multiple times leads to undefined results (fix?)
 func (doc *Document) ReadLines(src io.RuneReader, start charm.State) (err error) {
 	run := charm.Parallel("parse lines", FilterControlCodes(), UnhandledError(start), &doc.Cursor)
 	if e := charm.Read(src, run); e != nil {

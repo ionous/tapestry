@@ -122,9 +122,6 @@ func (val *riftValue) tryBool(r rune, makeNext func(str string) charm.State) (re
 			ret = makeNext(partial).NewRune(r)
 		} else {
 			// store the result early, in case we're at the end of the document.
-			// fix: for this and number we should require a space or eol after
-			// to complete the value; *clear* some value on success rather setting some ambient state
-			// and error on pop if the value wasnt cleared
 			val.setComputedValue(res)
 			ret = charm.Statement("post bool", func(r rune) (ret charm.State) {
 				// the word "true" or "false" needs to check the rune after it
