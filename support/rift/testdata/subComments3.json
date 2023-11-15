@@ -1,9 +1,0 @@
-{
-  "content": [
-    "# for consistency, the entry\t# can use nesting here.",
-    {
-      "": "# and, the header can also\t# use nesting here.",
-      "sub:collection:with:": "one element"
-    }
-  ]
-}

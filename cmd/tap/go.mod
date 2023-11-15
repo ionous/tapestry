@@ -1,6 +1,6 @@
 module git.sr.ht/~ionous/tapestry/cmd/tap
 
-go 1.18
+go 1.20
 
 require (
 	git.sr.ht/~ionous/tapestry v0.0.0-20220223221837-b25bd82d20fe

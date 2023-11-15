@@ -1,6 +1,0 @@
-# BUG -- i think things like this should be allowed
-# but it fails. note: if the header alignment has the indentation
-# as the sequence, everything is fine.
-
-        - "some indentation"
-        - "yay"

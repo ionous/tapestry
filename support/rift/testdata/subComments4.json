@@ -1,9 +1,0 @@
-{
-  "content": [
-    "# test extra offsets from the collection marker\t# can use nesting here.",
-    {
-      "": "# so long as everything is aligned\t# its supposed to work fine.",
-      "sub:collection:with:": "one element"
-    }
-  ]
-}

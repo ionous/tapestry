@@ -1,6 +1,0 @@
-
--     # test extra offsets from the collection marker
-       # can use nesting here.
-      # so long as everything is aligned
-        # its supposed to work fine.
-      sub:collection:with: "one element"

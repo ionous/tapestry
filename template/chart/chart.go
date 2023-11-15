@@ -1,11 +1,11 @@
 package chart
 
 import (
-	"git.sr.ht/~ionous/tapestry/support/charm"
-	"git.sr.ht/~ionous/tapestry/support/charmed"
 	"git.sr.ht/~ionous/tapestry/template/postfix"
 	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
+	"github.com/ionous/tell/charm"
+	"github.com/ionous/tell/charmed"
 )
 
 type Runes = charm.Runes

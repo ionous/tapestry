@@ -1,6 +1,0 @@
-
-- # for consistency, the entry
-    # can use nesting here.
-  # and, the header can also
-    # use nesting here.
-  sub:collection:with: "one element"
