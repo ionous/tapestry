@@ -30,7 +30,7 @@ func Registry() composer.TypeRegistry {
 }
 
 func CompactDecode(msg json.RawMessage) (ret StoryFile, err error) {
-	err = Decode(&ret, msg, AllSignatures)
+	err = DecodeJson(&ret, msg, AllSignatures)
 	return
 }
 

@@ -13,7 +13,7 @@ import (
 // verifies this expands a pattern call and that it generates a pattern reference.
 func TestDetermineNum(t *testing.T) {
 	var call rt.NumberEval
-	if e := story.Decode(rt.NumberEval_Slot{&call},
+	if e := story.DecodeJson(rt.NumberEval_Slot{&call},
 		[]byte(`{"Factorial num:":{"FromNumber:": 3}}`),
 		story.AllSignatures); e != nil {
 		t.Fatal(e)

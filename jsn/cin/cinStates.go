@@ -3,7 +3,7 @@ package cin
 import (
 	"encoding/json"
 	"errors"
-	"strings"
+	r "reflect"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -18,8 +18,8 @@ type xDecoder struct {
 	customFlow FlowDecoder
 }
 
-type SlotDecoder func(jsn.Marshaler, jsn.SlotBlock, json.RawMessage) error
-type FlowDecoder func(jsn.Marshaler, jsn.FlowBlock, json.RawMessage) error
+type SlotDecoder func(jsn.Marshaler, jsn.SlotBlock, r.Value) error
+type FlowDecoder func(jsn.Marshaler, jsn.FlowBlock, r.Value) error
 
 // Customization of the decoding process
 type Decoder xDecoder
@@ -28,10 +28,10 @@ func NewDecoder(reg TypeCreator) *Decoder {
 	d := &xDecoder{
 		TypeCreator: reg,
 		Machine:     chart.MakeDecoder(),
-		customSlot: func(jsn.Marshaler, jsn.SlotBlock, json.RawMessage) error {
+		customSlot: func(jsn.Marshaler, jsn.SlotBlock, r.Value) error {
 			return chart.Unhandled("no custom slot handler")
 		},
-		customFlow: func(jsn.Marshaler, jsn.FlowBlock, json.RawMessage) error {
+		customFlow: func(jsn.Marshaler, jsn.FlowBlock, r.Value) error {
 			return chart.Unhandled("no custom flow handler")
 		},
 	}
@@ -49,17 +49,28 @@ func (b *Decoder) SetFlowDecoder(handler FlowDecoder) *Decoder {
 	return b
 }
 
-func (b *Decoder) Decode(dst jsn.Marshalee, msg json.RawMessage) error {
+func (b *Decoder) DecodeJson(dst jsn.Marshalee, raw json.RawMessage) (err error) {
 	x := (*xDecoder)(b)
-	return x.decode(dst, msg)
+	var msg any
+	if e := json.Unmarshal(raw, &msg); e != nil {
+		err = e
+	} else {
+		err = x.DecodeMsg(dst, r.ValueOf(msg))
+	}
+	return
+}
+
+func (b *Decoder) DecodeMsg(dst jsn.Marshalee, msg r.Value) error {
+	x := (*xDecoder)(b)
+	return x.DecodeMsg(dst, msg)
 }
 
 func Decode(dst jsn.Marshalee, msg json.RawMessage, reg TypeCreator) error {
 	dec := NewDecoder(reg)
-	return dec.Decode(dst, msg)
+	return dec.DecodeJson(dst, msg)
 }
 
-func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {
+func (dec *xDecoder) DecodeMsg(dst jsn.Marshalee, msg r.Value) error {
 	next := dec.newBlock(msg, new(chart.StateMix))
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)
@@ -67,7 +78,7 @@ func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {
 	return dec.Errors()
 }
 
-func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay bool) {
+func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg r.Value) (okay bool) {
 	if e := dec.customFlow(dec, flow, msg); e == nil {
 		dec.Commit("customFlow")
 	} else {
@@ -93,15 +104,10 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 	return
 }
 
-func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay bool) {
+func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg r.Value) (okay bool) {
 	if e := dec.customSlot(dec, slot, msg); e == nil {
 		dec.Commit("customSlot")
 	} else {
-		var reparse chart.Reparse
-		if errors.As(e, &reparse) {
-			msg = json.RawMessage(reparse)
-			e = nil
-		}
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.customSlot(dec, slot, msg)
@@ -124,9 +130,12 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 	return
 }
 
-func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg json.RawMessage) (okay bool) {
+func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg r.Value) (okay bool) {
 	// expanded swaps { "swapName choice:": <value> }
-	if op, e := ReadOp(msg); e != nil {
+	if t := msg.Type(); !IsValidMap(t) {
+		e := errutil.Fmt("expected a slot, have %s", t)
+		dec.Error(e)
+	} else if op, e := ReadOp(msg); e != nil {
 		dec.Error(e)
 	} else if sig, args, e := op.ReadMsg(); e != nil {
 		dec.Error(e)
@@ -137,60 +146,60 @@ func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg json.RawMessage) (okay bo
 		if ok := p.SetSwap(pick); !ok {
 			dec.Error(errutil.Fmt("swap has unexpected choice %q", pick))
 		} else {
-			dec.PushState(dec.newSwap(args[0]))
+			el := args.Index(0).Elem()
+			dec.PushState(dec.newSwap(el))
 			okay = true
 		}
 	}
 	return
 }
 
-func (dec *xDecoder) readRepeat(slice jsn.SliceBlock, msg json.RawMessage) bool {
-	// see also: comStates's handling of slices which implement "GetCompactValue"
-	var msgs []json.RawMessage
-	e := json.Unmarshal(msg, &msgs)
-	if e != nil {
-		msgs = []json.RawMessage{msg}
+// allows a single value, or an array of values
+func (dec *xDecoder) readRepeat(tgt jsn.SliceBlock, msg r.Value) (okay bool) {
+	var slice r.Value
+	if IsValidSlice(msg.Type()) {
+		slice = msg
+	} else {
+		slice = r.ValueOf([]any{msg.Interface()})
 	}
 	// to distinguish b/t missing and empty repeats, set even if size zero.
 	// note: we don't get here if the record was missing
+	cnt := slice.Len()
 	var next *chart.StateMix
-	cnt := len(msgs)
-	slice.SetSize(cnt)
+	tgt.SetSize(cnt)
 	if cnt == 0 {
 		next = chart.NewBlockResult(&dec.Machine, "empty slice")
 	} else {
-		next = dec.newSlice(msgs)
+		next = dec.newSlice(slice)
 	}
 	dec.PushState(next)
 	return true
 }
 
-func (dec *xDecoder) readValue(pv interface{}, msg json.RawMessage) (err error) {
-	if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
-		var i interface{}
-		if e := json.Unmarshal(msg, &i); e != nil {
-			err = e
-		} else if !el.SetValue(i) {
-			err = errutil.New("couldnt set value", i)
+func (dec *xDecoder) readValue(pv any, msg r.Value) (err error) {
+	// hrm... "str" types dont use boxing so they dont use set value
+	if el, ok := pv.(interface{ SetValue(any) bool }); ok {
+		if !el.SetValue(msg.Interface()) {
+			err = errutil.New("couldnt set value", msg)
 		}
+	} else if pstr, isString := pv.(*string); !isString {
+		err = errutil.Fmt("unexpected value of type %T", pv)
 	} else {
-		if e := json.Unmarshal(msg, pv); e != nil {
-			err = e // preliminary
-			if pstr, isString := pv.(*string); isString {
-				// handle an reading into a single string where an array (of lines) was provided
-				var strs []string
-				if e := json.Unmarshal(msg, &strs); e == nil {
-					*pstr = strings.Join(strs, "\n")
-					err = nil // succeeded reading, clear provisional error
-				}
-			}
+		if msg.Kind() == r.String {
+			*pstr = msg.String()
+		} else if lines, e := SliceLines(msg); e != nil {
+			err = e
+		} else {
+			*pstr = lines // a string with newlines.
 		}
 	}
+	// even on error?
 	dec.Commit("new value")
 	return
 }
 
-func (dec *xDecoder) newBlock(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
+// allows any r.Value
+func (dec *xDecoder) newBlock(msg r.Value, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(_ string, flow jsn.FlowBlock) bool {
 		return dec.readFlow(flow, msg)
 	}
@@ -231,57 +240,57 @@ func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
 	return &next
 }
 
-var emptyMessage = make([]byte, 0, 0)
+var empty json.RawMessage = make([]byte, 0, 0)
 
 // given a specific key, we have to look up the corresponding msg value before we can process it
 // some states however treat that key differently... ie. embedded swaps
-func (dec *xDecoder) newKeyValue(msgs *cinFlow, key string, prev chart.StateMix) *chart.StateMix {
+func (dec *xDecoder) newKeyValue(cmd *cinFlow, key string, prev chart.StateMix) *chart.StateMix {
 	next := prev // copy
 	//
 	next.OnMap = func(_ string, flow jsn.FlowBlock) (okay bool) {
-		if msg, e := msgs.getArg(key); e != nil {
+		if arg, e := cmd.getArg(key); e != nil {
 			dec.Error(e)
-		} else if len(msg) > 0 {
-			okay = dec.readFlow(flow, msg)
+		} else if arg.IsValid() {
+			okay = dec.readFlow(flow, arg)
 		}
 		return
 	}
 	next.OnSlot = func(_ string, slot jsn.SlotBlock) (okay bool) {
-		if msg, e := msgs.getArg(key); e != nil {
+		if arg, e := cmd.getArg(key); e != nil {
 			dec.Error(e)
-		} else if len(msg) > 0 {
-			okay = dec.readSlot(slot, msg)
+		} else if arg.IsValid() {
+			okay = dec.readSlot(slot, arg)
 		}
 		return
 	}
 	next.OnSwap = func(_ string, swap jsn.SwapBlock) (okay bool) {
-		if msg, pick, e := msgs.getPick(key); e != nil {
+		if arg, pick, e := cmd.getPick(key); e != nil {
 			dec.Error(e)
-		} else if len(msg) > 0 {
+		} else if arg.IsValid() {
 			if ok := swap.SetSwap(newStringKey(pick)); !ok {
 				dec.Error(errutil.Fmt("embedded swap at %q has unexpected choice %q", key, pick))
 			} else {
-				dec.PushState(dec.newSwap(msg))
+				dec.PushState(dec.newSwap(arg))
 				okay = true
 			}
 		}
 		return
 	}
 	next.OnRepeat = func(_ string, slice jsn.SliceBlock) (okay bool) {
-		if msg, e := msgs.getArg(key); e != nil {
+		if arg, e := cmd.getArg(key); e != nil {
 			dec.Error(e)
-		} else if len(msg) > 0 {
-			okay = dec.readRepeat(slice, msg)
+		} else if arg.IsValid() {
+			okay = dec.readRepeat(slice, arg)
 		}
 		return
 	}
 	next.OnValue = func(_ string, pv interface{}) (err error) {
-		if msg, e := msgs.getArg(key); e != nil {
+		if arg, e := cmd.getArg(key); e != nil {
 			dec.Error(e)
-		} else if len(msg) == 0 {
+		} else if !arg.IsValid() {
 			err = jsn.Missing
 		} else {
-			err = dec.readValue(pv, msg)
+			err = dec.readValue(pv, arg)
 		}
 		return
 	}
@@ -292,11 +301,14 @@ func (dec *xDecoder) newKeyValue(msgs *cinFlow, key string, prev chart.StateMix)
 }
 
 // we expect at least one msg, and no more and no fewer values than msgs
-func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
-	next := dec.newBlock(msgs[0], new(chart.StateMix))
+func (dec *xDecoder) newSlice(slice r.Value) *chart.StateMix {
+	first := slice.Index(0).Elem()
+	next := dec.newBlock(first, new(chart.StateMix))
+	// loops by slicing the array each time.
 	next.OnCommit = func(interface{}) {
 		var after *chart.StateMix
-		if rest := msgs[1:]; len(rest) > 0 {
+		if cnt := slice.Len(); cnt > 1 {
+			rest := slice.Slice(1, cnt)
 			after = dec.newSlice(rest)
 		} else {
 			after = chart.NewBlockResult(&dec.Machine, "slice end")
@@ -304,7 +316,7 @@ func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 		dec.ChangeState(after)
 	}
 	next.OnEnd = func() {
-		dec.Error(errutil.New("slice underflow", len(msgs)))
+		dec.Error(errutil.Fmt("slice underflow, %d remaining", slice.Len()))
 		dec.FinishState("bad slice")
 	}
 	return next
@@ -325,13 +337,14 @@ func (dec *xDecoder) newSlot(op Op) *chart.StateMix {
 		}
 		return
 	}
-	next.OnValue = func(typeName string, pv interface{}) (err error) {
+	next.OnValue = func(typeName string, pv any) (err error) {
 		if sig, args, e := op.ReadMsg(); e != nil {
 			dec.Error(e)
-		} else if len(args) != 1 {
-			dec.Error(errutil.New("unexpected number of args", sig.Name, len(args)))
+		} else if cnt := args.Len(); cnt != 1 {
+			dec.Error(errutil.Fmt("expected %s to have one arg, has %d", sig.Name, cnt))
 		} else {
-			err = dec.readValue(pv, args[0])
+			el := args.Index(0).Elem()
+			err = dec.readValue(pv, el)
 		}
 		return
 	}
@@ -345,7 +358,7 @@ func (dec *xDecoder) newSlot(op Op) *chart.StateMix {
 }
 
 // pretty much any simple value or block data can fulfill a swap
-func (dec *xDecoder) newSwap(msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSwap(msg r.Value) *chart.StateMix {
 	next := dec.newBlock(msg, new(chart.StateMix))
 	next.OnCommit = func(interface{}) {
 		dec.ChangeState(chart.NewBlockResult(&dec.Machine, "swap end"))

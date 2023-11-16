@@ -26,7 +26,7 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 			var d grammar.Directive
 			if e := cin.NewDecoder(cin.Signatures{grammar.Signatures, assign.Signatures, literal.Signatures}).
 				SetSlotDecoder(literal.CompactSlotDecoder).
-				Decode(&d, prog); e != nil {
+				DecodeJson(&d, prog); e != nil {
 				err = e
 			} else {
 				x := d.MakeScanners()

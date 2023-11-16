@@ -1,7 +1,7 @@
 package cin
 
 import (
-	"encoding/json"
+	r "reflect"
 
 	"github.com/ionous/errutil"
 )
@@ -9,7 +9,7 @@ import (
 type cinFlow struct {
 	name      string
 	params    []Parameter
-	args      []json.RawMessage
+	args      r.Value // a slice of interfaces
 	bestIndex int
 }
 
@@ -22,34 +22,36 @@ func newFlowData(op Op) (ret *cinFlow, err error) {
 	return
 }
 
-func (f *cinFlow) getArg(key string) (ret json.RawMessage, err error) {
-	if i := f.getArgAt(key); i >= 0 {
+// returns the argument for the passed parameter label;
+// nothing if not found; errors if known to be invalid.
+func (f *cinFlow) getArg(key string) (ret r.Value, err error) {
+	if i := f.getParamIndex(key); i >= 0 {
 		if c := f.params[i].Choice; len(c) > 0 {
 			err = errutil.Fmt("expected no choice for key %q have %q", key, c)
 		} else {
-			ret = f.args[i]
+			ret = f.args.Index(i).Elem()
 			f.bestIndex = i + 1
 		}
 	}
 	return
 }
 
-func (f *cinFlow) getPick(key string) (retMsg json.RawMessage, retChoice string, err error) {
+func (f *cinFlow) getPick(key string) (retMsg r.Value, retChoice string, err error) {
 	// the signature parser can't distinguish b/t a leading first selector, and a leading anonymous choice:
 	//  ex. "Command choice:" -- so the param array has the choice in the label's spot
 	if len(key) == 0 && f.bestIndex == 0 && len(f.params) > 0 && len(f.params[0].Choice) == 0 {
 		retChoice = f.params[0].Label
-		retMsg = f.args[0]
+		retMsg = f.args.Index(0).Elem()
 		f.bestIndex = 1
 	} else {
 		// otherwise we expect named selector/choice pairs
 		// "Command selector choice:"
-		if i := f.getArgAt(key); i >= 0 {
+		if i := f.getParamIndex(key); i >= 0 {
 			if c := f.params[i].Choice; len(c) == 0 {
 				err = errutil.Fmt("expected a trailing choice for key %q", key)
 			} else {
 				retChoice = c
-				retMsg = f.args[i]
+				retMsg = f.args.Index(i).Elem()
 				f.bestIndex = i + 1
 			}
 		}
@@ -57,10 +59,12 @@ func (f *cinFlow) getPick(key string) (retMsg json.RawMessage, retChoice string,
 	return
 }
 
-func (f *cinFlow) getArgAt(key string) (ret int) {
+// returns the index of the labeled parameter, or -1 if not found.
+// only looks at or to the right of the current "bestIndex"
+func (f *cinFlow) getParamIndex(label string) (ret int) {
 	ret = -1 // provisionally
 	for i, cnt := f.bestIndex, len(f.params); i < cnt; i++ {
-		if n := f.params[i]; n.Label == key {
+		if n := f.params[i]; n.Label == label {
 			ret = i
 			break
 		}

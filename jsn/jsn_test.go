@@ -66,7 +66,7 @@ func TestMissingSlot(t *testing.T) {
 		core.T("one"), core.T("two"), core.T("three"),
 	}}
 	var have core.Join
-	if e := story.Decode(&have, []byte(in), story.AllSignatures); e != nil {
+	if e := story.DecodeJson(&have, []byte(in), story.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -76,7 +76,7 @@ func TestMissingSlot(t *testing.T) {
 }
 
 // cinStates: xDecoder.readFlow() reads the Text:initially signature
-// but previously only used itto separate out the parameter names;
+// but previously only used it to separate out the parameter names;
 // it didnt validate it against the flow, and handed the json map to Arg_Marshal
 // which read any matching fields, ex. the the _ field holding "description".
 // now: it tests that the lede of the command matches the first part of the signature
@@ -84,7 +84,7 @@ func TestExpectedFailure(t *testing.T) {
 	var dst assign.Arg_Slice
 	if e := cin.NewDecoder(cin.Signatures(tapestry.AllSignatures)).
 		SetSlotDecoder(core.CompactSlotDecoder).
-		Decode(&dst, []byte(failure)); e == nil {
+		DecodeJson(&dst, []byte(failure)); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok:", e)

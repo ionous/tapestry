@@ -1,6 +1,11 @@
 package literal
 
-import "github.com/ionous/errutil"
+import (
+	r "reflect"
+
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"github.com/ionous/errutil"
+)
 
 func marshalFields(out map[string]interface{}, vs []FieldValue) (err error) {
 Loop:
@@ -31,33 +36,42 @@ Loop:
 	return
 }
 
-func unmarshalFields(m map[string]interface{}) (ret []FieldValue, err error) {
-Loop:
-	for key, val := range m {
-		var i LiteralValue
-		switch v := val.(type) {
-		case bool:
-			i = &BoolValue{Value: v}
-		case string:
-			i = &TextValue{Value: v}
-		case float64:
-			i = &NumValue{Value: v}
-		case []float64:
-			i = &NumValues{Values: v}
-		case []string:
-			i = &TextValues{Values: v}
-		case map[string]interface{}:
-			if x, e := unmarshalFields(v); e != nil {
-				err = e
+// reads a literal record
+// fix: when is this used? shouldn't this be a pattern call?
+func unmarshalFields(msg r.Value) (ret []FieldValue, err error) {
+	if t := msg.Type(); !cin.IsValidMap(t) {
+		err = errutil.Fmt("expected a map, have %s", t)
+	} else {
+	Loop:
+		for it := msg.MapRange(); it.Next(); {
+			key, val := it.Key().String(), it.Value().Elem()
+			var i LiteralValue
+			switch val.Kind() {
+			case r.Bool:
+				i = &BoolValue{Value: val.Bool()}
+			case r.String:
+				i = &TextValue{Value: val.String()}
+			case r.Float64:
+				i = &NumValue{Value: val.Float()}
+			case r.Slice:
+				if vs, ok := cin.SliceFloats(msg); ok {
+					i = &NumValues{Values: vs}
+				} else if vs, ok := cin.SliceStrings(msg); ok {
+					i = &TextValues{Values: vs}
+				}
+			case r.Map:
+				if x, e := unmarshalFields(val); e != nil {
+					err = e
+					break Loop
+				} else {
+					i = &FieldList{Fields: x}
+				}
+			default:
+				err = errutil.Fmt("unmarshalFields unhandled literal %T", val.Type())
 				break Loop
-			} else {
-				i = &FieldList{Fields: x}
 			}
-		default:
-			err = errutil.Fmt("unmarshalFields unhandled literal %T", v)
-			break Loop
+			ret = append(ret, FieldValue{Field: key, Value: i})
 		}
-		ret = append(ret, FieldValue{Field: key, Value: i})
 	}
 	return
 }

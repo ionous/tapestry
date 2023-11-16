@@ -1,7 +1,7 @@
 package cin
 
 import (
-	"encoding/json"
+	r "reflect"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt/markup"
@@ -12,19 +12,17 @@ import (
 // ex. {"Sig:":  <Msg>, "--": "Markup"}
 // ( note: the registry uses the raw signature without additional processing to find associated golang struct )
 type Op struct {
-	Sig    string          // raw signature containing one or more colon separators
-	Markup map[string]any  // metadata from "--" fields
-	Msg    json.RawMessage // probably an array of values
+	Sig    string         // raw signature containing one or more colon separators
+	Markup map[string]any // metadata from "--" fields
+	Msg    r.Value        // probably an array of values
 }
 
-// ReadOp - interpret the passed json as the start of a compact command.
-// fix? replace this with a custom implementation of json.Unmarshaler ( UnmarshalJSON() )
-func ReadOp(msg json.RawMessage) (ret Op, err error) {
-	var d map[string]json.RawMessage
-	if e := json.Unmarshal(msg, &d); e != nil {
-		err = e
+// ReadOp - interpret the passed object as the start of a compact command.
+func ReadOp(msg r.Value) (ret Op, err error) {
+	if t := msg.Type(); !IsValidMap(t) {
+		err = errutil.Fmt("expected a compact command, not %s", t)
 	} else {
-		ret, err = parseOp(d) // start by trying to read the {} format
+		ret, err = parseOp(msg)
 	}
 	return
 }
@@ -38,7 +36,8 @@ func (op *Op) AddMarkup(k string, value any) {
 
 // ReadMsg - given a valid Op, split out its call signature and associated parameters.
 // Errors if the number of separators in its sig differs from the number of parameters in its msg.
-func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error) {
+// retArgs is guaranteed to be a slice
+func (op *Op) ReadMsg() (retSig Signature, retArgs r.Value, err error) {
 	if sig, e := ReadSignature(op.Sig); e != nil {
 		err = e
 	} else {
@@ -46,47 +45,44 @@ func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error)
 		// ideally it would be optional, but it gets a bit weird when the single argument is itself an array.
 		// there's no way to distinguish that case without knowing the desired format of the argument ( and we dont here. )
 		// fix? maybe the cout should always use an array.... it just seemed verbose at the time.
-		var args []json.RawMessage
-		pn := len(sig.Params)
-		if pn == 1 {
-			args = []json.RawMessage{op.Msg}
-		} else if pn > 1 {
-			err = json.Unmarshal(op.Msg, &args)
+		var args r.Value
+		switch pn := len(sig.Params); pn {
+		case 0:
+			// tbd: this used to return a nil slice;
+			// now it returns invalid. is that okay?
+		case 1:
+			args = r.ValueOf([]any{op.Msg.Interface()})
+		default:
+			slice := op.Msg
+			if t := slice.Type(); !IsValidSlice(t) {
+				err = errutil.Fmt("expected a slice of arguments, not a(n) %s", t)
+			} else if an := slice.Len(); an != pn {
+				err = errutil.Fmt("expected %s with %d args, has %d args",
+					sig.DebugString(), pn, an)
+			}
+			args = op.Msg
 		}
 		if err == nil {
-			if an := len(args); pn != an {
-				snippet := "???"
-				if an > 0 {
-					x := args[0]
-					if cap := 25; len(x) > cap {
-						x = x[:cap]
-					}
-					snippet = string(x)
-				}
-				err = errutil.Fmt("%q given %d args: %s", sig.DebugString(), an, snippet)
-			} else {
-				retSig = sig
-				retArgs = args
-			}
+			retSig = sig
+			retArgs = args
 		}
 	}
 	return
 }
 
-func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
+// expects a map of string to value
+func parseOp(obj r.Value) (ret Op, err error) {
 	var out Op
-	for k, v := range d {
+	for it := obj.MapRange(); it.Next(); {
+		k, v := it.Key().String(), it.Value().Elem()
 		if strings.HasPrefix(k, markupMarker) {
-			var value any
-			if e := json.Unmarshal(v, &value); e != nil {
-				err = errutil.New("couldnt read markup at", k, e)
-			} else if key := k[len(markupMarker):]; len(key) == 0 {
-				out.AddMarkup(markup.Comment, value)
+			if key := k[len(markupMarker):]; len(key) == 0 {
+				out.AddMarkup(markup.Comment, v.Interface())
 			} else {
-				out.AddMarkup(key, value)
+				out.AddMarkup(key, v.Interface())
 			}
 		} else if len(out.Sig) > 0 {
-			err = errutil.New("expected only a single key", d)
+			err = errutil.New("expected only a single key")
 			break
 		} else {
 			out.Sig, out.Msg = k, v

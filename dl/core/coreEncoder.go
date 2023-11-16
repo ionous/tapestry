@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -53,14 +54,14 @@ func encodeVariableRef(vref *assign.VariableRef) (ret string) {
 	return
 }
 
-func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
+func DecodeJson(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 	return cin.NewDecoder(sig).
 		SetSlotDecoder(CompactSlotDecoder).
-		Decode(dst, msg)
+		DecodeJson(dst, msg)
 }
 
 // unhandled reads are attempted via default readSlot evaluation.
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch typeName := slot.GetType(); typeName {
 	default:
@@ -76,13 +77,22 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 		rt.RecordListEval_Type,
 		// writing to a variable:
 		assign.Address_Type:
-		var str string
-		if e := json.Unmarshal(msg, &str); e == nil && len(str) > 0 && str[0] == '@' {
-			if !slot.SetSlot(Variable(str[1:])) {
+		if str := getVariableString(msg); len(str) > 0 {
+			if !slot.SetSlot(Variable(str)) {
 				err = errutil.New("unexpected error setting slot")
 			}
 		} else {
 			err = literal.CompactSlotDecoder(m, slot, msg)
+		}
+	}
+	return
+}
+
+func getVariableString(msg r.Value) (ret string) {
+	if msg.Kind() == r.String {
+		str := msg.String()
+		if len(str) > 0 && str[0] == '@' {
+			ret = str[1:]
 		}
 	}
 	return

@@ -3,6 +3,7 @@ package story
 import (
 	"encoding/json"
 	"errors"
+	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
@@ -14,22 +15,19 @@ import (
 )
 
 // Read a story from a story file.
-func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
-	return decode(dst, msg, sig)
-}
-
-func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
+func DecodeJson(dst jsn.Marshalee, msg json.RawMessage, reg cin.Signatures) error {
 	return cin.NewDecoder(reg).
-		//SetFlowDecoder(core.CompactFlowDecoder).
 		SetSlotDecoder(CompactSlotDecoder).
-		Decode(dst, msg)
-
-	// re: flow decoder
-	// right now, we only get here when the flow is a member of a flow;
-	// when we know what the type is but havent tried to read from the msg yet.
+		DecodeJson(dst, msg)
 }
 
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+func decode(dst jsn.Marshalee, obj r.Value, reg cin.TypeCreator) error {
+	return cin.NewDecoder(reg).
+		SetSlotDecoder(CompactSlotDecoder).
+		DecodeMsg(dst, obj)
+}
+
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err error) {
 	if err = core.CompactSlotDecoder(m, slot, msg); err != nil {
 		// keep this as the provisional error unless we figure out something else
 		// ( important so that callers can see the original unhandled value if any )
@@ -74,7 +72,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 
 // read the command as if it were a standard compact encoded golang struct.
 // if we don't find it, then we'll treat it as a pattern call.
-func tryPattern(m jsn.Marshaler, msg json.RawMessage, typeName string) (retSig string, retArgs []assign.Arg, err error) {
+func tryPattern(m jsn.Marshaler, msg r.Value, typeName string) (retSig string, retArgs []assign.Arg, err error) {
 	// are we in fact parsing with the compact decoder?
 	// if so, we can use its registry to figure out what's known and unknown.
 	if reg, ok := m.(cin.TypeCreator); ok {
@@ -88,9 +86,9 @@ func tryPattern(m jsn.Marshaler, msg json.RawMessage, typeName string) (retSig s
 			} else {
 				var call []assign.Arg
 				for i, p := range sig.Params {
-					arg := args[i]
 					var val rt.Assignment
-					if e := decode(rt.Assignment_Slot{Value: &val}, arg, reg); e != nil {
+					el := args.Index(i).Elem()
+					if e := decode(rt.Assignment_Slot{Value: &val}, el, reg); e != nil {
 						err = e
 						break
 					}

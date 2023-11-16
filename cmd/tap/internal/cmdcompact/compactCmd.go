@@ -147,7 +147,7 @@ func decodeEncodeSpec(in, out string, pretty bool) (err error) {
 
 var compact = xform{
 	func(dst jsn.Marshalee, b []byte) error {
-		return story.Decode(dst, b, story.AllSignatures)
+		return story.DecodeJson(dst, b, story.AllSignatures)
 	},
 	func(src jsn.Marshalee) (interface{}, error) {
 		return cout.CustomEncode(src, cout.Handlers{

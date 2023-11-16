@@ -1,14 +1,14 @@
 package literal
 
 import (
-	"encoding/json"
-	"strings"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
+
+	r "reflect"
 )
 
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
@@ -55,7 +55,7 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	return
 }
 
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err error) {
 	if ptr, e := readLiteral(slot.GetType(), "", msg); e != nil {
 		err = e
 	} else if !slot.SetSlot(ptr) {
@@ -64,25 +64,20 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 	return
 }
 
-func ReadLiteral(aff affine.Affinity, kind string, msg json.RawMessage) (ret LiteralValue, err error) {
+func ReadLiteral(aff affine.Affinity, kind string, msg r.Value) (ret LiteralValue, err error) {
 	// most literals write themselves in the same way as the eval shortcuts
 	// record doesnt yet? have a way to distinguish b/t the literal json and the eval json, so context matters.
 	if aff != affine.Record {
 		ret, err = readLiteral(aff.String()+"_eval", kind, msg)
+	} else if fields, e := unmarshalFields(msg); e != nil {
+		err = e
 	} else {
-		var obj map[string]interface{}
-		if e := json.Unmarshal(msg, &obj); e != nil {
-			err = e
-		} else if fields, e := unmarshalFields(obj); e != nil {
-			err = e
-		} else {
-			ret = &RecordValue{Kind: kind, Fields: fields}
-		}
+		ret = &RecordValue{Kind: kind, Fields: fields}
 	}
 	return
 }
 
-func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, err error) {
+func readLiteral(typeName, kind string, msg r.Value) (ret LiteralValue, err error) {
 	// when decoding, we havent created the command yet ( we're doing that now )
 	// so we have to switch on the typename not the value in the slot.
 	switch typeName {
@@ -93,59 +88,59 @@ func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, 
 		err = chart.Unhandled("CustomSlot")
 
 	case rt.BoolEval_Type:
-		var val bool
-		if e := json.Unmarshal(msg, &val); e != nil {
+		if msg.Kind() != r.Bool {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &BoolValue{Value: val, Kind: kind}
+			ret = &BoolValue{Value: msg.Bool(), Kind: kind}
 		}
 
 	case rt.NumberEval_Type:
-		var val float64
-		if e := json.Unmarshal(msg, &val); e != nil {
+		if msg.Kind() != r.Float64 {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &NumValue{Value: val, Kind: kind}
+			ret = &NumValue{Value: msg.Float(), Kind: kind}
 		}
 
 	case rt.TextEval_Type:
-		var val string
-		if e := json.Unmarshal(msg, &val); e == nil {
-			ret = &TextValue{Value: val, Kind: kind}
-		} else {
-			var vals []string
-			if e := json.Unmarshal(msg, &vals); e == nil {
-				val := strings.Join(vals, "\n")
-				ret = &TextValue{Value: val, Kind: kind}
-			} else {
+		switch msg.Kind() {
+		case r.String:
+			ret = &TextValue{Value: msg.String(), Kind: kind}
+		case r.Slice:
+			if lines, e := cin.SliceLines(msg); e != nil {
 				err = chart.Unhandled(typeName)
+			} else {
+				ret = &TextValue{Value: lines, Kind: kind}
 			}
+		default:
+			err = chart.Unhandled(typeName)
 		}
 
 	case rt.NumListEval_Type:
-		var vals []float64
-		if e := json.Unmarshal(msg, &vals); e == nil {
-			ret = &NumValues{Values: vals, Kind: kind}
-		} else {
-			var val float64
-			if e := json.Unmarshal(msg, &val); e == nil {
-				ret = &NumValues{Values: []float64{val}, Kind: kind}
-			} else {
+		switch msg.Kind() {
+		case r.Slice:
+			if vs, ok := cin.SliceFloats(msg); !ok {
 				err = chart.Unhandled(typeName)
+			} else {
+				ret = &NumValues{Values: vs, Kind: kind}
 			}
+		case r.Float64:
+			ret = &NumValues{Values: []float64{msg.Float()}, Kind: kind}
+		default:
+			err = chart.Unhandled(typeName)
 		}
 
 	case rt.TextListEval_Type:
-		var vals []string
-		if e := json.Unmarshal(msg, &vals); e == nil {
-			ret = &TextValues{Values: vals, Kind: kind}
-		} else {
-			var val string
-			if e := json.Unmarshal(msg, &val); e == nil {
-				ret = &TextValues{Values: []string{val}, Kind: kind}
-			} else {
+		switch msg.Kind() {
+		case r.Slice:
+			if vs, ok := cin.SliceStrings(msg); !ok {
 				err = chart.Unhandled(typeName)
+			} else {
+				ret = &TextValues{Values: vs, Kind: kind}
 			}
+		case r.String:
+			ret = &TextValues{Values: []string{msg.String()}, Kind: kind}
+		default:
+			err = chart.Unhandled(typeName)
 		}
 	}
 	return
