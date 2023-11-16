@@ -1,10 +1,11 @@
 package qna
 
 import (
+	"slices"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"golang.org/x/exp/slices"
 )
 
 // assumes the passed tgt is a text value referring to the object ( actor or other noun ) targeted by an event.

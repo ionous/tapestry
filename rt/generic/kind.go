@@ -1,8 +1,9 @@
 package generic
 
 import (
+	"slices"
+
 	"git.sr.ht/~ionous/tapestry/affine"
-	"golang.org/x/exp/slices"
 )
 
 // Kinds database

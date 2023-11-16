@@ -3,6 +3,7 @@ package mdl
 import (
 	"database/sql"
 	"errors"
+	"slices"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -14,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
-	"golang.org/x/exp/slices"
 )
 
 type Pen struct {
