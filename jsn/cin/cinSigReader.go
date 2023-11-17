@@ -28,7 +28,7 @@ func (s *Signature) DebugString() string {
 	return b.String()
 }
 
-// given a json .if key such as "Command noun:trait:change choice:"
+// given a key such as "Command noun:trait:change choice:"
 // separate out the command name and parameter labels
 func ReadSignature(key string) (ret Signature, err error) {
 	var sig sigReader

@@ -1,7 +1,6 @@
 package core
 
 import (
-	"encoding/json"
 	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -54,10 +53,14 @@ func encodeVariableRef(vref *assign.VariableRef) (ret string) {
 	return
 }
 
-func DecodeJson(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
+func Decode(dst jsn.Marshalee, msg map[string]any, sig cin.Signatures) error {
+	return DecodeValue(dst, r.ValueOf(msg), sig)
+}
+
+func DecodeValue(dst jsn.Marshalee, v r.Value, sig cin.Signatures) error {
 	return cin.NewDecoder(sig).
 		SetSlotDecoder(CompactSlotDecoder).
-		DecodeJson(dst, msg)
+		DecodeValue(dst, v)
 }
 
 // unhandled reads are attempted via default readSlot evaluation.

@@ -2,6 +2,7 @@ package story_test
 
 import (
 	_ "embed"
+	"encoding/json"
 	"log"
 	"testing"
 
@@ -41,7 +42,10 @@ func TestMacros(t *testing.T) {
 	cat := weave.NewCatalogWithWarnings(db, run, mdl.LogWarning)
 	dt := testweave.NewWeaverCatalog(name, db, cat, true)
 	//
-	if curr, e := story.CompactDecode(storyMacroData); e != nil {
+	var msg map[string]any
+	if e := json.Unmarshal(storyMacroData, &msg); e != nil {
+		t.Fatal(e)
+	} else if curr, e := story.CompactDecode(msg); e != nil {
 		t.Fatal(e)
 	} else if e := cat.DomainStart("tapestry", nil); e != nil {
 		t.Fatal(e)

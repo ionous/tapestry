@@ -1,7 +1,6 @@
 package story
 
 import (
-	"encoding/json"
 	"errors"
 	r "reflect"
 
@@ -14,17 +13,15 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Read a story from a story file.
-func DecodeJson(dst jsn.Marshalee, msg json.RawMessage, reg cin.Signatures) error {
-	return cin.NewDecoder(reg).
-		SetSlotDecoder(CompactSlotDecoder).
-		DecodeJson(dst, msg)
+// Create a story dl from native maps and slices.
+func Decode(dst jsn.Marshalee, msg map[string]any, reg cin.Signatures) error {
+	return decode(dst, r.ValueOf(msg), reg)
 }
 
-func decode(dst jsn.Marshalee, obj r.Value, reg cin.TypeCreator) error {
+func decode(dst jsn.Marshalee, msg r.Value, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
 		SetSlotDecoder(CompactSlotDecoder).
-		DecodeMsg(dst, obj)
+		DecodeValue(dst, msg)
 }
 
 func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err error) {

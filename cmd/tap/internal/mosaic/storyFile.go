@@ -49,14 +49,19 @@ func (sf storyFile) Find(sub string) (ret web.Resource) {
 func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	if b, e := files.ReadFile(sf.path); e != nil {
 		err = e
-	} else if file, e := story.CompactDecode(b); e != nil {
-		err = e
-	} else if data, e := dout.Encode(&file); e != nil {
-		err = e
 	} else {
-		w.Header().Set("Content-Type", "application/json")
-		js := json.NewEncoder(w)
-		err = js.Encode(data)
+		var msg map[string]any
+		if e := json.Unmarshal(b, &msg); e != nil {
+			err = e
+		} else if file, e := story.CompactDecode(msg); e != nil {
+			err = e
+		} else if data, e := dout.Encode(&file); e != nil {
+			err = e
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			js := json.NewEncoder(w)
+			err = js.Encode(data)
+		}
 	}
 	return
 }

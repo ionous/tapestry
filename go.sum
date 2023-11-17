@@ -7,8 +7,6 @@ github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842 h1:K/aFsqWoWaqdjo
 github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842/go.mod h1:wHkp9uwaQwPnxNpUblAkQsJz2q0Rdvuxk1WTN5zO1p8=
 github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77 h1:ESMGebexC3FTSESyloX5i9uO0gYKDvxYSZ4WCASWzFw=
 github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77/go.mod h1:l0XYSHRaNw8qImDaNqe4cd4kAG9HHj6799UaA7NvRjE=
-github.com/ionous/tell v0.0.0-20231115201044-05daa6691bc5 h1:WsSduawF+igykGFT4lHs5ZLNvXvSg5I8plh/c11FdLM=
-github.com/ionous/tell v0.0.0-20231115201044-05daa6691bc5/go.mod h1:528udWivAWko5qxImHmOMESRlHJtL5Pkwq3zgwApzrE=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
@@ -20,5 +18,3 @@ github.com/reiver/go-porterstemmer v1.0.1 h1:WyERBkASXgoXrTwq/IQ6wyNj/YG7j/ZURvT
 github.com/reiver/go-porterstemmer v1.0.1/go.mod h1:Z8uL/f/7UEwaeAJNwx1sO8kbqXiEuQieNuD735hLrSU=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
-golang.org/x/exp v0.0.0-20230810033253-352e893a4cad h1:g0bG7Z4uG+OgH2QDODnjp6ggkk1bJDsINcuWmJN1iJU=
-golang.org/x/exp v0.0.0-20230810033253-352e893a4cad/go.mod h1:FXUEEKJgO7OQYeo8N01OfiKP8RXMtf6e8aTskBGqWdc=

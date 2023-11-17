@@ -29,11 +29,12 @@ func Registry() composer.TypeRegistry {
 	return reg
 }
 
-func CompactDecode(msg json.RawMessage) (ret StoryFile, err error) {
-	err = DecodeJson(&ret, msg, AllSignatures)
+func CompactDecode(msg map[string]any) (ret StoryFile, err error) {
+	err = Decode(&ret, msg, AllSignatures)
 	return
 }
 
+// detailed decoder requires json
 func DetailedDecode(msg json.RawMessage) (ret StoryFile, err error) {
 	err = din.Decode(&ret, Registry(), msg)
 	return

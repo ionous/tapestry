@@ -1,6 +1,7 @@
 package story_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -13,8 +14,10 @@ import (
 // verifies this expands a pattern call and that it generates a pattern reference.
 func TestDetermineNum(t *testing.T) {
 	var call rt.NumberEval
-	if e := story.DecodeJson(rt.NumberEval_Slot{&call},
-		[]byte(`{"Factorial num:":{"FromNumber:": 3}}`),
+	var msg map[string]any
+	if e := json.Unmarshal([]byte(`{"Factorial num:":{"FromNumber:": 3}}`), &msg); e != nil {
+		t.Fatal(e)
+	} else if e := story.Decode(rt.NumberEval_Slot{&call}, msg,
 		story.AllSignatures); e != nil {
 		t.Fatal(e)
 	} else {

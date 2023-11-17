@@ -1,6 +1,7 @@
 package story_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -12,7 +13,10 @@ import (
 // decode and import a story;
 // only checks that the process finishes; doesnt check the results.
 func TestImportStory(t *testing.T) {
-	if curr, e := story.CompactDecode(debug.Blob); e != nil {
+	var msg map[string]any
+	if e := json.Unmarshal(debug.Blob, &msg); e != nil {
+		t.Fatal(e)
+	} else if curr, e := story.CompactDecode(msg); e != nil {
 		t.Fatal(e)
 	} else {
 		db := testdb.Create(t.Name())

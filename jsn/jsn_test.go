@@ -46,7 +46,10 @@ func TestCompactEncoder(t *testing.T) {
 
 // test the compact decoder can read from the "golden image" and get the hardwired factorial story.
 func TestCompactDecode(t *testing.T) {
-	if file, e := story.CompactDecode([]byte(jsnTestIf)); e != nil {
+	var msg map[string]any
+	if e := json.Unmarshal([]byte(jsnTestIf), &msg); e != nil {
+		t.Fatal(e)
+	} else if file, e := story.CompactDecode(msg); e != nil {
 		pretty.Println(file)
 		t.Fatal(e)
 	} else {
@@ -66,7 +69,10 @@ func TestMissingSlot(t *testing.T) {
 		core.T("one"), core.T("two"), core.T("three"),
 	}}
 	var have core.Join
-	if e := story.DecodeJson(&have, []byte(in), story.AllSignatures); e != nil {
+	var msg map[string]any
+	if e := json.Unmarshal([]byte(in), &msg); e != nil {
+		t.Fatal(e)
+	} else if e := story.Decode(&have, msg, story.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -82,16 +88,19 @@ func TestMissingSlot(t *testing.T) {
 // now: it tests that the lede of the command matches the first part of the signature
 func TestExpectedFailure(t *testing.T) {
 	var dst assign.Arg_Slice
-	if e := cin.NewDecoder(cin.Signatures(tapestry.AllSignatures)).
+	var msg map[string]any
+	if e := json.Unmarshal([]byte(failure), &msg); e != nil {
+		t.Fatal(e)
+	} else if e := cin.NewDecoder(cin.Signatures(tapestry.AllSignatures)).
 		SetSlotDecoder(core.CompactSlotDecoder).
-		DecodeJson(&dst, []byte(failure)); e == nil {
+		Decode(&dst, msg); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok:", e)
 	}
 }
 
-var failure = `[{
+var failure = `{
   "Text:initially:": [
     "description",
     {
@@ -101,4 +110,4 @@ var failure = `[{
       ]
     }
   ]
-}]`
+}`

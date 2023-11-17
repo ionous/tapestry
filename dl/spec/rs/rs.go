@@ -2,6 +2,7 @@
 package rs
 
 import (
+	"encoding/json"
 	"io/fs"
 	"sort"
 	"strings"
@@ -77,15 +78,20 @@ func readSpec(types *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 	if b, e := fs.ReadFile(files, fileName); e != nil {
 		err = e
 	} else {
-		// the outer one is always (supposed to be) a group
-		var blockType spec.TypeSpec
-		// note: we don't have to pass signatures, because .ifspecs always use concrete types.
-		if e := cin.Decode(&blockType, b, nil); e != nil {
-			err = e
-		} else if e := importTypes(types, &blockType); e != nil {
+		var msg map[string]any
+		if e := json.Unmarshal(b, &msg); e != nil {
 			err = e
 		} else {
-			ret = &blockType
+			// the outer one is always (supposed to be) a group
+			var blockType spec.TypeSpec
+			// note: we don't have to pass signatures, because .ifspecs always use concrete types.
+			if e := cin.Decode(&blockType, msg, nil); e != nil {
+				err = e
+			} else if e := importTypes(types, &blockType); e != nil {
+				err = e
+			} else {
+				ret = &blockType
+			}
 		}
 	}
 	return

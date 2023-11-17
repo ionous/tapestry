@@ -1,7 +1,6 @@
 package cin
 
 import (
-	"encoding/json"
 	"errors"
 	r "reflect"
 	"unicode"
@@ -23,6 +22,11 @@ type FlowDecoder func(jsn.Marshaler, jsn.FlowBlock, r.Value) error
 
 // Customization of the decoding process
 type Decoder xDecoder
+
+func Decode(dst jsn.Marshalee, msg map[string]any, reg TypeCreator) error {
+	dec := NewDecoder(reg)
+	return dec.Decode(dst, msg)
+}
 
 func NewDecoder(reg TypeCreator) *Decoder {
 	d := &xDecoder{
@@ -49,28 +53,17 @@ func (b *Decoder) SetFlowDecoder(handler FlowDecoder) *Decoder {
 	return b
 }
 
-func (b *Decoder) DecodeJson(dst jsn.Marshalee, raw json.RawMessage) (err error) {
+func (b *Decoder) Decode(dst jsn.Marshalee, msg map[string]any) error {
 	x := (*xDecoder)(b)
-	var msg any
-	if e := json.Unmarshal(raw, &msg); e != nil {
-		err = e
-	} else {
-		err = x.DecodeMsg(dst, r.ValueOf(msg))
-	}
-	return
+	return x.Decode(dst, r.ValueOf(msg))
 }
 
-func (b *Decoder) DecodeMsg(dst jsn.Marshalee, msg r.Value) error {
+func (b *Decoder) DecodeValue(dst jsn.Marshalee, msg r.Value) error {
 	x := (*xDecoder)(b)
-	return x.DecodeMsg(dst, msg)
+	return x.Decode(dst, msg)
 }
 
-func Decode(dst jsn.Marshalee, msg json.RawMessage, reg TypeCreator) error {
-	dec := NewDecoder(reg)
-	return dec.DecodeJson(dst, msg)
-}
-
-func (dec *xDecoder) DecodeMsg(dst jsn.Marshalee, msg r.Value) error {
+func (dec *xDecoder) Decode(dst jsn.Marshalee, msg r.Value) error {
 	next := dec.newBlock(msg, new(chart.StateMix))
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)
@@ -239,8 +232,6 @@ func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
 	}
 	return &next
 }
-
-var empty json.RawMessage = make([]byte, 0, 0)
 
 // given a specific key, we have to look up the corresponding msg value before we can process it
 // some states however treat that key differently... ie. embedded swaps

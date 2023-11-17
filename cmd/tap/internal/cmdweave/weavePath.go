@@ -2,6 +2,7 @@ package cmdweave
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"os"
 	"path"
@@ -105,7 +106,12 @@ func readOne(cat *weave.Catalog, path string) (err error) {
 func decodeStory(path string, b []byte) (ret story.StoryFile, err error) {
 	switch ext := filepath.Ext(path); ext {
 	case CompactExt:
-		ret, err = story.CompactDecode(b)
+		var msg map[string]any
+		if e := json.Unmarshal(b, &msg); e != nil {
+			err = e
+		} else {
+			ret, err = story.CompactDecode(msg)
+		}
 	case DetailedExt:
 		ret, err = story.DetailedDecode(b)
 	default:
