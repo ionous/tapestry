@@ -50,7 +50,7 @@ type NumParser struct {
 }
 
 func (p *NumParser) NewRune(r rune) charm.State {
-	return p.Decode()
+	return p.Decode().NewRune(r)
 }
 
 func (p *NumParser) GetOperand() (ret postfix.Function, err error) {

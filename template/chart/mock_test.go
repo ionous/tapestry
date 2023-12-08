@@ -1,6 +1,7 @@
 package chart
 
 import (
+	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/template/postfix"
@@ -19,7 +20,7 @@ type EmptyParser struct{}
 type AnyFactory struct{}
 
 // AnyParser reads letters.
-type AnyParser struct{ runes Runes }
+type AnyParser struct{ runes strings.Builder }
 
 func (*EmptyParser) String() string {
 	return "empty"
@@ -56,7 +57,8 @@ func (p *AnyParser) GetExpression() (ret postfix.Expression, err error) {
 
 func (p *AnyParser) NewRune(r rune) (ret State) {
 	if unicode.IsLower(r) {
-		ret = p.runes.Accept(r, p)
+		p.runes.WriteRune(r)
+		ret = p
 	} else if isDot(r) {
 		ret = p
 	}
