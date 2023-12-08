@@ -184,8 +184,8 @@
           ]
         },
         {
-          "-- tbd": [
-            "is a separate interface required for object kinds separate from everything else?",
+          "--": [
+            "tbd: is a separate interface required for object kinds separate from everything else?",
             "in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that."
           ],
           "Spec:slots:with flow:": [
