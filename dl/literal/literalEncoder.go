@@ -7,8 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
-
-	r "reflect"
 )
 
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
@@ -55,8 +53,8 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	return
 }
 
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err error) {
-	if ptr, e := readLiteral(slot.GetType(), "", msg); e != nil {
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err error) {
+	if ptr, e := readLiteral(slot.GetType(), "", body); e != nil {
 		err = e
 	} else if !slot.SetSlot(ptr) {
 		err = errutil.New("unexpected error setting slot")
@@ -64,11 +62,13 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err e
 	return
 }
 
-func ReadLiteral(aff affine.Affinity, kind string, msg r.Value) (ret LiteralValue, err error) {
+func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, err error) {
 	// most literals write themselves in the same way as the eval shortcuts
 	// record doesnt yet? have a way to distinguish b/t the literal json and the eval json, so context matters.
 	if aff != affine.Record {
-		ret, err = readLiteral(aff.String()+"_eval", kind, msg)
+		ret, err = readLiteral(aff.String()+"_eval", kind, val)
+	} else if msg, ok := val.(map[string]any); !ok {
+		err = errutil.Fmt("expected a map, have %T", val)
 	} else if fields, e := unmarshalFields(msg); e != nil {
 		err = e
 	} else {
@@ -77,7 +77,7 @@ func ReadLiteral(aff affine.Affinity, kind string, msg r.Value) (ret LiteralValu
 	return
 }
 
-func readLiteral(typeName, kind string, msg r.Value) (ret LiteralValue, err error) {
+func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
 	// when decoding, we havent created the command yet ( we're doing that now )
 	// so we have to switch on the typename not the value in the slot.
 	switch typeName {
@@ -88,25 +88,25 @@ func readLiteral(typeName, kind string, msg r.Value) (ret LiteralValue, err erro
 		err = chart.Unhandled("CustomSlot")
 
 	case rt.BoolEval_Type:
-		if msg.Kind() != r.Bool {
+		if v, ok := val.(bool); !ok {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &BoolValue{Value: msg.Bool(), Kind: kind}
+			ret = &BoolValue{Value: v, Kind: kind}
 		}
 
 	case rt.NumberEval_Type:
-		if msg.Kind() != r.Float64 {
+		if v, ok := val.(float64); !ok {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &NumValue{Value: msg.Float(), Kind: kind}
+			ret = &NumValue{Value: v, Kind: kind}
 		}
 
 	case rt.TextEval_Type:
-		switch msg.Kind() {
-		case r.String:
-			ret = &TextValue{Value: msg.String(), Kind: kind}
-		case r.Slice:
-			if lines, e := cin.SliceLines(msg); e != nil {
+		switch v := val.(type) {
+		case string:
+			ret = &TextValue{Value: v, Kind: kind}
+		case []any:
+			if lines, e := cin.SliceLines(v); e != nil {
 				err = chart.Unhandled(typeName)
 			} else {
 				ret = &TextValue{Value: lines, Kind: kind}
@@ -116,29 +116,29 @@ func readLiteral(typeName, kind string, msg r.Value) (ret LiteralValue, err erro
 		}
 
 	case rt.NumListEval_Type:
-		switch msg.Kind() {
-		case r.Slice:
-			if vs, ok := cin.SliceFloats(msg); !ok {
+		switch v := val.(type) {
+		case []any:
+			if vs, ok := cin.SliceFloats(v); !ok {
 				err = chart.Unhandled(typeName)
 			} else {
 				ret = &NumValues{Values: vs, Kind: kind}
 			}
-		case r.Float64:
-			ret = &NumValues{Values: []float64{msg.Float()}, Kind: kind}
+		case float64:
+			ret = &NumValues{Values: []float64{v}, Kind: kind}
 		default:
 			err = chart.Unhandled(typeName)
 		}
 
 	case rt.TextListEval_Type:
-		switch msg.Kind() {
-		case r.Slice:
-			if vs, ok := cin.SliceStrings(msg); !ok {
+		switch v := val.(type) {
+		case []any:
+			if vs, ok := cin.SliceStrings(v); !ok {
 				err = chart.Unhandled(typeName)
 			} else {
 				ret = &TextValues{Values: vs, Kind: kind}
 			}
-		case r.String:
-			ret = &TextValues{Values: []string{msg.String()}, Kind: kind}
+		case string:
+			ret = &TextValues{Values: []string{v}, Kind: kind}
 		default:
 			err = chart.Unhandled(typeName)
 		}

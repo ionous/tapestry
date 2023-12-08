@@ -1,15 +1,13 @@
 package cin
 
 import (
-	r "reflect"
-
 	"github.com/ionous/errutil"
 )
 
 type cinFlow struct {
 	name      string
 	params    []Parameter
-	args      r.Value // a slice of interfaces
+	args      []any
 	bestIndex int
 }
 
@@ -24,24 +22,24 @@ func newFlowData(op Op) (ret *cinFlow, err error) {
 
 // returns the argument for the passed parameter label;
 // nothing if not found; errors if known to be invalid.
-func (f *cinFlow) getArg(key string) (ret r.Value, err error) {
+func (f *cinFlow) getArg(key string) (ret any, err error) {
 	if i := f.getParamIndex(key); i >= 0 {
 		if c := f.params[i].Choice; len(c) > 0 {
 			err = errutil.Fmt("expected no choice for key %q have %q", key, c)
 		} else {
-			ret = f.args.Index(i).Elem()
+			ret = f.args[i]
 			f.bestIndex = i + 1
 		}
 	}
 	return
 }
 
-func (f *cinFlow) getPick(key string) (retMsg r.Value, retChoice string, err error) {
+func (f *cinFlow) getPick(key string) (retMsg any, retChoice string, err error) {
 	// the signature parser can't distinguish b/t a leading first selector, and a leading anonymous choice:
 	//  ex. "Command choice:" -- so the param array has the choice in the label's spot
 	if len(key) == 0 && f.bestIndex == 0 && len(f.params) > 0 && len(f.params[0].Choice) == 0 {
 		retChoice = f.params[0].Label
-		retMsg = f.args.Index(0).Elem()
+		retMsg = f.args[0]
 		f.bestIndex = 1
 	} else {
 		// otherwise we expect named selector/choice pairs
@@ -51,7 +49,7 @@ func (f *cinFlow) getPick(key string) (retMsg r.Value, retChoice string, err err
 				err = errutil.Fmt("expected a trailing choice for key %q", key)
 			} else {
 				retChoice = c
-				retMsg = f.args.Index(i).Elem()
+				retMsg = f.args[i]
 				f.bestIndex = i + 1
 			}
 		}

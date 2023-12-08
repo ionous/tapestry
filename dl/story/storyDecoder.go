@@ -2,7 +2,6 @@ package story
 
 import (
 	"errors"
-	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
@@ -15,30 +14,32 @@ import (
 
 // Create a story dl from native maps and slices.
 func Decode(dst jsn.Marshalee, msg map[string]any, reg cin.Signatures) error {
-	return decode(dst, r.ValueOf(msg), reg)
+	return decode(dst, msg, reg)
 }
 
-func decode(dst jsn.Marshalee, msg r.Value, reg cin.TypeCreator) error {
+func decode(dst jsn.Marshalee, val any, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
 		SetSlotDecoder(CompactSlotDecoder).
-		DecodeValue(dst, msg)
+		DecodeValue(dst, val)
 }
 
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err error) {
-	if err = core.CompactSlotDecoder(m, slot, msg); err != nil {
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err error) {
+	if err = core.CompactSlotDecoder(m, slot, body); err != nil {
 		// keep this as the provisional error unless we figure out something else
 		// ( important so that callers can see the original unhandled value if any )
 		var unhandled chart.Unhandled
 		if errors.As(err, &unhandled) {
 			switch typeName := slot.GetType(); typeName {
 			case StoryStatement_Type:
-				if sig, args, e := tryPattern(m, msg, typeName); e != nil {
-					err = e
-				} else if len(sig) > 0 {
-					if !slot.SetSlot(&CallMacro{MacroName: sig, Arguments: args}) {
-						err = errutil.New("unexpected error setting pattern slot", sig)
-					} else {
-						err = nil // clear the unhandled error
+				if msg, ok := body.(map[string]any); ok {
+					if sig, args, e := tryPattern(m, msg, typeName); e != nil {
+						err = e
+					} else if len(sig) > 0 {
+						if !slot.SetSlot(&CallMacro{MacroName: sig, Arguments: args}) {
+							err = errutil.New("unexpected error setting pattern slot", sig)
+						} else {
+							err = nil // clear the unhandled error
+						}
 					}
 				}
 
@@ -51,14 +52,16 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err e
 				rt.NumListEval_Type,
 				rt.TextListEval_Type,
 				rt.RecordListEval_Type:
-				if sig, args, e := tryPattern(m, msg, typeName); e != nil {
-					err = e
-				} else if len(sig) > 0 {
-					if !slot.SetSlot(&assign.CallPattern{PatternName: sig, Arguments: args}) {
-						err = errutil.New("unexpected error setting pattern slot", sig)
-					} else {
-						err = nil // clear the unhandled error
-						// ( it will error in the weave if no such pattern exists )
+				if msg, ok := body.(map[string]any); ok {
+					if sig, args, e := tryPattern(m, msg, typeName); e != nil {
+						err = e
+					} else if len(sig) > 0 {
+						if !slot.SetSlot(&assign.CallPattern{PatternName: sig, Arguments: args}) {
+							err = errutil.New("unexpected error setting pattern slot", sig)
+						} else {
+							err = nil // clear the unhandled error
+							// ( it will error in the weave if no such pattern exists )
+						}
 					}
 				}
 			}
@@ -69,7 +72,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg r.Value) (err e
 
 // read the command as if it were a standard compact encoded golang struct.
 // if we don't find it, then we'll treat it as a pattern call.
-func tryPattern(m jsn.Marshaler, msg r.Value, typeName string) (retSig string, retArgs []assign.Arg, err error) {
+func tryPattern(m jsn.Marshaler, msg map[string]any, typeName string) (retSig string, retArgs []assign.Arg, err error) {
 	// are we in fact parsing with the compact decoder?
 	// if so, we can use its registry to figure out what's known and unknown.
 	if reg, ok := m.(cin.TypeCreator); ok {
@@ -84,8 +87,7 @@ func tryPattern(m jsn.Marshaler, msg r.Value, typeName string) (retSig string, r
 				var call []assign.Arg
 				for i, p := range sig.Params {
 					var val rt.Assignment
-					el := args.Index(i).Elem()
-					if e := decode(rt.Assignment_Slot{Value: &val}, el, reg); e != nil {
+					if e := decode(rt.Assignment_Slot{Value: &val}, args[i], reg); e != nil {
 						err = e
 						break
 					}

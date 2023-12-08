@@ -1,8 +1,6 @@
 package literal
 
 import (
-	r "reflect"
-
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"github.com/ionous/errutil"
 )
@@ -38,40 +36,35 @@ Loop:
 
 // reads a literal record
 // fix: when is this used? shouldn't this be a pattern call?
-func unmarshalFields(msg r.Value) (ret []FieldValue, err error) {
-	if t := msg.Type(); !cin.IsValidMap(t) {
-		err = errutil.Fmt("expected a map, have %s", t)
-	} else {
-	Loop:
-		for it := msg.MapRange(); it.Next(); {
-			key, val := it.Key().String(), it.Value().Elem()
-			var i LiteralValue
-			switch val.Kind() {
-			case r.Bool:
-				i = &BoolValue{Value: val.Bool()}
-			case r.String:
-				i = &TextValue{Value: val.String()}
-			case r.Float64:
-				i = &NumValue{Value: val.Float()}
-			case r.Slice:
-				if vs, ok := cin.SliceFloats(msg); ok {
-					i = &NumValues{Values: vs}
-				} else if vs, ok := cin.SliceStrings(msg); ok {
-					i = &TextValues{Values: vs}
-				}
-			case r.Map:
-				if x, e := unmarshalFields(val); e != nil {
-					err = e
-					break Loop
-				} else {
-					i = &FieldList{Fields: x}
-				}
-			default:
-				err = errutil.Fmt("unmarshalFields unhandled literal %T", val.Type())
-				break Loop
+func unmarshalFields(msg map[string]any) (ret []FieldValue, err error) {
+Loop:
+	for key, v := range msg {
+		var i LiteralValue
+		switch val := v.(type) {
+		case bool:
+			i = &BoolValue{Value: val}
+		case string:
+			i = &TextValue{Value: val}
+		case float64:
+			i = &NumValue{Value: val}
+		case []any:
+			if vs, ok := cin.SliceFloats(val); ok {
+				i = &NumValues{Values: vs}
+			} else if vs, ok := cin.SliceStrings(val); ok {
+				i = &TextValues{Values: vs}
 			}
-			ret = append(ret, FieldValue{Field: key, Value: i})
+		case map[string]any:
+			if x, e := unmarshalFields(val); e != nil {
+				err = e
+				break Loop
+			} else {
+				i = &FieldList{Fields: x}
+			}
+		default:
+			err = errutil.Fmt("unmarshalFields unhandled literal %T", val)
+			break Loop
 		}
+		ret = append(ret, FieldValue{Field: key, Value: i})
 	}
 	return
 }
