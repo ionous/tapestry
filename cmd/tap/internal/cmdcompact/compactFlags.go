@@ -1,13 +1,16 @@
 package cmdcompact
 
-import "flag"
+import (
+	"flag"
+	"path/filepath"
+)
 
 // collection of local flags
 var compactFlags flags
 
 type flags struct {
 	inPath, outPath, inExts, outExt string
-	recurse, pretty, tell           bool
+	recurse, pretty                 bool
 }
 
 func buildFlags() (fs flag.FlagSet) {
@@ -18,23 +21,22 @@ func buildFlags() (fs flag.FlagSet) {
 		`extension(s) for directory scanning.
 ignored if 'in' refers to a specific file`)
 	fs.StringVar(&compactFlags.outExt, "convert", "",
-		`an optional file extension to force a story format conversion (.if|.ifx|.block)
+		`an optional file extension to force a story format conversion (.if|.ifx|.block|.tell|.tells)
 underscores are allowed to avoid copying over the original files. (._if, .if_, etc.)
 ( ex. if the in and out directories are the same.
 if no extension is specified, the output format is the same as the import format.`)
 	fs.BoolVar(&compactFlags.pretty, "pretty", false, "make the output somewhat human readable")
-	fs.BoolVar(&compactFlags.tell, "tell", false, "use the yaml-like tell format. otherwise, use json")
 	return
 }
 
-// output format style
-func (f flags) format() (ret format) {
-	if f.tell {
-		ret = useTellFormat
-	} else if f.pretty {
-		ret = indentedJson
+// given an input filename (without path, but with extension)
+// return the desired output filename.
+func (f flags) replaceExt(name string) (ret string) {
+	if len(compactFlags.outExt) == 0 {
+		ret = name
 	} else {
-		ret = unindentedJson
+		fileExt := filepath.Ext(name)
+		ret = name[:len(name)-len(fileExt)] + compactFlags.outExt
 	}
 	return
 }
