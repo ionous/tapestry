@@ -8,10 +8,8 @@ import (
 	"github.com/ionous/tell/charmed"
 )
 
-type Runes = charm.Runes
 type State = charm.State
 
-var Finished = charm.Finished
 var OnExit = charm.OnExit
 var Parallel = charm.Parallel
 var Parse = charm.ParseEof
@@ -21,6 +19,14 @@ var Statement = charm.Statement
 var Step = charm.Step
 
 var spaces = charm.Optional(isSpace)
+
+// for the very next rune, return nil ( unhandled )
+// it may be the end of parsing, or some parent state might be taking over from here on out.
+func Finished(reason string) State {
+	return Statement(reason, func(rune) (none State) {
+		return
+	})
+}
 
 // fix: apparently this is handling more than just bool
 // if it doesnt read a whole ident, or if it tries to return error ( instead of a nil function )
@@ -41,6 +47,10 @@ func (p *BooleanParser) GetOperand() (ret postfix.Function, err error) {
 
 type NumParser struct {
 	charmed.NumParser
+}
+
+func (p *NumParser) NewRune(r rune) charm.State {
+	return p.Decode()
 }
 
 func (p *NumParser) GetOperand() (ret postfix.Function, err error) {
