@@ -71,8 +71,8 @@ func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
 	)
 	dec.SetMapper(func(reserve bool) maps.Builder {
 		tap := make(tapMap)
-		x, y := dec.Position()
-		tap["--pos"] = fmt.Sprintf("%d,%d", y, x)
+		// x, y := dec.Position()
+		// tap["--pos"] = fmt.Sprintf("%d,%d", y, x)
 		return tap
 	})
 	if raw, e := dec.Decode(bufio.NewReader(fp)); e != nil {
