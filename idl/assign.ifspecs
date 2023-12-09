@@ -18,7 +18,6 @@
             }
           ]
         },
-        
         {
           "--": "Store a value into a variable or object.",
           "Spec:slots:with flow:": [
@@ -74,9 +73,9 @@
           ]
         },
         {
-          "--": [ 
-          	"Copy from one stored value to another.",
-          	"Requires that the type of the two values match exactly"
+          "--": [
+            "Copy from one stored value to another.",
+            "Requires that the type of the two values match exactly"
           ],
           "Spec:slots:with flow:": [
             "copy_value",
@@ -290,8 +289,8 @@
         },
         {
           "--": [
-          	"Adapts an execute statement to an assignment.",
-          	"Used internally for package shuttle."
+            "Adapts an execute statement to an assignment.",
+            "Used internally for package shuttle."
           ],
           "Spec:slots:groups:with flow:": [
             "from_exe",
