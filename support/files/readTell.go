@@ -46,30 +46,8 @@ func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
 				out.Set(res)
 			} else if res.CanConvert(ot) {
 				out.Set(res.Convert(ot))
-
 			} else {
 				err = fmt.Errorf("result of %q cant be written to a pointer of %q", rt, ot)
-			}
-		}
-		// ugly: merge the doc header and the header of the first command
-		// because a tap document *is* a single command. tbd: is there a better way?
-		if err == nil {
-			if str, ok := docComments.Resolve(); ok {
-				docHead := []string{str}
-				val := (*pv)["--"]
-				switch prefix := val.(type) {
-				case nil:
-					val = docHead
-				case []any:
-					for _, el := range prefix {
-						str := el.(string)
-						docHead = append(docHead, str)
-					}
-					val = docHead
-				case string:
-					val = append(docHead, prefix)
-				}
-				(*pv)["--"] = packComment(docHead)
 			}
 		}
 	}
