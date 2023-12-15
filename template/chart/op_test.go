@@ -41,7 +41,7 @@ func TestOps(t *testing.T) {
 		str := n.str
 		t.Log("test:", str)
 		p := OperatorParser{}
-		_ = Parse(&p, str) // this returns an error, lets ignore it.
+		_ = Parse(str, &p) // this returns an error, lets ignore it.
 		r, e := p.GetOperator()
 		ok := e == nil
 		if ok == n.errors {

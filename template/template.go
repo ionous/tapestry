@@ -13,7 +13,7 @@ type Expression = postfix.Expression
 // Parse the passed template string into an expression.
 func Parse(template string) (ret Expression, err error) {
 	p := chart.MakeTemplateParser()
-	e := chart.Parse(&p, template)
+	e := chart.Parse(template, &p)
 	xs, ex := p.GetExpression()
 	if ex != nil {
 		err = errutil.New(ex, e)
@@ -32,7 +32,7 @@ func Parse(template string) (ret Expression, err error) {
 // while the numbers are types.Number.
 func ParseExpression(str string) (ret Expression, err error) {
 	var p chart.SeriesParser
-	if e := chart.Parse(&p, str); e != nil {
+	if e := chart.Parse(str, &p); e != nil {
 		err = e
 	} else {
 		ret, err = p.GetExpression()

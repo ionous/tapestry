@@ -27,7 +27,7 @@ func TestArgs(t *testing.T) {
 func testArgs(t *testing.T, str, want string, a int) (err error) {
 	p := MakeArgParser(&AnyFactory{})
 	t.Logf("parsing: '%s'", str)
-	if e := Parse(&p, str); e != nil {
+	if e := Parse(str, &p); e != nil {
 		err = e
 	} else if res, arity, e := p.GetArguments(); e != nil {
 		err = e

@@ -11,7 +11,7 @@ import (
 
 	"github.com/ionous/tell/collect"
 	"github.com/ionous/tell/decode"
-	"github.com/ionous/tell/notes"
+	"github.com/ionous/tell/note"
 )
 
 // deserialize from the passed path
@@ -26,7 +26,7 @@ func ReadTell(inPath string, pv *map[string]any) (err error) {
 }
 
 func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
-	var docComments strings.Builder
+	var docComments note.Book
 	var dec decode.Decoder
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
 		return make(tapMap)
@@ -34,7 +34,7 @@ func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
 	dec.SetSequencer(func(reserve bool) collect.SequenceWriter {
 		return make(tapSeq, 0, 0)
 	})
-	dec.UseNotes(notes.NewCommentator(&docComments))
+	dec.UseNotes(&docComments)
 	if raw, e := dec.Decode(bufio.NewReader(fp)); e != nil {
 		err = e
 	} else {
@@ -53,22 +53,24 @@ func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
 		}
 		// ugly: merge the doc header and the header of the first command
 		// because a tap document *is* a single command. tbd: is there a better way?
-		if err == nil && docComments.Len() > 0 {
-			docHead := cleanComment(docComments.String())
-			val := (*pv)["--"]
-			switch prefix := val.(type) {
-			case nil:
-				val = docHead
-			case []any:
-				for _, el := range prefix {
-					str := el.(string)
-					docHead = append(docHead, str)
+		if err == nil {
+			if str, ok := docComments.Resolve(); ok {
+				docHead := []string{str}
+				val := (*pv)["--"]
+				switch prefix := val.(type) {
+				case nil:
+					val = docHead
+				case []any:
+					for _, el := range prefix {
+						str := el.(string)
+						docHead = append(docHead, str)
+					}
+					val = docHead
+				case string:
+					val = append(docHead, prefix)
 				}
-				val = docHead
-			case string:
-				val = append(docHead, prefix)
+				(*pv)["--"] = packComment(docHead)
 			}
-			(*pv)["--"] = packComment(docHead)
 		}
 	}
 	return
