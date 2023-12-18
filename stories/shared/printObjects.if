@@ -540,7 +540,7 @@
       "--": ""
     },
     {
-      "--:": " called via \"print status\" to add spacing and comma-and separators",
+      "--": " called via \"print status\" to add spacing and comma-and separators",
       "Define pattern:requires:provides:do:": [
         "print inner status",
         [

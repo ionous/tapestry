@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "--:": [
+      "--": [
         "adapts a verb from its specified (usually present) tense, to the story's tense.",
         "fix: this is just a placeholder for future work."
       ],
@@ -153,7 +153,7 @@
       "--": ""
     },
     {
-      "--:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names.",
+      "--": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names.",
       "Define pattern:requires:provides:do:": [
         "Are",
         [

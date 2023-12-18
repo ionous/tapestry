@@ -352,7 +352,7 @@
       "--": ""
     },
     {
-      "--:": "By default, just calls \"print object\" but can be overridden based on the grouping.",
+      "--": "By default, just calls \"print object\" but can be overridden based on the grouping.",
       "Define pattern:requires:provides:do:": [
         "print grouped object",
         [
