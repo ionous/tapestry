@@ -57,12 +57,11 @@ func encodeComments(v r.Value) (ret encode.CommentIter, err error) {
 	} else {
 		switch val := v.Elem(); {
 		case val.Kind() == r.String:
-			if str := val.String(); len(str) > 0 {
-				header := []string{"# " + str}
-				ret = encode.Comments([]encode.Comment{{
-					Header: header,
-				}})
-			}
+			header := []string{"# " + val.String()}
+			ret = encode.Comments([]encode.Comment{{
+				Header: header,
+			}})
+
 		case val.Kind() == r.Slice:
 			if cnt := val.Len(); cnt > 0 {
 				header := make([]string, cnt)
