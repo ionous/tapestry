@@ -26,41 +26,79 @@ func WriteTell(outPath string, data any) (err error) {
 // serialize to the passed open file
 func WriteTellFile(fp *os.File, data any) (err error) {
 	enc := tell.NewEncoder(fp)
-	var m encode.MapTransform
-	enc.SetMapper(m.
-		// keys with -- are metadata
-		KeyTransform(func(key r.Value) string {
-			str := key.String()
-			if strings.HasPrefix(str, "--") {
-				str = str[2:]
-			}
-			return str
-		}).
-		CommentFactory(encodeComments).
-		Mapper())
-	//
 	var n encode.SequenceTransform
 	enc.SetSequencer(n.
 		// tap only stores comments in its commands
 		CommentLocation(encode.NoComments).
 		Sequencer())
-	//
+	enc.SetMapper(makeMapping)
 	return enc.Encode(data)
 }
 
-// given the value of the blank key of the map
-// should return something to walk every key in the map
-// noting that .if mappings only have one term ( the command op )
-func encodeComments(v r.Value) (ret encode.CommentIter, err error) {
+func makeMapping(src r.Value) (ret encode.MappingIter, err error) {
+	if src.Len() == 0 {
+		err = errutil.New("can't encode empty command")
+	} else {
+		var pairs []pair
+		var header []string
+		for it := src.MapRange(); it.Next(); {
+			k, v := it.Key().String(), it.Value()
+			if !strings.HasPrefix(k, "--") {
+				if cnt := len(k); cnt > 0 && k[cnt-1] != ':' {
+					k, v = k+":", r.ValueOf(nil)
+				}
+				pairs = append([]pair{{k, v}}, pairs...)
+			} else {
+				if len(k) > 2 {
+					pairs = append(pairs, pair{k, v})
+				} else if c, e := encodeComments(v); e != nil {
+					err = e
+					break
+				} else {
+					header = c
+				}
+			}
+		}
+		if err == nil {
+			ret = &mapIter{pairs: pairs, header: header}
+		}
+	}
+	return
+}
+
+type pair struct {
+	key string
+	val r.Value
+}
+
+type mapIter struct {
+	pair    pair
+	comment encode.Comment
+	pairs   []pair
+	header  []string
+}
+
+func (m *mapIter) Next() (okay bool) {
+	if okay = len(m.pairs) > 0; okay {
+		m.pair, m.pairs = m.pairs[0], m.pairs[1:]
+		m.comment, m.header = encode.Comment{Header: m.header}, nil
+	}
+	return
+}
+
+func (m *mapIter) GetKey() string             { return m.pair.key }
+func (m *mapIter) GetValue() any              { return m.pair.val.Interface() }
+func (m *mapIter) GetReflectedValue() r.Value { return m.pair.val }
+func (m *mapIter) GetComment() encode.Comment { return m.comment }
+
+// commands have (at most) one header paragraph
+func encodeComments(v r.Value) (ret []string, err error) {
 	if k := v.Kind(); k != r.Interface {
 		err = fmt.Errorf("expected an interface value; got %s(%s)", k, v.Type())
 	} else {
 		switch val := v.Elem(); {
 		case val.Kind() == r.String:
-			header := []string{"# " + val.String()}
-			ret = encode.Comments([]encode.Comment{{
-				Header: header,
-			}})
+			ret = []string{"# " + val.String()}
 
 		case val.Kind() == r.Slice:
 			if cnt := val.Len(); cnt > 0 {
@@ -78,9 +116,7 @@ func encodeComments(v r.Value) (ret encode.CommentIter, err error) {
 					}
 				}
 				if err == nil {
-					ret = encode.Comments([]encode.Comment{{
-						Header: header,
-					}})
+					ret = header
 				}
 			}
 		default:

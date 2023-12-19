@@ -27,7 +27,7 @@ func ReadTell(inPath string, pv *map[string]any) (err error) {
 
 func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
 	var docComments note.Book
-	var dec decode.Decoder
+	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
 		return make(tapMap)
 	})
@@ -80,7 +80,13 @@ func (m tapMap) GetMap() any {
 func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 	if len(key) != 0 {
 		// lowercase keys are tapestry metadata
-		if unicode.IsLower(rune(key[0])) {
+		if !unicode.IsLower(rune(key[0])) {
+			if val == nil {
+				// replace unary values
+				key = key[:len(key)-1]
+				val = true
+			}
+		} else {
 			key = "--" + key
 			if end := len(key) - 1; key[end] == ':' {
 				key = key[:end]
@@ -88,7 +94,7 @@ func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 		}
 		m[key] = val
 	} else {
-		// fix: would it make more sense to send around "Comment" structs?
+		// tbd: would it make more sense to send around "Comment" structs?
 		if str := val.(string); len(str) > 0 {
 			lines := cleanComment(str)
 			m["--"] = packComment(lines)

@@ -57,16 +57,13 @@ func tempCommentHack(data any) {
 }
 
 func tempHackSlice(data []any) (ret []any) {
-
 	var comment any
-	for i, el := range data {
+	for _, el := range data {
 		switch m := el.(type) {
 		default:
-			if i != 0 {
-				panic("what is this array")
-			}
-			return data
-
+			ret = append(ret, el)
+		case []any:
+			ret = append(ret, tempHackSlice(m))
 		case map[string]any:
 			tempCommentHack(m)
 
@@ -85,16 +82,13 @@ func tempHackSlice(data []any) (ret []any) {
 					if comment != nil {
 						panic("yyy")
 					}
-
 					comment = c
 				} else {
 					if comment != nil && comment.(string) != "" {
 						panic("zzz")
 					}
-
 					ret = append(ret, el)
 					comment = nil
-
 				}
 			}
 		}

@@ -71,7 +71,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err erro
 }
 
 // read the command as if it were a standard compact encoded golang struct.
-// if we don't find it, then we'll treat it as a pattern call.
+// if it's *not* a normal command, treat it as a pattern call.
 func tryPattern(m jsn.Marshaler, msg map[string]any, typeName string) (retSig string, retArgs []assign.Arg, err error) {
 	// are we in fact parsing with the compact decoder?
 	// if so, we can use its registry to figure out what's known and unknown.
