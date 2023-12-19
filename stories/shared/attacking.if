@@ -104,7 +104,8 @@
         "attacking",
         "standard attacking rule",
         {
-          "--": "Continue on to the next event phase"
+          "--": "Continue on to the next event phase",
+          "Continue": true
         }
       ]
     },

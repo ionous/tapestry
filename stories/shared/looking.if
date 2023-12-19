@@ -735,7 +735,8 @@
           "Bool:": "success"
         },
         {
-          "--": "no default rules"
+          "--": "no default rules",
+           "Continue": true
         }
       ]
     },
@@ -928,7 +929,8 @@
           }
         ],
         {
-          "--": "no default rules"
+          "--": "no default rules",
+           "Continue": true
         }
       ]
     },

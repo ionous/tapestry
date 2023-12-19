@@ -73,7 +73,8 @@
           ]
         },
         {
-          "--": "no default rules"
+          "--": "no default rules",
+           "Continue": true
         }
       ]
     },
@@ -243,7 +244,8 @@
           "Bool:": "matching"
         },
         {
-          "--": "no default rules"
+          "--": "no default rules",
+           "Continue": true
         }
       ]
     },

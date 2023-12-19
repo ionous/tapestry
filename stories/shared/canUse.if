@@ -36,7 +36,8 @@
           "Text:": "response"
         },
         {
-          "--": "no default rules"
+          "--": "no default rules",
+           "Continue": true
         }
       ]
     }

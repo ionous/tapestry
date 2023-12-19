@@ -145,7 +145,8 @@
               ]
             },
             {
-              "--": "Continue on to the next event phase"
+              "--": "Continue on to the next event phase",
+           "Continue": true
             }
           ]
         }
@@ -299,7 +300,8 @@
               ]
             },
             {
-              "--": "Continue on to the next event phase"
+              "--": "Continue on to the next event phase",
+           "Continue": true
             }
           ]
         }
