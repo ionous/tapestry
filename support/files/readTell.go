@@ -112,8 +112,13 @@ func packComment(lines []string) (ret any) {
 	return
 }
 
+// split into separate lines, chop the leading hashes, and avoid leading newlines
+// ( that last gets used to indicate a not "inline" comment )
 func cleanComment(str string) []string {
 	lines := strings.Split(str, "\n")
+	if first := lines[0]; len(first) == 0 {
+		lines = lines[1:]
+	}
 	for i, el := range lines {
 		lines[i] = el[2:]
 	}
