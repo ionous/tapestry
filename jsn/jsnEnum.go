@@ -2,7 +2,7 @@ package jsn
 
 import "git.sr.ht/~ionous/tapestry/dl/composer"
 
-// Enum wraps str-like values used by the ifspec code generator.
+// Enum wraps str-like values used by the code generator.
 // it alleviates some redundant code generation.
 type Enum struct {
 	composer.Composer

@@ -61,7 +61,7 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 			} else {
 				defer db.Close()
 				if ts, e := rs.FromSpecs(specs); e != nil {
-					err = e // returns the .ifspecs as a map of spec.TypeSpec
+					err = e // returns the spec data as a map of spec.TypeSpec
 				} else {
 					generateIdb(&queue, ts)
 					if e := tables.CreateIdl(db); e != nil {

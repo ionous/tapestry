@@ -82,7 +82,7 @@ func readSpec(types *TypeSpecs, fsys fs.FS, fileName string) (ret *spec.TypeSpec
 	} else {
 		// the outer one is always (supposed to be) a group
 		var blockType spec.TypeSpec
-		// note: we don't have to pass signatures, because .ifspecs always use concrete types.
+		// note: we don't have to pass signatures, because the specs always use concrete types.
 		if e := cin.Decode(&blockType, msg, nil); e != nil {
 			err = e
 		} else if e := importTypes(types, &blockType); e != nil {

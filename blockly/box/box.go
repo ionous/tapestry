@@ -9,7 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-// reads the passed filesystem of ifspecs
+// reads all specs from the passed file system
 // returns them in blockly toolbox format
 func FromSpecs(files fs.FS) (ret string, err error) {
 	if ts, e := rs.FromSpecs(files); e != nil {

@@ -46,8 +46,8 @@
 // Start the Tapestry story editor.
 //
 // The 'in' directory should contain two sub-directories:
-// 	1. "stories" - containing .if files ( the target for save/load )
-// 	2. "ifspec"  - containing .ifspecs ( these define how to present the story content )
+// 	1. "stories" - containing story files ( the target for save/load )
+// 	2. "ifspec"  - containing interface description files ( these define how to display the story content )
 //
 // By default, attempts to use a directory called Tapestry in your Documents folder.
 //

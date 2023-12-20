@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 )
 
-// Flow creates a debug flow to simulate ifspec generation
+// Flow creates a debug flow to simulate spec generation
 type Flow struct{ op interface{} }
 
 // MakeFlow indicates the start of a set of key-value pairs.

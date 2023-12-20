@@ -29,7 +29,7 @@ func TestBlocklyTypes(t *testing.T) {
 }
 
 func TestRepeatingContainers(t *testing.T) {
-	// reads all of the files in the passed filesystem as ifspecs and returns them as one big json array of shapes
+	// read all tapestry idl files from the filesystem
 	if reps, e := findRepeatingContainers(idl.Specs); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(reps,

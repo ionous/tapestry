@@ -19,7 +19,7 @@ func buildFlags() (flags flag.FlagSet) {
 		inPath = filepath.Join(home, "Documents", "Tapestry", "idl")
 	}
 	flags.StringVar(&genFlags.dl, "dl", "", "limit to which groups")
-	flags.StringVar(&genFlags.in, "in", inPath, "input directory containing one or more .ifspecs")
+	flags.StringVar(&genFlags.in, "in", inPath, "input directory containing one or more spec files")
 	flags.StringVar(&genFlags.out, "out", "./_temp", "output directory (ex: ../../dl )")
 	return
 }

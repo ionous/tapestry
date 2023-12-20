@@ -21,7 +21,7 @@ var CmdGenerate = &base.Command{
 	UsageLine: "tap generate [-out ../../dl]",
 	Short:     "generate golang serializers from .tells",
 	Long: `
-Make generates .go language serialization code for reading and writing .if files.`,
+Generates .go source code for reading and writing story files.`,
 }
 
 // FIX: where do keyword specs come from?

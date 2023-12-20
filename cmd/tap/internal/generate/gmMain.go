@@ -13,10 +13,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// reads all of the files in the passed filesystem as ifspecs
-// generate golang structs
-func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
-	if types, e := rs.FromSpecs(ifspecs); e != nil {
+// read all of the files in the passed filesystem as interface description files,
+// and generate golang structs
+func WriteSpecs(specs fs.FS, onGroup func(string, []byte) error) (err error) {
+	if types, e := rs.FromSpecs(specs); e != nil {
 		err = e
 	} else {
 		// generate slot names, unboxed types, and other useful info.

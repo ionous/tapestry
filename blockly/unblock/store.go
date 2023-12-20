@@ -221,7 +221,7 @@ func newSwapContents(m *chart.Machine, reg TypeCreator, bff *BlockInfo) *chart.S
 	next.Name = "Swap:" + bff.Type
 	next.OnValue = func(typeName string, pv interface{}) (err error) {
 		// see: block.newSwap & shape.writeStandalone:
-		// the fields name is the name of the ifspec type 0 )
+		// the field name is the name of the spec type )
 		field := strings.ToUpper(typeName)
 		if idx := bff.Fields.FindIndex(field); idx < 0 {
 			err = jsn.Missing // the block might be missing, and that's okay.

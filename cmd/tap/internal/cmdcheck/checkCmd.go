@@ -1,5 +1,4 @@
-// Transforms detailed format json files to their compact format, and back again.
-// Relies on the file extension ".ifx" being used for detailed format files, and ".if" for compact files.
+// Runs tests on an existing story database.
 package cmdcheck
 
 import (

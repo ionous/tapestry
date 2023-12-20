@@ -1,5 +1,4 @@
-// Transforms detailed format json files to their compact format, and back again.
-// Relies on the file extension ".ifx" being used for detailed format files, and ".if" for compact files.
+// Convert between various tapestry file formats.
 package cmdcompact
 
 import (
@@ -108,15 +107,17 @@ var CmdCompact = &base.Command{
 
 Known file types include:
 
-	.if: default tapestry story file format
+	.if: json formatted story files
 	.ifx: an older, more verbose story file format
-	.ifspecs: idl files
+	.tell: a compact, yaml like story format
 	.block: blockly formatted story files
+	.ifspecs: json formatted command descriptions.
+	.tells: tell formatted command descriptions.
 
-Example, reads the .if file and saves it out again after formatting.
-	tap compact -in ../../stories/blank.if
+To reformat an existing file:
+	tap compact -in ../../stories/blank.tell
 
-Bulk conversion example:
+To bulk convert files:
 	tap compact -in ../../stories/shared -out ../../stories/shared
 `,
 }

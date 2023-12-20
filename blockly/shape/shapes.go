@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-// reads all of the files in the passed filesystem as ifspecs and returns them as one big json array of shapes
+// read all tapestry idl files from the filesystem and return them as an json array of shapes
 func FromSpecs(files fs.FS) (ret string, err error) {
 	if ts, e := rs.FromSpecs(files); e != nil {
 		err = e

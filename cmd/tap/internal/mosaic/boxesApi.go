@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
-// return the blockly specs on GET
+// return the blockly toolbox specs on GET
 func BoxesApi(*Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(str string) (ret web.Resource) {

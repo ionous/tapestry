@@ -29,8 +29,8 @@ var CmdMosaic = &base.Command{
 	Long: `Start the Tapestry story editor.
 
 The 'in' directory should contain two sub-directories:
-	1. "stories" - containing .if files ( the target for save/load )
-	2. "ifspec"  - containing .ifspecs ( these define how to present the story content )
+	1. "stories" - containing story files ( the target for save/load )
+	2. "ifspec"  - containing interface description files ( these define how to display the story content )
 
 By default, attempts to use a directory called Tapestry in your Documents folder.
 `,
@@ -52,21 +52,20 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 		// raw story files ( because why not )
 		mux.Handle("/stories/", web.HandleResource(mosaic.FilesApi(cfg)))
 
-		// blockly blocks ( from .if )
+		// blockly blocks ( from story files )
 		mux.Handle("/blocks/", web.HandleResource(mosaic.FilesApi(cfg)))
 
-		// blockly shape files ( from .ifspecs )
+		// blockly shape files ( from spec files )
 		mux.Handle("/shapes/", http.StripPrefix("/shapes/", web.HandleResource(mosaic.ShapesApi(cfg))))
 
-		// blockly shape files ( from .ifspecs )
+		// blockly toolbox files ( from spec files )
 		mux.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResource(mosaic.BoxesApi(cfg))))
 
 		// ui actions
 		mux.Handle("/actions/", http.StripPrefix("/actions/", web.HandleResource(mosaic.ActionsApi(cfg, &ws))))
 
-		// fix: serve .ifspecs from package idl?
-		// below is the older .ifspec endpoint --
-		// not clear if that's desirable at this pint...
+		// fix: serve specs from package idl?
+		// below is the file endpoint
 
 		if mosaic.BuildConfig == mosaic.Prod {
 			// prod redirects unknown url requests to our embedded assets
