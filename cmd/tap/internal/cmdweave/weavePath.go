@@ -20,11 +20,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-const (
-	DetailedExt = ".ifx"
-	CompactExt  = ".if"
-)
-
 // lets do this in the dumbest of ways for now.
 func WeavePath(srcPath, outFile string) (err error) {
 	if outFile, e := filepath.Abs(outFile); e != nil {
@@ -82,20 +77,22 @@ func addDefaultKinds(pen *mdl.Pen) (err error) {
 // read a comma-separated list of files and directories
 func importStoryFiles(cat *weave.Catalog, srcPath string) (err error) {
 	recurse := true
-	if e := files.ReadPaths(srcPath, recurse,
-		[]string{CompactExt, DetailedExt}, func(p string) error {
-			return readOne(cat, p)
-		}); e != nil {
+	if e := files.ReadPaths(srcPath, recurse, storyExts, func(p string) error {
+		return readOne(cat, p)
+	}); e != nil {
 		err = errutil.New("couldn't read file", srcPath, e)
 	}
 	return
 }
 
+var storyExts = []string{
+	files.CompactExt.String(),
+	files.DetailedExt.String(),
+	files.TellStory.String()}
+
 func readOne(cat *weave.Catalog, path string) (err error) {
 	log.Println("reading", path)
-	if b, e := files.ReadFile(path); e != nil {
-		err = e
-	} else if script, e := decodeStory(path, b); e != nil {
+	if script, e := decodeStory(path); e != nil {
 		err = errutil.New("couldn't decode", path, "b/c", e)
 	} else if e := story.ImportStory(cat, path, &script); e != nil {
 		err = errutil.New("couldn't import", path, "b/c", e)
@@ -103,17 +100,30 @@ func readOne(cat *weave.Catalog, path string) (err error) {
 	return
 }
 
-func decodeStory(path string, b []byte) (ret story.StoryFile, err error) {
-	switch ext := filepath.Ext(path); ext {
-	case CompactExt:
+func decodeStory(path string) (ret story.StoryFile, err error) {
+	switch ext := files.Ext(path); ext {
+	case files.TellStory:
 		var msg map[string]any
-		if e := json.Unmarshal(b, &msg); e != nil {
+		if e := files.ReadTell(path, &msg); e != nil {
 			err = e
 		} else {
 			ret, err = story.CompactDecode(msg)
 		}
-	case DetailedExt:
-		ret, err = story.DetailedDecode(b)
+	case files.CompactExt:
+		var msg map[string]any
+		if b, e := files.ReadFile(path); e != nil {
+			err = e
+		} else if e := json.Unmarshal(b, &msg); e != nil {
+			err = e
+		} else {
+			ret, err = story.CompactDecode(msg)
+		}
+	case files.DetailedExt:
+		if b, e := files.ReadFile(path); e != nil {
+			err = e
+		} else {
+			ret, err = story.DetailedDecode(b)
+		}
 	default:
 		err = errutil.Fmt("unknown file type %q", ext)
 	}

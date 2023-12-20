@@ -10,11 +10,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
 )
 
-// a directory of .if files
+// a directory of story files
 type storyFolder struct {
 	cfg  *Config
 	path string
@@ -83,7 +84,7 @@ func listDirectory(path string) (ret []string, err error) {
 					break
 				} else {
 					isDir := info.IsDir()
-					if isDir || strings.HasSuffix(name, ".if") {
+					if isDir || files.Ext(name).Story() {
 						if name[0] != '_' && name[0] != '.' {
 							if isDir {
 								name = "/" + name

@@ -63,8 +63,8 @@ func ActionsApi(opt *Config, ws *Workspace) web.Resource {
 					DefaultDirectory: base,
 					Title:            "Create new story",
 					Filters: []runtime.FileFilter{{
-						DisplayName: "Story files (*.if)",
-						Pattern:     "*.if", // semicolon separated list of extensions, EG: "*.jpg;*.png"
+						DisplayName: "Story files (*.if,*.tell)",
+						Pattern:     "*.if;*.tell", // semicolon separated list of extensions, EG: "*.jpg;*.png"
 					}},
 					CanCreateDirectories: true,
 					// DefaultFilename            string
@@ -89,8 +89,8 @@ func ActionsApi(opt *Config, ws *Workspace) web.Resource {
 					DefaultDirectory: base,
 					Title:            "Create new story",
 					Filters: []runtime.FileFilter{{
-						DisplayName: "Story files (*.if)",
-						Pattern:     "*.if", // semicolon separated list of extensions, EG: "*.jpg;*.png"
+						DisplayName: "Story files (*.if,*.tell)",
+						Pattern:     "*.if;*.tell", // semicolon separated list of extensions, EG: "*.jpg;*.png"
 					}},
 					CanCreateDirectories: true,
 					// DefaultFilename            string
