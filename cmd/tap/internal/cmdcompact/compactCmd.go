@@ -56,13 +56,14 @@ func process(inFile, tgtExt string) (err error) {
 	fileSystem := os.DirFS(filepath.Dir(inFile))
 	outName := compactFlags.replaceExt(filepath.Base(inFile))
 	outFile := filepath.Join(compactFlags.outPath, outName)
+	inName := filepath.Base(inFile)
 
 	// specs can only become specs:
-	if inExt, tgtExt := files.Ext(inFile), files.Ext(tgtExt); inExt.Spec() != tgtExt.Spec() {
+	if inExt, tgtExt := files.Ext(inName), files.Ext(tgtExt); inExt.Spec() != tgtExt.Spec() {
 		err = errutil.Fmt("can only change specs to specs. %s vs %s", inExt, tgtExt)
 	} else if inExt.Spec() {
 		var doc spec.TypeSpec
-		if e := readSpec(fileSystem, inFile, &doc); e != nil {
+		if e := readSpec(fileSystem, inName, &doc); e != nil {
 			err = errutil.Fmt("%w while reading %s", e, inFile)
 		} else if e := writeSpec(outFile, &doc); e != nil {
 			err = errutil.Fmt("%w while writing %s", e, outFile)
@@ -89,7 +90,7 @@ func process(inFile, tgtExt string) (err error) {
 		}
 		// read and write:
 		var doc story.StoryFile
-		if e := reader(fileSystem, inFile, &doc); e != nil {
+		if e := reader(fileSystem, inName, &doc); e != nil {
 			err = errutil.Fmt("%w while reading %s", e, inFile)
 		} else if e := writer(outFile, &doc); e != nil {
 			err = errutil.Fmt("%w while writing %s", e, outFile)

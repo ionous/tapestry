@@ -51,6 +51,8 @@ func FormattedRead(fsys fs.FS, fileName string) (ret map[string]any, err error) 
 		var msg map[string]any
 		if e := json.Unmarshal(b, &msg); e != nil {
 			err = e
+		} else {
+			ret = msg
 		}
 	}
 	return
