@@ -1,6 +1,8 @@
 package cmdcompact
 
 import (
+	"io/fs"
+
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
@@ -11,8 +13,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func readSpec(path string, out *spec.TypeSpec) (err error) {
-	if msg, e := formatOf(path).read(path); e != nil {
+func readSpec(fsys fs.FS, path string, out *spec.TypeSpec) (err error) {
+	if msg, e := files.ReadMessage(fsys, path); e != nil {
 		err = e
 	} else if e := cin.Decode(out, msg, cin.Signatures(story.AllSignatures)); e != nil {
 		err = e
@@ -20,12 +22,12 @@ func readSpec(path string, out *spec.TypeSpec) (err error) {
 	return
 }
 
-func readError(path string, _ *story.StoryFile) error {
+func readError(fsys fs.FS, path string, _ *story.StoryFile) error {
 	return errutil.New("unhandled read")
 }
 
-func readStory(path string, out *story.StoryFile) (err error) {
-	if msg, e := formatOf(path).read(path); e != nil {
+func readStory(fsys fs.FS, path string, out *story.StoryFile) (err error) {
+	if msg, e := files.ReadMessage(fsys, path); e != nil {
 		err = e
 	} else {
 		err = story.Decode(out, msg, story.AllSignatures)
@@ -33,8 +35,8 @@ func readStory(path string, out *story.StoryFile) (err error) {
 	return
 }
 
-func readDetailed(path string, out *story.StoryFile) (err error) {
-	if b, e := files.ReadFile(path); e != nil {
+func readDetailed(fsys fs.FS, path string, out *story.StoryFile) (err error) {
+	if b, e := fs.ReadFile(fsys, path); e != nil {
 		err = e
 	} else {
 		err = din.Decode(out, story.Registry(), b)
@@ -42,8 +44,8 @@ func readDetailed(path string, out *story.StoryFile) (err error) {
 	return
 }
 
-func readBlock(path string, out *story.StoryFile) (err error) {
-	if b, e := files.ReadFile(path); e != nil {
+func readBlock(fsys fs.FS, path string, out *story.StoryFile) (err error) {
+	if b, e := fs.ReadFile(fsys, path); e != nil {
 		err = e
 	} else {
 		err = unblock.Decode(out, "story_file", tapestry.Registry(), b)

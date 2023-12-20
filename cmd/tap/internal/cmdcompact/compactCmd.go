@@ -5,6 +5,7 @@ package cmdcompact
 import (
 	"context"
 	"flag"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -18,7 +19,7 @@ import (
 // entry point for "tap compact"
 func runCompact(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	tgtExt := strings.ReplaceAll(compactFlags.outExt, "_", "")
-	if len(tgtExt) != 0 && !files.IsValidExtension(tgtExt, allExts) {
+	if len(tgtExt) != 0 && isValidExtension(tgtExt) {
 		flag.Usage() // exits
 	} else if len(compactFlags.inPath) == 0 || len(compactFlags.outPath) == 0 {
 		flag.Usage() // exits
@@ -42,23 +43,27 @@ func runCompact(ctx context.Context, cmd *base.Command, args []string) (err erro
 	return
 }
 
+func isValidExtension(path string) bool {
+	return files.Ext(path) > 0
+}
+
 // called for every input file:
 func process(inFile, tgtExt string) (err error) {
 	// skip files we cant handle
-	if !files.IsValidExtension(inFile, allExts) {
+	if !isValidExtension(inFile) {
 		return
 	}
 	// convert the filename
+	fileSystem := os.DirFS(filepath.Dir(inFile))
 	outName := compactFlags.replaceExt(filepath.Base(inFile))
 	outFile := filepath.Join(compactFlags.outPath, outName)
 
 	// specs can only become specs:
-	inExt := filepath.Ext(inFile)
-	if inSpec, outSpec := isSpecExt(inExt), isSpecExt(tgtExt); inSpec != outSpec {
+	if inExt, tgtExt := files.Ext(inFile), files.Ext(tgtExt); inExt.Spec() != tgtExt.Spec() {
 		err = errutil.Fmt("can only change specs to specs. %s vs %s", inExt, tgtExt)
-	} else if inSpec {
+	} else if inExt.Spec() {
 		var doc spec.TypeSpec
-		if e := readSpec(inFile, &doc); e != nil {
+		if e := readSpec(fileSystem, inFile, &doc); e != nil {
 			err = errutil.Fmt("%w while reading %s", e, inFile)
 		} else if e := writeSpec(outFile, &doc); e != nil {
 			err = errutil.Fmt("%w while writing %s", e, outFile)
@@ -67,25 +72,25 @@ func process(inFile, tgtExt string) (err error) {
 		// pick the reader:
 		reader, writer := readError, writeError
 		switch inExt {
-		case CompactExt, TellStory:
+		case files.CompactExt, files.TellStory:
 			reader = readStory
-		case DetailedExt:
+		case files.DetailedExt:
 			reader = readDetailed
-		case BlockExt:
+		case files.BlockExt:
 			reader = readBlock
 		}
 		// pick the writer:
 		switch tgtExt {
-		case CompactExt, TellStory:
+		case files.CompactExt, files.TellStory:
 			writer = writeStory
-		case DetailedExt:
+		case files.DetailedExt:
 			writer = writeDetailed
-		case BlockExt:
+		case files.BlockExt:
 			writer = writeBlock
 		}
 		// read and write:
 		var doc story.StoryFile
-		if e := reader(inFile, &doc); e != nil {
+		if e := reader(fileSystem, inFile, &doc); e != nil {
 			err = errutil.Fmt("%w while reading %s", e, inFile)
 		} else if e := writer(outFile, &doc); e != nil {
 			err = errutil.Fmt("%w while writing %s", e, outFile)
