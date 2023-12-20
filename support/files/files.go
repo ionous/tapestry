@@ -36,7 +36,7 @@ func ReadFile(path string) ([]byte, error) {
 }
 
 // can read json and tell files that contain a top level command
-func ReadMessage(fsys fs.FS, fileName string) (ret map[string]any, err error) {
+func FormattedRead(fsys fs.FS, fileName string) (ret map[string]any, err error) {
 	if ext := Ext(fileName); ext.Tell() {
 		if fp, e := fsys.Open(fileName); e != nil {
 			err = e

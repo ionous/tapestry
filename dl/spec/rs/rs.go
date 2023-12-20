@@ -77,7 +77,7 @@ func ReadSpec(fsys fs.FS, fileName string) (ret TypeSpecs, err error) {
 // reads a single typespec from the named file from the passed filesystem into the lookup.
 // ( usually a group containing other yet still other typespecs )
 func readSpec(types *TypeSpecs, fsys fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
-	if msg, e := files.ReadMessage(fsys, fileName); e != nil {
+	if msg, e := files.FormattedRead(fsys, fileName); e != nil {
 		err = e
 	} else {
 		// the outer one is always (supposed to be) a group

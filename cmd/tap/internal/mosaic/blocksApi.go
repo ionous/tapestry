@@ -72,9 +72,9 @@ func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWrite
 			} else if data, e := story.Encode(&file); e != nil {
 				err = errutil.Append(err, e)
 			} else if fp, e := os.OpenFile(d.path, os.O_WRONLY|os.O_TRUNC, 0); e != nil {
-				err = e
+				err = e // ^ why cant this use create? ( and call FormattedSave?
 			} else {
-				if e := files.WriteJsonFile(fp, data, true); e != nil {
+				if e := files.FormattedWrite(fp, data, files.Ext(d.path), true); e != nil {
 					err = errutil.Append(err, e)
 				}
 				fp.Close()
@@ -109,7 +109,7 @@ func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 	} else if fp, e := os.OpenFile(d.path, os.O_WRONLY|os.O_TRUNC, 0); e != nil {
 		err = e
 	} else {
-		if e := files.WriteJsonFile(fp, data, true); e != nil {
+		if e := files.FormattedWrite(fp, data, files.Ext(d.path), true); e != nil {
 			err = e
 		}
 		fp.Close()

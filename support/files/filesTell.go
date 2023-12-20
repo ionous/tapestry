@@ -2,6 +2,7 @@ package files
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -13,19 +14,19 @@ import (
 )
 
 // serialize to the passed path
-func WriteTell(outPath string, data any) (err error) {
+func SaveTell(outPath string, data any) (err error) {
 	if fp, e := os.Create(outPath); e != nil {
 		err = e
 	} else {
 		defer fp.Close()
-		err = WriteTellFile(fp, data)
+		err = WriteTell(fp, data)
 	}
 	return
 }
 
 // serialize to the passed open file
-func WriteTellFile(fp *os.File, data any) (err error) {
-	enc := tell.NewEncoder(fp)
+func WriteTell(w io.Writer, data any) (err error) {
+	enc := tell.NewEncoder(w)
 	var n encode.SequenceTransform
 	enc.SetSequencer(n.
 		// tap only stores comments in its commands

@@ -14,7 +14,7 @@ import (
 )
 
 func readSpec(fsys fs.FS, path string, out *spec.TypeSpec) (err error) {
-	if msg, e := files.ReadMessage(fsys, path); e != nil {
+	if msg, e := files.FormattedRead(fsys, path); e != nil {
 		err = e
 	} else if e := cin.Decode(out, msg, cin.Signatures(story.AllSignatures)); e != nil {
 		err = e
@@ -27,7 +27,7 @@ func readError(fsys fs.FS, path string, _ *story.StoryFile) error {
 }
 
 func readStory(fsys fs.FS, path string, out *story.StoryFile) (err error) {
-	if msg, e := files.ReadMessage(fsys, path); e != nil {
+	if msg, e := files.FormattedRead(fsys, path); e != nil {
 		err = e
 	} else {
 		err = story.Decode(out, msg, story.AllSignatures)

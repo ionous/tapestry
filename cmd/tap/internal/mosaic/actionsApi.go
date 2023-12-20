@@ -78,7 +78,7 @@ func ActionsApi(opt *Config, ws *Workspace) web.Resource {
 					blank := story.StoryFile{StoryStatements: []story.StoryStatement{}}
 					if content, e := story.Encode(&blank); e != nil {
 						err = e
-					} else if e := files.WriteJson(filepath.Join(base, rel), content, true); e != nil {
+					} else if e := files.FormattedSave(filepath.Join(base, rel), content, true); e != nil {
 						err = e
 					} else {
 						ret = rel
