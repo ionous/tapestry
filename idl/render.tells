@@ -1,0 +1,88 @@
+# render
+Spec:with group:
+  - "render"
+  - Group contains:
+      - # Handles changing a template like {.boombip} into text.
+        # If the name is a variable containing an object name: return the printed object name ( via "print name" );
+        # if the name is a variable with some other text: return that text;
+        # if the name isn't a variable but refers to some object: return that object's printed object name;
+        # otherwise, its an error.
+        Spec:slots:groups:with flow:
+          - "render_name"
+          - "text_eval"
+          - "internal"
+          - Flow uses:
+              - Term:name:type:
+                  - "_"
+                  - "name"
+                  - "text"
+      - # Used with render pattern for arguments of unknown type.
+        Spec:groups:with slot:
+          - "render_eval"
+          - "internal"
+          - Slot:
+      - # Pull a value from name that might refer either to a variable, or to an object.
+        # If the name is an object, returns the object id.
+        Spec:slots:groups:with flow:
+          - "render_ref"
+          - - "bool_eval"
+            - "number_eval"
+            - "text_eval"
+            - "record_eval"
+            - "num_list_eval"
+            - "text_list_eval"
+            - "record_list_eval"
+            - "render_eval"
+          - "internal"
+          - Flow uses:
+              - Term:name:type:
+                  - "_"
+                  - "name"
+                  - "text_eval"
+              - Term:optional:repeats:
+                  - "dot"
+                  - true
+                  - true
+      - # Pull a value from an assignment of unknown affinity.
+        Spec:slots:groups:with flow:
+          - "render_value"
+          - "render_eval"
+          - "internal"
+          - Flow uses:
+              - Term:name:type:
+                  - "_"
+                  - "value"
+                  - "assignment"
+      - # A version of core's call pattern
+        # that figures out how to evaluate its arguments at runtime.
+        Spec:slots:groups:with flow:
+          - "render_pattern"
+          - - "bool_eval"
+            - "text_eval"
+            - "render_eval"
+          - "internal"
+          - Flow:uses:
+              - "render"
+              - - Term:name:type:
+                    - "_"
+                    - "pattern_name"
+                    - "text"
+                - Term:type:repeats:
+                    - "render"
+                    - "render_eval"
+                    - true
+      - # Generate text in a replaceable manner.
+        Spec:slots:groups:with flow:
+          - "render_response"
+          - - "execute"
+            - "text_eval"
+          - "internal"
+          - Flow uses:
+              - Term:name:type:
+                  - "_"
+                  - "name"
+                  - "text"
+              - Term:type:optional:
+                  - "text"
+                  - "text_eval"
+                  - true

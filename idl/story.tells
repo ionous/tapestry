@@ -1,0 +1,888 @@
+# story
+Spec:with group:
+  - "story"
+  - Group contains:
+      - # Add a note.
+        # Information about the story for you and other authors.
+        Spec:slots:groups:with flow:
+          - "comment"
+          - - "story_statement"
+            - "execute"
+          - "language"
+          - Flow phrase:uses:
+              - "Note: {comment$lines}"
+              - - Term:name:
+                    - "_"
+                    - "lines"
+      - # Create a scene
+        Spec:slots:with flow:
+          - "test"
+          - - "story_statement"
+            - "execute"
+          - Flow uses:
+              - Term:name:type:
+                  - "_"
+                  - "test_name"
+                  - "text"
+              - Term:name:type:optional:repeats:
+                  - "depends_on"
+                  - "scene_names"
+                  - "text"
+                  - true
+                  - true
+              - Term:name:type:optional:repeats:
+                  - "with_scene"
+                  - "test_statements"
+                  - "story_statement"
+                  - true
+                  - true
+              - Term:name:type:repeats:
+                  - "do"
+                  - "exe"
+                  - "execute"
+                  - true
+      - # Define a sub world.
+        Spec:slots:with flow:
+          - "define_scene"
+          - "story_statement"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "scene"
+                    - "text_eval"
+                - Term:type:optional:
+                    - "depends_on"
+                    - "text_list_eval"
+                    - true
+                - Term:type:repeats:
+                    - "with"
+                    - "story_statement"
+                    - true
+      - # Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
+        Spec:slots:groups:with flow:
+          - "define_action"
+          - - "story_statement"
+            - "execute"
+          - "events"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "action"
+                    - "text_eval"
+                - Term:type:repeats:
+                    - "requires"
+                    - "field_definition"
+                    - true
+                - Term:type:optional:repeats:
+                    - "provides"
+                    - "field_definition"
+                    - true
+                    - true
+      - # Add traits to an aspect
+        Spec:slots:with flow:
+          - "define_traits"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "traits"
+                    - "text_list_eval"
+                - Term:name:type:
+                    - "as"
+                    - "aspect"
+                    - "text_eval"
+      - # tbd: is a separate interface required for object kinds separate from everything else?
+        # in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that.
+        Spec:slots:with flow:
+          - "aspect_field"
+          - "field_definition"
+          - Flow:uses:
+              - "aspect"
+              - - Term:name:type:
+                    - "_"
+                    - "aspect"
+                    - "text_eval"
+      - Spec:slots:with flow:
+          - "bool_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "bool"
+              - "a true/false value named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "bool_eval"
+                    - true
+      - # A guard which returns true based on a counter.
+        # Counters start at zero and are incremented every time the guard gets checked.
+        Spec:slots:groups:with flow:
+          - "count_of"
+          - "bool_eval"
+          - "logic"
+          - Flow phrase:uses:
+              - "trigger {_$trigger} {$num}"
+              - - Term:name:
+                    - "_"
+                    - "trigger"
+                - Term:type:
+                    - "num"
+                    - "number_eval"
+      - # When called multiple times, returns each of its inputs in turn.
+        Spec:slots:groups:with flow:
+          - "cycle_text"
+          - "text_eval"
+          - "output"
+          - Flow phrase:uses:
+              - "cycle {_$parts}"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "parts"
+                    - "text_eval"
+                    - true
+      - # allows the player to refer to a noun by one or more other terms.
+        Spec:slots:with flow:
+          - "define_alias"
+          - - "execute"
+            - "story_statement"
+          - Flow:uses:
+              - "interpret"
+              - - Term:name:type:
+                    - "alias"
+                    - "names"
+                    - "text_list_eval"
+                - Term:name:type:
+                    - "as"
+                    - "noun_name"
+                    - "text_eval"
+      - # starts a parser scanner.
+        Spec:slots:with flow:
+          - "define_leading_grammar"
+          - - "execute"
+            - "story_statement"
+          - Flow:uses:
+              - "interpret"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "lede"
+                    - "text"
+                    - true
+                - Term:name:type:repeats:
+                    - "with"
+                    - "scans"
+                    - "scanner_maker"
+                    - true
+      - # starts a parser scanner.
+        Spec:slots:with flow:
+          - "define_named_grammar"
+          - - "execute"
+            - "story_statement"
+          - Flow:uses:
+              - "interpret"
+              - - Term:type:
+                    - "name"
+                    - "text"
+                - Term:name:type:repeats:
+                    - "with"
+                    - "scans"
+                    - "scanner_maker"
+                    - true
+      - # Define a phrase that can be used with 'natural language' statements.
+        Spec:slots:with flow:
+          - "define_phrase"
+          - "story_statement"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "phrase"
+                    - "text_eval"
+                - Term:name:type:
+                    - "as_macro"
+                    - "macro"
+                    - "text_eval"
+                - Term:type:optional:
+                    - "reversed"
+                    - "bool_eval"
+                    - true
+      - # Simple english like definitions of nouns, kinds, and their relatives.
+        Spec:slots:with flow:
+          - "declare_statement"
+          - "story_statement"
+          - Flow:uses:
+              - "declare"
+              - - Term:name:type:
+                    - "_"
+                    - "text"
+                    - "text_eval"
+      - Spec:slots:groups:with flow:
+          - "define_relation"
+          - - "story_statement"
+            - "execute"
+          - "relations"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "relation"
+                    - "text_eval"
+                - Term:type:
+                    - "cardinality"
+                    - "relation_cardinality"
+      - # Add properties to a kind
+        Spec:slots:with flow:
+          - "define_fields"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "kind"
+                    - "text_eval"
+                - Term:type:repeats:
+                    - "fields"
+                    - "field_definition"
+                    - true
+      - Spec:slots:with flow:
+          - "define_kinds"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "kinds"
+                    - "text_list_eval"
+                - Term:name:type:
+                    - "as"
+                    - "ancestor"
+                    - "text_eval"
+      - # The opposite of east is west.
+        Spec:slots:groups:with flow:
+          - "make_opposite"
+          - - "story_statement"
+            - "execute"
+          - "language"
+          - Flow:phrase:uses:
+              - "define"
+              - "The opposite of {$word} is the {$opposite}."
+              - - Term:name:type:
+                    - "_"
+                    - "word"
+                    - "text_eval"
+                - Term:type:
+                    - "opposite"
+                    - "text_eval"
+      - # The plural of person is people.
+        # The plural of person is persons.
+        Spec:slots:groups:with flow:
+          - "make_plural"
+          - - "story_statement"
+            - "execute"
+          - "language"
+          - Flow:phrase:uses:
+              - "define"
+              - "The plural of {$singular} is {$plural}."
+              - - Term:name:type:
+                    - "_"
+                    - "singular"
+                    - "text_eval"
+                - Term:type:
+                    - "plural"
+                    - "text_eval"
+      - Spec:groups:with flow:
+          - "many_to_many"
+          - "relations"
+          - Flow phrase:uses:
+              - "many {$kinds} to many {$other_kinds}"
+              - - Term:name:type:
+                    - "_"
+                    - "kinds"
+                    - "text_eval"
+                - Term:type:
+                    - "other_kinds"
+                    - "text_eval"
+      - Spec:groups:with flow:
+          - "many_to_one"
+          - "relations"
+          - Flow phrase:uses:
+              - "many {$kinds} to one {$kind}"
+              - - Term:name:type:
+                    - "_"
+                    - "kinds"
+                    - "text_eval"
+                - Term:type:
+                    - "kind"
+                    - "text_eval"
+      - # Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.
+        Spec:groups:with str:
+          - "map_connection"
+          - "map_making"
+          - Str exclusively:uses:
+              - true
+              - - Option: "arriving_at"
+                - Option: "connecting_to"
+      - # Leaving a room by by going through a door ( ex. departing the house via the front door... ).
+        Spec:slots:groups:with flow:
+          - "map_departing"
+          - - "story_statement"
+            - "execute"
+          - - "map_making"
+            - "modeling"
+          - Flow:uses:
+              - "departing"
+              - - Term:name:type:
+                    - "from"
+                    - "room_name"
+                    - "text_eval"
+                - # todo? use soft suffix of 'noun_name' to indicate the field should pull autocomplete from pooled nouns.
+                  # or, should there be pools per kind? ex. rooms
+                  # and,or, should this use markup instead of naming convention?
+                  Term:name:type:
+                    - "via"
+                    - "door_name"
+                    - "text_eval"
+                - Term:name:
+                    - "and"
+                    - "map_connection"
+                - Term:name:type:
+                    - "other_room"
+                    - "other_room_name"
+                    - "text_eval"
+      - # A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.
+        Spec:groups:with str:
+          - "map_direction"
+          - - "map_making"
+            - "modeling"
+          - Str uses: []
+      - # Leaving a room by moving in a compass direction ( ex. heading east... ).
+        Spec:slots:groups:with flow:
+          - "map_heading"
+          - - "story_statement"
+            - "execute"
+          - - "map_making"
+            - "modeling"
+          - Flow:uses:
+              - "heading"
+              - - Term:name:type:
+                    - "_"
+                    - "dir"
+                    - "map_direction"
+                - Term:name:type:
+                    - "from"
+                    - "room_name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "via"
+                    - "door_name"
+                    - "text_eval"
+                    - true
+                - Term:name:
+                    - "and"
+                    - "map_connection"
+                - Term:name:type:
+                    - "other_room"
+                    - "other_room_name"
+                    - "text_eval"
+      - # Assign a starting value to the field of one or nouns.
+        Spec:slots:with flow:
+          - "define_value"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "value"
+                    - "field_name"
+                    - "text_eval"
+                - Term:name:type:
+                    - "of"
+                    - "nouns"
+                    - "text_list_eval"
+                - Term:name:type:
+                    - "as"
+                    - "value"
+                    - "assignment"
+      - Spec:slots:with flow:
+          - "define_nouns"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "nouns"
+                    - "text_list_eval"
+                - Term:name:type:
+                    - "as"
+                    - "kind"
+                    - "text_eval"
+      - Spec:slots:with flow:
+          - "define_noun_traits"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "nouns"
+                    - "text_list_eval"
+                - Term:type:
+                    - "traits"
+                    - "text_list_eval"
+      - Spec:slots:with flow:
+          - "num_list_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "num_list"
+              - "a list of nums named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "num_list_eval"
+                    - true
+      - Spec:slots:with flow:
+          - "number_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "number"
+              - "a number named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "number_eval"
+                    - true
+      - Spec:groups:with flow:
+          - "one_to_many"
+          - "relations"
+          - Flow phrase:uses:
+              - "one {$kind} to many {$kinds}"
+              - - Term:name:type:
+                    - "_"
+                    - "kind"
+                    - "text_eval"
+                - Term:type:
+                    - "kinds"
+                    - "text_eval"
+      - Spec:groups:with flow:
+          - "one_to_one"
+          - "relations"
+          - Flow phrase:uses:
+              - "one {$kind} to one {$other_kind}"
+              - - Term:name:type:
+                    - "_"
+                    - "kind"
+                    - "text_eval"
+                - Term:type:
+                    - "other_kind"
+                    - "text_eval"
+      - Spec:slots:groups:with flow:
+          - "rule_provides"
+          - - "story_statement"
+            - "execute"
+          - "patterns"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "rule"
+                    - "pattern_name"
+                    - "text_eval"
+                - Term:type:repeats:
+                    - "provides"
+                    - "field_definition"
+                    - true
+      - # Change the behavior of an existing pattern.
+        # For events, this adds a listener that responds to the targeted object only when triggered by the player.
+        # By default, rules with filters continue on to the next rule automatically.
+        # Because event listeners have filters they continue to the next listener unless specifically stopped.
+        Spec:slots:groups:with flow:
+          - "rule_for_pattern"
+          - - "story_statement"
+            - "execute"
+          - "patterns"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "rule"
+                    - "pattern_name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "named"
+                    - "rule_name"
+                    - "text_eval"
+                    - true
+                - Term:name:type:repeats:
+                    - "do"
+                    - "exe"
+                    - "execute"
+                    - true
+      - # Change the behavior of an existing pattern.
+        # The default behavior for events is to fall through to the next handler unless canceled or stopped.
+        Spec:slots:groups:with flow:
+          - "rule_for_noun"
+          - - "story_statement"
+            - "execute"
+          - "patterns"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "rule"
+                    - "pattern_name"
+                    - "text_eval"
+                - Term:name:type:
+                    - "noun"
+                    - "noun_name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "named"
+                    - "rule_name"
+                    - "text_eval"
+                    - true
+                - Term:name:type:repeats:
+                    - "do"
+                    - "exe"
+                    - "execute"
+                    - true
+      - # Change the behavior of an existing pattern.
+        # The default behavior for events is to fall through to the next handler unless canceled or stopped.
+        Spec:slots:groups:with flow:
+          - "rule_for_kind"
+          - - "story_statement"
+            - "execute"
+          - "patterns"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "rule"
+                    - "pattern_name"
+                    - "text_eval"
+                - Term:name:type:
+                    - "kind"
+                    - "kind_name"
+                    - "text_eval"
+                - Term:type:optional:
+                    - "exactly"
+                    - "bool_eval"
+                    - true
+                - Term:name:type:optional:
+                    - "named"
+                    - "rule_name"
+                    - "text_eval"
+                    - true
+                - Term:name:type:repeats:
+                    - "do"
+                    - "exe"
+                    - "execute"
+                    - true
+      - # Declare a function which can produce statements about the game world.
+        # They are processed at import time, and they cannot call patterns
+        # nor can patterns -- which are processed during play -- call macros.
+        # Unlike patterns, they cannot be extended; the entire definition must live in one place.
+        Spec:slots:with flow:
+          - "define_macro"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "macro"
+                    - "macro_name"
+                    - "text_eval"
+                - Term:type:repeats:
+                    - "requires"
+                    - "field_definition"
+                    - true
+                - Term:type:repeats:
+                    - "provides"
+                    - "field_definition"
+                    - true
+                - Term:name:type:repeats:
+                    - "do"
+                    - "macro_statements"
+                    - "execute"
+                    - true
+      - # Executes a macro, and potentially returns a value.
+        Spec:slots:with flow:
+          - "call_macro"
+          - - "execute"
+            - "bool_eval"
+            - "number_eval"
+            - "text_eval"
+            - "record_eval"
+            - "num_list_eval"
+            - "text_list_eval"
+            - "record_list_eval"
+            - "story_statement"
+          - Flow:uses:
+              - "call"
+              - - Term:name:type:
+                    - "macro"
+                    - "macro_name"
+                    - "text"
+                - Term:name:type:repeats:
+                    - "args"
+                    - "arguments"
+                    - "arg"
+                    - true
+      - # Declare a new pattern.
+        # A pattern is a bundle of functions which can either change the game world or provide information about it.
+        # Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
+        Spec:slots:groups:with flow:
+          - "define_pattern"
+          - - "story_statement"
+            - "execute"
+          - "patterns"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "pattern"
+                    - "pattern_name"
+                    - "text_eval"
+                - Term:type:repeats:
+                    - "requires"
+                    - "field_definition"
+                    - true
+                - Term:type:repeats:
+                    - "provides"
+                    - "field_definition"
+                    - true
+                - Term:name:type:optional:repeats:
+                    - "do"
+                    - "exe"
+                    - "execute"
+                    - true
+                    - true
+      - # Fields are used to define the members of kinds, records, patterns, and so on.
+        Spec:with slot:
+          - "field_definition"
+          - Slot:
+      - Spec:slots:with flow:
+          - "record_list_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "record_list"
+              - "a list of records named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "record_list_eval"
+                    - true
+      - Spec:slots:with flow:
+          - "record_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "record"
+              - "a record named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "record_eval"
+                    - true
+      - Spec:groups:with swap:
+          - "relation_cardinality"
+          - "relations"
+          - Swap between:
+              - Pick: "one_to_one"
+              - Pick: "one_to_many"
+              - Pick: "many_to_one"
+              - Pick: "many_to_many"
+      - # Relate nouns to each other
+        Spec:slots:with flow:
+          - "define_relatives"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:type:
+                    - "nouns"
+                    - "text_list_eval"
+                - Term:name:type:
+                    - "relative_to"
+                    - "relation"
+                    - "text_eval"
+                - Term:type:
+                    - "other_nouns"
+                    - "text_list_eval"
+      - # Relate nouns to each other
+        Spec:slots:with flow:
+          - "define_other_relatives"
+          - - "story_statement"
+            - "execute"
+          - Flow:uses:
+              - "define"
+              - - Term:name:type:
+                    - "relative_to"
+                    - "relation"
+                    - "text_eval"
+                - Term:type:
+                    - "nouns"
+                    - "text_list_eval"
+                - Term:type:
+                    - "other_nouns"
+                    - "text_list_eval"
+      - # Used for displaying text to the player.
+        # The text can contain 'inline-templates';
+        # mini-commands that help to simplify printing text.
+        # See also: https://github.com/ionous/iffy/wiki/Templates.
+        # ( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )
+        Spec:slots:groups:with flow:
+          - "say_template"
+          - - "execute"
+            - "text_eval"
+          - "printing"
+          - Flow:uses:
+              - "say"
+              - - Term:name:type:
+                    - "_"
+                    - "template"
+                    - "lines"
+      - # Generate text in a replaceable manner.
+        # ( note: this is transformed for the runtime into a named 'RenderResponse'. )
+        Spec:slots:groups:with flow:
+          - "say_response"
+          - - "execute"
+            - "text_eval"
+          - "printing"
+          - Flow:uses:
+              - "say"
+              - - Term:name:type:
+                    - "response"
+                    - "name"
+                    - "text"
+                - Term:name:type:
+                    - "with"
+                    - "text"
+                    - "text_eval"
+      - # When called multiple times returns its inputs at random.
+        Spec:slots:groups:with flow:
+          - "shuffle_text"
+          - "text_eval"
+          - "output"
+          - Flow phrase:uses:
+              - "shuffle {_$parts}"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "parts"
+                    - "text_eval"
+                    - true
+      - # When called multiple times returns each of its inputs in turn, sticking to the last one.
+        Spec:slots:groups:with flow:
+          - "stopping_text"
+          - "text_eval"
+          - "output"
+          - Flow phrase:uses:
+              - "stopping {_$parts}"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "parts"
+                    - "text_eval"
+                    - true
+      - # a command with a signature of the comment marker metadata.
+        # a cheat to allows nodes that have only a comment marker and no actual command.
+        # see also: debug.do_nothing
+        Spec:slots:with flow:
+          - "story_break"
+          - "story_statement"
+          - Flow:uses:
+              - "--"
+              - []
+      - # top level node, currently just for blockly might eventually contain story metadata  ex. author, description...
+        Spec:groups:with flow:
+          - "story_file"
+          - "mosaic:root_block"
+          - Flow:phrase:uses:
+              - "tapestry"
+              - "{_$story_lines}"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "story_statements"
+                    - "story_statement"
+                    - true
+        blockly-color: "TAP_HUE_ROOT"
+      - # Phrase
+        Spec:with slot:
+          - "story_statement"
+          - Slot:
+        blockly-stack: true
+        blockly-color: "VARIABLES_HUE"
+      - Spec:slots:with flow:
+          - "text_list_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "text_list"
+              - "a list of text named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "text_list_eval"
+                    - true
+      - Spec:slots:with flow:
+          - "text_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "text"
+              - "some text named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "text_eval"
+                    - true
+      - # A valueless field.
+        # Intended mainly for patterns which don't need to return a value.
+        Spec:slots:with flow:
+          - "nothing_field"
+          - "field_definition"
+          - Flow:uses:
+              - "nothing"
+              - []

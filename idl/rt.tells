@@ -1,0 +1,49 @@
+# rt
+Spec:with group:
+  - "rt"
+  - Group contains:
+      - # Reads from evals in a uniform manner for common functions.
+        Spec:with slot:
+          - "assignment"
+          - Slot:
+      - # Statements which return true/false values.
+        Spec:with slot:
+          - "bool_eval"
+          - Slot:
+        blockly-color: "LOGIC_HUE"
+      - # Run a series of statements.
+        Spec:with slot:
+          - "execute"
+          - Slot:
+        blockly-color: "PROCEDURES_HUE"
+        blockly-stack: true
+      - # Statements which return a list of numbers.
+        Spec:with slot:
+          - "num_list_eval"
+          - Slot:
+        blockly-color: "MATH_HUE"
+      - # Statements which return a number.
+        Spec:with slot:
+          - "number_eval"
+          - Slot:
+        blockly-color: "MATH_HUE"
+      - # Statements which return text.
+        Spec:with slot:
+          - "text_eval"
+          - Slot:
+        blockly-color: "TEXTS_HUE"
+      - # Statements which return a list of text.
+        Spec:with slot:
+          - "text_list_eval"
+          - Slot:
+        blockly-color: "TEXTS_HUE"
+      - # Statements which return a record.
+        Spec:with slot:
+          - "record_eval"
+          - Slot:
+        blockly-color: "LISTS_HUE"
+      - # Statements which return a list of records.
+        Spec:with slot:
+          - "record_list_eval"
+          - Slot:
+        blockly-color: "LISTS_HUE"
