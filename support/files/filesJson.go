@@ -16,7 +16,6 @@ func FormattedSave(outPath string, data any, pretty bool) (err error) {
 	case ext.Json():
 		err = writeJson(outPath, data, pretty)
 	case ext.Tell():
-		tempCommentHack(data)
 		err = SaveTell(outPath, data)
 	default:
 		err = errutil.New("unknown format")
@@ -67,59 +66,6 @@ func prettify(str string, pretty bool) (ret []byte) {
 			log.Println(e)
 		} else {
 			ret = indent.Bytes()
-		}
-	}
-	return
-}
-
-// change stand alone comments "--"; embedding them into the next element of an array
-func tempCommentHack(data any) {
-	m := data.(map[string]any)
-	for k, v := range m {
-		switch v := v.(type) {
-		case []any:
-			m[k] = tempHackSlice(v)
-		case map[string]any:
-			tempCommentHack(v)
-		}
-	}
-}
-
-func tempHackSlice(data []any) (ret []any) {
-	var comment any
-	for _, el := range data {
-		switch m := el.(type) {
-		default:
-			ret = append(ret, el)
-		case []any:
-			ret = append(ret, tempHackSlice(m))
-		case map[string]any:
-			tempCommentHack(m)
-
-			// doesnt have a comment entry?
-			if c, ok := m["--"]; !ok {
-				// add the previous comment if it existed
-				if comment != nil {
-					m["--"] = comment
-					comment = nil
-				}
-				// keep the element
-				ret = append(ret, el)
-			} else {
-				// comment only? store.
-				if len(m) == 1 {
-					if comment != nil {
-						panic("yyy")
-					}
-					comment = c
-				} else {
-					if comment != nil && comment.(string) != "" {
-						panic("zzz")
-					}
-					ret = append(ret, el)
-					comment = nil
-				}
-			}
 		}
 	}
 	return
