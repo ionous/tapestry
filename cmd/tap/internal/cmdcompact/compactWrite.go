@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 
@@ -72,7 +73,7 @@ func writeBlock(path string, src *story.StoryFile) (err error) {
 }
 
 func writeData(path string, data any) error {
-	return formatOf(path).write(path, data, compactFlags.pretty)
+	return files.FormattedSave(path, data, compactFlags.pretty)
 }
 
 var blockTypes *rs.TypeSpecs // cache of loaded typespecs

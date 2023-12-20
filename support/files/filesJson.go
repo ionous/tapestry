@@ -12,11 +12,10 @@ import (
 
 // write a .if or .tell story file
 func FormattedSave(outPath string, data any, pretty bool) (err error) {
-	ext := Ext(outPath)
-	switch ext {
-	case CompactExt:
+	switch ext := Ext(outPath); {
+	case ext.Json():
 		err = writeJson(outPath, data, pretty)
-	case TellStory:
+	case ext.Tell():
 		tempCommentHack(data)
 		err = SaveTell(outPath, data)
 	default:
@@ -27,10 +26,10 @@ func FormattedSave(outPath string, data any, pretty bool) (err error) {
 
 // write a .if or .tell story file
 func FormattedWrite(w io.Writer, data any, ext Extension, pretty bool) (err error) {
-	switch ext {
-	case CompactExt:
+	switch {
+	case ext.Json():
 		err = writeJsonFile(w, data, pretty)
-	case TellStory:
+	case ext.Tell():
 		err = WriteTell(w, data)
 	default:
 		err = errutil.New("unknown format")
