@@ -50,6 +50,7 @@ func makeMapping(src r.Value) (ret encode.MappingIter, err error) {
 				pairs = append([]pair{{k, v}}, pairs...)
 			} else {
 				if len(k) > 2 {
+					k = k[2:] + ":"
 					pairs = append(pairs, pair{k, v})
 				} else if c, e := encodeComments(v); e != nil {
 					err = e
