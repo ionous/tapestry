@@ -2,6 +2,7 @@
 package files
 
 import (
+	"encoding/json"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -32,6 +33,27 @@ func ReadPaths(filePaths string, recusive bool, exts []string, onFile func(strin
 // read the complete contents of the passed file
 func ReadFile(path string) ([]byte, error) {
 	return os.ReadFile(path)
+}
+
+// can read json and tell files that contain a top level command
+func ReadMessage(fsys fs.FS, fileName string) (ret map[string]any, err error) {
+	if ext := Ext(fileName); ext.Tell() {
+		if fp, e := fsys.Open(fileName); e != nil {
+			err = e
+		} else {
+			err = ReadTellFile(fp, &ret)
+		}
+	} else if !ext.Json() {
+		err = errutil.New("unexpected format", ext)
+	} else if b, e := fs.ReadFile(fsys, fileName); e != nil {
+		err = e
+	} else {
+		var msg map[string]any
+		if e := json.Unmarshal(b, &msg); e != nil {
+			err = e
+		}
+	}
+	return
 }
 
 // exts: optional list of ".ext" to filter.

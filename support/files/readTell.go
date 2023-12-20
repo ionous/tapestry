@@ -3,6 +3,7 @@ package files
 import (
 	"bufio"
 	"fmt"
+	"io/fs"
 	"os"
 	"strings"
 	"unicode"
@@ -25,7 +26,7 @@ func ReadTell(inPath string, pv *map[string]any) (err error) {
 	return
 }
 
-func ReadTellFile(fp *os.File, pv *map[string]any) (err error) {
+func ReadTellFile(fp fs.File, pv *map[string]any) (err error) {
 	var docComments note.Book
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
