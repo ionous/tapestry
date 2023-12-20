@@ -104,7 +104,7 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	if ts, e := rs.ReadSpec(idl.Specs, "story.ifspecs"); e != nil {
+	if ts, e := rs.ReadSpec(idl.Specs, "story.tells"); e != nil {
 		t.Fatal(e)
 	} else if x, ok := ts.Types["story_file"]; !ok {
 		t.Fatal("missing story file type")

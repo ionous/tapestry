@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
@@ -47,13 +48,24 @@ func (sf storyFile) Find(sub string) (ret web.Resource) {
 // files are stored in compact format
 // we check that the file is valid ( by loading it ) before returning it.
 func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	if b, e := files.ReadFile(sf.path); e != nil {
-		err = e
-	} else {
-		var msg map[string]any
-		if e := json.Unmarshal(b, &msg); e != nil {
+	var msg map[string]any
+	if ext := files.Ext(sf.path); ext.Tell() {
+		if fp, e := os.Open(sf.path); e != nil {
 			err = e
-		} else if file, e := story.CompactDecode(msg); e != nil {
+		} else {
+			err = files.ReadTellFile(fp, &msg)
+		}
+	} else if ext.Json() {
+		if b, e := files.ReadFile(sf.path); e != nil {
+			err = e
+		} else if e := json.Unmarshal(b, &msg); e != nil {
+			err = e
+		}
+	} else {
+		err = errutil.New("unknown file type", sf.path)
+	}
+	if err == nil {
+		if file, e := story.CompactDecode(msg); e != nil {
 			err = e
 		} else if data, e := dout.Encode(&file); e != nil {
 			err = e

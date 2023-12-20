@@ -2,5 +2,5 @@ package idl
 
 import "embed"
 
-//go:embed *.ifspecs
+//go:embed *.tells
 var Specs embed.FS

@@ -2,7 +2,6 @@
 package rs
 
 import (
-	"encoding/json"
 	"io/fs"
 	"sort"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 
@@ -33,7 +33,7 @@ func (types *TypeSpecs) FindType(name string) (ret *spec.TypeSpec, okay bool) {
 // return a list of sorted keys
 func (types *TypeSpecs) Keys() []string {
 	keys := make([]string, 0, len(types.Types))
-	for k, _ := range types.Types {
+	for k := range types.Types {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
@@ -42,14 +42,15 @@ func (types *TypeSpecs) Keys() []string {
 
 type typeMap map[string]*spec.TypeSpec
 
-// reads all of the files in the passed filesystem as ifspecs and returns them as one big map
-func FromSpecs(files fs.FS) (ret TypeSpecs, err error) {
+// reads all of the files in the passed filesystem and returns them as one big map
+func FromSpecs(fileSystem fs.FS) (ret TypeSpecs, err error) {
+	filter := files.TellSpec
 	types := TypeSpecs{Types: make(typeMap)}
-	if e := fs.WalkDir(files, ".", func(path string, d fs.DirEntry, e error) (err error) {
+	if e := fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, e error) (err error) {
 		if e != nil {
 			err = e
-		} else if !d.IsDir() && strings.HasSuffix(d.Name(), ".ifspecs") { // the first dir we get is "."
-			if _, e := readSpec(&types, files, path); e != nil {
+		} else if !d.IsDir() && strings.HasSuffix(d.Name(), filter.String()) { // the first dir we get is "."
+			if _, e := readSpec(&types, fileSystem, path); e != nil {
 				err = errutil.New("reading", path, e)
 			}
 		}
@@ -59,12 +60,13 @@ func FromSpecs(files fs.FS) (ret TypeSpecs, err error) {
 	} else {
 		ret = types
 	}
+
 	return
 }
 
-func ReadSpec(files fs.FS, fileName string) (ret TypeSpecs, err error) {
+func ReadSpec(fsys fs.FS, fileName string) (ret TypeSpecs, err error) {
 	types := TypeSpecs{Types: make(typeMap)}
-	if _, e := readSpec(&types, files, fileName); e != nil {
+	if _, e := readSpec(&types, fsys, fileName); e != nil {
 		err = e
 	} else {
 		ret = types
@@ -74,24 +76,19 @@ func ReadSpec(files fs.FS, fileName string) (ret TypeSpecs, err error) {
 
 // reads a single typespec from the named file from the passed filesystem into the lookup.
 // ( usually a group containing other yet still other typespecs )
-func readSpec(types *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
-	if b, e := fs.ReadFile(files, fileName); e != nil {
+func readSpec(types *TypeSpecs, fsys fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
+	if msg, e := files.ReadMessage(fsys, fileName); e != nil {
 		err = e
 	} else {
-		var msg map[string]any
-		if e := json.Unmarshal(b, &msg); e != nil {
+		// the outer one is always (supposed to be) a group
+		var blockType spec.TypeSpec
+		// note: we don't have to pass signatures, because .ifspecs always use concrete types.
+		if e := cin.Decode(&blockType, msg, nil); e != nil {
+			err = e
+		} else if e := importTypes(types, &blockType); e != nil {
 			err = e
 		} else {
-			// the outer one is always (supposed to be) a group
-			var blockType spec.TypeSpec
-			// note: we don't have to pass signatures, because .ifspecs always use concrete types.
-			if e := cin.Decode(&blockType, msg, nil); e != nil {
-				err = e
-			} else if e := importTypes(types, &blockType); e != nil {
-				err = e
-			} else {
-				ret = &blockType
-			}
+			ret = &blockType
 		}
 	}
 	return

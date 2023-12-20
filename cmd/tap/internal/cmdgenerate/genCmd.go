@@ -19,7 +19,7 @@ var CmdGenerate = &base.Command{
 	Run:       runGenerate,
 	Flag:      buildFlags(),
 	UsageLine: "tap generate [-out ../../dl]",
-	Short:     "generate golang serializers from .ifspecs",
+	Short:     "generate golang serializers from .tells",
 	Long: `
 Make generates .go language serialization code for reading and writing .if files.`,
 }

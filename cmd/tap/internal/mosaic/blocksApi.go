@@ -122,7 +122,7 @@ func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 
 // gets the contents of the story file, transforms it into blocks
 func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	if b, e := files.ReadFile(d.path); e != nil {
+	if b, e := os.ReadFile(d.path); e != nil {
 		err = e
 	} else {
 		var msg map[string]any
