@@ -1,0 +1,35 @@
+Tapestry:
+  - Test:withScene:do:
+      - "x countOf"
+      - - Define pattern:requires:provides:do:
+            - "magic symbols"
+            - - Nothing:
+            - - Nothing:
+            - - Print: "o"
+        - Define rule:do:
+            - "magic symbols"
+            - - If:do:
+                  - CountOf:num:
+                      - After:
+                      - 5
+                  - - Print: "x"
+        - Define rule:do:
+            - "magic symbols"
+            - - If:do:
+                  - CountOf:num:
+                      - At:
+                      - 3
+                  - - Print: "-"
+        - Define rule:do:
+            - "magic symbols"
+            - - If:do:
+                  - CountOf:num:
+                      - Every:
+                      - 2
+                  - - Print: "*"
+      - - Repeating across:as:do:
+            - FromNumList:
+                Range: 7
+            - "i"
+            - - MagicSymbols:
+        - Expect output: "o*-*x*x"

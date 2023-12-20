@@ -1,0 +1,61 @@
+Tapestry:
+  - Test:dependsOn:withScene:do:
+      - "Kitchenette"
+      - "Thingaverse"
+      - - Declare: "The kitchen is a room. You are in the kitchen."
+        - Define value:of:as:
+            - "description"
+            - "the kitchen"
+            - FromText: "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
+        - Define value:of:as:
+            - "printed name"
+            - "the kitchen"
+            - FromText: "Kitchen"
+        - # 
+          Declare: """
+            Cats are kinds of animal.
+            The broom, a hat, and two cats are in the kitchen.
+            The broom and the hat are things.
+            """
+        - Define value:of:as:
+            - "initial appearance"
+            - "the hat"
+            - FromText: "A pointed black hat lies discarded on the floor under a dusty shelf."
+        - Define value:of:as:
+            - "description"
+            - "the hat"
+            - FromText: "Your aunt's very own witches hat, a Halloween favorite."
+        - # 
+          Declare: """
+            The container called the cabinet is in the kitchen.
+            The cabinet is openable, enterable, scenery.
+            The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet.
+            """
+        - Define value:of:as:
+            - "initial appearance"
+            - "the hook"
+            - FromText: "Beneath your feet is a bright and shiny hook."
+        - Define value:of:as:
+            - "description"
+            - "the cabinet"
+            - FromText: "An ancient teak wardrobe repurposed as a kitchen cupboard."
+        - Interpret alias:as:
+            - "blade"
+            - "rusty knife"
+        - # 
+          Declare: """
+            The shelf is a supporter in the kitchen. The shelf is scenery.
+            A can of tomatoes, a can of potato leek soup, and a tin of deflating powder are things on the shelf.
+            The counter is a supporter in the kitchen.
+            The espresso machine is a fixed in place, closed container on the counter.
+            Some coffee beans are in the espresso machine.
+            The beans are plural named.
+            A blender and a mortar are containers on the counter.
+            A pestle is in the mortar.
+            """
+        - Define value:of:as:
+            - "initial appearance"
+            - "the espresso machine"
+            - FromText: "Steam leaks from the top of a recently used espresso machine."
+      - - # do nothing
+          Continue:

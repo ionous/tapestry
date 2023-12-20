@@ -1,0 +1,171 @@
+Tapestry:
+  - Define action:requires:
+      - "examining"
+      - - # the actor activating something  ( ex. the player. )
+          Text:kind:
+            - "actor"
+            - "actor"
+        - # the object being examined. ( ex. a thing or direction. )
+          Text:kind:
+            - "noun"
+            - "object"
+  - Define rule:named:do:
+      - "examining"
+      - "the standard examining checks"
+      - - If:assuming:do:else:
+            - Not:
+                Is empty: "@response"
+            - - Arg:from:
+                  - "response"
+                  - FromText:
+                      CanReach actor:action:noun:requiresLight:
+                        - FromText: "@actor"
+                        - FromText: "examining"
+                        - FromText: "@noun"
+                        - FromBool: true
+            - - Print: "@response"
+            - If:assuming:do:
+                - Not:
+                    Is empty: "@response"
+                - - Arg:from:
+                      - "response"
+                      - FromText:
+                          CanUse actor:action:noun:
+                            - FromText: "@actor"
+                            - FromText: "examining"
+                            - FromText: "@noun"
+                - - Print: "@response"
+  - # check if the player is examining a direction and respond accordingly.
+    Define rule:do:
+      - "instead of examining"
+      - - If:do:
+            - KindOf:is:
+                - "@noun"
+                - "directions"
+            - - Say response:with:
+                  - "examine directions"
+                  - "You see nothing unexpected in that direction."
+  - # the player's examination gets handled in the standard examining action.
+    # for other actors, we use report to say what they have done.
+    Define rule:do:
+      - "report someone examining"
+      - - If:do:
+            - Not:
+                IsPlayer obj:
+                  FromText: "@actor"
+            - - PrintDescription obj:
+                  FromText: "@noun"
+  - Define rule:named:do:
+      - "examining"
+      - "standard examining action"
+      - - PrintDescription obj:
+            FromText: "@noun"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print description"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+      - - # no default rules
+          Continue:
+  - Define rule:do:
+      - "print description"
+      - - If:do:
+            - Not:
+                PrintParticulars obj:
+                  FromText: "@obj"
+            - - Say response:with:
+                  - "unremarkable description"
+                  - "{We!|make_title_case!} see nothing special about {the: .obj}."
+  - Define rule:named:do:
+      - "print description"
+      - "standard description printing rule"
+      - - If:assuming:do:
+            - Not:
+                Is empty: "@description"
+            - - Arg:from:
+                  - "description"
+                  - FromText:
+                      Object:field:
+                        - "@obj"
+                        - "description"
+            - - Print: "@description"
+              - PrintParticulars obj:
+                  FromText: "@obj"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print particulars"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Bool: "success"
+      - - # no default rules
+          Continue:
+  - Define rule:named:do:
+      - "Print particulars"
+      - "the print containers contents rule"
+      - - If:do:
+            - KindOf:is:
+                - "@obj"
+                - "containers"
+            - - If:do:else:
+                  - PrintInlineStorage obj:
+                      FromText: "@obj"
+                  - - Set:value:
+                        - "@success"
+                        - FromBool: true
+                  - # if the player isn't in the container.
+                    If:do:
+                      - Is:matching:text:
+                          - "@obj"
+                          - "other_than"
+                          - ContainerOf obj:
+                              FromText: "player"
+                      - - Say response:with:
+                            - "empty container description"
+                            - "{The: .obj|capitalize!} {are: .obj} empty."
+                        - Set:value:
+                            - "@success"
+                            - FromBool: true
+  - Define rule:named:do:
+      - "Print particulars"
+      - "the print supporter contents rule"
+      - - If:do:
+            - KindOf:is:
+                - "@obj"
+                - "supporters"
+            - - If:do:
+                  - PrintInlineStorage obj:
+                      FromText: "@obj"
+                  - - Set:value:
+                        - "@success"
+                        - FromBool: true
+  - # 
+    Test:dependsOn:do:
+      - "examining test"
+      - "Kitchenette"
+      - - PrintDescription obj:
+            FromText: "mortar"
+        - Expect output: "In the mortar is a pestle."
+        - PrintDescription obj:
+            FromText: "blender"
+        - Expect output: "The blender is empty."
+        - PrintDescription obj:
+            FromText: "hat"
+        - Expect output: "Your aunt's very own witches hat, a Halloween favorite."
+        - PrintDescription obj:
+            FromText: "shelf"
+        - Expect output: "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+        - PrintDescription obj:
+            FromText: "cabinet"
+        - Expect output:
+            - "An ancient teak wardrobe repurposed as a kitchen cupboard."
+            - "In the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife."
+        - Relate:to:via:
+            - "blender"
+            - "self"
+            - "whereabouts"
+        - PrintDescription obj:
+            FromText: "blender"
+        - Expect output: "You see nothing special about the blender."

@@ -1,0 +1,443 @@
+Tapestry:
+  - Define action:requires:
+      - "looking"
+      - - # the actor looking ( ex. the player. )
+          Text:kind:
+            - "actor"
+            - "actor"
+  - Define rule:do:
+      - "someone looking"
+      - - Say response:with:
+            - "someone looks around"
+            - "{the:.actor|capitalize!} looks around."
+  - Define rule:named:do:
+      - "looking"
+      - "the standard looking action"
+      - - PrintVantage verbosity:
+            # when explicitly looking, always use the verbose mode.
+            FromText: "verbose"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print vantage"
+      - - # A room or some other object capable of containing (or supporting) an actor.
+          # If not specified, uses the current story location.
+          Text:kind:initially:
+            - "location"
+            - "object"
+            - Object:field:
+                - "story"
+                - "location"
+        - # Whether the location is illuminated or not.
+          # If not specified, uses the current story illumination.
+          Bool:initially:
+            - "illuminated"
+            - Object:field:
+                - "story"
+                - "illuminated"
+        - # One of the verbosity traits.
+          # If not specified, uses the setting's verbosity.
+          Text:kind:initially:
+            - "verbosity"
+            - "verbosity"
+            - Object:field:
+                - "settings"
+                - "verbosity"
+      - - Nothing:
+        - TextList:initially:
+            - "enclosures"
+            - TransparentList obj:
+                FromText: "@location"
+        - Text:kind:initially:
+            - "room"
+            - "object"
+            - CurrentRoom obj:
+                FromText: "@location"
+      - - SetEverythingUnmentioned:
+        - If:do:else:
+            - Not: "@illuminated"
+            - - PrintDarkHeader room:
+                  FromText: "@room"
+              - If:do:
+                  - AnyTrue:
+                      - Is:matching:text:
+                          - "@verbosity"
+                          - "equal_to"
+                          - "verbose"
+                      - AllTrue:
+                          - Is:matching:text:
+                              - "@verbosity"
+                              - "equal_to"
+                              - "brief"
+                          - Object:field:
+                              - "story"
+                              - "not darkness witnessed"
+                  - - PrintDarkDescription room:
+                        FromText: "@room"
+            - # when illuminate
+              Finally do:
+                - Comment: "list is inner to outer. the term \"locale\" here means some enclosure we are in."
+                - PrintLocaleTitle locale:enclosures:
+                    - FromText: "@room"
+                    - FromTextList: "@enclosures"
+                - PrintLocaleSubtitle enclosures:
+                    FromTextList: "@enclosures"
+                - # Line break
+                  Br:
+                - If:do:
+                    - AnyTrue:
+                        - Is:matching:text:
+                            - "@verbosity"
+                            - "equal_to"
+                            - "verbose"
+                        - AllTrue:
+                            - Is:matching:text:
+                                - "@verbosity"
+                                - "equal_to"
+                                - "brief"
+                            - Object:field:
+                                - "@room"
+                                - "not visited"
+                    - - Comment: "Reorder from outer to inner"
+                      - Reverse list: "@enclosures"
+                      - Repeating across:as:do:
+                          - FromTextList: "@enclosures"
+                          - "it"
+                          - - PrintLocaleDescription locale:viewpoint:room:
+                                - FromText: "@it"
+                                - FromText: "@location"
+                                - FromText: "@room"
+        - If:do:else:
+            - Not: "@illuminated"
+            - - Set:value:
+                  - Object:field:
+                      - "story"
+                      - "darkness witnessed"
+                  - FromBool: true
+            - Finally do:
+                - Set:value:
+                    - Object:field:
+                        - "@room"
+                        - "visited"
+                    - FromBool: true
+  - # 
+    Define pattern:requires:provides:do:
+      - "print dark header"
+      - - Text:kind:
+            - "room"
+            - "room"
+      - - Nothing:
+      - - Say response:with:
+            - "the darkness"
+            - "<b>Darkness</b><br>"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print dark description"
+      - - Text:kind:
+            - "room"
+            - "room"
+      - - Nothing:
+      - - Say response:with:
+            - "pitch dark"
+            - "It is pitch dark, and you can't see a thing."
+  - # Print a header for the named location.
+    # For example: `The lobby`
+    # This is used as part of printing the vantage point when entering a new location, or when the player asks to 'look'
+    Define pattern:requires:provides:do:
+      - "Print locale title"
+      - - # The location to print the title for.
+          Text:kind:
+            - "locale"
+            - "object"
+        - # A nested list of objects ( if any ) containing or supporting the locale.
+          # If there is a list of enclosures, it should progress from inner most to outer most object; the last object is often a room.
+          TextList: "enclosures"
+      - - Nothing:
+      - - If:assuming:do:else:
+            - Is:matching:text:
+                - "@locale"
+                - "equal_to"
+                - "@ceiling"
+            - - # the ceiling is the last (outermost) object in the list of enclosures.
+                Arg:from:
+                  - "ceiling"
+                  - FromText:
+                      Variable:dot:
+                        - "enclosures"
+                        - - AtIndex:
+                              Len:
+                                FromTextList: "@enclosures"
+            - - Say: "<b>{.locale}</b>"
+            - # The top most object is contained somewhere in the locale.
+              Finally do:
+                - Say: "<b>{The: .ceiling|capitalize!}</b>"
+  - # Print a list of enclosures to provide context for a player who is located inside of some number of containers,or on top of some number of supporters, etc.
+    # The locale subtitle is usually written directly after the locale title on the same line.
+    # For example: `The lobby (in a bottle)`
+    # This is used as part of printing the vantage point when entering a new location, or when the player asks to 'look'
+    Define pattern:requires:provides:do:
+      - "Print locale subtitle"
+      - - TextList: "enclosures"
+      - - Nothing:
+        - Text:kind:initially:
+            - "ceiling"
+            - "object"
+            - Variable:dot:
+                - "enclosures"
+                - - AtIndex:
+                      Len:
+                        FromTextList: "@enclosures"
+      - - Repeating across:as:do:
+            - FromTextList: "@enclosures"
+            - "it"
+            - - If:do:
+                  - Is:matching:text:
+                      - "@it"
+                      - "equal_to"
+                      - "@ceiling"
+                  - - Break:
+              - Say: " ({on: .it} {the: .it})"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print locale description"
+      - - Text:kind:
+            - "locale"
+            - "object"
+        - Text:kind:
+            - "viewpoint"
+            - "object"
+        - Text:kind:
+            - "room"
+            - "room"
+      - - Nothing:
+        - TextList:initially:
+            - "kids"
+            - ChildrenOf obj:
+                FromText: "@locale"
+        - Number:initially:
+            - "previous mentions"
+            - Object:field:
+                - "story"
+                - "mentions"
+        - TextList: "remaining kids"
+      - - If:do:
+            - Is:matching:text:
+                - "@locale"
+                - "equal_to"
+                - "@room"
+            - - Print:
+                  Object:field:
+                    - "@room"
+                    - "description"
+        - SortTexts:byField:
+            - "@kids"
+            - "grouping label"
+        - Repeating across:as:do:
+            - FromTextList: "@kids"
+            - "it"
+            - - Comment: "exclude objects that enclose the viewpoint, those get their own locale descriptions"
+              - If:do:
+                  - Not:
+                      AnyTrue:
+                        - Is:matching:text:
+                            - "@it"
+                            - "equal_to"
+                            - "@viewpoint"
+                        - AncestorOf obj:root:
+                            - FromText: "@viewpoint"
+                            - FromText: "@it"
+                        - IsPlayer obj:
+                            FromText: "@it"
+                  - - PrintObjectDescription obj:
+                        FromText: "@it"
+                    - If:do:
+                        - AllTrue:
+                            - Object:field:
+                                - "@it"
+                                - "not mentioned"
+                            - Object:field:
+                                - "@it"
+                                - "not scenery"
+                        - - Push:into:
+                              - FromText: "@it"
+                              - "@remaining_kids"
+        - CanAlsoSee where:here:children:firstMention:
+            - FromText: "@locale"
+            - FromBool:
+                Is:matching:text:
+                  - "@locale"
+                  - "equal_to"
+                  - "@room"
+            - FromTextList: "@remaining_kids"
+            - FromBool:
+                Is:matching:num:
+                  - "@previous_mentions"
+                  - "equal_to"
+                  - Object:field:
+                      - "story"
+                      - "mentions"
+  - # 
+    Comment: "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
+  - Define pattern:requires:provides:do:
+      - "print object description"
+      - - Text:kind:
+            - "obj"
+            - "object"
+        - Text:kind:
+            - "locale"
+            - "object"
+      - - # setting success stops other rules from running.
+          Bool: "success"
+      - - # no default rules
+          Continue:
+  - # this prints "on the..." for any supporters mentioned by the scenery supporters rule or mentioned by the author.
+    Define rule:named:do:
+      - "print object description"
+      - "print mentioned supporters"
+      - - If:do:
+            - AllTrue:
+                - Object:field:
+                    - "@obj"
+                    - "mentioned"
+                - KindOf:is:
+                    - "@obj"
+                    - "supporters"
+            - - PrintInlineStorage obj:
+                  FromText: "@obj"
+  - # This flags 'scenery supporters' as 'mentioned' so that the 'print mentioned supporters' rule will print their contents.
+    # Scenery supporters are any supporters which the author has set as 'scenery'. Presumably the author mentioned the supporter in the room description, but since the objects can be placed or removed from the supporter during play -- those objects cant be described in the room's description, so we print them here.
+    Define rule:named:do:
+      - "print object description"
+      - "print scenery supporters"
+      - - If:do:
+            - AllTrue:
+                - Object:field:
+                    - "@obj"
+                    - "scenery"
+                - KindOf:is:
+                    - "@obj"
+                    - "supporters"
+            - - Mention obj:
+                  FromText: "@obj"
+  - Define rule:named:do:
+      - "print object description"
+      - "print initial impression"
+      - - If:do:
+            - Object:field:
+                - "@obj"
+                - "not mentioned"
+            - - Comment:
+                  - "print impression prints objects that have an initial appearance,"
+                  - "and flags them as mentioned."
+              - PrintImpressionOf obj:locale:
+                  - FromText: "@obj"
+                  - FromText: "@locale"
+  - Define rule:do:
+      - "print object description"
+      - - If:do:
+            - KindOf:is:
+                - "@obj"
+                - "actors"
+            - - Comment:
+                  - "This doesn't have to say anything special for actors."
+                  - "Stories can change that with their own rules when needed."
+              - Set:value:
+                  - "@success"
+                  - FromBool: true
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print impression of"
+      - - Text:kind:
+            - "obj"
+            - "object"
+        - Text:kind:
+            - "locale"
+            - "object"
+      - - Bool: "success"
+        - Bool:initially:
+            - "first look"
+            - AllTrue:
+                - Object:field:
+                    - "@obj"
+                    - "not mentioned"
+                - Object:field:
+                    - "@obj"
+                    - "not scenery"
+                - Not:
+                    Is empty:
+                      Object:field:
+                        - "@obj"
+                        - "initial appearance"
+      - - # no default rules
+          Continue:
+  - Define rule:do:
+      - "print impression of"
+      - - If:do:
+            - AllTrue:
+                - KindOf:is:
+                    - "@obj"
+                    - "supporters"
+                - Is:matching:text:
+                    - ParentOf obj:
+                        FromText: "@obj"
+                    - "equal_to"
+                    - "@locale"
+            - - Comment: "we check where to stop recursion of supporters in supporters"
+              - Repeating across:as:do:
+                  - FromTextList:
+                      ChildrenOf obj:
+                        FromText: "@obj"
+                  - "it"
+                  - - PrintImpressionOf obj:
+                        FromText: "@it"
+  - Define rule:do:
+      - "Print impression of"
+      - - If:do:
+            - AllTrue:
+                - "@first_look"
+                - Object:field:
+                    - "@obj"
+                    - "not mentioned"
+            - - Say: "{.obj.initial_appearance}"
+              - Mention obj:
+                  FromText: "@obj"
+              - Set:value:
+                  - "@success"
+                  - FromBool: true
+  - # 
+    Define pattern:requires:provides:do:
+      - "Can also see"
+      - - Text:kind:
+            - "where"
+            - "object"
+        - Bool: "here"
+        - TextList: "children"
+        - Bool: "first mention"
+      - - Nothing:
+      - - If:do:
+            - Is:matching:num:
+                - Len:
+                    FromTextList: "@children"
+                - "greater_than"
+                - 0
+            - - Say response:with:
+                  - "you can also see"
+                  - "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .first_mention}also {end}see {print_inline_objects: .children}."
+  - # 
+    Define pattern:requires:provides:do:
+      - "set everything unmentioned"
+      - - Nothing:
+      - - Nothing:
+      - - Set:value:
+            - Object:field:
+                - "story"
+                - "mentions"
+            - FromNumber: 0
+        - Repeating across:as:do:
+            - FromTextList:
+                KindsOf: "things"
+            - "it"
+            - - Set:value:
+                  - Object:field:
+                      - "@it"
+                      - "not mentioned"
+                  - FromBool: true

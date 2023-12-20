@@ -1,0 +1,285 @@
+Tapestry:
+  - # Determine whether an actor can touch some specific object.
+    Define pattern:requires:provides:do:
+      - "can reach"
+      - - Text:kind:
+            - "actor"
+            - "actor"
+        - Text: "action"
+        - # the target the agent is trying to reach
+          Text:kind:
+            - "noun"
+            - "object"
+        - Bool: "requires light"
+      - - Text: "response"
+        - Text:kind:
+            - "i"
+            - "object"
+        - Text:kind:
+            - "next"
+            - "object"
+        - Text: "dig error"
+        - Number: "lca"
+        - Text: "reach response"
+        - Number: "reach error"
+        - TextList: "path"
+      - - Set:value:
+            - "@i"
+            - FromText: "@actor"
+        - Repeating:do:
+            - Not:
+                Is empty: "@i"
+            - - Comment: "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
+              - Push:into:
+                  - FromText: "@i"
+                  - "@path"
+              - Set:value:
+                  - "@next"
+                  - FromText:
+                      ParentOf obj:
+                        FromText: "@i"
+              - If:do:
+                  - Is empty: "@reach_response"
+                  - - Comment: "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized."
+                    - If:assuming:do:
+                        - Not:
+                            Is empty: "@response"
+                        - - Arg:from:
+                              - "response"
+                              - FromText:
+                                  ReachUp fromObj:intoObj:actor:noun:action:
+                                    - FromText: "@i"
+                                    - FromText: "@next"
+                                    - FromText: "@actor"
+                                    - FromText: "@noun"
+                                    - FromText: "@action"
+                        - - Set:value:
+                              - "@reach_error"
+                              - FromNumber:
+                                  Len:
+                                    FromTextList: "@path"
+                          - Set:value:
+                              - "@reach_response"
+                              - FromText: "@response"
+                          - Comment:
+                              - "This doesn't exit the loop."
+                              - "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
+              - Set:value:
+                  - "@i"
+                  - FromText: "@next"
+        - Comment: "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
+        - Log:value:
+            - "note"
+            - FromTextList: "@path"
+        - Set:value:
+            - "@i"
+            - FromText: "@noun"
+        - Repeating:do:
+            - Not:
+                Is empty: "@i"
+            - - Set:value:
+                  - "@lca"
+                  - FromNumber:
+                      Find:inList:
+                        - FromText: "@i"
+                        - FromTextList: "@path"
+              - If:do:
+                  - Is:matching:num:
+                      - "@lca"
+                      - "greater_than"
+                      - 0
+                  - - Comment: "Exit once we've found the lca."
+                    - Break:
+              - Set:value:
+                  - "@next"
+                  - FromText:
+                      ParentOf obj:
+                        FromText: "@i"
+              - If:assuming:do:
+                  - Not:
+                      Is empty: "@response"
+                  - - Arg:from:
+                        - "response"
+                        - FromText:
+                            ReachDown fromObj:intoObj:actor:noun:action:
+                              - FromText: "@next"
+                              - FromText: "@i"
+                              - FromText: "@actor"
+                              - FromText: "@noun"
+                              - FromText: "@action"
+                  - - Set:value:
+                        - "@dig_error"
+                        - FromText: "@response"
+                    - Comment:
+                        - "To find the outermost dig error keep going,"
+                        - "updating the error each time."
+              - Set:value:
+                  - "@i"
+                  - FromText: "@next"
+        - Comment: "Return the best response."
+        - If:do:else:
+            - Is:matching:num:
+                - "@lca"
+                - "equal_to"
+                - 0
+            - - Comment: "No lca ever found? That's the most important error."
+              - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't reach a common ancestor"
+                        - "{They:.noun|capitalize!} {arent:.noun} available."
+            - If:do:else:
+                - Is:matching:num:
+                    - "@reach_error"
+                    - "less_than"
+                    - "@lca"
+                - - Comment: "There is an error reaching up from the actor towards the lca."
+                  - Set:value:
+                      - "@response"
+                      - FromText: "@reach_response"
+                - If:do:
+                    - Not:
+                        Is empty: "@dig_error"
+                    - - Comment: "There was no error reaching up to the lca, so return any errors digging down to the noun."
+                      - Set:value:
+                          - "@response"
+                          - FromText: "@dig_error"
+  - Define rule:do:
+      - "before can reach"
+      - - If:do:
+            - Object:field:
+                - "@noun"
+                - "intangible"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "require substance"
+                        - "You should name something more substantial."
+  - Define rule:do:
+      - "before can reach"
+      - - If:do:
+            - AllTrue:
+                - "@requires_light"
+                - # we know this rule is for the player, so we can rely the illumination cache.
+                  Object:field:
+                    - "@actor"
+                    - "not illuminated"
+            - - Comment:
+                  - "Used to determine whether an action needing light can proceed."
+                  - "Returns some response text if the action is blocked."
+                  - "Relies on has light."
+              - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't act in the dark"
+                        - "It is pitch dark, and {we!} can't see a thing."
+  - # 
+    Define pattern:requires:provides:do:
+      - "reach up"
+      - - Text:kind:
+            - "from obj"
+            - "object"
+        - Text:kind:
+            - "into obj"
+            - "object"
+        - Text:kind:
+            - "actor"
+            - "object"
+        - Text:kind:
+            - "noun"
+            - "object"
+        - Text: "action"
+      - - Text: "response"
+      - - # no default rules
+          Continue:
+  - Define rule:do:
+      - "reach up"
+      - - If:do:
+            - AllTrue:
+                - KindOf:is:
+                    - "@from_obj"
+                    - "containers"
+                - Object:field:
+                    - "@from_obj"
+                    - "closed"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't reach outside closed containers"
+                        - "{The: .from_obj|capitalize!} {arent: .from_obj} open."
+  - Define rule:do:
+      - "reach up"
+      - - Log:value:
+            - "note"
+            - FromText:
+                Say: "reach up: from:{.from_obj} -> into:{.into_obj}"
+        - If:do:
+            - KindOf:is:
+                - "@from_obj"
+                - "rooms"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't reach outside rooms"
+                        - "{They:.noun|capitalize!} {arent:.noun} available."
+  - # 
+    Define pattern:requires:provides:do:
+      - "reach down"
+      - - Text:kind:
+            - "from obj"
+            - "object"
+        - Text:kind:
+            - "into obj"
+            - "object"
+        - Text:kind:
+            - "actor"
+            - "object"
+        - Text:kind:
+            - "noun"
+            - "object"
+        - Text: "action"
+      - - Text: "response"
+      - - # no default rules
+          Continue:
+  - Define rule:do:
+      - "reach down"
+      - - If:do:
+            - AllTrue:
+                - KindOf:is:
+                    - "@into_obj"
+                    - "containers"
+                - Object:field:
+                    - "@into_obj"
+                    - "closed"
+                - Not:
+                    Is:matching:text:
+                      - "@into_obj"
+                      - "equal_to"
+                      - "@noun"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't reach inside closed containers"
+                        - "{The: .into_obj|capitalize!} {arent: .into_obj} open."
+  - Define rule:do:
+      - "reach down"
+      - - Log:value:
+            - "note"
+            - FromText:
+                Say: "reach down: from:{.from_obj} -> into:{.into_obj}"
+        - If:do:
+            - KindOf:is:
+                - "@into_obj"
+                - "rooms"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't reach inside rooms"
+                        - "{We:|capitalize!} can't reach into {the: .into_obj}."

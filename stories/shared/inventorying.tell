@@ -1,0 +1,43 @@
+Tapestry:
+  - Define action:requires:
+      - "inventorying"
+      - - # the actor who checking their inventory ( ex. the player. )
+          Text:kind:
+            - "actor"
+            - "actor"
+  - Define rule:do:
+      - "someone inventorying"
+      - - Say response:with:
+            - "someone takes inventory"
+            - "{the:.actor|capitalize!} looks through their possessions."
+  - Define rule:named:do:
+      - "inventorying"
+      - "the standard inventorying action"
+      - - PrintInventory actor:
+            FromText: "@actor"
+  - # 
+    Define pattern:requires:provides:do:
+      - "print inventory"
+      - - Text:kind:
+            - "actor"
+            - "actor"
+      - - Nothing:
+        - TextList:initially:
+            - "kids"
+            - ChildrenOf obj:
+                FromText: "@actor"
+      - - If:do:else:
+            - Is:matching:num:
+                - Len:
+                    FromTextList: "@kids"
+                - "greater_than"
+                - 0
+            - - Say response:with:
+                  - "carrying something"
+                  - "You are carrying:"
+              - PrintBlockList objs:
+                  FromTextList: "@kids"
+            - Finally do:
+                - Say response:with:
+                    - "carrying nothing"
+                    - "{we:|capitalize!} {are:.actor} carrying nothing."

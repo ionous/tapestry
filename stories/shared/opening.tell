@@ -1,0 +1,178 @@
+Tapestry:
+  - Define action:requires:
+      - "opening"
+      - - # the actor opening something ( ex. the player. )
+          Text:kind:
+            - "actor"
+            - "actor"
+        - # the thing being opened.
+          Text:kind:
+            - "noun"
+            - "thing"
+  - Define rule:named:do:
+      - "instead of opening"
+      - "the standard opening checks"
+      - - If:assuming:do:else:
+            - Not:
+                Is empty: "@response"
+            - - Arg:from:
+                  - "response"
+                  - FromText:
+                      CanReach actor:action:noun:
+                        - FromText: "@actor"
+                        - FromText: "opening"
+                        - FromText: "@noun"
+            - - Print: "@response"
+            - If:assuming:do:
+                - Not:
+                    Is empty: "@response"
+                - - Arg:from:
+                      - "response"
+                      - FromText:
+                          CanUse actor:action:noun:
+                            - FromText: "@actor"
+                            - FromText: "opening"
+                            - FromText: "@noun"
+                - - Print: "@response"
+  - Define rule:do:
+      - "someone opening"
+      - - If:do:
+            - Not:
+                IsPlayer obj:
+                  FromText: "@actor"
+            - - Say response:with:
+                  - "someone closes something"
+                  - "{the:.actor|capitalize!} doesn't know how to do that."
+  - Define rule:named:do:
+      - "opening"
+      - "the standard opening action"
+      - - If:do:
+            - StateChanging noun:actor:trait:guard:change:
+                - FromText: "@noun"
+                - FromText: "@actor"
+                - FromText: "open"
+                - FromText: "openable"
+                - FromText: "open"
+            - - # Continue on to the next event phase
+                Continue:
+  - # 
+    Define action:requires:
+      - "closing"
+      - - # the actor closing something ( ex. the player. )
+          Text:kind:
+            - "actor"
+            - "actor"
+        - # the thing being closed.
+          Text:kind:
+            - "noun"
+            - "thing"
+  - Define rule:named:do:
+      - "instead of closing"
+      - "the standard closing checks"
+      - - If:assuming:do:else:
+            - Not:
+                Is empty: "@response"
+            - - Arg:from:
+                  - "response"
+                  - FromText:
+                      CanReach actor:action:noun:
+                        - FromText: "@actor"
+                        - FromText: "closing"
+                        - FromText: "@noun"
+            - - Print: "@response"
+            - If:assuming:do:
+                - Not:
+                    Is empty: "@response"
+                - - Arg:from:
+                      - "response"
+                      - FromText:
+                          CanUse actor:action:noun:
+                            - FromText: "@actor"
+                            - FromText: "closing"
+                            - FromText: "@noun"
+                - - Print: "@response"
+  - Define rule:do:
+      - "someone closing"
+      - - If:do:
+            - Not:
+                IsPlayer obj:
+                  FromText: "@actor"
+            - - Say response:with:
+                  - "someone closes something"
+                  - "{the:.actor|capitalize!} doesn't know how to do that."
+  - Define rule:named:do:
+      - "closing"
+      - "the standard closing action"
+      - - If:do:
+            - StateChanging noun:actor:trait:guard:change:
+                - FromText: "@noun"
+                - FromText: "@actor"
+                - FromText: "closed"
+                - FromText: "openable"
+                - FromText: "close"
+            - - # Continue on to the next event phase
+                Continue:
+  - # 
+    Define rule:kind:do:
+      - "instead of state changing"
+      - "openers"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:text:
+                    - "@trait"
+                    - "equal_to"
+                    - "open"
+                - Object:field:
+                    - "@noun"
+                    - "lockable"
+                - Object:field:
+                    - "@noun"
+                    - "locked"
+            - - Say response:with:
+                  - "can't open when locked"
+                  - "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
+  - # FIX -- should probably be on opening
+    # to do so reporting state change would have to be launched by the actions
+    # so state changing ( events in general ) need to return true / false.
+    Define rule:kind:do:
+      - "report state changing"
+      - "containers"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:text:
+                    - "@trait"
+                    - "equal_to"
+                    - "open"
+                - Object:field:
+                    - "@noun"
+                    - "opaque"
+                - Not:
+                    AncestorOf obj:root:
+                      - FromText: "@noun"
+                      - FromText: "@actor"
+            - - If:assuming:do:
+                  - Is:matching:num:
+                      - Len:
+                          FromTextList: "@concealed_items"
+                      - "greater_than"
+                      - 0
+                  - - Arg:from:
+                        - "concealed items"
+                        - FromTextList:
+                            VisibleStorage obj:
+                              FromText: "@noun"
+                  - - # inform doesn't print the inventory details when opening objects, so this doesn't either.
+                      Say response:with:
+                        - "reveal newly visible objects"
+                        - # uses 'spaces' to join multiple pieces of text
+                          # ( because print response only allows a single text return.
+                          # tbd: maybe it'd make more sense for print to take repeated elements and space them automatically.
+                          Spaces do:
+                            - Say: "{We!|capitalize!} open {the: .noun} revealing"
+                            - Print:
+                                Commas do:
+                                  - Repeating across:as:do:
+                                      - FromTextList: "@concealed_items"
+                                      - "item"
+                                      - - Say: "{the: .item}"
+                            - Print: "."

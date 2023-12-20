@@ -1,0 +1,86 @@
+Tapestry:
+  - # run after every action to complete the turn.
+    Define pattern:requires:provides:do:
+      - "pass time"
+      - - Nothing:
+      - - Nothing:
+      - - UpdateStory:
+        - # allow after rules to run, if any.
+          Continue:
+  - Define rule:named:do:
+      - "after pass time, then continue"
+      - "witness light"
+      - - WitnessLight:
+  - # run when a player first starts a new story.
+    Define pattern:requires:provides:do:
+      - "start game"
+      - - # the player
+          Text:kind:
+            - "actor"
+            - "actor"
+        - # when true, suppress the banner text.
+          # (useful for tests).
+          Bool: "quietly"
+      - - Nothing:
+      - - UpdateStory actor:
+            FromText: "@actor"
+        - UpdateLastKnownStatus:
+        - # allow 'after start game' rules.
+          Continue:
+  - Define rule:named:do:
+      - "after start game, then continue"
+      - "the print first room rule"
+      - - If:do:
+            - Not: "@quietly"
+            - - # separate the banner from the vantage (if any)
+                P:
+              - PrintVantage:
+              - # separate the look from the command line
+                P:
+  - # fix: ordering of after rules
+    Define rule:named:do:
+      - "after start game, then continue"
+      - "the go start playing rule"
+      - - Increase:
+            Object:field:
+              - "story"
+              - "turn count"
+        - Set:trait:
+            - "story"
+            - "playing"
+  - Define rule:named:do:
+      - "before start game, then continue"
+      - "the print banner rule"
+      - - If:do:
+            - Not: "@quietly"
+            - - PrintTheBanner:
+  - # a parser action, which calls the low level request to quit.
+    Define pattern:requires:provides:do:
+      - "request to quit"
+      - - Nothing:
+      - - Nothing:
+      - - QuitGame:
+  - Define pattern:requires:provides:do:
+      - "end game"
+      - - # A placeholder. Eventually, when finally is true, the game is completely over. Otherwise, the game can be (eventually) restarted.
+          Bool: "finally"
+        - # can be assigned 'Say' to use a template
+          Text:initially:
+            - "saying"
+            - Object:field:
+                - "story"
+                - "ending message"
+      - - Nothing:
+      - - Set:trait:
+            - "story"
+            - Txt if:then:else:
+                - Not: "@finally"
+                - "concluded"
+                - "completed"
+        - # fix: some sort of indention block. ul/ol use bullets, numbers.
+          Print: "<p><b>"
+        - Print: "@saying"
+        - Print: "</b><p>"
+        - RequestTheScore:
+        - # maybe send 'finally' to quit game?
+          QuitGame:

@@ -1,0 +1,32 @@
+Tapestry:
+  - Define kind:fields:
+      - "Things"
+      - - Text: "printed plural name"
+  - # 
+    Define pattern:requires:provides:do:
+      - "print plural name"
+      - - Text:kind:
+            - "obj"
+            - "thing"
+      - - Nothing:
+      - - # It says the plural of the target's name.
+          If:do:else:
+            - Is:matching:text:
+                - Object:field:
+                    - "@obj"
+                    - "printed plural name"
+                - "other_than"
+                - ""
+            - - Say: "{.obj.printed_plural_name}"
+            - Finally do:
+                - Say: "{print_name:.obj|pluralize!}"
+  - # 
+    Test:withScene:do:
+      - "plural name printing"
+      - - Declare: "The flowerpot, the dishes, and the spoon are things."
+        - Define value:of:as:
+            - "printed plural name"
+            - "the flowerpot"
+            - FromText: "broken flower pots"
+      - - Say: "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}."
+        - Expect output: "broken flower pots, dishes, spoons."

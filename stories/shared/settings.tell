@@ -1,0 +1,56 @@
+Tapestry:
+  - Declare: "Settings are kinds of kinds. Settings are usually brief."
+  - # Settings is a global singleton for controlling various gameplay options.
+    Define nouns:as:
+      - "settings"
+      - "settings"
+  - Define kind:fields:
+      - "Settings"
+      - - Aspect: "verbosity"
+  - Declare: "verbosity is a kind of aspect."
+  - # verbosity traits:
+    #   superbrief: always prints short room descriptions.
+    #   brief: the first time a player visits a room, this prints the room's long description; on subsequent visits to the room, prints the short description.
+    #   verbose: always prints long descriptions of rooms.
+    # note: the player can change the setting with the short, superbrief, brief, normal, verbose, and long commands.
+    Define traits:as:
+      - - "superbrief"
+        - "brief"
+        - "verbose"
+      - "verbosity"
+  - Interpret:with:
+      - - "short"
+        - "superbrief"
+      - - Action:args:
+            - "request verbosity"
+            - - Arg:from:
+                  - "mode"
+                  - FromText: "superbrief"
+  - # for historical reasons, 'normal' is brief, sometimes abbreviated descriptions; but the default mode is actually verbose.
+    Interpret:with:
+      - - "normal"
+        - "brief"
+      - - Action:args:
+            - "request verbosity"
+            - - Arg:from:
+                  - "mode"
+                  - FromText: "brief"
+  - Interpret:with:
+      - - "long"
+        - "verbose"
+      - - Action:args:
+            - "request verbosity"
+            - - Arg:from:
+                  - "mode"
+                  - FromText: "verbose"
+  - Define pattern:requires:provides:do:
+      - "request verbosity"
+      - - # assumes mode is one of the valid verbosity
+          Text: "mode"
+      - - Nothing:
+      - - Set:trait:
+            - "settings"
+            - "@mode"
+        - Say response:with:
+            - "room description response"
+            - "Now using \"{.settings.verbosity}\" mode which {if .settings.superbrief}always gives short descriptions of locations (even if you haven't been there before){elseIf .settings.brief}gives long descriptions of places never before visited and short descriptions otherwise{else}always gives long descriptions of locations (even if you've been there before){end}."

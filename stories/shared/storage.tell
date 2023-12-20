@@ -1,0 +1,106 @@
+Tapestry:
+  - # Returns true if an object allows items to be stored inside it or on top of it.
+    Define pattern:requires:provides:do:
+      - "provides storage"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Bool: "success"
+      - - # by default, the answer is no.
+          Set:value:
+            - "@success"
+            - FromBool: false
+  - Define rule:do:
+      - "provides storage"
+      - - If:do:
+            - KindOf:is:
+                - "@obj"
+                - "supporters"
+            - - Set:value:
+                  - "@success"
+                  - FromBool: true
+  - Define rule:do:
+      - "provides storage"
+      - - If:do:
+            - KindOf:is:
+                - "@obj"
+                - "containers"
+            - - Set:value:
+                  - "@success"
+                  - FromBool: true
+  - # Returns true if the object provide storage, and if its contents can be seen from outside.
+    Define pattern:requires:provides:do:
+      - "shows storage"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Bool: "success"
+      - - If:do:
+            - ProvidesStorage obj:
+                FromText: "@obj"
+            - - Set:value:
+                  - "@success"
+                  - FromBool:
+                      Not:
+                        FullyOpaque obj:
+                          FromText: "@obj"
+  - # Return any object contents which need to be mentioned to the player.
+    # Excludes the player's actor and scenery objects
+    # and only includes the *direct* contents, not contents of contents.
+    Define pattern:requires:provides:do:
+      - "visible storage"
+      - - Text:kind:
+            - "obj"
+            - "thing"
+      - - TextList: "out"
+      - - If:do:
+            - ShowsStorage obj:
+                FromText: "@obj"
+            - - Repeating across:as:do:
+                  - FromTextList:
+                      ChildrenOf obj:
+                        FromText: "@obj"
+                  - "it"
+                  - - If:do:
+                        - Not:
+                            AnyTrue:
+                              - Is:matching:text:
+                                  - "@it"
+                                  - "equal_to"
+                                  - Object:field:
+                                      - "player"
+                                      - "pawn"
+                              - Object:field:
+                                  - "@it"
+                                  - "scenery"
+                        - - Push:into:
+                              - FromText: "@it"
+                              - "@out"
+  - # 
+    Define pattern:requires:provides:do:
+      - "allows storage"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Bool: "success"
+      - - # by default, if an object provides storage, it allows storage.
+          If:do:
+            - ProvidesStorage obj:
+                FromText: "@obj"
+            - - Set:value:
+                  - "@success"
+                  - FromBool: true
+  - # closed containers prevent storage.
+    Define rule:do:
+      - "allows storage"
+      - - If:do:
+            - AllTrue:
+                - KindOf:is:
+                    - "@obj"
+                    - "containers"
+                - Object:field:
+                    - "@obj"
+                    - "closed"
+            - - Set:value:
+                  - "@success"
+                  - FromBool: false

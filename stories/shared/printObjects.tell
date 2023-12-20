@@ -1,0 +1,254 @@
+Tapestry:
+  - Define pattern:requires:provides:do:
+      - "print inline objects"
+      - - TextList: "objs"
+      - - Nothing:
+      - - Print:
+            Commas do:
+              - Repeating across:as:do:
+                  - FromRecordList:
+                      MakeGroups objs:
+                        FromTextList: "@objs"
+                  - "group"
+                  - - Print:
+                        Spaces do:
+                          - PrintGroup group:
+                              FromRecord: "@group"
+  - # 
+    Define pattern:requires:provides:do:
+      - "print block list"
+      - - TextList: "objs"
+      - - Nothing:
+        - RecordList:kind:initially:
+            - "groups"
+            - "object group"
+            - MakeGroups objs:
+                FromTextList: "@objs"
+      - - Print:
+            Rows do:
+              - Repeating across:as:do:
+                  - FromRecordList: "@groups"
+                  - "group"
+                  - - Print:
+                        Row do:
+                          - PrintGroup group:
+                              FromRecord: "@group"
+  - # 
+    Define pattern:requires:provides:do:
+      - "print object"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+        - Number:initially:
+            - "inline depth"
+            - During: "print inline objects"
+        - Number:initially:
+            - "block depth"
+            - During: "print block list"
+      - - Say: "{.obj}"
+  - Comment: "Say the object's name ( and some object details. )"
+  - Define rule:do:
+      - "print object"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:num:
+                    - "@inline_depth"
+                    - "greater_than"
+                    - 0
+                - Is:matching:num:
+                    - "@inline_depth"
+                    - "greater_than"
+                    - "@block_depth"
+            - - Print:
+                  Spaces do:
+                    - A noun:
+                        FromText: "@obj"
+                    - Print:
+                        Brackets do:
+                          - PrintDetails obj:
+                              FromText: "@obj"
+  - Define rule:do:
+      - "print object"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:num:
+                    - "@block_depth"
+                    - "greater_than"
+                    - 0
+                - Is:matching:num:
+                    - "@block_depth"
+                    - "greater_than"
+                    - "@inline_depth"
+            - - PrintOneBlock obj:
+                  FromText: "@obj"
+  - # 
+    Define pattern:requires:provides:do:
+      - "print one block"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+        - TextList:initially:
+            - "kids"
+            - VisibleStorage obj:
+                FromText: "@obj"
+        - Bool:initially:
+            - "has kids"
+            - Is:matching:num:
+                - Len:
+                    FromTextList: "@kids"
+                - "greater_than"
+                - 0
+      - - Print:
+            Spaces do:
+              - A noun:
+                  FromText: "@obj"
+              - PrintStatus obj:isEmpty:
+                  - FromText: "@obj"
+                  - FromBool:
+                      Not: "@has_kids"
+        - If:do:
+            - "@has_kids"
+            - - PrintBlockList objs:
+                  FromTextList: "@kids"
+  - # 
+    Define pattern:requires:provides:do:
+      - "print inline storage"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+      - - If:assuming:do:
+            - Is:matching:num:
+                - Len:
+                    FromTextList: "@kids"
+                - "greater_than"
+                - 0
+            - - Arg:from:
+                  - "kids"
+                  - FromTextList:
+                      VisibleStorage obj:
+                        FromText: "@obj"
+            - - Say response:with:
+                  - "inline storage"
+                  - "<p>{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
+  - # 
+    Define pattern:requires:provides:
+      - "print details"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+        - TextList:initially:
+            - "kids"
+            - VisibleStorage obj:
+                FromText: "@obj"
+  - Comment: "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
+  - Define rule:do:
+      - "print details"
+      - - If:do:
+            - AllTrue:
+                - KindOf:is:
+                    - "@obj"
+                    - "containers"
+            - - Say response:with:
+                  - "empty container"
+                  - "empty"
+  - Define rule:do:
+      - "print details"
+      - - If:do:
+            - AllTrue:
+                - KindOf:is:
+                    - "@obj"
+                    - "containers"
+                - Object:field:
+                    - "@obj"
+                    - "closed"
+            - - Say response:with:
+                  - "closed container"
+                  - "closed"
+  - Define rule:do:
+      - "print details"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:num:
+                    - Len:
+                        FromTextList: "@kids"
+                    - "greater_than"
+                    - 0
+            - - Say response:with:
+                  - "on which are"
+                  - "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+  - # extra information about an object useful for inventorying ( usually appearing inside brackets )
+    Define pattern:requires:provides:do:
+      - "print status"
+      - - Text:kind:
+            - "obj"
+            - "object"
+        - Bool: "is empty"
+      - - Bool: "skip"
+      - - Print:
+            Brackets do:
+              - Print:
+                  Commas do:
+                    - PrintInnerStatus obj:isEmpty:
+                        - FromText: "@obj"
+                        - FromBool: "@is_empty"
+  - #  called via "print status" to add spacing and comma-and separators
+    Define pattern:requires:provides:
+      - "print inner status"
+      - - Text:kind:
+            - "obj"
+            - "object"
+        - Bool: "is empty"
+      - - Bool: "skip"
+  - Define rule:do:
+      - "print inner status"
+      - - If:do:
+            - Object:field:
+                - "@obj"
+                - "locked"
+            - - Say response:with:
+                  - "locked status"
+                  - "{if .obj.closed and .obj.locked}locked{end}"
+  - Define rule:do:
+      - "print inner status"
+      - - If:do:
+            - AllTrue:
+                - Object:field:
+                    - "@obj"
+                    - "transparent"
+                - Object:field:
+                    - "@obj"
+                    - "unopenable"
+            - - Say response:with:
+                  - "transparent status"
+                  - "{if .is_empty}empty{end}"
+  - Define rule:do:
+      - "print inner status"
+      - - If:do:
+            - Object:field:
+                - "@obj"
+                - "openable"
+            - - Say response:with:
+                  - "openable status"
+                  - "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
+  - Define rule:do:
+      - "print inner status"
+      - - If:do:
+            - Object:field:
+                - "@obj"
+                - "worn"
+            - - Say response:with:
+                  - "inner worn status"
+                  - "being worn"
+  - Define rule:do:
+      - "print inner status"
+      - - If:do:
+            - Object:field:
+                - "@obj"
+                - "lit"
+            - - Say response:with:
+                  - "lit status"
+                  - "providing light"

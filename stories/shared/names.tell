@@ -1,0 +1,115 @@
+Tapestry:
+  - Declare: "Things are a kind of kind."
+  - Define kind:fields:
+      - "Things"
+      - - Text: "printed name"
+  - # 
+    Test:withScene:do:
+      - "name of a kind"
+      - - Declare: "The named object and the unnamed object are things."
+        - Declare: "The unnamed object is privately named."
+      - - Comment:
+            - "The story engine automagically calls \"print name\" when the name of an object is used in a template. "
+            - "ex. { .someObject }"
+        - Say: "{.named}, {.unnamed}."
+        - Expect output: "named object, thing."
+  - # 
+    Define pattern:requires:provides:do:
+      - "print name"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+      - - # if the object doesn't exist, use 'print nothing'.
+          # ( by default, that will try to write: 'nowhere', 'nobody', or 'nothing'. )
+          If:do:else:
+            - Not:
+                Is valid: "@obj"
+            - - PrintNothing:
+                  FromText: "@obj"
+            - # if the object was given an explicit 'printed name', print that.
+              If:do:else:
+                - Is:matching:text:
+                    - Object:field:
+                        - "@obj"
+                        - "printed name"
+                    - "other_than"
+                    - ""
+                - - Print:
+                      Object:field:
+                        - "@obj"
+                        - "printed name"
+                  - Mention obj:
+                      FromText: "@obj"
+                - # if the object is publicly named, print the original name of the object;
+                  # privately named objects skip this rule.
+                  If:do:else:
+                    - Object:field:
+                        - "@obj"
+                        - "publicly named"
+                    - - Print:
+                          NameOf: "@obj"
+                      - Mention obj:
+                          FromText: "@obj"
+                    - # if nothing else was printed, print the singular name of the kind: 'room', 'container', etc.
+                      Finally do:
+                        - Print:
+                            Singular of:
+                              KindOf: "@obj"
+                        - Mention obj:
+                            FromText: "@obj"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print nothing"
+      - - # Print nothing takes an object reference.
+          # It uses that to try to determine the kind of the reference
+          # even if the reference itself is blank.
+          Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+      - - Print: "nothing"
+  - Define rule:named:do:
+      - "Print nothing"
+      - "print nowhere rule"
+      - - If:do:
+            - KindOf:is:nothing:
+                - "@obj"
+                - "rooms"
+                - true
+            - - Print: "nowhere"
+  - Define rule:named:do:
+      - "Print nothing"
+      - "print nobody rule"
+      - - If:do:
+            - KindOf:is:nothing:
+                - "@obj"
+                - "actors"
+                - true
+            - - Print: "nobody"
+  - # make a note that the named object has been mentioned in the story output.
+    Define pattern:requires:provides:do:
+      - "mention"
+      - - Text:kind:
+            - "obj"
+            - "object"
+      - - Nothing:
+      - - If:do:
+            - KindOf:is:
+                - "@obj"
+                - "things"
+            - - Set:value:
+                  - Object:field:
+                      - "@obj"
+                      - "mentioned"
+                  - FromBool: true
+              - Set:value:
+                  - Object:field:
+                      - "story"
+                      - "mentions"
+                  - FromNumber:
+                      Add:value:
+                        - 1
+                        - Object:field:
+                            - "story"
+                            - "mentions"

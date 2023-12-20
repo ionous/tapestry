@@ -1,0 +1,90 @@
+Tapestry:
+  - Interpret:with:
+      - - "kiss"
+        - "hug"
+        - "embrace"
+      - - One noun: "things"
+        - Action: "kissing"
+  - # 
+    Define action:requires:
+      - "kissing"
+      - - # the actor kissing ( ex. the player. ) something
+          Text:kind:
+            - "actor"
+            - "actor"
+        - # the thing being kissed
+          Text:kind:
+            - "noun"
+            - "thing"
+  - Define rule:do:
+      - "kissing"
+      - - If:assuming:do:else:
+            - Not:
+                Is empty: "@response"
+            - - Arg:from:
+                  - "response"
+                  - FromText:
+                      CanReach actor:action:noun:
+                        - FromText: "@actor"
+                        - FromText: "kissing"
+                        - FromText: "@noun"
+            - - Print: "@response"
+            - If:assuming:do:
+                - Not:
+                    Is empty: "@response"
+                - - Arg:from:
+                      - "response"
+                      - FromText:
+                          CanUse actor:action:noun:
+                            - FromText: "@actor"
+                            - FromText: "kissing"
+                            - FromText: "@noun"
+                - - Print: "@response"
+  - # 
+    Define rule:do:
+      - "can use"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:text:
+                    - "@action"
+                    - "equal_to"
+                    - "kissing"
+                - IsPlayer obj:
+                    FromText: "@actor"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't kiss without consent"
+                        - "{the:.noun|capitalize!} might not like that."
+  - Define rule:do:
+      - "can use"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:text:
+                    - "@action"
+                    - "equal_to"
+                    - "kissing"
+                - Is:matching:text:
+                    - "@actor"
+                    - "equal_to"
+                    - "@noun"
+                - IsPlayer obj:
+                    FromText: "@actor"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't kiss yourself"
+                        - "{we:|capitalize!} don't get much from that."
+  - # 
+    Define rule:do:
+      - "report someone kissing"
+      - - Say response:with:
+            - "actor kissing"
+            - "{the:.actor|capitalize!} kisses {the:.noun}."
+  - Define rule:do:
+      - "report kissing"
+      - - Say response:with:
+            - "player kissing"
+            - "{we:|capitalize!} kiss on {the:.noun}."

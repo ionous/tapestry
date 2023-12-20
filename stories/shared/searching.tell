@@ -1,0 +1,103 @@
+Tapestry:
+  - Define action:requires:
+      - "searching"
+      - - # the actor searching ( ex. the player. ) something
+          Text:kind:
+            - "actor"
+            - "actor"
+        - # the thing being searched
+          Text:kind:
+            - "noun"
+            - "thing"
+  - Define rule:do:
+      - "instead of searching"
+      - - If:assuming:do:
+            - Not:
+                Is empty: "@result"
+            - - Arg:from:
+                  - "result"
+                  - FromText:
+                      CanReach actor:action:noun:requiresLight:
+                        - FromText: "@actor"
+                        - FromText: "searching"
+                        - FromText: "@noun"
+                        - FromBool: true
+            - - Print: "@result"
+  - # 
+    Define rule:do:
+      - "report someone searching"
+      - - Say response:with:
+            - "someone else searches something"
+            - "{The: .actor|capitalize!} searches {the: .noun}."
+  - # handle the player if all else fails
+    Define rule:do:
+      - "report searching"
+      - - Say response:with:
+            - "the player finds nothing"
+            - "{we!|capitalize!} find nothing of interest."
+  - Define rule:named:do:
+      - "report searching"
+      - "the player finds something"
+      - - If:do:
+            - ShowsStorage obj:
+                FromText: "@noun"
+            - - If:assuming:do:else:
+                  - Is:matching:num:
+                      - Len:
+                          FromTextList: "@items"
+                      - "equal_to"
+                      - 0
+                  - - Arg:from:
+                        - "items"
+                        - FromTextList:
+                            VisibleStorage obj:
+                              FromText: "@noun"
+                  - - Say response:with:
+                        - "player searches empty storage"
+                        - "There is nothing {on:.noun} {the:.noun}."
+                  - Finally do:
+                      - Say response:with:
+                          - "player searches storage"
+                          - Spaces do:
+                              - Say: "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                              - Print:
+                                  Commas do:
+                                    - Repeating across:as:do:
+                                        - FromTextList: "@items"
+                                        - "item"
+                                        - - Say: "{the: .item}"
+                              - Print: "."
+  - # 
+    Define rule:do:
+      - "can reach"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:text:
+                    - "@action"
+                    - "equal_to"
+                    - "searching"
+                - FullyOpaque obj:
+                    FromText: "@noun"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can't search opaque objects"
+                        - "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+  - Define rule:do:
+      - "can reach"
+      - - If:do:
+            - AllTrue:
+                - Is:matching:text:
+                    - "@action"
+                    - "equal_to"
+                    - "searching"
+                - Not:
+                    ProvidesStorage obj:
+                      FromText: "@noun"
+            - - Set:value:
+                  - "@response"
+                  - FromText:
+                      Say response:with:
+                        - "can only search storage"
+                        - "{we!|capitalize!} find nothing of interest."

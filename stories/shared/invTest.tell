@@ -1,0 +1,39 @@
+Tapestry:
+  - Test:dependsOn:withScene:do:
+      - "status printing test"
+      - "thingaverse"
+      - - Declare: "The flashlight is lit."
+      - - Say: "{the: .flower}: {print_status:.flower}."
+        - Expect output: "the flower: (being worn)."
+        - Say: "{the: .headlamp}: {print_status:.headlamp}."
+        - Expect output: "the headlamp: (providing light and being worn)."
+        - Say: "{the: .secrets}: {print_status:.secrets}."
+        - Expect output: "the book of secrets: (closed and locked)."
+        - Say: "{the: .wisdom}: {print_status:.wisdom true}."
+        - Expect output: "the book of wisdom: (open but empty)."
+        - Say: "{the: .clutch}: {print_status:.clutch}."
+        - Expect output: "the clutch: (open)."
+        - Say: "{the: .purse}: {print_status:.purse}."
+        - Expect output: "the purse: (open)."
+        - Say: "{the: .flashlight}: {print_status:.flashlight}."
+        - Expect output: "the flashlight: (providing light)."
+        - Say: "{the: .coin}: {print_status:.coin}."
+        - Expect output: "the coin: ."
+  - # 
+    Test:dependsOn:do:
+      - "default inventory"
+      - "Kitchenette"
+      - - PrintInventory actor:
+            FromText:
+              IdOf: "Mildred"
+        - # FIX: there are suddenly spaces after open
+          # i suspect it might be from the ul indentation somehow....
+          Expect output:
+            - "You are carrying:"
+            - "  - a book of secrets (closed and locked)"
+            - "  - a book of wisdom (open but empty)"
+            - "  - a clutch (open) "
+            - "    - a purse (open) "
+            - "      - a coin"
+            - "  - a flower (being worn)"
+            - "  - a headlamp (providing light and being worn)"

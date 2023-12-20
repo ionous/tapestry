@@ -1,0 +1,30 @@
+Tapestry:
+  - Define phrase:asMacro:
+      - "usually"
+      - "implies something"
+  - Define phrase:asMacro:
+      - "kinds of"
+      - "inheriting something"
+  - Define phrase:asMacro:
+      - "a kind of"
+      - "inheriting something"
+  - Define phrase:asMacro:reversed:
+      - "in"
+      - "containing something"
+      - true
+  - Define phrase:asMacro:reversed:
+      - "on"
+      - "supporting something"
+      - true
+  - Define phrase:asMacro:
+      - "carrying"
+      - "carrying something"
+  - Define phrase:asMacro:
+      - "wearing"
+      - "wearing something"
+  - Define phrase:asMacro:
+      - "supporting"
+      - "supporting something"
+  - Define phrase:asMacro:
+      - "containing"
+      - "containing something"

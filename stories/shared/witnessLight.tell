@@ -1,0 +1,74 @@
+Tapestry:
+  - Comment: "Used at the end of the turn to decide if the player has been plunged into darkness or thrust into the light."
+  - # print news of light or darkness as needed.
+    # (namely, is the player in the same location as last turn, are they controlling the same actor as before, and has the lighting changed.)
+    Define pattern:requires:provides:do:
+      - "witness light"
+      - - Nothing:
+      - - Bool:initially:
+            - "same actor"
+            - Is:matching:text:
+                - Object:field:
+                    - "story"
+                    - "actor"
+                - "equal_to"
+                - Object:field:
+                    - "last known"
+                    - "actor"
+        - Bool:initially:
+            - "same location"
+            - Is:matching:text:
+                - Object:field:
+                    - "story"
+                    - "location"
+                - "equal_to"
+                - Object:field:
+                    - "last known"
+                    - "location"
+        - Bool:initially:
+            - "was illuminated"
+            - Object:field:
+                - "last known"
+                - "illuminated"
+        - Bool:initially:
+            - "now illuminated"
+            - Object:field:
+                - "story"
+                - "illuminated"
+      - - # allow after actions
+          Continue:
+  - Define rule:named:do:
+      - "witness light"
+      - "discovered the light"
+      - - If:do:
+            - AllTrue:
+                - "@same_actor"
+                - "@same_location"
+                - "@now_illuminated"
+                - Not: "@was_illuminated"
+            - - PrintNewsOfLight:
+  - Define rule:named:do:
+      - "witness light"
+      - "discovered the dark"
+      - - If:do:
+            - AllTrue:
+                - "@same_actor"
+                - "@same_location"
+                - "@was_illuminated"
+                - Not: "@now_illuminated"
+            - - PrintNewsOfDarkness:
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print news of darkness"
+      - - Nothing:
+      - - Nothing:
+      - - Say response:with:
+            - "darkness has fallen"
+            - "<p>It is now pitch dark in here!"
+  - # 
+    Define pattern:requires:provides:do:
+      - "Print news of light"
+      - - Nothing:
+      - - Nothing:
+      - - P:
+        - PrintVantage:
