@@ -14,10 +14,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// endpoint containing a local .if file.
+// endpoint containing a local story file.
 // handles getting the contents, and a subaction to post a check of the current contents.
-//   - /stories/<path>/<to>/<file>.if: get or put individual story files
-//   - /stories/<path>/<to>/<file>.if/check: post to test story tests
+//   - /stories/<path>/<to>/<file.ext>: get or put individual story files
+//   - /stories/<path>/<to>/<file.ext>/check: post to test story tests
 type storyFile struct {
 	cfg  *Config
 	path string

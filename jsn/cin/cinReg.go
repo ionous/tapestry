@@ -8,7 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Generate instances of go types from .if file signatures.
+// Generate instances of go types from story file signatures.
 type TypeCreator interface {
 	HasType(Hashed) bool
 	NewFromSignature(Hashed) (any, error)

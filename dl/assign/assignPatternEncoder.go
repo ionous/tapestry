@@ -13,7 +13,7 @@ import (
 // and only then compact it.. that will allow dynamic calls.
 func EncodePattern(m jsn.Marshaler, op *CallPattern) (err error) {
 	// auto generated command names are underscore separated
-	// writeBreak in jsn/cout turns those names into pascal case for the .if commands
+	// writeBreak in jsn/cout turns those names into pascal case for the story commands
 	// TestEncodePattern checks that common inputs work okay.
 	patName := strings.TrimSpace(op.PatternName)
 	pb := patternBlock(patName)

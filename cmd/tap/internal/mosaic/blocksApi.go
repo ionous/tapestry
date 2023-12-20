@@ -23,12 +23,12 @@ type blocksRoot struct {
 	blocksFolder
 }
 
-// finds and gets .if files
+// finds and gets story files
 type blocksFolder struct {
 	storyFolder
 }
 
-// loads .if files and translates them into blocks
+// loads story files and translates them into blocks
 type blocksFile struct {
 	cfg  *Config
 	path string
