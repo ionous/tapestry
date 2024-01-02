@@ -7,10 +7,3 @@ use (
 	./cmd/tap
 )
 
-
-
-// so that it will use the local source tree, and not the currently released version.
-replace (
-	github.com/ionous/tell => ../GitHub/tell
-	github.com/ionous/tell/notes => ../GitHub/tell/notes
-)
