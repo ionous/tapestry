@@ -83,6 +83,8 @@ func parseOp(msg map[string]any) (ret Op, err error) {
 		}
 	}
 	if err == nil {
+		// fix: remove. standalone comments should be the comment command only
+		// ( jsnTest still has some of these. )
 		// in the case that there was no command but there was a comment marker
 		// let the command *be* the comment marker
 		if len(out.Sig) == 0 {

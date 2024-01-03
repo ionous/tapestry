@@ -74,19 +74,3 @@ func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
 		})
 	})
 }
-
-// scheduled by importStory: verifies a pattern exists for this action
-func importActionRef(cat *weave.Catalog, op *grammar.Action) error {
-	// fix: the post import doesn't keep track of domains
-	// everything gets referenced from "tapestry",
-	// and actions which are declared and referenced from other domains fail.
-	//
-	// return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-	// 	act := lang.Normalize(op.Action) // todo: a simpler way of handling references
-	// 	if e := w.Pin().ExtendPattern(mdl.NewPatternBuilder(act).Pattern); e != nil {
-	// 		err = errutil.Fmt("%w while validating grammar", e)
-	// 	}
-	// 	return
-	// })
-	return nil
-}

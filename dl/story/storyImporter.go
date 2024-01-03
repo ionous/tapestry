@@ -1,7 +1,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -68,32 +67,6 @@ func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 			},
 			chart.BlockEnd: func(b jsn.Block, _ interface{}) (_ error) {
 				cat.Env.Inc(activityDepth, -1)
-				return
-			},
-		},
-		// validate the pattern exists?
-		// assign.CallPattern_Type: chart.KeyMap{
-		// 	chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
-		// 		if flow, ok := b.(jsn.FlowBlock); !ok {
-		// 			err = errutil.Fmt("trying to import something other than a flow")
-		// 		} else if _, ok := flow.GetFlow().(*assign.CallPattern); !ok {
-		// 			err = errutil.Fmt("trying to import something other unexpected")
-		// 		} else {
-		// 			...
-		// 		}
-		// 		return
-		// 	},
-		// },
-		// validate the referenced action exists.
-		grammar.Action_Type: chart.KeyMap{
-			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
-				if flow, ok := b.(jsn.FlowBlock); !ok {
-					err = errutil.Fmt("trying to import something other than a flow")
-				} else if op, ok := flow.GetFlow().(*grammar.Action); !ok {
-					err = errutil.Fmt("trying to import something other unexpected")
-				} else {
-					err = importActionRef(cat, op)
-				}
 				return
 			},
 		},

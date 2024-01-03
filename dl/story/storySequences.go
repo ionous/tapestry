@@ -7,14 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave"
 )
 
-// fix? are these primports stubs really needed anymore?
-// perhaps we can use reserved fields of the counter computation?
-// the advantage of the stubs is that it keeps knowledge of the importer out of the "core" which is otherwise just runtime
-// an alternative is to put a post-processing hook inside "importStory" like ResponseType, etc. do.
-// the only reason against that is the big switch statement all in one place
-// maybe, there's a way to stub the signature/s in certain contexts to say --
-// all of these things you think are type X are actually type y during import [ even if its a type alias ]
-
 // ensure that a valid counter exists
 func (op *CycleText) PreImport(cat *weave.Catalog) (ret any, err error) {
 	ret = &core.CallCycle{Parts: op.Parts, Name: newCounter(cat, "seq")}
