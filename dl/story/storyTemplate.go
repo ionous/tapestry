@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
@@ -25,7 +25,7 @@ func (op *SayTemplate) PreImport(cat *weave.Catalog) (any, error) {
 // ( post import so it happens after any transforms in its evals have been processed )
 func (op *SayResponse) PostImport(cat *weave.Catalog) (ret any, err error) {
 	// render by lookup if there's no text
-	if name := lang.Normalize(op.Name); op.Text == nil {
+	if name := en.Normalize(op.Name); op.Text == nil {
 		ret = &render.RenderResponse{Name: name}
 	} else {
 		if txt, e := convertEval(op.Text); e != nil {

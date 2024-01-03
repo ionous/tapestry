@@ -1,4 +1,4 @@
-package lang
+package en
 
 import (
 	"github.com/ionous/num2words"

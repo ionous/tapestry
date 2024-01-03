@@ -2,7 +2,7 @@ package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -15,7 +15,7 @@ import (
 // see if the requested name is an object instead.
 func ResolveName(run rt.Runtime, name string, path DottedPath) (ret RootValue, err error) {
 	// uppercase names are assumed to be requests for object names.
-	if lang.IsCapitalized(name) {
+	if en.IsCapitalized(name) {
 		ret, err = tryAsObject(run, name, path)
 
 	} else {

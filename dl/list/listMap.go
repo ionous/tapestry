@@ -3,7 +3,7 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -18,7 +18,7 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
-	pat := lang.Normalize(op.PatternName)
+	pat := en.Normalize(op.PatternName)
 	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if tgt, e := root.GetList(run); e != nil {

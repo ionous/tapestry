@@ -1,4 +1,4 @@
-package lang
+package en
 
 import (
 	"testing"

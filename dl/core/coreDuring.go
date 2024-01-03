@@ -1,7 +1,7 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 
@@ -20,7 +20,7 @@ func (op *During) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *During) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	name := lang.Normalize(op.PatternName)
+	name := en.Normalize(op.PatternName)
 	if depth, e := run.GetField(meta.PatternRunning, name); e != nil {
 		err = cmdError(op, e)
 	} else {

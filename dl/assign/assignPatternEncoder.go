@@ -3,8 +3,8 @@ package assign
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -20,8 +20,8 @@ func EncodePattern(m jsn.Marshaler, op *CallPattern) (err error) {
 	if err = m.MarshalBlock(pb); err == nil {
 		for _, arg := range op.Arguments {
 			argName := strings.TrimSpace(arg.Name)
-			if lang.IsCapitalized(argName) {
-				argName = lang.MixedCaseToSpaces(argName)
+			if en.IsCapitalized(argName) {
+				argName = en.MixedCaseToSpaces(argName)
 			}
 			if e := m.MarshalKey(argName, argName); e != nil {
 				err = e

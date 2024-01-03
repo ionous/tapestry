@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
 )
 
@@ -25,7 +24,7 @@ func CreateAtlas(db *sql.DB) (err error) {
 var spaces = regexp.MustCompile(`\s+`)
 
 var funcMap = template.FuncMap{
-	"title": lang.Titlecase,
+	"title": en.Titlecase,
 	"safe": func(s string) string {
 		return spaces.ReplaceAllString(s, "-")
 	},

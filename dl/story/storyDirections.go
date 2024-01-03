@@ -3,7 +3,7 @@ package story
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -37,12 +37,12 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 					pen := w.Pin()
 					// write a fact stating the general direction from one room to the other has been established.
 					// ( used to detect conflicts in (the reverse directional) implications of some other statement )
-					if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
+					if dir := en.Normalize(op.Dir.Str); len(dir) == 0 {
 						err = errutil.New("empty map direction")
 					} else if ok, e := pen.AddFact("dir", room, dir, otherRoom); e != nil {
 						err = e
 					} else if ok && op.MapConnection.isTwoWay() {
-						if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
+						if dir := en.Normalize(op.Dir.Str); len(dir) == 0 {
 							err = errutil.New("empty map direction")
 						} else {
 							otherDir := w.OppositeOf(dir)
@@ -139,7 +139,7 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 
 // set the room's compass, creating an exit if needed to normalize directional travel to always involve a door.
 func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir MapDirection) (err error) {
-	if dir := lang.Normalize(mapDir.Str); len(dir) == 0 {
+	if dir := en.Normalize(mapDir.Str); len(dir) == 0 {
 		err = errutil.New("empty map direction")
 	} else {
 		pen := w.Pin()

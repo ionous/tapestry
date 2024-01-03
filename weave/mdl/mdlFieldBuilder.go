@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -37,7 +37,7 @@ func NewFieldBuilder(kind string) *FieldBuilder {
 		// tbd: feels like it'd be best to have spec flag names that need normalization,
 		// and convert all the names at load time ( probably storing the original somewhere )
 		// ( ex. store the normalized names in the meta data )
-		kind: lang.Normalize(kind),
+		kind: en.Normalize(kind),
 	}}
 }
 
@@ -74,10 +74,10 @@ func (fs *Fields) rewriteImplicitAspects(pen *Pen, kind kindInfo, cache *classCa
 			// but that screws with grok, sentences would have to be: "the noun is is something"
 			if field.Affinity == affine.Bool && len(field.Class) == 0 {
 				// default trait is the unset version
-				defaultTrait := lang.Join([]string{"not", field.Name})
+				defaultTrait := en.Join([]string{"not", field.Name})
 				traits := []string{defaultTrait, field.Name}
 				// rewrite bool fields as implicit aspects
-				aspect := lang.Join([]string{field.Name, "aspect"})
+				aspect := en.Join([]string{field.Name, "aspect"})
 				cls, e := pen.addAspect(aspect, traits)
 				if e := eatDuplicates(pen.warn, e); e != nil {
 					err = e

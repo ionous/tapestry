@@ -1,4 +1,4 @@
-package lang
+package en
 
 import (
 	"strings"
@@ -115,7 +115,7 @@ func IsSpace(r rune) (ret bool) {
 	return
 }
 
-// Fields is similar to strings.Fields except it follows the rules of lang.IsSpace
+// Fields is similar to strings.Fields except it follows the rules of en.IsSpace
 func Fields(s string) []string {
 	return strings.FieldsFunc(s, IsSpace)
 }

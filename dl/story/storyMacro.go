@@ -3,7 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -84,7 +84,7 @@ func (op *CallMacro) GetRecordList(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *CallMacro) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	name := lang.Normalize(op.MacroName)
+	name := en.Normalize(op.MacroName)
 	if k, v, e := assign.ExpandArgs(run, op.Arguments); e != nil {
 		err = assign.CmdError(op, e)
 	} else if v, e := run.Call(name, aff, k, v); e != nil {

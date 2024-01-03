@@ -1,7 +1,7 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -87,7 +87,7 @@ func (op *ObjectTraits) getTraits(run rt.Runtime) (ret []string, err error) {
 
 // returns a list of all objects of the specified kind.
 func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
-	kind := lang.Normalize(op.Kind) // fix: at assembly time.
+	kind := en.Normalize(op.Kind) // fix: at assembly time.
 	return run.GetField(meta.ObjectsOfKind, kind)
 }
 
@@ -111,7 +111,7 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if k, e := objectKind(run, op.Object, op.Nothing); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ok := k != nil && k.Implements(lang.Normalize(op.Kind))
+		ok := k != nil && k.Implements(en.Normalize(op.Kind))
 		ret = g.BoolOf(ok)
 	}
 	return
@@ -124,7 +124,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if k, e := objectKind(run, op.Object, false); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ok := k != nil && k.Name() == lang.Normalize(op.Kind)
+		ok := k != nil && k.Name() == en.Normalize(op.Kind)
 		ret = g.BoolOf(ok)
 	}
 	return

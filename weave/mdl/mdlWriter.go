@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -491,7 +491,7 @@ func genNames(short, long string) []string {
 	out = append(out, short)
 
 	// generate additional names by splitting the name into parts
-	split := lang.Fields(short)
+	split := en.Fields(short)
 	if cnt := len(split); cnt > 1 {
 		// in case the name was reduced due to multiple separators
 		if breaks := strings.Join(split, " "); breaks != short {

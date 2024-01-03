@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -17,7 +16,7 @@ type Aliases struct {
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-		n := lang.Normalize(op.ShortName)
+		n := en.Normalize(op.ShortName)
 		if n, e := w.GetClosestNoun(n); e != nil {
 			err = e
 		} else {

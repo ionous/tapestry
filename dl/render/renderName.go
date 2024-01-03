@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -27,7 +27,7 @@ func (op *RenderName) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 	// uppercase names are assumed to be requests for object names.
-	if name := op.Name; lang.IsCapitalized(name) {
+	if name := op.Name; en.IsCapitalized(name) {
 		ret, err = op.getPrintedObjectName(run, name)
 
 	} else {

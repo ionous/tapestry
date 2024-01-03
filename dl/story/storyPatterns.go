@@ -5,7 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -28,7 +28,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
-			name := lang.Normalize(name.String())
+			name := en.Normalize(name.String())
 			pb := mdl.NewPatternBuilder(name)
 			if e := addRequiredFields(w, pb, op.Requires); e != nil {
 				err = e
@@ -62,7 +62,7 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 		if act, e := safe.GetText(w, op.Action); e != nil {
 			err = e
 		} else {
-			act := mdl.NewPatternSubtype(lang.Normalize(act.String()), kindsOf.Action.String())
+			act := mdl.NewPatternSubtype(en.Normalize(act.String()), kindsOf.Action.String())
 			// note: actions dont have an explicit return
 			if e := addRequiredFields(w, act, op.Requires); e != nil {
 				err = e
@@ -97,7 +97,7 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
 		if act, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
-		} else if act, e := w.Pin().GetKind(lang.Normalize(act.String())); e != nil {
+		} else if act, e := w.Pin().GetKind(en.Normalize(act.String())); e != nil {
 			err = e // ^ verify the kind exists
 		} else {
 			pb := mdl.NewPatternSubtype(act, kindsOf.Action.String())
@@ -184,7 +184,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
 		if kind, e := safe.GetText(w, op.KindName); e != nil {
 			err = e
-		} else if k, e := w.Pin().GetKind(lang.Normalize(kind.String())); e != nil {
+		} else if k, e := w.Pin().GetKind(en.Normalize(kind.String())); e != nil {
 			err = e // ^ verify the kind exists
 		} else if exact, e := safe.GetOptionalBool(w, op.Exactly, false); e != nil {
 			err = e

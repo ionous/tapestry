@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"github.com/ionous/errutil"
 )
 
@@ -125,7 +125,7 @@ func (n variant) Index(i int) (ret Value) {
 }
 
 func (n variant) FieldByName(f string) (ret Value, err error) {
-	name := lang.Normalize(f)
+	name := en.Normalize(f)
 	if rec := n.Record(); rec == nil {
 		err = errutil.Fmt("get field %q of nil record %q", name, n.Type())
 	} else {
@@ -139,7 +139,7 @@ func (n variant) FieldByName(f string) (ret Value, err error) {
 }
 
 func (n variant) SetFieldByName(f string, v Value) (err error) {
-	name := lang.Normalize(f)
+	name := en.Normalize(f)
 	if rec := n.Record(); rec == nil {
 		err = errutil.Fmt("set field %q of nil record %q", name, n.Type())
 	} else {

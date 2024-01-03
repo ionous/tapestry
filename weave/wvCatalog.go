@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -199,7 +199,7 @@ func (cat *Catalog) Schedule(when Phase, what ScheduledCallback) (err error) {
 // return the uniformly named domain ( creating it if necessary )
 func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err error) {
 	// find or create the domain
-	n := lang.Normalize(name)
+	n := en.Normalize(name)
 	d, ok := cat.domains[n]
 	if !ok {
 		d = &Domain{name: n, cat: cat}
@@ -222,7 +222,7 @@ func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err
 		} else {
 			for _, req := range reqs {
 				// check for circular references:
-				if req := lang.Normalize(req); n == req {
+				if req := en.Normalize(req); n == req {
 					err = errutil.Fmt("circular reference: %q can't depend on itself", n)
 				} else {
 					var exists bool

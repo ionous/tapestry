@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -116,7 +116,7 @@ func (run *Runner) SingularOf(plural string) (ret string) {
 	} else if len(n) > 0 {
 		ret = n
 	} else {
-		ret = lang.Singularize(plural)
+		ret = en.Singularize(plural)
 	}
 	return
 }
@@ -131,7 +131,7 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	} else if len(n) > 0 {
 		ret = n
 	} else {
-		ret = lang.Pluralize(singular)
+		ret = en.Pluralize(singular)
 	}
 	return
 }
@@ -204,7 +204,7 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
 
 func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 	// fix: pre-transform field name
-	if field := lang.Normalize(rawField); len(field) == 0 {
+	if field := en.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story
@@ -254,7 +254,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	// fix: pre-transform field
-	if field := lang.Normalize(rawField); len(field) == 0 {
+	if field := en.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("GetField given an empty field for target %q", target)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story
@@ -342,7 +342,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		// custom options
 		case meta.Option:
 			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
-			// fix? specify those strings as their lang.Normalized versions using -linecomment?
+			// fix? specify those strings as their en.Normalized versions using -linecomment?
 			if t, e := run.options.OptionByName(rawField); e != nil {
 				err = run.reportError(e)
 			} else {

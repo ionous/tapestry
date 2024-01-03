@@ -1,7 +1,7 @@
 package grammar
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/parser"
 )
 
@@ -10,7 +10,7 @@ type ScannerMaker interface{ MakeScanner() parser.Scanner }
 
 func (op *Action) MakeScanner() parser.Scanner {
 	return &parser.Action{
-		Name: lang.Normalize(op.Action),
+		Name: en.Normalize(op.Action),
 		Args: op.Arguments, // resolved when the action is executed
 	}
 }

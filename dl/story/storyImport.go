@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -25,9 +25,9 @@ func (op *DefineTraits) Weave(cat *weave.Catalog) error {
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
 		} else {
-			aspect, traits := lang.Normalize(aspect.String()), traits.Strings()
+			aspect, traits := en.Normalize(aspect.String()), traits.Strings()
 			for i, t := range traits {
-				traits[i] = lang.Normalize(t)
+				traits[i] = en.Normalize(t)
 			}
 			err = w.Pin().AddAspect(aspect, traits)
 		}
@@ -50,7 +50,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			pen := w.Pin()
 			names := nouns.Strings()
 			for _, t := range traits {
-				t := lang.Normalize(t)
+				t := en.Normalize(t)
 				for _, n := range names {
 					if e := w.AddInitialValue(pen, n, t, truly()); e != nil {
 						err = errutil.Append(err, e)
@@ -76,7 +76,7 @@ func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if rev, e := safe.GetOptionalBool(w, op.Reversed, false); e != nil {
 			err = e
-		} else if macro := lang.Normalize(macro.String()); len(macro) == 0 {
+		} else if macro := en.Normalize(macro.String()); len(macro) == 0 {
 			err = errutil.New("missing macro name")
 		} else {
 			err = w.Pin().AddPhrase(macro, phrase.String(), rev.Bool())
@@ -106,7 +106,7 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 					for _, noun := range names {
 						if noun, e := grok.StripArticle(noun); e != nil {
 							err = errutil.Append(err, e)
-						} else if e := pen.AddNoun(lang.Normalize(noun), noun, kind); e != nil {
+						} else if e := pen.AddNoun(en.Normalize(noun), noun, kind); e != nil {
 							err = errutil.Append(err, e)
 						}
 					}
@@ -146,7 +146,7 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 				for _, noun := range subjects {
 					if name, e := grok.StripArticle(noun); e != nil {
 						err = errutil.Append(err, e)
-					} else if noun, e := pen.GetClosestNoun(lang.Normalize(name)); e != nil {
+					} else if noun, e := pen.GetClosestNoun(en.Normalize(name)); e != nil {
 						err = errutil.Append(err, e)
 					} else if e := w.AddInitialValue(pen, noun, field, value); e != nil {
 						err = errutil.Append(err, e)
@@ -207,13 +207,13 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 }
 
 func defineRelatives(w *weave.Weaver, rel string, nouns, otherNouns []string) (err error) {
-	pen, rel := w.Pin(), lang.Normalize(rel)
+	pen, rel := w.Pin(), en.Normalize(rel)
 	for _, one := range nouns {
-		if a, e := w.GetClosestNoun(lang.Normalize(one)); e != nil {
+		if a, e := w.GetClosestNoun(en.Normalize(one)); e != nil {
 			err = errutil.Append(err, e)
 		} else {
 			for _, other := range otherNouns {
-				if b, e := w.GetClosestNoun(lang.Normalize(other)); e != nil {
+				if b, e := w.GetClosestNoun(en.Normalize(other)); e != nil {
 					err = errutil.Append(err, e)
 				} else {
 					if e := pen.AddPair(rel, a, b); e != nil {

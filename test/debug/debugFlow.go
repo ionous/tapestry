@@ -2,8 +2,6 @@ package debug
 
 import (
 	r "reflect"
-
-	"git.sr.ht/~ionous/tapestry/lang"
 )
 
 // Flow creates a debug flow to simulate spec generation
@@ -18,7 +16,7 @@ func (n Flow) GetType() string {
 }
 
 func (n Flow) GetLede() string {
-	return lang.Normalize(n.GetType())
+	return en.Normalize(n.GetType())
 }
 
 func (n Flow) GetFlow() interface{} {

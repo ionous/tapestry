@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -82,6 +82,6 @@ func (op *ManyToMany) addRelation(w *weave.Weaver, rel string) (err error) {
 }
 
 func addRelation(pen *mdl.Pen, rel, a, b string, amany, bmany bool) error {
-	rn, an, bn := lang.Normalize(rel), lang.Normalize(a), lang.Normalize(b)
+	rn, an, bn := en.Normalize(rel), en.Normalize(a), en.Normalize(b)
 	return pen.AddRelation(rn, an, bn, amany, bmany)
 }
