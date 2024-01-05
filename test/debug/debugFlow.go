@@ -2,6 +2,8 @@ package debug
 
 import (
 	r "reflect"
+
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 )
 
 // Flow creates a debug flow to simulate spec generation

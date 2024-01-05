@@ -6,7 +6,7 @@ import (
 	"text/template"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/rt/markup"
+	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 

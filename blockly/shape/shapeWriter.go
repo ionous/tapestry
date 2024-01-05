@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
-	"git.sr.ht/~ionous/tapestry/rt/markup"
+	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 

@@ -5,7 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
-	"git.sr.ht/~ionous/tapestry/rt/markup"
+	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"github.com/ionous/errutil"
 )
 

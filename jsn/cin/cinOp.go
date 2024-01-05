@@ -3,7 +3,7 @@ package cin
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/rt/markup"
+	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"github.com/ionous/errutil"
 )
 

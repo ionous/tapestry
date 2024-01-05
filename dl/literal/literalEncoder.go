@@ -1,10 +1,14 @@
 package literal
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -73,6 +77,14 @@ func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, e
 		err = e
 	} else {
 		ret = &RecordValue{Kind: kind, Fields: fields}
+	}
+	return
+}
+
+func LiteralDecoder(dec *decode.Decoder, slot string, body any) (ret any, err error) {
+	var u chart.Unhandled
+	if ret, err = readLiteral(slot, "", body); errors.As(err, &u) {
+		err = compact.Unhandled
 	}
 	return
 }

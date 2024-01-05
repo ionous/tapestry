@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/inflect/en"
 	"github.com/ionous/errutil"
 )
 

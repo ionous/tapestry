@@ -6,6 +6,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -61,12 +63,11 @@ func DecodeValue(dst jsn.Marshalee, val any, sig cin.Signatures) error {
 		DecodeValue(dst, val)
 }
 
-// unhandled reads are attempted via default readSlot evaluation.
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err error) {
+func CoreDecoder(dec *decode.Decoder, slot string, body any) (ret any, err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
-	switch typeName := slot.GetType(); typeName {
+	switch slot {
 	default:
-		err = chart.Unhandled(typeName)
+		err = compact.Unhandled
 	case
 		// reading from a variable:
 		rt.BoolEval_Type,
@@ -79,12 +80,24 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err erro
 		// writing to a variable:
 		assign.Address_Type:
 		if str := getVariableString(body); len(str) > 0 {
-			if !slot.SetSlot(Variable(str)) {
-				err = errutil.New("unexpected error setting slot")
-			}
+			ret = Variable(str)
 		} else {
-			err = literal.CompactSlotDecoder(m, slot, body)
+			ret, err = literal.LiteralDecoder(dec, slot, body)
 		}
+	}
+	return
+}
+
+// unhandled reads are attempted via default readSlot evaluation.
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err error) {
+	if v, e := CoreDecoder(nil, slot.GetType(), body); e != nil {
+		if e == compact.Unhandled {
+			err = chart.Unhandled("compact")
+		} else {
+			err = e
+		}
+	} else if !slot.SetSlot(v) {
+		err = errutil.New("unexpected error setting slot")
 	}
 	return
 }

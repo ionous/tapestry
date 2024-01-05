@@ -8,16 +8,18 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
 // Create a story dl from native maps and slices.
 func Decode(dst jsn.Marshalee, msg map[string]any, reg cin.Signatures) error {
-	return decode(dst, msg, reg)
+	return decodeMe(dst, msg, reg)
 }
 
-func decode(dst jsn.Marshalee, val any, reg cin.TypeCreator) error {
+func decodeMe(dst jsn.Marshalee, val any, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
 		SetSlotDecoder(CompactSlotDecoder).
 		DecodeValue(dst, val)
@@ -87,7 +89,7 @@ func tryPattern(m jsn.Marshaler, msg map[string]any, typeName string) (retSig st
 				var call []assign.Arg
 				for i, p := range sig.Params {
 					var val rt.Assignment
-					if e := decode(rt.Assignment_Slot{Value: &val}, args[i], reg); e != nil {
+					if e := decodeMe(rt.Assignment_Slot{Value: &val}, args[i], reg); e != nil {
 						err = e
 						break
 					}
@@ -96,6 +98,51 @@ func tryPattern(m jsn.Marshaler, msg map[string]any, typeName string) (retSig st
 				if len(sig.Params) == len(call) {
 					retSig, retArgs = sig.Name, call
 				}
+			}
+		}
+	}
+	return
+}
+
+func TryPattern(dec *decode.Decoder, slot string, msg compact.Message) (ret any, err error) {
+	switch slot {
+	default:
+		err = compact.Unhandled
+	case StoryStatement_Type:
+		if args, e := tryPatternArgs(dec, slot, msg); e != nil {
+			err = e
+		} else {
+			ret = &CallMacro{MacroName: msg.Name, Arguments: args}
+		}
+	case
+		rt.Execute_Type,
+		rt.BoolEval_Type,
+		rt.NumberEval_Type,
+		rt.TextEval_Type,
+		rt.RecordEval_Type,
+		rt.NumListEval_Type,
+		rt.TextListEval_Type,
+		rt.RecordListEval_Type:
+		if args, e := tryPatternArgs(dec, slot, msg); e != nil {
+			err = e
+		} else {
+			ret = &assign.CallPattern{PatternName: msg.Name, Arguments: args}
+		}
+	}
+	return
+}
+
+func tryPatternArgs(dec *decode.Decoder, slot string, msg compact.Message) (ret []assign.Arg, err error) {
+	if args, e := msg.Args(); e != nil {
+		err = e
+	} else {
+		for i, p := range msg.Params {
+			var val rt.Assignment
+			if e := dec.UnmarshalSlot(&val, args[i]); e != nil {
+				err = e
+				break
+			} else {
+				ret = append(ret, assign.Arg{Name: p.Label, Value: val})
 			}
 		}
 	}

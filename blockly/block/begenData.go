@@ -3,7 +3,7 @@ package block
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/rt/markup"
+	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 

@@ -1,6 +1,6 @@
 package cout
 
-import "git.sr.ht/~ionous/tapestry/rt/markup"
+import "git.sr.ht/~ionous/tapestry/lang/markup"
 
 type comFlow struct {
 	sig    Sig
