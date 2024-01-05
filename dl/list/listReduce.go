@@ -5,7 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -20,7 +20,7 @@ func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListReduce) reduce(run rt.Runtime) (err error) {
-	pat := en.Normalize(op.PatternName)
+	pat := inflect.Normalize(op.PatternName)
 	if tgt, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if fromList, e := safe.GetAssignment(run, op.List); e != nil {

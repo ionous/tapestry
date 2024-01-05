@@ -1,7 +1,7 @@
 package mdl
 
 import (
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
@@ -49,7 +49,7 @@ func NewPatternSubtype(name string, parent string) *PatternBuilder {
 			// tbd: feels like it'd be best to have spec flag names that need normalization,
 			// and convert all the names at load time ( probably storing the original somewhere )
 			// ( ex. store the normalized names in the meta data )
-			name:   en.Normalize(name),
+			name:   inflect.Normalize(name),
 			parent: parent,
 		}}
 }

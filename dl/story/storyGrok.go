@@ -7,7 +7,7 @@ import (
 	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -105,13 +105,13 @@ func optionalLast(list []grok.Match) (ret grok.Match) {
 }
 
 func grokKind(pen *mdl.Pen, k, a grok.Match, traits []grok.Match) (err error) {
-	kind := en.Normalize(grok.MatchString(k))
-	ancestor := en.Normalize(grok.MatchString(a))
+	kind := inflect.Normalize(grok.MatchString(k))
+	ancestor := inflect.Normalize(grok.MatchString(a))
 	if e := pen.AddKind(kind, ancestor); e != nil {
 		err = e
 	} else {
 		for _, t := range traits {
-			t := en.Normalize(t.String())
+			t := inflect.Normalize(t.String())
 			if e := pen.AddDefaultValue(kind, t, truly()); e != nil {
 				err = errutil.Append(err, e)
 			}
@@ -206,7 +206,7 @@ func validTargets(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) 
 
 // determine whether the noun seems to be a proper name
 func isProper(article grok.Article, name string) (okay bool) {
-	a := en.Normalize(article.String())
+	a := inflect.Normalize(article.String())
 	if len(name) > 1 || a == "our" {
 		first, _ := utf8.DecodeRuneInString(name)
 		okay = unicode.ToUpper(first) == first
@@ -217,7 +217,7 @@ func isProper(article grok.Article, name string) (okay bool) {
 // determine whether the noun will need a custom indefinite property
 // this uses a subset of the known articles, due to way object printing works.
 func getCustomArticle(article grok.Article) (ret string) {
-	switch a := en.Normalize(article.String()); a {
+	switch a := inflect.Normalize(article.String()); a {
 	case "a", "an", "the":
 	default:
 		ret = a
@@ -261,7 +261,7 @@ func genNouns(w *weave.Weaver, ns []grok.Name, multi bool) (ret g.Value, err err
 func importNamedNoun(w *weave.Weaver, pen *mdl.Pen, n grok.Name) (ret string, err error) {
 	var noun string
 	fullName := n.String()
-	if name := en.Normalize(fullName); name == "you" {
+	if name := inflect.Normalize(fullName); name == "you" {
 		// tdb: the current thought is that "the player" should be a variable;
 		// currently its an "agent".
 		noun, err = pen.GetExactNoun("self")
@@ -277,7 +277,7 @@ func importNamedNoun(w *weave.Weaver, pen *mdl.Pen, n grok.Name) (ret string, er
 		if errors.Is(err, mdl.Missing) {
 			base := "things" // ugh
 			if len(n.Kinds) > 0 {
-				base = en.Normalize(n.Kinds[0].String())
+				base = inflect.Normalize(n.Kinds[0].String())
 			}
 			if e := pen.AddNoun(name, fullName, base); e != nil {
 				err = e
@@ -290,7 +290,7 @@ func importNamedNoun(w *weave.Weaver, pen *mdl.Pen, n grok.Name) (ret string, er
 	// fix consider a "noun builder" instead
 	if err == nil {
 		for _, k := range n.Kinds {
-			k := en.Normalize(k.String())
+			k := inflect.Normalize(k.String())
 			// since noun already exists: this ensures that the noun inherits from all of the specified kinds
 			if e := pen.AddNoun(noun, "", k); e != nil {
 				err = e
@@ -313,7 +313,7 @@ func importNamedNoun(w *weave.Weaver, pen *mdl.Pen, n grok.Name) (ret string, er
 	// add traits:
 	if err == nil {
 		for _, t := range n.Traits {
-			t := en.Normalize(t.String())
+			t := inflect.Normalize(t.String())
 			if e := w.AddInitialValue(pen, noun, t, truly()); e != nil {
 				err = errutil.Append(err, e)
 				break // out of the traits to the next noun
@@ -348,7 +348,7 @@ func importCountedNoun(w *weave.Weaver, noun grok.Name) (ret []string, err error
 			// fix: grok should return that as an object *called* two triangles, not something counted.
 			parent = noun.Kinds[0].String()
 		}
-		name = en.Normalize(name)
+		name = inflect.Normalize(name)
 
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {

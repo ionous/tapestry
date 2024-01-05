@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 
@@ -48,7 +48,7 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (g.Value, error) {
 // note: at one point this would unwrap errors so that callers couldn't see them
 // i no longer am sure why. doing stops game.Signals(s) ( ex SignalQuit ) from reaching the parser.
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	name := en.Normalize(op.PatternName)
+	name := inflect.Normalize(op.PatternName)
 	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
 		err = CmdErrorCtx(op, name, e)
 	} else if v, e := run.Call(name, aff, k, v); e != nil && !errors.Is(e, rt.NoResult) {
@@ -67,7 +67,7 @@ func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []g.Value
 				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
 				break
 			} else {
-				keys[i], vals[i] = en.Normalize(a.Name), val
+				keys[i], vals[i] = inflect.Normalize(a.Name), val
 			}
 		}
 		if err == nil {

@@ -3,7 +3,7 @@ package safe
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -30,7 +30,7 @@ func NewLabelFinder(run rt.Runtime, kind *g.Kind) (ret *LabelFinder, err error) 
 // returns nil on success; updates internals
 func (lf *LabelFinder) FindNext(k string) (ret int, err error) {
 	// blank names are positional arguments
-	if key := en.Normalize(k); len(key) == 0 {
+	if key := inflect.Normalize(k); len(key) == 0 {
 		if lf.noMoreBlanks {
 			err = errutil.New("unexpected blank label", lf.next)
 		} else if now := lf.next; now >= lf.kind.NumField() {

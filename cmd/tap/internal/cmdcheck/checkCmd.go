@@ -9,7 +9,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -27,7 +27,7 @@ func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error)
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
 		opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
-		if cnt, e := checkFile(checkFlags.srcPath, en.Normalize(checkFlags.checkOne), opt); e != nil {
+		if cnt, e := checkFile(checkFlags.srcPath, inflect.Normalize(checkFlags.checkOne), opt); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {
 				log.Panic("mismatched")

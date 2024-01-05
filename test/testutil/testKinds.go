@@ -5,7 +5,7 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -225,7 +225,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 				if trait == end {
 					break
 				}
-				name := en.MixedCaseToSpaces(trait)
+				name := inflect.MixedCaseToSpaces(trait)
 				traits = append(traits, name)
 			}
 			kb.Aspects = append(kb.Aspects, g.Aspect{
@@ -234,12 +234,12 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 			})
 		}
 		if len(b.Aff) > 0 {
-			name := en.MixedCaseToSpaces(f.Name)
+			name := inflect.MixedCaseToSpaces(f.Name)
 			(*pfields) = append((*pfields), g.Field{Name: name, Affinity: b.Aff, Type: b.Type})
 		}
 	}
 }
 
 func nameOfType(t r.Type) string {
-	return en.MixedCaseToSpaces(t.Name())
+	return inflect.MixedCaseToSpaces(t.Name())
 }

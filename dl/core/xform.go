@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -82,7 +82,7 @@ func (op *MakeTitleCase) GetText(run rt.Runtime) (ret g.Value, err error) {
 	} else if str := t.String(); len(str) == 0 {
 		ret = t
 	} else {
-		title := en.Titlecase(str)
+		title := inflect.Titlecase(str)
 		ret = g.StringFrom(title, t.Type())
 	}
 	return
@@ -94,7 +94,7 @@ func (op *MakeSentenceCase) GetText(run rt.Runtime) (ret g.Value, err error) {
 	} else if str := t.String(); len(str) == 0 {
 		ret = t
 	} else {
-		sentence := en.SentenceCase(str)
+		sentence := inflect.SentenceCase(str)
 		ret = g.StringFrom(sentence, t.Type())
 	}
 	return

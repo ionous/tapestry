@@ -3,7 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -84,8 +84,8 @@ func defineField(run rt.Runtime, name, cls rt.TextEval, aff affine.Affinity, ini
 		err = e
 	} else {
 		ret = mdl.FieldInfo{
-			Name:     en.Normalize(name.String()),
-			Class:    en.Normalize(cls.String()),
+			Name:     inflect.Normalize(name.String()),
+			Class:    inflect.Normalize(cls.String()),
 			Affinity: aff,
 			Init:     init,
 		}

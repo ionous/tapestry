@@ -2,7 +2,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
@@ -19,8 +19,8 @@ type Params struct {
 
 func (p Params) FieldInfo() mdl.FieldInfo {
 	return mdl.FieldInfo{
-		Name:     en.Normalize(p.Name),
-		Class:    en.Normalize(p.Class),
+		Name:     inflect.Normalize(p.Name),
+		Class:    inflect.Normalize(p.Class),
 		Affinity: p.Affinity,
 		Init:     p.Initially,
 	}

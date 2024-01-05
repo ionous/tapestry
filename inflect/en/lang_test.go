@@ -1,4 +1,4 @@
-package en
+package inflect
 
 import (
 	"testing"

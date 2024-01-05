@@ -4,7 +4,7 @@ import (
 	"log"
 	"sort"
 
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -17,7 +17,7 @@ type Noun struct {
 }
 
 func MakeNoun(run rt.Runtime, name string) *Noun {
-	return &Noun{run, en.Normalize(name)}
+	return &Noun{run, inflect.Normalize(name)}
 }
 
 // Id for the noun. Returned via ResultList.Objects() on a successful match.
@@ -42,7 +42,7 @@ func (n *Noun) HasName(name string) (okay bool) {
 }
 
 func (n *Noun) HasClass(s string) (ret bool) { // fix: pre-normalize during weave
-	if ok, e := safe.IsKindOf(n.run, n.id, en.Normalize(s)); e != nil {
+	if ok, e := safe.IsKindOf(n.run, n.id, inflect.Normalize(s)); e != nil {
 		log.Println("parser error", e)
 	} else {
 		ret = ok

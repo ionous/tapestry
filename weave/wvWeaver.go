@@ -3,7 +3,7 @@ package weave
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/grok"
@@ -47,7 +47,7 @@ func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value rt.Assi
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
 	if bare, e := grok.StripArticle(name); e != nil {
 		err = e
-	} else if n := en.Normalize(bare); len(n) == 0 {
+	} else if n := inflect.Normalize(bare); len(n) == 0 {
 		err = errutil.New("empty name")
 	} else if n, e := w.Pin().GetClosestNoun(n); e != nil {
 		err = e

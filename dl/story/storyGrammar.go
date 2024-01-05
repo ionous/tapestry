@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -21,12 +21,12 @@ func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if names, e := safe.GetTextList(w, op.Names); e != nil {
 			err = e
-		} else if n, e := w.GetClosestNoun(en.Normalize(name.String())); e != nil {
+		} else if n, e := w.GetClosestNoun(inflect.Normalize(name.String())); e != nil {
 			err = e
 		} else {
 			pen := w.Pin()
 			for _, a := range names.Strings() {
-				if a := en.Normalize(a); len(a) > 0 {
+				if a := inflect.Normalize(a); len(a) > 0 {
 					if e := pen.AddName(n, a, -1); e != nil {
 						err = e
 						break
@@ -66,7 +66,7 @@ func (op *DefineNamedGrammar) Execute(macro rt.Runtime) error {
 // an ugly way to ensure that grammar ( and therefore the runtime )
 // isnt dependent on story / weave
 func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
-	name := en.Normalize(op.Name)
+	name := inflect.Normalize(op.Name)
 	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(name, &grammar.Directive{
 			Name:   name,

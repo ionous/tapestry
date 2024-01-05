@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -42,8 +42,8 @@ func MakeSurveyor(run rt.Runtime, player, pattern, relation string) Survey {
 	return Survey{
 		run:      run,
 		focus:    player,
-		bounds:   en.Normalize(pattern),
-		relation: en.Normalize(relation),
+		bounds:   inflect.Normalize(pattern),
+		relation: inflect.Normalize(relation),
 	}
 }
 

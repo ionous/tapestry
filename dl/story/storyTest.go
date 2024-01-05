@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
@@ -13,12 +13,12 @@ func (op *Test) Execute(macro rt.Runtime) error {
 }
 
 func (op *Test) Weave(cat *weave.Catalog) (err error) {
-	if name := en.Normalize(op.TestName); len(name) == 0 {
+	if name := inflect.Normalize(op.TestName); len(name) == 0 {
 		errutil.New("test has empty name")
 	} else {
 		var req []string
 		for _, n := range op.SceneNames {
-			req = append(req, en.Normalize(n))
+			req = append(req, inflect.Normalize(n))
 		}
 		if e := cat.DomainStart(name, req); e != nil {
 			err = e

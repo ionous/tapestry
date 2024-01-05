@@ -1,7 +1,7 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/aspects"
@@ -11,7 +11,7 @@ import (
 )
 
 func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
-	if name := en.Normalize(rawName); len(name) == 0 {
+	if name := inflect.Normalize(rawName); len(name) == 0 {
 		err = errutil.New("no kind of empty name")
 	} else if cached, e := run.getKind(name); e != nil {
 		err = e

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
@@ -52,7 +52,7 @@ func (p *BracketSpanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 func Capitalize(out writer.Output) writer.ChunkOutput {
 	f := &Filter{
 		First: func(c writer.Chunk) (int, error) {
-			cap := en.Capitalize(c.String())
+			cap := inflect.Capitalize(c.String())
 			return out.WriteString(cap)
 		},
 		Rest: func(c writer.Chunk) (int, error) {
@@ -66,7 +66,7 @@ func Capitalize(out writer.Output) writer.ChunkOutput {
 func TitleCase(out writer.Output) writer.ChunkOutput {
 	f := &Filter{
 		Rest: func(c writer.Chunk) (int, error) {
-			cap := en.Capitalize(c.String())
+			cap := inflect.Capitalize(c.String())
 			return out.WriteString(cap)
 		},
 	}

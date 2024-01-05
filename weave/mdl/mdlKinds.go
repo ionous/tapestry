@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"github.com/ionous/errutil"
 )
 
@@ -151,7 +151,7 @@ func (pen *Pen) singularize(kind string) (ret string, err error) {
 		on (uses = domain)
 	where base = ?1 and many = ?2
 	limit 1`, pen.domain, kind).Scan(&ret); e == sql.ErrNoRows {
-		ret = en.Singularize(kind)
+		ret = inflect.Singularize(kind)
 	} else {
 		err = e // other error or nil.
 	}

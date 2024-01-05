@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/render"
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
@@ -60,7 +60,7 @@ func (n RuleName) EventName() (ret string) {
 }
 
 func ReadPhrase(phrase, label string) (ret RuleName) {
-	phrase, label = en.Normalize(phrase), en.Normalize(label)
+	phrase, label = inflect.Normalize(phrase), inflect.Normalize(label)
 	name, suffix := findSuffix(phrase)
 	// return name sans any prefix, and any prefix the name had.
 	short, prefix := findPrefix(name)

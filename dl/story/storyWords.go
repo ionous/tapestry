@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/inflect/en"
+	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -21,9 +21,9 @@ func (op *MakePlural) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if singular, e := safe.GetText(w, op.Singular); e != nil {
 			err = e
-		} else if plural := en.Normalize(plural.String()); len(plural) < 0 {
+		} else if plural := inflect.Normalize(plural.String()); len(plural) < 0 {
 			err = errutil.New("no plural specified")
-		} else if singular := en.Normalize(singular.String()); len(singular) < 0 {
+		} else if singular := inflect.Normalize(singular.String()); len(singular) < 0 {
 			err = errutil.New("no singular specified")
 		} else {
 			err = w.Pin().AddPlural(plural, singular)
@@ -43,9 +43,9 @@ func (op *MakeOpposite) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if opposite, e := safe.GetText(w, op.Opposite); e != nil {
 			err = e
-		} else if a := en.Normalize(word.String()); len(a) < 0 {
+		} else if a := inflect.Normalize(word.String()); len(a) < 0 {
 			err = errutil.New("no word for opposite specified")
-		} else if b := en.Normalize(opposite.String()); len(b) < 0 {
+		} else if b := inflect.Normalize(opposite.String()); len(b) < 0 {
 			err = errutil.New("no opposite for word specified")
 		} else {
 			err = w.Pin().AddOpposite(a, b)
