@@ -8,12 +8,23 @@ import (
 
 // info about a member of a flow
 type Field struct {
+	name      string
 	fieldType r.Type
 	tag       tag.StructTag // cached tag of the current field
 }
 
+// name of the golang type.
+func (f *Field) Name() string {
+	return f.name
+}
+
+// reflected type
 func (f *Field) Type() r.Type {
 	return f.fieldType
+}
+
+func (f *Field) SpecType() Type {
+	return fieldType(f.fieldType)
 }
 
 func (f *Field) Optional() bool {
@@ -24,7 +35,9 @@ func (f *Field) Internal() bool {
 	return f.tag.Exists("internal")
 }
 
-// true if the container is a slice of commands.
+// true if the container is a slice of commands or slots.
+// ( this is slightly different meaning of "repeat" than the definitions themselves
+//   which use repeat to indicate slices of primitive values as well )
 func (f *Field) Repeats() (okay bool) {
 	k := f.fieldType.Kind()
 	if k == r.Slice {

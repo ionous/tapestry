@@ -1,142 +1,155 @@
 package walk_test
 
-// func TestPod(t *testing.T) {
-// 	type Pod struct {
-// 		A string
-// 		B string
-// 	}
-// 	if e := Check(t, walk.NewWalker(r.ValueOf(new(Pod)).Elem()),
-// 		"Pod", "Initial",
-// 		"Pod", "A",
-// 		"Pod", "B",
-// 		"Pod", "Terminal",
-// 	); e != nil {
-// 		t.Fatal(e)
-// 	}
+import (
+	r "reflect"
+	"strconv"
+	"testing"
 
-// 	type Outer struct {
-// 		X Pod
-// 		Y string
-// 		Z string
-// 		W Pod
-// 	}
-// 	if e := Check(t, walk.NewWalker(r.ValueOf(new(Outer)).Elem()),
-// 		"Outer", "Initial",
-// 		"Outer", "X",
-// 		"Pod", "A",
-// 		"Pod", "B",
-// 		"Pod", "Terminal",
-// 		"Outer", "Y",
-// 		"Outer", "Z",
-// 		"Outer", "W",
-// 		"Pod", "A",
-// 		"Pod", "B",
-// 		"Pod", "Terminal",
-// 		"Outer", "Terminal",
-// 	); e != nil {
-// 		t.Fatal(e)
-// 	}
-// }
+	"git.sr.ht/~ionous/tapestry/lang/walk"
+)
 
-// func TestSlice(t *testing.T) {
-// 	type Pod struct {
-// 		A string
-// 		B string
-// 	}
+type Pod struct {
+	A string
+	B string
+}
 
-// 	if e := Check(t, walk.NewWalker(r.ValueOf(make([]Pod, 2))),
-// 		"", "Initial", // the slice as container
-// 		"", "0", // the pod element; ( the container is still the slice )
-// 		"Pod", "A",
-// 		"Pod", "B",
-// 		"Pod", "Terminal",
-// 		"", "1",
-// 		"Pod", "A",
-// 		"Pod", "B",
-// 		"Pod", "Terminal",
-// 		"", "Terminal",
-// 	); e != nil {
-// 		t.Fatal(e)
-// 	}
-// }
+type Outer struct {
+	X Pod
+	Y string
+	Z string
+	W Pod
+}
 
-// func TestSlot(t *testing.T) {
-// 	type Pod struct {
-// 		A string
-// 		B string
-// 	}
-// 	type Outer struct {
-// 		Slot any
-// 	}
+type Slice struct {
+	Els []Pod
+}
 
-// 	empty := Outer{}
-// 	if e := Check(t, walk.NewWalker(r.ValueOf(empty)),
-// 		"Outer", "Initial",
-// 		"Outer", "Slot",
-// 		"", "Terminal", // the slot is empty
-// 		"Outer", "Terminal",
-// 	); e != nil {
-// 		t.Fatal(e)
-// 	}
+type Slot struct {
+	P any
+}
 
-// 	filled := Outer{Slot: new(Pod)}
-// 	if e := Check(t, walk.NewWalker(r.ValueOf(filled)),
-// 		"Outer", "Initial",
-// 		"Outer", "Slot",
-// 		"", "Interface", // the pod element in the slot
-// 		"Pod", "A",
-// 		"Pod", "B",
-// 		"Pod", "Terminal",
-// 		"", "Terminal", // the end of the pod in the slot
-// 		"Outer", "Terminal",
-// 	); e != nil {
-// 		t.Fatal(e)
-// 	}
-// }
+func TestPod(t *testing.T) {
+	var pod Pod
+	Check(t, walk.Walk(r.ValueOf(pod)),
+		"{", "A", "Value", "B", "Value", "}",
+	)
+}
 
-// func Check(t *testing.T, it *walk.Walker, parts ...string) (err error) {
-// 	var l listChecker
-// 	for ok := true; ok; ok = it.Next() {
-// 		c := it.Container().Type()
-// 		if e := l.check(t, parts, c.Name()); e != nil && err == nil {
-// 			// t.Error(e)
-// 			err = e
-// 		}
-// 		var n string
-// 		if v := it.Value(); !v.IsValid() {
-// 			n = "Terminal"
-// 		} else if it.Initial() {
-// 			n = "Initial"
-// 		} else if k := c.Kind(); k == r.Struct {
-// 			n = it.Field().Name
-// 		} else if k == r.Slice {
-// 			i := it.Index()
-// 			n = strconv.Itoa(i)
-// 		} else if k == r.Interface {
-// 			n = "Interface"
-// 		}
-// 		if e := l.check(t, parts, n); e != nil && err == nil {
-// 			// t.Error(e)
-// 			err = e
-// 		}
-// 	}
-// 	if err == nil && int(l) < len(parts) {
-// 		err = fmt.Errorf("ended early at line %d", l/2)
-// 	}
-// 	return
-// }
+func TestOuter(t *testing.T) {
+	var outer Outer
+	Check(t, walk.Walk(r.ValueOf(outer)),
+		"{",
+		"X", "Flow",
+		"{", "A", "Value", "B", "Value", "}",
+		"Y", "Value",
+		"Z", "Value",
+		"W", "Flow",
+		"{", "A", "Value", "B", "Value", "}",
+		"}",
+	)
+}
 
-// type listChecker int
+func TestSlice(t *testing.T) {
+	slice := Slice{make([]Pod, 2)}
+	Check(t, walk.Walk(r.ValueOf(slice)),
+		"{", "Els", "Flow", "[",
+		"0", "{", "A", "Value", "B", "Value", "}",
+		"1", "{", "A", "Value", "B", "Value", "}",
+		"]", "}",
+	)
+	empty := Slice{}
+	Check(t, walk.Walk(r.ValueOf(empty)),
+		"{", "Els", "Flow", "[",
+		"]", "}",
+	)
+}
 
-// // check the passed strings, one at a time.
-// func (lc *listChecker) check(t *testing.T, parts []string, got string) (err error) {
-// 	t.Log(got)
-// 	if i := int(*lc); i >= len(parts) {
-// 		err = errors.New("out of range")
-// 	} else if next := parts[i]; next != got {
-// 		err = fmt.Errorf("mismatch at %d; expected %q got %q", i, next, got)
-// 	} else {
-// 		(*lc)++
-// 	}
-// 	return
-// }
+func TestSlot(t *testing.T) {
+	empty := Slot{}
+	Check(t, walk.Walk(r.ValueOf(empty)),
+		"{", "P", "Slot",
+		"<", ">",
+		"}")
+	filled := Slot{new(Pod)}
+	Check(t, walk.Walk(r.ValueOf(filled)),
+		"{", "P", "Slot",
+		"<", "Pod", // reports on what type fills the slot
+		"{", "A", "Value", "B", "Value", "}", // then the flow
+		">", "}")
+}
+
+func Check(t *testing.T, it walk.Walker, parts ...string) {
+	lc := listChecker{parts: parts}
+	lc.flow(t, it)
+
+	if lc.idx < len(parts) {
+		t.Logf("ended early, missing: %v", parts[lc.idx:])
+		t.Fail()
+	}
+}
+
+func (lc *listChecker) flow(t *testing.T, it walk.Walker) {
+	lc.check(t, "{")
+	for it.Next() {
+		f := it.Field()
+		lc.check(t, f.Name(), f.SpecType().String())
+		switch f.SpecType() {
+		case walk.Flow:
+			if f.Repeats() {
+				lc.repeatFlow(t, it.Walk())
+			} else {
+				lc.flow(t, it.Walk())
+			}
+
+		case walk.Slot:
+			if f.Repeats() {
+				panic("should really have a test for this")
+			} else {
+				lc.slot(t, it.Walk())
+			}
+		}
+	}
+	lc.check(t, "}")
+	return
+}
+
+func (lc *listChecker) slot(t *testing.T, it walk.Walker) {
+	lc.check(t, "<")
+	for i := 0; it.Next(); i++ {
+		lc.check(t, it.Value().Type().Name())
+		lc.flow(t, it.Walk())
+	}
+	lc.check(t, ">")
+}
+
+func (lc *listChecker) repeatFlow(t *testing.T, it walk.Walker) {
+	lc.check(t, "[")
+	for i := 0; it.Next(); i++ {
+		lc.check(t, strconv.Itoa(i))
+		lc.flow(t, it.Walk())
+	}
+	lc.check(t, "]")
+	return
+}
+
+type listChecker struct {
+	idx   int
+	parts []string
+}
+
+// check the passed strings, one at a time.
+func (lc *listChecker) check(t *testing.T, strs ...string) {
+	for _, got := range strs {
+		t.Log(got)
+		if lc.idx >= len(lc.parts) {
+			t.Log("out of range")
+			t.Fail()
+		} else if next := lc.parts[lc.idx]; next != got {
+			t.Logf("mismatch at %d; expected %q got %q", lc.idx, next, got)
+			t.Fail()
+		} else {
+			lc.idx++
+		}
+	}
+	return
+}
