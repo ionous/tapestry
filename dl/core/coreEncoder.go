@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -37,6 +38,33 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 
 	default:
 		err = literal.CompactEncoder(m, flow)
+	}
+	return
+}
+
+func CustomEncoder(enc *encode.Encoder, op any) (ret any, err error) {
+	switch op := op.(type) {
+	case *assign.CallPattern:
+		ret, err = assign.CustomEncoder(enc, op)
+
+	case *assign.VariableRef:
+		if name := encodeVariableRef(op); len(name) == 0 {
+			err = compact.Unhandled
+		} else {
+			ret = name
+		}
+
+	case *literal.TextValue:
+		// if the text starts with an @, skip it:
+		// ( ie. dont confuse the rare text literal starting with an ampersand, with GetVar )
+		if str := op.Value; len(str) > 0 && str[0] == '@' {
+			err = compact.Unhandled
+		} else {
+			ret, err = literal.CustomEncoder(enc, op)
+		}
+
+	default:
+		ret, err = literal.CustomEncoder(enc, op)
 	}
 	return
 }

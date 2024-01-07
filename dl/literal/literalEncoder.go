@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -52,6 +53,37 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 			err = e
 		} else {
 			err = m.MarshalValue(typeName, obj)
+		}
+	}
+	return
+}
+
+func CustomEncoder(enc *encode.Encoder, op any) (ret any, err error) {
+	switch out := op.(type) {
+	default:
+		err = compact.Unhandled
+
+	case *BoolValue:
+		ret = out.Value
+
+	case *NumValue:
+		ret = out.Value
+
+	case *TextValue:
+		ret = out.Value
+
+	case *NumValues:
+		if len(out.Values) == 1 {
+			ret = out.Values[0]
+		} else {
+			ret = out.Values
+		}
+
+	case *TextValues:
+		if len(out.Values) == 1 {
+			ret = out.Values[0]
+		} else {
+			ret = out.Values
 		}
 	}
 	return

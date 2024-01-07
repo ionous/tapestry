@@ -39,7 +39,7 @@ func TestDetailsEncodeDecode(t *testing.T) {
 func TestCompactEncoder(t *testing.T) {
 	if str, e := cout.Marshal(debug.FactorialStory, story.CompactEncoder); e != nil {
 		t.Fatal(e)
-	} else if str != jsnTestIf {
+	} else if str != debug.FactorialJs {
 		t.Fatal(str)
 	}
 }
@@ -47,7 +47,7 @@ func TestCompactEncoder(t *testing.T) {
 // test the compact decoder can read from the "golden image" and get the hardwired factorial story.
 func TestCompactDecode(t *testing.T) {
 	var msg map[string]any
-	if e := json.Unmarshal([]byte(jsnTestIf), &msg); e != nil {
+	if e := json.Unmarshal([]byte(debug.FactorialJs), &msg); e != nil {
 		t.Fatal(e)
 	} else if file, e := story.CompactDecode(msg); e != nil {
 		pretty.Println(file)
@@ -59,9 +59,6 @@ func TestCompactDecode(t *testing.T) {
 		}
 	}
 }
-
-//go:embed jsnTest.if
-var jsnTestIf string
 
 func TestMissingSlot(t *testing.T) {
 	in := `{"Join parts:":["one","two","three"]}`

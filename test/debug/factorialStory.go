@@ -15,7 +15,7 @@ func UserComment(s string) map[string]any {
 	return map[string]any{markup.Comment: s}
 }
 
-//go:embed factorial.if
+//go:embed factorialStory.if
 var FactorialJs string
 
 // a program that can check factorials

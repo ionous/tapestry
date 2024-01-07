@@ -74,8 +74,10 @@ func (w *Walker) Value() (ret r.Value) {
 	return
 }
 
-// returns a new walker for the currently focused element
-// panics if the element isn't a valid container
+// returns a new walker for the currently focused element;
+// panics if the element isn't a valid container.
+// the returned iterator points to the container
+// and requires a Next() to advance to the first element.
 func (w *Walker) Walk() (ret Walker) {
 	v := w.focus
 	switch w.focus.Kind() {

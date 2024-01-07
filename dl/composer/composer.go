@@ -23,6 +23,15 @@ type Spec struct {
 	Swaps       []interface{}
 }
 
+func (spec Spec) GetLede() (ret string) {
+	if spec.Lede != "" {
+		ret = spec.Lede
+	} else {
+		ret = spec.Name
+	}
+	return
+}
+
 func (spec *Spec) UsesStr() bool {
 	return spec.OpenStrings || len(spec.Strings) > 0
 }
