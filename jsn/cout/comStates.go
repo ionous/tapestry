@@ -16,10 +16,8 @@ type xEncoder struct {
 }
 
 type CustomFlow func(jsn.Marshaler, jsn.FlowBlock) error
-type CustomSlot func(jsn.Marshaler, jsn.SlotBlock) error
 
 type Handlers struct {
-	Slot CustomSlot
 	Flow CustomFlow
 }
 
@@ -34,11 +32,6 @@ func CustomEncode(in jsn.Marshalee, custom Handlers) (ret interface{}, err error
 	// fill out some default handlers:
 	if custom.Flow == nil {
 		custom.Flow = func(jsn.Marshaler, jsn.FlowBlock) error {
-			return chart.Unhandled("no custom encoder")
-		}
-	}
-	if custom.Slot == nil {
-		custom.Slot = func(jsn.Marshaler, jsn.SlotBlock) error {
 			return chart.Unhandled("no custom encoder")
 		}
 	}
@@ -112,14 +105,9 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 		return
 	}
 	next.OnSlot = func(_ string, slot jsn.SlotBlock) (okay bool) {
-		if e := m.custom.Slot(m, slot); e != nil {
-			var unhandled chart.Unhandled
-			if !errors.As(e, &unhandled) {
-				m.Error(e)
-			} else if _, ok := slot.GetSlot(); ok {
-				m.PushState(m.newSlot())
-				okay = true
-			}
+		if _, ok := slot.GetSlot(); ok {
+			m.PushState(m.newSlot())
+			okay = true
 		}
 		return
 	}

@@ -15,13 +15,13 @@ func SpecName(c Composer) (ret string) {
 }
 
 // translate a choice, typically a $TOKEN, to a value.
-func FindChoice(op Composer, choice string) (ret string, found bool) {
-	spec := op.Compose()
-	if s, i := spec.IndexOfChoice(choice); i >= 0 {
-		ret = s
-		found = true
-	} else if spec.OpenStrings {
-		ret = choice
-	}
-	return
-}
+// func FindChoice(op Composer, choice string) (ret string, found bool) {
+// 	spec := op.Compose()
+// 	if s, i := spec.IndexOfChoice(choice); i >= 0 {
+// 		ret = s
+// 		found = true
+// 	} else if spec.OpenStrings {
+// 		ret = choice
+// 	}
+// 	return
+// }

@@ -27,22 +27,22 @@ func (spec *Spec) UsesStr() bool {
 	return spec.OpenStrings || len(spec.Strings) > 0
 }
 
-// given a choice like "$NAME" return the friendly value, ex. "name"
-// fix: could use some cleanup based on how its actually getting used.
-func (spec Spec) FindChoice(choice string) (ret string, okay bool) {
-	if len(choice) > 0 {
-		if choice[0] != '$' {
-			if spec.OpenStrings {
-				ret = choice
-				okay = true
-			}
-		} else if s, i := spec.IndexOfChoice(choice); i >= 0 {
-			ret = s
-			okay = true
-		}
-	}
-	return
-}
+// // given a choice like "$NAME" return the friendly value, ex. "name"
+// // fix: could use some cleanup based on how its actually getting used.
+// func (spec Spec) FindChoice(choice string) (ret string, okay bool) {
+// 	if len(choice) > 0 {
+// 		if choice[0] != '$' {
+// 			if spec.OpenStrings {
+// 				ret = choice
+// 				okay = true
+// 			}
+// 		} else if s, i := spec.IndexOfChoice(choice); i >= 0 {
+// 			ret = s
+// 			okay = true
+// 		}
+// 	}
+// 	return
+// }
 
 // given a choice like "$NAME" return the friendly value, ex. "name"
 func (spec *Spec) IndexOfChoice(key string) (retVal string, retInd int) {
