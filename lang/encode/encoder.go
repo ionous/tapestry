@@ -18,11 +18,18 @@ type Encoder struct {
 // fix: cmd should have an interface
 type CustomEncoder func(enc *Encoder, cmd any) (any, error)
 
-// turn the passed tapestry data into json friendly values.
-// currently, expects ptr to a tapestry command, and returns a map[string]any
-// future: allow ptr to be any container type
-func (enc *Encoder) Marshal(ptr any) (res any, err error) {
+// turn the passed tapestry command into json friendly values.
+func (enc *Encoder) MarshalFlow(ptr any) (ret any, err error) {
 	return enc.writeFlow(walk.Walk(r.ValueOf(ptr).Elem()))
+}
+
+// turn the passed tapestry slot into json friendly values.
+func (enc *Encoder) MarshalSlot(ptr any) (ret any, err error) {
+	slot := walk.Walk(r.ValueOf(ptr).Elem())
+	if slot.Next() {
+		ret, err = enc.writeFlow(slot.Walk())
+	}
+	return
 }
 
 // it is at the struct level

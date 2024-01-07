@@ -15,7 +15,7 @@ func TestEncodeStory(t *testing.T) {
 	enc := encode.Encoder{
 		CustomEncoder: core.CustomEncoder,
 	}
-	if n, e := enc.Marshal(debug.FactorialStory); e != nil {
+	if n, e := enc.MarshalFlow(&debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else {
 		var b strings.Builder

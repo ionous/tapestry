@@ -21,14 +21,14 @@ import (
 // test that the detailed format can be used to write out, and read back in the same data
 // we dont much care what it looks like anymore.
 func TestDetailsEncodeDecode(t *testing.T) {
-	if d, e := dout.Encode(debug.FactorialStory); e != nil {
+	if d, e := dout.Encode(&debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
 	} else if in, e := story.DetailedDecode(b); e != nil {
 		t.Fatal(e)
 	} else {
-		if diff := pretty.Diff(debug.FactorialStory, &in); len(diff) != 0 {
+		if diff := pretty.Diff(debug.FactorialStory, in); len(diff) != 0 {
 			pretty.Print(in)
 			t.Fatal(diff)
 		}
@@ -37,7 +37,7 @@ func TestDetailsEncodeDecode(t *testing.T) {
 
 // test that the compact encoding matches a particular "golden image"
 func TestCompactEncoder(t *testing.T) {
-	if str, e := cout.Marshal(debug.FactorialStory, story.CompactEncoder); e != nil {
+	if str, e := cout.Marshal(&debug.FactorialStory, story.CompactEncoder); e != nil {
 		t.Fatal(e)
 	} else if str != debug.FactorialJs {
 		t.Fatal(str)
@@ -53,7 +53,7 @@ func TestCompactDecode(t *testing.T) {
 		pretty.Println(file)
 		t.Fatal(e)
 	} else {
-		if diff := pretty.Diff(debug.FactorialStory, &file); len(diff) != 0 {
+		if diff := pretty.Diff(debug.FactorialStory, file); len(diff) != 0 {
 			pretty.Print(file)
 			t.Fatal(diff)
 		}

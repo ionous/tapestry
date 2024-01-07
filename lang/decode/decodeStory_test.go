@@ -29,7 +29,7 @@ func TestDecodeStory(t *testing.T) {
 		}
 		if e := d.Unmarshal(&file, m); e != nil {
 			t.Fatal(e)
-		} else if diff := pretty.Diff(debug.FactorialStory, &file); len(diff) != 0 {
+		} else if diff := pretty.Diff(debug.FactorialStory, file); len(diff) != 0 {
 			pretty.Print(file)
 			t.Fatal(diff)
 		}

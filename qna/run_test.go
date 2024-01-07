@@ -14,7 +14,7 @@ package qna
 // 		t.Fatal("couldn't create tables", e)
 // 	} else {
 // 		k := weave.NewCatalog(dbwriter(db))
-// 		if e := story.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
+// 		if e := story.ImportStory(k, t.Name(), &debug.FactorialStory); e != nil {
 // 			t.Fatal("couldn't import story", e)
 // 		} else if e := asm.AssembleStory(db, "kinds", ds.Add); e != nil {
 // 			t.Fatal("couldnt assemble story", e, ds.Err())

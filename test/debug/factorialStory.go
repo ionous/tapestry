@@ -19,7 +19,7 @@ func UserComment(s string) map[string]any {
 var FactorialJs string
 
 // a program that can check factorials
-var FactorialStory = &story.StoryFile{
+var FactorialStory = story.StoryFile{
 	StoryStatements: []story.StoryStatement{
 		&story.Test{
 			TestName: "factorial",
