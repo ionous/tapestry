@@ -29,7 +29,7 @@ type Walker struct {
 // Returns the number of repeated elements in the current container;
 // doesn't change over the course of iteration.
 // Filled slots have one element; empty slots zero elements.
-func (w *Walker) ContainerLen() (ret int) {
+func (w *Walker) Len() (ret int) {
 	switch w.curr.Kind() {
 	default:
 		panic("can't measure the length of primitive values")

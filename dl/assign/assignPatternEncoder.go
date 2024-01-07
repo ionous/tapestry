@@ -51,12 +51,11 @@ func CustomEncoder(enc *encode.Encoder, op *CallPattern) (ret any, err error) {
 		if inflect.IsCapitalized(argName) {
 			argName = inflect.MixedCaseToSpaces(argName)
 		}
-		var m map[string]any
-		if e := enc.Marshal(&m, &arg.Value); e != nil {
+		if out, e := enc.Marshal(&arg.Value); e != nil {
 			err = e
 			break
 		} else {
-			pb.WriteArg(argName, m)
+			pb.WriteArg(argName, out)
 		}
 	}
 	if err == nil {
