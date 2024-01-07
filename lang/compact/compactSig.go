@@ -15,10 +15,6 @@ type Param struct {
 	Choice string // optional
 }
 
-func (p *Param) Matches(s string) bool {
-	return s == p.Label || s == "_" && len(p.Label) == 0
-}
-
 // helper for debug printing
 func (s *Signature) DebugString() string {
 	var b strings.Builder
@@ -33,6 +29,10 @@ func (s *Signature) DebugString() string {
 	}
 	b.WriteRune(':')
 	return b.String()
+}
+
+func (p *Param) Matches(s string) bool {
+	return s == p.Label || s == "_" && len(p.Label) == 0
 }
 
 func (p *Param) DebugString() string {
