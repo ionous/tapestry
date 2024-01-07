@@ -12,8 +12,8 @@ import (
 func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 	var out compact.Message
 	for k, v := range msg {
-		if strings.HasPrefix(k, markupMarker) {
-			if key := k[len(markupMarker):]; len(key) == 0 {
+		if strings.HasPrefix(k, markup.Marker) {
+			if key := k[len(markup.Marker):]; len(key) == 0 {
 				out.AddMarkup(markup.Comment, v)
 			} else {
 				out.AddMarkup(key, v)
@@ -33,5 +33,3 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 	}
 	return
 }
-
-const markupMarker = "--"

@@ -3,6 +3,7 @@ package markup
 const (
 	Comment  = "comment"
 	Template = "template"
+	Marker   = "--"
 )
 
 // read a user comment from markup, normalizing it as an array of strings

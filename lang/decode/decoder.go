@@ -29,7 +29,7 @@ func (dec *Decoder) Unmarshal(ptr composer.Composer, m map[string]any) (err erro
 	if msg, e := parseMessage(m); e != nil {
 		err = e
 	} else {
-		err = dec.readMsg(msg, walk.MakeWalker(r.ValueOf(ptr).Elem()))
+		err = dec.readMsg(msg, walk.Walk(r.ValueOf(ptr).Elem()))
 	}
 	return
 }
@@ -38,7 +38,7 @@ func (dec *Decoder) Unmarshal(ptr composer.Composer, m map[string]any) (err erro
 // currently: address of a slot.
 func (dec *Decoder) UnmarshalSlot(slotptr, data any) (err error) {
 	out := r.ValueOf(slotptr).Elem()
-	slot := slotName(out.Type())
+	slot := walk.SlotName(out.Type())
 	return dec.slotData(slot, out, data)
 }
 
@@ -61,7 +61,7 @@ func (dec *Decoder) readMsg(msg compact.Message, it walk.Walker) (err error) {
 				err = errors.New("signature mismatch")
 			} else {
 				arg, out := args[i], it.Value()
-				switch t := it.Type(); t {
+				switch t := f.SpecType(); t {
 				default:
 					err = fmt.Errorf("unhandled type %s", t)
 
@@ -81,17 +81,17 @@ func (dec *Decoder) readMsg(msg compact.Message, it walk.Walker) (err error) {
 					} else {
 						if msg, e := parseMessage(arg); e != nil {
 							err = e
-						} else if subit, ok := it.Descend(); ok {
-							err = dec.readMsg(msg, subit)
+						} else {
+							err = dec.readMsg(msg, it.Walk())
 						}
 					}
 
 				case walk.Slot:
 					if f.Repeats() {
-						slot := slotName(out.Type().Elem())
+						slot := walk.SlotName(out.Type().Elem())
 						err = dec.repeatSlot(slot, out, arg)
 					} else {
-						slot := slotName(out.Type())
+						slot := walk.SlotName(out.Type())
 						err = dec.slotData(slot, out, arg)
 					}
 				}
@@ -109,7 +109,6 @@ func (dec *Decoder) readMsg(msg compact.Message, it walk.Walker) (err error) {
 				v.Set(r.ValueOf(msg.Markup))
 			}
 		}
-
 	}
 	return
 }

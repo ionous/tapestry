@@ -1,6 +1,8 @@
 package debug
 
 import (
+	_ "embed"
+
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
@@ -12,6 +14,9 @@ import (
 func UserComment(s string) map[string]any {
 	return map[string]any{markup.Comment: s}
 }
+
+//go:embed factorial.if
+var FactorialJs string
 
 // a program that can check factorials
 var FactorialStory = &story.StoryFile{

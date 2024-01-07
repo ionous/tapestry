@@ -64,7 +64,7 @@ func (w *Walker) Value() (ret r.Value) {
 	if !w.focus.IsValid() {
 		ret = w.curr
 	} else {
-		switch w.containerType() {
+		switch typeOf(w.focus.Type()) {
 		case Str, Num:
 			ret = w.focus.Field(0)
 		default:
@@ -134,16 +134,16 @@ func (w *Walker) Next() (okay bool) {
 }
 
 // shouldnt need to be public because callers initiate the traversal.
-func (w *Walker) containerType() (ret Type) {
-	switch curr := w.curr; curr.Kind() {
+func typeOf(curr r.Type) (ret Type) {
+	switch curr.Kind() {
 	default:
-		panic("invalid container")
+		ret = Value // roughly
 	case r.Interface:
 		ret = Slot
 	case r.Struct:
-		ret = structType(curr.Type())
+		ret = structType(curr)
 	case r.Slice:
-		ret = sliceType(curr.Type().Elem())
+		ret = sliceType(curr.Elem())
 	}
 	return
 }

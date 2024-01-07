@@ -17,7 +17,7 @@ func (dec *Decoder) repeatFlow(out r.Value, val any) (err error) {
 			if msg, e := parseMessage(el); e != nil {
 				err = e
 			} else {
-				dst := walk.MakeWalker(out.Index(i))
+				dst := walk.Walk(out.Index(i))
 				err = dec.readMsg(msg, dst)
 			}
 		}

@@ -22,7 +22,7 @@ func (dec *Decoder) slotData(slot string, out r.Value, data any) (err error) {
 				err = fmt.Errorf("unknown signature slot=%q flow=%q", slot, msg.Key)
 
 			case ok:
-				dst := walk.MakeWalker(rptr.Elem())
+				dst := walk.Walk(rptr.Elem())
 				if e := dec.readMsg(msg, dst); e != nil {
 					err = e
 				} else {

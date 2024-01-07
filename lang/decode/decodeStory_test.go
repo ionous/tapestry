@@ -12,9 +12,6 @@ import (
 	"github.com/kr/pretty"
 )
 
-//go:embed decodeTest.if
-var decodeTest string
-
 // given a container ( as defined by walker )
 // and a json like object tree
 // read the json like data into the container;
@@ -22,7 +19,7 @@ var decodeTest string
 func TestDecodeStory(t *testing.T) {
 	var file story.StoryFile // fix: it'd be nice to use hand rolled structs or test data instead of story
 	var m map[string]any
-	if e := json.Unmarshal([]byte(decodeTest), &m); e != nil {
+	if e := json.Unmarshal([]byte(debug.FactorialJs), &m); e != nil {
 		t.Fatal(e)
 	} else {
 		d := decode.Decoder{
