@@ -10,15 +10,14 @@ func _() {
 	var x [1]struct{}
 	_ = x[BlockExt-1]
 	_ = x[CompactExt-2]
-	_ = x[DetailedExt-3]
-	_ = x[SpecExt-4]
-	_ = x[TellSpec-5]
-	_ = x[TellStory-6]
+	_ = x[SpecExt-3]
+	_ = x[TellSpec-4]
+	_ = x[TellStory-5]
 }
 
-const _Extension_name = ".block.if.ifx.ifspecs.tells.tell"
+const _Extension_name = ".block.if.ifspecs.tells.tell"
 
-var _Extension_index = [...]uint8{0, 6, 9, 13, 21, 27, 32}
+var _Extension_index = [...]uint8{0, 6, 9, 17, 23, 28}
 
 func (i Extension) String() string {
 	i -= 1

@@ -8,12 +8,11 @@ type Extension int
 
 //go:generate stringer -type=Extension -linecomment
 const (
-	BlockExt    Extension = iota + 1 // .block
-	CompactExt                       // .if
-	DetailedExt                      // .ifx
-	SpecExt                          // .ifspecs
-	TellSpec                         // .tells
-	TellStory                        // .tell
+	BlockExt   Extension = iota + 1 // .block
+	CompactExt                      // .if
+	SpecExt                         // .ifspecs
+	TellSpec                        // .tells
+	TellStory                       // .tell
 )
 
 func Ext(path string) (ret Extension) {
@@ -32,7 +31,7 @@ func (ext Extension) Spec() bool {
 }
 
 func (ext Extension) Story() bool {
-	return ext == CompactExt || ext == TellStory || ext == DetailedExt
+	return ext == CompactExt || ext == TellStory
 }
 
 // blockly's format.
