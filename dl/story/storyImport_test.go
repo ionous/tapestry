@@ -16,7 +16,7 @@ func TestImportStory(t *testing.T) {
 	var msg map[string]any
 	if e := json.Unmarshal(debug.Blob, &msg); e != nil {
 		t.Fatal(e)
-	} else if curr, e := story.CompactDecode(msg); e != nil {
+	} else if curr, e := story.Decode(msg); e != nil {
 		t.Fatal(e)
 	} else {
 		db := testdb.Create(t.Name())

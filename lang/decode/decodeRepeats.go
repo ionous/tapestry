@@ -7,8 +7,8 @@ import (
 )
 
 func (dec *Decoder) repeatFlow(out r.Value, val any) (err error) {
-	if els, ok := val.([]any); !ok {
-		err = ValueError("not a slice of flows", val)
+	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
+		err = dec.repeatFlow(out, []any{val})
 	} else if cnt := len(els); cnt == 0 {
 		out.Clear()
 	} else {
@@ -26,8 +26,8 @@ func (dec *Decoder) repeatFlow(out r.Value, val any) (err error) {
 }
 
 func (dec *Decoder) repeatSlot(slot string, out r.Value, val any) (err error) {
-	if els, ok := val.([]any); !ok {
-		err = ValueError("not a slice of slots", val)
+	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
+		err = dec.repeatSlot(slot, out, []any{val})
 	} else if cnt := len(els); cnt == 0 {
 		out.Clear()
 	} else {

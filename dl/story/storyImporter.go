@@ -1,8 +1,9 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	r "reflect"
+
+	"git.sr.ht/~ionous/tapestry/lang/walk"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
@@ -24,17 +25,16 @@ var currentCatalog *weave.Catalog
 func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
 	currentCatalog = cat
 	cat.SetSource(path)
-	if e := importStory(cat, tgt); e != nil {
-		err = e
-	} else {
-		err = WeaveStatements(cat, tgt.StoryStatements)
-	}
-	return err
+	return WeaveStatements(cat, tgt.StoryStatements)
 }
 
 func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
-	for _, el := range all {
-		if e := el.Weave(cat); e != nil {
+	slice := r.ValueOf(all)
+	for i, el := range all {
+		if e := rewriteSlot(cat, walk.Walk(slice.Index(i))); e != nil {
+			err = e
+			break
+		} else if e := el.Weave(cat); e != nil {
 			err = e
 			break
 		}
@@ -55,50 +55,66 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 	return
 }
 
-// post-processing hooks:
-// after the story has been read we run an encoder to visit every node.
-func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
-	ts := chart.MakeEncoder()
-	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
-		rt.Execute_Type: chart.KeyMap{
-			chart.BlockStart: func(b jsn.Block, _ interface{}) (_ error) {
-				cat.Env.Inc(activityDepth, 1)
-				return
-			},
-			chart.BlockEnd: func(b jsn.Block, _ interface{}) (_ error) {
-				cat.Env.Inc(activityDepth, -1)
-				return
-			},
-		},
-		chart.OtherBlocks: chart.KeyMap{
-			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
-				if slot, ok := b.(jsn.SlotBlock); ok {
-					if slat, ok := slot.GetSlot(); !ok {
-						err = jsn.Missing
-					} else if tgt, ok := slat.(PreImport); ok {
-						if rep, e := tgt.PreImport(cat); e != nil {
-							err = errutil.New(e, "failed to create replacement")
-						} else if rep != nil && !slot.SetSlot(rep) {
-							err = errutil.Fmt("failed to set slot %T with replacement %T", slot, rep)
-						}
-					}
+// given a slot, replace its command using PreImport or PostImport
+// and, walk the contents of its (replaced) for additional pre or post imports.
+// a command usually would only implement either Pre or Post ( or neither. )
+func rewriteSlot(cat *weave.Catalog, slot walk.Walker) (err error) {
+	if flow, ok := unpackSlot(slot); ok {
+		// kind of weird: the value of the slot is a pointer;
+		// the value of the flow is a struct; we need the pointer.
+		i := slot.Value().Interface()
+		if tgt, ok := i.(PreImport); ok {
+			if rep, e := tgt.PreImport(cat); e != nil {
+				err = errutil.New(e, "failed to create pre replacement")
+			} else if rep != nil {
+				// fix: a more direct setValue?
+				slot.Value().Set(r.ValueOf(rep))
+			}
+		}
+		//
+		if e := rewriteFlow(cat, flow); e != nil {
+			err = e
+		} else if tgt, ok := i.(PostImport); ok {
+			if rep, e := tgt.PostImport(cat); e != nil {
+				err = errutil.New(e, "failed to create post replacement")
+			} else if rep != nil {
+				slot.Value().Set(r.ValueOf(rep))
+			}
+		}
+	}
+	return
+}
+
+// a flow cant be swapped out the way a slot can,
+// however a slot in a glow might be able to change.
+func rewriteFlow(cat *weave.Catalog, flow walk.Walker) (err error) {
+	for flow.Next() {
+		switch f := flow.Field(); f.SpecType() {
+		case walk.Slot:
+			if !f.Repeats() {
+				err = rewriteSlot(cat, flow.Walk())
+			} else {
+				for it := flow.Walk(); it.Next(); {
+					err = rewriteSlot(cat, it.Walk())
 				}
-				return
-			},
-			chart.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
-				if slot, ok := b.(jsn.SlotBlock); ok {
-					if slat, ok := slot.GetSlot(); !ok {
-						err = jsn.Missing
-					} else if tgt, ok := slat.(PostImport); ok {
-						if rep, e := tgt.PostImport(cat); e != nil {
-							err = errutil.New(e, "failed to create replacement")
-						} else if rep != nil && !slot.SetSlot(rep) {
-							err = errutil.Fmt("failed to set slot %T with replacement %T", slot, rep)
-						}
-					}
+			}
+		case walk.Flow:
+			if !f.Repeats() {
+				err = rewriteFlow(cat, flow.Walk())
+			} else {
+				for it := flow.Walk(); it.Next(); {
+					err = rewriteFlow(cat, it.Walk())
 				}
-				return
-			},
-		},
-	}))
+			}
+		}
+	}
+	return
+}
+
+// given a slot, return its flow ( false if the slot was empty )
+func unpackSlot(slot walk.Walker) (ret walk.Walker, okay bool) {
+	if slot.Next() { // next moves the focus to the command if any
+		ret, okay = slot.Walk(), true // walk returns the command as a container
+	}
+	return
 }

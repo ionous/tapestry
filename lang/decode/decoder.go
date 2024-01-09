@@ -47,7 +47,7 @@ func (dec *Decoder) UnmarshalSlice(ptr r.Value, msgs []any) (err error) {
 }
 
 // assumes that it is at the start of a flow container
-func (dec *Decoder) readMsg(msg compact.Message, it walk.Walker) (err error) {
+func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 	if args, e := msg.Args(); e != nil {
 		err = e
 	} else {
@@ -55,7 +55,7 @@ func (dec *Decoder) readMsg(msg compact.Message, it walk.Walker) (err error) {
 		// but since the args were built from the signature
 		// and the signature was matched against the registry:
 		// we know we have the right type and args.
-		for i, cnt := 0, len(args); i < cnt; i++ {
+		for i, cnt, it := 0, len(args), out; i < cnt; i++ {
 			p := msg.Params[i] // fix: clear fields that get skipped?
 			if f, ok := nextField(&it, p); !ok {
 				err = errors.New("signature mismatch")
@@ -102,11 +102,8 @@ func (dec *Decoder) readMsg(msg compact.Message, it walk.Walker) (err error) {
 			}
 		} // for
 		if err == nil {
-			// future: remove reflection, and provide access to Markup through Compose()?
-			// ( would be nice b/c we could do this before everything else, w/o err testing )
-			markup := findLast(it) // cause this is kind of hacky.
-			if v := markup.Value(); v.Kind() == r.Map {
-				v.Set(r.ValueOf(msg.Markup))
+			if markup := out.Markup(); markup.IsValid() {
+				markup.Set(r.ValueOf(msg.Markup))
 			}
 		}
 	}

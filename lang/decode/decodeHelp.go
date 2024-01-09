@@ -14,14 +14,6 @@ func parseMessage(v any) (ret compact.Message, err error) {
 	return
 }
 
-func findLast(it walk.Walker) walk.Walker {
-	last := it
-	for it.Next() {
-		last = it
-	}
-	return last
-}
-
 func nextField(it *walk.Walker, p compact.Param) (ret walk.Field, okay bool) {
 	for it.Next() {
 		info := it.Field() // internal fields dont have labels....
