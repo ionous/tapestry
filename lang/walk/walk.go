@@ -34,14 +34,32 @@ func (w *Walker) Len() (ret int) {
 	default:
 		panic("can't measure the length of primitive values")
 	case r.Interface:
-		ret = w.slotLen()
+		if !w.curr.IsNil() {
+			ret = 1
+		}
 	case r.Struct:
-		ret = w.curr.NumField()
+		if cnt := w.curr.NumField(); cnt > 0 {
+			if w.curr.Field(cnt-1).Kind() == r.Map {
+				cnt--
+			}
+			ret = cnt
+		}
 	case r.Slice:
 		if sliceType(w.curr.Type().Elem()) == Value {
 			panic("doesn't measure the length of a primitive array")
 		} else {
 			ret = w.curr.Len()
+		}
+	}
+	return
+}
+
+// only valid for the members of a flow; panics otherwise
+// can return invalid if the markup field doesnt exist in the flow (ex. for tests)
+func (w *Walker) Markup() (ret r.Value) {
+	if cnt := w.curr.NumField(); cnt > 0 {
+		if v := w.curr.Field(cnt - 1); v.Kind() == r.Map {
+			ret = v
 		}
 	}
 	return
@@ -109,7 +127,7 @@ func (w *Walker) Walk() (ret Walker) {
 func (w *Walker) Next() (okay bool) {
 	switch curr := w.curr; curr.Kind() {
 	case r.Interface:
-		okay = w.step(w.slotLen(), func(int) r.Value {
+		okay = w.step(func(int) r.Value {
 			// first get the element underlying the interface
 			// which is always a pointer, then get the value ( struct ) at the pointer.
 			// this callback only happens if there was a valid slot ( index 0 of slotLen 1 )
@@ -118,13 +136,13 @@ func (w *Walker) Next() (okay bool) {
 	case r.Slice:
 		// to be here, we must be unpacking a slice of slots or flow
 		// we would have already returned value *as* the slice
-		okay = w.step(curr.Len(), curr.Index)
+		okay = w.step(curr.Index)
 
 	case r.Struct:
 		// embedded flow
 		// zero index, the state before the first call to Next(), indicates the flow itself
 		// on first Next() we want to return the zeroth field; so "index" is used directly as the index.
-		okay = w.step(curr.NumField(), curr.Field)
+		okay = w.step(curr.Field)
 
 	default:
 		// ex. Array, Uintptr, Complex64, Complex128, Chan, Func,
@@ -150,15 +168,8 @@ func typeOf(curr r.Type) (ret Type) {
 	return
 }
 
-func (w *Walker) slotLen() (ret int) {
-	if !w.curr.IsNil() {
-		ret = 1
-	}
-	return
-}
-
-func (w *Walker) step(cnt int, get func(int) r.Value) (okay bool) {
-	if at, num := w.index, cnt; at < num {
+func (w *Walker) step(get func(int) r.Value) (okay bool) {
+	if at := w.index; at < w.Len() {
 		nextField := get(at)
 		w.focus, w.index = nextField, at+1
 		okay = true
