@@ -33,70 +33,69 @@ func (enc *Encoder) MarshalSlot(ptr any) (ret any, err error) {
 }
 
 // it is at the struct level
-func (enc *Encoder) writeFlow(it walk.Walker) (ret any, err error) {
-	if fix, ok := it.Value().Addr().Interface().(composer.Composer); !ok {
-		err = fmt.Errorf("%s is not a flow", it.Value().Type())
+func (enc *Encoder) writeFlow(src walk.Walker) (ret any, err error) {
+	if fix, ok := src.Value().Addr().Interface().(composer.Composer); !ok {
+		err = fmt.Errorf("%s is not a flow", src.Value().Type())
 	} else if res, e := enc.customEncode(fix); e == nil {
 		ret = res
 	} else if e != compact.Unhandled && !errors.Is(e, compact.Unhandled) {
 		err = e
 	} else {
 		var out FlowBuilder
-		out.WriteLede(fix.Compose().GetLede())
-		for i, cnt := 0, it.Len()-1; i < cnt; i++ { // -1 to end before the markup
-			it.Next()
-			f, val := it.Field(), it.Value()
-			if !f.Optional() || !val.IsZero() {
-				switch t := f.SpecType(); t {
-				default:
-					err = fmt.Errorf("unhandled type %s", t)
+		if e := writeMarkup(&out, src); e != nil {
+			err = e
+		} else {
+			out.WriteLede(fix.Compose().GetLede())
+			for it := src; it.Next(); { // -1 to end before the markup
+				f, val := it.Field(), it.Value()
+				if !f.Optional() || !val.IsZero() {
+					switch t := f.SpecType(); t {
+					default:
+						err = fmt.Errorf("unhandled type %s", t)
 
-				case walk.Str:
-					err = WriteEnum(&out, f, val.String())
+					case walk.Str:
+						err = WriteEnum(&out, f, val.String())
 
-				case walk.Value:
-					err = out.WriteField(f, val.Interface())
+					case walk.Value:
+						err = out.WriteField(f, val.Interface())
 
-				case walk.Flow:
-					if f.Repeats() {
-						if slice, e := enc.encodeFlows(it.Walk()); e != nil {
+					case walk.Flow:
+						if f.Repeats() {
+							if slice, e := enc.encodeFlows(it.Walk()); e != nil {
+								err = e
+							} else {
+								err = out.WriteField(f, slice)
+							}
+						} else if res, e := enc.writeFlow(it); e != nil {
 							err = e
 						} else {
-							err = out.WriteField(f, slice)
+							err = out.WriteField(f, res)
 						}
-					} else if res, e := enc.writeFlow(it); e != nil {
-						err = e
-					} else {
-						err = out.WriteField(f, res)
-					}
 
-				case walk.Slot:
-					if f.Repeats() {
-						if slice, e := enc.encodeSlots(it.Walk()); e != nil {
+					case walk.Slot:
+						if f.Repeats() {
+							if slice, e := enc.encodeSlots(it.Walk()); e != nil {
+								err = e
+							} else {
+								err = out.WriteField(f, slice)
+							}
+						} else if slot := it.Walk(); !slot.Next() {
+							// ^ walk into the field to get the container of the slot
+							// ^ next, check for empty contents; write nil if so.
+							err = out.WriteField(f, nil)
+						} else if res, e := enc.writeFlow(slot.Walk()); e != nil {
 							err = e
 						} else {
-							err = out.WriteField(f, slice)
+							err = out.WriteField(f, res)
 						}
-					} else if slot := it.Walk(); !slot.Next() {
-						// ^ walk into the field to get the container of the slot
-						// ^ next, check for empty contents; write nil if so.
-						err = out.WriteField(f, nil)
-					} else if res, e := enc.writeFlow(slot.Walk()); e != nil {
-						err = e
-					} else {
-						err = out.WriteField(f, res)
 					}
 				}
-			}
-			if err != nil {
-				err = fmt.Errorf("%T (@%s) %w", fix, f.Name(), err)
-				break
-			}
-		} // (end for)
-		if err == nil { // handle markup
-			if e := writeMarkup(&out, it); e != nil {
-				err = e
-			} else {
+				if err != nil {
+					err = fmt.Errorf("%T (@%s) %w", fix, f.Name(), err)
+					break
+				}
+			} // (end for)
+			if err == nil {
 				ret = out.FinalizeMap()
 			}
 		}
@@ -113,12 +112,10 @@ func (enc *Encoder) customEncode(cmd any) (ret any, err error) {
 	return
 }
 
-// it, the element before the markup
-func writeMarkup(out *FlowBuilder, it walk.Walker) (err error) {
-	if it.Next() {
-		last := it.Value()
-		if m, ok := last.Interface().(map[string]any); !ok {
-			err = fmt.Errorf("expected markup, have %s", last.Type())
+func writeMarkup(out *FlowBuilder, src walk.Walker) (err error) {
+	if markup := src.Markup(); markup.IsValid() {
+		if m, ok := markup.Interface().(map[string]any); !ok {
+			err = fmt.Errorf("expected markup, have %s", markup.Type())
 		} else {
 			out.SetMarkup(m)
 		}
