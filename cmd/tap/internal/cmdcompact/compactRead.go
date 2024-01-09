@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
-	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
@@ -30,16 +29,7 @@ func readStory(fsys fs.FS, path string, out *story.StoryFile) (err error) {
 	if msg, e := files.FormattedRead(fsys, path); e != nil {
 		err = e
 	} else {
-		err = story.Decode(out, msg, story.AllSignatures)
-	}
-	return
-}
-
-func readDetailed(fsys fs.FS, path string, out *story.StoryFile) (err error) {
-	if b, e := fs.ReadFile(fsys, path); e != nil {
-		err = e
-	} else {
-		err = din.Decode(out, story.Registry(), b)
+		err = story.DecodeMessage(out, msg)
 	}
 	return
 }

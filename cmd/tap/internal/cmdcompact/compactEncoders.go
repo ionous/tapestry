@@ -1,14 +1,9 @@
 package cmdcompact
 
-import (
-	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
-)
-
 // define  a custom spec encoder.
-var customSpecEncoder cout.CustomFlow = nil
-var customStoryFlow = story.CompactEncoder
-var customStorySlot cout.CustomSlot = nil
+// var customSpecEncoder cout.CustomFlow = nil
+// var customStoryFlow = story.CompactEncoder
+// var customStorySlot cout.CustomSlot = nil
 
 // example removing "trim" for underscore names
 // func init() {

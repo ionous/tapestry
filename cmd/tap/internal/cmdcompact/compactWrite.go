@@ -10,13 +10,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
-	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 
 func writeSpec(path string, src *spec.TypeSpec) (err error) {
-	if data, e := cout.Encode(src, customSpecEncoder); e != nil {
+	if data, e := cout.Encode(src, nil); e != nil {
 		err = e
 	} else {
 		err = writeData(path, data)
@@ -29,19 +28,7 @@ func writeError(path string, _ *story.StoryFile) error {
 }
 
 func writeStory(path string, src *story.StoryFile) (err error) {
-	if data, e := cout.CustomEncode(src, cout.Handlers{
-		Flow: customStoryFlow,
-		Slot: customStorySlot,
-	}); e != nil {
-		err = e
-	} else {
-		err = writeData(path, data)
-	}
-	return
-}
-
-func writeDetailed(path string, src *story.StoryFile) (err error) {
-	if data, e := dout.Encode(src); e != nil {
+	if data, e := story.Encode(src); e != nil {
 		err = e
 	} else {
 		err = writeData(path, data)

@@ -74,8 +74,6 @@ func process(inFile, tgtExt string) (err error) {
 		switch inExt {
 		case files.CompactExt, files.TellStory:
 			reader = readStory
-		case files.DetailedExt:
-			reader = readDetailed
 		case files.BlockExt:
 			reader = readBlock
 		}
@@ -83,8 +81,6 @@ func process(inFile, tgtExt string) (err error) {
 		switch tgtExt {
 		case files.CompactExt, files.TellStory:
 			writer = writeStory
-		case files.DetailedExt:
-			writer = writeDetailed
 		case files.BlockExt:
 			writer = writeBlock
 		}

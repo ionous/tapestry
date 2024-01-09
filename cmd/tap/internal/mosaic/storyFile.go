@@ -65,7 +65,7 @@ func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 		err = errutil.New("unknown file type", sf.path)
 	}
 	if err == nil {
-		if file, e := story.CompactDecode(msg); e != nil {
+		if file, e := story.Decode(msg); e != nil {
 			err = e
 		} else if data, e := dout.Encode(&file); e != nil {
 			err = e

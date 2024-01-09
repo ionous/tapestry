@@ -87,7 +87,6 @@ func importStoryFiles(cat *weave.Catalog, srcPath string) (err error) {
 
 var storyExts = []string{
 	files.CompactExt.String(),
-	files.DetailedExt.String(),
 	files.TellStory.String()}
 
 func readOne(cat *weave.Catalog, path string) (err error) {
@@ -107,7 +106,7 @@ func decodeStory(path string) (ret story.StoryFile, err error) {
 		if e := files.ReadTell(path, &msg); e != nil {
 			err = e
 		} else {
-			ret, err = story.CompactDecode(msg)
+			ret, err = story.Decode(msg)
 		}
 	case files.CompactExt:
 		var msg map[string]any
@@ -116,13 +115,7 @@ func decodeStory(path string) (ret story.StoryFile, err error) {
 		} else if e := json.Unmarshal(b, &msg); e != nil {
 			err = e
 		} else {
-			ret, err = story.CompactDecode(msg)
-		}
-	case files.DetailedExt:
-		if b, e := files.ReadFile(path); e != nil {
-			err = e
-		} else {
-			ret, err = story.DetailedDecode(b)
+			ret, err = story.Decode(msg)
 		}
 	default:
 		err = errutil.Fmt("unknown file type %q", ext)
