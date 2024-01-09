@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	r "reflect"
+	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -75,6 +76,25 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 						err = SetValue(out, arg)
 					}
 
+				case walk.Swap: // ugh.
+					if f.Repeats() {
+						panic("not implemented")
+					} else {
+						choice := newStringKey(p.Choice) // "one_to_many" -> "$ONE_TO_MANY"
+						i := out.Addr().Interface()      //
+						swap := i.(interface{ SetSwap(string) bool })
+						if !swap.SetSwap(choice) {
+							err = fmt.Errorf("swap has unexpected choice %q", choice)
+						} else {
+							if msg, e := parseMessage(arg); e != nil {
+								err = e
+							} else {
+								swap := it.Walk()
+								swap.Next()
+								err = dec.readMsg(msg, swap.Walk())
+							}
+						}
+					}
 				case walk.Flow:
 					if f.Repeats() {
 						err = dec.repeatFlow(out, arg)
@@ -108,4 +128,13 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 		}
 	}
 	return
+}
+
+func newStringKey(s string) string {
+	rs := make([]rune, 0, len(s)+1)
+	rs = append(rs, '$')
+	for _, r := range s {
+		rs = append(rs, unicode.ToUpper(r))
+	}
+	return string(rs)
 }

@@ -90,9 +90,14 @@ func rewriteSlot(cat *weave.Catalog, slot walk.Walker) (err error) {
 
 // fix: for comment logging; remove?
 func updateActivityDepth(cat *weave.Catalog, i any, inc int) {
-	if _, ok := i.(rt.Execute); ok {
-		cat.Env.Inc(activityDepth, inc)
-	}
+	// fix:
+	// this used to switch on the *slot*
+	// now its switching on the interface
+	// *in* that slot. getting that zero value for a switch is a bit of a pain.
+
+	// if _, ok := i.(rt.Execute); ok {
+	// 	cat.Env.Inc(activityDepth, inc)
+	// }
 }
 
 // a flow cant be swapped out the way a slot can,

@@ -6,6 +6,7 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
 // fix? it's a bit of a cheat that there's no "SetCompactValue"
@@ -15,12 +16,23 @@ func SetString(dst r.Value, strtype r.Type, kv any) (err error) {
 	c := r.New(strtype).Interface() // ugh. fix.
 	if n, ok := c.(composer.Composer); !ok {
 		err = fmt.Errorf("is %s not a generated type?", dst.Type())
-	} else if src, ok := kv.(string); !ok {
+	} else if src, ok := toString(kv); !ok {
 		err = errors.New("not string data")
 	} else if str, ok := xformString(src, n.Compose()); !ok {
 		err = errors.New("invalid string ")
 	} else {
 		dst.Set(r.ValueOf(str))
+	}
+	return
+}
+
+// fix: limit special handling for prim.lines?
+func toString(v any) (ret string, okay bool) {
+	switch s := v.(type) {
+	case string:
+		ret, okay = s, true
+	case []any:
+		ret, okay = compact.SliceLines(s)
 	}
 	return
 }

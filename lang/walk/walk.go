@@ -97,28 +97,12 @@ func (w *Walker) Value() (ret r.Value) {
 // the returned iterator points to the container
 // and requires a Next() to advance to the first element.
 func (w *Walker) Walk() (ret Walker) {
-	v := w.focus
-	switch w.focus.Kind() {
+	switch v := w.focus; typeOf(v.Type()) {
+	case Flow, Slot, Swap:
+		ret = Walker{curr: v}
 	default:
 		log.Printf("trying to walk a %s a %s", w.focus.Type(), w.focus.Kind())
 		panic("can't descend into primitive values")
-
-	case r.Invalid:
-		panic("can't walk into the container; only members of the container")
-
-	case r.Interface:
-		// unpack the interface, and then: we always fill the interfaces with pointers
-		ret = Walker{curr: v}
-
-	case r.Struct:
-		ret = Walker{curr: v}
-
-	case r.Slice:
-		if sliceType(v.Type().Elem()) == Value {
-			panic("can't walk a slice of primitive values")
-		} else {
-			ret = Walker{curr: v}
-		}
 	}
 	return
 }
@@ -139,10 +123,20 @@ func (w *Walker) Next() (okay bool) {
 		okay = w.step(curr.Index)
 
 	case r.Struct:
-		// embedded flow
-		// zero index, the state before the first call to Next(), indicates the flow itself
-		// on first Next() we want to return the zeroth field; so "index" is used directly as the index.
-		okay = w.step(curr.Field)
+		if t := structType(curr.Type()); t == Flow {
+			// embedded flow
+			// zero index, the state before the first call to Next(), indicates the flow itself
+			// on first Next() we want to return the zeroth field; so "index" is used directly as the index.
+			okay = w.step(curr.Field)
+		} else if t == Swap {
+			okay = w.step(func(int) r.Value {
+				// first get the element underlying the interface
+				// which is always a pointer, then get the value ( struct ) at the pointer.
+				// this callback only happens if there was a valid slot ( index 0 of slotLen 1 )
+				return w.curr.Field(1).Elem().Elem()
+			})
+
+		}
 
 	default:
 		// ex. Array, Uintptr, Complex64, Complex128, Chan, Func,

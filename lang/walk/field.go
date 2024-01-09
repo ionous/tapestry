@@ -35,16 +35,9 @@ func (f *Field) Internal() bool {
 	return f.tag.Exists("internal")
 }
 
-// true if the container is a slice of commands or slots.
-// ( this is slightly different meaning of "repeat" than the definitions themselves
-//   which use repeat to indicate slices of primitive values as well )
-func (f *Field) Repeats() (okay bool) {
+func (f *Field) Repeats() bool {
 	k := f.fieldType.Kind()
-	if k == r.Slice {
-		t := sliceType(f.fieldType.Elem())
-		okay = t != Value
-	}
-	return
+	return k == r.Slice
 }
 
 func (f *Field) Label() (ret string, okay bool) {
