@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"github.com/ionous/errutil"
 )
 
@@ -164,8 +165,8 @@ func (dec *xDecoder) readValue(pout any, val any) (err error) {
 		if str, ok := val.(string); ok {
 			*pstr = str
 		} else if slice, ok := val.([]any); ok {
-			if lines, e := SliceLines(slice); e != nil {
-				err = e
+			if lines, ok := compact.SliceLines(slice); !ok {
+				err = errutil.New("not a slice of string")
 			} else {
 				*pstr = lines // a string with newlines.
 			}

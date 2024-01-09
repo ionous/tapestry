@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
@@ -150,7 +149,7 @@ func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
 		case string:
 			ret = &TextValue{Value: v, Kind: kind}
 		case []any:
-			if lines, e := cin.SliceLines(v); e != nil {
+			if lines, ok := compact.SliceLines(v); !ok {
 				err = chart.Unhandled(typeName)
 			} else {
 				ret = &TextValue{Value: lines, Kind: kind}
@@ -162,7 +161,7 @@ func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
 	case rt.NumListEval_Type:
 		switch v := val.(type) {
 		case []any:
-			if vs, ok := cin.SliceFloats(v); !ok {
+			if vs, ok := compact.SliceFloats(v); !ok {
 				err = chart.Unhandled(typeName)
 			} else {
 				ret = &NumValues{Values: vs, Kind: kind}
@@ -176,7 +175,7 @@ func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
 	case rt.TextListEval_Type:
 		switch v := val.(type) {
 		case []any:
-			if vs, ok := cin.SliceStrings(v); !ok {
+			if vs, ok := compact.SliceStrings(v); !ok {
 				err = chart.Unhandled(typeName)
 			} else {
 				ret = &TextValues{Values: vs, Kind: kind}

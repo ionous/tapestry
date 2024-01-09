@@ -1,7 +1,7 @@
 package literal
 
 import (
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"github.com/ionous/errutil"
 )
 
@@ -48,9 +48,9 @@ Loop:
 		case float64:
 			i = &NumValue{Value: val}
 		case []any:
-			if vs, ok := cin.SliceFloats(val); ok {
+			if vs, ok := compact.SliceFloats(val); ok {
 				i = &NumValues{Values: vs}
-			} else if vs, ok := cin.SliceStrings(val); ok {
+			} else if vs, ok := compact.SliceStrings(val); ok {
 				i = &TextValues{Values: vs}
 			}
 		case map[string]any:

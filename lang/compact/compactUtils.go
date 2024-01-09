@@ -1,10 +1,6 @@
-package cin
+package compact
 
-import (
-	"strings"
-
-	"github.com/ionous/errutil"
-)
+import "strings"
 
 // type conversion: convert a slice of interfaces to a slice of numbers
 func SliceFloats(slice []any) (ret []float64, okay bool) {
@@ -42,11 +38,12 @@ func SliceStrings(slice []any) (ret []string, okay bool) {
 
 // type conversion: convert a slice of interfaces
 // to a slice of strings joined with newlines.
-func SliceLines(slice []any) (ret string, err error) {
+func SliceLines(slice []any) (ret string, okay bool) {
+	okay = true // provisionally
 	var b strings.Builder
 	for i, el := range slice {
 		if str, ok := el.(string); !ok {
-			err = errutil.New("expected a string, got %T", el)
+			okay = false
 			break
 		} else {
 			if i > 0 {
@@ -55,7 +52,7 @@ func SliceLines(slice []any) (ret string, err error) {
 			b.WriteString(str)
 		}
 	}
-	if err == nil {
+	if okay {
 		ret = b.String()
 	}
 	return

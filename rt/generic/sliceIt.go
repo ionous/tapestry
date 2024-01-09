@@ -1,19 +1,5 @@
 package generic
 
-func SliceFloats(vs []float64) Iterator {
-	return SliceIt(len(vs), func(i int) (ret Value, err error) {
-		ret = FloatOf(vs[i])
-		return
-	})
-}
-
-func SliceStrings(vs []string) Iterator {
-	return SliceIt(len(vs), func(i int) (ret Value, err error) {
-		ret = StringOf(vs[i])
-		return
-	})
-}
-
 func SliceIt(size int, next func(int) (Value, error)) *sliceIt {
 	return &sliceIt{size: size, next: next}
 }
