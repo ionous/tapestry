@@ -63,6 +63,8 @@ func rewriteSlot(cat *weave.Catalog, slot walk.Walker) (err error) {
 		// kind of weird: the value of the slot is a pointer;
 		// the value of the flow is a struct; we need the pointer.
 		i := slot.Value().Interface()
+		updateActivityDepth(cat, i, 1)
+		//
 		if tgt, ok := i.(PreImport); ok {
 			if rep, e := tgt.PreImport(cat); e != nil {
 				err = errutil.New(e, "failed to create pre replacement")
@@ -81,8 +83,16 @@ func rewriteSlot(cat *weave.Catalog, slot walk.Walker) (err error) {
 				slot.Value().Set(r.ValueOf(rep))
 			}
 		}
+		updateActivityDepth(cat, i, -1)
 	}
 	return
+}
+
+// fix: for comment logging; remove?
+func updateActivityDepth(cat *weave.Catalog, i any, inc int) {
+	if _, ok := i.(rt.Execute); ok {
+		cat.Env.Inc(activityDepth, inc)
+	}
 }
 
 // a flow cant be swapped out the way a slot can,
