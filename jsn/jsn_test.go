@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
 
@@ -49,7 +48,7 @@ func TestCompactDecode(t *testing.T) {
 	var msg map[string]any
 	if e := json.Unmarshal([]byte(debug.FactorialJs), &msg); e != nil {
 		t.Fatal(e)
-	} else if file, e := story.CompactDecode(msg); e != nil {
+	} else if file, e := story.Decode(msg); e != nil {
 		pretty.Println(file)
 		t.Fatal(e)
 	} else {
@@ -57,24 +56,6 @@ func TestCompactDecode(t *testing.T) {
 			pretty.Print(file)
 			t.Fatal(diff)
 		}
-	}
-}
-
-func TestMissingSlot(t *testing.T) {
-	in := `{"Join parts:":["one","two","three"]}`
-	want := core.Join{Parts: []rt.TextEval{
-		core.T("one"), core.T("two"), core.T("three"),
-	}}
-	var have core.Join
-	var msg map[string]any
-	if e := json.Unmarshal([]byte(in), &msg); e != nil {
-		t.Fatal(e)
-	} else if e := story.Decode(&have, msg, story.AllSignatures); e != nil {
-		pretty.Println("got:", have)
-		t.Fatal(e)
-	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
-		pretty.Println("got:", have)
-		t.Fatal(diff)
 	}
 }
 
