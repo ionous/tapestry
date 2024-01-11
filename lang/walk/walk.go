@@ -26,6 +26,12 @@ type Walker struct {
 	index       int // *next* index in a slice, or field in a struct
 }
 
+// change the size of the container
+func (w *Walker) Resize(cnt int) {
+	w.curr.Grow(cnt)
+	w.curr.SetLen(cnt)
+}
+
 // Returns the number of repeated elements in the current container;
 // doesn't change over the course of iteration.
 // Filled slots have one element; empty slots zero elements.
@@ -45,11 +51,7 @@ func (w *Walker) Len() (ret int) {
 			ret = cnt
 		}
 	case r.Slice:
-		if sliceType(w.curr.Type().Elem()) == Value {
-			panic("doesn't measure the length of a primitive array")
-		} else {
-			ret = w.curr.Len()
-		}
+		ret = w.curr.Len()
 	}
 	return
 }
@@ -97,12 +99,12 @@ func (w *Walker) Value() (ret r.Value) {
 // the returned iterator points to the container
 // and requires a Next() to advance to the first element.
 func (w *Walker) Walk() (ret Walker) {
-	switch v := w.focus; typeOf(v.Type()) {
-	case Flow, Slot, Swap:
-		ret = Walker{curr: v}
+	switch v := w.focus; v.Kind() {
 	default:
 		log.Printf("trying to walk a %s a %s", w.focus.Type(), w.focus.Kind())
 		panic("can't descend into primitive values")
+	case r.Interface, r.Struct, r.Slice:
+		ret = Walker{curr: v}
 	}
 	return
 }
@@ -117,6 +119,7 @@ func (w *Walker) Next() (okay bool) {
 			// this callback only happens if there was a valid slot ( index 0 of slotLen 1 )
 			return w.curr.Elem().Elem()
 		})
+
 	case r.Slice:
 		// to be here, we must be unpacking a slice of slots or flow
 		// we would have already returned value *as* the slice
@@ -135,7 +138,6 @@ func (w *Walker) Next() (okay bool) {
 				// this callback only happens if there was a valid slot ( index 0 of slotLen 1 )
 				return w.curr.Field(1).Elem().Elem()
 			})
-
 		}
 
 	default:
