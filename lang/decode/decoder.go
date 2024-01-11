@@ -97,7 +97,7 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 					}
 				case walk.Flow:
 					if f.Repeats() {
-						err = dec.repeatFlow(out, arg)
+						err = dec.repeatFlow(it.Walk(), arg)
 					} else {
 						if msg, e := parseMessage(arg); e != nil {
 							err = e
@@ -108,8 +108,7 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 
 				case walk.Slot:
 					if f.Repeats() {
-						slot := walk.SlotName(out.Type().Elem())
-						err = dec.repeatSlot(slot, out, arg)
+						err = dec.repeatSlot(it.Walk(), arg)
 					} else {
 						slot := walk.SlotName(out.Type())
 						err = dec.slotData(slot, out, arg)

@@ -1,44 +1,37 @@
 package decode
 
 import (
-	r "reflect"
-
 	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
-func (dec *Decoder) repeatFlow(out r.Value, val any) (err error) {
+func (dec *Decoder) repeatFlow(out walk.Walker, val any) (err error) {
 	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
 		err = dec.repeatFlow(out, []any{val})
 	} else {
-		resize(out, len(els))
-		for i, el := range els {
-			if msg, e := parseMessage(el); e != nil {
+		out.Resize(len(els))
+		for i := 0; out.Next(); i++ {
+			if msg, e := parseMessage(els[i]); e != nil {
 				err = e
 			} else {
-				dst := walk.Walk(out.Index(i))
-				err = dec.readMsg(msg, dst)
+				err = dec.readMsg(msg, out.Walk())
 			}
 		}
 	}
 	return
 }
 
-func (dec *Decoder) repeatSlot(slot string, out r.Value, val any) (err error) {
+func (dec *Decoder) repeatSlot(out walk.Walker, val any) (err error) {
 	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
-		err = dec.repeatSlot(slot, out, []any{val})
+		err = dec.repeatSlot(out, []any{val})
 	} else {
-		resize(out, len(els))
-		for i, el := range els {
-			if e := dec.slotData(slot, out.Index(i), el); e != nil {
+		slot := walk.SlotName(out.Value().Type().Elem())
+		out.Resize(len(els))
+		for i := 0; out.Next(); i++ {
+			if e := dec.slotData(slot, out.Value(), els[i]); e != nil {
 				err = e
 				break
 			}
 		}
 	}
 	return
-}
-
-func resize(out r.Value, cnt int) {
-	out.Grow(cnt)
-	out.SetLen(cnt)
 }

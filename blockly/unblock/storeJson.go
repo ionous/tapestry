@@ -1,10 +1,8 @@
 package unblock
 
 import (
-	"encoding/json"
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -72,25 +70,24 @@ func (bi *Input) CountNext() (ret int) {
 }
 
 // return the number of term# formatted fields
-func (bi *BlockInfo) CountFields(term string) (retStart, retCnt int) {
-	return count(term, bi.Fields)
+func (bi *BlockInfo) ReadInput(idx int) (ret Input, err error) {
+	return readInput(bi.Inputs[idx])
+}
+
+// return the number of term# formatted fields
+func (bi *BlockInfo) SliceFields(term string) js.MapSlice {
+	return sliceTerm(term, bi.Fields)
 }
 
 // return the number of term# formatted inputs
-func (bi *BlockInfo) CountInputs(term string) (retStart, retCnt int) {
-	return count(term, bi.Inputs)
+func (bi *BlockInfo) SliceInputs(term string) js.MapSlice {
+	return sliceTerm(term, bi.Inputs)
 }
 
-func (bi *BlockInfo) ReadInput(i int) (ret Input, err error) {
-	if e := json.Unmarshal(bi.Inputs[i].Msg, &ret); e != nil {
-		err = e
-	} else if ret.BlockInfo == nil {
-		err = jsn.Missing
-	}
-	return
-}
-
-func count(term string, msgs js.MapSlice) (retStart, retCnt int) {
+// "inputs": { "CONTAINS0": {"block":{...}}, "CONTAINS1": {"block":{...}}, ... }
+// fix: nothing tests this.
+func sliceTerm(term string, msgs js.MapSlice) (ret js.MapSlice) {
+	var retStart, retCnt int
 	next := term + strconv.Itoa(retCnt)
 	if at := msgs.FindIndex(next); at >= 0 {
 		retStart, retCnt = at, 1
@@ -101,5 +98,5 @@ func count(term string, msgs js.MapSlice) (retStart, retCnt int) {
 			retCnt++
 		}
 	}
-	return
+	return msgs[retStart:retCnt]
 }
