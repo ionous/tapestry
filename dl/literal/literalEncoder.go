@@ -1,62 +1,20 @@
 package literal
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
-	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
-func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-	typeName := flow.GetType()
-	switch out := flow.GetFlow().(type) {
-	default:
-		err = chart.Unhandled(typeName)
-
-	case *BoolValue:
-		err = m.MarshalValue(typeName, out.Value)
-
-	case *NumValue:
-		err = m.MarshalValue(typeName, out.Value)
-
-	case *TextValue:
-		err = m.MarshalValue(typeName, out.Value)
-
-	case *NumValues:
-		if len(out.Values) == 1 {
-			err = m.MarshalValue(typeName, out.Values[0])
-		} else {
-			err = m.MarshalValue(typeName, out.Values)
-		}
-
-	case *TextValues:
-		if len(out.Values) == 1 {
-			err = m.MarshalValue(typeName, out.Values[0])
-		} else {
-			err = m.MarshalValue(typeName, out.Values)
-		}
-
-	// records dont want to contain the names of their records
-	// since that's generally recoverable from knowing the names of the fields
-	// it might be better to allow that though, and only remove that info on the special compact encoding
-	// otherwise writing are reading arent exactly idempotent ( writes from fields but generates a record )
-	case *FieldList:
-		obj := make(map[string]interface{})
-		if e := marshalFields(obj, out.Fields); e != nil {
-			err = e
-		} else {
-			err = m.MarshalValue(typeName, obj)
-		}
-	}
-	return
-}
-
+// Write literal commands as plain values.
+// ex. BoolValue becomes a bool (true or false) in the output data.
+//
+// note: TextValues and NumValues of containing a single value
+// and serialized as that single value ( [6]-> 6 )
+// because, in theory, that can help simply the specification for authors.
 func CustomEncoder(enc *encode.Encoder, op any) (ret any, err error) {
 	switch out := op.(type) {
 	default:
@@ -75,26 +33,33 @@ func CustomEncoder(enc *encode.Encoder, op any) (ret any, err error) {
 		if len(out.Values) == 1 {
 			ret = out.Values[0]
 		} else {
-			ret = out.Values
+			ret = anySlice(out.Values)
 		}
 
 	case *TextValues:
 		if len(out.Values) == 1 {
 			ret = out.Values[0]
 		} else {
-			ret = out.Values
+			ret = anySlice(out.Values)
 		}
 	}
 	return
 }
 
-func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, body any) (err error) {
-	if ptr, e := readLiteral(slot.GetType(), "", body); e != nil {
-		err = e
-	} else if !slot.SetSlot(ptr) {
-		err = errutil.New("unexpected error setting slot")
+// convert slices of specific types to slices of any
+// the rationale here is that plain data slices and maps
+// always deserialize into the "any" type, therefore
+// to be idempotent marshaling should too
+func anySlice[V any](els []V) []any {
+	slice := make([]any, len(els))
+	for i, v := range els {
+		slice[i] = v
 	}
-	return
+	return slice
+}
+
+func DecodeLiteral(slot string, body any) (ret any, err error) {
+	return readLiteral(slot, "", body)
 }
 
 func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, err error) {
@@ -108,14 +73,6 @@ func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, e
 		err = e
 	} else {
 		ret = &RecordValue{Kind: kind, Fields: fields}
-	}
-	return
-}
-
-func LiteralDecoder(dec *decode.Decoder, slot string, body any) (ret any, err error) {
-	var u chart.Unhandled
-	if ret, err = readLiteral(slot, "", body); errors.As(err, &u) {
-		err = compact.Unhandled
 	}
 	return
 }
