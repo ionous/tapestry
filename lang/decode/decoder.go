@@ -72,8 +72,8 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 				case walk.Value:
 					if f.Repeats() {
 						err = SetValues(out, arg)
-					} else {
-						err = SetValue(out, arg)
+					} else if ok := it.SetValue(arg); !ok {
+						err = fmt.Errorf("couldnt assign from %T", arg)
 					}
 
 				case walk.Swap: // ugh.

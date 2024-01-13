@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	r "reflect"
 	"strings"
 
@@ -15,101 +14,108 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// where topBlock is the expected topblock type in the file.... ex. story_file
+func Decode(dst r.Value, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
+	var bff File
+	if e := json.Unmarshal(msg, &bff); e != nil {
+		err = e
+	} else if top, ok := bff.FindFirst(topBlock); !ok {
+		err = errutil.New("couldnt find story file in block file")
+	} else {
+		err = DecodeBlock(dst, reg, top)
+	}
+	return
+}
+
+// where topBlock is the expected topblock type in the file.... ex. story_file
+func DecodeBlock(dst r.Value, reg TypeCreator, top *BlockInfo) (err error) {
+	dec := unblock{reg}
+	return dec.decodeBlock(walk.Walk(dst), top)
+}
+
 type unblock struct {
 	factory TypeCreator
 }
 
 func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
+	if e := readMarkup(out, bff); e != nil {
+		err = e
+	} else {
+		for out.Next() && err == nil {
+			f := out.Field()
+			termName := upper(f.Name())
+			switch t := f.SpecType(); t {
+			default:
+				err = fmt.Errorf("unhandled type %s", t)
 
-	for it := out.Walk(); it.Next() && err == nil; {
-		f := it.Field()
-		termName := upper(f.Name())
-		// a member that repeats:
-		// could be a slice of a specific flow of a series of slots ( of numbered inputs ),
-		// a stack ( starting in input, continuing in next ), a list ( of numbered fields )
-		// we could return true/false depending on whether the block file has data
-		// but first we have to find out where that data lives
-		if f.Repeats() { // SliceBlock
-			if fields := bff.SliceFields(termName); len(fields) > 0 {
-				un.decodeList(it.Walk(), fields)
-
-			} else if inputs := bff.SliceInputs(termName); len(inputs) > 0 {
-				err = un.decodeSeriesSlice(out.Walk(), f, inputs)
-
-			} else if at := bff.Inputs.FindIndex(termName); at >= 0 {
-
-				if input, e := bff.ReadInput(at); e != nil {
-					log.Println(e)
+			// simple values live in bff.fields
+			case walk.Str, walk.Value:
+				if f.Repeats() {
+					if fields := bff.SliceFields(termName); len(fields) > 0 {
+						err = un.decodeList(out.Walk(), fields)
+					}
 				} else {
-					// might be nicer if count could grow, rather than counting in advance
-					// could also sink them into a flat list as we count.
-					cnt := 1 + input.CountNext() // all of the next blocks connected to the input, plus the input block itself.
-					out.Resize(cnt)
-					err = un.decodeStack(out, input.BlockInfo)
-				}
-			} else {
-				switch t := f.SpecType(); t {
-				default:
-					err = fmt.Errorf("unhandled type %s", t)
-
-					// a member that is a flow; its value lives in an input.
-				case walk.Flow:
-					if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
-						if input, e := bff.ReadInput(idx); e != nil {
-							log.Println(e)
-						} else {
-							err = un.decodeBlock(out.Walk(), input.BlockInfo)
-						}
-					}
-
-					// a member that fills a slot; its value lives in an input.
-				case walk.Slot:
-					if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
-						if input, e := bff.ReadInput(idx); e != nil {
-							err = e
-						} else if e := un.fillSlot(out, input.Type); e != nil {
-							err = e
-						} else {
-							err = un.decodeBlock(out.Walk(), input.BlockInfo)
-						}
-					}
-				// case :
-				// a member that's a swap uses both a field and an input.
-				// for simple values ( strs in swaps ) there will be a faux block type for that input.
-
-				case walk.Swap:
-					// the field holds a combo box with swap's choice
-					if idx := bff.Fields.FindIndex(termName); idx >= 0 {
-						var choice string
-						if e := json.Unmarshal(bff.Fields[idx].Msg, &choice); e != nil {
-							err = e
-						} else if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
-							// the input hold the value of the swap's block
-							if input, e := bff.ReadInput(idx); e != nil {
-								err = e
-							} else {
-								err = un.decodeSwap(out, choice, input.BlockInfo)
-							}
-						}
-					}
-
-					// simple values live in bff.fields
-				case walk.Str, walk.Value:
-					var value any
-					if field, ok := bff.Fields.Find(termName); !ok {
-						err = jsn.Missing
-					} else if e := json.Unmarshal(field.Msg, &value); e != nil {
+					if e := decodeField(out, bff, termName); e != jsn.Missing {
 						err = e
-					} else {
-						err = storeValue(out, f, value)
+					}
+				}
+
+			// a member that is a flow; its value lives in an input.
+			case walk.Flow:
+				if f.Repeats() {
+					if inputs := bff.SliceInputs(termName); len(inputs) > 0 {
+						err = un.decodeSlice(out.Walk(), inputs)
+					}
+
+				} else {
+					if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
+						if input, e := bff.ReadInput(idx); e != nil {
+							err = e
+
+						} else {
+							err = un.decodeBlock(out.Walk(), input.BlockInfo)
+						}
+					}
+				}
+
+			// a member that fills a slot; its value lives in an input.
+			case walk.Slot:
+				if f.Repeats() {
+					if at := bff.Inputs.FindIndex(termName); at >= 0 {
+						err = un.decodeStack(out.Walk(), bff, at)
+					} else if inputs := bff.SliceInputs(termName); len(inputs) > 0 {
+						err = un.decodeSeries(out.Walk(), inputs)
+					}
+				} else {
+					if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
+						if input, e := bff.ReadInput(idx); e != nil {
+							err = e
+						} else {
+							err = un.decodeSlot(out, input.Type, input.BlockInfo)
+						}
+					}
+				}
+
+			// a swap uses both a field and an input.
+			// for simple values ( strs in swaps ) there will be a faux block type for that input.
+			case walk.Swap:
+				// the field holds a combo box with swap's choice
+				if idx := bff.Fields.FindIndex(termName); idx >= 0 {
+					var choice string // ex. $C
+					if e := json.Unmarshal(bff.Fields[idx].Msg, &choice); e != nil {
+						err = e
+					} else if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
+						// the input hold the swap's contents
+						if input, e := bff.ReadInput(idx); e != nil {
+							err = e
+						} else {
+							err = un.decodeSwap(out, choice, input.BlockInfo)
+						}
 					}
 				}
 			}
 		}
 	}
-
-	panic("readMarkup")
-
 	return
 }
 
@@ -134,46 +140,47 @@ func readMarkup(flow walk.Walker, bff *BlockInfo) (err error) {
 }
 
 // a stack is a repeating slot
-func (un *unblock) decodeStack(out walk.Walker, next *BlockInfo) (err error) {
-	// the typename we want is (munged) in the block file
-	if typeName, ok := unstackName(next.Type); !ok {
-		err = fmt.Errorf("couldnt unstack %q", next.Type)
-	} else if e := un.fillSlot(out, typeName); e != nil {
+func (un *unblock) decodeStack(out walk.Walker, bff *BlockInfo, idx int) (err error) {
+	if input, e := bff.ReadInput(idx); e != nil {
 		err = e
 	} else {
-		err = un.decodeBlock(out.Walk(), next)
+		// tbd: sink them into a flat list during count?
+		// re: +1: all of the blocks connected to the input, plus the input block itself.
+		out.Resize(1 + input.CountNext())
+		for next := input; next.BlockInfo != nil; next = next.GetNext() {
+			// the typename we want is (munged) in the block file
+			if typeName, ok := unstackName(next.Type); !ok {
+				err = fmt.Errorf("couldnt unstack %q", next.Type)
+				break
+			} else {
+				out.Next()
+				if e := un.decodeSlot(out, typeName, next.BlockInfo); e != nil {
+					err = e
+					break
+				}
+			}
+		}
 	}
 	return
 }
 
-// read the insides of a swap:
-// it could be a flow filling the input....
-// or a fake block wrapping a primitive value ( a "standalone" )
+// read the insides of a swap
 func (un *unblock) decodeSwap(out walk.Walker, choice string, bff *BlockInfo) (err error) {
-	// //if !swap.SetSwap(choice) {
-
-	// // see: block.newSwap & shape.writeStandalone:
-	// // the field name is the name of the spec type )
-	// field := strings.ToUpper(typeName)
-	// if idx := bff.Fields.FindIndex(field); idx < 0 {
-	// 	err = jsn.Missing // the block might be missing, and that's okay.
-	// } else {
-	// 	field := bff.Fields[idx]
-	// 	err = storeValue(pv, field.Msg) // pv is the destination
-	// }
-	// return next
-	panic("huh")
-}
-
-// fix: refactor
-func (un *unblock) decodeSeriesSlice(out walk.Walker, f walk.Field, inputs js.MapSlice) (err error) {
-	switch f.SpecType() {
-	case walk.Slot:
-		err = un.decodeSeries(out, inputs)
-	case walk.Flow:
-		err = un.decodeSlice(out, inputs)
-	default:
-		err = errors.New("unexpected slice")
+	i := out.Value().Addr().Interface() // ptr to an auto-generated swap sstructure
+	swap := i.(interface{ SetSwap(string) bool })
+	if !swap.SetSwap(choice) {
+		err = fmt.Errorf("swap has unexpected choice %q", choice)
+	} else if swap := out.Walk(); !swap.Next() {
+		err = errors.New("unexpected error")
+	} else {
+		// it could be a flow filling the input....
+		// or a fake block wrapping a primitive value ( ex. a swap supporting str )
+		if t := swap.SpecType(); t == walk.Flow {
+			err = un.decodeBlock(swap.Walk(), bff)
+		} else {
+			typeName := strings.ToUpper(bff.Type)
+			err = decodeField(swap, bff, typeName)
+		}
 	}
 	return
 }
@@ -186,13 +193,31 @@ func (un *unblock) decodeSeries(out walk.Walker, inputs js.MapSlice) (err error)
 		if input, e := readInput(el); e != nil {
 			err = e
 			break
-		} else if e := un.fillSlot(out, input.Type); e != nil {
-			err = e
-			break
-		} else if e := un.decodeBlock(out.Walk(), input.BlockInfo); e != nil {
+		} else if un.decodeSlot(out, input.Type, input.BlockInfo); e != nil {
 			err = e
 			break
 		}
+	}
+	return
+}
+
+func (un *unblock) decodeSlot(out walk.Walker, inputType string, next *BlockInfo) (err error) {
+	if e := un.fillSlot(out, inputType); e != nil {
+		err = e
+	} else if slot := out.Walk(); !slot.Next() {
+		err = errors.New("slot empty after filling it?")
+	} else if e := un.decodeBlock(slot.Walk(), next); e != nil {
+		err = e
+	}
+	return
+}
+
+// create a blank command to fill the targeted slot.
+func (un *unblock) fillSlot(out walk.Walker, typeName string) (err error) {
+	if rptr, ok := un.factory.NewType(typeName); !ok {
+		err = errutil.Fmt("couldn't create %q", typeName)
+	} else {
+		out.Value().Set(r.ValueOf(rptr))
 	}
 	return
 }
@@ -213,16 +238,7 @@ func (un *unblock) decodeSlice(out walk.Walker, inputs js.MapSlice) (err error) 
 	return
 }
 
-func (un *unblock) fillSlot(out walk.Walker, typeName string) (err error) {
-	if rptr, ok := un.factory.NewType(typeName); !ok {
-		err = errutil.Fmt("couldn't create %q", typeName)
-	} else {
-		out.Value().Set(r.ValueOf(rptr))
-	}
-	return
-}
-
-// an array of primitives is a list of fields .
+// an array of primitives is a list of fields.
 func (un *unblock) decodeList(out walk.Walker, fields js.MapSlice) (err error) {
 	out.Resize(len(fields))
 	for _, el := range fields {
@@ -230,15 +246,22 @@ func (un *unblock) decodeList(out walk.Walker, fields js.MapSlice) (err error) {
 		if v, e := readValue(el); e != nil {
 			err = e
 			break
-		} else {
-			// fix: might need to convert via the regular decoder.
-			// especially because this can panic
-			out.Value().Set(r.ValueOf(v))
+		} else if !out.SetValue(v) {
+			err = errutil.Fmt("couldn't assign from %T", v)
 		}
 	}
 	return
 }
 
-func storeValue(out walk.Walker, f walk.Field, v any) (err error) {
-	panic("")
+// simple values live in bff.fields
+func decodeField(out walk.Walker, bff *BlockInfo, fieldName string) (err error) {
+	var value any
+	if field, ok := bff.Fields.Find(fieldName); !ok {
+		err = jsn.Missing
+	} else if e := json.Unmarshal(field.Msg, &value); e != nil {
+		err = e
+	} else if !out.SetValue(value) {
+		err = fmt.Errorf("couldnt store %T", value)
+	}
+	return
 }

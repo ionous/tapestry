@@ -69,6 +69,24 @@ func (bi *Input) CountNext() (ret int) {
 	return
 }
 
+// return the next input as a concrete object
+// if there was no next input, the returned object's BlockInfo will be nil
+func (bi *Input) GetNext() (ret Input) {
+	if bi.Next != nil {
+		ret = *bi.Next
+	}
+	return
+}
+
+func (bi *BlockInfo) CountFields(term string) (retStart, retCnt int) {
+	return count(term, bi.Fields)
+}
+
+// return the number of term# formatted inputs
+func (bi *BlockInfo) CountInputs(term string) (retStart, retCnt int) {
+	return count(term, bi.Inputs)
+}
+
 // return the number of term# formatted fields
 func (bi *BlockInfo) ReadInput(idx int) (ret Input, err error) {
 	return readInput(bi.Inputs[idx])
@@ -84,10 +102,14 @@ func (bi *BlockInfo) SliceInputs(term string) js.MapSlice {
 	return sliceTerm(term, bi.Inputs)
 }
 
+func sliceTerm(term string, msgs js.MapSlice) js.MapSlice {
+	min, max := count(term, msgs)
+	return msgs[min:max]
+}
+
 // "inputs": { "CONTAINS0": {"block":{...}}, "CONTAINS1": {"block":{...}}, ... }
 // fix: nothing tests this.
-func sliceTerm(term string, msgs js.MapSlice) (ret js.MapSlice) {
-	var retStart, retCnt int
+func count(term string, msgs js.MapSlice) (retStart, retCnt int) {
 	next := term + strconv.Itoa(retCnt)
 	if at := msgs.FindIndex(next); at >= 0 {
 		retStart, retCnt = at, 1
@@ -98,5 +120,5 @@ func sliceTerm(term string, msgs js.MapSlice) (ret js.MapSlice) {
 			retCnt++
 		}
 	}
-	return msgs[retStart:retCnt]
+	return
 }

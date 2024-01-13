@@ -28,6 +28,9 @@ type Walker struct {
 
 // change the size of the container
 func (w *Walker) Resize(cnt int) {
+	if w.curr.Kind() != r.Slice {
+		log.Printf("can't resize a %s(%s)", w.curr.Kind(), w.curr.Type())
+	}
 	w.curr.Grow(cnt)
 	w.curr.SetLen(cnt)
 }
@@ -70,6 +73,7 @@ func (w *Walker) Markup() (ret r.Value) {
 // only valid for the members of a flow; panics otherwise
 func (w *Walker) Field() Field {
 	if k := w.curr.Kind(); k != r.Struct || w.index == 0 {
+		log.Printf("container is %s(%s) index: %d", k, w.curr.Type(), w.index)
 		panic("fields only make sense for structs")
 	}
 	containerType := w.curr.Type()
@@ -79,7 +83,7 @@ func (w *Walker) Field() Field {
 }
 
 // returns the "focus" of the current iteration.
-// falls back to the container itself if next() has yet to be called.
+// falls back to the container itself if Next() has yet to be called.
 func (w *Walker) Value() (ret r.Value) {
 	if !w.focus.IsValid() {
 		ret = w.curr
@@ -92,6 +96,19 @@ func (w *Walker) Value() (ret r.Value) {
 		}
 	}
 	return
+}
+
+// returns the "focus" of the current iteration.
+// falls back to the container itself if Next() has yet to be called.
+// ( needed for swaps which can technically point to any type )
+func (w *Walker) SpecType() Type {
+	var which r.Value
+	if !w.focus.IsValid() {
+		which = w.curr
+	} else {
+		which = w.focus
+	}
+	return typeOf(which.Type())
 }
 
 // returns a new walker for the currently focused element;
@@ -149,7 +166,7 @@ func (w *Walker) Next() (okay bool) {
 	return
 }
 
-// shouldnt need to be public because callers initiate the traversal.
+//
 func typeOf(curr r.Type) (ret Type) {
 	switch curr.Kind() {
 	default:
@@ -169,6 +186,19 @@ func (w *Walker) step(get func(int) r.Value) (okay bool) {
 		nextField := get(at)
 		w.focus, w.index = nextField, at+1
 		okay = true
+	}
+	return
+}
+
+// write a value into the target of an iterator.
+// returns false if the value is incompatible
+// ( uses go rules of conversion when needed to complete the assignment )
+func (w *Walker) SetValue(val any) (okay bool) {
+	if out, val := w.Value(), r.ValueOf(val); out.Kind() == val.Kind() {
+		out.Set(val)
+		okay = true
+	} else if t := w.focus.Type(); val.CanConvert(t) {
+		out.Set(val.Convert(t))
 	}
 	return
 }
