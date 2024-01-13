@@ -1,2 +1,2 @@
-// package unblock decodes block files into in-memory stories
+// Package unblock decodes blockly style story files into tapestry commands.
 package unblock

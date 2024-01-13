@@ -37,26 +37,6 @@ func TestStoring(t *testing.T) {
 }
 
 // for now just tests that it can load into the in memory structures without error
-func xTestUnblockStructs(t *testing.T) {
-	// var reg composer.TypeRegistry
-	// reg.RegisterTypes(literal.Slats)
-	// reg.RegisterTypes(core.Slats)
-	// reg.RegisterTypes(test.Slats)
-	// reg.RegisterTypes(story.Slats) // for StoryBreak; fix: make a test_empty?
-
-	// var out story.StoryFile
-	// if e := unblock.Decode(r.ValueOf(&out).Elem(), "story_file", reg, storeTest); e != nil {
-	// 	t.Fatal(e)
-	// } else {
-	// 	// for visual inspection:
-	// 	t.Log(pretty.Sprint(out))
-	// }
-}
-
-//go:embed storeTest.json
-var storeTest []byte
-
-// for now just tests that it can load into the in memory structures without error
 func TestCountField(t *testing.T) {
 	fields := []js.MapItem{
 		{Key: "a"},

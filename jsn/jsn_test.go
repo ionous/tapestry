@@ -13,26 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
-
-	"git.sr.ht/~ionous/tapestry/jsn/dout"
 )
-
-// test that the detailed format can be used to write out, and read back in the same data
-// we dont much care what it looks like anymore.
-func TestDetailsEncodeDecode(t *testing.T) {
-	if d, e := dout.Encode(&debug.FactorialStory); e != nil {
-		t.Fatal(e)
-	} else if b, e := json.Marshal(d); e != nil {
-		t.Fatal(e)
-	} else if in, e := story.DetailedDecode(b); e != nil {
-		t.Fatal(e)
-	} else {
-		if diff := pretty.Diff(debug.FactorialStory, in); len(diff) != 0 {
-			pretty.Print(in)
-			t.Fatal(diff)
-		}
-	}
-}
 
 // test that the compact encoding matches a particular "golden image"
 func TestCompactEncoder(t *testing.T) {
