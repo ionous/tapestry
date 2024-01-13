@@ -11,7 +11,12 @@ import (
 )
 
 type Encoder struct {
-	CustomEncoder
+	customEncoder CustomEncoder
+}
+
+func (enc *Encoder) CustomEncoder(c CustomEncoder) *Encoder {
+	enc.customEncoder = c
+	return enc
 }
 
 // given a tapestry command, return its json-like value
@@ -104,7 +109,7 @@ func (enc *Encoder) writeFlow(src walk.Walker) (ret any, err error) {
 }
 
 func (enc *Encoder) customEncode(cmd any) (ret any, err error) {
-	if c := enc.CustomEncoder; c == nil {
+	if c := enc.customEncoder; c == nil {
 		err = compact.Unhandled
 	} else {
 		ret, err = c(enc, cmd)

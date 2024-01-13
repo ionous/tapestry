@@ -1,12 +1,14 @@
 package core_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
 )
 
 func TestGetTrait(t *testing.T) {
@@ -14,7 +16,7 @@ func TestGetTrait(t *testing.T) {
 		Name:  core.Variable("noun"),
 		Field: core.Variable("trait"),
 	}
-	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
+	if have, e := stringify(out); e != nil {
 		t.Fatal(e)
 	} else if have != `{"Object:field:":["@noun","@trait"]}` {
 		t.Fatal(have)
@@ -26,7 +28,7 @@ func TestGetVariablePath(t *testing.T) {
 
 	// fix: this should have path syntax ( re: expressions )
 	// ex. @pawn.trait
-	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
+	if have, e := stringify(out); e != nil {
 		t.Fatal(e)
 	} else if have != `{"Variable:dot:":["pawn",[{"AtField:":"trait"}]]}` {
 		t.Fatal(have)
@@ -43,7 +45,7 @@ func TestListPush(t *testing.T) {
 
 	// fix: this should have path syntax ( re: expressions )
 	// ex. @pawn.trait
-	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
+	if have, e := stringify(out); e != nil {
 		t.Fatal(e)
 	} else if have != `{"Push:into:atFront:":[{"FromText:":"@obj"},"@bounds",true]}` {
 		t.Fatal(have)
@@ -56,9 +58,21 @@ func TestUnaryEncoding(t *testing.T) {
 
 	// fix: this should have path syntax ( re: expressions )
 	// ex. @pawn.trait
-	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
+	if have, e := stringify(out); e != nil {
 		t.Fatal(e)
 	} else if have != `{"Wbr":true}` {
 		t.Fatal(have)
 	}
+}
+
+func stringify(v jsn.Marshalee) (ret string, err error) {
+	var enc encode.Encoder
+	if res, e := enc.CustomEncoder(core.CustomEncoder).MarshalFlow(v); e != nil {
+		err = e
+	} else if b, e := json.Marshal(res); e != nil {
+		err = e
+	} else {
+		ret = string(b)
+	}
+	return
 }

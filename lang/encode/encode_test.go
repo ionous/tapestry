@@ -12,10 +12,8 @@ import (
 )
 
 func TestEncodeStory(t *testing.T) {
-	enc := encode.Encoder{
-		CustomEncoder: core.CustomEncoder,
-	}
-	if n, e := enc.MarshalFlow(&debug.FactorialStory); e != nil {
+	var enc encode.Encoder // story doesnt have its own custom encoder.
+	if n, e := enc.CustomEncoder(core.CustomEncoder).MarshalFlow(&debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else {
 		var b strings.Builder
