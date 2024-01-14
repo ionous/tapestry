@@ -1,12 +1,12 @@
 package assign_test
 
 import (
+	"reflect"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"github.com/ionous/errutil"
 )
 
@@ -25,7 +25,9 @@ func TestEncodePattern(t *testing.T) {
 		t.Fatal(e)
 	}
 }
+
 func testString(n, a string) (err error) {
+	var enc encode.Encoder
 	out := &assign.CallPattern{
 		PatternName: n,
 		Arguments: []assign.Arg{{
@@ -34,21 +36,17 @@ func testString(n, a string) (err error) {
 				Value: literal.I(5), // the encode gets unhappy without a real value here.
 			},
 		}}}
-
-	if have, e := cout.Marshal(out, encoder); e != nil {
+	// calls EncodePattern indirectly
+	if got, e := enc.Customize(literal.CustomEncoder).Encode(out); e != nil {
 		err = e
-	} else if have != `{"PatternName argName:":{"FromNumber:":5}}` {
-		err = errutil.New(have)
+	} else if reflect.DeepEqual(got, wantPattern) {
+		err = errutil.New(got)
 	}
 	return
 }
 
-func encoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-	switch op := flow.GetFlow().(type) {
-	case *assign.CallPattern:
-		err = assign.EncodePattern(m, op)
-	default:
-		err = literal.CompactEncoder(m, flow)
-	}
-	return
+var wantPattern = map[string]any{
+	"PatternName argName:": map[string]any{
+		"FromNumber:": 5,
+	},
 }

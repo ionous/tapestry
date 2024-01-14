@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -24,17 +24,21 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 		from mdl_grammar
 		order by rowid`,
 		func() (err error) {
-			var d grammar.Directive
+			var dir grammar.Directive
 			var msg map[string]any
 			if e := json.Unmarshal(prog, &msg); e != nil {
 				err = e
-			} else if e := cin.NewDecoder(cin.Signatures{grammar.Signatures, assign.Signatures, literal.Signatures}).
-				SetSlotDecoder(literal.CompactSlotDecoder).
-				Decode(&d, msg); e != nil {
-				err = e
 			} else {
-				x := d.MakeScanners()
-				xs = append(xs, x)
+				var dec decode.Decoder
+				if e := dec.
+					Signatures(grammar.Signatures, assign.Signatures, literal.Signatures).
+					Customize(literal.CustomDecoder).
+					Decode(&dir, msg); e != nil {
+					err = e
+				} else {
+					x := dir.MakeScanners()
+					xs = append(xs, x)
+				}
 			}
 			return
 		}, &name, &prog,

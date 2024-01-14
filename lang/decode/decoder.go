@@ -6,15 +6,34 @@ import (
 	r "reflect"
 	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
 type Decoder struct {
-	SignatureTable
-	CustomDecoder
-	PatternDecoder
+	signatures    SignatureTable
+	customDecoder CustomDecoder
+	patterns      PatternDecoder
+}
+
+// provide translation from command signatures to actual commands.
+// ex. "Tapestry:" to *story.StoryFile
+func (dec *Decoder) Signatures(t ...map[uint64]any) *Decoder {
+	dec.signatures = t
+	return dec
+}
+
+// customize the handling of specific slots.
+func (dec *Decoder) Customize(c CustomDecoder) *Decoder {
+	dec.customDecoder = c
+	return dec
+}
+
+// handle conversion of unknown commands to scripted function calls.
+func (dec *Decoder) Patterns(p PatternDecoder) *Decoder {
+	dec.patterns = p
+	return dec
 }
 
 // create an arbitrary command from arbitrary data
@@ -23,28 +42,47 @@ type Decoder struct {
 type CustomDecoder func(dec *Decoder, slot string, body any) (any, error)
 
 // handle pattern parsing.
-// fix: return should be composer
+// fix: return should be composer or marshalee
 type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (any, error)
 
-func (dec *Decoder) Unmarshal(ptr composer.Composer, m map[string]any) (err error) {
-	if msg, e := parseMessage(m); e != nil {
-		err = e
-	} else {
-		err = dec.readMsg(msg, walk.Walk(r.ValueOf(ptr).Elem()))
+func (dec *Decoder) Decode(out jsn.Marshalee, from any) (err error) {
+	tgt := r.ValueOf(out).Elem()
+	switch t := tgt.Type(); t.Kind() { // ugh
+	default:
+		err = unknownType(t)
+	case r.Struct:
+		switch tgt.NumField() {
+		case 0:
+			err = unknownType(t)
+		case 1: // slots are structs containing { Value *slot }
+			typeName := out.(jsn.SlotBlock).GetType()
+			err = dec.decodeSlot(typeName, tgt, from)
+		default: // flow is struct > 1 field ( Markup + something )
+			if msg, e := parseMessage(from); e != nil {
+				err = e
+			} else {
+				err = dec.readMsg(msg, walk.Walk(tgt))
+			}
+		}
+	// slice is a []slot or []flow
+	case r.Slice:
+		w := walk.Walk(tgt)
+		elType := tgt.Type().Elem()
+		switch elType.Kind() {
+		default:
+			err = unknownType(t) // print the original type
+		case r.Interface:
+			typeName := out.(jsn.SliceBlock).GetType()
+			err = dec.repeatSlot(typeName, w, from)
+		case r.Struct:
+			err = dec.repeatFlow(w, from)
+		}
 	}
 	return
 }
 
-// fix: slot should be an interface of some useful sort
-// currently: address of a slot.
-func (dec *Decoder) UnmarshalSlot(slotptr, data any) (err error) {
-	out := r.ValueOf(slotptr).Elem()
-	slot := walk.SlotName(out.Type())
-	return dec.slotData(slot, out, data)
-}
-
-func (dec *Decoder) UnmarshalSlice(ptr r.Value, msgs []any) (err error) {
-	panic("xx")
+func unknownType(t r.Type) error {
+	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
 }
 
 // assumes that it is at the start of a flow container
@@ -95,6 +133,7 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 							}
 						}
 					}
+
 				case walk.Flow:
 					if f.Repeats() {
 						err = dec.repeatFlow(it.Walk(), arg)
@@ -108,10 +147,11 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 
 				case walk.Slot:
 					if f.Repeats() {
-						err = dec.repeatSlot(it.Walk(), arg)
+						slotName := walk.SlotName(out.Type().Elem())
+						err = dec.repeatSlot(slotName, it.Walk(), arg)
 					} else {
-						slot := walk.SlotName(out.Type())
-						err = dec.slotData(slot, out, arg)
+						slotName := walk.SlotName(out.Type())
+						err = dec.decodeSlot(slotName, out, arg)
 					}
 				}
 			}

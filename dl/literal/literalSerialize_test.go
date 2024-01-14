@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 )
 
@@ -38,7 +39,10 @@ func TestEncodingDecoding(t *testing.T) {
 }
 
 type testPair struct {
-	v   literal.LiteralValue
+	v interface {
+		jsn.Marshalee
+		literal.LiteralValue
+	}
 	res any
 }
 
@@ -63,7 +67,7 @@ func testPairs(t *testing.T, pairs []testPair) {
 	}
 }
 
-func marshal(v literal.LiteralValue) (ret any, err error) {
+func marshal(v jsn.Marshalee) (ret any, err error) {
 	var enc encode.Encoder
-	return enc.CustomEncoder(literal.CustomEncoder).MarshalFlow(v)
+	return enc.Customize(literal.CustomEncoder).Encode(v)
 }

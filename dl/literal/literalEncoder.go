@@ -2,9 +2,12 @@ package literal
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+
+	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -15,7 +18,7 @@ import (
 // note: TextValues and NumValues of containing a single value
 // and serialized as that single value ( [6]-> 6 )
 // because, in theory, that can help simply the specification for authors.
-func CustomEncoder(enc *encode.Encoder, op any) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op jsn.Marshalee) (ret any, err error) {
 	switch out := op.(type) {
 	default:
 		err = compact.Unhandled
@@ -47,7 +50,7 @@ func CustomEncoder(enc *encode.Encoder, op any) (ret any, err error) {
 }
 
 // convert slices of specific types to slices of any
-// the rationale here is that plain data slices and maps
+// the rationale here is that plain values slices and maps
 // always deserialize into the "any" type, therefore
 // to be idempotent marshaling should too
 func anySlice[V any](els []V) []any {
@@ -56,6 +59,10 @@ func anySlice[V any](els []V) []any {
 		slice[i] = v
 	}
 	return slice
+}
+
+func CustomDecoder(_ *decode.Decoder, slot string, body any) (any, error) {
+	return readLiteral(slot, "", body)
 }
 
 func DecodeLiteral(slot string, body any) (ret any, err error) {

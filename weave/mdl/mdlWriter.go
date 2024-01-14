@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -126,7 +127,7 @@ func (pen *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Exec
 			if err == nil {
 				if prog, e := marshalprog(prog); e != nil {
 					err = e
-				} else if out, e := marshalout(value); e != nil {
+				} else if out, e := marshalSlot(value); e != nil {
 					err = e
 				} else {
 					var aff affine.Affinity
@@ -240,7 +241,7 @@ var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 // player input parsing
 func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 	domain, at := pen.domain, pen.at
-	if prog, e := marshalout(prog); e != nil {
+	if prog, e := marshalSlot(jsn.Marshalee(prog)); e != nil {
 		err = e
 	} else if d, e := pen.findDomain(); e != nil {
 		err = e

@@ -67,7 +67,7 @@ func TestUnaryEncoding(t *testing.T) {
 
 func stringify(v jsn.Marshalee) (ret string, err error) {
 	var enc encode.Encoder
-	if res, e := enc.CustomEncoder(core.CustomEncoder).MarshalFlow(v); e != nil {
+	if res, e := enc.Customize(core.CustomEncoder).Encode(v); e != nil {
 		err = e
 	} else if b, e := json.Marshal(res); e != nil {
 		err = e
