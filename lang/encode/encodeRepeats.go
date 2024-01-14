@@ -6,7 +6,7 @@ func (enc *Encoder) encodeFlows(it walk.Walker) (ret []any, err error) {
 	if cnt := it.Len(); cnt > 0 {
 		ret = make([]any, cnt)
 		for i := 0; i < cnt && it.Next(); i++ {
-			if res, e := enc.writeFlow(it); e != nil {
+			if res, e := enc.writeFlow(it.Walk()); e != nil {
 				ret, err = nil, e
 				break
 			} else {

@@ -61,19 +61,6 @@ func (enc *Encoder) Encode(out jsn.Marshalee) (ret any, err error) {
 	return
 }
 
-func unknownType(t r.Type) error {
-	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
-}
-
-func unpack(src walk.Walker) (ret jsn.Marshalee, err error) {
-	if fix, ok := src.Value().Addr().Interface().(jsn.Marshalee); !ok {
-		err = fmt.Errorf("%s is not a flow", src.Value().Type())
-	} else {
-		ret = fix
-	}
-	return
-}
-
 // it is at the struct level
 func (enc *Encoder) writeFlow(src walk.Walker) (ret any, err error) {
 	if fix, e := unpack(src); e != nil {
@@ -84,12 +71,13 @@ func (enc *Encoder) writeFlow(src walk.Walker) (ret any, err error) {
 		err = e
 	} else {
 		var out FlowBuilder
-		if e := writeMarkup(&out, src); e != nil {
+		if m, e := getMarkup(src); e != nil {
 			err = e
 		} else if fix, ok := fix.(composer.Composer); !ok {
 			err = fmt.Errorf("%s is not a flow", src.Value().Type())
 		} else {
 			out.WriteLede(fix.Compose().GetLede())
+			out.SetMarkup(m)
 			for it := src; it.Next(); { // -1 to end before the markup
 				f, val := it.Field(), it.Value()
 				if !f.Optional() || !val.IsZero() {
@@ -156,12 +144,26 @@ func (enc *Encoder) customEncode(cmd jsn.Marshalee) (ret any, err error) {
 	return
 }
 
-func writeMarkup(out *FlowBuilder, src walk.Walker) (err error) {
+func unknownType(t r.Type) error {
+	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
+}
+
+func unpack(src walk.Walker) (ret jsn.Marshalee, err error) {
+	if fix, ok := src.Value().Addr().Interface().(jsn.Marshalee); !ok {
+		err = fmt.Errorf("%s is not a flow", src.Value().Type())
+	} else {
+		ret = fix
+	}
+	return
+}
+
+// read markup from the passed walker
+func getMarkup(src walk.Walker) (ret map[string]any, err error) {
 	if markup := src.Markup(); markup.IsValid() {
 		if m, ok := markup.Interface().(map[string]any); !ok {
 			err = fmt.Errorf("expected markup, have %s", markup.Type())
 		} else {
-			out.SetMarkup(m)
+			ret = m
 		}
 	}
 	return

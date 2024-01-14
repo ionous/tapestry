@@ -37,16 +37,16 @@ func testString(n, a string) (err error) {
 			},
 		}}}
 	// calls EncodePattern indirectly
-	if got, e := enc.Customize(literal.CustomEncoder).Encode(out); e != nil {
+	if got, e := enc.Customize(assign.CustomEncoder).Encode(out); e != nil {
 		err = e
-	} else if reflect.DeepEqual(got, wantPattern) {
-		err = errutil.New(got)
+	} else if !reflect.DeepEqual(got, wantPattern) {
+		err = errutil.New("mismatch", got)
 	}
 	return
 }
 
 var wantPattern = map[string]any{
 	"PatternName argName:": map[string]any{
-		"FromNumber:": 5,
+		"FromNumber:": 5.0,
 	},
 }
