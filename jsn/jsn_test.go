@@ -17,11 +17,12 @@ import (
 
 // test that the compact encoding matches a particular "golden image"
 func TestCompactEncoder(t *testing.T) {
-	if str, e := cout.Marshal(&debug.FactorialStory, story.CompactEncoder); e != nil {
-		t.Fatal(e)
-	} else if str != debug.FactorialJs {
-		t.Fatal(str)
-	}
+	t.Fatal("does this need porting?")
+	// if str, e := cout.Marshal(&debug.FactorialStory, story.CompactEncoder); e != nil {
+	// 	t.Fatal(e)
+	// } else if str != debug.FactorialJs {
+	// 	t.Fatal(str)
+	// }
 }
 
 // test the compact decoder can read from the "golden image" and get the hardwired factorial story.
@@ -46,17 +47,18 @@ func TestCompactDecode(t *testing.T) {
 // which read any matching fields, ex. the the _ field holding "description".
 // now: it tests that the lede of the command matches the first part of the signature
 func TestExpectedFailure(t *testing.T) {
-	var dst assign.Arg_Slice
-	var msg map[string]any
-	if e := json.Unmarshal([]byte(failure), &msg); e != nil {
-		t.Fatal(e)
-	} else if e := cin.NewDecoder(cin.Signatures(tapestry.AllSignatures)).
-		SetSlotDecoder(core.CompactSlotDecoder).
-		Decode(&dst, msg); e == nil {
-		t.Fatal("expected error")
-	} else {
-		t.Log("ok:", e)
-	}
+	t.Fatal("does this need porting?")
+	// var dst assign.Arg_Slice
+	// var msg map[string]any
+	// if e := json.Unmarshal([]byte(failure), &msg); e != nil {
+	// 	t.Fatal(e)
+	// } else if e := cin.NewDecoder(cin.Signatures(tapestry.AllSignatures)).
+	// 	SetSlotDecoder(core.CompactSlotDecoder).
+	// 	Decode(&dst, msg); e == nil {
+	// 	t.Fatal("expected error")
+	// } else {
+	// 	t.Log("ok:", e)
+	// }
 }
 
 var failure = `{

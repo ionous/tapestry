@@ -13,7 +13,7 @@ import (
 
 func TestEncodeStory(t *testing.T) {
 	var enc encode.Encoder // story doesnt have its own custom encoder.
-	if n, e := enc.CustomEncoder(core.CustomEncoder).Encode(&debug.FactorialStory); e != nil {
+	if n, e := enc.Customize(core.CustomEncoder).Encode(&debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else {
 		var b strings.Builder
