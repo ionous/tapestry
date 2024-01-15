@@ -33,7 +33,7 @@ func encodePattern(enc *encode.Encoder, op *CallPattern) (ret any, err error) {
 		if inflect.IsCapitalized(argName) {
 			argName = inflect.MixedCaseToSpaces(argName)
 		}
-		slot := rt.Assignment_Slot{Value: &arg.Value}
+		slot := rt.Assignment_Slot{Value: arg.Value}
 		if out, e := enc.Encode(&slot); e != nil {
 			err = e
 			break

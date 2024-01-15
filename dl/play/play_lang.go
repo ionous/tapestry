@@ -115,9 +115,9 @@ const PlayMessage_Type = "play_message"
 
 var PlayMessage_Optional_Marshal = PlayMessage_Marshal
 
-type PlayMessage_Slot struct{ Value *PlayMessage }
+type PlayMessage_Slot struct{ Value PlayMessage }
 
-func (at PlayMessage_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *PlayMessage_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -128,16 +128,21 @@ func (at PlayMessage_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at PlayMessage_Slot) GetType() string              { return PlayMessage_Type }
-func (at PlayMessage_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at PlayMessage_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(PlayMessage)
+func (at *PlayMessage_Slot) GetType() string              { return PlayMessage_Type }
+func (at *PlayMessage_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *PlayMessage_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(PlayMessage)
 	return
 }
 
 func PlayMessage_Marshal(m jsn.Marshaler, ptr *PlayMessage) (err error) {
-	slot := PlayMessage_Slot{ptr}
-	return slot.Marshal(m)
+	slot := PlayMessage_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type PlayMessage_Slice []PlayMessage

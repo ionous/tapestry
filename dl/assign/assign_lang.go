@@ -13,9 +13,9 @@ const Address_Type = "address"
 
 var Address_Optional_Marshal = Address_Marshal
 
-type Address_Slot struct{ Value *Address }
+type Address_Slot struct{ Value Address }
 
-func (at Address_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *Address_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -26,16 +26,21 @@ func (at Address_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at Address_Slot) GetType() string              { return Address_Type }
-func (at Address_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Address_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Address)
+func (at *Address_Slot) GetType() string              { return Address_Type }
+func (at *Address_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *Address_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(Address)
 	return
 }
 
 func Address_Marshal(m jsn.Marshaler, ptr *Address) (err error) {
-	slot := Address_Slot{ptr}
-	return slot.Marshal(m)
+	slot := Address_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type Address_Slice []Address
@@ -626,9 +631,9 @@ const Dot_Type = "dot"
 
 var Dot_Optional_Marshal = Dot_Marshal
 
-type Dot_Slot struct{ Value *Dot }
+type Dot_Slot struct{ Value Dot }
 
-func (at Dot_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *Dot_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -639,16 +644,21 @@ func (at Dot_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at Dot_Slot) GetType() string              { return Dot_Type }
-func (at Dot_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Dot_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Dot)
+func (at *Dot_Slot) GetType() string              { return Dot_Type }
+func (at *Dot_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *Dot_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(Dot)
 	return
 }
 
 func Dot_Marshal(m jsn.Marshaler, ptr *Dot) (err error) {
-	slot := Dot_Slot{ptr}
-	return slot.Marshal(m)
+	slot := Dot_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type Dot_Slice []Dot

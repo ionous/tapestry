@@ -723,9 +723,9 @@ const Brancher_Type = "brancher"
 
 var Brancher_Optional_Marshal = Brancher_Marshal
 
-type Brancher_Slot struct{ Value *Brancher }
+type Brancher_Slot struct{ Value Brancher }
 
-func (at Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -736,16 +736,21 @@ func (at Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at Brancher_Slot) GetType() string              { return Brancher_Type }
-func (at Brancher_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Brancher_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Brancher)
+func (at *Brancher_Slot) GetType() string              { return Brancher_Type }
+func (at *Brancher_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *Brancher_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(Brancher)
 	return
 }
 
 func Brancher_Marshal(m jsn.Marshaler, ptr *Brancher) (err error) {
-	slot := Brancher_Slot{ptr}
-	return slot.Marshal(m)
+	slot := Brancher_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type Brancher_Slice []Brancher
@@ -7049,9 +7054,9 @@ const Trigger_Type = "trigger"
 
 var Trigger_Optional_Marshal = Trigger_Marshal
 
-type Trigger_Slot struct{ Value *Trigger }
+type Trigger_Slot struct{ Value Trigger }
 
-func (at Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -7062,16 +7067,21 @@ func (at Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at Trigger_Slot) GetType() string              { return Trigger_Type }
-func (at Trigger_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Trigger_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Trigger)
+func (at *Trigger_Slot) GetType() string              { return Trigger_Type }
+func (at *Trigger_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *Trigger_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(Trigger)
 	return
 }
 
 func Trigger_Marshal(m jsn.Marshaler, ptr *Trigger) (err error) {
-	slot := Trigger_Slot{ptr}
-	return slot.Marshal(m)
+	slot := Trigger_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type Trigger_Slice []Trigger

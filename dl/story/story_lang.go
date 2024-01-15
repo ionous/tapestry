@@ -2795,9 +2795,9 @@ const FieldDefinition_Type = "field_definition"
 
 var FieldDefinition_Optional_Marshal = FieldDefinition_Marshal
 
-type FieldDefinition_Slot struct{ Value *FieldDefinition }
+type FieldDefinition_Slot struct{ Value FieldDefinition }
 
-func (at FieldDefinition_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *FieldDefinition_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -2808,16 +2808,21 @@ func (at FieldDefinition_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at FieldDefinition_Slot) GetType() string              { return FieldDefinition_Type }
-func (at FieldDefinition_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at FieldDefinition_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(FieldDefinition)
+func (at *FieldDefinition_Slot) GetType() string              { return FieldDefinition_Type }
+func (at *FieldDefinition_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *FieldDefinition_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(FieldDefinition)
 	return
 }
 
 func FieldDefinition_Marshal(m jsn.Marshaler, ptr *FieldDefinition) (err error) {
-	slot := FieldDefinition_Slot{ptr}
-	return slot.Marshal(m)
+	slot := FieldDefinition_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type FieldDefinition_Slice []FieldDefinition
@@ -5777,9 +5782,9 @@ const StoryStatement_Type = "story_statement"
 
 var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
-type StoryStatement_Slot struct{ Value *StoryStatement }
+type StoryStatement_Slot struct{ Value StoryStatement }
 
-func (at StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -5790,16 +5795,21 @@ func (at StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
-func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(StoryStatement)
+func (at *StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
+func (at *StoryStatement_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(StoryStatement)
 	return
 }
 
 func StoryStatement_Marshal(m jsn.Marshaler, ptr *StoryStatement) (err error) {
-	slot := StoryStatement_Slot{ptr}
-	return slot.Marshal(m)
+	slot := StoryStatement_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type StoryStatement_Slice []StoryStatement

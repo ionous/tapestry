@@ -61,7 +61,7 @@ func tryPatternArgs(dec *decode.Decoder, slot string, msg compact.Message) (ret 
 				err = e
 				break
 			} else {
-				ret = append(ret, assign.Arg{Name: p.Label, Value: *val.Value})
+				ret = append(ret, assign.Arg{Name: p.Label, Value: val.Value})
 			}
 		}
 	}

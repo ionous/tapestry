@@ -37,7 +37,7 @@ func (enc *Encoder) Encode(out jsn.Marshalee) (ret any, err error) {
 			// this ignores the slot and encodes the contents
 			// meaning the decoder needs to know what slot to read into.
 			if ptr := src.Field(0); ptr.IsValid() {
-				if w := walk.Walk(ptr.Elem()); w.Next() {
+				if w := walk.Walk(ptr); w.Next() {
 					ret, err = enc.writeFlow(w.Walk())
 				}
 			}

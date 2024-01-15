@@ -14,9 +14,9 @@ const RenderEval_Type = "render_eval"
 
 var RenderEval_Optional_Marshal = RenderEval_Marshal
 
-type RenderEval_Slot struct{ Value *RenderEval }
+type RenderEval_Slot struct{ Value RenderEval }
 
-func (at RenderEval_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *RenderEval_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -27,16 +27,21 @@ func (at RenderEval_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at RenderEval_Slot) GetType() string              { return RenderEval_Type }
-func (at RenderEval_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at RenderEval_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(RenderEval)
+func (at *RenderEval_Slot) GetType() string              { return RenderEval_Type }
+func (at *RenderEval_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *RenderEval_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(RenderEval)
 	return
 }
 
 func RenderEval_Marshal(m jsn.Marshaler, ptr *RenderEval) (err error) {
-	slot := RenderEval_Slot{ptr}
-	return slot.Marshal(m)
+	slot := RenderEval_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type RenderEval_Slice []RenderEval

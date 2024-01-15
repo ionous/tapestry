@@ -3,7 +3,7 @@ var {{Pascal .Name}}_Optional_Marshal = {{Pascal .Name}}_Marshal
 
 type {{Pascal .Name}}_Slot struct { Value *{{Pascal .Name}} }
 
-func (at {{Pascal .Name}}_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *{{Pascal .Name}}_Slot) Marshal(m jsn.Marshaler) (err error) {
   if err = m.MarshalBlock(at); err == nil {
     if a, ok := at.GetSlot(); ok {
       if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -14,15 +14,20 @@ func (at {{Pascal .Name}}_Slot) Marshal(m jsn.Marshaler) (err error) {
   }
   return
 }
-func (at {{Pascal .Name}}_Slot) GetType() string { return {{Pascal .Name}}_Type }
-func (at {{Pascal .Name}}_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at {{Pascal .Name}}_Slot) SetSlot(v interface{}) (okay bool) {
-  (*at.Value), okay = v.({{Pascal .Name}})
+func (at *{{Pascal .Name}}_Slot) GetType() string { return {{Pascal .Name}}_Type }
+func (at *{{Pascal .Name}}_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *{{Pascal .Name}}_Slot) SetSlot(v interface{}) (okay bool) {
+  at.Value, okay = v.({{Pascal .Name}})
   return
 }
 
 func {{Pascal .Name}}_Marshal(m jsn.Marshaler, ptr *{{Pascal .Name}}) (err error) {
-  slot := {{Pascal .Name}}_Slot{ptr}
-  return slot.Marshal(m)
+  slot := {{Pascal .Name}}_Slot{*ptr}
+ 	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else !m.IsEncoding() {
+		*ptr = slot.Value
+	}
+	return
 }
 {{template "repeating.tmpl" (RepeatData .Name false)}}

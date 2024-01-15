@@ -50,60 +50,60 @@ func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignment, err error) {
 	switch a {
 	case affine.None:
-		var v rt.Assignment
-		if e := d.decodeValue(rt.Assignment_Slot{Value: &v}, b); e != nil {
+		var v rt.Assignment_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = v
+			ret = v.Value
 		}
 	case affine.Bool:
-		var v rt.BoolEval
-		if e := d.decodeValue(rt.BoolEval_Slot{Value: &v}, b); e != nil {
+		var v rt.BoolEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromBool{Value: v}
+			ret = &assign.FromBool{Value: v.Value}
 		}
 	case affine.Number:
-		var v rt.NumberEval
-		if e := d.decodeValue(rt.NumberEval_Slot{Value: &v}, b); e != nil {
+		var v rt.NumberEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromNumber{Value: v}
+			ret = &assign.FromNumber{Value: v.Value}
 		}
 	case affine.Text:
-		var v rt.TextEval
-		if e := d.decodeValue(rt.TextEval_Slot{Value: &v}, b); e != nil {
+		var v rt.TextEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromText{Value: v}
+			ret = &assign.FromText{Value: v.Value}
 		}
 	case affine.NumList:
-		var v rt.NumListEval
-		if e := d.decodeValue(rt.NumListEval_Slot{Value: &v}, b); e != nil {
+		var v rt.NumListEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromNumList{Value: v}
+			ret = &assign.FromNumList{Value: v.Value}
 		}
 	case affine.TextList:
-		var v rt.TextListEval
-		if e := d.decodeValue(rt.TextListEval_Slot{Value: &v}, b); e != nil {
+		var v rt.TextListEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromTextList{Value: v}
+			ret = &assign.FromTextList{Value: v.Value}
 		}
 	case affine.Record:
-		var v rt.RecordEval
-		if e := d.decodeValue(rt.RecordEval_Slot{Value: &v}, b); e != nil {
+		var v rt.RecordEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromRecord{Value: v}
+			ret = &assign.FromRecord{Value: v.Value}
 		}
 	case affine.RecordList:
-		var v rt.RecordListEval
-		if e := d.decodeValue(rt.RecordListEval_Slot{Value: &v}, b); e != nil {
+		var v rt.RecordListEval_Slot
+		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromRecordList{Value: v}
+			ret = &assign.FromRecordList{Value: v.Value}
 		}
 	default:
 		err = errutil.New("unhandled affinity", a.String())

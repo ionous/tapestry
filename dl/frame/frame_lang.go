@@ -12,9 +12,9 @@ const Event_Type = "event"
 
 var Event_Optional_Marshal = Event_Marshal
 
-type Event_Slot struct{ Value *Event }
+type Event_Slot struct{ Value Event }
 
-func (at Event_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *Event_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -25,16 +25,21 @@ func (at Event_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at Event_Slot) GetType() string              { return Event_Type }
-func (at Event_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Event_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Event)
+func (at *Event_Slot) GetType() string              { return Event_Type }
+func (at *Event_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *Event_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(Event)
 	return
 }
 
 func Event_Marshal(m jsn.Marshaler, ptr *Event) (err error) {
-	slot := Event_Slot{ptr}
-	return slot.Marshal(m)
+	slot := Event_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type Event_Slice []Event

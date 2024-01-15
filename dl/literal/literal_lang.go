@@ -339,9 +339,9 @@ const LiteralValue_Type = "literal_value"
 
 var LiteralValue_Optional_Marshal = LiteralValue_Marshal
 
-type LiteralValue_Slot struct{ Value *LiteralValue }
+type LiteralValue_Slot struct{ Value LiteralValue }
 
-func (at LiteralValue_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at *LiteralValue_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -352,16 +352,21 @@ func (at LiteralValue_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at LiteralValue_Slot) GetType() string              { return LiteralValue_Type }
-func (at LiteralValue_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at LiteralValue_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(LiteralValue)
+func (at *LiteralValue_Slot) GetType() string              { return LiteralValue_Type }
+func (at *LiteralValue_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
+func (at *LiteralValue_Slot) SetSlot(v interface{}) (okay bool) {
+	at.Value, okay = v.(LiteralValue)
 	return
 }
 
 func LiteralValue_Marshal(m jsn.Marshaler, ptr *LiteralValue) (err error) {
-	slot := LiteralValue_Slot{ptr}
-	return slot.Marshal(m)
+	slot := LiteralValue_Slot{*ptr}
+	if e := slot.Marshal(m); e != nil {
+		err = e
+	} else {
+		*ptr = slot.Value
+	}
+	return
 }
 
 type LiteralValue_Slice []LiteralValue
