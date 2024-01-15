@@ -14,9 +14,10 @@ import (
 // only checks that the process finishes; doesnt check the results.
 func TestImportStory(t *testing.T) {
 	var msg map[string]any
+	var curr story.StoryFile
 	if e := json.Unmarshal(debug.Blob, &msg); e != nil {
 		t.Fatal(e)
-	} else if curr, e := story.Decode(msg); e != nil {
+	} else if e := story.Decode(&curr, msg); e != nil {
 		t.Fatal(e)
 	} else {
 		db := testdb.Create(t.Name())

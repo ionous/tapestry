@@ -12,9 +12,10 @@ import (
 
 func TestDecodeStory(t *testing.T) {
 	var m map[string]any
+	var file story.StoryFile
 	if e := json.Unmarshal([]byte(debug.FactorialJs), &m); e != nil {
 		t.Fatal(e)
-	} else if file, e := story.Decode(m); e != nil {
+	} else if e := story.Decode(&file, m); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, file); len(diff) != 0 {
 		pretty.Print(file)

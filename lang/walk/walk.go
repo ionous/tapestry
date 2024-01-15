@@ -3,6 +3,8 @@ package walk
 import (
 	"log"
 	r "reflect"
+	"strings"
+	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/support/tag"
 )
@@ -82,7 +84,7 @@ func (w *Walker) Field() Field {
 	return Field{field.Name, field.Type, tag}
 }
 
-// returns the "focus" of the current iteration.
+// returns the value of the current focus.
 // falls back to the container itself if Next() has yet to be called.
 func (w *Walker) Value() (ret r.Value) {
 	if !w.focus.IsValid() {
@@ -98,17 +100,29 @@ func (w *Walker) Value() (ret r.Value) {
 	return
 }
 
-// returns the "focus" of the current iteration.
+// returns the generated type name of the current focus.
+// falls back to the container itself if Next() has yet to be called.
+// panics if the focused type doesnt support type names
+func (w *Walker) TypeName() (ret string) {
+	return typeName(w.getTarget().Type())
+}
+
+// returns the type of the current focus.
 // falls back to the container itself if Next() has yet to be called.
 // ( needed for swaps which can technically point to any type )
 func (w *Walker) SpecType() Type {
+	which := w.getTarget()
+	return typeOf(which.Type())
+}
+
+func (w *Walker) getTarget() r.Value {
 	var which r.Value
 	if !w.focus.IsValid() {
 		which = w.curr
 	} else {
 		which = w.focus
 	}
-	return typeOf(which.Type())
+	return which
 }
 
 // returns a new walker for the currently focused element;
@@ -166,21 +180,6 @@ func (w *Walker) Next() (okay bool) {
 	return
 }
 
-//
-func typeOf(curr r.Type) (ret Type) {
-	switch curr.Kind() {
-	default:
-		ret = Value // roughly
-	case r.Interface:
-		ret = Slot
-	case r.Struct:
-		ret = structType(curr)
-	case r.Slice:
-		ret = sliceType(curr.Elem())
-	}
-	return
-}
-
 func (w *Walker) step(get func(int) r.Value) (okay bool) {
 	if at := w.index; at < w.Len() {
 		nextField := get(at)
@@ -201,4 +200,24 @@ func (w *Walker) SetValue(val any) (okay bool) {
 		out.Set(val.Convert(t))
 	}
 	return
+}
+
+// transform PascalCase to under_score
+// maybe store this in the slot registry instead
+// *or* add it t the the if labels slot=...
+// ( which would be redundant but useful )
+func typeName(slot r.Type) string {
+	var out strings.Builder
+	var prev bool
+	str := slot.Name()
+	for _, r := range str {
+		l := unicode.ToLower(r)
+		cap := l != r
+		if !prev && cap && out.Len() > 0 {
+			out.WriteRune('_')
+		}
+		out.WriteRune(l)
+		prev = cap
+	}
+	return out.String()
 }

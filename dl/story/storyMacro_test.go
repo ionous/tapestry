@@ -42,10 +42,11 @@ func TestMacros(t *testing.T) {
 	cat := weave.NewCatalogWithWarnings(db, run, mdl.LogWarning)
 	dt := testweave.NewWeaverCatalog(name, db, cat, true)
 	//
+	var curr story.StoryFile
 	var msg map[string]any
 	if e := json.Unmarshal(storyMacroData, &msg); e != nil {
 		t.Fatal(e)
-	} else if curr, e := story.Decode(msg); e != nil {
+	} else if e := story.Decode(&curr, msg); e != nil {
 		t.Fatal(e)
 	} else if e := cat.DomainStart("tapestry", nil); e != nil {
 		t.Fatal(e)

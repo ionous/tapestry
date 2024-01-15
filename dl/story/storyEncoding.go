@@ -17,9 +17,8 @@ func Encode(file *StoryFile) (ret any, err error) {
 		Encode(file)
 }
 
-func Decode(msg map[string]any) (ret StoryFile, err error) {
-	err = DecodeMessage(&ret, msg)
-	return
+func Decode(out *StoryFile, msg map[string]any) error {
+	return DecodeMessage(out, msg)
 }
 
 // Create a story dl from native maps and slices.

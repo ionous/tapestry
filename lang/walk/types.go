@@ -14,6 +14,20 @@ const (
 	Value // a field of a flow
 )
 
+func typeOf(curr r.Type) (ret Type) {
+	switch curr.Kind() {
+	default:
+		ret = Value // roughly
+	case r.Interface:
+		ret = Slot
+	case r.Struct:
+		ret = structType(curr)
+	case r.Slice:
+		ret = sliceType(curr.Elem())
+	}
+	return
+}
+
 // determine if the field is
 // a flow, a slot, a swap, a str, a num, generic value;
 // or a slice of one of those things.

@@ -23,15 +23,20 @@ type StoryStatement interface {
 var currentCatalog *weave.Catalog
 
 func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
-	currentCatalog = cat
 	cat.SetSource(path)
 	return WeaveStatements(cat, tgt.StoryStatements)
 }
 
 func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
+	currentCatalog = cat
 	slice := r.ValueOf(all)
+	evts := walk.Events{
+		BeforeSlot: beforeSlot,
+		AfterSlot:  afterSlot,
+	}
 	for i, el := range all {
-		if e := rewriteSlot(cat, walk.Walk(slice.Index(i))); e != nil {
+		w := walk.Walk(slice.Index(i))
+		if e := walk.VisitSlot(w, evts); e != nil {
 			err = e
 			break
 		} else if e := el.Weave(cat); e != nil {
@@ -58,11 +63,9 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 // given a slot, replace its command using PreImport or PostImport
 // and, walk the contents of its (replaced) for additional pre or post imports.
 // a command usually would only implement either Pre or Post ( or neither. )
-func rewriteSlot(cat *weave.Catalog, slot walk.Walker) (err error) {
-	if flow, ok := unpackSlot(slot); ok {
-		// kind of weird: the value of the slot is a pointer;
-		// the value of the flow is a struct; we need the pointer.
-		i := slot.Value().Interface()
+func beforeSlot(slot walk.Walker) (_ walk.Events, err error) {
+	cat := currentCatalog
+	if i := unpackSlot(slot); i != nil {
 		updateActivityDepth(cat, i, 1)
 		//
 		if tgt, ok := i.(PreImport); ok {
@@ -73,10 +76,14 @@ func rewriteSlot(cat *weave.Catalog, slot walk.Walker) (err error) {
 				slot.Value().Set(r.ValueOf(rep))
 			}
 		}
-		//
-		if e := rewriteFlow(cat, flow); e != nil {
-			err = e
-		} else if tgt, ok := i.(PostImport); ok {
+	}
+	return
+}
+
+func afterSlot(slot walk.Walker) (_ walk.Events, err error) {
+	cat := currentCatalog
+	if i := unpackSlot(slot); i != nil {
+		if tgt, ok := i.(PostImport); ok {
 			if rep, e := tgt.PostImport(cat); e != nil {
 				err = errutil.New(e, "failed to create post replacement")
 			} else if rep != nil {
@@ -100,36 +107,12 @@ func updateActivityDepth(cat *weave.Catalog, i any, inc int) {
 	// }
 }
 
-// a flow cant be swapped out the way a slot can,
-// however a slot in a glow might be able to change.
-func rewriteFlow(cat *weave.Catalog, flow walk.Walker) (err error) {
-	for flow.Next() {
-		switch f := flow.Field(); f.SpecType() {
-		case walk.Slot:
-			if !f.Repeats() {
-				err = rewriteSlot(cat, flow.Walk())
-			} else {
-				for it := flow.Walk(); it.Next(); {
-					err = rewriteSlot(cat, it.Walk())
-				}
-			}
-		case walk.Flow:
-			if !f.Repeats() {
-				err = rewriteFlow(cat, flow.Walk())
-			} else {
-				for it := flow.Walk(); it.Next(); {
-					err = rewriteFlow(cat, it.Walk())
-				}
-			}
-		}
-	}
-	return
-}
+// kind of weird: the value of the slot is a pointer;
+// the value of the flow is a struct; we need the pointer.
 
-// given a slot, return its flow ( false if the slot was empty )
-func unpackSlot(slot walk.Walker) (ret walk.Walker, okay bool) {
-	if slot.Next() { // next moves the focus to the command if any
-		ret, okay = slot.Walk(), true // walk returns the command as a container
+func unpackSlot(slot walk.Walker) (ret interface{}) {
+	if v := slot.Value(); v.IsValid() {
+		ret = v.Interface()
 	}
 	return
 }
