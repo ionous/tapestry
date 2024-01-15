@@ -10,11 +10,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // verify that core variables are written and read as @ strings
-// fix: these should have path syntax ( re: expressions )
-// ex. @pawn.trait
 func TestEncodingDecoding(t *testing.T) {
 	testPairs(t, []testPair{{
 		&assign.ObjectRef{
@@ -23,6 +22,7 @@ func TestEncodingDecoding(t *testing.T) {
 		},
 		`{"Object:field:":["@noun","@trait"]}`,
 	}, {
+		// fix:  should have path syntax ( re: expressions )  ex. @pawn.trait
 		core.Variable("pawn", "trait"),
 		`{"Variable:dot:":["pawn",[{"AtField:":"trait"}]]}`,
 	}, {
@@ -35,6 +35,12 @@ func TestEncodingDecoding(t *testing.T) {
 		// unary
 		&core.Softline{},
 		`{"Wbr":true}`,
+	}, {
+		// verify that things that arent variables dont get encoded as variables
+		&core.Join{Parts: []rt.TextEval{
+			core.T("one"), core.T("two"), core.T("three"),
+		}},
+		`{"Join parts:":["one","two","three"]}`,
 	},
 	})
 }

@@ -47,30 +47,33 @@ type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (any, e
 
 // given a desired output structure, read the passed plain data
 func (dec *Decoder) Decode(out jsn.Marshalee, plainData any) (err error) {
-	tgt := r.ValueOf(out).Elem()       // the element under the interface
-	switch t := tgt.Type(); t.Kind() { // ugh
-	default:
-		err = unknownType(t)
-	case r.Struct:
-		if slot, ok := out.(jsn.SlotBlock); ok {
-			err = dec.decodeSlot(tgt, plainData, slot.GetType())
-		} else if msg, e := parseMessage(plainData); e != nil {
-			err = e
-		} else {
-			err = dec.readMsg(msg, walk.Walk(tgt))
-		}
-	// slice is a []slot or []flow
-	case r.Slice:
-		w := walk.Walk(tgt)
-		elType := tgt.Type().Elem()
-		switch elType.Kind() {
+	if slot, ok := out.(jsn.SlotBlock); ok {
+		tgt := r.ValueOf(out).Elem() // the zeroth field is *slot
+		err = dec.decodeSlot(tgt.Field(0), plainData, slot.GetType())
+	} else {
+		tgt := r.ValueOf(out).Elem()       // the element under the interface
+		switch t := tgt.Type(); t.Kind() { // ugh
 		default:
-			err = unknownType(t) // print the original type
-		case r.Interface:
-			typeName := out.(jsn.SliceBlock).GetType()
-			err = dec.repeatSlot(w, plainData, typeName)
+			err = unknownType(t)
 		case r.Struct:
-			err = dec.repeatFlow(w, plainData)
+			if msg, e := parseMessage(plainData); e != nil {
+				err = e
+			} else {
+				err = dec.readMsg(msg, walk.Walk(tgt))
+			}
+		// slice is a []slot or []flow
+		case r.Slice:
+			w := walk.Walk(tgt)
+			elType := tgt.Type().Elem()
+			switch elType.Kind() {
+			default:
+				err = unknownType(t) // print the original type
+			case r.Interface:
+				typeName := out.(jsn.SliceBlock).GetType()
+				err = dec.repeatSlot(w, plainData, typeName)
+			case r.Struct:
+				err = dec.repeatFlow(w, plainData)
+			}
 		}
 	}
 	return

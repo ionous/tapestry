@@ -3,7 +3,6 @@ package literal
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 
@@ -22,23 +21,18 @@ func CustomEncoder(enc *encode.Encoder, op jsn.Marshalee) (ret any, err error) {
 	switch out := op.(type) {
 	default:
 		err = compact.Unhandled
-
 	case *BoolValue:
 		ret = out.Value
-
 	case *NumValue:
 		ret = out.Value
-
 	case *TextValue:
 		ret = out.Value
-
 	case *NumValues:
 		if len(out.Values) == 1 {
 			ret = out.Values[0]
 		} else {
 			ret = anySlice(out.Values)
 		}
-
 	case *TextValues:
 		if len(out.Values) == 1 {
 			ret = out.Values[0]
@@ -92,18 +86,18 @@ func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
 		// note: trying to read a record literal directly into a record eval slot wouldnt work well
 		// for one, it would have to know what type the record is.
 		// RecordValue ( "record:fields:<kind>, <field values>" ) is the thing for now.
-		err = chart.Unhandled("CustomSlot")
+		err = compact.Unhandled
 
 	case rt.BoolEval_Type:
 		if v, ok := val.(bool); !ok {
-			err = chart.Unhandled(typeName)
+			err = compact.Unhandled
 		} else {
 			ret = &BoolValue{Value: v, Kind: kind}
 		}
 
 	case rt.NumberEval_Type:
 		if v, ok := val.(float64); !ok {
-			err = chart.Unhandled(typeName)
+			err = compact.Unhandled
 		} else {
 			ret = &NumValue{Value: v, Kind: kind}
 		}
@@ -114,40 +108,40 @@ func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
 			ret = &TextValue{Value: v, Kind: kind}
 		case []any:
 			if lines, ok := compact.SliceLines(v); !ok {
-				err = chart.Unhandled(typeName)
+				err = compact.Unhandled
 			} else {
 				ret = &TextValue{Value: lines, Kind: kind}
 			}
 		default:
-			err = chart.Unhandled(typeName)
+			err = compact.Unhandled
 		}
 
 	case rt.NumListEval_Type:
 		switch v := val.(type) {
 		case []any:
 			if vs, ok := compact.SliceFloats(v); !ok {
-				err = chart.Unhandled(typeName)
+				err = compact.Unhandled
 			} else {
 				ret = &NumValues{Values: vs, Kind: kind}
 			}
 		case float64:
 			ret = &NumValues{Values: []float64{v}, Kind: kind}
 		default:
-			err = chart.Unhandled(typeName)
+			err = compact.Unhandled
 		}
 
 	case rt.TextListEval_Type:
 		switch v := val.(type) {
 		case []any:
 			if vs, ok := compact.SliceStrings(v); !ok {
-				err = chart.Unhandled(typeName)
+				err = compact.Unhandled
 			} else {
 				ret = &TextValues{Values: vs, Kind: kind}
 			}
 		case string:
 			ret = &TextValues{Values: []string{v}, Kind: kind}
 		default:
-			err = chart.Unhandled(typeName)
+			err = compact.Unhandled
 		}
 	}
 	return
