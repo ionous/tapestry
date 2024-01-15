@@ -20,14 +20,13 @@ func (dec *Decoder) repeatFlow(out walk.Walker, val any) (err error) {
 	return
 }
 
-func (dec *Decoder) repeatSlot(slotName string, out walk.Walker, val any) (err error) {
+func (dec *Decoder) repeatSlot(out walk.Walker, val any, slotName string) (err error) {
 	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
-		err = dec.repeatSlot(slotName, out, []any{val})
+		err = dec.repeatSlot(out, []any{val}, slotName)
 	} else {
-		// slot := walk.SlotName(out.Value().Type().Elem())
 		out.Resize(len(els))
 		for i := 0; out.Next(); i++ {
-			if e := dec.decodeSlot(slotName, out.Value(), els[i]); e != nil {
+			if e := dec.decodeSlot(out.Value(), els[i], slotName); e != nil {
 				err = e
 				break
 			}

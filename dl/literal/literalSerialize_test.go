@@ -55,7 +55,8 @@ func testPairs(t *testing.T, pairs []testPair) {
 			t.Logf("%d mismatched encode %#v", i, have)
 			t.Fail()
 		} else {
-			aff := literal.GetAffinity(p.v) // doesnt match the encoding api, but the spirit is the same.
+			// doesnt match the encoding api, but the spirit is the same.
+			aff := literal.GetAffinity(p.v)
 			if got, e := literal.ReadLiteral(aff, "", p.res); e != nil {
 				t.Log(i, "couldn't decode because", e)
 				t.Fail()

@@ -30,10 +30,9 @@ func (enc *Encoder) Encode(out jsn.Marshalee) (ret any, err error) {
 	default:
 		err = unknownType(t)
 	case r.Struct:
-		switch src.NumField() {
-		case 0:
-			err = unknownType(t)
-		case 1:
+		if _, ok := out.(jsn.SlotBlock); !ok {
+			ret, err = enc.writeFlow(walk.Walk(src))
+		} else {
 			// slots are structs containing { Value *slot }
 			// this ignores the slot and encodes the contents
 			// meaning the decoder needs to know what slot to read into.
@@ -42,8 +41,6 @@ func (enc *Encoder) Encode(out jsn.Marshalee) (ret any, err error) {
 					ret, err = enc.writeFlow(w.Walk())
 				}
 			}
-		default: // flow is struct > 1 field ( Markup + something )
-			ret, err = enc.writeFlow(walk.Walk(src))
 		}
 	// slice is a []slot or []flow
 	case r.Slice:

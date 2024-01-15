@@ -39,30 +39,25 @@ func (dec *Decoder) Patterns(p PatternDecoder) *Decoder {
 // create an arbitrary command from arbitrary data
 // ex. boolean literals are stored as actual bool values.
 // fix: return should be composer
-type CustomDecoder func(dec *Decoder, slot string, body any) (any, error)
+type CustomDecoder func(dec *Decoder, slot string, plainData any) (any, error)
 
 // handle pattern parsing.
 // fix: return should be composer or marshalee
 type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (any, error)
 
-func (dec *Decoder) Decode(out jsn.Marshalee, from any) (err error) {
-	tgt := r.ValueOf(out).Elem()
+// given a desired output structure, read the passed plain data
+func (dec *Decoder) Decode(out jsn.Marshalee, plainData any) (err error) {
+	tgt := r.ValueOf(out).Elem()       // the element under the interface
 	switch t := tgt.Type(); t.Kind() { // ugh
 	default:
 		err = unknownType(t)
 	case r.Struct:
-		switch tgt.NumField() {
-		case 0:
-			err = unknownType(t)
-		case 1: // slots are structs containing { Value *slot }
-			typeName := out.(jsn.SlotBlock).GetType()
-			err = dec.decodeSlot(typeName, tgt, from)
-		default: // flow is struct > 1 field ( Markup + something )
-			if msg, e := parseMessage(from); e != nil {
-				err = e
-			} else {
-				err = dec.readMsg(msg, walk.Walk(tgt))
-			}
+		if slot, ok := out.(jsn.SlotBlock); ok {
+			err = dec.decodeSlot(tgt, plainData, slot.GetType())
+		} else if msg, e := parseMessage(plainData); e != nil {
+			err = e
+		} else {
+			err = dec.readMsg(msg, walk.Walk(tgt))
 		}
 	// slice is a []slot or []flow
 	case r.Slice:
@@ -73,16 +68,12 @@ func (dec *Decoder) Decode(out jsn.Marshalee, from any) (err error) {
 			err = unknownType(t) // print the original type
 		case r.Interface:
 			typeName := out.(jsn.SliceBlock).GetType()
-			err = dec.repeatSlot(typeName, w, from)
+			err = dec.repeatSlot(w, plainData, typeName)
 		case r.Struct:
-			err = dec.repeatFlow(w, from)
+			err = dec.repeatFlow(w, plainData)
 		}
 	}
 	return
-}
-
-func unknownType(t r.Type) error {
-	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
 }
 
 // assumes that it is at the start of a flow container
@@ -147,11 +138,9 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 
 				case walk.Slot:
 					if f.Repeats() {
-						slotName := walk.SlotName(out.Type().Elem())
-						err = dec.repeatSlot(slotName, it.Walk(), arg)
+						err = dec.repeatSlot(it.Walk(), arg, nameOf(out.Type().Elem()))
 					} else {
-						slotName := walk.SlotName(out.Type())
-						err = dec.decodeSlot(slotName, out, arg)
+						err = dec.decodeSlot(out, arg, nameOf(out.Type()))
 					}
 				}
 			}
