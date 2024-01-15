@@ -40,19 +40,22 @@ func Variable(name string, path ...any) *assign.VariableRef {
 	}
 }
 
-func MakeDot(path ...any) []assign.Dot {
-	out := make([]assign.Dot, len(path))
-	for i, p := range path {
-		switch el := p.(type) {
-		case string:
-			out[i] = &assign.AtField{Field: literal.T(el)}
-		case int:
-			out[i] = &assign.AtIndex{Index: literal.I(el)}
-		case assign.Dot:
-			out[i] = el
-		default:
-			panic(errutil.Fmt("expected an int or string element; got %T", el))
+func MakeDot(path ...any) (ret []assign.Dot) {
+	if cnt := len(path); cnt > 0 {
+		out := make([]assign.Dot, len(path))
+		for i, p := range path {
+			switch el := p.(type) {
+			case string:
+				out[i] = &assign.AtField{Field: literal.T(el)}
+			case int:
+				out[i] = &assign.AtIndex{Index: literal.I(el)}
+			case assign.Dot:
+				out[i] = el
+			default:
+				panic(errutil.Fmt("expected an int or string element; got %T", el))
+			}
 		}
+		ret = out
 	}
-	return out
+	return
 }
