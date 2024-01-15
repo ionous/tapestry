@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
@@ -65,14 +64,13 @@ func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 		err = errutil.New("unknown file type", sf.path)
 	}
 	if err == nil {
-		if file, e := story.Decode(msg); e != nil {
-			err = e
-		} else if data, e := dout.Encode(&file); e != nil {
+		// verify the story is valid by loading it.
+		if _, e := story.Decode(msg); e != nil {
 			err = e
 		} else {
 			w.Header().Set("Content-Type", "application/json")
 			js := json.NewEncoder(w)
-			err = js.Encode(data)
+			err = js.Encode(msg)
 		}
 	}
 	return

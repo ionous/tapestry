@@ -25,7 +25,7 @@ func CustomEncoder(enc *encode.Encoder, op jsn.Marshalee) (ret any, err error) {
 func encodePattern(enc *encode.Encoder, op *CallPattern) (ret any, err error) {
 	var pb encode.FlowBuilder
 	// auto generated command names are underscore separated
-	// writeBreak in jsn/cout turns those names into pascal case for the story commands
+	// writeBreak those names into pascal case for the story commands
 	// TestEncodePattern checks that common inputs work okay.
 	pb.WriteLede(strings.TrimSpace(op.PatternName))
 	for _, arg := range op.Arguments {

@@ -15,14 +15,14 @@ import (
 )
 
 // where topBlock is the expected topblock type in the file.... ex. story_file
-func Decode(dst r.Value, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
+func Decode(dst jsn.Marshalee, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
 	var bff File
 	if e := json.Unmarshal(msg, &bff); e != nil {
 		err = e
 	} else if top, ok := bff.FindFirst(topBlock); !ok {
 		err = errutil.New("couldnt find story file in block file")
 	} else {
-		err = DecodeBlock(dst, reg, top)
+		err = DecodeBlock(r.ValueOf(dst), reg, top)
 	}
 	return
 }

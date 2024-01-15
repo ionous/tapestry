@@ -6,8 +6,16 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
+
+func Encode(file *StoryFile) (ret any, err error) {
+	var enc encode.Encoder
+	return enc.
+		Customize(core.CustomEncoder).
+		Encode(file)
+}
 
 func Decode(msg map[string]any) (ret StoryFile, err error) {
 	err = DecodeMessage(&ret, msg)
