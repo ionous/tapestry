@@ -12,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
-	"github.com/kr/pretty"
 )
 
 func writeSpec(path string, src *spec.TypeSpec) (err error) {
