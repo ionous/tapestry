@@ -24,13 +24,13 @@ func (enc *Encoder) Customize(c CustomEncoder) *Encoder {
 type CustomEncoder func(enc *Encoder, cmd jsn.Marshalee) (any, error)
 
 // turn the passed tapestry command into plain values.
-func (enc *Encoder) Encode(out jsn.Marshalee) (ret any, err error) {
-	src := r.ValueOf(out).Elem()
+func (enc *Encoder) Encode(m jsn.Marshalee) (ret any, err error) {
+	src := r.ValueOf(m).Elem()
 	switch t := src.Type(); t.Kind() { // ugh
 	default:
 		err = unknownType(t)
 	case r.Struct:
-		if _, ok := out.(jsn.SlotBlock); !ok {
+		if _, ok := m.(jsn.SlotBlock); !ok {
 			ret, err = enc.writeFlow(walk.Walk(src))
 		} else {
 			// slots are structs containing { Value *slot }

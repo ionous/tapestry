@@ -26,8 +26,8 @@ package qna
 // 	run := NewRuntime(db, []map[uint64]interface{}{
 // 		rt.Signatures,
 // 		core.Signatures, {
-// 			cin.Hash("SayMe:"):       (*debug.SayMe)(nil),
-// 			cin.Hash("MatchNumber:"): (*debug.MatchNumber)(nil),
+// 			decode.Hash("SayMe:"):       (*debug.SayMe)(nil),
+// 			decode.Hash("MatchNumber:"): (*debug.MatchNumber)(nil),
 // 		}})
 // 	for i, expect := range []string{"One!", "Two!", "Three!", "Not between 1 and 3."} {
 // 		var buf bytes.Buffer

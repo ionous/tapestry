@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"io"
 	"os"
+	r "reflect"
 	"strings"
 
-	r "reflect"
-
 	"github.com/ionous/errutil"
-	"github.com/ionous/tell"
 	"github.com/ionous/tell/encode"
 )
 
@@ -26,10 +24,7 @@ func SaveTell(outPath string, data any) (err error) {
 
 // serialize to the passed open file
 func WriteTell(w io.Writer, data any) (err error) {
-	enc := tell.
-		NewEncoder(w).
-		SetSequencer(encode.MakeSequence, encode.NoComments).
-		SetMapper(makeMapping, makeComments)
+	enc := TellEncoder(w)
 	return enc.Encode(data)
 }
 

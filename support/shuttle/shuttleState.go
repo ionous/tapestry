@@ -10,10 +10,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -87,10 +88,11 @@ func (c *Shuttle) Post(w io.Writer, endpoint string, msg json.RawMessage) (err e
 }
 
 func writeFrames(w io.Writer, frames frame.Frame_Slice) (err error) {
-	if have, e := cout.Marshal(&frames, nil); e != nil {
+	var enc encode.Encoder
+	if d, e := enc.Encode(&frames); e != nil {
 		err = e
 	} else {
-		_, err = w.Write([]byte(have))
+		err = files.JsonEncoder(w, files.RawJson).Encode(d)
 	}
 	return
 }

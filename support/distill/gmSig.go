@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
 )
 
 type Sig struct {
@@ -56,7 +55,7 @@ func makeSig(t *spec.TypeSpec, sig string) (ret []Sig) {
 	// we already have the type, and we're simply deserializing the fields into that type.
 	// ( still it's nice to see them )
 	if len(t.Slots) == 0 {
-		h := cin.Hash(sig, "")
+		h := Hash(sig, "")
 		ret = append(ret, Sig{
 			Type:     t.Name,
 			Sig:      h.String,
@@ -65,7 +64,7 @@ func makeSig(t *spec.TypeSpec, sig string) (ret []Sig) {
 		})
 	}
 	for _, slotType := range t.Slots {
-		h := cin.Hash(sig, slotType)
+		h := Hash(sig, slotType)
 		ret = append(ret, Sig{
 			Type: t.Name,
 			Slot: slotType,

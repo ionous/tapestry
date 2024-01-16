@@ -9,6 +9,7 @@ import (
 )
 
 // write a .if or .tell story file
+// determines the type from the passed path.
 func FormattedSave(outPath string, data any, pretty bool) (err error) {
 	switch ext := Ext(outPath); {
 	case ext.Json():
@@ -16,7 +17,7 @@ func FormattedSave(outPath string, data any, pretty bool) (err error) {
 	case ext.Tell():
 		err = SaveTell(outPath, data)
 	default:
-		err = errutil.New("unknown format")
+		err = errutil.New("unknown supported format", ext)
 	}
 	return
 }
@@ -25,11 +26,11 @@ func FormattedSave(outPath string, data any, pretty bool) (err error) {
 func FormattedWrite(w io.Writer, data any, ext Extension, pretty bool) (err error) {
 	switch {
 	case ext.Json():
-		err = WriteJson(w, data, pretty)
+		err = JsonEncoder(w, MakeJsonFlags(pretty, false)).Encode(data)
 	case ext.Tell():
 		err = WriteTell(w, data)
 	default:
-		err = errutil.New("unknown format")
+		err = errutil.New("unknown supported format", ext)
 	}
 	return
 }
@@ -40,22 +41,8 @@ func SaveJson(outPath string, data any, pretty bool) (err error) {
 		err = e
 	} else {
 		defer fp.Close()
-		err = WriteJson(fp, data, pretty)
+		err = JsonEncoder(fp, MakeJsonFlags(pretty, false)).Encode(data)
 	}
-	return
-}
-
-// serialize to the passed open file
-func WriteJson(w io.Writer, data any, pretty bool) (err error) {
-	if !pretty {
-		w = &noNewLine{out: w}
-	}
-	js := json.NewEncoder(w)
-	js.SetEscapeHTML(false)
-	if pretty {
-		js.SetIndent("", "  ")
-	}
-	err = js.Encode(data)
 	return
 }
 

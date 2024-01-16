@@ -17,7 +17,7 @@ func TestEncodeStory(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		var b strings.Builder
-		if e := files.WriteJson(&b, n, false); e != nil {
+		if e := files.JsonEncoder(&b, files.RawJson).Encode(n); e != nil {
 			t.Fatal(e)
 		} else if str := b.String(); str != debug.FactorialJs {
 			t.Fatal(str)
