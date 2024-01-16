@@ -65,7 +65,8 @@ func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 	}
 	if err == nil {
 		// verify the story is valid by loading it.
-		if _, e := story.Decode(msg); e != nil {
+		var file story.StoryFile
+		if e := story.Decode(&file, msg); e != nil {
 			err = e
 		} else {
 			w.Header().Set("Content-Type", "application/json")

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
-	"strings"
 	"unicode"
 
 	r "reflect"
@@ -97,31 +96,31 @@ func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 	} else {
 		// tbd: would it make more sense to send around "Comment" structs?
 		if str := val.(string); len(str) > 0 {
-			lines := cleanComment(str)
-			m["--"] = packComment(lines)
+			m["--"] = readComment(str)
 		}
 	}
 	return m
 }
 
-func packComment(lines []string) (ret any) {
-	if len(lines) == 1 {
-		ret = lines[0]
+// split into separate lines and chop the leading hashes.
+// the returned data is either a string, or a plain data slice of strings
+// ( ie. any[]{"example"} )
+func readComment(str string) (ret any) {
+	var last int
+	var out []any
+	for i, ch := range str {
+		if ch == '\n' {
+			add := str[last+2 : i]
+			out = append(out, add)
+			last = i + 1 // skip the newline
+		}
+	}
+	if last == 0 {
+		ret = str[last+2:]
 	} else {
-		ret = lines
+		add := str[last+2:]
+		out = append(out, add)
+		ret = out
 	}
 	return
-}
-
-// split into separate lines, chop the leading hashes, and avoid leading newlines
-// ( that last gets used to indicate a not "inline" comment )
-func cleanComment(str string) []string {
-	lines := strings.Split(str, "\n")
-	if first := lines[0]; len(first) == 0 {
-		lines = lines[1:]
-	}
-	for i, el := range lines {
-		lines[i] = el[2:]
-	}
-	return lines
 }

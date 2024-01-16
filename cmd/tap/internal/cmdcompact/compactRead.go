@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
@@ -15,8 +15,10 @@ import (
 func readSpec(fsys fs.FS, path string, out *spec.TypeSpec) (err error) {
 	if msg, e := files.FormattedRead(fsys, path); e != nil {
 		err = e
-	} else if e := cin.Decode(out, msg, cin.Signatures(story.AllSignatures)); e != nil {
-		err = e
+	} else {
+		var dec decode.Decoder
+		dec.Signatures(spec.Signatures)
+		err = dec.Decode(out, msg)
 	}
 	return
 }
@@ -29,7 +31,7 @@ func readStory(fsys fs.FS, path string, out *story.StoryFile) (err error) {
 	if msg, e := files.FormattedRead(fsys, path); e != nil {
 		err = e
 	} else {
-		err = story.DecodeMessage(out, msg)
+		err = story.Decode(out, msg)
 	}
 	return
 }

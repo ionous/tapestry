@@ -126,9 +126,10 @@ func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 		err = e
 	} else {
 		var msg map[string]any
+		var file story.StoryFile
 		if e := json.Unmarshal(b, &msg); e != nil {
 			err = e
-		} else if file, e := story.Decode(msg); e != nil {
+		} else if e := story.Decode(&file, msg); e != nil {
 			err = e
 		} else if str, e := block.Convert(&d.cfg.types, &file); e != nil {
 			err = e

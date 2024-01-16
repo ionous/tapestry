@@ -106,7 +106,7 @@ func decodeStory(path string) (ret story.StoryFile, err error) {
 		if e := files.ReadTell(path, &msg); e != nil {
 			err = e
 		} else {
-			ret, err = story.Decode(msg)
+			err = story.Decode(&ret, msg)
 		}
 	case files.CompactExt:
 		var msg map[string]any
@@ -115,7 +115,7 @@ func decodeStory(path string) (ret story.StoryFile, err error) {
 		} else if e := json.Unmarshal(b, &msg); e != nil {
 			err = e
 		} else {
-			ret, err = story.Decode(msg)
+			err = story.Decode(&ret, msg)
 		}
 	default:
 		err = errutil.Fmt("unknown file type %q", ext)
