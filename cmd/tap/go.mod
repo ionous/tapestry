@@ -18,7 +18,7 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/ionous/inflect v0.0.0-20211113032332-adfb17b87f92 // indirect
 	github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842 // indirect
-	github.com/ionous/tell v0.7.0 // indirect
+	github.com/ionous/tell v0.8.0 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/labstack/echo/v4 v4.10.2 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
