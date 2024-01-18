@@ -1,26 +1,24 @@
 package block
 
 import (
-	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
 // see also: newSwap
-func (m *bgen) newSlot(term string, blk *blockData) *chart.StateMix {
+func (m *bgen) newSlot(term string, blk *blockData) walk.Callbacks {
 	was := -1
-	return &chart.StateMix{
-		OnBlock: func(block jsn.Block) (err error) {
+	return walk.Callbacks{
+		OnFlow: func(w walk.Walker) (_ error) {
+			isFlow := true // previously, if there were strs implementing slots then
 			was = blk.startInput(term)
-			_, ok := block.(jsn.FlowBlock)
-			m.PushState(m.newInnerBlock(&blk.inputs, block.GetType(), ok))
-			return
+			return m.events.Push(m.newInnerBlock(w, &blk.inputs, w.TypeName(), isFlow))
 		},
-		OnEnd: func() {
+		OnEnd: func(w walk.Walker) error {
 			if was >= 0 {
 				blk.endInput(was)
 				was = -1
 			}
-			m.FinishState(nil)
+			return m.events.Pop()
 		},
 	}
 }

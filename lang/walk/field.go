@@ -18,6 +18,11 @@ func (f *Field) Name() string {
 	return f.name
 }
 
+func (f *Field) FieldName() string {
+	// fix: this should be the primary name
+	return lowerName(f.Name())
+}
+
 // reflected type
 func (f *Field) Type() r.Type {
 	return f.fieldType

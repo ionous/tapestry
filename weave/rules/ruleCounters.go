@@ -35,8 +35,8 @@ func searchCounters(m jsn.Marshalee) (okay bool) {
 // return the first flow of the passed type
 func searchForFlow(src jsn.Marshalee, typeName string) (ret any, err error) {
 	w := walk.Walk(r.ValueOf(src).Elem())
-	evts := walk.Events{
-		OnCommand: func(w walk.Walker) (_ walk.Events, err error) {
+	evts := walk.Callbacks{
+		OnFlow: func(w walk.Walker) (err error) {
 			if typeName == w.TypeName() {
 				ret = w.Value().Interface()
 				err = walk.DoneVisiting
@@ -45,7 +45,7 @@ func searchForFlow(src jsn.Marshalee, typeName string) (ret any, err error) {
 			return
 		},
 	}
-	if e := walk.VisitCommand(w, evts); e != walk.DoneVisiting {
+	if e := walk.VisitFlow(w, evts); e != walk.DoneVisiting {
 		err = e
 	}
 	return

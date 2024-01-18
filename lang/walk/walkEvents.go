@@ -2,13 +2,18 @@ package walk
 
 import "errors"
 
-type Events struct {
-	BeforeSlot, AfterSlot, OnCommand Event
+// fix? this should probably be passing type info and not walker itself
+type Events interface {
+	Flow(Walker) error
+	Slot(Walker) error
+	Repeat(Walker) error
+	// called for every member of a flow
+	Field(Walker) error
+	// called for each value in a flow that exists
+	Value(Walker) error // FIX
+	// called after each flow, slot, or repeat
+	End(Walker) error
 }
-
-// if next is not nil, then next becomes the next handler.
-// ( next is ignored for AfterSlot )
-type Event func(w Walker) (next Events, err error)
 
 // can be used to early exit from visiting
 // caller still has to check for this to disambiguate the returned error
@@ -16,80 +21,81 @@ var DoneVisiting = errors.New("done visiting")
 
 // turn the iterator into an event style traversal
 // ( helps especially with backwards compatibility )
-func VisitCommand(w Walker, evts Events) error {
-	return evts.visitFlow(w)
+func VisitFlow(w Walker, evt Events) error {
+	return visitFlow(w, evt)
 	// fix: if we looked at the outer type instead of the fields
 	// this would be a lot more flexible
 	// currently, requires a block
 }
 
-func VisitSlot(w Walker, evts Events) error {
-	return evts.visitSlot(w)
+func VisitSlot(w Walker, evt Events) error {
+	return visitSlot(w, evt)
 }
 
-func merge(prev, next Events) Events {
-	if next.BeforeSlot == nil {
-		next.BeforeSlot = prev.BeforeSlot
-	}
-	if next.AfterSlot == nil {
-		next.AfterSlot = prev.AfterSlot
-	}
-	if next.OnCommand == nil {
-		next.OnCommand = prev.OnCommand
-	}
-	return next
-}
-
-func (b Events) visitFields(w Walker) (err error) {
+func visitFields(w Walker, evt Events) (err error) {
 	for w.Next() && err == nil {
+		if e := evt.Field(w); e != nil {
+			err = e
+			break
+		}
 		switch f := w.Field(); f.SpecType() {
 		case Flow:
 			if !f.Repeats() {
-				err = b.visitFlow(w.Walk())
+				err = visitFlow(w.Walk(), evt)
+			} else if e := visitFlows(w.Walk(), evt); e != nil {
+				err = e
 			} else {
-				err = b.visitFlows(w.Walk())
+				evt.End(w)
 			}
 		case Slot:
 			if !f.Repeats() {
-				err = b.visitSlot(w.Walk())
+				err = visitSlot(w.Walk(), evt)
+			} else if e := visitSlots(w.Walk(), evt); e != nil {
+				err = e
 			} else {
-				err = b.visitSlots(w.Walk())
+				evt.End(w)
+			}
+		case Value:
+			if !f.Repeats() {
+				err = evt.Value(w)
+			} else if e := visitValues(w.Walk(), evt); e != nil {
+				err = e
+			} else {
+				evt.End(w)
 			}
 		}
 	}
 	return
 }
 
-func (b Events) visitFlow(w Walker) (err error) {
-	if n, e := call(w, b.OnCommand); e != nil {
+func visitFlow(w Walker, evt Events) (err error) {
+	if e := evt.Flow(w); e != nil {
+		err = e
+	} else if e := visitFields(w, evt); e != nil {
 		err = e
 	} else {
-		next := merge(b, n)
-		err = next.visitFields(w)
+		err = evt.End(w)
 	}
 	return
 }
 
-func (b Events) visitSlot(w Walker) (err error) {
-	if n, e := call(w, b.BeforeSlot); e != nil {
+func visitSlot(w Walker, evt Events) (err error) {
+	if e := evt.Slot(w); e != nil {
 		err = e
 	} else {
 		if flow, ok := unpackSlot(w); ok {
-			b = merge(b, n)
-			err = b.visitFlow(flow)
+			err = visitFlow(flow, evt)
 		}
-	}
-	if err == nil {
-		if _, e := call(w, b.AfterSlot); e != nil {
-			err = e
+		if err == nil {
+			err = evt.End(w)
 		}
 	}
 	return
 }
 
-func (b Events) visitFlows(w Walker) (err error) {
+func visitFlows(w Walker, evt Events) (err error) {
 	for w.Next() {
-		if e := b.visitFlow(w.Walk()); e != nil {
+		if e := visitFlow(w.Walk(), evt); e != nil {
 			err = e
 			break
 		}
@@ -97,9 +103,9 @@ func (b Events) visitFlows(w Walker) (err error) {
 	return
 }
 
-func (b Events) visitSlots(w Walker) (err error) {
+func visitSlots(w Walker, evt Events) (err error) {
 	for w.Next() {
-		if e := b.visitSlot(w.Walk()); e != nil {
+		if e := visitSlot(w.Walk(), evt); e != nil {
 			err = e
 			break
 		}
@@ -107,13 +113,11 @@ func (b Events) visitSlots(w Walker) (err error) {
 	return
 }
 
-// returns done
-func call(w Walker, cb Event) (ret Events, err error) {
-	if cb != nil {
-		if n, e := cb(w); e != nil {
+func visitValues(w Walker, evt Events) (err error) {
+	for w.Next() {
+		if e := evt.Value(w); e != nil {
 			err = e
-		} else {
-			ret = n
+			break
 		}
 	}
 	return
@@ -121,8 +125,8 @@ func call(w Walker, cb Event) (ret Events, err error) {
 
 // given a slot, return its flow ( false if the slot was empty )
 func unpackSlot(slot Walker) (ret Walker, okay bool) {
-	if slot.Next() { // next moves the focus to the command if any
-		ret, okay = slot.Walk(), true // walk returns the command as a container
+	if slot.Next() { // next moves the focus to the flow if any
+		ret, okay = slot.Walk(), true // walk returns the flow as a container
 	}
 	return
 }

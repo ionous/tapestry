@@ -2,42 +2,40 @@ package block
 
 import (
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
-	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
 // a repeating member of a flow
 // could be a stack, a series of inputs, or a series of fields
 //
 // fix: doesnt handle repeating swaps there are none that i know of currently
-//      and not quite sure what they'd look like off hand....
-func (m *bgen) newRepeat(term string, blk *blockData) chart.State {
-	return &chart.StateMix{
+//
+//	and not quite sure what they'd look like off hand....
+func (m *bgen) newRepeat(term string, blk *blockData) walk.Callbacks {
+	return walk.Callbacks{
 		// ex. a series of a specific flow
-		OnMap: func(typeName string, flow jsn.FlowBlock) bool {
+		OnFlow: func(w walk.Walker) error {
 			next := m.newSlice(term, &blk.inputs)
-			m.PushState(next)
-			return next.OnMap(typeName, flow)
+			m.events.Replace(next)
+			return next.OnFlow(w)
 		},
 		// possibly a single stack, or a series of inputs
-		OnSlot: func(slotType string, slotBlock jsn.SlotBlock) bool {
-			var next *chart.StateMix
+		OnSlot: func(w walk.Walker) error {
+			var next walk.Callbacks
+			slotType := w.TypeName()
 			if slot := bconst.FindSlotRule(m.types, slotType); slot.Stack {
 				next = m.newStack(term, blk)
 			} else {
 				next = m.newSeries(term, &blk.inputs)
 			}
-			m.PushState(next)
-			return next.OnSlot(slotType, slotBlock)
+			m.events.Replace(next)
+			return next.OnSlot(w)
 		},
 		// a series of fields
-		OnValue: func(n string, pv interface{}) error {
+		OnValue: func(w walk.Walker) error {
 			next := m.newList(term, &blk.fields)
-			m.PushState(next)
-			return next.OnValue(n, pv)
-		},
-		OnCommit: func(interface{}) {
-			m.FinishState(nil)
+			m.events.Replace(next)
+			return next.OnValue(w)
 		},
 	}
 }

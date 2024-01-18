@@ -1,111 +1,127 @@
 package block
 
 import (
+	r "reflect"
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/lang/walk"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // writes a new block into what might be the topLevel array of blocks,
 // or the value of a block or shadow key.
-func NewTopBlock(cm *chart.Machine, types bconst.Types, blk *js.Builder, _zeroPos bool) chart.State {
-	m := bgen{cm, types}
-	open, close := js.Obj[0], js.Obj[1]
+func Build(out *js.Builder, src jsn.Marshalee, types bconst.Types, _zeroPos bool) (err error) {
+	w := walk.Walk(r.ValueOf(src).Elem())
 	zeroPos = _zeroPos
-	return &chart.StateMix{
-		// initially our own block name
-		// later, a member of our flow
-		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
-			blk.R(open)
-			m.PushState(m.newInnerFlow(blk, typeName))
-			return true
+
+	m := bgen{types: types}
+	m.events.Push(walk.Callbacks{
+		OnFlow: func(w walk.Walker) error {
+			typeName := w.TypeName()
+			return m.events.Push(m.newInnerFlow(w, out, typeName))
 		},
-		// listen to the end of the inner block
-		OnCommit: func(interface{}) {
-			blk.R(close)
-			m.FinishState(nil)
+		OnEnd: func(walk.Walker) error {
+			return m.events.Pop()
 		},
+	})
+
+	out.R(js.Obj[0])
+	if e := walk.VisitFlow(w, &m.events); e != nil {
+		err = e
+	} else {
+		out.R(js.Obj[1])
 	}
+	return
 }
 
 type bgen struct {
-	*chart.Machine
-	types bconst.Types
+	events walk.Stack
+	types  bconst.Types
 }
 
 var zeroPos = false
 
 // writes most of the contents of a block, without its surrounding {}
 // ( to support the nested linked lists of blocks used for stacks )
-func (m *bgen) newInnerFlow(body *js.Builder, typeName string) *chart.StateMix {
-	return m.newInnerBlock(body, typeName, true)
+func (m *bgen) newInnerFlow(w walk.Walker, body *js.Builder, typeName string) walk.Callbacks {
+	return m.newInnerBlock(w, body, typeName, true)
 }
 
-func (m *bgen) newInnerBlock(body *js.Builder, typeName string, allowExtraData bool) *chart.StateMix {
-	var markup map[string]any
-	if ptr := m.Markout; ptr != nil {
-		markup, m.Markout = *ptr, nil
+func (m *bgen) newInnerBlock(w walk.Walker, body *js.Builder, typeName string, allowExtraData bool) walk.Callbacks {
+	var term string // set per field, in CAP_UNDERSCORE format
+	blk := blockData{
+		id:             NewId(),
+		typeName:       typeName,
+		allowExtraData: allowExtraData,
+		markup:         w.Markup().Interface().(map[string]any),
+		zeroPos:        zeroPos,
 	}
-	//
-	var term string // set per key
-	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData, markup: markup, zeroPos: zeroPos}
 	zeroPos = false
-	return &chart.StateMix{
+	return walk.Callbacks{
 		// one of every extant member of the flow ( the encoder skips optional elements lacking a value )
 		// this might be a field or input
 		// we might write to next when the block is *followed* by another in a repeat.
 		// therefore we cant close the block in Commit --
 		// but we might close child blocks
-		OnKey: func(_ string, field string) (noerr error) {
-			term = field[1:] // strip off the $
+		OnField: func(w walk.Walker) (_ error) {
+			f := w.Field()
+			term = strings.ToUpper(f.FieldName())
 			return
 		},
 
 		// a member that is a flow.
-		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
+		OnFlow: func(w walk.Walker) error {
 			was := blk.startInput(term)
-			inner := m.newInnerFlow(&blk.inputs, flow.GetType())
-			m.PushState(inner)
-			defaultEnding := inner.OnEnd
-			inner.OnEnd = func() {
-				defaultEnding() // flushes its block, so call first
-				blk.endInput(was)
-			}
-			return true
+			return m.events.Push(
+				walk.OnEnd(m.newInnerFlow(w, &blk.inputs, w.TypeName()),
+					func(w walk.Walker, err error) error {
+						blk.endInput(was)
+						return err
+					}))
 		},
 
 		// a value that fills a slot; this will be an input
-		OnSlot: func(string, jsn.SlotBlock) (alwaysTrue bool) {
-			m.PushState(m.newSlot(term, &blk))
-			return true
-		},
-
-		// a member that's a swap
-		OnSwap: func(_ string, swap jsn.SwapBlock) (alwaysTrue bool) {
-			m.PushState(m.newSwap(term, swap, &blk))
-			return true
+		OnSlot: func(w walk.Walker) error {
+			return m.events.Push(m.newSlot(term, &blk))
 		},
 
 		// a member that repeats
-		OnRepeat: func(_ string, slice jsn.SliceBlock) (okay bool) {
-			if cnt := slice.GetSize(); cnt > 0 {
+		OnRepeat: func(w walk.Walker) (_ error) {
+			if cnt := w.Len(); cnt > 0 {
 				blk.writeCount(term, cnt)
-				m.PushState(m.newRepeat(term, &blk))
-				okay = true
+				m.events.Push(m.newRepeat(term, &blk))
 			}
 			return
 		},
 
 		// a single value
-		OnValue: func(_ string, pv interface{}) error {
-			return blk.writeValue(term, pv)
+		OnValue: func(w walk.Walker) (err error) {
+
+			// fix: when going through marshal and the autognerated things
+			// this will use things like Bool_Unboxed_Marshal
+			//  n m.MarshalValue(Bool_Type, jsn.BoxBool(val))
+			// which has GetValue() $TRUE $FALSE
+			// and compact value true, value
+			if v := w.RawValue(); v.IsValid() {
+				if f := w.Field(); !f.Optional() || !v.IsZero() {
+					// see valueToBytes which tries to use GetCompactValue if it eixsts
+					// Text_Unboxed_Repeats_Marshal for repeating text ( collapsing an array of lines to one )
+					// and Enum
+					// i think this has to do all that maually --
+					// except that type info should provide access to choices for strings
+					// and bool in type info should have str choices too,
+					err = blk.writeValue(term, v.Interface())
+				}
+			}
+			return
 		},
 
 		// end of the inner block
-		OnEnd: func() {
+		OnEnd: func(walk.Walker) error {
 			blk.writeTo(body)
-			m.FinishState(nil)
+			return m.events.Pop()
 		},
 	}
 }

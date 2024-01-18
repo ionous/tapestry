@@ -79,9 +79,9 @@ func (w *Walker) Field() Field {
 		panic("fields only make sense for structs")
 	}
 	containerType := w.curr.Type()
-	field := containerType.Field(w.index - 1)
-	tag := tag.ReadTag(field.Tag)
-	return Field{field.Name, field.Type, tag}
+	f := containerType.Field(w.index - 1)
+	tag := tag.ReadTag(f.Tag)
+	return Field{f.Name, f.Type, tag}
 }
 
 // returns the value of the current focus.
@@ -98,6 +98,11 @@ func (w *Walker) Value() (ret r.Value) {
 		}
 	}
 	return
+}
+
+// fix: remove
+func (w *Walker) RawValue() r.Value {
+	return w.getTarget()
 }
 
 // returns the generated type name of the current focus.
@@ -207,9 +212,12 @@ func (w *Walker) SetValue(val any) (okay bool) {
 // *or* add it t the the if labels slot=...
 // ( which would be redundant but useful )
 func typeName(slot r.Type) string {
+	return lowerName(slot.Name())
+}
+
+func lowerName(str string) string {
 	var out strings.Builder
 	var prev bool
-	str := slot.Name()
 	for _, r := range str {
 		l := unicode.ToLower(r)
 		cap := l != r

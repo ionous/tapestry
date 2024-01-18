@@ -28,15 +28,45 @@ func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
 }
 
 func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
+	evts := walk.Callbacks{
+		// given a slot, replace its command using PreImport or PostImport
+		// and, walk the contents of its (replaced) for additional pre or post imports.
+		// a command usually would only implement either Pre or Post ( or neither. )
+		OnSlot: func(slot walk.Walker) (err error) {
+			if i := unpackSlot(slot); i != nil {
+				updateActivityDepth(cat, i, 1)
+				//
+				if tgt, ok := i.(PreImport); ok {
+					if rep, e := tgt.PreImport(cat); e != nil {
+						err = errutil.New(e, "failed to create pre replacement")
+					} else if rep != nil {
+						// fix: a more direct setValue?
+						slot.Value().Set(r.ValueOf(rep))
+					}
+				}
+			}
+			return
+		},
+		OnEnd: func(slot walk.Walker) (err error) {
+			if i := unpackSlot(slot); i != nil {
+				if tgt, ok := i.(PostImport); ok {
+					if rep, e := tgt.PostImport(cat); e != nil {
+						err = errutil.New(e, "failed to create post replacement")
+					} else if rep != nil {
+						slot.Value().Set(r.ValueOf(rep))
+					}
+				}
+				updateActivityDepth(cat, i, -1)
+			}
+			return
+		},
+	}
+	//
 	currentCatalog = cat
 	slice := r.ValueOf(all)
-	evts := walk.Events{
-		BeforeSlot: beforeSlot,
-		AfterSlot:  afterSlot,
-	}
 	for i, el := range all {
 		w := walk.Walk(slice.Index(i))
-		if e := walk.VisitSlot(w, evts); e != nil {
+		if e := walk.VisitSlot(w, &evts); e != nil {
 			err = e
 			break
 		} else if e := el.Weave(cat); e != nil {
@@ -60,41 +90,6 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 	return
 }
 
-// given a slot, replace its command using PreImport or PostImport
-// and, walk the contents of its (replaced) for additional pre or post imports.
-// a command usually would only implement either Pre or Post ( or neither. )
-func beforeSlot(slot walk.Walker) (_ walk.Events, err error) {
-	cat := currentCatalog
-	if i := unpackSlot(slot); i != nil {
-		updateActivityDepth(cat, i, 1)
-		//
-		if tgt, ok := i.(PreImport); ok {
-			if rep, e := tgt.PreImport(cat); e != nil {
-				err = errutil.New(e, "failed to create pre replacement")
-			} else if rep != nil {
-				// fix: a more direct setValue?
-				slot.Value().Set(r.ValueOf(rep))
-			}
-		}
-	}
-	return
-}
-
-func afterSlot(slot walk.Walker) (_ walk.Events, err error) {
-	cat := currentCatalog
-	if i := unpackSlot(slot); i != nil {
-		if tgt, ok := i.(PostImport); ok {
-			if rep, e := tgt.PostImport(cat); e != nil {
-				err = errutil.New(e, "failed to create post replacement")
-			} else if rep != nil {
-				slot.Value().Set(r.ValueOf(rep))
-			}
-		}
-		updateActivityDepth(cat, i, -1)
-	}
-	return
-}
-
 // fix: for comment logging; remove?
 func updateActivityDepth(cat *weave.Catalog, i any, inc int) {
 	// fix:
@@ -109,10 +104,12 @@ func updateActivityDepth(cat *weave.Catalog, i any, inc int) {
 
 // kind of weird: the value of the slot is a pointer;
 // the value of the flow is a struct; we need the pointer.
-
 func unpackSlot(slot walk.Walker) (ret interface{}) {
-	if v := slot.Value(); v.IsValid() {
-		ret = v.Interface()
+	if slot.SpecType() == walk.Slot {
+
+		if v := slot.Value(); v.IsValid() {
+			ret = v.Interface()
+		}
 	}
 	return
 }

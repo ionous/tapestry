@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 )
@@ -31,10 +30,9 @@ func testBlocks(src jsn.Marshalee, expect string) (err error) {
 		return "test-" + strconv.Itoa(id)
 	}
 	var out js.Builder
-	enc := chart.MakeEncoder()
 	if ts, e := rs.FromSpecs(idl.Specs); e != nil {
 		err = e
-	} else if e := enc.Marshal(src, block.NewTopBlock(&enc, &ts, &out, false)); e != nil {
+	} else if e := block.Build(&out, src, &ts, false); e != nil {
 		err = errutil.New(e, "failed marshal")
 	} else if str := jsn.Indent(out.String()); str != expect {
 		err = errutil.New(e, "mismatched", str)
