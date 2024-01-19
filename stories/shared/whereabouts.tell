@@ -1,11 +1,11 @@
 Tapestry:
   - # The relative location of objects in the game world.
     # One parent (ex. a room) can have many children (ex. a table and chairs).
-    Define relation:cardinality oneToMany:
+    Define relation:kind:otherKind:cardinality:
       - "whereabouts"
-      - OneToMany:kinds:
-          - "object"
-          - "objects"
+      - "object"
+      - "objects"
+      - "one_to_many"
   - # An object indicating the position or ownership of another:
     # A kitchen encloses the cook, the cook holds a sack, the sack contains some flour.
     Define pattern:requires:provides:do:

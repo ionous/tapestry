@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"github.com/ionous/errutil"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -19,25 +18,23 @@ func (op *DefineRelation) Weave(cat *weave.Catalog) error {
 		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
 		} else {
-			err = op.Cardinality.DefineRelation(w, rel.String())
+			rel := rel.String()
+			switch op.Cardinality.String() {
+			case RelationCardinality_OneToOne:
+				err = op.addOneToOne(w, rel)
+			case RelationCardinality_OneToMany:
+				err = op.addOneToMany(w, rel)
+			case RelationCardinality_ManyToOne:
+				err = op.addManyToOne(w, rel)
+			case RelationCardinality_ManyToMany:
+				err = op.addManyToMany(w, rel)
+			}
 		}
 		return
 	})
 }
 
-func (op *RelationCardinality) DefineRelation(w *weave.Weaver, rel string) (err error) {
-	type RelationDefiner interface {
-		addRelation(*weave.Weaver, string) error
-	}
-	if c, ok := op.Value.(RelationDefiner); !ok {
-		err = ImportError(op, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
-	} else {
-		err = c.addRelation(w, rel)
-	}
-	return
-}
-
-func (op *OneToOne) addRelation(w *weave.Weaver, rel string) (err error) {
+func (op *DefineRelation) addOneToOne(w *weave.Weaver, rel string) (err error) {
 	if a, e := safe.GetText(w, op.Kind); e != nil {
 		err = e
 	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
@@ -48,10 +45,10 @@ func (op *OneToOne) addRelation(w *weave.Weaver, rel string) (err error) {
 	return
 }
 
-func (op *OneToMany) addRelation(w *weave.Weaver, rel string) (err error) {
+func (op *DefineRelation) addOneToMany(w *weave.Weaver, rel string) (err error) {
 	if a, e := safe.GetText(w, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.Kinds); e != nil {
+	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
 		err = e
 	} else {
 		err = addRelation(w.Pin(), rel, a.String(), b.String(), false, true)
@@ -59,10 +56,10 @@ func (op *OneToMany) addRelation(w *weave.Weaver, rel string) (err error) {
 	return
 }
 
-func (op *ManyToOne) addRelation(w *weave.Weaver, rel string) (err error) {
+func (op *DefineRelation) addManyToOne(w *weave.Weaver, rel string) (err error) {
 	if a, e := safe.GetText(w, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.Kinds); e != nil {
+	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
 		err = e
 	} else {
 		err = addRelation(w.Pin(), rel, a.String(), b.String(), true, false)
@@ -70,10 +67,10 @@ func (op *ManyToOne) addRelation(w *weave.Weaver, rel string) (err error) {
 	return
 }
 
-func (op *ManyToMany) addRelation(w *weave.Weaver, rel string) (err error) {
-	if a, e := safe.GetText(w, op.Kinds); e != nil {
+func (op *DefineRelation) addManyToMany(w *weave.Weaver, rel string) (err error) {
+	if a, e := safe.GetText(w, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.OtherKinds); e != nil {
+	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
 		err = e
 	} else {
 		err = addRelation(w.Pin(), rel, a.String(), b.String(), true, true)

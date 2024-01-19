@@ -103,14 +103,11 @@
       ]
     },
     {
-      "Define relation:cardinality oneToMany:": [
+      "Define relation:kind:otherKind:cardinality:": [
         "whereabouts",
-        {
-          "OneToMany:kinds:": [
-            "object",
-            "objects"
-          ]
-        }
+        "object",
+        "objects",
+        "one_to_many"
       ]
     },
     {

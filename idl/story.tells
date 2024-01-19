@@ -233,6 +233,12 @@ Spec:with group:
                     - "relation"
                     - "text_eval"
                 - Term:type:
+                    - "kind"
+                    - "text_eval"
+                - Term:type:
+                    - "other_kind"
+                    - "text_eval"
+                - Term:type:
                     - "cardinality"
                     - "relation_cardinality"
       - # Add properties to a kind
@@ -295,30 +301,7 @@ Spec:with group:
                 - Term:type:
                     - "plural"
                     - "text_eval"
-      - Spec:groups:with flow:
-          - "many_to_many"
-          - "relations"
-          - Flow phrase:uses:
-              - "many {$kinds} to many {$other_kinds}"
-              - - Term:name:type:
-                    - "_"
-                    - "kinds"
-                    - "text_eval"
-                - Term:type:
-                    - "other_kinds"
-                    - "text_eval"
-      - Spec:groups:with flow:
-          - "many_to_one"
-          - "relations"
-          - Flow phrase:uses:
-              - "many {$kinds} to one {$kind}"
-              - - Term:name:type:
-                    - "_"
-                    - "kinds"
-                    - "text_eval"
-                - Term:type:
-                    - "kind"
-                    - "text_eval"
+
       - # Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.
         Spec:groups:with str:
           - "map_connection"
@@ -471,30 +454,6 @@ Spec:with group:
                     - "initially"
                     - "number_eval"
                     - true
-      - Spec:groups:with flow:
-          - "one_to_many"
-          - "relations"
-          - Flow phrase:uses:
-              - "one {$kind} to many {$kinds}"
-              - - Term:name:type:
-                    - "_"
-                    - "kind"
-                    - "text_eval"
-                - Term:type:
-                    - "kinds"
-                    - "text_eval"
-      - Spec:groups:with flow:
-          - "one_to_one"
-          - "relations"
-          - Flow phrase:uses:
-              - "one {$kind} to one {$other_kind}"
-              - - Term:name:type:
-                    - "_"
-                    - "kind"
-                    - "text_eval"
-                - Term:type:
-                    - "other_kind"
-                    - "text_eval"
       - Spec:slots:groups:with flow:
           - "rule_provides"
           - - "story_statement"
@@ -713,14 +672,15 @@ Spec:with group:
                     - "initially"
                     - "record_eval"
                     - true
-      - Spec:groups:with swap:
+      - Spec:groups:with str:
           - "relation_cardinality"
           - "relations"
-          - Swap between:
-              - Pick: "one_to_one"
-              - Pick: "one_to_many"
-              - Pick: "many_to_one"
-              - Pick: "many_to_many"
+          - Str exclusively:uses:
+              - true
+              - - Option: "one_to_one"
+                - Option: "one_to_many"
+                - Option: "many_to_one"
+                - Option: "many_to_many"
       - # Relate nouns to each other
         Spec:slots:with flow:
           - "define_relatives"

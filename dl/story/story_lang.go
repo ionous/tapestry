@@ -12,7 +12,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// AspectField
+// AspectField tbd: is a separate interface required for object kinds separate from everything else?
+// in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that.
 type AspectField struct {
 	Aspect rt.TextEval `if:"label=_"`
 	Markup map[string]any
@@ -2203,6 +2204,8 @@ func DefinePhrase_Marshal(m jsn.Marshaler, val *DefinePhrase) (err error) {
 // DefineRelation
 type DefineRelation struct {
 	Relation    rt.TextEval         `if:"label=relation"`
+	Kind        rt.TextEval         `if:"label=kind"`
+	OtherKind   rt.TextEval         `if:"label=other_kind"`
 	Cardinality RelationCardinality `if:"label=cardinality"`
 	Markup      map[string]any
 }
@@ -2221,6 +2224,8 @@ func (*DefineRelation) Compose() composer.Spec {
 
 const DefineRelation_Type = "define_relation"
 const DefineRelation_Field_Relation = "$RELATION"
+const DefineRelation_Field_Kind = "$KIND"
+const DefineRelation_Field_OtherKind = "$OTHER_KIND"
 const DefineRelation_Field_Cardinality = "$CARDINALITY"
 
 func (op *DefineRelation) Marshal(m jsn.Marshaler) error {
@@ -2301,12 +2306,26 @@ func DefineRelation_Marshal(m jsn.Marshaler, val *DefineRelation) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineRelation_Field_Relation))
 		}
-		e1 := m.MarshalKey("cardinality", DefineRelation_Field_Cardinality)
+		e1 := m.MarshalKey("kind", DefineRelation_Field_Kind)
 		if e1 == nil {
-			e1 = RelationCardinality_Marshal(m, &val.Cardinality)
+			e1 = rt.TextEval_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefineRelation_Field_Cardinality))
+			m.Error(errutil.New(e1, "in flow at", DefineRelation_Field_Kind))
+		}
+		e2 := m.MarshalKey("other_kind", DefineRelation_Field_OtherKind)
+		if e2 == nil {
+			e2 = rt.TextEval_Marshal(m, &val.OtherKind)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineRelation_Field_OtherKind))
+		}
+		e3 := m.MarshalKey("cardinality", DefineRelation_Field_Cardinality)
+		if e3 == nil {
+			e3 = RelationCardinality_Marshal(m, &val.Cardinality)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", DefineRelation_Field_Cardinality))
 		}
 		m.EndBlock()
 	}
@@ -2795,9 +2814,9 @@ const FieldDefinition_Type = "field_definition"
 
 var FieldDefinition_Optional_Marshal = FieldDefinition_Marshal
 
-type FieldDefinition_Slot struct{ Value FieldDefinition }
+type FieldDefinition_Slot struct{ Value *FieldDefinition }
 
-func (at *FieldDefinition_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at FieldDefinition_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -2808,21 +2827,16 @@ func (at *FieldDefinition_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *FieldDefinition_Slot) GetType() string              { return FieldDefinition_Type }
-func (at *FieldDefinition_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
-func (at *FieldDefinition_Slot) SetSlot(v interface{}) (okay bool) {
-	at.Value, okay = v.(FieldDefinition)
+func (at FieldDefinition_Slot) GetType() string              { return FieldDefinition_Type }
+func (at FieldDefinition_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at FieldDefinition_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(FieldDefinition)
 	return
 }
 
 func FieldDefinition_Marshal(m jsn.Marshaler, ptr *FieldDefinition) (err error) {
-	slot := FieldDefinition_Slot{*ptr}
-	if e := slot.Marshal(m); e != nil {
-		err = e
-	} else {
-		*ptr = slot.Value
-	}
-	return
+	slot := FieldDefinition_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type FieldDefinition_Slice []FieldDefinition
@@ -3086,222 +3100,6 @@ func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakePlural_Field_Plural))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ManyToMany
-type ManyToMany struct {
-	Kinds      rt.TextEval `if:"label=_"`
-	OtherKinds rt.TextEval `if:"label=other_kinds"`
-	Markup     map[string]any
-}
-
-func (*ManyToMany) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ManyToMany_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const ManyToMany_Type = "many_to_many"
-const ManyToMany_Field_Kinds = "$KINDS"
-const ManyToMany_Field_OtherKinds = "$OTHER_KINDS"
-
-func (op *ManyToMany) Marshal(m jsn.Marshaler) error {
-	return ManyToMany_Marshal(m, op)
-}
-
-type ManyToMany_Slice []ManyToMany
-
-func (op *ManyToMany_Slice) GetType() string { return ManyToMany_Type }
-
-func (op *ManyToMany_Slice) Marshal(m jsn.Marshaler) error {
-	return ManyToMany_Repeats_Marshal(m, (*[]ManyToMany)(op))
-}
-
-func (op *ManyToMany_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ManyToMany_Slice) SetSize(cnt int) {
-	var els []ManyToMany
-	if cnt >= 0 {
-		els = make(ManyToMany_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ManyToMany_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ManyToMany_Marshal(m, &(*op)[i])
-}
-
-func ManyToMany_Repeats_Marshal(m jsn.Marshaler, vals *[]ManyToMany) error {
-	return jsn.RepeatBlock(m, (*ManyToMany_Slice)(vals))
-}
-
-func ManyToMany_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ManyToMany) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ManyToMany_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ManyToMany_Flow struct{ ptr *ManyToMany }
-
-func (n ManyToMany_Flow) GetType() string      { return ManyToMany_Type }
-func (n ManyToMany_Flow) GetLede() string      { return ManyToMany_Type }
-func (n ManyToMany_Flow) GetFlow() interface{} { return n.ptr }
-func (n ManyToMany_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ManyToMany); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ManyToMany_Optional_Marshal(m jsn.Marshaler, pv **ManyToMany) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ManyToMany_Marshal(m, *pv)
-	} else if !enc {
-		var v ManyToMany
-		if err = ManyToMany_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ManyToMany_Marshal(m jsn.Marshaler, val *ManyToMany) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ManyToMany_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ManyToMany_Field_Kinds)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Kinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ManyToMany_Field_Kinds))
-		}
-		e1 := m.MarshalKey("other_kinds", ManyToMany_Field_OtherKinds)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.OtherKinds)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ManyToMany_Field_OtherKinds))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ManyToOne
-type ManyToOne struct {
-	Kinds  rt.TextEval `if:"label=_"`
-	Kind   rt.TextEval `if:"label=kind"`
-	Markup map[string]any
-}
-
-func (*ManyToOne) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ManyToOne_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const ManyToOne_Type = "many_to_one"
-const ManyToOne_Field_Kinds = "$KINDS"
-const ManyToOne_Field_Kind = "$KIND"
-
-func (op *ManyToOne) Marshal(m jsn.Marshaler) error {
-	return ManyToOne_Marshal(m, op)
-}
-
-type ManyToOne_Slice []ManyToOne
-
-func (op *ManyToOne_Slice) GetType() string { return ManyToOne_Type }
-
-func (op *ManyToOne_Slice) Marshal(m jsn.Marshaler) error {
-	return ManyToOne_Repeats_Marshal(m, (*[]ManyToOne)(op))
-}
-
-func (op *ManyToOne_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ManyToOne_Slice) SetSize(cnt int) {
-	var els []ManyToOne
-	if cnt >= 0 {
-		els = make(ManyToOne_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ManyToOne_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ManyToOne_Marshal(m, &(*op)[i])
-}
-
-func ManyToOne_Repeats_Marshal(m jsn.Marshaler, vals *[]ManyToOne) error {
-	return jsn.RepeatBlock(m, (*ManyToOne_Slice)(vals))
-}
-
-func ManyToOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ManyToOne) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ManyToOne_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ManyToOne_Flow struct{ ptr *ManyToOne }
-
-func (n ManyToOne_Flow) GetType() string      { return ManyToOne_Type }
-func (n ManyToOne_Flow) GetLede() string      { return ManyToOne_Type }
-func (n ManyToOne_Flow) GetFlow() interface{} { return n.ptr }
-func (n ManyToOne_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ManyToOne); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ManyToOne_Optional_Marshal(m jsn.Marshaler, pv **ManyToOne) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ManyToOne_Marshal(m, *pv)
-	} else if !enc {
-		var v ManyToOne
-		if err = ManyToOne_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ManyToOne_Marshal(m jsn.Marshaler, val *ManyToOne) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ManyToOne_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ManyToOne_Field_Kinds)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Kinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ManyToOne_Field_Kinds))
-		}
-		e1 := m.MarshalKey("kind", ManyToOne_Field_Kind)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Kind)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ManyToOne_Field_Kind))
 		}
 		m.EndBlock()
 	}
@@ -4074,222 +3872,6 @@ func NumberField_Marshal(m jsn.Marshaler, val *NumberField) (err error) {
 	return
 }
 
-// OneToMany
-type OneToMany struct {
-	Kind   rt.TextEval `if:"label=_"`
-	Kinds  rt.TextEval `if:"label=kinds"`
-	Markup map[string]any
-}
-
-func (*OneToMany) Compose() composer.Spec {
-	return composer.Spec{
-		Name: OneToMany_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const OneToMany_Type = "one_to_many"
-const OneToMany_Field_Kind = "$KIND"
-const OneToMany_Field_Kinds = "$KINDS"
-
-func (op *OneToMany) Marshal(m jsn.Marshaler) error {
-	return OneToMany_Marshal(m, op)
-}
-
-type OneToMany_Slice []OneToMany
-
-func (op *OneToMany_Slice) GetType() string { return OneToMany_Type }
-
-func (op *OneToMany_Slice) Marshal(m jsn.Marshaler) error {
-	return OneToMany_Repeats_Marshal(m, (*[]OneToMany)(op))
-}
-
-func (op *OneToMany_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *OneToMany_Slice) SetSize(cnt int) {
-	var els []OneToMany
-	if cnt >= 0 {
-		els = make(OneToMany_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *OneToMany_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return OneToMany_Marshal(m, &(*op)[i])
-}
-
-func OneToMany_Repeats_Marshal(m jsn.Marshaler, vals *[]OneToMany) error {
-	return jsn.RepeatBlock(m, (*OneToMany_Slice)(vals))
-}
-
-func OneToMany_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]OneToMany) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = OneToMany_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type OneToMany_Flow struct{ ptr *OneToMany }
-
-func (n OneToMany_Flow) GetType() string      { return OneToMany_Type }
-func (n OneToMany_Flow) GetLede() string      { return OneToMany_Type }
-func (n OneToMany_Flow) GetFlow() interface{} { return n.ptr }
-func (n OneToMany_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*OneToMany); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func OneToMany_Optional_Marshal(m jsn.Marshaler, pv **OneToMany) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = OneToMany_Marshal(m, *pv)
-	} else if !enc {
-		var v OneToMany
-		if err = OneToMany_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func OneToMany_Marshal(m jsn.Marshaler, val *OneToMany) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(OneToMany_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", OneToMany_Field_Kind)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Kind)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", OneToMany_Field_Kind))
-		}
-		e1 := m.MarshalKey("kinds", OneToMany_Field_Kinds)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Kinds)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", OneToMany_Field_Kinds))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// OneToOne
-type OneToOne struct {
-	Kind      rt.TextEval `if:"label=_"`
-	OtherKind rt.TextEval `if:"label=other_kind"`
-	Markup    map[string]any
-}
-
-func (*OneToOne) Compose() composer.Spec {
-	return composer.Spec{
-		Name: OneToOne_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const OneToOne_Type = "one_to_one"
-const OneToOne_Field_Kind = "$KIND"
-const OneToOne_Field_OtherKind = "$OTHER_KIND"
-
-func (op *OneToOne) Marshal(m jsn.Marshaler) error {
-	return OneToOne_Marshal(m, op)
-}
-
-type OneToOne_Slice []OneToOne
-
-func (op *OneToOne_Slice) GetType() string { return OneToOne_Type }
-
-func (op *OneToOne_Slice) Marshal(m jsn.Marshaler) error {
-	return OneToOne_Repeats_Marshal(m, (*[]OneToOne)(op))
-}
-
-func (op *OneToOne_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *OneToOne_Slice) SetSize(cnt int) {
-	var els []OneToOne
-	if cnt >= 0 {
-		els = make(OneToOne_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *OneToOne_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return OneToOne_Marshal(m, &(*op)[i])
-}
-
-func OneToOne_Repeats_Marshal(m jsn.Marshaler, vals *[]OneToOne) error {
-	return jsn.RepeatBlock(m, (*OneToOne_Slice)(vals))
-}
-
-func OneToOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]OneToOne) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = OneToOne_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type OneToOne_Flow struct{ ptr *OneToOne }
-
-func (n OneToOne_Flow) GetType() string      { return OneToOne_Type }
-func (n OneToOne_Flow) GetLede() string      { return OneToOne_Type }
-func (n OneToOne_Flow) GetFlow() interface{} { return n.ptr }
-func (n OneToOne_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*OneToOne); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func OneToOne_Optional_Marshal(m jsn.Marshaler, pv **OneToOne) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = OneToOne_Marshal(m, *pv)
-	} else if !enc {
-		var v OneToOne
-		if err = OneToOne_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(OneToOne_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", OneToOne_Field_Kind)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Kind)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", OneToOne_Field_Kind))
-		}
-		e1 := m.MarshalKey("other_kind", OneToOne_Field_OtherKind)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.OtherKind)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", OneToOne_Field_OtherKind))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // RecordField
 type RecordField struct {
 	Name      rt.TextEval   `if:"label=_"`
@@ -4532,77 +4114,49 @@ func RecordListField_Marshal(m jsn.Marshaler, val *RecordListField) (err error) 
 	return
 }
 
-// RelationCardinality swaps between various options
+// RelationCardinality requires a predefined string.
 type RelationCardinality struct {
-	Choice string
-	Value  interface{}
+	Str string
 }
 
-var RelationCardinality_Optional_Marshal = RelationCardinality_Marshal
+func (op *RelationCardinality) String() string {
+	return op.Str
+}
 
-const RelationCardinality_OneToOne_Opt = "$ONE_TO_ONE"
-const RelationCardinality_OneToMany_Opt = "$ONE_TO_MANY"
-const RelationCardinality_ManyToOne_Opt = "$MANY_TO_ONE"
-const RelationCardinality_ManyToMany_Opt = "$MANY_TO_MANY"
+const RelationCardinality_OneToOne = "$ONE_TO_ONE"
+const RelationCardinality_OneToMany = "$ONE_TO_MANY"
+const RelationCardinality_ManyToOne = "$MANY_TO_ONE"
+const RelationCardinality_ManyToMany = "$MANY_TO_MANY"
 
 func (*RelationCardinality) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RelationCardinality_Type,
-		Uses: composer.Type_Swap,
+		Uses: composer.Type_Str,
 		Choices: []string{
-			RelationCardinality_OneToOne_Opt, RelationCardinality_OneToMany_Opt, RelationCardinality_ManyToOne_Opt, RelationCardinality_ManyToMany_Opt,
+			RelationCardinality_OneToOne, RelationCardinality_OneToMany, RelationCardinality_ManyToOne, RelationCardinality_ManyToMany,
 		},
-		Swaps: []interface{}{
-			(*OneToOne)(nil),
-			(*OneToMany)(nil),
-			(*ManyToOne)(nil),
-			(*ManyToMany)(nil),
+		Strings: []string{
+			"one_to_one", "one_to_many", "many_to_one", "many_to_many",
 		},
 	}
 }
 
 const RelationCardinality_Type = "relation_cardinality"
 
-func (op *RelationCardinality) GetType() string { return RelationCardinality_Type }
-
-func (op *RelationCardinality) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *RelationCardinality) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case RelationCardinality_OneToOne_Opt:
-		op.Choice, op.Value = c, new(OneToOne)
-		okay = true
-	case RelationCardinality_OneToMany_Opt:
-		op.Choice, op.Value = c, new(OneToMany)
-		okay = true
-	case RelationCardinality_ManyToOne_Opt:
-		op.Choice, op.Value = c, new(ManyToOne)
-		okay = true
-	case RelationCardinality_ManyToMany_Opt:
-		op.Choice, op.Value = c, new(ManyToMany)
-		okay = true
-	}
-	return
-}
-
 func (op *RelationCardinality) Marshal(m jsn.Marshaler) error {
 	return RelationCardinality_Marshal(m, op)
 }
-func RelationCardinality_Marshal(m jsn.Marshaler, val *RelationCardinality) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
+
+func RelationCardinality_Optional_Marshal(m jsn.Marshaler, val *RelationCardinality) (err error) {
+	var zero RelationCardinality
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = RelationCardinality_Marshal(m, val)
 	}
 	return
+}
+
+func RelationCardinality_Marshal(m jsn.Marshaler, val *RelationCardinality) (err error) {
+	return m.MarshalValue(RelationCardinality_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type RelationCardinality_Slice []RelationCardinality
@@ -5782,9 +5336,9 @@ const StoryStatement_Type = "story_statement"
 
 var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
-type StoryStatement_Slot struct{ Value StoryStatement }
+type StoryStatement_Slot struct{ Value *StoryStatement }
 
-func (at *StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -5795,21 +5349,16 @@ func (at *StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
-func (at *StoryStatement_Slot) GetSlot() (interface{}, bool) { return at.Value, at.Value != nil }
-func (at *StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
-	at.Value, okay = v.(StoryStatement)
+func (at StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
+func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(StoryStatement)
 	return
 }
 
 func StoryStatement_Marshal(m jsn.Marshaler, ptr *StoryStatement) (err error) {
-	slot := StoryStatement_Slot{*ptr}
-	if e := slot.Marshal(m); e != nil {
-		err = e
-	} else {
-		*ptr = slot.Value
-	}
-	return
+	slot := StoryStatement_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type StoryStatement_Slice []StoryStatement
@@ -6256,8 +5805,6 @@ var Slats = []composer.Composer{
 	(*DefineValue)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
-	(*ManyToMany)(nil),
-	(*ManyToOne)(nil),
 	(*MapConnection)(nil),
 	(*MapDeparting)(nil),
 	(*MapDirection)(nil),
@@ -6265,8 +5812,6 @@ var Slats = []composer.Composer{
 	(*NothingField)(nil),
 	(*NumListField)(nil),
 	(*NumberField)(nil),
-	(*OneToMany)(nil),
-	(*OneToOne)(nil),
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
@@ -6286,16 +5831,9 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
 	13422667607848275221: (*MapConnection)(nil),        /* MapConnection: */
 	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
-	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
-	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
-	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
+	10722525326402422155: (*RelationCardinality)(nil),  /* RelationCardinality: */
 	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
 	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
 	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
@@ -6339,14 +5877,8 @@ var Signatures = map[uint64]interface{}{
 	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
 	4650767708903763835:  (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro: */
 	89301097593785617:    (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro:reversed: */
-	10321772035226997803: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToMany: */
-	14085782312273513943: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality manyToMany: */
-	10263803882772415534: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToOne: */
-	13547088785328938282: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality manyToOne: */
-	14579122932423107502: (*DefineRelation)(nil),       /* execute=Define relation:cardinality oneToMany: */
-	8378907640508804698:  (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality oneToMany: */
-	7001459786598567501:  (*DefineRelation)(nil),       /* execute=Define relation:cardinality oneToOne: */
-	13361645062989794537: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality oneToOne: */
+	10034565430437798858: (*DefineRelation)(nil),       /* execute=Define relation:kind:otherKind:cardinality: */
+	15951965898335032430: (*DefineRelation)(nil),       /* story_statement=Define relation:kind:otherKind:cardinality: */
 	2570506749320892411:  (*DefineOtherRelatives)(nil), /* execute=Define relativeTo:nouns:otherNouns: */
 	16389453623741136831: (*DefineOtherRelatives)(nil), /* story_statement=Define relativeTo:nouns:otherNouns: */
 	10393873004445566457: (*RuleForPattern)(nil),       /* execute=Define rule:do: */
