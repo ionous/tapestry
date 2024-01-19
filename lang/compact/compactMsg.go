@@ -1,40 +1,17 @@
 package compact
 
-import (
-	"fmt"
-)
-
-// A decoding of a tapestry command
-// ex. {
-//     "Sig:": [....]
-//     "--": "comment"
-//     "--markup": "markup"
-// }
+// A decoding of a tapestry command.
+// Commands on disk are stored as plain value maps
+// containing a command signature and command data pair;
+// and any number of markup key-value pairs.
+// Signatures start with a capital letter, and contain parameter names separated by colons.
+// Markup keys start with a double dash.
 type Message struct {
-	Signature     // (full)Key, Name, []Params
-	Body      any // most often an array, sometimes a single value
-	Markup    map[string]any
-}
-
-// fix? maybe beter to set these by default instead of Body.
-
-func (op *Message) Args() (ret []any, err error) {
-	switch pn := len(op.Params); pn {
-	case 0:
-		// FIX: ensure that msg.Args are zero?
-	case 1:
-		// we require that single parameters concrete values
-		ret = []any{op.Body}
-	default:
-		if slice, ok := op.Body.([]any); !ok {
-			err = fmt.Errorf("expected a slice of arguments; got %T", op.Body)
-		} else if an := len(slice); an != pn {
-			err = fmt.Errorf("expected a slice of %d arguments, got %d arguments instead", pn, an)
-		} else {
-			ret = slice
-		}
-	}
-	return
+	Key    string         // original specified text: "Sig:label:"
+	Name   string         // names are lower_underscore
+	Labels []string       // parameter names sans colons
+	Args   []any          // the same length as labels
+	Markup map[string]any // from map keys starting with "--"; stored stripped of the dashes.
 }
 
 func (op *Message) AddMarkup(k string, v any) {

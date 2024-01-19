@@ -52,7 +52,7 @@ func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 		if fp, e := os.Open(sf.path); e != nil {
 			err = e
 		} else {
-			err = files.ReadTellFile(fp, &msg)
+			err = files.ReadTell(fp, &msg)
 		}
 	} else if ext.Json() {
 		if b, e := files.ReadFile(sf.path); e != nil {

@@ -3,7 +3,7 @@ package files
 import (
 	"bufio"
 	"fmt"
-	"io/fs"
+	"io"
 	"os"
 	"unicode"
 
@@ -15,17 +15,17 @@ import (
 )
 
 // deserialize from the passed path
-func ReadTell(inPath string, pv *map[string]any) (err error) {
+func ReadTellFile(inPath string, pv *map[string]any) (err error) {
 	if fp, e := os.Open(inPath); e != nil {
 		err = e
 	} else {
 		defer fp.Close()
-		err = ReadTellFile(fp, pv)
+		err = ReadTell(fp, pv)
 	}
 	return
 }
 
-func ReadTellFile(fp fs.File, pv *map[string]any) (err error) {
+func ReadRawTell(in io.Reader) (ret any, err error) {
 	var docComments note.Book
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
@@ -35,12 +35,17 @@ func ReadTellFile(fp fs.File, pv *map[string]any) (err error) {
 		return make(tapSeq, 0, 0)
 	})
 	dec.UseNotes(&docComments)
-	if raw, e := dec.Decode(bufio.NewReader(fp)); e != nil {
+	return dec.Decode(bufio.NewReader(in))
+}
+
+func ReadTell(in io.Reader, pv *map[string]any) (err error) {
+	if raw, e := ReadRawTell(in); e != nil {
 		err = e
 	} else {
 		if raw == nil {
 			*pv = make(map[string]any)
 		} else {
+			// fix: why not cast?
 			out, res := r.ValueOf(pv).Elem(), r.ValueOf(raw)
 			if rt, ot := res.Type(), out.Type(); rt.AssignableTo(ot) {
 				out.Set(res)

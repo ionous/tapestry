@@ -4,27 +4,40 @@ import (
 	"errors"
 	"fmt"
 	"unicode"
-
-	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
 // given a key such as "Command noun:trait:change choice:"
 // separate out the command name and parameter labels
-func DecodeSignature(key string) (ret compact.Signature, err error) {
+func DecodeSignature(key string) (ret []string, err error) {
 	var sig sigReader
 	if e := sig.readSig(key); e != nil {
 		err = e
 	} else {
-		ret = compact.Signature{Key: key, Name: sig.cmd, Params: sig.params}
+		// fix: remove this friction
+		out := make([]string, len(sig.params)+1)
+		out[0] = sig.cmd
+		for i, p := range sig.params {
+			str := p.Label
+			if len(p.Choice) > 0 {
+				str += " " + p.Choice
+			}
+			out[i+1] = str
+		}
+		ret = out
 	}
 	return
 }
 
 type sigReader struct {
 	cmd       string
-	params    []compact.Param // argument names
+	params    []param // argument names
 	currLabel string
 	buf       runeBuffer
+}
+
+type param struct {
+	Label  string
+	Choice string // optional
 }
 
 type runeBuffer []rune
@@ -57,7 +70,7 @@ func (s *sigReader) readCmd(r rune) {
 	switch {
 	// commands ending with a colon indicate an initial anonymous argument
 	case r == ':':
-		s.params = append(s.params, compact.Param{}) // blank, unlabeled
+		s.params = append(s.params, param{}) // blank, unlabeled
 		fallthrough
 	// a space is used to separate a command from its arguments
 	// ( and an immediate end of input means there are no arguments )
@@ -92,7 +105,7 @@ func (s *sigReader) readParam(r rune) (err error) {
 }
 
 // return (and reset) the pending argument's accumulated label and choice ( if any )
-func (s *sigReader) flush() (out compact.Param) {
+func (s *sigReader) flush() (out param) {
 	// nothing accumulated? then our parameter is anonymous
 	// ( that's totally fine for our first param )
 	if str := s.buf.unbuffer(); len(str) > 0 {

@@ -32,21 +32,19 @@ func nameOf(t r.Type) string {
 
 func parseMessage(v any) (ret compact.Message, err error) {
 	if m, ok := v.(map[string]any); !ok {
-		err = ValueError("not a key value map", v)
+		err = fmt.Errorf("expected a plain data map %T(%v)", v, v)
 	} else {
 		ret, err = DecodeMessage(m)
 	}
 	return
 }
 
-func nextField(it *walk.Walker, p compact.Param) (ret walk.Field, okay bool) {
+func nextField(it *walk.Walker, param string) (ret walk.Field, okay bool) {
 	for it.Next() {
 		info := it.Field() // internal fields dont have labels....
-		if label, ok := info.Label(); ok {
-			if p.Matches(label) {
-				ret, okay = info, true
-				break
-			}
+		if label, ok := info.Label(); ok && label == param {
+			ret, okay = info, true
+			break
 		}
 	}
 	return

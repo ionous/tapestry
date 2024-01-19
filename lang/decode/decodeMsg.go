@@ -23,13 +23,37 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 			break
 		} else if sig, e := DecodeSignature(k); e != nil {
 			err = e
+		} else if args, e := parseArgs(len(sig)-1, v); e != nil {
+			err = e
 		} else {
-			out.Signature, out.Body = sig, v
+			out.Key = k
+			out.Name = sig[0]
+			out.Labels = sig[1:]
+			out.Args = args
 			continue // keep going to detect any additional (incorrect) signatures
 		}
 	}
 	if err == nil {
 		ret = out
+	}
+	return
+}
+
+func parseArgs(pn int, body any) (ret []any, err error) {
+	switch pn {
+	case 0:
+		// FIX: ensure that msg.Args are zero?
+	case 1:
+		// we require that single parameters concrete values
+		ret = []any{body}
+	default:
+		if slice, ok := body.([]any); !ok {
+			err = fmt.Errorf("expected a slice of arguments; got %T", body)
+		} else if an := len(slice); an != pn {
+			err = fmt.Errorf("expected a slice of %d arguments, got %d arguments instead", pn, an)
+		} else {
+			ret = slice
+		}
 	}
 	return
 }

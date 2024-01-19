@@ -1,0 +1,14 @@
+// {{.Name}}, a type of slot.
+const Z_{{Pascal .Name}}_Type = "{{.Name}}"
+
+var Z_{{Pascal .Name}}_Info = typeinfo.Slot{
+	Name: Z_{{Pascal .Name}}_Type,
+}
+
+// holds a slice of slots
+type {{Pascal .Name}}_Slice []{{Pascal .Name}}
+
+// implements typeinfo.Inspector 
+func (*{{Pascal .Name}}_Slice) Inspect() typeinfo.T {
+	return &Z_{{Pascal .Name}}_Info
+}

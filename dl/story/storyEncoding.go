@@ -59,17 +59,13 @@ func TryPattern(dec *decode.Decoder, slot string, msg compact.Message) (ret any,
 }
 
 func tryPatternArgs(dec *decode.Decoder, slot string, msg compact.Message) (ret []assign.Arg, err error) {
-	if args, e := msg.Args(); e != nil {
-		err = e
-	} else {
-		for i, p := range msg.Params {
-			var val rt.Assignment_Slot
-			if e := dec.Decode(&val, args[i]); e != nil {
-				err = e
-				break
-			} else {
-				ret = append(ret, assign.Arg{Name: p.Label, Value: val.Value})
-			}
+	for i, p := range msg.Labels {
+		var val rt.Assignment_Slot
+		if e := dec.Decode(&val, msg.Args[i]); e != nil {
+			err = e
+			break
+		} else {
+			ret = append(ret, assign.Arg{Name: p, Value: val.Value})
 		}
 	}
 	return

@@ -1,0 +1,6 @@
+- # Slot for constant values.
+  Spec:with slot:
+    - "some_eval"
+    - Slot:
+  blockly-color: "MATH_HUE"
+

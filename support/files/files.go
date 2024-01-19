@@ -41,7 +41,7 @@ func FormattedRead(fsys fs.FS, fileName string) (ret map[string]any, err error) 
 		if fp, e := fsys.Open(fileName); e != nil {
 			err = e
 		} else {
-			err = ReadTellFile(fp, &ret)
+			err = ReadTell(fp, &ret)
 		}
 	} else if !ext.Json() {
 		err = errutil.New("unexpected format", ext)

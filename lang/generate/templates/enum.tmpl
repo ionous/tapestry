@@ -1,0 +1,17 @@
+// {{.Name}}, a type of str enum.
+const Z_{{Pascal .Name}}_Type = "{{.Name}}"
+
+const (
+{{- range $i, $opt := .Options }}
+  V_{{Pascal $.Name}}_{{Pascal $opt}} = "{{$opt}}"
+{{- end }}
+)
+
+var Z_{{Pascal .Name}}_Info = typeinfo.Str{
+	Name: Z_{{Pascal .Name}}_Type,
+	Options: []string{
+{{- range $i, $opt := .Options -}}
+{{if $i}}, {{end}}V_{{Pascal $.Name}}_{{Pascal $opt}}
+{{- end -}}
+},
+}
