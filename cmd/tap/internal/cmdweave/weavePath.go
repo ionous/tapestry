@@ -103,7 +103,7 @@ func decodeStory(path string) (ret story.StoryFile, err error) {
 	switch ext := files.Ext(path); ext {
 	case files.TellStory:
 		var msg map[string]any
-		if e := files.ReadTell(path, &msg); e != nil {
+		if e := files.LoadTell(path, &msg); e != nil {
 			err = e
 		} else {
 			err = story.Decode(&ret, msg)

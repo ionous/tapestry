@@ -31,21 +31,21 @@ type termData struct {
 }
 
 type typeData interface {
-	GetName() string
+	getName() string
 }
 
-func (f flowData) GetName() string {
+func (f flowData) getName() string {
 	return f.Name
 }
 
-func (f slotData) GetName() string {
+func (f slotData) getName() string {
 	return f.Name
 }
 
-func (f strData) GetName() string {
+func (f strData) getName() string {
 	return f.Name
 }
 
-func (f numData) GetName() string {
+func (f numData) getName() string {
 	return f.Name
 }

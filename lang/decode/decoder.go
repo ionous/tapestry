@@ -56,7 +56,7 @@ func (dec *Decoder) Decode(out jsn.Marshalee, plainData any) (err error) {
 		default:
 			err = unknownType(t)
 		case r.Struct:
-			if msg, e := parseMessage(plainData); e != nil {
+			if msg, e := ParseMessage(plainData); e != nil {
 				err = e
 			} else {
 				err = dec.readMsg(msg, walk.Walk(tgt))
@@ -110,7 +110,7 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 				if f.Repeats() {
 					err = dec.repeatFlow(it.Walk(), arg)
 				} else {
-					if msg, e := parseMessage(arg); e != nil {
+					if msg, e := ParseMessage(arg); e != nil {
 						err = e
 					} else {
 						err = dec.readMsg(msg, it.Walk())

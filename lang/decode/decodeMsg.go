@@ -8,7 +8,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/markup"
 )
 
-// expects a map of string to value
+// unpack a map of plain values into a description of a tapestry command.
+// doesn't operate recursively, and doesn't check to see if the command is one that exists.
 func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 	var out compact.Message
 	for k, v := range msg {
@@ -30,11 +31,21 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 			out.Name = sig[0]
 			out.Labels = sig[1:]
 			out.Args = args
-			continue // keep going to detect any additional (incorrect) signatures
+			continue // keep going to read markup and detect multiple signatures
 		}
 	}
 	if err == nil {
 		ret = out
+	}
+	return
+}
+
+// same as decode; errors if the passed value is something other than a map of plain values.
+func ParseMessage(v any) (ret compact.Message, err error) {
+	if m, ok := v.(map[string]any); !ok {
+		err = fmt.Errorf("expected a plain data map %T(%v)", v, v)
+	} else {
+		ret, err = DecodeMessage(m)
 	}
 	return
 }

@@ -16,7 +16,7 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 	funcMap := template.FuncMap{
 		"Pascal": distill.Pascal,
 		"Scoped": func(typeName string) (ret string, err error) {
-			if n, ok := p.FindScope(typeName); !ok {
+			if n, ok := p.findScope(typeName); !ok {
 				// err = fmt.Errorf("unknown type %q", termType)
 				ret = typeName // temp"
 			} else if len(n) > 0 {
@@ -29,7 +29,7 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 		"TermType": func(t termData) (ret string, err error) {
 			if termType := t.Type; t.Private {
 				ret = Pascal(termType)
-			} else if typeName := p.TypeName(termType); len(typeName) > 0 {
+			} else if typeName := p.findType(termType); len(typeName) > 0 {
 				ret = typeName
 			} else {
 				// err = fmt.Errorf("unknown type %q", termType)
@@ -43,8 +43,8 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 
 type TypeFinder interface {
 	// given a lowercase type name, find the go type
-	TypeName(n string) string
+	findType(n string) string
 	// only for flow and slot
 	// given a lowercase type name, find the package
-	FindScope(n string) (string, bool)
+	findScope(n string) (string, bool)
 }

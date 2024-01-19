@@ -15,7 +15,7 @@ import (
 )
 
 // deserialize from the passed path
-func ReadTellFile(inPath string, pv *map[string]any) (err error) {
+func LoadTell(inPath string, pv *map[string]any) (err error) {
 	if fp, e := os.Open(inPath); e != nil {
 		err = e
 	} else {

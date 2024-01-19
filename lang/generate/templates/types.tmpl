@@ -1,7 +1,6 @@
-{{if .List}}
+// {{.Comment}}
 var {{.Name}} = []{{.Type}}{
 {{range .List -}}
-  (*{{Pascal .}})(nil),
+  &Z_{{Pascal .Name}}_Info,
 {{end}}
 }
-{{end}}

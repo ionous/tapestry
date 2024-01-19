@@ -14,7 +14,7 @@ func (dec *Decoder) decodeSlot(out r.Value, data any, slot string) (err error) {
 	default:
 		err = e
 	case e == compact.Unhandled || errors.Is(e, compact.Unhandled):
-		if msg, e := parseMessage(data); e != nil {
+		if msg, e := ParseMessage(data); e != nil {
 			err = e
 		} else {
 			switch rptr, ok := dec.signatures.Create(slot, msg.Key); {

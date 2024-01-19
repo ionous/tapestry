@@ -1,13 +1,13 @@
 package generate
 
 // dont forget to exclude self
-type packageHelper struct {
-	groups         []groupData
+type groupSearch struct {
+	list           []Group
 	currentPackage string
 }
 
-func (p *packageHelper) FindScope(n string) (ret string, okay bool) {
-	for _, g := range p.groups {
+func (p *groupSearch) findScope(n string) (ret string, okay bool) {
+	for _, g := range p.list {
 		_, slot := findType(n, g.Slot)
 		_, flow := findType(n, g.Flow)
 		if slot || flow {
@@ -17,7 +17,7 @@ func (p *packageHelper) FindScope(n string) (ret string, okay bool) {
 	}
 	return
 }
-func (p *packageHelper) scope(group string) (ret string) {
+func (p *groupSearch) scope(group string) (ret string) {
 	if p.currentPackage != group {
 		ret = group + "."
 	}
@@ -25,8 +25,8 @@ func (p *packageHelper) scope(group string) (ret string) {
 }
 
 // return scoped typename
-func (p *packageHelper) TypeName(n string) (ret string) {
-	for _, g := range p.groups {
+func (p *groupSearch) findType(n string) (ret string) {
+	for _, g := range p.list {
 		if _, ok := findType(n, g.Slot); ok {
 			ret = p.scope(g.Name) + Pascal(n)
 			break

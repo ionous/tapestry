@@ -6,7 +6,6 @@ import (
 	"strings"
 	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
@@ -28,15 +27,6 @@ func nameOf(t r.Type) string {
 		prev = cap
 	}
 	return out.String()
-}
-
-func parseMessage(v any) (ret compact.Message, err error) {
-	if m, ok := v.(map[string]any); !ok {
-		err = fmt.Errorf("expected a plain data map %T(%v)", v, v)
-	} else {
-		ret, err = DecodeMessage(m)
-	}
-	return
 }
 
 func nextField(it *walk.Walker, param string) (ret walk.Field, okay bool) {

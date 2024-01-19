@@ -33,21 +33,12 @@ func parseStrings(v any) (ret []string, err error) {
 	return
 }
 
-func parseMessage(v any) (ret compact.Message, err error) {
-	if m, ok := v.(map[string]any); !ok {
-		err = fmt.Errorf("expected a map, have %T(%v)", v, v)
-	} else {
-		ret, err = decode.DecodeMessage(m)
-	}
-	return
-}
-
 func parseMessages(v any) (ret []compact.Message, err error) {
 	if els, ok := v.([]any); !ok && v != nil {
 		err = fmt.Errorf("expected a list, have %T", v)
 	} else {
 		for _, el := range els {
-			if msg, e := parseMessage(el); e != nil {
+			if msg, e := decode.ParseMessage(el); e != nil {
 				err = e
 				break
 			} else {
