@@ -2,7 +2,7 @@
 package {{.Name}}
 
 import (
-{{range .Imports}}
-  "."
-{{end}}
+{{- range .Imports}}
+  "{{.}}"
+{{- end}}
 )

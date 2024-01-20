@@ -58,9 +58,11 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 			return
 		}); e != nil {
 			err = e
+		} else if g, e := generate.MakeGenerator(groups); e != nil {
+			err = e
 		} else {
 			// write files
-			for g := generate.MakeGenerator(groups); g.Next(); {
+			for g.Next() {
 				groupName := g.Name() // optionally, limit to one particular group
 				if len(genFlags.dl) == 0 || (genFlags.dl == groupName) {
 					// tbd: an option to do everything in memory and write to stdout?

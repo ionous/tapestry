@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"bytes"
 	"errors"
 	"io"
 	"text/template"
@@ -25,16 +26,15 @@ func ReadSpec(msg compact.Message) (ret Group, err error) {
 }
 
 type Generator struct {
-	groups groupSearch
+	groups *groupSearch
 	tmp    *template.Template
-	err    error
 	i      int
 }
 
-func MakeGenerator(groups []Group) (ret Generator) {
-	seeker := groupSearch{list: groups}
-	if tmp, e := genTemplates(&seeker); e != nil {
-		ret = Generator{err: e}
+func MakeGenerator(groups []Group) (ret Generator, err error) {
+	seeker := &groupSearch{list: groups}
+	if tmp, e := genTemplates(seeker); e != nil {
+		err = e
 	} else {
 		ret = Generator{groups: seeker, tmp: tmp}
 	}
@@ -48,7 +48,7 @@ func (q *Generator) Name() string {
 
 // advance before writing
 func (q *Generator) Next() (okay bool) {
-	if okay = q.err != nil || (q.i < len(q.groups.list)); okay {
+	if okay = (q.i < len(q.groups.list)); okay {
 		q.i++
 	}
 	return
@@ -57,30 +57,36 @@ func (q *Generator) Next() (okay bool) {
 // after collecting groups, write them to targeted location
 // ( it tell format, with the tells extension )
 func (q *Generator) Write(w io.Writer) (err error) {
-	if q.err != nil {
-		err = q.err
-	} else if at := q.i - 1; at >= len(q.groups.list) {
+	if at := q.i - 1; at >= len(q.groups.list) {
 		err = errors.New("out of range")
 	} else {
-		g := q.groups.list[at]
+		g := q.groups.setCurrent(at)
+		// this uses the generation to determine inter package references
+		// so we have to build the body first, and later
+		// write the import header above it.
+		var body bytes.Buffer
 		var sigs distill.Registry
+		if e := q.writeContent(&body, g.groupContent); e != nil {
+			err = e
+		} else if e := q.writeTypes(&body, "slot", "( ex. for generating blockly shapes )",
+			g.Slot); e != nil {
+			err = e
+		} else if e := q.writeTypes(&body, "flow", "( ex. for reading blockly blocks )",
+			g.Flow); e != nil {
+			err = e
+		} else if e := q.writeSigs(&body, sigs); e != nil {
+			err = e
+		}
+		dl := "git.sr.ht/~ionous/tapestry/dl/" // fix: customize?
+		ti := "git.sr.ht/~ionous/tapestry/lang/typeinfo"
+		imports := q.groups.getRefs(dl, ti)
 		if e := q.write(w, "header", struct {
 			Name    string
 			Imports []string
-		}{g.Name, nil}); e != nil {
+		}{g.Name, imports}); e != nil {
 			err = e
-		} else if e := q.writeContent(w, g.groupContent); e != nil {
-			err = e
-		} else if e := q.writeTypes(w, "Y_Slot", "*typeinfo.Slot",
-			"a list of all slots ( ex. for generating blockly shapes )",
-			g.Slot); e != nil {
-			err = e
-		} else if e := q.writeTypes(w, "Y_Flow", "*typeinfo.Flow",
-			"a list of all flows ( ex. for reading blockly blocks )",
-			g.Flow); e != nil {
-			err = e
-		} else if e := q.writeSigs(w, sigs); e != nil {
-			err = e
+		} else {
+			w.Write(body.Bytes())
 		}
 	}
 	return
@@ -92,12 +98,15 @@ func (q *Generator) writeSigs(w io.Writer, reg distill.Registry) error {
 }
 
 // writes a list of typeinfo references
-func (q *Generator) writeTypes(w io.Writer, name, subType, comment string, list []typeData) error {
-	data := struct {
-		Name, Type, Comment string
-		List                []typeData
-	}{name, subType, comment, list}
-	return q.write(w, "types", data)
+func (q *Generator) writeTypes(w io.Writer, name, comment string, list []typeData) (err error) {
+	if len(list) > 0 {
+		data := struct {
+			Name, Comment string
+			List          []typeData
+		}{name, comment, list}
+		err = q.write(w, "types", data)
+	}
+	return
 }
 
 func (q *Generator) writeContent(w io.Writer, gc groupContent) (err error) {

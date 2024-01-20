@@ -6,9 +6,9 @@ var Z_{{Pascal .Name}}_Info = typeinfo.Slot{
 }
 
 // holds a slice of slots
-type {{Pascal .Name}}_Slice []{{Pascal .Name}}
+type {{Pascal .Name}}_Slots []{{Pascal .Name}}
 
 // implements typeinfo.Inspector 
-func (*{{Pascal .Name}}_Slice) Inspect() typeinfo.T {
+func (*{{Pascal .Name}}_Slots) Inspect() typeinfo.T {
 	return &Z_{{Pascal .Name}}_Info
 }

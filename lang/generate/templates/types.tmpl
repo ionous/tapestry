@@ -1,6 +1,7 @@
+// a list of all {{.Name}}s in this this package
 // {{.Comment}}
-var {{.Name}} = []{{.Type}}{
-{{range .List -}}
+var Y_{{.Name}}_List = []*typeinfo.{{Pascal .Name}}{
+{{- range .List}}
   &Z_{{Pascal .Name}}_Info,
-{{end}}
+{{- end}}
 }

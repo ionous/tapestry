@@ -11,7 +11,7 @@ var Z_{{Pascal .Name}}_Info = typeinfo.Str{
 	Name: Z_{{Pascal .Name}}_Type,
 	Options: []string{
 {{- range $i, $opt := .Options }}
-{{if $i}}, {{end}}W_{{Pascal $.Name}}_{{Pascal $opt}}
+		W_{{Pascal $.Name}}_{{Pascal $opt}},
 {{- end }}
 },
 }

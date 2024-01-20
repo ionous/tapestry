@@ -17,6 +17,7 @@ func parseString(name string, v any, otherwise string) (ret string, err error) {
 	}
 	return
 }
+
 func parseStrings(v any) (ret []string, err error) {
 	switch v := v.(type) {
 	case string:
