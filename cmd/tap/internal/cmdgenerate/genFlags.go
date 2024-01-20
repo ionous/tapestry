@@ -20,6 +20,6 @@ func buildFlags() (flags flag.FlagSet) {
 	}
 	flags.StringVar(&genFlags.dl, "dl", "", "limit to which groups")
 	flags.StringVar(&genFlags.in, "in", inPath, "input directory containing one or more spec files")
-	flags.StringVar(&genFlags.out, "out", " ../../dl", "output directory")
+	flags.StringVar(&genFlags.out, "out", "../../dl", "output directory")
 	return
 }
