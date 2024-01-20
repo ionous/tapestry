@@ -9,11 +9,13 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/generate"
 	"git.sr.ht/~ionous/tapestry/support/files"
+	"github.com/ionous/errutil"
 )
 
 var CmdGenerate = &base.Command{
@@ -36,8 +38,8 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 		inDir := os.DirFS(genFlags.in)
 		if e := fs.WalkDir(inDir, ".", func(path string, d fs.DirEntry, e error) (err error) {
 			if e != nil {
-				err = e
-			} else if !d.IsDir() { // the first dir we get is "."
+				err = e // fix: ignores specs for now ( it has swaps still )
+			} else if n := d.Name(); !d.IsDir() && strings.HasSuffix(n, ".tells") && n != "spec.tells" {
 				if fp, e := inDir.Open(path); e != nil {
 					err = e
 				} else if raw, e := files.ReadRawTell(fp); e != nil {
@@ -50,36 +52,32 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 					groups = append(groups, g)
 				}
 			}
+			if err != nil {
+				err = errutil.New(e, "in", path)
+			}
 			return
 		}); e != nil {
 			err = e
 		} else {
 			// write files
 			for g := generate.MakeGenerator(groups); g.Next(); {
-				groupName := g.Name()
+				groupName := g.Name() // optionally, limit to one particular group
 				if len(genFlags.dl) == 0 || (genFlags.dl == groupName) {
 					// tbd: an option to do everything in memory and write to stdout?
-					var b bytes.Buffer
-					if e := g.Write(&b); e != nil {
+					var u bytes.Buffer
+					if e := g.Write(&u); e != nil {
 						err = e
 						break
-					} else if b, e := format.Source(b.Bytes()); e != nil {
+					} else if f, e := format.Source(u.Bytes()); e != nil {
+						log.Println(u.String())
 						err = e
 						break
 					} else {
 						path := filepath.Join(outPath, groupName)
-						// are we in the dl directory, and writing to rt?
-						// fix: since there are no rt commands, only slots:
-						// writing to dl/rt ( or rtypes ) should be fine
-						// maybe even rename tells to "rtypes", "rtslots", "rti", to simplify
-						// dlLike := strings.HasSuffix(path, string(filepath.Separator)+"dl")
-						// if groupName == "rt" && dlLike {
-						// 	path = path[:len(path)-2]
-						// }
 						os.MkdirAll(path, 0700)
 						path = filepath.Join(path, groupName+"_types.go")
 						println("writing", path)
-						if e := os.WriteFile(path, b, 0666); e != nil {
+						if e := os.WriteFile(path, f, 0666); e != nil {
 							err = e
 							break
 						}

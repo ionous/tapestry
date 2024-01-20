@@ -1,3 +1,5 @@
+// a list of all command signautures
+// ( for processing and verifying story files )
 var Signatures = map[uint64]interface{}{
 {{range . -}}
   {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */

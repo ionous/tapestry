@@ -10,7 +10,7 @@ import (
 var genFlags = struct {
 	dl  string // filter by group
 	in  string // input path
-	out string // output directory: defaults to "_temp"
+	out string // output directory
 }{}
 
 func buildFlags() (flags flag.FlagSet) {
@@ -20,6 +20,6 @@ func buildFlags() (flags flag.FlagSet) {
 	}
 	flags.StringVar(&genFlags.dl, "dl", "", "limit to which groups")
 	flags.StringVar(&genFlags.in, "in", inPath, "input directory containing one or more spec files")
-	flags.StringVar(&genFlags.out, "out", "./_temp", "output directory (ex: ../../dl )")
+	flags.StringVar(&genFlags.out, "out", " ../../dl", "output directory")
 	return
 }

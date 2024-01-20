@@ -9,7 +9,6 @@ require (
 	github.com/ionous/errutil v0.0.0-20231013205411-87ce252b8e2a
 	github.com/wailsapp/wails/v2 v2.4.0
 	golang.org/x/sys v0.6.0
-	golang.org/x/tools v0.7.0
 )
 
 require (
@@ -38,7 +37,6 @@ require (
 	github.com/wailsapp/mimetype v1.4.1 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/exp v0.0.0-20230810033253-352e893a4cad // indirect
-	golang.org/x/mod v0.11.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 )

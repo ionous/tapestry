@@ -94,7 +94,7 @@ func readGroup(out *groupContent, n string, msg compact.Message) (err error) {
 
 func readFlow(n string, msg compact.Message, slots []string) (ret flowData, err error) {
 	mm := messageMap(msg)
-	if lede, e := mm.GetString("", ""); e != nil {
+	if lede, e := mm.GetString("", n); e != nil {
 		err = e
 	} else if uses, ok := mm["uses"]; !ok {
 		err = errors.New("missing flow terms")

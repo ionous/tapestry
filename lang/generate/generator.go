@@ -88,7 +88,7 @@ func (q *Generator) Write(w io.Writer) (err error) {
 
 // writes a list of typeinfo references
 func (q *Generator) writeSigs(w io.Writer, reg distill.Registry) error {
-	return q.tmp.ExecuteTemplate(w, "signatures", reg.Sigs)
+	return q.write(w, "signatures", reg.Sigs)
 }
 
 // writes a list of typeinfo references

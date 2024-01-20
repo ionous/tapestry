@@ -18,7 +18,6 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 		"Scoped": func(typeName string) (ret string, err error) {
 			if n, ok := p.findScope(typeName); !ok {
 				// err = fmt.Errorf("unknown type %q", termType)
-				ret = typeName // temp"
 			} else if len(n) > 0 {
 				ret = n
 			}

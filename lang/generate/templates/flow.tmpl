@@ -1,6 +1,7 @@
 
-// <insert comment here>
-type {{Pascal .Name}} struct {
+// FIX: for now we are generating side by side with the old definitions
+// also should have user comment here 
+type FIX_{{Pascal .Name}} struct {
 {{- range $i, $t := .Terms }}
 	{{Pascal $t.Name}} {{TermType $t}}
 {{- end }}
@@ -44,10 +45,12 @@ var Z_{{Pascal .Name}}_Info = typeinfo.Flow{
 {{- end -}}
 {{/**/}}		},
 {{- if .Slots }} 
-	Slots: []*Slot{ {{ range $i, $s := .Slots }}
+	Slots: []*Slot{ 
+{{- range $i, $s := .Slots }}
 		&{{Scoped $s}}Z_{{Pascal $s}}_Info,
+{{- end }}
 	},
-{{- end }}{{ end }}
+{{- end }}
 }
 
 // holds a slice of type {{.Name}}
