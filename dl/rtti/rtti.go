@@ -1,4 +1,4 @@
-package rti
+package rtti
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"

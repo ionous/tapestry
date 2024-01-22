@@ -3,7 +3,7 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -30,14 +30,14 @@ func (op *DoNothing) GetMarkup(ensure bool) map[string]any {
 const Z_DoNothing_Type = "do_nothing"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*DoNothing)(nil)
+var _ rtti.Execute = (*DoNothing)(nil)
 
 var Z_DoNothing_Info = typeinfo.Flow{
 	Name:  Z_DoNothing_Type,
 	Lede:  "--",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
@@ -56,7 +56,7 @@ func (*DoNothing_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Expect struct {
-	Value  rti.BoolEval
+	Value  rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -77,7 +77,7 @@ func (op *Expect) GetMarkup(ensure bool) map[string]any {
 const Z_Expect_Type = "expect"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Expect)(nil)
+var _ rtti.Execute = (*Expect)(nil)
 
 var Z_Expect_Info = typeinfo.Flow{
 	Name: Z_Expect_Type,
@@ -85,10 +85,10 @@ var Z_Expect_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "_",
-		Type:  &rti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -125,7 +125,7 @@ func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
 const Z_ExpectOutput_Type = "expect_output"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ExpectOutput)(nil)
+var _ rtti.Execute = (*ExpectOutput)(nil)
 
 var Z_ExpectOutput_Info = typeinfo.Flow{
 	Name: Z_ExpectOutput_Type,
@@ -136,7 +136,7 @@ var Z_ExpectOutput_Info = typeinfo.Flow{
 		Type:  &prim.Z_Lines_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -152,7 +152,7 @@ func (*ExpectOutput_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ExpectText struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -173,7 +173,7 @@ func (op *ExpectText) GetMarkup(ensure bool) map[string]any {
 const Z_ExpectText_Type = "expect_text"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ExpectText)(nil)
+var _ rtti.Execute = (*ExpectText)(nil)
 
 var Z_ExpectText_Info = typeinfo.Flow{
 	Name: Z_ExpectText_Type,
@@ -181,10 +181,10 @@ var Z_ExpectText_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "text",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -200,7 +200,7 @@ func (*ExpectText_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Fabricate struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -221,7 +221,7 @@ func (op *Fabricate) GetMarkup(ensure bool) map[string]any {
 const Z_Fabricate_Type = "fabricate"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Fabricate)(nil)
+var _ rtti.Execute = (*Fabricate)(nil)
 
 var Z_Fabricate_Info = typeinfo.Flow{
 	Name: Z_Fabricate_Type,
@@ -229,10 +229,10 @@ var Z_Fabricate_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "input",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"fake input as if the player had typed it themselves.", "only works while running checks."},
@@ -252,7 +252,7 @@ func (*Fabricate_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_DebugLog struct {
 	LogLevel string
-	Value    rti.Assignment
+	Value    rtti.Assignment
 	Markup   map[string]any
 }
 
@@ -273,7 +273,7 @@ func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 const Z_DebugLog_Type = "debug_log"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*DebugLog)(nil)
+var _ rtti.Execute = (*DebugLog)(nil)
 
 var Z_DebugLog_Info = typeinfo.Flow{
 	Name: Z_DebugLog_Type,
@@ -285,10 +285,10 @@ var Z_DebugLog_Info = typeinfo.Flow{
 	}, {
 		Name:  "value",
 		Label: "value",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Debug log.",

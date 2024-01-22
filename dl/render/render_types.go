@@ -4,7 +4,7 @@ package render
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -59,7 +59,7 @@ func (op *RenderName) GetMarkup(ensure bool) map[string]any {
 const Z_RenderName_Type = "render_name"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*RenderName)(nil)
+var _ rtti.TextEval = (*RenderName)(nil)
 
 var Z_RenderName_Info = typeinfo.Flow{
 	Name: Z_RenderName_Type,
@@ -70,7 +70,7 @@ var Z_RenderName_Info = typeinfo.Flow{
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
@@ -89,7 +89,7 @@ func (*RenderName_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_RenderRef struct {
-	Name   rti.TextEval
+	Name   rtti.TextEval
 	Dot    assign.Dot
 	Markup map[string]any
 }
@@ -111,13 +111,13 @@ func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 const Z_RenderRef_Type = "render_ref"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*RenderRef)(nil)
-var _ rti.NumberEval = (*RenderRef)(nil)
-var _ rti.TextEval = (*RenderRef)(nil)
-var _ rti.RecordEval = (*RenderRef)(nil)
-var _ rti.NumListEval = (*RenderRef)(nil)
-var _ rti.TextListEval = (*RenderRef)(nil)
-var _ rti.RecordListEval = (*RenderRef)(nil)
+var _ rtti.BoolEval = (*RenderRef)(nil)
+var _ rtti.NumberEval = (*RenderRef)(nil)
+var _ rtti.TextEval = (*RenderRef)(nil)
+var _ rtti.RecordEval = (*RenderRef)(nil)
+var _ rtti.NumListEval = (*RenderRef)(nil)
+var _ rtti.TextListEval = (*RenderRef)(nil)
+var _ rtti.RecordListEval = (*RenderRef)(nil)
 var _ RenderEval = (*RenderRef)(nil)
 
 var Z_RenderRef_Info = typeinfo.Flow{
@@ -126,7 +126,7 @@ var Z_RenderRef_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:     "dot",
 		Label:    "dot",
@@ -135,13 +135,13 @@ var Z_RenderRef_Info = typeinfo.Flow{
 		Type:     &assign.Z_Dot_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
-		&rti.Z_NumberEval_Info,
-		&rti.Z_TextEval_Info,
-		&rti.Z_RecordEval_Info,
-		&rti.Z_NumListEval_Info,
-		&rti.Z_TextListEval_Info,
-		&rti.Z_RecordListEval_Info,
+		&rtti.Z_BoolEval_Info,
+		&rtti.Z_NumberEval_Info,
+		&rtti.Z_TextEval_Info,
+		&rtti.Z_RecordEval_Info,
+		&rtti.Z_NumListEval_Info,
+		&rtti.Z_TextListEval_Info,
+		&rtti.Z_RecordListEval_Info,
 		&Z_RenderEval_Info,
 	},
 	Markup: map[string]any{
@@ -161,7 +161,7 @@ func (*RenderRef_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_RenderValue struct {
-	Value  rti.Assignment
+	Value  rtti.Assignment
 	Markup map[string]any
 }
 
@@ -190,7 +190,7 @@ var Z_RenderValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "_",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_RenderEval_Info,
@@ -234,8 +234,8 @@ func (op *RenderPattern) GetMarkup(ensure bool) map[string]any {
 const Z_RenderPattern_Type = "render_pattern"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*RenderPattern)(nil)
-var _ rti.TextEval = (*RenderPattern)(nil)
+var _ rtti.BoolEval = (*RenderPattern)(nil)
+var _ rtti.TextEval = (*RenderPattern)(nil)
 var _ RenderEval = (*RenderPattern)(nil)
 
 var Z_RenderPattern_Info = typeinfo.Flow{
@@ -252,8 +252,8 @@ var Z_RenderPattern_Info = typeinfo.Flow{
 		Type:    &Z_RenderEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
-		&rti.Z_TextEval_Info,
+		&rtti.Z_BoolEval_Info,
+		&rtti.Z_TextEval_Info,
 		&Z_RenderEval_Info,
 	},
 	Markup: map[string]any{
@@ -274,7 +274,7 @@ func (*RenderPattern_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_RenderResponse struct {
 	Name   string
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -295,8 +295,8 @@ func (op *RenderResponse) GetMarkup(ensure bool) map[string]any {
 const Z_RenderResponse_Type = "render_response"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*RenderResponse)(nil)
-var _ rti.TextEval = (*RenderResponse)(nil)
+var _ rtti.Execute = (*RenderResponse)(nil)
+var _ rtti.TextEval = (*RenderResponse)(nil)
 
 var Z_RenderResponse_Info = typeinfo.Flow{
 	Name: Z_RenderResponse_Type,
@@ -309,11 +309,11 @@ var Z_RenderResponse_Info = typeinfo.Flow{
 		Name:     "text",
 		Label:    "text",
 		Optional: true,
-		Type:     &rti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
-		&rti.Z_TextEval_Info,
+		&rtti.Z_Execute_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Generate text in a replaceable manner.",

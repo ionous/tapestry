@@ -3,7 +3,7 @@ package literal
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -60,7 +60,7 @@ func (op *BoolValue) GetMarkup(ensure bool) map[string]any {
 const Z_BoolValue_Type = "bool_value"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*BoolValue)(nil)
+var _ rtti.BoolEval = (*BoolValue)(nil)
 var _ LiteralValue = (*BoolValue)(nil)
 
 var Z_BoolValue_Info = typeinfo.Flow{
@@ -77,7 +77,7 @@ var Z_BoolValue_Info = typeinfo.Flow{
 		Type:     &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{
@@ -221,7 +221,7 @@ func (op *NumValue) GetMarkup(ensure bool) map[string]any {
 const Z_NumValue_Type = "num_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*NumValue)(nil)
+var _ rtti.NumberEval = (*NumValue)(nil)
 var _ LiteralValue = (*NumValue)(nil)
 
 var Z_NumValue_Info = typeinfo.Flow{
@@ -238,7 +238,7 @@ var Z_NumValue_Info = typeinfo.Flow{
 		Type:     &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{
@@ -280,7 +280,7 @@ func (op *NumValues) GetMarkup(ensure bool) map[string]any {
 const Z_NumValues_Type = "num_values"
 
 // ensure the command implements its specified slots:
-var _ rti.NumListEval = (*NumValues)(nil)
+var _ rtti.NumListEval = (*NumValues)(nil)
 var _ LiteralValue = (*NumValues)(nil)
 
 var Z_NumValues_Info = typeinfo.Flow{
@@ -298,7 +298,7 @@ var Z_NumValues_Info = typeinfo.Flow{
 		Type:     &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumListEval_Info,
+		&rtti.Z_NumListEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{
@@ -341,7 +341,7 @@ func (op *RecordValue) GetMarkup(ensure bool) map[string]any {
 const Z_RecordValue_Type = "record_value"
 
 // ensure the command implements its specified slots:
-var _ rti.RecordEval = (*RecordValue)(nil)
+var _ rtti.RecordEval = (*RecordValue)(nil)
 var _ LiteralValue = (*RecordValue)(nil)
 
 var Z_RecordValue_Info = typeinfo.Flow{
@@ -362,7 +362,7 @@ var Z_RecordValue_Info = typeinfo.Flow{
 		Private: true,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_RecordEval_Info,
+		&rtti.Z_RecordEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{
@@ -405,7 +405,7 @@ func (op *RecordList) GetMarkup(ensure bool) map[string]any {
 const Z_RecordList_Type = "record_list"
 
 // ensure the command implements its specified slots:
-var _ rti.RecordListEval = (*RecordList)(nil)
+var _ rtti.RecordListEval = (*RecordList)(nil)
 var _ LiteralValue = (*RecordList)(nil)
 
 var Z_RecordList_Info = typeinfo.Flow{
@@ -426,7 +426,7 @@ var Z_RecordList_Info = typeinfo.Flow{
 		Private: true,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_RecordListEval_Info,
+		&rtti.Z_RecordListEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{
@@ -468,7 +468,7 @@ func (op *TextValue) GetMarkup(ensure bool) map[string]any {
 const Z_TextValue_Type = "text_value"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*TextValue)(nil)
+var _ rtti.TextEval = (*TextValue)(nil)
 var _ LiteralValue = (*TextValue)(nil)
 
 var Z_TextValue_Info = typeinfo.Flow{
@@ -485,7 +485,7 @@ var Z_TextValue_Info = typeinfo.Flow{
 		Type:     &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{
@@ -527,7 +527,7 @@ func (op *TextValues) GetMarkup(ensure bool) map[string]any {
 const Z_TextValues_Type = "text_values"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*TextValues)(nil)
+var _ rtti.TextListEval = (*TextValues)(nil)
 var _ LiteralValue = (*TextValues)(nil)
 
 var Z_TextValues_Info = typeinfo.Flow{
@@ -545,7 +545,7 @@ var Z_TextValues_Info = typeinfo.Flow{
 		Type:     &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 		&Z_LiteralValue_Info,
 	},
 	Markup: map[string]any{

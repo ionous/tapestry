@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -13,7 +13,7 @@ import (
 // also should have user comment here
 type FIX_EraseEdge struct {
 	Target assign.Address
-	AtEdge rti.BoolEval
+	AtEdge rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -34,7 +34,7 @@ func (op *EraseEdge) GetMarkup(ensure bool) map[string]any {
 const Z_EraseEdge_Type = "erase_edge"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*EraseEdge)(nil)
+var _ rtti.Execute = (*EraseEdge)(nil)
 
 var Z_EraseEdge_Info = typeinfo.Flow{
 	Name: Z_EraseEdge_Type,
@@ -47,10 +47,10 @@ var Z_EraseEdge_Info = typeinfo.Flow{
 		Name:     "at_edge",
 		Label:    "at_front",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Erase at edge: Remove one or more values from a list.",
@@ -69,9 +69,9 @@ func (*EraseEdge_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_EraseIndex struct {
-	Count   rti.NumberEval
+	Count   rtti.NumberEval
 	Target  assign.Address
-	AtIndex rti.NumberEval
+	AtIndex rtti.NumberEval
 	Markup  map[string]any
 }
 
@@ -92,7 +92,7 @@ func (op *EraseIndex) GetMarkup(ensure bool) map[string]any {
 const Z_EraseIndex_Type = "erase_index"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*EraseIndex)(nil)
+var _ rtti.Execute = (*EraseIndex)(nil)
 
 var Z_EraseIndex_Info = typeinfo.Flow{
 	Name: Z_EraseIndex_Type,
@@ -100,7 +100,7 @@ var Z_EraseIndex_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "count",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "target",
 		Label: "from",
@@ -108,10 +108,10 @@ var Z_EraseIndex_Info = typeinfo.Flow{
 	}, {
 		Name:  "at_index",
 		Label: "at_index",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Erase at index: Remove one or more values from a list.",
@@ -130,11 +130,11 @@ func (*EraseIndex_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Erasing struct {
-	Count   rti.NumberEval
+	Count   rtti.NumberEval
 	Target  assign.Address
-	AtIndex rti.NumberEval
+	AtIndex rtti.NumberEval
 	As      string
-	Exe     rti.Execute
+	Exe     rtti.Execute
 	Markup  map[string]any
 }
 
@@ -155,7 +155,7 @@ func (op *Erasing) GetMarkup(ensure bool) map[string]any {
 const Z_Erasing_Type = "erasing"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Erasing)(nil)
+var _ rtti.Execute = (*Erasing)(nil)
 
 var Z_Erasing_Info = typeinfo.Flow{
 	Name: Z_Erasing_Type,
@@ -163,7 +163,7 @@ var Z_Erasing_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "count",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "target",
 		Label: "from",
@@ -171,7 +171,7 @@ var Z_Erasing_Info = typeinfo.Flow{
 	}, {
 		Name:  "at_index",
 		Label: "at_index",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "as",
 		Label: "as",
@@ -180,10 +180,10 @@ var Z_Erasing_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Erase elements from the front or back of a list.", "Runs a pattern with a list containing the erased values.", "If nothing was erased, the pattern will be called with an empty list."},
@@ -203,9 +203,9 @@ func (*Erasing_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_ErasingEdge struct {
 	Target assign.Address
-	AtEdge rti.BoolEval
+	AtEdge rtti.BoolEval
 	As     string
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Else   core.Brancher
 	Markup map[string]any
 }
@@ -227,7 +227,7 @@ func (op *ErasingEdge) GetMarkup(ensure bool) map[string]any {
 const Z_ErasingEdge_Type = "erasing_edge"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ErasingEdge)(nil)
+var _ rtti.Execute = (*ErasingEdge)(nil)
 
 var Z_ErasingEdge_Info = typeinfo.Flow{
 	Name: Z_ErasingEdge_Type,
@@ -240,7 +240,7 @@ var Z_ErasingEdge_Info = typeinfo.Flow{
 		Name:     "at_edge",
 		Label:    "at_front",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}, {
 		Name:  "as",
 		Label: "as",
@@ -249,7 +249,7 @@ var Z_ErasingEdge_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}, {
 		Name:     "else",
 		Label:    "else",
@@ -257,7 +257,7 @@ var Z_ErasingEdge_Info = typeinfo.Flow{
 		Type:     &core.Z_Brancher_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
@@ -276,9 +276,9 @@ func (*ErasingEdge_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ListEach struct {
-	List   rti.Assignment
+	List   rtti.Assignment
 	As     string
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Else   core.Brancher
 	Markup map[string]any
 }
@@ -300,7 +300,7 @@ func (op *ListEach) GetMarkup(ensure bool) map[string]any {
 const Z_ListEach_Type = "list_each"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListEach)(nil)
+var _ rtti.Execute = (*ListEach)(nil)
 
 var Z_ListEach_Info = typeinfo.Flow{
 	Name: Z_ListEach_Type,
@@ -308,7 +308,7 @@ var Z_ListEach_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "list",
 		Label: "across",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "as",
 		Label: "as",
@@ -317,7 +317,7 @@ var Z_ListEach_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}, {
 		Name:     "else",
 		Label:    "else",
@@ -325,7 +325,7 @@ var Z_ListEach_Info = typeinfo.Flow{
 		Type:     &core.Z_Brancher_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
@@ -344,8 +344,8 @@ func (*ListEach_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ListFind struct {
-	Value  rti.Assignment
-	List   rti.Assignment
+	Value  rtti.Assignment
+	List   rtti.Assignment
 	Markup map[string]any
 }
 
@@ -366,8 +366,8 @@ func (op *ListFind) GetMarkup(ensure bool) map[string]any {
 const Z_ListFind_Type = "list_find"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*ListFind)(nil)
-var _ rti.NumberEval = (*ListFind)(nil)
+var _ rtti.BoolEval = (*ListFind)(nil)
+var _ rtti.NumberEval = (*ListFind)(nil)
 
 var Z_ListFind_Info = typeinfo.Flow{
 	Name: Z_ListFind_Type,
@@ -375,15 +375,15 @@ var Z_ListFind_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "_",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "list",
 		Label: "in_list",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_BoolEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Search a list for a specific value.",
@@ -403,7 +403,7 @@ func (*ListFind_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_ListGather struct {
 	Target assign.Address
-	From   rti.Assignment
+	From   rtti.Assignment
 	Using  string
 	Markup map[string]any
 }
@@ -434,7 +434,7 @@ var Z_ListGather_Info = typeinfo.Flow{
 	}, {
 		Name:  "from",
 		Label: "from",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "using",
 		Label: "using",
@@ -457,7 +457,7 @@ func (*ListGather_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ListLen struct {
-	List   rti.Assignment
+	List   rtti.Assignment
 	Markup map[string]any
 }
 
@@ -478,7 +478,7 @@ func (op *ListLen) GetMarkup(ensure bool) map[string]any {
 const Z_ListLen_Type = "list_len"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*ListLen)(nil)
+var _ rtti.NumberEval = (*ListLen)(nil)
 
 var Z_ListLen_Info = typeinfo.Flow{
 	Name: Z_ListLen_Type,
@@ -486,10 +486,10 @@ var Z_ListLen_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "list",
 		Label: "_",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Determines the number of values in a list.",
@@ -508,7 +508,7 @@ func (*ListLen_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeTextList struct {
-	Values rti.TextEval
+	Values rtti.TextEval
 	Markup map[string]any
 }
 
@@ -529,7 +529,7 @@ func (op *MakeTextList) GetMarkup(ensure bool) map[string]any {
 const Z_MakeTextList_Type = "make_text_list"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*MakeTextList)(nil)
+var _ rtti.TextListEval = (*MakeTextList)(nil)
 
 var Z_MakeTextList_Info = typeinfo.Flow{
 	Name: Z_MakeTextList_Type,
@@ -538,10 +538,10 @@ var Z_MakeTextList_Info = typeinfo.Flow{
 		Name:    "values",
 		Label:   "of_text",
 		Repeats: true,
-		Type:    &rti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 	},
 }
 
@@ -557,7 +557,7 @@ func (*MakeTextList_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeNumList struct {
-	Values rti.NumberEval
+	Values rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -578,7 +578,7 @@ func (op *MakeNumList) GetMarkup(ensure bool) map[string]any {
 const Z_MakeNumList_Type = "make_num_list"
 
 // ensure the command implements its specified slots:
-var _ rti.NumListEval = (*MakeNumList)(nil)
+var _ rtti.NumListEval = (*MakeNumList)(nil)
 
 var Z_MakeNumList_Info = typeinfo.Flow{
 	Name: Z_MakeNumList_Type,
@@ -587,10 +587,10 @@ var Z_MakeNumList_Info = typeinfo.Flow{
 		Name:    "values",
 		Label:   "of_numbers",
 		Repeats: true,
-		Type:    &rti.Z_NumberEval_Info,
+		Type:    &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumListEval_Info,
+		&rtti.Z_NumListEval_Info,
 	},
 }
 
@@ -606,8 +606,8 @@ func (*MakeNumList_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeRecordList struct {
-	Values rti.RecordEval
-	Kind   rti.TextEval
+	Values rtti.RecordEval
+	Kind   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -628,7 +628,7 @@ func (op *MakeRecordList) GetMarkup(ensure bool) map[string]any {
 const Z_MakeRecordList_Type = "make_record_list"
 
 // ensure the command implements its specified slots:
-var _ rti.RecordListEval = (*MakeRecordList)(nil)
+var _ rtti.RecordListEval = (*MakeRecordList)(nil)
 
 var Z_MakeRecordList_Info = typeinfo.Flow{
 	Name: Z_MakeRecordList_Type,
@@ -637,14 +637,14 @@ var Z_MakeRecordList_Info = typeinfo.Flow{
 		Name:    "values",
 		Label:   "of_records",
 		Repeats: true,
-		Type:    &rti.Z_RecordEval_Info,
+		Type:    &rtti.Z_RecordEval_Info,
 	}, {
 		Name:  "kind",
 		Label: "of_type",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_RecordListEval_Info,
+		&rtti.Z_RecordListEval_Info,
 	},
 }
 
@@ -661,7 +661,7 @@ func (*MakeRecordList_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_ListMap struct {
 	Target      assign.Address
-	List        rti.Assignment
+	List        rtti.Assignment
 	PatternName string
 	Markup      map[string]any
 }
@@ -683,7 +683,7 @@ func (op *ListMap) GetMarkup(ensure bool) map[string]any {
 const Z_ListMap_Type = "list_map"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListMap)(nil)
+var _ rtti.Execute = (*ListMap)(nil)
 
 var Z_ListMap_Info = typeinfo.Flow{
 	Name: Z_ListMap_Type,
@@ -695,14 +695,14 @@ var Z_ListMap_Info = typeinfo.Flow{
 	}, {
 		Name:  "list",
 		Label: "from_list",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "pattern_name",
 		Label: "using",
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Transform the values from one list and place the results in another list.", "The designated pattern is called with each value from the 'from list', one value at a time."},
@@ -722,7 +722,7 @@ func (*ListMap_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_ListReduce struct {
 	Target      assign.Address
-	List        rti.Assignment
+	List        rtti.Assignment
 	PatternName string
 	Markup      map[string]any
 }
@@ -744,7 +744,7 @@ func (op *ListReduce) GetMarkup(ensure bool) map[string]any {
 const Z_ListReduce_Type = "list_reduce"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListReduce)(nil)
+var _ rtti.Execute = (*ListReduce)(nil)
 
 var Z_ListReduce_Info = typeinfo.Flow{
 	Name: Z_ListReduce_Type,
@@ -756,14 +756,14 @@ var Z_ListReduce_Info = typeinfo.Flow{
 	}, {
 		Name:  "list",
 		Label: "from_list",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "pattern_name",
 		Label: "using",
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Combine all of the values in a list into a single value.", "The designated pattern is called with two parameters:", "  1. each element of the list; and,", "  2. the value being combined.", "And, that pattern is expected to return the newly updated value."},
@@ -803,7 +803,7 @@ func (op *ListReverse) GetMarkup(ensure bool) map[string]any {
 const Z_ListReverse_Type = "list_reverse"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListReverse)(nil)
+var _ rtti.Execute = (*ListReverse)(nil)
 
 var Z_ListReverse_Info = typeinfo.Flow{
 	Name: Z_ListReverse_Type,
@@ -814,7 +814,7 @@ var Z_ListReverse_Info = typeinfo.Flow{
 		Type:  &assign.Z_Address_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Reverse a list.",
@@ -833,9 +833,9 @@ func (*ListReverse_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ListSlice struct {
-	List   rti.Assignment
-	Start  rti.NumberEval
-	End    rti.NumberEval
+	List   rtti.Assignment
+	Start  rtti.NumberEval
+	End    rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -856,9 +856,9 @@ func (op *ListSlice) GetMarkup(ensure bool) map[string]any {
 const Z_ListSlice_Type = "list_slice"
 
 // ensure the command implements its specified slots:
-var _ rti.NumListEval = (*ListSlice)(nil)
-var _ rti.TextListEval = (*ListSlice)(nil)
-var _ rti.RecordListEval = (*ListSlice)(nil)
+var _ rtti.NumListEval = (*ListSlice)(nil)
+var _ rtti.TextListEval = (*ListSlice)(nil)
+var _ rtti.RecordListEval = (*ListSlice)(nil)
 
 var Z_ListSlice_Info = typeinfo.Flow{
 	Name: Z_ListSlice_Type,
@@ -866,22 +866,22 @@ var Z_ListSlice_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "list",
 		Label: "_",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:     "start",
 		Label:    "start",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "end",
 		Label:    "end",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumListEval_Info,
-		&rti.Z_TextListEval_Info,
-		&rti.Z_RecordListEval_Info,
+		&rtti.Z_NumListEval_Info,
+		&rtti.Z_TextListEval_Info,
+		&rtti.Z_RecordListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Create a new list from a section of another list.", "Start is optional, if omitted slice starts at the first element.", "If start is greater the length, an empty array is returned.", "Slice doesnt include the ending index.", "Negatives indices indicates an offset from the end.", "When end is omitted, copy up to and including the last element;", "and do the same if the end is greater than the length"},
@@ -902,7 +902,7 @@ func (*ListSlice_Slice) Inspect() typeinfo.T {
 type FIX_ListSortNumbers struct {
 	Target     assign.Address
 	ByField    string
-	Descending rti.BoolEval
+	Descending rtti.BoolEval
 	Markup     map[string]any
 }
 
@@ -923,7 +923,7 @@ func (op *ListSortNumbers) GetMarkup(ensure bool) map[string]any {
 const Z_ListSortNumbers_Type = "list_sort_numbers"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListSortNumbers)(nil)
+var _ rtti.Execute = (*ListSortNumbers)(nil)
 
 var Z_ListSortNumbers_Info = typeinfo.Flow{
 	Name: Z_ListSortNumbers_Type,
@@ -940,10 +940,10 @@ var Z_ListSortNumbers_Info = typeinfo.Flow{
 		Name:     "descending",
 		Label:    "descending",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -961,8 +961,8 @@ func (*ListSortNumbers_Slice) Inspect() typeinfo.T {
 type FIX_ListSortText struct {
 	Target     assign.Address
 	ByField    string
-	Descending rti.BoolEval
-	UsingCase  rti.BoolEval
+	Descending rtti.BoolEval
+	UsingCase  rtti.BoolEval
 	Markup     map[string]any
 }
 
@@ -983,7 +983,7 @@ func (op *ListSortText) GetMarkup(ensure bool) map[string]any {
 const Z_ListSortText_Type = "list_sort_text"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListSortText)(nil)
+var _ rtti.Execute = (*ListSortText)(nil)
 
 var Z_ListSortText_Info = typeinfo.Flow{
 	Name: Z_ListSortText_Type,
@@ -1000,15 +1000,15 @@ var Z_ListSortText_Info = typeinfo.Flow{
 		Name:     "descending",
 		Label:    "descending",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}, {
 		Name:     "using_case",
 		Label:    "using_case",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
@@ -1028,9 +1028,9 @@ func (*ListSortText_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_ListSplice struct {
 	Target assign.Address
-	Start  rti.NumberEval
-	Remove rti.NumberEval
-	Insert rti.Assignment
+	Start  rtti.NumberEval
+	Remove rtti.NumberEval
+	Insert rtti.Assignment
 	Markup map[string]any
 }
 
@@ -1051,10 +1051,10 @@ func (op *ListSplice) GetMarkup(ensure bool) map[string]any {
 const Z_ListSplice_Type = "list_splice"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListSplice)(nil)
-var _ rti.NumListEval = (*ListSplice)(nil)
-var _ rti.TextListEval = (*ListSplice)(nil)
-var _ rti.RecordListEval = (*ListSplice)(nil)
+var _ rtti.Execute = (*ListSplice)(nil)
+var _ rtti.NumListEval = (*ListSplice)(nil)
+var _ rtti.TextListEval = (*ListSplice)(nil)
+var _ rtti.RecordListEval = (*ListSplice)(nil)
 
 var Z_ListSplice_Info = typeinfo.Flow{
 	Name: Z_ListSplice_Type,
@@ -1066,21 +1066,21 @@ var Z_ListSplice_Info = typeinfo.Flow{
 	}, {
 		Name:  "start",
 		Label: "start",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "remove",
 		Label: "remove",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "insert",
 		Label: "insert",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
-		&rti.Z_NumListEval_Info,
-		&rti.Z_TextListEval_Info,
-		&rti.Z_RecordListEval_Info,
+		&rtti.Z_Execute_Info,
+		&rtti.Z_NumListEval_Info,
+		&rtti.Z_TextListEval_Info,
+		&rtti.Z_RecordListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Modify a list by adding and removing elements.", "The type of the elements being added must match the type of the list.", "Text cant be added to a list of numbers, numbers cant be added to a list of text.", "If the starting index is negative, this begins that many elements from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all elements from the start to the end;", "if the remove count is zero or negative, no elements are removed."},
@@ -1099,9 +1099,9 @@ func (*ListSplice_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ListPush struct {
-	Value  rti.Assignment
+	Value  rtti.Assignment
 	Target assign.Address
-	AtEdge rti.BoolEval
+	AtEdge rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -1122,7 +1122,7 @@ func (op *ListPush) GetMarkup(ensure bool) map[string]any {
 const Z_ListPush_Type = "list_push"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ListPush)(nil)
+var _ rtti.Execute = (*ListPush)(nil)
 
 var Z_ListPush_Info = typeinfo.Flow{
 	Name: Z_ListPush_Type,
@@ -1130,7 +1130,7 @@ var Z_ListPush_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "_",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "target",
 		Label: "into",
@@ -1139,10 +1139,10 @@ var Z_ListPush_Info = typeinfo.Flow{
 		Name:     "at_edge",
 		Label:    "at_front",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Add a value to a list.",
@@ -1161,9 +1161,9 @@ func (*ListPush_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Range struct {
-	To     rti.NumberEval
-	From   rti.NumberEval
-	ByStep rti.NumberEval
+	To     rtti.NumberEval
+	From   rtti.NumberEval
+	ByStep rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -1184,7 +1184,7 @@ func (op *Range) GetMarkup(ensure bool) map[string]any {
 const Z_Range_Type = "range"
 
 // ensure the command implements its specified slots:
-var _ rti.NumListEval = (*Range)(nil)
+var _ rtti.NumListEval = (*Range)(nil)
 
 var Z_Range_Info = typeinfo.Flow{
 	Name: Z_Range_Type,
@@ -1192,20 +1192,20 @@ var Z_Range_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "to",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "from",
 		Label:    "from",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "by_step",
 		Label:    "by_step",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumListEval_Info,
+		&rtti.Z_NumListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Generates a series of numbers r[i] = (start + step*i) where i>=0.", "Start and step default to 1, stop defaults to start;", "the inputs are truncated to produce whole numbers;", "a zero step returns an error.", "A positive step ends the series when the returned value would exceed stop", "while a negative step ends before generating a value less than stop."},

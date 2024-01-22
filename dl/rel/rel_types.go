@@ -2,7 +2,7 @@
 package rel
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -10,7 +10,7 @@ import (
 // also should have user comment here
 type FIX_ReciprocalOf struct {
 	Via    string
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -31,7 +31,7 @@ func (op *ReciprocalOf) GetMarkup(ensure bool) map[string]any {
 const Z_ReciprocalOf_Type = "reciprocal_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*ReciprocalOf)(nil)
+var _ rtti.TextEval = (*ReciprocalOf)(nil)
 
 var Z_ReciprocalOf_Info = typeinfo.Flow{
 	Name: Z_ReciprocalOf_Type,
@@ -43,10 +43,10 @@ var Z_ReciprocalOf_Info = typeinfo.Flow{
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
@@ -66,7 +66,7 @@ func (*ReciprocalOf_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_ReciprocalsOf struct {
 	Via    string
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -87,7 +87,7 @@ func (op *ReciprocalsOf) GetMarkup(ensure bool) map[string]any {
 const Z_ReciprocalsOf_Type = "reciprocals_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*ReciprocalsOf)(nil)
+var _ rtti.TextListEval = (*ReciprocalsOf)(nil)
 
 var Z_ReciprocalsOf_Info = typeinfo.Flow{
 	Name: Z_ReciprocalsOf_Type,
@@ -99,10 +99,10 @@ var Z_ReciprocalsOf_Info = typeinfo.Flow{
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
@@ -121,8 +121,8 @@ func (*ReciprocalsOf_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Relate struct {
-	Object   rti.TextEval
-	ToObject rti.TextEval
+	Object   rtti.TextEval
+	ToObject rtti.TextEval
 	Via      string
 	Markup   map[string]any
 }
@@ -144,7 +144,7 @@ func (op *Relate) GetMarkup(ensure bool) map[string]any {
 const Z_Relate_Type = "relate"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Relate)(nil)
+var _ rtti.Execute = (*Relate)(nil)
 
 var Z_Relate_Info = typeinfo.Flow{
 	Name: Z_Relate_Type,
@@ -152,18 +152,18 @@ var Z_Relate_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "to_object",
 		Label: "to",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "via",
 		Label: "via",
 		Type:  &Z_RelationName_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Relate two nouns.",
@@ -183,7 +183,7 @@ func (*Relate_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_RelativeOf struct {
 	Via    string
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -204,7 +204,7 @@ func (op *RelativeOf) GetMarkup(ensure bool) map[string]any {
 const Z_RelativeOf_Type = "relative_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*RelativeOf)(nil)
+var _ rtti.TextEval = (*RelativeOf)(nil)
 
 var Z_RelativeOf_Info = typeinfo.Flow{
 	Name: Z_RelativeOf_Type,
@@ -216,10 +216,10 @@ var Z_RelativeOf_Info = typeinfo.Flow{
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
@@ -239,7 +239,7 @@ func (*RelativeOf_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_RelativesOf struct {
 	Via    string
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -260,7 +260,7 @@ func (op *RelativesOf) GetMarkup(ensure bool) map[string]any {
 const Z_RelativesOf_Type = "relatives_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*RelativesOf)(nil)
+var _ rtti.TextListEval = (*RelativesOf)(nil)
 
 var Z_RelativesOf_Info = typeinfo.Flow{
 	Name: Z_RelativesOf_Type,
@@ -272,10 +272,10 @@ var Z_RelativesOf_Info = typeinfo.Flow{
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",

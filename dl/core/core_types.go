@@ -4,7 +4,7 @@ package core
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -65,7 +65,7 @@ func (*Trigger_Slots) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_AllTrue struct {
-	Test   rti.BoolEval
+	Test   rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -86,7 +86,7 @@ func (op *AllTrue) GetMarkup(ensure bool) map[string]any {
 const Z_AllTrue_Type = "all_true"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*AllTrue)(nil)
+var _ rtti.BoolEval = (*AllTrue)(nil)
 
 var Z_AllTrue_Info = typeinfo.Flow{
 	Name: Z_AllTrue_Type,
@@ -95,10 +95,10 @@ var Z_AllTrue_Info = typeinfo.Flow{
 		Name:    "test",
 		Label:   "_",
 		Repeats: true,
-		Type:    &rti.Z_BoolEval_Info,
+		Type:    &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns true if all of the evaluations are true.",
@@ -137,14 +137,14 @@ func (op *Always) GetMarkup(ensure bool) map[string]any {
 const Z_Always_Type = "always"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*Always)(nil)
+var _ rtti.BoolEval = (*Always)(nil)
 
 var Z_Always_Info = typeinfo.Flow{
 	Name:  Z_Always_Type,
 	Lede:  "always",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns true.",
@@ -163,7 +163,7 @@ func (*Always_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_AnyTrue struct {
-	Test   rti.BoolEval
+	Test   rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -184,7 +184,7 @@ func (op *AnyTrue) GetMarkup(ensure bool) map[string]any {
 const Z_AnyTrue_Type = "any_true"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*AnyTrue)(nil)
+var _ rtti.BoolEval = (*AnyTrue)(nil)
 
 var Z_AnyTrue_Info = typeinfo.Flow{
 	Name: Z_AnyTrue_Type,
@@ -193,10 +193,10 @@ var Z_AnyTrue_Info = typeinfo.Flow{
 		Name:    "test",
 		Label:   "_",
 		Repeats: true,
-		Type:    &rti.Z_BoolEval_Info,
+		Type:    &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns true if any of the evaluations are true.",
@@ -235,14 +235,14 @@ func (op *Blankline) GetMarkup(ensure bool) map[string]any {
 const Z_Blankline_Type = "blankline"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Blankline)(nil)
+var _ rtti.Execute = (*Blankline)(nil)
 
 var Z_Blankline_Info = typeinfo.Flow{
 	Name:  Z_Blankline_Type,
 	Lede:  "p",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Add a single blank line following some text.",
@@ -261,7 +261,7 @@ func (*Blankline_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_BracketText struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -282,7 +282,7 @@ func (op *BracketText) GetMarkup(ensure bool) map[string]any {
 const Z_BracketText_Type = "bracket_text"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*BracketText)(nil)
+var _ rtti.TextEval = (*BracketText)(nil)
 
 var Z_BracketText_Info = typeinfo.Flow{
 	Name: Z_BracketText_Type,
@@ -291,10 +291,10 @@ var Z_BracketText_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
@@ -333,14 +333,14 @@ func (op *Break) GetMarkup(ensure bool) map[string]any {
 const Z_Break_Type = "break"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Break)(nil)
+var _ rtti.Execute = (*Break)(nil)
 
 var Z_Break_Info = typeinfo.Flow{
 	Name:  Z_Break_Type,
 	Lede:  "break",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
@@ -359,7 +359,7 @@ func (*Break_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_BufferText struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -380,7 +380,7 @@ func (op *BufferText) GetMarkup(ensure bool) map[string]any {
 const Z_BufferText_Type = "buffer_text"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*BufferText)(nil)
+var _ rtti.TextEval = (*BufferText)(nil)
 
 var Z_BufferText_Info = typeinfo.Flow{
 	Name: Z_BufferText_Type,
@@ -389,10 +389,10 @@ var Z_BufferText_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 }
 
@@ -409,7 +409,7 @@ func (*BufferText_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_CallCycle struct {
 	Name   string
-	Parts  rti.TextEval
+	Parts  rtti.TextEval
 	Markup map[string]any
 }
 
@@ -430,7 +430,7 @@ func (op *CallCycle) GetMarkup(ensure bool) map[string]any {
 const Z_CallCycle_Type = "call_cycle"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*CallCycle)(nil)
+var _ rtti.TextEval = (*CallCycle)(nil)
 
 var Z_CallCycle_Info = typeinfo.Flow{
 	Name: Z_CallCycle_Type,
@@ -443,10 +443,10 @@ var Z_CallCycle_Info = typeinfo.Flow{
 		Name:    "parts",
 		Label:   "over",
 		Repeats: true,
-		Type:    &rti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Runtime version of cycle_text.",
@@ -466,7 +466,7 @@ func (*CallCycle_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_CallShuffle struct {
 	Name    string
-	Parts   rti.TextEval
+	Parts   rtti.TextEval
 	Indices Shuffler
 	Markup  map[string]any
 }
@@ -488,7 +488,7 @@ func (op *CallShuffle) GetMarkup(ensure bool) map[string]any {
 const Z_CallShuffle_Type = "call_shuffle"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*CallShuffle)(nil)
+var _ rtti.TextEval = (*CallShuffle)(nil)
 
 var Z_CallShuffle_Info = typeinfo.Flow{
 	Name: Z_CallShuffle_Type,
@@ -501,14 +501,14 @@ var Z_CallShuffle_Info = typeinfo.Flow{
 		Name:    "parts",
 		Label:   "over",
 		Repeats: true,
-		Type:    &rti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_Info,
 	}, {
 		Name:    "indices",
 		Label:   "indices",
 		Private: true,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Runtime version of shuffle_text.",
@@ -528,7 +528,7 @@ func (*CallShuffle_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_CallTerminal struct {
 	Name   string
-	Parts  rti.TextEval
+	Parts  rtti.TextEval
 	Markup map[string]any
 }
 
@@ -549,7 +549,7 @@ func (op *CallTerminal) GetMarkup(ensure bool) map[string]any {
 const Z_CallTerminal_Type = "call_terminal"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*CallTerminal)(nil)
+var _ rtti.TextEval = (*CallTerminal)(nil)
 
 var Z_CallTerminal_Info = typeinfo.Flow{
 	Name: Z_CallTerminal_Type,
@@ -562,10 +562,10 @@ var Z_CallTerminal_Info = typeinfo.Flow{
 		Name:    "parts",
 		Label:   "over",
 		Repeats: true,
-		Type:    &rti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Runtime version of stopping_text.",
@@ -586,7 +586,7 @@ func (*CallTerminal_Slice) Inspect() typeinfo.T {
 type FIX_CallTrigger struct {
 	Name    string
 	Trigger Trigger
-	Num     rti.NumberEval
+	Num     rtti.NumberEval
 	Markup  map[string]any
 }
 
@@ -607,7 +607,7 @@ func (op *CallTrigger) GetMarkup(ensure bool) map[string]any {
 const Z_CallTrigger_Type = "call_trigger"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*CallTrigger)(nil)
+var _ rtti.BoolEval = (*CallTrigger)(nil)
 
 var Z_CallTrigger_Info = typeinfo.Flow{
 	Name: Z_CallTrigger_Type,
@@ -623,10 +623,10 @@ var Z_CallTrigger_Info = typeinfo.Flow{
 	}, {
 		Name:  "num",
 		Label: "num",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Runtime version of count_of.",
@@ -645,7 +645,7 @@ func (*CallTrigger_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Capitalize struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -666,7 +666,7 @@ func (op *Capitalize) GetMarkup(ensure bool) map[string]any {
 const Z_Capitalize_Type = "capitalize"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*Capitalize)(nil)
+var _ rtti.TextEval = (*Capitalize)(nil)
 
 var Z_Capitalize_Info = typeinfo.Flow{
 	Name: Z_Capitalize_Type,
@@ -674,10 +674,10 @@ var Z_Capitalize_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns new text, with the first letter turned into uppercase.",
@@ -696,9 +696,9 @@ func (*Capitalize_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ChooseBranch struct {
-	If     rti.BoolEval
+	If     rtti.BoolEval
 	Args   assign.Arg
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Else   Brancher
 	Markup map[string]any
 }
@@ -720,7 +720,7 @@ func (op *ChooseBranch) GetMarkup(ensure bool) map[string]any {
 const Z_ChooseBranch_Type = "choose_branch"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*ChooseBranch)(nil)
+var _ rtti.Execute = (*ChooseBranch)(nil)
 var _ Brancher = (*ChooseBranch)(nil)
 
 var Z_ChooseBranch_Info = typeinfo.Flow{
@@ -729,7 +729,7 @@ var Z_ChooseBranch_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "if",
 		Label: "_",
-		Type:  &rti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_Info,
 	}, {
 		Name:     "args",
 		Label:    "assuming",
@@ -740,7 +740,7 @@ var Z_ChooseBranch_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}, {
 		Name:     "else",
 		Label:    "else",
@@ -748,7 +748,7 @@ var Z_ChooseBranch_Info = typeinfo.Flow{
 		Type:     &Z_Brancher_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 		&Z_Brancher_Info,
 	},
 	Markup: map[string]any{
@@ -768,7 +768,7 @@ func (*ChooseBranch_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ChooseNothingElse struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -798,7 +798,7 @@ var Z_ChooseNothingElse_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_Brancher_Info,
@@ -817,9 +817,9 @@ func (*ChooseNothingElse_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ChooseNum struct {
-	If     rti.BoolEval
-	True   rti.NumberEval
-	False  rti.NumberEval
+	If     rtti.BoolEval
+	True   rtti.NumberEval
+	False  rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -840,7 +840,7 @@ func (op *ChooseNum) GetMarkup(ensure bool) map[string]any {
 const Z_ChooseNum_Type = "choose_num"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*ChooseNum)(nil)
+var _ rtti.NumberEval = (*ChooseNum)(nil)
 
 var Z_ChooseNum_Info = typeinfo.Flow{
 	Name: Z_ChooseNum_Type,
@@ -848,19 +848,19 @@ var Z_ChooseNum_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "if",
 		Label: "if",
-		Type:  &rti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_Info,
 	}, {
 		Name:  "true",
 		Label: "then",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "false",
 		Label:    "else",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Pick one of two numbers based on a boolean test.",
@@ -879,9 +879,9 @@ func (*ChooseNum_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ChooseText struct {
-	If     rti.BoolEval
-	True   rti.TextEval
-	False  rti.TextEval
+	If     rtti.BoolEval
+	True   rtti.TextEval
+	False  rtti.TextEval
 	Markup map[string]any
 }
 
@@ -902,7 +902,7 @@ func (op *ChooseText) GetMarkup(ensure bool) map[string]any {
 const Z_ChooseText_Type = "choose_text"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*ChooseText)(nil)
+var _ rtti.TextEval = (*ChooseText)(nil)
 
 var Z_ChooseText_Info = typeinfo.Flow{
 	Name: Z_ChooseText_Type,
@@ -910,19 +910,19 @@ var Z_ChooseText_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "if",
 		Label: "if",
-		Type:  &rti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_Info,
 	}, {
 		Name:  "true",
 		Label: "then",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:     "false",
 		Label:    "else",
 		Optional: true,
-		Type:     &rti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Pick one of two strings based on a boolean test.",
@@ -941,7 +941,7 @@ func (*ChooseText_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_CommaText struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -962,7 +962,7 @@ func (op *CommaText) GetMarkup(ensure bool) map[string]any {
 const Z_CommaText_Type = "comma_text"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*CommaText)(nil)
+var _ rtti.TextEval = (*CommaText)(nil)
 
 var Z_CommaText_Info = typeinfo.Flow{
 	Name: Z_CommaText_Type,
@@ -971,10 +971,10 @@ var Z_CommaText_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Separates words with commas, and 'and'.",
@@ -993,9 +993,9 @@ func (*CommaText_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_CompareValue struct {
-	A      rti.Assignment
+	A      rtti.Assignment
 	Is     string
-	B      rti.Assignment
+	B      rtti.Assignment
 	Markup map[string]any
 }
 
@@ -1016,7 +1016,7 @@ func (op *CompareValue) GetMarkup(ensure bool) map[string]any {
 const Z_CompareValue_Type = "compare_value"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*CompareValue)(nil)
+var _ rtti.BoolEval = (*CompareValue)(nil)
 
 var Z_CompareValue_Info = typeinfo.Flow{
 	Name: Z_CompareValue_Type,
@@ -1024,7 +1024,7 @@ var Z_CompareValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}, {
 		Name:  "is",
 		Label: "matching",
@@ -1032,10 +1032,10 @@ var Z_CompareValue_Info = typeinfo.Flow{
 	}, {
 		Name:  "b",
 		Label: "value",
-		Type:  &rti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if eq,ne,gt,lt,ge,le two numbers.",
@@ -1054,9 +1054,9 @@ func (*CompareValue_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_CompareNum struct {
-	A         rti.NumberEval
+	A         rtti.NumberEval
 	Is        string
-	B         rti.NumberEval
+	B         rtti.NumberEval
 	Tolerance float64
 	Markup    map[string]any
 }
@@ -1078,7 +1078,7 @@ func (op *CompareNum) GetMarkup(ensure bool) map[string]any {
 const Z_CompareNum_Type = "compare_num"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*CompareNum)(nil)
+var _ rtti.BoolEval = (*CompareNum)(nil)
 
 var Z_CompareNum_Info = typeinfo.Flow{
 	Name: Z_CompareNum_Type,
@@ -1086,7 +1086,7 @@ var Z_CompareNum_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "is",
 		Label: "matching",
@@ -1094,7 +1094,7 @@ var Z_CompareNum_Info = typeinfo.Flow{
 	}, {
 		Name:  "b",
 		Label: "num",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "tolerance",
 		Label:    "within",
@@ -1102,7 +1102,7 @@ var Z_CompareNum_Info = typeinfo.Flow{
 		Type:     &prim.Z_Number_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if eq,ne,gt,lt,ge,le two numbers.",
@@ -1121,9 +1121,9 @@ func (*CompareNum_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_CompareText struct {
-	A      rti.TextEval
+	A      rtti.TextEval
 	Is     string
-	B      rti.TextEval
+	B      rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1144,7 +1144,7 @@ func (op *CompareText) GetMarkup(ensure bool) map[string]any {
 const Z_CompareText_Type = "compare_text"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*CompareText)(nil)
+var _ rtti.BoolEval = (*CompareText)(nil)
 
 var Z_CompareText_Info = typeinfo.Flow{
 	Name: Z_CompareText_Type,
@@ -1152,7 +1152,7 @@ var Z_CompareText_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "is",
 		Label: "matching",
@@ -1160,10 +1160,10 @@ var Z_CompareText_Info = typeinfo.Flow{
 	}, {
 		Name:  "b",
 		Label: "text",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if eq,ne,gt,lt,ge,le two strings ( lexical. ).",
@@ -1182,8 +1182,8 @@ func (*CompareText_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SubtractValue struct {
-	A      rti.NumberEval
-	B      rti.NumberEval
+	A      rtti.NumberEval
+	B      rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -1204,7 +1204,7 @@ func (op *SubtractValue) GetMarkup(ensure bool) map[string]any {
 const Z_SubtractValue_Type = "subtract_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*SubtractValue)(nil)
+var _ rtti.NumberEval = (*SubtractValue)(nil)
 
 var Z_SubtractValue_Info = typeinfo.Flow{
 	Name: Z_SubtractValue_Type,
@@ -1212,14 +1212,14 @@ var Z_SubtractValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "b",
 		Label: "value",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Subtract two numbers.",
@@ -1259,8 +1259,8 @@ func (op *During) GetMarkup(ensure bool) map[string]any {
 const Z_During_Type = "during"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*During)(nil)
-var _ rti.NumberEval = (*During)(nil)
+var _ rtti.BoolEval = (*During)(nil)
+var _ rtti.NumberEval = (*During)(nil)
 
 var Z_During_Info = typeinfo.Flow{
 	Name: Z_During_Type,
@@ -1271,8 +1271,8 @@ var Z_During_Info = typeinfo.Flow{
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_BoolEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Decide whether a pattern is running.",
@@ -1291,7 +1291,7 @@ func (*During_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_FieldsOfKind struct {
-	KindName rti.TextEval
+	KindName rtti.TextEval
 	Markup   map[string]any
 }
 
@@ -1312,7 +1312,7 @@ func (op *FieldsOfKind) GetMarkup(ensure bool) map[string]any {
 const Z_FieldsOfKind_Type = "fields_of_kind"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*FieldsOfKind)(nil)
+var _ rtti.TextListEval = (*FieldsOfKind)(nil)
 
 var Z_FieldsOfKind_Info = typeinfo.Flow{
 	Name: Z_FieldsOfKind_Type,
@@ -1320,10 +1320,10 @@ var Z_FieldsOfKind_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "kind_name",
 		Label: "of",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "List of the field names of a kind.",
@@ -1363,7 +1363,7 @@ func (op *HasDominion) GetMarkup(ensure bool) map[string]any {
 const Z_HasDominion_Type = "has_dominion"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*HasDominion)(nil)
+var _ rtti.BoolEval = (*HasDominion)(nil)
 
 var Z_HasDominion_Info = typeinfo.Flow{
 	Name: Z_HasDominion_Type,
@@ -1374,7 +1374,7 @@ var Z_HasDominion_Info = typeinfo.Flow{
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 }
 
@@ -1390,7 +1390,7 @@ func (*HasDominion_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_IdOf struct {
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1411,7 +1411,7 @@ func (op *IdOf) GetMarkup(ensure bool) map[string]any {
 const Z_IdOf_Type = "id_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*IdOf)(nil)
+var _ rtti.TextEval = (*IdOf)(nil)
 
 var Z_IdOf_Info = typeinfo.Flow{
 	Name: Z_IdOf_Type,
@@ -1419,10 +1419,10 @@ var Z_IdOf_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "A unique object identifier.",
@@ -1441,8 +1441,8 @@ func (*IdOf_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Includes struct {
-	Text   rti.TextEval
-	Part   rti.TextEval
+	Text   rtti.TextEval
+	Part   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1463,7 +1463,7 @@ func (op *Includes) GetMarkup(ensure bool) map[string]any {
 const Z_Includes_Type = "includes"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*Includes)(nil)
+var _ rtti.BoolEval = (*Includes)(nil)
 
 var Z_Includes_Info = typeinfo.Flow{
 	Name: Z_Includes_Type,
@@ -1471,14 +1471,14 @@ var Z_Includes_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "part",
 		Label: "part",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if text contains text.",
@@ -1497,7 +1497,7 @@ func (*Includes_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_IsEmpty struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1518,7 +1518,7 @@ func (op *IsEmpty) GetMarkup(ensure bool) map[string]any {
 const Z_IsEmpty_Type = "is_empty"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*IsEmpty)(nil)
+var _ rtti.BoolEval = (*IsEmpty)(nil)
 
 var Z_IsEmpty_Info = typeinfo.Flow{
 	Name: Z_IsEmpty_Type,
@@ -1526,10 +1526,10 @@ var Z_IsEmpty_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "empty",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if the text is empty.",
@@ -1548,7 +1548,7 @@ func (*IsEmpty_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_IsExactKindOf struct {
-	Object rti.TextEval
+	Object rtti.TextEval
 	Kind   string
 	Markup map[string]any
 }
@@ -1570,7 +1570,7 @@ func (op *IsExactKindOf) GetMarkup(ensure bool) map[string]any {
 const Z_IsExactKindOf_Type = "is_exact_kind_of"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*IsExactKindOf)(nil)
+var _ rtti.BoolEval = (*IsExactKindOf)(nil)
 
 var Z_IsExactKindOf_Info = typeinfo.Flow{
 	Name: Z_IsExactKindOf_Type,
@@ -1578,14 +1578,14 @@ var Z_IsExactKindOf_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "kind",
 		Label: "is_exactly",
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if the object is exactly the named kind.",
@@ -1604,7 +1604,7 @@ func (*IsExactKindOf_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_IsKindOf struct {
-	Object  rti.TextEval
+	Object  rtti.TextEval
 	Kind    string
 	Nothing bool
 	Markup  map[string]any
@@ -1627,7 +1627,7 @@ func (op *IsKindOf) GetMarkup(ensure bool) map[string]any {
 const Z_IsKindOf_Type = "is_kind_of"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*IsKindOf)(nil)
+var _ rtti.BoolEval = (*IsKindOf)(nil)
 
 var Z_IsKindOf_Info = typeinfo.Flow{
 	Name: Z_IsKindOf_Type,
@@ -1635,7 +1635,7 @@ var Z_IsKindOf_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "kind",
 		Label: "is",
@@ -1647,7 +1647,7 @@ var Z_IsKindOf_Info = typeinfo.Flow{
 		Type:     &prim.Z_Bool_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "True if the object is compatible with the named kind.",
@@ -1666,8 +1666,8 @@ func (*IsKindOf_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Join struct {
-	Sep    rti.TextEval
-	Parts  rti.TextEval
+	Sep    rtti.TextEval
+	Parts  rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1688,7 +1688,7 @@ func (op *Join) GetMarkup(ensure bool) map[string]any {
 const Z_Join_Type = "join"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*Join)(nil)
+var _ rtti.TextEval = (*Join)(nil)
 
 var Z_Join_Info = typeinfo.Flow{
 	Name: Z_Join_Type,
@@ -1697,15 +1697,15 @@ var Z_Join_Info = typeinfo.Flow{
 		Name:     "sep",
 		Label:    "_",
 		Optional: true,
-		Type:     &rti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_Info,
 	}, {
 		Name:    "parts",
 		Label:   "parts",
 		Repeats: true,
-		Type:    &rti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns multiple pieces of text as a single new piece of text.",
@@ -1724,7 +1724,7 @@ func (*Join_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_KindOf struct {
-	Object  rti.TextEval
+	Object  rtti.TextEval
 	Nothing bool
 	Markup  map[string]any
 }
@@ -1746,7 +1746,7 @@ func (op *KindOf) GetMarkup(ensure bool) map[string]any {
 const Z_KindOf_Type = "kind_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*KindOf)(nil)
+var _ rtti.TextEval = (*KindOf)(nil)
 
 var Z_KindOf_Info = typeinfo.Flow{
 	Name: Z_KindOf_Type,
@@ -1754,7 +1754,7 @@ var Z_KindOf_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:     "nothing",
 		Label:    "nothing",
@@ -1762,7 +1762,7 @@ var Z_KindOf_Info = typeinfo.Flow{
 		Type:     &prim.Z_Bool_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Friendly name of the object's kind.",
@@ -1802,7 +1802,7 @@ func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
 const Z_KindsOf_Type = "kinds_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*KindsOf)(nil)
+var _ rtti.TextListEval = (*KindsOf)(nil)
 
 var Z_KindsOf_Info = typeinfo.Flow{
 	Name: Z_KindsOf_Type,
@@ -1813,7 +1813,7 @@ var Z_KindsOf_Info = typeinfo.Flow{
 		Type:  &prim.Z_Text_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "A list of compatible kinds.",
@@ -1832,7 +1832,7 @@ func (*KindsOf_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeLowercase struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1853,7 +1853,7 @@ func (op *MakeLowercase) GetMarkup(ensure bool) map[string]any {
 const Z_MakeLowercase_Type = "make_lowercase"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*MakeLowercase)(nil)
+var _ rtti.TextEval = (*MakeLowercase)(nil)
 
 var Z_MakeLowercase_Info = typeinfo.Flow{
 	Name: Z_MakeLowercase_Type,
@@ -1861,10 +1861,10 @@ var Z_MakeLowercase_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
@@ -1883,7 +1883,7 @@ func (*MakeLowercase_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeReversed struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1904,7 +1904,7 @@ func (op *MakeReversed) GetMarkup(ensure bool) map[string]any {
 const Z_MakeReversed_Type = "make_reversed"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*MakeReversed)(nil)
+var _ rtti.TextEval = (*MakeReversed)(nil)
 
 var Z_MakeReversed_Info = typeinfo.Flow{
 	Name: Z_MakeReversed_Type,
@@ -1912,10 +1912,10 @@ var Z_MakeReversed_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "text",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
@@ -1934,7 +1934,7 @@ func (*MakeReversed_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeSentenceCase struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1955,7 +1955,7 @@ func (op *MakeSentenceCase) GetMarkup(ensure bool) map[string]any {
 const Z_MakeSentenceCase_Type = "make_sentence_case"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*MakeSentenceCase)(nil)
+var _ rtti.TextEval = (*MakeSentenceCase)(nil)
 
 var Z_MakeSentenceCase_Info = typeinfo.Flow{
 	Name: Z_MakeSentenceCase_Type,
@@ -1963,10 +1963,10 @@ var Z_MakeSentenceCase_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
@@ -1985,7 +1985,7 @@ func (*MakeSentenceCase_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeTitleCase struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2006,7 +2006,7 @@ func (op *MakeTitleCase) GetMarkup(ensure bool) map[string]any {
 const Z_MakeTitleCase_Type = "make_title_case"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*MakeTitleCase)(nil)
+var _ rtti.TextEval = (*MakeTitleCase)(nil)
 
 var Z_MakeTitleCase_Info = typeinfo.Flow{
 	Name: Z_MakeTitleCase_Type,
@@ -2014,10 +2014,10 @@ var Z_MakeTitleCase_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.",
@@ -2036,7 +2036,7 @@ func (*MakeTitleCase_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeUppercase struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2057,7 +2057,7 @@ func (op *MakeUppercase) GetMarkup(ensure bool) map[string]any {
 const Z_MakeUppercase_Type = "make_uppercase"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*MakeUppercase)(nil)
+var _ rtti.TextEval = (*MakeUppercase)(nil)
 
 var Z_MakeUppercase_Info = typeinfo.Flow{
 	Name: Z_MakeUppercase_Type,
@@ -2065,10 +2065,10 @@ var Z_MakeUppercase_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.",
@@ -2087,7 +2087,7 @@ func (*MakeUppercase_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Matches struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Match  string
 	Cache  MatchCache
 	Markup map[string]any
@@ -2110,7 +2110,7 @@ func (op *Matches) GetMarkup(ensure bool) map[string]any {
 const Z_Matches_Type = "matches"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*Matches)(nil)
+var _ rtti.BoolEval = (*Matches)(nil)
 
 var Z_Matches_Info = typeinfo.Flow{
 	Name: Z_Matches_Type,
@@ -2118,7 +2118,7 @@ var Z_Matches_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "match",
 		Label: "to",
@@ -2129,7 +2129,7 @@ var Z_Matches_Info = typeinfo.Flow{
 		Private: true,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Determine whether the specified text is similar to the specified regular expression.",
@@ -2148,7 +2148,7 @@ func (*Matches_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_NameOf struct {
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2169,7 +2169,7 @@ func (op *NameOf) GetMarkup(ensure bool) map[string]any {
 const Z_NameOf_Type = "name_of"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*NameOf)(nil)
+var _ rtti.TextEval = (*NameOf)(nil)
 
 var Z_NameOf_Info = typeinfo.Flow{
 	Name: Z_NameOf_Type,
@@ -2177,10 +2177,10 @@ var Z_NameOf_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Full name of the object.",
@@ -2219,14 +2219,14 @@ func (op *Never) GetMarkup(ensure bool) map[string]any {
 const Z_Never_Type = "never"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*Never)(nil)
+var _ rtti.BoolEval = (*Never)(nil)
 
 var Z_Never_Info = typeinfo.Flow{
 	Name:  Z_Never_Type,
 	Lede:  "never",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns false.",
@@ -2265,14 +2265,14 @@ func (op *Newline) GetMarkup(ensure bool) map[string]any {
 const Z_Newline_Type = "newline"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Newline)(nil)
+var _ rtti.Execute = (*Newline)(nil)
 
 var Z_Newline_Info = typeinfo.Flow{
 	Name:  Z_Newline_Type,
 	Lede:  "br",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Start a new line.",
@@ -2311,14 +2311,14 @@ func (op *Continue) GetMarkup(ensure bool) map[string]any {
 const Z_Continue_Type = "continue"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Continue)(nil)
+var _ rtti.Execute = (*Continue)(nil)
 
 var Z_Continue_Info = typeinfo.Flow{
 	Name:  Z_Continue_Type,
 	Lede:  "continue",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
@@ -2337,7 +2337,7 @@ func (*Continue_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Not struct {
-	Test   rti.BoolEval
+	Test   rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -2358,7 +2358,7 @@ func (op *Not) GetMarkup(ensure bool) map[string]any {
 const Z_Not_Type = "not"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*Not)(nil)
+var _ rtti.BoolEval = (*Not)(nil)
 
 var Z_Not_Info = typeinfo.Flow{
 	Name: Z_Not_Type,
@@ -2366,10 +2366,10 @@ var Z_Not_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "test",
 		Label: "_",
-		Type:  &rti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the opposite value.",
@@ -2388,7 +2388,7 @@ func (*Not_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ObjectExists struct {
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2409,7 +2409,7 @@ func (op *ObjectExists) GetMarkup(ensure bool) map[string]any {
 const Z_ObjectExists_Type = "object_exists"
 
 // ensure the command implements its specified slots:
-var _ rti.BoolEval = (*ObjectExists)(nil)
+var _ rtti.BoolEval = (*ObjectExists)(nil)
 
 var Z_ObjectExists_Info = typeinfo.Flow{
 	Name: Z_ObjectExists_Type,
@@ -2417,10 +2417,10 @@ var Z_ObjectExists_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "valid",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns whether there is a object of the specified name.",
@@ -2439,7 +2439,7 @@ func (*ObjectExists_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ObjectTraits struct {
-	Object rti.TextEval
+	Object rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2460,7 +2460,7 @@ func (op *ObjectTraits) GetMarkup(ensure bool) map[string]any {
 const Z_ObjectTraits_Type = "object_traits"
 
 // ensure the command implements its specified slots:
-var _ rti.TextListEval = (*ObjectTraits)(nil)
+var _ rtti.TextListEval = (*ObjectTraits)(nil)
 
 var Z_ObjectTraits_Info = typeinfo.Flow{
 	Name: Z_ObjectTraits_Type,
@@ -2468,10 +2468,10 @@ var Z_ObjectTraits_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "traits",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextListEval_Info,
+		&rtti.Z_TextListEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns all of the object's current traits as a list of text.",
@@ -2490,7 +2490,7 @@ func (*ObjectTraits_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Pluralize struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2511,7 +2511,7 @@ func (op *Pluralize) GetMarkup(ensure bool) map[string]any {
 const Z_Pluralize_Type = "pluralize"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*Pluralize)(nil)
+var _ rtti.TextEval = (*Pluralize)(nil)
 
 var Z_Pluralize_Info = typeinfo.Flow{
 	Name: Z_Pluralize_Type,
@@ -2519,10 +2519,10 @@ var Z_Pluralize_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "of",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the plural form of a singular word. (ex. apples for apple. ).",
@@ -2541,7 +2541,7 @@ func (*Pluralize_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_PrintNum struct {
-	Num    rti.NumberEval
+	Num    rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2562,7 +2562,7 @@ func (op *PrintNum) GetMarkup(ensure bool) map[string]any {
 const Z_PrintNum_Type = "print_num"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*PrintNum)(nil)
+var _ rtti.TextEval = (*PrintNum)(nil)
 
 var Z_PrintNum_Info = typeinfo.Flow{
 	Name: Z_PrintNum_Type,
@@ -2570,10 +2570,10 @@ var Z_PrintNum_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "num",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Writes a number using numerals, eg. '1'.",
@@ -2592,7 +2592,7 @@ func (*PrintNum_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_PrintNumWord struct {
-	Num    rti.NumberEval
+	Num    rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2613,7 +2613,7 @@ func (op *PrintNumWord) GetMarkup(ensure bool) map[string]any {
 const Z_PrintNumWord_Type = "print_num_word"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*PrintNumWord)(nil)
+var _ rtti.TextEval = (*PrintNumWord)(nil)
 
 var Z_PrintNumWord_Info = typeinfo.Flow{
 	Name: Z_PrintNumWord_Type,
@@ -2621,10 +2621,10 @@ var Z_PrintNumWord_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "num",
 		Label: "words",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Writes a number in plain english: eg. 'one'.",
@@ -2643,8 +2643,8 @@ func (*PrintNumWord_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MultiplyValue struct {
-	A      rti.NumberEval
-	B      rti.NumberEval
+	A      rtti.NumberEval
+	B      rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2665,7 +2665,7 @@ func (op *MultiplyValue) GetMarkup(ensure bool) map[string]any {
 const Z_MultiplyValue_Type = "multiply_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*MultiplyValue)(nil)
+var _ rtti.NumberEval = (*MultiplyValue)(nil)
 
 var Z_MultiplyValue_Info = typeinfo.Flow{
 	Name: Z_MultiplyValue_Type,
@@ -2673,14 +2673,14 @@ var Z_MultiplyValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "b",
 		Label: "value",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Multiply two numbers.",
@@ -2699,8 +2699,8 @@ func (*MultiplyValue_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_DivideValue struct {
-	A      rti.NumberEval
-	B      rti.NumberEval
+	A      rtti.NumberEval
+	B      rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2721,7 +2721,7 @@ func (op *DivideValue) GetMarkup(ensure bool) map[string]any {
 const Z_DivideValue_Type = "divide_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*DivideValue)(nil)
+var _ rtti.NumberEval = (*DivideValue)(nil)
 
 var Z_DivideValue_Info = typeinfo.Flow{
 	Name: Z_DivideValue_Type,
@@ -2729,14 +2729,14 @@ var Z_DivideValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "b",
 		Label: "value",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Divide one number by another.",
@@ -2755,8 +2755,8 @@ func (*DivideValue_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ModValue struct {
-	A      rti.NumberEval
-	B      rti.NumberEval
+	A      rtti.NumberEval
+	B      rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2777,7 +2777,7 @@ func (op *ModValue) GetMarkup(ensure bool) map[string]any {
 const Z_ModValue_Type = "mod_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*ModValue)(nil)
+var _ rtti.NumberEval = (*ModValue)(nil)
 
 var Z_ModValue_Info = typeinfo.Flow{
 	Name: Z_ModValue_Type,
@@ -2785,14 +2785,14 @@ var Z_ModValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "b",
 		Label: "value",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Divide one number by another, and return the remainder.",
@@ -2811,7 +2811,7 @@ func (*ModValue_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_AbsValue struct {
-	Value  rti.NumberEval
+	Value  rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2832,7 +2832,7 @@ func (op *AbsValue) GetMarkup(ensure bool) map[string]any {
 const Z_AbsValue_Type = "abs_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*AbsValue)(nil)
+var _ rtti.NumberEval = (*AbsValue)(nil)
 
 var Z_AbsValue_Info = typeinfo.Flow{
 	Name: Z_AbsValue_Type,
@@ -2840,10 +2840,10 @@ var Z_AbsValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "value",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 }
 
@@ -2860,7 +2860,7 @@ func (*AbsValue_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_Increment struct {
 	Target assign.Address
-	Step   rti.NumberEval
+	Step   rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2881,8 +2881,8 @@ func (op *Increment) GetMarkup(ensure bool) map[string]any {
 const Z_Increment_Type = "increment"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*Increment)(nil)
-var _ rti.Execute = (*Increment)(nil)
+var _ rtti.NumberEval = (*Increment)(nil)
+var _ rtti.Execute = (*Increment)(nil)
 
 var Z_Increment_Info = typeinfo.Flow{
 	Name: Z_Increment_Type,
@@ -2895,11 +2895,11 @@ var Z_Increment_Info = typeinfo.Flow{
 		Name:     "step",
 		Label:    "by",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
-		&rti.Z_Execute_Info,
+		&rtti.Z_NumberEval_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Increases the value of a number held in by a variable or object field.", "Returns the new value of the number."},
@@ -2919,7 +2919,7 @@ func (*Increment_Slice) Inspect() typeinfo.T {
 // also should have user comment here
 type FIX_Decrement struct {
 	Target assign.Address
-	Step   rti.NumberEval
+	Step   rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -2940,8 +2940,8 @@ func (op *Decrement) GetMarkup(ensure bool) map[string]any {
 const Z_Decrement_Type = "decrement"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*Decrement)(nil)
-var _ rti.Execute = (*Decrement)(nil)
+var _ rtti.NumberEval = (*Decrement)(nil)
+var _ rtti.Execute = (*Decrement)(nil)
 
 var Z_Decrement_Info = typeinfo.Flow{
 	Name: Z_Decrement_Type,
@@ -2954,11 +2954,11 @@ var Z_Decrement_Info = typeinfo.Flow{
 		Name:     "step",
 		Label:    "by",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
-		&rti.Z_Execute_Info,
+		&rtti.Z_NumberEval_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Decrease the value of a number held in by a variable or object field.", "Returns the new value of the number."},
@@ -2977,10 +2977,10 @@ func (*Decrement_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_IncrementAspect struct {
-	Target rti.TextEval
-	Aspect rti.TextEval
-	Step   rti.NumberEval
-	Clamp  rti.BoolEval
+	Target rtti.TextEval
+	Aspect rtti.TextEval
+	Step   rtti.NumberEval
+	Clamp  rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -3001,8 +3001,8 @@ func (op *IncrementAspect) GetMarkup(ensure bool) map[string]any {
 const Z_IncrementAspect_Type = "increment_aspect"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*IncrementAspect)(nil)
-var _ rti.Execute = (*IncrementAspect)(nil)
+var _ rtti.TextEval = (*IncrementAspect)(nil)
+var _ rtti.Execute = (*IncrementAspect)(nil)
 
 var Z_IncrementAspect_Info = typeinfo.Flow{
 	Name: Z_IncrementAspect_Type,
@@ -3010,25 +3010,25 @@ var Z_IncrementAspect_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "target",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "aspect",
 		Label: "aspect",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:     "step",
 		Label:    "by",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "clamp",
 		Label:    "clamp",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
-		&rti.Z_Execute_Info,
+		&rtti.Z_TextEval_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Increases the value of a trait held by an object aspect.", "Returns the new value of the trait."},
@@ -3047,10 +3047,10 @@ func (*IncrementAspect_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_DecrementAspect struct {
-	Target rti.TextEval
-	Aspect rti.TextEval
-	Step   rti.NumberEval
-	Clamp  rti.BoolEval
+	Target rtti.TextEval
+	Aspect rtti.TextEval
+	Step   rtti.NumberEval
+	Clamp  rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -3071,8 +3071,8 @@ func (op *DecrementAspect) GetMarkup(ensure bool) map[string]any {
 const Z_DecrementAspect_Type = "decrement_aspect"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*DecrementAspect)(nil)
-var _ rti.Execute = (*DecrementAspect)(nil)
+var _ rtti.TextEval = (*DecrementAspect)(nil)
+var _ rtti.Execute = (*DecrementAspect)(nil)
 
 var Z_DecrementAspect_Info = typeinfo.Flow{
 	Name: Z_DecrementAspect_Type,
@@ -3080,25 +3080,25 @@ var Z_DecrementAspect_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "target",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:  "aspect",
 		Label: "aspect",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}, {
 		Name:     "step",
 		Label:    "by",
 		Optional: true,
-		Type:     &rti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_Info,
 	}, {
 		Name:     "clamp",
 		Label:    "clamp",
 		Optional: true,
-		Type:     &rti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
-		&rti.Z_Execute_Info,
+		&rtti.Z_TextEval_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Increases the value of a trait held by an object aspect.", "Returns the new value of the trait."},
@@ -3117,7 +3117,7 @@ func (*DecrementAspect_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_PrintText struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -3138,7 +3138,7 @@ func (op *PrintText) GetMarkup(ensure bool) map[string]any {
 const Z_PrintText_Type = "print_text"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*PrintText)(nil)
+var _ rtti.Execute = (*PrintText)(nil)
 
 var Z_PrintText_Info = typeinfo.Flow{
 	Name: Z_PrintText_Type,
@@ -3146,10 +3146,10 @@ var Z_PrintText_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Display some text to the player without apply any additional formatting.",
@@ -3168,7 +3168,7 @@ func (*PrintText_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Row struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -3189,7 +3189,7 @@ func (op *Row) GetMarkup(ensure bool) map[string]any {
 const Z_Row_Type = "row"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*Row)(nil)
+var _ rtti.TextEval = (*Row)(nil)
 
 var Z_Row_Info = typeinfo.Flow{
 	Name: Z_Row_Type,
@@ -3198,10 +3198,10 @@ var Z_Row_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
@@ -3220,7 +3220,7 @@ func (*Row_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Rows struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -3241,7 +3241,7 @@ func (op *Rows) GetMarkup(ensure bool) map[string]any {
 const Z_Rows_Type = "rows"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*Rows)(nil)
+var _ rtti.TextEval = (*Rows)(nil)
 
 var Z_Rows_Info = typeinfo.Flow{
 	Name: Z_Rows_Type,
@@ -3250,10 +3250,10 @@ var Z_Rows_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Group text into an unordered list <ul>.",
@@ -3272,7 +3272,7 @@ func (*Rows_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Singularize struct {
-	Text   rti.TextEval
+	Text   rtti.TextEval
 	Markup map[string]any
 }
 
@@ -3293,7 +3293,7 @@ func (op *Singularize) GetMarkup(ensure bool) map[string]any {
 const Z_Singularize_Type = "singularize"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*Singularize)(nil)
+var _ rtti.TextEval = (*Singularize)(nil)
 
 var Z_Singularize_Info = typeinfo.Flow{
 	Name: Z_Singularize_Type,
@@ -3301,10 +3301,10 @@ var Z_Singularize_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "of",
-		Type:  &rti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the singular form of a plural word. (ex. apple for apples ).",
@@ -3323,7 +3323,7 @@ func (*Singularize_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SlashText struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -3344,7 +3344,7 @@ func (op *SlashText) GetMarkup(ensure bool) map[string]any {
 const Z_SlashText_Type = "slash_text"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*SlashText)(nil)
+var _ rtti.TextEval = (*SlashText)(nil)
 
 var Z_SlashText_Info = typeinfo.Flow{
 	Name: Z_SlashText_Type,
@@ -3353,10 +3353,10 @@ var Z_SlashText_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Separates words with left-leaning slashes '/'.",
@@ -3395,14 +3395,14 @@ func (op *Softline) GetMarkup(ensure bool) map[string]any {
 const Z_Softline_Type = "softline"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*Softline)(nil)
+var _ rtti.Execute = (*Softline)(nil)
 
 var Z_Softline_Info = typeinfo.Flow{
 	Name:  Z_Softline_Type,
 	Lede:  "wbr",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Start a new line ( if not already at a new line. ).",
@@ -3421,7 +3421,7 @@ func (*Softline_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SpanText struct {
-	Exe    rti.Execute
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -3442,7 +3442,7 @@ func (op *SpanText) GetMarkup(ensure bool) map[string]any {
 const Z_SpanText_Type = "span_text"
 
 // ensure the command implements its specified slots:
-var _ rti.TextEval = (*SpanText)(nil)
+var _ rtti.TextEval = (*SpanText)(nil)
 
 var Z_SpanText_Info = typeinfo.Flow{
 	Name: Z_SpanText_Type,
@@ -3451,10 +3451,10 @@ var Z_SpanText_Info = typeinfo.Flow{
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_TextEval_Info,
+		&rtti.Z_TextEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Writes text with spaces between words.",
@@ -3473,8 +3473,8 @@ func (*SpanText_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_AddValue struct {
-	A      rti.NumberEval
-	B      rti.NumberEval
+	A      rtti.NumberEval
+	B      rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -3495,7 +3495,7 @@ func (op *AddValue) GetMarkup(ensure bool) map[string]any {
 const Z_AddValue_Type = "add_value"
 
 // ensure the command implements its specified slots:
-var _ rti.NumberEval = (*AddValue)(nil)
+var _ rtti.NumberEval = (*AddValue)(nil)
 
 var Z_AddValue_Info = typeinfo.Flow{
 	Name: Z_AddValue_Type,
@@ -3503,14 +3503,14 @@ var Z_AddValue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "_",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}, {
 		Name:  "b",
 		Label: "value",
-		Type:  &rti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_NumberEval_Info,
+		&rtti.Z_NumberEval_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Add two numbers.",
@@ -3658,8 +3658,8 @@ func (*TriggerSwitch_Slice) Inspect() typeinfo.T {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_While struct {
-	True   rti.BoolEval
-	Exe    rti.Execute
+	True   rtti.BoolEval
+	Exe    rtti.Execute
 	Markup map[string]any
 }
 
@@ -3680,7 +3680,7 @@ func (op *While) GetMarkup(ensure bool) map[string]any {
 const Z_While_Type = "while"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*While)(nil)
+var _ rtti.Execute = (*While)(nil)
 
 var Z_While_Info = typeinfo.Flow{
 	Name: Z_While_Type,
@@ -3688,15 +3688,15 @@ var Z_While_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{{
 		Name:  "true",
 		Label: "_",
-		Type:  &rti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_Info,
 	}, {
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_Info,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 	Markup: map[string]any{
 		"comment": "Keep running a series of actions while a condition is true.",

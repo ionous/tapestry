@@ -2,7 +2,7 @@
 package game
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/rti"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -29,14 +29,14 @@ func (op *QuitGame) GetMarkup(ensure bool) map[string]any {
 const Z_QuitGame_Type = "quit_game"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*QuitGame)(nil)
+var _ rtti.Execute = (*QuitGame)(nil)
 
 var Z_QuitGame_Info = typeinfo.Flow{
 	Name:  Z_QuitGame_Type,
 	Lede:  "quit_game",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -72,14 +72,14 @@ func (op *SaveGame) GetMarkup(ensure bool) map[string]any {
 const Z_SaveGame_Type = "save_game"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*SaveGame)(nil)
+var _ rtti.Execute = (*SaveGame)(nil)
 
 var Z_SaveGame_Info = typeinfo.Flow{
 	Name:  Z_SaveGame_Type,
 	Lede:  "save_game",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -115,14 +115,14 @@ func (op *RestoreGame) GetMarkup(ensure bool) map[string]any {
 const Z_RestoreGame_Type = "restore_game"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*RestoreGame)(nil)
+var _ rtti.Execute = (*RestoreGame)(nil)
 
 var Z_RestoreGame_Info = typeinfo.Flow{
 	Name:  Z_RestoreGame_Type,
 	Lede:  "restore_game",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -158,14 +158,14 @@ func (op *UndoTurn) GetMarkup(ensure bool) map[string]any {
 const Z_UndoTurn_Type = "undo_turn"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*UndoTurn)(nil)
+var _ rtti.Execute = (*UndoTurn)(nil)
 
 var Z_UndoTurn_Info = typeinfo.Flow{
 	Name:  Z_UndoTurn_Type,
 	Lede:  "undo_turn",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
@@ -201,14 +201,14 @@ func (op *PrintVersion) GetMarkup(ensure bool) map[string]any {
 const Z_PrintVersion_Type = "print_version"
 
 // ensure the command implements its specified slots:
-var _ rti.Execute = (*PrintVersion)(nil)
+var _ rtti.Execute = (*PrintVersion)(nil)
 
 var Z_PrintVersion_Info = typeinfo.Flow{
 	Name:  Z_PrintVersion_Type,
 	Lede:  "print_version",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rti.Z_Execute_Info,
+		&rtti.Z_Execute_Info,
 	},
 }
 
