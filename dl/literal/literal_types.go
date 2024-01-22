@@ -12,12 +12,25 @@ const Z_LiteralValue_Type = "literal_value"
 
 var Z_LiteralValue_Info = typeinfo.Slot{
 	Name: Z_LiteralValue_Type,
+	Markup: map[string]any{
+		"blockly-color": "MATH_HUE",
+		"comment":       "Slot for constant values.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_LiteralValue_Slot struct{ Value LiteralValue }
+
+// implements typeinfo.Inspector for a single slot.
+func (*LiteralValue_Slot) Inspect() typeinfo.T {
+	return &Z_LiteralValue_Info
 }
 
 // holds a slice of slots
 type LiteralValue_Slots []LiteralValue
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*LiteralValue_Slots) Inspect() typeinfo.T {
 	return &Z_LiteralValue_Info
 }
@@ -67,6 +80,9 @@ var Z_BoolValue_Info = typeinfo.Flow{
 		&rti.Z_BoolEval_Info,
 		&Z_LiteralValue_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Specify an explicit true or false.",
+	},
 }
 
 // holds a slice of type bool_value
@@ -114,6 +130,9 @@ var Z_FieldValue_Info = typeinfo.Flow{
 		Label: "value",
 		Type:  &Z_LiteralValue_Info,
 	}},
+	Markup: map[string]any{
+		"comment": "A fixed value of a record.",
+	},
 }
 
 // holds a slice of type field_value
@@ -162,6 +181,9 @@ var Z_FieldList_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_LiteralValue_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"A series of values all for the same record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
 	},
 }
 
@@ -219,6 +241,9 @@ var Z_NumValue_Info = typeinfo.Flow{
 		&rti.Z_NumberEval_Info,
 		&Z_LiteralValue_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Specify a particular number.",
+	},
 }
 
 // holds a slice of type num_value
@@ -275,6 +300,9 @@ var Z_NumValues_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumListEval_Info,
 		&Z_LiteralValue_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Number List: Specify a list of numbers.",
 	},
 }
 
@@ -337,6 +365,9 @@ var Z_RecordValue_Info = typeinfo.Flow{
 		&rti.Z_RecordEval_Info,
 		&Z_LiteralValue_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Specify a record composed of literal values.",
+	},
 }
 
 // holds a slice of type record_value
@@ -398,6 +429,9 @@ var Z_RecordList_Info = typeinfo.Flow{
 		&rti.Z_RecordListEval_Info,
 		&Z_LiteralValue_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Specify a series of records, all of the same kind.",
+	},
 }
 
 // holds a slice of type record_list
@@ -453,6 +487,9 @@ var Z_TextValue_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 		&Z_LiteralValue_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Specify a small bit of text.",
 	},
 }
 
@@ -510,6 +547,9 @@ var Z_TextValues_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextListEval_Info,
 		&Z_LiteralValue_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Text List: Specifies a set of text values.",
 	},
 }
 

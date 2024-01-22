@@ -39,6 +39,9 @@ var Z_DoNothing_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
+	},
 }
 
 // holds a slice of type do_nothing
@@ -231,6 +234,9 @@ var Z_Fabricate_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"fake input as if the player had typed it themselves.", "only works while running checks."},
+	},
 }
 
 // holds a slice of type fabricate
@@ -284,6 +290,9 @@ var Z_DebugLog_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Debug log.",
+	},
 }
 
 // holds a slice of type debug_log
@@ -299,11 +308,11 @@ func (*DebugLog_Slice) Inspect() typeinfo.T {
 const Z_LoggingLevel_Type = "logging_level"
 
 const (
-	W_LoggingLevel_Note  = "note"
-	W_LoggingLevel_Debug = "debug"
-	W_LoggingLevel_Info  = "info"
-	W_LoggingLevel_Warn  = "warn"
-	W_LoggingLevel_Error = "error"
+	W_LoggingLevel_Note  = "$NOTE"
+	W_LoggingLevel_Debug = "$DEBUG"
+	W_LoggingLevel_Info  = "$INFO"
+	W_LoggingLevel_Warn  = "$WARN"
+	W_LoggingLevel_Error = "$ERROR"
 )
 
 var Z_LoggingLevel_Info = typeinfo.Str{

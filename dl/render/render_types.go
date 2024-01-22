@@ -13,12 +13,24 @@ const Z_RenderEval_Type = "render_eval"
 
 var Z_RenderEval_Info = typeinfo.Slot{
 	Name: Z_RenderEval_Type,
+	Markup: map[string]any{
+		"comment": "Used with render pattern for arguments of unknown type.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_RenderEval_Slot struct{ Value RenderEval }
+
+// implements typeinfo.Inspector for a single slot.
+func (*RenderEval_Slot) Inspect() typeinfo.T {
+	return &Z_RenderEval_Info
 }
 
 // holds a slice of slots
 type RenderEval_Slots []RenderEval
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*RenderEval_Slots) Inspect() typeinfo.T {
 	return &Z_RenderEval_Info
 }
@@ -59,6 +71,9 @@ var Z_RenderName_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
 	},
 }
 
@@ -129,6 +144,9 @@ var Z_RenderRef_Info = typeinfo.Flow{
 		&rti.Z_RecordListEval_Info,
 		&Z_RenderEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
+	},
 }
 
 // holds a slice of type render_ref
@@ -176,6 +194,9 @@ var Z_RenderValue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_RenderEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Pull a value from an assignment of unknown affinity.",
 	},
 }
 
@@ -235,6 +256,9 @@ var Z_RenderPattern_Info = typeinfo.Flow{
 		&rti.Z_TextEval_Info,
 		&Z_RenderEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+	},
 }
 
 // holds a slice of type render_pattern
@@ -290,6 +314,9 @@ var Z_RenderResponse_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Generate text in a replaceable manner.",
 	},
 }
 

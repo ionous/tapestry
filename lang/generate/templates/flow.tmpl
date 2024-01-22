@@ -44,13 +44,14 @@ var Z_{{Pascal .Name}}_Info = typeinfo.Flow{
 	}
 {{- end -}}
 {{/**/}}		},
-{{- if .Slots }} 
+	{{- if .Slots }} 
 	Slots: []*typeinfo.Slot{ 
-{{- range $i, $s := .Slots }}
+	{{- range $i, $s := .Slots }}
 		&{{PackageDot $s}}Z_{{Pascal $s}}_Info,
-{{- end }}
+	{{- end }}
 	},
-{{- end }}
+	{{- end }}
+	{{- template "markup.tmpl" .}}
 }
 
 // holds a slice of type {{.Name}}

@@ -13,10 +13,19 @@ var Z_Event_Info = typeinfo.Slot{
 	Name: Z_Event_Type,
 }
 
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_Event_Slot struct{ Value Event }
+
+// implements typeinfo.Inspector for a single slot.
+func (*Event_Slot) Inspect() typeinfo.T {
+	return &Z_Event_Info
+}
+
 // holds a slice of slots
 type Event_Slots []Event
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*Event_Slots) Inspect() typeinfo.T {
 	return &Z_Event_Info
 }

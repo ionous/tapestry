@@ -12,10 +12,19 @@ var Z_TestSlot_Info = typeinfo.Slot{
 	Name: Z_TestSlot_Type,
 }
 
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_TestSlot_Slot struct{ Value TestSlot }
+
+// implements typeinfo.Inspector for a single slot.
+func (*TestSlot_Slot) Inspect() typeinfo.T {
+	return &Z_TestSlot_Info
+}
+
 // holds a slice of slots
 type TestSlot_Slots []TestSlot
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*TestSlot_Slots) Inspect() typeinfo.T {
 	return &Z_TestSlot_Info
 }
@@ -146,8 +155,8 @@ func (*TestFlow_Slice) Inspect() typeinfo.T {
 const Z_TestBool_Type = "test_bool"
 
 const (
-	W_TestBool_True  = "true"
-	W_TestBool_False = "false"
+	W_TestBool_True  = "$TRUE"
+	W_TestBool_False = "$FALSE"
 )
 
 var Z_TestBool_Info = typeinfo.Str{
@@ -162,9 +171,9 @@ var Z_TestBool_Info = typeinfo.Str{
 const Z_TestStr_Type = "test_str"
 
 const (
-	W_TestStr_One    = "one"
-	W_TestStr_Other  = "other"
-	W_TestStr_Option = "option"
+	W_TestStr_One    = "$ONE"
+	W_TestStr_Other  = "$OTHER"
+	W_TestStr_Option = "$OPTION"
 )
 
 var Z_TestStr_Info = typeinfo.Str{

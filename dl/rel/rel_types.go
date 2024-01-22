@@ -48,6 +48,9 @@ var Z_ReciprocalOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
+	},
 }
 
 // holds a slice of type reciprocal_of
@@ -100,6 +103,9 @@ var Z_ReciprocalsOf_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextListEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
 	},
 }
 
@@ -159,6 +165,9 @@ var Z_Relate_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Relate two nouns.",
+	},
 }
 
 // holds a slice of type relate
@@ -212,6 +221,9 @@ var Z_RelativeOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
+	},
 }
 
 // holds a slice of type relative_of
@@ -264,6 +276,9 @@ var Z_RelativesOf_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextListEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
 	},
 }
 

@@ -12,12 +12,24 @@ const Z_Address_Type = "address"
 
 var Z_Address_Info = typeinfo.Slot{
 	Name: Z_Address_Type,
+	Markup: map[string]any{
+		"comment": []interface{}{"Identifies some particular object field, local variable, or pattern argument.", "Addresses can be read from or written to.", "That is to say, addresses implement all of the rt evals,", "and all commands which read from objects or variables should use the methods the address interface provides."},
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_Address_Slot struct{ Value Address }
+
+// implements typeinfo.Inspector for a single slot.
+func (*Address_Slot) Inspect() typeinfo.T {
+	return &Z_Address_Info
 }
 
 // holds a slice of slots
 type Address_Slots []Address
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*Address_Slots) Inspect() typeinfo.T {
 	return &Z_Address_Info
 }
@@ -27,12 +39,25 @@ const Z_Dot_Type = "dot"
 
 var Z_Dot_Info = typeinfo.Slot{
 	Name: Z_Dot_Type,
+	Markup: map[string]any{
+		"blockly-color": "MATH_HUE",
+		"comment":       "Picks values from types containing other values.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_Dot_Slot struct{ Value Dot }
+
+// implements typeinfo.Inspector for a single slot.
+func (*Dot_Slot) Inspect() typeinfo.T {
+	return &Z_Dot_Info
 }
 
 // holds a slice of slots
 type Dot_Slots []Dot
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*Dot_Slots) Inspect() typeinfo.T {
 	return &Z_Dot_Info
 }
@@ -78,6 +103,9 @@ var Z_SetValue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Store a value into a variable or object.",
 	},
 }
 
@@ -132,6 +160,9 @@ var Z_SetTrait_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Set the state of an object.",
+	},
 }
 
 // holds a slice of type set_trait
@@ -184,6 +215,9 @@ var Z_CopyValue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Copy from one stored value to another.", "Requires that the type of the two values match exactly"},
 	},
 }
 
@@ -492,6 +526,9 @@ var Z_CallPattern_Info = typeinfo.Flow{
 		&rti.Z_TextListEval_Info,
 		&rti.Z_RecordListEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Executes a pattern, and potentially returns a value.",
+	},
 }
 
 // holds a slice of type call_pattern
@@ -539,6 +576,9 @@ var Z_Arg_Info = typeinfo.Flow{
 		Label: "from",
 		Type:  &rti.Z_Assignment_Info,
 	}},
+	Markup: map[string]any{
+		"comment": "Runtime version of argument.",
+	},
 }
 
 // holds a slice of type arg
@@ -586,6 +626,9 @@ var Z_FromExe_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Adapts an execute statement to an assignment.", "Used internally for package shuttle."},
 	},
 }
 
@@ -635,6 +678,9 @@ var Z_FromBool_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Calculates a boolean value.",
+	},
 }
 
 // holds a slice of type from_bool
@@ -682,6 +728,9 @@ var Z_FromNumber_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Calculates a number.",
 	},
 }
 
@@ -731,6 +780,9 @@ var Z_FromText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Calculates a text string.",
+	},
 }
 
 // holds a slice of type from_text
@@ -778,6 +830,9 @@ var Z_FromRecord_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Calculates a record.",
 	},
 }
 
@@ -827,6 +882,9 @@ var Z_FromNumList_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Calculates a list of numbers.",
+	},
 }
 
 // holds a slice of type from_num_list
@@ -875,6 +933,9 @@ var Z_FromTextList_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Calculates a list of text strings.",
+	},
 }
 
 // holds a slice of type from_text_list
@@ -922,6 +983,9 @@ var Z_FromRecordList_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Assignment_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Calculates a list of records.",
 	},
 }
 

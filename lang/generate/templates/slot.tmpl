@@ -3,12 +3,22 @@ const Z_{{Pascal .Name}}_Type = "{{.Name}}"
 
 var Z_{{Pascal .Name}}_Info = typeinfo.Slot{
 	Name: Z_{{Pascal .Name}}_Type,
+	{{- template "markup.tmpl" .}}
+}
+
+// holds a single slot
+// FIX: currently provided by the spec 
+type FIX_{{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
+
+// implements typeinfo.Inspector for a single slot.
+func (*{{Pascal .Name}}_Slot) Inspect() typeinfo.T {
+	return &Z_{{Pascal .Name}}_Info
 }
 
 // holds a slice of slots
 type {{Pascal .Name}}_Slots []{{Pascal .Name}}
 
-// implements typeinfo.Inspector 
+// implements typeinfo.Inspector for a series of slots.
 func (*{{Pascal .Name}}_Slots) Inspect() typeinfo.T {
 	return &Z_{{Pascal .Name}}_Info
 }

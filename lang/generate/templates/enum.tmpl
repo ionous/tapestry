@@ -3,15 +3,16 @@ const Z_{{Pascal .Name}}_Type = "{{.Name}}"
 
 const (
 {{- range $i, $opt := .Options }}
-  W_{{Pascal $.Name}}_{{Pascal $opt}} = "{{$opt}}"
+  W_{{Pascal $.Name}}_{{Pascal $opt}} = "{{StringKey $opt}}"
 {{- end }}
 )
 
 var Z_{{Pascal .Name}}_Info = typeinfo.Str{
 	Name: Z_{{Pascal .Name}}_Type,
 	Options: []string{
-{{- range $i, $opt := .Options }}
+	{{- range $i, $opt := .Options }}
 		W_{{Pascal $.Name}}_{{Pascal $opt}},
-{{- end }}
-},
+	{{- end }}
+	},
+	{{- template "markup.tmpl" .}}
 }

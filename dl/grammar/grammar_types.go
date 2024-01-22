@@ -12,12 +12,24 @@ const Z_GrammarMaker_Type = "grammar_maker"
 
 var Z_GrammarMaker_Info = typeinfo.Slot{
 	Name: Z_GrammarMaker_Type,
+	Markup: map[string]any{
+		"comment": "Helper for defining parser grammars.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_GrammarMaker_Slot struct{ Value GrammarMaker }
+
+// implements typeinfo.Inspector for a single slot.
+func (*GrammarMaker_Slot) Inspect() typeinfo.T {
+	return &Z_GrammarMaker_Info
 }
 
 // holds a slice of slots
 type GrammarMaker_Slots []GrammarMaker
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*GrammarMaker_Slots) Inspect() typeinfo.T {
 	return &Z_GrammarMaker_Info
 }
@@ -27,12 +39,24 @@ const Z_ScannerMaker_Type = "scanner_maker"
 
 var Z_ScannerMaker_Info = typeinfo.Slot{
 	Name: Z_ScannerMaker_Type,
+	Markup: map[string]any{
+		"comment": "Helper for defining input scanners.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_ScannerMaker_Slot struct{ Value ScannerMaker }
+
+// implements typeinfo.Inspector for a single slot.
+func (*ScannerMaker_Slot) Inspect() typeinfo.T {
+	return &Z_ScannerMaker_Info
 }
 
 // holds a slice of slots
 type ScannerMaker_Slots []ScannerMaker
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*ScannerMaker_Slots) Inspect() typeinfo.T {
 	return &Z_ScannerMaker_Info
 }
@@ -80,6 +104,9 @@ var Z_Action_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
+	},
+	Markup: map[string]any{
+		"comment": "makes a parser scanner producing a script defined action.",
 	},
 }
 
@@ -130,6 +157,9 @@ var Z_Sequence_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
 	},
+	Markup: map[string]any{
+		"comment": "makes a parser scanner.",
+	},
 }
 
 // holds a slice of type sequence
@@ -178,6 +208,9 @@ var Z_ChooseOne_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
+	},
+	Markup: map[string]any{
+		"comment": "makes a parser scanner.",
 	},
 }
 
@@ -233,6 +266,9 @@ var Z_Directive_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_GrammarMaker_Info,
 	},
+	Markup: map[string]any{
+		"comment": "starts a parser scanner.",
+	},
 }
 
 // holds a slice of type directive
@@ -280,6 +316,9 @@ var Z_Noun_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
+	},
+	Markup: map[string]any{
+		"comment": "makes a parser scanner.",
 	},
 }
 
@@ -330,6 +369,9 @@ var Z_Refine_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Change to the bounds of the most recent result.",
+	},
 }
 
 // holds a slice of type refine
@@ -378,6 +420,9 @@ var Z_Reverse_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Swap the first and last matching results.",
 	},
 }
 
@@ -433,6 +478,9 @@ var Z_Focus_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Select a specific set of bounds for the scanner.",
+	},
 }
 
 // holds a slice of type focus
@@ -481,6 +529,9 @@ var Z_Words_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_ScannerMaker_Info,
+	},
+	Markup: map[string]any{
+		"comment": "makes a parser scanner.",
 	},
 }
 

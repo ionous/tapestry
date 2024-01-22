@@ -1,0 +1,7 @@
+{{- if .Markup }}
+	Markup: map[string]any {
+{{- range $k, $v := .Markup }}
+		"{{$k}}": {{Encode $v}},
+{{- end }}
+	},
+{{- end }}

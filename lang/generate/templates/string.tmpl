@@ -3,4 +3,5 @@ const Z_{{Pascal .Name}}_Type = "{{.Name}}"
 
 var Z_{{Pascal .Name}}_Info = typeinfo.Str{
 	Name: Z_{{Pascal .Name}}_Type,
+	{{- template "markup.tmpl" .}}
 }

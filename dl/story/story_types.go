@@ -15,12 +15,24 @@ const Z_FieldDefinition_Type = "field_definition"
 
 var Z_FieldDefinition_Info = typeinfo.Slot{
 	Name: Z_FieldDefinition_Type,
+	Markup: map[string]any{
+		"comment": "Fields are used to define the members of kinds, records, patterns, and so on.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_FieldDefinition_Slot struct{ Value FieldDefinition }
+
+// implements typeinfo.Inspector for a single slot.
+func (*FieldDefinition_Slot) Inspect() typeinfo.T {
+	return &Z_FieldDefinition_Info
 }
 
 // holds a slice of slots
 type FieldDefinition_Slots []FieldDefinition
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*FieldDefinition_Slots) Inspect() typeinfo.T {
 	return &Z_FieldDefinition_Info
 }
@@ -30,12 +42,26 @@ const Z_StoryStatement_Type = "story_statement"
 
 var Z_StoryStatement_Info = typeinfo.Slot{
 	Name: Z_StoryStatement_Type,
+	Markup: map[string]any{
+		"blockly-color": "VARIABLES_HUE",
+		"blockly-stack": true,
+		"comment":       "Phrase",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_StoryStatement_Slot struct{ Value StoryStatement }
+
+// implements typeinfo.Inspector for a single slot.
+func (*StoryStatement_Slot) Inspect() typeinfo.T {
+	return &Z_StoryStatement_Info
 }
 
 // holds a slice of slots
 type StoryStatement_Slots []StoryStatement
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*StoryStatement_Slots) Inspect() typeinfo.T {
 	return &Z_StoryStatement_Info
 }
@@ -78,6 +104,9 @@ var Z_Comment_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Add a note.", "Information about the story for you and other authors."},
 	},
 }
 
@@ -149,6 +178,9 @@ var Z_Test_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Create a scene",
+	},
 }
 
 // holds a slice of type test
@@ -208,6 +240,9 @@ var Z_DefineScene_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Define a sub world.",
 	},
 }
 
@@ -272,6 +307,9 @@ var Z_DefineAction_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
+	},
 }
 
 // holds a slice of type define_action
@@ -327,6 +365,9 @@ var Z_DefineTraits_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Add traits to an aspect",
+	},
 }
 
 // holds a slice of type define_traits
@@ -374,6 +415,9 @@ var Z_AspectField_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_FieldDefinition_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"tbd: is a separate interface required for object kinds separate from everything else?", "in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that."},
 	},
 }
 
@@ -488,6 +532,9 @@ var Z_CountOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard gets checked."},
+	},
 }
 
 // holds a slice of type count_of
@@ -536,6 +583,9 @@ var Z_CycleText_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "When called multiple times, returns each of its inputs in turn.",
 	},
 }
 
@@ -591,6 +641,9 @@ var Z_DefineAlias_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 		&Z_StoryStatement_Info,
+	},
+	Markup: map[string]any{
+		"comment": "allows the player to refer to a noun by one or more other terms.",
 	},
 }
 
@@ -649,6 +702,9 @@ var Z_DefineLeadingGrammar_Info = typeinfo.Flow{
 		&rti.Z_Execute_Info,
 		&Z_StoryStatement_Info,
 	},
+	Markup: map[string]any{
+		"comment": "starts a parser scanner.",
+	},
 }
 
 // holds a slice of type define_leading_grammar
@@ -704,6 +760,9 @@ var Z_DefineNamedGrammar_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 		&Z_StoryStatement_Info,
+	},
+	Markup: map[string]any{
+		"comment": "starts a parser scanner.",
 	},
 }
 
@@ -764,6 +823,9 @@ var Z_DefinePhrase_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Define a phrase that can be used with 'natural language' statements.",
+	},
 }
 
 // holds a slice of type define_phrase
@@ -811,6 +873,9 @@ var Z_DeclareStatement_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Simple english like definitions of nouns, kinds, and their relatives.",
 	},
 }
 
@@ -933,6 +998,9 @@ var Z_DefineFields_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Add properties to a kind",
+	},
 }
 
 // holds a slice of type define_fields
@@ -1043,6 +1111,9 @@ var Z_MakeOpposite_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "The opposite of east is west.",
+	},
 }
 
 // holds a slice of type make_opposite
@@ -1097,6 +1168,9 @@ var Z_MakePlural_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"The plural of person is people.", "The plural of person is persons."},
 	},
 }
 
@@ -1162,6 +1236,9 @@ var Z_MapDeparting_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
 	},
 }
 
@@ -1234,6 +1311,9 @@ var Z_MapHeading_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
+	},
 }
 
 // holds a slice of type map_heading
@@ -1293,6 +1373,9 @@ var Z_DefineValue_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Assign a starting value to the field of one or nouns.",
 	},
 }
 
@@ -1642,6 +1725,9 @@ var Z_RuleForPattern_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Change the behavior of an existing pattern.", "For events, this adds a listener that responds to the targeted object only when triggered by the player.", "By default, rules with filters continue on to the next rule automatically.", "Because event listeners have filters they continue to the next listener unless specifically stopped."},
+	},
 }
 
 // holds a slice of type rule_for_pattern
@@ -1708,6 +1794,9 @@ var Z_RuleForNoun_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
 	},
 }
 
@@ -1782,6 +1871,9 @@ var Z_RuleForKind_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
+	},
 }
 
 // holds a slice of type rule_for_kind
@@ -1849,6 +1941,9 @@ var Z_DefineMacro_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Declare a function which can produce statements about the game world.", "They are processed at import time, and they cannot call patterns", "nor can patterns -- which are processed during play -- call macros.", "Unlike patterns, they cannot be extended; the entire definition must live in one place."},
 	},
 }
 
@@ -1920,6 +2015,9 @@ var Z_CallMacro_Info = typeinfo.Flow{
 		&rti.Z_RecordListEval_Info,
 		&Z_StoryStatement_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Executes a macro, and potentially returns a value.",
+	},
 }
 
 // holds a slice of type call_macro
@@ -1988,6 +2086,9 @@ var Z_DefinePattern_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Declare a new pattern.", "A pattern is a bundle of functions which can either change the game world or provide information about it.", "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."},
 	},
 }
 
@@ -2169,6 +2270,9 @@ var Z_DefineRelatives_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Relate nouns to each other",
+	},
 }
 
 // holds a slice of type define_relatives
@@ -2229,6 +2333,9 @@ var Z_DefineOtherRelatives_Info = typeinfo.Flow{
 		&Z_StoryStatement_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Relate nouns to each other",
+	},
 }
 
 // holds a slice of type define_other_relatives
@@ -2278,6 +2385,9 @@ var Z_SayTemplate_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Used for displaying text to the player.", "The text can contain 'inline-templates';", "mini-commands that help to simplify printing text.", "See also: https://github.com/ionous/iffy/wiki/Templates.", "( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )"},
 	},
 }
 
@@ -2334,6 +2444,9 @@ var Z_SayResponse_Info = typeinfo.Flow{
 		&rti.Z_Execute_Info,
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Generate text in a replaceable manner.", "( note: this is transformed for the runtime into a named 'RenderResponse'. )"},
+	},
 }
 
 // holds a slice of type say_response
@@ -2382,6 +2495,9 @@ var Z_ShuffleText_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "When called multiple times returns its inputs at random.",
 	},
 }
 
@@ -2432,6 +2548,9 @@ var Z_StoppingText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
+	},
 }
 
 // holds a slice of type stopping_text
@@ -2474,6 +2593,9 @@ var Z_StoryBreak_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&Z_StoryStatement_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: debug.do_nothing"},
 	},
 }
 
@@ -2518,6 +2640,10 @@ var Z_StoryFile_Info = typeinfo.Flow{
 		Repeats: true,
 		Type:    &Z_StoryStatement_Info,
 	}},
+	Markup: map[string]any{
+		"blockly-color": "TAP_HUE_ROOT",
+		"comment":       "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
+	},
 }
 
 // holds a slice of type story_file
@@ -2681,6 +2807,9 @@ var Z_NothingField_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_FieldDefinition_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"A valueless field.", "Intended mainly for patterns which don't need to return a value."},
+	},
 }
 
 // holds a slice of type nothing_field
@@ -2696,8 +2825,8 @@ func (*NothingField_Slice) Inspect() typeinfo.T {
 const Z_MapConnection_Type = "map_connection"
 
 const (
-	W_MapConnection_ArrivingAt   = "arriving_at"
-	W_MapConnection_ConnectingTo = "connecting_to"
+	W_MapConnection_ArrivingAt   = "$ARRIVING_AT"
+	W_MapConnection_ConnectingTo = "$CONNECTING_TO"
 )
 
 var Z_MapConnection_Info = typeinfo.Str{
@@ -2706,6 +2835,9 @@ var Z_MapConnection_Info = typeinfo.Str{
 		W_MapConnection_ArrivingAt,
 		W_MapConnection_ConnectingTo,
 	},
+	Markup: map[string]any{
+		"comment": "Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.",
+	},
 }
 
 // map_direction, a type of str.
@@ -2713,16 +2845,19 @@ const Z_MapDirection_Type = "map_direction"
 
 var Z_MapDirection_Info = typeinfo.Str{
 	Name: Z_MapDirection_Type,
+	Markup: map[string]any{
+		"comment": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
+	},
 }
 
 // relation_cardinality, a type of str enum.
 const Z_RelationCardinality_Type = "relation_cardinality"
 
 const (
-	W_RelationCardinality_OneToOne   = "one_to_one"
-	W_RelationCardinality_OneToMany  = "one_to_many"
-	W_RelationCardinality_ManyToOne  = "many_to_one"
-	W_RelationCardinality_ManyToMany = "many_to_many"
+	W_RelationCardinality_OneToOne   = "$ONE_TO_ONE"
+	W_RelationCardinality_OneToMany  = "$ONE_TO_MANY"
+	W_RelationCardinality_ManyToOne  = "$MANY_TO_ONE"
+	W_RelationCardinality_ManyToMany = "$MANY_TO_MANY"
 )
 
 var Z_RelationCardinality_Info = typeinfo.Str{

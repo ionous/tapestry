@@ -38,6 +38,7 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 						if d, e := readFlow(name, inner, slots); e != nil {
 							err = e
 						} else {
+							d.Markup = msg.Markup
 							out.Flow = append(out.Flow, d)
 						}
 					case "with group":
@@ -47,18 +48,21 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 						if d, e := readSlot(name, inner); e != nil {
 							err = e
 						} else {
+							d.Markup = msg.Markup
 							out.Slot = append(out.Slot, d)
 						}
 					case "with str":
 						if d, e := readStr(name, inner); e != nil {
 							err = e
 						} else {
+							d.Markup = msg.Markup
 							out.Str = append(out.Str, d)
 						}
 					case "with num":
 						if d, e := readNum(name, inner); e != nil {
 							err = e
 						} else {
+							d.Markup = msg.Markup
 							out.Num = append(out.Num, d)
 						}
 					default:
@@ -130,6 +134,7 @@ func readFlow(n string, msg compact.Message, slots []string) (ret flowData, err 
 					private,
 					optional,
 					repeats,
+					td.Markup,
 				}
 			}
 		}
@@ -153,7 +158,7 @@ func readSlot(n string, msg compact.Message) (ret slotData, err error) {
 	} else if cnt := len(uses); cnt > 0 {
 		err = errors.New("expected no constraints for slot")
 	} else {
-		ret = slotData{n}
+		ret = slotData{Name: n}
 	}
 	return
 }
@@ -176,7 +181,7 @@ func readSimpleStr(n string, uses []compact.Message) (ret strData, err error) {
 	if cnt := len(uses); cnt > 0 {
 		err = errors.New("expected no constraints for simple string")
 	} else {
-		ret = strData{n, nil}
+		ret = strData{Name: n}
 	}
 	return
 }
@@ -198,7 +203,7 @@ func readEnum(n string, uses []compact.Message) (ret strData, err error) {
 			}
 		}
 		if err == nil {
-			ret = strData{n, options}
+			ret = strData{Name: n, Options: options}
 		}
 	}
 	return
@@ -213,7 +218,7 @@ func readNum(n string, msg compact.Message) (ret numData, err error) {
 	} else if len(uses) != 0 {
 		err = errors.New("expected no numeric constraints")
 	} else {
-		ret = numData{n}
+		ret = numData{Name: n}
 	}
 	return
 }

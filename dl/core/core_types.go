@@ -13,12 +13,24 @@ const Z_Brancher_Type = "brancher"
 
 var Z_Brancher_Info = typeinfo.Slot{
 	Name: Z_Brancher_Type,
+	Markup: map[string]any{
+		"comment": "Helper for choose action.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_Brancher_Slot struct{ Value Brancher }
+
+// implements typeinfo.Inspector for a single slot.
+func (*Brancher_Slot) Inspect() typeinfo.T {
+	return &Z_Brancher_Info
 }
 
 // holds a slice of slots
 type Brancher_Slots []Brancher
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*Brancher_Slots) Inspect() typeinfo.T {
 	return &Z_Brancher_Info
 }
@@ -28,12 +40,24 @@ const Z_Trigger_Type = "trigger"
 
 var Z_Trigger_Info = typeinfo.Slot{
 	Name: Z_Trigger_Type,
+	Markup: map[string]any{
+		"comment": "Helper for counting values.",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_Trigger_Slot struct{ Value Trigger }
+
+// implements typeinfo.Inspector for a single slot.
+func (*Trigger_Slot) Inspect() typeinfo.T {
+	return &Z_Trigger_Info
 }
 
 // holds a slice of slots
 type Trigger_Slots []Trigger
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*Trigger_Slots) Inspect() typeinfo.T {
 	return &Z_Trigger_Info
 }
@@ -75,6 +99,9 @@ var Z_AllTrue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns true if all of the evaluations are true.",
 	},
 }
 
@@ -118,6 +145,9 @@ var Z_Always_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns true.",
 	},
 }
 
@@ -168,6 +198,9 @@ var Z_AnyTrue_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns true if any of the evaluations are true.",
+	},
 }
 
 // holds a slice of type any_true
@@ -210,6 +243,9 @@ var Z_Blankline_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Add a single blank line following some text.",
 	},
 }
 
@@ -260,6 +296,9 @@ var Z_BracketText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
+	},
 }
 
 // holds a slice of type bracket_text
@@ -302,6 +341,9 @@ var Z_Break_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
 	},
 }
 
@@ -406,6 +448,9 @@ var Z_CallCycle_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Runtime version of cycle_text.",
+	},
 }
 
 // holds a slice of type call_cycle
@@ -465,6 +510,9 @@ var Z_CallShuffle_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Runtime version of shuffle_text.",
+	},
 }
 
 // holds a slice of type call_shuffle
@@ -518,6 +566,9 @@ var Z_CallTerminal_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Runtime version of stopping_text.",
 	},
 }
 
@@ -577,6 +628,9 @@ var Z_CallTrigger_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Runtime version of count_of.",
+	},
 }
 
 // holds a slice of type call_trigger
@@ -624,6 +678,9 @@ var Z_Capitalize_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns new text, with the first letter turned into uppercase.",
 	},
 }
 
@@ -693,6 +750,9 @@ var Z_ChooseBranch_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 		&Z_Brancher_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"An if statement.", "The provided local fields are evaluated before the if test itself."},
 	},
 }
 
@@ -802,6 +862,9 @@ var Z_ChooseNum_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Pick one of two numbers based on a boolean test.",
+	},
 }
 
 // holds a slice of type choose_num
@@ -861,6 +924,9 @@ var Z_ChooseText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Pick one of two strings based on a boolean test.",
+	},
 }
 
 // holds a slice of type choose_text
@@ -909,6 +975,9 @@ var Z_CommaText_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Separates words with commas, and 'and'.",
 	},
 }
 
@@ -967,6 +1036,9 @@ var Z_CompareValue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "True if eq,ne,gt,lt,ge,le two numbers.",
 	},
 }
 
@@ -1032,6 +1104,9 @@ var Z_CompareNum_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "True if eq,ne,gt,lt,ge,le two numbers.",
+	},
 }
 
 // holds a slice of type compare_num
@@ -1090,6 +1165,9 @@ var Z_CompareText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "True if eq,ne,gt,lt,ge,le two strings ( lexical. ).",
+	},
 }
 
 // holds a slice of type compare_text
@@ -1143,6 +1221,9 @@ var Z_SubtractValue_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Subtract two numbers.",
+	},
 }
 
 // holds a slice of type subtract_value
@@ -1193,6 +1274,9 @@ var Z_During_Info = typeinfo.Flow{
 		&rti.Z_BoolEval_Info,
 		&rti.Z_NumberEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Decide whether a pattern is running.",
+	},
 }
 
 // holds a slice of type during
@@ -1240,6 +1324,9 @@ var Z_FieldsOfKind_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextListEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "List of the field names of a kind.",
 	},
 }
 
@@ -1337,6 +1424,9 @@ var Z_IdOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "A unique object identifier.",
+	},
 }
 
 // holds a slice of type id_of
@@ -1390,6 +1480,9 @@ var Z_Includes_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "True if text contains text.",
+	},
 }
 
 // holds a slice of type includes
@@ -1437,6 +1530,9 @@ var Z_IsEmpty_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "True if the text is empty.",
 	},
 }
 
@@ -1490,6 +1586,9 @@ var Z_IsExactKindOf_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "True if the object is exactly the named kind.",
 	},
 }
 
@@ -1550,6 +1649,9 @@ var Z_IsKindOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "True if the object is compatible with the named kind.",
+	},
 }
 
 // holds a slice of type is_kind_of
@@ -1605,6 +1707,9 @@ var Z_Join_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns multiple pieces of text as a single new piece of text.",
+	},
 }
 
 // holds a slice of type join
@@ -1659,6 +1764,9 @@ var Z_KindOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Friendly name of the object's kind.",
+	},
 }
 
 // holds a slice of type kind_of
@@ -1706,6 +1814,9 @@ var Z_KindsOf_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextListEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "A list of compatible kinds.",
 	},
 }
 
@@ -1755,6 +1866,9 @@ var Z_MakeLowercase_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
+	},
 }
 
 // holds a slice of type make_lowercase
@@ -1802,6 +1916,9 @@ var Z_MakeReversed_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
 	},
 }
 
@@ -1851,6 +1968,9 @@ var Z_MakeSentenceCase_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
+	},
 }
 
 // holds a slice of type make_sentence_case
@@ -1899,6 +2019,9 @@ var Z_MakeTitleCase_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.",
+	},
 }
 
 // holds a slice of type make_title_case
@@ -1946,6 +2069,9 @@ var Z_MakeUppercase_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.",
 	},
 }
 
@@ -2005,6 +2131,9 @@ var Z_Matches_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Determine whether the specified text is similar to the specified regular expression.",
+	},
 }
 
 // holds a slice of type matches
@@ -2053,6 +2182,9 @@ var Z_NameOf_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Full name of the object.",
+	},
 }
 
 // holds a slice of type name_of
@@ -2095,6 +2227,9 @@ var Z_Never_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns false.",
 	},
 }
 
@@ -2139,6 +2274,9 @@ var Z_Newline_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Start a new line.",
+	},
 }
 
 // holds a slice of type newline
@@ -2181,6 +2319,9 @@ var Z_Continue_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
 	},
 }
 
@@ -2230,6 +2371,9 @@ var Z_Not_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns the opposite value.",
+	},
 }
 
 // holds a slice of type not
@@ -2277,6 +2421,9 @@ var Z_ObjectExists_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_BoolEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns whether there is a object of the specified name.",
 	},
 }
 
@@ -2326,6 +2473,9 @@ var Z_ObjectTraits_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextListEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Returns all of the object's current traits as a list of text.",
+	},
 }
 
 // holds a slice of type object_traits
@@ -2373,6 +2523,9 @@ var Z_Pluralize_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns the plural form of a singular word. (ex. apples for apple. ).",
 	},
 }
 
@@ -2422,6 +2575,9 @@ var Z_PrintNum_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Writes a number using numerals, eg. '1'.",
+	},
 }
 
 // holds a slice of type print_num
@@ -2469,6 +2625,9 @@ var Z_PrintNumWord_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Writes a number in plain english: eg. 'one'.",
 	},
 }
 
@@ -2523,6 +2682,9 @@ var Z_MultiplyValue_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Multiply two numbers.",
+	},
 }
 
 // holds a slice of type multiply_value
@@ -2576,6 +2738,9 @@ var Z_DivideValue_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Divide one number by another.",
+	},
 }
 
 // holds a slice of type divide_value
@@ -2628,6 +2793,9 @@ var Z_ModValue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Divide one number by another, and return the remainder.",
 	},
 }
 
@@ -2733,6 +2901,9 @@ var Z_Increment_Info = typeinfo.Flow{
 		&rti.Z_NumberEval_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Increases the value of a number held in by a variable or object field.", "Returns the new value of the number."},
+	},
 }
 
 // holds a slice of type increment
@@ -2788,6 +2959,9 @@ var Z_Decrement_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Decrease the value of a number held in by a variable or object field.", "Returns the new value of the number."},
 	},
 }
 
@@ -2856,6 +3030,9 @@ var Z_IncrementAspect_Info = typeinfo.Flow{
 		&rti.Z_TextEval_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Increases the value of a trait held by an object aspect.", "Returns the new value of the trait."},
+	},
 }
 
 // holds a slice of type increment_aspect
@@ -2923,6 +3100,9 @@ var Z_DecrementAspect_Info = typeinfo.Flow{
 		&rti.Z_TextEval_Info,
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Increases the value of a trait held by an object aspect.", "Returns the new value of the trait."},
+	},
 }
 
 // holds a slice of type decrement_aspect
@@ -2970,6 +3150,9 @@ var Z_PrintText_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Display some text to the player without apply any additional formatting.",
 	},
 }
 
@@ -3020,6 +3203,9 @@ var Z_Row_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
+	},
 }
 
 // holds a slice of type row
@@ -3069,6 +3255,9 @@ var Z_Rows_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Group text into an unordered list <ul>.",
+	},
 }
 
 // holds a slice of type rows
@@ -3116,6 +3305,9 @@ var Z_Singularize_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Returns the singular form of a plural word. (ex. apple for apples ).",
 	},
 }
 
@@ -3166,6 +3358,9 @@ var Z_SlashText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Separates words with left-leaning slashes '/'.",
+	},
 }
 
 // holds a slice of type slash_text
@@ -3208,6 +3403,9 @@ var Z_Softline_Info = typeinfo.Flow{
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Start a new line ( if not already at a new line. ).",
 	},
 }
 
@@ -3257,6 +3455,9 @@ var Z_SpanText_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_TextEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Writes text with spaces between words.",
 	},
 }
 
@@ -3310,6 +3511,9 @@ var Z_AddValue_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Add two numbers.",
 	},
 }
 
@@ -3494,6 +3698,9 @@ var Z_While_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Keep running a series of actions while a condition is true.",
+	},
 }
 
 // holds a slice of type while
@@ -3509,12 +3716,12 @@ func (*While_Slice) Inspect() typeinfo.T {
 const Z_Comparison_Type = "comparison"
 
 const (
-	W_Comparison_EqualTo     = "equal_to"
-	W_Comparison_OtherThan   = "other_than"
-	W_Comparison_GreaterThan = "greater_than"
-	W_Comparison_LessThan    = "less_than"
-	W_Comparison_AtLeast     = "at_least"
-	W_Comparison_AtMost      = "at_most"
+	W_Comparison_EqualTo     = "$EQUAL_TO"
+	W_Comparison_OtherThan   = "$OTHER_THAN"
+	W_Comparison_GreaterThan = "$GREATER_THAN"
+	W_Comparison_LessThan    = "$LESS_THAN"
+	W_Comparison_AtLeast     = "$AT_LEAST"
+	W_Comparison_AtMost      = "$AT_MOST"
 )
 
 var Z_Comparison_Info = typeinfo.Str{

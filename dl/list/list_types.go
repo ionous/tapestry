@@ -52,6 +52,9 @@ var Z_EraseEdge_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Erase at edge: Remove one or more values from a list.",
+	},
 }
 
 // holds a slice of type erase_edge
@@ -109,6 +112,9 @@ var Z_EraseIndex_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Erase at index: Remove one or more values from a list.",
 	},
 }
 
@@ -178,6 +184,9 @@ var Z_Erasing_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Erase elements from the front or back of a list.", "Runs a pattern with a list containing the erased values.", "If nothing was erased, the pattern will be called with an empty list."},
 	},
 }
 
@@ -250,6 +259,9 @@ var Z_ErasingEdge_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+	},
 }
 
 // holds a slice of type erasing_edge
@@ -315,6 +327,9 @@ var Z_ListEach_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
+	},
 }
 
 // holds a slice of type list_each
@@ -370,6 +385,9 @@ var Z_ListFind_Info = typeinfo.Flow{
 		&rti.Z_BoolEval_Info,
 		&rti.Z_NumberEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Search a list for a specific value.",
+	},
 }
 
 // holds a slice of type list_find
@@ -422,6 +440,9 @@ var Z_ListGather_Info = typeinfo.Flow{
 		Label: "using",
 		Type:  &prim.Z_Text_Info,
 	}},
+	Markup: map[string]any{
+		"comment": []interface{}{"Transform the values from a list.", "The named pattern gets with with two parameters for each value in the list:", "'in' as each value from the list, and 'out' as the var passed to the gather."},
+	},
 }
 
 // holds a slice of type list_gather
@@ -469,6 +490,9 @@ var Z_ListLen_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumberEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Determines the number of values in a list.",
 	},
 }
 
@@ -680,6 +704,9 @@ var Z_ListMap_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Transform the values from one list and place the results in another list.", "The designated pattern is called with each value from the 'from list', one value at a time."},
+	},
 }
 
 // holds a slice of type list_map
@@ -738,6 +765,9 @@ var Z_ListReduce_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Combine all of the values in a list into a single value.", "The designated pattern is called with two parameters:", "  1. each element of the list; and,", "  2. the value being combined.", "And, that pattern is expected to return the newly updated value."},
+	},
 }
 
 // holds a slice of type list_reduce
@@ -785,6 +815,9 @@ var Z_ListReverse_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Reverse a list.",
 	},
 }
 
@@ -849,6 +882,9 @@ var Z_ListSlice_Info = typeinfo.Flow{
 		&rti.Z_NumListEval_Info,
 		&rti.Z_TextListEval_Info,
 		&rti.Z_RecordListEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Create a new list from a section of another list.", "Start is optional, if omitted slice starts at the first element.", "If start is greater the length, an empty array is returned.", "Slice doesnt include the ending index.", "Negatives indices indicates an offset from the end.", "When end is omitted, copy up to and including the last element;", "and do the same if the end is greater than the length"},
 	},
 }
 
@@ -974,6 +1010,9 @@ var Z_ListSortText_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
 	},
+	Markup: map[string]any{
+		"comment": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+	},
 }
 
 // holds a slice of type list_sort_text
@@ -1043,6 +1082,9 @@ var Z_ListSplice_Info = typeinfo.Flow{
 		&rti.Z_TextListEval_Info,
 		&rti.Z_RecordListEval_Info,
 	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Modify a list by adding and removing elements.", "The type of the elements being added must match the type of the list.", "Text cant be added to a list of numbers, numbers cant be added to a list of text.", "If the starting index is negative, this begins that many elements from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all elements from the start to the end;", "if the remove count is zero or negative, no elements are removed."},
+	},
 }
 
 // holds a slice of type list_splice
@@ -1101,6 +1143,9 @@ var Z_ListPush_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_Execute_Info,
+	},
+	Markup: map[string]any{
+		"comment": "Add a value to a list.",
 	},
 }
 
@@ -1161,6 +1206,9 @@ var Z_Range_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&rti.Z_NumListEval_Info,
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Generates a series of numbers r[i] = (start + step*i) where i>=0.", "Start and step default to 1, stop defaults to start;", "the inputs are truncated to produce whole numbers;", "a zero step returns an error.", "A positive step ends the series when the returned value would exceed stop", "while a negative step ends before generating a value less than stop."},
 	},
 }
 

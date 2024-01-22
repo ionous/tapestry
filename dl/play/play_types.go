@@ -11,12 +11,24 @@ const Z_PlayMessage_Type = "play_message"
 
 var Z_PlayMessage_Info = typeinfo.Slot{
 	Name: Z_PlayMessage_Type,
+	Markup: map[string]any{
+		"comment": "a client-server message for the play app",
+	},
+}
+
+// holds a single slot
+// FIX: currently provided by the spec
+type FIX_PlayMessage_Slot struct{ Value PlayMessage }
+
+// implements typeinfo.Inspector for a single slot.
+func (*PlayMessage_Slot) Inspect() typeinfo.T {
+	return &Z_PlayMessage_Info
 }
 
 // holds a slice of slots
 type PlayMessage_Slots []PlayMessage
 
-// implements typeinfo.Inspector
+// implements typeinfo.Inspector for a series of slots.
 func (*PlayMessage_Slots) Inspect() typeinfo.T {
 	return &Z_PlayMessage_Info
 }
@@ -57,6 +69,9 @@ var Z_PlayLog_Info = typeinfo.Flow{
 	}},
 	Slots: []*typeinfo.Slot{
 		&Z_PlayMessage_Info,
+	},
+	Markup: map[string]any{
+		"comment": "a log message that can optionally be displayed to the client.",
 	},
 }
 
@@ -106,6 +121,9 @@ var Z_PlayMode_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_PlayMessage_Info,
 	},
+	Markup: map[string]any{
+		"comment": "app level change in state.",
+	},
 }
 
 // holds a slice of type play_mode
@@ -154,6 +172,9 @@ var Z_PlayOut_Info = typeinfo.Flow{
 	Slots: []*typeinfo.Slot{
 		&Z_PlayMessage_Info,
 	},
+	Markup: map[string]any{
+		"comment": "output from the game itself.",
+	},
 }
 
 // holds a slice of type play_out
@@ -169,10 +190,10 @@ func (*PlayOut_Slice) Inspect() typeinfo.T {
 const Z_PlayModes_Type = "play_modes"
 
 const (
-	W_PlayModes_Asm      = "asm"
-	W_PlayModes_Play     = "play"
-	W_PlayModes_Complete = "complete"
-	W_PlayModes_Error    = "error"
+	W_PlayModes_Asm      = "$ASM"
+	W_PlayModes_Play     = "$PLAY"
+	W_PlayModes_Complete = "$COMPLETE"
+	W_PlayModes_Error    = "$ERROR"
 )
 
 var Z_PlayModes_Info = typeinfo.Str{
@@ -182,6 +203,9 @@ var Z_PlayModes_Info = typeinfo.Str{
 		W_PlayModes_Play,
 		W_PlayModes_Complete,
 		W_PlayModes_Error,
+	},
+	Markup: map[string]any{
+		"comment": "enum for play play_mode",
 	},
 }
 

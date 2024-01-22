@@ -17,6 +17,13 @@ var Pascal = distill.Pascal
 func genTemplates(p TypeFinder) (*template.Template, error) {
 	funcMap := template.FuncMap{
 		"Pascal": distill.Pascal,
+		// fix? ideally would generate go style enums i'd think.
+		"StringKey": func(str string) string {
+			return "$" + strings.ToUpper(str)
+		},
+		"Encode": func(v any) (ret string) {
+			return fmt.Sprintf("%#v", v)
+		},
 		// return the package scope; doesnt care if the tapestry type is exported
 		// ( useful for typeinfo references where the go type becomes a primitive value )
 		// ( ex. to reference the bool info for a bool type )
