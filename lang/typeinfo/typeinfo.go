@@ -7,53 +7,62 @@ package typeinfo
 
 // implemented by every auto-generated command
 type Inspector interface {
+	// returns the typeinfo for the instance.
 	Inspect() T
 }
 
-// marker interface implemented by each container type.
+// implemented by auto-generated flows
+type FlowInspector interface {
+	Inspector
+	GetMarkup(ensure bool) map[string]any
+}
+
+// marker interface implemented by each kind of typeinfo:
+// Flow, Slot, Str, and Num.
 type T interface{ TypeInfo() T }
 
 type Flow struct {
-	Name  string  // normalized as lower_underscore
-	Lede  string  // the compact format leading text
-	Slots []*Slot // interfaces that a command implements
-	Terms []Term  // terms of the command
+	Name   string         // unique name for this type
+	Lede   string         // the compact format leading text
+	Slots  []*Slot        // interfaces that a command implements
+	Terms  []Term         // terms of the command
+	Markup map[string]any // metadata shared by all instances of this type
+}
+
+// designates Flow as typeinfo; returns itself
+func (t *Flow) TypeInfo() T { return t }
+
+// a member of a Flow.
+type Term struct {
+	Name     string // go lang name; unique within its flow.
+	Label    string // the compact format signature
+	Private  bool   // a member that only exists in memory; never serialized
+	Optional bool   // true when the term can be omitted for instances of the flow.
+	Repeats  bool   // true when the term can have multiple values ( all of the same type )
+	Type     T      // a pointer to Flow, Slot, Str, or Num; or, nil if private
 }
 
 type Slot struct {
-	Name string //  unique
+	Name   string         // unique name for this type
+	Markup map[string]any // metadata shared by all instances of this type
 }
+
+// designates Slot as typeinfo; returns itself
+func (t *Slot) TypeInfo() T { return t }
 
 type Str struct {
-	Name    string   // unique
-	Options []string // for enumerations
+	Name    string         // unique name for this type
+	Options []string       // for enumerations; for plain strings, this is nil.
+	Markup  map[string]any // metadata shared by all instances of this type
 }
+
+// designates Str as typeinfo; returns itself
+func (t *Str) TypeInfo() T { return t }
 
 type Num struct {
-	Name string // unique
+	Name   string         // unique name for this type
+	Markup map[string]any // metadata shared by all instances of this type
 }
 
-type Term struct {
-	Name     string // go lang name
-	Label    string // the compact format signature
-	Private  bool
-	Optional bool
-	Repeats  bool
-	Type     T // a pointer to Flow, Slot, Str, or Num; or, nil if private
-}
-
-func (t *Flow) TypeInfo() T {
-	return t
-}
-
-func (t *Slot) TypeInfo() T {
-	return t
-}
-
-func (t *Str) TypeInfo() T {
-	return t
-}
-
-func (t *Num) TypeInfo() T {
-	return t
-}
+// designates Num as typeinfo; returns itself
+func (t *Num) TypeInfo() T { return t }

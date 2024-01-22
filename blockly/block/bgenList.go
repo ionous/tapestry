@@ -1,18 +1,17 @@
 package block
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang/walk"
+	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // writes a fields ( in dummy inputs ) representing a repeating set of primitives.
 // "fields": { "VALUES0": "a", "VALUES1": "b"... }
-func (m *bgen) newList(term string, fields *js.Builder) walk.Callbacks {
+func (m *bgen) newList(term string, fields *js.Builder) inspect.Callbacks {
 	var cnt int
-	return walk.Callbacks{
-		OnValue: func(w walk.Walker) (err error) {
-			pv := w.Value().Interface()
-			if b, e := valueToBytes(pv); e != nil {
+	return inspect.Callbacks{
+		OnValue: func(w inspect.Iter) (err error) {
+			if b, e := valueToBytes(w); e != nil {
 				err = e
 			} else {
 				if fields.Len() > 0 {
@@ -27,7 +26,7 @@ func (m *bgen) newList(term string, fields *js.Builder) walk.Callbacks {
 		},
 		// we dont enter a new state for "OnValue".. but values dont have a matching End.
 		// we only get the end of our own repeat.
-		OnEnd: func(w walk.Walker) error {
+		OnEnd: func(w inspect.Iter) error {
 			return m.events.Pop()
 		},
 	}

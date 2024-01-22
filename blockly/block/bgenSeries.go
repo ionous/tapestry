@@ -1,24 +1,25 @@
 package block
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang/walk"
+	"git.sr.ht/~ionous/tapestry/lang/inspect"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // writes a list of inputs representing a repeating set of slots.
 // unlike stacks, repeated inputs are all in the same block.
 // "inputs": { "CONTAINS0": {"block":{...}}, "CONTAINS1": {"block":{...}}, ... }
-func (m *bgen) newSeries(term string, inputs *js.Builder) walk.Callbacks {
+func (m *bgen) newSeries(term string, inputs *js.Builder) inspect.Callbacks {
 	open, close := js.Obj[0], js.Obj[1]
 	var cnt int
 	var writingSlot bool
-	return walk.Callbacks{
-		OnSlot: func(w walk.Walker) (_ error) {
+	return inspect.Callbacks{
+		OnSlot: func(w inspect.Iter) (_ error) {
 			cnt++ // we count every slot, even if there is no block filling it.
 			writingSlot = true
 			return
 		},
-		OnFlow: func(w walk.Walker) error {
+		OnFlow: func(w inspect.Iter) error {
 			if inputs.Len() > 0 {
 				inputs.R(js.Comma)
 			}
@@ -30,16 +31,18 @@ func (m *bgen) newSeries(term string, inputs *js.Builder) walk.Callbacks {
 				R(js.Colon).R(open).
 				Q("block").
 				R(js.Colon).R(open)
-			return m.events.Push(walk.OnEnd(m.newInnerFlow(w, inputs, w.TypeName()),
+
+			typeName := w.TypeInfo().(*typeinfo.Flow).Name
+			return m.events.Push(inspect.OnEnd(m.newInnerFlow(w, inputs, typeName),
 				// when a child ( the inner block ) has finished
-				func(w walk.Walker, err error) error {
+				func(w inspect.Iter, err error) error {
 					if err == nil {
 						inputs.R(close, close)
 					}
 					return err
 				}))
 		},
-		OnEnd: func(w walk.Walker) (err error) {
+		OnEnd: func(w inspect.Iter) (err error) {
 			// note: we reuse the current state for each "OnSlot"
 			// so we get ends for it and for the end of our own repeat.
 			if writingSlot {

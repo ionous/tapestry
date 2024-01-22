@@ -2,12 +2,12 @@ package block
 
 import (
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // convert the passed elements to blockly workspace format
-func Convert(types bconst.Types, story jsn.Marshalee) (ret string, err error) {
+func Convert(types bconst.Types, story typeinfo.Inspector) (ret string, err error) {
 	const header = `{"blocks": {"languageVersion": 0,"blocks": [`
 	const footer = `]}}`
 	var out js.Builder

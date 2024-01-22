@@ -1,9 +1,22 @@
 package bconst
 
-import "git.sr.ht/~ionous/tapestry/dl/spec"
+import (
+	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+)
 
 type Types interface {
 	FindType(string) (*spec.TypeSpec, bool)
+}
+
+func MakeSlotRule(slot *typeinfo.Slot) SlotRule {
+	stacks, _ := slot.Markup[StackMarkup].(bool)
+	color, _ := slot.Markup[ColorMarkup].(string)
+	return SlotRule{
+		Name:   slot.Name,
+		Stack:  stacks,
+		Colour: color,
+	}
 }
 
 // pass the name of the slot

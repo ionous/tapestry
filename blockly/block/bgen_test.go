@@ -1,14 +1,14 @@
 package block_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"strconv"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/test"
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
-	"git.sr.ht/~ionous/tapestry/idl"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 )
@@ -23,19 +23,22 @@ func TestPairs(t *testing.T) {
 	}
 }
 
-func testBlocks(src jsn.Marshalee, expect string) (err error) {
+func testBlocks(src typeinfo.Inspector, expect string) (err error) {
 	var id int
 	block.NewId = func() string {
 		id++
 		return "test-" + strconv.Itoa(id)
 	}
 	var out js.Builder
-	if ts, e := rs.FromSpecs(idl.Specs); e != nil {
-		err = e
-	} else if e := block.Build(&out, src, &ts, false); e != nil {
+	if e := block.Build(&out, src, false); e != nil {
 		err = errutil.New(e, "failed marshal")
-	} else if str := jsn.Indent(out.String()); str != expect {
-		err = errutil.New(e, "mismatched", str)
+	} else {
+		var indented bytes.Buffer
+		if e := json.Indent(&indented, []byte(out.String()), "", "  "); e != nil {
+			err = errutil.New("indention error", e)
+		} else if str := indented.String(); str != expect {
+			err = errutil.New(e, "mismatched", str)
+		}
 	}
 	return
 }

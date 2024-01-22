@@ -4,14 +4,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/dl/testdl"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 // contents of block files and their matching representation in go.
 // ( used by un/block to test read/writing of block files )
 var Pairs = []struct {
 	Name string
-	Test jsn.Marshalee
+	Test typeinfo.Inspector
 	Json string
 }{{
 	// swap member of the flow
