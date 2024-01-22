@@ -28,7 +28,8 @@ func TestStoring(t *testing.T) {
 	for _, p := range test.Pairs {
 		if !strings.HasPrefix(p.Name, "x") {
 			t.Run(p.Name, func(t *testing.T) {
-				if e := testUnblock(reg, p.Test, p.Json); e != nil {
+				// FIX: porting in progress....
+				if e := testUnblock(reg, p.Test.(jsn.Marshalee), p.Json); e != nil {
 					t.Fatal(e)
 				}
 			})
