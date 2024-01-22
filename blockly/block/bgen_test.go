@@ -37,7 +37,7 @@ func testBlocks(src typeinfo.Inspector, expect string) (err error) {
 		if e := json.Indent(&indented, []byte(out.String()), "", "  "); e != nil {
 			err = errutil.New("indention error", e)
 		} else if str := indented.String(); str != expect {
-			err = errutil.New(e, "mismatched", str)
+			err = errutil.New("mismatched", str)
 		}
 	}
 	return

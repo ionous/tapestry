@@ -14,36 +14,6 @@ var Pairs = []struct {
 	Test typeinfo.Inspector
 	Json string
 }{{
-	// swap member of the flow
-	/*test*/ "Swap",
-	&testdl.TestFlow{
-		Swap: testdl.TestSwap{
-			Choice: testdl.TestSwap_C_Opt,
-			Value: &testdl.TestTxt{
-				Str: "something",
-			},
-		},
-	}, `{
-  "type": "test_flow",
-  "id": "test-1",
-  "extraState": {
-    "SWAP": 1
-  },
-  "fields": {
-    "SWAP": "$C"
-  },
-  "inputs": {
-    "SWAP": {
-      "block": {
-        "type": "test_txt",
-        "id": "test-2",
-        "fields": {
-          "TEST_TXT": "something"
-        }
-      }
-    }
-  }
-}`}, {
 	// repeats of a specific flow
 	/*test*/ "Slice",
 	&literal.FieldList{

@@ -15,7 +15,10 @@ type blockData struct {
 	zeroPos                    bool
 	fields, inputs, extraState js.Builder
 	allowExtraData             bool
-	markup                     map[string]any
+	// for comments. tbd: comments probably should be their own blocks
+	// the block writer would generate the comment blocks,
+	// and the block reader would collapse them down into their original location.
+	markup map[string]any
 }
 
 // start a new input connection from this block to some new block

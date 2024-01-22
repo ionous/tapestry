@@ -14,7 +14,9 @@ func (s *Stack) Replace(next Events) {
 
 // always returns nil
 func (s *Stack) Push(next Events) (_ error) {
-	s.events = append(s.events, s.Events)
+	if s.Events != nil {
+		s.events = append(s.events, s.Events)
+	}
 	s.Events = next
 	return
 }

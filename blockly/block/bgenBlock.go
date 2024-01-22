@@ -12,7 +12,8 @@ import (
 // or the value of a block or shadow key.
 func Build(out *js.Builder, src typeinfo.Inspector, _zeroPos bool) (err error) {
 	zeroPos = _zeroPos
-
+	// this setup is a little odd because we push to handle the visit
+	// and then push to handle the src flow...
 	var m bgen
 	m.events.Push(inspect.Callbacks{
 		OnFlow: func(w inspect.Iter) error {
@@ -51,7 +52,7 @@ func (m *bgen) newInnerBlock(w inspect.Iter, body *js.Builder, typeName string, 
 		id:             NewId(),
 		typeName:       typeName,
 		allowExtraData: allowExtraData,
-		markup:         w.Markup(),
+		markup:         w.Markup(), // for comments
 		zeroPos:        zeroPos,
 	}
 	zeroPos = false
@@ -80,13 +81,20 @@ func (m *bgen) newInnerBlock(w inspect.Iter, body *js.Builder, typeName string, 
 		},
 
 		// a value that fills a slot; this will be an input
-		OnSlot: func(w inspect.Iter) error {
-			return m.events.Push(m.newSlot(term, &blk))
+		OnSlot: func(w inspect.Iter) (err error) {
+			if cnt := w.Len(); cnt == 0 {
+				m.skip()
+			} else {
+				err = m.events.Push(m.newSlot(term, &blk))
+			}
+			return
 		},
 
 		// a member that repeats
 		OnRepeat: func(w inspect.Iter) (_ error) {
-			if cnt := w.Len(); cnt > 0 {
+			if cnt := w.Len(); cnt == 0 {
+				m.skip()
+			} else {
 				blk.writeCount(term, cnt)
 				m.events.Push(m.newRepeat(term, &blk))
 			}
@@ -107,4 +115,12 @@ func (m *bgen) newInnerBlock(w inspect.Iter, body *js.Builder, typeName string, 
 			return m.events.Pop()
 		},
 	}
+}
+
+func (m *bgen) skip() {
+	m.events.Push(inspect.Callbacks{
+		OnEnd: func(inspect.Iter) (_ error) {
+			return m.events.Pop()
+		},
+	})
 }
