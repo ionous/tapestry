@@ -54,7 +54,7 @@ var Z_StoryStatement_Info = typeinfo.Slot{
 type FIX_StoryStatement_Slot struct{ Value StoryStatement }
 
 // implements typeinfo.Inspector for a single slot.
-func (*StoryStatement_Slot) Inspect() typeinfo.T {
+func (*FIX_StoryStatement_Slot) Inspect() typeinfo.T {
 	return &Z_StoryStatement_Info
 }
 

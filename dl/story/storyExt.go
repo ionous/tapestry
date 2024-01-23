@@ -1,6 +1,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -13,11 +14,11 @@ import (
 
 // PreImport happens at the opening of a json block and it can transform the value into something completely new.
 type PreImport interface {
-	PreImport(*weave.Catalog) (any, error)
+	PreImport(*weave.Catalog) (typeinfo.Inspector, error)
 }
 
 type PostImport interface {
-	PostImport(*weave.Catalog) (any, error)
+	PostImport(*weave.Catalog) (typeinfo.Inspector, error)
 }
 
 var _ PreImport = (*CountOf)(nil)

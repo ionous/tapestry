@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 )
@@ -22,7 +23,7 @@ func (*Comment) Execute(rt.Runtime) (_ error) {
 }
 
 // PreImport turns a comment statement into a debug log.
-func (op *Comment) PreImport(cat *weave.Catalog) (ret any, err error) {
+func (op *Comment) PreImport(cat *weave.Catalog) (ret typeinfo.Inspector, err error) {
 	if cat.Env.Inc(activityDepth, 0) == 0 {
 		ret = op
 	} else {

@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/lang/walk"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -37,12 +36,12 @@ func searchForFlow(src typeinfo.Inspector, typeName string) (ret any, err error)
 			t := w.TypeInfo().(*typeinfo.Flow)
 			if typeName == t.Name {
 				ret = w.GoValue()
-				err = walk.DoneVisiting
+				err = inspect.DoneVisiting
 			}
 			return
 		},
 	}
-	if e := inspect.Visit(src, evts); e != walk.DoneVisiting {
+	if e := inspect.Visit(src, evts); e != inspect.DoneVisiting {
 		err = e
 	}
 	return

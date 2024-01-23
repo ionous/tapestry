@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
@@ -17,13 +18,13 @@ import (
 )
 
 // transform SayTemplate into a RenderResponse
-func (op *SayTemplate) PreImport(cat *weave.Catalog) (any, error) {
+func (op *SayTemplate) PreImport(cat *weave.Catalog) (typeinfo.Inspector, error) {
 	return convertTemplate("", op.Template.Str)
 }
 
 // transform SayResponse into a RenderResponse
 // ( post import so it happens after any transforms in its evals have been processed )
-func (op *SayResponse) PostImport(cat *weave.Catalog) (ret any, err error) {
+func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Inspector, err error) {
 	// render by lookup if there's no text
 	if name := inflect.Normalize(op.Name); op.Text == nil {
 		ret = &render.RenderResponse{Name: name}

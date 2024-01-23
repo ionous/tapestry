@@ -178,6 +178,18 @@ func (w *Iter) NormalizedValue() (ret any) {
 }
 
 // write a value into the target of an iterator.
+// ( SetSlot can't be on the slot itself since the slot is often a bare member )
+func (w *Iter) SetSlot(val typeinfo.Inspector) (okay bool) {
+	v, _ := w.getFocus()
+	newVal := r.ValueOf(v)
+	if newVal.Type().AssignableTo(v.Type()) {
+		v.Set(newVal)
+		okay = true
+	}
+	return
+}
+
+// write a value into the target of an iterator.
 // returns false if the value is incompatible
 // ( uses go rules of conversion when needed to complete the assignment )
 // func (w *Iter) SetValue(val any) (okay bool) {

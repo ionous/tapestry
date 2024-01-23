@@ -11,7 +11,7 @@ var Z_{{Pascal .Name}}_Info = typeinfo.Slot{
 type FIX_{{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
 
 // implements typeinfo.Inspector for a single slot.
-func (*{{Pascal .Name}}_Slot) Inspect() typeinfo.T {
+func (*FIX_{{Pascal .Name}}_Slot) Inspect() typeinfo.T {
 	return &Z_{{Pascal .Name}}_Info
 }
 

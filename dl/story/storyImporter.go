@@ -1,9 +1,9 @@
 package story
 
 import (
-	r "reflect"
-
-	"git.sr.ht/~ionous/tapestry/lang/walk"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
+	"git.sr.ht/~ionous/tapestry/lang/inspect"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
@@ -28,45 +28,47 @@ func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
 }
 
 func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
-	evts := walk.Callbacks{
+	evts := inspect.Callbacks{
 		// given a slot, replace its command using PreImport or PostImport
 		// and, walk the contents of its (replaced) for additional pre or post imports.
 		// a command usually would only implement either Pre or Post ( or neither. )
-		OnSlot: func(slot walk.Walker) (err error) {
-			if i := unpackSlot(slot); i != nil {
-				updateActivityDepth(cat, i, 1)
+		OnSlot: func(slot inspect.Iter) (err error) {
+			if t := slot.TypeInfo().(*typeinfo.Slot); slot.Next() {
+				updateActivityDepth(cat, t, 1)
 				//
-				if tgt, ok := i.(PreImport); ok {
+				if tgt, ok := slot.GoValue().(PreImport); ok {
 					if rep, e := tgt.PreImport(cat); e != nil {
-						err = errutil.New(e, "failed to create pre replacement")
+						err = errutil.New(e, "failed to create pre import")
 					} else if rep != nil {
-						// fix: a more direct setValue?
-						slot.Value().Set(r.ValueOf(rep))
+						if !slot.SetSlot(rep) {
+							err = errutil.New("couldnt assign pre import")
+						}
 					}
 				}
 			}
 			return
 		},
-		OnEnd: func(slot walk.Walker) (err error) {
-			if i := unpackSlot(slot); i != nil {
-				if tgt, ok := i.(PostImport); ok {
+		OnEnd: func(slot inspect.Iter) (err error) {
+			if t := slot.TypeInfo().(*typeinfo.Slot); slot.Next() {
+				if tgt, ok := slot.GoValue().(PostImport); ok {
 					if rep, e := tgt.PostImport(cat); e != nil {
-						err = errutil.New(e, "failed to create post replacement")
+						err = errutil.New(e, "failed to create post import")
 					} else if rep != nil {
-						slot.Value().Set(r.ValueOf(rep))
+						if !slot.SetSlot(rep) {
+							err = errutil.New("couldnt assign post import")
+						}
 					}
 				}
-				updateActivityDepth(cat, i, -1)
+				updateActivityDepth(cat, t, -1)
 			}
 			return
 		},
 	}
 	//
 	currentCatalog = cat
-	slice := r.ValueOf(all)
-	for i, el := range all {
-		w := walk.Walk(slice.Index(i))
-		if e := walk.VisitSlot(w, &evts); e != nil {
+	for _, el := range all {
+		slot := FIX_StoryStatement_Slot{Value: el}
+		if e := inspect.Visit(&slot, &evts); e != nil {
 			err = e
 			break
 		} else if e := el.Weave(cat); e != nil {
@@ -91,25 +93,8 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 }
 
 // fix: for comment logging; remove?
-func updateActivityDepth(cat *weave.Catalog, i any, inc int) {
-	// fix:
-	// this used to switch on the *slot*
-	// now its switching on the interface
-	// *in* that slot. getting that zero value for a switch is a bit of a pain.
-
-	// if _, ok := i.(rt.Execute); ok {
-	// 	cat.Env.Inc(activityDepth, inc)
-	// }
-}
-
-// kind of weird: the value of the slot is a pointer;
-// the value of the flow is a struct; we need the pointer.
-func unpackSlot(slot walk.Walker) (ret interface{}) {
-	if slot.SpecType() == walk.Slot {
-
-		if v := slot.Value(); v.IsValid() {
-			ret = v.Interface()
-		}
+func updateActivityDepth(cat *weave.Catalog, t *typeinfo.Slot, inc int) {
+	if t == &rtti.Z_Execute_Info {
+		cat.Env.Inc(activityDepth, inc)
 	}
-	return
 }
