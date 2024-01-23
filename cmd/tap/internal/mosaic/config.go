@@ -3,15 +3,12 @@ package mosaic
 import (
 	"path"
 	"path/filepath"
-
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 )
 
 // Config contains paths to the standalone console utils.
 type Config struct {
-	cmds  string // base directory for commands
-	data  string // base directory for data
-	types rs.TypeSpecs
+	cmds string // base directory for commands
+	data string // base directory for data
 }
 
 func (cfg *Config) Scratch(parts ...string) string {
@@ -33,10 +30,9 @@ func (cfg *Config) Stories() string {
 }
 
 // Configure creates a reasonable(?) config based on the developer go path.
-func Configure(types rs.TypeSpecs, cmdDir, dataDir string) *Config {
+func Configure(cmdDir, dataDir string) *Config {
 	return &Config{
-		types: types,
-		cmds:  cmdDir,
-		data:  dataDir,
+		cmds: cmdDir,
+		data: dataDir,
 	}
 }

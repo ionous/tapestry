@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/support/files"
@@ -50,5 +49,3 @@ func writeBlock(path string, src *story.StoryFile) (err error) {
 	}
 	return
 }
-
-var blockTypes *rs.TypeSpecs // cache of loaded typespecs

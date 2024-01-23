@@ -14,10 +14,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaic"
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
-	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/web"
-	"github.com/ionous/errutil"
 )
 
 // exported to package main in cmd/tap
@@ -39,15 +36,13 @@ By default, attempts to use a directory called Tapestry in your Documents folder
 func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	if dir, e := mosaicFlags.folder.GetFolder(); e != nil {
 		err = e
-	} else if types, e := rs.FromSpecs(idl.Specs); e != nil {
-		err = errutil.New("fatal error:", e)
 	} else {
 		var ws mosaic.Workspace
 		mux := http.NewServeMux()
 
 		// FIX: remove the "cmdDir"
 		// everything should be using tap internals at this point i think.
-		cfg := mosaic.Configure(types, build.Default.GOPATH, dir)
+		cfg := mosaic.Configure(build.Default.GOPATH, dir)
 
 		// raw story files ( because why not )
 		mux.Handle("/stories/", web.HandleResource(mosaic.FilesApi(cfg)))
