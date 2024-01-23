@@ -2,7 +2,7 @@ package rules
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -18,9 +18,8 @@ func (b updateTracker) HasUpdate() bool {
 
 func (b *updateTracker) CheckArgs(args []assign.Arg) (okay bool) {
 	for _, arg := range args {
-		if m, ok := arg.Value.(jsn.Marshalee); !ok {
-			panic("unknown type")
-		} else if searchCounters(m) {
+		slot := rtti.Assignment_Slot{Value: arg.Value}
+		if searchCounters(&slot) {
 			okay = true
 			*b++
 			break

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -157,14 +158,13 @@ func (n RuleName) ruleForPattern(ks g.Kinds) (ret RuleInfo, err error) {
 // tdb: could this be processed at load time (storyImport)
 func DoesUpdate(exe []rt.Execute) (okay bool) {
 	// wrap the exes up into a single block for easier searching
-	var m rt.Execute_Slice = exe
+	var m rtti.Execute_Slots = exe
 	return searchCounters(&m)
 }
 
 // tdb: could this? be processed at load time (storyImport)
 func DoesTerminate(exe []rt.Execute) bool {
 	var terminal bool //provisionally continues
-
 Out:
 	for _, el := range exe {
 		switch el := el.(type) {
@@ -197,7 +197,7 @@ Out:
 
 // return the first response definition in the block
 func FindNamedResponse(exe []rt.Execute) (ret string) {
-	var m rt.Execute_Slice = exe
+	var m rtti.Execute_Slots = exe
 	if op, e := searchForFlow(&m, render.RenderResponse_Type); e != nil && e != jsn.Missing {
 		panic(e)
 	} else if response, ok := op.(*render.RenderResponse); ok && response.Text != nil {

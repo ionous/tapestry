@@ -2,6 +2,9 @@ package inspect
 
 import (
 	"errors"
+	"fmt"
+	r "reflect"
+
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -26,8 +29,28 @@ type Events interface {
 var DoneVisiting = errors.New("done visiting")
 
 // turn the iterator into an event style callbacks
-func Visit(i typeinfo.Inspector, evt Events) error {
-	return visitFlow(Walk(i), evt)
+func Visit(i typeinfo.Inspector, evt Events) (err error) {
+	w := Walk(i) // cheats a little to grab the type info and repeat style...
+	t, repeat := w.currType, w.curr.Kind() == r.Slice
+	// almost the same as visit fields except it has to walk into the field
+	// and this already has the element it walks to walk
+	switch t.(type) {
+	case *typeinfo.Flow:
+		if !repeat {
+			err = visitFlow(w, evt)
+		} else {
+			err = visitFlows(w, evt)
+		}
+	case *typeinfo.Slot:
+		if !repeat {
+			err = visitSlot(w, evt)
+		} else {
+			err = visitSlots(w, evt)
+		}
+	default:
+		err = fmt.Errorf("expected a container type, not %T", i)
+	}
+	return
 }
 
 func visitFields(w Iter, evt Events) (err error) {
@@ -75,8 +98,8 @@ func visitSlot(w Iter, evt Events) (err error) {
 	if e := evt.Slot(w); e != nil {
 		err = e
 	} else {
-		if flow, ok := unpackSlot(w); ok {
-			err = visitFlow(flow, evt)
+		if it := w; it.Next() { // next moves the focus to the flow if any
+			err = visitFlow(it.Walk(), evt) // walk returns the flow as a container
 		}
 		if err == nil {
 			err = evt.End(w)
@@ -123,14 +146,6 @@ func visitValues(w Iter, evt Events) (err error) {
 	}
 	if err == nil {
 		evt.End(w)
-	}
-	return
-}
-
-// given a slot, return its flow ( false if the slot was empty )
-func unpackSlot(slot Iter) (ret Iter, okay bool) {
-	if slot.Next() { // next moves the focus to the flow if any
-		ret, okay = slot.Walk(), true // walk returns the flow as a container
 	}
 	return
 }
