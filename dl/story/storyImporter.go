@@ -33,24 +33,24 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 		// and, walk the contents of its (replaced) for additional pre or post imports.
 		// a command usually would only implement either Pre or Post ( or neither. )
 		OnSlot: func(slot inspect.Iter) (err error) {
-			if t := slot.TypeInfo().(*typeinfo.Slot); slot.Next() {
-				updateActivityDepth(cat, t, 1)
-				//
-				if tgt, ok := slot.GoValue().(PreImport); ok {
-					if rep, e := tgt.PreImport(cat); e != nil {
-						err = errutil.New(e, "failed to create pre import")
-					} else if rep != nil {
-						if !slot.SetSlot(rep) {
-							err = errutil.New("couldnt assign pre import")
-						}
+			t := slot.TypeInfo().(*typeinfo.Slot)
+			updateActivityDepth(cat, t, 1)
+			var tgt PreImport
+			if ok := slot.GetSlot(&tgt); ok {
+				if rep, e := tgt.PreImport(cat); e != nil {
+					err = errutil.New(e, "failed to create pre import")
+				} else if rep != nil {
+					if !slot.SetSlot(rep) {
+						err = errutil.New("couldnt assign pre import")
 					}
 				}
 			}
 			return
 		},
 		OnEnd: func(slot inspect.Iter) (err error) {
-			if t := slot.TypeInfo().(*typeinfo.Slot); slot.Next() {
-				if tgt, ok := slot.GoValue().(PostImport); ok {
+			if t, ok := slot.TypeInfo().(*typeinfo.Slot); ok && !slot.Repeating() {
+				var tgt PostImport
+				if ok := slot.GetSlot(&tgt); ok {
 					if rep, e := tgt.PostImport(cat); e != nil {
 						err = errutil.New(e, "failed to create post import")
 					} else if rep != nil {

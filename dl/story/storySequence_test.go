@@ -47,7 +47,7 @@ func TestImportSequence(t *testing.T) {
 			},
 		}
 		if diff := pretty.Diff(printText.Text, &expect); len(diff) > 0 {
-			t.Fatal(pretty.Print("want:", expect, "have:", printText.Text))
+			t.Fatal("want:", expect, "have:", pretty.Sprint(printText.Text))
 		}
 	}
 }

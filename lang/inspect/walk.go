@@ -177,35 +177,36 @@ func (w *Iter) NormalizedValue() (ret any) {
 	return
 }
 
-// write a value into the target of an iterator.
-// ( SetSlot can't be on the slot itself since the slot is often a bare member )
+// write a value into the target of a slot.
 func (w *Iter) SetSlot(val typeinfo.Inspector) (okay bool) {
-	v, _ := w.getFocus()
-	newVal := r.ValueOf(v)
-	if newVal.Type().AssignableTo(v.Type()) {
-		v.Set(newVal)
+	return setValue(w.curr, r.ValueOf(val))
+}
+
+// read the target of a slot
+func (w *Iter) GetSlot(ptr any) (okay bool) {
+	if !w.curr.IsNil() {
+		okay = setValue(r.ValueOf(ptr).Elem(), w.curr.Elem())
+	}
+	return
+}
+
+func setValue(out r.Value, from r.Value) (okay bool) {
+	if from.CanConvert(out.Type()) {
+		out.Set(from.Convert(out.Type()))
 		okay = true
 	}
 	return
 }
 
-// write a value into the target of an iterator.
-// returns false if the value is incompatible
-// ( uses go rules of conversion when needed to complete the assignment )
-// func (w *Iter) SetValue(val any) (okay bool) {
-// 	if out, val := w.Value(), r.ValueOf(val); out.Kind() == val.Kind() {
-// 		out.Set(val)
-// 		okay = true
-// 	} else if t := out.Type(); val.CanConvert(t) {
-// 		out.Set(val.Convert(t))
-// 	}
-// 	return
-// }
+func (w *Iter) Repeating() bool {
+	return w.curr.Kind() == r.Slice
+}
 
 // change the size of the container
 func (w *Iter) Resize(cnt int) {
-	if w.curr.Kind() != r.Slice {
+	if !w.Repeating() {
 		log.Printf("can't resize a %s(%s)", w.curr.Kind(), w.curr.Type())
+		panic("not a slice")
 	}
 	w.curr.Grow(cnt)
 	w.curr.SetLen(cnt)
