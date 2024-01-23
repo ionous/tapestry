@@ -21,7 +21,7 @@ var Z_PlayMessage_Info = typeinfo.Slot{
 type FIX_PlayMessage_Slot struct{ Value PlayMessage }
 
 // implements typeinfo.Inspector for a single slot.
-func (*PlayMessage_Slot) Inspect() typeinfo.T {
+func (*FIX_PlayMessage_Slot) Inspect() typeinfo.T {
 	return &Z_PlayMessage_Info
 }
 
@@ -209,20 +209,23 @@ var Z_PlayModes_Info = typeinfo.Str{
 	},
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "play",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_PlayMessage_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_PlayLog_Info,
 	&Z_PlayMode_Info,
 	&Z_PlayOut_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

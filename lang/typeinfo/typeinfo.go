@@ -17,6 +17,14 @@ type FlowInspector interface {
 	GetMarkup(ensure bool) map[string]any
 }
 
+// package listing of type data
+type TypeSet struct {
+	Name       string
+	Slot       []*Slot
+	Flow       []*Flow
+	Signatures map[uint64]any
+}
+
 // marker interface implemented by each kind of typeinfo:
 // Flow, Slot, Str, and Num.
 type T interface{ TypeInfo() T }

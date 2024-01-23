@@ -22,7 +22,7 @@ var Z_Address_Info = typeinfo.Slot{
 type FIX_Address_Slot struct{ Value Address }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Address_Slot) Inspect() typeinfo.T {
+func (*FIX_Address_Slot) Inspect() typeinfo.T {
 	return &Z_Address_Info
 }
 
@@ -50,7 +50,7 @@ var Z_Dot_Info = typeinfo.Slot{
 type FIX_Dot_Slot struct{ Value Dot }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Dot_Slot) Inspect() typeinfo.T {
+func (*FIX_Dot_Slot) Inspect() typeinfo.T {
 	return &Z_Dot_Info
 }
 
@@ -998,16 +998,23 @@ func (*FromRecordList_Slice) Inspect() typeinfo.T {
 	return &Z_FromRecordList_Info
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "assign",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_Address_Info,
 	&Z_Dot_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_SetValue_Info,
 	&Z_SetTrait_Info,
 	&Z_CopyValue_Info,
@@ -1026,7 +1033,3 @@ var Y_flow_List = []*typeinfo.Flow{
 	&Z_FromTextList_Info,
 	&Z_FromRecordList_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

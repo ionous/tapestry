@@ -298,16 +298,16 @@ var Z_RelationName_Info = typeinfo.Str{
 	Name: Z_RelationName_Type,
 }
 
-// a list of all flows in this this package
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "rel",
+	Flow: z_flow_list,
+} // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_ReciprocalOf_Info,
 	&Z_ReciprocalsOf_Info,
 	&Z_Relate_Info,
 	&Z_RelativeOf_Info,
 	&Z_RelativesOf_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

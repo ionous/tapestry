@@ -68,45 +68,49 @@ func (q *Generator) Write(w io.Writer) (err error) {
 		var sigs distill.Registry
 		if e := q.writeContent(&body, g.groupContent); e != nil {
 			err = e
-		} else if e := q.writeTypes(&body, "slot", "( ex. for generating blockly shapes )",
-			g.Slot); e != nil {
-			err = e
-		} else if e := q.writeTypes(&body, "flow", "( ex. for reading blockly blocks )",
-			g.Flow); e != nil {
-			err = e
-		} else if e := q.writeSigs(&body, sigs); e != nil {
-			err = e
-		}
-		dl := "git.sr.ht/~ionous/tapestry/dl/" // fix: customize?
-		ti := "git.sr.ht/~ionous/tapestry/lang/typeinfo"
-		imports := q.groups.getRefs(dl, ti)
-		if e := q.write(w, "header", struct {
-			Name    string
-			Imports []string
-		}{g.Name, imports}); e != nil {
-			err = e
 		} else {
-			w.Write(body.Bytes())
+			dl := "git.sr.ht/~ionous/tapestry/dl/" // fix: customize?
+			ti := "git.sr.ht/~ionous/tapestry/lang/typeinfo"
+			imports := q.groups.getRefs(dl, ti)
+			if e := q.write(w, "header", struct {
+				Name    string
+				Imports []string
+			}{g.Name, imports}); e != nil {
+				err = e
+			} else {
+				w.Write(body.Bytes())
+				err = q.writeFooter(w,
+					g.Name, sigs,
+					typeList{
+						Type:    "slot",
+						Comment: "( ex. for generating blockly shapes )",
+						List:    g.Slot,
+					},
+					typeList{
+						Type:    "flow",
+						Comment: "( ex. for reading blockly blocks )",
+						List:    g.Flow,
+					},
+				)
+			}
 		}
 	}
 	return
 }
 
 // writes a list of typeinfo references
-func (q *Generator) writeSigs(w io.Writer, reg distill.Registry) error {
-	return q.write(w, "signatures", reg.Sigs)
+func (q *Generator) writeFooter(w io.Writer, name string, reg distill.Registry, slot, flow typeList) error {
+	return q.write(w, "footer", struct {
+		Name       string
+		Slot, Flow typeList
+		Signatures []distill.Sig
+	}{name, slot, flow, reg.Sigs})
 }
 
-// writes a list of typeinfo references
-func (q *Generator) writeTypes(w io.Writer, name, comment string, list []typeData) (err error) {
-	if len(list) > 0 {
-		data := struct {
-			Name, Comment string
-			List          []typeData
-		}{name, comment, list}
-		err = q.write(w, "types", data)
-	}
-	return
+type typeList struct {
+	Type    string
+	Comment string
+	List    []typeData
 }
 
 func (q *Generator) writeContent(w io.Writer, gc groupContent) (err error) {

@@ -23,7 +23,7 @@ var Z_Brancher_Info = typeinfo.Slot{
 type FIX_Brancher_Slot struct{ Value Brancher }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Brancher_Slot) Inspect() typeinfo.T {
+func (*FIX_Brancher_Slot) Inspect() typeinfo.T {
 	return &Z_Brancher_Info
 }
 
@@ -50,7 +50,7 @@ var Z_Trigger_Info = typeinfo.Slot{
 type FIX_Trigger_Slot struct{ Value Trigger }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Trigger_Slot) Inspect() typeinfo.T {
+func (*FIX_Trigger_Slot) Inspect() typeinfo.T {
 	return &Z_Trigger_Info
 }
 
@@ -3736,16 +3736,23 @@ var Z_Comparison_Info = typeinfo.Str{
 	},
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "core",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_Brancher_Info,
 	&Z_Trigger_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_AllTrue_Info,
 	&Z_Always_Info,
 	&Z_AnyTrue_Info,
@@ -3815,7 +3822,3 @@ var Y_flow_List = []*typeinfo.Flow{
 	&Z_TriggerSwitch_Info,
 	&Z_While_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

@@ -23,7 +23,7 @@ var Z_RenderEval_Info = typeinfo.Slot{
 type FIX_RenderEval_Slot struct{ Value RenderEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*RenderEval_Slot) Inspect() typeinfo.T {
+func (*FIX_RenderEval_Slot) Inspect() typeinfo.T {
 	return &Z_RenderEval_Info
 }
 
@@ -329,22 +329,25 @@ func (*RenderResponse_Slice) Inspect() typeinfo.T {
 	return &Z_RenderResponse_Info
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "render",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_RenderEval_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_RenderName_Info,
 	&Z_RenderRef_Info,
 	&Z_RenderValue_Info,
 	&Z_RenderPattern_Info,
 	&Z_RenderResponse_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

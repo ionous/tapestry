@@ -48,6 +48,7 @@ var Z_Number_Info = typeinfo.Num{
 	Name: Z_Number_Type,
 }
 
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "prim",
+}

@@ -326,9 +326,13 @@ var Z_LoggingLevel_Info = typeinfo.Str{
 	},
 }
 
-// a list of all flows in this this package
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "debug",
+	Flow: z_flow_list,
+} // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_DoNothing_Info,
 	&Z_Expect_Info,
 	&Z_ExpectOutput_Info,
@@ -336,7 +340,3 @@ var Y_flow_List = []*typeinfo.Flow{
 	&Z_Fabricate_Info,
 	&Z_DebugLog_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

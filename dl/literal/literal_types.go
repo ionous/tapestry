@@ -23,7 +23,7 @@ var Z_LiteralValue_Info = typeinfo.Slot{
 type FIX_LiteralValue_Slot struct{ Value LiteralValue }
 
 // implements typeinfo.Inspector for a single slot.
-func (*LiteralValue_Slot) Inspect() typeinfo.T {
+func (*FIX_LiteralValue_Slot) Inspect() typeinfo.T {
 	return &Z_LiteralValue_Info
 }
 
@@ -562,15 +562,22 @@ func (*TextValues_Slice) Inspect() typeinfo.T {
 	return &Z_TextValues_Info
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "literal",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_LiteralValue_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_BoolValue_Info,
 	&Z_FieldValue_Info,
 	&Z_FieldList_Info,
@@ -581,7 +588,3 @@ var Y_flow_List = []*typeinfo.Flow{
 	&Z_TextValue_Info,
 	&Z_TextValues_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

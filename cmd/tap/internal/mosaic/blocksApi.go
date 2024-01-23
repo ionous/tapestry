@@ -131,7 +131,7 @@ func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 			err = e
 		} else if e := story.Decode(&file, msg); e != nil {
 			err = e
-		} else if str, e := block.Convert(&d.cfg.types, &file); e != nil {
+		} else if str, e := block.Convert(&file); e != nil {
 			err = e
 		} else {
 			w.Header().Set("Content-Type", "application/json")

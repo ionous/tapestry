@@ -25,7 +25,7 @@ var Z_FieldDefinition_Info = typeinfo.Slot{
 type FIX_FieldDefinition_Slot struct{ Value FieldDefinition }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FieldDefinition_Slot) Inspect() typeinfo.T {
+func (*FIX_FieldDefinition_Slot) Inspect() typeinfo.T {
 	return &Z_FieldDefinition_Info
 }
 
@@ -2870,16 +2870,23 @@ var Z_RelationCardinality_Info = typeinfo.Str{
 	},
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "story",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_FieldDefinition_Info,
 	&Z_StoryStatement_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_Comment_Info,
 	&Z_Test_Info,
 	&Z_DefineScene_Info,
@@ -2927,7 +2934,3 @@ var Y_flow_List = []*typeinfo.Flow{
 	&Z_TextField_Info,
 	&Z_NothingField_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

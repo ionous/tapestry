@@ -1,7 +1,0 @@
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{
-{{range . -}}
-  {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */
-{{end -}}
-}

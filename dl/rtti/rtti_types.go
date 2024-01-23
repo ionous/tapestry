@@ -257,9 +257,15 @@ func (*RecordListEval_Slots) Inspect() typeinfo.T {
 	return &Z_RecordListEval_Info
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "rtti",
+	Slot: z_slot_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_Assignment_Info,
 	&Z_BoolEval_Info,
 	&Z_Execute_Info,
@@ -270,7 +276,3 @@ var Y_slot_List = []*typeinfo.Slot{
 	&Z_RecordEval_Info,
 	&Z_RecordListEval_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

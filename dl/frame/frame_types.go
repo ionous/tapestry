@@ -18,7 +18,7 @@ var Z_Event_Info = typeinfo.Slot{
 type FIX_Event_Slot struct{ Value Event }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Event_Slot) Inspect() typeinfo.T {
+func (*FIX_Event_Slot) Inspect() typeinfo.T {
 	return &Z_Event_Info
 }
 
@@ -351,15 +351,22 @@ func (*PairChanged_Slice) Inspect() typeinfo.T {
 	return &Z_PairChanged_Info
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "frame",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_Event_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_Frame_Info,
 	&Z_FrameOutput_Info,
 	&Z_SceneStarted_Info,
@@ -367,7 +374,3 @@ var Y_flow_List = []*typeinfo.Flow{
 	&Z_StateChanged_Info,
 	&Z_PairChanged_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}

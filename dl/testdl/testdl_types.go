@@ -17,7 +17,7 @@ var Z_TestSlot_Info = typeinfo.Slot{
 type FIX_TestSlot_Slot struct{ Value TestSlot }
 
 // implements typeinfo.Inspector for a single slot.
-func (*TestSlot_Slot) Inspect() typeinfo.T {
+func (*FIX_TestSlot_Slot) Inspect() typeinfo.T {
 	return &Z_TestSlot_Info
 }
 
@@ -199,19 +199,22 @@ var Z_TestNum_Info = typeinfo.Num{
 	Name: Z_TestNum_Type,
 }
 
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name: "testdl",
+	Slot: z_slot_list,
+	Flow: z_flow_list,
+}
+
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
-var Y_slot_List = []*typeinfo.Slot{
+var z_slot_list = []*typeinfo.Slot{
 	&Z_TestSlot_Info,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
-var Y_flow_List = []*typeinfo.Flow{
+var z_flow_list = []*typeinfo.Flow{
 	&Z_TestEmbed_Info,
 	&Z_TestFlow_Info,
 }
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var Z_Signatures = map[uint64]interface{}{}
