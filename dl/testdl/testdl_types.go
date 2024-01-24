@@ -6,10 +6,8 @@ import (
 )
 
 // test_slot, a type of slot.
-const Z_TestSlot_Name = "test_slot"
-
-var Z_TestSlot_T = typeinfo.Slot{
-	Name: Z_TestSlot_Name,
+var Zt_TestSlot = typeinfo.Slot{
+	Name: "test_slot",
 }
 
 // holds a single slot
@@ -18,7 +16,7 @@ type FIX_TestSlot_Slot struct{ Value TestSlot }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_TestSlot_Slot) Inspect() typeinfo.T {
-	return &Z_TestSlot_T
+	return &Zt_TestSlot
 }
 
 // holds a slice of slots
@@ -26,7 +24,7 @@ type TestSlot_Slots []TestSlot
 
 // implements typeinfo.Inspector for a series of slots.
 func (*TestSlot_Slots) Inspect() typeinfo.T {
-	return &Z_TestSlot_T
+	return &Zt_TestSlot
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -38,7 +36,7 @@ type FIX_TestEmbed struct {
 
 // implements typeinfo.Inspector
 func (*TestEmbed) Inspect() typeinfo.T {
-	return &Z_TestEmbed_T
+	return &Zt_TestEmbed
 }
 
 // return a valid markup map, creating it if necessary.
@@ -49,22 +47,20 @@ func (op *TestEmbed) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// test_embed, a type of flow.
-const Z_TestEmbed_Name = "test_embed"
-
 // ensure the command implements its specified slots:
 var _ TestSlot = (*TestEmbed)(nil)
 
-var Z_TestEmbed_T = typeinfo.Flow{
-	Name: Z_TestEmbed_Name,
+// test_embed, a type of flow.
+var Zt_TestEmbed = typeinfo.Flow{
+	Name: "test_embed",
 	Lede: "embed",
 	Terms: []typeinfo.Term{{
 		Name:  "test_flow",
 		Label: "test_flow",
-		Type:  &Z_TestFlow_T,
+		Type:  &Zt_TestFlow,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_TestSlot_T,
+		&Zt_TestSlot,
 	},
 }
 
@@ -74,7 +70,7 @@ type FIX_TestEmbed_Slice []TestEmbed
 
 // implements typeinfo.Inspector
 func (*TestEmbed_Slice) Inspect() typeinfo.T {
-	return &Z_TestEmbed_T
+	return &Zt_TestEmbed
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -90,7 +86,7 @@ type FIX_TestFlow struct {
 
 // implements typeinfo.Inspector
 func (*TestFlow) Inspect() typeinfo.T {
-	return &Z_TestFlow_T
+	return &Zt_TestFlow
 }
 
 // return a valid markup map, creating it if necessary.
@@ -101,44 +97,42 @@ func (op *TestFlow) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// test_flow, a type of flow.
-const Z_TestFlow_Name = "test_flow"
-
 // ensure the command implements its specified slots:
 var _ TestSlot = (*TestFlow)(nil)
 
-var Z_TestFlow_T = typeinfo.Flow{
-	Name: Z_TestFlow_Name,
+// test_flow, a type of flow.
+var Zt_TestFlow = typeinfo.Flow{
+	Name: "test_flow",
 	Lede: "flow",
 	Terms: []typeinfo.Term{{
 		Name:     "slot",
 		Label:    "slot",
 		Optional: true,
-		Type:     &Z_TestSlot_T,
+		Type:     &Zt_TestSlot,
 	}, {
 		Name:     "txt",
 		Label:    "txt",
 		Optional: true,
-		Type:     &Z_TestTxt_T,
+		Type:     &Zt_TestTxt,
 	}, {
 		Name:     "num",
 		Label:    "num",
 		Optional: true,
-		Type:     &Z_TestNum_T,
+		Type:     &Zt_TestNum,
 	}, {
 		Name:     "bool",
 		Label:    "bool",
 		Optional: true,
-		Type:     &Z_TestBool_T,
+		Type:     &Zt_TestBool,
 	}, {
 		Name:     "slots",
 		Label:    "slots",
 		Optional: true,
 		Repeats:  true,
-		Type:     &Z_TestSlot_T,
+		Type:     &Zt_TestSlot,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_TestSlot_T,
+		&Zt_TestSlot,
 	},
 }
 
@@ -148,55 +142,45 @@ type FIX_TestFlow_Slice []TestFlow
 
 // implements typeinfo.Inspector
 func (*TestFlow_Slice) Inspect() typeinfo.T {
-	return &Z_TestFlow_T
+	return &Zt_TestFlow
 }
+
+const (
+	Zc_TestBool_True  = "true"
+	Zc_TestBool_False = "false"
+)
 
 // test_bool, a type of str enum.
-const Z_TestBool_Name = "test_bool"
-
-const (
-	W_TestBool_True  = "true"
-	W_TestBool_False = "false"
-)
-
-var Z_TestBool_T = typeinfo.Str{
-	Name: Z_TestBool_Name,
+var Zt_TestBool = typeinfo.Str{
+	Name: "test_bool",
 	Options: []string{
-		W_TestBool_True,
-		W_TestBool_False,
+		Zc_TestBool_True,
+		Zc_TestBool_False,
 	},
 }
+
+const (
+	Zc_TestStr_One    = "one"
+	Zc_TestStr_Other  = "other"
+	Zc_TestStr_Option = "option"
+)
 
 // test_str, a type of str enum.
-const Z_TestStr_Name = "test_str"
-
-const (
-	W_TestStr_One    = "one"
-	W_TestStr_Other  = "other"
-	W_TestStr_Option = "option"
-)
-
-var Z_TestStr_T = typeinfo.Str{
-	Name: Z_TestStr_Name,
+var Zt_TestStr = typeinfo.Str{
+	Name: "test_str",
 	Options: []string{
-		W_TestStr_One,
-		W_TestStr_Other,
-		W_TestStr_Option,
+		Zc_TestStr_One,
+		Zc_TestStr_Other,
+		Zc_TestStr_Option,
 	},
 }
-
-// test_txt, a type of str.
-const Z_TestTxt_Name = "test_txt"
-
-var Z_TestTxt_T = typeinfo.Str{
-	Name: Z_TestTxt_Name,
+var Zt_TestTxt = typeinfo.Str{
+	Name: "test_txt",
 }
 
 // test_num, a type of num.
-const Z_TestNum_Name = "test_num"
-
-var Z_TestNum_T = typeinfo.Num{
-	Name: Z_TestNum_Name,
+var Zt_TestNum = typeinfo.Num{
+	Name: "test_num",
 }
 
 // package listing of type data
@@ -211,24 +195,24 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_TestSlot_T,
+	&Zt_TestSlot,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_TestEmbed_T,
-	&Z_TestFlow_T,
+	&Zt_TestEmbed,
+	&Zt_TestFlow,
 }
 
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
-	&Z_TestBool_T,
-	&Z_TestStr_T,
-	&Z_TestTxt_T,
+	&Zt_TestBool,
+	&Zt_TestStr,
+	&Zt_TestTxt,
 }
 
 // a list of all nums in this this package
 var z_num_list = []*typeinfo.Num{
-	&Z_TestNum_T,
+	&Zt_TestNum,
 }

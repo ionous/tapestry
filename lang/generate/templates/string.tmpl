@@ -1,7 +1,4 @@
-// {{.Name}}, a type of str.
-const Z_{{Pascal .Name}}_Name = "{{.Name}}"
-
-var Z_{{Pascal .Name}}_T = typeinfo.Str{
-	Name: Z_{{Pascal .Name}}_Name,
+var Zt_{{Pascal .Name}} = typeinfo.Str{
+	Name: "{{.Name}}",
 	{{- template "markup.tmpl" .}}
 }

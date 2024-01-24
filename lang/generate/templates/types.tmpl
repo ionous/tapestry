@@ -2,6 +2,6 @@
 // {{.Comment}}
 var z_{{.Type}}_list = []*typeinfo.{{Pascal .Type}}{
 {{- range .List}}
-  &Z_{{Pascal .Name}}_T,
+  &Zt_{{Pascal .Name}},
 {{- end}}
 }

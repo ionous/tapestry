@@ -131,7 +131,7 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	x := &story.Z_StoryFile_T
+	x := &story.Zt_StoryFile
 	ts := shape.TypeMap{x.Name: x}
 
 	var out js.Builder
@@ -193,7 +193,7 @@ func TestStoryTextShape(t *testing.T) {
     ]
   }
 }`
-	x := &story.Z_TextField_T
+	x := &story.Zt_TextField
 	ts := shape.TypeMap{x.Name: x}
 
 	var out js.Builder
@@ -276,7 +276,7 @@ func TestStrEnum(t *testing.T) {
     ]
   }
 }`
-	x := &core.Z_CompareText_T
+	x := &core.Zt_CompareText
 	ts := shape.TypeMap{x.Name: x}
 
 	var out js.Builder

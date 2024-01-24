@@ -1,17 +1,15 @@
-// {{.Name}}, a type of str enum.
-const Z_{{Pascal .Name}}_Name = "{{.Name}}"
-
 const (
 {{- range $i, $opt := .Options }}
-  W_{{Pascal $.Name}}_{{Pascal $opt}} = "{{$opt}}"
+  Zc_{{Pascal $.Name}}_{{Pascal $opt}} = "{{$opt}}"
 {{- end }}
 )
 
-var Z_{{Pascal .Name}}_T = typeinfo.Str{
-	Name: Z_{{Pascal .Name}}_Name,
+// {{.Name}}, a type of str enum.
+var Zt_{{Pascal .Name}} = typeinfo.Str{
+	Name: "{{.Name}}",
 	Options: []string{
 	{{- range $i, $opt := .Options }}
-		W_{{Pascal $.Name}}_{{Pascal $opt}},
+		Zc_{{Pascal $.Name}}_{{Pascal $opt}},
 	{{- end }}
 	},
 	{{- template "markup.tmpl" .}}

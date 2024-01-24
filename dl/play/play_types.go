@@ -7,10 +7,8 @@ import (
 )
 
 // play_message, a type of slot.
-const Z_PlayMessage_Name = "play_message"
-
-var Z_PlayMessage_T = typeinfo.Slot{
-	Name: Z_PlayMessage_Name,
+var Zt_PlayMessage = typeinfo.Slot{
+	Name: "play_message",
 	Markup: map[string]any{
 		"comment": "a client-server message for the play app",
 	},
@@ -22,7 +20,7 @@ type FIX_PlayMessage_Slot struct{ Value PlayMessage }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_PlayMessage_Slot) Inspect() typeinfo.T {
-	return &Z_PlayMessage_T
+	return &Zt_PlayMessage
 }
 
 // holds a slice of slots
@@ -30,7 +28,7 @@ type PlayMessage_Slots []PlayMessage
 
 // implements typeinfo.Inspector for a series of slots.
 func (*PlayMessage_Slots) Inspect() typeinfo.T {
-	return &Z_PlayMessage_T
+	return &Zt_PlayMessage
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -42,7 +40,7 @@ type FIX_PlayLog struct {
 
 // implements typeinfo.Inspector
 func (*PlayLog) Inspect() typeinfo.T {
-	return &Z_PlayLog_T
+	return &Zt_PlayLog
 }
 
 // return a valid markup map, creating it if necessary.
@@ -53,22 +51,20 @@ func (op *PlayLog) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// play_log, a type of flow.
-const Z_PlayLog_Name = "play_log"
-
 // ensure the command implements its specified slots:
 var _ PlayMessage = (*PlayLog)(nil)
 
-var Z_PlayLog_T = typeinfo.Flow{
-	Name: Z_PlayLog_Name,
+// play_log, a type of flow.
+var Zt_PlayLog = typeinfo.Flow{
+	Name: "play_log",
 	Lede: "play",
 	Terms: []typeinfo.Term{{
 		Name:  "log",
 		Label: "log",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_PlayMessage_T,
+		&Zt_PlayMessage,
 	},
 	Markup: map[string]any{
 		"comment": "a log message that can optionally be displayed to the client.",
@@ -81,7 +77,7 @@ type FIX_PlayLog_Slice []PlayLog
 
 // implements typeinfo.Inspector
 func (*PlayLog_Slice) Inspect() typeinfo.T {
-	return &Z_PlayLog_T
+	return &Zt_PlayLog
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -93,7 +89,7 @@ type FIX_PlayMode struct {
 
 // implements typeinfo.Inspector
 func (*PlayMode) Inspect() typeinfo.T {
-	return &Z_PlayMode_T
+	return &Zt_PlayMode
 }
 
 // return a valid markup map, creating it if necessary.
@@ -104,22 +100,20 @@ func (op *PlayMode) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// play_mode, a type of flow.
-const Z_PlayMode_Name = "play_mode"
-
 // ensure the command implements its specified slots:
 var _ PlayMessage = (*PlayMode)(nil)
 
-var Z_PlayMode_T = typeinfo.Flow{
-	Name: Z_PlayMode_Name,
+// play_mode, a type of flow.
+var Zt_PlayMode = typeinfo.Flow{
+	Name: "play_mode",
 	Lede: "play",
 	Terms: []typeinfo.Term{{
 		Name:  "mode",
 		Label: "mode",
-		Type:  &Z_PlayModes_T,
+		Type:  &Zt_PlayModes,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_PlayMessage_T,
+		&Zt_PlayMessage,
 	},
 	Markup: map[string]any{
 		"comment": "app level change in state.",
@@ -132,7 +126,7 @@ type FIX_PlayMode_Slice []PlayMode
 
 // implements typeinfo.Inspector
 func (*PlayMode_Slice) Inspect() typeinfo.T {
-	return &Z_PlayMode_T
+	return &Zt_PlayMode
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -144,7 +138,7 @@ type FIX_PlayOut struct {
 
 // implements typeinfo.Inspector
 func (*PlayOut) Inspect() typeinfo.T {
-	return &Z_PlayOut_T
+	return &Zt_PlayOut
 }
 
 // return a valid markup map, creating it if necessary.
@@ -155,22 +149,20 @@ func (op *PlayOut) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// play_out, a type of flow.
-const Z_PlayOut_Name = "play_out"
-
 // ensure the command implements its specified slots:
 var _ PlayMessage = (*PlayOut)(nil)
 
-var Z_PlayOut_T = typeinfo.Flow{
-	Name: Z_PlayOut_Name,
+// play_out, a type of flow.
+var Zt_PlayOut = typeinfo.Flow{
+	Name: "play_out",
 	Lede: "play",
 	Terms: []typeinfo.Term{{
 		Name:  "out",
 		Label: "out",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_PlayMessage_T,
+		&Zt_PlayMessage,
 	},
 	Markup: map[string]any{
 		"comment": "output from the game itself.",
@@ -183,26 +175,24 @@ type FIX_PlayOut_Slice []PlayOut
 
 // implements typeinfo.Inspector
 func (*PlayOut_Slice) Inspect() typeinfo.T {
-	return &Z_PlayOut_T
+	return &Zt_PlayOut
 }
 
-// play_modes, a type of str enum.
-const Z_PlayModes_Name = "play_modes"
-
 const (
-	W_PlayModes_Asm      = "asm"
-	W_PlayModes_Play     = "play"
-	W_PlayModes_Complete = "complete"
-	W_PlayModes_Error    = "error"
+	Zc_PlayModes_Asm      = "asm"
+	Zc_PlayModes_Play     = "play"
+	Zc_PlayModes_Complete = "complete"
+	Zc_PlayModes_Error    = "error"
 )
 
-var Z_PlayModes_T = typeinfo.Str{
-	Name: Z_PlayModes_Name,
+// play_modes, a type of str enum.
+var Zt_PlayModes = typeinfo.Str{
+	Name: "play_modes",
 	Options: []string{
-		W_PlayModes_Asm,
-		W_PlayModes_Play,
-		W_PlayModes_Complete,
-		W_PlayModes_Error,
+		Zc_PlayModes_Asm,
+		Zc_PlayModes_Play,
+		Zc_PlayModes_Complete,
+		Zc_PlayModes_Error,
 	},
 	Markup: map[string]any{
 		"comment": "enum for play play_mode",
@@ -220,18 +210,18 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_PlayMessage_T,
+	&Zt_PlayMessage,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_PlayLog_T,
-	&Z_PlayMode_T,
-	&Z_PlayOut_T,
+	&Zt_PlayLog,
+	&Zt_PlayMode,
+	&Zt_PlayOut,
 }
 
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
-	&Z_PlayModes_T,
+	&Zt_PlayModes,
 }

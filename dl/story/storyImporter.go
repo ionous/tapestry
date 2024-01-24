@@ -94,7 +94,7 @@ func Weave(run rt.Runtime, op StoryStatement) (err error) {
 
 // fix: for comment logging; remove?
 func updateActivityDepth(cat *weave.Catalog, t *typeinfo.Slot, inc int) {
-	if t == &rtti.Z_Execute_T {
+	if t == &rtti.Zt_Execute {
 		cat.Env.Inc(activityDepth, inc)
 	}
 }

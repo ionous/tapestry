@@ -16,7 +16,7 @@ type FIX_ReciprocalOf struct {
 
 // implements typeinfo.Inspector
 func (*ReciprocalOf) Inspect() typeinfo.T {
-	return &Z_ReciprocalOf_T
+	return &Zt_ReciprocalOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -27,26 +27,24 @@ func (op *ReciprocalOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// reciprocal_of, a type of flow.
-const Z_ReciprocalOf_Name = "reciprocal_of"
-
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*ReciprocalOf)(nil)
 
-var Z_ReciprocalOf_T = typeinfo.Flow{
-	Name: Z_ReciprocalOf_Name,
+// reciprocal_of, a type of flow.
+var Zt_ReciprocalOf = typeinfo.Flow{
+	Name: "reciprocal_of",
 	Lede: "reciprocal",
 	Terms: []typeinfo.Term{{
 		Name:  "via",
 		Label: "_",
-		Type:  &Z_RelationName_T,
+		Type:  &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_T,
+		&rtti.Zt_TextEval,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
@@ -59,7 +57,7 @@ type FIX_ReciprocalOf_Slice []ReciprocalOf
 
 // implements typeinfo.Inspector
 func (*ReciprocalOf_Slice) Inspect() typeinfo.T {
-	return &Z_ReciprocalOf_T
+	return &Zt_ReciprocalOf
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -72,7 +70,7 @@ type FIX_ReciprocalsOf struct {
 
 // implements typeinfo.Inspector
 func (*ReciprocalsOf) Inspect() typeinfo.T {
-	return &Z_ReciprocalsOf_T
+	return &Zt_ReciprocalsOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -83,26 +81,24 @@ func (op *ReciprocalsOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// reciprocals_of, a type of flow.
-const Z_ReciprocalsOf_Name = "reciprocals_of"
-
 // ensure the command implements its specified slots:
 var _ rtti.TextListEval = (*ReciprocalsOf)(nil)
 
-var Z_ReciprocalsOf_T = typeinfo.Flow{
-	Name: Z_ReciprocalsOf_Name,
+// reciprocals_of, a type of flow.
+var Zt_ReciprocalsOf = typeinfo.Flow{
+	Name: "reciprocals_of",
 	Lede: "reciprocals",
 	Terms: []typeinfo.Term{{
 		Name:  "via",
 		Label: "_",
-		Type:  &Z_RelationName_T,
+		Type:  &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextListEval_T,
+		&rtti.Zt_TextListEval,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
@@ -115,7 +111,7 @@ type FIX_ReciprocalsOf_Slice []ReciprocalsOf
 
 // implements typeinfo.Inspector
 func (*ReciprocalsOf_Slice) Inspect() typeinfo.T {
-	return &Z_ReciprocalsOf_T
+	return &Zt_ReciprocalsOf
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -129,7 +125,7 @@ type FIX_Relate struct {
 
 // implements typeinfo.Inspector
 func (*Relate) Inspect() typeinfo.T {
-	return &Z_Relate_T
+	return &Zt_Relate
 }
 
 // return a valid markup map, creating it if necessary.
@@ -140,30 +136,28 @@ func (op *Relate) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// relate, a type of flow.
-const Z_Relate_Name = "relate"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Relate)(nil)
 
-var Z_Relate_T = typeinfo.Flow{
-	Name: Z_Relate_Name,
+// relate, a type of flow.
+var Zt_Relate = typeinfo.Flow{
+	Name: "relate",
 	Lede: "relate",
 	Terms: []typeinfo.Term{{
 		Name:  "object",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}, {
 		Name:  "to_object",
 		Label: "to",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}, {
 		Name:  "via",
 		Label: "via",
-		Type:  &Z_RelationName_T,
+		Type:  &Zt_RelationName,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
+		&rtti.Zt_Execute,
 	},
 	Markup: map[string]any{
 		"comment": "Relate two nouns.",
@@ -176,7 +170,7 @@ type FIX_Relate_Slice []Relate
 
 // implements typeinfo.Inspector
 func (*Relate_Slice) Inspect() typeinfo.T {
-	return &Z_Relate_T
+	return &Zt_Relate
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -189,7 +183,7 @@ type FIX_RelativeOf struct {
 
 // implements typeinfo.Inspector
 func (*RelativeOf) Inspect() typeinfo.T {
-	return &Z_RelativeOf_T
+	return &Zt_RelativeOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -200,26 +194,24 @@ func (op *RelativeOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// relative_of, a type of flow.
-const Z_RelativeOf_Name = "relative_of"
-
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*RelativeOf)(nil)
 
-var Z_RelativeOf_T = typeinfo.Flow{
-	Name: Z_RelativeOf_Name,
+// relative_of, a type of flow.
+var Zt_RelativeOf = typeinfo.Flow{
+	Name: "relative_of",
 	Lede: "relative",
 	Terms: []typeinfo.Term{{
 		Name:  "via",
 		Label: "_",
-		Type:  &Z_RelationName_T,
+		Type:  &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_T,
+		&rtti.Zt_TextEval,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
@@ -232,7 +224,7 @@ type FIX_RelativeOf_Slice []RelativeOf
 
 // implements typeinfo.Inspector
 func (*RelativeOf_Slice) Inspect() typeinfo.T {
-	return &Z_RelativeOf_T
+	return &Zt_RelativeOf
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -245,7 +237,7 @@ type FIX_RelativesOf struct {
 
 // implements typeinfo.Inspector
 func (*RelativesOf) Inspect() typeinfo.T {
-	return &Z_RelativesOf_T
+	return &Zt_RelativesOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -256,26 +248,24 @@ func (op *RelativesOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// relatives_of, a type of flow.
-const Z_RelativesOf_Name = "relatives_of"
-
 // ensure the command implements its specified slots:
 var _ rtti.TextListEval = (*RelativesOf)(nil)
 
-var Z_RelativesOf_T = typeinfo.Flow{
-	Name: Z_RelativesOf_Name,
+// relatives_of, a type of flow.
+var Zt_RelativesOf = typeinfo.Flow{
+	Name: "relatives_of",
 	Lede: "relatives",
 	Terms: []typeinfo.Term{{
 		Name:  "via",
 		Label: "_",
-		Type:  &Z_RelationName_T,
+		Type:  &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextListEval_T,
+		&rtti.Zt_TextListEval,
 	},
 	Markup: map[string]any{
 		"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
@@ -288,14 +278,11 @@ type FIX_RelativesOf_Slice []RelativesOf
 
 // implements typeinfo.Inspector
 func (*RelativesOf_Slice) Inspect() typeinfo.T {
-	return &Z_RelativesOf_T
+	return &Zt_RelativesOf
 }
 
-// relation_name, a type of str.
-const Z_RelationName_Name = "relation_name"
-
-var Z_RelationName_T = typeinfo.Str{
-	Name: Z_RelationName_Name,
+var Zt_RelationName = typeinfo.Str{
+	Name: "relation_name",
 }
 
 // package listing of type data
@@ -308,14 +295,14 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_ReciprocalOf_T,
-	&Z_ReciprocalsOf_T,
-	&Z_Relate_T,
-	&Z_RelativeOf_T,
-	&Z_RelativesOf_T,
+	&Zt_ReciprocalOf,
+	&Zt_ReciprocalsOf,
+	&Zt_Relate,
+	&Zt_RelativeOf,
+	&Zt_RelativesOf,
 }
 
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
-	&Z_RelationName_T,
+	&Zt_RelationName,
 }

@@ -14,7 +14,7 @@ type FIX_QuitGame struct {
 
 // implements typeinfo.Inspector
 func (*QuitGame) Inspect() typeinfo.T {
-	return &Z_QuitGame_T
+	return &Zt_QuitGame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -25,18 +25,16 @@ func (op *QuitGame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// quit_game, a type of flow.
-const Z_QuitGame_Name = "quit_game"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*QuitGame)(nil)
 
-var Z_QuitGame_T = typeinfo.Flow{
-	Name:  Z_QuitGame_Name,
+// quit_game, a type of flow.
+var Zt_QuitGame = typeinfo.Flow{
+	Name:  "quit_game",
 	Lede:  "quit_game",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
+		&rtti.Zt_Execute,
 	},
 }
 
@@ -46,7 +44,7 @@ type FIX_QuitGame_Slice []QuitGame
 
 // implements typeinfo.Inspector
 func (*QuitGame_Slice) Inspect() typeinfo.T {
-	return &Z_QuitGame_T
+	return &Zt_QuitGame
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -57,7 +55,7 @@ type FIX_SaveGame struct {
 
 // implements typeinfo.Inspector
 func (*SaveGame) Inspect() typeinfo.T {
-	return &Z_SaveGame_T
+	return &Zt_SaveGame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -68,18 +66,16 @@ func (op *SaveGame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// save_game, a type of flow.
-const Z_SaveGame_Name = "save_game"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SaveGame)(nil)
 
-var Z_SaveGame_T = typeinfo.Flow{
-	Name:  Z_SaveGame_Name,
+// save_game, a type of flow.
+var Zt_SaveGame = typeinfo.Flow{
+	Name:  "save_game",
 	Lede:  "save_game",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
+		&rtti.Zt_Execute,
 	},
 }
 
@@ -89,7 +85,7 @@ type FIX_SaveGame_Slice []SaveGame
 
 // implements typeinfo.Inspector
 func (*SaveGame_Slice) Inspect() typeinfo.T {
-	return &Z_SaveGame_T
+	return &Zt_SaveGame
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -100,7 +96,7 @@ type FIX_RestoreGame struct {
 
 // implements typeinfo.Inspector
 func (*RestoreGame) Inspect() typeinfo.T {
-	return &Z_RestoreGame_T
+	return &Zt_RestoreGame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -111,18 +107,16 @@ func (op *RestoreGame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// restore_game, a type of flow.
-const Z_RestoreGame_Name = "restore_game"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*RestoreGame)(nil)
 
-var Z_RestoreGame_T = typeinfo.Flow{
-	Name:  Z_RestoreGame_Name,
+// restore_game, a type of flow.
+var Zt_RestoreGame = typeinfo.Flow{
+	Name:  "restore_game",
 	Lede:  "restore_game",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
+		&rtti.Zt_Execute,
 	},
 }
 
@@ -132,7 +126,7 @@ type FIX_RestoreGame_Slice []RestoreGame
 
 // implements typeinfo.Inspector
 func (*RestoreGame_Slice) Inspect() typeinfo.T {
-	return &Z_RestoreGame_T
+	return &Zt_RestoreGame
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -143,7 +137,7 @@ type FIX_UndoTurn struct {
 
 // implements typeinfo.Inspector
 func (*UndoTurn) Inspect() typeinfo.T {
-	return &Z_UndoTurn_T
+	return &Zt_UndoTurn
 }
 
 // return a valid markup map, creating it if necessary.
@@ -154,18 +148,16 @@ func (op *UndoTurn) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// undo_turn, a type of flow.
-const Z_UndoTurn_Name = "undo_turn"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*UndoTurn)(nil)
 
-var Z_UndoTurn_T = typeinfo.Flow{
-	Name:  Z_UndoTurn_Name,
+// undo_turn, a type of flow.
+var Zt_UndoTurn = typeinfo.Flow{
+	Name:  "undo_turn",
 	Lede:  "undo_turn",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
+		&rtti.Zt_Execute,
 	},
 }
 
@@ -175,7 +167,7 @@ type FIX_UndoTurn_Slice []UndoTurn
 
 // implements typeinfo.Inspector
 func (*UndoTurn_Slice) Inspect() typeinfo.T {
-	return &Z_UndoTurn_T
+	return &Zt_UndoTurn
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -186,7 +178,7 @@ type FIX_PrintVersion struct {
 
 // implements typeinfo.Inspector
 func (*PrintVersion) Inspect() typeinfo.T {
-	return &Z_PrintVersion_T
+	return &Zt_PrintVersion
 }
 
 // return a valid markup map, creating it if necessary.
@@ -197,18 +189,16 @@ func (op *PrintVersion) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// print_version, a type of flow.
-const Z_PrintVersion_Name = "print_version"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*PrintVersion)(nil)
 
-var Z_PrintVersion_T = typeinfo.Flow{
-	Name:  Z_PrintVersion_Name,
+// print_version, a type of flow.
+var Zt_PrintVersion = typeinfo.Flow{
+	Name:  "print_version",
 	Lede:  "print_version",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
+		&rtti.Zt_Execute,
 	},
 }
 
@@ -218,7 +208,7 @@ type FIX_PrintVersion_Slice []PrintVersion
 
 // implements typeinfo.Inspector
 func (*PrintVersion_Slice) Inspect() typeinfo.T {
-	return &Z_PrintVersion_T
+	return &Zt_PrintVersion
 }
 
 // package listing of type data
@@ -230,9 +220,9 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_QuitGame_T,
-	&Z_SaveGame_T,
-	&Z_RestoreGame_T,
-	&Z_UndoTurn_T,
-	&Z_PrintVersion_T,
+	&Zt_QuitGame,
+	&Zt_SaveGame,
+	&Zt_RestoreGame,
+	&Zt_UndoTurn,
+	&Zt_PrintVersion,
 }

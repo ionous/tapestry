@@ -9,10 +9,8 @@ import (
 )
 
 // render_eval, a type of slot.
-const Z_RenderEval_Name = "render_eval"
-
-var Z_RenderEval_T = typeinfo.Slot{
-	Name: Z_RenderEval_Name,
+var Zt_RenderEval = typeinfo.Slot{
+	Name: "render_eval",
 	Markup: map[string]any{
 		"comment": "Used with render pattern for arguments of unknown type.",
 	},
@@ -24,7 +22,7 @@ type FIX_RenderEval_Slot struct{ Value RenderEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_RenderEval_Slot) Inspect() typeinfo.T {
-	return &Z_RenderEval_T
+	return &Zt_RenderEval
 }
 
 // holds a slice of slots
@@ -32,7 +30,7 @@ type RenderEval_Slots []RenderEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*RenderEval_Slots) Inspect() typeinfo.T {
-	return &Z_RenderEval_T
+	return &Zt_RenderEval
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -44,7 +42,7 @@ type FIX_RenderName struct {
 
 // implements typeinfo.Inspector
 func (*RenderName) Inspect() typeinfo.T {
-	return &Z_RenderName_T
+	return &Zt_RenderName
 }
 
 // return a valid markup map, creating it if necessary.
@@ -55,22 +53,20 @@ func (op *RenderName) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// render_name, a type of flow.
-const Z_RenderName_Name = "render_name"
-
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*RenderName)(nil)
 
-var Z_RenderName_T = typeinfo.Flow{
-	Name: Z_RenderName_Name,
+// render_name, a type of flow.
+var Zt_RenderName = typeinfo.Flow{
+	Name: "render_name",
 	Lede: "render_name",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_T,
+		&rtti.Zt_TextEval,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
@@ -83,7 +79,7 @@ type FIX_RenderName_Slice []RenderName
 
 // implements typeinfo.Inspector
 func (*RenderName_Slice) Inspect() typeinfo.T {
-	return &Z_RenderName_T
+	return &Zt_RenderName
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -96,7 +92,7 @@ type FIX_RenderRef struct {
 
 // implements typeinfo.Inspector
 func (*RenderRef) Inspect() typeinfo.T {
-	return &Z_RenderRef_T
+	return &Zt_RenderRef
 }
 
 // return a valid markup map, creating it if necessary.
@@ -106,9 +102,6 @@ func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
-
-// render_ref, a type of flow.
-const Z_RenderRef_Name = "render_ref"
 
 // ensure the command implements its specified slots:
 var _ rtti.BoolEval = (*RenderRef)(nil)
@@ -120,29 +113,30 @@ var _ rtti.TextListEval = (*RenderRef)(nil)
 var _ rtti.RecordListEval = (*RenderRef)(nil)
 var _ RenderEval = (*RenderRef)(nil)
 
-var Z_RenderRef_T = typeinfo.Flow{
-	Name: Z_RenderRef_Name,
+// render_ref, a type of flow.
+var Zt_RenderRef = typeinfo.Flow{
+	Name: "render_ref",
 	Lede: "render_ref",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_T,
+		Type:  &rtti.Zt_TextEval,
 	}, {
 		Name:     "dot",
 		Label:    "dot",
 		Optional: true,
 		Repeats:  true,
-		Type:     &assign.Z_Dot_T,
+		Type:     &assign.Zt_Dot,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_BoolEval_T,
-		&rtti.Z_NumberEval_T,
-		&rtti.Z_TextEval_T,
-		&rtti.Z_RecordEval_T,
-		&rtti.Z_NumListEval_T,
-		&rtti.Z_TextListEval_T,
-		&rtti.Z_RecordListEval_T,
-		&Z_RenderEval_T,
+		&rtti.Zt_BoolEval,
+		&rtti.Zt_NumberEval,
+		&rtti.Zt_TextEval,
+		&rtti.Zt_RecordEval,
+		&rtti.Zt_NumListEval,
+		&rtti.Zt_TextListEval,
+		&rtti.Zt_RecordListEval,
+		&Zt_RenderEval,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
@@ -155,7 +149,7 @@ type FIX_RenderRef_Slice []RenderRef
 
 // implements typeinfo.Inspector
 func (*RenderRef_Slice) Inspect() typeinfo.T {
-	return &Z_RenderRef_T
+	return &Zt_RenderRef
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -167,7 +161,7 @@ type FIX_RenderValue struct {
 
 // implements typeinfo.Inspector
 func (*RenderValue) Inspect() typeinfo.T {
-	return &Z_RenderValue_T
+	return &Zt_RenderValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -178,22 +172,20 @@ func (op *RenderValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// render_value, a type of flow.
-const Z_RenderValue_Name = "render_value"
-
 // ensure the command implements its specified slots:
 var _ RenderEval = (*RenderValue)(nil)
 
-var Z_RenderValue_T = typeinfo.Flow{
-	Name: Z_RenderValue_Name,
+// render_value, a type of flow.
+var Zt_RenderValue = typeinfo.Flow{
+	Name: "render_value",
 	Lede: "render_value",
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "_",
-		Type:  &rtti.Z_Assignment_T,
+		Type:  &rtti.Zt_Assignment,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_RenderEval_T,
+		&Zt_RenderEval,
 	},
 	Markup: map[string]any{
 		"comment": "Pull a value from an assignment of unknown affinity.",
@@ -206,7 +198,7 @@ type FIX_RenderValue_Slice []RenderValue
 
 // implements typeinfo.Inspector
 func (*RenderValue_Slice) Inspect() typeinfo.T {
-	return &Z_RenderValue_T
+	return &Zt_RenderValue
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -219,7 +211,7 @@ type FIX_RenderPattern struct {
 
 // implements typeinfo.Inspector
 func (*RenderPattern) Inspect() typeinfo.T {
-	return &Z_RenderPattern_T
+	return &Zt_RenderPattern
 }
 
 // return a valid markup map, creating it if necessary.
@@ -230,31 +222,29 @@ func (op *RenderPattern) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// render_pattern, a type of flow.
-const Z_RenderPattern_Name = "render_pattern"
-
 // ensure the command implements its specified slots:
 var _ rtti.BoolEval = (*RenderPattern)(nil)
 var _ rtti.TextEval = (*RenderPattern)(nil)
 var _ RenderEval = (*RenderPattern)(nil)
 
-var Z_RenderPattern_T = typeinfo.Flow{
-	Name: Z_RenderPattern_Name,
+// render_pattern, a type of flow.
+var Zt_RenderPattern = typeinfo.Flow{
+	Name: "render_pattern",
 	Lede: "render",
 	Terms: []typeinfo.Term{{
 		Name:  "pattern_name",
 		Label: "_",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:    "render",
 		Label:   "render",
 		Repeats: true,
-		Type:    &Z_RenderEval_T,
+		Type:    &Zt_RenderEval,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_BoolEval_T,
-		&rtti.Z_TextEval_T,
-		&Z_RenderEval_T,
+		&rtti.Zt_BoolEval,
+		&rtti.Zt_TextEval,
+		&Zt_RenderEval,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
@@ -267,7 +257,7 @@ type FIX_RenderPattern_Slice []RenderPattern
 
 // implements typeinfo.Inspector
 func (*RenderPattern_Slice) Inspect() typeinfo.T {
-	return &Z_RenderPattern_T
+	return &Zt_RenderPattern
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -280,7 +270,7 @@ type FIX_RenderResponse struct {
 
 // implements typeinfo.Inspector
 func (*RenderResponse) Inspect() typeinfo.T {
-	return &Z_RenderResponse_T
+	return &Zt_RenderResponse
 }
 
 // return a valid markup map, creating it if necessary.
@@ -291,29 +281,27 @@ func (op *RenderResponse) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// render_response, a type of flow.
-const Z_RenderResponse_Name = "render_response"
-
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*RenderResponse)(nil)
 var _ rtti.TextEval = (*RenderResponse)(nil)
 
-var Z_RenderResponse_T = typeinfo.Flow{
-	Name: Z_RenderResponse_Name,
+// render_response, a type of flow.
+var Zt_RenderResponse = typeinfo.Flow{
+	Name: "render_response",
 	Lede: "render_response",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:     "text",
 		Label:    "text",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_T,
+		Type:     &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_T,
-		&rtti.Z_TextEval_T,
+		&rtti.Zt_Execute,
+		&rtti.Zt_TextEval,
 	},
 	Markup: map[string]any{
 		"comment": "Generate text in a replaceable manner.",
@@ -326,7 +314,7 @@ type FIX_RenderResponse_Slice []RenderResponse
 
 // implements typeinfo.Inspector
 func (*RenderResponse_Slice) Inspect() typeinfo.T {
-	return &Z_RenderResponse_T
+	return &Zt_RenderResponse
 }
 
 // package listing of type data
@@ -339,15 +327,15 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_RenderEval_T,
+	&Zt_RenderEval,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_RenderName_T,
-	&Z_RenderRef_T,
-	&Z_RenderValue_T,
-	&Z_RenderPattern_T,
-	&Z_RenderResponse_T,
+	&Zt_RenderName,
+	&Zt_RenderRef,
+	&Zt_RenderValue,
+	&Zt_RenderPattern,
+	&Zt_RenderResponse,
 }

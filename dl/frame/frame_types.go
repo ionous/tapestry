@@ -7,10 +7,8 @@ import (
 )
 
 // event, a type of slot.
-const Z_Event_Name = "event"
-
-var Z_Event_T = typeinfo.Slot{
-	Name: Z_Event_Name,
+var Zt_Event = typeinfo.Slot{
+	Name: "event",
 }
 
 // holds a single slot
@@ -19,7 +17,7 @@ type FIX_Event_Slot struct{ Value Event }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_Event_Slot) Inspect() typeinfo.T {
-	return &Z_Event_T
+	return &Zt_Event
 }
 
 // holds a slice of slots
@@ -27,7 +25,7 @@ type Event_Slots []Event
 
 // implements typeinfo.Inspector for a series of slots.
 func (*Event_Slots) Inspect() typeinfo.T {
-	return &Z_Event_T
+	return &Zt_Event
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -41,7 +39,7 @@ type FIX_Frame struct {
 
 // implements typeinfo.Inspector
 func (*Frame) Inspect() typeinfo.T {
-	return &Z_Frame_T
+	return &Zt_Frame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -53,25 +51,23 @@ func (op *Frame) GetMarkup(ensure bool) map[string]any {
 }
 
 // frame, a type of flow.
-const Z_Frame_Name = "frame"
-
-var Z_Frame_T = typeinfo.Flow{
-	Name: Z_Frame_Name,
+var Zt_Frame = typeinfo.Flow{
+	Name: "frame",
 	Lede: "frame",
 	Terms: []typeinfo.Term{{
 		Name:  "result",
 		Label: "result",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:    "events",
 		Label:   "events",
 		Repeats: true,
-		Type:    &Z_Event_T,
+		Type:    &Zt_Event,
 	}, {
 		Name:     "error",
 		Label:    "error",
 		Optional: true,
-		Type:     &prim.Z_Text_T,
+		Type:     &prim.Zt_Text,
 	}},
 }
 
@@ -81,7 +77,7 @@ type FIX_Frame_Slice []Frame
 
 // implements typeinfo.Inspector
 func (*Frame_Slice) Inspect() typeinfo.T {
-	return &Z_Frame_T
+	return &Zt_Frame
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -93,7 +89,7 @@ type FIX_FrameOutput struct {
 
 // implements typeinfo.Inspector
 func (*FrameOutput) Inspect() typeinfo.T {
-	return &Z_FrameOutput_T
+	return &Zt_FrameOutput
 }
 
 // return a valid markup map, creating it if necessary.
@@ -104,22 +100,20 @@ func (op *FrameOutput) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// frame_output, a type of flow.
-const Z_FrameOutput_Name = "frame_output"
-
 // ensure the command implements its specified slots:
 var _ Event = (*FrameOutput)(nil)
 
-var Z_FrameOutput_T = typeinfo.Flow{
-	Name: Z_FrameOutput_Name,
+// frame_output, a type of flow.
+var Zt_FrameOutput = typeinfo.Flow{
+	Name: "frame_output",
 	Lede: "frame_output",
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_Event_T,
+		&Zt_Event,
 	},
 }
 
@@ -129,7 +123,7 @@ type FIX_FrameOutput_Slice []FrameOutput
 
 // implements typeinfo.Inspector
 func (*FrameOutput_Slice) Inspect() typeinfo.T {
-	return &Z_FrameOutput_T
+	return &Zt_FrameOutput
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -141,7 +135,7 @@ type FIX_SceneStarted struct {
 
 // implements typeinfo.Inspector
 func (*SceneStarted) Inspect() typeinfo.T {
-	return &Z_SceneStarted_T
+	return &Zt_SceneStarted
 }
 
 // return a valid markup map, creating it if necessary.
@@ -152,23 +146,21 @@ func (op *SceneStarted) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// scene_started, a type of flow.
-const Z_SceneStarted_Name = "scene_started"
-
 // ensure the command implements its specified slots:
 var _ Event = (*SceneStarted)(nil)
 
-var Z_SceneStarted_T = typeinfo.Flow{
-	Name: Z_SceneStarted_Name,
+// scene_started, a type of flow.
+var Zt_SceneStarted = typeinfo.Flow{
+	Name: "scene_started",
 	Lede: "scene_started",
 	Terms: []typeinfo.Term{{
 		Name:    "domains",
 		Label:   "_",
 		Repeats: true,
-		Type:    &prim.Z_Text_T,
+		Type:    &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_Event_T,
+		&Zt_Event,
 	},
 }
 
@@ -178,7 +170,7 @@ type FIX_SceneStarted_Slice []SceneStarted
 
 // implements typeinfo.Inspector
 func (*SceneStarted_Slice) Inspect() typeinfo.T {
-	return &Z_SceneStarted_T
+	return &Zt_SceneStarted
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -190,7 +182,7 @@ type FIX_SceneEnded struct {
 
 // implements typeinfo.Inspector
 func (*SceneEnded) Inspect() typeinfo.T {
-	return &Z_SceneEnded_T
+	return &Zt_SceneEnded
 }
 
 // return a valid markup map, creating it if necessary.
@@ -201,23 +193,21 @@ func (op *SceneEnded) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// scene_ended, a type of flow.
-const Z_SceneEnded_Name = "scene_ended"
-
 // ensure the command implements its specified slots:
 var _ Event = (*SceneEnded)(nil)
 
-var Z_SceneEnded_T = typeinfo.Flow{
-	Name: Z_SceneEnded_Name,
+// scene_ended, a type of flow.
+var Zt_SceneEnded = typeinfo.Flow{
+	Name: "scene_ended",
 	Lede: "scene_ended",
 	Terms: []typeinfo.Term{{
 		Name:    "domains",
 		Label:   "_",
 		Repeats: true,
-		Type:    &prim.Z_Text_T,
+		Type:    &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_Event_T,
+		&Zt_Event,
 	},
 }
 
@@ -227,7 +217,7 @@ type FIX_SceneEnded_Slice []SceneEnded
 
 // implements typeinfo.Inspector
 func (*SceneEnded_Slice) Inspect() typeinfo.T {
-	return &Z_SceneEnded_T
+	return &Zt_SceneEnded
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -242,7 +232,7 @@ type FIX_StateChanged struct {
 
 // implements typeinfo.Inspector
 func (*StateChanged) Inspect() typeinfo.T {
-	return &Z_StateChanged_T
+	return &Zt_StateChanged
 }
 
 // return a valid markup map, creating it if necessary.
@@ -253,34 +243,32 @@ func (op *StateChanged) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// state_changed, a type of flow.
-const Z_StateChanged_Name = "state_changed"
-
 // ensure the command implements its specified slots:
 var _ Event = (*StateChanged)(nil)
 
-var Z_StateChanged_T = typeinfo.Flow{
-	Name: Z_StateChanged_Name,
+// state_changed, a type of flow.
+var Zt_StateChanged = typeinfo.Flow{
+	Name: "state_changed",
 	Lede: "state_changed",
 	Terms: []typeinfo.Term{{
 		Name:  "noun",
 		Label: "noun",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:  "aspect",
 		Label: "aspect",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:  "prev",
 		Label: "prev",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:  "trait",
 		Label: "trait",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_Event_T,
+		&Zt_Event,
 	},
 }
 
@@ -290,7 +278,7 @@ type FIX_StateChanged_Slice []StateChanged
 
 // implements typeinfo.Inspector
 func (*StateChanged_Slice) Inspect() typeinfo.T {
-	return &Z_StateChanged_T
+	return &Zt_StateChanged
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -304,7 +292,7 @@ type FIX_PairChanged struct {
 
 // implements typeinfo.Inspector
 func (*PairChanged) Inspect() typeinfo.T {
-	return &Z_PairChanged_T
+	return &Zt_PairChanged
 }
 
 // return a valid markup map, creating it if necessary.
@@ -315,30 +303,28 @@ func (op *PairChanged) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// pair_changed, a type of flow.
-const Z_PairChanged_Name = "pair_changed"
-
 // ensure the command implements its specified slots:
 var _ Event = (*PairChanged)(nil)
 
-var Z_PairChanged_T = typeinfo.Flow{
-	Name: Z_PairChanged_Name,
+// pair_changed, a type of flow.
+var Zt_PairChanged = typeinfo.Flow{
+	Name: "pair_changed",
 	Lede: "pair_changed",
 	Terms: []typeinfo.Term{{
 		Name:  "a",
 		Label: "a",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:  "b",
 		Label: "b",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:  "rel",
 		Label: "rel",
-		Type:  &prim.Z_Text_T,
+		Type:  &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_Event_T,
+		&Zt_Event,
 	},
 }
 
@@ -348,7 +334,7 @@ type FIX_PairChanged_Slice []PairChanged
 
 // implements typeinfo.Inspector
 func (*PairChanged_Slice) Inspect() typeinfo.T {
-	return &Z_PairChanged_T
+	return &Zt_PairChanged
 }
 
 // package listing of type data
@@ -361,16 +347,16 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_Event_T,
+	&Zt_Event,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_Frame_T,
-	&Z_FrameOutput_T,
-	&Z_SceneStarted_T,
-	&Z_SceneEnded_T,
-	&Z_StateChanged_T,
-	&Z_PairChanged_T,
+	&Zt_Frame,
+	&Zt_FrameOutput,
+	&Zt_SceneStarted,
+	&Zt_SceneEnded,
+	&Zt_StateChanged,
+	&Zt_PairChanged,
 }

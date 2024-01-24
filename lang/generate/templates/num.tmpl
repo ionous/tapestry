@@ -1,7 +1,5 @@
 // {{.Name}}, a type of num.
-const Z_{{Pascal .Name}}_Name = "{{.Name}}"
-
-var Z_{{Pascal .Name}}_T = typeinfo.Num{
-	Name: Z_{{Pascal .Name}}_Name,
+var Zt_{{Pascal .Name}} = typeinfo.Num{
+	Name: "{{.Name}}",
 	{{- template "markup.tmpl" .}}
 }
