@@ -3,7 +3,7 @@ const Z_{{Pascal .Name}}_Name = "{{.Name}}"
 
 const (
 {{- range $i, $opt := .Options }}
-  W_{{Pascal $.Name}}_{{Pascal $opt}} = "{{StringKey $opt}}"
+  W_{{Pascal $.Name}}_{{Pascal $opt}} = "{{$opt}}"
 {{- end }}
 )
 

@@ -2826,8 +2826,8 @@ func (*NothingField_Slice) Inspect() typeinfo.T {
 const Z_MapConnection_Name = "map_connection"
 
 const (
-	W_MapConnection_ArrivingAt   = "$ARRIVING_AT"
-	W_MapConnection_ConnectingTo = "$CONNECTING_TO"
+	W_MapConnection_ArrivingAt   = "arriving_at"
+	W_MapConnection_ConnectingTo = "connecting_to"
 )
 
 var Z_MapConnection_T = typeinfo.Str{
@@ -2855,10 +2855,10 @@ var Z_MapDirection_T = typeinfo.Str{
 const Z_RelationCardinality_Name = "relation_cardinality"
 
 const (
-	W_RelationCardinality_OneToOne   = "$ONE_TO_ONE"
-	W_RelationCardinality_OneToMany  = "$ONE_TO_MANY"
-	W_RelationCardinality_ManyToOne  = "$MANY_TO_ONE"
-	W_RelationCardinality_ManyToMany = "$MANY_TO_MANY"
+	W_RelationCardinality_OneToOne   = "one_to_one"
+	W_RelationCardinality_OneToMany  = "one_to_many"
+	W_RelationCardinality_ManyToOne  = "many_to_one"
+	W_RelationCardinality_ManyToMany = "many_to_many"
 )
 
 var Z_RelationCardinality_T = typeinfo.Str{

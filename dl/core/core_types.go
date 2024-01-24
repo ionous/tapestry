@@ -3716,12 +3716,12 @@ func (*While_Slice) Inspect() typeinfo.T {
 const Z_Comparison_Name = "comparison"
 
 const (
-	W_Comparison_EqualTo     = "$EQUAL_TO"
-	W_Comparison_OtherThan   = "$OTHER_THAN"
-	W_Comparison_GreaterThan = "$GREATER_THAN"
-	W_Comparison_LessThan    = "$LESS_THAN"
-	W_Comparison_AtLeast     = "$AT_LEAST"
-	W_Comparison_AtMost      = "$AT_MOST"
+	W_Comparison_EqualTo     = "equal_to"
+	W_Comparison_OtherThan   = "other_than"
+	W_Comparison_GreaterThan = "greater_than"
+	W_Comparison_LessThan    = "less_than"
+	W_Comparison_AtLeast     = "at_least"
+	W_Comparison_AtMost      = "at_most"
 )
 
 var Z_Comparison_T = typeinfo.Str{

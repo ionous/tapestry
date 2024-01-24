@@ -155,8 +155,8 @@ func (*TestFlow_Slice) Inspect() typeinfo.T {
 const Z_TestBool_Name = "test_bool"
 
 const (
-	W_TestBool_True  = "$TRUE"
-	W_TestBool_False = "$FALSE"
+	W_TestBool_True  = "true"
+	W_TestBool_False = "false"
 )
 
 var Z_TestBool_T = typeinfo.Str{
@@ -171,9 +171,9 @@ var Z_TestBool_T = typeinfo.Str{
 const Z_TestStr_Name = "test_str"
 
 const (
-	W_TestStr_One    = "$ONE"
-	W_TestStr_Other  = "$OTHER"
-	W_TestStr_Option = "$OPTION"
+	W_TestStr_One    = "one"
+	W_TestStr_Other  = "other"
+	W_TestStr_Option = "option"
 )
 
 var Z_TestStr_T = typeinfo.Str{

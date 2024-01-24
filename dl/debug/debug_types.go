@@ -308,11 +308,11 @@ func (*DebugLog_Slice) Inspect() typeinfo.T {
 const Z_LoggingLevel_Name = "logging_level"
 
 const (
-	W_LoggingLevel_Note  = "$NOTE"
-	W_LoggingLevel_Debug = "$DEBUG"
-	W_LoggingLevel_Info  = "$INFO"
-	W_LoggingLevel_Warn  = "$WARN"
-	W_LoggingLevel_Error = "$ERROR"
+	W_LoggingLevel_Note  = "note"
+	W_LoggingLevel_Debug = "debug"
+	W_LoggingLevel_Info  = "info"
+	W_LoggingLevel_Warn  = "warn"
+	W_LoggingLevel_Error = "error"
 )
 
 var Z_LoggingLevel_T = typeinfo.Str{

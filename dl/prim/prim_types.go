@@ -9,8 +9,8 @@ import (
 const Z_Bool_Name = "bool"
 
 const (
-	W_Bool_True  = "$TRUE"
-	W_Bool_False = "$FALSE"
+	W_Bool_True  = "true"
+	W_Bool_False = "false"
 )
 
 var Z_Bool_T = typeinfo.Str{

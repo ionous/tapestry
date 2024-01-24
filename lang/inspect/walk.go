@@ -141,7 +141,7 @@ func (w *Iter) CompactValue() (ret any) {
 	// temp: unpack Str struct
 	if t, ok := t.(*typeinfo.Str); ok && v.Kind() == r.Struct {
 		str := v.Field(0).String()
-		if opt := t.Options; len(opt) > 0 {
+		if len(t.Options) > 0 {
 			ret = strings.ToLower(str[1:])
 		} else {
 			ret = str

@@ -63,7 +63,7 @@ func writeStrField(w *ShapeWriter, out *js.Builder, term typeinfo.Term) {
 							options.R(js.Comma)
 						}
 						options.Brace(js.Array, func(opt *js.Builder) {
-							label := typeinfo.FriendlyName(pick)
+							label := strings.Replace(pick, "_", " ", -1)
 							key := bconst.KeyName(pick)
 							opt.Q(label).R(js.Comma).Q(key)
 						})

@@ -206,3 +206,86 @@ func TestStoryTextShape(t *testing.T) {
 		t.Fatal("ng", diff)
 	}
 }
+
+// test the generation of an enumeration
+func TestStrEnum(t *testing.T) {
+	expect := `{
+  "type": "compare_text",
+  "output": [
+    "compare_text",
+    "bool_eval"
+  ],
+  "colour": "%{BKY_LOGIC_HUE}",
+  "tooltip": "True if eq,ne,gt,lt,ge,le two strings ( lexical. ).",
+  "extensions": [
+    "tapestry_generic_mixin",
+    "tapestry_generic_extension"
+  ],
+  "mutator": "tapestry_generic_mutation",
+  "customData": {
+    "shapeDef": [
+      {
+        "label": "Is"
+      },
+      {
+        "name": "A",
+        "type": "input_value",
+        "checks": [
+          "text_eval"
+        ]
+      },
+      {
+        "label": "matching",
+        "name": "IS",
+        "type": "field_dropdown",
+        "options": [
+          [
+            "equal to",
+            "$EQUAL_TO"
+          ],
+          [
+            "other than",
+            "$OTHER_THAN"
+          ],
+          [
+            "greater than",
+            "$GREATER_THAN"
+          ],
+          [
+            "less than",
+            "$LESS_THAN"
+          ],
+          [
+            "at least",
+            "$AT_LEAST"
+          ],
+          [
+            "at most",
+            "$AT_MOST"
+          ]
+        ]
+      },
+      {
+        "label": "text",
+        "name": "B",
+        "type": "input_value",
+        "checks": [
+          "text_eval"
+        ]
+      }
+    ]
+  }
+}`
+	x := &core.Z_CompareText_T
+	ts := shape.TypeMap{x.Name: x}
+
+	var out js.Builder
+	w := shape.ShapeWriter{ts}
+	w.WriteShape(&out, x)
+	//
+	str := jsn.Indent(out.String())
+	if diff := pretty.Diff(str, expect); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
+	}
+}

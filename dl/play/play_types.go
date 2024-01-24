@@ -190,10 +190,10 @@ func (*PlayOut_Slice) Inspect() typeinfo.T {
 const Z_PlayModes_Name = "play_modes"
 
 const (
-	W_PlayModes_Asm      = "$ASM"
-	W_PlayModes_Play     = "$PLAY"
-	W_PlayModes_Complete = "$COMPLETE"
-	W_PlayModes_Error    = "$ERROR"
+	W_PlayModes_Asm      = "asm"
+	W_PlayModes_Play     = "play"
+	W_PlayModes_Complete = "complete"
+	W_PlayModes_Error    = "error"
 )
 
 var Z_PlayModes_T = typeinfo.Str{
