@@ -3,14 +3,24 @@ package shape_test
 import (
 	_ "embed"
 	"encoding/json"
-	"io/fs"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/blockly/shape"
-	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
-	"git.sr.ht/~ionous/tapestry/idl"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/frame"
+	"git.sr.ht/~ionous/tapestry/dl/game"
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
+	"git.sr.ht/~ionous/tapestry/dl/rel"
+	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
+	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -19,7 +29,7 @@ import (
 // fix: generate and compare just testdl?
 // right now this just tests that the shapes are well formed.
 func TestBlocklyTypes(t *testing.T) {
-	if str, e := shape.FromSpecs(idl.Specs); e != nil {
+	if str, e := shape.FromTypes(blocks); e != nil {
 		t.Fatal(e)
 	} else if !json.Valid([]byte(str)) {
 		t.Fatal(e)
@@ -28,9 +38,29 @@ func TestBlocklyTypes(t *testing.T) {
 	}
 }
 
+var blocks = []*typeinfo.TypeSet{
+	&assign.Z_Types,
+	&core.Z_Types,
+	&debug.Z_Types,
+	&frame.Z_Types,
+	&game.Z_Types,
+	&grammar.Z_Types,
+	&list.Z_Types,
+	&literal.Z_Types,
+	// &play.Z_Types,
+	&prim.Z_Types,
+	&rel.Z_Types,
+	&render.Z_Types,
+	&rtti.Z_Types,
+	// &spec.Z_Types,
+	&story.Z_Types,
+	// &testdl.Z_Types,
+}
+
 func TestRepeatingContainers(t *testing.T) {
 	// read all tapestry idl files from the filesystem
-	if reps, e := findRepeatingContainers(idl.Specs); e != nil {
+	m := shape.MakeTypeMap(blocks)
+	if reps, e := findRepeatingContainers(m); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(reps,
 		[]repeatingContainer{
@@ -47,27 +77,24 @@ type repeatingContainer struct {
 	outer, inner string
 }
 
-func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) {
-	if ts, e := rs.FromSpecs(files); e != nil {
-		err = e
-	} else {
-		for _, k := range ts.Keys() {
-			blockType := ts.Types[k]
-			// search for flows...
-			if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
-				// that have a term...
-				for _, t := range flow.Terms {
-					// that isnt a special internal term...
-					if n := t.TypeName(); !t.Private {
-						if ref, ok := ts.Types[n]; !ok {
-							err = errutil.New("couldnt find", n)
-						} else {
-							// which is a flow...
-							if flow, ok := ref.Spec.Value.(*spec.FlowSpec); ok {
-								// containing a single repeating term
-								if len(flow.Terms) == 1 && flow.Terms[0].Repeats {
-									ret = append(ret, repeatingContainer{n, flow.Terms[0].TypeName()})
-								}
+func findRepeatingContainers(ts shape.TypeMap) (ret []repeatingContainer, err error) {
+	for _, k := range ts.Keys() {
+		blockType := ts[k]
+		// search for flows...
+		if flow, ok := blockType.(*typeinfo.Flow); ok {
+			// that have a term...
+			for _, t := range flow.Terms {
+				// that isnt a special internal term...
+				if !t.Private {
+					n := t.Type.TypeName()
+					if ref, ok := ts[n]; !ok {
+						err = errutil.New("couldnt find", n)
+					} else {
+						// which is a flow...
+						if flow, ok := ref.(*typeinfo.Flow); ok {
+							// containing a single repeating term
+							if len(flow.Terms) == 1 && flow.Terms[0].Repeats {
+								ret = append(ret, repeatingContainer{n, flow.Terms[0].Type.TypeName()})
 							}
 						}
 					}
@@ -104,20 +131,18 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	if ts, e := rs.ReadSpec(idl.Specs, "story.tells"); e != nil {
-		t.Fatal(e)
-	} else if x, ok := ts.Types["story_file"]; !ok {
-		t.Fatal("missing story file type")
-	} else {
-		var out js.Builder
-		w := shape.ShapeWriter{ts}
-		w.WriteShape(&out, x)
-		//
-		str := jsn.Indent(out.String())
-		if diff := pretty.Diff(str, expect); len(diff) > 0 {
-			t.Log(str)
-			t.Fatal("ng", diff)
-		}
+	x := &story.Z_StoryFile_T
+	ts := shape.TypeMap{x.Name: x}
+
+	var out js.Builder
+	w := shape.ShapeWriter{ts}
+	w.WriteShape(&out, x)
+	//
+	got := jsn.Indent(out.String())
+	if got != expect {
+		t.Log("have: \n", got)
+		t.Log("want: \n", expect)
+		t.Fatal("ng", len(got), len(expect))
 	}
 }
 
@@ -168,19 +193,16 @@ func TestStoryTextShape(t *testing.T) {
     ]
   }
 }`
-	if ts, e := rs.FromSpecs(idl.Specs); e != nil {
-		t.Fatal(e)
-	} else if x, ok := ts.Types["text_field"]; !ok {
-		t.Fatal("missing story file type")
-	} else {
-		var out js.Builder
-		w := shape.ShapeWriter{ts}
-		w.WriteShape(&out, x)
-		//
-		str := jsn.Indent(out.String())
-		if diff := pretty.Diff(str, expect); len(diff) > 0 {
-			t.Log(str)
-			t.Fatal("ng", diff)
-		}
+	x := &story.Z_TextField_T
+	ts := shape.TypeMap{x.Name: x}
+
+	var out js.Builder
+	w := shape.ShapeWriter{ts}
+	w.WriteShape(&out, x)
+	//
+	str := jsn.Indent(out.String())
+	if diff := pretty.Diff(str, expect); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
 	}
 }

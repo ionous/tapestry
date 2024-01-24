@@ -23,7 +23,7 @@ import (
 )
 
 func TestToolbox(t *testing.T) {
-	if str, e := box.FromTypeSet(blocks); e != nil {
+	if str, e := box.FromTypes(blocks); e != nil {
 		t.Fatal(e)
 	} else if !json.Valid([]byte(str)) {
 		t.Fatal(str)

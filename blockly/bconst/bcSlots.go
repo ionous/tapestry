@@ -1,13 +1,8 @@
 package bconst
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
-
-type Types interface {
-	FindType(string) (*spec.TypeSpec, bool)
-}
 
 func MakeSlotRule(slot *typeinfo.Slot) SlotRule {
 	stacks, _ := slot.Markup[StackMarkup].(bool)
@@ -16,28 +11,15 @@ func MakeSlotRule(slot *typeinfo.Slot) SlotRule {
 		Name:   slot.Name,
 		Stack:  stacks,
 		Colour: color,
+		Type:   slot,
 	}
-}
-
-// pass the name of the slot
-func FindSlotRule(types Types, name string) (ret SlotRule) {
-	if slot, ok := types.FindType(name); !ok {
-		ret = SlotRule{Name: name}
-	} else {
-		stacks, _ := slot.Markup[StackMarkup].(bool)
-		ret = SlotRule{
-			Name:   name,
-			Stack:  stacks,
-			Colour: BlockColor(slot),
-		}
-	}
-	return
 }
 
 type SlotRule struct {
 	Name   string
 	Stack  bool // if false, then: input_value, if true: input_statement
 	Colour string
+	Type   *typeinfo.Slot
 	// fix? maybe "internal" could indicate shadows...
 }
 

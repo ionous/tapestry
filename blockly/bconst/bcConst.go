@@ -1,11 +1,16 @@
 package bconst
 
+import "strings"
+
 // yup.
 const DefaultColor = "TAP_HUE"
 
 // tapestry typespec markup
 const ColorMarkup = "blockly-color"
 const StackMarkup = "blockly-stack"
+
+const RootBlockMarkup = "mosaic-root"     // special shapes that have no output.
+const InlineBlockMarkup = "mosaic-inline" // a block with no labels
 
 const (
 	FieldCheckbox = "field_checkbox"
@@ -33,3 +38,8 @@ const (
 	// multiline variant of the text field
 	MosaicMultilineField = "mosaic_multiline_field"
 )
+
+// underscore name to something else.
+func KeyName(s string) string {
+	return "$" + strings.ToUpper(s)
+}

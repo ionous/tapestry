@@ -5,40 +5,37 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
-	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/lang/markup"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 type ShapeWriter struct {
-	rs.TypeSpecs
+	Types TypeMap
 }
 
-func NewShapeWriter(ts rs.TypeSpecs) *ShapeWriter {
+func NewShapeWriter(ts TypeMap) *ShapeWriter {
 	return &ShapeWriter{ts}
 }
 
 // return any fields which need mutation
-func (w *ShapeWriter) WriteShape(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
-	switch t := blockType.Spec.Choice; t {
-	case spec.UsesSpec_Flow_Opt:
+func (w *ShapeWriter) WriteShape(block *js.Builder, blockType typeinfo.T) (okay bool) {
+	switch blockType := blockType.(type) {
+	case *typeinfo.Flow:
 		okay = w.writeFlowBlock(block, blockType)
-	case spec.UsesSpec_Slot_Opt:
+	case *typeinfo.Slot:
 		okay = w.writeSlotBlock(block, blockType)
-	case spec.UsesSpec_Swap_Opt:
+	case *typeinfo.Num:
 		okay = w.writeStandalone(block, blockType)
-	case spec.UsesSpec_Num_Opt:
-		okay = w.writeStandalone(block, blockType)
-	case spec.UsesSpec_Str_Opt:
+	case *typeinfo.Str:
 		okay = w.writeStandalone(block, blockType)
 	default:
-		log.Fatalln("unknown type", blockType.Spec.Choice)
+		log.Fatalf("unknown type %T", blockType)
 	}
 	return
 }
 
-func (w *ShapeWriter) writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
+func (w *ShapeWriter) writeSlotBlock(block *js.Builder, blockType *typeinfo.Slot) bool {
 	return false // slots dont have have corresponding blocks
 }
 
@@ -46,41 +43,41 @@ func (w *ShapeWriter) writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec
 // however, if they are used by a slot -- then we need a block for them too.
 // fix: maybe consider writing an "inputDef" object {} as the value of "swaps"
 // ( for simple types or maybe all of them ) and change the block's input on selection.
-func (w *ShapeWriter) writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
+func (w *ShapeWriter) writeStandalone(block *js.Builder, blockType typeinfo.T) (okay bool) {
 	// we simply pretend we're a flow of one anonymous member.
-	name := spec.FriendlyName(blockType.Name, false)
-	okay = w._writeShape(block, name, blockType, []spec.TermSpec{{
+	n := blockType.TypeName()
+	name := typeinfo.FriendlyName(n)
+	okay = w._writeShape(block, name, blockType, []typeinfo.Term{{
 		Label: "",
-		Name:  blockType.Name,
-		Type:  blockType.Name,
+		Name:  n,
+		Type:  w.Types[n],
 	}})
 	return okay
 }
 
-func (w *ShapeWriter) writeFlowBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
-	flow := blockType.Spec.Value.(*spec.FlowSpec)
-	name := flow.FriendlyLede(blockType)
-	return w._writeShape(block, name, blockType, flow.Terms)
+func (w *ShapeWriter) writeFlowBlock(block *js.Builder, flow *typeinfo.Flow) bool {
+	name := typeinfo.FriendlyName(flow.Lede)
+	return w._writeShape(block, name, flow, flow.Terms)
 }
 
 // writes one or possible two blocks to represent the blockType.
 // will always generate an output block because every type outputs itself
 // it may also generate a stackable block if any of the slots implemented have a stackable SlotRule.
 // ( ex. a type that implements rt.BoolEval and rt.Execute will write both types of blocks )
-func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spec.TypeSpec, terms []spec.TermSpec) bool {
-	stacks, outputs := slotStacks(w, blockType)
+func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType typeinfo.T, terms []typeinfo.Term) bool {
+	stacks, outSlots := slotStacks(w.Types, blockType)
 	// we write to partial so that we can potentially have two blocks
 	var partial js.Builder
 	// color
 	var colour string // default
 	if c := bconst.BlockColor(blockType); len(c) > 0 {
 		colour = c
-	} else if len(outputs) > 0 { // we take on the color of the first slot specified
-		colour = bconst.BlockColor(w.Types[outputs[0]])
+	} else if len(outSlots) > 0 { // we take on the color of the first slot specified
+		n := outSlots[0]
+		colour = bconst.BlockColor(n.Type)
 	} else if len(stacks) > 0 {
 		n := stacks[0]
-		n = n[1 : len(n)-len("_stack")] // yikes.
-		colour = bconst.BlockColor(w.Types[n])
+		colour = bconst.BlockColor(n.Type)
 	}
 	if len(colour) == 0 {
 		colour = bconst.DefaultColor
@@ -88,7 +85,7 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	partial.Q("colour").Raw(`:"%{BKY_`).Raw(colour).Raw(`}"`)
 
 	// comment
-	if cmt := comment(blockType.Markup); len(cmt) > 0 {
+	if cmt := comment(blockType.TypeMarkup()); len(cmt) > 0 {
 		partial.R(js.Comma).Kv("tooltip", cmt)
 	}
 	partial.R(js.Comma)
@@ -99,17 +96,19 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {
 		block.Brace(js.Obj, func(out *js.Builder) {
-			out.Kv("type", bconst.StackedName(blockType.Name))
-			appendChecks(out, "nextStatement", stacks)
-			appendChecks(out, "previousStatement", stacks)
+			out.Kv("type", bconst.StackedName(blockType.TypeName()))
+			checks := slotTypes(stacks)
+			appendChecks(out, "nextStatement", checks)
+			appendChecks(out, "previousStatement", checks)
 			appendString(out, partial.String())
 		}).R(js.Comma)
 	}
-	if rootBlock := blockType.InGroup(RootBlock); !rootBlock {
-		outputs = append([]string{blockType.Name}, outputs...)
+	outputs := slotTypes(outSlots)
+	if rootBlock := bconst.RootBlock(blockType); !rootBlock {
+		outputs = append([]string{blockType.TypeName()}, outputs...)
 	}
 	block.Brace(js.Obj, func(out *js.Builder) {
-		out.Kv("type", blockType.Name)
+		out.Kv("type", blockType.TypeName())
 		appendChecks(out, "output", outputs)
 		appendString(out, partial.String())
 	})
@@ -124,14 +123,14 @@ func comment(m map[string]any) (ret string) {
 }
 
 // write the args0 and message0 key-outputs.
-func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spec.TypeSpec, terms []spec.TermSpec) {
+func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType typeinfo.T, terms []typeinfo.Term) {
 	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
 	// note: currently if  excluding empty term sets causes a problem because the block output generates an extraState object that's empty: {}
 	// blockly in blocks.js loadExtraState() believes that's valid data; sees we don't have the mutator loadExtraState function
 	// and therefore tries to parse the empty object as xml... which raises an (uncaught) exception: stopping the whole page from loading.
 	// ( so much power this one little line )
-	hasMutator := /*len(terms) > 0 &&*/ blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
-	inlineBlock := blockType.InGroup(InlineBlock)
+	_, hasMutator := /*len(terms) > 0 &&*/ blockType.(*typeinfo.Flow)
+	inlineBlock := bconst.InlineBlock(blockType)
 	if hasMutator {
 		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
 	}
@@ -151,9 +150,7 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 					for _, term := range terms {
 						if fd, e := w.newFieldDef(term); e != nil {
 							log.Fatalln(e) // exit if we couldnt create the field def
-						} else if fn, ok := fieldWriter[fd.termType()]; !ok {
-							log.Fatalln("unknown term type", fd.termType())
-						} else if fn != nil {
+						} else if fn := fieldWriter(term.Type); fn != nil {
 							if comma {
 								out.R(js.Comma)
 							}
@@ -166,7 +163,7 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 								// every term needs a name ( for blockly's sake )
 								out.Kv("name", fd.name()).R(js.Comma)
 								// write the contents of the term
-								fn(w, out, fd.term, fd.typeSpec)
+								fn(w, out, fd.term)
 								// write optional, and repeating status
 								if fd.term.Optional {
 									out.R(js.Comma).Q("optional").R(js.Colon).Raw("true")
@@ -183,7 +180,7 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 		})
 }
 
-func publicTerms(terms []spec.TermSpec) (ret []spec.TermSpec) {
+func publicTerms(terms []typeinfo.Term) (ret []typeinfo.Term) {
 	for _, t := range terms {
 		if !t.Private {
 			ret = append(ret, t)
@@ -193,19 +190,20 @@ func publicTerms(terms []spec.TermSpec) (ret []spec.TermSpec) {
 }
 
 // split the slots that this type supports into "stacks" and "outputs"
-func slotStacks(types bconst.Types, blockType *spec.TypeSpec) (retStack, retOutput []string) {
-	var slots []string
-	if blockType.Spec.Choice == spec.UsesSpec_Slot_Opt {
-		slots = []string{blockType.Name}
-	} else {
-		slots = blockType.Slots
+func slotStacks(types TypeMap, blockType typeinfo.T) (retStack, retOutput []bconst.SlotRule) {
+	var slots []*typeinfo.Slot
+	switch t := blockType.(type) {
+	case *typeinfo.Flow:
+		slots = t.Slots
+	case *typeinfo.Slot:
+		slots = []*typeinfo.Slot{t}
 	}
 	for _, s := range slots {
-		slotRule := bconst.FindSlotRule(types, s)
+		slotRule := bconst.MakeSlotRule(s)
 		if slotRule.Stack {
-			retStack = append(retStack, slotRule.SlotType())
+			retStack = append(retStack, slotRule)
 		} else {
-			retOutput = append(retOutput, s)
+			retOutput = append(retOutput, slotRule)
 		}
 	}
 	return

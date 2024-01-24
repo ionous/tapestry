@@ -4,34 +4,33 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
-	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"github.com/ionous/errutil"
 )
 
 type shapeField struct {
-	term     spec.TermSpec
-	typeSpec *spec.TypeSpec
-	slot     bconst.SlotRule
+	term typeinfo.Term
+	slot bconst.SlotRule
 }
 
-func (w *ShapeWriter) newFieldDef(term spec.TermSpec) (ret *shapeField, err error) {
-	typeName := term.TypeName() // lookup spec
-	if typeSpec, ok := w.Types[typeName]; !ok {
-		err = errutil.New("missing named type", typeName)
+func (w *ShapeWriter) newFieldDef(term typeinfo.Term) (ret *shapeField, err error) {
+	var slot bconst.SlotRule
+	if term.Type == nil {
+		// could happen with private fields
+		err = errutil.New("missing term type", term.Name)
 	} else {
-		var slot bconst.SlotRule
-		if typeSpec.Spec.Choice == spec.UsesSpec_Slot_Opt {
+		if t, ok := term.Type.(*typeinfo.Slot); ok {
 			// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
 			// regardless, it only has the input, no special fields.
-			slot = bconst.FindSlotRule(w, typeSpec.Name)
+			slot = bconst.MakeSlotRule(t)
 		}
-		ret = &shapeField{term, typeSpec, slot}
+		ret = &shapeField{term, slot}
 	}
 	return
 }
 
 func (fd *shapeField) name() string {
-	return strings.ToUpper(fd.term.Field())
+	return strings.ToUpper(fd.term.Name)
 }
 
 // will we need a label for required anonymous terms?
@@ -45,10 +44,10 @@ func (fd *shapeField) blocklyLabel() (ret string) {
 	return
 }
 
-// handle our fake field for the leading label.
-func (fd *shapeField) termType() (ret string) {
-	if fd.typeSpec != nil {
-		ret = fd.typeSpec.Spec.Choice
-	}
-	return
-}
+// // handle our fake field for the leading label.
+// func (fd *shapeField) termType() (ret string) {
+// 	if fd.typeSpec != nil {
+// 		ret = fd.typeSpec.Spec.Choice
+// 	}
+// 	return
+// }

@@ -36,6 +36,14 @@ func appendChecks(out *js.Builder, label string, checks []string) {
 	}
 }
 
+func slotTypes(rules []bconst.SlotRule) []string {
+	str := make([]string, len(rules))
+	for i, s := range rules {
+		str[i] = s.SlotType()
+	}
+	return str
+}
+
 func writeShapeDef(out *js.Builder, cb func(*js.Builder)) {
 	out.WriteString(`,"extensions":["tapestry_generic_mixin","tapestry_generic_extension"]`)
 	out.R(js.Comma).Q("customData").R(js.Colon).

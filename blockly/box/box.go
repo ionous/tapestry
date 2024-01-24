@@ -8,7 +8,7 @@ import (
 
 // reads all specs from the passed file system
 // returns them in blockly toolbox format
-func FromTypeSet(types []*typeinfo.TypeSet) (ret string, err error) {
+func FromTypes(types []*typeinfo.TypeSet) (ret string, err error) {
 	ret = js.Embrace(js.Obj, func(out *js.Builder) {
 		out.
 			Kv("kind", "categoryToolbox").R(js.Comma).

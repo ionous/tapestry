@@ -30,7 +30,7 @@ func BoxesApi(*Config) web.Resource {
 			if len(str) == 0 {
 				ret = &web.Wrapper{
 					Gets: func(ctx context.Context, w http.ResponseWriter) (err error) {
-						if shapes, e := box.FromTypeSet(blocks); e != nil {
+						if shapes, e := box.FromTypes(blocks); e != nil {
 							err = e
 						} else {
 							w.Header().Set("Content-Type", "application/json")
