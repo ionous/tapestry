@@ -22,12 +22,18 @@ type TypeSet struct {
 	Name       string
 	Slot       []*Slot
 	Flow       []*Flow
+	Str        []*Str
+	Num        []*Num
 	Signatures map[uint64]any
 }
 
 // marker interface implemented by each kind of typeinfo:
 // Flow, Slot, Str, and Num.
-type T interface{ TypeInfo() T }
+type T interface {
+	TypeInfo() T
+	TypeName() string
+	TypeMarkup() map[string]any
+}
 
 type Flow struct {
 	Name   string         // unique name for this type
@@ -38,7 +44,17 @@ type Flow struct {
 }
 
 // designates Flow as typeinfo; returns itself
-func (t *Flow) TypeInfo() T { return t }
+func (t *Flow) TypeInfo() T {
+	return t
+}
+
+func (t *Flow) TypeName() string {
+	return t.Name
+}
+
+func (t *Flow) TypeMarkup() map[string]any {
+	return t.Markup
+}
 
 // a member of a Flow.
 type Term struct {
@@ -50,13 +66,27 @@ type Term struct {
 	Type     T      // a pointer to Flow, Slot, Str, or Num; or, nil if private
 }
 
+func (t Term) IsAnonymous() bool {
+	return t.Label == "_"
+}
+
 type Slot struct {
 	Name   string         // unique name for this type
 	Markup map[string]any // metadata shared by all instances of this type
 }
 
 // designates Slot as typeinfo; returns itself
-func (t *Slot) TypeInfo() T { return t }
+func (t *Slot) TypeInfo() T {
+	return t
+}
+
+func (t *Slot) TypeName() string {
+	return t.Name
+}
+
+func (t *Slot) TypeMarkup() map[string]any {
+	return t.Markup
+}
 
 type Str struct {
 	Name    string         // unique name for this type
@@ -65,7 +95,17 @@ type Str struct {
 }
 
 // designates Str as typeinfo; returns itself
-func (t *Str) TypeInfo() T { return t }
+func (t *Str) TypeInfo() T {
+	return t
+}
+
+func (t *Str) TypeName() string {
+	return t.Name
+}
+
+func (t *Str) TypeMarkup() map[string]any {
+	return t.Markup
+}
 
 type Num struct {
 	Name   string         // unique name for this type
@@ -73,4 +113,14 @@ type Num struct {
 }
 
 // designates Num as typeinfo; returns itself
-func (t *Num) TypeInfo() T { return t }
+func (t *Num) TypeInfo() T {
+	return t
+}
+
+func (t *Num) TypeName() string {
+	return t.Name
+}
+
+func (t *Num) TypeMarkup() map[string]any {
+	return t.Markup
+}

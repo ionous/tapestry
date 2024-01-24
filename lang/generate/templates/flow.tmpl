@@ -10,7 +10,7 @@ type FIX_{{Pascal .Name}} struct {
 
 // implements typeinfo.Inspector
 func (*{{Pascal .Name}}) Inspect() typeinfo.T {
-	return &Z_{{Pascal .Name}}_Info
+	return &Z_{{Pascal .Name}}_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -22,7 +22,7 @@ func (op *{{Pascal .Name}}) GetMarkup(ensure bool) map[string]any {
 }
 
 // {{.Name}}, a type of flow.
-const Z_{{Pascal .Name}}_Type = "{{.Name}}"
+const Z_{{Pascal .Name}}_Name = "{{.Name}}"
 {{if .Slots }}
 // ensure the command implements its specified slots:
 {{- range $i, $s := .Slots }}
@@ -30,8 +30,8 @@ var _ {{ScopedType $s}} = (*{{Pascal $.Name}})(nil)
 {{- end }}
 {{- end}}
 
-var Z_{{Pascal .Name}}_Info = typeinfo.Flow{
-	Name: Z_{{Pascal .Name}}_Type,
+var Z_{{Pascal .Name}}_T = typeinfo.Flow{
+	Name: Z_{{Pascal .Name}}_Name,
 	Lede: "{{.Lede}}",
 	Terms: []typeinfo.Term{
 {{- range $i, $t := .Terms -}}{{if $i}},{{end}}{
@@ -40,14 +40,14 @@ var Z_{{Pascal .Name}}_Info = typeinfo.Flow{
 		Private: true,{{end}}{{if $t.Optional}}
 		Optional: true,{{end}}{{if $t.Repeats}}
 		Repeats: true,{{end}}{{if not $t.Private}}
-		Type: &{{PackageDot $t.Type}}Z_{{Pascal $t.Type}}_Info,{{end}}
+		Type: &{{PackageDot $t.Type}}Z_{{Pascal $t.Type}}_T,{{end}}
 	}
 {{- end -}}
 {{/**/}}		},
 	{{- if .Slots }} 
 	Slots: []*typeinfo.Slot{ 
 	{{- range $i, $s := .Slots }}
-		&{{PackageDot $s}}Z_{{Pascal $s}}_Info,
+		&{{PackageDot $s}}Z_{{Pascal $s}}_T,
 	{{- end }}
 	},
 	{{- end }}
@@ -60,5 +60,5 @@ type FIX_{{Pascal .Name}}_Slice []{{Pascal .Name}}
 
 // implements typeinfo.Inspector
 func (*{{Pascal .Name}}_Slice) Inspect() typeinfo.T {
-	return &Z_{{Pascal .Name}}_Info
+	return &Z_{{Pascal .Name}}_T
 }

@@ -15,7 +15,7 @@ type FIX_DoNothing struct {
 
 // implements typeinfo.Inspector
 func (*DoNothing) Inspect() typeinfo.T {
-	return &Z_DoNothing_Info
+	return &Z_DoNothing_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -27,17 +27,17 @@ func (op *DoNothing) GetMarkup(ensure bool) map[string]any {
 }
 
 // do_nothing, a type of flow.
-const Z_DoNothing_Type = "do_nothing"
+const Z_DoNothing_Name = "do_nothing"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DoNothing)(nil)
 
-var Z_DoNothing_Info = typeinfo.Flow{
-	Name:  Z_DoNothing_Type,
+var Z_DoNothing_T = typeinfo.Flow{
+	Name:  Z_DoNothing_Name,
 	Lede:  "--",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
@@ -50,7 +50,7 @@ type FIX_DoNothing_Slice []DoNothing
 
 // implements typeinfo.Inspector
 func (*DoNothing_Slice) Inspect() typeinfo.T {
-	return &Z_DoNothing_Info
+	return &Z_DoNothing_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -62,7 +62,7 @@ type FIX_Expect struct {
 
 // implements typeinfo.Inspector
 func (*Expect) Inspect() typeinfo.T {
-	return &Z_Expect_Info
+	return &Z_Expect_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -74,21 +74,21 @@ func (op *Expect) GetMarkup(ensure bool) map[string]any {
 }
 
 // expect, a type of flow.
-const Z_Expect_Type = "expect"
+const Z_Expect_Name = "expect"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Expect)(nil)
 
-var Z_Expect_Info = typeinfo.Flow{
-	Name: Z_Expect_Type,
+var Z_Expect_T = typeinfo.Flow{
+	Name: Z_Expect_Name,
 	Lede: "expect",
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "_",
-		Type:  &rtti.Z_BoolEval_Info,
+		Type:  &rtti.Z_BoolEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -98,7 +98,7 @@ type FIX_Expect_Slice []Expect
 
 // implements typeinfo.Inspector
 func (*Expect_Slice) Inspect() typeinfo.T {
-	return &Z_Expect_Info
+	return &Z_Expect_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -110,7 +110,7 @@ type FIX_ExpectOutput struct {
 
 // implements typeinfo.Inspector
 func (*ExpectOutput) Inspect() typeinfo.T {
-	return &Z_ExpectOutput_Info
+	return &Z_ExpectOutput_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -122,21 +122,21 @@ func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
 }
 
 // expect_output, a type of flow.
-const Z_ExpectOutput_Type = "expect_output"
+const Z_ExpectOutput_Name = "expect_output"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ExpectOutput)(nil)
 
-var Z_ExpectOutput_Info = typeinfo.Flow{
-	Name: Z_ExpectOutput_Type,
+var Z_ExpectOutput_T = typeinfo.Flow{
+	Name: Z_ExpectOutput_Name,
 	Lede: "expect",
 	Terms: []typeinfo.Term{{
 		Name:  "output",
 		Label: "output",
-		Type:  &prim.Z_Lines_Info,
+		Type:  &prim.Z_Lines_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -146,7 +146,7 @@ type FIX_ExpectOutput_Slice []ExpectOutput
 
 // implements typeinfo.Inspector
 func (*ExpectOutput_Slice) Inspect() typeinfo.T {
-	return &Z_ExpectOutput_Info
+	return &Z_ExpectOutput_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -158,7 +158,7 @@ type FIX_ExpectText struct {
 
 // implements typeinfo.Inspector
 func (*ExpectText) Inspect() typeinfo.T {
-	return &Z_ExpectText_Info
+	return &Z_ExpectText_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -170,21 +170,21 @@ func (op *ExpectText) GetMarkup(ensure bool) map[string]any {
 }
 
 // expect_text, a type of flow.
-const Z_ExpectText_Type = "expect_text"
+const Z_ExpectText_Name = "expect_text"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ExpectText)(nil)
 
-var Z_ExpectText_Info = typeinfo.Flow{
-	Name: Z_ExpectText_Type,
+var Z_ExpectText_T = typeinfo.Flow{
+	Name: Z_ExpectText_Name,
 	Lede: "expect",
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "text",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -194,7 +194,7 @@ type FIX_ExpectText_Slice []ExpectText
 
 // implements typeinfo.Inspector
 func (*ExpectText_Slice) Inspect() typeinfo.T {
-	return &Z_ExpectText_Info
+	return &Z_ExpectText_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -206,7 +206,7 @@ type FIX_Fabricate struct {
 
 // implements typeinfo.Inspector
 func (*Fabricate) Inspect() typeinfo.T {
-	return &Z_Fabricate_Info
+	return &Z_Fabricate_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -218,21 +218,21 @@ func (op *Fabricate) GetMarkup(ensure bool) map[string]any {
 }
 
 // fabricate, a type of flow.
-const Z_Fabricate_Type = "fabricate"
+const Z_Fabricate_Name = "fabricate"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Fabricate)(nil)
 
-var Z_Fabricate_Info = typeinfo.Flow{
-	Name: Z_Fabricate_Type,
+var Z_Fabricate_T = typeinfo.Flow{
+	Name: Z_Fabricate_Name,
 	Lede: "fabricate",
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "input",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"fake input as if the player had typed it themselves.", "only works while running checks."},
@@ -245,7 +245,7 @@ type FIX_Fabricate_Slice []Fabricate
 
 // implements typeinfo.Inspector
 func (*Fabricate_Slice) Inspect() typeinfo.T {
-	return &Z_Fabricate_Info
+	return &Z_Fabricate_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -258,7 +258,7 @@ type FIX_DebugLog struct {
 
 // implements typeinfo.Inspector
 func (*DebugLog) Inspect() typeinfo.T {
-	return &Z_DebugLog_Info
+	return &Z_DebugLog_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -270,25 +270,25 @@ func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 }
 
 // debug_log, a type of flow.
-const Z_DebugLog_Type = "debug_log"
+const Z_DebugLog_Name = "debug_log"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DebugLog)(nil)
 
-var Z_DebugLog_Info = typeinfo.Flow{
-	Name: Z_DebugLog_Type,
+var Z_DebugLog_T = typeinfo.Flow{
+	Name: Z_DebugLog_Name,
 	Lede: "log",
 	Terms: []typeinfo.Term{{
 		Name:  "log_level",
 		Label: "_",
-		Type:  &Z_LoggingLevel_Info,
+		Type:  &Z_LoggingLevel_T,
 	}, {
 		Name:  "value",
 		Label: "value",
-		Type:  &rtti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Debug log.",
@@ -301,11 +301,11 @@ type FIX_DebugLog_Slice []DebugLog
 
 // implements typeinfo.Inspector
 func (*DebugLog_Slice) Inspect() typeinfo.T {
-	return &Z_DebugLog_Info
+	return &Z_DebugLog_T
 }
 
 // logging_level, a type of str enum.
-const Z_LoggingLevel_Type = "logging_level"
+const Z_LoggingLevel_Name = "logging_level"
 
 const (
 	W_LoggingLevel_Note  = "$NOTE"
@@ -315,8 +315,8 @@ const (
 	W_LoggingLevel_Error = "$ERROR"
 )
 
-var Z_LoggingLevel_Info = typeinfo.Str{
-	Name: Z_LoggingLevel_Type,
+var Z_LoggingLevel_T = typeinfo.Str{
+	Name: Z_LoggingLevel_Name,
 	Options: []string{
 		W_LoggingLevel_Note,
 		W_LoggingLevel_Debug,
@@ -330,13 +330,21 @@ var Z_LoggingLevel_Info = typeinfo.Str{
 var Z_Types = typeinfo.TypeSet{
 	Name: "debug",
 	Flow: z_flow_list,
-} // a list of all flows in this this package
+	Str:  z_str_list,
+}
+
+// a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_DoNothing_Info,
-	&Z_Expect_Info,
-	&Z_ExpectOutput_Info,
-	&Z_ExpectText_Info,
-	&Z_Fabricate_Info,
-	&Z_DebugLog_Info,
+	&Z_DoNothing_T,
+	&Z_Expect_T,
+	&Z_ExpectOutput_T,
+	&Z_ExpectText_T,
+	&Z_Fabricate_T,
+	&Z_DebugLog_T,
+}
+
+// a list of all strs in this this package
+var z_str_list = []*typeinfo.Str{
+	&Z_LoggingLevel_T,
 }

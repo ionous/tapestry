@@ -1,28 +1,22 @@
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:  "{{.Name}}",
-{{- if .Slot.List }}
-	Slot:  z_slot_list,
-{{- end }}
-{{- if .Flow.List }}
-	Flow:  z_flow_list,
-{{- end }}
-{{- if .Signatures}}
+{{- range .Types }}{{ if .List }}
+	{{Pascal .Type}}:  z_{{.Type}}_list,
+{{- end }}{{ end }}
+{{- if .Signatures }}
 	Signatures: z_signatures,
 {{- end }}
 }
-{{- if .Slot.List }}
-{{ template "types.tmpl" .Slot }}
-{{- end }}
-{{- if .Flow.List }}
-{{- template "types.tmpl" .Flow }}
-{{- end }}
+{{- range .Types }}{{ if .List }}
+{{ template "types.tmpl" . }}
+{{- end }}{{ end }}
 {{- if .Signatures }}
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]any{
-{{range .Signatures -}}
+{{- range .Signatures }}
   {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */
-{{end -}}
+{{- end }}
 }
 {{- end }}

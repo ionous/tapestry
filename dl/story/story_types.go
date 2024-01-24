@@ -11,10 +11,10 @@ import (
 )
 
 // field_definition, a type of slot.
-const Z_FieldDefinition_Type = "field_definition"
+const Z_FieldDefinition_Name = "field_definition"
 
-var Z_FieldDefinition_Info = typeinfo.Slot{
-	Name: Z_FieldDefinition_Type,
+var Z_FieldDefinition_T = typeinfo.Slot{
+	Name: Z_FieldDefinition_Name,
 	Markup: map[string]any{
 		"comment": "Fields are used to define the members of kinds, records, patterns, and so on.",
 	},
@@ -26,7 +26,7 @@ type FIX_FieldDefinition_Slot struct{ Value FieldDefinition }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_FieldDefinition_Slot) Inspect() typeinfo.T {
-	return &Z_FieldDefinition_Info
+	return &Z_FieldDefinition_T
 }
 
 // holds a slice of slots
@@ -34,14 +34,14 @@ type FieldDefinition_Slots []FieldDefinition
 
 // implements typeinfo.Inspector for a series of slots.
 func (*FieldDefinition_Slots) Inspect() typeinfo.T {
-	return &Z_FieldDefinition_Info
+	return &Z_FieldDefinition_T
 }
 
 // story_statement, a type of slot.
-const Z_StoryStatement_Type = "story_statement"
+const Z_StoryStatement_Name = "story_statement"
 
-var Z_StoryStatement_Info = typeinfo.Slot{
-	Name: Z_StoryStatement_Type,
+var Z_StoryStatement_T = typeinfo.Slot{
+	Name: Z_StoryStatement_Name,
 	Markup: map[string]any{
 		"blockly-color": "VARIABLES_HUE",
 		"blockly-stack": true,
@@ -55,7 +55,7 @@ type FIX_StoryStatement_Slot struct{ Value StoryStatement }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_StoryStatement_Slot) Inspect() typeinfo.T {
-	return &Z_StoryStatement_Info
+	return &Z_StoryStatement_T
 }
 
 // holds a slice of slots
@@ -63,7 +63,7 @@ type StoryStatement_Slots []StoryStatement
 
 // implements typeinfo.Inspector for a series of slots.
 func (*StoryStatement_Slots) Inspect() typeinfo.T {
-	return &Z_StoryStatement_Info
+	return &Z_StoryStatement_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -75,7 +75,7 @@ type FIX_Comment struct {
 
 // implements typeinfo.Inspector
 func (*Comment) Inspect() typeinfo.T {
-	return &Z_Comment_Info
+	return &Z_Comment_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -87,23 +87,23 @@ func (op *Comment) GetMarkup(ensure bool) map[string]any {
 }
 
 // comment, a type of flow.
-const Z_Comment_Type = "comment"
+const Z_Comment_Name = "comment"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*Comment)(nil)
 var _ rtti.Execute = (*Comment)(nil)
 
-var Z_Comment_Info = typeinfo.Flow{
-	Name: Z_Comment_Type,
+var Z_Comment_T = typeinfo.Flow{
+	Name: Z_Comment_Name,
 	Lede: "comment",
 	Terms: []typeinfo.Term{{
 		Name:  "lines",
 		Label: "_",
-		Type:  &prim.Z_Lines_Info,
+		Type:  &prim.Z_Lines_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Add a note.", "Information about the story for you and other authors."},
@@ -116,7 +116,7 @@ type FIX_Comment_Slice []Comment
 
 // implements typeinfo.Inspector
 func (*Comment_Slice) Inspect() typeinfo.T {
-	return &Z_Comment_Info
+	return &Z_Comment_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -131,7 +131,7 @@ type FIX_Test struct {
 
 // implements typeinfo.Inspector
 func (*Test) Inspect() typeinfo.T {
-	return &Z_Test_Info
+	return &Z_Test_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -143,40 +143,40 @@ func (op *Test) GetMarkup(ensure bool) map[string]any {
 }
 
 // test, a type of flow.
-const Z_Test_Type = "test"
+const Z_Test_Name = "test"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*Test)(nil)
 var _ rtti.Execute = (*Test)(nil)
 
-var Z_Test_Info = typeinfo.Flow{
-	Name: Z_Test_Type,
+var Z_Test_T = typeinfo.Flow{
+	Name: Z_Test_Name,
 	Lede: "test",
 	Terms: []typeinfo.Term{{
 		Name:  "test_name",
 		Label: "_",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:     "scene_names",
 		Label:    "depends_on",
 		Optional: true,
 		Repeats:  true,
-		Type:     &prim.Z_Text_Info,
+		Type:     &prim.Z_Text_T,
 	}, {
 		Name:     "test_statements",
 		Label:    "with_scene",
 		Optional: true,
 		Repeats:  true,
-		Type:     &Z_StoryStatement_Info,
+		Type:     &Z_StoryStatement_T,
 	}, {
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rtti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Create a scene",
@@ -189,7 +189,7 @@ type FIX_Test_Slice []Test
 
 // implements typeinfo.Inspector
 func (*Test_Slice) Inspect() typeinfo.T {
-	return &Z_Test_Info
+	return &Z_Test_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -203,7 +203,7 @@ type FIX_DefineScene struct {
 
 // implements typeinfo.Inspector
 func (*DefineScene) Inspect() typeinfo.T {
-	return &Z_DefineScene_Info
+	return &Z_DefineScene_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -215,31 +215,31 @@ func (op *DefineScene) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_scene, a type of flow.
-const Z_DefineScene_Type = "define_scene"
+const Z_DefineScene_Name = "define_scene"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineScene)(nil)
 
-var Z_DefineScene_Info = typeinfo.Flow{
-	Name: Z_DefineScene_Type,
+var Z_DefineScene_T = typeinfo.Flow{
+	Name: Z_DefineScene_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "scene",
 		Label: "scene",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "depends_on",
 		Label:    "depends_on",
 		Optional: true,
-		Type:     &rtti.Z_TextListEval_Info,
+		Type:     &rtti.Z_TextListEval_T,
 	}, {
 		Name:    "with",
 		Label:   "with",
 		Repeats: true,
-		Type:    &Z_StoryStatement_Info,
+		Type:    &Z_StoryStatement_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "Define a sub world.",
@@ -252,7 +252,7 @@ type FIX_DefineScene_Slice []DefineScene
 
 // implements typeinfo.Inspector
 func (*DefineScene_Slice) Inspect() typeinfo.T {
-	return &Z_DefineScene_Info
+	return &Z_DefineScene_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -266,7 +266,7 @@ type FIX_DefineAction struct {
 
 // implements typeinfo.Inspector
 func (*DefineAction) Inspect() typeinfo.T {
-	return &Z_DefineAction_Info
+	return &Z_DefineAction_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -278,34 +278,34 @@ func (op *DefineAction) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_action, a type of flow.
-const Z_DefineAction_Type = "define_action"
+const Z_DefineAction_Name = "define_action"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineAction)(nil)
 var _ rtti.Execute = (*DefineAction)(nil)
 
-var Z_DefineAction_Info = typeinfo.Flow{
-	Name: Z_DefineAction_Type,
+var Z_DefineAction_T = typeinfo.Flow{
+	Name: Z_DefineAction_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "action",
 		Label: "action",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:    "requires",
 		Label:   "requires",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}, {
 		Name:     "provides",
 		Label:    "provides",
 		Optional: true,
 		Repeats:  true,
-		Type:     &Z_FieldDefinition_Info,
+		Type:     &Z_FieldDefinition_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
@@ -318,7 +318,7 @@ type FIX_DefineAction_Slice []DefineAction
 
 // implements typeinfo.Inspector
 func (*DefineAction_Slice) Inspect() typeinfo.T {
-	return &Z_DefineAction_Info
+	return &Z_DefineAction_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -331,7 +331,7 @@ type FIX_DefineTraits struct {
 
 // implements typeinfo.Inspector
 func (*DefineTraits) Inspect() typeinfo.T {
-	return &Z_DefineTraits_Info
+	return &Z_DefineTraits_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -343,27 +343,27 @@ func (op *DefineTraits) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_traits, a type of flow.
-const Z_DefineTraits_Type = "define_traits"
+const Z_DefineTraits_Name = "define_traits"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineTraits)(nil)
 var _ rtti.Execute = (*DefineTraits)(nil)
 
-var Z_DefineTraits_Info = typeinfo.Flow{
-	Name: Z_DefineTraits_Type,
+var Z_DefineTraits_T = typeinfo.Flow{
+	Name: Z_DefineTraits_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "traits",
 		Label: "traits",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "aspect",
 		Label: "as",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Add traits to an aspect",
@@ -376,7 +376,7 @@ type FIX_DefineTraits_Slice []DefineTraits
 
 // implements typeinfo.Inspector
 func (*DefineTraits_Slice) Inspect() typeinfo.T {
-	return &Z_DefineTraits_Info
+	return &Z_DefineTraits_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -388,7 +388,7 @@ type FIX_AspectField struct {
 
 // implements typeinfo.Inspector
 func (*AspectField) Inspect() typeinfo.T {
-	return &Z_AspectField_Info
+	return &Z_AspectField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -400,21 +400,21 @@ func (op *AspectField) GetMarkup(ensure bool) map[string]any {
 }
 
 // aspect_field, a type of flow.
-const Z_AspectField_Type = "aspect_field"
+const Z_AspectField_Name = "aspect_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*AspectField)(nil)
 
-var Z_AspectField_Info = typeinfo.Flow{
-	Name: Z_AspectField_Type,
+var Z_AspectField_T = typeinfo.Flow{
+	Name: Z_AspectField_Name,
 	Lede: "aspect",
 	Terms: []typeinfo.Term{{
 		Name:  "aspect",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"tbd: is a separate interface required for object kinds separate from everything else?", "in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that."},
@@ -427,7 +427,7 @@ type FIX_AspectField_Slice []AspectField
 
 // implements typeinfo.Inspector
 func (*AspectField_Slice) Inspect() typeinfo.T {
-	return &Z_AspectField_Info
+	return &Z_AspectField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -441,7 +441,7 @@ type FIX_BoolField struct {
 
 // implements typeinfo.Inspector
 func (*BoolField) Inspect() typeinfo.T {
-	return &Z_BoolField_Info
+	return &Z_BoolField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -453,31 +453,31 @@ func (op *BoolField) GetMarkup(ensure bool) map[string]any {
 }
 
 // bool_field, a type of flow.
-const Z_BoolField_Type = "bool_field"
+const Z_BoolField_Name = "bool_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*BoolField)(nil)
 
-var Z_BoolField_Info = typeinfo.Flow{
-	Name: Z_BoolField_Type,
+var Z_BoolField_T = typeinfo.Flow{
+	Name: Z_BoolField_Name,
 	Lede: "bool",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -487,7 +487,7 @@ type FIX_BoolField_Slice []BoolField
 
 // implements typeinfo.Inspector
 func (*BoolField_Slice) Inspect() typeinfo.T {
-	return &Z_BoolField_Info
+	return &Z_BoolField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -500,7 +500,7 @@ type FIX_CountOf struct {
 
 // implements typeinfo.Inspector
 func (*CountOf) Inspect() typeinfo.T {
-	return &Z_CountOf_Info
+	return &Z_CountOf_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -512,25 +512,25 @@ func (op *CountOf) GetMarkup(ensure bool) map[string]any {
 }
 
 // count_of, a type of flow.
-const Z_CountOf_Type = "count_of"
+const Z_CountOf_Name = "count_of"
 
 // ensure the command implements its specified slots:
 var _ rtti.BoolEval = (*CountOf)(nil)
 
-var Z_CountOf_Info = typeinfo.Flow{
-	Name: Z_CountOf_Type,
+var Z_CountOf_T = typeinfo.Flow{
+	Name: Z_CountOf_Name,
 	Lede: "count_of",
 	Terms: []typeinfo.Term{{
 		Name:  "trigger",
 		Label: "_",
-		Type:  &core.Z_Trigger_Info,
+		Type:  &core.Z_Trigger_T,
 	}, {
 		Name:  "num",
 		Label: "num",
-		Type:  &rtti.Z_NumberEval_Info,
+		Type:  &rtti.Z_NumberEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_BoolEval_Info,
+		&rtti.Z_BoolEval_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard gets checked."},
@@ -543,7 +543,7 @@ type FIX_CountOf_Slice []CountOf
 
 // implements typeinfo.Inspector
 func (*CountOf_Slice) Inspect() typeinfo.T {
-	return &Z_CountOf_Info
+	return &Z_CountOf_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -555,7 +555,7 @@ type FIX_CycleText struct {
 
 // implements typeinfo.Inspector
 func (*CycleText) Inspect() typeinfo.T {
-	return &Z_CycleText_Info
+	return &Z_CycleText_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -567,22 +567,22 @@ func (op *CycleText) GetMarkup(ensure bool) map[string]any {
 }
 
 // cycle_text, a type of flow.
-const Z_CycleText_Type = "cycle_text"
+const Z_CycleText_Name = "cycle_text"
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*CycleText)(nil)
 
-var Z_CycleText_Info = typeinfo.Flow{
-	Name: Z_CycleText_Type,
+var Z_CycleText_T = typeinfo.Flow{
+	Name: Z_CycleText_Name,
 	Lede: "cycle_text",
 	Terms: []typeinfo.Term{{
 		Name:    "parts",
 		Label:   "_",
 		Repeats: true,
-		Type:    &rtti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_Info,
+		&rtti.Z_TextEval_T,
 	},
 	Markup: map[string]any{
 		"comment": "When called multiple times, returns each of its inputs in turn.",
@@ -595,7 +595,7 @@ type FIX_CycleText_Slice []CycleText
 
 // implements typeinfo.Inspector
 func (*CycleText_Slice) Inspect() typeinfo.T {
-	return &Z_CycleText_Info
+	return &Z_CycleText_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -608,7 +608,7 @@ type FIX_DefineAlias struct {
 
 // implements typeinfo.Inspector
 func (*DefineAlias) Inspect() typeinfo.T {
-	return &Z_DefineAlias_Info
+	return &Z_DefineAlias_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -620,27 +620,27 @@ func (op *DefineAlias) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_alias, a type of flow.
-const Z_DefineAlias_Type = "define_alias"
+const Z_DefineAlias_Name = "define_alias"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DefineAlias)(nil)
 var _ StoryStatement = (*DefineAlias)(nil)
 
-var Z_DefineAlias_Info = typeinfo.Flow{
-	Name: Z_DefineAlias_Type,
+var Z_DefineAlias_T = typeinfo.Flow{
+	Name: Z_DefineAlias_Name,
 	Lede: "interpret",
 	Terms: []typeinfo.Term{{
 		Name:  "names",
 		Label: "alias",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "noun_name",
 		Label: "as",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
-		&Z_StoryStatement_Info,
+		&rtti.Z_Execute_T,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "allows the player to refer to a noun by one or more other terms.",
@@ -653,7 +653,7 @@ type FIX_DefineAlias_Slice []DefineAlias
 
 // implements typeinfo.Inspector
 func (*DefineAlias_Slice) Inspect() typeinfo.T {
-	return &Z_DefineAlias_Info
+	return &Z_DefineAlias_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -666,7 +666,7 @@ type FIX_DefineLeadingGrammar struct {
 
 // implements typeinfo.Inspector
 func (*DefineLeadingGrammar) Inspect() typeinfo.T {
-	return &Z_DefineLeadingGrammar_Info
+	return &Z_DefineLeadingGrammar_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -678,29 +678,29 @@ func (op *DefineLeadingGrammar) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_leading_grammar, a type of flow.
-const Z_DefineLeadingGrammar_Type = "define_leading_grammar"
+const Z_DefineLeadingGrammar_Name = "define_leading_grammar"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DefineLeadingGrammar)(nil)
 var _ StoryStatement = (*DefineLeadingGrammar)(nil)
 
-var Z_DefineLeadingGrammar_Info = typeinfo.Flow{
-	Name: Z_DefineLeadingGrammar_Type,
+var Z_DefineLeadingGrammar_T = typeinfo.Flow{
+	Name: Z_DefineLeadingGrammar_Name,
 	Lede: "interpret",
 	Terms: []typeinfo.Term{{
 		Name:    "lede",
 		Label:   "_",
 		Repeats: true,
-		Type:    &prim.Z_Text_Info,
+		Type:    &prim.Z_Text_T,
 	}, {
 		Name:    "scans",
 		Label:   "with",
 		Repeats: true,
-		Type:    &grammar.Z_ScannerMaker_Info,
+		Type:    &grammar.Z_ScannerMaker_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
-		&Z_StoryStatement_Info,
+		&rtti.Z_Execute_T,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "starts a parser scanner.",
@@ -713,7 +713,7 @@ type FIX_DefineLeadingGrammar_Slice []DefineLeadingGrammar
 
 // implements typeinfo.Inspector
 func (*DefineLeadingGrammar_Slice) Inspect() typeinfo.T {
-	return &Z_DefineLeadingGrammar_Info
+	return &Z_DefineLeadingGrammar_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -726,7 +726,7 @@ type FIX_DefineNamedGrammar struct {
 
 // implements typeinfo.Inspector
 func (*DefineNamedGrammar) Inspect() typeinfo.T {
-	return &Z_DefineNamedGrammar_Info
+	return &Z_DefineNamedGrammar_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -738,28 +738,28 @@ func (op *DefineNamedGrammar) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_named_grammar, a type of flow.
-const Z_DefineNamedGrammar_Type = "define_named_grammar"
+const Z_DefineNamedGrammar_Name = "define_named_grammar"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DefineNamedGrammar)(nil)
 var _ StoryStatement = (*DefineNamedGrammar)(nil)
 
-var Z_DefineNamedGrammar_Info = typeinfo.Flow{
-	Name: Z_DefineNamedGrammar_Type,
+var Z_DefineNamedGrammar_T = typeinfo.Flow{
+	Name: Z_DefineNamedGrammar_Name,
 	Lede: "interpret",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "name",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:    "scans",
 		Label:   "with",
 		Repeats: true,
-		Type:    &grammar.Z_ScannerMaker_Info,
+		Type:    &grammar.Z_ScannerMaker_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
-		&Z_StoryStatement_Info,
+		&rtti.Z_Execute_T,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "starts a parser scanner.",
@@ -772,7 +772,7 @@ type FIX_DefineNamedGrammar_Slice []DefineNamedGrammar
 
 // implements typeinfo.Inspector
 func (*DefineNamedGrammar_Slice) Inspect() typeinfo.T {
-	return &Z_DefineNamedGrammar_Info
+	return &Z_DefineNamedGrammar_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -786,7 +786,7 @@ type FIX_DefinePhrase struct {
 
 // implements typeinfo.Inspector
 func (*DefinePhrase) Inspect() typeinfo.T {
-	return &Z_DefinePhrase_Info
+	return &Z_DefinePhrase_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -798,30 +798,30 @@ func (op *DefinePhrase) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_phrase, a type of flow.
-const Z_DefinePhrase_Type = "define_phrase"
+const Z_DefinePhrase_Name = "define_phrase"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePhrase)(nil)
 
-var Z_DefinePhrase_Info = typeinfo.Flow{
-	Name: Z_DefinePhrase_Type,
+var Z_DefinePhrase_T = typeinfo.Flow{
+	Name: Z_DefinePhrase_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "phrase",
 		Label: "phrase",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "macro",
 		Label: "as_macro",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "reversed",
 		Label:    "reversed",
 		Optional: true,
-		Type:     &rtti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "Define a phrase that can be used with 'natural language' statements.",
@@ -834,7 +834,7 @@ type FIX_DefinePhrase_Slice []DefinePhrase
 
 // implements typeinfo.Inspector
 func (*DefinePhrase_Slice) Inspect() typeinfo.T {
-	return &Z_DefinePhrase_Info
+	return &Z_DefinePhrase_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -846,7 +846,7 @@ type FIX_DeclareStatement struct {
 
 // implements typeinfo.Inspector
 func (*DeclareStatement) Inspect() typeinfo.T {
-	return &Z_DeclareStatement_Info
+	return &Z_DeclareStatement_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -858,21 +858,21 @@ func (op *DeclareStatement) GetMarkup(ensure bool) map[string]any {
 }
 
 // declare_statement, a type of flow.
-const Z_DeclareStatement_Type = "declare_statement"
+const Z_DeclareStatement_Name = "declare_statement"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DeclareStatement)(nil)
 
-var Z_DeclareStatement_Info = typeinfo.Flow{
-	Name: Z_DeclareStatement_Type,
+var Z_DeclareStatement_T = typeinfo.Flow{
+	Name: Z_DeclareStatement_Name,
 	Lede: "declare",
 	Terms: []typeinfo.Term{{
 		Name:  "text",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "Simple english like definitions of nouns, kinds, and their relatives.",
@@ -885,7 +885,7 @@ type FIX_DeclareStatement_Slice []DeclareStatement
 
 // implements typeinfo.Inspector
 func (*DeclareStatement_Slice) Inspect() typeinfo.T {
-	return &Z_DeclareStatement_Info
+	return &Z_DeclareStatement_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -900,7 +900,7 @@ type FIX_DefineRelation struct {
 
 // implements typeinfo.Inspector
 func (*DefineRelation) Inspect() typeinfo.T {
-	return &Z_DefineRelation_Info
+	return &Z_DefineRelation_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -912,35 +912,35 @@ func (op *DefineRelation) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_relation, a type of flow.
-const Z_DefineRelation_Type = "define_relation"
+const Z_DefineRelation_Name = "define_relation"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineRelation)(nil)
 var _ rtti.Execute = (*DefineRelation)(nil)
 
-var Z_DefineRelation_Info = typeinfo.Flow{
-	Name: Z_DefineRelation_Type,
+var Z_DefineRelation_T = typeinfo.Flow{
+	Name: Z_DefineRelation_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "relation",
 		Label: "relation",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "kind",
 		Label: "kind",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "other_kind",
 		Label: "other_kind",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "cardinality",
 		Label: "cardinality",
-		Type:  &Z_RelationCardinality_Info,
+		Type:  &Z_RelationCardinality_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -950,7 +950,7 @@ type FIX_DefineRelation_Slice []DefineRelation
 
 // implements typeinfo.Inspector
 func (*DefineRelation_Slice) Inspect() typeinfo.T {
-	return &Z_DefineRelation_Info
+	return &Z_DefineRelation_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -963,7 +963,7 @@ type FIX_DefineFields struct {
 
 // implements typeinfo.Inspector
 func (*DefineFields) Inspect() typeinfo.T {
-	return &Z_DefineFields_Info
+	return &Z_DefineFields_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -975,28 +975,28 @@ func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_fields, a type of flow.
-const Z_DefineFields_Type = "define_fields"
+const Z_DefineFields_Name = "define_fields"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineFields)(nil)
 var _ rtti.Execute = (*DefineFields)(nil)
 
-var Z_DefineFields_Info = typeinfo.Flow{
-	Name: Z_DefineFields_Type,
+var Z_DefineFields_T = typeinfo.Flow{
+	Name: Z_DefineFields_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "kind",
 		Label: "kind",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:    "fields",
 		Label:   "fields",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Add properties to a kind",
@@ -1009,7 +1009,7 @@ type FIX_DefineFields_Slice []DefineFields
 
 // implements typeinfo.Inspector
 func (*DefineFields_Slice) Inspect() typeinfo.T {
-	return &Z_DefineFields_Info
+	return &Z_DefineFields_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1022,7 +1022,7 @@ type FIX_DefineKinds struct {
 
 // implements typeinfo.Inspector
 func (*DefineKinds) Inspect() typeinfo.T {
-	return &Z_DefineKinds_Info
+	return &Z_DefineKinds_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1034,27 +1034,27 @@ func (op *DefineKinds) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_kinds, a type of flow.
-const Z_DefineKinds_Type = "define_kinds"
+const Z_DefineKinds_Name = "define_kinds"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineKinds)(nil)
 var _ rtti.Execute = (*DefineKinds)(nil)
 
-var Z_DefineKinds_Info = typeinfo.Flow{
-	Name: Z_DefineKinds_Type,
+var Z_DefineKinds_T = typeinfo.Flow{
+	Name: Z_DefineKinds_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "kinds",
 		Label: "kinds",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "ancestor",
 		Label: "as",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -1064,7 +1064,7 @@ type FIX_DefineKinds_Slice []DefineKinds
 
 // implements typeinfo.Inspector
 func (*DefineKinds_Slice) Inspect() typeinfo.T {
-	return &Z_DefineKinds_Info
+	return &Z_DefineKinds_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1077,7 +1077,7 @@ type FIX_MakeOpposite struct {
 
 // implements typeinfo.Inspector
 func (*MakeOpposite) Inspect() typeinfo.T {
-	return &Z_MakeOpposite_Info
+	return &Z_MakeOpposite_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1089,27 +1089,27 @@ func (op *MakeOpposite) GetMarkup(ensure bool) map[string]any {
 }
 
 // make_opposite, a type of flow.
-const Z_MakeOpposite_Type = "make_opposite"
+const Z_MakeOpposite_Name = "make_opposite"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*MakeOpposite)(nil)
 var _ rtti.Execute = (*MakeOpposite)(nil)
 
-var Z_MakeOpposite_Info = typeinfo.Flow{
-	Name: Z_MakeOpposite_Type,
+var Z_MakeOpposite_T = typeinfo.Flow{
+	Name: Z_MakeOpposite_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "word",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "opposite",
 		Label: "opposite",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "The opposite of east is west.",
@@ -1122,7 +1122,7 @@ type FIX_MakeOpposite_Slice []MakeOpposite
 
 // implements typeinfo.Inspector
 func (*MakeOpposite_Slice) Inspect() typeinfo.T {
-	return &Z_MakeOpposite_Info
+	return &Z_MakeOpposite_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1135,7 +1135,7 @@ type FIX_MakePlural struct {
 
 // implements typeinfo.Inspector
 func (*MakePlural) Inspect() typeinfo.T {
-	return &Z_MakePlural_Info
+	return &Z_MakePlural_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1147,27 +1147,27 @@ func (op *MakePlural) GetMarkup(ensure bool) map[string]any {
 }
 
 // make_plural, a type of flow.
-const Z_MakePlural_Type = "make_plural"
+const Z_MakePlural_Name = "make_plural"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*MakePlural)(nil)
 var _ rtti.Execute = (*MakePlural)(nil)
 
-var Z_MakePlural_Info = typeinfo.Flow{
-	Name: Z_MakePlural_Type,
+var Z_MakePlural_T = typeinfo.Flow{
+	Name: Z_MakePlural_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "singular",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "plural",
 		Label: "plural",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"The plural of person is people.", "The plural of person is persons."},
@@ -1180,7 +1180,7 @@ type FIX_MakePlural_Slice []MakePlural
 
 // implements typeinfo.Inspector
 func (*MakePlural_Slice) Inspect() typeinfo.T {
-	return &Z_MakePlural_Info
+	return &Z_MakePlural_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1195,7 +1195,7 @@ type FIX_MapDeparting struct {
 
 // implements typeinfo.Inspector
 func (*MapDeparting) Inspect() typeinfo.T {
-	return &Z_MapDeparting_Info
+	return &Z_MapDeparting_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1207,35 +1207,35 @@ func (op *MapDeparting) GetMarkup(ensure bool) map[string]any {
 }
 
 // map_departing, a type of flow.
-const Z_MapDeparting_Type = "map_departing"
+const Z_MapDeparting_Name = "map_departing"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*MapDeparting)(nil)
 var _ rtti.Execute = (*MapDeparting)(nil)
 
-var Z_MapDeparting_Info = typeinfo.Flow{
-	Name: Z_MapDeparting_Type,
+var Z_MapDeparting_T = typeinfo.Flow{
+	Name: Z_MapDeparting_Name,
 	Lede: "departing",
 	Terms: []typeinfo.Term{{
 		Name:  "room_name",
 		Label: "from",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "door_name",
 		Label: "via",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "map_connection",
 		Label: "and",
-		Type:  &Z_MapConnection_Info,
+		Type:  &Z_MapConnection_T,
 	}, {
 		Name:  "other_room_name",
 		Label: "other_room",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
@@ -1248,7 +1248,7 @@ type FIX_MapDeparting_Slice []MapDeparting
 
 // implements typeinfo.Inspector
 func (*MapDeparting_Slice) Inspect() typeinfo.T {
-	return &Z_MapDeparting_Info
+	return &Z_MapDeparting_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1264,7 +1264,7 @@ type FIX_MapHeading struct {
 
 // implements typeinfo.Inspector
 func (*MapHeading) Inspect() typeinfo.T {
-	return &Z_MapHeading_Info
+	return &Z_MapHeading_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1276,40 +1276,40 @@ func (op *MapHeading) GetMarkup(ensure bool) map[string]any {
 }
 
 // map_heading, a type of flow.
-const Z_MapHeading_Type = "map_heading"
+const Z_MapHeading_Name = "map_heading"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*MapHeading)(nil)
 var _ rtti.Execute = (*MapHeading)(nil)
 
-var Z_MapHeading_Info = typeinfo.Flow{
-	Name: Z_MapHeading_Type,
+var Z_MapHeading_T = typeinfo.Flow{
+	Name: Z_MapHeading_Name,
 	Lede: "heading",
 	Terms: []typeinfo.Term{{
 		Name:  "dir",
 		Label: "_",
-		Type:  &Z_MapDirection_Info,
+		Type:  &Z_MapDirection_T,
 	}, {
 		Name:  "room_name",
 		Label: "from",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "door_name",
 		Label:    "via",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:  "map_connection",
 		Label: "and",
-		Type:  &Z_MapConnection_Info,
+		Type:  &Z_MapConnection_T,
 	}, {
 		Name:  "other_room_name",
 		Label: "other_room",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
@@ -1322,7 +1322,7 @@ type FIX_MapHeading_Slice []MapHeading
 
 // implements typeinfo.Inspector
 func (*MapHeading_Slice) Inspect() typeinfo.T {
-	return &Z_MapHeading_Info
+	return &Z_MapHeading_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1336,7 +1336,7 @@ type FIX_DefineValue struct {
 
 // implements typeinfo.Inspector
 func (*DefineValue) Inspect() typeinfo.T {
-	return &Z_DefineValue_Info
+	return &Z_DefineValue_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1348,31 +1348,31 @@ func (op *DefineValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_value, a type of flow.
-const Z_DefineValue_Type = "define_value"
+const Z_DefineValue_Name = "define_value"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineValue)(nil)
 var _ rtti.Execute = (*DefineValue)(nil)
 
-var Z_DefineValue_Info = typeinfo.Flow{
-	Name: Z_DefineValue_Type,
+var Z_DefineValue_T = typeinfo.Flow{
+	Name: Z_DefineValue_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "field_name",
 		Label: "value",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "nouns",
 		Label: "of",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "value",
 		Label: "as",
-		Type:  &rtti.Z_Assignment_Info,
+		Type:  &rtti.Z_Assignment_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Assign a starting value to the field of one or nouns.",
@@ -1385,7 +1385,7 @@ type FIX_DefineValue_Slice []DefineValue
 
 // implements typeinfo.Inspector
 func (*DefineValue_Slice) Inspect() typeinfo.T {
-	return &Z_DefineValue_Info
+	return &Z_DefineValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1398,7 +1398,7 @@ type FIX_DefineNouns struct {
 
 // implements typeinfo.Inspector
 func (*DefineNouns) Inspect() typeinfo.T {
-	return &Z_DefineNouns_Info
+	return &Z_DefineNouns_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1410,27 +1410,27 @@ func (op *DefineNouns) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_nouns, a type of flow.
-const Z_DefineNouns_Type = "define_nouns"
+const Z_DefineNouns_Name = "define_nouns"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineNouns)(nil)
 var _ rtti.Execute = (*DefineNouns)(nil)
 
-var Z_DefineNouns_Info = typeinfo.Flow{
-	Name: Z_DefineNouns_Type,
+var Z_DefineNouns_T = typeinfo.Flow{
+	Name: Z_DefineNouns_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "nouns",
 		Label: "nouns",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "kind",
 		Label: "as",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -1440,7 +1440,7 @@ type FIX_DefineNouns_Slice []DefineNouns
 
 // implements typeinfo.Inspector
 func (*DefineNouns_Slice) Inspect() typeinfo.T {
-	return &Z_DefineNouns_Info
+	return &Z_DefineNouns_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1453,7 +1453,7 @@ type FIX_DefineNounTraits struct {
 
 // implements typeinfo.Inspector
 func (*DefineNounTraits) Inspect() typeinfo.T {
-	return &Z_DefineNounTraits_Info
+	return &Z_DefineNounTraits_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1465,27 +1465,27 @@ func (op *DefineNounTraits) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_noun_traits, a type of flow.
-const Z_DefineNounTraits_Type = "define_noun_traits"
+const Z_DefineNounTraits_Name = "define_noun_traits"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineNounTraits)(nil)
 var _ rtti.Execute = (*DefineNounTraits)(nil)
 
-var Z_DefineNounTraits_Info = typeinfo.Flow{
-	Name: Z_DefineNounTraits_Type,
+var Z_DefineNounTraits_T = typeinfo.Flow{
+	Name: Z_DefineNounTraits_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "nouns",
 		Label: "nouns",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "traits",
 		Label: "traits",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -1495,7 +1495,7 @@ type FIX_DefineNounTraits_Slice []DefineNounTraits
 
 // implements typeinfo.Inspector
 func (*DefineNounTraits_Slice) Inspect() typeinfo.T {
-	return &Z_DefineNounTraits_Info
+	return &Z_DefineNounTraits_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1509,7 +1509,7 @@ type FIX_NumListField struct {
 
 // implements typeinfo.Inspector
 func (*NumListField) Inspect() typeinfo.T {
-	return &Z_NumListField_Info
+	return &Z_NumListField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1521,31 +1521,31 @@ func (op *NumListField) GetMarkup(ensure bool) map[string]any {
 }
 
 // num_list_field, a type of flow.
-const Z_NumListField_Type = "num_list_field"
+const Z_NumListField_Name = "num_list_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*NumListField)(nil)
 
-var Z_NumListField_Info = typeinfo.Flow{
-	Name: Z_NumListField_Type,
+var Z_NumListField_T = typeinfo.Flow{
+	Name: Z_NumListField_Name,
 	Lede: "num_list",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_NumListEval_Info,
+		Type:     &rtti.Z_NumListEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -1555,7 +1555,7 @@ type FIX_NumListField_Slice []NumListField
 
 // implements typeinfo.Inspector
 func (*NumListField_Slice) Inspect() typeinfo.T {
-	return &Z_NumListField_Info
+	return &Z_NumListField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1569,7 +1569,7 @@ type FIX_NumberField struct {
 
 // implements typeinfo.Inspector
 func (*NumberField) Inspect() typeinfo.T {
-	return &Z_NumberField_Info
+	return &Z_NumberField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1581,31 +1581,31 @@ func (op *NumberField) GetMarkup(ensure bool) map[string]any {
 }
 
 // number_field, a type of flow.
-const Z_NumberField_Type = "number_field"
+const Z_NumberField_Name = "number_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*NumberField)(nil)
 
-var Z_NumberField_Info = typeinfo.Flow{
-	Name: Z_NumberField_Type,
+var Z_NumberField_T = typeinfo.Flow{
+	Name: Z_NumberField_Name,
 	Lede: "number",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_NumberEval_Info,
+		Type:     &rtti.Z_NumberEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -1615,7 +1615,7 @@ type FIX_NumberField_Slice []NumberField
 
 // implements typeinfo.Inspector
 func (*NumberField_Slice) Inspect() typeinfo.T {
-	return &Z_NumberField_Info
+	return &Z_NumberField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1628,7 +1628,7 @@ type FIX_RuleProvides struct {
 
 // implements typeinfo.Inspector
 func (*RuleProvides) Inspect() typeinfo.T {
-	return &Z_RuleProvides_Info
+	return &Z_RuleProvides_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1640,28 +1640,28 @@ func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 }
 
 // rule_provides, a type of flow.
-const Z_RuleProvides_Type = "rule_provides"
+const Z_RuleProvides_Name = "rule_provides"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleProvides)(nil)
 var _ rtti.Execute = (*RuleProvides)(nil)
 
-var Z_RuleProvides_Info = typeinfo.Flow{
-	Name: Z_RuleProvides_Type,
+var Z_RuleProvides_T = typeinfo.Flow{
+	Name: Z_RuleProvides_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "pattern_name",
 		Label: "rule",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:    "provides",
 		Label:   "provides",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 }
 
@@ -1671,7 +1671,7 @@ type FIX_RuleProvides_Slice []RuleProvides
 
 // implements typeinfo.Inspector
 func (*RuleProvides_Slice) Inspect() typeinfo.T {
-	return &Z_RuleProvides_Info
+	return &Z_RuleProvides_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1685,7 +1685,7 @@ type FIX_RuleForPattern struct {
 
 // implements typeinfo.Inspector
 func (*RuleForPattern) Inspect() typeinfo.T {
-	return &Z_RuleForPattern_Info
+	return &Z_RuleForPattern_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1697,33 +1697,33 @@ func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 }
 
 // rule_for_pattern, a type of flow.
-const Z_RuleForPattern_Type = "rule_for_pattern"
+const Z_RuleForPattern_Name = "rule_for_pattern"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForPattern)(nil)
 var _ rtti.Execute = (*RuleForPattern)(nil)
 
-var Z_RuleForPattern_Info = typeinfo.Flow{
-	Name: Z_RuleForPattern_Type,
+var Z_RuleForPattern_T = typeinfo.Flow{
+	Name: Z_RuleForPattern_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "pattern_name",
 		Label: "rule",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "rule_name",
 		Label:    "named",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rtti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Change the behavior of an existing pattern.", "For events, this adds a listener that responds to the targeted object only when triggered by the player.", "By default, rules with filters continue on to the next rule automatically.", "Because event listeners have filters they continue to the next listener unless specifically stopped."},
@@ -1736,7 +1736,7 @@ type FIX_RuleForPattern_Slice []RuleForPattern
 
 // implements typeinfo.Inspector
 func (*RuleForPattern_Slice) Inspect() typeinfo.T {
-	return &Z_RuleForPattern_Info
+	return &Z_RuleForPattern_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1751,7 +1751,7 @@ type FIX_RuleForNoun struct {
 
 // implements typeinfo.Inspector
 func (*RuleForNoun) Inspect() typeinfo.T {
-	return &Z_RuleForNoun_Info
+	return &Z_RuleForNoun_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1763,37 +1763,37 @@ func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 }
 
 // rule_for_noun, a type of flow.
-const Z_RuleForNoun_Type = "rule_for_noun"
+const Z_RuleForNoun_Name = "rule_for_noun"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForNoun)(nil)
 var _ rtti.Execute = (*RuleForNoun)(nil)
 
-var Z_RuleForNoun_Info = typeinfo.Flow{
-	Name: Z_RuleForNoun_Type,
+var Z_RuleForNoun_T = typeinfo.Flow{
+	Name: Z_RuleForNoun_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "pattern_name",
 		Label: "rule",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "noun_name",
 		Label: "noun",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "rule_name",
 		Label:    "named",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rtti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
@@ -1806,7 +1806,7 @@ type FIX_RuleForNoun_Slice []RuleForNoun
 
 // implements typeinfo.Inspector
 func (*RuleForNoun_Slice) Inspect() typeinfo.T {
-	return &Z_RuleForNoun_Info
+	return &Z_RuleForNoun_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1822,7 +1822,7 @@ type FIX_RuleForKind struct {
 
 // implements typeinfo.Inspector
 func (*RuleForKind) Inspect() typeinfo.T {
-	return &Z_RuleForKind_Info
+	return &Z_RuleForKind_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1834,42 +1834,42 @@ func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 }
 
 // rule_for_kind, a type of flow.
-const Z_RuleForKind_Type = "rule_for_kind"
+const Z_RuleForKind_Name = "rule_for_kind"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForKind)(nil)
 var _ rtti.Execute = (*RuleForKind)(nil)
 
-var Z_RuleForKind_Info = typeinfo.Flow{
-	Name: Z_RuleForKind_Type,
+var Z_RuleForKind_T = typeinfo.Flow{
+	Name: Z_RuleForKind_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "pattern_name",
 		Label: "rule",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "kind_name",
 		Label: "kind",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "exactly",
 		Label:    "exactly",
 		Optional: true,
-		Type:     &rtti.Z_BoolEval_Info,
+		Type:     &rtti.Z_BoolEval_T,
 	}, {
 		Name:     "rule_name",
 		Label:    "named",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:    "exe",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rtti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
@@ -1882,7 +1882,7 @@ type FIX_RuleForKind_Slice []RuleForKind
 
 // implements typeinfo.Inspector
 func (*RuleForKind_Slice) Inspect() typeinfo.T {
-	return &Z_RuleForKind_Info
+	return &Z_RuleForKind_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1897,7 +1897,7 @@ type FIX_DefineMacro struct {
 
 // implements typeinfo.Inspector
 func (*DefineMacro) Inspect() typeinfo.T {
-	return &Z_DefineMacro_Info
+	return &Z_DefineMacro_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1909,38 +1909,38 @@ func (op *DefineMacro) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_macro, a type of flow.
-const Z_DefineMacro_Type = "define_macro"
+const Z_DefineMacro_Name = "define_macro"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineMacro)(nil)
 var _ rtti.Execute = (*DefineMacro)(nil)
 
-var Z_DefineMacro_Info = typeinfo.Flow{
-	Name: Z_DefineMacro_Type,
+var Z_DefineMacro_T = typeinfo.Flow{
+	Name: Z_DefineMacro_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "macro_name",
 		Label: "macro",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:    "requires",
 		Label:   "requires",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}, {
 		Name:    "provides",
 		Label:   "provides",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}, {
 		Name:    "macro_statements",
 		Label:   "do",
 		Repeats: true,
-		Type:    &rtti.Z_Execute_Info,
+		Type:    &rtti.Z_Execute_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Declare a function which can produce statements about the game world.", "They are processed at import time, and they cannot call patterns", "nor can patterns -- which are processed during play -- call macros.", "Unlike patterns, they cannot be extended; the entire definition must live in one place."},
@@ -1953,7 +1953,7 @@ type FIX_DefineMacro_Slice []DefineMacro
 
 // implements typeinfo.Inspector
 func (*DefineMacro_Slice) Inspect() typeinfo.T {
-	return &Z_DefineMacro_Info
+	return &Z_DefineMacro_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1966,7 +1966,7 @@ type FIX_CallMacro struct {
 
 // implements typeinfo.Inspector
 func (*CallMacro) Inspect() typeinfo.T {
-	return &Z_CallMacro_Info
+	return &Z_CallMacro_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1978,7 +1978,7 @@ func (op *CallMacro) GetMarkup(ensure bool) map[string]any {
 }
 
 // call_macro, a type of flow.
-const Z_CallMacro_Type = "call_macro"
+const Z_CallMacro_Name = "call_macro"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*CallMacro)(nil)
@@ -1991,29 +1991,29 @@ var _ rtti.TextListEval = (*CallMacro)(nil)
 var _ rtti.RecordListEval = (*CallMacro)(nil)
 var _ StoryStatement = (*CallMacro)(nil)
 
-var Z_CallMacro_Info = typeinfo.Flow{
-	Name: Z_CallMacro_Type,
+var Z_CallMacro_T = typeinfo.Flow{
+	Name: Z_CallMacro_Name,
 	Lede: "call",
 	Terms: []typeinfo.Term{{
 		Name:  "macro_name",
 		Label: "macro",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:    "arguments",
 		Label:   "args",
 		Repeats: true,
-		Type:    &assign.Z_Arg_Info,
+		Type:    &assign.Z_Arg_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
-		&rtti.Z_BoolEval_Info,
-		&rtti.Z_NumberEval_Info,
-		&rtti.Z_TextEval_Info,
-		&rtti.Z_RecordEval_Info,
-		&rtti.Z_NumListEval_Info,
-		&rtti.Z_TextListEval_Info,
-		&rtti.Z_RecordListEval_Info,
-		&Z_StoryStatement_Info,
+		&rtti.Z_Execute_T,
+		&rtti.Z_BoolEval_T,
+		&rtti.Z_NumberEval_T,
+		&rtti.Z_TextEval_T,
+		&rtti.Z_RecordEval_T,
+		&rtti.Z_NumListEval_T,
+		&rtti.Z_TextListEval_T,
+		&rtti.Z_RecordListEval_T,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": "Executes a macro, and potentially returns a value.",
@@ -2026,7 +2026,7 @@ type FIX_CallMacro_Slice []CallMacro
 
 // implements typeinfo.Inspector
 func (*CallMacro_Slice) Inspect() typeinfo.T {
-	return &Z_CallMacro_Info
+	return &Z_CallMacro_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2041,7 +2041,7 @@ type FIX_DefinePattern struct {
 
 // implements typeinfo.Inspector
 func (*DefinePattern) Inspect() typeinfo.T {
-	return &Z_DefinePattern_Info
+	return &Z_DefinePattern_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2053,39 +2053,39 @@ func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_pattern, a type of flow.
-const Z_DefinePattern_Type = "define_pattern"
+const Z_DefinePattern_Name = "define_pattern"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePattern)(nil)
 var _ rtti.Execute = (*DefinePattern)(nil)
 
-var Z_DefinePattern_Info = typeinfo.Flow{
-	Name: Z_DefinePattern_Type,
+var Z_DefinePattern_T = typeinfo.Flow{
+	Name: Z_DefinePattern_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "pattern_name",
 		Label: "pattern",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:    "requires",
 		Label:   "requires",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}, {
 		Name:    "provides",
 		Label:   "provides",
 		Repeats: true,
-		Type:    &Z_FieldDefinition_Info,
+		Type:    &Z_FieldDefinition_T,
 	}, {
 		Name:     "exe",
 		Label:    "do",
 		Optional: true,
 		Repeats:  true,
-		Type:     &rtti.Z_Execute_Info,
+		Type:     &rtti.Z_Execute_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Declare a new pattern.", "A pattern is a bundle of functions which can either change the game world or provide information about it.", "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."},
@@ -2098,7 +2098,7 @@ type FIX_DefinePattern_Slice []DefinePattern
 
 // implements typeinfo.Inspector
 func (*DefinePattern_Slice) Inspect() typeinfo.T {
-	return &Z_DefinePattern_Info
+	return &Z_DefinePattern_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2112,7 +2112,7 @@ type FIX_RecordListField struct {
 
 // implements typeinfo.Inspector
 func (*RecordListField) Inspect() typeinfo.T {
-	return &Z_RecordListField_Info
+	return &Z_RecordListField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2124,31 +2124,31 @@ func (op *RecordListField) GetMarkup(ensure bool) map[string]any {
 }
 
 // record_list_field, a type of flow.
-const Z_RecordListField_Type = "record_list_field"
+const Z_RecordListField_Name = "record_list_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*RecordListField)(nil)
 
-var Z_RecordListField_Info = typeinfo.Flow{
-	Name: Z_RecordListField_Type,
+var Z_RecordListField_T = typeinfo.Flow{
+	Name: Z_RecordListField_Name,
 	Lede: "record_list",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_RecordListEval_Info,
+		Type:     &rtti.Z_RecordListEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -2158,7 +2158,7 @@ type FIX_RecordListField_Slice []RecordListField
 
 // implements typeinfo.Inspector
 func (*RecordListField_Slice) Inspect() typeinfo.T {
-	return &Z_RecordListField_Info
+	return &Z_RecordListField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2172,7 +2172,7 @@ type FIX_RecordField struct {
 
 // implements typeinfo.Inspector
 func (*RecordField) Inspect() typeinfo.T {
-	return &Z_RecordField_Info
+	return &Z_RecordField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2184,31 +2184,31 @@ func (op *RecordField) GetMarkup(ensure bool) map[string]any {
 }
 
 // record_field, a type of flow.
-const Z_RecordField_Type = "record_field"
+const Z_RecordField_Name = "record_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*RecordField)(nil)
 
-var Z_RecordField_Info = typeinfo.Flow{
-	Name: Z_RecordField_Type,
+var Z_RecordField_T = typeinfo.Flow{
+	Name: Z_RecordField_Name,
 	Lede: "record",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_RecordEval_Info,
+		Type:     &rtti.Z_RecordEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -2218,7 +2218,7 @@ type FIX_RecordField_Slice []RecordField
 
 // implements typeinfo.Inspector
 func (*RecordField_Slice) Inspect() typeinfo.T {
-	return &Z_RecordField_Info
+	return &Z_RecordField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2232,7 +2232,7 @@ type FIX_DefineRelatives struct {
 
 // implements typeinfo.Inspector
 func (*DefineRelatives) Inspect() typeinfo.T {
-	return &Z_DefineRelatives_Info
+	return &Z_DefineRelatives_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2244,31 +2244,31 @@ func (op *DefineRelatives) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_relatives, a type of flow.
-const Z_DefineRelatives_Type = "define_relatives"
+const Z_DefineRelatives_Name = "define_relatives"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineRelatives)(nil)
 var _ rtti.Execute = (*DefineRelatives)(nil)
 
-var Z_DefineRelatives_Info = typeinfo.Flow{
-	Name: Z_DefineRelatives_Type,
+var Z_DefineRelatives_T = typeinfo.Flow{
+	Name: Z_DefineRelatives_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "nouns",
 		Label: "nouns",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "relation",
 		Label: "relative_to",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "other_nouns",
 		Label: "other_nouns",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Relate nouns to each other",
@@ -2281,7 +2281,7 @@ type FIX_DefineRelatives_Slice []DefineRelatives
 
 // implements typeinfo.Inspector
 func (*DefineRelatives_Slice) Inspect() typeinfo.T {
-	return &Z_DefineRelatives_Info
+	return &Z_DefineRelatives_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2295,7 +2295,7 @@ type FIX_DefineOtherRelatives struct {
 
 // implements typeinfo.Inspector
 func (*DefineOtherRelatives) Inspect() typeinfo.T {
-	return &Z_DefineOtherRelatives_Info
+	return &Z_DefineOtherRelatives_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2307,31 +2307,31 @@ func (op *DefineOtherRelatives) GetMarkup(ensure bool) map[string]any {
 }
 
 // define_other_relatives, a type of flow.
-const Z_DefineOtherRelatives_Type = "define_other_relatives"
+const Z_DefineOtherRelatives_Name = "define_other_relatives"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineOtherRelatives)(nil)
 var _ rtti.Execute = (*DefineOtherRelatives)(nil)
 
-var Z_DefineOtherRelatives_Info = typeinfo.Flow{
-	Name: Z_DefineOtherRelatives_Type,
+var Z_DefineOtherRelatives_T = typeinfo.Flow{
+	Name: Z_DefineOtherRelatives_Name,
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name:  "relation",
 		Label: "relative_to",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:  "nouns",
 		Label: "nouns",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}, {
 		Name:  "other_nouns",
 		Label: "other_nouns",
-		Type:  &rtti.Z_TextListEval_Info,
+		Type:  &rtti.Z_TextListEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
-		&rtti.Z_Execute_Info,
+		&Z_StoryStatement_T,
+		&rtti.Z_Execute_T,
 	},
 	Markup: map[string]any{
 		"comment": "Relate nouns to each other",
@@ -2344,7 +2344,7 @@ type FIX_DefineOtherRelatives_Slice []DefineOtherRelatives
 
 // implements typeinfo.Inspector
 func (*DefineOtherRelatives_Slice) Inspect() typeinfo.T {
-	return &Z_DefineOtherRelatives_Info
+	return &Z_DefineOtherRelatives_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2356,7 +2356,7 @@ type FIX_SayTemplate struct {
 
 // implements typeinfo.Inspector
 func (*SayTemplate) Inspect() typeinfo.T {
-	return &Z_SayTemplate_Info
+	return &Z_SayTemplate_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2368,23 +2368,23 @@ func (op *SayTemplate) GetMarkup(ensure bool) map[string]any {
 }
 
 // say_template, a type of flow.
-const Z_SayTemplate_Type = "say_template"
+const Z_SayTemplate_Name = "say_template"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SayTemplate)(nil)
 var _ rtti.TextEval = (*SayTemplate)(nil)
 
-var Z_SayTemplate_Info = typeinfo.Flow{
-	Name: Z_SayTemplate_Type,
+var Z_SayTemplate_T = typeinfo.Flow{
+	Name: Z_SayTemplate_Name,
 	Lede: "say",
 	Terms: []typeinfo.Term{{
 		Name:  "template",
 		Label: "_",
-		Type:  &prim.Z_Lines_Info,
+		Type:  &prim.Z_Lines_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
-		&rtti.Z_TextEval_Info,
+		&rtti.Z_Execute_T,
+		&rtti.Z_TextEval_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Used for displaying text to the player.", "The text can contain 'inline-templates';", "mini-commands that help to simplify printing text.", "See also: https://github.com/ionous/iffy/wiki/Templates.", "( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )"},
@@ -2397,7 +2397,7 @@ type FIX_SayTemplate_Slice []SayTemplate
 
 // implements typeinfo.Inspector
 func (*SayTemplate_Slice) Inspect() typeinfo.T {
-	return &Z_SayTemplate_Info
+	return &Z_SayTemplate_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2410,7 +2410,7 @@ type FIX_SayResponse struct {
 
 // implements typeinfo.Inspector
 func (*SayResponse) Inspect() typeinfo.T {
-	return &Z_SayResponse_Info
+	return &Z_SayResponse_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2422,27 +2422,27 @@ func (op *SayResponse) GetMarkup(ensure bool) map[string]any {
 }
 
 // say_response, a type of flow.
-const Z_SayResponse_Type = "say_response"
+const Z_SayResponse_Name = "say_response"
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SayResponse)(nil)
 var _ rtti.TextEval = (*SayResponse)(nil)
 
-var Z_SayResponse_Info = typeinfo.Flow{
-	Name: Z_SayResponse_Type,
+var Z_SayResponse_T = typeinfo.Flow{
+	Name: Z_SayResponse_Name,
 	Lede: "say",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "response",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:  "text",
 		Label: "with",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_Execute_Info,
-		&rtti.Z_TextEval_Info,
+		&rtti.Z_Execute_T,
+		&rtti.Z_TextEval_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"Generate text in a replaceable manner.", "( note: this is transformed for the runtime into a named 'RenderResponse'. )"},
@@ -2455,7 +2455,7 @@ type FIX_SayResponse_Slice []SayResponse
 
 // implements typeinfo.Inspector
 func (*SayResponse_Slice) Inspect() typeinfo.T {
-	return &Z_SayResponse_Info
+	return &Z_SayResponse_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2467,7 +2467,7 @@ type FIX_ShuffleText struct {
 
 // implements typeinfo.Inspector
 func (*ShuffleText) Inspect() typeinfo.T {
-	return &Z_ShuffleText_Info
+	return &Z_ShuffleText_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2479,22 +2479,22 @@ func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
 }
 
 // shuffle_text, a type of flow.
-const Z_ShuffleText_Type = "shuffle_text"
+const Z_ShuffleText_Name = "shuffle_text"
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*ShuffleText)(nil)
 
-var Z_ShuffleText_Info = typeinfo.Flow{
-	Name: Z_ShuffleText_Type,
+var Z_ShuffleText_T = typeinfo.Flow{
+	Name: Z_ShuffleText_Name,
 	Lede: "shuffle_text",
 	Terms: []typeinfo.Term{{
 		Name:    "parts",
 		Label:   "_",
 		Repeats: true,
-		Type:    &rtti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_Info,
+		&rtti.Z_TextEval_T,
 	},
 	Markup: map[string]any{
 		"comment": "When called multiple times returns its inputs at random.",
@@ -2507,7 +2507,7 @@ type FIX_ShuffleText_Slice []ShuffleText
 
 // implements typeinfo.Inspector
 func (*ShuffleText_Slice) Inspect() typeinfo.T {
-	return &Z_ShuffleText_Info
+	return &Z_ShuffleText_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2519,7 +2519,7 @@ type FIX_StoppingText struct {
 
 // implements typeinfo.Inspector
 func (*StoppingText) Inspect() typeinfo.T {
-	return &Z_StoppingText_Info
+	return &Z_StoppingText_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2531,22 +2531,22 @@ func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
 }
 
 // stopping_text, a type of flow.
-const Z_StoppingText_Type = "stopping_text"
+const Z_StoppingText_Name = "stopping_text"
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*StoppingText)(nil)
 
-var Z_StoppingText_Info = typeinfo.Flow{
-	Name: Z_StoppingText_Type,
+var Z_StoppingText_T = typeinfo.Flow{
+	Name: Z_StoppingText_Name,
 	Lede: "stopping_text",
 	Terms: []typeinfo.Term{{
 		Name:    "parts",
 		Label:   "_",
 		Repeats: true,
-		Type:    &rtti.Z_TextEval_Info,
+		Type:    &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_Info,
+		&rtti.Z_TextEval_T,
 	},
 	Markup: map[string]any{
 		"comment": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
@@ -2559,7 +2559,7 @@ type FIX_StoppingText_Slice []StoppingText
 
 // implements typeinfo.Inspector
 func (*StoppingText_Slice) Inspect() typeinfo.T {
-	return &Z_StoppingText_Info
+	return &Z_StoppingText_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2570,7 +2570,7 @@ type FIX_StoryBreak struct {
 
 // implements typeinfo.Inspector
 func (*StoryBreak) Inspect() typeinfo.T {
-	return &Z_StoryBreak_Info
+	return &Z_StoryBreak_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2582,17 +2582,17 @@ func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
 }
 
 // story_break, a type of flow.
-const Z_StoryBreak_Type = "story_break"
+const Z_StoryBreak_Name = "story_break"
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*StoryBreak)(nil)
 
-var Z_StoryBreak_Info = typeinfo.Flow{
-	Name:  Z_StoryBreak_Type,
+var Z_StoryBreak_T = typeinfo.Flow{
+	Name:  Z_StoryBreak_Name,
 	Lede:  "--",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&Z_StoryStatement_Info,
+		&Z_StoryStatement_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: debug.do_nothing"},
@@ -2605,7 +2605,7 @@ type FIX_StoryBreak_Slice []StoryBreak
 
 // implements typeinfo.Inspector
 func (*StoryBreak_Slice) Inspect() typeinfo.T {
-	return &Z_StoryBreak_Info
+	return &Z_StoryBreak_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2617,7 +2617,7 @@ type FIX_StoryFile struct {
 
 // implements typeinfo.Inspector
 func (*StoryFile) Inspect() typeinfo.T {
-	return &Z_StoryFile_Info
+	return &Z_StoryFile_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2629,20 +2629,21 @@ func (op *StoryFile) GetMarkup(ensure bool) map[string]any {
 }
 
 // story_file, a type of flow.
-const Z_StoryFile_Type = "story_file"
+const Z_StoryFile_Name = "story_file"
 
-var Z_StoryFile_Info = typeinfo.Flow{
-	Name: Z_StoryFile_Type,
+var Z_StoryFile_T = typeinfo.Flow{
+	Name: Z_StoryFile_Name,
 	Lede: "tapestry",
 	Terms: []typeinfo.Term{{
 		Name:    "story_statements",
 		Label:   "_",
 		Repeats: true,
-		Type:    &Z_StoryStatement_Info,
+		Type:    &Z_StoryStatement_T,
 	}},
 	Markup: map[string]any{
 		"blockly-color": "TAP_HUE_ROOT",
 		"comment":       "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
+		"mosaic-root":   true,
 	},
 }
 
@@ -2652,7 +2653,7 @@ type FIX_StoryFile_Slice []StoryFile
 
 // implements typeinfo.Inspector
 func (*StoryFile_Slice) Inspect() typeinfo.T {
-	return &Z_StoryFile_Info
+	return &Z_StoryFile_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2666,7 +2667,7 @@ type FIX_TextListField struct {
 
 // implements typeinfo.Inspector
 func (*TextListField) Inspect() typeinfo.T {
-	return &Z_TextListField_Info
+	return &Z_TextListField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2678,31 +2679,31 @@ func (op *TextListField) GetMarkup(ensure bool) map[string]any {
 }
 
 // text_list_field, a type of flow.
-const Z_TextListField_Type = "text_list_field"
+const Z_TextListField_Name = "text_list_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*TextListField)(nil)
 
-var Z_TextListField_Info = typeinfo.Flow{
-	Name: Z_TextListField_Type,
+var Z_TextListField_T = typeinfo.Flow{
+	Name: Z_TextListField_Name,
 	Lede: "text_list",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_TextListEval_Info,
+		Type:     &rtti.Z_TextListEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -2712,7 +2713,7 @@ type FIX_TextListField_Slice []TextListField
 
 // implements typeinfo.Inspector
 func (*TextListField_Slice) Inspect() typeinfo.T {
-	return &Z_TextListField_Info
+	return &Z_TextListField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2726,7 +2727,7 @@ type FIX_TextField struct {
 
 // implements typeinfo.Inspector
 func (*TextField) Inspect() typeinfo.T {
-	return &Z_TextField_Info
+	return &Z_TextField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2738,31 +2739,31 @@ func (op *TextField) GetMarkup(ensure bool) map[string]any {
 }
 
 // text_field, a type of flow.
-const Z_TextField_Type = "text_field"
+const Z_TextField_Name = "text_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*TextField)(nil)
 
-var Z_TextField_Info = typeinfo.Flow{
-	Name: Z_TextField_Type,
+var Z_TextField_T = typeinfo.Flow{
+	Name: Z_TextField_Name,
 	Lede: "text",
 	Terms: []typeinfo.Term{{
 		Name:  "name",
 		Label: "_",
-		Type:  &rtti.Z_TextEval_Info,
+		Type:  &rtti.Z_TextEval_T,
 	}, {
 		Name:     "type",
 		Label:    "kind",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}, {
 		Name:     "initially",
 		Label:    "initially",
 		Optional: true,
-		Type:     &rtti.Z_TextEval_Info,
+		Type:     &rtti.Z_TextEval_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 }
 
@@ -2772,7 +2773,7 @@ type FIX_TextField_Slice []TextField
 
 // implements typeinfo.Inspector
 func (*TextField_Slice) Inspect() typeinfo.T {
-	return &Z_TextField_Info
+	return &Z_TextField_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2783,7 +2784,7 @@ type FIX_NothingField struct {
 
 // implements typeinfo.Inspector
 func (*NothingField) Inspect() typeinfo.T {
-	return &Z_NothingField_Info
+	return &Z_NothingField_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2795,17 +2796,17 @@ func (op *NothingField) GetMarkup(ensure bool) map[string]any {
 }
 
 // nothing_field, a type of flow.
-const Z_NothingField_Type = "nothing_field"
+const Z_NothingField_Name = "nothing_field"
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*NothingField)(nil)
 
-var Z_NothingField_Info = typeinfo.Flow{
-	Name:  Z_NothingField_Type,
+var Z_NothingField_T = typeinfo.Flow{
+	Name:  Z_NothingField_Name,
 	Lede:  "nothing",
 	Terms: []typeinfo.Term{},
 	Slots: []*typeinfo.Slot{
-		&Z_FieldDefinition_Info,
+		&Z_FieldDefinition_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"A valueless field.", "Intended mainly for patterns which don't need to return a value."},
@@ -2818,19 +2819,19 @@ type FIX_NothingField_Slice []NothingField
 
 // implements typeinfo.Inspector
 func (*NothingField_Slice) Inspect() typeinfo.T {
-	return &Z_NothingField_Info
+	return &Z_NothingField_T
 }
 
 // map_connection, a type of str enum.
-const Z_MapConnection_Type = "map_connection"
+const Z_MapConnection_Name = "map_connection"
 
 const (
 	W_MapConnection_ArrivingAt   = "$ARRIVING_AT"
 	W_MapConnection_ConnectingTo = "$CONNECTING_TO"
 )
 
-var Z_MapConnection_Info = typeinfo.Str{
-	Name: Z_MapConnection_Type,
+var Z_MapConnection_T = typeinfo.Str{
+	Name: Z_MapConnection_Name,
 	Options: []string{
 		W_MapConnection_ArrivingAt,
 		W_MapConnection_ConnectingTo,
@@ -2841,17 +2842,17 @@ var Z_MapConnection_Info = typeinfo.Str{
 }
 
 // map_direction, a type of str.
-const Z_MapDirection_Type = "map_direction"
+const Z_MapDirection_Name = "map_direction"
 
-var Z_MapDirection_Info = typeinfo.Str{
-	Name: Z_MapDirection_Type,
+var Z_MapDirection_T = typeinfo.Str{
+	Name: Z_MapDirection_Name,
 	Markup: map[string]any{
 		"comment": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
 	},
 }
 
 // relation_cardinality, a type of str enum.
-const Z_RelationCardinality_Type = "relation_cardinality"
+const Z_RelationCardinality_Name = "relation_cardinality"
 
 const (
 	W_RelationCardinality_OneToOne   = "$ONE_TO_ONE"
@@ -2860,8 +2861,8 @@ const (
 	W_RelationCardinality_ManyToMany = "$MANY_TO_MANY"
 )
 
-var Z_RelationCardinality_Info = typeinfo.Str{
-	Name: Z_RelationCardinality_Type,
+var Z_RelationCardinality_T = typeinfo.Str{
+	Name: Z_RelationCardinality_Name,
 	Options: []string{
 		W_RelationCardinality_OneToOne,
 		W_RelationCardinality_OneToMany,
@@ -2875,62 +2876,70 @@ var Z_Types = typeinfo.TypeSet{
 	Name: "story",
 	Slot: z_slot_list,
 	Flow: z_flow_list,
+	Str:  z_str_list,
 }
 
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_FieldDefinition_Info,
-	&Z_StoryStatement_Info,
+	&Z_FieldDefinition_T,
+	&Z_StoryStatement_T,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_Comment_Info,
-	&Z_Test_Info,
-	&Z_DefineScene_Info,
-	&Z_DefineAction_Info,
-	&Z_DefineTraits_Info,
-	&Z_AspectField_Info,
-	&Z_BoolField_Info,
-	&Z_CountOf_Info,
-	&Z_CycleText_Info,
-	&Z_DefineAlias_Info,
-	&Z_DefineLeadingGrammar_Info,
-	&Z_DefineNamedGrammar_Info,
-	&Z_DefinePhrase_Info,
-	&Z_DeclareStatement_Info,
-	&Z_DefineRelation_Info,
-	&Z_DefineFields_Info,
-	&Z_DefineKinds_Info,
-	&Z_MakeOpposite_Info,
-	&Z_MakePlural_Info,
-	&Z_MapDeparting_Info,
-	&Z_MapHeading_Info,
-	&Z_DefineValue_Info,
-	&Z_DefineNouns_Info,
-	&Z_DefineNounTraits_Info,
-	&Z_NumListField_Info,
-	&Z_NumberField_Info,
-	&Z_RuleProvides_Info,
-	&Z_RuleForPattern_Info,
-	&Z_RuleForNoun_Info,
-	&Z_RuleForKind_Info,
-	&Z_DefineMacro_Info,
-	&Z_CallMacro_Info,
-	&Z_DefinePattern_Info,
-	&Z_RecordListField_Info,
-	&Z_RecordField_Info,
-	&Z_DefineRelatives_Info,
-	&Z_DefineOtherRelatives_Info,
-	&Z_SayTemplate_Info,
-	&Z_SayResponse_Info,
-	&Z_ShuffleText_Info,
-	&Z_StoppingText_Info,
-	&Z_StoryBreak_Info,
-	&Z_StoryFile_Info,
-	&Z_TextListField_Info,
-	&Z_TextField_Info,
-	&Z_NothingField_Info,
+	&Z_Comment_T,
+	&Z_Test_T,
+	&Z_DefineScene_T,
+	&Z_DefineAction_T,
+	&Z_DefineTraits_T,
+	&Z_AspectField_T,
+	&Z_BoolField_T,
+	&Z_CountOf_T,
+	&Z_CycleText_T,
+	&Z_DefineAlias_T,
+	&Z_DefineLeadingGrammar_T,
+	&Z_DefineNamedGrammar_T,
+	&Z_DefinePhrase_T,
+	&Z_DeclareStatement_T,
+	&Z_DefineRelation_T,
+	&Z_DefineFields_T,
+	&Z_DefineKinds_T,
+	&Z_MakeOpposite_T,
+	&Z_MakePlural_T,
+	&Z_MapDeparting_T,
+	&Z_MapHeading_T,
+	&Z_DefineValue_T,
+	&Z_DefineNouns_T,
+	&Z_DefineNounTraits_T,
+	&Z_NumListField_T,
+	&Z_NumberField_T,
+	&Z_RuleProvides_T,
+	&Z_RuleForPattern_T,
+	&Z_RuleForNoun_T,
+	&Z_RuleForKind_T,
+	&Z_DefineMacro_T,
+	&Z_CallMacro_T,
+	&Z_DefinePattern_T,
+	&Z_RecordListField_T,
+	&Z_RecordField_T,
+	&Z_DefineRelatives_T,
+	&Z_DefineOtherRelatives_T,
+	&Z_SayTemplate_T,
+	&Z_SayResponse_T,
+	&Z_ShuffleText_T,
+	&Z_StoppingText_T,
+	&Z_StoryBreak_T,
+	&Z_StoryFile_T,
+	&Z_TextListField_T,
+	&Z_TextField_T,
+	&Z_NothingField_T,
+}
+
+// a list of all strs in this this package
+var z_str_list = []*typeinfo.Str{
+	&Z_MapConnection_T,
+	&Z_MapDirection_T,
+	&Z_RelationCardinality_T,
 }

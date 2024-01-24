@@ -6,10 +6,10 @@ import (
 )
 
 // assignment, a type of slot.
-const Z_Assignment_Type = "assignment"
+const Z_Assignment_Name = "assignment"
 
-var Z_Assignment_Info = typeinfo.Slot{
-	Name: Z_Assignment_Type,
+var Z_Assignment_T = typeinfo.Slot{
+	Name: Z_Assignment_Name,
 	Markup: map[string]any{
 		"comment": "Reads from evals in a uniform manner for common functions.",
 	},
@@ -21,7 +21,7 @@ type Assignment_Slot struct{ Value Assignment }
 
 // implements typeinfo.Inspector for a single slot.
 func (*Assignment_Slot) Inspect() typeinfo.T {
-	return &Z_Assignment_Info
+	return &Z_Assignment_T
 }
 
 // holds a slice of slots
@@ -29,14 +29,14 @@ type Assignment_Slots []Assignment
 
 // implements typeinfo.Inspector for a series of slots.
 func (*Assignment_Slots) Inspect() typeinfo.T {
-	return &Z_Assignment_Info
+	return &Z_Assignment_T
 }
 
 // bool_eval, a type of slot.
-const Z_BoolEval_Type = "bool_eval"
+const Z_BoolEval_Name = "bool_eval"
 
-var Z_BoolEval_Info = typeinfo.Slot{
-	Name: Z_BoolEval_Type,
+var Z_BoolEval_T = typeinfo.Slot{
+	Name: Z_BoolEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "LOGIC_HUE",
 		"comment":       "Statements which return true/false values.",
@@ -49,7 +49,7 @@ type BoolEval_Slot struct{ Value BoolEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*BoolEval_Slot) Inspect() typeinfo.T {
-	return &Z_BoolEval_Info
+	return &Z_BoolEval_T
 }
 
 // holds a slice of slots
@@ -57,14 +57,14 @@ type BoolEval_Slots []BoolEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*BoolEval_Slots) Inspect() typeinfo.T {
-	return &Z_BoolEval_Info
+	return &Z_BoolEval_T
 }
 
 // execute, a type of slot.
-const Z_Execute_Type = "execute"
+const Z_Execute_Name = "execute"
 
-var Z_Execute_Info = typeinfo.Slot{
-	Name: Z_Execute_Type,
+var Z_Execute_T = typeinfo.Slot{
+	Name: Z_Execute_Name,
 	Markup: map[string]any{
 		"blockly-color": "PROCEDURES_HUE",
 		"blockly-stack": true,
@@ -78,7 +78,7 @@ type Execute_Slot struct{ Value Execute }
 
 // implements typeinfo.Inspector for a single slot.
 func (*Execute_Slot) Inspect() typeinfo.T {
-	return &Z_Execute_Info
+	return &Z_Execute_T
 }
 
 // holds a slice of slots
@@ -86,14 +86,14 @@ type Execute_Slots []Execute
 
 // implements typeinfo.Inspector for a series of slots.
 func (*Execute_Slots) Inspect() typeinfo.T {
-	return &Z_Execute_Info
+	return &Z_Execute_T
 }
 
 // num_list_eval, a type of slot.
-const Z_NumListEval_Type = "num_list_eval"
+const Z_NumListEval_Name = "num_list_eval"
 
-var Z_NumListEval_Info = typeinfo.Slot{
-	Name: Z_NumListEval_Type,
+var Z_NumListEval_T = typeinfo.Slot{
+	Name: Z_NumListEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
 		"comment":       "Statements which return a list of numbers.",
@@ -106,7 +106,7 @@ type NumListEval_Slot struct{ Value NumListEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*NumListEval_Slot) Inspect() typeinfo.T {
-	return &Z_NumListEval_Info
+	return &Z_NumListEval_T
 }
 
 // holds a slice of slots
@@ -114,14 +114,14 @@ type NumListEval_Slots []NumListEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*NumListEval_Slots) Inspect() typeinfo.T {
-	return &Z_NumListEval_Info
+	return &Z_NumListEval_T
 }
 
 // number_eval, a type of slot.
-const Z_NumberEval_Type = "number_eval"
+const Z_NumberEval_Name = "number_eval"
 
-var Z_NumberEval_Info = typeinfo.Slot{
-	Name: Z_NumberEval_Type,
+var Z_NumberEval_T = typeinfo.Slot{
+	Name: Z_NumberEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
 		"comment":       "Statements which return a number.",
@@ -134,7 +134,7 @@ type NumberEval_Slot struct{ Value NumberEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*NumberEval_Slot) Inspect() typeinfo.T {
-	return &Z_NumberEval_Info
+	return &Z_NumberEval_T
 }
 
 // holds a slice of slots
@@ -142,14 +142,14 @@ type NumberEval_Slots []NumberEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*NumberEval_Slots) Inspect() typeinfo.T {
-	return &Z_NumberEval_Info
+	return &Z_NumberEval_T
 }
 
 // text_eval, a type of slot.
-const Z_TextEval_Type = "text_eval"
+const Z_TextEval_Name = "text_eval"
 
-var Z_TextEval_Info = typeinfo.Slot{
-	Name: Z_TextEval_Type,
+var Z_TextEval_T = typeinfo.Slot{
+	Name: Z_TextEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "TEXTS_HUE",
 		"comment":       "Statements which return text.",
@@ -162,7 +162,7 @@ type TextEval_Slot struct{ Value TextEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*TextEval_Slot) Inspect() typeinfo.T {
-	return &Z_TextEval_Info
+	return &Z_TextEval_T
 }
 
 // holds a slice of slots
@@ -170,14 +170,14 @@ type TextEval_Slots []TextEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*TextEval_Slots) Inspect() typeinfo.T {
-	return &Z_TextEval_Info
+	return &Z_TextEval_T
 }
 
 // text_list_eval, a type of slot.
-const Z_TextListEval_Type = "text_list_eval"
+const Z_TextListEval_Name = "text_list_eval"
 
-var Z_TextListEval_Info = typeinfo.Slot{
-	Name: Z_TextListEval_Type,
+var Z_TextListEval_T = typeinfo.Slot{
+	Name: Z_TextListEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "TEXTS_HUE",
 		"comment":       "Statements which return a list of text.",
@@ -190,7 +190,7 @@ type TextListEval_Slot struct{ Value TextListEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*TextListEval_Slot) Inspect() typeinfo.T {
-	return &Z_TextListEval_Info
+	return &Z_TextListEval_T
 }
 
 // holds a slice of slots
@@ -198,14 +198,14 @@ type TextListEval_Slots []TextListEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*TextListEval_Slots) Inspect() typeinfo.T {
-	return &Z_TextListEval_Info
+	return &Z_TextListEval_T
 }
 
 // record_eval, a type of slot.
-const Z_RecordEval_Type = "record_eval"
+const Z_RecordEval_Name = "record_eval"
 
-var Z_RecordEval_Info = typeinfo.Slot{
-	Name: Z_RecordEval_Type,
+var Z_RecordEval_T = typeinfo.Slot{
+	Name: Z_RecordEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "LISTS_HUE",
 		"comment":       "Statements which return a record.",
@@ -218,7 +218,7 @@ type RecordEval_Slot struct{ Value RecordEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*RecordEval_Slot) Inspect() typeinfo.T {
-	return &Z_RecordEval_Info
+	return &Z_RecordEval_T
 }
 
 // holds a slice of slots
@@ -226,14 +226,14 @@ type RecordEval_Slots []RecordEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*RecordEval_Slots) Inspect() typeinfo.T {
-	return &Z_RecordEval_Info
+	return &Z_RecordEval_T
 }
 
 // record_list_eval, a type of slot.
-const Z_RecordListEval_Type = "record_list_eval"
+const Z_RecordListEval_Name = "record_list_eval"
 
-var Z_RecordListEval_Info = typeinfo.Slot{
-	Name: Z_RecordListEval_Type,
+var Z_RecordListEval_T = typeinfo.Slot{
+	Name: Z_RecordListEval_Name,
 	Markup: map[string]any{
 		"blockly-color": "LISTS_HUE",
 		"comment":       "Statements which return a list of records.",
@@ -246,7 +246,7 @@ type RecordListEval_Slot struct{ Value RecordListEval }
 
 // implements typeinfo.Inspector for a single slot.
 func (*RecordListEval_Slot) Inspect() typeinfo.T {
-	return &Z_RecordListEval_Info
+	return &Z_RecordListEval_T
 }
 
 // holds a slice of slots
@@ -254,7 +254,7 @@ type RecordListEval_Slots []RecordListEval
 
 // implements typeinfo.Inspector for a series of slots.
 func (*RecordListEval_Slots) Inspect() typeinfo.T {
-	return &Z_RecordListEval_Info
+	return &Z_RecordListEval_T
 }
 
 // package listing of type data
@@ -266,13 +266,13 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_Assignment_Info,
-	&Z_BoolEval_Info,
-	&Z_Execute_Info,
-	&Z_NumListEval_Info,
-	&Z_NumberEval_Info,
-	&Z_TextEval_Info,
-	&Z_TextListEval_Info,
-	&Z_RecordEval_Info,
-	&Z_RecordListEval_Info,
+	&Z_Assignment_T,
+	&Z_BoolEval_T,
+	&Z_Execute_T,
+	&Z_NumListEval_T,
+	&Z_NumberEval_T,
+	&Z_TextEval_T,
+	&Z_TextListEval_T,
+	&Z_RecordEval_T,
+	&Z_RecordListEval_T,
 }

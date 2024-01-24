@@ -91,6 +91,14 @@ func (q *Generator) Write(w io.Writer) (err error) {
 						Comment: "( ex. for reading blockly blocks )",
 						List:    g.Flow,
 					},
+					typeList{
+						Type: "str",
+						List: g.Str,
+					},
+					typeList{
+						Type: "num",
+						List: g.Num,
+					},
 				)
 			}
 		}
@@ -99,12 +107,12 @@ func (q *Generator) Write(w io.Writer) (err error) {
 }
 
 // writes a list of typeinfo references
-func (q *Generator) writeFooter(w io.Writer, name string, reg distill.Registry, slot, flow typeList) error {
+func (q *Generator) writeFooter(w io.Writer, name string, reg distill.Registry, types ...typeList) error {
 	return q.write(w, "footer", struct {
 		Name       string
-		Slot, Flow typeList
+		Types      []typeList
 		Signatures []distill.Sig
-	}{name, slot, flow, reg.Sigs})
+	}{name, types, reg.Sigs})
 }
 
 type typeList struct {

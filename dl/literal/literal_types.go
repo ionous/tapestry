@@ -8,10 +8,10 @@ import (
 )
 
 // literal_value, a type of slot.
-const Z_LiteralValue_Type = "literal_value"
+const Z_LiteralValue_Name = "literal_value"
 
-var Z_LiteralValue_Info = typeinfo.Slot{
-	Name: Z_LiteralValue_Type,
+var Z_LiteralValue_T = typeinfo.Slot{
+	Name: Z_LiteralValue_Name,
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
 		"comment":       "Slot for constant values.",
@@ -24,7 +24,7 @@ type FIX_LiteralValue_Slot struct{ Value LiteralValue }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_LiteralValue_Slot) Inspect() typeinfo.T {
-	return &Z_LiteralValue_Info
+	return &Z_LiteralValue_T
 }
 
 // holds a slice of slots
@@ -32,7 +32,7 @@ type LiteralValue_Slots []LiteralValue
 
 // implements typeinfo.Inspector for a series of slots.
 func (*LiteralValue_Slots) Inspect() typeinfo.T {
-	return &Z_LiteralValue_Info
+	return &Z_LiteralValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -45,7 +45,7 @@ type FIX_BoolValue struct {
 
 // implements typeinfo.Inspector
 func (*BoolValue) Inspect() typeinfo.T {
-	return &Z_BoolValue_Info
+	return &Z_BoolValue_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -57,28 +57,28 @@ func (op *BoolValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // bool_value, a type of flow.
-const Z_BoolValue_Type = "bool_value"
+const Z_BoolValue_Name = "bool_value"
 
 // ensure the command implements its specified slots:
 var _ rtti.BoolEval = (*BoolValue)(nil)
 var _ LiteralValue = (*BoolValue)(nil)
 
-var Z_BoolValue_Info = typeinfo.Flow{
-	Name: Z_BoolValue_Type,
+var Z_BoolValue_T = typeinfo.Flow{
+	Name: Z_BoolValue_Name,
 	Lede: "bool",
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "value",
-		Type:  &prim.Z_Bool_Info,
+		Type:  &prim.Z_Bool_T,
 	}, {
 		Name:     "kind",
 		Label:    "kind",
 		Optional: true,
-		Type:     &prim.Z_Text_Info,
+		Type:     &prim.Z_Text_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_BoolEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_BoolEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Specify an explicit true or false.",
@@ -91,7 +91,7 @@ type FIX_BoolValue_Slice []BoolValue
 
 // implements typeinfo.Inspector
 func (*BoolValue_Slice) Inspect() typeinfo.T {
-	return &Z_BoolValue_Info
+	return &Z_BoolValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -104,7 +104,7 @@ type FIX_FieldValue struct {
 
 // implements typeinfo.Inspector
 func (*FieldValue) Inspect() typeinfo.T {
-	return &Z_FieldValue_Info
+	return &Z_FieldValue_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -116,19 +116,19 @@ func (op *FieldValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // field_value, a type of flow.
-const Z_FieldValue_Type = "field_value"
+const Z_FieldValue_Name = "field_value"
 
-var Z_FieldValue_Info = typeinfo.Flow{
-	Name: Z_FieldValue_Type,
+var Z_FieldValue_T = typeinfo.Flow{
+	Name: Z_FieldValue_Name,
 	Lede: "field",
 	Terms: []typeinfo.Term{{
 		Name:  "field",
 		Label: "_",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:  "value",
 		Label: "value",
-		Type:  &Z_LiteralValue_Info,
+		Type:  &Z_LiteralValue_T,
 	}},
 	Markup: map[string]any{
 		"comment": "A fixed value of a record.",
@@ -141,7 +141,7 @@ type FIX_FieldValue_Slice []FieldValue
 
 // implements typeinfo.Inspector
 func (*FieldValue_Slice) Inspect() typeinfo.T {
-	return &Z_FieldValue_Info
+	return &Z_FieldValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -153,7 +153,7 @@ type FIX_FieldList struct {
 
 // implements typeinfo.Inspector
 func (*FieldList) Inspect() typeinfo.T {
-	return &Z_FieldList_Info
+	return &Z_FieldList_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -165,22 +165,22 @@ func (op *FieldList) GetMarkup(ensure bool) map[string]any {
 }
 
 // field_list, a type of flow.
-const Z_FieldList_Type = "field_list"
+const Z_FieldList_Name = "field_list"
 
 // ensure the command implements its specified slots:
 var _ LiteralValue = (*FieldList)(nil)
 
-var Z_FieldList_Info = typeinfo.Flow{
-	Name: Z_FieldList_Type,
+var Z_FieldList_T = typeinfo.Flow{
+	Name: Z_FieldList_Name,
 	Lede: "field_list",
 	Terms: []typeinfo.Term{{
 		Name:    "fields",
 		Label:   "_",
 		Repeats: true,
-		Type:    &Z_FieldValue_Info,
+		Type:    &Z_FieldValue_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&Z_LiteralValue_Info,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": []interface{}{"A series of values all for the same record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
@@ -193,7 +193,7 @@ type FIX_FieldList_Slice []FieldList
 
 // implements typeinfo.Inspector
 func (*FieldList_Slice) Inspect() typeinfo.T {
-	return &Z_FieldList_Info
+	return &Z_FieldList_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -206,7 +206,7 @@ type FIX_NumValue struct {
 
 // implements typeinfo.Inspector
 func (*NumValue) Inspect() typeinfo.T {
-	return &Z_NumValue_Info
+	return &Z_NumValue_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -218,28 +218,28 @@ func (op *NumValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // num_value, a type of flow.
-const Z_NumValue_Type = "num_value"
+const Z_NumValue_Name = "num_value"
 
 // ensure the command implements its specified slots:
 var _ rtti.NumberEval = (*NumValue)(nil)
 var _ LiteralValue = (*NumValue)(nil)
 
-var Z_NumValue_Info = typeinfo.Flow{
-	Name: Z_NumValue_Type,
+var Z_NumValue_T = typeinfo.Flow{
+	Name: Z_NumValue_Name,
 	Lede: "num",
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "value",
-		Type:  &prim.Z_Number_Info,
+		Type:  &prim.Z_Number_T,
 	}, {
 		Name:     "kind",
 		Label:    "kind",
 		Optional: true,
-		Type:     &prim.Z_Text_Info,
+		Type:     &prim.Z_Text_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_NumberEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_NumberEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Specify a particular number.",
@@ -252,7 +252,7 @@ type FIX_NumValue_Slice []NumValue
 
 // implements typeinfo.Inspector
 func (*NumValue_Slice) Inspect() typeinfo.T {
-	return &Z_NumValue_Info
+	return &Z_NumValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -265,7 +265,7 @@ type FIX_NumValues struct {
 
 // implements typeinfo.Inspector
 func (*NumValues) Inspect() typeinfo.T {
-	return &Z_NumValues_Info
+	return &Z_NumValues_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -277,29 +277,29 @@ func (op *NumValues) GetMarkup(ensure bool) map[string]any {
 }
 
 // num_values, a type of flow.
-const Z_NumValues_Type = "num_values"
+const Z_NumValues_Name = "num_values"
 
 // ensure the command implements its specified slots:
 var _ rtti.NumListEval = (*NumValues)(nil)
 var _ LiteralValue = (*NumValues)(nil)
 
-var Z_NumValues_Info = typeinfo.Flow{
-	Name: Z_NumValues_Type,
+var Z_NumValues_T = typeinfo.Flow{
+	Name: Z_NumValues_Name,
 	Lede: "num",
 	Terms: []typeinfo.Term{{
 		Name:    "values",
 		Label:   "values",
 		Repeats: true,
-		Type:    &prim.Z_Number_Info,
+		Type:    &prim.Z_Number_T,
 	}, {
 		Name:     "kind",
 		Label:    "kind",
 		Optional: true,
-		Type:     &prim.Z_Text_Info,
+		Type:     &prim.Z_Text_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_NumListEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_NumListEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Number List: Specify a list of numbers.",
@@ -312,7 +312,7 @@ type FIX_NumValues_Slice []NumValues
 
 // implements typeinfo.Inspector
 func (*NumValues_Slice) Inspect() typeinfo.T {
-	return &Z_NumValues_Info
+	return &Z_NumValues_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -326,7 +326,7 @@ type FIX_RecordValue struct {
 
 // implements typeinfo.Inspector
 func (*RecordValue) Inspect() typeinfo.T {
-	return &Z_RecordValue_Info
+	return &Z_RecordValue_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -338,32 +338,32 @@ func (op *RecordValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // record_value, a type of flow.
-const Z_RecordValue_Type = "record_value"
+const Z_RecordValue_Name = "record_value"
 
 // ensure the command implements its specified slots:
 var _ rtti.RecordEval = (*RecordValue)(nil)
 var _ LiteralValue = (*RecordValue)(nil)
 
-var Z_RecordValue_Info = typeinfo.Flow{
-	Name: Z_RecordValue_Type,
+var Z_RecordValue_T = typeinfo.Flow{
+	Name: Z_RecordValue_Name,
 	Lede: "record",
 	Terms: []typeinfo.Term{{
 		Name:  "kind",
 		Label: "_",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:    "fields",
 		Label:   "fields",
 		Repeats: true,
-		Type:    &Z_FieldValue_Info,
+		Type:    &Z_FieldValue_T,
 	}, {
 		Name:    "cache",
 		Label:   "cache",
 		Private: true,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_RecordEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_RecordEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Specify a record composed of literal values.",
@@ -376,7 +376,7 @@ type FIX_RecordValue_Slice []RecordValue
 
 // implements typeinfo.Inspector
 func (*RecordValue_Slice) Inspect() typeinfo.T {
-	return &Z_RecordValue_Info
+	return &Z_RecordValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -390,7 +390,7 @@ type FIX_RecordList struct {
 
 // implements typeinfo.Inspector
 func (*RecordList) Inspect() typeinfo.T {
-	return &Z_RecordList_Info
+	return &Z_RecordList_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -402,32 +402,32 @@ func (op *RecordList) GetMarkup(ensure bool) map[string]any {
 }
 
 // record_list, a type of flow.
-const Z_RecordList_Type = "record_list"
+const Z_RecordList_Name = "record_list"
 
 // ensure the command implements its specified slots:
 var _ rtti.RecordListEval = (*RecordList)(nil)
 var _ LiteralValue = (*RecordList)(nil)
 
-var Z_RecordList_Info = typeinfo.Flow{
-	Name: Z_RecordList_Type,
+var Z_RecordList_T = typeinfo.Flow{
+	Name: Z_RecordList_Name,
 	Lede: "record",
 	Terms: []typeinfo.Term{{
 		Name:  "kind",
 		Label: "_",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:    "records",
 		Label:   "values",
 		Repeats: true,
-		Type:    &Z_FieldList_Info,
+		Type:    &Z_FieldList_T,
 	}, {
 		Name:    "cache",
 		Label:   "cache",
 		Private: true,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_RecordListEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_RecordListEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Specify a series of records, all of the same kind.",
@@ -440,7 +440,7 @@ type FIX_RecordList_Slice []RecordList
 
 // implements typeinfo.Inspector
 func (*RecordList_Slice) Inspect() typeinfo.T {
-	return &Z_RecordList_Info
+	return &Z_RecordList_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -453,7 +453,7 @@ type FIX_TextValue struct {
 
 // implements typeinfo.Inspector
 func (*TextValue) Inspect() typeinfo.T {
-	return &Z_TextValue_Info
+	return &Z_TextValue_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -465,28 +465,28 @@ func (op *TextValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // text_value, a type of flow.
-const Z_TextValue_Type = "text_value"
+const Z_TextValue_Name = "text_value"
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*TextValue)(nil)
 var _ LiteralValue = (*TextValue)(nil)
 
-var Z_TextValue_Info = typeinfo.Flow{
-	Name: Z_TextValue_Type,
+var Z_TextValue_T = typeinfo.Flow{
+	Name: Z_TextValue_Name,
 	Lede: "text",
 	Terms: []typeinfo.Term{{
 		Name:  "value",
 		Label: "value",
-		Type:  &prim.Z_Text_Info,
+		Type:  &prim.Z_Text_T,
 	}, {
 		Name:     "kind",
 		Label:    "kind",
 		Optional: true,
-		Type:     &prim.Z_Text_Info,
+		Type:     &prim.Z_Text_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_TextEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Specify a small bit of text.",
@@ -499,7 +499,7 @@ type FIX_TextValue_Slice []TextValue
 
 // implements typeinfo.Inspector
 func (*TextValue_Slice) Inspect() typeinfo.T {
-	return &Z_TextValue_Info
+	return &Z_TextValue_T
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -512,7 +512,7 @@ type FIX_TextValues struct {
 
 // implements typeinfo.Inspector
 func (*TextValues) Inspect() typeinfo.T {
-	return &Z_TextValues_Info
+	return &Z_TextValues_T
 }
 
 // return a valid markup map, creating it if necessary.
@@ -524,29 +524,29 @@ func (op *TextValues) GetMarkup(ensure bool) map[string]any {
 }
 
 // text_values, a type of flow.
-const Z_TextValues_Type = "text_values"
+const Z_TextValues_Name = "text_values"
 
 // ensure the command implements its specified slots:
 var _ rtti.TextListEval = (*TextValues)(nil)
 var _ LiteralValue = (*TextValues)(nil)
 
-var Z_TextValues_Info = typeinfo.Flow{
-	Name: Z_TextValues_Type,
+var Z_TextValues_T = typeinfo.Flow{
+	Name: Z_TextValues_Name,
 	Lede: "text",
 	Terms: []typeinfo.Term{{
 		Name:    "values",
 		Label:   "values",
 		Repeats: true,
-		Type:    &prim.Z_Text_Info,
+		Type:    &prim.Z_Text_T,
 	}, {
 		Name:     "kind",
 		Label:    "kind",
 		Optional: true,
-		Type:     &prim.Z_Text_Info,
+		Type:     &prim.Z_Text_T,
 	}},
 	Slots: []*typeinfo.Slot{
-		&rtti.Z_TextListEval_Info,
-		&Z_LiteralValue_Info,
+		&rtti.Z_TextListEval_T,
+		&Z_LiteralValue_T,
 	},
 	Markup: map[string]any{
 		"comment": "Text List: Specifies a set of text values.",
@@ -559,7 +559,7 @@ type FIX_TextValues_Slice []TextValues
 
 // implements typeinfo.Inspector
 func (*TextValues_Slice) Inspect() typeinfo.T {
-	return &Z_TextValues_Info
+	return &Z_TextValues_T
 }
 
 // package listing of type data
@@ -572,19 +572,19 @@ var Z_Types = typeinfo.TypeSet{
 // a list of all slots in this this package
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Z_LiteralValue_Info,
+	&Z_LiteralValue_T,
 }
 
 // a list of all flows in this this package
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Z_BoolValue_Info,
-	&Z_FieldValue_Info,
-	&Z_FieldList_Info,
-	&Z_NumValue_Info,
-	&Z_NumValues_Info,
-	&Z_RecordValue_Info,
-	&Z_RecordList_Info,
-	&Z_TextValue_Info,
-	&Z_TextValues_Info,
+	&Z_BoolValue_T,
+	&Z_FieldValue_T,
+	&Z_FieldList_T,
+	&Z_NumValue_T,
+	&Z_NumValues_T,
+	&Z_RecordValue_T,
+	&Z_RecordList_T,
+	&Z_TextValue_T,
+	&Z_TextValues_T,
 }

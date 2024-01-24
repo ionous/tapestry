@@ -1,8 +1,8 @@
 // {{.Name}}, a type of slot.
-const Z_{{Pascal .Name}}_Type = "{{.Name}}"
+const Z_{{Pascal .Name}}_Name = "{{.Name}}"
 
-var Z_{{Pascal .Name}}_Info = typeinfo.Slot{
-	Name: Z_{{Pascal .Name}}_Type,
+var Z_{{Pascal .Name}}_T = typeinfo.Slot{
+	Name: Z_{{Pascal .Name}}_Name,
 	{{- template "markup.tmpl" .}}
 }
 
@@ -12,7 +12,7 @@ type FIX_{{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
 
 // implements typeinfo.Inspector for a single slot.
 func (*FIX_{{Pascal .Name}}_Slot) Inspect() typeinfo.T {
-	return &Z_{{Pascal .Name}}_Info
+	return &Z_{{Pascal .Name}}_T
 }
 
 // holds a slice of slots
@@ -20,5 +20,5 @@ type {{Pascal .Name}}_Slots []{{Pascal .Name}}
 
 // implements typeinfo.Inspector for a series of slots.
 func (*{{Pascal .Name}}_Slots) Inspect() typeinfo.T {
-	return &Z_{{Pascal .Name}}_Info
+	return &Z_{{Pascal .Name}}_T
 }
