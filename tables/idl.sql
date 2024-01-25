@@ -3,13 +3,11 @@
  */
 
 /* a tapestry command
- * type: one of, str, flow, num, swap, group
- * label for flow and swap holds an English name for use in script;
- * for str and num types it indicates the user is allowed custom values.
+ * type: one of, str, flow, num, swap.
  * ops are currently expected to be globally unique ( unlike golang where names are scoped per package )
  * to do otherwise, the .ifspec(s) themselves would have to contain package disambiguation when they name a type.
  */
-create table idl_op( name text, package text, type text, label text,
+create table idl_op( name text, package text, spec text, 
     primary key(name) );
 
 /* permissible formats for each command. slot is a reference to an op of slot type.
@@ -20,27 +18,20 @@ create table idl_op( name text, package text, type text, label text,
 create table idl_sig( op int not null, slot int, hash text, body text,
     primary key(slot, body),
     unique(hash) );
+
 /**
- * the predefined values of str and num types.
- * unlike the raw specification where the label can be blank, its expanded here.
- * future: maybe a separate range min, max table for nums?
+ * the predefined values for str types.
  */
-create table idl_enum( op int not null, label text, value blob,
-    primary key(op, label) );
+create table idl_enum( op int not null, value text );
 
-/** the choices for a swap type; 'swap' is an op reference */
-create table idl_swap( op int not null, label text, value text, swap int,
-    primary key(op, label) );
-
-/** the members of a flow type; 'term' is an op reference*/
-create table idl_term( op int not null, label text, field text, term int,
+/** the members of a flow type; 'type' is an op reference */
+create table idl_term( op int not null, name text, label text, type int,
     private bool, optional bool, repeats bool,
-    primary key(op, label),
-    unique(op, field) );
+    primary key(op, name) );
 
 /** markup from the serialized data; especially comments */
-create table idl_markup( op int not null, term text, markup text, value blob,
-    primary key(op, term, markup) );
+create table idl_markup( op int not null, key text, value blob,
+    primary key(op, key) );
 
 /** the pairings of ops to slots can be determined from the signature data */
 create view idl_slot as select op,slot from idl_sig where slot is not null group by op, slot;

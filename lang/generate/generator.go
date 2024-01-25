@@ -1,13 +1,10 @@
 package generate
 
 import (
-	"bytes"
 	"errors"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"io"
 	"text/template"
-
-	"git.sr.ht/~ionous/tapestry/lang/compact"
-	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 
 // read a "Spec:with group:" message
@@ -25,6 +22,9 @@ func ReadSpec(msg compact.Message) (ret Group, err error) {
 	return
 }
 
+// the generator walks a list of groups,
+// producing one group at a time:
+// each of which can be written to its own location.
 type Generator struct {
 	groups *groupSearch
 	tmp    *template.Template
@@ -32,7 +32,7 @@ type Generator struct {
 }
 
 func MakeGenerator(groups []Group) (ret Generator, err error) {
-	seeker := &groupSearch{list: groups}
+	seeker := newGroupSearch(groups)
 	if tmp, e := genTemplates(seeker); e != nil {
 		err = e
 	} else {
@@ -41,110 +41,41 @@ func MakeGenerator(groups []Group) (ret Generator, err error) {
 	return
 }
 
-func (q *Generator) Name() string {
-	g := q.groups.list[q.i-1]
-	return g.Name
+func (q *Generator) group() Group {
+	return q.groups.list[q.i-1]
 }
 
 // advance before writing
 func (q *Generator) Next() (okay bool) {
 	if okay = (q.i < len(q.groups.list)); okay {
+		q.groups.setCurrent(q.i)
 		q.i++
 	}
 	return
 }
 
-// after collecting groups, write them to targeted location
-// ( it tell format, with the tells extension )
-func (q *Generator) Write(w io.Writer) (err error) {
-	if at := q.i - 1; at >= len(q.groups.list) {
-		err = errors.New("out of range")
-	} else {
-		g := q.groups.setCurrent(at)
-		// this uses the generation to determine inter package references
-		// so we have to build the body first, and later
-		// write the import header above it.
-		var body bytes.Buffer
-		var sigs distill.Registry
-		if e := q.writeContent(&body, g.groupContent); e != nil {
-			err = e
-		} else {
-			dl := "git.sr.ht/~ionous/tapestry/dl/" // fix: customize?
-			ti := "git.sr.ht/~ionous/tapestry/lang/typeinfo"
-			imports := q.groups.getRefs(dl, ti)
-			if e := q.write(w, "header", struct {
-				Name    string
-				Imports []string
-			}{g.Name, imports}); e != nil {
-				err = e
-			} else {
-				w.Write(body.Bytes())
-				err = q.writeFooter(w,
-					g.Name, sigs,
-					typeList{
-						Type:    "slot",
-						Comment: "( ex. for generating blockly shapes )",
-						List:    g.Slot,
-					},
-					typeList{
-						Type:    "flow",
-						Comment: "( ex. for reading blockly blocks )",
-						List:    g.Flow,
-					},
-					typeList{
-						Type: "str",
-						List: g.Str,
-					},
-					typeList{
-						Type: "num",
-						List: g.Num,
-					},
-				)
-			}
-		}
-	}
-	return
+// database/sql like interface
+type DB interface {
+	Write(q string, args ...interface{}) error
 }
 
-// writes a list of typeinfo references
-func (q *Generator) writeFooter(w io.Writer, name string, reg distill.Registry, types ...typeList) error {
-	return q.write(w, "footer", struct {
-		Name       string
-		Types      []typeList
-		Signatures []distill.Sig
-	}{name, types, reg.Sigs})
+func (q *Generator) Name() string {
+	return q.group().Name
 }
 
-type typeList struct {
-	Type    string
-	Comment string
-	List    []typeData
+// write a go file containing typeinfo for the current group
+func (q *Generator) WriteSource(w io.Writer) error {
+	return q.writeSource(w, q.group())
 }
 
-func (q *Generator) writeContent(w io.Writer, gc groupContent) (err error) {
-	for i, cnt := 0, len(gc.Slot); i < cnt && err == nil; i++ {
-		n := gc.Slot[i]
-		err = q.write(w, "slot", n)
-	}
-	for i, cnt := 0, len(gc.Flow); i < cnt && err == nil; i++ {
-		n := gc.Flow[i]
-		err = q.write(w, "flow", n)
-	}
-	for i, cnt := 0, len(gc.Str); i < cnt && err == nil; i++ {
-		n := gc.Str[i].(strData)
-		if len(n.Options) > 0 {
-			err = q.write(w, "enum", n)
-		} else {
-			err = q.write(w, "string", n)
-		}
-	}
-	for i, cnt := 0, len(gc.Num); i < cnt && err == nil; i++ {
-		n := gc.Num[i]
-		err = q.write(w, "num", n)
-	}
-	return
+// record the primary type data for the passed group
+// using sqlite friendly data to the passed database
+func (q *Generator) WriteTable(w DB) error {
+	return writeTable(w, q.group())
 }
 
-func (q *Generator) write(w io.Writer, name string, data any) error {
-	return q.tmp.ExecuteTemplate(w, name+".tmpl", data)
+// record the derived type data for the passed group
+// using sqlite friendly data to the passed database
+func (q *Generator) WriteReferences(w DB) error {
+	return writeReferences(w, q.group())
 }
