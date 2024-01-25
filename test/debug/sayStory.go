@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -20,19 +19,18 @@ type MatchNumber struct {
 	Val int
 }
 
-func (op *MatchNumber) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(MakeFlow(op)); err == nil {
-		e0 := m.MarshalKey("", "")
-		if e0 == nil {
-			e0 = m.MarshalValue("", &op.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(e0)
-		}
-		m.EndBlock()
-	}
-	return
-}
+// num_value, a type of flow.
+// var Zt_MatchNumber = typeinfo.Flow{
+// 	Name: "match_number",
+// 	Lede: "match",
+// 	Terms: []typeinfo.Term{{
+// 		Name: "val",
+// 		Type: &prim.Zt_Number,
+// 	}},
+// 	Slots: []*typeinfo.Slot{
+// 		&rtti.Zt_BoolEval,
+// 	},
+// }
 
 func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if v, e := run.GetField(meta.Variables, "num"); e != nil {
@@ -59,19 +57,19 @@ type SayMe struct {
 	Num float64
 }
 
-func (op *SayMe) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(MakeFlow(op)); err == nil {
-		e0 := m.MarshalKey("", "")
-		if e0 == nil {
-			e0 = m.MarshalValue("", &op.Num)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(e0)
-		}
-		m.EndBlock()
-	}
-	return
-}
+// func (op *SayMe) Marshal(m jsn.Marshaler) (err error) {
+// 	if err = m.MarshalBlock(MakeFlow(op)); err == nil {
+// 		e0 := m.MarshalKey("", "")
+// 		if e0 == nil {
+// 			e0 = m.MarshalValue("", &op.Num)
+// 		}
+// 		if e0 != nil && e0 != jsn.Missing {
+// 			m.Error(e0)
+// 		}
+// 		m.EndBlock()
+// 	}
+// 	return
+// }
 
 // the rules defined last run first
 var SayPattern = testpat.Pattern{

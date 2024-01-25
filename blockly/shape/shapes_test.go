@@ -19,8 +19,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -138,7 +138,7 @@ func TestStoryFileShape(t *testing.T) {
 	w := shape.ShapeWriter{ts}
 	w.WriteShape(&out, x)
 	//
-	got := jsn.Indent(out.String())
+	got := files.Indent(out.String())
 	if got != expect {
 		t.Log("have: \n", got)
 		t.Log("want: \n", expect)
@@ -200,7 +200,7 @@ func TestStoryTextShape(t *testing.T) {
 	w := shape.ShapeWriter{ts}
 	w.WriteShape(&out, x)
 	//
-	str := jsn.Indent(out.String())
+	str := files.Indent(out.String())
 	if diff := pretty.Diff(str, expect); len(diff) > 0 {
 		t.Log(str)
 		t.Fatal("ng", diff)
@@ -283,7 +283,7 @@ func TestStrEnum(t *testing.T) {
 	w := shape.ShapeWriter{ts}
 	w.WriteShape(&out, x)
 	//
-	str := jsn.Indent(out.String())
+	str := files.Indent(out.String())
 	if diff := pretty.Diff(str, expect); len(diff) > 0 {
 		t.Log(str)
 		t.Fatal("ng", diff)

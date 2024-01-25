@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/debug"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
@@ -76,8 +76,8 @@ func TestGrouping(t *testing.T) {
 			    ]
 			  }]`
 				got := debug.Stringify(groups)
-				if got != jsn.Compact(expect) {
-					t.Fatal(jsn.Indent(got))
+				if got != files.Compact(expect) {
+					t.Fatal(files.Indent(got))
 				}
 			}
 		}

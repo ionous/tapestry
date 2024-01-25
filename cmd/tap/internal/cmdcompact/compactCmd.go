@@ -105,7 +105,6 @@ var CmdCompact = &base.Command{
 Known file types include:
 
 	.if: json formatted story files
-	.ifx: an older, more verbose story file format
 	.tell: a compact, yaml like story format
 	.block: blockly formatted story files
 	.ifspecs: json formatted command descriptions.

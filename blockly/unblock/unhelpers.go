@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
+	"errors"
+
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -32,7 +33,7 @@ func readInput(m js.MapItem) (ret Input, err error) {
 	if e := json.Unmarshal(m.Msg, &ret); e != nil {
 		err = e
 	} else if ret.BlockInfo == nil {
-		err = jsn.Missing
+		err = errors.New("missing input")
 	}
 	return
 }

@@ -4,13 +4,13 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
-	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-func CustomEncoder(enc *encode.Encoder, op jsn.Marshalee) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
 	if call, ok := op.(*CallPattern); !ok {
 		ret, err = literal.CustomEncoder(enc, op)
 	} else {
@@ -33,7 +33,7 @@ func encodePattern(enc *encode.Encoder, op *CallPattern) (ret any, err error) {
 		if inflect.IsCapitalized(argName) {
 			argName = inflect.MixedCaseToSpaces(argName)
 		}
-		slot := rt.Assignment_Slot{Value: arg.Value}
+		slot := rtti.Assignment_Slot{Value: arg.Value}
 		if out, e := enc.Encode(&slot); e != nil {
 			err = e
 			break

@@ -2,9 +2,9 @@ package literal
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -17,7 +17,7 @@ import (
 // note: TextValues and NumValues of containing a single value
 // and serialized as that single value ( [6]-> 6 )
 // because, in theory, that can help simply the specification for authors.
-func CustomEncoder(enc *encode.Encoder, op jsn.Marshalee) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
 	switch out := op.(type) {
 	default:
 		err = compact.Unhandled

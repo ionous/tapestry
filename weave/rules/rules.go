@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -198,7 +197,7 @@ Out:
 // return the first response definition in the block
 func FindNamedResponse(exe []rt.Execute) (ret string) {
 	var m rtti.Execute_Slots = exe
-	if op, e := searchForFlow(&m, render.RenderResponse_Type); e != nil && e != jsn.Missing {
+	if op, e := searchForFlow(&m, render.RenderResponse_Type); e != nil {
 		panic(e)
 	} else if response, ok := op.(*render.RenderResponse); ok && response.Text != nil {
 		ret = response.Name

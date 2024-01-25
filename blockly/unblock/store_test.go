@@ -13,7 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/dl/testdl"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -29,7 +29,7 @@ func TestStoring(t *testing.T) {
 		if !strings.HasPrefix(p.Name, "x") {
 			t.Run(p.Name, func(t *testing.T) {
 				// FIX: porting in progress....
-				if e := testUnblock(reg, p.Test.(jsn.Marshalee), p.Json); e != nil {
+				if e := testUnblock(reg, p.Test, p.Json); e != nil {
 					t.Fatal(e)
 				}
 			})
@@ -63,7 +63,7 @@ func TestCountField(t *testing.T) {
 	}
 }
 
-func testUnblock(reg unblock.TypeCreator, expect jsn.Marshalee, msg string) (err error) {
+func testUnblock(reg unblock.TypeCreator, expect typeinfo.Inspector, msg string) (err error) {
 	var top unblock.BlockInfo
 	if e := json.Unmarshal([]byte(msg), &top); e != nil {
 		err = e
@@ -72,7 +72,7 @@ func testUnblock(reg unblock.TypeCreator, expect jsn.Marshalee, msg string) (err
 		if e := unblock.DecodeBlock(ptr.Elem(), reg, &top); e != nil {
 			err = e
 		} else {
-			got := ptr.Interface().(jsn.Marshalee)
+			got := ptr.Interface().(typeinfo.Inspector)
 			if diff := pretty.Diff(expect, got); len(diff) > 0 {
 				pretty.Println(got)
 				err = errutil.New(e, "mismatched", diff)

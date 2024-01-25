@@ -3,10 +3,11 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -22,12 +23,12 @@ func Decode(out *StoryFile, msg map[string]any) error {
 }
 
 // Create a story dl from native maps and slices.
-func DecodeMessage(ptr jsn.Marshalee, msg map[string]any) error {
+func DecodeMessage(out typeinfo.Inspector, msg map[string]any) error {
 	var dec decode.Decoder
 	dec.Signatures(AllSignatures...).
 		Customize(core.CustomDecoder).
 		Patterns(TryPattern)
-	return dec.Decode(ptr, msg)
+	return dec.Decode(out, msg)
 }
 
 func TryPattern(dec *decode.Decoder, slot string, msg compact.Message) (ret any, err error) {
@@ -60,7 +61,7 @@ func TryPattern(dec *decode.Decoder, slot string, msg compact.Message) (ret any,
 
 func tryPatternArgs(dec *decode.Decoder, slot string, msg compact.Message) (ret []assign.Arg, err error) {
 	for i, p := range msg.Labels {
-		var val rt.Assignment_Slot
+		var val rtti.Assignment_Slot
 		if e := dec.Decode(&val, msg.Args[i]); e != nil {
 			err = e
 			break

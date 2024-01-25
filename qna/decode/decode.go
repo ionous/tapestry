@@ -8,8 +8,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -35,7 +36,7 @@ func (d *Decoder) DecodeField(a affine.Affinity, b []byte, fieldType string) (re
 }
 
 func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
-	var act rt.Execute_Slice
+	var act rtti.Execute_Slots
 	if e := d.decodeValue(&act, b); e != nil {
 		err = e
 	} else {
@@ -50,56 +51,56 @@ func (d *Decoder) DecodeProg(b []byte) (ret []rt.Execute, err error) {
 func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignment, err error) {
 	switch a {
 	case affine.None:
-		var v rt.Assignment_Slot
+		var v rtti.Assignment_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = v.Value
 		}
 	case affine.Bool:
-		var v rt.BoolEval_Slot
+		var v rtti.BoolEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &assign.FromBool{Value: v.Value}
 		}
 	case affine.Number:
-		var v rt.NumberEval_Slot
+		var v rtti.NumberEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &assign.FromNumber{Value: v.Value}
 		}
 	case affine.Text:
-		var v rt.TextEval_Slot
+		var v rtti.TextEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &assign.FromText{Value: v.Value}
 		}
 	case affine.NumList:
-		var v rt.NumListEval_Slot
+		var v rtti.NumListEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &assign.FromNumList{Value: v.Value}
 		}
 	case affine.TextList:
-		var v rt.TextListEval_Slot
+		var v rtti.TextListEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &assign.FromTextList{Value: v.Value}
 		}
 	case affine.Record:
-		var v rt.RecordEval_Slot
+		var v rtti.RecordEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
 			ret = &assign.FromRecord{Value: v.Value}
 		}
 	case affine.RecordList:
-		var v rt.RecordListEval_Slot
+		var v rtti.RecordListEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
@@ -111,7 +112,7 @@ func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignme
 	return
 }
 
-func (d *Decoder) decodeValue(out jsn.Marshalee, b []byte) (err error) {
+func (d *Decoder) decodeValue(out typeinfo.Inspector, b []byte) (err error) {
 	if len(b) > 0 {
 		var val any
 		if e := json.Unmarshal(b, &val); e != nil {

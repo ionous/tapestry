@@ -1,14 +1,13 @@
 package block_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"strconv"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/test"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 )
@@ -32,13 +31,8 @@ func testBlocks(src typeinfo.Inspector, expect string) (err error) {
 	var out js.Builder
 	if e := block.Build(&out, src, false); e != nil {
 		err = errutil.New(e, "failed marshal")
-	} else {
-		var indented bytes.Buffer
-		if e := json.Indent(&indented, []byte(out.String()), "", "  "); e != nil {
-			err = errutil.New("indention error", e)
-		} else if str := indented.String(); str != expect {
-			err = errutil.New("mismatched", str)
-		}
+	} else if str := files.Indent(out.String()); str != expect {
+		err = errutil.New("mismatched", str)
 	}
 	return
 }

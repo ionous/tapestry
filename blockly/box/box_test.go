@@ -20,6 +20,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/support/files"
 )
 
 func TestToolbox(t *testing.T) {
@@ -28,12 +29,8 @@ func TestToolbox(t *testing.T) {
 	} else if !json.Valid([]byte(str)) {
 		t.Fatal(str)
 	} else {
-		var b bytes.Buffer
-		if e := json.Indent(&b, []byte(str), "", "  "); e != nil {
-			t.Fatal(e)
-		} else {
-			t.Log(b.String())
-		}
+		str := files.Indent(str)
+		t.Log(str)
 	}
 }
 

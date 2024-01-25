@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/play"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web"
 )
@@ -35,7 +35,7 @@ func Decode(r io.Reader) (ret string, err error) {
 
 func Marshal(m play.PlayMessage) (ret string, err error) {
 	var enc encode.Encoder
-	if d, e := enc.Encode(m.(jsn.Marshalee)); e != nil {
+	if d, e := enc.Encode(m); e != nil {
 		err = e
 	} else {
 		var str strings.Builder
@@ -48,7 +48,7 @@ func Marshal(m play.PlayMessage) (ret string, err error) {
 	return
 }
 
-func marshal(m jsn.Marshalee) (ret string, err error) {
+func marshal(m typeinfo.Inspector) (ret string, err error) {
 	var enc encode.Encoder
 	if d, e := enc.Encode(m); e != nil {
 		err = e

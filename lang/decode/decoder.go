@@ -8,6 +8,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
@@ -46,7 +47,7 @@ type CustomDecoder func(dec *Decoder, slot string, plainData any) (any, error)
 type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (any, error)
 
 // given a desired output structure, read the passed plain data
-func (dec *Decoder) Decode(out jsn.Marshalee, plainData any) (err error) {
+func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
 	if slot, ok := out.(jsn.SlotBlock); ok {
 		tgt := r.ValueOf(out).Elem() // the zeroth field is *slot
 		err = dec.decodeSlot(tgt.Field(0), plainData, slot.GetType())

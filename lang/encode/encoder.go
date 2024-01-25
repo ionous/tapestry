@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
@@ -20,11 +21,11 @@ func (enc *Encoder) Customize(c CustomEncoder) *Encoder {
 	return enc
 }
 
-// given a tapestry command, return its plain value.
-type CustomEncoder func(enc *Encoder, cmd jsn.Marshalee) (any, error)
+// given a tapestry flow, return its plain value.
+type CustomEncoder func(*Encoder, typeinfo.Inspector) (any, error)
 
 // turn the passed tapestry command into plain values.
-func (enc *Encoder) Encode(m jsn.Marshalee) (ret any, err error) {
+func (enc *Encoder) Encode(m typeinfo.Inspector) (ret any, err error) {
 	src := r.ValueOf(m).Elem()
 	switch t := src.Type(); t.Kind() { // ugh
 	default:
@@ -132,7 +133,7 @@ func (enc *Encoder) writeFlow(src walk.Walker) (ret any, err error) {
 	return
 }
 
-func (enc *Encoder) customEncode(cmd jsn.Marshalee) (ret any, err error) {
+func (enc *Encoder) customEncode(cmd typeinfo.Inspector) (ret any, err error) {
 	if c := enc.customEncoder; c == nil {
 		err = compact.Unhandled
 	} else {
@@ -145,8 +146,8 @@ func unknownType(t r.Type) error {
 	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
 }
 
-func unpack(src walk.Walker) (ret jsn.Marshalee, err error) {
-	if fix, ok := src.Value().Addr().Interface().(jsn.Marshalee); !ok {
+func unpack(src walk.Walker) (ret typeinfo.Inspector, err error) {
+	if fix, ok := src.Value().Addr().Interface().(typeinfo.Inspector); !ok {
 		err = fmt.Errorf("%s is not a flow", src.Value().Type())
 	} else {
 		ret = fix

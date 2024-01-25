@@ -35,7 +35,6 @@ func writeReferences(w DB, g Group) (err error) {
 	gc := g.groupContent
 	if e := writeTerms(w, g.Name, gc.Flow); e != nil {
 		err = fmt.Errorf("%w writing flow for %s", e, g.Name)
-
 	}
 	return
 }

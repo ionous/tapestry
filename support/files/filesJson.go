@@ -1,8 +1,10 @@
 package files
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"os"
 
 	"github.com/ionous/errutil"
@@ -46,12 +48,26 @@ func SaveJson(outPath string, data any, pretty bool) (err error) {
 	return
 }
 
-// panics if the passed data isnt json friendly.
-func Stringify(data any) (ret string) {
-	if a, e := json.MarshalIndent(data, "", " "); e != nil {
-		panic(e)
+// take existing json data and prettify it.
+// on error, logs and returns the empty string
+func Indent(str string) (ret string) {
+	var b bytes.Buffer
+	if e := json.Indent(&b, []byte(str), "", "  "); e != nil {
+		log.Println("indention error", e)
 	} else {
-		ret = string(a)
+		ret = b.String()
+	}
+	return
+}
+
+// take existing json data and minimize it.
+// on error, logs and returns the empty string
+func Compact(str string) (ret string) {
+	var b bytes.Buffer
+	if e := json.Compact(&b, []byte(str)); e != nil {
+		log.Println("indention error", e)
+	} else {
+		ret = b.String()
 	}
 	return
 }

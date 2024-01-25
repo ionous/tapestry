@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 // verify that literal commands become plain values.
@@ -40,7 +40,7 @@ func TestEncodingDecoding(t *testing.T) {
 
 type testPair struct {
 	v interface {
-		jsn.Marshalee
+		typeinfo.Inspector
 		literal.LiteralValue
 	}
 	res any
@@ -68,7 +68,7 @@ func testPairs(t *testing.T, pairs []testPair) {
 	}
 }
 
-func marshal(v jsn.Marshalee) (ret any, err error) {
+func marshal(v typeinfo.Inspector) (ret any, err error) {
 	var enc encode.Encoder
 	return enc.Customize(literal.CustomEncoder).Encode(v)
 }

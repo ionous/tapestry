@@ -3,16 +3,16 @@ package core
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // fix: move some part of this into package assign?
 // especially because the opposite is handled in... story?
-func CustomEncoder(enc *encode.Encoder, op jsn.Marshalee) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
 	switch op := op.(type) {
 	case *assign.CallPattern:
 		ret, err = assign.CustomEncoder(enc, op)

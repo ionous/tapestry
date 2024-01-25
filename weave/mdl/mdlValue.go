@@ -8,8 +8,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
@@ -67,7 +68,7 @@ func (pen *Pen) addPathValue(noun string, parts []string, value literal.LiteralV
 		err = e
 	} else if end := len(parts) - 1; parts[end] != inner.name {
 		err = errutil.New("can't add traits to records of nouns")
-	} else if out, provisional, e := marshalLiteral(value, inner.aff); e != nil {
+	} else if out, provisional, e := marshalProvisional(value, inner.aff); e != nil {
 		err = e
 	} else {
 		field, dot := parts[0], strings.Join(parts[1:], ".")
@@ -216,19 +217,26 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 		// strip off the From section to avoid serializing redundant info
 		switch v := val.(type) {
 		case *assign.FromBool:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.BoolEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		case *assign.FromNumber:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.NumberEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		case *assign.FromText:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.TextEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		case *assign.FromRecord:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.RecordEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		case *assign.FromNumList:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.NumListEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		case *assign.FromTextList:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.TextListEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		case *assign.FromRecordList:
-			ret, err = marshalSlot(v.Value)
+			slot := rtti.RecordListEval_Slot{Value: v.Value}
+			ret, err = marshalSlot(&slot)
 		default:
 			err = errutil.New("unknown type")
 		}
@@ -236,7 +244,7 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 	return
 }
 
-func marshalLiteral(val literal.LiteralValue, wantAff affine.Affinity) (ret string, provisional bool, err error) {
+func marshalProvisional(val literal.LiteralValue, wantAff affine.Affinity) (ret string, provisional bool, err error) {
 	// questionable: since we know the type of the field
 	// storing the assignment wrapper is redundant.
 	if a, ok := val.(ProvisionalLiteral); ok {
@@ -246,17 +254,21 @@ func marshalLiteral(val literal.LiteralValue, wantAff affine.Affinity) (ret stri
 	if aff := literal.GetAffinity(val); aff != wantAff {
 		err = errutil.Fmt("mismatched literal, wanted %s not %s", aff, wantAff)
 	} else {
-		ret, err = marshalSlot(val)
+		slot := literal.FIX_LiteralValue_Slot{Value: val}
+		ret, err = marshalSlot(&slot)
 	}
 	return
 }
 
+func marshalLiteral(val literal.LiteralValue) (ret string, err error) {
+	slot := literal.FIX_LiteralValue_Slot{Value: val}
+	return marshalSlot(&slot)
+}
+
 // shared generic marshal prog to text
-func marshalSlot(slot any) (ret string, err error) {
+func marshalSlot(slot typeinfo.Inspector) (ret string, err error) {
 	if slot != nil {
-		if slot, ok := slot.(jsn.Marshalee); !ok {
-			err = errutil.New("slot not marshalable")
-		} else if els, e := encoder().Encode(slot); e != nil {
+		if els, e := encoder().Encode(slot); e != nil {
 			err = e
 		} else if b, e := json.Marshal(els); e != nil {
 			err = e
@@ -269,8 +281,8 @@ func marshalSlot(slot any) (ret string, err error) {
 
 func marshalprog(prog []rt.Execute) (ret string, err error) {
 	if len(prog) > 0 {
-		act := rt.Execute_Slice(prog)
-		if els, e := encoder().Encode(&act); e != nil {
+		slots := rtti.Execute_Slots(prog)
+		if els, e := encoder().Encode(&slots); e != nil {
 			err = e
 		} else if b, e := json.Marshal(els); e != nil {
 			err = e

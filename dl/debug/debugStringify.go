@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-// turn a value into a json(ish) formatted string
+// turn a tapestry generic value into a json(ish) formatted string
 func Stringify(v g.Value) (ret string) {
 	var out js.Builder
 	stringifyValue(&out, v)

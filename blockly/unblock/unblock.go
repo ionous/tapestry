@@ -7,15 +7,15 @@ import (
 	r "reflect"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/markup"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 )
 
 // where topBlock is the expected topblock type in the file.... ex. story_file
-func Decode(dst jsn.Marshalee, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
+func Decode(dst typeinfo.Inspector, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
 	var bff File
 	if e := json.Unmarshal(msg, &bff); e != nil {
 		err = e
@@ -55,9 +55,7 @@ func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
 						err = un.decodeList(out.Walk(), fields)
 					}
 				} else {
-					if e := decodeField(out, bff, termName); e != jsn.Missing {
-						err = e
-					}
+					err = decodeField(out, bff, termName)
 				}
 
 			// a member that is a flow; its value lives in an input.
@@ -66,12 +64,10 @@ func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
 					if inputs := bff.SliceInputs(termName); len(inputs) > 0 {
 						err = un.decodeSlice(out.Walk(), inputs)
 					}
-
 				} else {
 					if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
 						if input, e := bff.ReadInput(idx); e != nil {
 							err = e
-
 						} else {
 							err = un.decodeBlock(out.Walk(), input.BlockInfo)
 						}
@@ -92,24 +88,6 @@ func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
 							err = e
 						} else {
 							err = un.decodeSlot(out, input.Type, input.BlockInfo)
-						}
-					}
-				}
-
-			// a swap uses both a field and an input.
-			// for simple values ( strs in swaps ) there will be a faux block type for that input.
-			case walk.Swap:
-				// the field holds a combo box with swap's choice
-				if idx := bff.Fields.FindIndex(termName); idx >= 0 {
-					var choice string // ex. $C
-					if e := json.Unmarshal(bff.Fields[idx].Msg, &choice); e != nil {
-						err = e
-					} else if idx := bff.Inputs.FindIndex(termName); idx >= 0 {
-						// the input hold the swap's contents
-						if input, e := bff.ReadInput(idx); e != nil {
-							err = e
-						} else {
-							err = un.decodeSwap(out, choice, input.BlockInfo)
 						}
 					}
 				}
@@ -159,27 +137,6 @@ func (un *unblock) decodeStack(out walk.Walker, bff *BlockInfo, idx int) (err er
 					break
 				}
 			}
-		}
-	}
-	return
-}
-
-// read the insides of a swap
-func (un *unblock) decodeSwap(out walk.Walker, choice string, bff *BlockInfo) (err error) {
-	i := out.Value().Addr().Interface() // ptr to an auto-generated swap sstructure
-	swap := i.(interface{ SetSwap(string) bool })
-	if !swap.SetSwap(choice) {
-		err = fmt.Errorf("swap has unexpected choice %q", choice)
-	} else if swap := out.Walk(); !swap.Next() {
-		err = errors.New("unexpected error")
-	} else {
-		// it could be a flow filling the input....
-		// or a fake block wrapping a primitive value ( ex. a swap supporting str )
-		if t := swap.SpecType(); t == walk.Flow {
-			err = un.decodeBlock(swap.Walk(), bff)
-		} else {
-			typeName := strings.ToUpper(bff.Type)
-			err = decodeField(swap, bff, typeName)
 		}
 	}
 	return
@@ -255,13 +212,13 @@ func (un *unblock) decodeList(out walk.Walker, fields js.MapSlice) (err error) {
 
 // simple values live in bff.fields
 func decodeField(out walk.Walker, bff *BlockInfo, fieldName string) (err error) {
-	var value any
-	if field, ok := bff.Fields.Find(fieldName); !ok {
-		err = jsn.Missing
-	} else if e := json.Unmarshal(field.Msg, &value); e != nil {
-		err = e
-	} else if !out.SetValue(value) {
-		err = fmt.Errorf("couldnt store %T", value)
+	if field, ok := bff.Fields.Find(fieldName); ok {
+		var value any
+		if e := json.Unmarshal(field.Msg, &value); e != nil {
+			err = e
+		} else if !out.SetValue(value) {
+			err = fmt.Errorf("couldnt store %T", value)
+		}
 	}
 	return
 }

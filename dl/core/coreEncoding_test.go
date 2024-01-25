@@ -7,9 +7,9 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -47,7 +47,7 @@ func TestEncodingDecoding(t *testing.T) {
 
 type testPair struct {
 	v interface {
-		jsn.Marshalee
+		typeinfo.Inspector
 	}
 	expect string
 }
@@ -66,7 +66,7 @@ func testPairs(t *testing.T, pairs []testPair) {
 		} else {
 			rtype := r.ValueOf(p.v).Elem().Type()
 			println("newing", rtype.String())
-			reversed := r.New(rtype).Interface().(jsn.Marshalee)
+			reversed := r.New(rtype).Interface().(typeinfo.Inspector)
 			if e := unmarshal(reversed, expect); e != nil {
 				t.Logf("%d couldn't decode because %v", i, e)
 				t.Fail()
@@ -78,11 +78,11 @@ func testPairs(t *testing.T, pairs []testPair) {
 	}
 }
 
-func marshal(v jsn.Marshalee) (ret any, err error) {
+func marshal(v typeinfo.Inspector) (ret any, err error) {
 	var enc encode.Encoder
 	return enc.Customize(core.CustomEncoder).Encode(v)
 }
-func unmarshal(out jsn.Marshalee, plainData any) (err error) {
+func unmarshal(out typeinfo.Inspector, plainData any) (err error) {
 	var dec decode.Decoder
 	return dec.
 		Signatures(assign.Signatures, core.Signatures).
