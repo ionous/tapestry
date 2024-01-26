@@ -230,8 +230,7 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]any{
-	6163370811322312405:  (*PlayModes)(nil), /* PlayModes: */
-	17624726337788752012: (*PlayLog)(nil),   /* play_message=Play log: */
-	4988029522939467359:  (*PlayMode)(nil),  /* play_message=Play mode: */
-	14741822345399231886: (*PlayOut)(nil),   /* play_message=Play out: */
+	17624726337788752012: (*PlayLog)(nil),  /* play_message=Play log: */
+	4988029522939467359:  (*PlayMode)(nil), /* play_message=Play mode: */
+	14741822345399231886: (*PlayOut)(nil),  /* play_message=Play out: */
 }

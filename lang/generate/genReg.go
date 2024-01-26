@@ -9,12 +9,6 @@ import (
 // Doesnt currently support multiple groups
 type Registry []Signature
 
-func (reg Registry) addPrim(t specData) Registry {
-	commandName := Pascal(t.Name)
-	sigs := makeSig(t, commandName+":", nil)
-	return append(reg, sigs...)
-}
-
 func (reg Registry) addFlow(t flowData) Registry {
 	sets := sigTerms(t)
 	for _, set := range sets {

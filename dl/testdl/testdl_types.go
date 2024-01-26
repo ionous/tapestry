@@ -221,10 +221,6 @@ var z_num_list = []*typeinfo.Num{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]any{
-	5375871781273392485:  (*TestBool)(nil),  /* TestBool: */
-	2921095451308776491:  (*TestNum)(nil),   /* TestNum: */
-	8940712013797765950:  (*TestStr)(nil),   /* TestStr: */
-	9144781193212880495:  (*TestTxt)(nil),   /* TestTxt: */
 	4674877661722404900:  (*TestEmbed)(nil), /* test_slot=Embed testFlow: */
 	6035317458491358757:  (*TestFlow)(nil),  /* test_slot=Flow */
 	3180197217674355987:  (*TestFlow)(nil),  /* test_slot=Flow bool: */

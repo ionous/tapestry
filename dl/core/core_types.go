@@ -3691,7 +3691,6 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]any{
-	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
 	9652861807756732392:  (*AbsValue)(nil),          /* number_eval=Absolute value: */
 	6415467136316515808:  (*AddValue)(nil),          /* number_eval=Add:value: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */

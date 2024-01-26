@@ -2844,9 +2844,6 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]any{
-	13422667607848275221: (*MapConnection)(nil),        /* MapConnection: */
-	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
-	10722525326402422155: (*RelationCardinality)(nil),  /* RelationCardinality: */
 	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
 	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
 	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
