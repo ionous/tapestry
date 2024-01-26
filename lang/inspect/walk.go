@@ -144,16 +144,23 @@ func (w *Iter) GoValue() (ret any) {
 // falls back to the container itself if Next() has yet to be called.
 func (w *Iter) CompactValue() (ret any) {
 	v, t := w.getFocus()
-	// temp: unpack Str struct
-	if _, ok := t.(*typeinfo.Str); ok && v.Kind() == r.Struct {
-		str := v.Field(0).String()
-		if len(str) > 0 && str[0] == '$' {
-			str = strings.ToLower(str[1:])
-		}
-		ret = str
-
-	} else {
+	// FIX: unpack Str struct
+	if _, ok := t.(*typeinfo.Str); !ok {
 		ret = v.Interface()
+	} else {
+		switch v.Kind() {
+		default:
+			ret = v.Interface()
+		case r.Int:
+			// interesting that .String() doesnt work....
+			ret = v.Interface().(interface{ String() string }).String()
+		case r.Struct:
+			str := v.Field(0).String()
+			if len(str) > 0 && str[0] == '$' {
+				str = strings.ToLower(str[1:])
+			}
+			ret = str
+		}
 	}
 	return
 }
