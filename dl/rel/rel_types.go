@@ -8,7 +8,7 @@ import (
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ReciprocalOf struct {
+type ReciprocalOf struct {
 	Via    string
 	Object rtti.TextEval
 	Markup map[string]any
@@ -52,7 +52,7 @@ var Zt_ReciprocalOf = typeinfo.Flow{
 
 // holds a slice of type reciprocal_of
 // FIX: duplicates the spec decl.
-type FIX_ReciprocalOf_Slice []ReciprocalOf
+type ReciprocalOf_Slice []ReciprocalOf
 
 // implements typeinfo.Inspector
 func (*ReciprocalOf_Slice) Inspect() (typeinfo.T, bool) {
@@ -61,7 +61,7 @@ func (*ReciprocalOf_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ReciprocalsOf struct {
+type ReciprocalsOf struct {
 	Via    string
 	Object rtti.TextEval
 	Markup map[string]any
@@ -105,7 +105,7 @@ var Zt_ReciprocalsOf = typeinfo.Flow{
 
 // holds a slice of type reciprocals_of
 // FIX: duplicates the spec decl.
-type FIX_ReciprocalsOf_Slice []ReciprocalsOf
+type ReciprocalsOf_Slice []ReciprocalsOf
 
 // implements typeinfo.Inspector
 func (*ReciprocalsOf_Slice) Inspect() (typeinfo.T, bool) {
@@ -114,7 +114,7 @@ func (*ReciprocalsOf_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Relate struct {
+type Relate struct {
 	Object   rtti.TextEval
 	ToObject rtti.TextEval
 	Via      string
@@ -163,7 +163,7 @@ var Zt_Relate = typeinfo.Flow{
 
 // holds a slice of type relate
 // FIX: duplicates the spec decl.
-type FIX_Relate_Slice []Relate
+type Relate_Slice []Relate
 
 // implements typeinfo.Inspector
 func (*Relate_Slice) Inspect() (typeinfo.T, bool) {
@@ -172,7 +172,7 @@ func (*Relate_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RelativeOf struct {
+type RelativeOf struct {
 	Via    string
 	Object rtti.TextEval
 	Markup map[string]any
@@ -216,7 +216,7 @@ var Zt_RelativeOf = typeinfo.Flow{
 
 // holds a slice of type relative_of
 // FIX: duplicates the spec decl.
-type FIX_RelativeOf_Slice []RelativeOf
+type RelativeOf_Slice []RelativeOf
 
 // implements typeinfo.Inspector
 func (*RelativeOf_Slice) Inspect() (typeinfo.T, bool) {
@@ -225,7 +225,7 @@ func (*RelativeOf_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RelativesOf struct {
+type RelativesOf struct {
 	Via    string
 	Object rtti.TextEval
 	Markup map[string]any
@@ -269,7 +269,7 @@ var Zt_RelativesOf = typeinfo.Flow{
 
 // holds a slice of type relatives_of
 // FIX: duplicates the spec decl.
-type FIX_RelativesOf_Slice []RelativesOf
+type RelativesOf_Slice []RelativesOf
 
 // implements typeinfo.Inspector
 func (*RelativesOf_Slice) Inspect() (typeinfo.T, bool) {
