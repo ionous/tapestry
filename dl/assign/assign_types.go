@@ -20,16 +20,16 @@ var Zt_Address = typeinfo.Slot{
 type FIX_Address_Slot struct{ Value Address }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_Address_Slot) Inspect() typeinfo.T {
-	return &Zt_Address
+func (*FIX_Address_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_Address, false
 }
 
 // holds a slice of slots
 type Address_Slots []Address
 
 // implements typeinfo.Inspector for a series of slots.
-func (*Address_Slots) Inspect() typeinfo.T {
-	return &Zt_Address
+func (*Address_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_Address, true
 }
 
 // dot, a type of slot.
@@ -46,16 +46,16 @@ var Zt_Dot = typeinfo.Slot{
 type FIX_Dot_Slot struct{ Value Dot }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_Dot_Slot) Inspect() typeinfo.T {
-	return &Zt_Dot
+func (*FIX_Dot_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_Dot, false
 }
 
 // holds a slice of slots
 type Dot_Slots []Dot
 
 // implements typeinfo.Inspector for a series of slots.
-func (*Dot_Slots) Inspect() typeinfo.T {
-	return &Zt_Dot
+func (*Dot_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_Dot, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -67,8 +67,8 @@ type FIX_SetValue struct {
 }
 
 // implements typeinfo.Inspector
-func (*SetValue) Inspect() typeinfo.T {
-	return &Zt_SetValue
+func (*SetValue) Inspect() (typeinfo.T, bool) {
+	return &Zt_SetValue, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -108,8 +108,8 @@ var Zt_SetValue = typeinfo.Flow{
 type FIX_SetValue_Slice []SetValue
 
 // implements typeinfo.Inspector
-func (*SetValue_Slice) Inspect() typeinfo.T {
-	return &Zt_SetValue
+func (*SetValue_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SetValue, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -121,8 +121,8 @@ type FIX_SetTrait struct {
 }
 
 // implements typeinfo.Inspector
-func (*SetTrait) Inspect() typeinfo.T {
-	return &Zt_SetTrait
+func (*SetTrait) Inspect() (typeinfo.T, bool) {
+	return &Zt_SetTrait, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -162,8 +162,8 @@ var Zt_SetTrait = typeinfo.Flow{
 type FIX_SetTrait_Slice []SetTrait
 
 // implements typeinfo.Inspector
-func (*SetTrait_Slice) Inspect() typeinfo.T {
-	return &Zt_SetTrait
+func (*SetTrait_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SetTrait, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -175,8 +175,8 @@ type FIX_CopyValue struct {
 }
 
 // implements typeinfo.Inspector
-func (*CopyValue) Inspect() typeinfo.T {
-	return &Zt_CopyValue
+func (*CopyValue) Inspect() (typeinfo.T, bool) {
+	return &Zt_CopyValue, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -216,8 +216,8 @@ var Zt_CopyValue = typeinfo.Flow{
 type FIX_CopyValue_Slice []CopyValue
 
 // implements typeinfo.Inspector
-func (*CopyValue_Slice) Inspect() typeinfo.T {
-	return &Zt_CopyValue
+func (*CopyValue_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_CopyValue, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -230,8 +230,8 @@ type FIX_ObjectRef struct {
 }
 
 // implements typeinfo.Inspector
-func (*ObjectRef) Inspect() typeinfo.T {
-	return &Zt_ObjectRef
+func (*ObjectRef) Inspect() (typeinfo.T, bool) {
+	return &Zt_ObjectRef, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -288,8 +288,8 @@ var Zt_ObjectRef = typeinfo.Flow{
 type FIX_ObjectRef_Slice []ObjectRef
 
 // implements typeinfo.Inspector
-func (*ObjectRef_Slice) Inspect() typeinfo.T {
-	return &Zt_ObjectRef
+func (*ObjectRef_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_ObjectRef, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -301,8 +301,8 @@ type FIX_VariableRef struct {
 }
 
 // implements typeinfo.Inspector
-func (*VariableRef) Inspect() typeinfo.T {
-	return &Zt_VariableRef
+func (*VariableRef) Inspect() (typeinfo.T, bool) {
+	return &Zt_VariableRef, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -355,8 +355,8 @@ var Zt_VariableRef = typeinfo.Flow{
 type FIX_VariableRef_Slice []VariableRef
 
 // implements typeinfo.Inspector
-func (*VariableRef_Slice) Inspect() typeinfo.T {
-	return &Zt_VariableRef
+func (*VariableRef_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_VariableRef, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -367,8 +367,8 @@ type FIX_AtField struct {
 }
 
 // implements typeinfo.Inspector
-func (*AtField) Inspect() typeinfo.T {
-	return &Zt_AtField
+func (*AtField) Inspect() (typeinfo.T, bool) {
+	return &Zt_AtField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -401,8 +401,8 @@ var Zt_AtField = typeinfo.Flow{
 type FIX_AtField_Slice []AtField
 
 // implements typeinfo.Inspector
-func (*AtField_Slice) Inspect() typeinfo.T {
-	return &Zt_AtField
+func (*AtField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_AtField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -413,8 +413,8 @@ type FIX_AtIndex struct {
 }
 
 // implements typeinfo.Inspector
-func (*AtIndex) Inspect() typeinfo.T {
-	return &Zt_AtIndex
+func (*AtIndex) Inspect() (typeinfo.T, bool) {
+	return &Zt_AtIndex, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -447,8 +447,8 @@ var Zt_AtIndex = typeinfo.Flow{
 type FIX_AtIndex_Slice []AtIndex
 
 // implements typeinfo.Inspector
-func (*AtIndex_Slice) Inspect() typeinfo.T {
-	return &Zt_AtIndex
+func (*AtIndex_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_AtIndex, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -460,8 +460,8 @@ type FIX_CallPattern struct {
 }
 
 // implements typeinfo.Inspector
-func (*CallPattern) Inspect() typeinfo.T {
-	return &Zt_CallPattern
+func (*CallPattern) Inspect() (typeinfo.T, bool) {
+	return &Zt_CallPattern, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -516,8 +516,8 @@ var Zt_CallPattern = typeinfo.Flow{
 type FIX_CallPattern_Slice []CallPattern
 
 // implements typeinfo.Inspector
-func (*CallPattern_Slice) Inspect() typeinfo.T {
-	return &Zt_CallPattern
+func (*CallPattern_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_CallPattern, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -529,8 +529,8 @@ type FIX_Arg struct {
 }
 
 // implements typeinfo.Inspector
-func (*Arg) Inspect() typeinfo.T {
-	return &Zt_Arg
+func (*Arg) Inspect() (typeinfo.T, bool) {
+	return &Zt_Arg, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -564,8 +564,8 @@ var Zt_Arg = typeinfo.Flow{
 type FIX_Arg_Slice []Arg
 
 // implements typeinfo.Inspector
-func (*Arg_Slice) Inspect() typeinfo.T {
-	return &Zt_Arg
+func (*Arg_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Arg, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -576,8 +576,8 @@ type FIX_FromExe struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromExe) Inspect() typeinfo.T {
-	return &Zt_FromExe
+func (*FromExe) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromExe, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -613,8 +613,8 @@ var Zt_FromExe = typeinfo.Flow{
 type FIX_FromExe_Slice []FromExe
 
 // implements typeinfo.Inspector
-func (*FromExe_Slice) Inspect() typeinfo.T {
-	return &Zt_FromExe
+func (*FromExe_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromExe, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -625,8 +625,8 @@ type FIX_FromBool struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromBool) Inspect() typeinfo.T {
-	return &Zt_FromBool
+func (*FromBool) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromBool, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -662,8 +662,8 @@ var Zt_FromBool = typeinfo.Flow{
 type FIX_FromBool_Slice []FromBool
 
 // implements typeinfo.Inspector
-func (*FromBool_Slice) Inspect() typeinfo.T {
-	return &Zt_FromBool
+func (*FromBool_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromBool, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -674,8 +674,8 @@ type FIX_FromNumber struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromNumber) Inspect() typeinfo.T {
-	return &Zt_FromNumber
+func (*FromNumber) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromNumber, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -711,8 +711,8 @@ var Zt_FromNumber = typeinfo.Flow{
 type FIX_FromNumber_Slice []FromNumber
 
 // implements typeinfo.Inspector
-func (*FromNumber_Slice) Inspect() typeinfo.T {
-	return &Zt_FromNumber
+func (*FromNumber_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromNumber, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -723,8 +723,8 @@ type FIX_FromText struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromText) Inspect() typeinfo.T {
-	return &Zt_FromText
+func (*FromText) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromText, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -760,8 +760,8 @@ var Zt_FromText = typeinfo.Flow{
 type FIX_FromText_Slice []FromText
 
 // implements typeinfo.Inspector
-func (*FromText_Slice) Inspect() typeinfo.T {
-	return &Zt_FromText
+func (*FromText_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromText, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -772,8 +772,8 @@ type FIX_FromRecord struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromRecord) Inspect() typeinfo.T {
-	return &Zt_FromRecord
+func (*FromRecord) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromRecord, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -809,8 +809,8 @@ var Zt_FromRecord = typeinfo.Flow{
 type FIX_FromRecord_Slice []FromRecord
 
 // implements typeinfo.Inspector
-func (*FromRecord_Slice) Inspect() typeinfo.T {
-	return &Zt_FromRecord
+func (*FromRecord_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromRecord, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -821,8 +821,8 @@ type FIX_FromNumList struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromNumList) Inspect() typeinfo.T {
-	return &Zt_FromNumList
+func (*FromNumList) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromNumList, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -858,8 +858,8 @@ var Zt_FromNumList = typeinfo.Flow{
 type FIX_FromNumList_Slice []FromNumList
 
 // implements typeinfo.Inspector
-func (*FromNumList_Slice) Inspect() typeinfo.T {
-	return &Zt_FromNumList
+func (*FromNumList_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromNumList, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -870,8 +870,8 @@ type FIX_FromTextList struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromTextList) Inspect() typeinfo.T {
-	return &Zt_FromTextList
+func (*FromTextList) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromTextList, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -907,8 +907,8 @@ var Zt_FromTextList = typeinfo.Flow{
 type FIX_FromTextList_Slice []FromTextList
 
 // implements typeinfo.Inspector
-func (*FromTextList_Slice) Inspect() typeinfo.T {
-	return &Zt_FromTextList
+func (*FromTextList_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromTextList, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -919,8 +919,8 @@ type FIX_FromRecordList struct {
 }
 
 // implements typeinfo.Inspector
-func (*FromRecordList) Inspect() typeinfo.T {
-	return &Zt_FromRecordList
+func (*FromRecordList) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromRecordList, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -956,8 +956,8 @@ var Zt_FromRecordList = typeinfo.Flow{
 type FIX_FromRecordList_Slice []FromRecordList
 
 // implements typeinfo.Inspector
-func (*FromRecordList_Slice) Inspect() typeinfo.T {
-	return &Zt_FromRecordList
+func (*FromRecordList_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FromRecordList, true
 }
 
 // package listing of type data

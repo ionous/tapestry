@@ -6,7 +6,6 @@ import (
 	r "reflect"
 	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
@@ -48,33 +47,23 @@ type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (any, e
 
 // given a desired output structure, read the passed plain data
 func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
-	if slot, ok := out.(jsn.SlotBlock); ok {
-		tgt := r.ValueOf(out).Elem() // the zeroth field is *slot
-		err = dec.decodeSlot(tgt.Field(0), plainData, slot.GetType())
-	} else {
-		tgt := r.ValueOf(out).Elem()       // the element under the interface
-		switch t := tgt.Type(); t.Kind() { // ugh
-		default:
-			err = unknownType(t)
-		case r.Struct:
+	tgt := r.ValueOf(out).Elem() // the element under the interface
+	if t, repeats := out.Inspect(); !repeats {
+		if slot, ok := t.(*typeinfo.Slot); ok {
+			err = dec.decodeSlot(tgt.Field(0), plainData, slot.Name)
+		} else {
 			if msg, e := ParseMessage(plainData); e != nil {
 				err = e
 			} else {
 				err = dec.readMsg(msg, walk.Walk(tgt))
 			}
-		// slice is a []slot or []flow
-		case r.Slice:
-			w := walk.Walk(tgt)
-			elType := tgt.Type().Elem()
-			switch elType.Kind() {
-			default:
-				err = unknownType(t) // print the original type
-			case r.Interface:
-				typeName := out.(jsn.SliceBlock).GetType()
-				err = dec.repeatSlot(w, plainData, typeName)
-			case r.Struct:
-				err = dec.repeatFlow(w, plainData)
-			}
+		}
+	} else {
+		w := walk.Walk(tgt)
+		if slot, ok := t.(*typeinfo.Slot); ok {
+			err = dec.repeatSlot(w, plainData, slot.Name)
+		} else {
+			err = dec.repeatFlow(w, plainData)
 		}
 	}
 	return

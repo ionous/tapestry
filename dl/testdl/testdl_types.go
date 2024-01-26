@@ -15,16 +15,16 @@ var Zt_TestSlot = typeinfo.Slot{
 type FIX_TestSlot_Slot struct{ Value TestSlot }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_TestSlot_Slot) Inspect() typeinfo.T {
-	return &Zt_TestSlot
+func (*FIX_TestSlot_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_TestSlot, false
 }
 
 // holds a slice of slots
 type TestSlot_Slots []TestSlot
 
 // implements typeinfo.Inspector for a series of slots.
-func (*TestSlot_Slots) Inspect() typeinfo.T {
-	return &Zt_TestSlot
+func (*TestSlot_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_TestSlot, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -35,8 +35,8 @@ type FIX_TestEmbed struct {
 }
 
 // implements typeinfo.Inspector
-func (*TestEmbed) Inspect() typeinfo.T {
-	return &Zt_TestEmbed
+func (*TestEmbed) Inspect() (typeinfo.T, bool) {
+	return &Zt_TestEmbed, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -69,8 +69,8 @@ var Zt_TestEmbed = typeinfo.Flow{
 type FIX_TestEmbed_Slice []TestEmbed
 
 // implements typeinfo.Inspector
-func (*TestEmbed_Slice) Inspect() typeinfo.T {
-	return &Zt_TestEmbed
+func (*TestEmbed_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_TestEmbed, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -85,8 +85,8 @@ type FIX_TestFlow struct {
 }
 
 // implements typeinfo.Inspector
-func (*TestFlow) Inspect() typeinfo.T {
-	return &Zt_TestFlow
+func (*TestFlow) Inspect() (typeinfo.T, bool) {
+	return &Zt_TestFlow, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -141,8 +141,8 @@ var Zt_TestFlow = typeinfo.Flow{
 type FIX_TestFlow_Slice []TestFlow
 
 // implements typeinfo.Inspector
-func (*TestFlow_Slice) Inspect() typeinfo.T {
-	return &Zt_TestFlow
+func (*TestFlow_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_TestFlow, true
 }
 
 const (

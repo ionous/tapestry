@@ -16,16 +16,16 @@ var Zt_Event = typeinfo.Slot{
 type FIX_Event_Slot struct{ Value Event }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_Event_Slot) Inspect() typeinfo.T {
-	return &Zt_Event
+func (*FIX_Event_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_Event, false
 }
 
 // holds a slice of slots
 type Event_Slots []Event
 
 // implements typeinfo.Inspector for a series of slots.
-func (*Event_Slots) Inspect() typeinfo.T {
-	return &Zt_Event
+func (*Event_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_Event, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -38,8 +38,8 @@ type FIX_Frame struct {
 }
 
 // implements typeinfo.Inspector
-func (*Frame) Inspect() typeinfo.T {
-	return &Zt_Frame
+func (*Frame) Inspect() (typeinfo.T, bool) {
+	return &Zt_Frame, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -76,8 +76,8 @@ var Zt_Frame = typeinfo.Flow{
 type FIX_Frame_Slice []Frame
 
 // implements typeinfo.Inspector
-func (*Frame_Slice) Inspect() typeinfo.T {
-	return &Zt_Frame
+func (*Frame_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Frame, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -88,8 +88,8 @@ type FIX_FrameOutput struct {
 }
 
 // implements typeinfo.Inspector
-func (*FrameOutput) Inspect() typeinfo.T {
-	return &Zt_FrameOutput
+func (*FrameOutput) Inspect() (typeinfo.T, bool) {
+	return &Zt_FrameOutput, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -122,8 +122,8 @@ var Zt_FrameOutput = typeinfo.Flow{
 type FIX_FrameOutput_Slice []FrameOutput
 
 // implements typeinfo.Inspector
-func (*FrameOutput_Slice) Inspect() typeinfo.T {
-	return &Zt_FrameOutput
+func (*FrameOutput_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_FrameOutput, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -134,8 +134,8 @@ type FIX_SceneStarted struct {
 }
 
 // implements typeinfo.Inspector
-func (*SceneStarted) Inspect() typeinfo.T {
-	return &Zt_SceneStarted
+func (*SceneStarted) Inspect() (typeinfo.T, bool) {
+	return &Zt_SceneStarted, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -169,8 +169,8 @@ var Zt_SceneStarted = typeinfo.Flow{
 type FIX_SceneStarted_Slice []SceneStarted
 
 // implements typeinfo.Inspector
-func (*SceneStarted_Slice) Inspect() typeinfo.T {
-	return &Zt_SceneStarted
+func (*SceneStarted_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SceneStarted, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -181,8 +181,8 @@ type FIX_SceneEnded struct {
 }
 
 // implements typeinfo.Inspector
-func (*SceneEnded) Inspect() typeinfo.T {
-	return &Zt_SceneEnded
+func (*SceneEnded) Inspect() (typeinfo.T, bool) {
+	return &Zt_SceneEnded, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -216,8 +216,8 @@ var Zt_SceneEnded = typeinfo.Flow{
 type FIX_SceneEnded_Slice []SceneEnded
 
 // implements typeinfo.Inspector
-func (*SceneEnded_Slice) Inspect() typeinfo.T {
-	return &Zt_SceneEnded
+func (*SceneEnded_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SceneEnded, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -231,8 +231,8 @@ type FIX_StateChanged struct {
 }
 
 // implements typeinfo.Inspector
-func (*StateChanged) Inspect() typeinfo.T {
-	return &Zt_StateChanged
+func (*StateChanged) Inspect() (typeinfo.T, bool) {
+	return &Zt_StateChanged, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -277,8 +277,8 @@ var Zt_StateChanged = typeinfo.Flow{
 type FIX_StateChanged_Slice []StateChanged
 
 // implements typeinfo.Inspector
-func (*StateChanged_Slice) Inspect() typeinfo.T {
-	return &Zt_StateChanged
+func (*StateChanged_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_StateChanged, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -291,8 +291,8 @@ type FIX_PairChanged struct {
 }
 
 // implements typeinfo.Inspector
-func (*PairChanged) Inspect() typeinfo.T {
-	return &Zt_PairChanged
+func (*PairChanged) Inspect() (typeinfo.T, bool) {
+	return &Zt_PairChanged, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -333,8 +333,8 @@ var Zt_PairChanged = typeinfo.Flow{
 type FIX_PairChanged_Slice []PairChanged
 
 // implements typeinfo.Inspector
-func (*PairChanged_Slice) Inspect() typeinfo.T {
-	return &Zt_PairChanged
+func (*PairChanged_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_PairChanged, true
 }
 
 // package listing of type data

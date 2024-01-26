@@ -9,14 +9,14 @@ var Zt_{{Pascal .Name}} = typeinfo.Slot{
 type FIX_{{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_{{Pascal .Name}}_Slot) Inspect() typeinfo.T {
-	return &Zt_{{Pascal .Name}}
+func (*FIX_{{Pascal .Name}}_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_{{Pascal .Name}}, false
 }
 
 // holds a slice of slots
 type {{Pascal .Name}}_Slots []{{Pascal .Name}}
 
 // implements typeinfo.Inspector for a series of slots.
-func (*{{Pascal .Name}}_Slots) Inspect() typeinfo.T {
-	return &Zt_{{Pascal .Name}}
+func (*{{Pascal .Name}}_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_{{Pascal .Name}}, true
 }

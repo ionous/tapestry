@@ -14,8 +14,8 @@ type FIX_DoNothing struct {
 }
 
 // implements typeinfo.Inspector
-func (*DoNothing) Inspect() typeinfo.T {
-	return &Zt_DoNothing
+func (*DoNothing) Inspect() (typeinfo.T, bool) {
+	return &Zt_DoNothing, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -47,8 +47,8 @@ var Zt_DoNothing = typeinfo.Flow{
 type FIX_DoNothing_Slice []DoNothing
 
 // implements typeinfo.Inspector
-func (*DoNothing_Slice) Inspect() typeinfo.T {
-	return &Zt_DoNothing
+func (*DoNothing_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DoNothing, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -59,8 +59,8 @@ type FIX_Expect struct {
 }
 
 // implements typeinfo.Inspector
-func (*Expect) Inspect() typeinfo.T {
-	return &Zt_Expect
+func (*Expect) Inspect() (typeinfo.T, bool) {
+	return &Zt_Expect, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -93,8 +93,8 @@ var Zt_Expect = typeinfo.Flow{
 type FIX_Expect_Slice []Expect
 
 // implements typeinfo.Inspector
-func (*Expect_Slice) Inspect() typeinfo.T {
-	return &Zt_Expect
+func (*Expect_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Expect, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -105,8 +105,8 @@ type FIX_ExpectOutput struct {
 }
 
 // implements typeinfo.Inspector
-func (*ExpectOutput) Inspect() typeinfo.T {
-	return &Zt_ExpectOutput
+func (*ExpectOutput) Inspect() (typeinfo.T, bool) {
+	return &Zt_ExpectOutput, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -139,8 +139,8 @@ var Zt_ExpectOutput = typeinfo.Flow{
 type FIX_ExpectOutput_Slice []ExpectOutput
 
 // implements typeinfo.Inspector
-func (*ExpectOutput_Slice) Inspect() typeinfo.T {
-	return &Zt_ExpectOutput
+func (*ExpectOutput_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_ExpectOutput, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -151,8 +151,8 @@ type FIX_ExpectText struct {
 }
 
 // implements typeinfo.Inspector
-func (*ExpectText) Inspect() typeinfo.T {
-	return &Zt_ExpectText
+func (*ExpectText) Inspect() (typeinfo.T, bool) {
+	return &Zt_ExpectText, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -185,8 +185,8 @@ var Zt_ExpectText = typeinfo.Flow{
 type FIX_ExpectText_Slice []ExpectText
 
 // implements typeinfo.Inspector
-func (*ExpectText_Slice) Inspect() typeinfo.T {
-	return &Zt_ExpectText
+func (*ExpectText_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_ExpectText, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -197,8 +197,8 @@ type FIX_Fabricate struct {
 }
 
 // implements typeinfo.Inspector
-func (*Fabricate) Inspect() typeinfo.T {
-	return &Zt_Fabricate
+func (*Fabricate) Inspect() (typeinfo.T, bool) {
+	return &Zt_Fabricate, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -234,8 +234,8 @@ var Zt_Fabricate = typeinfo.Flow{
 type FIX_Fabricate_Slice []Fabricate
 
 // implements typeinfo.Inspector
-func (*Fabricate_Slice) Inspect() typeinfo.T {
-	return &Zt_Fabricate
+func (*Fabricate_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Fabricate, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -247,8 +247,8 @@ type FIX_DebugLog struct {
 }
 
 // implements typeinfo.Inspector
-func (*DebugLog) Inspect() typeinfo.T {
-	return &Zt_DebugLog
+func (*DebugLog) Inspect() (typeinfo.T, bool) {
+	return &Zt_DebugLog, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -288,8 +288,8 @@ var Zt_DebugLog = typeinfo.Flow{
 type FIX_DebugLog_Slice []DebugLog
 
 // implements typeinfo.Inspector
-func (*DebugLog_Slice) Inspect() typeinfo.T {
-	return &Zt_DebugLog
+func (*DebugLog_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DebugLog, true
 }
 
 const (

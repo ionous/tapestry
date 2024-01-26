@@ -19,16 +19,16 @@ var Zt_PlayMessage = typeinfo.Slot{
 type FIX_PlayMessage_Slot struct{ Value PlayMessage }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_PlayMessage_Slot) Inspect() typeinfo.T {
-	return &Zt_PlayMessage
+func (*FIX_PlayMessage_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayMessage, false
 }
 
 // holds a slice of slots
 type PlayMessage_Slots []PlayMessage
 
 // implements typeinfo.Inspector for a series of slots.
-func (*PlayMessage_Slots) Inspect() typeinfo.T {
-	return &Zt_PlayMessage
+func (*PlayMessage_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayMessage, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -39,8 +39,8 @@ type FIX_PlayLog struct {
 }
 
 // implements typeinfo.Inspector
-func (*PlayLog) Inspect() typeinfo.T {
-	return &Zt_PlayLog
+func (*PlayLog) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayLog, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -76,8 +76,8 @@ var Zt_PlayLog = typeinfo.Flow{
 type FIX_PlayLog_Slice []PlayLog
 
 // implements typeinfo.Inspector
-func (*PlayLog_Slice) Inspect() typeinfo.T {
-	return &Zt_PlayLog
+func (*PlayLog_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayLog, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -88,8 +88,8 @@ type FIX_PlayMode struct {
 }
 
 // implements typeinfo.Inspector
-func (*PlayMode) Inspect() typeinfo.T {
-	return &Zt_PlayMode
+func (*PlayMode) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayMode, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -125,8 +125,8 @@ var Zt_PlayMode = typeinfo.Flow{
 type FIX_PlayMode_Slice []PlayMode
 
 // implements typeinfo.Inspector
-func (*PlayMode_Slice) Inspect() typeinfo.T {
-	return &Zt_PlayMode
+func (*PlayMode_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayMode, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -137,8 +137,8 @@ type FIX_PlayOut struct {
 }
 
 // implements typeinfo.Inspector
-func (*PlayOut) Inspect() typeinfo.T {
-	return &Zt_PlayOut
+func (*PlayOut) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayOut, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -174,8 +174,8 @@ var Zt_PlayOut = typeinfo.Flow{
 type FIX_PlayOut_Slice []PlayOut
 
 // implements typeinfo.Inspector
-func (*PlayOut_Slice) Inspect() typeinfo.T {
-	return &Zt_PlayOut
+func (*PlayOut_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_PlayOut, true
 }
 
 const (

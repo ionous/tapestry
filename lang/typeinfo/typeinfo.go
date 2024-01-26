@@ -7,8 +7,9 @@ package typeinfo
 
 // implemented by every auto-generated command
 type Inspector interface {
-	// returns the typeinfo for the instance.
-	Inspect() T
+	// returns the typeinfo for the instance
+	// and whether it repeats.
+	Inspect() (T, bool)
 }
 
 // implemented by auto-generated flows

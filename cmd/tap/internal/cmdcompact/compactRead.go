@@ -7,19 +7,19 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 
 func readSpec(fsys fs.FS, path string, out *spec.TypeSpec) (err error) {
-	if msg, e := files.FormattedRead(fsys, path); e != nil {
-		err = e
-	} else {
-		var dec decode.Decoder
-		dec.Signatures(spec.Signatures)
-		err = dec.Decode(out, msg)
-	}
+	panic("fix")
+	// if msg, e := files.FormattedRead(fsys, path); e != nil {
+	// 	err = e
+	// } else {
+	// 	var dec decode.Decoder
+	// 	dec.Signatures(spec.Signatures)
+	// 	err = dec.Decode(out, msg)
+	// }
 	return
 }
 

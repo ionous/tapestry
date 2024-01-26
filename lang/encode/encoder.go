@@ -6,7 +6,6 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/lang/walk"
@@ -27,11 +26,8 @@ type CustomEncoder func(*Encoder, typeinfo.Inspector) (any, error)
 // turn the passed tapestry command into plain values.
 func (enc *Encoder) Encode(m typeinfo.Inspector) (ret any, err error) {
 	src := r.ValueOf(m).Elem()
-	switch t := src.Type(); t.Kind() { // ugh
-	default:
-		err = unknownType(t)
-	case r.Struct:
-		if _, ok := m.(jsn.SlotBlock); !ok {
+	if t, repeats := m.Inspect(); !repeats {
+		if _, ok := t.(*typeinfo.Slot); !ok {
 			ret, err = enc.writeFlow(walk.Walk(src))
 		} else {
 			// slots are structs containing { Value *slot }
@@ -43,17 +39,12 @@ func (enc *Encoder) Encode(m typeinfo.Inspector) (ret any, err error) {
 				}
 			}
 		}
-	// slice is a []slot or []flow
-	case r.Slice:
+	} else {
 		w := walk.Walk(src)
-		elType := src.Type().Elem()
-		switch elType.Kind() {
-		default:
-			err = unknownType(t) // print the original type
-		case r.Interface:
-			ret, err = enc.encodeSlots(w)
-		case r.Ptr:
+		if _, ok := t.(*typeinfo.Slot); !ok {
 			ret, err = enc.encodeFlows(w)
+		} else {
+			ret, err = enc.encodeSlots(w)
 		}
 	}
 	return

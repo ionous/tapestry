@@ -7,18 +7,18 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 
 func writeSpec(path string, src *spec.TypeSpec) (err error) {
-	var enc encode.Encoder
-	if plainData, e := enc.Encode(src); e != nil {
-		err = e
-	} else {
-		err = files.FormattedSave(path, plainData, compactFlags.pretty)
-	}
+	panic("fix")
+	// var enc encode.Encoder
+	// if plainData, e := enc.Encode(src); e != nil {
+	// 	err = e
+	// } else {
+	// 	err = files.FormattedSave(path, plainData, compactFlags.pretty)
+	// }
 	return
 }
 

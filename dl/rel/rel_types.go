@@ -15,8 +15,8 @@ type FIX_ReciprocalOf struct {
 }
 
 // implements typeinfo.Inspector
-func (*ReciprocalOf) Inspect() typeinfo.T {
-	return &Zt_ReciprocalOf
+func (*ReciprocalOf) Inspect() (typeinfo.T, bool) {
+	return &Zt_ReciprocalOf, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -56,8 +56,8 @@ var Zt_ReciprocalOf = typeinfo.Flow{
 type FIX_ReciprocalOf_Slice []ReciprocalOf
 
 // implements typeinfo.Inspector
-func (*ReciprocalOf_Slice) Inspect() typeinfo.T {
-	return &Zt_ReciprocalOf
+func (*ReciprocalOf_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_ReciprocalOf, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -69,8 +69,8 @@ type FIX_ReciprocalsOf struct {
 }
 
 // implements typeinfo.Inspector
-func (*ReciprocalsOf) Inspect() typeinfo.T {
-	return &Zt_ReciprocalsOf
+func (*ReciprocalsOf) Inspect() (typeinfo.T, bool) {
+	return &Zt_ReciprocalsOf, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -110,8 +110,8 @@ var Zt_ReciprocalsOf = typeinfo.Flow{
 type FIX_ReciprocalsOf_Slice []ReciprocalsOf
 
 // implements typeinfo.Inspector
-func (*ReciprocalsOf_Slice) Inspect() typeinfo.T {
-	return &Zt_ReciprocalsOf
+func (*ReciprocalsOf_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_ReciprocalsOf, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -124,8 +124,8 @@ type FIX_Relate struct {
 }
 
 // implements typeinfo.Inspector
-func (*Relate) Inspect() typeinfo.T {
-	return &Zt_Relate
+func (*Relate) Inspect() (typeinfo.T, bool) {
+	return &Zt_Relate, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -169,8 +169,8 @@ var Zt_Relate = typeinfo.Flow{
 type FIX_Relate_Slice []Relate
 
 // implements typeinfo.Inspector
-func (*Relate_Slice) Inspect() typeinfo.T {
-	return &Zt_Relate
+func (*Relate_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Relate, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -182,8 +182,8 @@ type FIX_RelativeOf struct {
 }
 
 // implements typeinfo.Inspector
-func (*RelativeOf) Inspect() typeinfo.T {
-	return &Zt_RelativeOf
+func (*RelativeOf) Inspect() (typeinfo.T, bool) {
+	return &Zt_RelativeOf, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -223,8 +223,8 @@ var Zt_RelativeOf = typeinfo.Flow{
 type FIX_RelativeOf_Slice []RelativeOf
 
 // implements typeinfo.Inspector
-func (*RelativeOf_Slice) Inspect() typeinfo.T {
-	return &Zt_RelativeOf
+func (*RelativeOf_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RelativeOf, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -236,8 +236,8 @@ type FIX_RelativesOf struct {
 }
 
 // implements typeinfo.Inspector
-func (*RelativesOf) Inspect() typeinfo.T {
-	return &Zt_RelativesOf
+func (*RelativesOf) Inspect() (typeinfo.T, bool) {
+	return &Zt_RelativesOf, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -277,8 +277,8 @@ var Zt_RelativesOf = typeinfo.Flow{
 type FIX_RelativesOf_Slice []RelativesOf
 
 // implements typeinfo.Inspector
-func (*RelativesOf_Slice) Inspect() typeinfo.T {
-	return &Zt_RelativesOf
+func (*RelativesOf_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RelativesOf, true
 }
 
 var Zt_RelationName = typeinfo.Str{

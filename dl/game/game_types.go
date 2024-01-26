@@ -13,8 +13,8 @@ type FIX_QuitGame struct {
 }
 
 // implements typeinfo.Inspector
-func (*QuitGame) Inspect() typeinfo.T {
-	return &Zt_QuitGame
+func (*QuitGame) Inspect() (typeinfo.T, bool) {
+	return &Zt_QuitGame, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -43,8 +43,8 @@ var Zt_QuitGame = typeinfo.Flow{
 type FIX_QuitGame_Slice []QuitGame
 
 // implements typeinfo.Inspector
-func (*QuitGame_Slice) Inspect() typeinfo.T {
-	return &Zt_QuitGame
+func (*QuitGame_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_QuitGame, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -54,8 +54,8 @@ type FIX_SaveGame struct {
 }
 
 // implements typeinfo.Inspector
-func (*SaveGame) Inspect() typeinfo.T {
-	return &Zt_SaveGame
+func (*SaveGame) Inspect() (typeinfo.T, bool) {
+	return &Zt_SaveGame, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -84,8 +84,8 @@ var Zt_SaveGame = typeinfo.Flow{
 type FIX_SaveGame_Slice []SaveGame
 
 // implements typeinfo.Inspector
-func (*SaveGame_Slice) Inspect() typeinfo.T {
-	return &Zt_SaveGame
+func (*SaveGame_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SaveGame, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -95,8 +95,8 @@ type FIX_RestoreGame struct {
 }
 
 // implements typeinfo.Inspector
-func (*RestoreGame) Inspect() typeinfo.T {
-	return &Zt_RestoreGame
+func (*RestoreGame) Inspect() (typeinfo.T, bool) {
+	return &Zt_RestoreGame, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -125,8 +125,8 @@ var Zt_RestoreGame = typeinfo.Flow{
 type FIX_RestoreGame_Slice []RestoreGame
 
 // implements typeinfo.Inspector
-func (*RestoreGame_Slice) Inspect() typeinfo.T {
-	return &Zt_RestoreGame
+func (*RestoreGame_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RestoreGame, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -136,8 +136,8 @@ type FIX_UndoTurn struct {
 }
 
 // implements typeinfo.Inspector
-func (*UndoTurn) Inspect() typeinfo.T {
-	return &Zt_UndoTurn
+func (*UndoTurn) Inspect() (typeinfo.T, bool) {
+	return &Zt_UndoTurn, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -166,8 +166,8 @@ var Zt_UndoTurn = typeinfo.Flow{
 type FIX_UndoTurn_Slice []UndoTurn
 
 // implements typeinfo.Inspector
-func (*UndoTurn_Slice) Inspect() typeinfo.T {
-	return &Zt_UndoTurn
+func (*UndoTurn_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_UndoTurn, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -177,8 +177,8 @@ type FIX_PrintVersion struct {
 }
 
 // implements typeinfo.Inspector
-func (*PrintVersion) Inspect() typeinfo.T {
-	return &Zt_PrintVersion
+func (*PrintVersion) Inspect() (typeinfo.T, bool) {
+	return &Zt_PrintVersion, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -207,8 +207,8 @@ var Zt_PrintVersion = typeinfo.Flow{
 type FIX_PrintVersion_Slice []PrintVersion
 
 // implements typeinfo.Inspector
-func (*PrintVersion_Slice) Inspect() typeinfo.T {
-	return &Zt_PrintVersion
+func (*PrintVersion_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_PrintVersion, true
 }
 
 // package listing of type data

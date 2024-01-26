@@ -9,8 +9,8 @@ type FIX_{{Pascal .Name}} struct {
 }
 
 // implements typeinfo.Inspector
-func (*{{Pascal .Name}}) Inspect() typeinfo.T {
-	return &Zt_{{Pascal .Name}}
+func (*{{Pascal .Name}}) Inspect() (typeinfo.T, bool) {
+	return &Zt_{{Pascal .Name}}, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -58,6 +58,6 @@ var Zt_{{Pascal .Name}} = typeinfo.Flow{
 type FIX_{{Pascal .Name}}_Slice []{{Pascal .Name}}
 
 // implements typeinfo.Inspector
-func (*{{Pascal .Name}}_Slice) Inspect() typeinfo.T {
-	return &Zt_{{Pascal .Name}}
+func (*{{Pascal .Name}}_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_{{Pascal .Name}}, true
 }

@@ -21,16 +21,16 @@ var Zt_RenderEval = typeinfo.Slot{
 type FIX_RenderEval_Slot struct{ Value RenderEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_RenderEval_Slot) Inspect() typeinfo.T {
-	return &Zt_RenderEval
+func (*FIX_RenderEval_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderEval, false
 }
 
 // holds a slice of slots
 type RenderEval_Slots []RenderEval
 
 // implements typeinfo.Inspector for a series of slots.
-func (*RenderEval_Slots) Inspect() typeinfo.T {
-	return &Zt_RenderEval
+func (*RenderEval_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderEval, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -41,8 +41,8 @@ type FIX_RenderName struct {
 }
 
 // implements typeinfo.Inspector
-func (*RenderName) Inspect() typeinfo.T {
-	return &Zt_RenderName
+func (*RenderName) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderName, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -78,8 +78,8 @@ var Zt_RenderName = typeinfo.Flow{
 type FIX_RenderName_Slice []RenderName
 
 // implements typeinfo.Inspector
-func (*RenderName_Slice) Inspect() typeinfo.T {
-	return &Zt_RenderName
+func (*RenderName_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderName, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -91,8 +91,8 @@ type FIX_RenderRef struct {
 }
 
 // implements typeinfo.Inspector
-func (*RenderRef) Inspect() typeinfo.T {
-	return &Zt_RenderRef
+func (*RenderRef) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderRef, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -148,8 +148,8 @@ var Zt_RenderRef = typeinfo.Flow{
 type FIX_RenderRef_Slice []RenderRef
 
 // implements typeinfo.Inspector
-func (*RenderRef_Slice) Inspect() typeinfo.T {
-	return &Zt_RenderRef
+func (*RenderRef_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderRef, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -160,8 +160,8 @@ type FIX_RenderValue struct {
 }
 
 // implements typeinfo.Inspector
-func (*RenderValue) Inspect() typeinfo.T {
-	return &Zt_RenderValue
+func (*RenderValue) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderValue, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -197,8 +197,8 @@ var Zt_RenderValue = typeinfo.Flow{
 type FIX_RenderValue_Slice []RenderValue
 
 // implements typeinfo.Inspector
-func (*RenderValue_Slice) Inspect() typeinfo.T {
-	return &Zt_RenderValue
+func (*RenderValue_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderValue, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -210,8 +210,8 @@ type FIX_RenderPattern struct {
 }
 
 // implements typeinfo.Inspector
-func (*RenderPattern) Inspect() typeinfo.T {
-	return &Zt_RenderPattern
+func (*RenderPattern) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderPattern, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -256,8 +256,8 @@ var Zt_RenderPattern = typeinfo.Flow{
 type FIX_RenderPattern_Slice []RenderPattern
 
 // implements typeinfo.Inspector
-func (*RenderPattern_Slice) Inspect() typeinfo.T {
-	return &Zt_RenderPattern
+func (*RenderPattern_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderPattern, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -269,8 +269,8 @@ type FIX_RenderResponse struct {
 }
 
 // implements typeinfo.Inspector
-func (*RenderResponse) Inspect() typeinfo.T {
-	return &Zt_RenderResponse
+func (*RenderResponse) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderResponse, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -313,8 +313,8 @@ var Zt_RenderResponse = typeinfo.Flow{
 type FIX_RenderResponse_Slice []RenderResponse
 
 // implements typeinfo.Inspector
-func (*RenderResponse_Slice) Inspect() typeinfo.T {
-	return &Zt_RenderResponse
+func (*RenderResponse_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RenderResponse, true
 }
 
 // package listing of type data

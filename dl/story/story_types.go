@@ -23,16 +23,16 @@ var Zt_FieldDefinition = typeinfo.Slot{
 type FIX_FieldDefinition_Slot struct{ Value FieldDefinition }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_FieldDefinition_Slot) Inspect() typeinfo.T {
-	return &Zt_FieldDefinition
+func (*FIX_FieldDefinition_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_FieldDefinition, false
 }
 
 // holds a slice of slots
 type FieldDefinition_Slots []FieldDefinition
 
 // implements typeinfo.Inspector for a series of slots.
-func (*FieldDefinition_Slots) Inspect() typeinfo.T {
-	return &Zt_FieldDefinition
+func (*FieldDefinition_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_FieldDefinition, true
 }
 
 // story_statement, a type of slot.
@@ -50,16 +50,16 @@ var Zt_StoryStatement = typeinfo.Slot{
 type FIX_StoryStatement_Slot struct{ Value StoryStatement }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_StoryStatement_Slot) Inspect() typeinfo.T {
-	return &Zt_StoryStatement
+func (*FIX_StoryStatement_Slot) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoryStatement, false
 }
 
 // holds a slice of slots
 type StoryStatement_Slots []StoryStatement
 
 // implements typeinfo.Inspector for a series of slots.
-func (*StoryStatement_Slots) Inspect() typeinfo.T {
-	return &Zt_StoryStatement
+func (*StoryStatement_Slots) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoryStatement, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -70,8 +70,8 @@ type FIX_Comment struct {
 }
 
 // implements typeinfo.Inspector
-func (*Comment) Inspect() typeinfo.T {
-	return &Zt_Comment
+func (*Comment) Inspect() (typeinfo.T, bool) {
+	return &Zt_Comment, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -109,8 +109,8 @@ var Zt_Comment = typeinfo.Flow{
 type FIX_Comment_Slice []Comment
 
 // implements typeinfo.Inspector
-func (*Comment_Slice) Inspect() typeinfo.T {
-	return &Zt_Comment
+func (*Comment_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Comment, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -124,8 +124,8 @@ type FIX_Test struct {
 }
 
 // implements typeinfo.Inspector
-func (*Test) Inspect() typeinfo.T {
-	return &Zt_Test
+func (*Test) Inspect() (typeinfo.T, bool) {
+	return &Zt_Test, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -180,8 +180,8 @@ var Zt_Test = typeinfo.Flow{
 type FIX_Test_Slice []Test
 
 // implements typeinfo.Inspector
-func (*Test_Slice) Inspect() typeinfo.T {
-	return &Zt_Test
+func (*Test_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_Test, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -194,8 +194,8 @@ type FIX_DefineScene struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineScene) Inspect() typeinfo.T {
-	return &Zt_DefineScene
+func (*DefineScene) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineScene, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -241,8 +241,8 @@ var Zt_DefineScene = typeinfo.Flow{
 type FIX_DefineScene_Slice []DefineScene
 
 // implements typeinfo.Inspector
-func (*DefineScene_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineScene
+func (*DefineScene_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineScene, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -255,8 +255,8 @@ type FIX_DefineAction struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineAction) Inspect() typeinfo.T {
-	return &Zt_DefineAction
+func (*DefineAction) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineAction, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -305,8 +305,8 @@ var Zt_DefineAction = typeinfo.Flow{
 type FIX_DefineAction_Slice []DefineAction
 
 // implements typeinfo.Inspector
-func (*DefineAction_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineAction
+func (*DefineAction_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineAction, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -318,8 +318,8 @@ type FIX_DefineTraits struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineTraits) Inspect() typeinfo.T {
-	return &Zt_DefineTraits
+func (*DefineTraits) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineTraits, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -361,8 +361,8 @@ var Zt_DefineTraits = typeinfo.Flow{
 type FIX_DefineTraits_Slice []DefineTraits
 
 // implements typeinfo.Inspector
-func (*DefineTraits_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineTraits
+func (*DefineTraits_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineTraits, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -373,8 +373,8 @@ type FIX_AspectField struct {
 }
 
 // implements typeinfo.Inspector
-func (*AspectField) Inspect() typeinfo.T {
-	return &Zt_AspectField
+func (*AspectField) Inspect() (typeinfo.T, bool) {
+	return &Zt_AspectField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -410,8 +410,8 @@ var Zt_AspectField = typeinfo.Flow{
 type FIX_AspectField_Slice []AspectField
 
 // implements typeinfo.Inspector
-func (*AspectField_Slice) Inspect() typeinfo.T {
-	return &Zt_AspectField
+func (*AspectField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_AspectField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -424,8 +424,8 @@ type FIX_BoolField struct {
 }
 
 // implements typeinfo.Inspector
-func (*BoolField) Inspect() typeinfo.T {
-	return &Zt_BoolField
+func (*BoolField) Inspect() (typeinfo.T, bool) {
+	return &Zt_BoolField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -468,8 +468,8 @@ var Zt_BoolField = typeinfo.Flow{
 type FIX_BoolField_Slice []BoolField
 
 // implements typeinfo.Inspector
-func (*BoolField_Slice) Inspect() typeinfo.T {
-	return &Zt_BoolField
+func (*BoolField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_BoolField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -481,8 +481,8 @@ type FIX_CountOf struct {
 }
 
 // implements typeinfo.Inspector
-func (*CountOf) Inspect() typeinfo.T {
-	return &Zt_CountOf
+func (*CountOf) Inspect() (typeinfo.T, bool) {
+	return &Zt_CountOf, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -522,8 +522,8 @@ var Zt_CountOf = typeinfo.Flow{
 type FIX_CountOf_Slice []CountOf
 
 // implements typeinfo.Inspector
-func (*CountOf_Slice) Inspect() typeinfo.T {
-	return &Zt_CountOf
+func (*CountOf_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_CountOf, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -534,8 +534,8 @@ type FIX_CycleText struct {
 }
 
 // implements typeinfo.Inspector
-func (*CycleText) Inspect() typeinfo.T {
-	return &Zt_CycleText
+func (*CycleText) Inspect() (typeinfo.T, bool) {
+	return &Zt_CycleText, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -572,8 +572,8 @@ var Zt_CycleText = typeinfo.Flow{
 type FIX_CycleText_Slice []CycleText
 
 // implements typeinfo.Inspector
-func (*CycleText_Slice) Inspect() typeinfo.T {
-	return &Zt_CycleText
+func (*CycleText_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_CycleText, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -585,8 +585,8 @@ type FIX_DefineAlias struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineAlias) Inspect() typeinfo.T {
-	return &Zt_DefineAlias
+func (*DefineAlias) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineAlias, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -628,8 +628,8 @@ var Zt_DefineAlias = typeinfo.Flow{
 type FIX_DefineAlias_Slice []DefineAlias
 
 // implements typeinfo.Inspector
-func (*DefineAlias_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineAlias
+func (*DefineAlias_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineAlias, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -641,8 +641,8 @@ type FIX_DefineLeadingGrammar struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineLeadingGrammar) Inspect() typeinfo.T {
-	return &Zt_DefineLeadingGrammar
+func (*DefineLeadingGrammar) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineLeadingGrammar, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -686,8 +686,8 @@ var Zt_DefineLeadingGrammar = typeinfo.Flow{
 type FIX_DefineLeadingGrammar_Slice []DefineLeadingGrammar
 
 // implements typeinfo.Inspector
-func (*DefineLeadingGrammar_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineLeadingGrammar
+func (*DefineLeadingGrammar_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineLeadingGrammar, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -699,8 +699,8 @@ type FIX_DefineNamedGrammar struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineNamedGrammar) Inspect() typeinfo.T {
-	return &Zt_DefineNamedGrammar
+func (*DefineNamedGrammar) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineNamedGrammar, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -743,8 +743,8 @@ var Zt_DefineNamedGrammar = typeinfo.Flow{
 type FIX_DefineNamedGrammar_Slice []DefineNamedGrammar
 
 // implements typeinfo.Inspector
-func (*DefineNamedGrammar_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineNamedGrammar
+func (*DefineNamedGrammar_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineNamedGrammar, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -757,8 +757,8 @@ type FIX_DefinePhrase struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefinePhrase) Inspect() typeinfo.T {
-	return &Zt_DefinePhrase
+func (*DefinePhrase) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefinePhrase, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -803,8 +803,8 @@ var Zt_DefinePhrase = typeinfo.Flow{
 type FIX_DefinePhrase_Slice []DefinePhrase
 
 // implements typeinfo.Inspector
-func (*DefinePhrase_Slice) Inspect() typeinfo.T {
-	return &Zt_DefinePhrase
+func (*DefinePhrase_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefinePhrase, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -815,8 +815,8 @@ type FIX_DeclareStatement struct {
 }
 
 // implements typeinfo.Inspector
-func (*DeclareStatement) Inspect() typeinfo.T {
-	return &Zt_DeclareStatement
+func (*DeclareStatement) Inspect() (typeinfo.T, bool) {
+	return &Zt_DeclareStatement, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -852,8 +852,8 @@ var Zt_DeclareStatement = typeinfo.Flow{
 type FIX_DeclareStatement_Slice []DeclareStatement
 
 // implements typeinfo.Inspector
-func (*DeclareStatement_Slice) Inspect() typeinfo.T {
-	return &Zt_DeclareStatement
+func (*DeclareStatement_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DeclareStatement, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -867,8 +867,8 @@ type FIX_DefineRelation struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineRelation) Inspect() typeinfo.T {
-	return &Zt_DefineRelation
+func (*DefineRelation) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineRelation, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -915,8 +915,8 @@ var Zt_DefineRelation = typeinfo.Flow{
 type FIX_DefineRelation_Slice []DefineRelation
 
 // implements typeinfo.Inspector
-func (*DefineRelation_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineRelation
+func (*DefineRelation_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineRelation, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -928,8 +928,8 @@ type FIX_DefineFields struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineFields) Inspect() typeinfo.T {
-	return &Zt_DefineFields
+func (*DefineFields) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineFields, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -972,8 +972,8 @@ var Zt_DefineFields = typeinfo.Flow{
 type FIX_DefineFields_Slice []DefineFields
 
 // implements typeinfo.Inspector
-func (*DefineFields_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineFields
+func (*DefineFields_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineFields, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -985,8 +985,8 @@ type FIX_DefineKinds struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineKinds) Inspect() typeinfo.T {
-	return &Zt_DefineKinds
+func (*DefineKinds) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineKinds, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1025,8 +1025,8 @@ var Zt_DefineKinds = typeinfo.Flow{
 type FIX_DefineKinds_Slice []DefineKinds
 
 // implements typeinfo.Inspector
-func (*DefineKinds_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineKinds
+func (*DefineKinds_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineKinds, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1038,8 +1038,8 @@ type FIX_MakeOpposite struct {
 }
 
 // implements typeinfo.Inspector
-func (*MakeOpposite) Inspect() typeinfo.T {
-	return &Zt_MakeOpposite
+func (*MakeOpposite) Inspect() (typeinfo.T, bool) {
+	return &Zt_MakeOpposite, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1081,8 +1081,8 @@ var Zt_MakeOpposite = typeinfo.Flow{
 type FIX_MakeOpposite_Slice []MakeOpposite
 
 // implements typeinfo.Inspector
-func (*MakeOpposite_Slice) Inspect() typeinfo.T {
-	return &Zt_MakeOpposite
+func (*MakeOpposite_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_MakeOpposite, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1094,8 +1094,8 @@ type FIX_MakePlural struct {
 }
 
 // implements typeinfo.Inspector
-func (*MakePlural) Inspect() typeinfo.T {
-	return &Zt_MakePlural
+func (*MakePlural) Inspect() (typeinfo.T, bool) {
+	return &Zt_MakePlural, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1137,8 +1137,8 @@ var Zt_MakePlural = typeinfo.Flow{
 type FIX_MakePlural_Slice []MakePlural
 
 // implements typeinfo.Inspector
-func (*MakePlural_Slice) Inspect() typeinfo.T {
-	return &Zt_MakePlural
+func (*MakePlural_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_MakePlural, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1152,8 +1152,8 @@ type FIX_MapDeparting struct {
 }
 
 // implements typeinfo.Inspector
-func (*MapDeparting) Inspect() typeinfo.T {
-	return &Zt_MapDeparting
+func (*MapDeparting) Inspect() (typeinfo.T, bool) {
+	return &Zt_MapDeparting, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1203,8 +1203,8 @@ var Zt_MapDeparting = typeinfo.Flow{
 type FIX_MapDeparting_Slice []MapDeparting
 
 // implements typeinfo.Inspector
-func (*MapDeparting_Slice) Inspect() typeinfo.T {
-	return &Zt_MapDeparting
+func (*MapDeparting_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_MapDeparting, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1219,8 +1219,8 @@ type FIX_MapHeading struct {
 }
 
 // implements typeinfo.Inspector
-func (*MapHeading) Inspect() typeinfo.T {
-	return &Zt_MapHeading
+func (*MapHeading) Inspect() (typeinfo.T, bool) {
+	return &Zt_MapHeading, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1275,8 +1275,8 @@ var Zt_MapHeading = typeinfo.Flow{
 type FIX_MapHeading_Slice []MapHeading
 
 // implements typeinfo.Inspector
-func (*MapHeading_Slice) Inspect() typeinfo.T {
-	return &Zt_MapHeading
+func (*MapHeading_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_MapHeading, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1289,8 +1289,8 @@ type FIX_DefineValue struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineValue) Inspect() typeinfo.T {
-	return &Zt_DefineValue
+func (*DefineValue) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineValue, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1336,8 +1336,8 @@ var Zt_DefineValue = typeinfo.Flow{
 type FIX_DefineValue_Slice []DefineValue
 
 // implements typeinfo.Inspector
-func (*DefineValue_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineValue
+func (*DefineValue_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineValue, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1349,8 +1349,8 @@ type FIX_DefineNouns struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineNouns) Inspect() typeinfo.T {
-	return &Zt_DefineNouns
+func (*DefineNouns) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineNouns, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1389,8 +1389,8 @@ var Zt_DefineNouns = typeinfo.Flow{
 type FIX_DefineNouns_Slice []DefineNouns
 
 // implements typeinfo.Inspector
-func (*DefineNouns_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineNouns
+func (*DefineNouns_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineNouns, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1402,8 +1402,8 @@ type FIX_DefineNounTraits struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineNounTraits) Inspect() typeinfo.T {
-	return &Zt_DefineNounTraits
+func (*DefineNounTraits) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineNounTraits, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1442,8 +1442,8 @@ var Zt_DefineNounTraits = typeinfo.Flow{
 type FIX_DefineNounTraits_Slice []DefineNounTraits
 
 // implements typeinfo.Inspector
-func (*DefineNounTraits_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineNounTraits
+func (*DefineNounTraits_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineNounTraits, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1456,8 +1456,8 @@ type FIX_NumListField struct {
 }
 
 // implements typeinfo.Inspector
-func (*NumListField) Inspect() typeinfo.T {
-	return &Zt_NumListField
+func (*NumListField) Inspect() (typeinfo.T, bool) {
+	return &Zt_NumListField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1500,8 +1500,8 @@ var Zt_NumListField = typeinfo.Flow{
 type FIX_NumListField_Slice []NumListField
 
 // implements typeinfo.Inspector
-func (*NumListField_Slice) Inspect() typeinfo.T {
-	return &Zt_NumListField
+func (*NumListField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_NumListField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1514,8 +1514,8 @@ type FIX_NumberField struct {
 }
 
 // implements typeinfo.Inspector
-func (*NumberField) Inspect() typeinfo.T {
-	return &Zt_NumberField
+func (*NumberField) Inspect() (typeinfo.T, bool) {
+	return &Zt_NumberField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1558,8 +1558,8 @@ var Zt_NumberField = typeinfo.Flow{
 type FIX_NumberField_Slice []NumberField
 
 // implements typeinfo.Inspector
-func (*NumberField_Slice) Inspect() typeinfo.T {
-	return &Zt_NumberField
+func (*NumberField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_NumberField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1571,8 +1571,8 @@ type FIX_RuleProvides struct {
 }
 
 // implements typeinfo.Inspector
-func (*RuleProvides) Inspect() typeinfo.T {
-	return &Zt_RuleProvides
+func (*RuleProvides) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleProvides, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1612,8 +1612,8 @@ var Zt_RuleProvides = typeinfo.Flow{
 type FIX_RuleProvides_Slice []RuleProvides
 
 // implements typeinfo.Inspector
-func (*RuleProvides_Slice) Inspect() typeinfo.T {
-	return &Zt_RuleProvides
+func (*RuleProvides_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleProvides, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1626,8 +1626,8 @@ type FIX_RuleForPattern struct {
 }
 
 // implements typeinfo.Inspector
-func (*RuleForPattern) Inspect() typeinfo.T {
-	return &Zt_RuleForPattern
+func (*RuleForPattern) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleForPattern, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1675,8 +1675,8 @@ var Zt_RuleForPattern = typeinfo.Flow{
 type FIX_RuleForPattern_Slice []RuleForPattern
 
 // implements typeinfo.Inspector
-func (*RuleForPattern_Slice) Inspect() typeinfo.T {
-	return &Zt_RuleForPattern
+func (*RuleForPattern_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleForPattern, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1690,8 +1690,8 @@ type FIX_RuleForNoun struct {
 }
 
 // implements typeinfo.Inspector
-func (*RuleForNoun) Inspect() typeinfo.T {
-	return &Zt_RuleForNoun
+func (*RuleForNoun) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleForNoun, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1743,8 +1743,8 @@ var Zt_RuleForNoun = typeinfo.Flow{
 type FIX_RuleForNoun_Slice []RuleForNoun
 
 // implements typeinfo.Inspector
-func (*RuleForNoun_Slice) Inspect() typeinfo.T {
-	return &Zt_RuleForNoun
+func (*RuleForNoun_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleForNoun, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1759,8 +1759,8 @@ type FIX_RuleForKind struct {
 }
 
 // implements typeinfo.Inspector
-func (*RuleForKind) Inspect() typeinfo.T {
-	return &Zt_RuleForKind
+func (*RuleForKind) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleForKind, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1817,8 +1817,8 @@ var Zt_RuleForKind = typeinfo.Flow{
 type FIX_RuleForKind_Slice []RuleForKind
 
 // implements typeinfo.Inspector
-func (*RuleForKind_Slice) Inspect() typeinfo.T {
-	return &Zt_RuleForKind
+func (*RuleForKind_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RuleForKind, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1832,8 +1832,8 @@ type FIX_DefineMacro struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineMacro) Inspect() typeinfo.T {
-	return &Zt_DefineMacro
+func (*DefineMacro) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineMacro, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1886,8 +1886,8 @@ var Zt_DefineMacro = typeinfo.Flow{
 type FIX_DefineMacro_Slice []DefineMacro
 
 // implements typeinfo.Inspector
-func (*DefineMacro_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineMacro
+func (*DefineMacro_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineMacro, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1899,8 +1899,8 @@ type FIX_CallMacro struct {
 }
 
 // implements typeinfo.Inspector
-func (*CallMacro) Inspect() typeinfo.T {
-	return &Zt_CallMacro
+func (*CallMacro) Inspect() (typeinfo.T, bool) {
+	return &Zt_CallMacro, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1957,8 +1957,8 @@ var Zt_CallMacro = typeinfo.Flow{
 type FIX_CallMacro_Slice []CallMacro
 
 // implements typeinfo.Inspector
-func (*CallMacro_Slice) Inspect() typeinfo.T {
-	return &Zt_CallMacro
+func (*CallMacro_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_CallMacro, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -1972,8 +1972,8 @@ type FIX_DefinePattern struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefinePattern) Inspect() typeinfo.T {
-	return &Zt_DefinePattern
+func (*DefinePattern) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefinePattern, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2027,8 +2027,8 @@ var Zt_DefinePattern = typeinfo.Flow{
 type FIX_DefinePattern_Slice []DefinePattern
 
 // implements typeinfo.Inspector
-func (*DefinePattern_Slice) Inspect() typeinfo.T {
-	return &Zt_DefinePattern
+func (*DefinePattern_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefinePattern, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2041,8 +2041,8 @@ type FIX_RecordListField struct {
 }
 
 // implements typeinfo.Inspector
-func (*RecordListField) Inspect() typeinfo.T {
-	return &Zt_RecordListField
+func (*RecordListField) Inspect() (typeinfo.T, bool) {
+	return &Zt_RecordListField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2085,8 +2085,8 @@ var Zt_RecordListField = typeinfo.Flow{
 type FIX_RecordListField_Slice []RecordListField
 
 // implements typeinfo.Inspector
-func (*RecordListField_Slice) Inspect() typeinfo.T {
-	return &Zt_RecordListField
+func (*RecordListField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RecordListField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2099,8 +2099,8 @@ type FIX_RecordField struct {
 }
 
 // implements typeinfo.Inspector
-func (*RecordField) Inspect() typeinfo.T {
-	return &Zt_RecordField
+func (*RecordField) Inspect() (typeinfo.T, bool) {
+	return &Zt_RecordField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2143,8 +2143,8 @@ var Zt_RecordField = typeinfo.Flow{
 type FIX_RecordField_Slice []RecordField
 
 // implements typeinfo.Inspector
-func (*RecordField_Slice) Inspect() typeinfo.T {
-	return &Zt_RecordField
+func (*RecordField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_RecordField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2157,8 +2157,8 @@ type FIX_DefineRelatives struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineRelatives) Inspect() typeinfo.T {
-	return &Zt_DefineRelatives
+func (*DefineRelatives) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineRelatives, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2204,8 +2204,8 @@ var Zt_DefineRelatives = typeinfo.Flow{
 type FIX_DefineRelatives_Slice []DefineRelatives
 
 // implements typeinfo.Inspector
-func (*DefineRelatives_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineRelatives
+func (*DefineRelatives_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineRelatives, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2218,8 +2218,8 @@ type FIX_DefineOtherRelatives struct {
 }
 
 // implements typeinfo.Inspector
-func (*DefineOtherRelatives) Inspect() typeinfo.T {
-	return &Zt_DefineOtherRelatives
+func (*DefineOtherRelatives) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineOtherRelatives, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2265,8 +2265,8 @@ var Zt_DefineOtherRelatives = typeinfo.Flow{
 type FIX_DefineOtherRelatives_Slice []DefineOtherRelatives
 
 // implements typeinfo.Inspector
-func (*DefineOtherRelatives_Slice) Inspect() typeinfo.T {
-	return &Zt_DefineOtherRelatives
+func (*DefineOtherRelatives_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_DefineOtherRelatives, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2277,8 +2277,8 @@ type FIX_SayTemplate struct {
 }
 
 // implements typeinfo.Inspector
-func (*SayTemplate) Inspect() typeinfo.T {
-	return &Zt_SayTemplate
+func (*SayTemplate) Inspect() (typeinfo.T, bool) {
+	return &Zt_SayTemplate, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2316,8 +2316,8 @@ var Zt_SayTemplate = typeinfo.Flow{
 type FIX_SayTemplate_Slice []SayTemplate
 
 // implements typeinfo.Inspector
-func (*SayTemplate_Slice) Inspect() typeinfo.T {
-	return &Zt_SayTemplate
+func (*SayTemplate_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SayTemplate, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2329,8 +2329,8 @@ type FIX_SayResponse struct {
 }
 
 // implements typeinfo.Inspector
-func (*SayResponse) Inspect() typeinfo.T {
-	return &Zt_SayResponse
+func (*SayResponse) Inspect() (typeinfo.T, bool) {
+	return &Zt_SayResponse, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2372,8 +2372,8 @@ var Zt_SayResponse = typeinfo.Flow{
 type FIX_SayResponse_Slice []SayResponse
 
 // implements typeinfo.Inspector
-func (*SayResponse_Slice) Inspect() typeinfo.T {
-	return &Zt_SayResponse
+func (*SayResponse_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_SayResponse, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2384,8 +2384,8 @@ type FIX_ShuffleText struct {
 }
 
 // implements typeinfo.Inspector
-func (*ShuffleText) Inspect() typeinfo.T {
-	return &Zt_ShuffleText
+func (*ShuffleText) Inspect() (typeinfo.T, bool) {
+	return &Zt_ShuffleText, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2422,8 +2422,8 @@ var Zt_ShuffleText = typeinfo.Flow{
 type FIX_ShuffleText_Slice []ShuffleText
 
 // implements typeinfo.Inspector
-func (*ShuffleText_Slice) Inspect() typeinfo.T {
-	return &Zt_ShuffleText
+func (*ShuffleText_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_ShuffleText, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2434,8 +2434,8 @@ type FIX_StoppingText struct {
 }
 
 // implements typeinfo.Inspector
-func (*StoppingText) Inspect() typeinfo.T {
-	return &Zt_StoppingText
+func (*StoppingText) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoppingText, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2472,8 +2472,8 @@ var Zt_StoppingText = typeinfo.Flow{
 type FIX_StoppingText_Slice []StoppingText
 
 // implements typeinfo.Inspector
-func (*StoppingText_Slice) Inspect() typeinfo.T {
-	return &Zt_StoppingText
+func (*StoppingText_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoppingText, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2483,8 +2483,8 @@ type FIX_StoryBreak struct {
 }
 
 // implements typeinfo.Inspector
-func (*StoryBreak) Inspect() typeinfo.T {
-	return &Zt_StoryBreak
+func (*StoryBreak) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoryBreak, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2516,8 +2516,8 @@ var Zt_StoryBreak = typeinfo.Flow{
 type FIX_StoryBreak_Slice []StoryBreak
 
 // implements typeinfo.Inspector
-func (*StoryBreak_Slice) Inspect() typeinfo.T {
-	return &Zt_StoryBreak
+func (*StoryBreak_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoryBreak, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2528,8 +2528,8 @@ type FIX_StoryFile struct {
 }
 
 // implements typeinfo.Inspector
-func (*StoryFile) Inspect() typeinfo.T {
-	return &Zt_StoryFile
+func (*StoryFile) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoryFile, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2562,8 +2562,8 @@ var Zt_StoryFile = typeinfo.Flow{
 type FIX_StoryFile_Slice []StoryFile
 
 // implements typeinfo.Inspector
-func (*StoryFile_Slice) Inspect() typeinfo.T {
-	return &Zt_StoryFile
+func (*StoryFile_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_StoryFile, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2576,8 +2576,8 @@ type FIX_TextListField struct {
 }
 
 // implements typeinfo.Inspector
-func (*TextListField) Inspect() typeinfo.T {
-	return &Zt_TextListField
+func (*TextListField) Inspect() (typeinfo.T, bool) {
+	return &Zt_TextListField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2620,8 +2620,8 @@ var Zt_TextListField = typeinfo.Flow{
 type FIX_TextListField_Slice []TextListField
 
 // implements typeinfo.Inspector
-func (*TextListField_Slice) Inspect() typeinfo.T {
-	return &Zt_TextListField
+func (*TextListField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_TextListField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2634,8 +2634,8 @@ type FIX_TextField struct {
 }
 
 // implements typeinfo.Inspector
-func (*TextField) Inspect() typeinfo.T {
-	return &Zt_TextField
+func (*TextField) Inspect() (typeinfo.T, bool) {
+	return &Zt_TextField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2678,8 +2678,8 @@ var Zt_TextField = typeinfo.Flow{
 type FIX_TextField_Slice []TextField
 
 // implements typeinfo.Inspector
-func (*TextField_Slice) Inspect() typeinfo.T {
-	return &Zt_TextField
+func (*TextField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_TextField, true
 }
 
 // FIX: for now we are generating side by side with the old definitions
@@ -2689,8 +2689,8 @@ type FIX_NothingField struct {
 }
 
 // implements typeinfo.Inspector
-func (*NothingField) Inspect() typeinfo.T {
-	return &Zt_NothingField
+func (*NothingField) Inspect() (typeinfo.T, bool) {
+	return &Zt_NothingField, false
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2722,8 +2722,8 @@ var Zt_NothingField = typeinfo.Flow{
 type FIX_NothingField_Slice []NothingField
 
 // implements typeinfo.Inspector
-func (*NothingField_Slice) Inspect() typeinfo.T {
-	return &Zt_NothingField
+func (*NothingField_Slice) Inspect() (typeinfo.T, bool) {
+	return &Zt_NothingField, true
 }
 
 const (
