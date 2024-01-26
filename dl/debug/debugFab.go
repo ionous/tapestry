@@ -31,7 +31,7 @@ func (op *Fabricate) fabricate(run rt.Runtime) (err error) {
 		err = e
 	} else {
 		words := words.String()
-		if LogLevel.Str <= LoggingLevel_Debug {
+		if LogLevel <= C_LoggingLevel_Debug {
 			log.Println("> ", words)
 		}
 		if len(words) > 0 {

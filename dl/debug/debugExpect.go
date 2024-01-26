@@ -18,7 +18,11 @@ type GreatExpectations interface {
 }
 
 func (op *ExpectOutput) Execute(run rt.Runtime) (err error) {
-	return compareOutput(run, op.Output.GetLines())
+	return compareOutput(run, SplitLines(op.Output))
+}
+
+func SplitLines(str string) []string {
+	return strings.FieldsFunc(str, func(r rune) bool { return r == '\n' })
 }
 
 func (op *ExpectText) Execute(run rt.Runtime) (err error) {
@@ -69,7 +73,7 @@ func compareLines(want, have []string) (err error) {
 			if w != h {
 				e := errutil.Fmt("line %v mismatched. wanted '%v' have '%v'", i, want[i], have[i])
 				err = errutil.Append(err, e)
-			} else if LogLevel.Str <= LoggingLevel_Debug {
+			} else if LogLevel <= C_LoggingLevel_Debug {
 				log.Println("~ ", want[i])
 			}
 		}

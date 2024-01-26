@@ -28,10 +28,8 @@ func (op *Comment) PreImport(cat *weave.Catalog) (ret typeinfo.Inspector, err er
 		ret = op
 	} else {
 		ret = &debug.DebugLog{
-			Value: &assign.FromText{Value: core.T(op.Lines)},
-			LogLevel: debug.LoggingLevel{
-				Str: debug.LoggingLevel_Note,
-			},
+			Value:    &assign.FromText{Value: core.T(op.Lines)},
+			LogLevel: debug.C_LoggingLevel_Note,
 		}
 	}
 	return

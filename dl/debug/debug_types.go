@@ -10,7 +10,7 @@ import (
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DoNothing struct {
+type DoNothing struct {
 	Markup map[string]any
 }
 
@@ -45,7 +45,7 @@ var Zt_DoNothing = typeinfo.Flow{
 
 // holds a slice of type do_nothing
 // FIX: duplicates the spec decl.
-type FIX_DoNothing_Slice []DoNothing
+type DoNothing_Slice []DoNothing
 
 // implements typeinfo.Inspector
 func (*DoNothing_Slice) Inspect() (typeinfo.T, bool) {
@@ -54,7 +54,7 @@ func (*DoNothing_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Expect struct {
+type Expect struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
 }
@@ -90,7 +90,7 @@ var Zt_Expect = typeinfo.Flow{
 
 // holds a slice of type expect
 // FIX: duplicates the spec decl.
-type FIX_Expect_Slice []Expect
+type Expect_Slice []Expect
 
 // implements typeinfo.Inspector
 func (*Expect_Slice) Inspect() (typeinfo.T, bool) {
@@ -99,7 +99,7 @@ func (*Expect_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ExpectOutput struct {
+type ExpectOutput struct {
 	Output string
 	Markup map[string]any
 }
@@ -136,7 +136,7 @@ var Zt_ExpectOutput = typeinfo.Flow{
 
 // holds a slice of type expect_output
 // FIX: duplicates the spec decl.
-type FIX_ExpectOutput_Slice []ExpectOutput
+type ExpectOutput_Slice []ExpectOutput
 
 // implements typeinfo.Inspector
 func (*ExpectOutput_Slice) Inspect() (typeinfo.T, bool) {
@@ -145,7 +145,7 @@ func (*ExpectOutput_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ExpectText struct {
+type ExpectText struct {
 	Text   rtti.TextEval
 	Markup map[string]any
 }
@@ -182,7 +182,7 @@ var Zt_ExpectText = typeinfo.Flow{
 
 // holds a slice of type expect_text
 // FIX: duplicates the spec decl.
-type FIX_ExpectText_Slice []ExpectText
+type ExpectText_Slice []ExpectText
 
 // implements typeinfo.Inspector
 func (*ExpectText_Slice) Inspect() (typeinfo.T, bool) {
@@ -191,7 +191,7 @@ func (*ExpectText_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Fabricate struct {
+type Fabricate struct {
 	Text   rtti.TextEval
 	Markup map[string]any
 }
@@ -231,7 +231,7 @@ var Zt_Fabricate = typeinfo.Flow{
 
 // holds a slice of type fabricate
 // FIX: duplicates the spec decl.
-type FIX_Fabricate_Slice []Fabricate
+type Fabricate_Slice []Fabricate
 
 // implements typeinfo.Inspector
 func (*Fabricate_Slice) Inspect() (typeinfo.T, bool) {
@@ -240,8 +240,8 @@ func (*Fabricate_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DebugLog struct {
-	LogLevel FIX_LoggingLevel
+type DebugLog struct {
+	LogLevel LoggingLevel
 	Value    rtti.Assignment
 	Markup   map[string]any
 }
@@ -284,7 +284,7 @@ var Zt_DebugLog = typeinfo.Flow{
 
 // holds a slice of type debug_log
 // FIX: duplicates the spec decl.
-type FIX_DebugLog_Slice []DebugLog
+type DebugLog_Slice []DebugLog
 
 // implements typeinfo.Inspector
 func (*DebugLog_Slice) Inspect() (typeinfo.T, bool) {
@@ -292,25 +292,25 @@ func (*DebugLog_Slice) Inspect() (typeinfo.T, bool) {
 }
 
 // LoggingLevel, a type of str enum.
-type FIX_LoggingLevel int
+type LoggingLevel int
 
 // enumerated values of LoggingLevel
 const (
-	C_LoggingLevel_Note FIX_LoggingLevel = iota
+	C_LoggingLevel_Note LoggingLevel = iota
 	C_LoggingLevel_Debug
 	C_LoggingLevel_Info
 	C_LoggingLevel_Warn
 	C_LoggingLevel_Error
 )
 
-func MakeLoggingLevel(str string) (ret FIX_LoggingLevel, okay bool) {
+func MakeLoggingLevel(str string) (ret LoggingLevel, okay bool) {
 	if i := Zt_LoggingLevel.FindOption(str); i >= 0 {
-		ret, okay = FIX_LoggingLevel(i), true
+		ret, okay = LoggingLevel(i), true
 	}
 	return
 }
 
-func (op FIX_LoggingLevel) String() (ret string) {
+func (op LoggingLevel) String() (ret string) {
 	if i, opts := int(op), Zt_LoggingLevel.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]
 	} else {

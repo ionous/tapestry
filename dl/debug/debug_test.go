@@ -15,7 +15,7 @@ func TestLog(t *testing.T) {
 	log.SetOutput(&b)
 	//
 	lo := DebugLog{
-		LogLevel: LoggingLevel{Str: LoggingLevel_Error},
+		LogLevel: C_LoggingLevel_Error,
 		Value:    &assign.FromText{Value: T("hello")},
 	}
 	if e := lo.Execute(nil); e != nil {
