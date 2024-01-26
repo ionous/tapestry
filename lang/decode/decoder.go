@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	r "reflect"
-	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -71,7 +70,6 @@ func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
 
 // assumes that it is at the start of a flow container
 func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
-
 	// technically, the iterator should be the source of truth here.
 	// but since the args were built from the signature
 	// and the signature was matched against the registry:
@@ -116,8 +114,8 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 			}
 		}
 		if err != nil {
+			// EARLY OUT
 			return fmt.Errorf("%q(@%s:) %w", msg.Key, p, err)
-			break
 		}
 	} // for
 	if err == nil {
@@ -126,13 +124,4 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 		}
 	}
 	return
-}
-
-func newStringKey(s string) string {
-	rs := make([]rune, 0, len(s)+1)
-	rs = append(rs, '$')
-	for _, r := range s {
-		rs = append(rs, unicode.ToUpper(r))
-	}
-	return string(rs)
 }

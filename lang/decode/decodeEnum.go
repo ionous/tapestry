@@ -19,7 +19,7 @@ func SetString(dst r.Value, strtype r.Type, kv any) (err error) {
 	} else if src, ok := toString(kv); !ok {
 		err = errors.New("not string data")
 	} else if str, ok := xformString(src, n.Compose()); !ok {
-		err = errors.New("invalid string ")
+		err = errors.New("invalid string")
 	} else {
 		dst.Set(r.ValueOf(str))
 	}
