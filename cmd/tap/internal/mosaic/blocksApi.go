@@ -10,11 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/support/files"
-
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
 )
@@ -67,7 +66,7 @@ func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWrite
 			if at := filepath.Join(root, el.Path); !strings.HasPrefix(at, root) {
 				e := errutil.New("cant save to", at)
 				err = errutil.Append(err, e)
-			} else if e := unblock.Decode(&file, "story_file", story.Registry(), el.Contents); e != nil {
+			} else if e := unblock.Decode(&file, "story_file", blockRegistry, el.Contents); e != nil {
 				err = errutil.Append(err, e)
 			} else if data, e := story.Encode(&file); e != nil {
 				err = errutil.Append(err, e)
@@ -102,7 +101,7 @@ func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 	var file story.StoryFile // mosaic hands back blocks
 	if raw, e := io.ReadAll(r); e != nil {
 		err = e
-	} else if e := unblock.Decode(&file, "story_file", story.Registry(), raw); e != nil {
+	} else if e := unblock.Decode(&file, "story_file", blockRegistry, raw); e != nil {
 		err = e
 	} else if data, e := story.Encode(&file); e != nil {
 		err = e
@@ -143,3 +142,5 @@ func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 	}
 	return
 }
+
+var blockRegistry = unblock.MakeBlockCreator(blocks)

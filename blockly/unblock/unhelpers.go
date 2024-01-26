@@ -2,16 +2,42 @@ package unblock
 
 import (
 	"encoding/json"
+	"errors"
+	r "reflect"
 	"strings"
 
-	"errors"
-
 	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-type TypeCreator interface {
+type Creator interface {
 	NewType(string) (any, bool)
+}
+
+func MakeBlockCreator(blocks []*typeinfo.TypeSet) Creator {
+	m := make(typeMap)
+	for _, b := range blocks {
+		for _, ptr := range b.Signatures {
+			i, _ := ptr.(typeinfo.Inspector).Inspect()
+			n := i.TypeName() // multiple signatures can generate the same type
+			if _, ok := m[n]; !ok {
+				m[n] = r.TypeOf(ptr).Elem()
+			}
+		}
+	}
+	return m
+}
+
+type typeMap map[string]r.Type
+
+// returns .(typeinfo.Inspector)
+func (reg typeMap) NewType(name string) (ret any, okay bool) {
+	if rtype, ok := reg[name]; ok {
+		ret = r.New(rtype).Interface()
+		okay = true
+	}
+	return
 }
 
 // fix: turn pascal to block case - TEST_NAME

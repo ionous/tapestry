@@ -15,7 +15,7 @@ import (
 )
 
 // where topBlock is the expected topblock type in the file.... ex. story_file
-func Decode(dst typeinfo.Inspector, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
+func Decode(dst typeinfo.Inspector, topBlock string, reg Creator, msg json.RawMessage) (err error) {
 	var bff File
 	if e := json.Unmarshal(msg, &bff); e != nil {
 		err = e
@@ -28,13 +28,13 @@ func Decode(dst typeinfo.Inspector, topBlock string, reg TypeCreator, msg json.R
 }
 
 // where topBlock is the expected topblock type in the file.... ex. story_file
-func DecodeBlock(dst r.Value, reg TypeCreator, top *BlockInfo) (err error) {
+func DecodeBlock(dst r.Value, reg Creator, top *BlockInfo) (err error) {
 	dec := unblock{reg}
 	return dec.decodeBlock(walk.Walk(dst), top)
 }
 
 type unblock struct {
-	factory TypeCreator
+	factory Creator
 }
 
 func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {

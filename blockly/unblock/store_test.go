@@ -9,7 +9,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/blockly/test"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/dl/testdl"
@@ -20,15 +19,17 @@ import (
 )
 
 func TestStoring(t *testing.T) {
-	var reg composer.TypeRegistry
-	reg.RegisterTypes(literal.Slats)
-	reg.RegisterTypes(testdl.Slats)
-	reg.RegisterTypes(story.Slats) // for StoryBreak; fix: make a test_empty?
+	reg := unblock.MakeBlockCreator([]*typeinfo.TypeSet{
+		&literal.Z_Types,
+		&testdl.Z_Types,
+		&story.Z_Types, // for StoryBreak; fix: make a test_empty?
+	})
 
 	for _, p := range test.Pairs {
-		if !strings.HasPrefix(p.Name, "x") {
+		if strings.HasPrefix(p.Name, "x") {
+			t.Log("skipping", p.Name)
+		} else {
 			t.Run(p.Name, func(t *testing.T) {
-				// FIX: porting in progress....
 				if e := testUnblock(reg, p.Test, p.Json); e != nil {
 					t.Fatal(e)
 				}
@@ -63,7 +64,7 @@ func TestCountField(t *testing.T) {
 	}
 }
 
-func testUnblock(reg unblock.TypeCreator, expect typeinfo.Inspector, msg string) (err error) {
+func testUnblock(reg unblock.Creator, expect typeinfo.Inspector, msg string) (err error) {
 	var top unblock.BlockInfo
 	if e := json.Unmarshal([]byte(msg), &top); e != nil {
 		err = e
