@@ -36,17 +36,17 @@ func (dec *Decoder) Patternize(p PatternDecoder) *Decoder {
 
 // create an arbitrary command from arbitrary data
 // ex. boolean literals are stored as actual bool values.
-type CustomDecoder func(dec *Decoder, slot string, plainData any) (typeinfo.Inspector, error)
+type CustomDecoder func(dec *Decoder, slot *typeinfo.Slot, plainData any) (typeinfo.Inspector, error)
 
 // handle pattern parsing.
-type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (typeinfo.Inspector, error)
+type PatternDecoder func(dec *Decoder, slot *typeinfo.Slot, msg compact.Message) (typeinfo.Inspector, error)
 
 // given a desired output structure, read the passed plain data
 func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
 	w := inspect.Walk(out)
 	if t := w.TypeInfo(); !w.Repeating() {
 		if slot, ok := t.(*typeinfo.Slot); ok {
-			err = dec.decodeSlot(w, plainData, slot.Name)
+			err = dec.decodeSlot(w, slot, plainData)
 		} else {
 			if msg, e := ParseMessage(plainData); e != nil {
 				err = e
@@ -56,7 +56,7 @@ func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
 		}
 	} else {
 		if slot, ok := t.(*typeinfo.Slot); ok {
-			err = dec.repeatSlot(w, plainData, slot.Name)
+			err = dec.repeatSlot(w, slot, plainData)
 		} else {
 			err = dec.repeatFlow(w, plainData)
 		}
@@ -108,9 +108,9 @@ Break:
 
 			case *typeinfo.Slot:
 				if slot := it.Walk(); f.Repeats {
-					err = dec.repeatSlot(slot, arg, t.Name)
+					err = dec.repeatSlot(slot, t, arg)
 				} else {
-					err = dec.decodeSlot(slot, arg, t.Name)
+					err = dec.decodeSlot(slot, t, arg)
 				}
 			}
 		}

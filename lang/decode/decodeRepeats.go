@@ -2,6 +2,7 @@ package decode
 
 import (
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 func (dec *Decoder) repeatFlow(out inspect.Iter, val any) (err error) {
@@ -20,13 +21,13 @@ func (dec *Decoder) repeatFlow(out inspect.Iter, val any) (err error) {
 	return
 }
 
-func (dec *Decoder) repeatSlot(out inspect.Iter, val any, slotName string) (err error) {
+func (dec *Decoder) repeatSlot(out inspect.Iter, slot *typeinfo.Slot, val any) (err error) {
 	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
-		err = dec.repeatSlot(out, []any{val}, slotName)
+		err = dec.repeatSlot(out, slot, []any{val})
 	} else {
 		out.Resize(len(els))
 		for i := 0; out.Next(); i++ {
-			if e := dec.decodeSlot(out.Walk(), els[i], slotName); e != nil {
+			if e := dec.decodeSlot(out.Walk(), slot, els[i]); e != nil {
 				err = e
 				break
 			}

@@ -2,12 +2,12 @@ package literal
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 
 	"git.sr.ht/~ionous/tapestry/lang/decode"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -55,12 +55,12 @@ func anySlice[V any](els []V) []any {
 	return slice
 }
 
-func CustomDecoder(_ *decode.Decoder, slot string, body any) (typeinfo.Inspector, error) {
-	return readLiteral(slot, "", body)
+func CustomDecoder(_ *decode.Decoder, slot *typeinfo.Slot, body any) (typeinfo.Inspector, error) {
+	return readLiteral(slot.Name, "", body)
 }
 
-func DecodeLiteral(slot string, body any) (ret typeinfo.Inspector, err error) {
-	return readLiteral(slot, "", body)
+func DecodeLiteral(slot *typeinfo.Slot, body any) (ret typeinfo.Inspector, err error) {
+	return readLiteral(slot.Name, "", body)
 }
 
 func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, err error) {
@@ -93,21 +93,21 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 		// RecordValue ( "record:fields:<kind>, <field values>" ) is the thing for now.
 		err = compact.Unhandled
 
-	case rt.BoolEval_Type:
+	case rtti.Zt_BoolEval.Name:
 		if v, ok := val.(bool); !ok {
 			err = compact.Unhandled
 		} else {
 			ret = &BoolValue{Value: v, Kind: kind}
 		}
 
-	case rt.NumberEval_Type:
+	case rtti.Zt_NumberEval.Name:
 		if v, ok := val.(float64); !ok {
 			err = compact.Unhandled
 		} else {
 			ret = &NumValue{Value: v, Kind: kind}
 		}
 
-	case rt.TextEval_Type:
+	case rtti.Zt_TextEval.Name:
 		switch v := val.(type) {
 		case string:
 			ret = &TextValue{Value: v, Kind: kind}
@@ -121,7 +121,7 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 			err = compact.Unhandled
 		}
 
-	case rt.NumListEval_Type:
+	case rtti.Zt_NumListEval.Name:
 		switch v := val.(type) {
 		case []any:
 			if vs, ok := compact.SliceFloats(v); !ok {
@@ -135,7 +135,7 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 			err = compact.Unhandled
 		}
 
-	case rt.TextListEval_Type:
+	case rtti.Zt_TextListEval.Name:
 		switch v := val.(type) {
 		case []any:
 			if vs, ok := compact.SliceStrings(v); !ok {

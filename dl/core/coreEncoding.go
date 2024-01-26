@@ -3,11 +3,11 @@ package core
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // fix: move some part of this into package assign?
@@ -42,22 +42,22 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err err
 	return
 }
 
-func CustomDecoder(dec *decode.Decoder, slot string, body any) (ret typeinfo.Inspector, err error) {
+func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.Inspector, err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch slot {
 	default:
 		err = compact.Unhandled
 	case
 		// reading from a variable:
-		rt.BoolEval_Type,
-		rt.NumberEval_Type,
-		rt.TextEval_Type,
-		rt.NumListEval_Type,
-		rt.TextListEval_Type,
-		rt.RecordEval_Type,
-		rt.RecordListEval_Type,
+		&rtti.Zt_BoolEval,
+		&rtti.Zt_NumberEval,
+		&rtti.Zt_TextEval,
+		&rtti.Zt_NumListEval,
+		&rtti.Zt_TextListEval,
+		&rtti.Zt_RecordEval,
+		&rtti.Zt_RecordListEval,
 		// writing to a variable:
-		assign.Address_Type:
+		&assign.Zt_Address:
 		if str := getVariableString(body); len(str) > 0 {
 			ret = Variable(str)
 		} else {

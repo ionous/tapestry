@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func Encode(file *StoryFile) (ret any, err error) {
@@ -31,26 +30,26 @@ func DecodeMessage(out typeinfo.Inspector, msg map[string]any) error {
 	return dec.Decode(out, msg)
 }
 
-func DecodePattern(dec *decode.Decoder, slot string, msg compact.Message) (ret typeinfo.Inspector, err error) {
+func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Inspector, err error) {
 	switch slot {
 	default:
 		err = compact.Unhandled
-	case Zt_StoryStatement.Name:
-		if args, e := tryPatternArgs(dec, slot, msg); e != nil {
+	case &Zt_StoryStatement:
+		if args, e := tryPatternArgs(dec, msg); e != nil {
 			err = e
 		} else {
 			ret = &CallMacro{MacroName: msg.Name, Arguments: args}
 		}
 	case
-		rt.Execute_Type,
-		rt.BoolEval_Type,
-		rt.NumberEval_Type,
-		rt.TextEval_Type,
-		rt.RecordEval_Type,
-		rt.NumListEval_Type,
-		rt.TextListEval_Type,
-		rt.RecordListEval_Type:
-		if args, e := tryPatternArgs(dec, slot, msg); e != nil {
+		&rtti.Zt_Execute,
+		&rtti.Zt_BoolEval,
+		&rtti.Zt_NumberEval,
+		&rtti.Zt_TextEval,
+		&rtti.Zt_RecordEval,
+		&rtti.Zt_NumListEval,
+		&rtti.Zt_TextListEval,
+		&rtti.Zt_RecordListEval:
+		if args, e := tryPatternArgs(dec, msg); e != nil {
 			err = e
 		} else {
 			ret = &assign.CallPattern{PatternName: msg.Name, Arguments: args}
@@ -59,7 +58,7 @@ func DecodePattern(dec *decode.Decoder, slot string, msg compact.Message) (ret t
 	return
 }
 
-func tryPatternArgs(dec *decode.Decoder, slot string, msg compact.Message) (ret []assign.Arg, err error) {
+func tryPatternArgs(dec *decode.Decoder, msg compact.Message) (ret []assign.Arg, err error) {
 	for i, p := range msg.Labels {
 		var val rtti.Assignment_Slot
 		if e := dec.Decode(&val, msg.Args[i]); e != nil {
