@@ -2,7 +2,6 @@ package mdl
 
 import (
 	"database/sql"
-	"encoding/json"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -12,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -218,25 +218,25 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 		switch v := val.(type) {
 		case *assign.FromBool:
 			slot := rtti.BoolEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		case *assign.FromNumber:
 			slot := rtti.NumberEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		case *assign.FromText:
 			slot := rtti.TextEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		case *assign.FromRecord:
 			slot := rtti.RecordEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		case *assign.FromNumList:
 			slot := rtti.NumListEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		case *assign.FromTextList:
 			slot := rtti.TextListEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		case *assign.FromRecordList:
 			slot := rtti.RecordListEval_Slot{Value: v.Value}
-			ret, err = marshalSlot(&slot)
+			ret, err = marshal(&slot)
 		default:
 			err = errutil.New("unknown type")
 		}
@@ -255,25 +255,28 @@ func marshalProvisional(val literal.LiteralValue, wantAff affine.Affinity) (ret 
 		err = errutil.Fmt("mismatched literal, wanted %s not %s", aff, wantAff)
 	} else {
 		slot := literal.FIX_LiteralValue_Slot{Value: val}
-		ret, err = marshalSlot(&slot)
+		ret, err = marshal(&slot)
 	}
 	return
 }
 
 func marshalLiteral(val literal.LiteralValue) (ret string, err error) {
 	slot := literal.FIX_LiteralValue_Slot{Value: val}
-	return marshalSlot(&slot)
+	return marshal(&slot)
 }
 
 // shared generic marshal prog to text
-func marshalSlot(slot typeinfo.Inspector) (ret string, err error) {
+func marshal(slot typeinfo.Inspector) (ret string, err error) {
 	if slot != nil {
-		if els, e := encoder().Encode(slot); e != nil {
-			err = e
-		} else if b, e := json.Marshal(els); e != nil {
+		if out, e := encoder().Encode(slot); e != nil {
 			err = e
 		} else {
-			ret = string(b)
+			var str strings.Builder
+			if e := files.JsonEncoder(&str, files.RawJson).Encode(out); e != nil {
+				err = e
+			} else {
+				ret = str.String()
+			}
 		}
 	}
 	return
@@ -282,13 +285,7 @@ func marshalSlot(slot typeinfo.Inspector) (ret string, err error) {
 func marshalprog(prog []rt.Execute) (ret string, err error) {
 	if len(prog) > 0 {
 		slots := rtti.Execute_Slots(prog)
-		if els, e := encoder().Encode(&slots); e != nil {
-			err = e
-		} else if b, e := json.Marshal(els); e != nil {
-			err = e
-		} else {
-			ret = string(b)
-		}
+		ret, err = marshal(&slots)
 	}
 	return
 }

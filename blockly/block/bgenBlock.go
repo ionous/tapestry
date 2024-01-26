@@ -52,7 +52,7 @@ func (m *bgen) newInnerBlock(w inspect.Iter, body *js.Builder, typeName string, 
 		id:             NewId(),
 		typeName:       typeName,
 		allowExtraData: allowExtraData,
-		markup:         w.Markup(), // for comments
+		markup:         w.Markup(false), // for comments
 		zeroPos:        zeroPos,
 	}
 	zeroPos = false
@@ -103,7 +103,7 @@ func (m *bgen) newInnerBlock(w inspect.Iter, body *js.Builder, typeName string, 
 
 		// a single value
 		OnValue: func(w inspect.Iter) (err error) {
-			if f := w.Term(); !f.Optional || !w.ZeroValue() {
+			if f := w.Term(); !f.Optional || !w.IsZero() {
 				err = blk.writeValue(term, w)
 			}
 			return

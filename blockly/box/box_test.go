@@ -1,7 +1,6 @@
 package box_test
 
 import (
-	"bytes"
 	"encoding/json"
 	"testing"
 

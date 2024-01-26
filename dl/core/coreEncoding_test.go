@@ -11,10 +11,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"github.com/kr/pretty"
 )
 
 // verify that core variables are written and read as @ strings
-func TestEncodingDecoding(t *testing.T) {
+func TestCoreEncoding(t *testing.T) {
 	testPairs(t, []testPair{{
 		&assign.ObjectRef{
 			Name:  core.Variable("noun"),
@@ -46,9 +47,7 @@ func TestEncodingDecoding(t *testing.T) {
 }
 
 type testPair struct {
-	v interface {
-		typeinfo.Inspector
-	}
+	v      typeinfo.Inspector
 	expect string
 }
 
@@ -65,13 +64,15 @@ func testPairs(t *testing.T, pairs []testPair) {
 			t.Fail()
 		} else {
 			rtype := r.ValueOf(p.v).Elem().Type()
-			println("newing", rtype.String())
+			// println("testing", rtype.String())
 			reversed := r.New(rtype).Interface().(typeinfo.Inspector)
 			if e := unmarshal(reversed, expect); e != nil {
 				t.Logf("%d couldn't decode because %v", i, e)
 				t.Fail()
 			} else if !r.DeepEqual(reversed, p.v) {
-				t.Logf("%d mismatched decode %#v", i, have)
+				t.Logf("%d mismatched decode", i)
+				t.Log("want: ", pretty.Sprint(p.v))
+				t.Log("have: ", pretty.Sprint(reversed))
 				t.Fail()
 			}
 		}
@@ -82,6 +83,7 @@ func marshal(v typeinfo.Inspector) (ret any, err error) {
 	var enc encode.Encoder
 	return enc.Customize(core.CustomEncoder).Encode(v)
 }
+
 func unmarshal(out typeinfo.Inspector, plainData any) (err error) {
 	var dec decode.Decoder
 	return dec.

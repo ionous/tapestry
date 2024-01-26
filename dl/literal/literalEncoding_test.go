@@ -13,7 +13,7 @@ import (
 // for example the object "BoolValue" becomes the bool literal true or false
 // note: that slices containing a single value serialize as the value
 // this
-func TestEncodingDecoding(t *testing.T) {
+func TestLiteralEncoding(t *testing.T) {
 	testPairs(t, []testPair{{
 		&literal.BoolValue{Value: true},
 		true,

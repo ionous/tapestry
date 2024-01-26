@@ -1,6 +1,7 @@
 package assign_test
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -40,7 +41,7 @@ func testString(n, a string) (err error) {
 	if got, e := enc.Customize(assign.CustomEncoder).Encode(out); e != nil {
 		err = e
 	} else if !reflect.DeepEqual(got, wantPattern) {
-		err = errutil.New("mismatch", got)
+		err = errutil.New("mismatch", fmt.Sprintf("%#v", got))
 	}
 	return
 }

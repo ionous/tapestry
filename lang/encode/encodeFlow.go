@@ -1,10 +1,7 @@
 package encode
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/lang/markup"
-	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
 type FlowBuilder struct {
@@ -18,25 +15,9 @@ func (out *FlowBuilder) WriteArg(label string, value any) {
 	out.params = append(out.params, value)
 }
 
-func (out *FlowBuilder) WriteField(f walk.Field, value any) (err error) {
-	if label, ok := f.Label(); !ok {
-		err = errors.New("invalid label?")
-	} else {
-		out.WriteLabel(label)
-		out.params = append(out.params, value)
-	}
-	return
-}
-
 func (out *FlowBuilder) SetMarkup(markup map[string]any) {
 	out.markup = markup
 }
-
-// for swaps
-// func (out *FlowBuilder) ArgPair(label, choice string, value any) {
-// 	out.WriteLabelPair(label, choice)
-// 	out.params = append(out.params, value)
-// }
 
 // build a map that we get serialized to json
 func (out *FlowBuilder) FinalizeMap() (ret map[string]any) {

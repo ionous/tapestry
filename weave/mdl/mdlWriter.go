@@ -240,7 +240,7 @@ var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 // player input parsing
 func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 	domain, at := pen.domain, pen.at
-	if prog, e := marshalSlot(prog); e != nil {
+	if prog, e := marshal(prog); e != nil {
 		err = e
 	} else if d, e := pen.findDomain(); e != nil {
 		err = e

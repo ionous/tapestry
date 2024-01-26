@@ -29,10 +29,12 @@ func TestGrammar(t *testing.T) {
 		t.Fatal(e)
 	} else if out, e := dt.ReadGrammar(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, []string{
-		`b:{"Interpret name:with:":["jump/skip/hop",[{"One word:":["jump","skip","hop"]},{"Action:":"jumping"}]]}`,
-	}); len(diff) > 0 {
-		t.Log("got:", pretty.Sprint(out))
+	} else if diff := pretty.Diff(out, wantGrammar); len(diff) > 0 {
+		t.Log("got:", out)
 		t.Fatal(diff)
 	}
+}
+
+var wantGrammar = []string{
+	`b:{"Interpret name:with:":["jump/skip/hop",[{"One word:":["jump","skip","hop"]},{"Action:":"jumping"}]]}`,
 }

@@ -108,6 +108,17 @@ func (t *Str) TypeMarkup() map[string]any {
 	return t.Markup
 }
 
+func (t *Str) FindOption(str string) (ret int) {
+	ret = -1 // provisionally
+	for i, opt := range t.Options {
+		if opt == str {
+			ret = i
+			break
+		}
+	}
+	return
+}
+
 type Num struct {
 	Name   string         // unique name for this type
 	Markup map[string]any // metadata shared by all instances of this type
