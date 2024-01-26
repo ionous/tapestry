@@ -85,7 +85,7 @@ func (f strData) goType() (ret string) {
 		case "bool":
 			ret = "bool"
 		default:
-			ret = "FIX_" + Pascal(f.Name)
+			ret = Pascal(f.Name)
 		}
 	}
 	return

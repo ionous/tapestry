@@ -7,22 +7,22 @@ import (
 )
 
 // Bool, a type of str enum.
-type FIX_Bool int
+type Bool int
 
 // enumerated values of Bool
 const (
-	C_Bool_True FIX_Bool = iota
+	C_Bool_True Bool = iota
 	C_Bool_False
 )
 
-func MakeBool(str string) (ret FIX_Bool, okay bool) {
+func MakeBool(str string) (ret Bool, okay bool) {
 	if i := Zt_Bool.FindOption(str); i >= 0 {
-		ret, okay = FIX_Bool(i), true
+		ret, okay = Bool(i), true
 	}
 	return
 }
 
-func (op FIX_Bool) String() (ret string) {
+func (op Bool) String() (ret string) {
 	if i, opts := int(op), Zt_Bool.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]
 	} else {

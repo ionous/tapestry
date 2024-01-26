@@ -6,8 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type ReciprocalOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -51,7 +49,6 @@ var Zt_ReciprocalOf = typeinfo.Flow{
 }
 
 // holds a slice of type reciprocal_of
-// FIX: duplicates the spec decl.
 type ReciprocalOf_Slice []ReciprocalOf
 
 // implements typeinfo.Inspector
@@ -59,8 +56,6 @@ func (*ReciprocalOf_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_ReciprocalOf, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type ReciprocalsOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -104,7 +99,6 @@ var Zt_ReciprocalsOf = typeinfo.Flow{
 }
 
 // holds a slice of type reciprocals_of
-// FIX: duplicates the spec decl.
 type ReciprocalsOf_Slice []ReciprocalsOf
 
 // implements typeinfo.Inspector
@@ -112,8 +106,6 @@ func (*ReciprocalsOf_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_ReciprocalsOf, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Relate struct {
 	Object   rtti.TextEval
 	ToObject rtti.TextEval
@@ -162,7 +154,6 @@ var Zt_Relate = typeinfo.Flow{
 }
 
 // holds a slice of type relate
-// FIX: duplicates the spec decl.
 type Relate_Slice []Relate
 
 // implements typeinfo.Inspector
@@ -170,8 +161,6 @@ func (*Relate_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Relate, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RelativeOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -215,7 +204,6 @@ var Zt_RelativeOf = typeinfo.Flow{
 }
 
 // holds a slice of type relative_of
-// FIX: duplicates the spec decl.
 type RelativeOf_Slice []RelativeOf
 
 // implements typeinfo.Inspector
@@ -223,8 +211,6 @@ func (*RelativeOf_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RelativeOf, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RelativesOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -268,7 +254,6 @@ var Zt_RelativesOf = typeinfo.Flow{
 }
 
 // holds a slice of type relatives_of
-// FIX: duplicates the spec decl.
 type RelativesOf_Slice []RelativesOf
 
 // implements typeinfo.Inspector

@@ -15,8 +15,7 @@ var Zt_PlayMessage = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type PlayMessage_Slot struct{ Value PlayMessage }
 
 // implements typeinfo.Inspector for a single slot.
@@ -24,7 +23,7 @@ func (*PlayMessage_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_PlayMessage, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type PlayMessage_Slots []PlayMessage
 
 // implements typeinfo.Inspector for a series of slots.
@@ -32,8 +31,6 @@ func (*PlayMessage_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_PlayMessage, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type PlayLog struct {
 	Log    string
 	Markup map[string]any
@@ -73,7 +70,6 @@ var Zt_PlayLog = typeinfo.Flow{
 }
 
 // holds a slice of type play_log
-// FIX: duplicates the spec decl.
 type PlayLog_Slice []PlayLog
 
 // implements typeinfo.Inspector
@@ -81,8 +77,6 @@ func (*PlayLog_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_PlayLog, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type PlayMode struct {
 	Mode   PlayModes
 	Markup map[string]any
@@ -122,7 +116,6 @@ var Zt_PlayMode = typeinfo.Flow{
 }
 
 // holds a slice of type play_mode
-// FIX: duplicates the spec decl.
 type PlayMode_Slice []PlayMode
 
 // implements typeinfo.Inspector
@@ -130,8 +123,6 @@ func (*PlayMode_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_PlayMode, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type PlayOut struct {
 	Out    string
 	Markup map[string]any
@@ -171,7 +162,6 @@ var Zt_PlayOut = typeinfo.Flow{
 }
 
 // holds a slice of type play_out
-// FIX: duplicates the spec decl.
 type PlayOut_Slice []PlayOut
 
 // implements typeinfo.Inspector

@@ -6,8 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type QuitGame struct {
 	Markup map[string]any
 }
@@ -39,7 +37,6 @@ var Zt_QuitGame = typeinfo.Flow{
 }
 
 // holds a slice of type quit_game
-// FIX: duplicates the spec decl.
 type QuitGame_Slice []QuitGame
 
 // implements typeinfo.Inspector
@@ -47,8 +44,6 @@ func (*QuitGame_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_QuitGame, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type SaveGame struct {
 	Markup map[string]any
 }
@@ -80,7 +75,6 @@ var Zt_SaveGame = typeinfo.Flow{
 }
 
 // holds a slice of type save_game
-// FIX: duplicates the spec decl.
 type SaveGame_Slice []SaveGame
 
 // implements typeinfo.Inspector
@@ -88,8 +82,6 @@ func (*SaveGame_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_SaveGame, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RestoreGame struct {
 	Markup map[string]any
 }
@@ -121,7 +113,6 @@ var Zt_RestoreGame = typeinfo.Flow{
 }
 
 // holds a slice of type restore_game
-// FIX: duplicates the spec decl.
 type RestoreGame_Slice []RestoreGame
 
 // implements typeinfo.Inspector
@@ -129,8 +120,6 @@ func (*RestoreGame_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RestoreGame, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type UndoTurn struct {
 	Markup map[string]any
 }
@@ -162,7 +151,6 @@ var Zt_UndoTurn = typeinfo.Flow{
 }
 
 // holds a slice of type undo_turn
-// FIX: duplicates the spec decl.
 type UndoTurn_Slice []UndoTurn
 
 // implements typeinfo.Inspector
@@ -170,8 +158,6 @@ func (*UndoTurn_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_UndoTurn, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type PrintVersion struct {
 	Markup map[string]any
 }
@@ -203,7 +189,6 @@ var Zt_PrintVersion = typeinfo.Flow{
 }
 
 // holds a slice of type print_version
-// FIX: duplicates the spec decl.
 type PrintVersion_Slice []PrintVersion
 
 // implements typeinfo.Inspector

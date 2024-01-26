@@ -13,8 +13,7 @@ var Zt_Assignment = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type Assignment_Slot struct{ Value Assignment }
 
 // implements typeinfo.Inspector for a single slot.
@@ -22,7 +21,7 @@ func (*Assignment_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Assignment, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type Assignment_Slots []Assignment
 
 // implements typeinfo.Inspector for a series of slots.
@@ -39,8 +38,7 @@ var Zt_BoolEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type BoolEval_Slot struct{ Value BoolEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -48,7 +46,7 @@ func (*BoolEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_BoolEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type BoolEval_Slots []BoolEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -66,8 +64,7 @@ var Zt_Execute = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type Execute_Slot struct{ Value Execute }
 
 // implements typeinfo.Inspector for a single slot.
@@ -75,7 +72,7 @@ func (*Execute_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Execute, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type Execute_Slots []Execute
 
 // implements typeinfo.Inspector for a series of slots.
@@ -92,8 +89,7 @@ var Zt_NumListEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type NumListEval_Slot struct{ Value NumListEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -101,7 +97,7 @@ func (*NumListEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_NumListEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type NumListEval_Slots []NumListEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -118,8 +114,7 @@ var Zt_NumberEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type NumberEval_Slot struct{ Value NumberEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -127,7 +122,7 @@ func (*NumberEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_NumberEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type NumberEval_Slots []NumberEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -144,8 +139,7 @@ var Zt_TextEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type TextEval_Slot struct{ Value TextEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -153,7 +147,7 @@ func (*TextEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_TextEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type TextEval_Slots []TextEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -170,8 +164,7 @@ var Zt_TextListEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type TextListEval_Slot struct{ Value TextListEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -179,7 +172,7 @@ func (*TextListEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_TextListEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type TextListEval_Slots []TextListEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -196,8 +189,7 @@ var Zt_RecordEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type RecordEval_Slot struct{ Value RecordEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -205,7 +197,7 @@ func (*RecordEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_RecordEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type RecordEval_Slots []RecordEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -222,8 +214,7 @@ var Zt_RecordListEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type RecordListEval_Slot struct{ Value RecordListEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -231,7 +222,7 @@ func (*RecordListEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_RecordListEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type RecordListEval_Slots []RecordListEval
 
 // implements typeinfo.Inspector for a series of slots.

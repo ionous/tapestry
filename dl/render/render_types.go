@@ -16,8 +16,7 @@ var Zt_RenderEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type RenderEval_Slot struct{ Value RenderEval }
 
 // implements typeinfo.Inspector for a single slot.
@@ -25,7 +24,7 @@ func (*RenderEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_RenderEval, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type RenderEval_Slots []RenderEval
 
 // implements typeinfo.Inspector for a series of slots.
@@ -33,8 +32,6 @@ func (*RenderEval_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_RenderEval, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RenderName struct {
 	Name   string
 	Markup map[string]any
@@ -73,7 +70,6 @@ var Zt_RenderName = typeinfo.Flow{
 }
 
 // holds a slice of type render_name
-// FIX: duplicates the spec decl.
 type RenderName_Slice []RenderName
 
 // implements typeinfo.Inspector
@@ -81,8 +77,6 @@ func (*RenderName_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RenderName, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RenderRef struct {
 	Name   rtti.TextEval
 	Dot    []assign.Dot
@@ -142,7 +136,6 @@ var Zt_RenderRef = typeinfo.Flow{
 }
 
 // holds a slice of type render_ref
-// FIX: duplicates the spec decl.
 type RenderRef_Slice []RenderRef
 
 // implements typeinfo.Inspector
@@ -150,8 +143,6 @@ func (*RenderRef_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RenderRef, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RenderValue struct {
 	Value  rtti.Assignment
 	Markup map[string]any
@@ -190,7 +181,6 @@ var Zt_RenderValue = typeinfo.Flow{
 }
 
 // holds a slice of type render_value
-// FIX: duplicates the spec decl.
 type RenderValue_Slice []RenderValue
 
 // implements typeinfo.Inspector
@@ -198,8 +188,6 @@ func (*RenderValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RenderValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RenderPattern struct {
 	PatternName string
 	Render      []RenderEval
@@ -248,7 +236,6 @@ var Zt_RenderPattern = typeinfo.Flow{
 }
 
 // holds a slice of type render_pattern
-// FIX: duplicates the spec decl.
 type RenderPattern_Slice []RenderPattern
 
 // implements typeinfo.Inspector
@@ -256,8 +243,6 @@ func (*RenderPattern_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RenderPattern, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RenderResponse struct {
 	Name   string
 	Text   rtti.TextEval
@@ -304,7 +289,6 @@ var Zt_RenderResponse = typeinfo.Flow{
 }
 
 // holds a slice of type render_response
-// FIX: duplicates the spec decl.
 type RenderResponse_Slice []RenderResponse
 
 // implements typeinfo.Inspector

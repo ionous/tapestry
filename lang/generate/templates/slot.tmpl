@@ -4,16 +4,15 @@ var Zt_{{Pascal .Name}} = typeinfo.Slot{
 	{{- template "markup.tmpl" .}}
 }
 
-// holds a single slot
-// FIX: currently provided by the spec 
-type FIX_{{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
+// holds a single slot.
+type {{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_{{Pascal .Name}}_Slot) Inspect() (typeinfo.T, bool) {
+func (*{{Pascal .Name}}_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_{{Pascal .Name}}, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type {{Pascal .Name}}_Slots []{{Pascal .Name}}
 
 // implements typeinfo.Inspector for a series of slots.

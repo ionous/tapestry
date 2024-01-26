@@ -16,8 +16,7 @@ var Zt_LiteralValue = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type LiteralValue_Slot struct{ Value LiteralValue }
 
 // implements typeinfo.Inspector for a single slot.
@@ -25,7 +24,7 @@ func (*LiteralValue_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_LiteralValue, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type LiteralValue_Slots []LiteralValue
 
 // implements typeinfo.Inspector for a series of slots.
@@ -33,8 +32,6 @@ func (*LiteralValue_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_LiteralValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type BoolValue struct {
 	Value  bool
 	Kind   string
@@ -82,7 +79,6 @@ var Zt_BoolValue = typeinfo.Flow{
 }
 
 // holds a slice of type bool_value
-// FIX: duplicates the spec decl.
 type BoolValue_Slice []BoolValue
 
 // implements typeinfo.Inspector
@@ -90,8 +86,6 @@ func (*BoolValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_BoolValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FieldValue struct {
 	Field  string
 	Value  LiteralValue
@@ -129,7 +123,6 @@ var Zt_FieldValue = typeinfo.Flow{
 }
 
 // holds a slice of type field_value
-// FIX: duplicates the spec decl.
 type FieldValue_Slice []FieldValue
 
 // implements typeinfo.Inspector
@@ -137,8 +130,6 @@ func (*FieldValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FieldValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FieldList struct {
 	Fields []FieldValue
 	Markup map[string]any
@@ -178,7 +169,6 @@ var Zt_FieldList = typeinfo.Flow{
 }
 
 // holds a slice of type field_list
-// FIX: duplicates the spec decl.
 type FieldList_Slice []FieldList
 
 // implements typeinfo.Inspector
@@ -186,8 +176,6 @@ func (*FieldList_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FieldList, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type NumValue struct {
 	Value  float64
 	Kind   string
@@ -235,7 +223,6 @@ var Zt_NumValue = typeinfo.Flow{
 }
 
 // holds a slice of type num_value
-// FIX: duplicates the spec decl.
 type NumValue_Slice []NumValue
 
 // implements typeinfo.Inspector
@@ -243,8 +230,6 @@ func (*NumValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_NumValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type NumValues struct {
 	Values []float64
 	Kind   string
@@ -293,7 +278,6 @@ var Zt_NumValues = typeinfo.Flow{
 }
 
 // holds a slice of type num_values
-// FIX: duplicates the spec decl.
 type NumValues_Slice []NumValues
 
 // implements typeinfo.Inspector
@@ -301,8 +285,6 @@ func (*NumValues_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_NumValues, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RecordValue struct {
 	Kind   string
 	Fields []FieldValue
@@ -354,7 +336,6 @@ var Zt_RecordValue = typeinfo.Flow{
 }
 
 // holds a slice of type record_value
-// FIX: duplicates the spec decl.
 type RecordValue_Slice []RecordValue
 
 // implements typeinfo.Inspector
@@ -362,8 +343,6 @@ func (*RecordValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RecordValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type RecordList struct {
 	Kind    string
 	Records []FieldList
@@ -415,7 +394,6 @@ var Zt_RecordList = typeinfo.Flow{
 }
 
 // holds a slice of type record_list
-// FIX: duplicates the spec decl.
 type RecordList_Slice []RecordList
 
 // implements typeinfo.Inspector
@@ -423,8 +401,6 @@ func (*RecordList_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_RecordList, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type TextValue struct {
 	Value  string
 	Kind   string
@@ -472,7 +448,6 @@ var Zt_TextValue = typeinfo.Flow{
 }
 
 // holds a slice of type text_value
-// FIX: duplicates the spec decl.
 type TextValue_Slice []TextValue
 
 // implements typeinfo.Inspector
@@ -480,8 +455,6 @@ func (*TextValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_TextValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type TextValues struct {
 	Values []string
 	Kind   string
@@ -530,7 +503,6 @@ var Zt_TextValues = typeinfo.Flow{
 }
 
 // holds a slice of type text_values
-// FIX: duplicates the spec decl.
 type TextValues_Slice []TextValues
 
 // implements typeinfo.Inspector

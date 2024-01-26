@@ -36,6 +36,7 @@ type T interface {
 	TypeMarkup() map[string]any
 }
 
+// tbd: add groups to flow? ( and other types; maybe then a wrapped spec struct for Name, Groups, and Markup )
 type Flow struct {
 	Name   string         // unique name for this type
 	Lede   string         // the compact format leading text

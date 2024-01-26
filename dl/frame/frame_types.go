@@ -11,8 +11,7 @@ var Zt_Event = typeinfo.Slot{
 	Name: "event",
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type Event_Slot struct{ Value Event }
 
 // implements typeinfo.Inspector for a single slot.
@@ -20,7 +19,7 @@ func (*Event_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Event, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type Event_Slots []Event
 
 // implements typeinfo.Inspector for a series of slots.
@@ -28,8 +27,6 @@ func (*Event_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_Event, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Frame struct {
 	Result string
 	Events []Event
@@ -72,7 +69,6 @@ var Zt_Frame = typeinfo.Flow{
 }
 
 // holds a slice of type frame
-// FIX: duplicates the spec decl.
 type Frame_Slice []Frame
 
 // implements typeinfo.Inspector
@@ -80,8 +76,6 @@ func (*Frame_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Frame, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FrameOutput struct {
 	Text   string
 	Markup map[string]any
@@ -117,7 +111,6 @@ var Zt_FrameOutput = typeinfo.Flow{
 }
 
 // holds a slice of type frame_output
-// FIX: duplicates the spec decl.
 type FrameOutput_Slice []FrameOutput
 
 // implements typeinfo.Inspector
@@ -125,8 +118,6 @@ func (*FrameOutput_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FrameOutput, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type SceneStarted struct {
 	Domains []string
 	Markup  map[string]any
@@ -163,7 +154,6 @@ var Zt_SceneStarted = typeinfo.Flow{
 }
 
 // holds a slice of type scene_started
-// FIX: duplicates the spec decl.
 type SceneStarted_Slice []SceneStarted
 
 // implements typeinfo.Inspector
@@ -171,8 +161,6 @@ func (*SceneStarted_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_SceneStarted, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type SceneEnded struct {
 	Domains []string
 	Markup  map[string]any
@@ -209,7 +197,6 @@ var Zt_SceneEnded = typeinfo.Flow{
 }
 
 // holds a slice of type scene_ended
-// FIX: duplicates the spec decl.
 type SceneEnded_Slice []SceneEnded
 
 // implements typeinfo.Inspector
@@ -217,8 +204,6 @@ func (*SceneEnded_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_SceneEnded, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type StateChanged struct {
 	Noun   string
 	Aspect string
@@ -270,7 +255,6 @@ var Zt_StateChanged = typeinfo.Flow{
 }
 
 // holds a slice of type state_changed
-// FIX: duplicates the spec decl.
 type StateChanged_Slice []StateChanged
 
 // implements typeinfo.Inspector
@@ -278,8 +262,6 @@ func (*StateChanged_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_StateChanged, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type PairChanged struct {
 	A      string
 	B      string
@@ -326,7 +308,6 @@ var Zt_PairChanged = typeinfo.Flow{
 }
 
 // holds a slice of type pair_changed
-// FIX: duplicates the spec decl.
 type PairChanged_Slice []PairChanged
 
 // implements typeinfo.Inspector

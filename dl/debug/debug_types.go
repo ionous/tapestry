@@ -8,8 +8,6 @@ import (
 	"strconv"
 )
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type DoNothing struct {
 	Markup map[string]any
 }
@@ -44,7 +42,6 @@ var Zt_DoNothing = typeinfo.Flow{
 }
 
 // holds a slice of type do_nothing
-// FIX: duplicates the spec decl.
 type DoNothing_Slice []DoNothing
 
 // implements typeinfo.Inspector
@@ -52,8 +49,6 @@ func (*DoNothing_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_DoNothing, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Expect struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
@@ -89,7 +84,6 @@ var Zt_Expect = typeinfo.Flow{
 }
 
 // holds a slice of type expect
-// FIX: duplicates the spec decl.
 type Expect_Slice []Expect
 
 // implements typeinfo.Inspector
@@ -97,8 +91,6 @@ func (*Expect_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Expect, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type ExpectOutput struct {
 	Output string
 	Markup map[string]any
@@ -135,7 +127,6 @@ var Zt_ExpectOutput = typeinfo.Flow{
 }
 
 // holds a slice of type expect_output
-// FIX: duplicates the spec decl.
 type ExpectOutput_Slice []ExpectOutput
 
 // implements typeinfo.Inspector
@@ -143,8 +134,6 @@ func (*ExpectOutput_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_ExpectOutput, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type ExpectText struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -181,7 +170,6 @@ var Zt_ExpectText = typeinfo.Flow{
 }
 
 // holds a slice of type expect_text
-// FIX: duplicates the spec decl.
 type ExpectText_Slice []ExpectText
 
 // implements typeinfo.Inspector
@@ -189,8 +177,6 @@ func (*ExpectText_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_ExpectText, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Fabricate struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -230,7 +216,6 @@ var Zt_Fabricate = typeinfo.Flow{
 }
 
 // holds a slice of type fabricate
-// FIX: duplicates the spec decl.
 type Fabricate_Slice []Fabricate
 
 // implements typeinfo.Inspector
@@ -238,8 +223,6 @@ func (*Fabricate_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Fabricate, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type DebugLog struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment
@@ -283,7 +266,6 @@ var Zt_DebugLog = typeinfo.Flow{
 }
 
 // holds a slice of type debug_log
-// FIX: duplicates the spec decl.
 type DebugLog_Slice []DebugLog
 
 // implements typeinfo.Inspector

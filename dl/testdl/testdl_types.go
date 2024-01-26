@@ -11,8 +11,7 @@ var Zt_TestSlot = typeinfo.Slot{
 	Name: "test_slot",
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type TestSlot_Slot struct{ Value TestSlot }
 
 // implements typeinfo.Inspector for a single slot.
@@ -20,7 +19,7 @@ func (*TestSlot_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_TestSlot, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type TestSlot_Slots []TestSlot
 
 // implements typeinfo.Inspector for a series of slots.
@@ -28,8 +27,6 @@ func (*TestSlot_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_TestSlot, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type TestEmbed struct {
 	TestFlow TestFlow
 	Markup   map[string]any
@@ -66,7 +63,6 @@ var Zt_TestEmbed = typeinfo.Flow{
 }
 
 // holds a slice of type test_embed
-// FIX: duplicates the spec decl.
 type TestEmbed_Slice []TestEmbed
 
 // implements typeinfo.Inspector
@@ -74,8 +70,6 @@ func (*TestEmbed_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_TestEmbed, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type TestFlow struct {
 	Slot   TestSlot
 	Txt    string
@@ -138,7 +132,6 @@ var Zt_TestFlow = typeinfo.Flow{
 }
 
 // holds a slice of type test_flow
-// FIX: duplicates the spec decl.
 type TestFlow_Slice []TestFlow
 
 // implements typeinfo.Inspector

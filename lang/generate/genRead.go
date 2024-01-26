@@ -29,7 +29,6 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 				if _, e := parseStrings(arg); e != nil {
 					err = e
 				}
-				// FIX: add to current groups (push /pop)
 			default:
 				if inner, e := decode.ParseMessage(arg); e != nil {
 					err = e
@@ -64,7 +63,6 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 							out.Num = append(out.Num, d)
 						}
 					default:
-						// which of course is ironic, because the specs currently use slots
 						// fix: the specs should be switched to regular slots
 						// might consider ripping off the out "TypeSpec" part
 						// especially because so much of tapestry only supports slots for flows

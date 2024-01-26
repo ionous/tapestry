@@ -15,8 +15,7 @@ var Zt_Address = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type Address_Slot struct{ Value Address }
 
 // implements typeinfo.Inspector for a single slot.
@@ -24,7 +23,7 @@ func (*Address_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Address, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type Address_Slots []Address
 
 // implements typeinfo.Inspector for a series of slots.
@@ -41,8 +40,7 @@ var Zt_Dot = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type Dot_Slot struct{ Value Dot }
 
 // implements typeinfo.Inspector for a single slot.
@@ -50,7 +48,7 @@ func (*Dot_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Dot, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type Dot_Slots []Dot
 
 // implements typeinfo.Inspector for a series of slots.
@@ -58,8 +56,6 @@ func (*Dot_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_Dot, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type SetValue struct {
 	Target Address
 	Value  rtti.Assignment
@@ -103,7 +99,6 @@ var Zt_SetValue = typeinfo.Flow{
 }
 
 // holds a slice of type set_value
-// FIX: duplicates the spec decl.
 type SetValue_Slice []SetValue
 
 // implements typeinfo.Inspector
@@ -111,8 +106,6 @@ func (*SetValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_SetValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type SetTrait struct {
 	Target rtti.TextEval
 	Trait  rtti.TextEval
@@ -156,7 +149,6 @@ var Zt_SetTrait = typeinfo.Flow{
 }
 
 // holds a slice of type set_trait
-// FIX: duplicates the spec decl.
 type SetTrait_Slice []SetTrait
 
 // implements typeinfo.Inspector
@@ -164,8 +156,6 @@ func (*SetTrait_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_SetTrait, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type CopyValue struct {
 	Target Address
 	Source Address
@@ -209,7 +199,6 @@ var Zt_CopyValue = typeinfo.Flow{
 }
 
 // holds a slice of type copy_value
-// FIX: duplicates the spec decl.
 type CopyValue_Slice []CopyValue
 
 // implements typeinfo.Inspector
@@ -217,8 +206,6 @@ func (*CopyValue_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_CopyValue, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type ObjectRef struct {
 	Name   rtti.TextEval
 	Field  rtti.TextEval
@@ -280,7 +267,6 @@ var Zt_ObjectRef = typeinfo.Flow{
 }
 
 // holds a slice of type object_ref
-// FIX: duplicates the spec decl.
 type ObjectRef_Slice []ObjectRef
 
 // implements typeinfo.Inspector
@@ -288,8 +274,6 @@ func (*ObjectRef_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_ObjectRef, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type VariableRef struct {
 	Name   rtti.TextEval
 	Dot    []Dot
@@ -346,7 +330,6 @@ var Zt_VariableRef = typeinfo.Flow{
 }
 
 // holds a slice of type variable_ref
-// FIX: duplicates the spec decl.
 type VariableRef_Slice []VariableRef
 
 // implements typeinfo.Inspector
@@ -354,8 +337,6 @@ func (*VariableRef_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_VariableRef, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type AtField struct {
 	Field  rtti.TextEval
 	Markup map[string]any
@@ -391,7 +372,6 @@ var Zt_AtField = typeinfo.Flow{
 }
 
 // holds a slice of type at_field
-// FIX: duplicates the spec decl.
 type AtField_Slice []AtField
 
 // implements typeinfo.Inspector
@@ -399,8 +379,6 @@ func (*AtField_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_AtField, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type AtIndex struct {
 	Index  rtti.NumberEval
 	Markup map[string]any
@@ -436,7 +414,6 @@ var Zt_AtIndex = typeinfo.Flow{
 }
 
 // holds a slice of type at_index
-// FIX: duplicates the spec decl.
 type AtIndex_Slice []AtIndex
 
 // implements typeinfo.Inspector
@@ -444,8 +421,6 @@ func (*AtIndex_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_AtIndex, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type CallPattern struct {
 	PatternName string
 	Arguments   []Arg
@@ -504,7 +479,6 @@ var Zt_CallPattern = typeinfo.Flow{
 }
 
 // holds a slice of type call_pattern
-// FIX: duplicates the spec decl.
 type CallPattern_Slice []CallPattern
 
 // implements typeinfo.Inspector
@@ -512,8 +486,6 @@ func (*CallPattern_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_CallPattern, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Arg struct {
 	Name   string
 	Value  rtti.Assignment
@@ -551,7 +523,6 @@ var Zt_Arg = typeinfo.Flow{
 }
 
 // holds a slice of type arg
-// FIX: duplicates the spec decl.
 type Arg_Slice []Arg
 
 // implements typeinfo.Inspector
@@ -559,8 +530,6 @@ func (*Arg_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Arg, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromExe struct {
 	Exe    rtti.Execute
 	Markup map[string]any
@@ -599,7 +568,6 @@ var Zt_FromExe = typeinfo.Flow{
 }
 
 // holds a slice of type from_exe
-// FIX: duplicates the spec decl.
 type FromExe_Slice []FromExe
 
 // implements typeinfo.Inspector
@@ -607,8 +575,6 @@ func (*FromExe_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromExe, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromBool struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
@@ -647,7 +613,6 @@ var Zt_FromBool = typeinfo.Flow{
 }
 
 // holds a slice of type from_bool
-// FIX: duplicates the spec decl.
 type FromBool_Slice []FromBool
 
 // implements typeinfo.Inspector
@@ -655,8 +620,6 @@ func (*FromBool_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromBool, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromNumber struct {
 	Value  rtti.NumberEval
 	Markup map[string]any
@@ -695,7 +658,6 @@ var Zt_FromNumber = typeinfo.Flow{
 }
 
 // holds a slice of type from_number
-// FIX: duplicates the spec decl.
 type FromNumber_Slice []FromNumber
 
 // implements typeinfo.Inspector
@@ -703,8 +665,6 @@ func (*FromNumber_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromNumber, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromText struct {
 	Value  rtti.TextEval
 	Markup map[string]any
@@ -743,7 +703,6 @@ var Zt_FromText = typeinfo.Flow{
 }
 
 // holds a slice of type from_text
-// FIX: duplicates the spec decl.
 type FromText_Slice []FromText
 
 // implements typeinfo.Inspector
@@ -751,8 +710,6 @@ func (*FromText_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromText, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromRecord struct {
 	Value  rtti.RecordEval
 	Markup map[string]any
@@ -791,7 +748,6 @@ var Zt_FromRecord = typeinfo.Flow{
 }
 
 // holds a slice of type from_record
-// FIX: duplicates the spec decl.
 type FromRecord_Slice []FromRecord
 
 // implements typeinfo.Inspector
@@ -799,8 +755,6 @@ func (*FromRecord_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromRecord, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromNumList struct {
 	Value  rtti.NumListEval
 	Markup map[string]any
@@ -839,7 +793,6 @@ var Zt_FromNumList = typeinfo.Flow{
 }
 
 // holds a slice of type from_num_list
-// FIX: duplicates the spec decl.
 type FromNumList_Slice []FromNumList
 
 // implements typeinfo.Inspector
@@ -847,8 +800,6 @@ func (*FromNumList_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromNumList, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromTextList struct {
 	Value  rtti.TextListEval
 	Markup map[string]any
@@ -887,7 +838,6 @@ var Zt_FromTextList = typeinfo.Flow{
 }
 
 // holds a slice of type from_text_list
-// FIX: duplicates the spec decl.
 type FromTextList_Slice []FromTextList
 
 // implements typeinfo.Inspector
@@ -895,8 +845,6 @@ func (*FromTextList_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_FromTextList, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type FromRecordList struct {
 	Value  rtti.RecordListEval
 	Markup map[string]any
@@ -935,7 +883,6 @@ var Zt_FromRecordList = typeinfo.Flow{
 }
 
 // holds a slice of type from_record_list
-// FIX: duplicates the spec decl.
 type FromRecordList_Slice []FromRecordList
 
 // implements typeinfo.Inspector

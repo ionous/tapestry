@@ -15,8 +15,7 @@ var Zt_GrammarMaker = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type GrammarMaker_Slot struct{ Value GrammarMaker }
 
 // implements typeinfo.Inspector for a single slot.
@@ -24,7 +23,7 @@ func (*GrammarMaker_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_GrammarMaker, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type GrammarMaker_Slots []GrammarMaker
 
 // implements typeinfo.Inspector for a series of slots.
@@ -40,8 +39,7 @@ var Zt_ScannerMaker = typeinfo.Slot{
 	},
 }
 
-// holds a single slot
-// FIX: currently provided by the spec
+// holds a single slot.
 type ScannerMaker_Slot struct{ Value ScannerMaker }
 
 // implements typeinfo.Inspector for a single slot.
@@ -49,7 +47,7 @@ func (*ScannerMaker_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_ScannerMaker, false
 }
 
-// holds a slice of slots
+// holds a slice of slots.
 type ScannerMaker_Slots []ScannerMaker
 
 // implements typeinfo.Inspector for a series of slots.
@@ -57,8 +55,6 @@ func (*ScannerMaker_Slots) Inspect() (typeinfo.T, bool) {
 	return &Zt_ScannerMaker, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Action struct {
 	Action    string
 	Arguments []assign.Arg
@@ -104,7 +100,6 @@ var Zt_Action = typeinfo.Flow{
 }
 
 // holds a slice of type action
-// FIX: duplicates the spec decl.
 type Action_Slice []Action
 
 // implements typeinfo.Inspector
@@ -112,8 +107,6 @@ func (*Action_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Action, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Sequence struct {
 	Series []ScannerMaker
 	Markup map[string]any
@@ -153,7 +146,6 @@ var Zt_Sequence = typeinfo.Flow{
 }
 
 // holds a slice of type sequence
-// FIX: duplicates the spec decl.
 type Sequence_Slice []Sequence
 
 // implements typeinfo.Inspector
@@ -161,8 +153,6 @@ func (*Sequence_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Sequence, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type ChooseOne struct {
 	Options []ScannerMaker
 	Markup  map[string]any
@@ -203,7 +193,6 @@ var Zt_ChooseOne = typeinfo.Flow{
 }
 
 // holds a slice of type choose_one
-// FIX: duplicates the spec decl.
 type ChooseOne_Slice []ChooseOne
 
 // implements typeinfo.Inspector
@@ -211,8 +200,6 @@ func (*ChooseOne_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_ChooseOne, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Directive struct {
 	Name   string
 	Series []ScannerMaker
@@ -258,7 +245,6 @@ var Zt_Directive = typeinfo.Flow{
 }
 
 // holds a slice of type directive
-// FIX: duplicates the spec decl.
 type Directive_Slice []Directive
 
 // implements typeinfo.Inspector
@@ -266,8 +252,6 @@ func (*Directive_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Directive, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Noun struct {
 	Kind   string
 	Markup map[string]any
@@ -307,7 +291,6 @@ var Zt_Noun = typeinfo.Flow{
 }
 
 // holds a slice of type noun
-// FIX: duplicates the spec decl.
 type Noun_Slice []Noun
 
 // implements typeinfo.Inspector
@@ -315,8 +298,6 @@ func (*Noun_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Noun, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Refine struct {
 	Series []ScannerMaker
 	Markup map[string]any
@@ -357,7 +338,6 @@ var Zt_Refine = typeinfo.Flow{
 }
 
 // holds a slice of type refine
-// FIX: duplicates the spec decl.
 type Refine_Slice []Refine
 
 // implements typeinfo.Inspector
@@ -365,8 +345,6 @@ func (*Refine_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Refine, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Reverse struct {
 	Reverses []ScannerMaker
 	Markup   map[string]any
@@ -406,7 +384,6 @@ var Zt_Reverse = typeinfo.Flow{
 }
 
 // holds a slice of type reverse
-// FIX: duplicates the spec decl.
 type Reverse_Slice []Reverse
 
 // implements typeinfo.Inspector
@@ -414,8 +391,6 @@ func (*Reverse_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Reverse, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Focus struct {
 	Player string
 	Series []ScannerMaker
@@ -460,7 +435,6 @@ var Zt_Focus = typeinfo.Flow{
 }
 
 // holds a slice of type focus
-// FIX: duplicates the spec decl.
 type Focus_Slice []Focus
 
 // implements typeinfo.Inspector
@@ -468,8 +442,6 @@ func (*Focus_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_Focus, true
 }
 
-// FIX: for now we are generating side by side with the old definitions
-// also should have user comment here
 type Words struct {
 	Words  []string
 	Markup map[string]any
@@ -510,7 +482,6 @@ var Zt_Words = typeinfo.Flow{
 }
 
 // holds a slice of type words
-// FIX: duplicates the spec decl.
 type Words_Slice []Words
 
 // implements typeinfo.Inspector
