@@ -197,7 +197,7 @@ Out:
 // return the first response definition in the block
 func FindNamedResponse(exe []rt.Execute) (ret string) {
 	var m rtti.Execute_Slots = exe
-	if op, e := searchForFlow(&m, render.RenderResponse_Type); e != nil {
+	if op, e := searchForFlow(&m, &render.Zt_RenderResponse); e != nil {
 		panic(e)
 	} else if response, ok := op.(*render.RenderResponse); ok && response.Text != nil {
 		ret = response.Name

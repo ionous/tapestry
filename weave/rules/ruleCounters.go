@@ -20,7 +20,7 @@ func FilterHasCounter(filter rt.BoolEval) (okay bool) {
 // also might be cool to augment or replace the serialized type
 // with our own that has an pre-calced field ( at import, via state parser )
 func searchCounters(m typeinfo.Inspector) (okay bool) {
-	if ok, e := searchForFlow(m, core.CallTrigger_Type); e != nil {
+	if ok, e := searchForFlow(m, &core.Zt_CallTrigger); e != nil {
 		panic(e)
 	} else {
 		okay = ok != nil
@@ -29,11 +29,10 @@ func searchCounters(m typeinfo.Inspector) (okay bool) {
 }
 
 // return the first flow of the passed type
-func searchForFlow(src typeinfo.Inspector, typeName string) (ret any, err error) {
+func searchForFlow(src typeinfo.Inspector, find typeinfo.T) (ret any, err error) {
 	evts := inspect.Callbacks{
 		OnFlow: func(w inspect.Iter) (err error) {
-			t := w.TypeInfo().(*typeinfo.Flow)
-			if typeName == t.Name {
+			if find == w.TypeInfo() {
 				ret = w.GoValue()
 				err = inspect.DoneVisiting
 			}
