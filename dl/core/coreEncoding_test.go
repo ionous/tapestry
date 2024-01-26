@@ -87,7 +87,7 @@ func marshal(v typeinfo.Inspector) (ret any, err error) {
 func unmarshal(out typeinfo.Inspector, plainData any) (err error) {
 	var dec decode.Decoder
 	return dec.
-		Signatures(assign.Signatures, core.Signatures).
+		Signatures(assign.Z_Types.Signatures, core.Z_Types.Signatures).
 		Customize(core.CustomDecoder).
 		Decode(out, plainData)
 }

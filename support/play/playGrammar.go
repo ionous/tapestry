@@ -31,7 +31,7 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 			} else {
 				var dec decode.Decoder
 				if e := dec.
-					Signatures(grammar.Signatures, assign.Signatures, literal.Signatures).
+					Signatures(grammar.Z_Types.Signatures, assign.Z_Types.Signatures, literal.Z_Types.Signatures).
 					Customize(literal.CustomDecoder).
 					Decode(&dir, msg); e != nil {
 					err = e
