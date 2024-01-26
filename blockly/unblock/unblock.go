@@ -7,13 +7,14 @@ import (
 	r "reflect"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/lang/walk"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 )
 
+// read blockly data into the passed tapestry command (tree).
 // where topBlock is the expected topblock type in the file.... ex. story_file
 func Decode(dst typeinfo.Inspector, topBlock string, reg Creator, msg json.RawMessage) (err error) {
 	var bff File
@@ -22,35 +23,36 @@ func Decode(dst typeinfo.Inspector, topBlock string, reg Creator, msg json.RawMe
 	} else if top, ok := bff.FindFirst(topBlock); !ok {
 		err = errutil.New("couldnt find story file in block file")
 	} else {
-		err = DecodeBlock(r.ValueOf(dst), reg, top)
+		err = DecodeBlock(dst, reg, top)
 	}
 	return
 }
 
-// where topBlock is the expected topblock type in the file.... ex. story_file
-func DecodeBlock(dst r.Value, reg Creator, top *BlockInfo) (err error) {
+// decode a generic block
+// public for testing.
+func DecodeBlock(dst typeinfo.Inspector, reg Creator, top *BlockInfo) (err error) {
 	dec := unblock{reg}
-	return dec.decodeBlock(walk.Walk(dst), top)
+	return dec.decodeBlock(inspect.Walk(dst), top)
 }
 
 type unblock struct {
 	factory Creator
 }
 
-func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
+func (un *unblock) decodeBlock(out inspect.Iter, bff *BlockInfo) (err error) {
 	if e := readMarkup(out, bff); e != nil {
 		err = e
 	} else {
 		for out.Next() && err == nil {
-			f := out.Field()
-			termName := upper(f.Name())
-			switch t := f.SpecType(); t {
+			f := out.Term()
+			termName := upper(f.Name)
+			switch t := f.Type; t.(type) {
 			default:
 				err = fmt.Errorf("unhandled type %s", t)
 
 			// simple values live in bff.fields
-			case walk.Str, walk.Value:
-				if f.Repeats() {
+			case *typeinfo.Str, *typeinfo.Num:
+				if f.Repeats {
 					if fields := bff.SliceFields(termName); len(fields) > 0 {
 						err = un.decodeList(out.Walk(), fields)
 					}
@@ -59,8 +61,8 @@ func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
 				}
 
 			// a member that is a flow; its value lives in an input.
-			case walk.Flow:
-				if f.Repeats() {
+			case *typeinfo.Flow:
+				if f.Repeats {
 					if inputs := bff.SliceInputs(termName); len(inputs) > 0 {
 						err = un.decodeSlice(out.Walk(), inputs)
 					}
@@ -75,8 +77,8 @@ func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
 				}
 
 			// a member that fills a slot; its value lives in an input.
-			case walk.Slot:
-				if f.Repeats() {
+			case *typeinfo.Slot:
+				if f.Repeats {
 					if at := bff.Inputs.FindIndex(termName); at >= 0 {
 						err = un.decodeStack(out.Walk(), bff, at)
 					} else if inputs := bff.SliceInputs(termName); len(inputs) > 0 {
@@ -97,9 +99,9 @@ func (un *unblock) decodeBlock(out walk.Walker, bff *BlockInfo) (err error) {
 	return
 }
 
-func readMarkup(flow walk.Walker, bff *BlockInfo) (err error) {
+func readMarkup(flow inspect.Iter, bff *BlockInfo) (err error) {
 	if c := bff.Icons.Comment; c != nil {
-		m := make(map[string]any)
+		m := flow.Markup(true)
 		lines := strings.FieldsFunc(c.Text, func(r rune) bool {
 			const newline = '\n'
 			return r == newline
@@ -112,13 +114,12 @@ func readMarkup(flow walk.Walker, bff *BlockInfo) (err error) {
 		default:
 			m[markup.Comment] = lines
 		}
-		flow.Markup().Set(r.ValueOf(m))
 	}
 	return
 }
 
 // a stack is a repeating slot
-func (un *unblock) decodeStack(out walk.Walker, bff *BlockInfo, idx int) (err error) {
+func (un *unblock) decodeStack(out inspect.Iter, bff *BlockInfo, idx int) (err error) {
 	if input, e := bff.ReadInput(idx); e != nil {
 		err = e
 	} else {
@@ -143,7 +144,7 @@ func (un *unblock) decodeStack(out walk.Walker, bff *BlockInfo, idx int) (err er
 }
 
 // repeating non-stacking slots
-func (un *unblock) decodeSeries(out walk.Walker, inputs js.MapSlice) (err error) {
+func (un *unblock) decodeSeries(out inspect.Iter, inputs js.MapSlice) (err error) {
 	out.Resize(len(inputs))
 	for _, el := range inputs {
 		out.Next()
@@ -158,7 +159,7 @@ func (un *unblock) decodeSeries(out walk.Walker, inputs js.MapSlice) (err error)
 	return
 }
 
-func (un *unblock) decodeSlot(out walk.Walker, inputType string, next *BlockInfo) (err error) {
+func (un *unblock) decodeSlot(out inspect.Iter, inputType string, next *BlockInfo) (err error) {
 	if e := un.fillSlot(out, inputType); e != nil {
 		err = e
 	} else if slot := out.Walk(); !slot.Next() {
@@ -170,17 +171,17 @@ func (un *unblock) decodeSlot(out walk.Walker, inputType string, next *BlockInfo
 }
 
 // create a blank command to fill the targeted slot.
-func (un *unblock) fillSlot(out walk.Walker, typeName string) (err error) {
+func (un *unblock) fillSlot(out inspect.Iter, typeName string) (err error) {
 	if rptr, ok := un.factory.NewType(typeName); !ok {
 		err = errutil.Fmt("couldn't create %q", typeName)
 	} else {
-		out.Value().Set(r.ValueOf(rptr))
+		out.RawValue().Set(r.ValueOf(rptr))
 	}
 	return
 }
 
 // repeating flows
-func (un *unblock) decodeSlice(out walk.Walker, inputs js.MapSlice) (err error) {
+func (un *unblock) decodeSlice(out inspect.Iter, inputs js.MapSlice) (err error) {
 	out.Resize(len(inputs))
 	for _, el := range inputs {
 		out.Next()
@@ -196,7 +197,7 @@ func (un *unblock) decodeSlice(out walk.Walker, inputs js.MapSlice) (err error) 
 }
 
 // an array of primitives is a list of fields.
-func (un *unblock) decodeList(out walk.Walker, fields js.MapSlice) (err error) {
+func (un *unblock) decodeList(out inspect.Iter, fields js.MapSlice) (err error) {
 	out.Resize(len(fields))
 	for _, el := range fields {
 		out.Next()
@@ -211,7 +212,7 @@ func (un *unblock) decodeList(out walk.Walker, fields js.MapSlice) (err error) {
 }
 
 // simple values live in bff.fields
-func decodeField(out walk.Walker, bff *BlockInfo, fieldName string) (err error) {
+func decodeField(out inspect.Iter, bff *BlockInfo, fieldName string) (err error) {
 	if field, ok := bff.Fields.Find(fieldName); ok {
 		var value any
 		if e := json.Unmarshal(field.Msg, &value); e != nil {

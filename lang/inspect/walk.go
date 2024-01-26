@@ -104,9 +104,25 @@ func (w *Iter) IsZero() (okay bool) {
 	return
 }
 
+// fix: backwards compatibility. what are the use cases
+// and what should be brought in here?
 func (w *Iter) RawValue() r.Value {
 	v, _ := w.getFocus()
 	return v
+}
+
+// fix? feels like this should match the way Get works.
+// write a value into the target of an iterator.
+// returns false if the value is incompatible
+// ( uses go rules of conversion when needed to complete the assignment )
+func (w *Iter) SetValue(val any) (okay bool) {
+	if out, val := w.RawValue(), r.ValueOf(val); out.Kind() == val.Kind() {
+		out.Set(val)
+		okay = true
+	} else if t := out.Type(); val.CanConvert(t) {
+		out.Set(val.Convert(t))
+	}
+	return
 }
 
 // returns the value of the current focus as used by go.

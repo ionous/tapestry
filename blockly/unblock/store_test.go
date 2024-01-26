@@ -69,13 +69,12 @@ func testUnblock(reg unblock.Creator, expect typeinfo.Inspector, msg string) (er
 	if e := json.Unmarshal([]byte(msg), &top); e != nil {
 		err = e
 	} else {
-		ptr := r.New(r.TypeOf(expect).Elem())
-		if e := unblock.DecodeBlock(ptr.Elem(), reg, &top); e != nil {
+		ptr := r.New(r.TypeOf(expect).Elem()).Interface().(typeinfo.Inspector)
+		if e := unblock.DecodeBlock(ptr, reg, &top); e != nil {
 			err = e
 		} else {
-			got := ptr.Interface().(typeinfo.Inspector)
-			if diff := pretty.Diff(expect, got); len(diff) > 0 {
-				pretty.Println(got)
+			if diff := pretty.Diff(expect, ptr); len(diff) > 0 {
+				pretty.Println(ptr)
 				err = errutil.New(e, "mismatched", diff)
 			}
 		}
