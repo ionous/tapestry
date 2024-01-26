@@ -21,8 +21,8 @@ import (
 
 func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	log.Println("Checking", checkFlags.srcPath)
-	if lvl, e := getLogLevel(checkFlags.logLevel); e != nil {
-		err = e
+	if lvl, ok := debug.MakeLoggingLevel(checkFlags.logLevel); !ok {
+		err = errutil.New("Unknown log level", checkFlags.logLevel)
 	} else {
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
