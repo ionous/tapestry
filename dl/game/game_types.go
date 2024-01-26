@@ -8,7 +8,7 @@ import (
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_QuitGame struct {
+type QuitGame struct {
 	Markup map[string]any
 }
 
@@ -40,7 +40,7 @@ var Zt_QuitGame = typeinfo.Flow{
 
 // holds a slice of type quit_game
 // FIX: duplicates the spec decl.
-type FIX_QuitGame_Slice []QuitGame
+type QuitGame_Slice []QuitGame
 
 // implements typeinfo.Inspector
 func (*QuitGame_Slice) Inspect() (typeinfo.T, bool) {
@@ -49,7 +49,7 @@ func (*QuitGame_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_SaveGame struct {
+type SaveGame struct {
 	Markup map[string]any
 }
 
@@ -81,7 +81,7 @@ var Zt_SaveGame = typeinfo.Flow{
 
 // holds a slice of type save_game
 // FIX: duplicates the spec decl.
-type FIX_SaveGame_Slice []SaveGame
+type SaveGame_Slice []SaveGame
 
 // implements typeinfo.Inspector
 func (*SaveGame_Slice) Inspect() (typeinfo.T, bool) {
@@ -90,7 +90,7 @@ func (*SaveGame_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RestoreGame struct {
+type RestoreGame struct {
 	Markup map[string]any
 }
 
@@ -122,7 +122,7 @@ var Zt_RestoreGame = typeinfo.Flow{
 
 // holds a slice of type restore_game
 // FIX: duplicates the spec decl.
-type FIX_RestoreGame_Slice []RestoreGame
+type RestoreGame_Slice []RestoreGame
 
 // implements typeinfo.Inspector
 func (*RestoreGame_Slice) Inspect() (typeinfo.T, bool) {
@@ -131,7 +131,7 @@ func (*RestoreGame_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_UndoTurn struct {
+type UndoTurn struct {
 	Markup map[string]any
 }
 
@@ -163,7 +163,7 @@ var Zt_UndoTurn = typeinfo.Flow{
 
 // holds a slice of type undo_turn
 // FIX: duplicates the spec decl.
-type FIX_UndoTurn_Slice []UndoTurn
+type UndoTurn_Slice []UndoTurn
 
 // implements typeinfo.Inspector
 func (*UndoTurn_Slice) Inspect() (typeinfo.T, bool) {
@@ -172,7 +172,7 @@ func (*UndoTurn_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_PrintVersion struct {
+type PrintVersion struct {
 	Markup map[string]any
 }
 
@@ -204,7 +204,7 @@ var Zt_PrintVersion = typeinfo.Flow{
 
 // holds a slice of type print_version
 // FIX: duplicates the spec decl.
-type FIX_PrintVersion_Slice []PrintVersion
+type PrintVersion_Slice []PrintVersion
 
 // implements typeinfo.Inspector
 func (*PrintVersion_Slice) Inspect() (typeinfo.T, bool) {
