@@ -13,10 +13,10 @@ var Zt_TestSlot = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type FIX_TestSlot_Slot struct{ Value TestSlot }
+type TestSlot_Slot struct{ Value TestSlot }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_TestSlot_Slot) Inspect() (typeinfo.T, bool) {
+func (*TestSlot_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_TestSlot, false
 }
 
@@ -30,7 +30,7 @@ func (*TestSlot_Slots) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_TestEmbed struct {
+type TestEmbed struct {
 	TestFlow TestFlow
 	Markup   map[string]any
 }
@@ -67,7 +67,7 @@ var Zt_TestEmbed = typeinfo.Flow{
 
 // holds a slice of type test_embed
 // FIX: duplicates the spec decl.
-type FIX_TestEmbed_Slice []TestEmbed
+type TestEmbed_Slice []TestEmbed
 
 // implements typeinfo.Inspector
 func (*TestEmbed_Slice) Inspect() (typeinfo.T, bool) {
@@ -76,11 +76,11 @@ func (*TestEmbed_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_TestFlow struct {
+type TestFlow struct {
 	Slot   TestSlot
 	Txt    string
 	Num    float64
-	Bool   FIX_TestBool
+	Bool   TestBool
 	Slots  []TestSlot
 	Markup map[string]any
 }
@@ -139,7 +139,7 @@ var Zt_TestFlow = typeinfo.Flow{
 
 // holds a slice of type test_flow
 // FIX: duplicates the spec decl.
-type FIX_TestFlow_Slice []TestFlow
+type TestFlow_Slice []TestFlow
 
 // implements typeinfo.Inspector
 func (*TestFlow_Slice) Inspect() (typeinfo.T, bool) {
@@ -147,15 +147,15 @@ func (*TestFlow_Slice) Inspect() (typeinfo.T, bool) {
 }
 
 // TestBool, a type of str enum.
-type FIX_TestBool int
+type TestBool int
 
 // enumerated values of TestBool
 const (
-	C_TestBool_True FIX_TestBool = iota
+	C_TestBool_True TestBool = iota
 	C_TestBool_False
 )
 
-func (op FIX_TestBool) String() (ret string) {
+func (op TestBool) String() (ret string) {
 	if i, opts := int(op), Zt_TestBool.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]
 	} else {
@@ -174,16 +174,16 @@ var Zt_TestBool = typeinfo.Str{
 }
 
 // TestStr, a type of str enum.
-type FIX_TestStr int
+type TestStr int
 
 // enumerated values of TestStr
 const (
-	C_TestStr_One FIX_TestStr = iota
+	C_TestStr_One TestStr = iota
 	C_TestStr_Other
 	C_TestStr_Option
 )
 
-func (op FIX_TestStr) String() (ret string) {
+func (op TestStr) String() (ret string) {
 	if i, opts := int(op), Zt_TestStr.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]
 	} else {
