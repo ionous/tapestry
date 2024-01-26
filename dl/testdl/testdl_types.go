@@ -80,7 +80,7 @@ type FIX_TestFlow struct {
 	Txt    string
 	Num    float64
 	Bool   string
-	Slots  TestSlot
+	Slots  []TestSlot
 	Markup map[string]any
 }
 

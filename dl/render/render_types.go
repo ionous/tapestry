@@ -62,7 +62,6 @@ var Zt_RenderName = typeinfo.Flow{
 	Lede: "render_name",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -86,7 +85,7 @@ func (*RenderName_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_RenderRef struct {
 	Name   rtti.TextEval
-	Dot    assign.Dot
+	Dot    []assign.Dot
 	Markup map[string]any
 }
 
@@ -119,7 +118,6 @@ var Zt_RenderRef = typeinfo.Flow{
 	Lede: "render_ref",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "dot",
@@ -181,7 +179,6 @@ var Zt_RenderValue = typeinfo.Flow{
 	Lede: "render_value",
 	Terms: []typeinfo.Term{{
 		Name: "value",
-
 		Type: &rtti.Zt_Assignment,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -205,7 +202,7 @@ func (*RenderValue_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_RenderPattern struct {
 	PatternName string
-	Render      RenderEval
+	Render      []RenderEval
 	Markup      map[string]any
 }
 
@@ -233,7 +230,6 @@ var Zt_RenderPattern = typeinfo.Flow{
 	Lede: "render",
 	Terms: []typeinfo.Term{{
 		Name: "pattern_name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "render",
@@ -291,7 +287,6 @@ var Zt_RenderResponse = typeinfo.Flow{
 	Lede: "render_response",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:     "text",

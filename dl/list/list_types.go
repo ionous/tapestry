@@ -39,7 +39,6 @@ var Zt_EraseEdge = typeinfo.Flow{
 	Lede: "erase",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:     "at_edge",
@@ -95,7 +94,6 @@ var Zt_EraseIndex = typeinfo.Flow{
 	Lede: "erase",
 	Terms: []typeinfo.Term{{
 		Name: "count",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "target",
@@ -130,7 +128,7 @@ type FIX_Erasing struct {
 	Target  assign.Address
 	AtIndex rtti.NumberEval
 	As      string
-	Exe     rtti.Execute
+	Exe     []rtti.Execute
 	Markup  map[string]any
 }
 
@@ -156,7 +154,6 @@ var Zt_Erasing = typeinfo.Flow{
 	Lede: "erasing",
 	Terms: []typeinfo.Term{{
 		Name: "count",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "target",
@@ -199,7 +196,7 @@ type FIX_ErasingEdge struct {
 	Target assign.Address
 	AtEdge rtti.BoolEval
 	As     string
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Else   core.Brancher
 	Markup map[string]any
 }
@@ -226,7 +223,6 @@ var Zt_ErasingEdge = typeinfo.Flow{
 	Lede: "erasing",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:     "at_edge",
@@ -270,7 +266,7 @@ func (*ErasingEdge_Slice) Inspect() (typeinfo.T, bool) {
 type FIX_ListEach struct {
 	List   rtti.Assignment
 	As     string
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Else   core.Brancher
 	Markup map[string]any
 }
@@ -362,7 +358,6 @@ var Zt_ListFind = typeinfo.Flow{
 	Lede: "find",
 	Terms: []typeinfo.Term{{
 		Name: "value",
-
 		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:  "list",
@@ -415,7 +410,6 @@ var Zt_ListGather = typeinfo.Flow{
 	Lede: "gather",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:  "from",
@@ -469,7 +463,6 @@ var Zt_ListLen = typeinfo.Flow{
 	Lede: "len",
 	Terms: []typeinfo.Term{{
 		Name: "list",
-
 		Type: &rtti.Zt_Assignment,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -492,7 +485,7 @@ func (*ListLen_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeTextList struct {
-	Values rtti.TextEval
+	Values []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -539,7 +532,7 @@ func (*MakeTextList_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeNumList struct {
-	Values rtti.NumberEval
+	Values []rtti.NumberEval
 	Markup map[string]any
 }
 
@@ -586,7 +579,7 @@ func (*MakeNumList_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_MakeRecordList struct {
-	Values rtti.RecordEval
+	Values []rtti.RecordEval
 	Kind   rtti.TextEval
 	Markup map[string]any
 }
@@ -666,7 +659,6 @@ var Zt_ListMap = typeinfo.Flow{
 	Lede: "map",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:  "list",
@@ -835,7 +827,6 @@ var Zt_ListSlice = typeinfo.Flow{
 	Lede: "slice",
 	Terms: []typeinfo.Term{{
 		Name: "list",
-
 		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:     "start",
@@ -898,7 +889,6 @@ var Zt_ListSortNumbers = typeinfo.Flow{
 	Lede: "sort_numbers",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:  "by_field",
@@ -956,7 +946,6 @@ var Zt_ListSortText = typeinfo.Flow{
 	Lede: "sort_texts",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:  "by_field",
@@ -1025,7 +1014,6 @@ var Zt_ListSplice = typeinfo.Flow{
 	Lede: "splice",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:  "start",
@@ -1091,7 +1079,6 @@ var Zt_ListPush = typeinfo.Flow{
 	Lede: "push",
 	Terms: []typeinfo.Term{{
 		Name: "value",
-
 		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:  "target",
@@ -1151,7 +1138,6 @@ var Zt_Range = typeinfo.Flow{
 	Lede: "range",
 	Terms: []typeinfo.Term{{
 		Name: "to",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:     "from",

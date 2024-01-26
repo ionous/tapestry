@@ -15,10 +15,10 @@ var Zt_Assignment = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type Assignment_Slot struct{ Value Assignment }
+type FIX_Assignment_Slot struct{ Value Assignment }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Assignment_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_Assignment_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Assignment, false
 }
 
@@ -41,10 +41,10 @@ var Zt_BoolEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type BoolEval_Slot struct{ Value BoolEval }
+type FIX_BoolEval_Slot struct{ Value BoolEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*BoolEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_BoolEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_BoolEval, false
 }
 
@@ -68,10 +68,10 @@ var Zt_Execute = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type Execute_Slot struct{ Value Execute }
+type FIX_Execute_Slot struct{ Value Execute }
 
 // implements typeinfo.Inspector for a single slot.
-func (*Execute_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_Execute_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Execute, false
 }
 
@@ -94,10 +94,10 @@ var Zt_NumListEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type NumListEval_Slot struct{ Value NumListEval }
+type FIX_NumListEval_Slot struct{ Value NumListEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*NumListEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_NumListEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_NumListEval, false
 }
 
@@ -120,10 +120,10 @@ var Zt_NumberEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type NumberEval_Slot struct{ Value NumberEval }
+type FIX_NumberEval_Slot struct{ Value NumberEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*NumberEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_NumberEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_NumberEval, false
 }
 
@@ -146,10 +146,10 @@ var Zt_TextEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type TextEval_Slot struct{ Value TextEval }
+type FIX_TextEval_Slot struct{ Value TextEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*TextEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_TextEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_TextEval, false
 }
 
@@ -172,10 +172,10 @@ var Zt_TextListEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type TextListEval_Slot struct{ Value TextListEval }
+type FIX_TextListEval_Slot struct{ Value TextListEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*TextListEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_TextListEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_TextListEval, false
 }
 
@@ -198,10 +198,10 @@ var Zt_RecordEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type RecordEval_Slot struct{ Value RecordEval }
+type FIX_RecordEval_Slot struct{ Value RecordEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*RecordEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_RecordEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_RecordEval, false
 }
 
@@ -224,10 +224,10 @@ var Zt_RecordListEval = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type RecordListEval_Slot struct{ Value RecordListEval }
+type FIX_RecordListEval_Slot struct{ Value RecordListEval }
 
 // implements typeinfo.Inspector for a single slot.
-func (*RecordListEval_Slot) Inspect() (typeinfo.T, bool) {
+func (*FIX_RecordListEval_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_RecordListEval, false
 }
 

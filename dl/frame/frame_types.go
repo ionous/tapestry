@@ -32,7 +32,7 @@ func (*Event_Slots) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_Frame struct {
 	Result string
-	Events Event
+	Events []Event
 	Error  string
 	Markup map[string]any
 }
@@ -109,7 +109,6 @@ var Zt_FrameOutput = typeinfo.Flow{
 	Lede: "frame_output",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -129,7 +128,7 @@ func (*FrameOutput_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SceneStarted struct {
-	Domains string
+	Domains []string
 	Markup  map[string]any
 }
 
@@ -154,8 +153,7 @@ var Zt_SceneStarted = typeinfo.Flow{
 	Name: "scene_started",
 	Lede: "scene_started",
 	Terms: []typeinfo.Term{{
-		Name: "domains",
-
+		Name:    "domains",
 		Repeats: true,
 		Type:    &prim.Zt_Text,
 	}},
@@ -176,7 +174,7 @@ func (*SceneStarted_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SceneEnded struct {
-	Domains string
+	Domains []string
 	Markup  map[string]any
 }
 
@@ -201,8 +199,7 @@ var Zt_SceneEnded = typeinfo.Flow{
 	Name: "scene_ended",
 	Lede: "scene_ended",
 	Terms: []typeinfo.Term{{
-		Name: "domains",
-
+		Name:    "domains",
 		Repeats: true,
 		Type:    &prim.Zt_Text,
 	}},

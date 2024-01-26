@@ -50,6 +50,9 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 			} else {
 				ret = goName
 			}
+			if t.Repeats {
+				ret = "[]" + ret
+			}
 			return
 		},
 	}

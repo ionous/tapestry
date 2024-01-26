@@ -36,7 +36,6 @@ var Zt_ReciprocalOf = typeinfo.Flow{
 	Lede: "reciprocal",
 	Terms: []typeinfo.Term{{
 		Name: "via",
-
 		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
@@ -90,7 +89,6 @@ var Zt_ReciprocalsOf = typeinfo.Flow{
 	Lede: "reciprocals",
 	Terms: []typeinfo.Term{{
 		Name: "via",
-
 		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
@@ -145,7 +143,6 @@ var Zt_Relate = typeinfo.Flow{
 	Lede: "relate",
 	Terms: []typeinfo.Term{{
 		Name: "object",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "to_object",
@@ -203,7 +200,6 @@ var Zt_RelativeOf = typeinfo.Flow{
 	Lede: "relative",
 	Terms: []typeinfo.Term{{
 		Name: "via",
-
 		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
@@ -257,7 +253,6 @@ var Zt_RelativesOf = typeinfo.Flow{
 	Lede: "relatives",
 	Terms: []typeinfo.Term{{
 		Name: "via",
-
 		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",

@@ -80,7 +80,6 @@ var Zt_Expect = typeinfo.Flow{
 	Lede: "expect",
 	Terms: []typeinfo.Term{{
 		Name: "value",
-
 		Type: &rtti.Zt_BoolEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -268,7 +267,6 @@ var Zt_DebugLog = typeinfo.Flow{
 	Lede: "log",
 	Terms: []typeinfo.Term{{
 		Name: "log_level",
-
 		Type: &Zt_LoggingLevel,
 	}, {
 		Name:  "value",

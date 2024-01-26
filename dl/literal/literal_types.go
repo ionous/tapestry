@@ -117,7 +117,6 @@ var Zt_FieldValue = typeinfo.Flow{
 	Lede: "field",
 	Terms: []typeinfo.Term{{
 		Name: "field",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:  "value",
@@ -141,7 +140,7 @@ func (*FieldValue_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_FieldList struct {
-	Fields FieldValue
+	Fields []FieldValue
 	Markup map[string]any
 }
 
@@ -166,8 +165,7 @@ var Zt_FieldList = typeinfo.Flow{
 	Name: "field_list",
 	Lede: "field_list",
 	Terms: []typeinfo.Term{{
-		Name: "fields",
-
+		Name:    "fields",
 		Repeats: true,
 		Type:    &Zt_FieldValue,
 	}},
@@ -248,7 +246,7 @@ func (*NumValue_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_NumValues struct {
-	Values float64
+	Values []float64
 	Kind   string
 	Markup map[string]any
 }
@@ -307,7 +305,7 @@ func (*NumValues_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_RecordValue struct {
 	Kind   string
-	Fields FieldValue
+	Fields []FieldValue
 	Cache  RecordCache
 	Markup map[string]any
 }
@@ -335,7 +333,6 @@ var Zt_RecordValue = typeinfo.Flow{
 	Lede: "record",
 	Terms: []typeinfo.Term{{
 		Name: "kind",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "fields",
@@ -369,7 +366,7 @@ func (*RecordValue_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_RecordList struct {
 	Kind    string
-	Records FieldList
+	Records []FieldList
 	Cache   RecordsCache
 	Markup  map[string]any
 }
@@ -397,7 +394,6 @@ var Zt_RecordList = typeinfo.Flow{
 	Lede: "record",
 	Terms: []typeinfo.Term{{
 		Name: "kind",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "records",
@@ -487,7 +483,7 @@ func (*TextValue_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_TextValues struct {
-	Values string
+	Values []string
 	Kind   string
 	Markup map[string]any
 }

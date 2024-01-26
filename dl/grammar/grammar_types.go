@@ -61,7 +61,7 @@ func (*ScannerMaker_Slots) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_Action struct {
 	Action    string
-	Arguments assign.Arg
+	Arguments []assign.Arg
 	Markup    map[string]any
 }
 
@@ -87,7 +87,6 @@ var Zt_Action = typeinfo.Flow{
 	Lede: "action",
 	Terms: []typeinfo.Term{{
 		Name: "action",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:     "arguments",
@@ -116,7 +115,7 @@ func (*Action_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Sequence struct {
-	Series ScannerMaker
+	Series []ScannerMaker
 	Markup map[string]any
 }
 
@@ -141,8 +140,7 @@ var Zt_Sequence = typeinfo.Flow{
 	Name: "sequence",
 	Lede: "sequence",
 	Terms: []typeinfo.Term{{
-		Name: "series",
-
+		Name:    "series",
 		Repeats: true,
 		Type:    &Zt_ScannerMaker,
 	}},
@@ -166,7 +164,7 @@ func (*Sequence_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ChooseOne struct {
-	Options ScannerMaker
+	Options []ScannerMaker
 	Markup  map[string]any
 }
 
@@ -217,7 +215,7 @@ func (*ChooseOne_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_Directive struct {
 	Name   string
-	Series ScannerMaker
+	Series []ScannerMaker
 	Markup map[string]any
 }
 
@@ -320,7 +318,7 @@ func (*Noun_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Refine struct {
-	Series ScannerMaker
+	Series []ScannerMaker
 	Markup map[string]any
 }
 
@@ -370,7 +368,7 @@ func (*Refine_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Reverse struct {
-	Reverses ScannerMaker
+	Reverses []ScannerMaker
 	Markup   map[string]any
 }
 
@@ -395,8 +393,7 @@ var Zt_Reverse = typeinfo.Flow{
 	Name: "reverse",
 	Lede: "reverse",
 	Terms: []typeinfo.Term{{
-		Name: "reverses",
-
+		Name:    "reverses",
 		Repeats: true,
 		Type:    &Zt_ScannerMaker,
 	}},
@@ -421,7 +418,7 @@ func (*Reverse_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_Focus struct {
 	Player string
-	Series ScannerMaker
+	Series []ScannerMaker
 	Markup map[string]any
 }
 
@@ -447,7 +444,6 @@ var Zt_Focus = typeinfo.Flow{
 	Lede: "focus",
 	Terms: []typeinfo.Term{{
 		Name: "player",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "series",
@@ -475,7 +471,7 @@ func (*Focus_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Words struct {
-	Words  string
+	Words  []string
 	Markup map[string]any
 }
 

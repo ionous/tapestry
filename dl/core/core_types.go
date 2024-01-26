@@ -61,7 +61,7 @@ func (*Trigger_Slots) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_AllTrue struct {
-	Test   rtti.BoolEval
+	Test   []rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -86,8 +86,7 @@ var Zt_AllTrue = typeinfo.Flow{
 	Name: "all_true",
 	Lede: "all_true",
 	Terms: []typeinfo.Term{{
-		Name: "test",
-
+		Name:    "test",
 		Repeats: true,
 		Type:    &rtti.Zt_BoolEval,
 	}},
@@ -155,7 +154,7 @@ func (*Always_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_AnyTrue struct {
-	Test   rtti.BoolEval
+	Test   []rtti.BoolEval
 	Markup map[string]any
 }
 
@@ -180,8 +179,7 @@ var Zt_AnyTrue = typeinfo.Flow{
 	Name: "any_true",
 	Lede: "any_true",
 	Terms: []typeinfo.Term{{
-		Name: "test",
-
+		Name:    "test",
 		Repeats: true,
 		Type:    &rtti.Zt_BoolEval,
 	}},
@@ -249,7 +247,7 @@ func (*Blankline_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_BracketText struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -343,7 +341,7 @@ func (*Break_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_BufferText struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -391,7 +389,7 @@ func (*BufferText_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CallCycle struct {
 	Name   string
-	Parts  rtti.TextEval
+	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -417,7 +415,6 @@ var Zt_CallCycle = typeinfo.Flow{
 	Lede: "cycle",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "parts",
@@ -446,7 +443,7 @@ func (*CallCycle_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CallShuffle struct {
 	Name    string
-	Parts   rtti.TextEval
+	Parts   []rtti.TextEval
 	Indices Shuffler
 	Markup  map[string]any
 }
@@ -473,7 +470,6 @@ var Zt_CallShuffle = typeinfo.Flow{
 	Lede: "shuffle",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "parts",
@@ -506,7 +502,7 @@ func (*CallShuffle_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CallTerminal struct {
 	Name   string
-	Parts  rtti.TextEval
+	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -532,7 +528,6 @@ var Zt_CallTerminal = typeinfo.Flow{
 	Lede: "stopping",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:    "parts",
@@ -588,7 +583,6 @@ var Zt_CallTrigger = typeinfo.Flow{
 	Lede: "trigger",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:  "trigger",
@@ -645,7 +639,6 @@ var Zt_Capitalize = typeinfo.Flow{
 	Lede: "capitalize",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -669,8 +662,8 @@ func (*Capitalize_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_ChooseBranch struct {
 	If     rtti.BoolEval
-	Args   assign.Arg
-	Exe    rtti.Execute
+	Args   []assign.Arg
+	Exe    []rtti.Execute
 	Else   Brancher
 	Markup map[string]any
 }
@@ -698,7 +691,6 @@ var Zt_ChooseBranch = typeinfo.Flow{
 	Lede: "if",
 	Terms: []typeinfo.Term{{
 		Name: "if",
-
 		Type: &rtti.Zt_BoolEval,
 	}, {
 		Name:     "args",
@@ -738,7 +730,7 @@ func (*ChooseBranch_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ChooseNothingElse struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -905,7 +897,7 @@ func (*ChooseText_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_CommaText struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -983,7 +975,6 @@ var Zt_CompareValue = typeinfo.Flow{
 	Lede: "is",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:  "is",
@@ -1043,7 +1034,6 @@ var Zt_CompareNum = typeinfo.Flow{
 	Lede: "is",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "is",
@@ -1107,7 +1097,6 @@ var Zt_CompareText = typeinfo.Flow{
 	Lede: "is",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "is",
@@ -1165,7 +1154,6 @@ var Zt_SubtractValue = typeinfo.Flow{
 	Lede: "subtract",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
@@ -1219,7 +1207,6 @@ var Zt_During = typeinfo.Flow{
 	Lede: "during",
 	Terms: []typeinfo.Term{{
 		Name: "pattern_name",
-
 		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1364,7 +1351,6 @@ var Zt_IdOf = typeinfo.Flow{
 	Lede: "id_of",
 	Terms: []typeinfo.Term{{
 		Name: "object",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1414,7 +1400,6 @@ var Zt_Includes = typeinfo.Flow{
 	Lede: "contains",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "part",
@@ -1517,7 +1502,6 @@ var Zt_IsExactKindOf = typeinfo.Flow{
 	Lede: "kind_of",
 	Terms: []typeinfo.Term{{
 		Name: "object",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "kind",
@@ -1572,7 +1556,6 @@ var Zt_IsKindOf = typeinfo.Flow{
 	Lede: "kind_of",
 	Terms: []typeinfo.Term{{
 		Name: "object",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "kind",
@@ -1605,7 +1588,7 @@ func (*IsKindOf_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_Join struct {
 	Sep    rtti.TextEval
-	Parts  rtti.TextEval
+	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -1630,8 +1613,7 @@ var Zt_Join = typeinfo.Flow{
 	Name: "join",
 	Lede: "join",
 	Terms: []typeinfo.Term{{
-		Name: "sep",
-
+		Name:     "sep",
 		Optional: true,
 		Type:     &rtti.Zt_TextEval,
 	}, {
@@ -1687,7 +1669,6 @@ var Zt_KindOf = typeinfo.Flow{
 	Lede: "kind_of",
 	Terms: []typeinfo.Term{{
 		Name: "object",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "nothing",
@@ -1741,7 +1722,6 @@ var Zt_KindsOf = typeinfo.Flow{
 	Lede: "kinds_of",
 	Terms: []typeinfo.Term{{
 		Name: "kind",
-
 		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1790,7 +1770,6 @@ var Zt_MakeLowercase = typeinfo.Flow{
 	Lede: "lower",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1888,7 +1867,6 @@ var Zt_MakeSentenceCase = typeinfo.Flow{
 	Lede: "sentence",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1937,7 +1915,6 @@ var Zt_MakeTitleCase = typeinfo.Flow{
 	Lede: "title",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1986,7 +1963,6 @@ var Zt_MakeUppercase = typeinfo.Flow{
 	Lede: "upper",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -2037,7 +2013,6 @@ var Zt_Matches = typeinfo.Flow{
 	Lede: "matches",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "match",
@@ -2094,7 +2069,6 @@ var Zt_NameOf = typeinfo.Flow{
 	Lede: "name_of",
 	Terms: []typeinfo.Term{{
 		Name: "object",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -2275,7 +2249,6 @@ var Zt_Not = typeinfo.Flow{
 	Lede: "not",
 	Terms: []typeinfo.Term{{
 		Name: "test",
-
 		Type: &rtti.Zt_BoolEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -2471,7 +2444,6 @@ var Zt_PrintNum = typeinfo.Flow{
 	Lede: "numeral",
 	Terms: []typeinfo.Term{{
 		Name: "num",
-
 		Type: &rtti.Zt_NumberEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -2570,7 +2542,6 @@ var Zt_MultiplyValue = typeinfo.Flow{
 	Lede: "multiply",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
@@ -2624,7 +2595,6 @@ var Zt_DivideValue = typeinfo.Flow{
 	Lede: "divide",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
@@ -2678,7 +2648,6 @@ var Zt_ModValue = typeinfo.Flow{
 	Lede: "mod",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
@@ -2779,7 +2748,6 @@ var Zt_Increment = typeinfo.Flow{
 	Lede: "increase",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:     "step",
@@ -2836,7 +2804,6 @@ var Zt_Decrement = typeinfo.Flow{
 	Lede: "decrease",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &assign.Zt_Address,
 	}, {
 		Name:     "step",
@@ -2895,7 +2862,6 @@ var Zt_IncrementAspect = typeinfo.Flow{
 	Lede: "increase",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "aspect",
@@ -2963,7 +2929,6 @@ var Zt_DecrementAspect = typeinfo.Flow{
 	Lede: "decrease",
 	Terms: []typeinfo.Term{{
 		Name: "target",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "aspect",
@@ -3027,7 +2992,6 @@ var Zt_PrintText = typeinfo.Flow{
 	Lede: "print",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -3050,7 +3014,7 @@ func (*PrintText_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Row struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -3100,7 +3064,7 @@ func (*Row_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_Rows struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -3199,7 +3163,7 @@ func (*Singularize_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SlashText struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -3293,7 +3257,7 @@ func (*Softline_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_SpanText struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -3370,7 +3334,6 @@ var Zt_AddValue = typeinfo.Flow{
 	Lede: "add",
 	Terms: []typeinfo.Term{{
 		Name: "a",
-
 		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
@@ -3521,7 +3484,7 @@ func (*TriggerSwitch_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_While struct {
 	True   rtti.BoolEval
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -3547,7 +3510,6 @@ var Zt_While = typeinfo.Flow{
 	Lede: "repeating",
 	Terms: []typeinfo.Term{{
 		Name: "true",
-
 		Type: &rtti.Zt_BoolEval,
 	}, {
 		Name:    "exe",

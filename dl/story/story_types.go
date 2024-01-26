@@ -92,7 +92,6 @@ var Zt_Comment = typeinfo.Flow{
 	Lede: "comment",
 	Terms: []typeinfo.Term{{
 		Name: "lines",
-
 		Type: &prim.Zt_Lines,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -117,9 +116,9 @@ func (*Comment_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_Test struct {
 	TestName       string
-	SceneNames     string
-	TestStatements StoryStatement
-	Exe            rtti.Execute
+	SceneNames     []string
+	TestStatements []StoryStatement
+	Exe            []rtti.Execute
 	Markup         map[string]any
 }
 
@@ -146,7 +145,6 @@ var Zt_Test = typeinfo.Flow{
 	Lede: "test",
 	Terms: []typeinfo.Term{{
 		Name: "test_name",
-
 		Type: &prim.Zt_Text,
 	}, {
 		Name:     "scene_names",
@@ -189,7 +187,7 @@ func (*Test_Slice) Inspect() (typeinfo.T, bool) {
 type FIX_DefineScene struct {
 	Scene     rtti.TextEval
 	DependsOn rtti.TextListEval
-	With      StoryStatement
+	With      []StoryStatement
 	Markup    map[string]any
 }
 
@@ -249,8 +247,8 @@ func (*DefineScene_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_DefineAction struct {
 	Action   rtti.TextEval
-	Requires FieldDefinition
-	Provides FieldDefinition
+	Requires []FieldDefinition
+	Provides []FieldDefinition
 	Markup   map[string]any
 }
 
@@ -394,7 +392,6 @@ var Zt_AspectField = typeinfo.Flow{
 	Lede: "aspect",
 	Terms: []typeinfo.Term{{
 		Name: "aspect",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -445,7 +442,6 @@ var Zt_BoolField = typeinfo.Flow{
 	Lede: "bool",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
@@ -502,7 +498,6 @@ var Zt_CountOf = typeinfo.Flow{
 	Lede: "count_of",
 	Terms: []typeinfo.Term{{
 		Name: "trigger",
-
 		Type: &core.Zt_Trigger,
 	}, {
 		Name:  "num",
@@ -529,7 +524,7 @@ func (*CountOf_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_CycleText struct {
-	Parts  rtti.TextEval
+	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -554,8 +549,7 @@ var Zt_CycleText = typeinfo.Flow{
 	Name: "cycle_text",
 	Lede: "cycle_text",
 	Terms: []typeinfo.Term{{
-		Name: "parts",
-
+		Name:    "parts",
 		Repeats: true,
 		Type:    &rtti.Zt_TextEval,
 	}},
@@ -635,8 +629,8 @@ func (*DefineAlias_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_DefineLeadingGrammar struct {
-	Lede   string
-	Scans  grammar.ScannerMaker
+	Lede   []string
+	Scans  []grammar.ScannerMaker
 	Markup map[string]any
 }
 
@@ -662,8 +656,7 @@ var Zt_DefineLeadingGrammar = typeinfo.Flow{
 	Name: "define_leading_grammar",
 	Lede: "interpret",
 	Terms: []typeinfo.Term{{
-		Name: "lede",
-
+		Name:    "lede",
 		Repeats: true,
 		Type:    &prim.Zt_Text,
 	}, {
@@ -694,7 +687,7 @@ func (*DefineLeadingGrammar_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_DefineNamedGrammar struct {
 	Name   string
-	Scans  grammar.ScannerMaker
+	Scans  []grammar.ScannerMaker
 	Markup map[string]any
 }
 
@@ -836,7 +829,6 @@ var Zt_DeclareStatement = typeinfo.Flow{
 	Lede: "declare",
 	Terms: []typeinfo.Term{{
 		Name: "text",
-
 		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -923,7 +915,7 @@ func (*DefineRelation_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_DefineFields struct {
 	Kind   rtti.TextEval
-	Fields FieldDefinition
+	Fields []FieldDefinition
 	Markup map[string]any
 }
 
@@ -1060,7 +1052,6 @@ var Zt_MakeOpposite = typeinfo.Flow{
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name: "word",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "opposite",
@@ -1116,7 +1107,6 @@ var Zt_MakePlural = typeinfo.Flow{
 	Lede: "define",
 	Terms: []typeinfo.Term{{
 		Name: "singular",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "plural",
@@ -1241,7 +1231,6 @@ var Zt_MapHeading = typeinfo.Flow{
 	Lede: "heading",
 	Terms: []typeinfo.Term{{
 		Name: "dir",
-
 		Type: &Zt_MapDirection,
 	}, {
 		Name:  "room_name",
@@ -1477,7 +1466,6 @@ var Zt_NumListField = typeinfo.Flow{
 	Lede: "num_list",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
@@ -1535,7 +1523,6 @@ var Zt_NumberField = typeinfo.Flow{
 	Lede: "number",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
@@ -1566,7 +1553,7 @@ func (*NumberField_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_RuleProvides struct {
 	PatternName rtti.TextEval
-	Provides    FieldDefinition
+	Provides    []FieldDefinition
 	Markup      map[string]any
 }
 
@@ -1621,7 +1608,7 @@ func (*RuleProvides_Slice) Inspect() (typeinfo.T, bool) {
 type FIX_RuleForPattern struct {
 	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
-	Exe         rtti.Execute
+	Exe         []rtti.Execute
 	Markup      map[string]any
 }
 
@@ -1685,7 +1672,7 @@ type FIX_RuleForNoun struct {
 	PatternName rtti.TextEval
 	NounName    rtti.TextEval
 	RuleName    rtti.TextEval
-	Exe         rtti.Execute
+	Exe         []rtti.Execute
 	Markup      map[string]any
 }
 
@@ -1754,7 +1741,7 @@ type FIX_RuleForKind struct {
 	KindName    rtti.TextEval
 	Exactly     rtti.BoolEval
 	RuleName    rtti.TextEval
-	Exe         rtti.Execute
+	Exe         []rtti.Execute
 	Markup      map[string]any
 }
 
@@ -1825,9 +1812,9 @@ func (*RuleForKind_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_DefineMacro struct {
 	MacroName       rtti.TextEval
-	Requires        FieldDefinition
-	Provides        FieldDefinition
-	MacroStatements rtti.Execute
+	Requires        []FieldDefinition
+	Provides        []FieldDefinition
+	MacroStatements []rtti.Execute
 	Markup          map[string]any
 }
 
@@ -1894,7 +1881,7 @@ func (*DefineMacro_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CallMacro struct {
 	MacroName string
-	Arguments assign.Arg
+	Arguments []assign.Arg
 	Markup    map[string]any
 }
 
@@ -1965,9 +1952,9 @@ func (*CallMacro_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_DefinePattern struct {
 	PatternName rtti.TextEval
-	Requires    FieldDefinition
-	Provides    FieldDefinition
-	Exe         rtti.Execute
+	Requires    []FieldDefinition
+	Provides    []FieldDefinition
+	Exe         []rtti.Execute
 	Markup      map[string]any
 }
 
@@ -2062,7 +2049,6 @@ var Zt_RecordListField = typeinfo.Flow{
 	Lede: "record_list",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
@@ -2120,7 +2106,6 @@ var Zt_RecordField = typeinfo.Flow{
 	Lede: "record",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
@@ -2299,7 +2284,6 @@ var Zt_SayTemplate = typeinfo.Flow{
 	Lede: "say",
 	Terms: []typeinfo.Term{{
 		Name: "template",
-
 		Type: &prim.Zt_Lines,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -2379,7 +2363,7 @@ func (*SayResponse_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_ShuffleText struct {
-	Parts  rtti.TextEval
+	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2404,8 +2388,7 @@ var Zt_ShuffleText = typeinfo.Flow{
 	Name: "shuffle_text",
 	Lede: "shuffle_text",
 	Terms: []typeinfo.Term{{
-		Name: "parts",
-
+		Name:    "parts",
 		Repeats: true,
 		Type:    &rtti.Zt_TextEval,
 	}},
@@ -2429,7 +2412,7 @@ func (*ShuffleText_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_StoppingText struct {
-	Parts  rtti.TextEval
+	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
@@ -2454,8 +2437,7 @@ var Zt_StoppingText = typeinfo.Flow{
 	Name: "stopping_text",
 	Lede: "stopping_text",
 	Terms: []typeinfo.Term{{
-		Name: "parts",
-
+		Name:    "parts",
 		Repeats: true,
 		Type:    &rtti.Zt_TextEval,
 	}},
@@ -2523,7 +2505,7 @@ func (*StoryBreak_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_StoryFile struct {
-	StoryStatements StoryStatement
+	StoryStatements []StoryStatement
 	Markup          map[string]any
 }
 
@@ -2545,8 +2527,7 @@ var Zt_StoryFile = typeinfo.Flow{
 	Name: "story_file",
 	Lede: "tapestry",
 	Terms: []typeinfo.Term{{
-		Name: "story_statements",
-
+		Name:    "story_statements",
 		Repeats: true,
 		Type:    &Zt_StoryStatement,
 	}},
@@ -2597,7 +2578,6 @@ var Zt_TextListField = typeinfo.Flow{
 	Lede: "text_list",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
@@ -2655,7 +2635,6 @@ var Zt_TextField = typeinfo.Flow{
 	Lede: "text",
 	Terms: []typeinfo.Term{{
 		Name: "name",
-
 		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
