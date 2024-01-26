@@ -13,10 +13,10 @@ var Zt_Event = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type FIX_Event_Slot struct{ Value Event }
+type Event_Slot struct{ Value Event }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_Event_Slot) Inspect() (typeinfo.T, bool) {
+func (*Event_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_Event, false
 }
 
@@ -30,7 +30,7 @@ func (*Event_Slots) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Frame struct {
+type Frame struct {
 	Result string
 	Events []Event
 	Error  string
@@ -73,7 +73,7 @@ var Zt_Frame = typeinfo.Flow{
 
 // holds a slice of type frame
 // FIX: duplicates the spec decl.
-type FIX_Frame_Slice []Frame
+type Frame_Slice []Frame
 
 // implements typeinfo.Inspector
 func (*Frame_Slice) Inspect() (typeinfo.T, bool) {
@@ -82,7 +82,7 @@ func (*Frame_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_FrameOutput struct {
+type FrameOutput struct {
 	Text   string
 	Markup map[string]any
 }
@@ -118,7 +118,7 @@ var Zt_FrameOutput = typeinfo.Flow{
 
 // holds a slice of type frame_output
 // FIX: duplicates the spec decl.
-type FIX_FrameOutput_Slice []FrameOutput
+type FrameOutput_Slice []FrameOutput
 
 // implements typeinfo.Inspector
 func (*FrameOutput_Slice) Inspect() (typeinfo.T, bool) {
@@ -127,7 +127,7 @@ func (*FrameOutput_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_SceneStarted struct {
+type SceneStarted struct {
 	Domains []string
 	Markup  map[string]any
 }
@@ -164,7 +164,7 @@ var Zt_SceneStarted = typeinfo.Flow{
 
 // holds a slice of type scene_started
 // FIX: duplicates the spec decl.
-type FIX_SceneStarted_Slice []SceneStarted
+type SceneStarted_Slice []SceneStarted
 
 // implements typeinfo.Inspector
 func (*SceneStarted_Slice) Inspect() (typeinfo.T, bool) {
@@ -173,7 +173,7 @@ func (*SceneStarted_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_SceneEnded struct {
+type SceneEnded struct {
 	Domains []string
 	Markup  map[string]any
 }
@@ -210,7 +210,7 @@ var Zt_SceneEnded = typeinfo.Flow{
 
 // holds a slice of type scene_ended
 // FIX: duplicates the spec decl.
-type FIX_SceneEnded_Slice []SceneEnded
+type SceneEnded_Slice []SceneEnded
 
 // implements typeinfo.Inspector
 func (*SceneEnded_Slice) Inspect() (typeinfo.T, bool) {
@@ -219,7 +219,7 @@ func (*SceneEnded_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_StateChanged struct {
+type StateChanged struct {
 	Noun   string
 	Aspect string
 	Prev   string
@@ -271,7 +271,7 @@ var Zt_StateChanged = typeinfo.Flow{
 
 // holds a slice of type state_changed
 // FIX: duplicates the spec decl.
-type FIX_StateChanged_Slice []StateChanged
+type StateChanged_Slice []StateChanged
 
 // implements typeinfo.Inspector
 func (*StateChanged_Slice) Inspect() (typeinfo.T, bool) {
@@ -280,7 +280,7 @@ func (*StateChanged_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_PairChanged struct {
+type PairChanged struct {
 	A      string
 	B      string
 	Rel    string
@@ -327,7 +327,7 @@ var Zt_PairChanged = typeinfo.Flow{
 
 // holds a slice of type pair_changed
 // FIX: duplicates the spec decl.
-type FIX_PairChanged_Slice []PairChanged
+type PairChanged_Slice []PairChanged
 
 // implements typeinfo.Inspector
 func (*PairChanged_Slice) Inspect() (typeinfo.T, bool) {
