@@ -4,6 +4,8 @@ import (
 	"hash/fnv"
 	"io"
 	r "reflect"
+
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 // hash to pointer to a nil value of the type
@@ -22,11 +24,11 @@ func (fac SignatureTable) FindType(hash uint64) (ret any, okay bool) {
 }
 
 // create a new instance of the type and return its pointer
-func (fac SignatureTable) Create(slot, fullsig string) (ret r.Value, okay bool) {
+func (fac SignatureTable) Create(slot, fullsig string) (ret typeinfo.Inspector, okay bool) {
 	hash := Hash(slot, fullsig)
 	if cmdPtr, ok := fac.FindType(hash); ok {
 		cmdType := r.TypeOf(cmdPtr).Elem()
-		ret = r.New(cmdType)
+		ret = r.New(cmdType).Interface().(typeinfo.Inspector)
 		okay = true
 	}
 	return

@@ -87,9 +87,9 @@ var Zt_SetValue = typeinfo.Flow{
 	Name: "set_value",
 	Lede: "set",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &Zt_Address,
+		Name: "target",
+
+		Type: &Zt_Address,
 	}, {
 		Name:  "value",
 		Label: "value",
@@ -141,9 +141,9 @@ var Zt_SetTrait = typeinfo.Flow{
 	Name: "set_trait",
 	Lede: "set",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "target",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "trait",
 		Label: "trait",
@@ -195,9 +195,9 @@ var Zt_CopyValue = typeinfo.Flow{
 	Name: "copy_value",
 	Lede: "copy",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &Zt_Address,
+		Name: "target",
+
+		Type: &Zt_Address,
 	}, {
 		Name:  "source",
 		Label: "from",
@@ -257,9 +257,9 @@ var Zt_ObjectRef = typeinfo.Flow{
 	Name: "object_ref",
 	Lede: "object",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "field",
 		Label: "field",
@@ -328,9 +328,9 @@ var Zt_VariableRef = typeinfo.Flow{
 	Name: "variable_ref",
 	Lede: "variable",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "dot",
 		Label:    "dot",
@@ -387,9 +387,9 @@ var Zt_AtField = typeinfo.Flow{
 	Name: "at_field",
 	Lede: "at_field",
 	Terms: []typeinfo.Term{{
-		Name:  "field",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "field",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_Dot,
@@ -433,9 +433,9 @@ var Zt_AtIndex = typeinfo.Flow{
 	Name: "at_index",
 	Lede: "at_index",
 	Terms: []typeinfo.Term{{
-		Name:  "index",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "index",
+
+		Type: &rtti.Zt_NumberEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_Dot,
@@ -487,9 +487,9 @@ var Zt_CallPattern = typeinfo.Flow{
 	Name: "call_pattern",
 	Lede: "determine",
 	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "pattern_name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "arguments",
 		Label:   "args",
@@ -546,9 +546,9 @@ var Zt_Arg = typeinfo.Flow{
 	Name: "arg",
 	Lede: "arg",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:  "value",
 		Label: "from",
@@ -596,9 +596,9 @@ var Zt_FromExe = typeinfo.Flow{
 	Name: "from_exe",
 	Lede: "from_exe",
 	Terms: []typeinfo.Term{{
-		Name:  "exe",
-		Label: "_",
-		Type:  &rtti.Zt_Execute,
+		Name: "exe",
+
+		Type: &rtti.Zt_Execute,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -645,9 +645,9 @@ var Zt_FromBool = typeinfo.Flow{
 	Name: "from_bool",
 	Lede: "from_bool",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_BoolEval,
+		Name: "value",
+
+		Type: &rtti.Zt_BoolEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -694,9 +694,9 @@ var Zt_FromNumber = typeinfo.Flow{
 	Name: "from_number",
 	Lede: "from_number",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "value",
+
+		Type: &rtti.Zt_NumberEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -743,9 +743,9 @@ var Zt_FromText = typeinfo.Flow{
 	Name: "from_text",
 	Lede: "from_text",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "value",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -792,9 +792,9 @@ var Zt_FromRecord = typeinfo.Flow{
 	Name: "from_record",
 	Lede: "from_record",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_RecordEval,
+		Name: "value",
+
+		Type: &rtti.Zt_RecordEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -841,9 +841,9 @@ var Zt_FromNumList = typeinfo.Flow{
 	Name: "from_num_list",
 	Lede: "from_num_list",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_NumListEval,
+		Name: "value",
+
+		Type: &rtti.Zt_NumListEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -890,9 +890,9 @@ var Zt_FromTextList = typeinfo.Flow{
 	Name: "from_text_list",
 	Lede: "from_text_list",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_TextListEval,
+		Name: "value",
+
+		Type: &rtti.Zt_TextListEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,
@@ -939,9 +939,9 @@ var Zt_FromRecordList = typeinfo.Flow{
 	Name: "from_record_list",
 	Lede: "from_record_list",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_RecordListEval,
+		Name: "value",
+
+		Type: &rtti.Zt_RecordListEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Assignment,

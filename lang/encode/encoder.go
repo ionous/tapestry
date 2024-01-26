@@ -63,8 +63,7 @@ func (enc *Encoder) writeFlow(src inspect.Iter) (ret any, err error) {
 		for it := src; it.Next(); { // -1 to end before the markup
 			f, val := it.Term(), it.RawValue()
 			if !f.Optional || !val.IsZero() {
-				t := f.Type
-				switch t := t.(type) {
+				switch t := f.Type.(type) {
 				default:
 					err = fmt.Errorf("unhandled type %s", t)
 

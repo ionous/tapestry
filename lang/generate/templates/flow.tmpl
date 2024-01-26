@@ -34,8 +34,8 @@ var Zt_{{Pascal .Name}} = typeinfo.Flow{
 	Lede: "{{.Lede}}",
 	Terms: []typeinfo.Term{
 {{- range $i, $t := .Terms -}}{{if $i}},{{end}}{
-		Name: "{{$t.Name}}",
-		Label: "{{$t.Label}}", {{if $t.Private}}
+		Name: "{{$t.Name}}",{{if $t.SimpleLabel}}
+		Label: "{{$t.SimpleLabel}}",{{end}}{{if $t.Private}}
 		Private: true,{{end}}{{if $t.Optional}}
 		Optional: true,{{end}}{{if $t.Repeats}}
 		Repeats: true,{{end}}{{if not $t.Private}}

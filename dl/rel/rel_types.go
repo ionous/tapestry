@@ -35,9 +35,9 @@ var Zt_ReciprocalOf = typeinfo.Flow{
 	Name: "reciprocal_of",
 	Lede: "reciprocal",
 	Terms: []typeinfo.Term{{
-		Name:  "via",
-		Label: "_",
-		Type:  &Zt_RelationName,
+		Name: "via",
+
+		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
@@ -89,9 +89,9 @@ var Zt_ReciprocalsOf = typeinfo.Flow{
 	Name: "reciprocals_of",
 	Lede: "reciprocals",
 	Terms: []typeinfo.Term{{
-		Name:  "via",
-		Label: "_",
-		Type:  &Zt_RelationName,
+		Name: "via",
+
+		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
@@ -144,9 +144,9 @@ var Zt_Relate = typeinfo.Flow{
 	Name: "relate",
 	Lede: "relate",
 	Terms: []typeinfo.Term{{
-		Name:  "object",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "object",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "to_object",
 		Label: "to",
@@ -202,9 +202,9 @@ var Zt_RelativeOf = typeinfo.Flow{
 	Name: "relative_of",
 	Lede: "relative",
 	Terms: []typeinfo.Term{{
-		Name:  "via",
-		Label: "_",
-		Type:  &Zt_RelationName,
+		Name: "via",
+
+		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",
@@ -256,9 +256,9 @@ var Zt_RelativesOf = typeinfo.Flow{
 	Name: "relatives_of",
 	Lede: "relatives",
 	Terms: []typeinfo.Term{{
-		Name:  "via",
-		Label: "_",
-		Type:  &Zt_RelationName,
+		Name: "via",
+
+		Type: &Zt_RelationName,
 	}, {
 		Name:  "object",
 		Label: "object",

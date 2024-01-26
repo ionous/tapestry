@@ -27,11 +27,11 @@ func DecodeMessage(out typeinfo.Inspector, msg map[string]any) error {
 	var dec decode.Decoder
 	dec.Signatures(AllSignatures...).
 		Customize(core.CustomDecoder).
-		Patterns(TryPattern)
+		Patternize(DecodePattern)
 	return dec.Decode(out, msg)
 }
 
-func TryPattern(dec *decode.Decoder, slot string, msg compact.Message) (ret any, err error) {
+func DecodePattern(dec *decode.Decoder, slot string, msg compact.Message) (ret typeinfo.Inspector, err error) {
 	switch slot {
 	default:
 		err = compact.Unhandled

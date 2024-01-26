@@ -39,6 +39,7 @@ func writeStrField(w *ShapeWriter, out *js.Builder, term typeinfo.Term) {
 			fieldType = bconst.MosaicMultilineField
 		}
 		out.Kv("type", fieldType)
+		// every field needs to be labeled
 		var placeholder string
 		if !term.IsAnonymous() {
 			placeholder = term.Label

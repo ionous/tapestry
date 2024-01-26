@@ -45,6 +45,14 @@ type termData struct {
 	Private, Optional, Repeats bool
 }
 
+// handle transforming _ into a blank string
+func (t *termData) SimpleLabel() (ret string) {
+	if t.Label != "_" {
+		ret = t.Label
+	}
+	return
+}
+
 // shadows the typeinfo.T interface
 // these implementations exist to created the data for that interface.
 type typeData interface {

@@ -116,9 +116,9 @@ var Zt_FieldValue = typeinfo.Flow{
 	Name: "field_value",
 	Lede: "field",
 	Terms: []typeinfo.Term{{
-		Name:  "field",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "field",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:  "value",
 		Label: "value",
@@ -166,8 +166,8 @@ var Zt_FieldList = typeinfo.Flow{
 	Name: "field_list",
 	Lede: "field_list",
 	Terms: []typeinfo.Term{{
-		Name:    "fields",
-		Label:   "_",
+		Name: "fields",
+
 		Repeats: true,
 		Type:    &Zt_FieldValue,
 	}},
@@ -334,9 +334,9 @@ var Zt_RecordValue = typeinfo.Flow{
 	Name: "record_value",
 	Lede: "record",
 	Terms: []typeinfo.Term{{
-		Name:  "kind",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "kind",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "fields",
 		Label:   "fields",
@@ -396,9 +396,9 @@ var Zt_RecordList = typeinfo.Flow{
 	Name: "record_list",
 	Lede: "record",
 	Terms: []typeinfo.Term{{
-		Name:  "kind",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "kind",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "records",
 		Label:   "values",

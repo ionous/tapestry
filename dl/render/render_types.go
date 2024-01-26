@@ -61,9 +61,9 @@ var Zt_RenderName = typeinfo.Flow{
 	Name: "render_name",
 	Lede: "render_name",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -118,9 +118,9 @@ var Zt_RenderRef = typeinfo.Flow{
 	Name: "render_ref",
 	Lede: "render_ref",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "dot",
 		Label:    "dot",
@@ -180,9 +180,9 @@ var Zt_RenderValue = typeinfo.Flow{
 	Name: "render_value",
 	Lede: "render_value",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_Assignment,
+		Name: "value",
+
+		Type: &rtti.Zt_Assignment,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_RenderEval,
@@ -232,9 +232,9 @@ var Zt_RenderPattern = typeinfo.Flow{
 	Name: "render_pattern",
 	Lede: "render",
 	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "pattern_name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "render",
 		Label:   "render",
@@ -290,9 +290,9 @@ var Zt_RenderResponse = typeinfo.Flow{
 	Name: "render_response",
 	Lede: "render_response",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:     "text",
 		Label:    "text",

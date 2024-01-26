@@ -91,9 +91,9 @@ var Zt_Comment = typeinfo.Flow{
 	Name: "comment",
 	Lede: "comment",
 	Terms: []typeinfo.Term{{
-		Name:  "lines",
-		Label: "_",
-		Type:  &prim.Zt_Lines,
+		Name: "lines",
+
+		Type: &prim.Zt_Lines,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_StoryStatement,
@@ -145,9 +145,9 @@ var Zt_Test = typeinfo.Flow{
 	Name: "test",
 	Lede: "test",
 	Terms: []typeinfo.Term{{
-		Name:  "test_name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "test_name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:     "scene_names",
 		Label:    "depends_on",
@@ -393,9 +393,9 @@ var Zt_AspectField = typeinfo.Flow{
 	Name: "aspect_field",
 	Lede: "aspect",
 	Terms: []typeinfo.Term{{
-		Name:  "aspect",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "aspect",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_FieldDefinition,
@@ -444,9 +444,9 @@ var Zt_BoolField = typeinfo.Flow{
 	Name: "bool_field",
 	Lede: "bool",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",
@@ -501,9 +501,9 @@ var Zt_CountOf = typeinfo.Flow{
 	Name: "count_of",
 	Lede: "count_of",
 	Terms: []typeinfo.Term{{
-		Name:  "trigger",
-		Label: "_",
-		Type:  &core.Zt_Trigger,
+		Name: "trigger",
+
+		Type: &core.Zt_Trigger,
 	}, {
 		Name:  "num",
 		Label: "num",
@@ -554,8 +554,8 @@ var Zt_CycleText = typeinfo.Flow{
 	Name: "cycle_text",
 	Lede: "cycle_text",
 	Terms: []typeinfo.Term{{
-		Name:    "parts",
-		Label:   "_",
+		Name: "parts",
+
 		Repeats: true,
 		Type:    &rtti.Zt_TextEval,
 	}},
@@ -662,8 +662,8 @@ var Zt_DefineLeadingGrammar = typeinfo.Flow{
 	Name: "define_leading_grammar",
 	Lede: "interpret",
 	Terms: []typeinfo.Term{{
-		Name:    "lede",
-		Label:   "_",
+		Name: "lede",
+
 		Repeats: true,
 		Type:    &prim.Zt_Text,
 	}, {
@@ -835,9 +835,9 @@ var Zt_DeclareStatement = typeinfo.Flow{
 	Name: "declare_statement",
 	Lede: "declare",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_StoryStatement,
@@ -1059,9 +1059,9 @@ var Zt_MakeOpposite = typeinfo.Flow{
 	Name: "make_opposite",
 	Lede: "define",
 	Terms: []typeinfo.Term{{
-		Name:  "word",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "word",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "opposite",
 		Label: "opposite",
@@ -1115,9 +1115,9 @@ var Zt_MakePlural = typeinfo.Flow{
 	Name: "make_plural",
 	Lede: "define",
 	Terms: []typeinfo.Term{{
-		Name:  "singular",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "singular",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "plural",
 		Label: "plural",
@@ -1240,9 +1240,9 @@ var Zt_MapHeading = typeinfo.Flow{
 	Name: "map_heading",
 	Lede: "heading",
 	Terms: []typeinfo.Term{{
-		Name:  "dir",
-		Label: "_",
-		Type:  &Zt_MapDirection,
+		Name: "dir",
+
+		Type: &Zt_MapDirection,
 	}, {
 		Name:  "room_name",
 		Label: "from",
@@ -1476,9 +1476,9 @@ var Zt_NumListField = typeinfo.Flow{
 	Name: "num_list_field",
 	Lede: "num_list",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",
@@ -1534,9 +1534,9 @@ var Zt_NumberField = typeinfo.Flow{
 	Name: "number_field",
 	Lede: "number",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",
@@ -2061,9 +2061,9 @@ var Zt_RecordListField = typeinfo.Flow{
 	Name: "record_list_field",
 	Lede: "record_list",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",
@@ -2119,9 +2119,9 @@ var Zt_RecordField = typeinfo.Flow{
 	Name: "record_field",
 	Lede: "record",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",
@@ -2298,9 +2298,9 @@ var Zt_SayTemplate = typeinfo.Flow{
 	Name: "say_template",
 	Lede: "say",
 	Terms: []typeinfo.Term{{
-		Name:  "template",
-		Label: "_",
-		Type:  &prim.Zt_Lines,
+		Name: "template",
+
+		Type: &prim.Zt_Lines,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Execute,
@@ -2404,8 +2404,8 @@ var Zt_ShuffleText = typeinfo.Flow{
 	Name: "shuffle_text",
 	Lede: "shuffle_text",
 	Terms: []typeinfo.Term{{
-		Name:    "parts",
-		Label:   "_",
+		Name: "parts",
+
 		Repeats: true,
 		Type:    &rtti.Zt_TextEval,
 	}},
@@ -2454,8 +2454,8 @@ var Zt_StoppingText = typeinfo.Flow{
 	Name: "stopping_text",
 	Lede: "stopping_text",
 	Terms: []typeinfo.Term{{
-		Name:    "parts",
-		Label:   "_",
+		Name: "parts",
+
 		Repeats: true,
 		Type:    &rtti.Zt_TextEval,
 	}},
@@ -2545,8 +2545,8 @@ var Zt_StoryFile = typeinfo.Flow{
 	Name: "story_file",
 	Lede: "tapestry",
 	Terms: []typeinfo.Term{{
-		Name:    "story_statements",
-		Label:   "_",
+		Name: "story_statements",
+
 		Repeats: true,
 		Type:    &Zt_StoryStatement,
 	}},
@@ -2596,9 +2596,9 @@ var Zt_TextListField = typeinfo.Flow{
 	Name: "text_list_field",
 	Lede: "text_list",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",
@@ -2654,9 +2654,9 @@ var Zt_TextField = typeinfo.Flow{
 	Name: "text_field",
 	Lede: "text",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "name",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "type",
 		Label:    "kind",

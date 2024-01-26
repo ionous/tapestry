@@ -185,7 +185,12 @@ func (w *Iter) NormalizedValue() (ret any) {
 
 // write a value into the target of a slot.
 func (w *Iter) SetSlot(val typeinfo.Inspector) (okay bool) {
-	return setValue(w.curr, r.ValueOf(val))
+	if val == nil {
+		w.curr.SetZero()
+	} else {
+		okay = setValue(w.curr, r.ValueOf(val))
+	}
+	return
 }
 
 // read the target of a slot

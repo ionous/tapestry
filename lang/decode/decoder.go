@@ -3,11 +3,10 @@ package decode
 import (
 	"errors"
 	"fmt"
-	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/lang/walk"
 )
 
 type Decoder struct {
@@ -30,35 +29,32 @@ func (dec *Decoder) Customize(c CustomDecoder) *Decoder {
 }
 
 // handle conversion of unknown commands to scripted function calls.
-func (dec *Decoder) Patterns(p PatternDecoder) *Decoder {
+func (dec *Decoder) Patternize(p PatternDecoder) *Decoder {
 	dec.patterns = p
 	return dec
 }
 
 // create an arbitrary command from arbitrary data
 // ex. boolean literals are stored as actual bool values.
-// fix: return should be composer
-type CustomDecoder func(dec *Decoder, slot string, plainData any) (any, error)
+type CustomDecoder func(dec *Decoder, slot string, plainData any) (typeinfo.Inspector, error)
 
 // handle pattern parsing.
-// fix: return should be composer or marshalee
-type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (any, error)
+type PatternDecoder func(dec *Decoder, slot string, msg compact.Message) (typeinfo.Inspector, error)
 
 // given a desired output structure, read the passed plain data
 func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
-	tgt := r.ValueOf(out).Elem() // the element under the interface
-	if t, repeats := out.Inspect(); !repeats {
+	w := inspect.Walk(out)
+	if t := w.TypeInfo(); !w.Repeating() {
 		if slot, ok := t.(*typeinfo.Slot); ok {
-			err = dec.decodeSlot(tgt.Field(0), plainData, slot.Name)
+			err = dec.decodeSlot(w, plainData, slot.Name)
 		} else {
 			if msg, e := ParseMessage(plainData); e != nil {
 				err = e
 			} else {
-				err = dec.readMsg(msg, walk.Walk(tgt))
+				err = dec.readMsg(msg, w)
 			}
 		}
 	} else {
-		w := walk.Walk(tgt)
 		if slot, ok := t.(*typeinfo.Slot); ok {
 			err = dec.repeatSlot(w, plainData, slot.Name)
 		} else {
@@ -69,33 +65,38 @@ func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
 }
 
 // assumes that it is at the start of a flow container
-func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
+func (dec *Decoder) readMsg(msg compact.Message, out inspect.Iter) (err error) {
 	// technically, the iterator should be the source of truth here.
 	// but since the args were built from the signature
 	// and the signature was matched against the registry:
 	// we know we have the right type and args.
+Break:
 	for i, cnt, it := 0, len(msg.Args), out; i < cnt; i++ {
 		p := msg.Labels[i] // fix: clear fields that get skipped?
 		if f, ok := nextField(&it, p); !ok {
 			err = errors.New("signature mismatch")
 		} else {
-			arg, out := msg.Args[i], it.Value()
-			switch t := f.SpecType(); t {
+			arg, out := msg.Args[i], it.RawValue()
+			switch t := f.Type.(type) {
 			default:
 				err = fmt.Errorf("unhandled type %s", t)
 
-			case walk.Str:
-				err = SetString(out, f.Type(), arg) // fix: are there repeating strings?
+			case *typeinfo.Str:
+				if f.Repeats {
+					err = decodeStrings(out, arg)
+				} else {
+					err = SetString(out, t, arg)
+				}
 
-			case walk.Value:
-				if f.Repeats() {
-					err = SetValues(out, arg)
+			case *typeinfo.Num:
+				if f.Repeats {
+					err = decodeNumbers(out, arg)
 				} else if ok := it.SetValue(arg); !ok {
 					err = fmt.Errorf("couldnt assign from %T", arg)
 				}
 
-			case walk.Flow:
-				if f.Repeats() {
+			case *typeinfo.Flow:
+				if f.Repeats {
 					err = dec.repeatFlow(it.Walk(), arg)
 				} else {
 					if msg, e := ParseMessage(arg); e != nil {
@@ -105,22 +106,23 @@ func (dec *Decoder) readMsg(msg compact.Message, out walk.Walker) (err error) {
 					}
 				}
 
-			case walk.Slot:
-				if f.Repeats() {
-					err = dec.repeatSlot(it.Walk(), arg, nameOf(out.Type().Elem()))
+			case *typeinfo.Slot:
+				if slot := it.Walk(); f.Repeats {
+					err = dec.repeatSlot(slot, arg, t.Name)
 				} else {
-					err = dec.decodeSlot(out, arg, nameOf(out.Type()))
+					err = dec.decodeSlot(slot, arg, t.Name)
 				}
 			}
 		}
 		if err != nil {
-			// EARLY OUT
-			return fmt.Errorf("%q(@%s:) %w", msg.Key, p, err)
+			err = fmt.Errorf("%q(@%s:) %w", msg.Key, p, err)
+			break Break
 		}
 	} // for
-	if err == nil {
-		if markup := out.Markup(); markup.IsValid() {
-			markup.Set(r.ValueOf(msg.Markup))
+	if err == nil && len(msg.Markup) > 0 {
+		m := out.Markup(true) // fix: make this a sink during decoding?
+		for k, v := range msg.Markup {
+			m[k] = v
 		}
 	}
 	return

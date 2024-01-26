@@ -86,8 +86,8 @@ var Zt_AllTrue = typeinfo.Flow{
 	Name: "all_true",
 	Lede: "all_true",
 	Terms: []typeinfo.Term{{
-		Name:    "test",
-		Label:   "_",
+		Name: "test",
+
 		Repeats: true,
 		Type:    &rtti.Zt_BoolEval,
 	}},
@@ -180,8 +180,8 @@ var Zt_AnyTrue = typeinfo.Flow{
 	Name: "any_true",
 	Lede: "any_true",
 	Terms: []typeinfo.Term{{
-		Name:    "test",
-		Label:   "_",
+		Name: "test",
+
 		Repeats: true,
 		Type:    &rtti.Zt_BoolEval,
 	}},
@@ -416,9 +416,9 @@ var Zt_CallCycle = typeinfo.Flow{
 	Name: "call_cycle",
 	Lede: "cycle",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "parts",
 		Label:   "over",
@@ -472,9 +472,9 @@ var Zt_CallShuffle = typeinfo.Flow{
 	Name: "call_shuffle",
 	Lede: "shuffle",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "parts",
 		Label:   "over",
@@ -531,9 +531,9 @@ var Zt_CallTerminal = typeinfo.Flow{
 	Name: "call_terminal",
 	Lede: "stopping",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "parts",
 		Label:   "over",
@@ -587,9 +587,9 @@ var Zt_CallTrigger = typeinfo.Flow{
 	Name: "call_trigger",
 	Lede: "trigger",
 	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "name",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:  "trigger",
 		Label: "on",
@@ -644,9 +644,9 @@ var Zt_Capitalize = typeinfo.Flow{
 	Name: "capitalize",
 	Lede: "capitalize",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -697,9 +697,9 @@ var Zt_ChooseBranch = typeinfo.Flow{
 	Name: "choose_branch",
 	Lede: "if",
 	Terms: []typeinfo.Term{{
-		Name:  "if",
-		Label: "_",
-		Type:  &rtti.Zt_BoolEval,
+		Name: "if",
+
+		Type: &rtti.Zt_BoolEval,
 	}, {
 		Name:     "args",
 		Label:    "assuming",
@@ -982,9 +982,9 @@ var Zt_CompareValue = typeinfo.Flow{
 	Name: "compare_value",
 	Lede: "is",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_Assignment,
+		Name: "a",
+
+		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:  "is",
 		Label: "matching",
@@ -1042,9 +1042,9 @@ var Zt_CompareNum = typeinfo.Flow{
 	Name: "compare_num",
 	Lede: "is",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "a",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "is",
 		Label: "matching",
@@ -1106,9 +1106,9 @@ var Zt_CompareText = typeinfo.Flow{
 	Name: "compare_text",
 	Lede: "is",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "a",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "is",
 		Label: "matching",
@@ -1164,9 +1164,9 @@ var Zt_SubtractValue = typeinfo.Flow{
 	Name: "subtract_value",
 	Lede: "subtract",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "a",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
 		Label: "value",
@@ -1218,9 +1218,9 @@ var Zt_During = typeinfo.Flow{
 	Name: "during",
 	Lede: "during",
 	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "pattern_name",
+
+		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_BoolEval,
@@ -1363,9 +1363,9 @@ var Zt_IdOf = typeinfo.Flow{
 	Name: "id_of",
 	Lede: "id_of",
 	Terms: []typeinfo.Term{{
-		Name:  "object",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "object",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -1413,9 +1413,9 @@ var Zt_Includes = typeinfo.Flow{
 	Name: "includes",
 	Lede: "contains",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "part",
 		Label: "part",
@@ -1516,9 +1516,9 @@ var Zt_IsExactKindOf = typeinfo.Flow{
 	Name: "is_exact_kind_of",
 	Lede: "kind_of",
 	Terms: []typeinfo.Term{{
-		Name:  "object",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "object",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "kind",
 		Label: "is_exactly",
@@ -1571,9 +1571,9 @@ var Zt_IsKindOf = typeinfo.Flow{
 	Name: "is_kind_of",
 	Lede: "kind_of",
 	Terms: []typeinfo.Term{{
-		Name:  "object",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "object",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "kind",
 		Label: "is",
@@ -1630,8 +1630,8 @@ var Zt_Join = typeinfo.Flow{
 	Name: "join",
 	Lede: "join",
 	Terms: []typeinfo.Term{{
-		Name:     "sep",
-		Label:    "_",
+		Name: "sep",
+
 		Optional: true,
 		Type:     &rtti.Zt_TextEval,
 	}, {
@@ -1686,9 +1686,9 @@ var Zt_KindOf = typeinfo.Flow{
 	Name: "kind_of",
 	Lede: "kind_of",
 	Terms: []typeinfo.Term{{
-		Name:  "object",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "object",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:     "nothing",
 		Label:    "nothing",
@@ -1740,9 +1740,9 @@ var Zt_KindsOf = typeinfo.Flow{
 	Name: "kinds_of",
 	Lede: "kinds_of",
 	Terms: []typeinfo.Term{{
-		Name:  "kind",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "kind",
+
+		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextListEval,
@@ -1789,9 +1789,9 @@ var Zt_MakeLowercase = typeinfo.Flow{
 	Name: "make_lowercase",
 	Lede: "lower",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -1887,9 +1887,9 @@ var Zt_MakeSentenceCase = typeinfo.Flow{
 	Name: "make_sentence_case",
 	Lede: "sentence",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -1936,9 +1936,9 @@ var Zt_MakeTitleCase = typeinfo.Flow{
 	Name: "make_title_case",
 	Lede: "title",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -1985,9 +1985,9 @@ var Zt_MakeUppercase = typeinfo.Flow{
 	Name: "make_uppercase",
 	Lede: "upper",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -2036,9 +2036,9 @@ var Zt_Matches = typeinfo.Flow{
 	Name: "matches",
 	Lede: "matches",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "match",
 		Label: "to",
@@ -2093,9 +2093,9 @@ var Zt_NameOf = typeinfo.Flow{
 	Name: "name_of",
 	Lede: "name_of",
 	Terms: []typeinfo.Term{{
-		Name:  "object",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "object",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -2274,9 +2274,9 @@ var Zt_Not = typeinfo.Flow{
 	Name: "not",
 	Lede: "not",
 	Terms: []typeinfo.Term{{
-		Name:  "test",
-		Label: "_",
-		Type:  &rtti.Zt_BoolEval,
+		Name: "test",
+
+		Type: &rtti.Zt_BoolEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_BoolEval,
@@ -2470,9 +2470,9 @@ var Zt_PrintNum = typeinfo.Flow{
 	Name: "print_num",
 	Lede: "numeral",
 	Terms: []typeinfo.Term{{
-		Name:  "num",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "num",
+
+		Type: &rtti.Zt_NumberEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_TextEval,
@@ -2569,9 +2569,9 @@ var Zt_MultiplyValue = typeinfo.Flow{
 	Name: "multiply_value",
 	Lede: "multiply",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "a",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
 		Label: "value",
@@ -2623,9 +2623,9 @@ var Zt_DivideValue = typeinfo.Flow{
 	Name: "divide_value",
 	Lede: "divide",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "a",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
 		Label: "value",
@@ -2677,9 +2677,9 @@ var Zt_ModValue = typeinfo.Flow{
 	Name: "mod_value",
 	Lede: "mod",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "a",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
 		Label: "value",
@@ -2778,9 +2778,9 @@ var Zt_Increment = typeinfo.Flow{
 	Name: "increment",
 	Lede: "increase",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:     "step",
 		Label:    "by",
@@ -2835,9 +2835,9 @@ var Zt_Decrement = typeinfo.Flow{
 	Name: "decrement",
 	Lede: "decrease",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:     "step",
 		Label:    "by",
@@ -2894,9 +2894,9 @@ var Zt_IncrementAspect = typeinfo.Flow{
 	Name: "increment_aspect",
 	Lede: "increase",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "target",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "aspect",
 		Label: "aspect",
@@ -2962,9 +2962,9 @@ var Zt_DecrementAspect = typeinfo.Flow{
 	Name: "decrement_aspect",
 	Lede: "decrease",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "target",
+
+		Type: &rtti.Zt_TextEval,
 	}, {
 		Name:  "aspect",
 		Label: "aspect",
@@ -3026,9 +3026,9 @@ var Zt_PrintText = typeinfo.Flow{
 	Name: "print_text",
 	Lede: "print",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &rtti.Zt_TextEval,
+		Name: "text",
+
+		Type: &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_Execute,
@@ -3369,9 +3369,9 @@ var Zt_AddValue = typeinfo.Flow{
 	Name: "add_value",
 	Lede: "add",
 	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "a",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "b",
 		Label: "value",
@@ -3546,9 +3546,9 @@ var Zt_While = typeinfo.Flow{
 	Name: "while",
 	Lede: "repeating",
 	Terms: []typeinfo.Term{{
-		Name:  "true",
-		Label: "_",
-		Type:  &rtti.Zt_BoolEval,
+		Name: "true",
+
+		Type: &rtti.Zt_BoolEval,
 	}, {
 		Name:    "exe",
 		Label:   "do",

@@ -55,11 +55,11 @@ func anySlice[V any](els []V) []any {
 	return slice
 }
 
-func CustomDecoder(_ *decode.Decoder, slot string, body any) (any, error) {
+func CustomDecoder(_ *decode.Decoder, slot string, body any) (typeinfo.Inspector, error) {
 	return readLiteral(slot, "", body)
 }
 
-func DecodeLiteral(slot string, body any) (ret any, err error) {
+func DecodeLiteral(slot string, body any) (ret typeinfo.Inspector, err error) {
 	return readLiteral(slot, "", body)
 }
 
@@ -78,7 +78,12 @@ func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, e
 	return
 }
 
-func readLiteral(typeName, kind string, val any) (ret LiteralValue, err error) {
+type literalCommand interface {
+	typeinfo.Inspector
+	LiteralValue
+}
+
+func readLiteral(typeName, kind string, val any) (ret literalCommand, err error) {
 	// when decoding, we havent created the command yet ( we're doing that now )
 	// so we have to switch on the typename not the value in the slot.
 	switch typeName {

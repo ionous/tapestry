@@ -38,9 +38,9 @@ var Zt_EraseEdge = typeinfo.Flow{
 	Name: "erase_edge",
 	Lede: "erase",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:     "at_edge",
 		Label:    "at_front",
@@ -94,9 +94,9 @@ var Zt_EraseIndex = typeinfo.Flow{
 	Name: "erase_index",
 	Lede: "erase",
 	Terms: []typeinfo.Term{{
-		Name:  "count",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "count",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "target",
 		Label: "from",
@@ -155,9 +155,9 @@ var Zt_Erasing = typeinfo.Flow{
 	Name: "erasing",
 	Lede: "erasing",
 	Terms: []typeinfo.Term{{
-		Name:  "count",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "count",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:  "target",
 		Label: "from",
@@ -225,9 +225,9 @@ var Zt_ErasingEdge = typeinfo.Flow{
 	Name: "erasing_edge",
 	Lede: "erasing",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:     "at_edge",
 		Label:    "at_front",
@@ -361,9 +361,9 @@ var Zt_ListFind = typeinfo.Flow{
 	Name: "list_find",
 	Lede: "find",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_Assignment,
+		Name: "value",
+
+		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:  "list",
 		Label: "in_list",
@@ -414,9 +414,9 @@ var Zt_ListGather = typeinfo.Flow{
 	Name: "list_gather",
 	Lede: "gather",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:  "from",
 		Label: "from",
@@ -468,9 +468,9 @@ var Zt_ListLen = typeinfo.Flow{
 	Name: "list_len",
 	Lede: "len",
 	Terms: []typeinfo.Term{{
-		Name:  "list",
-		Label: "_",
-		Type:  &rtti.Zt_Assignment,
+		Name: "list",
+
+		Type: &rtti.Zt_Assignment,
 	}},
 	Slots: []*typeinfo.Slot{
 		&rtti.Zt_NumberEval,
@@ -665,9 +665,9 @@ var Zt_ListMap = typeinfo.Flow{
 	Name: "list_map",
 	Lede: "map",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:  "list",
 		Label: "from_list",
@@ -834,9 +834,9 @@ var Zt_ListSlice = typeinfo.Flow{
 	Name: "list_slice",
 	Lede: "slice",
 	Terms: []typeinfo.Term{{
-		Name:  "list",
-		Label: "_",
-		Type:  &rtti.Zt_Assignment,
+		Name: "list",
+
+		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:     "start",
 		Label:    "start",
@@ -897,9 +897,9 @@ var Zt_ListSortNumbers = typeinfo.Flow{
 	Name: "list_sort_numbers",
 	Lede: "sort_numbers",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:  "by_field",
 		Label: "by_field",
@@ -955,9 +955,9 @@ var Zt_ListSortText = typeinfo.Flow{
 	Name: "list_sort_text",
 	Lede: "sort_texts",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:  "by_field",
 		Label: "by_field",
@@ -1024,9 +1024,9 @@ var Zt_ListSplice = typeinfo.Flow{
 	Name: "list_splice",
 	Lede: "splice",
 	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "_",
-		Type:  &assign.Zt_Address,
+		Name: "target",
+
+		Type: &assign.Zt_Address,
 	}, {
 		Name:  "start",
 		Label: "start",
@@ -1090,9 +1090,9 @@ var Zt_ListPush = typeinfo.Flow{
 	Name: "list_push",
 	Lede: "push",
 	Terms: []typeinfo.Term{{
-		Name:  "value",
-		Label: "_",
-		Type:  &rtti.Zt_Assignment,
+		Name: "value",
+
+		Type: &rtti.Zt_Assignment,
 	}, {
 		Name:  "target",
 		Label: "into",
@@ -1150,9 +1150,9 @@ var Zt_Range = typeinfo.Flow{
 	Name: "range",
 	Lede: "range",
 	Terms: []typeinfo.Term{{
-		Name:  "to",
-		Label: "_",
-		Type:  &rtti.Zt_NumberEval,
+		Name: "to",
+
+		Type: &rtti.Zt_NumberEval,
 	}, {
 		Name:     "from",
 		Label:    "from",

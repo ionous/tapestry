@@ -108,9 +108,9 @@ var Zt_FrameOutput = typeinfo.Flow{
 	Name: "frame_output",
 	Lede: "frame_output",
 	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "text",
+
+		Type: &prim.Zt_Text,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_Event,
@@ -154,8 +154,8 @@ var Zt_SceneStarted = typeinfo.Flow{
 	Name: "scene_started",
 	Lede: "scene_started",
 	Terms: []typeinfo.Term{{
-		Name:    "domains",
-		Label:   "_",
+		Name: "domains",
+
 		Repeats: true,
 		Type:    &prim.Zt_Text,
 	}},
@@ -201,8 +201,8 @@ var Zt_SceneEnded = typeinfo.Flow{
 	Name: "scene_ended",
 	Lede: "scene_ended",
 	Terms: []typeinfo.Term{{
-		Name:    "domains",
-		Label:   "_",
+		Name: "domains",
+
 		Repeats: true,
 		Type:    &prim.Zt_Text,
 	}},

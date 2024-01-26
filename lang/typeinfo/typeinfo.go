@@ -68,7 +68,7 @@ type Term struct {
 }
 
 func (t Term) IsAnonymous() bool {
-	return t.Label == "_"
+	return len(t.Label) == 0
 }
 
 type Slot struct {

@@ -86,9 +86,9 @@ var Zt_Action = typeinfo.Flow{
 	Name: "action",
 	Lede: "action",
 	Terms: []typeinfo.Term{{
-		Name:  "action",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "action",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:     "arguments",
 		Label:    "args",
@@ -141,8 +141,8 @@ var Zt_Sequence = typeinfo.Flow{
 	Name: "sequence",
 	Lede: "sequence",
 	Terms: []typeinfo.Term{{
-		Name:    "series",
-		Label:   "_",
+		Name: "series",
+
 		Repeats: true,
 		Type:    &Zt_ScannerMaker,
 	}},
@@ -395,8 +395,8 @@ var Zt_Reverse = typeinfo.Flow{
 	Name: "reverse",
 	Lede: "reverse",
 	Terms: []typeinfo.Term{{
-		Name:    "reverses",
-		Label:   "_",
+		Name: "reverses",
+
 		Repeats: true,
 		Type:    &Zt_ScannerMaker,
 	}},
@@ -446,9 +446,9 @@ var Zt_Focus = typeinfo.Flow{
 	Name: "focus",
 	Lede: "focus",
 	Terms: []typeinfo.Term{{
-		Name:  "player",
-		Label: "_",
-		Type:  &prim.Zt_Text,
+		Name: "player",
+
+		Type: &prim.Zt_Text,
 	}, {
 		Name:    "series",
 		Label:   "sequence",

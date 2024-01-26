@@ -42,7 +42,7 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err err
 	return
 }
 
-func CustomDecoder(dec *decode.Decoder, slot string, body any) (ret any, err error) {
+func CustomDecoder(dec *decode.Decoder, slot string, body any) (ret typeinfo.Inspector, err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch slot {
 	default:

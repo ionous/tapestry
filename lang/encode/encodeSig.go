@@ -24,7 +24,7 @@ func (b *SigBuilder) WriteLede(s string) {
 // label is in break_case
 func (b *SigBuilder) WriteLabel(s string) {
 	// write non-anonymous labels
-	if len(s) > 0 && s != "_" {
+	if len(s) > 0 {
 		// add space between the lede and the first non-anonymous label
 		if b.labels == 0 {
 			b.out.WriteRune(' ')
