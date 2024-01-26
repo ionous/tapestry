@@ -2715,6 +2715,13 @@ const (
 	C_MapConnection_ConnectingTo
 )
 
+func MakeMapConnection(str string) (ret MapConnection, okay bool) {
+	if i := Zt_MapConnection.FindOption(str); i >= 0 {
+		ret, okay = MapConnection(i), true
+	}
+	return
+}
+
 func (op MapConnection) String() (ret string) {
 	if i, opts := int(op), Zt_MapConnection.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]
@@ -2752,6 +2759,13 @@ const (
 	C_RelationCardinality_ManyToOne
 	C_RelationCardinality_ManyToMany
 )
+
+func MakeRelationCardinality(str string) (ret RelationCardinality, okay bool) {
+	if i := Zt_RelationCardinality.FindOption(str); i >= 0 {
+		ret, okay = RelationCardinality(i), true
+	}
+	return
+}
 
 func (op RelationCardinality) String() (ret string) {
 	if i, opts := int(op), Zt_RelationCardinality.Options; i >= 0 && i < len(opts) {

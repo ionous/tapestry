@@ -15,6 +15,13 @@ const (
 	C_Bool_False
 )
 
+func MakeBool(str string) (ret FIX_Bool, okay bool) {
+	if i := Zt_Bool.FindOption(str); i >= 0 {
+		ret, okay = FIX_Bool(i), true
+	}
+	return
+}
+
 func (op FIX_Bool) String() (ret string) {
 	if i, opts := int(op), Zt_Bool.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]

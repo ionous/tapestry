@@ -303,6 +303,13 @@ const (
 	C_LoggingLevel_Error
 )
 
+func MakeLoggingLevel(str string) (ret FIX_LoggingLevel, okay bool) {
+	if i := Zt_LoggingLevel.FindOption(str); i >= 0 {
+		ret, okay = FIX_LoggingLevel(i), true
+	}
+	return
+}
+
 func (op FIX_LoggingLevel) String() (ret string) {
 	if i, opts := int(op), Zt_LoggingLevel.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]

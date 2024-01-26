@@ -3548,6 +3548,13 @@ const (
 	C_Comparison_AtMost
 )
 
+func MakeComparison(str string) (ret FIX_Comparison, okay bool) {
+	if i := Zt_Comparison.FindOption(str); i >= 0 {
+		ret, okay = FIX_Comparison(i), true
+	}
+	return
+}
+
 func (op FIX_Comparison) String() (ret string) {
 	if i, opts := int(op), Zt_Comparison.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]

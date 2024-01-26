@@ -190,6 +190,13 @@ const (
 	C_PlayModes_Error
 )
 
+func MakePlayModes(str string) (ret FIX_PlayModes, okay bool) {
+	if i := Zt_PlayModes.FindOption(str); i >= 0 {
+		ret, okay = FIX_PlayModes(i), true
+	}
+	return
+}
+
 func (op FIX_PlayModes) String() (ret string) {
 	if i, opts := int(op), Zt_PlayModes.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]

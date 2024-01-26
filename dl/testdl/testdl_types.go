@@ -155,6 +155,13 @@ const (
 	C_TestBool_False
 )
 
+func MakeTestBool(str string) (ret TestBool, okay bool) {
+	if i := Zt_TestBool.FindOption(str); i >= 0 {
+		ret, okay = TestBool(i), true
+	}
+	return
+}
+
 func (op TestBool) String() (ret string) {
 	if i, opts := int(op), Zt_TestBool.Options; i >= 0 && i < len(opts) {
 		ret = opts[i]
@@ -182,6 +189,13 @@ const (
 	C_TestStr_Other
 	C_TestStr_Option
 )
+
+func MakeTestStr(str string) (ret TestStr, okay bool) {
+	if i := Zt_TestStr.FindOption(str); i >= 0 {
+		ret, okay = TestStr(i), true
+	}
+	return
+}
 
 func (op TestStr) String() (ret string) {
 	if i, opts := int(op), Zt_TestStr.Options; i >= 0 && i < len(opts) {

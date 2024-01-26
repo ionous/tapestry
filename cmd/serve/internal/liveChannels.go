@@ -26,12 +26,12 @@ func NewChannels() *Channels {
 	}
 }
 
-func (cs *Channels) ChangeMode(n string) {
-	cs.msgs <- &play.PlayMode{Mode: play.PlayModes{Str: n}}
+func (cs *Channels) ChangeMode(m play.PlayModes) {
+	cs.msgs <- &play.PlayMode{Mode: m}
 }
 
 func (cs *Channels) Fatal(e error) {
-	cs.ChangeMode(play.PlayModes_Error)
+	cs.ChangeMode(play.C_PlayModes_Error)
 	cs.msgs <- &play.PlayLog{Log: e.Error()}
 }
 
