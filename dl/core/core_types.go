@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"strconv"
 )
 
 // brancher, a type of slot.
@@ -948,7 +949,7 @@ func (*CommaText_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CompareValue struct {
 	A      rtti.Assignment
-	Is     string
+	Is     FIX_Comparison
 	B      rtti.Assignment
 	Markup map[string]any
 }
@@ -1006,7 +1007,7 @@ func (*CompareValue_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CompareNum struct {
 	A         rtti.NumberEval
-	Is        string
+	Is        FIX_Comparison
 	B         rtti.NumberEval
 	Tolerance float64
 	Markup    map[string]any
@@ -1070,7 +1071,7 @@ func (*CompareNum_Slice) Inspect() (typeinfo.T, bool) {
 // also should have user comment here
 type FIX_CompareText struct {
 	A      rtti.TextEval
-	Is     string
+	Is     FIX_Comparison
 	B      rtti.TextEval
 	Markup map[string]any
 }
@@ -3534,25 +3535,38 @@ func (*While_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_While, true
 }
 
+// Comparison, a type of str enum.
+type FIX_Comparison int
+
+// enumerated values of Comparison
 const (
-	Zc_Comparison_EqualTo     = "equal_to"
-	Zc_Comparison_OtherThan   = "other_than"
-	Zc_Comparison_GreaterThan = "greater_than"
-	Zc_Comparison_LessThan    = "less_than"
-	Zc_Comparison_AtLeast     = "at_least"
-	Zc_Comparison_AtMost      = "at_most"
+	C_Comparison_EqualTo FIX_Comparison = iota
+	C_Comparison_OtherThan
+	C_Comparison_GreaterThan
+	C_Comparison_LessThan
+	C_Comparison_AtLeast
+	C_Comparison_AtMost
 )
+
+func (op FIX_Comparison) String() (ret string) {
+	if i, opts := int(op), Zt_Comparison.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid Comparison(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // comparison, a type of str enum.
 var Zt_Comparison = typeinfo.Str{
 	Name: "comparison",
 	Options: []string{
-		Zc_Comparison_EqualTo,
-		Zc_Comparison_OtherThan,
-		Zc_Comparison_GreaterThan,
-		Zc_Comparison_LessThan,
-		Zc_Comparison_AtLeast,
-		Zc_Comparison_AtMost,
+		"equal_to",
+		"other_than",
+		"greater_than",
+		"less_than",
+		"at_least",
+		"at_most",
 	},
 }
 

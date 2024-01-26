@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"strconv"
 )
 
 // FIX: for now we are generating side by side with the old definitions
@@ -240,7 +241,7 @@ func (*Fabricate_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_DebugLog struct {
-	LogLevel string
+	LogLevel FIX_LoggingLevel
 	Value    rtti.Assignment
 	Markup   map[string]any
 }
@@ -290,23 +291,36 @@ func (*DebugLog_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_DebugLog, true
 }
 
+// LoggingLevel, a type of str enum.
+type FIX_LoggingLevel int
+
+// enumerated values of LoggingLevel
 const (
-	Zc_LoggingLevel_Note  = "note"
-	Zc_LoggingLevel_Debug = "debug"
-	Zc_LoggingLevel_Info  = "info"
-	Zc_LoggingLevel_Warn  = "warn"
-	Zc_LoggingLevel_Error = "error"
+	C_LoggingLevel_Note FIX_LoggingLevel = iota
+	C_LoggingLevel_Debug
+	C_LoggingLevel_Info
+	C_LoggingLevel_Warn
+	C_LoggingLevel_Error
 )
+
+func (op FIX_LoggingLevel) String() (ret string) {
+	if i, opts := int(op), Zt_LoggingLevel.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid LoggingLevel(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // logging_level, a type of str enum.
 var Zt_LoggingLevel = typeinfo.Str{
 	Name: "logging_level",
 	Options: []string{
-		Zc_LoggingLevel_Note,
-		Zc_LoggingLevel_Debug,
-		Zc_LoggingLevel_Info,
-		Zc_LoggingLevel_Warn,
-		Zc_LoggingLevel_Error,
+		"note",
+		"debug",
+		"info",
+		"warn",
+		"error",
 	},
 }
 

@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"strconv"
 )
 
 // field_definition, a type of slot.
@@ -20,10 +21,10 @@ var Zt_FieldDefinition = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type FIX_FieldDefinition_Slot struct{ Value FieldDefinition }
+type FieldDefinition_Slot struct{ Value FieldDefinition }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_FieldDefinition_Slot) Inspect() (typeinfo.T, bool) {
+func (*FieldDefinition_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_FieldDefinition, false
 }
 
@@ -47,10 +48,10 @@ var Zt_StoryStatement = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type FIX_StoryStatement_Slot struct{ Value StoryStatement }
+type StoryStatement_Slot struct{ Value StoryStatement }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_StoryStatement_Slot) Inspect() (typeinfo.T, bool) {
+func (*StoryStatement_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_StoryStatement, false
 }
 
@@ -64,7 +65,7 @@ func (*StoryStatement_Slots) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Comment struct {
+type Comment struct {
 	Lines  string
 	Markup map[string]any
 }
@@ -105,7 +106,7 @@ var Zt_Comment = typeinfo.Flow{
 
 // holds a slice of type comment
 // FIX: duplicates the spec decl.
-type FIX_Comment_Slice []Comment
+type Comment_Slice []Comment
 
 // implements typeinfo.Inspector
 func (*Comment_Slice) Inspect() (typeinfo.T, bool) {
@@ -114,7 +115,7 @@ func (*Comment_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Test struct {
+type Test struct {
 	TestName       string
 	SceneNames     []string
 	TestStatements []StoryStatement
@@ -175,7 +176,7 @@ var Zt_Test = typeinfo.Flow{
 
 // holds a slice of type test
 // FIX: duplicates the spec decl.
-type FIX_Test_Slice []Test
+type Test_Slice []Test
 
 // implements typeinfo.Inspector
 func (*Test_Slice) Inspect() (typeinfo.T, bool) {
@@ -184,7 +185,7 @@ func (*Test_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineScene struct {
+type DefineScene struct {
 	Scene     rtti.TextEval
 	DependsOn rtti.TextListEval
 	With      []StoryStatement
@@ -236,7 +237,7 @@ var Zt_DefineScene = typeinfo.Flow{
 
 // holds a slice of type define_scene
 // FIX: duplicates the spec decl.
-type FIX_DefineScene_Slice []DefineScene
+type DefineScene_Slice []DefineScene
 
 // implements typeinfo.Inspector
 func (*DefineScene_Slice) Inspect() (typeinfo.T, bool) {
@@ -245,7 +246,7 @@ func (*DefineScene_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineAction struct {
+type DefineAction struct {
 	Action   rtti.TextEval
 	Requires []FieldDefinition
 	Provides []FieldDefinition
@@ -300,7 +301,7 @@ var Zt_DefineAction = typeinfo.Flow{
 
 // holds a slice of type define_action
 // FIX: duplicates the spec decl.
-type FIX_DefineAction_Slice []DefineAction
+type DefineAction_Slice []DefineAction
 
 // implements typeinfo.Inspector
 func (*DefineAction_Slice) Inspect() (typeinfo.T, bool) {
@@ -309,7 +310,7 @@ func (*DefineAction_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineTraits struct {
+type DefineTraits struct {
 	Traits rtti.TextListEval
 	Aspect rtti.TextEval
 	Markup map[string]any
@@ -356,7 +357,7 @@ var Zt_DefineTraits = typeinfo.Flow{
 
 // holds a slice of type define_traits
 // FIX: duplicates the spec decl.
-type FIX_DefineTraits_Slice []DefineTraits
+type DefineTraits_Slice []DefineTraits
 
 // implements typeinfo.Inspector
 func (*DefineTraits_Slice) Inspect() (typeinfo.T, bool) {
@@ -365,7 +366,7 @@ func (*DefineTraits_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_AspectField struct {
+type AspectField struct {
 	Aspect rtti.TextEval
 	Markup map[string]any
 }
@@ -404,7 +405,7 @@ var Zt_AspectField = typeinfo.Flow{
 
 // holds a slice of type aspect_field
 // FIX: duplicates the spec decl.
-type FIX_AspectField_Slice []AspectField
+type AspectField_Slice []AspectField
 
 // implements typeinfo.Inspector
 func (*AspectField_Slice) Inspect() (typeinfo.T, bool) {
@@ -413,7 +414,7 @@ func (*AspectField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_BoolField struct {
+type BoolField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.BoolEval
@@ -461,7 +462,7 @@ var Zt_BoolField = typeinfo.Flow{
 
 // holds a slice of type bool_field
 // FIX: duplicates the spec decl.
-type FIX_BoolField_Slice []BoolField
+type BoolField_Slice []BoolField
 
 // implements typeinfo.Inspector
 func (*BoolField_Slice) Inspect() (typeinfo.T, bool) {
@@ -470,7 +471,7 @@ func (*BoolField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_CountOf struct {
+type CountOf struct {
 	Trigger core.Trigger
 	Num     rtti.NumberEval
 	Markup  map[string]any
@@ -514,7 +515,7 @@ var Zt_CountOf = typeinfo.Flow{
 
 // holds a slice of type count_of
 // FIX: duplicates the spec decl.
-type FIX_CountOf_Slice []CountOf
+type CountOf_Slice []CountOf
 
 // implements typeinfo.Inspector
 func (*CountOf_Slice) Inspect() (typeinfo.T, bool) {
@@ -523,7 +524,7 @@ func (*CountOf_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_CycleText struct {
+type CycleText struct {
 	Parts  []rtti.TextEval
 	Markup map[string]any
 }
@@ -563,7 +564,7 @@ var Zt_CycleText = typeinfo.Flow{
 
 // holds a slice of type cycle_text
 // FIX: duplicates the spec decl.
-type FIX_CycleText_Slice []CycleText
+type CycleText_Slice []CycleText
 
 // implements typeinfo.Inspector
 func (*CycleText_Slice) Inspect() (typeinfo.T, bool) {
@@ -572,7 +573,7 @@ func (*CycleText_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineAlias struct {
+type DefineAlias struct {
 	Names    rtti.TextListEval
 	NounName rtti.TextEval
 	Markup   map[string]any
@@ -619,7 +620,7 @@ var Zt_DefineAlias = typeinfo.Flow{
 
 // holds a slice of type define_alias
 // FIX: duplicates the spec decl.
-type FIX_DefineAlias_Slice []DefineAlias
+type DefineAlias_Slice []DefineAlias
 
 // implements typeinfo.Inspector
 func (*DefineAlias_Slice) Inspect() (typeinfo.T, bool) {
@@ -628,7 +629,7 @@ func (*DefineAlias_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineLeadingGrammar struct {
+type DefineLeadingGrammar struct {
 	Lede   []string
 	Scans  []grammar.ScannerMaker
 	Markup map[string]any
@@ -676,7 +677,7 @@ var Zt_DefineLeadingGrammar = typeinfo.Flow{
 
 // holds a slice of type define_leading_grammar
 // FIX: duplicates the spec decl.
-type FIX_DefineLeadingGrammar_Slice []DefineLeadingGrammar
+type DefineLeadingGrammar_Slice []DefineLeadingGrammar
 
 // implements typeinfo.Inspector
 func (*DefineLeadingGrammar_Slice) Inspect() (typeinfo.T, bool) {
@@ -685,7 +686,7 @@ func (*DefineLeadingGrammar_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineNamedGrammar struct {
+type DefineNamedGrammar struct {
 	Name   string
 	Scans  []grammar.ScannerMaker
 	Markup map[string]any
@@ -733,7 +734,7 @@ var Zt_DefineNamedGrammar = typeinfo.Flow{
 
 // holds a slice of type define_named_grammar
 // FIX: duplicates the spec decl.
-type FIX_DefineNamedGrammar_Slice []DefineNamedGrammar
+type DefineNamedGrammar_Slice []DefineNamedGrammar
 
 // implements typeinfo.Inspector
 func (*DefineNamedGrammar_Slice) Inspect() (typeinfo.T, bool) {
@@ -742,7 +743,7 @@ func (*DefineNamedGrammar_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefinePhrase struct {
+type DefinePhrase struct {
 	Phrase   rtti.TextEval
 	Macro    rtti.TextEval
 	Reversed rtti.BoolEval
@@ -793,7 +794,7 @@ var Zt_DefinePhrase = typeinfo.Flow{
 
 // holds a slice of type define_phrase
 // FIX: duplicates the spec decl.
-type FIX_DefinePhrase_Slice []DefinePhrase
+type DefinePhrase_Slice []DefinePhrase
 
 // implements typeinfo.Inspector
 func (*DefinePhrase_Slice) Inspect() (typeinfo.T, bool) {
@@ -802,7 +803,7 @@ func (*DefinePhrase_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DeclareStatement struct {
+type DeclareStatement struct {
 	Text   rtti.TextEval
 	Markup map[string]any
 }
@@ -841,7 +842,7 @@ var Zt_DeclareStatement = typeinfo.Flow{
 
 // holds a slice of type declare_statement
 // FIX: duplicates the spec decl.
-type FIX_DeclareStatement_Slice []DeclareStatement
+type DeclareStatement_Slice []DeclareStatement
 
 // implements typeinfo.Inspector
 func (*DeclareStatement_Slice) Inspect() (typeinfo.T, bool) {
@@ -850,11 +851,11 @@ func (*DeclareStatement_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineRelation struct {
+type DefineRelation struct {
 	Relation    rtti.TextEval
 	Kind        rtti.TextEval
 	OtherKind   rtti.TextEval
-	Cardinality string
+	Cardinality RelationCardinality
 	Markup      map[string]any
 }
 
@@ -904,7 +905,7 @@ var Zt_DefineRelation = typeinfo.Flow{
 
 // holds a slice of type define_relation
 // FIX: duplicates the spec decl.
-type FIX_DefineRelation_Slice []DefineRelation
+type DefineRelation_Slice []DefineRelation
 
 // implements typeinfo.Inspector
 func (*DefineRelation_Slice) Inspect() (typeinfo.T, bool) {
@@ -913,7 +914,7 @@ func (*DefineRelation_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineFields struct {
+type DefineFields struct {
 	Kind   rtti.TextEval
 	Fields []FieldDefinition
 	Markup map[string]any
@@ -961,7 +962,7 @@ var Zt_DefineFields = typeinfo.Flow{
 
 // holds a slice of type define_fields
 // FIX: duplicates the spec decl.
-type FIX_DefineFields_Slice []DefineFields
+type DefineFields_Slice []DefineFields
 
 // implements typeinfo.Inspector
 func (*DefineFields_Slice) Inspect() (typeinfo.T, bool) {
@@ -970,7 +971,7 @@ func (*DefineFields_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineKinds struct {
+type DefineKinds struct {
 	Kinds    rtti.TextListEval
 	Ancestor rtti.TextEval
 	Markup   map[string]any
@@ -1014,7 +1015,7 @@ var Zt_DefineKinds = typeinfo.Flow{
 
 // holds a slice of type define_kinds
 // FIX: duplicates the spec decl.
-type FIX_DefineKinds_Slice []DefineKinds
+type DefineKinds_Slice []DefineKinds
 
 // implements typeinfo.Inspector
 func (*DefineKinds_Slice) Inspect() (typeinfo.T, bool) {
@@ -1023,7 +1024,7 @@ func (*DefineKinds_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MakeOpposite struct {
+type MakeOpposite struct {
 	Word     rtti.TextEval
 	Opposite rtti.TextEval
 	Markup   map[string]any
@@ -1069,7 +1070,7 @@ var Zt_MakeOpposite = typeinfo.Flow{
 
 // holds a slice of type make_opposite
 // FIX: duplicates the spec decl.
-type FIX_MakeOpposite_Slice []MakeOpposite
+type MakeOpposite_Slice []MakeOpposite
 
 // implements typeinfo.Inspector
 func (*MakeOpposite_Slice) Inspect() (typeinfo.T, bool) {
@@ -1078,7 +1079,7 @@ func (*MakeOpposite_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MakePlural struct {
+type MakePlural struct {
 	Singular rtti.TextEval
 	Plural   rtti.TextEval
 	Markup   map[string]any
@@ -1124,7 +1125,7 @@ var Zt_MakePlural = typeinfo.Flow{
 
 // holds a slice of type make_plural
 // FIX: duplicates the spec decl.
-type FIX_MakePlural_Slice []MakePlural
+type MakePlural_Slice []MakePlural
 
 // implements typeinfo.Inspector
 func (*MakePlural_Slice) Inspect() (typeinfo.T, bool) {
@@ -1133,10 +1134,10 @@ func (*MakePlural_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MapDeparting struct {
+type MapDeparting struct {
 	RoomName      rtti.TextEval
 	DoorName      rtti.TextEval
-	MapConnection string
+	MapConnection MapConnection
 	OtherRoomName rtti.TextEval
 	Markup        map[string]any
 }
@@ -1190,7 +1191,7 @@ var Zt_MapDeparting = typeinfo.Flow{
 
 // holds a slice of type map_departing
 // FIX: duplicates the spec decl.
-type FIX_MapDeparting_Slice []MapDeparting
+type MapDeparting_Slice []MapDeparting
 
 // implements typeinfo.Inspector
 func (*MapDeparting_Slice) Inspect() (typeinfo.T, bool) {
@@ -1199,11 +1200,11 @@ func (*MapDeparting_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MapHeading struct {
+type MapHeading struct {
 	Dir           string
 	RoomName      rtti.TextEval
 	DoorName      rtti.TextEval
-	MapConnection string
+	MapConnection MapConnection
 	OtherRoomName rtti.TextEval
 	Markup        map[string]any
 }
@@ -1261,7 +1262,7 @@ var Zt_MapHeading = typeinfo.Flow{
 
 // holds a slice of type map_heading
 // FIX: duplicates the spec decl.
-type FIX_MapHeading_Slice []MapHeading
+type MapHeading_Slice []MapHeading
 
 // implements typeinfo.Inspector
 func (*MapHeading_Slice) Inspect() (typeinfo.T, bool) {
@@ -1270,7 +1271,7 @@ func (*MapHeading_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineValue struct {
+type DefineValue struct {
 	FieldName rtti.TextEval
 	Nouns     rtti.TextListEval
 	Value     rtti.Assignment
@@ -1322,7 +1323,7 @@ var Zt_DefineValue = typeinfo.Flow{
 
 // holds a slice of type define_value
 // FIX: duplicates the spec decl.
-type FIX_DefineValue_Slice []DefineValue
+type DefineValue_Slice []DefineValue
 
 // implements typeinfo.Inspector
 func (*DefineValue_Slice) Inspect() (typeinfo.T, bool) {
@@ -1331,7 +1332,7 @@ func (*DefineValue_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineNouns struct {
+type DefineNouns struct {
 	Nouns  rtti.TextListEval
 	Kind   rtti.TextEval
 	Markup map[string]any
@@ -1375,7 +1376,7 @@ var Zt_DefineNouns = typeinfo.Flow{
 
 // holds a slice of type define_nouns
 // FIX: duplicates the spec decl.
-type FIX_DefineNouns_Slice []DefineNouns
+type DefineNouns_Slice []DefineNouns
 
 // implements typeinfo.Inspector
 func (*DefineNouns_Slice) Inspect() (typeinfo.T, bool) {
@@ -1384,7 +1385,7 @@ func (*DefineNouns_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineNounTraits struct {
+type DefineNounTraits struct {
 	Nouns  rtti.TextListEval
 	Traits rtti.TextListEval
 	Markup map[string]any
@@ -1428,7 +1429,7 @@ var Zt_DefineNounTraits = typeinfo.Flow{
 
 // holds a slice of type define_noun_traits
 // FIX: duplicates the spec decl.
-type FIX_DefineNounTraits_Slice []DefineNounTraits
+type DefineNounTraits_Slice []DefineNounTraits
 
 // implements typeinfo.Inspector
 func (*DefineNounTraits_Slice) Inspect() (typeinfo.T, bool) {
@@ -1437,7 +1438,7 @@ func (*DefineNounTraits_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_NumListField struct {
+type NumListField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.NumListEval
@@ -1485,7 +1486,7 @@ var Zt_NumListField = typeinfo.Flow{
 
 // holds a slice of type num_list_field
 // FIX: duplicates the spec decl.
-type FIX_NumListField_Slice []NumListField
+type NumListField_Slice []NumListField
 
 // implements typeinfo.Inspector
 func (*NumListField_Slice) Inspect() (typeinfo.T, bool) {
@@ -1494,7 +1495,7 @@ func (*NumListField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_NumberField struct {
+type NumberField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.NumberEval
@@ -1542,7 +1543,7 @@ var Zt_NumberField = typeinfo.Flow{
 
 // holds a slice of type number_field
 // FIX: duplicates the spec decl.
-type FIX_NumberField_Slice []NumberField
+type NumberField_Slice []NumberField
 
 // implements typeinfo.Inspector
 func (*NumberField_Slice) Inspect() (typeinfo.T, bool) {
@@ -1551,7 +1552,7 @@ func (*NumberField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RuleProvides struct {
+type RuleProvides struct {
 	PatternName rtti.TextEval
 	Provides    []FieldDefinition
 	Markup      map[string]any
@@ -1596,7 +1597,7 @@ var Zt_RuleProvides = typeinfo.Flow{
 
 // holds a slice of type rule_provides
 // FIX: duplicates the spec decl.
-type FIX_RuleProvides_Slice []RuleProvides
+type RuleProvides_Slice []RuleProvides
 
 // implements typeinfo.Inspector
 func (*RuleProvides_Slice) Inspect() (typeinfo.T, bool) {
@@ -1605,7 +1606,7 @@ func (*RuleProvides_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RuleForPattern struct {
+type RuleForPattern struct {
 	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
 	Exe         []rtti.Execute
@@ -1659,7 +1660,7 @@ var Zt_RuleForPattern = typeinfo.Flow{
 
 // holds a slice of type rule_for_pattern
 // FIX: duplicates the spec decl.
-type FIX_RuleForPattern_Slice []RuleForPattern
+type RuleForPattern_Slice []RuleForPattern
 
 // implements typeinfo.Inspector
 func (*RuleForPattern_Slice) Inspect() (typeinfo.T, bool) {
@@ -1668,7 +1669,7 @@ func (*RuleForPattern_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RuleForNoun struct {
+type RuleForNoun struct {
 	PatternName rtti.TextEval
 	NounName    rtti.TextEval
 	RuleName    rtti.TextEval
@@ -1727,7 +1728,7 @@ var Zt_RuleForNoun = typeinfo.Flow{
 
 // holds a slice of type rule_for_noun
 // FIX: duplicates the spec decl.
-type FIX_RuleForNoun_Slice []RuleForNoun
+type RuleForNoun_Slice []RuleForNoun
 
 // implements typeinfo.Inspector
 func (*RuleForNoun_Slice) Inspect() (typeinfo.T, bool) {
@@ -1736,7 +1737,7 @@ func (*RuleForNoun_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RuleForKind struct {
+type RuleForKind struct {
 	PatternName rtti.TextEval
 	KindName    rtti.TextEval
 	Exactly     rtti.BoolEval
@@ -1801,7 +1802,7 @@ var Zt_RuleForKind = typeinfo.Flow{
 
 // holds a slice of type rule_for_kind
 // FIX: duplicates the spec decl.
-type FIX_RuleForKind_Slice []RuleForKind
+type RuleForKind_Slice []RuleForKind
 
 // implements typeinfo.Inspector
 func (*RuleForKind_Slice) Inspect() (typeinfo.T, bool) {
@@ -1810,7 +1811,7 @@ func (*RuleForKind_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineMacro struct {
+type DefineMacro struct {
 	MacroName       rtti.TextEval
 	Requires        []FieldDefinition
 	Provides        []FieldDefinition
@@ -1870,7 +1871,7 @@ var Zt_DefineMacro = typeinfo.Flow{
 
 // holds a slice of type define_macro
 // FIX: duplicates the spec decl.
-type FIX_DefineMacro_Slice []DefineMacro
+type DefineMacro_Slice []DefineMacro
 
 // implements typeinfo.Inspector
 func (*DefineMacro_Slice) Inspect() (typeinfo.T, bool) {
@@ -1879,7 +1880,7 @@ func (*DefineMacro_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_CallMacro struct {
+type CallMacro struct {
 	MacroName string
 	Arguments []assign.Arg
 	Markup    map[string]any
@@ -1941,7 +1942,7 @@ var Zt_CallMacro = typeinfo.Flow{
 
 // holds a slice of type call_macro
 // FIX: duplicates the spec decl.
-type FIX_CallMacro_Slice []CallMacro
+type CallMacro_Slice []CallMacro
 
 // implements typeinfo.Inspector
 func (*CallMacro_Slice) Inspect() (typeinfo.T, bool) {
@@ -1950,7 +1951,7 @@ func (*CallMacro_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefinePattern struct {
+type DefinePattern struct {
 	PatternName rtti.TextEval
 	Requires    []FieldDefinition
 	Provides    []FieldDefinition
@@ -2011,7 +2012,7 @@ var Zt_DefinePattern = typeinfo.Flow{
 
 // holds a slice of type define_pattern
 // FIX: duplicates the spec decl.
-type FIX_DefinePattern_Slice []DefinePattern
+type DefinePattern_Slice []DefinePattern
 
 // implements typeinfo.Inspector
 func (*DefinePattern_Slice) Inspect() (typeinfo.T, bool) {
@@ -2020,7 +2021,7 @@ func (*DefinePattern_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RecordListField struct {
+type RecordListField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.RecordListEval
@@ -2068,7 +2069,7 @@ var Zt_RecordListField = typeinfo.Flow{
 
 // holds a slice of type record_list_field
 // FIX: duplicates the spec decl.
-type FIX_RecordListField_Slice []RecordListField
+type RecordListField_Slice []RecordListField
 
 // implements typeinfo.Inspector
 func (*RecordListField_Slice) Inspect() (typeinfo.T, bool) {
@@ -2077,7 +2078,7 @@ func (*RecordListField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RecordField struct {
+type RecordField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.RecordEval
@@ -2125,7 +2126,7 @@ var Zt_RecordField = typeinfo.Flow{
 
 // holds a slice of type record_field
 // FIX: duplicates the spec decl.
-type FIX_RecordField_Slice []RecordField
+type RecordField_Slice []RecordField
 
 // implements typeinfo.Inspector
 func (*RecordField_Slice) Inspect() (typeinfo.T, bool) {
@@ -2134,7 +2135,7 @@ func (*RecordField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineRelatives struct {
+type DefineRelatives struct {
 	Nouns      rtti.TextListEval
 	Relation   rtti.TextEval
 	OtherNouns rtti.TextListEval
@@ -2186,7 +2187,7 @@ var Zt_DefineRelatives = typeinfo.Flow{
 
 // holds a slice of type define_relatives
 // FIX: duplicates the spec decl.
-type FIX_DefineRelatives_Slice []DefineRelatives
+type DefineRelatives_Slice []DefineRelatives
 
 // implements typeinfo.Inspector
 func (*DefineRelatives_Slice) Inspect() (typeinfo.T, bool) {
@@ -2195,7 +2196,7 @@ func (*DefineRelatives_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_DefineOtherRelatives struct {
+type DefineOtherRelatives struct {
 	Relation   rtti.TextEval
 	Nouns      rtti.TextListEval
 	OtherNouns rtti.TextListEval
@@ -2247,7 +2248,7 @@ var Zt_DefineOtherRelatives = typeinfo.Flow{
 
 // holds a slice of type define_other_relatives
 // FIX: duplicates the spec decl.
-type FIX_DefineOtherRelatives_Slice []DefineOtherRelatives
+type DefineOtherRelatives_Slice []DefineOtherRelatives
 
 // implements typeinfo.Inspector
 func (*DefineOtherRelatives_Slice) Inspect() (typeinfo.T, bool) {
@@ -2256,7 +2257,7 @@ func (*DefineOtherRelatives_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_SayTemplate struct {
+type SayTemplate struct {
 	Template string
 	Markup   map[string]any
 }
@@ -2297,7 +2298,7 @@ var Zt_SayTemplate = typeinfo.Flow{
 
 // holds a slice of type say_template
 // FIX: duplicates the spec decl.
-type FIX_SayTemplate_Slice []SayTemplate
+type SayTemplate_Slice []SayTemplate
 
 // implements typeinfo.Inspector
 func (*SayTemplate_Slice) Inspect() (typeinfo.T, bool) {
@@ -2306,7 +2307,7 @@ func (*SayTemplate_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_SayResponse struct {
+type SayResponse struct {
 	Name   string
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -2353,7 +2354,7 @@ var Zt_SayResponse = typeinfo.Flow{
 
 // holds a slice of type say_response
 // FIX: duplicates the spec decl.
-type FIX_SayResponse_Slice []SayResponse
+type SayResponse_Slice []SayResponse
 
 // implements typeinfo.Inspector
 func (*SayResponse_Slice) Inspect() (typeinfo.T, bool) {
@@ -2362,7 +2363,7 @@ func (*SayResponse_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ShuffleText struct {
+type ShuffleText struct {
 	Parts  []rtti.TextEval
 	Markup map[string]any
 }
@@ -2402,7 +2403,7 @@ var Zt_ShuffleText = typeinfo.Flow{
 
 // holds a slice of type shuffle_text
 // FIX: duplicates the spec decl.
-type FIX_ShuffleText_Slice []ShuffleText
+type ShuffleText_Slice []ShuffleText
 
 // implements typeinfo.Inspector
 func (*ShuffleText_Slice) Inspect() (typeinfo.T, bool) {
@@ -2411,7 +2412,7 @@ func (*ShuffleText_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_StoppingText struct {
+type StoppingText struct {
 	Parts  []rtti.TextEval
 	Markup map[string]any
 }
@@ -2451,7 +2452,7 @@ var Zt_StoppingText = typeinfo.Flow{
 
 // holds a slice of type stopping_text
 // FIX: duplicates the spec decl.
-type FIX_StoppingText_Slice []StoppingText
+type StoppingText_Slice []StoppingText
 
 // implements typeinfo.Inspector
 func (*StoppingText_Slice) Inspect() (typeinfo.T, bool) {
@@ -2460,7 +2461,7 @@ func (*StoppingText_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_StoryBreak struct {
+type StoryBreak struct {
 	Markup map[string]any
 }
 
@@ -2495,7 +2496,7 @@ var Zt_StoryBreak = typeinfo.Flow{
 
 // holds a slice of type story_break
 // FIX: duplicates the spec decl.
-type FIX_StoryBreak_Slice []StoryBreak
+type StoryBreak_Slice []StoryBreak
 
 // implements typeinfo.Inspector
 func (*StoryBreak_Slice) Inspect() (typeinfo.T, bool) {
@@ -2504,7 +2505,7 @@ func (*StoryBreak_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_StoryFile struct {
+type StoryFile struct {
 	StoryStatements []StoryStatement
 	Markup          map[string]any
 }
@@ -2540,7 +2541,7 @@ var Zt_StoryFile = typeinfo.Flow{
 
 // holds a slice of type story_file
 // FIX: duplicates the spec decl.
-type FIX_StoryFile_Slice []StoryFile
+type StoryFile_Slice []StoryFile
 
 // implements typeinfo.Inspector
 func (*StoryFile_Slice) Inspect() (typeinfo.T, bool) {
@@ -2549,7 +2550,7 @@ func (*StoryFile_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_TextListField struct {
+type TextListField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.TextListEval
@@ -2597,7 +2598,7 @@ var Zt_TextListField = typeinfo.Flow{
 
 // holds a slice of type text_list_field
 // FIX: duplicates the spec decl.
-type FIX_TextListField_Slice []TextListField
+type TextListField_Slice []TextListField
 
 // implements typeinfo.Inspector
 func (*TextListField_Slice) Inspect() (typeinfo.T, bool) {
@@ -2606,7 +2607,7 @@ func (*TextListField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_TextField struct {
+type TextField struct {
 	Name      rtti.TextEval
 	Type      rtti.TextEval
 	Initially rtti.TextEval
@@ -2654,7 +2655,7 @@ var Zt_TextField = typeinfo.Flow{
 
 // holds a slice of type text_field
 // FIX: duplicates the spec decl.
-type FIX_TextField_Slice []TextField
+type TextField_Slice []TextField
 
 // implements typeinfo.Inspector
 func (*TextField_Slice) Inspect() (typeinfo.T, bool) {
@@ -2663,7 +2664,7 @@ func (*TextField_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_NothingField struct {
+type NothingField struct {
 	Markup map[string]any
 }
 
@@ -2698,24 +2699,37 @@ var Zt_NothingField = typeinfo.Flow{
 
 // holds a slice of type nothing_field
 // FIX: duplicates the spec decl.
-type FIX_NothingField_Slice []NothingField
+type NothingField_Slice []NothingField
 
 // implements typeinfo.Inspector
 func (*NothingField_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_NothingField, true
 }
 
+// MapConnection, a type of str enum.
+type MapConnection int
+
+// enumerated values of MapConnection
 const (
-	Zc_MapConnection_ArrivingAt   = "arriving_at"
-	Zc_MapConnection_ConnectingTo = "connecting_to"
+	C_MapConnection_ArrivingAt MapConnection = iota
+	C_MapConnection_ConnectingTo
 )
+
+func (op MapConnection) String() (ret string) {
+	if i, opts := int(op), Zt_MapConnection.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid MapConnection(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // map_connection, a type of str enum.
 var Zt_MapConnection = typeinfo.Str{
 	Name: "map_connection",
 	Options: []string{
-		Zc_MapConnection_ArrivingAt,
-		Zc_MapConnection_ConnectingTo,
+		"arriving_at",
+		"connecting_to",
 	},
 	Markup: map[string]any{
 		"comment": "Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.",
@@ -2728,21 +2742,34 @@ var Zt_MapDirection = typeinfo.Str{
 	},
 }
 
+// RelationCardinality, a type of str enum.
+type RelationCardinality int
+
+// enumerated values of RelationCardinality
 const (
-	Zc_RelationCardinality_OneToOne   = "one_to_one"
-	Zc_RelationCardinality_OneToMany  = "one_to_many"
-	Zc_RelationCardinality_ManyToOne  = "many_to_one"
-	Zc_RelationCardinality_ManyToMany = "many_to_many"
+	C_RelationCardinality_OneToOne RelationCardinality = iota
+	C_RelationCardinality_OneToMany
+	C_RelationCardinality_ManyToOne
+	C_RelationCardinality_ManyToMany
 )
+
+func (op RelationCardinality) String() (ret string) {
+	if i, opts := int(op), Zt_RelationCardinality.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid RelationCardinality(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // relation_cardinality, a type of str enum.
 var Zt_RelationCardinality = typeinfo.Str{
 	Name: "relation_cardinality",
 	Options: []string{
-		Zc_RelationCardinality_OneToOne,
-		Zc_RelationCardinality_OneToMany,
-		Zc_RelationCardinality_ManyToOne,
-		Zc_RelationCardinality_ManyToMany,
+		"one_to_one",
+		"one_to_many",
+		"many_to_one",
+		"many_to_many",
 	},
 }
 

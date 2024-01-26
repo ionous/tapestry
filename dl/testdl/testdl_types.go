@@ -3,6 +3,7 @@ package testdl
 
 import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"strconv"
 )
 
 // test_slot, a type of slot.
@@ -79,7 +80,7 @@ type FIX_TestFlow struct {
 	Slot   TestSlot
 	Txt    string
 	Num    float64
-	Bool   string
+	Bool   FIX_TestBool
 	Slots  []TestSlot
 	Markup map[string]any
 }
@@ -145,33 +146,59 @@ func (*TestFlow_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_TestFlow, true
 }
 
+// TestBool, a type of str enum.
+type FIX_TestBool int
+
+// enumerated values of TestBool
 const (
-	Zc_TestBool_True  = "true"
-	Zc_TestBool_False = "false"
+	C_TestBool_True FIX_TestBool = iota
+	C_TestBool_False
 )
+
+func (op FIX_TestBool) String() (ret string) {
+	if i, opts := int(op), Zt_TestBool.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid TestBool(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // test_bool, a type of str enum.
 var Zt_TestBool = typeinfo.Str{
 	Name: "test_bool",
 	Options: []string{
-		Zc_TestBool_True,
-		Zc_TestBool_False,
+		"true",
+		"false",
 	},
 }
 
+// TestStr, a type of str enum.
+type FIX_TestStr int
+
+// enumerated values of TestStr
 const (
-	Zc_TestStr_One    = "one"
-	Zc_TestStr_Other  = "other"
-	Zc_TestStr_Option = "option"
+	C_TestStr_One FIX_TestStr = iota
+	C_TestStr_Other
+	C_TestStr_Option
 )
+
+func (op FIX_TestStr) String() (ret string) {
+	if i, opts := int(op), Zt_TestStr.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid TestStr(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // test_str, a type of str enum.
 var Zt_TestStr = typeinfo.Str{
 	Name: "test_str",
 	Options: []string{
-		Zc_TestStr_One,
-		Zc_TestStr_Other,
-		Zc_TestStr_Option,
+		"one",
+		"other",
+		"option",
 	},
 }
 var Zt_TestTxt = typeinfo.Str{

@@ -4,6 +4,7 @@ package play
 import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"strconv"
 )
 
 // play_message, a type of slot.
@@ -83,7 +84,7 @@ func (*PlayLog_Slice) Inspect() (typeinfo.T, bool) {
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
 type FIX_PlayMode struct {
-	Mode   string
+	Mode   FIX_PlayModes
 	Markup map[string]any
 }
 
@@ -178,21 +179,34 @@ func (*PlayOut_Slice) Inspect() (typeinfo.T, bool) {
 	return &Zt_PlayOut, true
 }
 
+// PlayModes, a type of str enum.
+type FIX_PlayModes int
+
+// enumerated values of PlayModes
 const (
-	Zc_PlayModes_Asm      = "asm"
-	Zc_PlayModes_Play     = "play"
-	Zc_PlayModes_Complete = "complete"
-	Zc_PlayModes_Error    = "error"
+	C_PlayModes_Asm FIX_PlayModes = iota
+	C_PlayModes_Play
+	C_PlayModes_Complete
+	C_PlayModes_Error
 )
+
+func (op FIX_PlayModes) String() (ret string) {
+	if i, opts := int(op), Zt_PlayModes.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid PlayModes(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // play_modes, a type of str enum.
 var Zt_PlayModes = typeinfo.Str{
 	Name: "play_modes",
 	Options: []string{
-		Zc_PlayModes_Asm,
-		Zc_PlayModes_Play,
-		Zc_PlayModes_Complete,
-		Zc_PlayModes_Error,
+		"asm",
+		"play",
+		"complete",
+		"error",
 	},
 	Markup: map[string]any{
 		"comment": "enum for play play_mode",

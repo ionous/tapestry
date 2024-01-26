@@ -1,15 +1,28 @@
+// {{Pascal .Name}}, a type of str enum.
+type FIX_{{Pascal .Name}} int
+
+// enumerated values of {{Pascal .Name}}
 const (
 {{- range $i, $opt := .Options }}
-  Zc_{{Pascal $.Name}}_{{Pascal $opt}} = "{{$opt}}"
+  C_{{Pascal $.Name}}_{{Pascal $opt}} {{if not $i}}FIX_{{Pascal $.Name}} = iota{{end}}
 {{- end }}
 )
+
+func (op FIX_{{Pascal .Name}}) String() (ret string) {
+	if i, opts := int(op), Zt_{{Pascal .Name}}.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid {{Pascal .Name}}(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return 
+}
 
 // {{.Name}}, a type of str enum.
 var Zt_{{Pascal .Name}} = typeinfo.Str{
 	Name: "{{.Name}}",
 	Options: []string{
 	{{- range $i, $opt := .Options }}
-		Zc_{{Pascal $.Name}}_{{Pascal $opt}},
+		"{{$opt}}",
 	{{- end }}
 	},
 	{{- template "markup.tmpl" .}}

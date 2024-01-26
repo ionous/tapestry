@@ -37,12 +37,12 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 					pen := w.Pin()
 					// write a fact stating the general direction from one room to the other has been established.
 					// ( used to detect conflicts in (the reverse directional) implications of some other statement )
-					if dir := inflect.Normalize(op.Dir.Str); len(dir) == 0 {
+					if dir := inflect.Normalize(op.Dir); len(dir) == 0 {
 						err = errutil.New("empty map direction")
 					} else if ok, e := pen.AddFact("dir", room, dir, otherRoom); e != nil {
 						err = e
 					} else if ok && op.MapConnection.isTwoWay() {
-						if dir := inflect.Normalize(op.Dir.Str); len(dir) == 0 {
+						if dir := inflect.Normalize(op.Dir); len(dir) == 0 {
 							err = errutil.New("empty map direction")
 						} else {
 							otherDir := w.OppositeOf(dir)
@@ -56,7 +56,7 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 							} else if ok {
 								err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
 									// create the reverse door, etc.
-									return mapDirect(w, otherRoom, room, "", MapDirection{otherDir})
+									return mapDirect(w, otherRoom, room, "", otherDir)
 								})
 							}
 						}
@@ -138,8 +138,8 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 }
 
 // set the room's compass, creating an exit if needed to normalize directional travel to always involve a door.
-func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir MapDirection) (err error) {
-	if dir := inflect.Normalize(mapDir.Str); len(dir) == 0 {
+func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir string) (err error) {
+	if dir := inflect.Normalize(mapDir); len(dir) == 0 {
 		err = errutil.New("empty map direction")
 	} else {
 		pen := w.Pin()
@@ -176,8 +176,8 @@ func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir MapDire
 	return
 }
 
-func (op *MapConnection) isTwoWay() bool {
-	return op.Str == MapConnection_ConnectingTo
+func (op MapConnection) isTwoWay() bool {
+	return op == C_MapConnection_ConnectingTo
 }
 
 // queue this as its own commands helps ensure the relation gets built properly

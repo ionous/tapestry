@@ -19,7 +19,7 @@ import (
 
 // transform SayTemplate into a RenderResponse
 func (op *SayTemplate) PreImport(cat *weave.Catalog) (typeinfo.Inspector, error) {
-	return convertTemplate("", op.Template.Str)
+	return convertTemplate("", op.Template)
 }
 
 // transform SayResponse into a RenderResponse

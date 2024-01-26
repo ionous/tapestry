@@ -2,6 +2,7 @@ package decode
 
 import (
 	"errors"
+	"fmt"
 	r "reflect"
 	"strings"
 
@@ -15,14 +16,27 @@ import (
 func SetString(dst r.Value, spec *typeinfo.Str, kv any) (err error) {
 	if src, ok := toString(kv); !ok {
 		err = errors.New("not string data")
-	} else if str, ok := xformString(src, spec); !ok {
-		err = errors.New("invalid string")
 	} else {
-		// FIX
-		if dst.Kind() == r.String {
-			dst.Set(r.ValueOf(str))
+		// fix: when everything is conveted should be using spec.Options to switch
+		if dst.Kind() == r.Int {
+			if i := spec.FindOption(src); i < 0 {
+				err = fmt.Errorf("invalid option %q for %s", src, spec.Name)
+			} else {
+				dst.SetInt(int64(i))
+			}
+
 		} else {
-			dst.Field(0).Set(r.ValueOf(str))
+			if str, ok := xformString(src, spec); !ok {
+				// hrm...
+				err = errors.New("invalid string")
+			} else {
+				// FIX
+				if dst.Kind() == r.String {
+					dst.Set(r.ValueOf(str))
+				} else {
+					dst.Field(0).Set(r.ValueOf(str))
+				}
+			}
 		}
 	}
 	return

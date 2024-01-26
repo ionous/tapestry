@@ -19,14 +19,14 @@ func (op *DefineRelation) Weave(cat *weave.Catalog) error {
 			err = e
 		} else {
 			rel := rel.String()
-			switch op.Cardinality.String() {
-			case RelationCardinality_OneToOne:
+			switch op.Cardinality {
+			case C_RelationCardinality_OneToOne:
 				err = op.addOneToOne(w, rel)
-			case RelationCardinality_OneToMany:
+			case C_RelationCardinality_OneToMany:
 				err = op.addOneToMany(w, rel)
-			case RelationCardinality_ManyToOne:
+			case C_RelationCardinality_ManyToOne:
 				err = op.addManyToOne(w, rel)
-			case RelationCardinality_ManyToMany:
+			case C_RelationCardinality_ManyToMany:
 				err = op.addManyToMany(w, rel)
 			}
 		}

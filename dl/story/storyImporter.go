@@ -67,7 +67,7 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 	//
 	currentCatalog = cat
 	for _, el := range all {
-		slot := FIX_StoryStatement_Slot{Value: el}
+		slot := StoryStatement_Slot{Value: el}
 		if e := inspect.Visit(&slot, &evts); e != nil {
 			err = e
 			break

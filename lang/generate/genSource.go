@@ -16,8 +16,15 @@ func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 		err = e
 	} else {
 		dl := "git.sr.ht/~ionous/tapestry/dl/" // fix: customize?
-		ti := "git.sr.ht/~ionous/tapestry/lang/typeinfo"
-		imports := q.groups.getImports(dl, ti)
+		var extras []string
+		for _, str := range g.Str {
+			if str := str.(strData); len(str.Options) > 0 {
+				extras = append(extras, "strconv")
+				break
+			}
+		}
+		extras = append(extras, "git.sr.ht/~ionous/tapestry/lang/typeinfo")
+		imports := q.groups.getImports(dl, extras...)
 		if e := q.write(w, "header", struct {
 			Name    string
 			Imports []string

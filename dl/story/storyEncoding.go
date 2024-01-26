@@ -35,7 +35,7 @@ func DecodePattern(dec *decode.Decoder, slot string, msg compact.Message) (ret t
 	switch slot {
 	default:
 		err = compact.Unhandled
-	case StoryStatement_Type:
+	case Zt_StoryStatement.Name:
 		if args, e := tryPatternArgs(dec, slot, msg); e != nil {
 			err = e
 		} else {

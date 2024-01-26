@@ -85,7 +85,7 @@ func (f strData) goType() (ret string) {
 		case "bool":
 			ret = "bool"
 		default:
-			ret = "string" // tbd: or maybe dont switch from Str structs just yet
+			ret = "FIX_" + Pascal(f.Name)
 		}
 	}
 	return

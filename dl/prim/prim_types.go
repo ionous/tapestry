@@ -3,19 +3,33 @@ package prim
 
 import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"strconv"
 )
 
+// Bool, a type of str enum.
+type FIX_Bool int
+
+// enumerated values of Bool
 const (
-	Zc_Bool_True  = "true"
-	Zc_Bool_False = "false"
+	C_Bool_True FIX_Bool = iota
+	C_Bool_False
 )
+
+func (op FIX_Bool) String() (ret string) {
+	if i, opts := int(op), Zt_Bool.Options; i >= 0 && i < len(opts) {
+		ret = opts[i]
+	} else {
+		ret = "Invalid Bool(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return
+}
 
 // bool, a type of str enum.
 var Zt_Bool = typeinfo.Str{
 	Name: "bool",
 	Options: []string{
-		Zc_Bool_True,
-		Zc_Bool_False,
+		"true",
+		"false",
 	},
 }
 var Zt_Lines = typeinfo.Str{
