@@ -38,9 +38,10 @@ var Zt_Number = typeinfo.Num{
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "prim",
-	Str:  z_str_list,
-	Num:  z_num_list,
+	Name:       "prim",
+	Str:        z_str_list,
+	Num:        z_num_list,
+	Signatures: z_signatures,
 }
 
 // a list of all strs in this this package
@@ -53,4 +54,13 @@ var z_str_list = []*typeinfo.Str{
 // a list of all nums in this this package
 var z_num_list = []*typeinfo.Num{
 	&Zt_Number,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	1736897526516691909:  (*Bool)(nil),   /* Bool: */
+	16705119881164468210: (*Lines)(nil),  /* Lines: */
+	5524275432872349646:  (*Number)(nil), /* Number: */
+	3128978846958847468:  (*Text)(nil),   /* Text: */
 }

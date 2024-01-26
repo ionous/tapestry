@@ -319,9 +319,10 @@ func (*RenderResponse_Slice) Inspect() (typeinfo.T, bool) {
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "render",
-	Slot: z_slot_list,
-	Flow: z_flow_list,
+	Name:       "render",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
 }
 
 // a list of all slots in this this package
@@ -338,4 +339,34 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RenderValue,
 	&Zt_RenderPattern,
 	&Zt_RenderResponse,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	14401057669022842575: (*RenderPattern)(nil),  /* bool_eval=Render:render: */
+	2910903954323771519:  (*RenderPattern)(nil),  /* render_eval=Render:render: */
+	3385363614654173788:  (*RenderPattern)(nil),  /* text_eval=Render:render: */
+	4328811686385928991:  (*RenderName)(nil),     /* text_eval=RenderName: */
+	12372540113328333010: (*RenderRef)(nil),      /* bool_eval=RenderRef: */
+	17707941731931999319: (*RenderRef)(nil),      /* num_list_eval=RenderRef: */
+	586781755231363619:   (*RenderRef)(nil),      /* number_eval=RenderRef: */
+	11952381947639314199: (*RenderRef)(nil),      /* record_eval=RenderRef: */
+	5794615276964665178:  (*RenderRef)(nil),      /* record_list_eval=RenderRef: */
+	15289959684061875714: (*RenderRef)(nil),      /* render_eval=RenderRef: */
+	10542331033523904889: (*RenderRef)(nil),      /* text_eval=RenderRef: */
+	4171261980310148416:  (*RenderRef)(nil),      /* text_list_eval=RenderRef: */
+	18249933776929959289: (*RenderRef)(nil),      /* bool_eval=RenderRef:dot: */
+	9735547470721472920:  (*RenderRef)(nil),      /* num_list_eval=RenderRef:dot: */
+	13239953219501121612: (*RenderRef)(nil),      /* number_eval=RenderRef:dot: */
+	8324158095841155032:  (*RenderRef)(nil),      /* record_eval=RenderRef:dot: */
+	17618593433797581633: (*RenderRef)(nil),      /* record_list_eval=RenderRef:dot: */
+	7883271647282708009:  (*RenderRef)(nil),      /* render_eval=RenderRef:dot: */
+	239223853229152058:   (*RenderRef)(nil),      /* text_eval=RenderRef:dot: */
+	3872622981826050135:  (*RenderRef)(nil),      /* text_list_eval=RenderRef:dot: */
+	15658359855727638606: (*RenderResponse)(nil), /* execute=RenderResponse: */
+	6351613444865908923:  (*RenderResponse)(nil), /* text_eval=RenderResponse: */
+	167592851841791829:   (*RenderResponse)(nil), /* execute=RenderResponse:text: */
+	10415880721138830946: (*RenderResponse)(nil), /* text_eval=RenderResponse:text: */
+	7608693554121607902:  (*RenderValue)(nil),    /* render_eval=RenderValue: */
 }

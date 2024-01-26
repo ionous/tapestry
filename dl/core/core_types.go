@@ -3596,10 +3596,11 @@ var Zt_Comparison = typeinfo.Str{
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "core",
-	Slot: z_slot_list,
-	Flow: z_flow_list,
-	Str:  z_str_list,
+	Name:       "core",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Str:        z_str_list,
+	Signatures: z_signatures,
 }
 
 // a list of all slots in this this package
@@ -3685,4 +3686,112 @@ var z_flow_list = []*typeinfo.Flow{
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
 	&Zt_Comparison,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
+	9652861807756732392:  (*AbsValue)(nil),          /* number_eval=Absolute value: */
+	6415467136316515808:  (*AddValue)(nil),          /* number_eval=Add:value: */
+	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */
+	8082607244820951444:  (*AllTrue)(nil),           /* bool_eval=AllTrue: */
+	1979437068831463006:  (*Always)(nil),            /* bool_eval=Always */
+	1963945852392897915:  (*AnyTrue)(nil),           /* bool_eval=AnyTrue: */
+	2233111806717201007:  (*TriggerOnce)(nil),       /* trigger=At */
+	15800853823523633295: (*Newline)(nil),           /* execute=Br */
+	8805770583889466012:  (*BracketText)(nil),       /* text_eval=Brackets do: */
+	9570569845423374482:  (*Break)(nil),             /* execute=Break */
+	11322251195672034522: (*BufferText)(nil),        /* text_eval=Buffers do: */
+	8695677004499439692:  (*Capitalize)(nil),        /* text_eval=Capitalize: */
+	18319016698864768677: (*CommaText)(nil),         /* text_eval=Commas do: */
+	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
+	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */
+	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
+	1765941604351725175:  (*Decrement)(nil),         /* execute=Decrease: */
+	16337634811621251476: (*Decrement)(nil),         /* number_eval=Decrease: */
+	13259725831972112539: (*DecrementAspect)(nil),   /* execute=Decrease:aspect: */
+	9604047801594713852:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect: */
+	11515881376122775668: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by: */
+	1589765377795283065:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by: */
+	10691394634979399555: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by:clamp: */
+	16351892255943407142: (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:by:clamp: */
+	16567257087826189312: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:clamp: */
+	7498537354592687963:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:clamp: */
+	906537561468635208:   (*Decrement)(nil),         /* execute=Decrease:by: */
+	7249930857706662977:  (*Decrement)(nil),         /* number_eval=Decrease:by: */
+	14212233424935015742: (*DivideValue)(nil),       /* number_eval=Divide:value: */
+	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
+	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
+	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
+	2224842870997259213:  (*FieldsOfKind)(nil),      /* text_list_eval=Fields of: */
+	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
+	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
+	6524366950360243674:  (*ChooseBranch)(nil),      /* brancher=If:assuming:do: */
+	12195526980856142720: (*ChooseBranch)(nil),      /* execute=If:assuming:do: */
+	16752471159562852415: (*ChooseBranch)(nil),      /* brancher=If:assuming:do:else: */
+	2092791308408463217:  (*ChooseBranch)(nil),      /* execute=If:assuming:do:else: */
+	11676187955438326921: (*ChooseBranch)(nil),      /* brancher=If:do: */
+	16551038912311542599: (*ChooseBranch)(nil),      /* execute=If:do: */
+	11846460753008131314: (*ChooseBranch)(nil),      /* brancher=If:do:else: */
+	9882017885672780228:  (*ChooseBranch)(nil),      /* execute=If:do:else: */
+	3419326304120453839:  (*Increment)(nil),         /* execute=Increase: */
+	5814330157137261092:  (*Increment)(nil),         /* number_eval=Increase: */
+	11043224857467493683: (*IncrementAspect)(nil),   /* execute=Increase:aspect: */
+	1296309673842091672:  (*IncrementAspect)(nil),   /* text_eval=Increase:aspect: */
+	4473637830475551932:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by: */
+	18328024260427443133: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by: */
+	1150598923989934235:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by:clamp: */
+	16465259325356451354: (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:by:clamp: */
+	4522630356185077352:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:clamp: */
+	705264554644415287:   (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:clamp: */
+	9916665856596995152:  (*Increment)(nil),         /* execute=Increase:by: */
+	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
+	16720860407833961741: (*HasDominion)(nil),       /* bool_eval=Is domain: */
+	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
+	17183768313478169229: (*ObjectExists)(nil),      /* bool_eval=Is valid: */
+	4986574662941955696:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num: */
+	6471221873898876231:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num:within: */
+	2616749751052919401:  (*CompareText)(nil),       /* bool_eval=Is:matching:text: */
+	7216474174347601443:  (*CompareValue)(nil),      /* bool_eval=Is:matching:value: */
+	10106284345457008764: (*Join)(nil),              /* text_eval=Join parts: */
+	16037301925772243654: (*Join)(nil),              /* text_eval=Join:parts: */
+	16305715626122315047: (*KindOf)(nil),            /* text_eval=KindOf: */
+	16744881049704292640: (*IsKindOf)(nil),          /* bool_eval=KindOf:is: */
+	210805642732508805:   (*IsKindOf)(nil),          /* bool_eval=KindOf:is:nothing: */
+	7296079450764183372:  (*IsExactKindOf)(nil),     /* bool_eval=KindOf:isExactly: */
+	4254622167054960918:  (*KindOf)(nil),            /* text_eval=KindOf:nothing: */
+	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
+	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
+	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */
+	734548188050460137:   (*ModValue)(nil),          /* number_eval=Mod:value: */
+	17515508702665594117: (*MultiplyValue)(nil),     /* number_eval=Multiply:value: */
+	15519818243985955688: (*NameOf)(nil),            /* text_eval=NameOf: */
+	1310533520550597035:  (*Never)(nil),             /* bool_eval=Never */
+	3572677870333466638:  (*Not)(nil),               /* bool_eval=Not: */
+	2793972640309351788:  (*ChooseNum)(nil),         /* number_eval=Num if:then: */
+	1916074756917320013:  (*ChooseNum)(nil),         /* number_eval=Num if:then:else: */
+	18009133328614046007: (*PrintNumWord)(nil),      /* text_eval=Numeral words: */
+	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
+	15933580486837544843: (*ObjectTraits)(nil),      /* text_list_eval=Object traits: */
+	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
+	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
+	4512128922644282356:  (*PrintText)(nil),         /* execute=Print: */
+	16853421744116592875: (*While)(nil),             /* execute=Repeating:do: */
+	12963686195606417453: (*MakeReversed)(nil),      /* text_eval=Reverse text: */
+	14820902432990466009: (*Row)(nil),               /* text_eval=Row do: */
+	42419598592471524:    (*Rows)(nil),              /* text_eval=Rows do: */
+	10747671703915852065: (*MakeSentenceCase)(nil),  /* text_eval=Sentence: */
+	3632089819497852687:  (*CallShuffle)(nil),       /* text_eval=Shuffle:over: */
+	2397382738676796596:  (*Singularize)(nil),       /* text_eval=Singular of: */
+	13377280423859122588: (*SlashText)(nil),         /* text_eval=Slashes do: */
+	14637971099620461998: (*SpanText)(nil),          /* text_eval=Spaces do: */
+	10180508752412200934: (*CallTerminal)(nil),      /* text_eval=Stopping:over: */
+	6622046790206362641:  (*SubtractValue)(nil),     /* number_eval=Subtract:value: */
+	10878271994667616824: (*MakeTitleCase)(nil),     /* text_eval=Title: */
+	2711869841453509536:  (*CallTrigger)(nil),       /* bool_eval=Trigger:on:num: */
+	9953804072544503126:  (*ChooseText)(nil),        /* text_eval=Txt if:then: */
+	5534583393866490763:  (*ChooseText)(nil),        /* text_eval=Txt if:then:else: */
+	5481656653805454214:  (*MakeUppercase)(nil),     /* text_eval=Upper: */
+	16612725309683107572: (*Softline)(nil),          /* execute=Wbr */
 }

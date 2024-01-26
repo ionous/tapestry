@@ -1,9 +1,10 @@
 package generate
 
 import (
-	"encoding/json"
 	"fmt"
+	"strings"
 
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables/idl"
 )
 
@@ -79,10 +80,11 @@ Break:
 			m := t.getMarkup()
 			for _, k := range m.Keys() {
 				v := m[k]
-				if str, e := json.Marshal(v); e != nil {
+				var b strings.Builder
+				if e := files.JsonEncoder(&b, files.RawJson).Encode(v); e != nil {
 					err = e
 					break Break
-				} else if e := w.Write(idl.Markup, n, k, str); e != nil {
+				} else if e := w.Write(idl.Markup, n, k, b.String()); e != nil {
 					err = fmt.Errorf("%w couldnt write markup %q ", e, k)
 					break Break
 				}

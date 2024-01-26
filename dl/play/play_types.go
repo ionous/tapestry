@@ -201,10 +201,11 @@ var Zt_PlayModes = typeinfo.Str{
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "play",
-	Slot: z_slot_list,
-	Flow: z_flow_list,
-	Str:  z_str_list,
+	Name:       "play",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Str:        z_str_list,
+	Signatures: z_signatures,
 }
 
 // a list of all slots in this this package
@@ -224,4 +225,13 @@ var z_flow_list = []*typeinfo.Flow{
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
 	&Zt_PlayModes,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	6163370811322312405:  (*PlayModes)(nil), /* PlayModes: */
+	17624726337788752012: (*PlayLog)(nil),   /* play_message=Play log: */
+	4988029522939467359:  (*PlayMode)(nil),  /* play_message=Play mode: */
+	14741822345399231886: (*PlayOut)(nil),   /* play_message=Play out: */
 }

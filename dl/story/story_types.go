@@ -2769,10 +2769,11 @@ var Zt_RelationCardinality = typeinfo.Str{
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "story",
-	Slot: z_slot_list,
-	Flow: z_flow_list,
-	Str:  z_str_list,
+	Name:       "story",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Str:        z_str_list,
+	Signatures: z_signatures,
 }
 
 // a list of all slots in this this package
@@ -2838,4 +2839,138 @@ var z_str_list = []*typeinfo.Str{
 	&Zt_MapConnection,
 	&Zt_MapDirection,
 	&Zt_RelationCardinality,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	13422667607848275221: (*MapConnection)(nil),        /* MapConnection: */
+	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
+	10722525326402422155: (*RelationCardinality)(nil),  /* RelationCardinality: */
+	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
+	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
+	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
+	12738236274201716794: (*BoolField)(nil),            /* field_definition=Bool: */
+	18077675806901364237: (*BoolField)(nil),            /* field_definition=Bool:initially: */
+	17184788623765734642: (*BoolField)(nil),            /* field_definition=Bool:kind: */
+	124015053883609573:   (*BoolField)(nil),            /* field_definition=Bool:kind:initially: */
+	4843373105631259652:  (*CallMacro)(nil),            /* bool_eval=Call macro:args: */
+	10236024639985130132: (*CallMacro)(nil),            /* execute=Call macro:args: */
+	5651581957203069121:  (*CallMacro)(nil),            /* num_list_eval=Call macro:args: */
+	11693923858603804101: (*CallMacro)(nil),            /* number_eval=Call macro:args: */
+	1853884795003797121:  (*CallMacro)(nil),            /* record_eval=Call macro:args: */
+	12142382415765691372: (*CallMacro)(nil),            /* record_list_eval=Call macro:args: */
+	15275988251373739424: (*CallMacro)(nil),            /* story_statement=Call macro:args: */
+	14675240953305539039: (*CallMacro)(nil),            /* text_eval=Call macro:args: */
+	7066713272892250094:  (*CallMacro)(nil),            /* text_list_eval=Call macro:args: */
+	3991849378064754806:  (*Comment)(nil),              /* execute=Comment: */
+	16586092333187989882: (*Comment)(nil),              /* story_statement=Comment: */
+	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
+	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
+	9796202271034753943:  (*DeclareStatement)(nil),     /* story_statement=Declare: */
+	10109890763294157270: (*DefineAction)(nil),         /* execute=Define action:requires: */
+	14790755516297707674: (*DefineAction)(nil),         /* story_statement=Define action:requires: */
+	14322897916789725742: (*DefineAction)(nil),         /* execute=Define action:requires:provides: */
+	5312053119535959994:  (*DefineAction)(nil),         /* story_statement=Define action:requires:provides: */
+	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */
+	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
+	17025532743550436003: (*DefineKinds)(nil),          /* execute=Define kinds:as: */
+	11622379079031968031: (*DefineKinds)(nil),          /* story_statement=Define kinds:as: */
+	18413110137608794005: (*DefineMacro)(nil),          /* execute=Define macro:requires:provides:do: */
+	17004191702311840201: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:provides:do: */
+	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
+	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
+	9839172640820177073:  (*DefineRelatives)(nil),      /* execute=Define nouns:relativeTo:otherNouns: */
+	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
+	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
+	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
+	811338311732531998:   (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides: */
+	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
+	2917659442779702699:  (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides:do: */
+	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
+	4650767708903763835:  (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro: */
+	89301097593785617:    (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro:reversed: */
+	10034565430437798858: (*DefineRelation)(nil),       /* execute=Define relation:kind:otherKind:cardinality: */
+	15951965898335032430: (*DefineRelation)(nil),       /* story_statement=Define relation:kind:otherKind:cardinality: */
+	2570506749320892411:  (*DefineOtherRelatives)(nil), /* execute=Define relativeTo:nouns:otherNouns: */
+	16389453623741136831: (*DefineOtherRelatives)(nil), /* story_statement=Define relativeTo:nouns:otherNouns: */
+	10393873004445566457: (*RuleForPattern)(nil),       /* execute=Define rule:do: */
+	18093984368234904277: (*RuleForPattern)(nil),       /* story_statement=Define rule:do: */
+	6144114745580995665:  (*RuleForKind)(nil),          /* execute=Define rule:kind:do: */
+	12136992210577308757: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:do: */
+	12497780268362777975: (*RuleForKind)(nil),          /* execute=Define rule:kind:exactly:do: */
+	10538385905361340595: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:do: */
+	10044089009426244136: (*RuleForKind)(nil),          /* execute=Define rule:kind:exactly:named:do: */
+	11666026550766211860: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:named:do: */
+	14253827009100247466: (*RuleForKind)(nil),          /* execute=Define rule:kind:named:do: */
+	2951940010570883790:  (*RuleForKind)(nil),          /* story_statement=Define rule:kind:named:do: */
+	589486870138010946:   (*RuleForPattern)(nil),       /* execute=Define rule:named:do: */
+	2007307886252117326:  (*RuleForPattern)(nil),       /* story_statement=Define rule:named:do: */
+	5341208345720564107:  (*RuleForNoun)(nil),          /* execute=Define rule:noun:do: */
+	4344965134492972319:  (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:do: */
+	12048342630397883580: (*RuleForNoun)(nil),          /* execute=Define rule:noun:named:do: */
+	16133739979148445504: (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:named:do: */
+	16815703800760921520: (*RuleProvides)(nil),         /* execute=Define rule:provides: */
+	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
+	5110919797933301972:  (*DefineScene)(nil),          /* story_statement=Define scene:dependsOn:with: */
+	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
+	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
+	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
+	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
+	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
+	12949514552590649363: (*MakeOpposite)(nil),         /* execute=Define:opposite: */
+	5688318111906346127:  (*MakeOpposite)(nil),         /* story_statement=Define:opposite: */
+	16375064846040326258: (*MakePlural)(nil),           /* execute=Define:plural: */
+	12640732630499152662: (*MakePlural)(nil),           /* story_statement=Define:plural: */
+	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
+	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
+	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
+	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
+	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
+	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
+	10612153415886771360: (*DefineAlias)(nil),          /* execute=Interpret alias:as: */
+	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
+	16304045397725596887: (*DefineNamedGrammar)(nil),   /* execute=Interpret name:with: */
+	8001652437005351387:  (*DefineNamedGrammar)(nil),   /* story_statement=Interpret name:with: */
+	2895546536328156972:  (*DefineLeadingGrammar)(nil), /* execute=Interpret:with: */
+	6001249499689096432:  (*DefineLeadingGrammar)(nil), /* story_statement=Interpret:with: */
+	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
+	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
+	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */
+	2289982379805608146:  (*NumListField)(nil),         /* field_definition=NumList:kind: */
+	223049567122462661:   (*NumListField)(nil),         /* field_definition=NumList:kind:initially: */
+	16579038690333872565: (*NumberField)(nil),          /* field_definition=Number: */
+	7599754526096278866:  (*NumberField)(nil),          /* field_definition=Number:initially: */
+	13275028962550729195: (*NumberField)(nil),          /* field_definition=Number:kind: */
+	8920589511475179656:  (*NumberField)(nil),          /* field_definition=Number:kind:initially: */
+	7896413305974623897:  (*RecordField)(nil),          /* field_definition=Record: */
+	9030081498362006310:  (*RecordField)(nil),          /* field_definition=Record:initially: */
+	7215961239288768263:  (*RecordField)(nil),          /* field_definition=Record:kind: */
+	8334583613109868292:  (*RecordField)(nil),          /* field_definition=Record:kind:initially: */
+	3705957996596149197:  (*RecordListField)(nil),      /* field_definition=RecordList: */
+	5153309692795646250:  (*RecordListField)(nil),      /* field_definition=RecordList:initially: */
+	15479801779125468947: (*RecordListField)(nil),      /* field_definition=RecordList:kind: */
+	17384295137903978384: (*RecordListField)(nil),      /* field_definition=RecordList:kind:initially: */
+	12945074305202371477: (*SayResponse)(nil),          /* execute=Say response:with: */
+	7921553818502082370:  (*SayResponse)(nil),          /* text_eval=Say response:with: */
+	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */
+	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
+	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */
+	13921723804355948971: (*StoppingText)(nil),         /* text_eval=StoppingText: */
+	2871145226608221260:  (*Test)(nil),                 /* execute=Test:dependsOn:do: */
+	9865864948070946448:  (*Test)(nil),                 /* story_statement=Test:dependsOn:do: */
+	5453259149853633814:  (*Test)(nil),                 /* execute=Test:dependsOn:withScene:do: */
+	12698818979331053506: (*Test)(nil),                 /* story_statement=Test:dependsOn:withScene:do: */
+	13063212444104265068: (*Test)(nil),                 /* execute=Test:do: */
+	9283516926116088792:  (*Test)(nil),                 /* story_statement=Test:do: */
+	11682383000525011702: (*Test)(nil),                 /* execute=Test:withScene:do: */
+	500333266696321514:   (*Test)(nil),                 /* story_statement=Test:withScene:do: */
+	9387832592330456403:  (*TextField)(nil),            /* field_definition=Text: */
+	16637694412733787472: (*TextField)(nil),            /* field_definition=Text:initially: */
+	15791809714384972761: (*TextField)(nil),            /* field_definition=Text:kind: */
+	16917317465644840422: (*TextField)(nil),            /* field_definition=Text:kind:initially: */
+	3830912410254339707:  (*TextListField)(nil),        /* field_definition=TextList: */
+	15743255383721832504: (*TextListField)(nil),        /* field_definition=TextList:initially: */
+	2011197685129757745:  (*TextListField)(nil),        /* field_definition=TextList:kind: */
+	3232692879001227038:  (*TextListField)(nil),        /* field_definition=TextList:kind:initially: */
 }

@@ -1183,8 +1183,9 @@ func (*Range_Slice) Inspect() (typeinfo.T, bool) {
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "list",
-	Flow: z_flow_list,
+	Name:       "list",
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
 }
 
 // a list of all flows in this this package
@@ -1210,4 +1211,57 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ListSplice,
 	&Zt_ListPush,
 	&Zt_Range,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
+	17857642077015906043: (*EraseEdge)(nil),       /* execute=Erase: */
+	4911242881414594201:  (*EraseEdge)(nil),       /* execute=Erase:atFront: */
+	13326390992756169124: (*EraseIndex)(nil),      /* execute=Erase:from:atIndex: */
+	15309883842271607141: (*ErasingEdge)(nil),     /* execute=Erasing:as:do: */
+	2341467540630172606:  (*ErasingEdge)(nil),     /* execute=Erasing:as:do:else: */
+	7006351070379896671:  (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do: */
+	12034742036302137452: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do:else: */
+	1044384912965145788:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:do: */
+	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
+	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
+	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
+	11141869806069158915: (*MakeNumList)(nil),     /* num_list_eval=List ofNumbers: */
+	10609280349940760977: (*MakeRecordList)(nil),  /* record_list_eval=List ofRecords:ofType: */
+	15650595833095485421: (*MakeTextList)(nil),    /* text_list_eval=List ofText: */
+	8449127989109999373:  (*ListMap)(nil),         /* execute=Map:fromList:using: */
+	14590825769568398889: (*ListPush)(nil),        /* execute=Push:into: */
+	17497959320325918107: (*ListPush)(nil),        /* execute=Push:into:atFront: */
+	120416590109430143:   (*Range)(nil),           /* num_list_eval=Range: */
+	15503705420922978310: (*Range)(nil),           /* num_list_eval=Range:byStep: */
+	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
+	14227857065891717050: (*Range)(nil),           /* num_list_eval=Range:from:byStep: */
+	18245549119758376391: (*ListReduce)(nil),      /* execute=Reduce into:fromList:using: */
+	7084717997213120806:  (*ListEach)(nil),        /* execute=Repeating across:as:do: */
+	12445157229684471803: (*ListEach)(nil),        /* execute=Repeating across:as:do:else: */
+	177314099445105829:   (*ListReverse)(nil),     /* execute=Reverse list: */
+	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
+	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */
+	18323981472330239313: (*ListSlice)(nil),       /* text_list_eval=Slice: */
+	3713929053224137387:  (*ListSlice)(nil),       /* num_list_eval=Slice:end: */
+	326673439235441194:   (*ListSlice)(nil),       /* record_list_eval=Slice:end: */
+	8469880138850798532:  (*ListSlice)(nil),       /* text_list_eval=Slice:end: */
+	6763121597476813124:  (*ListSlice)(nil),       /* num_list_eval=Slice:start: */
+	10126987075066562677: (*ListSlice)(nil),       /* record_list_eval=Slice:start: */
+	2045310658543284955:  (*ListSlice)(nil),       /* text_list_eval=Slice:start: */
+	14495675636779114361: (*ListSlice)(nil),       /* num_list_eval=Slice:start:end: */
+	3241896595896148736:  (*ListSlice)(nil),       /* record_list_eval=Slice:start:end: */
+	8901512565003460886:  (*ListSlice)(nil),       /* text_list_eval=Slice:start:end: */
+	2873147130324862012:  (*ListSortNumbers)(nil), /* execute=SortNumbers:byField: */
+	16697045456605499852: (*ListSortNumbers)(nil), /* execute=SortNumbers:byField:descending: */
+	16004888373963195994: (*ListSortText)(nil),    /* execute=SortTexts:byField: */
+	10015011362106184366: (*ListSortText)(nil),    /* execute=SortTexts:byField:descending: */
+	10595238214248400404: (*ListSortText)(nil),    /* execute=SortTexts:byField:descending:usingCase: */
+	10680774202307610784: (*ListSortText)(nil),    /* execute=SortTexts:byField:usingCase: */
+	13203130291219794646: (*ListSplice)(nil),      /* execute=Splice:start:remove:insert: */
+	6201472222981604265:  (*ListSplice)(nil),      /* num_list_eval=Splice:start:remove:insert: */
+	15778591428898251294: (*ListSplice)(nil),      /* record_list_eval=Splice:start:remove:insert: */
+	11160578659475180120: (*ListSplice)(nil),      /* text_list_eval=Splice:start:remove:insert: */
 }

@@ -40,6 +40,7 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 							err = e
 						} else {
 							out.Flow = append(out.Flow, d)
+							out.Reg = out.Reg.addFlow(d)
 						}
 					case "with group":
 						err = readGroup(out, spec, inner)
@@ -55,12 +56,14 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 							err = e
 						} else {
 							out.Str = append(out.Str, d)
+							out.Reg = out.Reg.addPrim(d.specData)
 						}
 					case "with num":
 						if d, e := readNum(spec, inner); e != nil {
 							err = e
 						} else {
 							out.Num = append(out.Num, d)
+							out.Reg = out.Reg.addPrim(d.specData)
 						}
 					default:
 						// which of course is ironic, because the specs currently use slots

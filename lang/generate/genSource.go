@@ -3,8 +3,6 @@ package generate
 import (
 	"bytes"
 	"io"
-
-	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 
 // after collecting groups, write them to targeted location
@@ -14,7 +12,6 @@ func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 	// so we have to build the body first, and later
 	// write the import header above it.
 	var body bytes.Buffer
-	var sigs distill.Registry
 	if e := q.writeContent(&body, g.groupContent); e != nil {
 		err = e
 	} else {
@@ -29,7 +26,7 @@ func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 		} else {
 			w.Write(body.Bytes())
 			err = q.writeFooter(w,
-				g.Name, sigs,
+				g.Name, g.Reg,
 				typeList{
 					Type:    "slot",
 					Comment: "( ex. for generating blockly shapes )",
@@ -55,12 +52,13 @@ func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 }
 
 // writes a list of typeinfo references
-func (q *Generator) writeFooter(w io.Writer, name string, reg distill.Registry, types ...typeList) error {
+func (q *Generator) writeFooter(w io.Writer, name string, reg Registry, types ...typeList) error {
+	reg.Sort()
 	return q.write(w, "footer", struct {
 		Name       string
 		Types      []typeList
-		Signatures []distill.Sig
-	}{name, types, reg.Sigs})
+		Signatures []Signature
+	}{name, types, reg})
 }
 
 type typeList struct {

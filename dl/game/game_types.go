@@ -213,8 +213,9 @@ func (*PrintVersion_Slice) Inspect() (typeinfo.T, bool) {
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "game",
-	Flow: z_flow_list,
+	Name:       "game",
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
 }
 
 // a list of all flows in this this package
@@ -225,4 +226,14 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RestoreGame,
 	&Zt_UndoTurn,
 	&Zt_PrintVersion,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	16069653899165369674: (*PrintVersion)(nil), /* execute=PrintVersion */
+	13962506025236193050: (*QuitGame)(nil),     /* execute=QuitGame */
+	8293164373151279469:  (*RestoreGame)(nil),  /* execute=RestoreGame */
+	12343662000108026632: (*SaveGame)(nil),     /* execute=SaveGame */
+	6128819475946940678:  (*UndoTurn)(nil),     /* execute=UndoTurn */
 }

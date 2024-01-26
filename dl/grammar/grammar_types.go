@@ -524,9 +524,10 @@ func (*Words_Slice) Inspect() (typeinfo.T, bool) {
 
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
-	Name: "grammar",
-	Slot: z_slot_list,
-	Flow: z_flow_list,
+	Name:       "grammar",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
 }
 
 // a list of all slots in this this package
@@ -548,4 +549,19 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Reverse,
 	&Zt_Focus,
 	&Zt_Words,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]any{
+	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
+	967998274944030280:   (*Action)(nil),    /* scanner_maker=Action:args: */
+	1756442538083378424:  (*Focus)(nil),     /* scanner_maker=Focus:sequence: */
+	6454124700650096920:  (*Directive)(nil), /* grammar_maker=Interpret name:with: */
+	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */
+	16418039705711067622: (*ChooseOne)(nil), /* scanner_maker=One of: */
+	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */
+	11402479949132197621: (*Refine)(nil),    /* scanner_maker=Refine sequence: */
+	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
+	10728359537834940094: (*Sequence)(nil),  /* scanner_maker=Sequence: */
 }

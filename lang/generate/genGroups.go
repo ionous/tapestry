@@ -12,6 +12,7 @@ type groupContent struct {
 	Slot []typeData
 	Str  []typeData
 	Num  []typeData
+	Reg  Registry
 }
 
 // dont forget to exclude self

@@ -5,18 +5,14 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
-
-	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 
 //go:embed templates/*
 var tempFS embed.FS
 
-var Pascal = distill.Pascal
-
 func genTemplates(p TypeFinder) (*template.Template, error) {
 	funcMap := template.FuncMap{
-		"Pascal": distill.Pascal,
+		"Pascal": Pascal,
 		"Encode": func(v any) (ret string) {
 			return fmt.Sprintf("%#v", v)
 		},

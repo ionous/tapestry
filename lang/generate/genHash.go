@@ -1,4 +1,4 @@
-package distill
+package generate
 
 import (
 	"hash/fnv"
