@@ -11,7 +11,7 @@ import (
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_EraseEdge struct {
+type EraseEdge struct {
 	Target assign.Address
 	AtEdge rtti.BoolEval
 	Markup map[string]any
@@ -56,7 +56,7 @@ var Zt_EraseEdge = typeinfo.Flow{
 
 // holds a slice of type erase_edge
 // FIX: duplicates the spec decl.
-type FIX_EraseEdge_Slice []EraseEdge
+type EraseEdge_Slice []EraseEdge
 
 // implements typeinfo.Inspector
 func (*EraseEdge_Slice) Inspect() (typeinfo.T, bool) {
@@ -65,7 +65,7 @@ func (*EraseEdge_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_EraseIndex struct {
+type EraseIndex struct {
 	Count   rtti.NumberEval
 	Target  assign.Address
 	AtIndex rtti.NumberEval
@@ -114,7 +114,7 @@ var Zt_EraseIndex = typeinfo.Flow{
 
 // holds a slice of type erase_index
 // FIX: duplicates the spec decl.
-type FIX_EraseIndex_Slice []EraseIndex
+type EraseIndex_Slice []EraseIndex
 
 // implements typeinfo.Inspector
 func (*EraseIndex_Slice) Inspect() (typeinfo.T, bool) {
@@ -123,7 +123,7 @@ func (*EraseIndex_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Erasing struct {
+type Erasing struct {
 	Count   rtti.NumberEval
 	Target  assign.Address
 	AtIndex rtti.NumberEval
@@ -183,7 +183,7 @@ var Zt_Erasing = typeinfo.Flow{
 
 // holds a slice of type erasing
 // FIX: duplicates the spec decl.
-type FIX_Erasing_Slice []Erasing
+type Erasing_Slice []Erasing
 
 // implements typeinfo.Inspector
 func (*Erasing_Slice) Inspect() (typeinfo.T, bool) {
@@ -192,7 +192,7 @@ func (*Erasing_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ErasingEdge struct {
+type ErasingEdge struct {
 	Target assign.Address
 	AtEdge rtti.BoolEval
 	As     string
@@ -254,7 +254,7 @@ var Zt_ErasingEdge = typeinfo.Flow{
 
 // holds a slice of type erasing_edge
 // FIX: duplicates the spec decl.
-type FIX_ErasingEdge_Slice []ErasingEdge
+type ErasingEdge_Slice []ErasingEdge
 
 // implements typeinfo.Inspector
 func (*ErasingEdge_Slice) Inspect() (typeinfo.T, bool) {
@@ -263,7 +263,7 @@ func (*ErasingEdge_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListEach struct {
+type ListEach struct {
 	List   rtti.Assignment
 	As     string
 	Exe    []rtti.Execute
@@ -320,7 +320,7 @@ var Zt_ListEach = typeinfo.Flow{
 
 // holds a slice of type list_each
 // FIX: duplicates the spec decl.
-type FIX_ListEach_Slice []ListEach
+type ListEach_Slice []ListEach
 
 // implements typeinfo.Inspector
 func (*ListEach_Slice) Inspect() (typeinfo.T, bool) {
@@ -329,7 +329,7 @@ func (*ListEach_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListFind struct {
+type ListFind struct {
 	Value  rtti.Assignment
 	List   rtti.Assignment
 	Markup map[string]any
@@ -375,7 +375,7 @@ var Zt_ListFind = typeinfo.Flow{
 
 // holds a slice of type list_find
 // FIX: duplicates the spec decl.
-type FIX_ListFind_Slice []ListFind
+type ListFind_Slice []ListFind
 
 // implements typeinfo.Inspector
 func (*ListFind_Slice) Inspect() (typeinfo.T, bool) {
@@ -384,7 +384,7 @@ func (*ListFind_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListGather struct {
+type ListGather struct {
 	Target assign.Address
 	From   rtti.Assignment
 	Using  string
@@ -427,7 +427,7 @@ var Zt_ListGather = typeinfo.Flow{
 
 // holds a slice of type list_gather
 // FIX: duplicates the spec decl.
-type FIX_ListGather_Slice []ListGather
+type ListGather_Slice []ListGather
 
 // implements typeinfo.Inspector
 func (*ListGather_Slice) Inspect() (typeinfo.T, bool) {
@@ -436,7 +436,7 @@ func (*ListGather_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListLen struct {
+type ListLen struct {
 	List   rtti.Assignment
 	Markup map[string]any
 }
@@ -475,7 +475,7 @@ var Zt_ListLen = typeinfo.Flow{
 
 // holds a slice of type list_len
 // FIX: duplicates the spec decl.
-type FIX_ListLen_Slice []ListLen
+type ListLen_Slice []ListLen
 
 // implements typeinfo.Inspector
 func (*ListLen_Slice) Inspect() (typeinfo.T, bool) {
@@ -484,7 +484,7 @@ func (*ListLen_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MakeTextList struct {
+type MakeTextList struct {
 	Values []rtti.TextEval
 	Markup map[string]any
 }
@@ -522,7 +522,7 @@ var Zt_MakeTextList = typeinfo.Flow{
 
 // holds a slice of type make_text_list
 // FIX: duplicates the spec decl.
-type FIX_MakeTextList_Slice []MakeTextList
+type MakeTextList_Slice []MakeTextList
 
 // implements typeinfo.Inspector
 func (*MakeTextList_Slice) Inspect() (typeinfo.T, bool) {
@@ -531,7 +531,7 @@ func (*MakeTextList_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MakeNumList struct {
+type MakeNumList struct {
 	Values []rtti.NumberEval
 	Markup map[string]any
 }
@@ -569,7 +569,7 @@ var Zt_MakeNumList = typeinfo.Flow{
 
 // holds a slice of type make_num_list
 // FIX: duplicates the spec decl.
-type FIX_MakeNumList_Slice []MakeNumList
+type MakeNumList_Slice []MakeNumList
 
 // implements typeinfo.Inspector
 func (*MakeNumList_Slice) Inspect() (typeinfo.T, bool) {
@@ -578,7 +578,7 @@ func (*MakeNumList_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_MakeRecordList struct {
+type MakeRecordList struct {
 	Values []rtti.RecordEval
 	Kind   rtti.TextEval
 	Markup map[string]any
@@ -621,7 +621,7 @@ var Zt_MakeRecordList = typeinfo.Flow{
 
 // holds a slice of type make_record_list
 // FIX: duplicates the spec decl.
-type FIX_MakeRecordList_Slice []MakeRecordList
+type MakeRecordList_Slice []MakeRecordList
 
 // implements typeinfo.Inspector
 func (*MakeRecordList_Slice) Inspect() (typeinfo.T, bool) {
@@ -630,7 +630,7 @@ func (*MakeRecordList_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListMap struct {
+type ListMap struct {
 	Target      assign.Address
 	List        rtti.Assignment
 	PatternName string
@@ -679,7 +679,7 @@ var Zt_ListMap = typeinfo.Flow{
 
 // holds a slice of type list_map
 // FIX: duplicates the spec decl.
-type FIX_ListMap_Slice []ListMap
+type ListMap_Slice []ListMap
 
 // implements typeinfo.Inspector
 func (*ListMap_Slice) Inspect() (typeinfo.T, bool) {
@@ -688,7 +688,7 @@ func (*ListMap_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListReduce struct {
+type ListReduce struct {
 	Target      assign.Address
 	List        rtti.Assignment
 	PatternName string
@@ -738,7 +738,7 @@ var Zt_ListReduce = typeinfo.Flow{
 
 // holds a slice of type list_reduce
 // FIX: duplicates the spec decl.
-type FIX_ListReduce_Slice []ListReduce
+type ListReduce_Slice []ListReduce
 
 // implements typeinfo.Inspector
 func (*ListReduce_Slice) Inspect() (typeinfo.T, bool) {
@@ -747,7 +747,7 @@ func (*ListReduce_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListReverse struct {
+type ListReverse struct {
 	Target assign.Address
 	Markup map[string]any
 }
@@ -787,7 +787,7 @@ var Zt_ListReverse = typeinfo.Flow{
 
 // holds a slice of type list_reverse
 // FIX: duplicates the spec decl.
-type FIX_ListReverse_Slice []ListReverse
+type ListReverse_Slice []ListReverse
 
 // implements typeinfo.Inspector
 func (*ListReverse_Slice) Inspect() (typeinfo.T, bool) {
@@ -796,7 +796,7 @@ func (*ListReverse_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListSlice struct {
+type ListSlice struct {
 	List   rtti.Assignment
 	Start  rtti.NumberEval
 	End    rtti.NumberEval
@@ -851,7 +851,7 @@ var Zt_ListSlice = typeinfo.Flow{
 
 // holds a slice of type list_slice
 // FIX: duplicates the spec decl.
-type FIX_ListSlice_Slice []ListSlice
+type ListSlice_Slice []ListSlice
 
 // implements typeinfo.Inspector
 func (*ListSlice_Slice) Inspect() (typeinfo.T, bool) {
@@ -860,7 +860,7 @@ func (*ListSlice_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListSortNumbers struct {
+type ListSortNumbers struct {
 	Target     assign.Address
 	ByField    string
 	Descending rtti.BoolEval
@@ -907,7 +907,7 @@ var Zt_ListSortNumbers = typeinfo.Flow{
 
 // holds a slice of type list_sort_numbers
 // FIX: duplicates the spec decl.
-type FIX_ListSortNumbers_Slice []ListSortNumbers
+type ListSortNumbers_Slice []ListSortNumbers
 
 // implements typeinfo.Inspector
 func (*ListSortNumbers_Slice) Inspect() (typeinfo.T, bool) {
@@ -916,7 +916,7 @@ func (*ListSortNumbers_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListSortText struct {
+type ListSortText struct {
 	Target     assign.Address
 	ByField    string
 	Descending rtti.BoolEval
@@ -972,7 +972,7 @@ var Zt_ListSortText = typeinfo.Flow{
 
 // holds a slice of type list_sort_text
 // FIX: duplicates the spec decl.
-type FIX_ListSortText_Slice []ListSortText
+type ListSortText_Slice []ListSortText
 
 // implements typeinfo.Inspector
 func (*ListSortText_Slice) Inspect() (typeinfo.T, bool) {
@@ -981,7 +981,7 @@ func (*ListSortText_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListSplice struct {
+type ListSplice struct {
 	Target assign.Address
 	Start  rtti.NumberEval
 	Remove rtti.NumberEval
@@ -1041,7 +1041,7 @@ var Zt_ListSplice = typeinfo.Flow{
 
 // holds a slice of type list_splice
 // FIX: duplicates the spec decl.
-type FIX_ListSplice_Slice []ListSplice
+type ListSplice_Slice []ListSplice
 
 // implements typeinfo.Inspector
 func (*ListSplice_Slice) Inspect() (typeinfo.T, bool) {
@@ -1050,7 +1050,7 @@ func (*ListSplice_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_ListPush struct {
+type ListPush struct {
 	Value  rtti.Assignment
 	Target assign.Address
 	AtEdge rtti.BoolEval
@@ -1100,7 +1100,7 @@ var Zt_ListPush = typeinfo.Flow{
 
 // holds a slice of type list_push
 // FIX: duplicates the spec decl.
-type FIX_ListPush_Slice []ListPush
+type ListPush_Slice []ListPush
 
 // implements typeinfo.Inspector
 func (*ListPush_Slice) Inspect() (typeinfo.T, bool) {
@@ -1109,7 +1109,7 @@ func (*ListPush_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_Range struct {
+type Range struct {
 	To     rtti.NumberEval
 	From   rtti.NumberEval
 	ByStep rtti.NumberEval
@@ -1160,7 +1160,7 @@ var Zt_Range = typeinfo.Flow{
 
 // holds a slice of type range
 // FIX: duplicates the spec decl.
-type FIX_Range_Slice []Range
+type Range_Slice []Range
 
 // implements typeinfo.Inspector
 func (*Range_Slice) Inspect() (typeinfo.T, bool) {
