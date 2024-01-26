@@ -26,8 +26,8 @@ var CmdServe = &base.Command{
 }
 
 func goServe(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if lvl, e := getLogLevel(cfg.logLevel); e != nil {
-		err = e
+	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
+		err = errutil.New("Unknown log level", cfg.logLevel)
 	} else {
 		listenTo, _ := cfg.listen.GetPort(8080)
 		requestFrom, useBrowser := cfg.request.GetPort(3000)
@@ -67,24 +67,10 @@ func buildFlags() (out flag.FlagSet) {
 	if home, e := os.UserHomeDir(); e == nil {
 		inFile = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 	}
-	spec := debug.LogLevel.Compose()
-	levels := strings.Join(spec.Strings, ", ")
+	levels := strings.Join(debug.Zt_LoggingLevel.Options, ", ")
 	out.StringVar(&cfg.inFile, "in", inFile, "input file name (sqlite3)")
 	out.StringVar(&cfg.logLevel, "log", "", levels)
 	out.Var(&cfg.listen, "listen", "the port for your web browser. specify a port number; or, 'true' for the default (8080).")
 	out.Var(&cfg.request, "www", "local vite server where tapestry can find its webapps. specify a port number; or, 'true' to use the default port (3000).")
-	return
-}
-
-// translate command line specified debug level into the runtime's debug level string
-func getLogLevel(in string) (ret debug.LoggingLevel, err error) {
-	if len(in) > 0 {
-		spec := ret.Compose()
-		if key, idx := spec.IndexOfValue(in); idx < 0 {
-			err = errutil.New("Unknown log level")
-		} else {
-			ret.Str = key
-		}
-	}
 	return
 }

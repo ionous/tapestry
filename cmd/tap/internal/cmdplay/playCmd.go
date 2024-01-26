@@ -14,8 +14,8 @@ import (
 )
 
 func goPlay(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if lvl, e := getLogLevel(cfg.logLevel); e != nil {
-		err = e
+	if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
+		err = errutil.New("Unknown log level", cfg.logLevel)
 	} else {
 		debug.LogLevel = lvl
 		opts := qna.NewOptions()
