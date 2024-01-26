@@ -1,7 +1,6 @@
 package express
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 )
 
@@ -17,9 +16,8 @@ var coreCache nameCache
 func (k *nameCache) get(n string) (ret interface{}, okay bool) {
 	if len(k.els) == 0 {
 		els := make(map[string]interface{})
-		for _, v := range core.Slats {
-			n := composer.SpecName(v) // ex. all_true
-			els[n] = v
+		for _, t := range core.Z_Types.Flow {
+			els[n] = t.Name
 		}
 		k.els = els
 	}

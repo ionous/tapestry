@@ -2,7 +2,6 @@ package tapestry
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/game"
@@ -12,43 +11,17 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
-	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-var AllSlats = [][]composer.Composer{
-	assign.Slats,
-	core.Slats,
-	debug.Slats,
-	grammar.Slats,
-	literal.Slats,
-	list.Slats,
-	prim.Slats,
-	rel.Slats,
-	render.Slats,
-	game.Slats,
-}
-
 var AllSignatures = []map[uint64]any{
-	assign.Signatures,
-	core.Signatures,
-	debug.Signatures,
-	grammar.Signatures,
-	literal.Signatures,
-	list.Signatures,
-	prim.Signatures,
-	rel.Signatures,
-	render.Signatures,
-	rt.Signatures,
-	game.Signatures,
-}
-
-var reg composer.TypeRegistry
-
-func Registry() composer.TypeRegistry {
-	if reg == nil {
-		for _, slats := range AllSlats {
-			reg.RegisterTypes(slats)
-		}
-	}
-	return reg
+	assign.Z_Types.Signatures,
+	core.Z_Types.Signatures,
+	debug.Z_Types.Signatures,
+	grammar.Z_Types.Signatures,
+	literal.Z_Types.Signatures,
+	list.Z_Types.Signatures,
+	prim.Z_Types.Signatures,
+	rel.Z_Types.Signatures,
+	render.Z_Types.Signatures,
+	game.Z_Types.Signatures,
 }
