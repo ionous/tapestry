@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/support/files"
@@ -25,10 +26,9 @@ func writeTable(w DB, g Group) (err error) {
 	} else if e := writeStr(w, g.Name, gc.Str); e != nil {
 		err = fmt.Errorf("%w writing str for %s", e, g.Name)
 	}
-	// FIX: write signatures
-	// for _, sig := range ds.Sigs {
-	// 	w.Write(idl.Sig, sig.Type, sig.Slot, strconv.FormatUint(sig.Hash, 16), sig.Body())
-	// }
+	for _, sig := range gc.Reg {
+		w.Write(idl.Sig, sig.Type, sig.Slot, strconv.FormatUint(sig.Hash, 16), sig.Body())
+	}
 	return
 }
 
