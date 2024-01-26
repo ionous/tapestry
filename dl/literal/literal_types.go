@@ -18,10 +18,10 @@ var Zt_LiteralValue = typeinfo.Slot{
 
 // holds a single slot
 // FIX: currently provided by the spec
-type FIX_LiteralValue_Slot struct{ Value LiteralValue }
+type LiteralValue_Slot struct{ Value LiteralValue }
 
 // implements typeinfo.Inspector for a single slot.
-func (*FIX_LiteralValue_Slot) Inspect() (typeinfo.T, bool) {
+func (*LiteralValue_Slot) Inspect() (typeinfo.T, bool) {
 	return &Zt_LiteralValue, false
 }
 
@@ -35,7 +35,7 @@ func (*LiteralValue_Slots) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_BoolValue struct {
+type BoolValue struct {
 	Value  bool
 	Kind   string
 	Markup map[string]any
@@ -83,7 +83,7 @@ var Zt_BoolValue = typeinfo.Flow{
 
 // holds a slice of type bool_value
 // FIX: duplicates the spec decl.
-type FIX_BoolValue_Slice []BoolValue
+type BoolValue_Slice []BoolValue
 
 // implements typeinfo.Inspector
 func (*BoolValue_Slice) Inspect() (typeinfo.T, bool) {
@@ -92,7 +92,7 @@ func (*BoolValue_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_FieldValue struct {
+type FieldValue struct {
 	Field  string
 	Value  LiteralValue
 	Markup map[string]any
@@ -130,7 +130,7 @@ var Zt_FieldValue = typeinfo.Flow{
 
 // holds a slice of type field_value
 // FIX: duplicates the spec decl.
-type FIX_FieldValue_Slice []FieldValue
+type FieldValue_Slice []FieldValue
 
 // implements typeinfo.Inspector
 func (*FieldValue_Slice) Inspect() (typeinfo.T, bool) {
@@ -139,7 +139,7 @@ func (*FieldValue_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_FieldList struct {
+type FieldList struct {
 	Fields []FieldValue
 	Markup map[string]any
 }
@@ -179,7 +179,7 @@ var Zt_FieldList = typeinfo.Flow{
 
 // holds a slice of type field_list
 // FIX: duplicates the spec decl.
-type FIX_FieldList_Slice []FieldList
+type FieldList_Slice []FieldList
 
 // implements typeinfo.Inspector
 func (*FieldList_Slice) Inspect() (typeinfo.T, bool) {
@@ -188,7 +188,7 @@ func (*FieldList_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_NumValue struct {
+type NumValue struct {
 	Value  float64
 	Kind   string
 	Markup map[string]any
@@ -236,7 +236,7 @@ var Zt_NumValue = typeinfo.Flow{
 
 // holds a slice of type num_value
 // FIX: duplicates the spec decl.
-type FIX_NumValue_Slice []NumValue
+type NumValue_Slice []NumValue
 
 // implements typeinfo.Inspector
 func (*NumValue_Slice) Inspect() (typeinfo.T, bool) {
@@ -245,7 +245,7 @@ func (*NumValue_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_NumValues struct {
+type NumValues struct {
 	Values []float64
 	Kind   string
 	Markup map[string]any
@@ -294,7 +294,7 @@ var Zt_NumValues = typeinfo.Flow{
 
 // holds a slice of type num_values
 // FIX: duplicates the spec decl.
-type FIX_NumValues_Slice []NumValues
+type NumValues_Slice []NumValues
 
 // implements typeinfo.Inspector
 func (*NumValues_Slice) Inspect() (typeinfo.T, bool) {
@@ -303,7 +303,7 @@ func (*NumValues_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RecordValue struct {
+type RecordValue struct {
 	Kind   string
 	Fields []FieldValue
 	Cache  RecordCache
@@ -355,7 +355,7 @@ var Zt_RecordValue = typeinfo.Flow{
 
 // holds a slice of type record_value
 // FIX: duplicates the spec decl.
-type FIX_RecordValue_Slice []RecordValue
+type RecordValue_Slice []RecordValue
 
 // implements typeinfo.Inspector
 func (*RecordValue_Slice) Inspect() (typeinfo.T, bool) {
@@ -364,7 +364,7 @@ func (*RecordValue_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_RecordList struct {
+type RecordList struct {
 	Kind    string
 	Records []FieldList
 	Cache   RecordsCache
@@ -416,7 +416,7 @@ var Zt_RecordList = typeinfo.Flow{
 
 // holds a slice of type record_list
 // FIX: duplicates the spec decl.
-type FIX_RecordList_Slice []RecordList
+type RecordList_Slice []RecordList
 
 // implements typeinfo.Inspector
 func (*RecordList_Slice) Inspect() (typeinfo.T, bool) {
@@ -425,7 +425,7 @@ func (*RecordList_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_TextValue struct {
+type TextValue struct {
 	Value  string
 	Kind   string
 	Markup map[string]any
@@ -473,7 +473,7 @@ var Zt_TextValue = typeinfo.Flow{
 
 // holds a slice of type text_value
 // FIX: duplicates the spec decl.
-type FIX_TextValue_Slice []TextValue
+type TextValue_Slice []TextValue
 
 // implements typeinfo.Inspector
 func (*TextValue_Slice) Inspect() (typeinfo.T, bool) {
@@ -482,7 +482,7 @@ func (*TextValue_Slice) Inspect() (typeinfo.T, bool) {
 
 // FIX: for now we are generating side by side with the old definitions
 // also should have user comment here
-type FIX_TextValues struct {
+type TextValues struct {
 	Values []string
 	Kind   string
 	Markup map[string]any
@@ -531,7 +531,7 @@ var Zt_TextValues = typeinfo.Flow{
 
 // holds a slice of type text_values
 // FIX: duplicates the spec decl.
-type FIX_TextValues_Slice []TextValues
+type TextValues_Slice []TextValues
 
 // implements typeinfo.Inspector
 func (*TextValues_Slice) Inspect() (typeinfo.T, bool) {

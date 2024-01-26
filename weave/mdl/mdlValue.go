@@ -254,14 +254,14 @@ func marshalProvisional(val literal.LiteralValue, wantAff affine.Affinity) (ret 
 	if aff := literal.GetAffinity(val); aff != wantAff {
 		err = errutil.Fmt("mismatched literal, wanted %s not %s", aff, wantAff)
 	} else {
-		slot := literal.FIX_LiteralValue_Slot{Value: val}
+		slot := literal.LiteralValue_Slot{Value: val}
 		ret, err = marshal(&slot)
 	}
 	return
 }
 
 func marshalLiteral(val literal.LiteralValue) (ret string, err error) {
-	slot := literal.FIX_LiteralValue_Slot{Value: val}
+	slot := literal.LiteralValue_Slot{Value: val}
 	return marshal(&slot)
 }
 
