@@ -165,7 +165,7 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 		} else {
 			filter := &core.CompareText{
 				A:  core.Variable(event.Object, event.Target.String()),
-				Is: core.Equal,
+				Is: core.C_Comparison_EqualTo,
 				B:  &literal.TextValue{Value: noun},
 			}
 			if e := weaveRule(w, rule, filter, op.Exe); e != nil {
@@ -251,7 +251,7 @@ func weaveRule(w *weave.Weaver, rule rules.RuleName, filter rt.BoolEval, exe []r
 				filters = append(filters,
 					&core.CompareText{
 						A:  core.Variable(event.Actor),
-						Is: core.Equal,
+						Is: core.C_Comparison_EqualTo,
 						B:  T("self"),
 					})
 			}
@@ -259,7 +259,7 @@ func weaveRule(w *weave.Weaver, rule rules.RuleName, filter rt.BoolEval, exe []r
 			filters = append(filters,
 				&core.CompareText{
 					A:  core.Variable(event.Object, event.CurrentTarget.String()),
-					Is: core.Equal,
+					Is: core.C_Comparison_EqualTo,
 					B:  core.Variable(event.Object, event.Target.String()),
 				})
 		}

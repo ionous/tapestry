@@ -37,7 +37,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"'a' < 'b'",
 			&core.CompareText{
-				A: T("a"), Is: core.LessThan, B: T("b"),
+				A: T("a"), Is: core.C_Comparison_LessThan, B: T("b"),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -46,7 +46,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"7 >= 8",
 			&core.CompareNum{
-				A: F(7), Is: core.AtLeast, B: F(8),
+				A: F(7), Is: core.C_Comparison_AtLeast, B: F(8),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -170,7 +170,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{if 7=7}boop{else}beep{end}",
 			&core.ChooseText{
 				If: &core.CompareNum{
-					A: F(7), Is: core.Equal, B: F(7),
+					A: F(7), Is: core.C_Comparison_EqualTo, B: F(7),
 				},
 				True:  T("boop"),
 				False: T("beep"),
@@ -183,7 +183,7 @@ func TestTemplates(t *testing.T) {
 			&core.ChooseText{
 				If: &core.Not{
 					Test: &core.CompareNum{
-						A: F(7), Is: core.Equal, B: F(7),
+						A: F(7), Is: core.C_Comparison_EqualTo, B: F(7),
 					}},
 				True:  T("boop"),
 				False: T("beep"),
@@ -209,7 +209,7 @@ func TestTemplates(t *testing.T) {
 					T(" "),
 					&core.ChooseText{
 						If: &core.CompareNum{
-							A: F(7), Is: core.Equal, B: F(7),
+							A: F(7), Is: core.C_Comparison_EqualTo, B: F(7),
 						},
 						True: T("boop"),
 					},

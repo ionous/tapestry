@@ -48,7 +48,7 @@ var FactorialStory = story.StoryFile{
 var FactorialCheck = []rt.Execute{
 	&debug.Expect{
 		Value: &core.CompareNum{
-			A: F(6), Is: core.Equal, B: &assign.CallPattern{
+			A: F(6), Is: core.C_Comparison_EqualTo, B: &assign.CallPattern{
 				PatternName: "factorial",
 				Arguments: []assign.Arg{{
 					Name:  "num",
@@ -79,7 +79,7 @@ var FactorialDecreaseRule = []rt.Execute{
 		If: &core.CompareNum{
 			Markup: UserComment("above zero, subtract one"),
 			A:      core.Variable("num"),
-			Is:     core.GreaterThan,
+			Is:     core.C_Comparison_GreaterThan,
 			B:      F(0)},
 		Exe: FactorialMulMinusOne,
 	},

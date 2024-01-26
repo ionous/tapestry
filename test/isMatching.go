@@ -33,13 +33,13 @@ var matchGroups = testpat.Pattern{
 		core.MakeRule(
 			&core.CompareText{
 				A:  core.Variable("a", "label"),
-				Is: core.Unequal,
+				Is: core.C_Comparison_OtherThan,
 				B:  core.Variable("b", "label"),
 			}, matches(false)),
 		core.MakeRule(
 			&core.CompareText{
 				A:  core.Variable("a", "group options"),
-				Is: core.Unequal,
+				Is: core.C_Comparison_OtherThan,
 				B:  core.Variable("b", "group options"),
 			}, matches(false)),
 	},

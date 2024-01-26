@@ -7,13 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-// backwards compat ish
-var Equal = Comparison{Str: Comparison_EqualTo}
-var Unequal = Comparison{Str: Comparison_OtherThan}
-var AtLeast = Comparison{Str: Comparison_AtLeast}
-var GreaterThan = Comparison{Str: Comparison_GreaterThan}
-var LessThan = Comparison{Str: Comparison_LessThan}
-
 const defaultTolerance = 1e-3
 
 func (op *CompareNum) GetBool(run rt.Runtime) (ret g.Value, err error) {
@@ -119,24 +112,24 @@ func compareValues(a, b g.Value, tolerance float64) (ret int, err error) {
 }
 
 // return flags to help compare numbers
-func (op *Comparison) Compare() (ret CompareType) {
-	switch op.Str {
-	case Comparison_EqualTo:
+func (op Comparison) Compare() (ret CompareType) {
+	switch op {
+	case C_Comparison_EqualTo:
 		ret = Compare_EqualTo
 
-	case Comparison_OtherThan:
+	case C_Comparison_OtherThan:
 		ret = Compare_GreaterThan | Compare_LessThan
 
-	case Comparison_GreaterThan:
+	case C_Comparison_GreaterThan:
 		ret = Compare_GreaterThan
 
-	case Comparison_LessThan:
+	case C_Comparison_LessThan:
 		ret = Compare_LessThan
 
-	case Comparison_AtLeast:
+	case C_Comparison_AtLeast:
 		ret = Compare_GreaterThan | Compare_EqualTo
 
-	case Comparison_AtMost:
+	case C_Comparison_AtMost:
 		ret = Compare_LessThan | Compare_EqualTo
 	}
 	return

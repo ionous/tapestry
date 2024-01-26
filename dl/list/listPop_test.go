@@ -38,7 +38,7 @@ func popTest(front bool, amt int, src ...string) []string {
 		Exe: core.MakeActivity(&core.ChooseBranch{
 			If: &core.CompareNum{
 				A:  &list.ListLen{List: &assign.FromTextList{Value: core.Variable("text")}},
-				Is: core.Equal,
+				Is: core.C_Comparison_EqualTo,
 				B:  I(0)},
 			Exe: core.MakeActivity(&Write{&out, T("x")}),
 			Else: &core.ChooseNothingElse{

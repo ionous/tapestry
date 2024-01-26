@@ -17,17 +17,17 @@ func TestCompareNumbers(t *testing.T) {
 			t.Fatal("mismatch")
 		}
 	}
-	test(10, GreaterThan, 1, true)
-	test(1, GreaterThan, 10, false)
-	test(8, GreaterThan, 8, false)
+	test(10, C_Comparison_GreaterThan, 1, true)
+	test(1, C_Comparison_GreaterThan, 10, false)
+	test(8, C_Comparison_GreaterThan, 8, false)
 	//
-	test(10, LessThan, 1, false)
-	test(1, LessThan, 10, true)
-	test(8, LessThan, 8, false)
+	test(10, C_Comparison_LessThan, 1, false)
+	test(1, C_Comparison_LessThan, 10, true)
+	test(8, C_Comparison_LessThan, 8, false)
 	//
-	test(10, Equal, 1, false)
-	test(1, Equal, 10, false)
-	test(8, Equal, 8, true)
+	test(10, C_Comparison_EqualTo, 1, false)
+	test(1, C_Comparison_EqualTo, 10, false)
+	test(8, C_Comparison_EqualTo, 8, true)
 }
 
 func TestCompareText(t *testing.T) {
@@ -40,12 +40,12 @@ func TestCompareText(t *testing.T) {
 			t.Fatal("mismatch")
 		}
 	}
-	test("Z", GreaterThan, "A", true)
-	test("A", GreaterThan, "Z", false)
+	test("Z", C_Comparison_GreaterThan, "A", true)
+	test("A", C_Comparison_GreaterThan, "Z", false)
 	//
-	test("marzip", LessThan, "marzipan", true)
-	test("marzipan", LessThan, "marzip", false)
+	test("marzip", C_Comparison_LessThan, "marzipan", true)
+	test("marzipan", C_Comparison_LessThan, "marzip", false)
 	//
-	test("bobby", Equal, "bobby", true)
-	test("bobby", Equal, "phillipa", false)
+	test("bobby", C_Comparison_EqualTo, "bobby", true)
+	test("bobby", C_Comparison_EqualTo, "phillipa", false)
 }

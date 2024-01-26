@@ -74,7 +74,7 @@ func (c *Converter) buildCommand(cmd interface{}, arity int) (err error) {
 }
 
 // fix? this is where a Scalar value could come in handy.
-func (c *Converter) buildCompare(cmp string) (err error) {
+func (c *Converter) buildCompare(cmp core.Comparison) (err error) {
 	if args, e := c.stack.pop(2); e != nil {
 		err = e
 	} else {
@@ -90,7 +90,7 @@ func (c *Converter) buildCompare(cmp string) (err error) {
 			err = errutil.Fmt("unknown commands %v %v", an, bn)
 		}
 		if err == nil {
-			cmp := r.ValueOf(core.Comparison{cmp})
+			cmp := r.ValueOf(cmp)
 			args = []r.Value{a, cmp, b}
 			if e := assignProps(ptr.Elem(), args); e != nil {
 				err = e
@@ -329,17 +329,17 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildTwo(&core.SubtractValue{})
 
 		case types.EQL:
-			err = c.buildCompare(core.Comparison_EqualTo)
+			err = c.buildCompare(core.C_Comparison_EqualTo)
 		case types.NEQ:
-			err = c.buildCompare(core.Comparison_OtherThan)
+			err = c.buildCompare(core.C_Comparison_OtherThan)
 		case types.LSS:
-			err = c.buildCompare(core.Comparison_LessThan)
+			err = c.buildCompare(core.C_Comparison_LessThan)
 		case types.LEQ:
-			err = c.buildCompare(core.Comparison_AtMost)
+			err = c.buildCompare(core.C_Comparison_AtMost)
 		case types.GTR:
-			err = c.buildCompare(core.Comparison_GreaterThan)
+			err = c.buildCompare(core.C_Comparison_GreaterThan)
 		case types.GEQ:
-			err = c.buildCompare(core.Comparison_AtLeast)
+			err = c.buildCompare(core.C_Comparison_AtLeast)
 
 		case types.LAND:
 			err = c.buildTwo(&core.AllTrue{})
