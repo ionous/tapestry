@@ -10,7 +10,7 @@ import (
 
 // writes a new block into what might be the topLevel array of blocks,
 // or the value of a block or shadow key.
-func Build(out *js.Builder, src typeinfo.Inspector, _zeroPos bool) (err error) {
+func Build(out *js.Builder, src typeinfo.Instance, _zeroPos bool) (err error) {
 	zeroPos = _zeroPos
 	// this setup is a little odd because we push to handle the visit
 	// and then push to handle the src flow...

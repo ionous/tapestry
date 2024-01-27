@@ -23,7 +23,7 @@ func (*Comment) Execute(rt.Runtime) (_ error) {
 }
 
 // PreImport turns a comment statement into a debug log.
-func (op *Comment) PreImport(cat *weave.Catalog) (ret typeinfo.Inspector, err error) {
+func (op *Comment) PreImport(cat *weave.Catalog) (ret typeinfo.Instance, err error) {
 	if cat.Env.Inc(activityDepth, 0) == 0 {
 		ret = op
 	} else {

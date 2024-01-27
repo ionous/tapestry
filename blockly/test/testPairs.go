@@ -11,7 +11,7 @@ import (
 // ( used by un/block to test read/writing of block files )
 var Pairs = []struct {
 	Name string
-	Test typeinfo.Inspector
+	Test typeinfo.Instance
 	Json string
 }{{
 	// repeats of a specific flow

@@ -14,7 +14,7 @@ var Z_Types = typeinfo.TypeSet{
 {{- if .Signatures }}
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 {{- range .Signatures }}
   {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */
 {{- end }}

@@ -40,7 +40,7 @@ func TestLiteralEncoding(t *testing.T) {
 
 type testPair struct {
 	v interface {
-		typeinfo.Inspector
+		typeinfo.Instance
 		literal.LiteralValue
 	}
 	res any
@@ -68,7 +68,7 @@ func testPairs(t *testing.T, pairs []testPair) {
 	}
 }
 
-func marshal(v typeinfo.Inspector) (ret any, err error) {
+func marshal(v typeinfo.Instance) (ret any, err error) {
 	var enc encode.Encoder
 	return enc.Customize(literal.CustomEncoder).Encode(v)
 }

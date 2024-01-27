@@ -7,15 +7,20 @@ var Zt_{{Pascal .Name}} = typeinfo.Slot{
 // holds a single slot.
 type {{Pascal .Name}}_Slot struct { Value {{Pascal .Name}} }
 
-// implements typeinfo.Inspector for a single slot.
-func (*{{Pascal .Name}}_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_{{Pascal .Name}}, false
+// implements typeinfo.Instance for a single slot.
+func (*{{Pascal .Name}}_Slot) TypeInfo() typeinfo.T {
+	return &Zt_{{Pascal .Name}}
 }
 
 // holds a slice of slots.
 type {{Pascal .Name}}_Slots []{{Pascal .Name}}
 
-// implements typeinfo.Inspector for a series of slots.
-func (*{{Pascal .Name}}_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_{{Pascal .Name}}, true
+// implements typeinfo.Instance for a series of slots.
+func (*{{Pascal .Name}}_Slots) TypeInfo() typeinfo.T {
+	return &Zt_{{Pascal .Name}}
+}
+
+// implements typeinfo.Repeats
+func (op *{{Pascal .Name}}_Slots) Repeats() bool {
+	return len(*op) > 0 
 }

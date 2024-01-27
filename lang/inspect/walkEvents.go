@@ -29,7 +29,7 @@ type Events interface {
 var DoneVisiting = errors.New("done visiting")
 
 // turn the iterator into an event style callbacks
-func Visit(i typeinfo.Inspector, evt Events) (err error) {
+func Visit(i typeinfo.Instance, evt Events) (err error) {
 	w := Walk(i) // cheats a little to grab the type info and repeat style...
 	t, repeat := w.currType, w.curr.Kind() == r.Slice
 	// almost the same as visit fields except it has to walk into the field

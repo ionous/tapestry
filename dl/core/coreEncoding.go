@@ -12,7 +12,7 @@ import (
 
 // fix: move some part of this into package assign?
 // especially because the opposite is handled in... story?
-func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch op := op.(type) {
 	case *assign.CallPattern:
 		ret, err = assign.CustomEncoder(enc, op)
@@ -42,7 +42,7 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err err
 	return
 }
 
-func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.Inspector, err error) {
+func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.Instance, err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch slot {
 	default:

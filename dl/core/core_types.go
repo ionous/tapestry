@@ -20,17 +20,22 @@ var Zt_Brancher = typeinfo.Slot{
 // holds a single slot.
 type Brancher_Slot struct{ Value Brancher }
 
-// implements typeinfo.Inspector for a single slot.
-func (*Brancher_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_Brancher, false
+// implements typeinfo.Instance for a single slot.
+func (*Brancher_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Brancher
 }
 
 // holds a slice of slots.
 type Brancher_Slots []Brancher
 
-// implements typeinfo.Inspector for a series of slots.
-func (*Brancher_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_Brancher, true
+// implements typeinfo.Instance for a series of slots.
+func (*Brancher_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Brancher
+}
+
+// implements typeinfo.Repeats
+func (op *Brancher_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 // trigger, a type of slot.
@@ -44,17 +49,22 @@ var Zt_Trigger = typeinfo.Slot{
 // holds a single slot.
 type Trigger_Slot struct{ Value Trigger }
 
-// implements typeinfo.Inspector for a single slot.
-func (*Trigger_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_Trigger, false
+// implements typeinfo.Instance for a single slot.
+func (*Trigger_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Trigger
 }
 
 // holds a slice of slots.
 type Trigger_Slots []Trigger
 
-// implements typeinfo.Inspector for a series of slots.
-func (*Trigger_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_Trigger, true
+// implements typeinfo.Instance for a series of slots.
+func (*Trigger_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Trigger
+}
+
+// implements typeinfo.Repeats
+func (op *Trigger_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 type AllTrue struct {
@@ -62,9 +72,9 @@ type AllTrue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*AllTrue) Inspect() (typeinfo.T, bool) {
-	return &Zt_AllTrue, false
+// implements typeinfo.Instance
+func (*AllTrue) TypeInfo() typeinfo.T {
+	return &Zt_AllTrue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -98,18 +108,23 @@ var Zt_AllTrue = typeinfo.Flow{
 // holds a slice of type all_true
 type AllTrue_Slice []AllTrue
 
-// implements typeinfo.Inspector
-func (*AllTrue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_AllTrue, true
+// implements typeinfo.Instance
+func (*AllTrue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AllTrue
+}
+
+// implements typeinfo.Repeats
+func (op *AllTrue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Always struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Always) Inspect() (typeinfo.T, bool) {
-	return &Zt_Always, false
+// implements typeinfo.Instance
+func (*Always) TypeInfo() typeinfo.T {
+	return &Zt_Always
 }
 
 // return a valid markup map, creating it if necessary.
@@ -139,9 +154,14 @@ var Zt_Always = typeinfo.Flow{
 // holds a slice of type always
 type Always_Slice []Always
 
-// implements typeinfo.Inspector
-func (*Always_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Always, true
+// implements typeinfo.Instance
+func (*Always_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Always
+}
+
+// implements typeinfo.Repeats
+func (op *Always_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type AnyTrue struct {
@@ -149,9 +169,9 @@ type AnyTrue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*AnyTrue) Inspect() (typeinfo.T, bool) {
-	return &Zt_AnyTrue, false
+// implements typeinfo.Instance
+func (*AnyTrue) TypeInfo() typeinfo.T {
+	return &Zt_AnyTrue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -185,18 +205,23 @@ var Zt_AnyTrue = typeinfo.Flow{
 // holds a slice of type any_true
 type AnyTrue_Slice []AnyTrue
 
-// implements typeinfo.Inspector
-func (*AnyTrue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_AnyTrue, true
+// implements typeinfo.Instance
+func (*AnyTrue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AnyTrue
+}
+
+// implements typeinfo.Repeats
+func (op *AnyTrue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Blankline struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Blankline) Inspect() (typeinfo.T, bool) {
-	return &Zt_Blankline, false
+// implements typeinfo.Instance
+func (*Blankline) TypeInfo() typeinfo.T {
+	return &Zt_Blankline
 }
 
 // return a valid markup map, creating it if necessary.
@@ -226,9 +251,14 @@ var Zt_Blankline = typeinfo.Flow{
 // holds a slice of type blankline
 type Blankline_Slice []Blankline
 
-// implements typeinfo.Inspector
-func (*Blankline_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Blankline, true
+// implements typeinfo.Instance
+func (*Blankline_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Blankline
+}
+
+// implements typeinfo.Repeats
+func (op *Blankline_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type BracketText struct {
@@ -236,9 +266,9 @@ type BracketText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*BracketText) Inspect() (typeinfo.T, bool) {
-	return &Zt_BracketText, false
+// implements typeinfo.Instance
+func (*BracketText) TypeInfo() typeinfo.T {
+	return &Zt_BracketText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -273,18 +303,23 @@ var Zt_BracketText = typeinfo.Flow{
 // holds a slice of type bracket_text
 type BracketText_Slice []BracketText
 
-// implements typeinfo.Inspector
-func (*BracketText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_BracketText, true
+// implements typeinfo.Instance
+func (*BracketText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_BracketText
+}
+
+// implements typeinfo.Repeats
+func (op *BracketText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Break struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Break) Inspect() (typeinfo.T, bool) {
-	return &Zt_Break, false
+// implements typeinfo.Instance
+func (*Break) TypeInfo() typeinfo.T {
+	return &Zt_Break
 }
 
 // return a valid markup map, creating it if necessary.
@@ -314,9 +349,14 @@ var Zt_Break = typeinfo.Flow{
 // holds a slice of type break
 type Break_Slice []Break
 
-// implements typeinfo.Inspector
-func (*Break_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Break, true
+// implements typeinfo.Instance
+func (*Break_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Break
+}
+
+// implements typeinfo.Repeats
+func (op *Break_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type BufferText struct {
@@ -324,9 +364,9 @@ type BufferText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*BufferText) Inspect() (typeinfo.T, bool) {
-	return &Zt_BufferText, false
+// implements typeinfo.Instance
+func (*BufferText) TypeInfo() typeinfo.T {
+	return &Zt_BufferText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -358,9 +398,14 @@ var Zt_BufferText = typeinfo.Flow{
 // holds a slice of type buffer_text
 type BufferText_Slice []BufferText
 
-// implements typeinfo.Inspector
-func (*BufferText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_BufferText, true
+// implements typeinfo.Instance
+func (*BufferText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_BufferText
+}
+
+// implements typeinfo.Repeats
+func (op *BufferText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CallCycle struct {
@@ -369,9 +414,9 @@ type CallCycle struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CallCycle) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallCycle, false
+// implements typeinfo.Instance
+func (*CallCycle) TypeInfo() typeinfo.T {
+	return &Zt_CallCycle
 }
 
 // return a valid markup map, creating it if necessary.
@@ -409,9 +454,14 @@ var Zt_CallCycle = typeinfo.Flow{
 // holds a slice of type call_cycle
 type CallCycle_Slice []CallCycle
 
-// implements typeinfo.Inspector
-func (*CallCycle_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallCycle, true
+// implements typeinfo.Instance
+func (*CallCycle_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CallCycle
+}
+
+// implements typeinfo.Repeats
+func (op *CallCycle_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CallShuffle struct {
@@ -421,9 +471,9 @@ type CallShuffle struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CallShuffle) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallShuffle, false
+// implements typeinfo.Instance
+func (*CallShuffle) TypeInfo() typeinfo.T {
+	return &Zt_CallShuffle
 }
 
 // return a valid markup map, creating it if necessary.
@@ -465,9 +515,14 @@ var Zt_CallShuffle = typeinfo.Flow{
 // holds a slice of type call_shuffle
 type CallShuffle_Slice []CallShuffle
 
-// implements typeinfo.Inspector
-func (*CallShuffle_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallShuffle, true
+// implements typeinfo.Instance
+func (*CallShuffle_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CallShuffle
+}
+
+// implements typeinfo.Repeats
+func (op *CallShuffle_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CallTerminal struct {
@@ -476,9 +531,9 @@ type CallTerminal struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CallTerminal) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallTerminal, false
+// implements typeinfo.Instance
+func (*CallTerminal) TypeInfo() typeinfo.T {
+	return &Zt_CallTerminal
 }
 
 // return a valid markup map, creating it if necessary.
@@ -516,9 +571,14 @@ var Zt_CallTerminal = typeinfo.Flow{
 // holds a slice of type call_terminal
 type CallTerminal_Slice []CallTerminal
 
-// implements typeinfo.Inspector
-func (*CallTerminal_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallTerminal, true
+// implements typeinfo.Instance
+func (*CallTerminal_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CallTerminal
+}
+
+// implements typeinfo.Repeats
+func (op *CallTerminal_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CallTrigger struct {
@@ -528,9 +588,9 @@ type CallTrigger struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CallTrigger) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallTrigger, false
+// implements typeinfo.Instance
+func (*CallTrigger) TypeInfo() typeinfo.T {
+	return &Zt_CallTrigger
 }
 
 // return a valid markup map, creating it if necessary.
@@ -571,9 +631,14 @@ var Zt_CallTrigger = typeinfo.Flow{
 // holds a slice of type call_trigger
 type CallTrigger_Slice []CallTrigger
 
-// implements typeinfo.Inspector
-func (*CallTrigger_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CallTrigger, true
+// implements typeinfo.Instance
+func (*CallTrigger_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CallTrigger
+}
+
+// implements typeinfo.Repeats
+func (op *CallTrigger_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Capitalize struct {
@@ -581,9 +646,9 @@ type Capitalize struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Capitalize) Inspect() (typeinfo.T, bool) {
-	return &Zt_Capitalize, false
+// implements typeinfo.Instance
+func (*Capitalize) TypeInfo() typeinfo.T {
+	return &Zt_Capitalize
 }
 
 // return a valid markup map, creating it if necessary.
@@ -616,9 +681,14 @@ var Zt_Capitalize = typeinfo.Flow{
 // holds a slice of type capitalize
 type Capitalize_Slice []Capitalize
 
-// implements typeinfo.Inspector
-func (*Capitalize_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Capitalize, true
+// implements typeinfo.Instance
+func (*Capitalize_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Capitalize
+}
+
+// implements typeinfo.Repeats
+func (op *Capitalize_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ChooseBranch struct {
@@ -629,9 +699,9 @@ type ChooseBranch struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ChooseBranch) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseBranch, false
+// implements typeinfo.Instance
+func (*ChooseBranch) TypeInfo() typeinfo.T {
+	return &Zt_ChooseBranch
 }
 
 // return a valid markup map, creating it if necessary.
@@ -682,9 +752,14 @@ var Zt_ChooseBranch = typeinfo.Flow{
 // holds a slice of type choose_branch
 type ChooseBranch_Slice []ChooseBranch
 
-// implements typeinfo.Inspector
-func (*ChooseBranch_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseBranch, true
+// implements typeinfo.Instance
+func (*ChooseBranch_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ChooseBranch
+}
+
+// implements typeinfo.Repeats
+func (op *ChooseBranch_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ChooseNothingElse struct {
@@ -692,9 +767,9 @@ type ChooseNothingElse struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ChooseNothingElse) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseNothingElse, false
+// implements typeinfo.Instance
+func (*ChooseNothingElse) TypeInfo() typeinfo.T {
+	return &Zt_ChooseNothingElse
 }
 
 // return a valid markup map, creating it if necessary.
@@ -726,9 +801,14 @@ var Zt_ChooseNothingElse = typeinfo.Flow{
 // holds a slice of type choose_nothing_else
 type ChooseNothingElse_Slice []ChooseNothingElse
 
-// implements typeinfo.Inspector
-func (*ChooseNothingElse_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseNothingElse, true
+// implements typeinfo.Instance
+func (*ChooseNothingElse_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ChooseNothingElse
+}
+
+// implements typeinfo.Repeats
+func (op *ChooseNothingElse_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ChooseNum struct {
@@ -738,9 +818,9 @@ type ChooseNum struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ChooseNum) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseNum, false
+// implements typeinfo.Instance
+func (*ChooseNum) TypeInfo() typeinfo.T {
+	return &Zt_ChooseNum
 }
 
 // return a valid markup map, creating it if necessary.
@@ -783,9 +863,14 @@ var Zt_ChooseNum = typeinfo.Flow{
 // holds a slice of type choose_num
 type ChooseNum_Slice []ChooseNum
 
-// implements typeinfo.Inspector
-func (*ChooseNum_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseNum, true
+// implements typeinfo.Instance
+func (*ChooseNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ChooseNum
+}
+
+// implements typeinfo.Repeats
+func (op *ChooseNum_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ChooseText struct {
@@ -795,9 +880,9 @@ type ChooseText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ChooseText) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseText, false
+// implements typeinfo.Instance
+func (*ChooseText) TypeInfo() typeinfo.T {
+	return &Zt_ChooseText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -840,9 +925,14 @@ var Zt_ChooseText = typeinfo.Flow{
 // holds a slice of type choose_text
 type ChooseText_Slice []ChooseText
 
-// implements typeinfo.Inspector
-func (*ChooseText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ChooseText, true
+// implements typeinfo.Instance
+func (*ChooseText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ChooseText
+}
+
+// implements typeinfo.Repeats
+func (op *ChooseText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CommaText struct {
@@ -850,9 +940,9 @@ type CommaText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CommaText) Inspect() (typeinfo.T, bool) {
-	return &Zt_CommaText, false
+// implements typeinfo.Instance
+func (*CommaText) TypeInfo() typeinfo.T {
+	return &Zt_CommaText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -887,9 +977,14 @@ var Zt_CommaText = typeinfo.Flow{
 // holds a slice of type comma_text
 type CommaText_Slice []CommaText
 
-// implements typeinfo.Inspector
-func (*CommaText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CommaText, true
+// implements typeinfo.Instance
+func (*CommaText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CommaText
+}
+
+// implements typeinfo.Repeats
+func (op *CommaText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CompareValue struct {
@@ -899,9 +994,9 @@ type CompareValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CompareValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_CompareValue, false
+// implements typeinfo.Instance
+func (*CompareValue) TypeInfo() typeinfo.T {
+	return &Zt_CompareValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -942,9 +1037,14 @@ var Zt_CompareValue = typeinfo.Flow{
 // holds a slice of type compare_value
 type CompareValue_Slice []CompareValue
 
-// implements typeinfo.Inspector
-func (*CompareValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CompareValue, true
+// implements typeinfo.Instance
+func (*CompareValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CompareValue
+}
+
+// implements typeinfo.Repeats
+func (op *CompareValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CompareNum struct {
@@ -955,9 +1055,9 @@ type CompareNum struct {
 	Markup    map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CompareNum) Inspect() (typeinfo.T, bool) {
-	return &Zt_CompareNum, false
+// implements typeinfo.Instance
+func (*CompareNum) TypeInfo() typeinfo.T {
+	return &Zt_CompareNum
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1003,9 +1103,14 @@ var Zt_CompareNum = typeinfo.Flow{
 // holds a slice of type compare_num
 type CompareNum_Slice []CompareNum
 
-// implements typeinfo.Inspector
-func (*CompareNum_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CompareNum, true
+// implements typeinfo.Instance
+func (*CompareNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CompareNum
+}
+
+// implements typeinfo.Repeats
+func (op *CompareNum_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type CompareText struct {
@@ -1015,9 +1120,9 @@ type CompareText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*CompareText) Inspect() (typeinfo.T, bool) {
-	return &Zt_CompareText, false
+// implements typeinfo.Instance
+func (*CompareText) TypeInfo() typeinfo.T {
+	return &Zt_CompareText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1058,9 +1163,14 @@ var Zt_CompareText = typeinfo.Flow{
 // holds a slice of type compare_text
 type CompareText_Slice []CompareText
 
-// implements typeinfo.Inspector
-func (*CompareText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_CompareText, true
+// implements typeinfo.Instance
+func (*CompareText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CompareText
+}
+
+// implements typeinfo.Repeats
+func (op *CompareText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type SubtractValue struct {
@@ -1069,9 +1179,9 @@ type SubtractValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*SubtractValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_SubtractValue, false
+// implements typeinfo.Instance
+func (*SubtractValue) TypeInfo() typeinfo.T {
+	return &Zt_SubtractValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1108,9 +1218,14 @@ var Zt_SubtractValue = typeinfo.Flow{
 // holds a slice of type subtract_value
 type SubtractValue_Slice []SubtractValue
 
-// implements typeinfo.Inspector
-func (*SubtractValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_SubtractValue, true
+// implements typeinfo.Instance
+func (*SubtractValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SubtractValue
+}
+
+// implements typeinfo.Repeats
+func (op *SubtractValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type During struct {
@@ -1118,9 +1233,9 @@ type During struct {
 	Markup      map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*During) Inspect() (typeinfo.T, bool) {
-	return &Zt_During, false
+// implements typeinfo.Instance
+func (*During) TypeInfo() typeinfo.T {
+	return &Zt_During
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1155,9 +1270,14 @@ var Zt_During = typeinfo.Flow{
 // holds a slice of type during
 type During_Slice []During
 
-// implements typeinfo.Inspector
-func (*During_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_During, true
+// implements typeinfo.Instance
+func (*During_Slice) TypeInfo() typeinfo.T {
+	return &Zt_During
+}
+
+// implements typeinfo.Repeats
+func (op *During_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type FieldsOfKind struct {
@@ -1165,9 +1285,9 @@ type FieldsOfKind struct {
 	Markup   map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*FieldsOfKind) Inspect() (typeinfo.T, bool) {
-	return &Zt_FieldsOfKind, false
+// implements typeinfo.Instance
+func (*FieldsOfKind) TypeInfo() typeinfo.T {
+	return &Zt_FieldsOfKind
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1201,9 +1321,14 @@ var Zt_FieldsOfKind = typeinfo.Flow{
 // holds a slice of type fields_of_kind
 type FieldsOfKind_Slice []FieldsOfKind
 
-// implements typeinfo.Inspector
-func (*FieldsOfKind_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_FieldsOfKind, true
+// implements typeinfo.Instance
+func (*FieldsOfKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FieldsOfKind
+}
+
+// implements typeinfo.Repeats
+func (op *FieldsOfKind_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type HasDominion struct {
@@ -1211,9 +1336,9 @@ type HasDominion struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*HasDominion) Inspect() (typeinfo.T, bool) {
-	return &Zt_HasDominion, false
+// implements typeinfo.Instance
+func (*HasDominion) TypeInfo() typeinfo.T {
+	return &Zt_HasDominion
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1244,9 +1369,14 @@ var Zt_HasDominion = typeinfo.Flow{
 // holds a slice of type has_dominion
 type HasDominion_Slice []HasDominion
 
-// implements typeinfo.Inspector
-func (*HasDominion_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_HasDominion, true
+// implements typeinfo.Instance
+func (*HasDominion_Slice) TypeInfo() typeinfo.T {
+	return &Zt_HasDominion
+}
+
+// implements typeinfo.Repeats
+func (op *HasDominion_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type IdOf struct {
@@ -1254,9 +1384,9 @@ type IdOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*IdOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_IdOf, false
+// implements typeinfo.Instance
+func (*IdOf) TypeInfo() typeinfo.T {
+	return &Zt_IdOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1289,9 +1419,14 @@ var Zt_IdOf = typeinfo.Flow{
 // holds a slice of type id_of
 type IdOf_Slice []IdOf
 
-// implements typeinfo.Inspector
-func (*IdOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_IdOf, true
+// implements typeinfo.Instance
+func (*IdOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_IdOf
+}
+
+// implements typeinfo.Repeats
+func (op *IdOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Includes struct {
@@ -1300,9 +1435,9 @@ type Includes struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Includes) Inspect() (typeinfo.T, bool) {
-	return &Zt_Includes, false
+// implements typeinfo.Instance
+func (*Includes) TypeInfo() typeinfo.T {
+	return &Zt_Includes
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1339,9 +1474,14 @@ var Zt_Includes = typeinfo.Flow{
 // holds a slice of type includes
 type Includes_Slice []Includes
 
-// implements typeinfo.Inspector
-func (*Includes_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Includes, true
+// implements typeinfo.Instance
+func (*Includes_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Includes
+}
+
+// implements typeinfo.Repeats
+func (op *Includes_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type IsEmpty struct {
@@ -1349,9 +1489,9 @@ type IsEmpty struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*IsEmpty) Inspect() (typeinfo.T, bool) {
-	return &Zt_IsEmpty, false
+// implements typeinfo.Instance
+func (*IsEmpty) TypeInfo() typeinfo.T {
+	return &Zt_IsEmpty
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1385,9 +1525,14 @@ var Zt_IsEmpty = typeinfo.Flow{
 // holds a slice of type is_empty
 type IsEmpty_Slice []IsEmpty
 
-// implements typeinfo.Inspector
-func (*IsEmpty_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_IsEmpty, true
+// implements typeinfo.Instance
+func (*IsEmpty_Slice) TypeInfo() typeinfo.T {
+	return &Zt_IsEmpty
+}
+
+// implements typeinfo.Repeats
+func (op *IsEmpty_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type IsExactKindOf struct {
@@ -1396,9 +1541,9 @@ type IsExactKindOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*IsExactKindOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_IsExactKindOf, false
+// implements typeinfo.Instance
+func (*IsExactKindOf) TypeInfo() typeinfo.T {
+	return &Zt_IsExactKindOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1435,9 +1580,14 @@ var Zt_IsExactKindOf = typeinfo.Flow{
 // holds a slice of type is_exact_kind_of
 type IsExactKindOf_Slice []IsExactKindOf
 
-// implements typeinfo.Inspector
-func (*IsExactKindOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_IsExactKindOf, true
+// implements typeinfo.Instance
+func (*IsExactKindOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_IsExactKindOf
+}
+
+// implements typeinfo.Repeats
+func (op *IsExactKindOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type IsKindOf struct {
@@ -1447,9 +1597,9 @@ type IsKindOf struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*IsKindOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_IsKindOf, false
+// implements typeinfo.Instance
+func (*IsKindOf) TypeInfo() typeinfo.T {
+	return &Zt_IsKindOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1491,9 +1641,14 @@ var Zt_IsKindOf = typeinfo.Flow{
 // holds a slice of type is_kind_of
 type IsKindOf_Slice []IsKindOf
 
-// implements typeinfo.Inspector
-func (*IsKindOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_IsKindOf, true
+// implements typeinfo.Instance
+func (*IsKindOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_IsKindOf
+}
+
+// implements typeinfo.Repeats
+func (op *IsKindOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Join struct {
@@ -1502,9 +1657,9 @@ type Join struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Join) Inspect() (typeinfo.T, bool) {
-	return &Zt_Join, false
+// implements typeinfo.Instance
+func (*Join) TypeInfo() typeinfo.T {
+	return &Zt_Join
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1543,9 +1698,14 @@ var Zt_Join = typeinfo.Flow{
 // holds a slice of type join
 type Join_Slice []Join
 
-// implements typeinfo.Inspector
-func (*Join_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Join, true
+// implements typeinfo.Instance
+func (*Join_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Join
+}
+
+// implements typeinfo.Repeats
+func (op *Join_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type KindOf struct {
@@ -1554,9 +1714,9 @@ type KindOf struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*KindOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_KindOf, false
+// implements typeinfo.Instance
+func (*KindOf) TypeInfo() typeinfo.T {
+	return &Zt_KindOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1594,9 +1754,14 @@ var Zt_KindOf = typeinfo.Flow{
 // holds a slice of type kind_of
 type KindOf_Slice []KindOf
 
-// implements typeinfo.Inspector
-func (*KindOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_KindOf, true
+// implements typeinfo.Instance
+func (*KindOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindOf
+}
+
+// implements typeinfo.Repeats
+func (op *KindOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type KindsOf struct {
@@ -1604,9 +1769,9 @@ type KindsOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*KindsOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_KindsOf, false
+// implements typeinfo.Instance
+func (*KindsOf) TypeInfo() typeinfo.T {
+	return &Zt_KindsOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1639,9 +1804,14 @@ var Zt_KindsOf = typeinfo.Flow{
 // holds a slice of type kinds_of
 type KindsOf_Slice []KindsOf
 
-// implements typeinfo.Inspector
-func (*KindsOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_KindsOf, true
+// implements typeinfo.Instance
+func (*KindsOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsOf
+}
+
+// implements typeinfo.Repeats
+func (op *KindsOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type MakeLowercase struct {
@@ -1649,9 +1819,9 @@ type MakeLowercase struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*MakeLowercase) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeLowercase, false
+// implements typeinfo.Instance
+func (*MakeLowercase) TypeInfo() typeinfo.T {
+	return &Zt_MakeLowercase
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1684,9 +1854,14 @@ var Zt_MakeLowercase = typeinfo.Flow{
 // holds a slice of type make_lowercase
 type MakeLowercase_Slice []MakeLowercase
 
-// implements typeinfo.Inspector
-func (*MakeLowercase_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeLowercase, true
+// implements typeinfo.Instance
+func (*MakeLowercase_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MakeLowercase
+}
+
+// implements typeinfo.Repeats
+func (op *MakeLowercase_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type MakeReversed struct {
@@ -1694,9 +1869,9 @@ type MakeReversed struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*MakeReversed) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeReversed, false
+// implements typeinfo.Instance
+func (*MakeReversed) TypeInfo() typeinfo.T {
+	return &Zt_MakeReversed
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1730,9 +1905,14 @@ var Zt_MakeReversed = typeinfo.Flow{
 // holds a slice of type make_reversed
 type MakeReversed_Slice []MakeReversed
 
-// implements typeinfo.Inspector
-func (*MakeReversed_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeReversed, true
+// implements typeinfo.Instance
+func (*MakeReversed_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MakeReversed
+}
+
+// implements typeinfo.Repeats
+func (op *MakeReversed_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type MakeSentenceCase struct {
@@ -1740,9 +1920,9 @@ type MakeSentenceCase struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*MakeSentenceCase) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeSentenceCase, false
+// implements typeinfo.Instance
+func (*MakeSentenceCase) TypeInfo() typeinfo.T {
+	return &Zt_MakeSentenceCase
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1775,9 +1955,14 @@ var Zt_MakeSentenceCase = typeinfo.Flow{
 // holds a slice of type make_sentence_case
 type MakeSentenceCase_Slice []MakeSentenceCase
 
-// implements typeinfo.Inspector
-func (*MakeSentenceCase_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeSentenceCase, true
+// implements typeinfo.Instance
+func (*MakeSentenceCase_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MakeSentenceCase
+}
+
+// implements typeinfo.Repeats
+func (op *MakeSentenceCase_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type MakeTitleCase struct {
@@ -1785,9 +1970,9 @@ type MakeTitleCase struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*MakeTitleCase) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeTitleCase, false
+// implements typeinfo.Instance
+func (*MakeTitleCase) TypeInfo() typeinfo.T {
+	return &Zt_MakeTitleCase
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1820,9 +2005,14 @@ var Zt_MakeTitleCase = typeinfo.Flow{
 // holds a slice of type make_title_case
 type MakeTitleCase_Slice []MakeTitleCase
 
-// implements typeinfo.Inspector
-func (*MakeTitleCase_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeTitleCase, true
+// implements typeinfo.Instance
+func (*MakeTitleCase_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MakeTitleCase
+}
+
+// implements typeinfo.Repeats
+func (op *MakeTitleCase_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type MakeUppercase struct {
@@ -1830,9 +2020,9 @@ type MakeUppercase struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*MakeUppercase) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeUppercase, false
+// implements typeinfo.Instance
+func (*MakeUppercase) TypeInfo() typeinfo.T {
+	return &Zt_MakeUppercase
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1865,9 +2055,14 @@ var Zt_MakeUppercase = typeinfo.Flow{
 // holds a slice of type make_uppercase
 type MakeUppercase_Slice []MakeUppercase
 
-// implements typeinfo.Inspector
-func (*MakeUppercase_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_MakeUppercase, true
+// implements typeinfo.Instance
+func (*MakeUppercase_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MakeUppercase
+}
+
+// implements typeinfo.Repeats
+func (op *MakeUppercase_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Matches struct {
@@ -1877,9 +2072,9 @@ type Matches struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Matches) Inspect() (typeinfo.T, bool) {
-	return &Zt_Matches, false
+// implements typeinfo.Instance
+func (*Matches) TypeInfo() typeinfo.T {
+	return &Zt_Matches
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1920,9 +2115,14 @@ var Zt_Matches = typeinfo.Flow{
 // holds a slice of type matches
 type Matches_Slice []Matches
 
-// implements typeinfo.Inspector
-func (*Matches_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Matches, true
+// implements typeinfo.Instance
+func (*Matches_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Matches
+}
+
+// implements typeinfo.Repeats
+func (op *Matches_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type NameOf struct {
@@ -1930,9 +2130,9 @@ type NameOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*NameOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_NameOf, false
+// implements typeinfo.Instance
+func (*NameOf) TypeInfo() typeinfo.T {
+	return &Zt_NameOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -1965,18 +2165,23 @@ var Zt_NameOf = typeinfo.Flow{
 // holds a slice of type name_of
 type NameOf_Slice []NameOf
 
-// implements typeinfo.Inspector
-func (*NameOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_NameOf, true
+// implements typeinfo.Instance
+func (*NameOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NameOf
+}
+
+// implements typeinfo.Repeats
+func (op *NameOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Never struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Never) Inspect() (typeinfo.T, bool) {
-	return &Zt_Never, false
+// implements typeinfo.Instance
+func (*Never) TypeInfo() typeinfo.T {
+	return &Zt_Never
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2006,18 +2211,23 @@ var Zt_Never = typeinfo.Flow{
 // holds a slice of type never
 type Never_Slice []Never
 
-// implements typeinfo.Inspector
-func (*Never_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Never, true
+// implements typeinfo.Instance
+func (*Never_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Never
+}
+
+// implements typeinfo.Repeats
+func (op *Never_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Newline struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Newline) Inspect() (typeinfo.T, bool) {
-	return &Zt_Newline, false
+// implements typeinfo.Instance
+func (*Newline) TypeInfo() typeinfo.T {
+	return &Zt_Newline
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2047,18 +2257,23 @@ var Zt_Newline = typeinfo.Flow{
 // holds a slice of type newline
 type Newline_Slice []Newline
 
-// implements typeinfo.Inspector
-func (*Newline_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Newline, true
+// implements typeinfo.Instance
+func (*Newline_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Newline
+}
+
+// implements typeinfo.Repeats
+func (op *Newline_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Continue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Continue) Inspect() (typeinfo.T, bool) {
-	return &Zt_Continue, false
+// implements typeinfo.Instance
+func (*Continue) TypeInfo() typeinfo.T {
+	return &Zt_Continue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2088,9 +2303,14 @@ var Zt_Continue = typeinfo.Flow{
 // holds a slice of type continue
 type Continue_Slice []Continue
 
-// implements typeinfo.Inspector
-func (*Continue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Continue, true
+// implements typeinfo.Instance
+func (*Continue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Continue
+}
+
+// implements typeinfo.Repeats
+func (op *Continue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Not struct {
@@ -2098,9 +2318,9 @@ type Not struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Not) Inspect() (typeinfo.T, bool) {
-	return &Zt_Not, false
+// implements typeinfo.Instance
+func (*Not) TypeInfo() typeinfo.T {
+	return &Zt_Not
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2133,9 +2353,14 @@ var Zt_Not = typeinfo.Flow{
 // holds a slice of type not
 type Not_Slice []Not
 
-// implements typeinfo.Inspector
-func (*Not_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Not, true
+// implements typeinfo.Instance
+func (*Not_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Not
+}
+
+// implements typeinfo.Repeats
+func (op *Not_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ObjectExists struct {
@@ -2143,9 +2368,9 @@ type ObjectExists struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ObjectExists) Inspect() (typeinfo.T, bool) {
-	return &Zt_ObjectExists, false
+// implements typeinfo.Instance
+func (*ObjectExists) TypeInfo() typeinfo.T {
+	return &Zt_ObjectExists
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2179,9 +2404,14 @@ var Zt_ObjectExists = typeinfo.Flow{
 // holds a slice of type object_exists
 type ObjectExists_Slice []ObjectExists
 
-// implements typeinfo.Inspector
-func (*ObjectExists_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ObjectExists, true
+// implements typeinfo.Instance
+func (*ObjectExists_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ObjectExists
+}
+
+// implements typeinfo.Repeats
+func (op *ObjectExists_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ObjectTraits struct {
@@ -2189,9 +2419,9 @@ type ObjectTraits struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ObjectTraits) Inspect() (typeinfo.T, bool) {
-	return &Zt_ObjectTraits, false
+// implements typeinfo.Instance
+func (*ObjectTraits) TypeInfo() typeinfo.T {
+	return &Zt_ObjectTraits
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2225,9 +2455,14 @@ var Zt_ObjectTraits = typeinfo.Flow{
 // holds a slice of type object_traits
 type ObjectTraits_Slice []ObjectTraits
 
-// implements typeinfo.Inspector
-func (*ObjectTraits_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ObjectTraits, true
+// implements typeinfo.Instance
+func (*ObjectTraits_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ObjectTraits
+}
+
+// implements typeinfo.Repeats
+func (op *ObjectTraits_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Pluralize struct {
@@ -2235,9 +2470,9 @@ type Pluralize struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Pluralize) Inspect() (typeinfo.T, bool) {
-	return &Zt_Pluralize, false
+// implements typeinfo.Instance
+func (*Pluralize) TypeInfo() typeinfo.T {
+	return &Zt_Pluralize
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2271,9 +2506,14 @@ var Zt_Pluralize = typeinfo.Flow{
 // holds a slice of type pluralize
 type Pluralize_Slice []Pluralize
 
-// implements typeinfo.Inspector
-func (*Pluralize_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Pluralize, true
+// implements typeinfo.Instance
+func (*Pluralize_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Pluralize
+}
+
+// implements typeinfo.Repeats
+func (op *Pluralize_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PrintNum struct {
@@ -2281,9 +2521,9 @@ type PrintNum struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PrintNum) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintNum, false
+// implements typeinfo.Instance
+func (*PrintNum) TypeInfo() typeinfo.T {
+	return &Zt_PrintNum
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2316,9 +2556,14 @@ var Zt_PrintNum = typeinfo.Flow{
 // holds a slice of type print_num
 type PrintNum_Slice []PrintNum
 
-// implements typeinfo.Inspector
-func (*PrintNum_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintNum, true
+// implements typeinfo.Instance
+func (*PrintNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintNum
+}
+
+// implements typeinfo.Repeats
+func (op *PrintNum_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PrintNumWord struct {
@@ -2326,9 +2571,9 @@ type PrintNumWord struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PrintNumWord) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintNumWord, false
+// implements typeinfo.Instance
+func (*PrintNumWord) TypeInfo() typeinfo.T {
+	return &Zt_PrintNumWord
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2362,9 +2607,14 @@ var Zt_PrintNumWord = typeinfo.Flow{
 // holds a slice of type print_num_word
 type PrintNumWord_Slice []PrintNumWord
 
-// implements typeinfo.Inspector
-func (*PrintNumWord_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintNumWord, true
+// implements typeinfo.Instance
+func (*PrintNumWord_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintNumWord
+}
+
+// implements typeinfo.Repeats
+func (op *PrintNumWord_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type MultiplyValue struct {
@@ -2373,9 +2623,9 @@ type MultiplyValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*MultiplyValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_MultiplyValue, false
+// implements typeinfo.Instance
+func (*MultiplyValue) TypeInfo() typeinfo.T {
+	return &Zt_MultiplyValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2412,9 +2662,14 @@ var Zt_MultiplyValue = typeinfo.Flow{
 // holds a slice of type multiply_value
 type MultiplyValue_Slice []MultiplyValue
 
-// implements typeinfo.Inspector
-func (*MultiplyValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_MultiplyValue, true
+// implements typeinfo.Instance
+func (*MultiplyValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MultiplyValue
+}
+
+// implements typeinfo.Repeats
+func (op *MultiplyValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type DivideValue struct {
@@ -2423,9 +2678,9 @@ type DivideValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*DivideValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_DivideValue, false
+// implements typeinfo.Instance
+func (*DivideValue) TypeInfo() typeinfo.T {
+	return &Zt_DivideValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2462,9 +2717,14 @@ var Zt_DivideValue = typeinfo.Flow{
 // holds a slice of type divide_value
 type DivideValue_Slice []DivideValue
 
-// implements typeinfo.Inspector
-func (*DivideValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_DivideValue, true
+// implements typeinfo.Instance
+func (*DivideValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DivideValue
+}
+
+// implements typeinfo.Repeats
+func (op *DivideValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ModValue struct {
@@ -2473,9 +2733,9 @@ type ModValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ModValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_ModValue, false
+// implements typeinfo.Instance
+func (*ModValue) TypeInfo() typeinfo.T {
+	return &Zt_ModValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2512,9 +2772,14 @@ var Zt_ModValue = typeinfo.Flow{
 // holds a slice of type mod_value
 type ModValue_Slice []ModValue
 
-// implements typeinfo.Inspector
-func (*ModValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ModValue, true
+// implements typeinfo.Instance
+func (*ModValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ModValue
+}
+
+// implements typeinfo.Repeats
+func (op *ModValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type AbsValue struct {
@@ -2522,9 +2787,9 @@ type AbsValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*AbsValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_AbsValue, false
+// implements typeinfo.Instance
+func (*AbsValue) TypeInfo() typeinfo.T {
+	return &Zt_AbsValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2555,9 +2820,14 @@ var Zt_AbsValue = typeinfo.Flow{
 // holds a slice of type abs_value
 type AbsValue_Slice []AbsValue
 
-// implements typeinfo.Inspector
-func (*AbsValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_AbsValue, true
+// implements typeinfo.Instance
+func (*AbsValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AbsValue
+}
+
+// implements typeinfo.Repeats
+func (op *AbsValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Increment struct {
@@ -2566,9 +2836,9 @@ type Increment struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Increment) Inspect() (typeinfo.T, bool) {
-	return &Zt_Increment, false
+// implements typeinfo.Instance
+func (*Increment) TypeInfo() typeinfo.T {
+	return &Zt_Increment
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2608,9 +2878,14 @@ var Zt_Increment = typeinfo.Flow{
 // holds a slice of type increment
 type Increment_Slice []Increment
 
-// implements typeinfo.Inspector
-func (*Increment_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Increment, true
+// implements typeinfo.Instance
+func (*Increment_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Increment
+}
+
+// implements typeinfo.Repeats
+func (op *Increment_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Decrement struct {
@@ -2619,9 +2894,9 @@ type Decrement struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Decrement) Inspect() (typeinfo.T, bool) {
-	return &Zt_Decrement, false
+// implements typeinfo.Instance
+func (*Decrement) TypeInfo() typeinfo.T {
+	return &Zt_Decrement
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2661,9 +2936,14 @@ var Zt_Decrement = typeinfo.Flow{
 // holds a slice of type decrement
 type Decrement_Slice []Decrement
 
-// implements typeinfo.Inspector
-func (*Decrement_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Decrement, true
+// implements typeinfo.Instance
+func (*Decrement_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Decrement
+}
+
+// implements typeinfo.Repeats
+func (op *Decrement_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type IncrementAspect struct {
@@ -2674,9 +2954,9 @@ type IncrementAspect struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*IncrementAspect) Inspect() (typeinfo.T, bool) {
-	return &Zt_IncrementAspect, false
+// implements typeinfo.Instance
+func (*IncrementAspect) TypeInfo() typeinfo.T {
+	return &Zt_IncrementAspect
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2725,9 +3005,14 @@ var Zt_IncrementAspect = typeinfo.Flow{
 // holds a slice of type increment_aspect
 type IncrementAspect_Slice []IncrementAspect
 
-// implements typeinfo.Inspector
-func (*IncrementAspect_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_IncrementAspect, true
+// implements typeinfo.Instance
+func (*IncrementAspect_Slice) TypeInfo() typeinfo.T {
+	return &Zt_IncrementAspect
+}
+
+// implements typeinfo.Repeats
+func (op *IncrementAspect_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type DecrementAspect struct {
@@ -2738,9 +3023,9 @@ type DecrementAspect struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*DecrementAspect) Inspect() (typeinfo.T, bool) {
-	return &Zt_DecrementAspect, false
+// implements typeinfo.Instance
+func (*DecrementAspect) TypeInfo() typeinfo.T {
+	return &Zt_DecrementAspect
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2789,9 +3074,14 @@ var Zt_DecrementAspect = typeinfo.Flow{
 // holds a slice of type decrement_aspect
 type DecrementAspect_Slice []DecrementAspect
 
-// implements typeinfo.Inspector
-func (*DecrementAspect_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_DecrementAspect, true
+// implements typeinfo.Instance
+func (*DecrementAspect_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DecrementAspect
+}
+
+// implements typeinfo.Repeats
+func (op *DecrementAspect_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PrintText struct {
@@ -2799,9 +3089,9 @@ type PrintText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PrintText) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintText, false
+// implements typeinfo.Instance
+func (*PrintText) TypeInfo() typeinfo.T {
+	return &Zt_PrintText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2834,9 +3124,14 @@ var Zt_PrintText = typeinfo.Flow{
 // holds a slice of type print_text
 type PrintText_Slice []PrintText
 
-// implements typeinfo.Inspector
-func (*PrintText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintText, true
+// implements typeinfo.Instance
+func (*PrintText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintText
+}
+
+// implements typeinfo.Repeats
+func (op *PrintText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Row struct {
@@ -2844,9 +3139,9 @@ type Row struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Row) Inspect() (typeinfo.T, bool) {
-	return &Zt_Row, false
+// implements typeinfo.Instance
+func (*Row) TypeInfo() typeinfo.T {
+	return &Zt_Row
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2881,9 +3176,14 @@ var Zt_Row = typeinfo.Flow{
 // holds a slice of type row
 type Row_Slice []Row
 
-// implements typeinfo.Inspector
-func (*Row_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Row, true
+// implements typeinfo.Instance
+func (*Row_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Row
+}
+
+// implements typeinfo.Repeats
+func (op *Row_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Rows struct {
@@ -2891,9 +3191,9 @@ type Rows struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Rows) Inspect() (typeinfo.T, bool) {
-	return &Zt_Rows, false
+// implements typeinfo.Instance
+func (*Rows) TypeInfo() typeinfo.T {
+	return &Zt_Rows
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2928,9 +3228,14 @@ var Zt_Rows = typeinfo.Flow{
 // holds a slice of type rows
 type Rows_Slice []Rows
 
-// implements typeinfo.Inspector
-func (*Rows_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Rows, true
+// implements typeinfo.Instance
+func (*Rows_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Rows
+}
+
+// implements typeinfo.Repeats
+func (op *Rows_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Singularize struct {
@@ -2938,9 +3243,9 @@ type Singularize struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Singularize) Inspect() (typeinfo.T, bool) {
-	return &Zt_Singularize, false
+// implements typeinfo.Instance
+func (*Singularize) TypeInfo() typeinfo.T {
+	return &Zt_Singularize
 }
 
 // return a valid markup map, creating it if necessary.
@@ -2974,9 +3279,14 @@ var Zt_Singularize = typeinfo.Flow{
 // holds a slice of type singularize
 type Singularize_Slice []Singularize
 
-// implements typeinfo.Inspector
-func (*Singularize_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Singularize, true
+// implements typeinfo.Instance
+func (*Singularize_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Singularize
+}
+
+// implements typeinfo.Repeats
+func (op *Singularize_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type SlashText struct {
@@ -2984,9 +3294,9 @@ type SlashText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*SlashText) Inspect() (typeinfo.T, bool) {
-	return &Zt_SlashText, false
+// implements typeinfo.Instance
+func (*SlashText) TypeInfo() typeinfo.T {
+	return &Zt_SlashText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3021,18 +3331,23 @@ var Zt_SlashText = typeinfo.Flow{
 // holds a slice of type slash_text
 type SlashText_Slice []SlashText
 
-// implements typeinfo.Inspector
-func (*SlashText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_SlashText, true
+// implements typeinfo.Instance
+func (*SlashText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SlashText
+}
+
+// implements typeinfo.Repeats
+func (op *SlashText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Softline struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Softline) Inspect() (typeinfo.T, bool) {
-	return &Zt_Softline, false
+// implements typeinfo.Instance
+func (*Softline) TypeInfo() typeinfo.T {
+	return &Zt_Softline
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3062,9 +3377,14 @@ var Zt_Softline = typeinfo.Flow{
 // holds a slice of type softline
 type Softline_Slice []Softline
 
-// implements typeinfo.Inspector
-func (*Softline_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Softline, true
+// implements typeinfo.Instance
+func (*Softline_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Softline
+}
+
+// implements typeinfo.Repeats
+func (op *Softline_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type SpanText struct {
@@ -3072,9 +3392,9 @@ type SpanText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*SpanText) Inspect() (typeinfo.T, bool) {
-	return &Zt_SpanText, false
+// implements typeinfo.Instance
+func (*SpanText) TypeInfo() typeinfo.T {
+	return &Zt_SpanText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3109,9 +3429,14 @@ var Zt_SpanText = typeinfo.Flow{
 // holds a slice of type span_text
 type SpanText_Slice []SpanText
 
-// implements typeinfo.Inspector
-func (*SpanText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_SpanText, true
+// implements typeinfo.Instance
+func (*SpanText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SpanText
+}
+
+// implements typeinfo.Repeats
+func (op *SpanText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type AddValue struct {
@@ -3120,9 +3445,9 @@ type AddValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*AddValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_AddValue, false
+// implements typeinfo.Instance
+func (*AddValue) TypeInfo() typeinfo.T {
+	return &Zt_AddValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3159,18 +3484,23 @@ var Zt_AddValue = typeinfo.Flow{
 // holds a slice of type add_value
 type AddValue_Slice []AddValue
 
-// implements typeinfo.Inspector
-func (*AddValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_AddValue, true
+// implements typeinfo.Instance
+func (*AddValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AddValue
+}
+
+// implements typeinfo.Repeats
+func (op *AddValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TriggerCycle struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TriggerCycle) Inspect() (typeinfo.T, bool) {
-	return &Zt_TriggerCycle, false
+// implements typeinfo.Instance
+func (*TriggerCycle) TypeInfo() typeinfo.T {
+	return &Zt_TriggerCycle
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3197,18 +3527,23 @@ var Zt_TriggerCycle = typeinfo.Flow{
 // holds a slice of type trigger_cycle
 type TriggerCycle_Slice []TriggerCycle
 
-// implements typeinfo.Inspector
-func (*TriggerCycle_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TriggerCycle, true
+// implements typeinfo.Instance
+func (*TriggerCycle_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TriggerCycle
+}
+
+// implements typeinfo.Repeats
+func (op *TriggerCycle_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TriggerOnce struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TriggerOnce) Inspect() (typeinfo.T, bool) {
-	return &Zt_TriggerOnce, false
+// implements typeinfo.Instance
+func (*TriggerOnce) TypeInfo() typeinfo.T {
+	return &Zt_TriggerOnce
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3235,18 +3570,23 @@ var Zt_TriggerOnce = typeinfo.Flow{
 // holds a slice of type trigger_once
 type TriggerOnce_Slice []TriggerOnce
 
-// implements typeinfo.Inspector
-func (*TriggerOnce_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TriggerOnce, true
+// implements typeinfo.Instance
+func (*TriggerOnce_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TriggerOnce
+}
+
+// implements typeinfo.Repeats
+func (op *TriggerOnce_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TriggerSwitch struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TriggerSwitch) Inspect() (typeinfo.T, bool) {
-	return &Zt_TriggerSwitch, false
+// implements typeinfo.Instance
+func (*TriggerSwitch) TypeInfo() typeinfo.T {
+	return &Zt_TriggerSwitch
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3273,9 +3613,14 @@ var Zt_TriggerSwitch = typeinfo.Flow{
 // holds a slice of type trigger_switch
 type TriggerSwitch_Slice []TriggerSwitch
 
-// implements typeinfo.Inspector
-func (*TriggerSwitch_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TriggerSwitch, true
+// implements typeinfo.Instance
+func (*TriggerSwitch_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TriggerSwitch
+}
+
+// implements typeinfo.Repeats
+func (op *TriggerSwitch_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type While struct {
@@ -3284,9 +3629,9 @@ type While struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*While) Inspect() (typeinfo.T, bool) {
-	return &Zt_While, false
+// implements typeinfo.Instance
+func (*While) TypeInfo() typeinfo.T {
+	return &Zt_While
 }
 
 // return a valid markup map, creating it if necessary.
@@ -3324,9 +3669,14 @@ var Zt_While = typeinfo.Flow{
 // holds a slice of type while
 type While_Slice []While
 
-// implements typeinfo.Inspector
-func (*While_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_While, true
+// implements typeinfo.Instance
+func (*While_Slice) TypeInfo() typeinfo.T {
+	return &Zt_While
+}
+
+// implements typeinfo.Repeats
+func (op *While_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // Comparison, a type of str enum.
@@ -3467,7 +3817,7 @@ var z_str_list = []*typeinfo.Str{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	9652861807756732392:  (*AbsValue)(nil),          /* number_eval=Absolute value: */
 	6415467136316515808:  (*AddValue)(nil),          /* number_eval=Add:value: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */

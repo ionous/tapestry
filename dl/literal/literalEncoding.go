@@ -17,7 +17,7 @@ import (
 // note: TextValues and NumValues of containing a single value
 // and serialized as that single value ( [6]-> 6 )
 // because, in theory, that can help simply the specification for authors.
-func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch out := op.(type) {
 	default:
 		err = compact.Unhandled("custom literal")
@@ -55,11 +55,11 @@ func anySlice[V any](els []V) []any {
 	return slice
 }
 
-func CustomDecoder(_ *decode.Decoder, slot *typeinfo.Slot, body any) (typeinfo.Inspector, error) {
+func CustomDecoder(_ *decode.Decoder, slot *typeinfo.Slot, body any) (typeinfo.Instance, error) {
 	return readLiteral(slot.Name, "", body)
 }
 
-func DecodeLiteral(slot *typeinfo.Slot, body any) (ret typeinfo.Inspector, err error) {
+func DecodeLiteral(slot *typeinfo.Slot, body any) (ret typeinfo.Instance, err error) {
 	return readLiteral(slot.Name, "", body)
 }
 
@@ -79,7 +79,7 @@ func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, e
 }
 
 type literalCommand interface {
-	typeinfo.Inspector
+	typeinfo.Instance
 	LiteralValue
 }
 

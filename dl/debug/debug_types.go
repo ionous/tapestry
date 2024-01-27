@@ -12,9 +12,9 @@ type DoNothing struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*DoNothing) Inspect() (typeinfo.T, bool) {
-	return &Zt_DoNothing, false
+// implements typeinfo.Instance
+func (*DoNothing) TypeInfo() typeinfo.T {
+	return &Zt_DoNothing
 }
 
 // return a valid markup map, creating it if necessary.
@@ -44,9 +44,14 @@ var Zt_DoNothing = typeinfo.Flow{
 // holds a slice of type do_nothing
 type DoNothing_Slice []DoNothing
 
-// implements typeinfo.Inspector
-func (*DoNothing_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_DoNothing, true
+// implements typeinfo.Instance
+func (*DoNothing_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DoNothing
+}
+
+// implements typeinfo.Repeats
+func (op *DoNothing_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Expect struct {
@@ -54,9 +59,9 @@ type Expect struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Expect) Inspect() (typeinfo.T, bool) {
-	return &Zt_Expect, false
+// implements typeinfo.Instance
+func (*Expect) TypeInfo() typeinfo.T {
+	return &Zt_Expect
 }
 
 // return a valid markup map, creating it if necessary.
@@ -86,9 +91,14 @@ var Zt_Expect = typeinfo.Flow{
 // holds a slice of type expect
 type Expect_Slice []Expect
 
-// implements typeinfo.Inspector
-func (*Expect_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Expect, true
+// implements typeinfo.Instance
+func (*Expect_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Expect
+}
+
+// implements typeinfo.Repeats
+func (op *Expect_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ExpectOutput struct {
@@ -96,9 +106,9 @@ type ExpectOutput struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ExpectOutput) Inspect() (typeinfo.T, bool) {
-	return &Zt_ExpectOutput, false
+// implements typeinfo.Instance
+func (*ExpectOutput) TypeInfo() typeinfo.T {
+	return &Zt_ExpectOutput
 }
 
 // return a valid markup map, creating it if necessary.
@@ -129,9 +139,14 @@ var Zt_ExpectOutput = typeinfo.Flow{
 // holds a slice of type expect_output
 type ExpectOutput_Slice []ExpectOutput
 
-// implements typeinfo.Inspector
-func (*ExpectOutput_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ExpectOutput, true
+// implements typeinfo.Instance
+func (*ExpectOutput_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ExpectOutput
+}
+
+// implements typeinfo.Repeats
+func (op *ExpectOutput_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ExpectText struct {
@@ -139,9 +154,9 @@ type ExpectText struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ExpectText) Inspect() (typeinfo.T, bool) {
-	return &Zt_ExpectText, false
+// implements typeinfo.Instance
+func (*ExpectText) TypeInfo() typeinfo.T {
+	return &Zt_ExpectText
 }
 
 // return a valid markup map, creating it if necessary.
@@ -172,9 +187,14 @@ var Zt_ExpectText = typeinfo.Flow{
 // holds a slice of type expect_text
 type ExpectText_Slice []ExpectText
 
-// implements typeinfo.Inspector
-func (*ExpectText_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ExpectText, true
+// implements typeinfo.Instance
+func (*ExpectText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ExpectText
+}
+
+// implements typeinfo.Repeats
+func (op *ExpectText_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Fabricate struct {
@@ -182,9 +202,9 @@ type Fabricate struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Fabricate) Inspect() (typeinfo.T, bool) {
-	return &Zt_Fabricate, false
+// implements typeinfo.Instance
+func (*Fabricate) TypeInfo() typeinfo.T {
+	return &Zt_Fabricate
 }
 
 // return a valid markup map, creating it if necessary.
@@ -218,9 +238,14 @@ var Zt_Fabricate = typeinfo.Flow{
 // holds a slice of type fabricate
 type Fabricate_Slice []Fabricate
 
-// implements typeinfo.Inspector
-func (*Fabricate_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Fabricate, true
+// implements typeinfo.Instance
+func (*Fabricate_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Fabricate
+}
+
+// implements typeinfo.Repeats
+func (op *Fabricate_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type DebugLog struct {
@@ -229,9 +254,9 @@ type DebugLog struct {
 	Markup   map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*DebugLog) Inspect() (typeinfo.T, bool) {
-	return &Zt_DebugLog, false
+// implements typeinfo.Instance
+func (*DebugLog) TypeInfo() typeinfo.T {
+	return &Zt_DebugLog
 }
 
 // return a valid markup map, creating it if necessary.
@@ -268,9 +293,14 @@ var Zt_DebugLog = typeinfo.Flow{
 // holds a slice of type debug_log
 type DebugLog_Slice []DebugLog
 
-// implements typeinfo.Inspector
-func (*DebugLog_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_DebugLog, true
+// implements typeinfo.Instance
+func (*DebugLog_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DebugLog
+}
+
+// implements typeinfo.Repeats
+func (op *DebugLog_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // LoggingLevel, a type of str enum.
@@ -339,7 +369,7 @@ var z_str_list = []*typeinfo.Str{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	15882152812809098721: (*DoNothing)(nil),    /* execute=-- */
 	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */

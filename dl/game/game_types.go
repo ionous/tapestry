@@ -10,9 +10,9 @@ type QuitGame struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*QuitGame) Inspect() (typeinfo.T, bool) {
-	return &Zt_QuitGame, false
+// implements typeinfo.Instance
+func (*QuitGame) TypeInfo() typeinfo.T {
+	return &Zt_QuitGame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -39,18 +39,23 @@ var Zt_QuitGame = typeinfo.Flow{
 // holds a slice of type quit_game
 type QuitGame_Slice []QuitGame
 
-// implements typeinfo.Inspector
-func (*QuitGame_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_QuitGame, true
+// implements typeinfo.Instance
+func (*QuitGame_Slice) TypeInfo() typeinfo.T {
+	return &Zt_QuitGame
+}
+
+// implements typeinfo.Repeats
+func (op *QuitGame_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type SaveGame struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*SaveGame) Inspect() (typeinfo.T, bool) {
-	return &Zt_SaveGame, false
+// implements typeinfo.Instance
+func (*SaveGame) TypeInfo() typeinfo.T {
+	return &Zt_SaveGame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -77,18 +82,23 @@ var Zt_SaveGame = typeinfo.Flow{
 // holds a slice of type save_game
 type SaveGame_Slice []SaveGame
 
-// implements typeinfo.Inspector
-func (*SaveGame_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_SaveGame, true
+// implements typeinfo.Instance
+func (*SaveGame_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SaveGame
+}
+
+// implements typeinfo.Repeats
+func (op *SaveGame_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RestoreGame struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RestoreGame) Inspect() (typeinfo.T, bool) {
-	return &Zt_RestoreGame, false
+// implements typeinfo.Instance
+func (*RestoreGame) TypeInfo() typeinfo.T {
+	return &Zt_RestoreGame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -115,18 +125,23 @@ var Zt_RestoreGame = typeinfo.Flow{
 // holds a slice of type restore_game
 type RestoreGame_Slice []RestoreGame
 
-// implements typeinfo.Inspector
-func (*RestoreGame_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RestoreGame, true
+// implements typeinfo.Instance
+func (*RestoreGame_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RestoreGame
+}
+
+// implements typeinfo.Repeats
+func (op *RestoreGame_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type UndoTurn struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*UndoTurn) Inspect() (typeinfo.T, bool) {
-	return &Zt_UndoTurn, false
+// implements typeinfo.Instance
+func (*UndoTurn) TypeInfo() typeinfo.T {
+	return &Zt_UndoTurn
 }
 
 // return a valid markup map, creating it if necessary.
@@ -153,18 +168,23 @@ var Zt_UndoTurn = typeinfo.Flow{
 // holds a slice of type undo_turn
 type UndoTurn_Slice []UndoTurn
 
-// implements typeinfo.Inspector
-func (*UndoTurn_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_UndoTurn, true
+// implements typeinfo.Instance
+func (*UndoTurn_Slice) TypeInfo() typeinfo.T {
+	return &Zt_UndoTurn
+}
+
+// implements typeinfo.Repeats
+func (op *UndoTurn_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PrintVersion struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PrintVersion) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintVersion, false
+// implements typeinfo.Instance
+func (*PrintVersion) TypeInfo() typeinfo.T {
+	return &Zt_PrintVersion
 }
 
 // return a valid markup map, creating it if necessary.
@@ -191,9 +211,14 @@ var Zt_PrintVersion = typeinfo.Flow{
 // holds a slice of type print_version
 type PrintVersion_Slice []PrintVersion
 
-// implements typeinfo.Inspector
-func (*PrintVersion_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PrintVersion, true
+// implements typeinfo.Instance
+func (*PrintVersion_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintVersion
+}
+
+// implements typeinfo.Repeats
+func (op *PrintVersion_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // package listing of type data
@@ -215,7 +240,7 @@ var z_flow_list = []*typeinfo.Flow{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	16069653899165369674: (*PrintVersion)(nil), /* execute=PrintVersion */
 	13962506025236193050: (*QuitGame)(nil),     /* execute=QuitGame */
 	8293164373151279469:  (*RestoreGame)(nil),  /* execute=RestoreGame */

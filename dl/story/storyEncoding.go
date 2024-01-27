@@ -22,7 +22,7 @@ func Decode(out *StoryFile, msg map[string]any) error {
 }
 
 // Create a story dl from native maps and slices.
-func DecodeMessage(out typeinfo.Inspector, msg map[string]any) error {
+func DecodeMessage(out typeinfo.Instance, msg map[string]any) error {
 	var dec decode.Decoder
 	dec.Signatures(AllSignatures...).
 		Customize(core.CustomDecoder).
@@ -30,7 +30,7 @@ func DecodeMessage(out typeinfo.Inspector, msg map[string]any) error {
 	return dec.Decode(out, msg)
 }
 
-func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Inspector, err error) {
+func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Instance, err error) {
 	switch slot {
 	default:
 		err = compact.Unhandled("pattern")

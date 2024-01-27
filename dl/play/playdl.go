@@ -5,7 +5,7 @@ import "git.sr.ht/~ionous/tapestry/lang/typeinfo"
 // marker interface for play message types
 type PlayMessage interface {
 	PlayMessage()
-	typeinfo.Inspector
+	typeinfo.Instance
 }
 
 func (*PlayLog) PlayMessage()  {}

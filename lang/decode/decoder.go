@@ -17,7 +17,7 @@ type Decoder struct {
 
 // provide translation from command signatures to actual commands.
 // ex. "Tapestry:" to *story.StoryFile
-func (dec *Decoder) Signatures(t ...map[uint64]any) *Decoder {
+func (dec *Decoder) Signatures(t ...map[uint64]typeinfo.Instance) *Decoder {
 	dec.signatures = t
 	return dec
 }
@@ -36,13 +36,13 @@ func (dec *Decoder) Patternize(p PatternDecoder) *Decoder {
 
 // create an arbitrary command from arbitrary data
 // ex. boolean literals are stored as actual bool values.
-type CustomDecoder func(dec *Decoder, slot *typeinfo.Slot, plainData any) (typeinfo.Inspector, error)
+type CustomDecoder func(dec *Decoder, slot *typeinfo.Slot, plainData any) (typeinfo.Instance, error)
 
 // handle pattern parsing.
-type PatternDecoder func(dec *Decoder, slot *typeinfo.Slot, msg compact.Message) (typeinfo.Inspector, error)
+type PatternDecoder func(dec *Decoder, slot *typeinfo.Slot, msg compact.Message) (typeinfo.Instance, error)
 
 // given a desired output structure, read the passed plain data
-func (dec *Decoder) Decode(out typeinfo.Inspector, plainData any) (err error) {
+func (dec *Decoder) Decode(out typeinfo.Instance, plainData any) (err error) {
 	w := inspect.Walk(out)
 	if t := w.TypeInfo(); !w.Repeating() {
 		if slot, ok := t.(*typeinfo.Slot); ok {

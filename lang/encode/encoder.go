@@ -19,12 +19,12 @@ func (enc *Encoder) Customize(c CustomEncoder) *Encoder {
 }
 
 // given a tapestry flow, return its plain value.
-type CustomEncoder func(*Encoder, typeinfo.Inspector) (any, error)
+type CustomEncoder func(*Encoder, typeinfo.Instance) (any, error)
 
 // turn the passed tapestry command into plain values.
-func (enc *Encoder) Encode(i typeinfo.Inspector) (ret any, err error) {
+func (enc *Encoder) Encode(i typeinfo.Instance) (ret any, err error) {
 	w := inspect.Walk(i)
-	if t, repeats := i.Inspect(); !repeats {
+	if t := w.TypeInfo(); !w.Repeating() {
 		if _, ok := t.(*typeinfo.Slot); !ok {
 			ret, err = enc.writeFlow(w)
 		} else {
@@ -118,7 +118,7 @@ func (enc *Encoder) writeFlow(src inspect.Iter) (ret any, err error) {
 	return
 }
 
-func (enc *Encoder) customEncode(cmd typeinfo.Inspector) (ret any, err error) {
+func (enc *Encoder) customEncode(cmd typeinfo.Instance) (ret any, err error) {
 	if c := enc.customEncoder; c == nil {
 		err = compact.Unhandled("custom encoder")
 	} else {
@@ -131,9 +131,9 @@ func unknownType(t r.Type) error {
 	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
 }
 
-func unpack(src inspect.Iter) (ret typeinfo.Inspector, err error) {
+func unpack(src inspect.Iter) (ret typeinfo.Instance, err error) {
 	v := src.RawValue()
-	if fix, ok := v.Addr().Interface().(typeinfo.Inspector); !ok {
+	if fix, ok := v.Addr().Interface().(typeinfo.Instance); !ok {
 		err = fmt.Errorf("%s is not a flow", v.Type())
 	} else {
 		ret = fix

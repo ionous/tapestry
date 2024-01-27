@@ -18,17 +18,22 @@ var Zt_PlayMessage = typeinfo.Slot{
 // holds a single slot.
 type PlayMessage_Slot struct{ Value PlayMessage }
 
-// implements typeinfo.Inspector for a single slot.
-func (*PlayMessage_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayMessage, false
+// implements typeinfo.Instance for a single slot.
+func (*PlayMessage_Slot) TypeInfo() typeinfo.T {
+	return &Zt_PlayMessage
 }
 
 // holds a slice of slots.
 type PlayMessage_Slots []PlayMessage
 
-// implements typeinfo.Inspector for a series of slots.
-func (*PlayMessage_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayMessage, true
+// implements typeinfo.Instance for a series of slots.
+func (*PlayMessage_Slots) TypeInfo() typeinfo.T {
+	return &Zt_PlayMessage
+}
+
+// implements typeinfo.Repeats
+func (op *PlayMessage_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PlayLog struct {
@@ -36,9 +41,9 @@ type PlayLog struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PlayLog) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayLog, false
+// implements typeinfo.Instance
+func (*PlayLog) TypeInfo() typeinfo.T {
+	return &Zt_PlayLog
 }
 
 // return a valid markup map, creating it if necessary.
@@ -72,9 +77,14 @@ var Zt_PlayLog = typeinfo.Flow{
 // holds a slice of type play_log
 type PlayLog_Slice []PlayLog
 
-// implements typeinfo.Inspector
-func (*PlayLog_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayLog, true
+// implements typeinfo.Instance
+func (*PlayLog_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PlayLog
+}
+
+// implements typeinfo.Repeats
+func (op *PlayLog_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PlayMode struct {
@@ -82,9 +92,9 @@ type PlayMode struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PlayMode) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayMode, false
+// implements typeinfo.Instance
+func (*PlayMode) TypeInfo() typeinfo.T {
+	return &Zt_PlayMode
 }
 
 // return a valid markup map, creating it if necessary.
@@ -118,9 +128,14 @@ var Zt_PlayMode = typeinfo.Flow{
 // holds a slice of type play_mode
 type PlayMode_Slice []PlayMode
 
-// implements typeinfo.Inspector
-func (*PlayMode_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayMode, true
+// implements typeinfo.Instance
+func (*PlayMode_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PlayMode
+}
+
+// implements typeinfo.Repeats
+func (op *PlayMode_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PlayOut struct {
@@ -128,9 +143,9 @@ type PlayOut struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PlayOut) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayOut, false
+// implements typeinfo.Instance
+func (*PlayOut) TypeInfo() typeinfo.T {
+	return &Zt_PlayOut
 }
 
 // return a valid markup map, creating it if necessary.
@@ -164,9 +179,14 @@ var Zt_PlayOut = typeinfo.Flow{
 // holds a slice of type play_out
 type PlayOut_Slice []PlayOut
 
-// implements typeinfo.Inspector
-func (*PlayOut_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PlayOut, true
+// implements typeinfo.Instance
+func (*PlayOut_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PlayOut
+}
+
+// implements typeinfo.Repeats
+func (op *PlayOut_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // PlayModes, a type of str enum.
@@ -240,7 +260,7 @@ var z_str_list = []*typeinfo.Str{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	17624726337788752012: (*PlayLog)(nil),  /* play_message=Play log: */
 	4988029522939467359:  (*PlayMode)(nil), /* play_message=Play mode: */
 	14741822345399231886: (*PlayOut)(nil),  /* play_message=Play out: */

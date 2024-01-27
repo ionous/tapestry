@@ -14,17 +14,22 @@ var Zt_Event = typeinfo.Slot{
 // holds a single slot.
 type Event_Slot struct{ Value Event }
 
-// implements typeinfo.Inspector for a single slot.
-func (*Event_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_Event, false
+// implements typeinfo.Instance for a single slot.
+func (*Event_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Event
 }
 
 // holds a slice of slots.
 type Event_Slots []Event
 
-// implements typeinfo.Inspector for a series of slots.
-func (*Event_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_Event, true
+// implements typeinfo.Instance for a series of slots.
+func (*Event_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Event
+}
+
+// implements typeinfo.Repeats
+func (op *Event_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Frame struct {
@@ -34,9 +39,9 @@ type Frame struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Frame) Inspect() (typeinfo.T, bool) {
-	return &Zt_Frame, false
+// implements typeinfo.Instance
+func (*Frame) TypeInfo() typeinfo.T {
+	return &Zt_Frame
 }
 
 // return a valid markup map, creating it if necessary.
@@ -71,9 +76,14 @@ var Zt_Frame = typeinfo.Flow{
 // holds a slice of type frame
 type Frame_Slice []Frame
 
-// implements typeinfo.Inspector
-func (*Frame_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Frame, true
+// implements typeinfo.Instance
+func (*Frame_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Frame
+}
+
+// implements typeinfo.Repeats
+func (op *Frame_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type FrameOutput struct {
@@ -81,9 +91,9 @@ type FrameOutput struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*FrameOutput) Inspect() (typeinfo.T, bool) {
-	return &Zt_FrameOutput, false
+// implements typeinfo.Instance
+func (*FrameOutput) TypeInfo() typeinfo.T {
+	return &Zt_FrameOutput
 }
 
 // return a valid markup map, creating it if necessary.
@@ -113,9 +123,14 @@ var Zt_FrameOutput = typeinfo.Flow{
 // holds a slice of type frame_output
 type FrameOutput_Slice []FrameOutput
 
-// implements typeinfo.Inspector
-func (*FrameOutput_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_FrameOutput, true
+// implements typeinfo.Instance
+func (*FrameOutput_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FrameOutput
+}
+
+// implements typeinfo.Repeats
+func (op *FrameOutput_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type SceneStarted struct {
@@ -123,9 +138,9 @@ type SceneStarted struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*SceneStarted) Inspect() (typeinfo.T, bool) {
-	return &Zt_SceneStarted, false
+// implements typeinfo.Instance
+func (*SceneStarted) TypeInfo() typeinfo.T {
+	return &Zt_SceneStarted
 }
 
 // return a valid markup map, creating it if necessary.
@@ -156,9 +171,14 @@ var Zt_SceneStarted = typeinfo.Flow{
 // holds a slice of type scene_started
 type SceneStarted_Slice []SceneStarted
 
-// implements typeinfo.Inspector
-func (*SceneStarted_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_SceneStarted, true
+// implements typeinfo.Instance
+func (*SceneStarted_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SceneStarted
+}
+
+// implements typeinfo.Repeats
+func (op *SceneStarted_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type SceneEnded struct {
@@ -166,9 +186,9 @@ type SceneEnded struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*SceneEnded) Inspect() (typeinfo.T, bool) {
-	return &Zt_SceneEnded, false
+// implements typeinfo.Instance
+func (*SceneEnded) TypeInfo() typeinfo.T {
+	return &Zt_SceneEnded
 }
 
 // return a valid markup map, creating it if necessary.
@@ -199,9 +219,14 @@ var Zt_SceneEnded = typeinfo.Flow{
 // holds a slice of type scene_ended
 type SceneEnded_Slice []SceneEnded
 
-// implements typeinfo.Inspector
-func (*SceneEnded_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_SceneEnded, true
+// implements typeinfo.Instance
+func (*SceneEnded_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SceneEnded
+}
+
+// implements typeinfo.Repeats
+func (op *SceneEnded_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type StateChanged struct {
@@ -212,9 +237,9 @@ type StateChanged struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*StateChanged) Inspect() (typeinfo.T, bool) {
-	return &Zt_StateChanged, false
+// implements typeinfo.Instance
+func (*StateChanged) TypeInfo() typeinfo.T {
+	return &Zt_StateChanged
 }
 
 // return a valid markup map, creating it if necessary.
@@ -257,9 +282,14 @@ var Zt_StateChanged = typeinfo.Flow{
 // holds a slice of type state_changed
 type StateChanged_Slice []StateChanged
 
-// implements typeinfo.Inspector
-func (*StateChanged_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_StateChanged, true
+// implements typeinfo.Instance
+func (*StateChanged_Slice) TypeInfo() typeinfo.T {
+	return &Zt_StateChanged
+}
+
+// implements typeinfo.Repeats
+func (op *StateChanged_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type PairChanged struct {
@@ -269,9 +299,9 @@ type PairChanged struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*PairChanged) Inspect() (typeinfo.T, bool) {
-	return &Zt_PairChanged, false
+// implements typeinfo.Instance
+func (*PairChanged) TypeInfo() typeinfo.T {
+	return &Zt_PairChanged
 }
 
 // return a valid markup map, creating it if necessary.
@@ -310,9 +340,14 @@ var Zt_PairChanged = typeinfo.Flow{
 // holds a slice of type pair_changed
 type PairChanged_Slice []PairChanged
 
-// implements typeinfo.Inspector
-func (*PairChanged_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_PairChanged, true
+// implements typeinfo.Instance
+func (*PairChanged_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PairChanged
+}
+
+// implements typeinfo.Repeats
+func (op *PairChanged_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // package listing of type data
@@ -342,7 +377,7 @@ var z_flow_list = []*typeinfo.Flow{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	14657663848717440116: (*Frame)(nil),        /* Frame result:events: */
 	2438049115146588168:  (*Frame)(nil),        /* Frame result:events:error: */
 	4385780296792938688:  (*FrameOutput)(nil),  /* event=FrameOutput: */

@@ -47,7 +47,7 @@ func TestCoreEncoding(t *testing.T) {
 }
 
 type testPair struct {
-	v      typeinfo.Inspector
+	v      typeinfo.Instance
 	expect string
 }
 
@@ -65,7 +65,7 @@ func testPairs(t *testing.T, pairs []testPair) {
 		} else {
 			rtype := r.ValueOf(p.v).Elem().Type()
 			// println("testing", rtype.String())
-			reversed := r.New(rtype).Interface().(typeinfo.Inspector)
+			reversed := r.New(rtype).Interface().(typeinfo.Instance)
 			if e := unmarshal(reversed, expect); e != nil {
 				t.Logf("%d couldn't decode because %v", i, e)
 				t.Fail()
@@ -79,12 +79,12 @@ func testPairs(t *testing.T, pairs []testPair) {
 	}
 }
 
-func marshal(v typeinfo.Inspector) (ret any, err error) {
+func marshal(v typeinfo.Instance) (ret any, err error) {
 	var enc encode.Encoder
 	return enc.Customize(core.CustomEncoder).Encode(v)
 }
 
-func unmarshal(out typeinfo.Inspector, plainData any) (err error) {
+func unmarshal(out typeinfo.Instance, plainData any) (err error) {
 	var dec decode.Decoder
 	return dec.
 		Signatures(assign.Z_Types.Signatures, core.Z_Types.Signatures).

@@ -2,7 +2,6 @@ package express
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 // maps cmd spec name to a nil pointer to the cmd type in question
@@ -21,8 +20,8 @@ func (k *nameCache) get(n string) (ret interface{}, okay bool) {
 		// tbd: add the pointers to flow, or a list to the generated type list?
 		// ( see also: unblock.MakeBlockCreator )
 		for _, ptr := range core.Z_Types.Signatures {
-			i, _ := ptr.(typeinfo.Inspector).Inspect()
-			m[i.TypeName()] = ptr // note: multiple signatures can generate the same type
+			t := ptr.TypeInfo()
+			m[t.TypeName()] = ptr // note: multiple signatures can generate the same type
 		}
 		k.els = m
 	}

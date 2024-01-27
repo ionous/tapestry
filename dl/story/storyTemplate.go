@@ -18,13 +18,13 @@ import (
 )
 
 // transform SayTemplate into a RenderResponse
-func (op *SayTemplate) PreImport(cat *weave.Catalog) (typeinfo.Inspector, error) {
+func (op *SayTemplate) PreImport(cat *weave.Catalog) (typeinfo.Instance, error) {
 	return convertTemplate("", op.Template)
 }
 
 // transform SayResponse into a RenderResponse
 // ( post import so it happens after any transforms in its evals have been processed )
-func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Inspector, err error) {
+func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, err error) {
 	// render by lookup if there's no text
 	if name := inflect.Normalize(op.Name); op.Text == nil {
 		ret = &render.RenderResponse{Name: name}

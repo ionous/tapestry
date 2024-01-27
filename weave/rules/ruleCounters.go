@@ -19,7 +19,7 @@ func FilterHasCounter(filter rt.BoolEval) (okay bool) {
 // fix? could we instead just strstr for countOf
 // also might be cool to augment or replace the serialized type
 // with our own that has an pre-calced field ( at import, via state parser )
-func searchCounters(m typeinfo.Inspector) (okay bool) {
+func searchCounters(m typeinfo.Instance) (okay bool) {
 	if ok, e := searchForFlow(m, &core.Zt_CallTrigger); e != nil {
 		panic(e)
 	} else {
@@ -29,11 +29,12 @@ func searchCounters(m typeinfo.Inspector) (okay bool) {
 }
 
 // return the first flow of the passed type
-func searchForFlow(src typeinfo.Inspector, find typeinfo.T) (ret typeinfo.Inspector, err error) {
+func searchForFlow(src typeinfo.Instance, find typeinfo.T) (ret typeinfo.Instance, err error) {
 	evts := inspect.Callbacks{
 		OnFlow: func(w inspect.Iter) (err error) {
 			if find == w.TypeInfo() {
-				ret = w.RawValue().Interface().(typeinfo.Inspector)
+				// ahg!
+				ret = w.RawValue().Addr().Interface().(typeinfo.Instance)
 				err = inspect.DoneVisiting
 			}
 			return

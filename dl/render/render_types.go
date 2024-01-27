@@ -19,17 +19,22 @@ var Zt_RenderEval = typeinfo.Slot{
 // holds a single slot.
 type RenderEval_Slot struct{ Value RenderEval }
 
-// implements typeinfo.Inspector for a single slot.
-func (*RenderEval_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderEval, false
+// implements typeinfo.Instance for a single slot.
+func (*RenderEval_Slot) TypeInfo() typeinfo.T {
+	return &Zt_RenderEval
 }
 
 // holds a slice of slots.
 type RenderEval_Slots []RenderEval
 
-// implements typeinfo.Inspector for a series of slots.
-func (*RenderEval_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderEval, true
+// implements typeinfo.Instance for a series of slots.
+func (*RenderEval_Slots) TypeInfo() typeinfo.T {
+	return &Zt_RenderEval
+}
+
+// implements typeinfo.Repeats
+func (op *RenderEval_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RenderName struct {
@@ -37,9 +42,9 @@ type RenderName struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RenderName) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderName, false
+// implements typeinfo.Instance
+func (*RenderName) TypeInfo() typeinfo.T {
+	return &Zt_RenderName
 }
 
 // return a valid markup map, creating it if necessary.
@@ -72,9 +77,14 @@ var Zt_RenderName = typeinfo.Flow{
 // holds a slice of type render_name
 type RenderName_Slice []RenderName
 
-// implements typeinfo.Inspector
-func (*RenderName_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderName, true
+// implements typeinfo.Instance
+func (*RenderName_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RenderName
+}
+
+// implements typeinfo.Repeats
+func (op *RenderName_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RenderRef struct {
@@ -83,9 +93,9 @@ type RenderRef struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RenderRef) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderRef, false
+// implements typeinfo.Instance
+func (*RenderRef) TypeInfo() typeinfo.T {
+	return &Zt_RenderRef
 }
 
 // return a valid markup map, creating it if necessary.
@@ -138,9 +148,14 @@ var Zt_RenderRef = typeinfo.Flow{
 // holds a slice of type render_ref
 type RenderRef_Slice []RenderRef
 
-// implements typeinfo.Inspector
-func (*RenderRef_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderRef, true
+// implements typeinfo.Instance
+func (*RenderRef_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RenderRef
+}
+
+// implements typeinfo.Repeats
+func (op *RenderRef_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RenderValue struct {
@@ -148,9 +163,9 @@ type RenderValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RenderValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderValue, false
+// implements typeinfo.Instance
+func (*RenderValue) TypeInfo() typeinfo.T {
+	return &Zt_RenderValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -183,9 +198,14 @@ var Zt_RenderValue = typeinfo.Flow{
 // holds a slice of type render_value
 type RenderValue_Slice []RenderValue
 
-// implements typeinfo.Inspector
-func (*RenderValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderValue, true
+// implements typeinfo.Instance
+func (*RenderValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RenderValue
+}
+
+// implements typeinfo.Repeats
+func (op *RenderValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RenderPattern struct {
@@ -194,9 +214,9 @@ type RenderPattern struct {
 	Markup      map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RenderPattern) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderPattern, false
+// implements typeinfo.Instance
+func (*RenderPattern) TypeInfo() typeinfo.T {
+	return &Zt_RenderPattern
 }
 
 // return a valid markup map, creating it if necessary.
@@ -238,9 +258,14 @@ var Zt_RenderPattern = typeinfo.Flow{
 // holds a slice of type render_pattern
 type RenderPattern_Slice []RenderPattern
 
-// implements typeinfo.Inspector
-func (*RenderPattern_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderPattern, true
+// implements typeinfo.Instance
+func (*RenderPattern_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RenderPattern
+}
+
+// implements typeinfo.Repeats
+func (op *RenderPattern_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RenderResponse struct {
@@ -249,9 +274,9 @@ type RenderResponse struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RenderResponse) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderResponse, false
+// implements typeinfo.Instance
+func (*RenderResponse) TypeInfo() typeinfo.T {
+	return &Zt_RenderResponse
 }
 
 // return a valid markup map, creating it if necessary.
@@ -291,9 +316,14 @@ var Zt_RenderResponse = typeinfo.Flow{
 // holds a slice of type render_response
 type RenderResponse_Slice []RenderResponse
 
-// implements typeinfo.Inspector
-func (*RenderResponse_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RenderResponse, true
+// implements typeinfo.Instance
+func (*RenderResponse_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RenderResponse
+}
+
+// implements typeinfo.Repeats
+func (op *RenderResponse_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // package listing of type data
@@ -322,7 +352,7 @@ var z_flow_list = []*typeinfo.Flow{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	14401057669022842575: (*RenderPattern)(nil),  /* bool_eval=Render:render: */
 	2910903954323771519:  (*RenderPattern)(nil),  /* render_eval=Render:render: */
 	3385363614654173788:  (*RenderPattern)(nil),  /* text_eval=Render:render: */

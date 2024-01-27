@@ -14,17 +14,22 @@ var Zt_TestSlot = typeinfo.Slot{
 // holds a single slot.
 type TestSlot_Slot struct{ Value TestSlot }
 
-// implements typeinfo.Inspector for a single slot.
-func (*TestSlot_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_TestSlot, false
+// implements typeinfo.Instance for a single slot.
+func (*TestSlot_Slot) TypeInfo() typeinfo.T {
+	return &Zt_TestSlot
 }
 
 // holds a slice of slots.
 type TestSlot_Slots []TestSlot
 
-// implements typeinfo.Inspector for a series of slots.
-func (*TestSlot_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_TestSlot, true
+// implements typeinfo.Instance for a series of slots.
+func (*TestSlot_Slots) TypeInfo() typeinfo.T {
+	return &Zt_TestSlot
+}
+
+// implements typeinfo.Repeats
+func (op *TestSlot_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TestEmbed struct {
@@ -32,9 +37,9 @@ type TestEmbed struct {
 	Markup   map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TestEmbed) Inspect() (typeinfo.T, bool) {
-	return &Zt_TestEmbed, false
+// implements typeinfo.Instance
+func (*TestEmbed) TypeInfo() typeinfo.T {
+	return &Zt_TestEmbed
 }
 
 // return a valid markup map, creating it if necessary.
@@ -65,9 +70,14 @@ var Zt_TestEmbed = typeinfo.Flow{
 // holds a slice of type test_embed
 type TestEmbed_Slice []TestEmbed
 
-// implements typeinfo.Inspector
-func (*TestEmbed_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TestEmbed, true
+// implements typeinfo.Instance
+func (*TestEmbed_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TestEmbed
+}
+
+// implements typeinfo.Repeats
+func (op *TestEmbed_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TestFlow struct {
@@ -79,9 +89,9 @@ type TestFlow struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TestFlow) Inspect() (typeinfo.T, bool) {
-	return &Zt_TestFlow, false
+// implements typeinfo.Instance
+func (*TestFlow) TypeInfo() typeinfo.T {
+	return &Zt_TestFlow
 }
 
 // return a valid markup map, creating it if necessary.
@@ -134,9 +144,14 @@ var Zt_TestFlow = typeinfo.Flow{
 // holds a slice of type test_flow
 type TestFlow_Slice []TestFlow
 
-// implements typeinfo.Inspector
-func (*TestFlow_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TestFlow, true
+// implements typeinfo.Instance
+func (*TestFlow_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TestFlow
+}
+
+// implements typeinfo.Repeats
+func (op *TestFlow_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // TestBool, a type of str enum.
@@ -254,7 +269,7 @@ var z_num_list = []*typeinfo.Num{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	4674877661722404900:  (*TestEmbed)(nil), /* test_slot=Embed testFlow: */
 	6035317458491358757:  (*TestFlow)(nil),  /* test_slot=Flow */
 	3180197217674355987:  (*TestFlow)(nil),  /* test_slot=Flow bool: */

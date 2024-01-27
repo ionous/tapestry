@@ -64,12 +64,12 @@ func TestCountField(t *testing.T) {
 	}
 }
 
-func testUnblock(reg unblock.Creator, expect typeinfo.Inspector, msg string) (err error) {
+func testUnblock(reg unblock.Creator, expect typeinfo.Instance, msg string) (err error) {
 	var top unblock.BlockInfo
 	if e := json.Unmarshal([]byte(msg), &top); e != nil {
 		err = e
 	} else {
-		ptr := r.New(r.TypeOf(expect).Elem()).Interface().(typeinfo.Inspector)
+		ptr := r.New(r.TypeOf(expect).Elem()).Interface().(typeinfo.Instance)
 		if e := unblock.DecodeBlock(ptr, reg, &top); e != nil {
 			err = e
 		} else {

@@ -11,8 +11,8 @@ type Bool int
 
 // enumerated values of Bool
 const (
-	C_Bool_True Bool = iota
-	C_Bool_False
+	C_Bool_False Bool = iota
+	C_Bool_True
 )
 
 func MakeBool(str string) (ret Bool, okay bool) {
@@ -37,6 +37,9 @@ var Zt_Bool = typeinfo.Str{
 	Options: []string{
 		"false",
 		"true",
+	},
+	Markup: map[string]any{
+		"comment": []interface{}{"Booleans values are described using strings:", "the tell and json parsers recognize that and allows literal true/false values", "go's generated code also recognizes that and generates bool fields."},
 	},
 }
 var Zt_Lines = typeinfo.Str{

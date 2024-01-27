@@ -9,14 +9,14 @@ var cmdError = CmdError       // backwards compat
 var cmdErrorCtx = CmdErrorCtx // backwards compat
 
 type CommandError struct {
-	Cmd typeinfo.Inspector
+	Cmd typeinfo.Instance
 	Ctx string
 }
 
 func (e CommandError) Error() string {
 	name := "<nil>"
 	if e.Cmd != nil {
-		t, _ := e.Cmd.Inspect()
+		t := e.Cmd.TypeInfo()
 		name = t.TypeName()
 	}
 	var padding string
@@ -26,11 +26,11 @@ func (e CommandError) Error() string {
 	return errutil.Sprintf("# %s%s%s", name, padding, e.Ctx)
 }
 
-func CmdError(op typeinfo.Inspector, err error) error {
+func CmdError(op typeinfo.Instance, err error) error {
 	return cmdErrorCtx(op, "", err)
 }
 
-func CmdErrorCtx(op typeinfo.Inspector, ctx string, err error) error {
+func CmdErrorCtx(op typeinfo.Instance, ctx string, err error) error {
 	e := &CommandError{Cmd: op, Ctx: ctx}
 	return errutil.Append(e, err)
 }

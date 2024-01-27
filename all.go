@@ -11,9 +11,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-var AllSignatures = []map[uint64]any{
+var AllSignatures = []map[uint64]typeinfo.Instance{
 	assign.Z_Types.Signatures,
 	core.Z_Types.Signatures,
 	debug.Z_Types.Signatures,

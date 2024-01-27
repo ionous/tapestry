@@ -6,7 +6,7 @@ import (
 )
 
 // convert the passed elements to blockly workspace format
-func Convert(story typeinfo.Inspector) (ret string, err error) {
+func Convert(story typeinfo.Instance) (ret string, err error) {
 	const header = `{"blocks": {"languageVersion": 0,"blocks": [`
 	const footer = `]}}`
 	var out js.Builder

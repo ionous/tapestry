@@ -9,6 +9,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -22,7 +23,7 @@ import (
 
 // CheckAll tests stored in the passed db.
 // It logs the results of running the checks, and only returns error on critical errors.
-func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]interface{}) (ret int, err error) {
+func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]typeinfo.Instance) (ret int, err error) {
 	if e := tables.CreateRun(db); e != nil {
 		err = e
 	} else if query, e := qdb.NewQueries(db, true); e != nil {

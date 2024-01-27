@@ -12,11 +12,13 @@ import (
 // calling Next advances to each element of the container in turn.
 // Containers can be a single command, a slot for a command, or slices of commands or slots;
 // other values have undefined results and may panic.
-func Walk(i typeinfo.Inspector) Iter {
+func Walk(i typeinfo.Instance) Iter {
 	v := r.ValueOf(i).Elem() // the value under the interface
-	t, repeats := i.Inspect()
-	if _, ok := t.(*typeinfo.Slot); ok && !repeats {
-		v = v.Field(0) // the inspector for a single slot is a struct
+	t := i.TypeInfo()
+	if _, ok := t.(*typeinfo.Slot); ok {
+		if _, ok := i.(typeinfo.Repeats); !ok {
+			v = v.Field(0) // the Instance for a single slot is a struct
+		}
 	}
 	return Iter{curr: v, currType: t}
 }
@@ -67,7 +69,7 @@ func (w *Iter) TypeInfo() typeinfo.T {
 // only valid flow; returns nil otherwise
 func (w *Iter) Markup(ensure bool) (ret map[string]any) {
 	v, _ := w.getFocus() // ugly.
-	if m, ok := v.Addr().Interface().(typeinfo.FlowInspector); ok {
+	if m, ok := v.Addr().Interface().(typeinfo.Markup); ok {
 		ret = m.GetMarkup(ensure)
 	}
 	return
@@ -98,20 +100,13 @@ func (w *Iter) RawValue() r.Value {
 	return v
 }
 
-// returns the value of the current focus as used by go.
-// for enums, its an int.
-func (w *Iter) GoValue() (ret any) {
-	v, _ := w.getFocus()
-	return v.Interface()
-}
-
 // returns the value of the current focus as it would appear in file.
 // enums use lower_case strings, while bool uses true/false.
 // falls back to the container itself if Next() has yet to be called.
 func (w *Iter) CompactValue() (ret any) {
 	v, t := w.getFocus()
 	if _, ok := t.(*typeinfo.Str); ok && v.Kind() == r.Int {
-		ret = ReflectStringer(v)
+		ret = destring(v)
 	} else {
 		ret = v.Interface()
 	}
@@ -127,7 +122,7 @@ func (w *Iter) GetSlot(ptr any) (okay bool) {
 }
 
 // write a value into the target of a slot.
-func (w *Iter) SetSlot(val typeinfo.Inspector) (okay bool) {
+func (w *Iter) SetSlot(val typeinfo.Instance) (okay bool) {
 	if val == nil {
 		w.curr.SetZero()
 	} else {
@@ -207,9 +202,9 @@ func (w *Iter) getFocus() (rv r.Value, rt typeinfo.T) {
 			// slots are filled with flows
 			// the first Elem() gets the pointer, the second the struct.
 			ptr := w.curr.Elem()
-			inspect := ptr.Interface().(typeinfo.Inspector)
+			inspect := ptr.Interface().(typeinfo.Instance)
 			rv = ptr.Elem()
-			rt, _ = inspect.Inspect()
+			rt = inspect.TypeInfo()
 		}
 	}
 	return

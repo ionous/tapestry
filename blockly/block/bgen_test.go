@@ -22,7 +22,7 @@ func TestPairs(t *testing.T) {
 	}
 }
 
-func testBlocks(src typeinfo.Inspector, expect string) (err error) {
+func testBlocks(src typeinfo.Instance, expect string) (err error) {
 	var id int
 	block.NewId = func() string {
 		id++

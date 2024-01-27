@@ -48,7 +48,7 @@ func Marshal(m play.PlayMessage) (ret string, err error) {
 	return
 }
 
-func marshal(m typeinfo.Inspector) (ret string, err error) {
+func marshal(m typeinfo.Instance) (ret string, err error) {
 	var enc encode.Encoder
 	if d, e := enc.Encode(m); e != nil {
 		err = e

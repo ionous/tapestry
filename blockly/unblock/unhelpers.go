@@ -19,8 +19,8 @@ func MakeBlockCreator(blocks []*typeinfo.TypeSet) Creator {
 	m := make(typeMap)
 	for _, b := range blocks {
 		for _, ptr := range b.Signatures {
-			i, _ := ptr.(typeinfo.Inspector).Inspect()
-			n := i.TypeName() // multiple signatures can generate the same type
+			t := ptr.TypeInfo()
+			n := t.TypeName() // multiple signatures can generate the same type
 			if _, ok := m[n]; !ok {
 				m[n] = r.TypeOf(ptr).Elem()
 			}
@@ -31,7 +31,7 @@ func MakeBlockCreator(blocks []*typeinfo.TypeSet) Creator {
 
 type typeMap map[string]r.Type
 
-// returns .(typeinfo.Inspector)
+// returns .(typeinfo.Instance)
 func (reg typeMap) NewType(name string) (ret any, okay bool) {
 	if rtype, ok := reg[name]; ok {
 		ret = r.New(rtype).Interface()

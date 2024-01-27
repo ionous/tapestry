@@ -19,17 +19,22 @@ var Zt_LiteralValue = typeinfo.Slot{
 // holds a single slot.
 type LiteralValue_Slot struct{ Value LiteralValue }
 
-// implements typeinfo.Inspector for a single slot.
-func (*LiteralValue_Slot) Inspect() (typeinfo.T, bool) {
-	return &Zt_LiteralValue, false
+// implements typeinfo.Instance for a single slot.
+func (*LiteralValue_Slot) TypeInfo() typeinfo.T {
+	return &Zt_LiteralValue
 }
 
 // holds a slice of slots.
 type LiteralValue_Slots []LiteralValue
 
-// implements typeinfo.Inspector for a series of slots.
-func (*LiteralValue_Slots) Inspect() (typeinfo.T, bool) {
-	return &Zt_LiteralValue, true
+// implements typeinfo.Instance for a series of slots.
+func (*LiteralValue_Slots) TypeInfo() typeinfo.T {
+	return &Zt_LiteralValue
+}
+
+// implements typeinfo.Repeats
+func (op *LiteralValue_Slots) Repeats() bool {
+	return len(*op) > 0
 }
 
 type BoolValue struct {
@@ -38,9 +43,9 @@ type BoolValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*BoolValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_BoolValue, false
+// implements typeinfo.Instance
+func (*BoolValue) TypeInfo() typeinfo.T {
+	return &Zt_BoolValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -81,9 +86,14 @@ var Zt_BoolValue = typeinfo.Flow{
 // holds a slice of type bool_value
 type BoolValue_Slice []BoolValue
 
-// implements typeinfo.Inspector
-func (*BoolValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_BoolValue, true
+// implements typeinfo.Instance
+func (*BoolValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_BoolValue
+}
+
+// implements typeinfo.Repeats
+func (op *BoolValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type FieldValue struct {
@@ -92,9 +102,9 @@ type FieldValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*FieldValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_FieldValue, false
+// implements typeinfo.Instance
+func (*FieldValue) TypeInfo() typeinfo.T {
+	return &Zt_FieldValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -125,9 +135,14 @@ var Zt_FieldValue = typeinfo.Flow{
 // holds a slice of type field_value
 type FieldValue_Slice []FieldValue
 
-// implements typeinfo.Inspector
-func (*FieldValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_FieldValue, true
+// implements typeinfo.Instance
+func (*FieldValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FieldValue
+}
+
+// implements typeinfo.Repeats
+func (op *FieldValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type FieldList struct {
@@ -135,9 +150,9 @@ type FieldList struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*FieldList) Inspect() (typeinfo.T, bool) {
-	return &Zt_FieldList, false
+// implements typeinfo.Instance
+func (*FieldList) TypeInfo() typeinfo.T {
+	return &Zt_FieldList
 }
 
 // return a valid markup map, creating it if necessary.
@@ -171,9 +186,14 @@ var Zt_FieldList = typeinfo.Flow{
 // holds a slice of type field_list
 type FieldList_Slice []FieldList
 
-// implements typeinfo.Inspector
-func (*FieldList_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_FieldList, true
+// implements typeinfo.Instance
+func (*FieldList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FieldList
+}
+
+// implements typeinfo.Repeats
+func (op *FieldList_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type NumValue struct {
@@ -182,9 +202,9 @@ type NumValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*NumValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_NumValue, false
+// implements typeinfo.Instance
+func (*NumValue) TypeInfo() typeinfo.T {
+	return &Zt_NumValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -225,9 +245,14 @@ var Zt_NumValue = typeinfo.Flow{
 // holds a slice of type num_value
 type NumValue_Slice []NumValue
 
-// implements typeinfo.Inspector
-func (*NumValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_NumValue, true
+// implements typeinfo.Instance
+func (*NumValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NumValue
+}
+
+// implements typeinfo.Repeats
+func (op *NumValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type NumValues struct {
@@ -236,9 +261,9 @@ type NumValues struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*NumValues) Inspect() (typeinfo.T, bool) {
-	return &Zt_NumValues, false
+// implements typeinfo.Instance
+func (*NumValues) TypeInfo() typeinfo.T {
+	return &Zt_NumValues
 }
 
 // return a valid markup map, creating it if necessary.
@@ -280,9 +305,14 @@ var Zt_NumValues = typeinfo.Flow{
 // holds a slice of type num_values
 type NumValues_Slice []NumValues
 
-// implements typeinfo.Inspector
-func (*NumValues_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_NumValues, true
+// implements typeinfo.Instance
+func (*NumValues_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NumValues
+}
+
+// implements typeinfo.Repeats
+func (op *NumValues_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RecordValue struct {
@@ -292,9 +322,9 @@ type RecordValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RecordValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_RecordValue, false
+// implements typeinfo.Instance
+func (*RecordValue) TypeInfo() typeinfo.T {
+	return &Zt_RecordValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -338,9 +368,14 @@ var Zt_RecordValue = typeinfo.Flow{
 // holds a slice of type record_value
 type RecordValue_Slice []RecordValue
 
-// implements typeinfo.Inspector
-func (*RecordValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RecordValue, true
+// implements typeinfo.Instance
+func (*RecordValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RecordValue
+}
+
+// implements typeinfo.Repeats
+func (op *RecordValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RecordList struct {
@@ -350,9 +385,9 @@ type RecordList struct {
 	Markup  map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RecordList) Inspect() (typeinfo.T, bool) {
-	return &Zt_RecordList, false
+// implements typeinfo.Instance
+func (*RecordList) TypeInfo() typeinfo.T {
+	return &Zt_RecordList
 }
 
 // return a valid markup map, creating it if necessary.
@@ -396,9 +431,14 @@ var Zt_RecordList = typeinfo.Flow{
 // holds a slice of type record_list
 type RecordList_Slice []RecordList
 
-// implements typeinfo.Inspector
-func (*RecordList_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RecordList, true
+// implements typeinfo.Instance
+func (*RecordList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RecordList
+}
+
+// implements typeinfo.Repeats
+func (op *RecordList_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TextValue struct {
@@ -407,9 +447,9 @@ type TextValue struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TextValue) Inspect() (typeinfo.T, bool) {
-	return &Zt_TextValue, false
+// implements typeinfo.Instance
+func (*TextValue) TypeInfo() typeinfo.T {
+	return &Zt_TextValue
 }
 
 // return a valid markup map, creating it if necessary.
@@ -450,9 +490,14 @@ var Zt_TextValue = typeinfo.Flow{
 // holds a slice of type text_value
 type TextValue_Slice []TextValue
 
-// implements typeinfo.Inspector
-func (*TextValue_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TextValue, true
+// implements typeinfo.Instance
+func (*TextValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TextValue
+}
+
+// implements typeinfo.Repeats
+func (op *TextValue_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type TextValues struct {
@@ -461,9 +506,9 @@ type TextValues struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*TextValues) Inspect() (typeinfo.T, bool) {
-	return &Zt_TextValues, false
+// implements typeinfo.Instance
+func (*TextValues) TypeInfo() typeinfo.T {
+	return &Zt_TextValues
 }
 
 // return a valid markup map, creating it if necessary.
@@ -505,9 +550,14 @@ var Zt_TextValues = typeinfo.Flow{
 // holds a slice of type text_values
 type TextValues_Slice []TextValues
 
-// implements typeinfo.Inspector
-func (*TextValues_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_TextValues, true
+// implements typeinfo.Instance
+func (*TextValues_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TextValues
+}
+
+// implements typeinfo.Repeats
+func (op *TextValues_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 // package listing of type data
@@ -540,7 +590,7 @@ var z_flow_list = []*typeinfo.Flow{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
 	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
 	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */

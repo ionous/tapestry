@@ -10,7 +10,7 @@ import (
 
 // hash to pointer to a nil value of the type
 // ex. 15485098871275255450: (*Comparison)(nil)
-type SignatureTable []map[uint64]any
+type SignatureTable []map[uint64]typeinfo.Instance
 
 // return the nil pointer to the type.
 func (fac SignatureTable) FindType(hash uint64) (ret any, okay bool) {
@@ -24,11 +24,11 @@ func (fac SignatureTable) FindType(hash uint64) (ret any, okay bool) {
 }
 
 // create a new instance of the type and return its pointer
-func (fac SignatureTable) Create(slot, fullsig string) (ret typeinfo.Inspector, okay bool) {
+func (fac SignatureTable) Create(slot, fullsig string) (ret typeinfo.Instance, okay bool) {
 	hash := Hash(slot, fullsig)
 	if cmdPtr, ok := fac.FindType(hash); ok {
 		cmdType := r.TypeOf(cmdPtr).Elem()
-		ret = r.New(cmdType).Interface().(typeinfo.Inspector)
+		ret = r.New(cmdType).Interface().(typeinfo.Instance)
 		okay = true
 	}
 	return

@@ -14,11 +14,11 @@ import (
 
 // PreImport happens at the opening of a json block and it can transform the value into something completely new.
 type PreImport interface {
-	PreImport(*weave.Catalog) (typeinfo.Inspector, error)
+	PreImport(*weave.Catalog) (typeinfo.Instance, error)
 }
 
 type PostImport interface {
-	PostImport(*weave.Catalog) (typeinfo.Inspector, error)
+	PostImport(*weave.Catalog) (typeinfo.Instance, error)
 }
 
 var _ PreImport = (*CountOf)(nil)

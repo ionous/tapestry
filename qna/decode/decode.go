@@ -112,7 +112,7 @@ func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignme
 	return
 }
 
-func (d *Decoder) decodeValue(out typeinfo.Inspector, b []byte) (err error) {
+func (d *Decoder) decodeValue(out typeinfo.Instance, b []byte) (err error) {
 	if len(b) > 0 {
 		var val any
 		if e := json.Unmarshal(b, &val); e != nil {

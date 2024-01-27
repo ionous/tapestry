@@ -16,7 +16,7 @@ import (
 
 // read blockly data into the passed tapestry command (tree).
 // where topBlock is the expected topblock type in the file.... ex. story_file
-func Decode(dst typeinfo.Inspector, topBlock string, reg Creator, msg json.RawMessage) (err error) {
+func Decode(dst typeinfo.Instance, topBlock string, reg Creator, msg json.RawMessage) (err error) {
 	var bff File
 	if e := json.Unmarshal(msg, &bff); e != nil {
 		err = e
@@ -30,7 +30,7 @@ func Decode(dst typeinfo.Inspector, topBlock string, reg Creator, msg json.RawMe
 
 // decode a generic block
 // public for testing.
-func DecodeBlock(dst typeinfo.Inspector, reg Creator, top *BlockInfo) (err error) {
+func DecodeBlock(dst typeinfo.Instance, reg Creator, top *BlockInfo) (err error) {
 	dec := unblock{reg}
 	return dec.decodeBlock(inspect.Walk(dst), top)
 }

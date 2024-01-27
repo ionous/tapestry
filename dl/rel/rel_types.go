@@ -12,9 +12,9 @@ type ReciprocalOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ReciprocalOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_ReciprocalOf, false
+// implements typeinfo.Instance
+func (*ReciprocalOf) TypeInfo() typeinfo.T {
+	return &Zt_ReciprocalOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -51,9 +51,14 @@ var Zt_ReciprocalOf = typeinfo.Flow{
 // holds a slice of type reciprocal_of
 type ReciprocalOf_Slice []ReciprocalOf
 
-// implements typeinfo.Inspector
-func (*ReciprocalOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ReciprocalOf, true
+// implements typeinfo.Instance
+func (*ReciprocalOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ReciprocalOf
+}
+
+// implements typeinfo.Repeats
+func (op *ReciprocalOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type ReciprocalsOf struct {
@@ -62,9 +67,9 @@ type ReciprocalsOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*ReciprocalsOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_ReciprocalsOf, false
+// implements typeinfo.Instance
+func (*ReciprocalsOf) TypeInfo() typeinfo.T {
+	return &Zt_ReciprocalsOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -101,9 +106,14 @@ var Zt_ReciprocalsOf = typeinfo.Flow{
 // holds a slice of type reciprocals_of
 type ReciprocalsOf_Slice []ReciprocalsOf
 
-// implements typeinfo.Inspector
-func (*ReciprocalsOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_ReciprocalsOf, true
+// implements typeinfo.Instance
+func (*ReciprocalsOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ReciprocalsOf
+}
+
+// implements typeinfo.Repeats
+func (op *ReciprocalsOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type Relate struct {
@@ -113,9 +123,9 @@ type Relate struct {
 	Markup   map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*Relate) Inspect() (typeinfo.T, bool) {
-	return &Zt_Relate, false
+// implements typeinfo.Instance
+func (*Relate) TypeInfo() typeinfo.T {
+	return &Zt_Relate
 }
 
 // return a valid markup map, creating it if necessary.
@@ -156,9 +166,14 @@ var Zt_Relate = typeinfo.Flow{
 // holds a slice of type relate
 type Relate_Slice []Relate
 
-// implements typeinfo.Inspector
-func (*Relate_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_Relate, true
+// implements typeinfo.Instance
+func (*Relate_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Relate
+}
+
+// implements typeinfo.Repeats
+func (op *Relate_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RelativeOf struct {
@@ -167,9 +182,9 @@ type RelativeOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RelativeOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_RelativeOf, false
+// implements typeinfo.Instance
+func (*RelativeOf) TypeInfo() typeinfo.T {
+	return &Zt_RelativeOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -206,9 +221,14 @@ var Zt_RelativeOf = typeinfo.Flow{
 // holds a slice of type relative_of
 type RelativeOf_Slice []RelativeOf
 
-// implements typeinfo.Inspector
-func (*RelativeOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RelativeOf, true
+// implements typeinfo.Instance
+func (*RelativeOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RelativeOf
+}
+
+// implements typeinfo.Repeats
+func (op *RelativeOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 type RelativesOf struct {
@@ -217,9 +237,9 @@ type RelativesOf struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*RelativesOf) Inspect() (typeinfo.T, bool) {
-	return &Zt_RelativesOf, false
+// implements typeinfo.Instance
+func (*RelativesOf) TypeInfo() typeinfo.T {
+	return &Zt_RelativesOf
 }
 
 // return a valid markup map, creating it if necessary.
@@ -256,9 +276,14 @@ var Zt_RelativesOf = typeinfo.Flow{
 // holds a slice of type relatives_of
 type RelativesOf_Slice []RelativesOf
 
-// implements typeinfo.Inspector
-func (*RelativesOf_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_RelativesOf, true
+// implements typeinfo.Instance
+func (*RelativesOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RelativesOf
+}
+
+// implements typeinfo.Repeats
+func (op *RelativesOf_Slice) Repeats() bool {
+	return len(*op) > 0
 }
 
 var Zt_RelationName = typeinfo.Str{
@@ -290,7 +315,7 @@ var z_str_list = []*typeinfo.Str{
 
 // a list of all command signatures
 // ( for processing and verifying story files )
-var z_signatures = map[uint64]any{
+var z_signatures = map[uint64]typeinfo.Instance{
 	6987621383789599381:  (*ReciprocalOf)(nil),  /* text_eval=Reciprocal:object: */
 	16170704865359856399: (*ReciprocalsOf)(nil), /* text_list_eval=Reciprocals:object: */
 	15160920709871392391: (*Relate)(nil),        /* execute=Relate:to:via: */

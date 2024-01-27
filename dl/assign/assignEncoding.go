@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
+func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	if call, ok := op.(*CallPattern); !ok {
 		ret, err = literal.CustomEncoder(enc, op)
 	} else {

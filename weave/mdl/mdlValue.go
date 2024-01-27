@@ -269,7 +269,7 @@ func marshalLiteral(val literal.LiteralValue) (ret string, err error) {
 }
 
 // shared generic marshal prog to text
-func marshal(slot typeinfo.Inspector) (ret string, err error) {
+func marshal(slot typeinfo.Instance) (ret string, err error) {
 	if slot != nil {
 		if out, e := encoder().Encode(slot); e != nil {
 			err = e

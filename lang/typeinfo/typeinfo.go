@@ -2,19 +2,24 @@
 // It follows closely from tapestry typespecs:
 // The typespecs describes the user specification ( in .ifspec, or .tells files )
 // while the typeinfo describes the golang structures derived from those specs.
-// unless otherwise specified, strings are underscore separated and lowercase.
+// unless otherwise specified, names are in "lower_case" format.
 package typeinfo
 
-// implemented by every auto-generated command
-type Inspector interface {
+// provides access to typeinfo for auto-generated commands
+type Instance interface {
 	// returns the typeinfo for the instance
-	// and whether it repeats.
-	Inspect() (T, bool)
+	TypeInfo() T
 }
 
-// implemented by auto-generated flows
-type FlowInspector interface {
-	Inspector
+// a marker interface implemented by slices of commands
+type Repeats interface {
+	// slices can return false if their list is empty.
+	Repeats() bool
+}
+
+// implemented by instances with author specified markup data
+// ( currently, that's only flows )
+type Markup interface {
 	GetMarkup(ensure bool) map[string]any
 }
 
@@ -25,14 +30,16 @@ type TypeSet struct {
 	Flow       []*Flow
 	Str        []*Str
 	Num        []*Num
-	Signatures map[uint64]any
+	Signatures map[uint64]Instance
 }
 
-// marker interface implemented by each kind of typeinfo:
-// Flow, Slot, Str, and Num.
+// implemented by each kind of typeinfo
+// ( see: Flow, Slot, Str, and Num. )
 type T interface {
-	TypeInfo() T
+	// globally unique name for the type.
 	TypeName() string
+	// returns markup data specified in the .tell spec
+	// ( for instance: comments, blockly presentation information, etc. )
 	TypeMarkup() map[string]any
 }
 
@@ -43,11 +50,6 @@ type Flow struct {
 	Slots  []*Slot        // interfaces that a command implements
 	Terms  []Term         // terms of the command
 	Markup map[string]any // metadata shared by all instances of this type
-}
-
-// designates Flow as typeinfo; returns itself
-func (t *Flow) TypeInfo() T {
-	return t
 }
 
 func (t *Flow) TypeName() string {
@@ -68,6 +70,10 @@ type Term struct {
 	Type     T      // a pointer to Flow, Slot, Str, or Num; or, nil if private
 }
 
+// anonymous terms have empty labels.
+// for instance, in some example command: { Say: "hello" }
+// there is no label after the word say and before the first colon
+// so that first term is considered anonymous.
 func (t Term) IsAnonymous() bool {
 	return len(t.Label) == 0
 }
@@ -75,11 +81,6 @@ func (t Term) IsAnonymous() bool {
 type Slot struct {
 	Name   string         // unique name for this type
 	Markup map[string]any // metadata shared by all instances of this type
-}
-
-// designates Slot as typeinfo; returns itself
-func (t *Slot) TypeInfo() T {
-	return t
 }
 
 func (t *Slot) TypeName() string {
@@ -94,11 +95,6 @@ type Str struct {
 	Name    string         // unique name for this type
 	Options []string       // for enumerations; for plain strings, this is nil.
 	Markup  map[string]any // metadata shared by all instances of this type
-}
-
-// designates Str as typeinfo; returns itself
-func (t *Str) TypeInfo() T {
-	return t
 }
 
 func (t *Str) TypeName() string {
@@ -123,11 +119,6 @@ func (t *Str) FindOption(str string) (ret int) {
 type Num struct {
 	Name   string         // unique name for this type
 	Markup map[string]any // metadata shared by all instances of this type
-}
-
-// designates Num as typeinfo; returns itself
-func (t *Num) TypeInfo() T {
-	return t
 }
 
 func (t *Num) TypeName() string {

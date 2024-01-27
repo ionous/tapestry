@@ -5,12 +5,12 @@ type {{Pascal .Name}} struct {
 	Markup map[string]any
 }
 
-// implements typeinfo.Inspector
-func (*{{Pascal .Name}}) Inspect() (typeinfo.T, bool) {
-	return &Zt_{{Pascal .Name}}, false
+// implements typeinfo.Instance
+func (*{{Pascal .Name}}) TypeInfo() typeinfo.T {
+	return &Zt_{{Pascal .Name}}
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *{{Pascal .Name}}) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -53,7 +53,12 @@ var Zt_{{Pascal .Name}} = typeinfo.Flow{
 // holds a slice of type {{.Name}}
 type {{Pascal .Name}}_Slice []{{Pascal .Name}}
 
-// implements typeinfo.Inspector
-func (*{{Pascal .Name}}_Slice) Inspect() (typeinfo.T, bool) {
-	return &Zt_{{Pascal .Name}}, true
+// implements typeinfo.Instance
+func (*{{Pascal .Name}}_Slice) TypeInfo() typeinfo.T {
+	return &Zt_{{Pascal .Name}}
+}
+
+// implements typeinfo.Repeats
+func (op* {{Pascal .Name}}_Slice) Repeats() bool {
+	return len(*op) > 0 
 }
