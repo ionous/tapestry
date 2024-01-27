@@ -29,11 +29,11 @@ func searchCounters(m typeinfo.Inspector) (okay bool) {
 }
 
 // return the first flow of the passed type
-func searchForFlow(src typeinfo.Inspector, find typeinfo.T) (ret any, err error) {
+func searchForFlow(src typeinfo.Inspector, find typeinfo.T) (ret typeinfo.Inspector, err error) {
 	evts := inspect.Callbacks{
 		OnFlow: func(w inspect.Iter) (err error) {
 			if find == w.TypeInfo() {
-				ret = w.GoValue()
+				ret = w.RawValue().Interface().(typeinfo.Inspector)
 				err = inspect.DoneVisiting
 			}
 			return
