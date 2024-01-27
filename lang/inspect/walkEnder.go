@@ -1,7 +1,7 @@
 package inspect
 
 // signature for OnEnd
-type Ender func(Iter, error) error
+type Ender func(It, error) error
 
 // after evt.End() run a function.
 // the function receives the error that the End function returned.
@@ -16,7 +16,7 @@ type ender struct {
 	cb Ender
 }
 
-func (n ender) End(w Iter) error {
+func (n ender) End(w It) error {
 	e := n.Events.End(w)
 	return n.cb(w, e)
 }

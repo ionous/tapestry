@@ -10,7 +10,7 @@ import (
 func (m *bgen) newList(term string, fields *js.Builder) inspect.Callbacks {
 	var cnt int
 	return inspect.Callbacks{
-		OnValue: func(w inspect.Iter) (err error) {
+		OnValue: func(w inspect.It) (err error) {
 			if b, e := valueToBytes(w); e != nil {
 				err = e
 			} else {
@@ -26,7 +26,7 @@ func (m *bgen) newList(term string, fields *js.Builder) inspect.Callbacks {
 		},
 		// we dont enter a new state for "OnValue".. but values dont have a matching End.
 		// we only get the end of our own repeat.
-		OnEnd: func(w inspect.Iter) error {
+		OnEnd: func(w inspect.It) error {
 			return m.events.Pop()
 		},
 	}

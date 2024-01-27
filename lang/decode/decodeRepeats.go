@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-func (dec *Decoder) repeatFlow(out inspect.Iter, val any) (err error) {
+func (dec *Decoder) repeatFlow(out inspect.It, val any) (err error) {
 	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
 		err = dec.repeatFlow(out, []any{val})
 	} else {
@@ -21,7 +21,7 @@ func (dec *Decoder) repeatFlow(out inspect.Iter, val any) (err error) {
 	return
 }
 
-func (dec *Decoder) repeatSlot(out inspect.Iter, slot *typeinfo.Slot, val any) (err error) {
+func (dec *Decoder) repeatSlot(out inspect.It, slot *typeinfo.Slot, val any) (err error) {
 	if els, ok := val.([]any); !ok { // single values can stand in as a slice of one
 		err = dec.repeatSlot(out, slot, []any{val})
 	} else {

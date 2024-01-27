@@ -3,8 +3,8 @@ package block
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
-	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -50,7 +50,7 @@ func (b *blockData) endInput(was int) {
 
 // fields are named the same as the input
 // see the tapestry_generic_mixin, createInput javascript.
-func (b *blockData) writeValue(term string, w inspect.Iter) (err error) {
+func (b *blockData) writeValue(term string, w inspect.It) (err error) {
 	if v, e := valueToBytes(w); e != nil {
 		err = e
 	} else {
@@ -114,7 +114,7 @@ func (b *blockData) writeTo(out *js.Builder) {
 }
 
 func comment(m map[string]any) (ret string) {
-	if lines := markup.UserComment(m); len(lines) > 0 {
+	if lines := compact.UserComment(m); len(lines) > 0 {
 		ret = strings.Join(lines, "\n")
 	}
 	return

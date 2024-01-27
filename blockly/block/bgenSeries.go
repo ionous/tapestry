@@ -14,12 +14,12 @@ func (m *bgen) newSeries(term string, inputs *js.Builder) inspect.Callbacks {
 	var cnt int
 	var writingSlot bool
 	return inspect.Callbacks{
-		OnSlot: func(w inspect.Iter) (_ error) {
+		OnSlot: func(w inspect.It) (_ error) {
 			cnt++ // we count every slot, even if there is no block filling it.
 			writingSlot = true
 			return
 		},
-		OnFlow: func(w inspect.Iter) error {
+		OnFlow: func(w inspect.It) error {
 			if inputs.Len() > 0 {
 				inputs.R(js.Comma)
 			}
@@ -35,14 +35,14 @@ func (m *bgen) newSeries(term string, inputs *js.Builder) inspect.Callbacks {
 			typeName := w.TypeInfo().(*typeinfo.Flow).Name
 			return m.events.Push(inspect.OnEnd(m.newInnerFlow(w, inputs, typeName),
 				// when a child ( the inner block ) has finished
-				func(w inspect.Iter, err error) error {
+				func(w inspect.It, err error) error {
 					if err == nil {
 						inputs.R(close, close)
 					}
 					return err
 				}))
 		},
-		OnEnd: func(w inspect.Iter) (err error) {
+		OnEnd: func(w inspect.It) (err error) {
 			// note: we reuse the current state for each "OnSlot"
 			// so we get ends for it and for the end of our own repeat.
 			if writingSlot {

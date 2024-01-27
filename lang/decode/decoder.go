@@ -65,7 +65,7 @@ func (dec *Decoder) Decode(out typeinfo.Instance, plainData any) (err error) {
 }
 
 // assumes that it is at the start of a flow container
-func (dec *Decoder) readMsg(msg compact.Message, out inspect.Iter) (err error) {
+func (dec *Decoder) readMsg(msg compact.Message, out inspect.It) (err error) {
 	// technically, the iterator should be the source of truth here.
 	// but since the args were built from the signature
 	// and the signature was matched against the registry:

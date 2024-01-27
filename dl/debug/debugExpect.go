@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/lang/markup"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -38,7 +38,7 @@ func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
 	} else if !condition.Bool() {
-		str, ok := op.Markup[markup.Comment]
+		str, ok := op.Markup[compact.Comment]
 		if !ok {
 			str = fmt.Sprintf("%v", op.Value)
 		}

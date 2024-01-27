@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
-	"git.sr.ht/~ionous/tapestry/lang/markup"
 )
 
 // unpack a map of plain values into a description of a tapestry command.
@@ -13,9 +12,9 @@ import (
 func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 	var out compact.Message
 	for k, v := range msg {
-		if strings.HasPrefix(k, markup.Marker) {
-			if key := k[len(markup.Marker):]; len(key) == 0 {
-				out.AddMarkup(markup.Comment, v)
+		if strings.HasPrefix(k, compact.Markup) {
+			if key := k[len(compact.Markup):]; len(key) == 0 {
+				out.AddMarkup(compact.Comment, v)
 			} else {
 				out.AddMarkup(key, v)
 			}

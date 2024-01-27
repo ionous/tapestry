@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-func nextField(it *inspect.Iter, param string) (ret typeinfo.Term, okay bool) {
+func nextField(it *inspect.It, param string) (ret typeinfo.Term, okay bool) {
 	for it.Next() {
 		info := it.Term() // internal fields dont have labels....
 		if !info.Private && info.Label == param {

@@ -11,13 +11,13 @@ import (
 func (m *bgen) newRepeat(term string, blk *blockData) inspect.Callbacks {
 	return inspect.Callbacks{
 		// ex. a series of a specific flow
-		OnFlow: func(w inspect.Iter) error {
+		OnFlow: func(w inspect.It) error {
 			next := m.newSlice(term, &blk.inputs)
 			m.events.Replace(next)
 			return next.OnFlow(w)
 		},
 		// possibly a single stack, or a series of inputs
-		OnSlot: func(w inspect.Iter) error {
+		OnSlot: func(w inspect.It) error {
 			var next inspect.Callbacks
 			slotType := w.TypeInfo().(*typeinfo.Slot)
 			if slot := bconst.MakeSlotRule(slotType); slot.Stack {
@@ -29,7 +29,7 @@ func (m *bgen) newRepeat(term string, blk *blockData) inspect.Callbacks {
 			return next.OnSlot(w)
 		},
 		// a series of fields
-		OnValue: func(w inspect.Iter) error {
+		OnValue: func(w inspect.It) error {
 			next := m.newList(term, &blk.fields)
 			m.events.Replace(next)
 			return next.OnValue(w)

@@ -2,7 +2,7 @@ package encode
 
 import "git.sr.ht/~ionous/tapestry/lang/inspect"
 
-func (enc *Encoder) encodeFlows(it inspect.Iter) (ret []any, err error) {
+func (enc *Encoder) encodeFlows(it inspect.It) (ret []any, err error) {
 	if cnt := it.Len(); cnt > 0 {
 		ret = make([]any, cnt)
 		for i := 0; i < cnt && it.Next(); i++ {
@@ -17,7 +17,7 @@ func (enc *Encoder) encodeFlows(it inspect.Iter) (ret []any, err error) {
 	return
 }
 
-func (enc *Encoder) encodeSlots(it inspect.Iter) (ret []any, err error) {
+func (enc *Encoder) encodeSlots(it inspect.It) (ret []any, err error) {
 	if cnt := it.Len(); cnt > 0 {
 		ret = make([]any, cnt)
 		for i := 0; it.Next(); i++ { // the indexed element

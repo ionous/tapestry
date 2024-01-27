@@ -12,7 +12,7 @@ import (
 func (m *bgen) newSlice(term string, inputs *js.Builder) inspect.Callbacks {
 	open, close, cnt := js.Obj[0], js.Obj[1], 0
 	return inspect.Callbacks{
-		OnFlow: func(w inspect.Iter) error {
+		OnFlow: func(w inspect.It) error {
 			if inputs.Len() > 0 {
 				inputs.R(js.Comma)
 			}
@@ -25,7 +25,7 @@ func (m *bgen) newSlice(term string, inputs *js.Builder) inspect.Callbacks {
 			typeName := w.TypeInfo().(*typeinfo.Flow).Name
 			return m.events.Push(
 				inspect.OnEnd(m.newInnerFlow(w, inputs, typeName),
-					func(w inspect.Iter, err error) error {
+					func(w inspect.It, err error) error {
 						if err == nil {
 							inputs.R(close, close)
 						}
@@ -33,7 +33,7 @@ func (m *bgen) newSlice(term string, inputs *js.Builder) inspect.Callbacks {
 					}))
 		},
 		// the end of the repeat block which started us.
-		OnEnd: func(w inspect.Iter) error {
+		OnEnd: func(w inspect.It) error {
 			return m.events.Pop()
 		},
 	}

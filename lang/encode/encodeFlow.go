@@ -1,7 +1,7 @@
 package encode
 
 import (
-	"git.sr.ht/~ionous/tapestry/lang/markup"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
 type FlowBuilder struct {
@@ -23,11 +23,11 @@ func (out *FlowBuilder) SetMarkup(markup map[string]any) {
 func (out *FlowBuilder) FinalizeMap() (ret map[string]any) {
 	if sig := out.String(); len(sig) > 0 {
 		m := make(map[string]any)
-		if sig == markup.Marker {
+		if sig == compact.Markup {
 			// this will most likely get overwritten by the markup loop
 			// however we want to avoid generating an empty {}
 			// and i just think it looks better as { "--": "" } than { "--": true }
-			m[markup.Marker] = ""
+			m[compact.Markup] = ""
 		} else {
 			switch vals := out.params; len(vals) {
 			// zero parameters { "sig": true }
@@ -45,12 +45,12 @@ func (out *FlowBuilder) FinalizeMap() (ret map[string]any) {
 			}
 		}
 		for k, v := range out.markup {
-			if k == markup.Comment {
+			if k == compact.Comment {
 				// { "--": "here's a story of a lovely comment, which was writing up some very lovely words." }
-				m[markup.Marker] = v
+				m[compact.Markup] = v
 			} else {
 				// { "--color": 5 }
-				m[markup.Marker+k] = v
+				m[compact.Markup+k] = v
 			}
 		}
 		ret = m

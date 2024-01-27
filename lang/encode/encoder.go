@@ -47,7 +47,7 @@ func (enc *Encoder) Encode(i typeinfo.Instance) (ret any, err error) {
 }
 
 // it is at the struct level
-func (enc *Encoder) writeFlow(src inspect.Iter) (ret any, err error) {
+func (enc *Encoder) writeFlow(src inspect.It) (ret any, err error) {
 	if fix, e := unpack(src); e != nil {
 		err = e
 	} else if res, e := enc.customEncode(fix); e == nil {
@@ -131,7 +131,7 @@ func unknownType(t r.Type) error {
 	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
 }
 
-func unpack(src inspect.Iter) (ret typeinfo.Instance, err error) {
+func unpack(src inspect.It) (ret typeinfo.Instance, err error) {
 	v := src.RawValue()
 	if fix, ok := v.Addr().Interface().(typeinfo.Instance); !ok {
 		err = fmt.Errorf("%s is not a flow", v.Type())

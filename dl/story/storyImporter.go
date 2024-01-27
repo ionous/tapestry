@@ -32,7 +32,7 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 		// given a slot, replace its command using PreImport or PostImport
 		// and, walk the contents of its (replaced) for additional pre or post imports.
 		// a command usually would only implement either Pre or Post ( or neither. )
-		OnSlot: func(slot inspect.Iter) (err error) {
+		OnSlot: func(slot inspect.It) (err error) {
 			t := slot.TypeInfo().(*typeinfo.Slot)
 			updateActivityDepth(cat, t, 1)
 			var tgt PreImport
@@ -47,7 +47,7 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 			}
 			return
 		},
-		OnEnd: func(slot inspect.Iter) (err error) {
+		OnEnd: func(slot inspect.It) (err error) {
 			if t, ok := slot.TypeInfo().(*typeinfo.Slot); ok && !slot.Repeating() {
 				var tgt PostImport
 				if ok := slot.GetSlot(&tgt); ok {

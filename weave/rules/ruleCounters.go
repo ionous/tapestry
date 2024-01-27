@@ -31,7 +31,7 @@ func searchCounters(m typeinfo.Instance) (okay bool) {
 // return the first flow of the passed type
 func searchForFlow(src typeinfo.Instance, find typeinfo.T) (ret typeinfo.Instance, err error) {
 	evts := inspect.Callbacks{
-		OnFlow: func(w inspect.Iter) (err error) {
+		OnFlow: func(w inspect.It) (err error) {
 			if find == w.TypeInfo() {
 				// ahg!
 				ret = w.RawValue().Addr().Interface().(typeinfo.Instance)

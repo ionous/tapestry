@@ -7,8 +7,8 @@ import (
 	r "reflect"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
-	"git.sr.ht/~ionous/tapestry/lang/markup"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
@@ -39,7 +39,7 @@ type unblock struct {
 	factory Creator
 }
 
-func (un *unblock) decodeBlock(out inspect.Iter, bff *BlockInfo) (err error) {
+func (un *unblock) decodeBlock(out inspect.It, bff *BlockInfo) (err error) {
 	if e := readMarkup(out, bff); e != nil {
 		err = e
 	} else {
@@ -101,7 +101,7 @@ func (un *unblock) decodeBlock(out inspect.Iter, bff *BlockInfo) (err error) {
 	return
 }
 
-func readMarkup(flow inspect.Iter, bff *BlockInfo) (err error) {
+func readMarkup(flow inspect.It, bff *BlockInfo) (err error) {
 	if c := bff.Icons.Comment; c != nil {
 		m := flow.Markup(true)
 		lines := strings.FieldsFunc(c.Text, func(r rune) bool {
@@ -110,18 +110,18 @@ func readMarkup(flow inspect.Iter, bff *BlockInfo) (err error) {
 		})
 		switch len(lines) {
 		case 0:
-			m[markup.Comment] = ""
+			m[compact.Comment] = ""
 		case 1:
-			m[markup.Comment] = lines[0]
+			m[compact.Comment] = lines[0]
 		default:
-			m[markup.Comment] = lines
+			m[compact.Comment] = lines
 		}
 	}
 	return
 }
 
 // a stack is a repeating slot
-func (un *unblock) decodeStack(out inspect.Iter, bff *BlockInfo, idx int) (err error) {
+func (un *unblock) decodeStack(out inspect.It, bff *BlockInfo, idx int) (err error) {
 	if input, e := bff.ReadInput(idx); e != nil {
 		err = e
 	} else {
@@ -146,7 +146,7 @@ func (un *unblock) decodeStack(out inspect.Iter, bff *BlockInfo, idx int) (err e
 }
 
 // repeating non-stacking slots
-func (un *unblock) decodeSeries(out inspect.Iter, inputs js.MapSlice) (err error) {
+func (un *unblock) decodeSeries(out inspect.It, inputs js.MapSlice) (err error) {
 	out.Resize(len(inputs))
 	for _, el := range inputs {
 		out.Next()
@@ -161,7 +161,7 @@ func (un *unblock) decodeSeries(out inspect.Iter, inputs js.MapSlice) (err error
 	return
 }
 
-func (un *unblock) decodeSlot(out inspect.Iter, inputType string, next *BlockInfo) (err error) {
+func (un *unblock) decodeSlot(out inspect.It, inputType string, next *BlockInfo) (err error) {
 	if e := un.fillSlot(out, inputType); e != nil {
 		err = e
 	} else if slot := out.Walk(); !slot.Next() {
@@ -173,7 +173,7 @@ func (un *unblock) decodeSlot(out inspect.Iter, inputType string, next *BlockInf
 }
 
 // create a blank command to fill the targeted slot.
-func (un *unblock) fillSlot(out inspect.Iter, typeName string) (err error) {
+func (un *unblock) fillSlot(out inspect.It, typeName string) (err error) {
 	if rptr, ok := un.factory.NewType(typeName); !ok {
 		err = errutil.Fmt("couldn't create %q", typeName)
 	} else {
@@ -183,7 +183,7 @@ func (un *unblock) fillSlot(out inspect.Iter, typeName string) (err error) {
 }
 
 // repeating flows
-func (un *unblock) decodeSlice(out inspect.Iter, inputs js.MapSlice) (err error) {
+func (un *unblock) decodeSlice(out inspect.It, inputs js.MapSlice) (err error) {
 	out.Resize(len(inputs))
 	for _, el := range inputs {
 		out.Next()
@@ -199,7 +199,7 @@ func (un *unblock) decodeSlice(out inspect.Iter, inputs js.MapSlice) (err error)
 }
 
 // an array of primitives is a list of fields.
-func (un *unblock) decodeList(out inspect.Iter, fields js.MapSlice) (err error) {
+func (un *unblock) decodeList(out inspect.It, fields js.MapSlice) (err error) {
 	out.Resize(len(fields))
 	for _, el := range fields {
 		out.Next()
@@ -214,7 +214,7 @@ func (un *unblock) decodeList(out inspect.Iter, fields js.MapSlice) (err error) 
 }
 
 // simple values live in bff.fields
-func decodeField(out inspect.Iter, bff *BlockInfo, fieldName string) (err error) {
+func decodeField(out inspect.It, bff *BlockInfo, fieldName string) (err error) {
 	if field, ok := bff.Fields.Find(fieldName); ok {
 		var value any
 		if e := json.Unmarshal(field.Msg, &value); e != nil {

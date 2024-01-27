@@ -11,7 +11,7 @@ import (
 
 // convert a value from the encoder to a jsonable output
 // ex. a string to `"a string"`
-func valueToBytes(w inspect.Iter) (ret json.RawMessage, err error) {
+func valueToBytes(w inspect.It) (ret json.RawMessage, err error) {
 	if v, ok := getValue(w); !ok {
 		err = errors.New("couldnt convert value")
 	} else if b, e := json.Marshal(v); e != nil {
@@ -22,7 +22,7 @@ func valueToBytes(w inspect.Iter) (ret json.RawMessage, err error) {
 	return
 }
 
-func getValue(w inspect.Iter) (ret any, okay bool) {
+func getValue(w inspect.It) (ret any, okay bool) {
 	t := w.TypeInfo()
 	switch t := t.(type) {
 	case *typeinfo.Num:

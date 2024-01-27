@@ -1,9 +1,9 @@
-package markup
+package compact
 
+// constants for the markup maps in the dl.
 const (
-	Comment  = "comment"
-	Template = "template"
-	Marker   = "--"
+	Comment = "comment"
+	Markup  = "--"
 )
 
 // read a user comment from markup, normalizing it as an array of strings

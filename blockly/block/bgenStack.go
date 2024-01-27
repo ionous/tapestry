@@ -19,12 +19,12 @@ func (m *bgen) newStack(term string, blk *blockData) inspect.Callbacks {
 	open, close := js.Obj[0], js.Obj[1]
 	return inspect.Callbacks{
 		// happens before each slat which is received in OnFlow.
-		OnSlot: func(w inspect.Iter) (_ error) {
+		OnSlot: func(w inspect.It) (_ error) {
 			writingSlot = true
 			return
 		},
 		// happens after OnSlot, if and only if the slot is filled.
-		OnFlow: func(w inspect.Iter) (_ error) {
+		OnFlow: func(w inspect.It) (_ error) {
 			typeName := w.TypeInfo().(*typeinfo.Flow).Name
 			if cnt == 0 {
 				_ = blk.startInputWithoutCount(term) // the repeat already wrote the count
@@ -36,7 +36,7 @@ func (m *bgen) newStack(term string, blk *blockData) inspect.Callbacks {
 			return m.events.Push(m.newInnerFlow(w, &blk.inputs, bconst.StackedName(typeName)))
 		},
 		// called after each slot and slot.
-		OnEnd: func(w inspect.Iter) (err error) {
+		OnEnd: func(w inspect.It) (err error) {
 			// we dont enter a new state for "OnSlot"
 			// so we get ends for it and for the end of our own repeat.
 			if writingSlot {

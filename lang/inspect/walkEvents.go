@@ -10,18 +10,18 @@ import (
 
 // fix? this should probably be passing type info and not walker itself
 type Events interface {
-	Flow(Iter) error
+	Flow(It) error
 	// called for every member of a flow.
-	Field(Iter) error
+	Field(It) error
 	// called for a member slot: can be an empty slot.
-	Slot(Iter) error
+	Slot(It) error
 	// called for a member that repeats; can be an empty list.
-	Repeat(Iter) error
+	Repeat(It) error
 	// called for each str or num in a flow, or in a repeat.
 	// because it isnt a container, there is no matching end.
-	Value(Iter) error
+	Value(It) error
 	// called after each flow, slot, or repeat.
-	End(Iter) error
+	End(It) error
 }
 
 // can be used to early exit from visiting
@@ -53,7 +53,7 @@ func Visit(i typeinfo.Instance, evt Events) (err error) {
 	return
 }
 
-func visitFields(w Iter, evt Events) (err error) {
+func visitFields(w It, evt Events) (err error) {
 	for w.Next() && err == nil {
 		if e := evt.Field(w); e != nil {
 			err = e
@@ -83,7 +83,7 @@ func visitFields(w Iter, evt Events) (err error) {
 	return
 }
 
-func visitFlow(w Iter, evt Events) (err error) {
+func visitFlow(w It, evt Events) (err error) {
 	if e := evt.Flow(w); e != nil {
 		err = e
 	} else if e := visitFields(w, evt); e != nil {
@@ -94,7 +94,7 @@ func visitFlow(w Iter, evt Events) (err error) {
 	return
 }
 
-func visitSlot(w Iter, evt Events) (err error) {
+func visitSlot(w It, evt Events) (err error) {
 	if e := evt.Slot(w); e != nil {
 		err = e
 	} else {
@@ -108,7 +108,7 @@ func visitSlot(w Iter, evt Events) (err error) {
 	return
 }
 
-func visitFlows(w Iter, evt Events) (err error) {
+func visitFlows(w It, evt Events) (err error) {
 	evt.Repeat(w)
 	for it := w; it.Next(); {
 		if e := visitFlow(it.Walk(), evt); e != nil {
@@ -122,7 +122,7 @@ func visitFlows(w Iter, evt Events) (err error) {
 	return
 }
 
-func visitSlots(w Iter, evt Events) (err error) {
+func visitSlots(w It, evt Events) (err error) {
 	evt.Repeat(w)
 	for it := w; it.Next(); {
 		if e := visitSlot(it.Walk(), evt); e != nil {
@@ -136,7 +136,7 @@ func visitSlots(w Iter, evt Events) (err error) {
 	return
 }
 
-func visitValues(w Iter, evt Events) (err error) {
+func visitValues(w It, evt Events) (err error) {
 	evt.Repeat(w)
 	for it := w; it.Next(); {
 		if e := evt.Value(it); e != nil {

@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-func (dec *Decoder) decodeSlot(w inspect.Iter, slot *typeinfo.Slot, data any) (err error) {
+func (dec *Decoder) decodeSlot(w inspect.It, slot *typeinfo.Slot, data any) (err error) {
 	if ptr, e := dec.innerDecode(w, slot, data); e != nil {
 		err = e
 	} else if !w.SetSlot(ptr) {
@@ -17,7 +17,7 @@ func (dec *Decoder) decodeSlot(w inspect.Iter, slot *typeinfo.Slot, data any) (e
 	return
 }
 
-func (dec *Decoder) innerDecode(w inspect.Iter, slot *typeinfo.Slot, data any) (ret typeinfo.Instance, err error) {
+func (dec *Decoder) innerDecode(w inspect.It, slot *typeinfo.Slot, data any) (ret typeinfo.Instance, err error) {
 	if v, e := dec.customDecode(w, slot, data); !compact.IsUnhandled(e) {
 		ret, err = v, e
 	} else {
@@ -41,7 +41,7 @@ func (dec *Decoder) innerDecode(w inspect.Iter, slot *typeinfo.Slot, data any) (
 	return
 }
 
-func (dec *Decoder) customDecode(w inspect.Iter, slot *typeinfo.Slot, arg any) (ret typeinfo.Instance, err error) {
+func (dec *Decoder) customDecode(w inspect.It, slot *typeinfo.Slot, arg any) (ret typeinfo.Instance, err error) {
 	if c := dec.customDecoder; c == nil {
 		err = compact.Unhandled("custom decoder")
 	} else {
