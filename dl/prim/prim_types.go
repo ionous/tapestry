@@ -35,8 +35,8 @@ func (op Bool) String() (ret string) {
 var Zt_Bool = typeinfo.Str{
 	Name: "bool",
 	Options: []string{
-		"true",
 		"false",
+		"true",
 	},
 }
 var Zt_Lines = typeinfo.Str{

@@ -27,6 +27,6 @@ func buildFlags() (fs flag.FlagSet) {
 	fs.StringVar(&cfg.testString, "test", "", "optional list of commands to run (non-interactive)")
 	fs.BoolVar(&cfg.json, "json", false, "expect input/output in json (default is plain text)")
 	fs.BoolVar(&cfg.responses, "responses", false, "print response names instead of values")
-	fs.StringVar(&cfg.logLevel, "log", "", levels)
+	fs.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Note.String(), levels)
 	return
 }

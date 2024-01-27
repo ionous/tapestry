@@ -83,9 +83,10 @@ func checkOne(d *decode.Decoder, play *play.Playtime, check query.CheckData, pre
 
 func readLegacyExpectation(check query.CheckData) (ret string, err error) {
 	if len(check.Value) > 0 {
-		if msg, e := json.Marshal(check.Value); e != nil {
+		var val any
+		if e := json.Unmarshal(check.Value, &val); e != nil {
 			err = e
-		} else if v, e := literal.ReadLiteral(check.Aff, "", msg); e != nil {
+		} else if v, e := literal.ReadLiteral(check.Aff, "", val); e != nil {
 			err = e
 		} else if expect, ok := v.(*literal.TextValue); !ok {
 			err = errutil.New("can only handle text values right now")

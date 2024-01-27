@@ -1,7 +1,6 @@
 package decode
 
 import (
-	"errors"
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -19,7 +18,7 @@ func (dec *Decoder) decodeSlot(w inspect.Iter, slot *typeinfo.Slot, data any) (e
 }
 
 func (dec *Decoder) innerDecode(w inspect.Iter, slot *typeinfo.Slot, data any) (ret typeinfo.Inspector, err error) {
-	if v, e := dec.customDecode(w, slot, data); !isUnhandled(e) {
+	if v, e := dec.customDecode(w, slot, data); !compact.IsUnhandled(e) {
 		ret, err = v, e
 	} else {
 		if msg, e := ParseMessage(data); e != nil {
@@ -44,13 +43,9 @@ func (dec *Decoder) innerDecode(w inspect.Iter, slot *typeinfo.Slot, data any) (
 
 func (dec *Decoder) customDecode(w inspect.Iter, slot *typeinfo.Slot, arg any) (ret typeinfo.Inspector, err error) {
 	if c := dec.customDecoder; c == nil {
-		err = compact.Unhandled
+		err = compact.Unhandled("custom decoder")
 	} else {
 		ret, err = c(dec, slot, arg)
 	}
 	return
-}
-
-func isUnhandled(e error) bool {
-	return e == compact.Unhandled || errors.Is(e, compact.Unhandled)
 }

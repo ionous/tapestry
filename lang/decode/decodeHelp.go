@@ -11,7 +11,7 @@ import (
 func nextField(it *inspect.Iter, param string) (ret typeinfo.Term, okay bool) {
 	for it.Next() {
 		info := it.Term() // internal fields dont have labels....
-		if info.Label == param {
+		if !info.Private && info.Label == param {
 			ret, okay = info, true
 			break
 		}

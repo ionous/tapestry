@@ -48,7 +48,9 @@ func (un *unblock) decodeBlock(out inspect.Iter, bff *BlockInfo) (err error) {
 			termName := upper(f.Name)
 			switch t := f.Type; t.(type) {
 			default:
-				err = fmt.Errorf("unhandled type %s", t)
+				if !f.Private { // private fields dont have typeinfo, and thats okay.
+					err = fmt.Errorf("unhandled type %s", t.TypeName())
+				}
 
 			// simple values live in bff.fields
 			case *typeinfo.Str, *typeinfo.Num:

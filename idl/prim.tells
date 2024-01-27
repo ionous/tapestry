@@ -2,12 +2,15 @@
 Spec:with group:
   - "prim"
   - Group contains:
-      - Spec:with str:
+      - # Booleans values are described using strings:
+        # the tell and json parsers recognize that and allows literal true/false values
+        # go's generated code also recognizes that and generates bool fields.
+        Spec:with str:
           - "bool"
           - Str exclusively:uses:
               - true
-              - - Option: "true"
-                - Option: "false"
+              - - Option: "false"
+                - Option: "true"
       - # A sequence of characters of any length spanning multiple lines. See also: text.
         Spec:with str:
           - "lines"

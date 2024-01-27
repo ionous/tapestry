@@ -20,7 +20,7 @@ import (
 func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err error) {
 	switch out := op.(type) {
 	default:
-		err = compact.Unhandled
+		err = compact.Unhandled("custom literal")
 	case *BoolValue:
 		ret = out.Value
 	case *NumValue:
@@ -91,18 +91,18 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 		// note: trying to read a record literal directly into a record eval slot wouldnt work well
 		// for one, it would have to know what type the record is.
 		// RecordValue ( "record:fields:<kind>, <field values>" ) is the thing for now.
-		err = compact.Unhandled
+		err = compact.Unhandled("literal value")
 
 	case rtti.Zt_BoolEval.Name:
 		if v, ok := val.(bool); !ok {
-			err = compact.Unhandled
+			err = compact.Unhandled("bool")
 		} else {
 			ret = &BoolValue{Value: v, Kind: kind}
 		}
 
 	case rtti.Zt_NumberEval.Name:
 		if v, ok := val.(float64); !ok {
-			err = compact.Unhandled
+			err = compact.Unhandled("float")
 		} else {
 			ret = &NumValue{Value: v, Kind: kind}
 		}
@@ -112,41 +112,41 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 		case string:
 			ret = &TextValue{Value: v, Kind: kind}
 		case []any:
-			if lines, ok := compact.SliceLines(v); !ok {
-				err = compact.Unhandled
+			if lines, ok := compact.JoinLines(v); !ok {
+				err = compact.Unhandled("lines")
 			} else {
 				ret = &TextValue{Value: lines, Kind: kind}
 			}
 		default:
-			err = compact.Unhandled
+			err = compact.Unhandled("text")
 		}
 
 	case rtti.Zt_NumListEval.Name:
 		switch v := val.(type) {
 		case []any:
 			if vs, ok := compact.SliceFloats(v); !ok {
-				err = compact.Unhandled
+				err = compact.Unhandled("floats")
 			} else {
 				ret = &NumValues{Values: vs, Kind: kind}
 			}
 		case float64:
 			ret = &NumValues{Values: []float64{v}, Kind: kind}
 		default:
-			err = compact.Unhandled
+			err = compact.Unhandled("numbers")
 		}
 
 	case rtti.Zt_TextListEval.Name:
 		switch v := val.(type) {
 		case []any:
 			if vs, ok := compact.SliceStrings(v); !ok {
-				err = compact.Unhandled
+				err = compact.Unhandled("strings")
 			} else {
 				ret = &TextValues{Values: vs, Kind: kind}
 			}
 		case string:
 			ret = &TextValues{Values: []string{v}, Kind: kind}
 		default:
-			err = compact.Unhandled
+			err = compact.Unhandled("text values")
 		}
 	}
 	return

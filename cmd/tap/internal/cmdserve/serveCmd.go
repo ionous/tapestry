@@ -69,7 +69,7 @@ func buildFlags() (out flag.FlagSet) {
 	}
 	levels := strings.Join(debug.Zt_LoggingLevel.Options, ", ")
 	out.StringVar(&cfg.inFile, "in", inFile, "input file name (sqlite3)")
-	out.StringVar(&cfg.logLevel, "log", "", levels)
+	out.StringVar(&cfg.logLevel, "log", debug.C_LoggingLevel_Note.String(), levels)
 	out.Var(&cfg.listen, "listen", "the port for your web browser. specify a port number; or, 'true' for the default (8080).")
 	out.Var(&cfg.request, "www", "local vite server where tapestry can find its webapps. specify a port number; or, 'true' to use the default port (3000).")
 	return

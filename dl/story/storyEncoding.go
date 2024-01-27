@@ -33,7 +33,7 @@ func DecodeMessage(out typeinfo.Inspector, msg map[string]any) error {
 func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Inspector, err error) {
 	switch slot {
 	default:
-		err = compact.Unhandled
+		err = compact.Unhandled("pattern")
 	case &Zt_StoryStatement:
 		if args, e := tryPatternArgs(dec, msg); e != nil {
 			err = e

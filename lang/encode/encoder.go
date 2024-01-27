@@ -1,7 +1,6 @@
 package encode
 
 import (
-	"errors"
 	"fmt"
 	r "reflect"
 
@@ -53,7 +52,7 @@ func (enc *Encoder) writeFlow(src inspect.Iter) (ret any, err error) {
 		err = e
 	} else if res, e := enc.customEncode(fix); e == nil {
 		ret = res
-	} else if e != compact.Unhandled && !errors.Is(e, compact.Unhandled) {
+	} else if !compact.IsUnhandled(e) {
 		err = e
 	} else {
 		var out FlowBuilder
@@ -62,10 +61,10 @@ func (enc *Encoder) writeFlow(src inspect.Iter) (ret any, err error) {
 		out.SetMarkup(src.Markup(false))
 		for it := src; it.Next(); { // -1 to end before the markup
 			f, val := it.Term(), it.RawValue()
-			if !f.Optional || !val.IsZero() {
+			if !f.Private && (!f.Optional || !val.IsZero()) {
 				switch t := f.Type.(type) {
 				default:
-					err = fmt.Errorf("unhandled type %s", t)
+					err = fmt.Errorf("unhandled type %s", t.TypeName())
 
 				case *typeinfo.Str, *typeinfo.Num:
 					if f.Repeats {
@@ -121,7 +120,7 @@ func (enc *Encoder) writeFlow(src inspect.Iter) (ret any, err error) {
 
 func (enc *Encoder) customEncode(cmd typeinfo.Inspector) (ret any, err error) {
 	if c := enc.customEncoder; c == nil {
-		err = compact.Unhandled
+		err = compact.Unhandled("custom encoder")
 	} else {
 		ret, err = c(enc, cmd)
 	}

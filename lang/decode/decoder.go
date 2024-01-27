@@ -79,13 +79,15 @@ Break:
 			arg, out := msg.Args[i], it.RawValue()
 			switch t := f.Type.(type) {
 			default:
-				err = fmt.Errorf("unhandled type %s", t)
+				if !f.Private { // private fields dont have typeinfo, and thats okay.
+					err = fmt.Errorf("unhandled type %s", t.TypeName())
+				}
 
 			case *typeinfo.Str:
 				if f.Repeats {
-					err = decodeStrings(out, arg)
+					err = decodeStrings(out, t, arg)
 				} else {
-					err = SetString(out, t, arg)
+					err = decodeString(out, t, arg)
 				}
 
 			case *typeinfo.Num:
@@ -96,10 +98,10 @@ Break:
 				}
 
 			case *typeinfo.Flow:
-				if f.Repeats {
-					err = dec.repeatFlow(it.Walk(), arg)
-				} else {
-					if msg, e := ParseMessage(arg); e != nil {
+				if arg != nil {
+					if f.Repeats {
+						err = dec.repeatFlow(it.Walk(), arg)
+					} else if msg, e := ParseMessage(arg); e != nil {
 						err = e
 					} else {
 						err = dec.readMsg(msg, it.Walk())
@@ -107,10 +109,12 @@ Break:
 				}
 
 			case *typeinfo.Slot:
-				if slot := it.Walk(); f.Repeats {
-					err = dec.repeatSlot(slot, t, arg)
-				} else {
-					err = dec.decodeSlot(slot, t, arg)
+				if arg != nil {
+					if slot := it.Walk(); f.Repeats {
+						err = dec.repeatSlot(slot, t, arg)
+					} else {
+						err = dec.decodeSlot(slot, t, arg)
+					}
 				}
 			}
 		}

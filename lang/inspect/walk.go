@@ -3,7 +3,6 @@ package inspect
 import (
 	"log"
 	r "reflect"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
@@ -85,23 +84,11 @@ func (w *Iter) Term() (ret typeinfo.Term) {
 	return
 }
 
-// returns the value of the current focus as used by go.
-// enums use $STRING_KEY, while bool uses true/false.
+// returns whether the focused value is at its default value.
 // falls back to the container itself if Next() has yet to be called.
 func (w *Iter) IsZero() (okay bool) {
-	v, t := w.getFocus()
-	// temp: unpack Str struct;
-	if _, ok := t.(*typeinfo.Str); ok && v.Kind() == r.Struct {
-		str := v.Field(0).String() // Str holds $KEY in memory.
-		// fix? the optional marshal treated zero value as "nothing specified"
-		// not, as you might expect, the zeroth enum value.
-		okay = len(str) == 0
-	} else {
-		// fix: $TRUE is listed as the zeroth value. while this treats false as zero.
-		// $FALSE seems like it should be the zeroth value.
-		okay = v.IsZero()
-	}
-	return
+	v, _ := w.getFocus()
+	return v.IsZero()
 }
 
 // fix: backwards compatibility. what are the use cases
@@ -111,81 +98,30 @@ func (w *Iter) RawValue() r.Value {
 	return v
 }
 
-// fix? feels like this should match the way Get works.
-// write a value into the target of an iterator.
-// returns false if the value is incompatible
-// ( uses go rules of conversion when needed to complete the assignment )
-func (w *Iter) SetValue(val any) (okay bool) {
-	if out, val := w.RawValue(), r.ValueOf(val); out.Kind() == val.Kind() {
-		out.Set(val)
-		okay = true
-	} else if t := out.Type(); val.CanConvert(t) {
-		out.Set(val.Convert(t))
-	}
-	return
-}
-
 // returns the value of the current focus as used by go.
-// enums use $STRING_KEY, while bool uses true/false.
-// falls back to the container itself if Next() has yet to be called.
+// for enums, its an int.
 func (w *Iter) GoValue() (ret any) {
-	v, t := w.getFocus()
-	// temp: unpack Str struct
-	if _, ok := t.(*typeinfo.Str); ok && v.Kind() == r.Struct {
-		ret = v.Field(0).String() // Str enums holds $KEY in memory.
-	} else {
-		ret = v.Interface()
-	}
-	return
+	v, _ := w.getFocus()
+	return v.Interface()
 }
 
 // returns the value of the current focus as it would appear in file.
-// enums use lowercase strings, while bool uses true/false.
+// enums use lower_case strings, while bool uses true/false.
 // falls back to the container itself if Next() has yet to be called.
 func (w *Iter) CompactValue() (ret any) {
 	v, t := w.getFocus()
-	// FIX: unpack Str struct
-	if _, ok := t.(*typeinfo.Str); !ok {
-		ret = v.Interface()
+	if _, ok := t.(*typeinfo.Str); ok && v.Kind() == r.Int {
+		ret = ReflectStringer(v)
 	} else {
-		switch v.Kind() {
-		default:
-			ret = v.Interface()
-		case r.Int:
-			// interesting that .String() doesnt work....
-			ret = v.Interface().(interface{ String() string }).String()
-		case r.Struct:
-			str := v.Field(0).String()
-			if len(str) > 0 && str[0] == '$' {
-				str = strings.ToLower(str[1:])
-			}
-			ret = str
-		}
+		ret = v.Interface()
 	}
 	return
 }
 
-// returns the value of the current focus as described by the spec.
-// for example: enums, including boolean values, use $STRING_KEY format.
-// falls back to the container itself if Next() has yet to be called.
-func (w *Iter) NormalizedValue() (ret any) {
-	v, t := w.getFocus()
-	// temp: unpack Str struct
-	if _, ok := t.(*typeinfo.Str); !ok {
-		ret = v.Interface()
-	} else {
-		switch v.Kind() {
-		case r.Struct:
-			ret = v.Field(0).Interface()
-		case r.Bool:
-			if v.Bool() {
-				ret = "$TRUE"
-			} else {
-				ret = "$FALSE"
-			}
-		default:
-			ret = v.String()
-		}
+// read the target of a slot
+func (w *Iter) GetSlot(ptr any) (okay bool) {
+	if !w.curr.IsNil() {
+		okay = setValue(r.ValueOf(ptr).Elem(), w.curr.Elem())
 	}
 	return
 }
@@ -200,10 +136,16 @@ func (w *Iter) SetSlot(val typeinfo.Inspector) (okay bool) {
 	return
 }
 
-// read the target of a slot
-func (w *Iter) GetSlot(ptr any) (okay bool) {
-	if !w.curr.IsNil() {
-		okay = setValue(r.ValueOf(ptr).Elem(), w.curr.Elem())
+// fix? feels like this should match the way Get works.
+// write a value into the target of an iterator.
+// returns false if the value is incompatible
+// ( uses go rules of conversion when needed to complete the assignment )
+func (w *Iter) SetValue(val any) (okay bool) {
+	if out, val := w.RawValue(), r.ValueOf(val); out.Kind() == val.Kind() {
+		out.Set(val)
+		okay = true
+	} else if t := out.Type(); val.CanConvert(t) {
+		out.Set(val.Convert(t))
 	}
 	return
 }

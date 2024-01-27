@@ -3,20 +3,26 @@ package compact
 import "strings"
 
 // type conversion: convert a slice containing float values into a float slice.
-// returns false if any members of the slice are not floats
+// returns false if any member of the slice isnt a float64
 func SliceFloats(slice []any) ([]float64, bool) {
 	return condition[float64](slice)
 }
 
 // type conversion: convert a slice containing string values into a string slice.
-// returns false if any members of the slice are not strings
+// returns false if any member of the slice isnt a string
 func SliceStrings(slice []any) ([]string, bool) {
 	return condition[string](slice)
 }
 
+// type conversion: convert a slice containing bool values into a bool slice.
+// returns false if any member of the slice isnt a bool
+func SliceBools(slice []any) ([]bool, bool) {
+	return condition[bool](slice)
+}
+
 // type conversion: convert a slice of interfaces
 // to a slice of strings joined with newlines.
-func SliceLines(slice []any) (ret string, okay bool) {
+func JoinLines(slice []any) (ret string, okay bool) {
 	okay = true // provisionally
 	var b strings.Builder
 	for i, el := range slice {

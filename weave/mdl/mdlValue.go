@@ -261,8 +261,11 @@ func marshalProvisional(val literal.LiteralValue, wantAff affine.Affinity) (ret 
 }
 
 func marshalLiteral(val literal.LiteralValue) (ret string, err error) {
-	slot := literal.LiteralValue_Slot{Value: val}
-	return marshal(&slot)
+	if val != nil {
+		slot := literal.LiteralValue_Slot{Value: val}
+		ret, err = marshal(&slot)
+	}
+	return
 }
 
 // shared generic marshal prog to text

@@ -24,14 +24,14 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Inspector) (ret any, err err
 		if name, ok := op.Name.(*literal.TextValue); len(op.Dot) == 0 && ok {
 			ret = "@" + name.Value
 		} else {
-			err = compact.Unhandled
+			err = compact.Unhandled("variable ref")
 		}
 
 	case *literal.TextValue:
 		// if the text starts with an @, skip it:
 		// ( ie. dont confuse the rare text literal starting with an ampersand, with GetVar )
 		if str := op.Value; len(str) > 0 && str[0] == '@' {
-			err = compact.Unhandled
+			err = compact.Unhandled("text value")
 		} else {
 			ret, err = literal.CustomEncoder(enc, op)
 		}
@@ -46,7 +46,7 @@ func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret type
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch slot {
 	default:
-		err = compact.Unhandled
+		err = compact.Unhandled("core decoder")
 	case
 		// reading from a variable:
 		&rtti.Zt_BoolEval,
