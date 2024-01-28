@@ -9,13 +9,13 @@ import (
 )
 
 // Execute - called by the macro runtime during weave.
-func (op *MakePlural) Execute(macro rt.Runtime) error {
+func (op *DefinePlural) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
-func (op *MakePlural) Weave(cat *weave.Catalog) error {
+func (op *DefinePlural) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if plural, e := safe.GetText(w, op.Plural); e != nil {
 			err = e
@@ -33,11 +33,11 @@ func (op *MakePlural) Weave(cat *weave.Catalog) error {
 }
 
 // Execute - called by the macro runtime during weave.
-func (op *MakeOpposite) Execute(macro rt.Runtime) error {
+func (op *DefineOpposite) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
-func (op *MakeOpposite) Weave(cat *weave.Catalog) error {
+func (op *DefineOpposite) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if word, e := safe.GetText(w, op.Word); e != nil {
 			err = e

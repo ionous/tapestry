@@ -1064,19 +1064,19 @@ func (op *DefineKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type MakeOpposite struct {
-	Word     rtti.TextEval
+type DefineOpposite struct {
 	Opposite rtti.TextEval
+	Word     rtti.TextEval
 	Markup   map[string]any
 }
 
 // implements typeinfo.Instance
-func (*MakeOpposite) TypeInfo() typeinfo.T {
-	return &Zt_MakeOpposite
+func (*DefineOpposite) TypeInfo() typeinfo.T {
+	return &Zt_DefineOpposite
 }
 
 // implements typeinfo.Markup
-func (op *MakeOpposite) GetMarkup(ensure bool) map[string]any {
+func (op *DefineOpposite) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -1084,19 +1084,20 @@ func (op *MakeOpposite) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*MakeOpposite)(nil)
-var _ rtti.Execute = (*MakeOpposite)(nil)
+var _ StoryStatement = (*DefineOpposite)(nil)
+var _ rtti.Execute = (*DefineOpposite)(nil)
 
-// make_opposite, a type of flow.
-var Zt_MakeOpposite = typeinfo.Flow{
-	Name: "make_opposite",
+// define_opposite, a type of flow.
+var Zt_DefineOpposite = typeinfo.Flow{
+	Name: "define_opposite",
 	Lede: "define",
 	Terms: []typeinfo.Term{{
-		Name: "word",
-		Type: &rtti.Zt_TextEval,
-	}, {
 		Name:  "opposite",
 		Label: "opposite",
+		Type:  &rtti.Zt_TextEval,
+	}, {
+		Name:  "word",
+		Label: "word",
 		Type:  &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
@@ -1104,36 +1105,36 @@ var Zt_MakeOpposite = typeinfo.Flow{
 		&rtti.Zt_Execute,
 	},
 	Markup: map[string]any{
-		"comment": "The opposite of east is west.",
+		"comment": []interface{}{"Opposites are used at runtime and during weave to", "interpret traits, directions, and other terms.", "For example:", "\"The opposite of east is west.\""},
 	},
 }
 
-// holds a slice of type make_opposite
-type MakeOpposite_Slice []MakeOpposite
+// holds a slice of type define_opposite
+type DefineOpposite_Slice []DefineOpposite
 
 // implements typeinfo.Instance
-func (*MakeOpposite_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MakeOpposite
+func (*DefineOpposite_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineOpposite
 }
 
 // implements typeinfo.Repeats
-func (op *MakeOpposite_Slice) Repeats() bool {
+func (op *DefineOpposite_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type MakePlural struct {
+type DefinePlural struct {
 	Singular rtti.TextEval
 	Plural   rtti.TextEval
 	Markup   map[string]any
 }
 
 // implements typeinfo.Instance
-func (*MakePlural) TypeInfo() typeinfo.T {
-	return &Zt_MakePlural
+func (*DefinePlural) TypeInfo() typeinfo.T {
+	return &Zt_DefinePlural
 }
 
 // implements typeinfo.Markup
-func (op *MakePlural) GetMarkup(ensure bool) map[string]any {
+func (op *DefinePlural) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -1141,16 +1142,17 @@ func (op *MakePlural) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*MakePlural)(nil)
-var _ rtti.Execute = (*MakePlural)(nil)
+var _ StoryStatement = (*DefinePlural)(nil)
+var _ rtti.Execute = (*DefinePlural)(nil)
 
-// make_plural, a type of flow.
-var Zt_MakePlural = typeinfo.Flow{
-	Name: "make_plural",
+// define_plural, a type of flow.
+var Zt_DefinePlural = typeinfo.Flow{
+	Name: "define_plural",
 	Lede: "define",
 	Terms: []typeinfo.Term{{
-		Name: "singular",
-		Type: &rtti.Zt_TextEval,
+		Name:  "singular",
+		Label: "singular",
+		Type:  &rtti.Zt_TextEval,
 	}, {
 		Name:  "plural",
 		Label: "plural",
@@ -1161,20 +1163,20 @@ var Zt_MakePlural = typeinfo.Flow{
 		&rtti.Zt_Execute,
 	},
 	Markup: map[string]any{
-		"comment": []interface{}{"The plural of person is people.", "The plural of person is persons."},
+		"comment": []interface{}{"Plurals are used at runtime and during weave to", "guide the interpretation of nouns and kinds.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
 	},
 }
 
-// holds a slice of type make_plural
-type MakePlural_Slice []MakePlural
+// holds a slice of type define_plural
+type DefinePlural_Slice []DefinePlural
 
 // implements typeinfo.Instance
-func (*MakePlural_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MakePlural
+func (*DefinePlural_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefinePlural
 }
 
 // implements typeinfo.Repeats
-func (op *MakePlural_Slice) Repeats() bool {
+func (op *DefinePlural_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2923,8 +2925,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineRelation,
 	&Zt_DefineFields,
 	&Zt_DefineKinds,
-	&Zt_MakeOpposite,
-	&Zt_MakePlural,
+	&Zt_DefineOpposite,
+	&Zt_DefinePlural,
 	&Zt_MapDeparting,
 	&Zt_MapHeading,
 	&Zt_DefineValue,
@@ -3001,6 +3003,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
 	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
 	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
+	13749527262166011841: (*DefineOpposite)(nil),       /* execute=Define opposite:word: */
+	17694415259589147741: (*DefineOpposite)(nil),       /* story_statement=Define opposite:word: */
 	811338311732531998:   (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides: */
 	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
 	2917659442779702699:  (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides:do: */
@@ -3031,6 +3035,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
 	10209709135447127962: (*DefineScene)(nil),          /* story_statement=Define scene:requires:with: */
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
+	14046702858409070523: (*DefinePlural)(nil),         /* execute=Define singular:plural: */
+	1798652288281835623:  (*DefinePlural)(nil),         /* story_statement=Define singular:plural: */
 	9186540469433423003:  (*DefineTest)(nil),           /* execute=Define test:do: */
 	12489141410311466071: (*DefineTest)(nil),           /* story_statement=Define test:do: */
 	1317505351252968509:  (*DefineTest)(nil),           /* execute=Define test:requires:do: */
@@ -3043,10 +3049,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
 	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
-	12949514552590649363: (*MakeOpposite)(nil),         /* execute=Define:opposite: */
-	5688318111906346127:  (*MakeOpposite)(nil),         /* story_statement=Define:opposite: */
-	16375064846040326258: (*MakePlural)(nil),           /* execute=Define:plural: */
-	12640732630499152662: (*MakePlural)(nil),           /* story_statement=Define:plural: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
 	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */

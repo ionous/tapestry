@@ -19,7 +19,7 @@ Tapestry:
             - List ofText:
                 - "@direction"
             - "direction"
-        - Define:opposite:
+        - Define opposite:word:
             - "@direction"
             - "@opposite"
         - Define kind:fields:
