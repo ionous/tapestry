@@ -15,7 +15,7 @@ func (*QuitGame) TypeInfo() typeinfo.T {
 	return &Zt_QuitGame
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *QuitGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -58,7 +58,7 @@ func (*SaveGame) TypeInfo() typeinfo.T {
 	return &Zt_SaveGame
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SaveGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -101,7 +101,7 @@ func (*RestoreGame) TypeInfo() typeinfo.T {
 	return &Zt_RestoreGame
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RestoreGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -144,7 +144,7 @@ func (*UndoTurn) TypeInfo() typeinfo.T {
 	return &Zt_UndoTurn
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *UndoTurn) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -187,7 +187,7 @@ func (*PrintVersion) TypeInfo() typeinfo.T {
 	return &Zt_PrintVersion
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *PrintVersion) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

@@ -17,7 +17,7 @@ func (*ReciprocalOf) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalOf
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ReciprocalOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -72,7 +72,7 @@ func (*ReciprocalsOf) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalsOf
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ReciprocalsOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -128,7 +128,7 @@ func (*Relate) TypeInfo() typeinfo.T {
 	return &Zt_Relate
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Relate) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -187,7 +187,7 @@ func (*RelativeOf) TypeInfo() typeinfo.T {
 	return &Zt_RelativeOf
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RelativeOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -242,7 +242,7 @@ func (*RelativesOf) TypeInfo() typeinfo.T {
 	return &Zt_RelativesOf
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RelativesOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

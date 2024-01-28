@@ -44,7 +44,7 @@ func (*Frame) TypeInfo() typeinfo.T {
 	return &Zt_Frame
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Frame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -96,7 +96,7 @@ func (*FrameOutput) TypeInfo() typeinfo.T {
 	return &Zt_FrameOutput
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FrameOutput) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -143,7 +143,7 @@ func (*SceneStarted) TypeInfo() typeinfo.T {
 	return &Zt_SceneStarted
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SceneStarted) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -191,7 +191,7 @@ func (*SceneEnded) TypeInfo() typeinfo.T {
 	return &Zt_SceneEnded
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SceneEnded) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -242,7 +242,7 @@ func (*StateChanged) TypeInfo() typeinfo.T {
 	return &Zt_StateChanged
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *StateChanged) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -304,7 +304,7 @@ func (*PairChanged) TypeInfo() typeinfo.T {
 	return &Zt_PairChanged
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *PairChanged) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

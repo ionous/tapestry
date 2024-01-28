@@ -81,7 +81,7 @@ func (*Comment) TypeInfo() typeinfo.T {
 	return &Zt_Comment
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Comment) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -136,7 +136,7 @@ func (*Test) TypeInfo() typeinfo.T {
 	return &Zt_Test
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Test) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -207,7 +207,7 @@ func (*DefineScene) TypeInfo() typeinfo.T {
 	return &Zt_DefineScene
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineScene) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -270,7 +270,7 @@ func (*DefineAction) TypeInfo() typeinfo.T {
 	return &Zt_DefineAction
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineAction) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -335,7 +335,7 @@ func (*DefineTraits) TypeInfo() typeinfo.T {
 	return &Zt_DefineTraits
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineTraits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -392,7 +392,7 @@ func (*AspectField) TypeInfo() typeinfo.T {
 	return &Zt_AspectField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *AspectField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -444,7 +444,7 @@ func (*BoolField) TypeInfo() typeinfo.T {
 	return &Zt_BoolField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *BoolField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -502,7 +502,7 @@ func (*CountOf) TypeInfo() typeinfo.T {
 	return &Zt_CountOf
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *CountOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -556,7 +556,7 @@ func (*CycleText) TypeInfo() typeinfo.T {
 	return &Zt_CycleText
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *CycleText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -608,7 +608,7 @@ func (*DefineAlias) TypeInfo() typeinfo.T {
 	return &Zt_DefineAlias
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineAlias) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -666,7 +666,7 @@ func (*DefineLeadingGrammar) TypeInfo() typeinfo.T {
 	return &Zt_DefineLeadingGrammar
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineLeadingGrammar) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -725,7 +725,7 @@ func (*DefineNamedGrammar) TypeInfo() typeinfo.T {
 	return &Zt_DefineNamedGrammar
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineNamedGrammar) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -785,7 +785,7 @@ func (*DefinePhrase) TypeInfo() typeinfo.T {
 	return &Zt_DefinePhrase
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefinePhrase) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -845,7 +845,7 @@ func (*DeclareStatement) TypeInfo() typeinfo.T {
 	return &Zt_DeclareStatement
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DeclareStatement) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -898,7 +898,7 @@ func (*DefineRelation) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelation
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineRelation) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -961,7 +961,7 @@ func (*DefineFields) TypeInfo() typeinfo.T {
 	return &Zt_DefineFields
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1020,7 +1020,7 @@ func (*DefineKinds) TypeInfo() typeinfo.T {
 	return &Zt_DefineKinds
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineKinds) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1075,7 +1075,7 @@ func (*MakeOpposite) TypeInfo() typeinfo.T {
 	return &Zt_MakeOpposite
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *MakeOpposite) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1132,7 +1132,7 @@ func (*MakePlural) TypeInfo() typeinfo.T {
 	return &Zt_MakePlural
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *MakePlural) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1191,7 +1191,7 @@ func (*MapDeparting) TypeInfo() typeinfo.T {
 	return &Zt_MapDeparting
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *MapDeparting) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1260,7 +1260,7 @@ func (*MapHeading) TypeInfo() typeinfo.T {
 	return &Zt_MapHeading
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *MapHeading) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1331,7 +1331,7 @@ func (*DefineValue) TypeInfo() typeinfo.T {
 	return &Zt_DefineValue
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1393,7 +1393,7 @@ func (*DefineNouns) TypeInfo() typeinfo.T {
 	return &Zt_DefineNouns
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineNouns) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1448,7 +1448,7 @@ func (*DefineNounTraits) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounTraits
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineNounTraits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1504,7 +1504,7 @@ func (*NumListField) TypeInfo() typeinfo.T {
 	return &Zt_NumListField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *NumListField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1563,7 +1563,7 @@ func (*NumberField) TypeInfo() typeinfo.T {
 	return &Zt_NumberField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *NumberField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1621,7 +1621,7 @@ func (*RuleProvides) TypeInfo() typeinfo.T {
 	return &Zt_RuleProvides
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1678,7 +1678,7 @@ func (*RuleForPattern) TypeInfo() typeinfo.T {
 	return &Zt_RuleForPattern
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1744,7 +1744,7 @@ func (*RuleForNoun) TypeInfo() typeinfo.T {
 	return &Zt_RuleForNoun
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1815,7 +1815,7 @@ func (*RuleForKind) TypeInfo() typeinfo.T {
 	return &Zt_RuleForKind
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1890,7 +1890,7 @@ func (*DefineMacro) TypeInfo() typeinfo.T {
 	return &Zt_DefineMacro
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineMacro) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1959,7 +1959,7 @@ func (*CallMacro) TypeInfo() typeinfo.T {
 	return &Zt_CallMacro
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *CallMacro) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2034,7 +2034,7 @@ func (*DefinePattern) TypeInfo() typeinfo.T {
 	return &Zt_DefinePattern
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2105,7 +2105,7 @@ func (*RecordListField) TypeInfo() typeinfo.T {
 	return &Zt_RecordListField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RecordListField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2164,7 +2164,7 @@ func (*RecordField) TypeInfo() typeinfo.T {
 	return &Zt_RecordField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RecordField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2223,7 +2223,7 @@ func (*DefineRelatives) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelatives
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineRelatives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2286,7 +2286,7 @@ func (*DefineOtherRelatives) TypeInfo() typeinfo.T {
 	return &Zt_DefineOtherRelatives
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DefineOtherRelatives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2347,7 +2347,7 @@ func (*SayTemplate) TypeInfo() typeinfo.T {
 	return &Zt_SayTemplate
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SayTemplate) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2400,7 +2400,7 @@ func (*SayResponse) TypeInfo() typeinfo.T {
 	return &Zt_SayResponse
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SayResponse) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2457,7 +2457,7 @@ func (*ShuffleText) TypeInfo() typeinfo.T {
 	return &Zt_ShuffleText
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2508,7 +2508,7 @@ func (*StoppingText) TypeInfo() typeinfo.T {
 	return &Zt_StoppingText
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2558,7 +2558,7 @@ func (*StoryBreak) TypeInfo() typeinfo.T {
 	return &Zt_StoryBreak
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2605,7 +2605,7 @@ func (*StoryFile) TypeInfo() typeinfo.T {
 	return &Zt_StoryFile
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *StoryFile) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2654,7 +2654,7 @@ func (*TextListField) TypeInfo() typeinfo.T {
 	return &Zt_TextListField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *TextListField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2713,7 +2713,7 @@ func (*TextField) TypeInfo() typeinfo.T {
 	return &Zt_TextField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *TextField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2769,7 +2769,7 @@ func (*NothingField) TypeInfo() typeinfo.T {
 	return &Zt_NothingField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *NothingField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

@@ -17,7 +17,7 @@ func (*DoNothing) TypeInfo() typeinfo.T {
 	return &Zt_DoNothing
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DoNothing) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -64,7 +64,7 @@ func (*Expect) TypeInfo() typeinfo.T {
 	return &Zt_Expect
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Expect) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -111,7 +111,7 @@ func (*ExpectOutput) TypeInfo() typeinfo.T {
 	return &Zt_ExpectOutput
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -159,7 +159,7 @@ func (*ExpectText) TypeInfo() typeinfo.T {
 	return &Zt_ExpectText
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ExpectText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -207,7 +207,7 @@ func (*Fabricate) TypeInfo() typeinfo.T {
 	return &Zt_Fabricate
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Fabricate) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -259,7 +259,7 @@ func (*DebugLog) TypeInfo() typeinfo.T {
 	return &Zt_DebugLog
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

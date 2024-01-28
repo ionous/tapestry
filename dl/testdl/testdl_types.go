@@ -42,7 +42,7 @@ func (*TestEmbed) TypeInfo() typeinfo.T {
 	return &Zt_TestEmbed
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *TestEmbed) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -94,7 +94,7 @@ func (*TestFlow) TypeInfo() typeinfo.T {
 	return &Zt_TestFlow
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *TestFlow) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

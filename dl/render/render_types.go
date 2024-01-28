@@ -47,7 +47,7 @@ func (*RenderName) TypeInfo() typeinfo.T {
 	return &Zt_RenderName
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RenderName) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -98,7 +98,7 @@ func (*RenderRef) TypeInfo() typeinfo.T {
 	return &Zt_RenderRef
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -168,7 +168,7 @@ func (*RenderValue) TypeInfo() typeinfo.T {
 	return &Zt_RenderValue
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RenderValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -219,7 +219,7 @@ func (*RenderPattern) TypeInfo() typeinfo.T {
 	return &Zt_RenderPattern
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RenderPattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -279,7 +279,7 @@ func (*RenderResponse) TypeInfo() typeinfo.T {
 	return &Zt_RenderResponse
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *RenderResponse) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

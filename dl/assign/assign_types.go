@@ -77,7 +77,7 @@ func (*SetValue) TypeInfo() typeinfo.T {
 	return &Zt_SetValue
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SetValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -132,7 +132,7 @@ func (*SetTrait) TypeInfo() typeinfo.T {
 	return &Zt_SetTrait
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *SetTrait) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -187,7 +187,7 @@ func (*CopyValue) TypeInfo() typeinfo.T {
 	return &Zt_CopyValue
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *CopyValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -243,7 +243,7 @@ func (*ObjectRef) TypeInfo() typeinfo.T {
 	return &Zt_ObjectRef
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ObjectRef) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -315,7 +315,7 @@ func (*VariableRef) TypeInfo() typeinfo.T {
 	return &Zt_VariableRef
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *VariableRef) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -382,7 +382,7 @@ func (*AtField) TypeInfo() typeinfo.T {
 	return &Zt_AtField
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *AtField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -429,7 +429,7 @@ func (*AtIndex) TypeInfo() typeinfo.T {
 	return &Zt_AtIndex
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *AtIndex) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -477,7 +477,7 @@ func (*CallPattern) TypeInfo() typeinfo.T {
 	return &Zt_CallPattern
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *CallPattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -547,7 +547,7 @@ func (*Arg) TypeInfo() typeinfo.T {
 	return &Zt_Arg
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Arg) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -595,7 +595,7 @@ func (*FromExe) TypeInfo() typeinfo.T {
 	return &Zt_FromExe
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromExe) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -645,7 +645,7 @@ func (*FromBool) TypeInfo() typeinfo.T {
 	return &Zt_FromBool
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromBool) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -695,7 +695,7 @@ func (*FromNumber) TypeInfo() typeinfo.T {
 	return &Zt_FromNumber
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromNumber) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -745,7 +745,7 @@ func (*FromText) TypeInfo() typeinfo.T {
 	return &Zt_FromText
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -795,7 +795,7 @@ func (*FromRecord) TypeInfo() typeinfo.T {
 	return &Zt_FromRecord
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromRecord) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -845,7 +845,7 @@ func (*FromNumList) TypeInfo() typeinfo.T {
 	return &Zt_FromNumList
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromNumList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -895,7 +895,7 @@ func (*FromTextList) TypeInfo() typeinfo.T {
 	return &Zt_FromTextList
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromTextList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -945,7 +945,7 @@ func (*FromRecordList) TypeInfo() typeinfo.T {
 	return &Zt_FromRecordList
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *FromRecordList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

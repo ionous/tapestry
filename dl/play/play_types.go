@@ -46,7 +46,7 @@ func (*PlayLog) TypeInfo() typeinfo.T {
 	return &Zt_PlayLog
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *PlayLog) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -97,7 +97,7 @@ func (*PlayMode) TypeInfo() typeinfo.T {
 	return &Zt_PlayMode
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *PlayMode) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -148,7 +148,7 @@ func (*PlayOut) TypeInfo() typeinfo.T {
 	return &Zt_PlayOut
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *PlayOut) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)

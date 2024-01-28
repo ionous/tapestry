@@ -76,7 +76,7 @@ func (*Action) TypeInfo() typeinfo.T {
 	return &Zt_Action
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Action) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -132,7 +132,7 @@ func (*Sequence) TypeInfo() typeinfo.T {
 	return &Zt_Sequence
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Sequence) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -183,7 +183,7 @@ func (*ChooseOne) TypeInfo() typeinfo.T {
 	return &Zt_ChooseOne
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *ChooseOne) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -236,7 +236,7 @@ func (*Directive) TypeInfo() typeinfo.T {
 	return &Zt_Directive
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Directive) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -292,7 +292,7 @@ func (*Noun) TypeInfo() typeinfo.T {
 	return &Zt_Noun
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Noun) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -343,7 +343,7 @@ func (*Refine) TypeInfo() typeinfo.T {
 	return &Zt_Refine
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Refine) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -395,7 +395,7 @@ func (*Reverse) TypeInfo() typeinfo.T {
 	return &Zt_Reverse
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Reverse) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -447,7 +447,7 @@ func (*Focus) TypeInfo() typeinfo.T {
 	return &Zt_Focus
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Focus) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -502,7 +502,7 @@ func (*Words) TypeInfo() typeinfo.T {
 	return &Zt_Words
 }
 
-// return a valid markup map, creating it if necessary.
+// implements typeinfo.Markup
 func (op *Words) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
