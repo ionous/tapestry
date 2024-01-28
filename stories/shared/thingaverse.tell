@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:withScene:do:
+  - Define test:scene:do:
       - "thingaverse"
       - - Declare: """
             Mildred is an actor.

@@ -142,7 +142,7 @@ Tapestry:
                         - "@success"
                         - FromBool: true
   - # 
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "examining test"
       - "Kitchenette"
       - - PrintDescription obj:

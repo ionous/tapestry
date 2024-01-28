@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:withScene:do:
+  - Define test:scene:do:
       - "traversal"
       - - Declare: """
             The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.

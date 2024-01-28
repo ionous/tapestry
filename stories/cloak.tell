@@ -5,7 +5,7 @@ Tapestry:
     It contains some essential features used by interactive fiction including: descriptions of rooms,
     their contents, and connections, darkness and the control of light, scoring, and more.
     """
-  - Define scene:dependsOn:with:
+  - Define scene:requires:with:
       - "cloak"
       - - "tapestry"
         - "scoring"
@@ -241,7 +241,7 @@ Tapestry:
                   - "onto"
               - One noun: "objects"
               - Action: "storing"
-        - Test:do:
+        - Define test:do:
             - "cloak of dropping"
             - - StartGame actor:quietly:
                   - FromText:
@@ -261,7 +261,7 @@ Tapestry:
                         - "score"
                     - "equal_to"
                     - 1
-        - Test:do:
+        - Define test:do:
             - "cloak of perfection"
             - - StartGame actor:quietly:
                   - FromText:
@@ -281,7 +281,7 @@ Tapestry:
                         - "score"
                     - "equal_to"
                     - 2
-        - Test:do:
+        - Define test:do:
             - "cloak of failure"
             - - StartGame actor:quietly:
                   - FromText:

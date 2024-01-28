@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:dependsOn:withScene:do:
+  - Define test:requires:scene:do:
       - "reach test"
       - "Kitchenette"
       - - Declare: "An other worldly cloak is a thing."

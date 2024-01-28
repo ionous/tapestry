@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:dependsOn:withScene:do:
+  - Define test:requires:scene:do:
       - "status printing test"
       - "thingaverse"
       - - Declare: "The flashlight is lit."
@@ -20,7 +20,7 @@ Tapestry:
         - Say: "{the: .coin}: {print_status:.coin}."
         - Expect output: "the coin: ."
   - # 
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "default inventory"
       - "Kitchenette"
       - - PrintInventory actor:

@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Test:withScene:do:": [
+      "Define test:scene:do:": [
         "testing",
         [
           {

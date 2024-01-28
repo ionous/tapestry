@@ -10,7 +10,7 @@ Tapestry:
       - "pluralization"
   - Declare: "Pluralization is a kind of aspect."
   - # 
-    Test:withScene:do:
+    Define test:scene:do:
       - "articles"
       - - Declare: "The lamp-post, some soldiers, and Trevor are things."
       - - Say:

@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:dependsOn:do:
+  - Define test:requires:do:
       - "base vis"
       - "Kitchenette"
       - - Comment: "Say the list of visible objects from one of several vantage points."
@@ -59,7 +59,7 @@ Tapestry:
               - "greater_than"
               - 1
   - # 
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "look object description"
       - "kitchenette"
       - - PrintObjectDescription obj:locale:
@@ -75,7 +75,7 @@ Tapestry:
             - FromText: "kitchen"
         - Expect output: "Steam leaks from the top of a recently used espresso machine."
   - # 
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "printing vantages"
       - "Kitchenette"
       - - PrintVantage location:illuminated:verbosity:
@@ -123,7 +123,7 @@ Tapestry:
             - "**The cabinet**"
             - "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
   - # 
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "printing inline objects"
       - "Kitchenette"
       - - PrintInlineObjects objs:

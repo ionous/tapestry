@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:withScene:do:
+  - Define test:scene:do:
       - "x countOf"
       - - Define pattern:requires:provides:do:
             - "magic symbols"

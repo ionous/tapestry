@@ -27,7 +27,7 @@ Tapestry:
                     - - Set:value:
                           - "@matching"
                           - FromBool: true
-  - Test:do:
+  - Define test:do:
       - "vowel tests"
       - - Print:
             Txt if:then:else:

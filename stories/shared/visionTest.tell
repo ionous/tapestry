@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:dependsOn:withScene:do:
+  - Define test:requires:scene:do:
       - "vision testing"
       - "Kitchenette"
       - - # fix: i think the news doesnt need a full pattern. but we need to be able to replace responses.

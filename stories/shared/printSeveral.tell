@@ -19,7 +19,7 @@ Tapestry:
                   - Finally do:
                       - Say: "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
   - # 
-    Test:withScene:do:
+    Define test:scene:do:
       - "print several"
       - - Declare: "The books are things."
       - - Say:

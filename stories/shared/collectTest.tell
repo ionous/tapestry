@@ -1,7 +1,7 @@
 Tapestry:
   - # this test is probably too sensitive to last for long.
     # maybe helpful for now at least
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "collect test"
       - "Kitchenette"
       - - Log:value:

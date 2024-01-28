@@ -8,7 +8,7 @@ Tapestry:
                 - - One noun: "objects"
                   - Action: "request debug details"
             - Action: "request debug location"
-  - Define scene:dependsOn:with:
+  - Define scene:requires:with:
       - "debugging"
       - "tapestry"
       - - Define pattern:requires:provides:do:

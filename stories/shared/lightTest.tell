@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:dependsOn:do:
+  - Define test:requires:do:
       - "vision test"
       - "Kitchenette"
       - - Set:trait:
@@ -22,7 +22,7 @@ Tapestry:
             - "lit"
         - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
         - Expect output: "ok: The cabinet has light."
-  - Test:dependsOn:withScene:do:
+  - Define test:requires:scene:do:
       - "the gloom"
       - "kitchenette"
       - - Declare: "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."

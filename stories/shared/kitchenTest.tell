@@ -1,6 +1,6 @@
 Tapestry:
   - # this is a little painfully exact; but maybe is good for now.
-    Test:dependsOn:do:
+    Define test:requires:do:
       - "kitchen play"
       - "kitchenette"
       - - StartGame actor:quietly:

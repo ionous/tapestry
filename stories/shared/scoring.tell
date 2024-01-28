@@ -1,5 +1,5 @@
 Tapestry:
-  - Define scene:dependsOn:with:
+  - Define scene:requires:with:
       - "scoring"
       - "tapestry"
       - - Define kind:fields:
@@ -88,7 +88,7 @@ Tapestry:
                       - - Arg:from:
                             - "notify"
                             - FromBool: true
-  - Test:dependsOn:do:
+  - Define test:requires:do:
       - "no score"
       - "tapestry"
       - - StartGame actor:quietly:
@@ -99,7 +99,7 @@ Tapestry:
             - FromBool: true
         - Fabricate input: "score"
         - Expect output: "This isn't a competition."
-  - Test:dependsOn:do:
+  - Define test:requires:do:
       - "mid game score"
       - "scoring"
       - - StartGame actor:quietly:
@@ -120,7 +120,7 @@ Tapestry:
             - FromNumber: 23
         - Fabricate input: "score"
         - Expect output: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
-  - Test:dependsOn:do:
+  - Define test:requires:do:
       - "post game score"
       - "scoring"
       - - # simulate the end of game state.
@@ -144,7 +144,7 @@ Tapestry:
             - FromNumber: 7
         - Fabricate input: "score"
         - Expect output: "In 7 turns, you scored 100 out of a possible 100 points."
-  - Test:dependsOn:withScene:do:
+  - Define test:requires:scene:do:
       - "score notification"
       - - "scoring"
         - "kitchenette"

@@ -1,5 +1,5 @@
 Tapestry:
-  - Test:dependsOn:withScene:do:
+  - Define test:requires:scene:do:
       - "wearing test"
       - "Kitchenette"
       - - Declare: "You are wearing the flower. You are carrying the knife."

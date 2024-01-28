@@ -4,7 +4,7 @@ Tapestry:
       - "Things"
       - - Text: "printed name"
   - # 
-    Test:withScene:do:
+    Define test:scene:do:
       - "name of a kind"
       - - Declare: "The named object and the unnamed object are things."
         - Declare: "The unnamed object is privately named."

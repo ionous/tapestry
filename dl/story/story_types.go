@@ -123,21 +123,21 @@ func (op *Comment_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type Test struct {
-	TestName       string
-	SceneNames     []string
-	TestStatements []StoryStatement
-	Exe            []rtti.Execute
-	Markup         map[string]any
+type DefineTest struct {
+	TestName   string
+	SceneNames rtti.TextListEval
+	Statements []StoryStatement
+	Exe        []rtti.Execute
+	Markup     map[string]any
 }
 
 // implements typeinfo.Instance
-func (*Test) TypeInfo() typeinfo.T {
-	return &Zt_Test
+func (*DefineTest) TypeInfo() typeinfo.T {
+	return &Zt_DefineTest
 }
 
 // implements typeinfo.Markup
-func (op *Test) GetMarkup(ensure bool) map[string]any {
+func (op *DefineTest) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -145,25 +145,25 @@ func (op *Test) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*Test)(nil)
-var _ rtti.Execute = (*Test)(nil)
+var _ StoryStatement = (*DefineTest)(nil)
+var _ rtti.Execute = (*DefineTest)(nil)
 
-// test, a type of flow.
-var Zt_Test = typeinfo.Flow{
-	Name: "test",
-	Lede: "test",
+// define_test, a type of flow.
+var Zt_DefineTest = typeinfo.Flow{
+	Name: "define_test",
+	Lede: "define",
 	Terms: []typeinfo.Term{{
-		Name: "test_name",
-		Type: &prim.Zt_Text,
+		Name:  "test_name",
+		Label: "test",
+		Type:  &prim.Zt_Text,
 	}, {
 		Name:     "scene_names",
-		Label:    "depends_on",
+		Label:    "requires",
 		Optional: true,
-		Repeats:  true,
-		Type:     &prim.Zt_Text,
+		Type:     &rtti.Zt_TextListEval,
 	}, {
-		Name:     "test_statements",
-		Label:    "with_scene",
+		Name:     "statements",
+		Label:    "scene",
 		Optional: true,
 		Repeats:  true,
 		Type:     &Zt_StoryStatement,
@@ -182,24 +182,24 @@ var Zt_Test = typeinfo.Flow{
 	},
 }
 
-// holds a slice of type test
-type Test_Slice []Test
+// holds a slice of type define_test
+type DefineTest_Slice []DefineTest
 
 // implements typeinfo.Instance
-func (*Test_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Test
+func (*DefineTest_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineTest
 }
 
 // implements typeinfo.Repeats
-func (op *Test_Slice) Repeats() bool {
+func (op *DefineTest_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
 type DefineScene struct {
-	Scene     rtti.TextEval
-	DependsOn rtti.TextListEval
-	With      []StoryStatement
-	Markup    map[string]any
+	Scene      rtti.TextEval
+	SceneNames rtti.TextListEval
+	With       []StoryStatement
+	Markup     map[string]any
 }
 
 // implements typeinfo.Instance
@@ -227,8 +227,8 @@ var Zt_DefineScene = typeinfo.Flow{
 		Label: "scene",
 		Type:  &rtti.Zt_TextEval,
 	}, {
-		Name:     "depends_on",
-		Label:    "depends_on",
+		Name:     "scene_names",
+		Label:    "requires",
 		Optional: true,
 		Type:     &rtti.Zt_TextListEval,
 	}, {
@@ -2907,7 +2907,7 @@ var z_slot_list = []*typeinfo.Slot{
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_Comment,
-	&Zt_Test,
+	&Zt_DefineTest,
 	&Zt_DefineScene,
 	&Zt_DefineAction,
 	&Zt_DefineTraits,
@@ -3029,8 +3029,16 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16133739979148445504: (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:named:do: */
 	16815703800760921520: (*RuleProvides)(nil),         /* execute=Define rule:provides: */
 	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
-	5110919797933301972:  (*DefineScene)(nil),          /* story_statement=Define scene:dependsOn:with: */
+	10209709135447127962: (*DefineScene)(nil),          /* story_statement=Define scene:requires:with: */
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
+	9186540469433423003:  (*DefineTest)(nil),           /* execute=Define test:do: */
+	12489141410311466071: (*DefineTest)(nil),           /* story_statement=Define test:do: */
+	1317505351252968509:  (*DefineTest)(nil),           /* execute=Define test:requires:do: */
+	3712030102885900665:  (*DefineTest)(nil),           /* story_statement=Define test:requires:do: */
+	4534084067371425967:  (*DefineTest)(nil),           /* execute=Define test:requires:scene:do: */
+	16978239348269462739: (*DefineTest)(nil),           /* story_statement=Define test:requires:scene:do: */
+	2982226642886528461:  (*DefineTest)(nil),           /* execute=Define test:scene:do: */
+	13333326165932249009: (*DefineTest)(nil),           /* story_statement=Define test:scene:do: */
 	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
@@ -3074,14 +3082,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
 	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */
 	13921723804355948971: (*StoppingText)(nil),         /* text_eval=StoppingText: */
-	2871145226608221260:  (*Test)(nil),                 /* execute=Test:dependsOn:do: */
-	9865864948070946448:  (*Test)(nil),                 /* story_statement=Test:dependsOn:do: */
-	5453259149853633814:  (*Test)(nil),                 /* execute=Test:dependsOn:withScene:do: */
-	12698818979331053506: (*Test)(nil),                 /* story_statement=Test:dependsOn:withScene:do: */
-	13063212444104265068: (*Test)(nil),                 /* execute=Test:do: */
-	9283516926116088792:  (*Test)(nil),                 /* story_statement=Test:do: */
-	11682383000525011702: (*Test)(nil),                 /* execute=Test:withScene:do: */
-	500333266696321514:   (*Test)(nil),                 /* story_statement=Test:withScene:do: */
 	9387832592330456403:  (*TextField)(nil),            /* field_definition=Text: */
 	16637694412733787472: (*TextField)(nil),            /* field_definition=Text:initially: */
 	15791809714384972761: (*TextField)(nil),            /* field_definition=Text:kind: */

@@ -21,7 +21,7 @@ Tapestry:
             - Finally do:
                 - Say: "{print_name:.obj|pluralize!}"
   - # 
-    Test:withScene:do:
+    Define test:scene:do:
       - "plural name printing"
       - - Declare: "The flowerpot, the dishes, and the spoon are things."
         - Define value:of:as:
