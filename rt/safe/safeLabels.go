@@ -3,10 +3,10 @@ package safe
 import (
 	"strings"
 
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
 

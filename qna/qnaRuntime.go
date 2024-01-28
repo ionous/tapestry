@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -13,6 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
 

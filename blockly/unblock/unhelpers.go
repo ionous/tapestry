@@ -6,8 +6,8 @@ import (
 	r "reflect"
 	"strings"
 
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 

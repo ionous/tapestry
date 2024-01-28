@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 // Parens buffers writer.Output, grouping a stream of writes.

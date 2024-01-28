@@ -1,9 +1,9 @@
 package mdl
 
 import (
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 type PatternBuilder struct {

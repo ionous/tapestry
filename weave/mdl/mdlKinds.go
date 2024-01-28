@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
 

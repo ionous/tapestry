@@ -4,10 +4,10 @@ import (
 	"strings"
 	"unicode"
 
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 func (op *Singularize) GetText(run rt.Runtime) (ret g.Value, err error) {

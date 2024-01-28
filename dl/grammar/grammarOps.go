@@ -1,8 +1,8 @@
 package grammar
 
 import (
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/parser"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 // ScannerMaker - creates parser scanners

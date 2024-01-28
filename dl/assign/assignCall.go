@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	inflect "git.sr.ht/~ionous/tapestry/inflect/en"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
