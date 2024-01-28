@@ -2,12 +2,9 @@ package files
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"os"
 	"unicode"
-
-	r "reflect"
 
 	"github.com/ionous/tell/collect"
 	"github.com/ionous/tell/decode"
@@ -15,17 +12,17 @@ import (
 )
 
 // deserialize from the passed path
-func LoadTell(inPath string, pv *map[string]any) (err error) {
+func LoadTell(inPath string) (ret any, err error) {
 	if fp, e := os.Open(inPath); e != nil {
 		err = e
 	} else {
 		defer fp.Close()
-		err = ReadTell(fp, pv)
+		ret, err = ReadTell(fp)
 	}
 	return
 }
 
-func ReadRawTell(in io.Reader) (ret any, err error) {
+func ReadTell(in io.Reader) (ret any, err error) {
 	var docComments note.Book
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
@@ -36,27 +33,6 @@ func ReadRawTell(in io.Reader) (ret any, err error) {
 	})
 	dec.UseNotes(&docComments)
 	return dec.Decode(bufio.NewReader(in))
-}
-
-func ReadTell(in io.Reader, pv *map[string]any) (err error) {
-	if raw, e := ReadRawTell(in); e != nil {
-		err = e
-	} else {
-		if raw == nil {
-			*pv = make(map[string]any)
-		} else {
-			// fix: why not cast?
-			out, res := r.ValueOf(pv).Elem(), r.ValueOf(raw)
-			if rt, ot := res.Type(), out.Type(); rt.AssignableTo(ot) {
-				out.Set(res)
-			} else if res.CanConvert(ot) {
-				out.Set(res.Convert(ot))
-			} else {
-				err = fmt.Errorf("result of %q cant be written to a pointer of %q", rt, ot)
-			}
-		}
-	}
-	return
 }
 
 // tapestry sequences never have comments; so throw out the zeroth element

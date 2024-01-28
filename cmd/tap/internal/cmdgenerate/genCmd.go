@@ -91,18 +91,25 @@ func readGroups(path string) (groups []generate.Group, err error) {
 	inDir := os.DirFS(path)
 	err = fs.WalkDir(inDir, ".", func(path string, d fs.DirEntry, e error) (err error) {
 		if e != nil {
-			err = e // fix: ignores specs for now ( it has swaps still )
-		} else if n := d.Name(); !d.IsDir() && strings.HasSuffix(n, ".tells") && n != "spec.tells" {
-			if fp, e := inDir.Open(path); e != nil {
-				err = e
-			} else if raw, e := files.ReadRawTell(fp); e != nil {
-				err = e
-			} else if msg, e := decode.ParseMessage(raw); e != nil {
-				err = e
-			} else if g, e := generate.ReadSpec(msg); e != nil {
-				err = e
-			} else {
-				groups = append(groups, g)
+			err = e
+		} else if n := d.Name(); !d.IsDir() {
+			ext := files.Ext(n) // fix: ignores specs for now ( it has swaps still )
+			if ext.Spec() && !strings.HasPrefix(n, "spec.") {
+				if fp, e := inDir.Open(path); e != nil {
+					err = e
+				} else {
+					defer fp.Close()
+					var m map[string]any
+					if e := files.FormattedRead(fp, ext, &m); e != nil {
+						err = e
+					} else if msg, e := decode.DecodeMessage(m); e != nil {
+						err = e
+					} else if g, e := generate.ReadSpec(msg); e != nil {
+						err = e
+					} else {
+						groups = append(groups, g)
+					}
+				}
 			}
 		}
 		if err != nil {

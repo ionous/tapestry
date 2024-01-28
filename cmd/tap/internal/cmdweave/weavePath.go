@@ -2,7 +2,6 @@ package cmdweave
 
 import (
 	"database/sql"
-	"encoding/json"
 	"log"
 	"os"
 	"path"
@@ -100,25 +99,11 @@ func readOne(cat *weave.Catalog, path string) (err error) {
 }
 
 func decodeStory(path string) (ret story.StoryFile, err error) {
-	switch ext := files.Ext(path); ext {
-	case files.TellStory:
-		var msg map[string]any
-		if e := files.LoadTell(path, &msg); e != nil {
-			err = e
-		} else {
-			err = story.Decode(&ret, msg)
-		}
-	case files.CompactExt:
-		var msg map[string]any
-		if b, e := files.ReadFile(path); e != nil {
-			err = e
-		} else if e := json.Unmarshal(b, &msg); e != nil {
-			err = e
-		} else {
-			err = story.Decode(&ret, msg)
-		}
-	default:
-		err = errutil.Fmt("unknown file type %q", ext)
+	var m map[string]any
+	if e := files.FormattedLoad(path, &m); e != nil {
+		err = e
+	} else {
+		err = story.Decode(&ret, m)
 	}
 	return
 }

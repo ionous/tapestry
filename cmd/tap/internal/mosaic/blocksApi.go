@@ -121,24 +121,20 @@ func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 
 // gets the contents of the story file, transforms it into blocks
 func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	if b, e := os.ReadFile(d.path); e != nil {
+	var msg map[string]any
+	var file story.StoryFile
+	if e := files.FormattedLoad(d.path, &msg); e != nil {
+		err = e
+	} else if e := story.Decode(&file, msg); e != nil {
+		err = e
+	} else if str, e := block.Convert(&file); e != nil {
 		err = e
 	} else {
-		var msg map[string]any
-		var file story.StoryFile
-		if e := json.Unmarshal(b, &msg); e != nil {
-			err = e
-		} else if e := story.Decode(&file, msg); e != nil {
-			err = e
-		} else if str, e := block.Convert(&file); e != nil {
-			err = e
-		} else {
-			w.Header().Set("Content-Type", "application/json")
-			// fix? a small rewrite to js.Builder so that it wraps a custom js.Writer interface
-			// which supports byte, rune, string, etc. and then a StreamWriter that implements those for a pure Writer
-			// we could stream here.... the normal construction would still use strings.Builder directly
-			_, err = io.WriteString(w, str)
-		}
+		w.Header().Set("Content-Type", "application/json")
+		// fix? a small rewrite to js.Builder so that it wraps a custom js.Writer interface
+		// which supports byte, rune, string, etc. and then a StreamWriter that implements those for a pure Writer
+		// we could stream here.... the normal construction would still use strings.Builder directly
+		_, err = io.WriteString(w, str)
 	}
 	return
 }

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"os"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/support/files"
@@ -48,22 +47,9 @@ func (sf storyFile) Find(sub string) (ret web.Resource) {
 // we check that the file is valid ( by loading it ) before returning it.
 func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	var msg map[string]any
-	if ext := files.Ext(sf.path); ext.Tell() {
-		if fp, e := os.Open(sf.path); e != nil {
-			err = e
-		} else {
-			err = files.ReadTell(fp, &msg)
-		}
-	} else if ext.Json() {
-		if b, e := files.ReadFile(sf.path); e != nil {
-			err = e
-		} else if e := json.Unmarshal(b, &msg); e != nil {
-			err = e
-		}
+	if e := files.FormattedLoad(sf.path, &msg); e != nil {
+		err = e
 	} else {
-		err = errutil.New("unknown file type", sf.path)
-	}
-	if err == nil {
 		// verify the story is valid by loading it.
 		var file story.StoryFile
 		if e := story.Decode(&file, msg); e != nil {
