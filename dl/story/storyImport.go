@@ -13,12 +13,12 @@ import (
 )
 
 // Execute - called by the macro runtime during weave.
-func (op *DefineTraits) Execute(macro rt.Runtime) error {
+func (op *DefineAspect) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
 // (the) colors are red, blue, or green.
-func (op *DefineTraits) Weave(cat *weave.Catalog) error {
+func (op *DefineAspect) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if aspect, e := safe.GetText(w, op.Aspect); e != nil {
 			err = e

@@ -13,11 +13,11 @@ Tapestry:
     #   brief: the first time a player visits a room, this prints the room's long description; on subsequent visits to the room, prints the short description.
     #   verbose: always prints long descriptions of rooms.
     # note: the player can change the setting with the short, superbrief, brief, normal, verbose, and long commands.
-    Define traits:as:
+    Define aspect:traits:
+      - "verbosity"
       - - "superbrief"
         - "brief"
         - "verbose"
-      - "verbosity"
   - Interpret:with:
       - - "short"
         - "superbrief"

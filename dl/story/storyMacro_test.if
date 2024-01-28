@@ -111,13 +111,13 @@
       ]
     },
     {
-      "Define traits:as:": [
+      "Define aspect:traits:": [
+        "noun types",
         [
           "common named",
           "proper named",
           "counted"
-        ],
-        "noun types"
+        ]
       ]
     }
   ]

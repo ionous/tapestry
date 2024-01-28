@@ -81,18 +81,17 @@ Spec:with group:
                     - true
       - # Add traits to an aspect
         Spec:slots:with flow:
-          - "define_traits"
+          - "define_aspect"
           - - "story_statement"
             - "execute"
           - Flow:uses:
               - "define"
               - - Term:type:
-                    - "traits"
-                    - "text_list_eval"
-                - Term:name:type:
-                    - "as"
-                    - "aspect"
-                    - "text_eval"
+                  - "aspect"
+                  - "text_eval"
+                - Term:type:
+                  - "traits"
+                  - "text_list_eval"
       - # tbd: is a separate interface required for object kinds separate from everything else?
         # in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that.
         Spec:slots:with flow:

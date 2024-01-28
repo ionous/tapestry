@@ -95,11 +95,11 @@ Tapestry:
             - - "floor"
               - "sawdust"
             - "message"
-        - Define traits:as:
+        - Define aspect:traits:
+            - "neatness"
             - - "neat"
               - "scuffed"
               - "trampled"
-            - "neatness"
         - Define kind:fields:
             - "messages"
             - - Aspect: "neatness"

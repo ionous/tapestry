@@ -12,10 +12,10 @@ Tapestry:
         - Define kind:fields:
             - "settings"
             - - Aspect: "score notification"
-        - Define traits:as:
+        - Define aspect:traits:
+            - "score notification"
             - - "score notification on"
               - "score notification off"
-            - "score notification"
         - # inform puts this last of all things using:
           # The notify score changes rule is listed last in the turn sequence rulebook.
           Define rule:do:

@@ -1,9 +1,9 @@
 Tapestry:
   - Declare: "Radiance is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "radiance"
       - - "unlit"
         - "lit"
-      - "radiance"
   - # Radiance determines whether something produces light.
     Define kind:fields:
       - "Things"

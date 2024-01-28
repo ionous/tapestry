@@ -102,12 +102,12 @@ Tapestry:
         - Aspect: "activation"
   - # 
     Declare: "Activatability is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "activatability"
       - - "activatable"
         - "not activatable"
-      - "activatability"
   - Declare: "Activation is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "activation"
       - - "deactivated"
         - "activated"
-      - "activation"

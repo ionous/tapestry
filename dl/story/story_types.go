@@ -324,19 +324,19 @@ func (op *DefineAction_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type DefineTraits struct {
-	Traits rtti.TextListEval
+type DefineAspect struct {
 	Aspect rtti.TextEval
+	Traits rtti.TextListEval
 	Markup map[string]any
 }
 
 // implements typeinfo.Instance
-func (*DefineTraits) TypeInfo() typeinfo.T {
-	return &Zt_DefineTraits
+func (*DefineAspect) TypeInfo() typeinfo.T {
+	return &Zt_DefineAspect
 }
 
 // implements typeinfo.Markup
-func (op *DefineTraits) GetMarkup(ensure bool) map[string]any {
+func (op *DefineAspect) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -344,21 +344,21 @@ func (op *DefineTraits) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineTraits)(nil)
-var _ rtti.Execute = (*DefineTraits)(nil)
+var _ StoryStatement = (*DefineAspect)(nil)
+var _ rtti.Execute = (*DefineAspect)(nil)
 
-// define_traits, a type of flow.
-var Zt_DefineTraits = typeinfo.Flow{
-	Name: "define_traits",
+// define_aspect, a type of flow.
+var Zt_DefineAspect = typeinfo.Flow{
+	Name: "define_aspect",
 	Lede: "define",
 	Terms: []typeinfo.Term{{
+		Name:  "aspect",
+		Label: "aspect",
+		Type:  &rtti.Zt_TextEval,
+	}, {
 		Name:  "traits",
 		Label: "traits",
 		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "aspect",
-		Label: "as",
-		Type:  &rtti.Zt_TextEval,
 	}},
 	Slots: []*typeinfo.Slot{
 		&Zt_StoryStatement,
@@ -369,16 +369,16 @@ var Zt_DefineTraits = typeinfo.Flow{
 	},
 }
 
-// holds a slice of type define_traits
-type DefineTraits_Slice []DefineTraits
+// holds a slice of type define_aspect
+type DefineAspect_Slice []DefineAspect
 
 // implements typeinfo.Instance
-func (*DefineTraits_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineTraits
+func (*DefineAspect_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineAspect
 }
 
 // implements typeinfo.Repeats
-func (op *DefineTraits_Slice) Repeats() bool {
+func (op *DefineAspect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2912,7 +2912,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineTest,
 	&Zt_DefineScene,
 	&Zt_DefineAction,
-	&Zt_DefineTraits,
+	&Zt_DefineAspect,
 	&Zt_AspectField,
 	&Zt_BoolField,
 	&Zt_CountOf,
@@ -2991,6 +2991,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	14790755516297707674: (*DefineAction)(nil),         /* story_statement=Define action:requires: */
 	14322897916789725742: (*DefineAction)(nil),         /* execute=Define action:requires:provides: */
 	5312053119535959994:  (*DefineAction)(nil),         /* story_statement=Define action:requires:provides: */
+	14770055621982936367: (*DefineAspect)(nil),         /* execute=Define aspect:traits: */
+	4679255645834546435:  (*DefineAspect)(nil),         /* story_statement=Define aspect:traits: */
 	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */
 	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
 	17025532743550436003: (*DefineKinds)(nil),          /* execute=Define kinds:as: */
@@ -3045,8 +3047,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16978239348269462739: (*DefineTest)(nil),           /* story_statement=Define test:requires:scene:do: */
 	2982226642886528461:  (*DefineTest)(nil),           /* execute=Define test:scene:do: */
 	13333326165932249009: (*DefineTest)(nil),           /* story_statement=Define test:scene:do: */
-	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
-	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
 	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */

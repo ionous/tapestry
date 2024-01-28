@@ -4,10 +4,10 @@ Tapestry:
       - - # when not set it will use the article from the declaration of the noun; example: "some" soldiers.
           Text: "indefinite article"
         - Aspect: "pluralization"
-  - Define traits:as:
+  - Define aspect:traits:
+      - "pluralization"
       - - "singular named"
         - "plural named"
-      - "pluralization"
   - Declare: "Pluralization is a kind of aspect."
   - # 
     Define test:scene:do:

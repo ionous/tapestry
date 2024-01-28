@@ -8,34 +8,34 @@ Tapestry:
         - Aspect: "private names"
         - Aspect: "tangibleness"
         - Text: "printed name"
-  - Define traits:as:
+  - Define aspect:traits:
+      - "noun types"
       - - "common named"
         - "proper named"
         - "counted"
-      - "noun types"
   - # when objects are publicly named, their name can appear in the output text.
     # by default, the names of privately named objects will never be displayed to the player.
-    Define traits:as:
+    Define aspect:traits:
+      - "private names"
       - - "publicly named"
         - "privately named"
-      - "private names"
   - # An object must be tangible in order to touch or interact with it.
     # A 'thing' is, by definition, a tangible object.
-    Define traits:as:
+    Define aspect:traits:
+      - "tangibleness"
       - - "intangible"
         - "tangible"
-      - "tangibleness"
   - Declare: "Things are kinds of object. Things are usually tangible."
   - Declare: "Possessiveness is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "possessiveness"
       - - "not worn"
         - "worn"
-      - "possessiveness"
   - Declare: "Portability is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "portability"
       - - "portable"
         - "fixed in place"
-      - "portability"
   - Define kind:fields:
       - "Things"
       - - Aspect: "portability"
@@ -48,10 +48,10 @@ Tapestry:
         - Bool: "mentioned"
         - Bool: "handled"
   - Declare: "Wearability is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "wearability"
       - - "not wearable"
         - "wearable"
-      - "wearability"
   - # 
     Declare: """
       Actors and props are a kind of thing.
@@ -59,25 +59,25 @@ Tapestry:
       Openers are a kind of prop.
       """
   - Declare: "Open status is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "open status"
       - - "open"
         - "closed"
-      - "open status"
   - Declare: "Openability is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "openability"
       - - "unopenable"
         - "openable"
-      - "openability"
   - Declare: "Locked status are kinds of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "locked status"
       - - "unlocked"
         - "locked"
-      - "locked status"
   - Declare: "Lockable status are kinds of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "lockable status"
       - - "lockable"
         - "unlockable"
-      - "lockable status"
   - Define kind:fields:
       - "Openers"
       - - Aspect: "open status"
@@ -87,10 +87,10 @@ Tapestry:
   - # 
     Declare: "Containers are kinds of opener."
   - Declare: "Opacity is a kind of aspect."
-  - Define traits:as:
+  - Define aspect:traits:
+      - "opacity"
       - - "opaque"
         - "transparent"
-      - "opacity"
   - Define kind:fields:
       - "Containers"
       - - Aspect: "opacity"
