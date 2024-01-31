@@ -26,7 +26,10 @@ func ReadTell(in io.Reader) (ret any, err error) {
 	var docComments note.Book
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
-		return make(tapMap)
+		m := make(tapMap)
+		x, y := dec.Position()
+		m["--pos"] = []int{x, y}
+		return m
 	})
 	dec.SetSequencer(func(reserve bool) collect.SequenceWriter {
 		return make(tapSeq, 0, 0)

@@ -113,7 +113,7 @@ func readGroups(path string) (groups []generate.Group, err error) {
 			}
 		}
 		if err != nil {
-			err = errutil.New(e, "in", path)
+			err = errutil.New(err, "in", path)
 		}
 		return
 	})

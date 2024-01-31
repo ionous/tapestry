@@ -7,6 +7,18 @@ type specData struct {
 	Markup markup
 }
 
+func (d specData) Comment() (ret []string) {
+	if c, ok := d.Markup["comment"]; ok {
+		switch c := c.(type) {
+		case string:
+			ret = []string{c}
+		case []string:
+			ret = c
+		}
+	}
+	return
+}
+
 // because references to types arent scoped but the generated code needs to be:
 // the generator has to load all possible types before writing them out.
 type flowData struct {
@@ -18,10 +30,13 @@ type flowData struct {
 
 type markup map[string]any
 
+// fix: cache to stop the multiple creation?
 func (m markup) Keys() []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
-		keys = append(keys, k)
+		if k != "pos" {
+			keys = append(keys, k)
+		}
 	}
 	sort.Strings(keys)
 	return keys

@@ -36,7 +36,7 @@ func parseStrings(v any) (ret []string, err error) {
 
 func parseMessages(v any) (ret []compact.Message, err error) {
 	if els, ok := v.([]any); !ok && v != nil {
-		err = fmt.Errorf("expected a list, have %T", v)
+		err = fmt.Errorf("expected a list, have %T %#v", v, v)
 	} else {
 		for _, el := range els {
 			if msg, e := decode.ParseMessage(el); e != nil {
