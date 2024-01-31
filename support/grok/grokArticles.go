@@ -8,7 +8,7 @@ func StripArticle(name string) (ret string, err error) {
 	} else if a, e := FindArticle(parts); e != nil {
 		err = e
 	} else {
-		words := parts[MatchLen(a.Match):]
+		words := parts[MatchedLen(a):]
 		ret = words.String()
 	}
 	return

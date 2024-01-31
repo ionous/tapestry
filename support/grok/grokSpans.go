@@ -9,7 +9,7 @@ func (ws SpanList) FindMatch(words Span) (ret Match, none error) {
 	return
 }
 
-// find the index and length of a prefix matching the passed words
+// find the index and length of the longest prefix matching the passed words
 func (ws SpanList) FindPrefix(words Span) (retWhich int, retLen int) {
 	if wordCount := len(words); wordCount > 0 {
 		for prefixIndex, prefix := range ws {
@@ -17,14 +17,7 @@ func (ws SpanList) FindPrefix(words Span) (retWhich int, retLen int) {
 			// and it has to be longer than any other previous match for it to be the best match
 			// ( tbd? try a sort search? my first attempt failed miserably )
 			if prefixLen := len(prefix); prefixLen <= wordCount && prefixLen > retLen {
-				var failed bool
-				for i, a := range prefix {
-					if a.Hash() != words[i].Hash() {
-						failed = true
-						break
-					}
-				}
-				if !failed {
+				if HasPrefix(words, prefix) {
 					retWhich, retLen = prefixIndex, prefixLen
 				}
 			}

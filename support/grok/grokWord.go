@@ -33,6 +33,10 @@ func (w *Word) equals(other uint64) bool {
 	return w.hash == other
 }
 
+func (w *Word) Equals(other uint64) bool {
+	return w.hash == other
+}
+
 func (w *Word) Hash() uint64 {
 	return w.hash
 }

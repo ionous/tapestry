@@ -19,14 +19,14 @@ const (
 //
 // only 1 & 2 support traits; only 2 & 3 support additional nouns.
 //
-// note: inform doesn't support leading anonymous nouns ( ex. "the car is in the garage" )
+// note: inform doesn't support leading anonymous nouns ( ex. "the thing is in the garage" )
 // they point out: it's not clear whether that indicates the most recent noun, or some new generic noun.
-// however, trailing anonymous nouns are allowed. ( ex. "in the garage is a car" )
+// however, trailing anonymous nouns are allowed. ( ex. "in the garage is a thing" )
 func grokNouns(known Grokker, out *[]Name, ws []Word, flag genFlag) (err error) {
 	for nextName := ws; len(nextName) > 0; {
 		if det, e := known.FindArticle(nextName); e != nil {
 			err = e
-		} else if skip := MatchLen(det.Match); skip >= len(nextName) {
+		} else if skip := MatchedLen(det.Match); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
 			name := nextName[skip:]
@@ -50,7 +50,7 @@ func grokNouns(known Grokker, out *[]Name, ws []Word, flag genFlag) (err error) 
 					}
 				} else {
 					// does it have a "called ..." some name trailing phrase?
-					called := len(postTraits) > 0 && postTraits[0].equals(keywords.called)
+					called := len(postTraits) > 0 && postTraits[0].equals(Keyword.Called)
 					if !called {
 						// case 2a: a counted kind: "two cats are on the bed."
 						// case 2b: an anonymous kind: "a container is in the lobby."
@@ -109,7 +109,7 @@ func chopArticle(known Grokker, ws []Word) (retDet Article, retName []Word, err 
 		err = errutil.New("empty name")
 	} else if det, e := known.FindArticle(ws); e != nil {
 		err = e
-	} else if skip := MatchLen(det.Match); skip >= len(ws) {
+	} else if skip := MatchedLen(det.Match); skip >= len(ws) {
 		err = makeWordError(ws[0], "no name found")
 	} else {
 		retDet, retName = det, ws[skip:]

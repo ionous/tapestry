@@ -1,40 +1,85 @@
-package grok_test
+package gestalt_test
 
 import (
 	"reflect"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/support/gestalt"
+	j "git.sr.ht/~ionous/tapestry/support/gestalt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/groktest"
+	"github.com/kr/pretty"
 )
+
+func TestPhrases(t *testing.T) {
+	// called can probably appear anywhere a noun can
+	// so you will want a name and a reference ( flyweight i guess )
+	called := &j.Sequence{[]j.Interpreter{
+		&j.Kind{},
+		&j.Words{Str: "called"},
+		// TODO: optional determiner
+		// and handle allow many (similar to traits... using comma-and rules
+		&j.NounExactly{},
+	}}
+	test := &j.Sequence{[]j.Interpreter{
+		called,
+		&j.Is{},
+		&j.Branch{[]j.Interpreter{
+			// ... is open.
+			// FIX: handle comma-and.
+			&j.Traits{},
+			// ... is on the .....
+			// &j.Sequence{[]j.Interpreter{
+			// 	&j.Verb{},
+			// 	called,
+			// }},
+		}},
+	}}
+
+	str := `The container called the sarcophagus is open.`
+	if ws, e := grok.MakeSpan(str); e != nil {
+		t.Fatal(e)
+	} else {
+		q, in := j.MakeQuery(&known), j.MakeInputState(ws)
+		if all := test.Match(q, []j.InputState{in}); len(all) != 1 {
+			t.Fatal("expected a match")
+		} else {
+			n := all[0]
+			res := gestalt.Reduce(n)
+			m := groktest.ResultMap(res)
+			if !reflect.DeepEqual(m, map[string]any{
+				"primary": []map[string]any{{
+					"det":    "the", // note: this is the bit closes to the noun
+					"name":   "sarcophagus",
+					"exact":  true,
+					"kinds":  []string{"container"},
+					"traits": []string{"open"},
+				}},
+			}) {
+				t.Log(pretty.Sprint(m))
+				t.Fatal("mismatched")
+			} else {
+				t.Log("ok")
+			}
+
+		}
+	}
+	// str2 := `The thing called the stake is on the supporter called the altar.`
+	// if ws, e := grok.MakeSpan(str2); e != nil {
+	// 	t.Fatal(e)
+	// } else {
+	// 	in := j.InputState{Words: ws, Query: &known}
+	// 	if e := test.Match([]j.InputState{in}); e != nil {
+	// 		t.Fatal(e)
+	// 	}
+	// }
+}
 
 type Word = grok.Word
 type Span = grok.Span
 type MacroType = grok.MacroType
 type Macro = grok.Macro
 type Match = grok.Match
-
-func TestPhrases(t *testing.T) {
-	groktest.Phrases(t, &known)
-}
-
-func TestTraits(t *testing.T) {
-	groktest.Phrases(t, &known)
-}
-
-func TestSep(t *testing.T) {
-	cnt := []int{
-		grok.Separator(0).Len(),
-		grok.CommaSep.Len(),
-		grok.AndSep.Len(),
-		(grok.CommaSep | grok.AndSep).Len(),
-	}
-	if !reflect.DeepEqual(cnt, []int{
-		0, 1, 1, 2,
-	}) {
-		t.Fatal(cnt)
-	}
-}
 
 type info struct {
 	kinds, traits grok.SpanList

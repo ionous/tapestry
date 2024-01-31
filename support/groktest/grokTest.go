@@ -434,14 +434,14 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				if haveError != nil {
 					t.Log("ok, test", i, p.test, haveError)
 				} else {
-					t.Log("ng, test", i, p.test, "expected an error", expectError, "but succeeded with", pretty.Sprint(resultMap(res)))
+					t.Log("ng, test", i, p.test, "expected an error", expectError, "but succeeded with", pretty.Sprint(ResultMap(res)))
 					t.Fail()
 				}
 			} else if haveError != nil {
 				t.Log("ng, test", i, p.test, haveError)
 				t.Fail()
 			} else if expectMap, ok := p.result.(map[string]any); ok {
-				m := resultMap(res)
+				m := ResultMap(res)
 				if d := pretty.Diff(expectMap, m); len(d) > 0 {
 					t.Log("ng, test", i, p.test, "got:\n", pretty.Sprint(m))
 					//t.Log("want:", pretty.Sprint(p.result))

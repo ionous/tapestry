@@ -21,8 +21,12 @@ type Grokker interface {
 }
 
 type Article struct {
-	Match Match
-	Count int
+	Match
+	Count int // for counted nouns: "seven (apples)"
+}
+
+func (a Article) Len() int {
+	return MatchedLen(a.Match)
 }
 
 func (a Article) String() (ret string) {
@@ -37,6 +41,10 @@ type Macro struct {
 	Match    Match
 	Type     MacroType
 	Reversed bool
+}
+
+func (m Macro) Len() int {
+	return MatchedLen(m.Match)
 }
 
 type Results struct {
@@ -67,7 +75,7 @@ type Match interface {
 
 // returns the size of a match;
 // 0 if the match is nil.
-func MatchLen(m Match) (ret int) {
+func MatchedLen(m Match) (ret int) {
 	if m != nil {
 		ret = m.NumWords()
 	}
@@ -76,7 +84,7 @@ func MatchLen(m Match) (ret int) {
 
 // returns the string of a match;
 // empty if the match is nil.
-func MatchString(m Match) (ret string) {
+func MatchedString(m Match) (ret string) {
 	if m != nil {
 		ret = m.String()
 	}
@@ -101,6 +109,20 @@ func (s Span) NumWords() int {
 	return len(s)
 }
 
+func HasPrefix(s, prefix []Word) (okay bool) {
+	// a prefix must be the same as or shorter than us
+	if len(prefix) <= len(s) {
+		okay = true // provisionally
+		for i, a := range prefix {
+			if a.Hash() != s[i].Hash() {
+				okay = false
+				break
+			}
+		}
+	}
+	return
+}
+
 // expects at most a single sentence.
 func Grok(known Grokker, p string) (ret Results, err error) {
 	if words, e := MakeSpan(p); e != nil {
@@ -115,7 +137,7 @@ func GrokSpan(known Grokker, words Span) (ret Results, err error) {
 	// scan for "is/are" or a macro verb, which ever comes first;
 	// the order can reverse subjects and objects.
 	for i, w := range words {
-		if w.equals(keywords.is) || w.equals(keywords.are) {
+		if w.equals(Keyword.Is) || w.equals(Keyword.Are) {
 			ret, err = beingPhrase(known, words[:i], words[i+1:])
 			break
 		} else if macro, e := known.FindMacro(words[i:]); e != nil {
@@ -130,13 +152,12 @@ func GrokSpan(known Grokker, words Span) (ret Results, err error) {
 }
 
 // make customizable?
-var keywords = struct {
-	and, are, called, comma, has, is uint64
+var Keyword = struct {
+	And, Are, Called, Comma, Is uint64
 }{
-	and:    Hash("and"),
-	are:    Hash("are"),
-	called: Hash("called"),
-	comma:  Hash(","),
-	has:    Hash("has"),
-	is:     Hash("is"),
+	And:    Hash("and"),
+	Are:    Hash("are"),
+	Called: Hash("called"),
+	Comma:  Hash(","),
+	Is:     Hash("is"),
 }

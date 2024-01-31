@@ -69,7 +69,7 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 			// fix? grok returns one of two two forms:
 			// one where the kind is already known to be a kind;
 			// and one where its seen as a generic name.
-			if grok.MatchLen(src.Span) == 0 {
+			if grok.MatchedLen(src.Span) == 0 {
 				if kinds := len(src.Kinds); kinds == 0 {
 					err = errutil.Fmt("%q expected a primary kind", res.Macro.Name)
 				} else if kinds > 2 {
@@ -105,8 +105,8 @@ func optionalLast(list []grok.Match) (ret grok.Match) {
 }
 
 func grokKind(pen *mdl.Pen, k, a grok.Match, traits []grok.Match) (err error) {
-	kind := inflect.Normalize(grok.MatchString(k))
-	ancestor := inflect.Normalize(grok.MatchString(a))
+	kind := inflect.Normalize(grok.MatchedString(k))
+	ancestor := inflect.Normalize(grok.MatchedString(a))
 	if e := pen.AddKind(kind, ancestor); e != nil {
 		err = e
 	} else {

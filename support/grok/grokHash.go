@@ -17,8 +17,8 @@ import (
 // fix? quote escaping?
 // rationale: since trimming and separating by spaces would require string allocation (probably multiple)
 // we might as well generate some hashes instead.
-func MakeSpan(s string) (ret Span, err error) {
-	if out, rem, e := makeSpan(s); e != nil {
+func MakeSpan(sentence string) (ret Span, err error) {
+	if out, rem, e := makeSpan(sentence); e != nil {
 		err = e
 	} else if len(rem) > 0 {
 		err = errutil.New("expected at most a single sentence")
@@ -28,8 +28,9 @@ func MakeSpan(s string) (ret Span, err error) {
 	return
 }
 
-func MakeSpans(s string) (ret []Span, err error) {
-	next := s
+// generates a set of spans from a string containing one or more sentences.
+func MakeSpans(sentences string) (ret []Span, err error) {
+	next := sentences
 	for len(next) > 0 {
 		if out, rem, e := makeSpan(next); e != nil {
 			err = e
@@ -85,7 +86,7 @@ Loop:
 
 		case r == ',':
 			flushWord(wordStart, i, sumReset(w))
-			flushWord(i, i+1, keywords.comma)
+			flushWord(i, i+1, Keyword.Comma)
 			wordStart = -1
 
 		case r != '-' && unicode.IsPunct(r):

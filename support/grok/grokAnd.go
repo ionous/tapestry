@@ -1,34 +1,40 @@
 package grok
 
-type sepFlag int
+// flags indicating the presence of a comma followed by an optional and.
+type Separator int
 
 const (
-	CommaSep sepFlag = 1 << iota
+	CommaSep Separator = 1 << iota
 	AndSep
 )
 
-// return the span of the and, the number of words to skip after
-// returns 0,0,nil if no ands found.
-func anyAnd(ws []Word) (retStart, retEnd int, err error) {
-	if start, skip, _, e := _findAnd(ws, false /*atStart*/); e != nil {
-		err = e
-	} else if skip > 0 {
-		retStart, retEnd = start, start+skip
-	}
-	return
+func (s Separator) Len() int {
+	return int(s&CommaSep) + int((s&AndSep)>>(AndSep-1))
 }
 
 // tests for an optional `, and` or `and`
 // and returns the number of words necessary to skip them.
 // errors if it detects an unexpected sequence of commas or ands.
 // note: when words were hashed, commas became their own Word.
-func countAnd(ws []Word) (retSkip int, retFlag sepFlag, err error) {
-	_, retSkip, retFlag, err = _findAnd(ws, true /*atStart*/)
+func CommaAnd(ws []Word) (ret Separator, err error) {
+	_, ret, err = countCommaAnd(ws, true /*atStart*/)
 	return
 }
 
-func _findAnd(ws []Word, atStart bool) (retStart, retSkip int, retFlag sepFlag, err error) {
-	var flag sepFlag
+// scan for an and,  the span of the and, the number of words to skip after
+// returns 0,0,nil if no ands found.
+func anyAnd(ws []Word) (retStart, retEnd int, err error) {
+	if start, sep, e := countCommaAnd(ws, false /*atStart*/); e != nil {
+		err = e
+	} else if skip := sep.Len(); skip > 0 {
+		retStart, retEnd = start, start+skip
+	}
+	return
+}
+
+// when at start is false, keeps scanning forward to find an and.
+func countCommaAnd(ws []Word, atStart bool) (retStart int, retFlag Separator, err error) {
+	var flag Separator
 	var start, skip int
 Loop:
 	for i, w := range ws {
@@ -39,7 +45,7 @@ Loop:
 				break Loop
 			}
 
-		case keywords.comma:
+		case Keyword.Comma:
 			if flag != 0 {
 				err = makeWordError(w, "unexpected comma")
 				break Loop
@@ -47,7 +53,7 @@ Loop:
 			flag |= CommaSep
 			start, skip = i, skip+1
 
-		case keywords.and:
+		case Keyword.And:
 			if flag == 0 {
 				start = i
 			} else if flag&AndSep != 0 {
@@ -63,7 +69,7 @@ Loop:
 		if skip == len(ws) {
 			err = makeWordError(ws[0], "unexpected ending")
 		} else {
-			retStart, retSkip, retFlag = start, skip, flag
+			retStart, retFlag = start, flag
 		}
 	}
 	return

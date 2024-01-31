@@ -2,7 +2,7 @@ package groktest
 
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
-func resultMap(in grok.Results) map[string]any {
+func ResultMap(in grok.Results) map[string]any {
 	m := make(map[string]any)
 	nounsIntoMap(m, "primary", in.Primary)
 	nounsIntoMap(m, "secondary", in.Secondary)

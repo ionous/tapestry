@@ -8,7 +8,7 @@ func macroPhrase(known Grokker, macro Macro, ws []Word) (ret Results, err error)
 	sources, targets := &out.Secondary, &out.Primary
 	at, cnt := 0, len(ws)
 	for ; at < cnt; at++ {
-		if w := ws[at]; w.equals(keywords.is) || w.equals(keywords.are) {
+		if w := ws[at]; w.equals(Keyword.Is) || w.equals(Keyword.Are) {
 			lhs, rhs := ws[:at], ws[at+1:]
 			if e := grokNouns(known, sources, rhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing right side nouns", e)
