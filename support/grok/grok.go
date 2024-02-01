@@ -37,8 +37,8 @@ func (a Article) String() (ret string) {
 }
 
 type Macro struct {
+	Match
 	Name     string
-	Match    Match
 	Type     MacroType
 	Reversed bool
 }

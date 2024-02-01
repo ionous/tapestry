@@ -1,5 +1,7 @@
 package gestalt
 
+import "git.sr.ht/~ionous/tapestry/support/grok"
+
 // matches one or more traits.
 // an article can precede every trait;
 // a comma or a comma plus an and can follow a trait
@@ -24,11 +26,15 @@ func (*Traits) Match(q Query, cs []InputState) (ret []InputState) {
 			} else {
 				skip := and + det + width
 				out := in.Next(skip)
-				out.AddResult(TypeTrait, trait)
+				out.AddResult(MatchedTrait{trait})
 				ret = append(ret, out)
 				ws = ws[skip:]
 			}
 		}
 	}
 	return
+}
+
+type MatchedTrait struct {
+	grok.Match
 }

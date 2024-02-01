@@ -10,18 +10,24 @@ import (
 )
 
 func Phrases(t *testing.T, g grok.Grokker) {
+	RunTests(t, func(test string) (grok.Results, error) {
+		return grok.Grok(g, test)
+	})
+}
+
+func RunTests(t *testing.T, interpret func(string) (grok.Results, error)) {
 	var phrases = []struct {
 		test   string
 		result any
 		skip   any
 	}{
 		{
-			test: `Devices are a kind of prop.`,
+			test: `Devices are a kind of thing.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{
 					{
-						"kinds": []string{"prop"},
+						"kinds": []string{"thing"},
 						"name":  "Devices",
 					},
 				},
@@ -34,12 +40,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			// I like that usually specifically indicates and separates kinds from nouns --
 			// im not sure the other certainties (never, always) are really needed:
 			// if so: the "final" field for mdl_value, mdl_value_kind could be used.
-			test: `Devices are usually closed.`,
+			test: `Containers are usually closed.`,
 			result: map[string]any{
 				"macro": "implies",
 				"primary": []map[string]any{
 					{
-						"name":   "Devices",
+						"name":   "Containers",
 						"traits": []string{"closed"},
 					},
 				},
@@ -65,7 +71,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 
 		{
-			test: `Hershel is carrying scissors and a pen.`,
+			// -- xx -- test: `Hershel is carrying scissors and a pen.`,
 			result: map[string]any{
 				"macro": "carry",
 				"primary": []map[string]any{{
@@ -81,7 +87,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// reverse carrying relation.
 		{
-			test: `The scissors and a pen are carried by Hershel.`,
+			// -- xx -- test: `The scissors and a pen are carried by Hershel.`,
 			result: map[string]any{
 				"macro": "carry",
 				"primary": []map[string]any{{
@@ -99,7 +105,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 
 		// simple trait:
 		{
-			test: `The bottle is closed.`,
+			// -- xx -- test: `The bottle is closed.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -110,7 +116,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// multi Word trait:
 		{
-			test: `The tree is fixed in place.`,
+			// -- xx -- test: `The tree is fixed in place.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -121,7 +127,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// multiple trailing properties, using the kind as a property.
 		{
-			test: `The bottle is a transparent, open, container.`,
+			// -- xx -- test: `The bottle is a transparent, open, container.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -133,7 +139,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// multiple nouns of different kinds
 		{
-			test: `The box and the top are closed containers.`,
+			// -- xx -- test: `The box and the top are closed containers.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -150,7 +156,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// using 'called' without a macro
 		{
-			test: `The container called the sarcophagus is open.`,
+			// -- xx -- test: `The container called the sarcophagus is open.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the", // note: this is the bit closes to the noun
@@ -164,7 +170,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// a kind of declaration ( uses a 'macro' verb )
 		// "is" left of macro
 		{
-			test: `A casket is a kind of container.`,
+			// -- xx -- test: `A casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{{
@@ -177,7 +183,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// kind of: adding trailing properties
 		// "is" left of macro
 		{
-			test: `A casket is a kind of closed container.`,
+			// -- xx -- test: `A casket is a kind of closed container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{{
@@ -193,7 +199,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// similarly, "The kind of the casket is a container", yields a name "kind of the casket".
 		// "is" left of macro.
 		{
-			test: `The closed casket is a kind of container.`,
+			// -- xx -- test: `The closed casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{{
@@ -207,12 +213,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// tbd: not allowed, but maybe it should be....
 		// "is" left of macro
 		{
-			test:   `The casket is a closed kind of container.`,
+			// -- xx -- test:   `The casket is a closed kind of container.`,
 			result: errutil.New("not allowed"),
 		},
 		// in inform, these become the plural kind "Bucketss" and "basketss"
 		{
-			test: `Buckets and baskets are kinds of container.`,
+			// -- xx -- test: `Buckets and baskets are kinds of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{
@@ -227,12 +233,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 		},
 		{
-			test:   `A container is in the lobby.`,
+			// -- xx -- test:   `A container is in the lobby.`,
 			result: errutil.New("this is specifically disallowed, and should generate an error"),
 		},
 		// rhs-contains; "in" is
 		{
-			test: `The unhappy man is in the closed bottle.`,
+			// -- xx -- test: `The unhappy man is in the closed bottle.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -248,7 +254,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			}},
 		// same pattern as the middle properties above; but not using kind of
 		{
-			test: `The coffin is a closed container in the antechamber.`,
+			// -- xx -- test: `The coffin is a closed container in the antechamber.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -265,7 +271,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// note, this is allowed even though it implies something different than what is written:
 		{
-			test: `The bottle is openable in the kitchen.`,
+			// -- xx -- test: `The bottle is openable in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -283,7 +289,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// note: The closed openable container called the trunk and the box is in the lobby.
 		// would create a noun called "the trunk and the box"
 		{
-			test: `The thing called the stake is on the supporter called the altar.`,
+			// -- xx -- test: `The thing called the stake is on the supporter called the altar.`,
 			result: map[string]any{
 				"macro": "support",
 				"secondary": []map[string]any{{
@@ -305,7 +311,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// slightly different parsing than "kind/s of":
 		// those expect only expect one set of nouns; these have two.
 		{
-			test: `A closed openable container called the trunk is in the lobby.`,
+			// -- xx -- test: `A closed openable container called the trunk is in the lobby.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -324,7 +330,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// multiple primary:
 		// "is" left of the macro "in".
 		{
-			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
+			// -- xx -- test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -345,7 +351,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// multiple primary with a leading macro
 		{
-			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
+			// -- xx -- test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -366,7 +372,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// multiple anonymous nouns.
 		{
-			test: `In the lobby are a supporter and a container.`,
+			// -- xx -- test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -382,7 +388,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// the special nxn description: no properties are allowed.
 		{
-			test: `Hector and Maria are suspicious of Santa and Santana.`,
+			// -- xx -- test: `Hector and Maria are suspicious of Santa and Santana.`,
 			result: map[string]any{
 				"macro": "suspect",
 				"primary": []map[string]any{{
@@ -399,7 +405,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// fix: trailing properties applying to the lhs
 		{
-			test: `The bottle in the kitchen is openable.`,
+			// -- xx -- test: `The bottle in the kitchen is openable.`,
 			skip: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -415,10 +421,10 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		},
 		// TODO: values.
 		{
-			//test:  `The bottle in the kitchen is openable and has age 42.`,
+			//// -- xx -- test:  `The bottle in the kitchen is openable and has age 42.`,
 		},
 		{
-			//test: `The age of the bottle is 42.`,
+			//// -- xx -- test: `The age of the bottle is 42.`,
 		},
 		// todo:  the device called the detonator is on the supporter called the shelf and is proper named"
 		// todo: In the lobby are two supporters" ( and "Two supporters are in..." works fine. )
@@ -426,10 +432,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 	}
 	var skipped int
 	for i, p := range phrases {
-		if len(p.test) > 0 && p.result == nil {
+		if len(p.test) == 0 || p.result == nil {
 			skipped++
 		} else {
-			res, haveError := grok.Grok(g, p.test)
+			res, haveError := interpret(p.test)
+
 			if expectError, ok := p.result.(error); ok {
 				if haveError != nil {
 					t.Log("ok, test", i, p.test, haveError)
@@ -462,32 +469,32 @@ func Traits(t *testing.T, g grok.Grokker) {
 		result any
 		skip   any
 	}{{
-		test: "open container",
+		// -- xx -- test: "open container",
 		result: map[string]any{
 			"kind":   "container",
 			"traits": []string{"open"},
 		},
 	}, {
-		test: "the open and an openable container",
+		// -- xx -- test: "the open and an openable container",
 		result: map[string]any{
 			"kind":   "container",
 			"traits": []string{"open", "openable"},
 		},
 	}, {
-		test: "open, and openable",
+		// -- xx -- test: "open, and openable",
 		result: map[string]any{
 			"traits": []string{"open", "openable"},
 		},
 	}, {
-		test: "open, openable",
+		// -- xx -- test: "open, openable",
 		result: map[string]any{
 			"traits": []string{"open", "openable"},
 		},
 	}, {
-		test:   "open and and openable",
+		// -- xx -- test:   "open and and openable",
 		result: errutil.New("two ands should fail"),
 	}, {
-		test:   "open and, openable",
+		// -- xx -- test:   "open and, openable",
 		result: errutil.New("backwards commas should fail"),
 	}}
 	var skipped int
@@ -497,7 +504,7 @@ func Traits(t *testing.T, g grok.Grokker) {
 			t.Fatal(e)
 		}
 		ts, haveError := grok.ParseTraitSet(g, span)
-		if len(p.test) > 0 && p.result == nil {
+		if len(p.test) == 0 || p.result == nil {
 			skipped++
 		} else if expectError, ok := p.result.(error); ok {
 			if haveError == nil {

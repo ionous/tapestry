@@ -7,10 +7,8 @@ import (
 )
 
 type Query struct {
-	g           grok.Grokker
-	Quiet       bool
-	LastArticle grok.Article
-	LastMacro   grok.Macro
+	g     grok.Grokker
+	Quiet bool
 }
 
 func MakeQuery(g grok.Grokker) Query {
@@ -30,24 +28,16 @@ func (q Query) SkipSeparators(ws grok.Span) (cnt int) {
 
 // ignores counted nouns
 func (q Query) SkipArticle(ws grok.Span) (cnt int) {
-	if res, e := q.g.FindArticle(ws); e != nil {
-		cnt = -1
-		q.log("CountArticle", e)
-	} else if res.Count > 0 {
-		cnt = -1
-	} else {
-		q.LastArticle = res
-		cnt = res.Len()
-	}
+	_, cnt = q.FindArticle(ws)
 	return
 }
 
 func (q Query) FindArticle(ws grok.Span) (ret grok.Article, cnt int) {
-	if res, e := q.g.FindArticle(ws); e != nil {
+	if m, e := grok.FindCommonArticles(ws); e != nil {
 		cnt = -1
 		q.log("FindArticle", e)
-	} else if m := res.Match; m != nil {
-		ret, cnt = res, m.NumWords()
+	} else if m != nil {
+		ret, cnt = grok.Article{Match: m}, m.NumWords()
 	}
 	return
 }
@@ -72,12 +62,12 @@ func (q Query) FindTrait(ws grok.Span) (ret grok.Match, cnt int) {
 	return
 }
 
-func (q Query) FindMacro(ws grok.Span) (cnt int) {
+func (q Query) FindMacro(ws grok.Span) (ret grok.Macro, cnt int) {
 	if res, e := q.g.FindMacro(ws); e != nil {
 		cnt = -1
 		q.log("FindMacro", e)
 	} else {
-		q.LastMacro = res
+		ret = res
 		cnt = res.Len()
 	}
 	return
