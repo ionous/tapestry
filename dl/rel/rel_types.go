@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
+// Returns the implied relative of a noun (ex. the source in a one-to-many relation.).
 type ReciprocalOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -61,6 +62,7 @@ func (op *ReciprocalOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).
 type ReciprocalsOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -116,6 +118,7 @@ func (op *ReciprocalsOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Relate two nouns.
 type Relate struct {
 	Object   rtti.TextEval
 	ToObject rtti.TextEval
@@ -176,6 +179,7 @@ func (op *Relate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns the relative of a noun (ex. the target of a one-to-one relation.).
 type RelativeOf struct {
 	Via    string
 	Object rtti.TextEval
@@ -231,6 +235,7 @@ func (op *RelativeOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
 	Via    string
 	Object rtti.TextEval

@@ -1,5 +1,5 @@
 {{- range .Comment }}
-// .
+// {{.}}
 {{- end }}
 type {{Pascal .Name}} struct {
 {{- range $i, $t := .Terms }}

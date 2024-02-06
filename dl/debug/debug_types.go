@@ -248,6 +248,7 @@ func (op *Fabricate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Debug log.
 type DebugLog struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment

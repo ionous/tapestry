@@ -65,6 +65,7 @@ func (op *ScannerMaker_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// makes a parser scanner producing a script defined action.
 type Action struct {
 	Action    string
 	Arguments []assign.Arg
@@ -122,6 +123,7 @@ func (op *Action_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// makes a parser scanner.
 type Sequence struct {
 	Series []ScannerMaker
 	Markup map[string]any
@@ -173,6 +175,7 @@ func (op *Sequence_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// makes a parser scanner.
 type ChooseOne struct {
 	Options []ScannerMaker
 	Markup  map[string]any
@@ -225,6 +228,7 @@ func (op *ChooseOne_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// starts a parser scanner.
 type Directive struct {
 	Name   string
 	Series []ScannerMaker
@@ -282,6 +286,7 @@ func (op *Directive_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// makes a parser scanner.
 type Noun struct {
 	Kind   string
 	Markup map[string]any
@@ -333,6 +338,7 @@ func (op *Noun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Change to the bounds of the most recent result.
 type Refine struct {
 	Series []ScannerMaker
 	Markup map[string]any
@@ -385,6 +391,7 @@ func (op *Refine_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Swap the first and last matching results.
 type Reverse struct {
 	Reverses []ScannerMaker
 	Markup   map[string]any
@@ -436,6 +443,7 @@ func (op *Reverse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Select a specific set of bounds for the scanner.
 type Focus struct {
 	Player string
 	Series []ScannerMaker
@@ -492,6 +500,7 @@ func (op *Focus_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// makes a parser scanner.
 type Words struct {
 	Words  []string
 	Markup map[string]any

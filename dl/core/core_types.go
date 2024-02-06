@@ -67,6 +67,7 @@ func (op *Trigger_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns true if all of the evaluations are true.
 type AllTrue struct {
 	Test   []rtti.BoolEval
 	Markup map[string]any
@@ -118,6 +119,7 @@ func (op *AllTrue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns true.
 type Always struct {
 	Markup map[string]any
 }
@@ -164,6 +166,7 @@ func (op *Always_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns true if any of the evaluations are true.
 type AnyTrue struct {
 	Test   []rtti.BoolEval
 	Markup map[string]any
@@ -215,6 +218,7 @@ func (op *AnyTrue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Add a single blank line following some text.
 type Blankline struct {
 	Markup map[string]any
 }
@@ -261,6 +265,7 @@ func (op *Blankline_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Sandwiches text printed during a block and puts them inside parenthesis '()'.
 type BracketText struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -408,6 +413,7 @@ func (op *BufferText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Runtime version of cycle_text.
 type CallCycle struct {
 	Name   string
 	Parts  []rtti.TextEval
@@ -464,6 +470,7 @@ func (op *CallCycle_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Runtime version of shuffle_text.
 type CallShuffle struct {
 	Name    string
 	Parts   []rtti.TextEval
@@ -525,6 +532,7 @@ func (op *CallShuffle_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Runtime version of stopping_text.
 type CallTerminal struct {
 	Name   string
 	Parts  []rtti.TextEval
@@ -581,6 +589,7 @@ func (op *CallTerminal_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Runtime version of count_of.
 type CallTrigger struct {
 	Name    string
 	Trigger Trigger
@@ -641,6 +650,7 @@ func (op *CallTrigger_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns new text, with the first letter turned into uppercase.
 type Capitalize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -811,6 +821,7 @@ func (op *ChooseNothingElse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Pick one of two numbers based on a boolean test.
 type ChooseNum struct {
 	If     rtti.BoolEval
 	True   rtti.NumberEval
@@ -873,6 +884,7 @@ func (op *ChooseNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Pick one of two strings based on a boolean test.
 type ChooseText struct {
 	If     rtti.BoolEval
 	True   rtti.TextEval
@@ -935,6 +947,7 @@ func (op *ChooseText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Separates words with commas, and 'and'.
 type CommaText struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -987,6 +1000,7 @@ func (op *CommaText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if eq,ne,gt,lt,ge,le two numbers.
 type CompareValue struct {
 	A      rtti.Assignment
 	Is     Comparison
@@ -1047,6 +1061,7 @@ func (op *CompareValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
 	A         rtti.NumberEval
 	Is        Comparison
@@ -1113,6 +1128,7 @@ func (op *CompareNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
 type CompareText struct {
 	A      rtti.TextEval
 	Is     Comparison
@@ -1173,6 +1189,7 @@ func (op *CompareText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Subtract two numbers.
 type SubtractValue struct {
 	A      rtti.NumberEval
 	B      rtti.NumberEval
@@ -1228,6 +1245,7 @@ func (op *SubtractValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Decide whether a pattern is running.
 type During struct {
 	PatternName string
 	Markup      map[string]any
@@ -1280,6 +1298,7 @@ func (op *During_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// List of the field names of a kind.
 type FieldsOfKind struct {
 	KindName rtti.TextEval
 	Markup   map[string]any
@@ -1379,6 +1398,7 @@ func (op *HasDominion_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A unique object identifier.
 type IdOf struct {
 	Object rtti.TextEval
 	Markup map[string]any
@@ -1429,6 +1449,7 @@ func (op *IdOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if text contains text.
 type Includes struct {
 	Text   rtti.TextEval
 	Part   rtti.TextEval
@@ -1484,6 +1505,7 @@ func (op *Includes_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if the text is empty.
 type IsEmpty struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -1535,6 +1557,7 @@ func (op *IsEmpty_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if the object is exactly the named kind.
 type IsExactKindOf struct {
 	Object rtti.TextEval
 	Kind   string
@@ -1590,6 +1613,7 @@ func (op *IsExactKindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// True if the object is compatible with the named kind.
 type IsKindOf struct {
 	Object  rtti.TextEval
 	Kind    string
@@ -1651,6 +1675,7 @@ func (op *IsKindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns multiple pieces of text as a single new piece of text.
 type Join struct {
 	Sep    rtti.TextEval
 	Parts  []rtti.TextEval
@@ -1708,6 +1733,7 @@ func (op *Join_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Friendly name of the object's kind.
 type KindOf struct {
 	Object  rtti.TextEval
 	Nothing bool
@@ -1764,6 +1790,7 @@ func (op *KindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A list of compatible kinds.
 type KindsOf struct {
 	Kind   string
 	Markup map[string]any
@@ -1814,6 +1841,7 @@ func (op *KindsOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
 type MakeLowercase struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -1864,6 +1892,7 @@ func (op *MakeLowercase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
 type MakeReversed struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -1915,6 +1944,7 @@ func (op *MakeReversed_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
 type MakeSentenceCase struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -1965,6 +1995,7 @@ func (op *MakeSentenceCase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
 type MakeTitleCase struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -2015,6 +2046,7 @@ func (op *MakeTitleCase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
 type MakeUppercase struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -2065,6 +2097,7 @@ func (op *MakeUppercase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Determine whether the specified text is similar to the specified regular expression.
 type Matches struct {
 	Text   rtti.TextEval
 	Match  string
@@ -2125,6 +2158,7 @@ func (op *Matches_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Full name of the object.
 type NameOf struct {
 	Object rtti.TextEval
 	Markup map[string]any
@@ -2175,6 +2209,7 @@ func (op *NameOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns false.
 type Never struct {
 	Markup map[string]any
 }
@@ -2221,6 +2256,7 @@ func (op *Never_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Start a new line.
 type Newline struct {
 	Markup map[string]any
 }
@@ -2313,6 +2349,7 @@ func (op *Continue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns the opposite value.
 type Not struct {
 	Test   rtti.BoolEval
 	Markup map[string]any
@@ -2363,6 +2400,7 @@ func (op *Not_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns whether there is a object of the specified name.
 type ObjectExists struct {
 	Object rtti.TextEval
 	Markup map[string]any
@@ -2414,6 +2452,7 @@ func (op *ObjectExists_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns all of the object's current traits as a list of text.
 type ObjectTraits struct {
 	Object rtti.TextEval
 	Markup map[string]any
@@ -2465,6 +2504,7 @@ func (op *ObjectTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns the plural form of a singular word. (ex. apples for apple. ).
 type Pluralize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -2516,6 +2556,7 @@ func (op *Pluralize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Writes a number using numerals, eg. '1'.
 type PrintNum struct {
 	Num    rtti.NumberEval
 	Markup map[string]any
@@ -2566,6 +2607,7 @@ func (op *PrintNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Writes a number in plain english: eg. 'one'.
 type PrintNumWord struct {
 	Num    rtti.NumberEval
 	Markup map[string]any
@@ -2617,6 +2659,7 @@ func (op *PrintNumWord_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Multiply two numbers.
 type MultiplyValue struct {
 	A      rtti.NumberEval
 	B      rtti.NumberEval
@@ -2672,6 +2715,7 @@ func (op *MultiplyValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Divide one number by another.
 type DivideValue struct {
 	A      rtti.NumberEval
 	B      rtti.NumberEval
@@ -2727,6 +2771,7 @@ func (op *DivideValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Divide one number by another, and return the remainder.
 type ModValue struct {
 	A      rtti.NumberEval
 	B      rtti.NumberEval
@@ -3084,6 +3129,7 @@ func (op *DecrementAspect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Display some text to the player without apply any additional formatting.
 type PrintText struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -3186,6 +3232,7 @@ func (op *Row_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Group text into an unordered list <ul>.
 type Rows struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -3238,6 +3285,7 @@ func (op *Rows_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Returns the singular form of a plural word. (ex. apple for apples ).
 type Singularize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -3289,6 +3337,7 @@ func (op *Singularize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Separates words with left-leaning slashes '/'.
 type SlashText struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -3341,6 +3390,7 @@ func (op *SlashText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Start a new line ( if not already at a new line. ).
 type Softline struct {
 	Markup map[string]any
 }
@@ -3387,6 +3437,7 @@ func (op *Softline_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Writes text with spaces between words.
 type SpanText struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -3439,6 +3490,7 @@ func (op *SpanText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Add two numbers.
 type AddValue struct {
 	A      rtti.NumberEval
 	B      rtti.NumberEval
@@ -3623,6 +3675,7 @@ func (op *TriggerSwitch_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Keep running a series of actions while a condition is true.
 type While struct {
 	True   rtti.BoolEval
 	Exe    []rtti.Execute

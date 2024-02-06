@@ -37,6 +37,7 @@ func (op *LiteralValue_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specify an explicit true or false.
 type BoolValue struct {
 	Value  bool
 	Kind   string
@@ -96,6 +97,7 @@ func (op *BoolValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A fixed value of a record.
 type FieldValue struct {
 	Field  string
 	Value  LiteralValue
@@ -196,6 +198,7 @@ func (op *FieldList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specify a particular number.
 type NumValue struct {
 	Value  float64
 	Kind   string
@@ -255,6 +258,7 @@ func (op *NumValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Number List: Specify a list of numbers.
 type NumValues struct {
 	Values []float64
 	Kind   string
@@ -315,6 +319,7 @@ func (op *NumValues_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specify a record composed of literal values.
 type RecordValue struct {
 	Kind   string
 	Fields []FieldValue
@@ -378,6 +383,7 @@ func (op *RecordValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specify a series of records, all of the same kind.
 type RecordList struct {
 	Kind    string
 	Records []FieldList
@@ -441,6 +447,7 @@ func (op *RecordList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specify a small bit of text.
 type TextValue struct {
 	Value  string
 	Kind   string
@@ -500,6 +507,7 @@ func (op *TextValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Text List: Specifies a set of text values.
 type TextValues struct {
 	Values []string
 	Kind   string

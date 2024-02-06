@@ -36,6 +36,7 @@ func (op *PlayMessage_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// a log message that can optionally be displayed to the client.
 type PlayLog struct {
 	Log    string
 	Markup map[string]any
@@ -87,6 +88,7 @@ func (op *PlayLog_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// app level change in state.
 type PlayMode struct {
 	Mode   PlayModes
 	Markup map[string]any
@@ -138,6 +140,7 @@ func (op *PlayMode_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// output from the game itself.
 type PlayOut struct {
 	Out    string
 	Markup map[string]any

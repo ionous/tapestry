@@ -60,7 +60,9 @@ Spec:with group:
                   - "exe"
                   - "execute"
                   - true
-      - # Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
+      - # Erase one element from the front or back of a list.
+        # Runs an activity with a list containing the erased values;
+        # the list can be empty if nothing was erased.
         Spec:slots:with flow:
           - "erasing_edge"
           - "execute"

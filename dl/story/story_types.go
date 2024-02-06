@@ -123,6 +123,7 @@ func (op *Comment_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Create a scene
 type DefineTest struct {
 	TestName   string
 	SceneNames rtti.TextListEval
@@ -195,6 +196,7 @@ func (op *DefineTest_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Define a sub world.
 type DefineScene struct {
 	Scene      rtti.TextEval
 	SceneNames rtti.TextListEval
@@ -258,6 +260,7 @@ func (op *DefineScene_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
 type DefineAction struct {
 	Action   rtti.TextEval
 	Requires []FieldDefinition
@@ -324,6 +327,7 @@ func (op *DefineAction_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Add traits to an aspect
 type DefineAspect struct {
 	Aspect rtti.TextEval
 	Traits rtti.TextListEval
@@ -546,6 +550,7 @@ func (op *CountOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// When called multiple times, returns each of its inputs in turn.
 type CycleText struct {
 	Parts  []rtti.TextEval
 	Markup map[string]any
@@ -597,6 +602,7 @@ func (op *CycleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// allows the player to refer to a noun by one or more other terms.
 type DefineAlias struct {
 	Names    rtti.TextListEval
 	NounName rtti.TextEval
@@ -655,6 +661,7 @@ func (op *DefineAlias_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// starts a parser scanner.
 type DefineLeadingGrammar struct {
 	Lede   []string
 	Scans  []grammar.ScannerMaker
@@ -714,6 +721,7 @@ func (op *DefineLeadingGrammar_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// starts a parser scanner.
 type DefineNamedGrammar struct {
 	Name   string
 	Scans  []grammar.ScannerMaker
@@ -773,6 +781,7 @@ func (op *DefineNamedGrammar_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Define a phrase that can be used with 'natural language' statements.
 type DefinePhrase struct {
 	Phrase   rtti.TextEval
 	Macro    rtti.TextEval
@@ -835,6 +844,7 @@ func (op *DefinePhrase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Simple english like definitions of nouns, kinds, and their relatives.
 type DeclareStatement struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -950,6 +960,7 @@ func (op *DefineRelation_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Add properties to a kind
 type DefineFields struct {
 	Kind   rtti.TextEval
 	Fields []FieldDefinition
@@ -1180,6 +1191,7 @@ func (op *DefinePlural_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Leaving a room by by going through a door ( ex. departing the house via the front door... ).
 type MapDeparting struct {
 	RoomName      rtti.TextEval
 	DoorName      rtti.TextEval
@@ -1248,6 +1260,7 @@ func (op *MapDeparting_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Leaving a room by moving in a compass direction ( ex. heading east... ).
 type MapHeading struct {
 	Dir           string
 	RoomName      rtti.TextEval
@@ -1321,6 +1334,7 @@ func (op *MapHeading_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Assign a starting value to the field of one or nouns.
 type DefineValue struct {
 	FieldName rtti.TextEval
 	Nouns     rtti.TextListEval
@@ -1950,6 +1964,7 @@ func (op *DefineMacro_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Executes a macro, and potentially returns a value.
 type CallMacro struct {
 	MacroName string
 	Arguments []assign.Arg
@@ -2213,6 +2228,7 @@ func (op *RecordField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Relate nouns to each other
 type DefineRelatives struct {
 	Nouns      rtti.TextListEval
 	Relation   rtti.TextEval
@@ -2276,6 +2292,7 @@ func (op *DefineRelatives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Relate nouns to each other
 type DefineOtherRelatives struct {
 	Relation   rtti.TextEval
 	Nouns      rtti.TextListEval
@@ -2449,6 +2466,7 @@ func (op *SayResponse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// When called multiple times returns its inputs at random.
 type ShuffleText struct {
 	Parts  []rtti.TextEval
 	Markup map[string]any
@@ -2500,6 +2518,7 @@ func (op *ShuffleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// When called multiple times returns each of its inputs in turn, sticking to the last one.
 type StoppingText struct {
 	Parts  []rtti.TextEval
 	Markup map[string]any
@@ -2597,6 +2616,7 @@ func (op *StoryBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// top level node, currently just for blockly might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
 	StoryStatements []StoryStatement
 	Markup          map[string]any

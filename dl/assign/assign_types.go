@@ -66,6 +66,7 @@ func (op *Dot_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Store a value into a variable or object.
 type SetValue struct {
 	Target Address
 	Value  rtti.Assignment
@@ -121,6 +122,7 @@ func (op *SetValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Set the state of an object.
 type SetTrait struct {
 	Target rtti.TextEval
 	Trait  rtti.TextEval
@@ -466,6 +468,7 @@ func (op *AtIndex_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Executes a pattern, and potentially returns a value.
 type CallPattern struct {
 	PatternName string
 	Arguments   []Arg
@@ -536,6 +539,7 @@ func (op *CallPattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Runtime version of argument.
 type Arg struct {
 	Name   string
 	Value  rtti.Assignment
@@ -635,6 +639,7 @@ func (op *FromExe_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a boolean value.
 type FromBool struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
@@ -685,6 +690,7 @@ func (op *FromBool_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a number.
 type FromNumber struct {
 	Value  rtti.NumberEval
 	Markup map[string]any
@@ -735,6 +741,7 @@ func (op *FromNumber_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a text string.
 type FromText struct {
 	Value  rtti.TextEval
 	Markup map[string]any
@@ -785,6 +792,7 @@ func (op *FromText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a record.
 type FromRecord struct {
 	Value  rtti.RecordEval
 	Markup map[string]any
@@ -835,6 +843,7 @@ func (op *FromRecord_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a list of numbers.
 type FromNumList struct {
 	Value  rtti.NumListEval
 	Markup map[string]any
@@ -885,6 +894,7 @@ func (op *FromNumList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a list of text strings.
 type FromTextList struct {
 	Value  rtti.TextListEval
 	Markup map[string]any
@@ -935,6 +945,7 @@ func (op *FromTextList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Calculates a list of records.
 type FromRecordList struct {
 	Value  rtti.RecordListEval
 	Markup map[string]any

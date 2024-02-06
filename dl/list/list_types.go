@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
+// Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
 	Target assign.Address
 	AtEdge rtti.BoolEval
@@ -65,6 +66,7 @@ func (op *EraseEdge_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
 	Count   rtti.NumberEval
 	Target  assign.Address
@@ -252,7 +254,7 @@ var Zt_ErasingEdge = typeinfo.Flow{
 		&rtti.Zt_Execute,
 	},
 	Markup: map[string]any{
-		"comment": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+		"comment": []interface{}{"Erase one element from the front or back of a list.", "Runs an activity with a list containing the erased values;", "the list can be empty if nothing was erased."},
 	},
 }
 
@@ -269,6 +271,7 @@ func (op *ErasingEdge_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
 	List   rtti.Assignment
 	As     string
@@ -337,6 +340,7 @@ func (op *ListEach_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Search a list for a specific value.
 type ListFind struct {
 	Value  rtti.Assignment
 	List   rtti.Assignment
@@ -448,6 +452,7 @@ func (op *ListGather_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Determines the number of values in a list.
 type ListLen struct {
 	List   rtti.Assignment
 	Markup map[string]any
@@ -771,6 +776,7 @@ func (op *ListReduce_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Reverse a list.
 type ListReverse struct {
 	Target assign.Address
 	Markup map[string]any
@@ -946,6 +952,7 @@ func (op *ListSortNumbers_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
 	Target     assign.Address
 	ByField    string
@@ -1084,6 +1091,7 @@ func (op *ListSplice_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Add a value to a list.
 type ListPush struct {
 	Value  rtti.Assignment
 	Target assign.Address

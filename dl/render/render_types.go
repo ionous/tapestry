@@ -158,6 +158,7 @@ func (op *RenderRef_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Pull a value from an assignment of unknown affinity.
 type RenderValue struct {
 	Value  rtti.Assignment
 	Markup map[string]any
@@ -268,6 +269,7 @@ func (op *RenderPattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Generate text in a replaceable manner.
 type RenderResponse struct {
 	Name   string
 	Text   rtti.TextEval
