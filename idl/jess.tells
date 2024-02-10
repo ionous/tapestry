@@ -19,9 +19,17 @@ Spec:with group:
           - "_"
           - "matched"
 
-    - # conjunction
+    - # conjunction junction
       Spec:with flow:
       - "comma_and"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+
+    - # matches "is" or "are".
+      Spec:with flow:
+      - "are"
       - Flow uses:
         - Term:name:
           - "_"
@@ -34,11 +42,13 @@ Spec:with group:
         - Term:name:
           - "_"
           - "matched"
+
     - # matches the name of an (existing) kind.
       Spec:with flow:
       - "kind_name"
       - Flow uses:
-        - Term:name:
+        - # the matched type is always a span.
+          Term:name:
           - "_"
           - "matched"
 
@@ -63,4 +73,44 @@ Spec:with group:
         - Term:optional:
           - "comma_and"
           - true
+        - Term: "traits"
+
+    - # matches one or more predefined words
+      # the specific words are specified via metadata
+      # on the term where this flow is declared.
+      Spec:with flow:
+      - "keywords"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+
+    - # matches one or more predefined words
+      # and returns a macro. like keywords
+      # the phrase and macro are on defined via metadata
+      Spec:with flow:
+      - "macro_name"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+        - Term:private:
+          - "macro"
+          - true
+
+    - # assigns default traits to a kind.
+      # [the] <kind> are "usually" <traits>
+      Spec:with flow:
+      - "kinds_are_traits"
+      - Flow uses:
+        - Term:optional:
+          - "article"
+          - true
+        - Term: "kind_name"
+        - Term: "are"
+        - Term:type:
+          - "usually"
+          - "macro_name"
+          phrase: "usually"
+          macro: "implies"
         - Term: "traits"

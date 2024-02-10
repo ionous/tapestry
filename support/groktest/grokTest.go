@@ -38,6 +38,24 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		result any
 		skip   any
 	}{
+		{
+			// note: "Devices are fixed in place" will parse properly
+			// but storyGrok will assume that the name "devices" refers to a noun
+			// and ( probably, hopefully ) some error will occur.
+			// I like that usually specifically indicates and separates kinds from nouns --
+			// im not sure the other certainties (never, always) are really needed:
+			// if so: the "final" field for mdl_value, mdl_value_kind could be used.
+			test: `Containers are usually closed.`,
+			result: map[string]any{
+				"macro": "implies",
+				"primary": []map[string]any{
+					{
+						"name":   "Containers",
+						"traits": []string{"closed"},
+					},
+				},
+			},
+		},
 		// simple trait:
 		{
 			test: `The bottle is closed.`,
@@ -114,24 +132,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 				},
 			},
 		},
-		{
-			// note: "Devices are fixed in place" will parse properly
-			// but storyGrok will assume that the name "devices" refers to a noun
-			// and ( probably, hopefully ) some error will occur.
-			// I like that usually specifically indicates and separates kinds from nouns --
-			// im not sure the other certainties (never, always) are really needed:
-			// if so: the "final" field for mdl_value, mdl_value_kind could be used.
-			// test: `Containers are usually closed.`,
-			result: map[string]any{
-				"macro": "implies",
-				"primary": []map[string]any{
-					{
-						"name":   "Containers",
-						"traits": []string{"closed"},
-					},
-				},
-			},
-		},
+
 		{
 			// note: in inform...	 §4.14. Duplicates
 			// "Two circles are in the Lab."

@@ -60,6 +60,17 @@ func (t *Flow) TypeMarkup() map[string]any {
 	return t.Markup
 }
 
+func (t *Flow) TermIndex(name string) (ret int) {
+	ret = -1 // provisionally not found
+	for i, n := range t.Terms {
+		if name == n.Name {
+			ret = i
+			break
+		}
+	}
+	return
+}
+
 // a member of a Flow.
 type Term struct {
 	Name     string         // go lang name; unique within its flow.

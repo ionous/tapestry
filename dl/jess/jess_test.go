@@ -17,12 +17,33 @@ func TestTraits(t *testing.T) {
 			err = e
 		} else {
 			var t jess.TraitsKind //
-			if m := t.Match(jess.MakeQuery(&known), jess.MakeInputState(ws)); m == 0 {
+			input := jess.InputState(ws)
+			if !t.Match(jess.MakeQuery(&known), &input) {
 				err = errors.New("failed to match")
-			} else if m != len(ws) {
-				err = fmt.Errorf("partially matched %d words", m)
+			} else if cnt := len(input); cnt != 0 {
+				err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
 			} else {
 				ret = t.GetTraitSet()
+			}
+		}
+		return
+	})
+}
+
+func TestPhrases(t *testing.T) {
+	groktest.RunPhraseTests(t, func(testPhrase string) (ret grok.Results, err error) {
+		t.Log("testing:", testPhrase)
+		if ws, e := grok.MakeSpan(testPhrase); e != nil {
+			err = e
+		} else {
+			var t jess.KindsAreTraits //
+			input := jess.InputState(ws)
+			if !t.Match(jess.MakeQuery(&known), &input) {
+				err = errors.New("failed to match")
+			} else if cnt := len(input); cnt != 0 {
+				err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
+			} else {
+				ret = t.GetResults()
 			}
 		}
 		return
@@ -58,7 +79,7 @@ func (n *info) FindMacro(ws Span) (Macro, error) {
 
 // "kinds of", "inherit", grok.Macro_PrimaryOnly, false
 // "a kind of", "inherit", grok.Macro_PrimaryOnly, false
-// "usually", "implies", grok.Macro_PrimaryOnly, false
+
 var known = info{
 	macros: groktest.PanicMacros(
 		// source carries/ is carrying the targets
@@ -75,6 +96,8 @@ var known = info{
 		"on", "support", grok.Macro_ManySecondary, true,
 		//
 		"suspicious of", "suspect", grok.Macro_ManyMany, false,
+		// fix: should this really be a macro?
+		"usually", "implies", grok.Macro_PrimaryOnly, false,
 	),
 	kinds: grok.PanicSpans(
 		"kind", "kinds",
