@@ -10,6 +10,9 @@ type QuitGame struct {
 	Markup map[string]any
 }
 
+// quit_game, a type of flow.
+var Zt_QuitGame typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*QuitGame) TypeInfo() typeinfo.T {
 	return &Zt_QuitGame
@@ -25,16 +28,6 @@ func (op *QuitGame) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*QuitGame)(nil)
-
-// quit_game, a type of flow.
-var Zt_QuitGame = typeinfo.Flow{
-	Name:  "quit_game",
-	Lede:  "quit_game",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type quit_game
 type QuitGame_Slice []QuitGame
@@ -53,6 +46,9 @@ type SaveGame struct {
 	Markup map[string]any
 }
 
+// save_game, a type of flow.
+var Zt_SaveGame typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SaveGame) TypeInfo() typeinfo.T {
 	return &Zt_SaveGame
@@ -68,16 +64,6 @@ func (op *SaveGame) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SaveGame)(nil)
-
-// save_game, a type of flow.
-var Zt_SaveGame = typeinfo.Flow{
-	Name:  "save_game",
-	Lede:  "save_game",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type save_game
 type SaveGame_Slice []SaveGame
@@ -96,6 +82,9 @@ type RestoreGame struct {
 	Markup map[string]any
 }
 
+// restore_game, a type of flow.
+var Zt_RestoreGame typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RestoreGame) TypeInfo() typeinfo.T {
 	return &Zt_RestoreGame
@@ -111,16 +100,6 @@ func (op *RestoreGame) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*RestoreGame)(nil)
-
-// restore_game, a type of flow.
-var Zt_RestoreGame = typeinfo.Flow{
-	Name:  "restore_game",
-	Lede:  "restore_game",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type restore_game
 type RestoreGame_Slice []RestoreGame
@@ -139,6 +118,9 @@ type UndoTurn struct {
 	Markup map[string]any
 }
 
+// undo_turn, a type of flow.
+var Zt_UndoTurn typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*UndoTurn) TypeInfo() typeinfo.T {
 	return &Zt_UndoTurn
@@ -154,16 +136,6 @@ func (op *UndoTurn) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*UndoTurn)(nil)
-
-// undo_turn, a type of flow.
-var Zt_UndoTurn = typeinfo.Flow{
-	Name:  "undo_turn",
-	Lede:  "undo_turn",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type undo_turn
 type UndoTurn_Slice []UndoTurn
@@ -182,6 +154,9 @@ type PrintVersion struct {
 	Markup map[string]any
 }
 
+// print_version, a type of flow.
+var Zt_PrintVersion typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*PrintVersion) TypeInfo() typeinfo.T {
 	return &Zt_PrintVersion
@@ -197,16 +172,6 @@ func (op *PrintVersion) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*PrintVersion)(nil)
-
-// print_version, a type of flow.
-var Zt_PrintVersion = typeinfo.Flow{
-	Name:  "print_version",
-	Lede:  "print_version",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type print_version
 type PrintVersion_Slice []PrintVersion
@@ -246,4 +211,49 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8293164373151279469:  (*RestoreGame)(nil),  /* execute=RestoreGame */
 	12343662000108026632: (*SaveGame)(nil),     /* execute=SaveGame */
 	6128819475946940678:  (*UndoTurn)(nil),     /* execute=UndoTurn */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_QuitGame = typeinfo.Flow{
+		Name:  "quit_game",
+		Lede:  "quit_game",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_SaveGame = typeinfo.Flow{
+		Name:  "save_game",
+		Lede:  "save_game",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_RestoreGame = typeinfo.Flow{
+		Name:  "restore_game",
+		Lede:  "restore_game",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_UndoTurn = typeinfo.Flow{
+		Name:  "undo_turn",
+		Lede:  "undo_turn",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_PrintVersion = typeinfo.Flow{
+		Name:  "print_version",
+		Lede:  "print_version",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
 }

@@ -73,6 +73,9 @@ type SetValue struct {
 	Markup map[string]any
 }
 
+// set_value, a type of flow.
+var Zt_SetValue typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SetValue) TypeInfo() typeinfo.T {
 	return &Zt_SetValue
@@ -88,26 +91,6 @@ func (op *SetValue) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SetValue)(nil)
-
-// set_value, a type of flow.
-var Zt_SetValue = typeinfo.Flow{
-	Name: "set_value",
-	Lede: "set",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &Zt_Address,
-	}, {
-		Name:  "value",
-		Label: "value",
-		Type:  &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Store a value into a variable or object.",
-	},
-}
 
 // holds a slice of type set_value
 type SetValue_Slice []SetValue
@@ -129,6 +112,9 @@ type SetTrait struct {
 	Markup map[string]any
 }
 
+// set_trait, a type of flow.
+var Zt_SetTrait typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SetTrait) TypeInfo() typeinfo.T {
 	return &Zt_SetTrait
@@ -144,26 +130,6 @@ func (op *SetTrait) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SetTrait)(nil)
-
-// set_trait, a type of flow.
-var Zt_SetTrait = typeinfo.Flow{
-	Name: "set_trait",
-	Lede: "set",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:  "trait",
-		Label: "trait",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Set the state of an object.",
-	},
-}
 
 // holds a slice of type set_trait
 type SetTrait_Slice []SetTrait
@@ -184,6 +150,9 @@ type CopyValue struct {
 	Markup map[string]any
 }
 
+// copy_value, a type of flow.
+var Zt_CopyValue typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*CopyValue) TypeInfo() typeinfo.T {
 	return &Zt_CopyValue
@@ -199,26 +168,6 @@ func (op *CopyValue) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*CopyValue)(nil)
-
-// copy_value, a type of flow.
-var Zt_CopyValue = typeinfo.Flow{
-	Name: "copy_value",
-	Lede: "copy",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &Zt_Address,
-	}, {
-		Name:  "source",
-		Label: "from",
-		Type:  &Zt_Address,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Copy from one stored value to another.", "Requires that the type of the two values match exactly"},
-	},
-}
 
 // holds a slice of type copy_value
 type CopyValue_Slice []CopyValue
@@ -239,6 +188,9 @@ type ObjectRef struct {
 	Dot    []Dot
 	Markup map[string]any
 }
+
+// object_ref, a type of flow.
+var Zt_ObjectRef typeinfo.Flow
 
 // implements typeinfo.Instance
 func (*ObjectRef) TypeInfo() typeinfo.T {
@@ -263,36 +215,6 @@ var _ rtti.NumListEval = (*ObjectRef)(nil)
 var _ rtti.TextListEval = (*ObjectRef)(nil)
 var _ rtti.RecordListEval = (*ObjectRef)(nil)
 
-// object_ref, a type of flow.
-var Zt_ObjectRef = typeinfo.Flow{
-	Name: "object_ref",
-	Lede: "object",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:  "field",
-		Label: "field",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "dot",
-		Label:    "dot",
-		Optional: true,
-		Repeats:  true,
-		Type:     &Zt_Dot,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Address,
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
-		&rtti.Zt_TextEval,
-		&rtti.Zt_RecordEval,
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-	},
-}
-
 // holds a slice of type object_ref
 type ObjectRef_Slice []ObjectRef
 
@@ -311,6 +233,9 @@ type VariableRef struct {
 	Dot    []Dot
 	Markup map[string]any
 }
+
+// variable_ref, a type of flow.
+var Zt_VariableRef typeinfo.Flow
 
 // implements typeinfo.Instance
 func (*VariableRef) TypeInfo() typeinfo.T {
@@ -335,32 +260,6 @@ var _ rtti.NumListEval = (*VariableRef)(nil)
 var _ rtti.TextListEval = (*VariableRef)(nil)
 var _ rtti.RecordListEval = (*VariableRef)(nil)
 
-// variable_ref, a type of flow.
-var Zt_VariableRef = typeinfo.Flow{
-	Name: "variable_ref",
-	Lede: "variable",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "dot",
-		Label:    "dot",
-		Optional: true,
-		Repeats:  true,
-		Type:     &Zt_Dot,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Address,
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
-		&rtti.Zt_TextEval,
-		&rtti.Zt_RecordEval,
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-	},
-}
-
 // holds a slice of type variable_ref
 type VariableRef_Slice []VariableRef
 
@@ -379,6 +278,9 @@ type AtField struct {
 	Markup map[string]any
 }
 
+// at_field, a type of flow.
+var Zt_AtField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*AtField) TypeInfo() typeinfo.T {
 	return &Zt_AtField
@@ -394,19 +296,6 @@ func (op *AtField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Dot = (*AtField)(nil)
-
-// at_field, a type of flow.
-var Zt_AtField = typeinfo.Flow{
-	Name: "at_field",
-	Lede: "at_field",
-	Terms: []typeinfo.Term{{
-		Name: "field",
-		Type: &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Dot,
-	},
-}
 
 // holds a slice of type at_field
 type AtField_Slice []AtField
@@ -426,6 +315,9 @@ type AtIndex struct {
 	Markup map[string]any
 }
 
+// at_index, a type of flow.
+var Zt_AtIndex typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*AtIndex) TypeInfo() typeinfo.T {
 	return &Zt_AtIndex
@@ -441,19 +333,6 @@ func (op *AtIndex) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Dot = (*AtIndex)(nil)
-
-// at_index, a type of flow.
-var Zt_AtIndex = typeinfo.Flow{
-	Name: "at_index",
-	Lede: "at_index",
-	Terms: []typeinfo.Term{{
-		Name: "index",
-		Type: &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Dot,
-	},
-}
 
 // holds a slice of type at_index
 type AtIndex_Slice []AtIndex
@@ -474,6 +353,9 @@ type CallPattern struct {
 	Arguments   []Arg
 	Markup      map[string]any
 }
+
+// call_pattern, a type of flow.
+var Zt_CallPattern typeinfo.Flow
 
 // implements typeinfo.Instance
 func (*CallPattern) TypeInfo() typeinfo.T {
@@ -498,34 +380,6 @@ var _ rtti.NumListEval = (*CallPattern)(nil)
 var _ rtti.TextListEval = (*CallPattern)(nil)
 var _ rtti.RecordListEval = (*CallPattern)(nil)
 
-// call_pattern, a type of flow.
-var Zt_CallPattern = typeinfo.Flow{
-	Name: "call_pattern",
-	Lede: "determine",
-	Terms: []typeinfo.Term{{
-		Name: "pattern_name",
-		Type: &prim.Zt_Text,
-	}, {
-		Name:    "arguments",
-		Label:   "args",
-		Repeats: true,
-		Type:    &Zt_Arg,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
-		&rtti.Zt_TextEval,
-		&rtti.Zt_RecordEval,
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-	},
-	Markup: map[string]any{
-		"comment": "Executes a pattern, and potentially returns a value.",
-	},
-}
-
 // holds a slice of type call_pattern
 type CallPattern_Slice []CallPattern
 
@@ -546,6 +400,9 @@ type Arg struct {
 	Markup map[string]any
 }
 
+// arg, a type of flow.
+var Zt_Arg typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Arg) TypeInfo() typeinfo.T {
 	return &Zt_Arg
@@ -557,23 +414,6 @@ func (op *Arg) GetMarkup(ensure bool) map[string]any {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
-}
-
-// arg, a type of flow.
-var Zt_Arg = typeinfo.Flow{
-	Name: "arg",
-	Lede: "arg",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &prim.Zt_Text,
-	}, {
-		Name:  "value",
-		Label: "from",
-		Type:  &rtti.Zt_Assignment,
-	}},
-	Markup: map[string]any{
-		"comment": "Runtime version of argument.",
-	},
 }
 
 // holds a slice of type arg
@@ -594,6 +434,9 @@ type FromExe struct {
 	Markup map[string]any
 }
 
+// from_exe, a type of flow.
+var Zt_FromExe typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromExe) TypeInfo() typeinfo.T {
 	return &Zt_FromExe
@@ -609,22 +452,6 @@ func (op *FromExe) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromExe)(nil)
-
-// from_exe, a type of flow.
-var Zt_FromExe = typeinfo.Flow{
-	Name: "from_exe",
-	Lede: "from_exe",
-	Terms: []typeinfo.Term{{
-		Name: "exe",
-		Type: &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Adapts an execute statement to an assignment.", "Used internally for package shuttle."},
-	},
-}
 
 // holds a slice of type from_exe
 type FromExe_Slice []FromExe
@@ -645,6 +472,9 @@ type FromBool struct {
 	Markup map[string]any
 }
 
+// from_bool, a type of flow.
+var Zt_FromBool typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromBool) TypeInfo() typeinfo.T {
 	return &Zt_FromBool
@@ -660,22 +490,6 @@ func (op *FromBool) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromBool)(nil)
-
-// from_bool, a type of flow.
-var Zt_FromBool = typeinfo.Flow{
-	Name: "from_bool",
-	Lede: "from_bool",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a boolean value.",
-	},
-}
 
 // holds a slice of type from_bool
 type FromBool_Slice []FromBool
@@ -696,6 +510,9 @@ type FromNumber struct {
 	Markup map[string]any
 }
 
+// from_number, a type of flow.
+var Zt_FromNumber typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromNumber) TypeInfo() typeinfo.T {
 	return &Zt_FromNumber
@@ -711,22 +528,6 @@ func (op *FromNumber) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromNumber)(nil)
-
-// from_number, a type of flow.
-var Zt_FromNumber = typeinfo.Flow{
-	Name: "from_number",
-	Lede: "from_number",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a number.",
-	},
-}
 
 // holds a slice of type from_number
 type FromNumber_Slice []FromNumber
@@ -747,6 +548,9 @@ type FromText struct {
 	Markup map[string]any
 }
 
+// from_text, a type of flow.
+var Zt_FromText typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromText) TypeInfo() typeinfo.T {
 	return &Zt_FromText
@@ -762,22 +566,6 @@ func (op *FromText) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromText)(nil)
-
-// from_text, a type of flow.
-var Zt_FromText = typeinfo.Flow{
-	Name: "from_text",
-	Lede: "from_text",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a text string.",
-	},
-}
 
 // holds a slice of type from_text
 type FromText_Slice []FromText
@@ -798,6 +586,9 @@ type FromRecord struct {
 	Markup map[string]any
 }
 
+// from_record, a type of flow.
+var Zt_FromRecord typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromRecord) TypeInfo() typeinfo.T {
 	return &Zt_FromRecord
@@ -813,22 +604,6 @@ func (op *FromRecord) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromRecord)(nil)
-
-// from_record, a type of flow.
-var Zt_FromRecord = typeinfo.Flow{
-	Name: "from_record",
-	Lede: "from_record",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_RecordEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a record.",
-	},
-}
 
 // holds a slice of type from_record
 type FromRecord_Slice []FromRecord
@@ -849,6 +624,9 @@ type FromNumList struct {
 	Markup map[string]any
 }
 
+// from_num_list, a type of flow.
+var Zt_FromNumList typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromNumList) TypeInfo() typeinfo.T {
 	return &Zt_FromNumList
@@ -864,22 +642,6 @@ func (op *FromNumList) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromNumList)(nil)
-
-// from_num_list, a type of flow.
-var Zt_FromNumList = typeinfo.Flow{
-	Name: "from_num_list",
-	Lede: "from_num_list",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_NumListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a list of numbers.",
-	},
-}
 
 // holds a slice of type from_num_list
 type FromNumList_Slice []FromNumList
@@ -900,6 +662,9 @@ type FromTextList struct {
 	Markup map[string]any
 }
 
+// from_text_list, a type of flow.
+var Zt_FromTextList typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromTextList) TypeInfo() typeinfo.T {
 	return &Zt_FromTextList
@@ -915,22 +680,6 @@ func (op *FromTextList) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromTextList)(nil)
-
-// from_text_list, a type of flow.
-var Zt_FromTextList = typeinfo.Flow{
-	Name: "from_text_list",
-	Lede: "from_text_list",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_TextListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a list of text strings.",
-	},
-}
 
 // holds a slice of type from_text_list
 type FromTextList_Slice []FromTextList
@@ -951,6 +700,9 @@ type FromRecordList struct {
 	Markup map[string]any
 }
 
+// from_record_list, a type of flow.
+var Zt_FromRecordList typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FromRecordList) TypeInfo() typeinfo.T {
 	return &Zt_FromRecordList
@@ -966,22 +718,6 @@ func (op *FromRecordList) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Assignment = (*FromRecordList)(nil)
-
-// from_record_list, a type of flow.
-var Zt_FromRecordList = typeinfo.Flow{
-	Name: "from_record_list",
-	Lede: "from_record_list",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_RecordListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Assignment,
-	},
-	Markup: map[string]any{
-		"comment": "Calculates a list of records.",
-	},
-}
 
 // holds a slice of type from_record_list
 type FromRecordList_Slice []FromRecordList
@@ -1090,4 +826,290 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11938488787528882828: (*VariableRef)(nil),    /* record_list_eval=Variable:dot: */
 	4798713833623285465:  (*VariableRef)(nil),    /* text_eval=Variable:dot: */
 	12039638244497140214: (*VariableRef)(nil),    /* text_list_eval=Variable:dot: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_SetValue = typeinfo.Flow{
+		Name: "set_value",
+		Lede: "set",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &Zt_Address,
+		}, {
+			Name:  "value",
+			Label: "value",
+			Type:  &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Store a value into a variable or object.",
+		},
+	}
+	Zt_SetTrait = typeinfo.Flow{
+		Name: "set_trait",
+		Lede: "set",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:  "trait",
+			Label: "trait",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Set the state of an object.",
+		},
+	}
+	Zt_CopyValue = typeinfo.Flow{
+		Name: "copy_value",
+		Lede: "copy",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &Zt_Address,
+		}, {
+			Name:  "source",
+			Label: "from",
+			Type:  &Zt_Address,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Copy from one stored value to another.", "Requires that the type of the two values match exactly"},
+		},
+	}
+	Zt_ObjectRef = typeinfo.Flow{
+		Name: "object_ref",
+		Lede: "object",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:  "field",
+			Label: "field",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "dot",
+			Label:    "dot",
+			Optional: true,
+			Repeats:  true,
+			Type:     &Zt_Dot,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Address,
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumberEval,
+			&rtti.Zt_TextEval,
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+		},
+	}
+	Zt_VariableRef = typeinfo.Flow{
+		Name: "variable_ref",
+		Lede: "variable",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "dot",
+			Label:    "dot",
+			Optional: true,
+			Repeats:  true,
+			Type:     &Zt_Dot,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Address,
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumberEval,
+			&rtti.Zt_TextEval,
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+		},
+	}
+	Zt_AtField = typeinfo.Flow{
+		Name: "at_field",
+		Lede: "at_field",
+		Terms: []typeinfo.Term{{
+			Name: "field",
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Dot,
+		},
+	}
+	Zt_AtIndex = typeinfo.Flow{
+		Name: "at_index",
+		Lede: "at_index",
+		Terms: []typeinfo.Term{{
+			Name: "index",
+			Type: &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Dot,
+		},
+	}
+	Zt_CallPattern = typeinfo.Flow{
+		Name: "call_pattern",
+		Lede: "determine",
+		Terms: []typeinfo.Term{{
+			Name: "pattern_name",
+			Type: &prim.Zt_Text,
+		}, {
+			Name:    "arguments",
+			Label:   "args",
+			Repeats: true,
+			Type:    &Zt_Arg,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumberEval,
+			&rtti.Zt_TextEval,
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+		},
+		Markup: map[string]any{
+			"comment": "Executes a pattern, and potentially returns a value.",
+		},
+	}
+	Zt_Arg = typeinfo.Flow{
+		Name: "arg",
+		Lede: "arg",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &prim.Zt_Text,
+		}, {
+			Name:  "value",
+			Label: "from",
+			Type:  &rtti.Zt_Assignment,
+		}},
+		Markup: map[string]any{
+			"comment": "Runtime version of argument.",
+		},
+	}
+	Zt_FromExe = typeinfo.Flow{
+		Name: "from_exe",
+		Lede: "from_exe",
+		Terms: []typeinfo.Term{{
+			Name: "exe",
+			Type: &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Adapts an execute statement to an assignment.", "Used internally for package shuttle."},
+		},
+	}
+	Zt_FromBool = typeinfo.Flow{
+		Name: "from_bool",
+		Lede: "from_bool",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a boolean value.",
+		},
+	}
+	Zt_FromNumber = typeinfo.Flow{
+		Name: "from_number",
+		Lede: "from_number",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a number.",
+		},
+	}
+	Zt_FromText = typeinfo.Flow{
+		Name: "from_text",
+		Lede: "from_text",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a text string.",
+		},
+	}
+	Zt_FromRecord = typeinfo.Flow{
+		Name: "from_record",
+		Lede: "from_record",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_RecordEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a record.",
+		},
+	}
+	Zt_FromNumList = typeinfo.Flow{
+		Name: "from_num_list",
+		Lede: "from_num_list",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_NumListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a list of numbers.",
+		},
+	}
+	Zt_FromTextList = typeinfo.Flow{
+		Name: "from_text_list",
+		Lede: "from_text_list",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a list of text strings.",
+		},
+	}
+	Zt_FromRecordList = typeinfo.Flow{
+		Name: "from_record_list",
+		Lede: "from_record_list",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_RecordListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Calculates a list of records.",
+		},
+	}
 }

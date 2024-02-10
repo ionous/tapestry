@@ -12,6 +12,9 @@ type DoNothing struct {
 	Markup map[string]any
 }
 
+// do_nothing, a type of flow.
+var Zt_DoNothing typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DoNothing) TypeInfo() typeinfo.T {
 	return &Zt_DoNothing
@@ -27,19 +30,6 @@ func (op *DoNothing) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DoNothing)(nil)
-
-// do_nothing, a type of flow.
-var Zt_DoNothing = typeinfo.Flow{
-	Name:  "do_nothing",
-	Lede:  "--",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
-	},
-}
 
 // holds a slice of type do_nothing
 type DoNothing_Slice []DoNothing
@@ -59,6 +49,9 @@ type Expect struct {
 	Markup map[string]any
 }
 
+// expect, a type of flow.
+var Zt_Expect typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Expect) TypeInfo() typeinfo.T {
 	return &Zt_Expect
@@ -74,19 +67,6 @@ func (op *Expect) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Expect)(nil)
-
-// expect, a type of flow.
-var Zt_Expect = typeinfo.Flow{
-	Name: "expect",
-	Lede: "expect",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type expect
 type Expect_Slice []Expect
@@ -106,6 +86,9 @@ type ExpectOutput struct {
 	Markup map[string]any
 }
 
+// expect_output, a type of flow.
+var Zt_ExpectOutput typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ExpectOutput) TypeInfo() typeinfo.T {
 	return &Zt_ExpectOutput
@@ -121,20 +104,6 @@ func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ExpectOutput)(nil)
-
-// expect_output, a type of flow.
-var Zt_ExpectOutput = typeinfo.Flow{
-	Name: "expect_output",
-	Lede: "expect",
-	Terms: []typeinfo.Term{{
-		Name:  "output",
-		Label: "output",
-		Type:  &prim.Zt_Lines,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type expect_output
 type ExpectOutput_Slice []ExpectOutput
@@ -154,6 +123,9 @@ type ExpectText struct {
 	Markup map[string]any
 }
 
+// expect_text, a type of flow.
+var Zt_ExpectText typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ExpectText) TypeInfo() typeinfo.T {
 	return &Zt_ExpectText
@@ -169,20 +141,6 @@ func (op *ExpectText) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ExpectText)(nil)
-
-// expect_text, a type of flow.
-var Zt_ExpectText = typeinfo.Flow{
-	Name: "expect_text",
-	Lede: "expect",
-	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "text",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type expect_text
 type ExpectText_Slice []ExpectText
@@ -202,6 +160,9 @@ type Fabricate struct {
 	Markup map[string]any
 }
 
+// fabricate, a type of flow.
+var Zt_Fabricate typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Fabricate) TypeInfo() typeinfo.T {
 	return &Zt_Fabricate
@@ -217,23 +178,6 @@ func (op *Fabricate) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Fabricate)(nil)
-
-// fabricate, a type of flow.
-var Zt_Fabricate = typeinfo.Flow{
-	Name: "fabricate",
-	Lede: "fabricate",
-	Terms: []typeinfo.Term{{
-		Name:  "text",
-		Label: "input",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"fake input as if the player had typed it themselves.", "only works while running checks."},
-	},
-}
 
 // holds a slice of type fabricate
 type Fabricate_Slice []Fabricate
@@ -255,6 +199,9 @@ type DebugLog struct {
 	Markup   map[string]any
 }
 
+// debug_log, a type of flow.
+var Zt_DebugLog typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DebugLog) TypeInfo() typeinfo.T {
 	return &Zt_DebugLog
@@ -270,26 +217,6 @@ func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DebugLog)(nil)
-
-// debug_log, a type of flow.
-var Zt_DebugLog = typeinfo.Flow{
-	Name: "debug_log",
-	Lede: "log",
-	Terms: []typeinfo.Term{{
-		Name: "log_level",
-		Type: &Zt_LoggingLevel,
-	}, {
-		Name:  "value",
-		Label: "value",
-		Type:  &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Debug log.",
-	},
-}
 
 // holds a slice of type debug_log
 type DebugLog_Slice []DebugLog
@@ -377,4 +304,88 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
 	12332403919453206336: (*Fabricate)(nil),    /* execute=Fabricate input: */
 	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_DoNothing = typeinfo.Flow{
+		Name:  "do_nothing",
+		Lede:  "--",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
+		},
+	}
+	Zt_Expect = typeinfo.Flow{
+		Name: "expect",
+		Lede: "expect",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_ExpectOutput = typeinfo.Flow{
+		Name: "expect_output",
+		Lede: "expect",
+		Terms: []typeinfo.Term{{
+			Name:  "output",
+			Label: "output",
+			Type:  &prim.Zt_Lines,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_ExpectText = typeinfo.Flow{
+		Name: "expect_text",
+		Lede: "expect",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "text",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_Fabricate = typeinfo.Flow{
+		Name: "fabricate",
+		Lede: "fabricate",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "input",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"fake input as if the player had typed it themselves.", "only works while running checks."},
+		},
+	}
+	Zt_DebugLog = typeinfo.Flow{
+		Name: "debug_log",
+		Lede: "log",
+		Terms: []typeinfo.Term{{
+			Name: "log_level",
+			Type: &Zt_LoggingLevel,
+		}, {
+			Name:  "value",
+			Label: "value",
+			Type:  &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Debug log.",
+		},
+	}
 }

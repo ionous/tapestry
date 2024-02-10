@@ -10,7 +10,7 @@ import (
 //go:embed templates/*
 var tempFS embed.FS
 
-func genTemplates(p TypeFinder) (*template.Template, error) {
+func genTemplates(p *groupSearch) (*template.Template, error) {
 	funcMap := template.FuncMap{
 		"Pascal": Pascal,
 		"Encode": func(v any) (ret string) {
@@ -20,19 +20,19 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 		// ( useful for typeinfo references where the go type becomes a primitive value )
 		// ( ex. to reference the bool info for a bool type )
 		"PackageDot": func(typeName string) (ret string, err error) {
-			if pack, goName := p.findType(typeName); len(goName) == 0 {
+			if t, ok := p.findType(typeName); !ok {
 				err = fmt.Errorf("unknown type %q", typeName)
-			} else if len(pack) > 0 {
-				ret = pack + "."
+			} else if t.group != p.currentGroup {
+				ret = t.group + "."
 			}
 			return
 		},
 		// return a scoped go type scoped for the named tapestry type.
 		"ScopedType": func(typeName string) (ret string, err error) {
-			if pack, goName := p.findType(typeName); len(goName) == 0 {
+			if t, ok := p.findType(typeName); !ok {
 				err = fmt.Errorf("unknown type %q", typeName)
-			} else if len(pack) > 0 && exported(goName) {
-				ret = pack + "." + goName
+			} else if goName := t.goType(); t.group != p.currentGroup && exported(goName) {
+				ret = t.group + "." + goName
 			} else {
 				ret = goName
 			}
@@ -40,17 +40,23 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 		},
 		// return a scoped go type for the term, scoped by the package.
 		// requires overrides for bool, num, str.
-		"TermType": func(t termData) (ret string, err error) {
-			if termType := t.Type; t.Private {
+		"TermType": func(term termData) (ret string, err error) {
+			if termType := term.Type; term.Private {
 				ret = Pascal(termType)
-			} else if pack, goName := p.findType(termType); len(goName) == 0 {
+			} else if t, ok := p.findType(termType); !ok {
 				err = fmt.Errorf("unknown type %q", termType)
-			} else if len(pack) > 0 && exported(goName) {
-				ret = pack + "." + goName
 			} else {
-				ret = goName
+				if goName := t.goType(); t.group != p.currentGroup && exported(goName) {
+					ret = t.group + "." + goName
+				} else {
+					ret = goName
+				}
+				_, isFlow := t.typeData.(flowData)
+				if term.Optional && !term.Repeats && isFlow {
+					ret = "*" + ret
+				}
 			}
-			if t.Repeats {
+			if term.Repeats {
 				ret = "[]" + ret
 			}
 			return
@@ -59,13 +65,8 @@ func genTemplates(p TypeFinder) (*template.Template, error) {
 	return template.New("").Funcs(funcMap).ParseFS(tempFS, "templates/*.tmpl")
 }
 
-// looks at whether the the
+// looks at whether the first letter is capitalized
 func exported(n string) bool {
 	first := n[:1]
 	return strings.ToUpper(first) == first
-}
-
-type TypeFinder interface {
-	// given a lowercase type name, find the go package and type
-	findType(n string) (string, string)
 }

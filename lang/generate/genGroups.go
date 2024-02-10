@@ -81,13 +81,13 @@ func (p *groupSearch) setCurrent(at int) Group {
 }
 
 // return scoped go type
-func (p *groupSearch) findType(n string) (retGroup, retName string) {
-	if a, ok := p.types[n]; ok {
-		if p.currentGroup != a.group {
-			retGroup = a.group
-			p.refs[a.group] = true
+
+func (p *groupSearch) findType(n string) (ret typeEntry, okay bool) {
+	if out, ok := p.types[n]; ok {
+		if p.currentGroup != out.group {
+			p.refs[out.group] = true
 		}
-		retName = a.goType()
+		ret, okay = out, true
 	}
 	return
 }

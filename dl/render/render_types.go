@@ -42,6 +42,9 @@ type RenderName struct {
 	Markup map[string]any
 }
 
+// render_name, a type of flow.
+var Zt_RenderName typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RenderName) TypeInfo() typeinfo.T {
 	return &Zt_RenderName
@@ -57,22 +60,6 @@ func (op *RenderName) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*RenderName)(nil)
-
-// render_name, a type of flow.
-var Zt_RenderName = typeinfo.Flow{
-	Name: "render_name",
-	Lede: "render_name",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
-	},
-}
 
 // holds a slice of type render_name
 type RenderName_Slice []RenderName
@@ -92,6 +79,9 @@ type RenderRef struct {
 	Dot    []assign.Dot
 	Markup map[string]any
 }
+
+// render_ref, a type of flow.
+var Zt_RenderRef typeinfo.Flow
 
 // implements typeinfo.Instance
 func (*RenderRef) TypeInfo() typeinfo.T {
@@ -116,35 +106,6 @@ var _ rtti.TextListEval = (*RenderRef)(nil)
 var _ rtti.RecordListEval = (*RenderRef)(nil)
 var _ RenderEval = (*RenderRef)(nil)
 
-// render_ref, a type of flow.
-var Zt_RenderRef = typeinfo.Flow{
-	Name: "render_ref",
-	Lede: "render_ref",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "dot",
-		Label:    "dot",
-		Optional: true,
-		Repeats:  true,
-		Type:     &assign.Zt_Dot,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
-		&rtti.Zt_TextEval,
-		&rtti.Zt_RecordEval,
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-		&Zt_RenderEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
-	},
-}
-
 // holds a slice of type render_ref
 type RenderRef_Slice []RenderRef
 
@@ -164,6 +125,9 @@ type RenderValue struct {
 	Markup map[string]any
 }
 
+// render_value, a type of flow.
+var Zt_RenderValue typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RenderValue) TypeInfo() typeinfo.T {
 	return &Zt_RenderValue
@@ -179,22 +143,6 @@ func (op *RenderValue) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ RenderEval = (*RenderValue)(nil)
-
-// render_value, a type of flow.
-var Zt_RenderValue = typeinfo.Flow{
-	Name: "render_value",
-	Lede: "render_value",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_RenderEval,
-	},
-	Markup: map[string]any{
-		"comment": "Pull a value from an assignment of unknown affinity.",
-	},
-}
 
 // holds a slice of type render_value
 type RenderValue_Slice []RenderValue
@@ -215,6 +163,9 @@ type RenderPattern struct {
 	Markup      map[string]any
 }
 
+// render_pattern, a type of flow.
+var Zt_RenderPattern typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RenderPattern) TypeInfo() typeinfo.T {
 	return &Zt_RenderPattern
@@ -232,29 +183,6 @@ func (op *RenderPattern) GetMarkup(ensure bool) map[string]any {
 var _ rtti.BoolEval = (*RenderPattern)(nil)
 var _ rtti.TextEval = (*RenderPattern)(nil)
 var _ RenderEval = (*RenderPattern)(nil)
-
-// render_pattern, a type of flow.
-var Zt_RenderPattern = typeinfo.Flow{
-	Name: "render_pattern",
-	Lede: "render",
-	Terms: []typeinfo.Term{{
-		Name: "pattern_name",
-		Type: &prim.Zt_Text,
-	}, {
-		Name:    "render",
-		Label:   "render",
-		Repeats: true,
-		Type:    &Zt_RenderEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_TextEval,
-		&Zt_RenderEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
-	},
-}
 
 // holds a slice of type render_pattern
 type RenderPattern_Slice []RenderPattern
@@ -276,6 +204,9 @@ type RenderResponse struct {
 	Markup map[string]any
 }
 
+// render_response, a type of flow.
+var Zt_RenderResponse typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RenderResponse) TypeInfo() typeinfo.T {
 	return &Zt_RenderResponse
@@ -292,28 +223,6 @@ func (op *RenderResponse) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*RenderResponse)(nil)
 var _ rtti.TextEval = (*RenderResponse)(nil)
-
-// render_response, a type of flow.
-var Zt_RenderResponse = typeinfo.Flow{
-	Name: "render_response",
-	Lede: "render_response",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &prim.Zt_Text,
-	}, {
-		Name:     "text",
-		Label:    "text",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": "Generate text in a replaceable manner.",
-	},
-}
 
 // holds a slice of type render_response
 type RenderResponse_Slice []RenderResponse
@@ -380,4 +289,105 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	167592851841791829:   (*RenderResponse)(nil), /* execute=RenderResponse:text: */
 	10415880721138830946: (*RenderResponse)(nil), /* text_eval=RenderResponse:text: */
 	7608693554121607902:  (*RenderValue)(nil),    /* render_eval=RenderValue: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_RenderName = typeinfo.Flow{
+		Name: "render_name",
+		Lede: "render_name",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
+		},
+	}
+	Zt_RenderRef = typeinfo.Flow{
+		Name: "render_ref",
+		Lede: "render_ref",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "dot",
+			Label:    "dot",
+			Optional: true,
+			Repeats:  true,
+			Type:     &assign.Zt_Dot,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumberEval,
+			&rtti.Zt_TextEval,
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+			&Zt_RenderEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
+		},
+	}
+	Zt_RenderValue = typeinfo.Flow{
+		Name: "render_value",
+		Lede: "render_value",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_RenderEval,
+		},
+		Markup: map[string]any{
+			"comment": "Pull a value from an assignment of unknown affinity.",
+		},
+	}
+	Zt_RenderPattern = typeinfo.Flow{
+		Name: "render_pattern",
+		Lede: "render",
+		Terms: []typeinfo.Term{{
+			Name: "pattern_name",
+			Type: &prim.Zt_Text,
+		}, {
+			Name:    "render",
+			Label:   "render",
+			Repeats: true,
+			Type:    &Zt_RenderEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_TextEval,
+			&Zt_RenderEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+		},
+	}
+	Zt_RenderResponse = typeinfo.Flow{
+		Name: "render_response",
+		Lede: "render_response",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &prim.Zt_Text,
+		}, {
+			Name:     "text",
+			Label:    "text",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "Generate text in a replaceable manner.",
+		},
+	}
 }

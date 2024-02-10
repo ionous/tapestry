@@ -13,6 +13,9 @@ type ReciprocalOf struct {
 	Markup map[string]any
 }
 
+// reciprocal_of, a type of flow.
+var Zt_ReciprocalOf typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ReciprocalOf) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalOf
@@ -28,26 +31,6 @@ func (op *ReciprocalOf) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*ReciprocalOf)(nil)
-
-// reciprocal_of, a type of flow.
-var Zt_ReciprocalOf = typeinfo.Flow{
-	Name: "reciprocal_of",
-	Lede: "reciprocal",
-	Terms: []typeinfo.Term{{
-		Name: "via",
-		Type: &Zt_RelationName,
-	}, {
-		Name:  "object",
-		Label: "object",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
-	},
-}
 
 // holds a slice of type reciprocal_of
 type ReciprocalOf_Slice []ReciprocalOf
@@ -69,6 +52,9 @@ type ReciprocalsOf struct {
 	Markup map[string]any
 }
 
+// reciprocals_of, a type of flow.
+var Zt_ReciprocalsOf typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ReciprocalsOf) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalsOf
@@ -84,26 +70,6 @@ func (op *ReciprocalsOf) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextListEval = (*ReciprocalsOf)(nil)
-
-// reciprocals_of, a type of flow.
-var Zt_ReciprocalsOf = typeinfo.Flow{
-	Name: "reciprocals_of",
-	Lede: "reciprocals",
-	Terms: []typeinfo.Term{{
-		Name: "via",
-		Type: &Zt_RelationName,
-	}, {
-		Name:  "object",
-		Label: "object",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextListEval,
-	},
-	Markup: map[string]any{
-		"comment": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
-	},
-}
 
 // holds a slice of type reciprocals_of
 type ReciprocalsOf_Slice []ReciprocalsOf
@@ -126,6 +92,9 @@ type Relate struct {
 	Markup   map[string]any
 }
 
+// relate, a type of flow.
+var Zt_Relate typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Relate) TypeInfo() typeinfo.T {
 	return &Zt_Relate
@@ -141,30 +110,6 @@ func (op *Relate) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Relate)(nil)
-
-// relate, a type of flow.
-var Zt_Relate = typeinfo.Flow{
-	Name: "relate",
-	Lede: "relate",
-	Terms: []typeinfo.Term{{
-		Name: "object",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:  "to_object",
-		Label: "to",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "via",
-		Label: "via",
-		Type:  &Zt_RelationName,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Relate two nouns.",
-	},
-}
 
 // holds a slice of type relate
 type Relate_Slice []Relate
@@ -186,6 +131,9 @@ type RelativeOf struct {
 	Markup map[string]any
 }
 
+// relative_of, a type of flow.
+var Zt_RelativeOf typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RelativeOf) TypeInfo() typeinfo.T {
 	return &Zt_RelativeOf
@@ -201,26 +149,6 @@ func (op *RelativeOf) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*RelativeOf)(nil)
-
-// relative_of, a type of flow.
-var Zt_RelativeOf = typeinfo.Flow{
-	Name: "relative_of",
-	Lede: "relative",
-	Terms: []typeinfo.Term{{
-		Name: "via",
-		Type: &Zt_RelationName,
-	}, {
-		Name:  "object",
-		Label: "object",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
-	},
-}
 
 // holds a slice of type relative_of
 type RelativeOf_Slice []RelativeOf
@@ -242,6 +170,9 @@ type RelativesOf struct {
 	Markup map[string]any
 }
 
+// relatives_of, a type of flow.
+var Zt_RelativesOf typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RelativesOf) TypeInfo() typeinfo.T {
 	return &Zt_RelativesOf
@@ -257,26 +188,6 @@ func (op *RelativesOf) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextListEval = (*RelativesOf)(nil)
-
-// relatives_of, a type of flow.
-var Zt_RelativesOf = typeinfo.Flow{
-	Name: "relatives_of",
-	Lede: "relatives",
-	Terms: []typeinfo.Term{{
-		Name: "via",
-		Type: &Zt_RelationName,
-	}, {
-		Name:  "object",
-		Label: "object",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextListEval,
-	},
-	Markup: map[string]any{
-		"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
-	},
-}
 
 // holds a slice of type relatives_of
 type RelativesOf_Slice []RelativesOf
@@ -326,4 +237,103 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15160920709871392391: (*Relate)(nil),        /* execute=Relate:to:via: */
 	14535552277213572673: (*RelativeOf)(nil),    /* text_eval=Relative:object: */
 	13180339401044333799: (*RelativesOf)(nil),   /* text_list_eval=Relatives:object: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_ReciprocalOf = typeinfo.Flow{
+		Name: "reciprocal_of",
+		Lede: "reciprocal",
+		Terms: []typeinfo.Term{{
+			Name: "via",
+			Type: &Zt_RelationName,
+		}, {
+			Name:  "object",
+			Label: "object",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
+		},
+	}
+	Zt_ReciprocalsOf = typeinfo.Flow{
+		Name: "reciprocals_of",
+		Lede: "reciprocals",
+		Terms: []typeinfo.Term{{
+			Name: "via",
+			Type: &Zt_RelationName,
+		}, {
+			Name:  "object",
+			Label: "object",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+		},
+		Markup: map[string]any{
+			"comment": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
+		},
+	}
+	Zt_Relate = typeinfo.Flow{
+		Name: "relate",
+		Lede: "relate",
+		Terms: []typeinfo.Term{{
+			Name: "object",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:  "to_object",
+			Label: "to",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "via",
+			Label: "via",
+			Type:  &Zt_RelationName,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Relate two nouns.",
+		},
+	}
+	Zt_RelativeOf = typeinfo.Flow{
+		Name: "relative_of",
+		Lede: "relative",
+		Terms: []typeinfo.Term{{
+			Name: "via",
+			Type: &Zt_RelationName,
+		}, {
+			Name:  "object",
+			Label: "object",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
+		},
+	}
+	Zt_RelativesOf = typeinfo.Flow{
+		Name: "relatives_of",
+		Lede: "relatives",
+		Terms: []typeinfo.Term{{
+			Name: "via",
+			Type: &Zt_RelationName,
+		}, {
+			Name:  "object",
+			Label: "object",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+		},
+		Markup: map[string]any{
+			"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
+		},
+	}
 }

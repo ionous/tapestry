@@ -39,6 +39,9 @@ type Frame struct {
 	Markup map[string]any
 }
 
+// frame, a type of flow.
+var Zt_Frame typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Frame) TypeInfo() typeinfo.T {
 	return &Zt_Frame
@@ -50,27 +53,6 @@ func (op *Frame) GetMarkup(ensure bool) map[string]any {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
-}
-
-// frame, a type of flow.
-var Zt_Frame = typeinfo.Flow{
-	Name: "frame",
-	Lede: "frame",
-	Terms: []typeinfo.Term{{
-		Name:  "result",
-		Label: "result",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "events",
-		Label:   "events",
-		Repeats: true,
-		Type:    &Zt_Event,
-	}, {
-		Name:     "error",
-		Label:    "error",
-		Optional: true,
-		Type:     &prim.Zt_Text,
-	}},
 }
 
 // holds a slice of type frame
@@ -91,6 +73,9 @@ type FrameOutput struct {
 	Markup map[string]any
 }
 
+// frame_output, a type of flow.
+var Zt_FrameOutput typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*FrameOutput) TypeInfo() typeinfo.T {
 	return &Zt_FrameOutput
@@ -106,19 +91,6 @@ func (op *FrameOutput) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Event = (*FrameOutput)(nil)
-
-// frame_output, a type of flow.
-var Zt_FrameOutput = typeinfo.Flow{
-	Name: "frame_output",
-	Lede: "frame_output",
-	Terms: []typeinfo.Term{{
-		Name: "text",
-		Type: &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Event,
-	},
-}
 
 // holds a slice of type frame_output
 type FrameOutput_Slice []FrameOutput
@@ -138,6 +110,9 @@ type SceneStarted struct {
 	Markup  map[string]any
 }
 
+// scene_started, a type of flow.
+var Zt_SceneStarted typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SceneStarted) TypeInfo() typeinfo.T {
 	return &Zt_SceneStarted
@@ -153,20 +128,6 @@ func (op *SceneStarted) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Event = (*SceneStarted)(nil)
-
-// scene_started, a type of flow.
-var Zt_SceneStarted = typeinfo.Flow{
-	Name: "scene_started",
-	Lede: "scene_started",
-	Terms: []typeinfo.Term{{
-		Name:    "domains",
-		Repeats: true,
-		Type:    &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Event,
-	},
-}
 
 // holds a slice of type scene_started
 type SceneStarted_Slice []SceneStarted
@@ -186,6 +147,9 @@ type SceneEnded struct {
 	Markup  map[string]any
 }
 
+// scene_ended, a type of flow.
+var Zt_SceneEnded typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SceneEnded) TypeInfo() typeinfo.T {
 	return &Zt_SceneEnded
@@ -201,20 +165,6 @@ func (op *SceneEnded) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Event = (*SceneEnded)(nil)
-
-// scene_ended, a type of flow.
-var Zt_SceneEnded = typeinfo.Flow{
-	Name: "scene_ended",
-	Lede: "scene_ended",
-	Terms: []typeinfo.Term{{
-		Name:    "domains",
-		Repeats: true,
-		Type:    &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Event,
-	},
-}
 
 // holds a slice of type scene_ended
 type SceneEnded_Slice []SceneEnded
@@ -237,6 +187,9 @@ type StateChanged struct {
 	Markup map[string]any
 }
 
+// state_changed, a type of flow.
+var Zt_StateChanged typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*StateChanged) TypeInfo() typeinfo.T {
 	return &Zt_StateChanged
@@ -252,32 +205,6 @@ func (op *StateChanged) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Event = (*StateChanged)(nil)
-
-// state_changed, a type of flow.
-var Zt_StateChanged = typeinfo.Flow{
-	Name: "state_changed",
-	Lede: "state_changed",
-	Terms: []typeinfo.Term{{
-		Name:  "noun",
-		Label: "noun",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:  "aspect",
-		Label: "aspect",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:  "prev",
-		Label: "prev",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:  "trait",
-		Label: "trait",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Event,
-	},
-}
 
 // holds a slice of type state_changed
 type StateChanged_Slice []StateChanged
@@ -299,6 +226,9 @@ type PairChanged struct {
 	Markup map[string]any
 }
 
+// pair_changed, a type of flow.
+var Zt_PairChanged typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*PairChanged) TypeInfo() typeinfo.T {
 	return &Zt_PairChanged
@@ -314,28 +244,6 @@ func (op *PairChanged) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ Event = (*PairChanged)(nil)
-
-// pair_changed, a type of flow.
-var Zt_PairChanged = typeinfo.Flow{
-	Name: "pair_changed",
-	Lede: "pair_changed",
-	Terms: []typeinfo.Term{{
-		Name:  "a",
-		Label: "a",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:  "b",
-		Label: "b",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:  "rel",
-		Label: "rel",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_Event,
-	},
-}
 
 // holds a slice of type pair_changed
 type PairChanged_Slice []PairChanged
@@ -385,4 +293,107 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	14005264853352099464: (*SceneEnded)(nil),   /* event=SceneEnded: */
 	12902248384806780167: (*SceneStarted)(nil), /* event=SceneStarted: */
 	7027046405509259850:  (*StateChanged)(nil), /* event=StateChanged noun:aspect:prev:trait: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_Frame = typeinfo.Flow{
+		Name: "frame",
+		Lede: "frame",
+		Terms: []typeinfo.Term{{
+			Name:  "result",
+			Label: "result",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "events",
+			Label:   "events",
+			Repeats: true,
+			Type:    &Zt_Event,
+		}, {
+			Name:     "error",
+			Label:    "error",
+			Optional: true,
+			Type:     &prim.Zt_Text,
+		}},
+	}
+	Zt_FrameOutput = typeinfo.Flow{
+		Name: "frame_output",
+		Lede: "frame_output",
+		Terms: []typeinfo.Term{{
+			Name: "text",
+			Type: &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Event,
+		},
+	}
+	Zt_SceneStarted = typeinfo.Flow{
+		Name: "scene_started",
+		Lede: "scene_started",
+		Terms: []typeinfo.Term{{
+			Name:    "domains",
+			Repeats: true,
+			Type:    &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Event,
+		},
+	}
+	Zt_SceneEnded = typeinfo.Flow{
+		Name: "scene_ended",
+		Lede: "scene_ended",
+		Terms: []typeinfo.Term{{
+			Name:    "domains",
+			Repeats: true,
+			Type:    &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Event,
+		},
+	}
+	Zt_StateChanged = typeinfo.Flow{
+		Name: "state_changed",
+		Lede: "state_changed",
+		Terms: []typeinfo.Term{{
+			Name:  "noun",
+			Label: "noun",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:  "aspect",
+			Label: "aspect",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:  "prev",
+			Label: "prev",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:  "trait",
+			Label: "trait",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Event,
+		},
+	}
+	Zt_PairChanged = typeinfo.Flow{
+		Name: "pair_changed",
+		Lede: "pair_changed",
+		Terms: []typeinfo.Term{{
+			Name:  "a",
+			Label: "a",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:  "b",
+			Label: "b",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:  "rel",
+			Label: "rel",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Event,
+		},
+	}
 }

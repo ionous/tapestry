@@ -37,6 +37,9 @@ type TestEmbed struct {
 	Markup   map[string]any
 }
 
+// test_embed, a type of flow.
+var Zt_TestEmbed typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*TestEmbed) TypeInfo() typeinfo.T {
 	return &Zt_TestEmbed
@@ -52,20 +55,6 @@ func (op *TestEmbed) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ TestSlot = (*TestEmbed)(nil)
-
-// test_embed, a type of flow.
-var Zt_TestEmbed = typeinfo.Flow{
-	Name: "test_embed",
-	Lede: "embed",
-	Terms: []typeinfo.Term{{
-		Name:  "test_flow",
-		Label: "test_flow",
-		Type:  &Zt_TestFlow,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_TestSlot,
-	},
-}
 
 // holds a slice of type test_embed
 type TestEmbed_Slice []TestEmbed
@@ -89,6 +78,9 @@ type TestFlow struct {
 	Markup map[string]any
 }
 
+// test_flow, a type of flow.
+var Zt_TestFlow typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*TestFlow) TypeInfo() typeinfo.T {
 	return &Zt_TestFlow
@@ -104,42 +96,6 @@ func (op *TestFlow) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ TestSlot = (*TestFlow)(nil)
-
-// test_flow, a type of flow.
-var Zt_TestFlow = typeinfo.Flow{
-	Name: "test_flow",
-	Lede: "flow",
-	Terms: []typeinfo.Term{{
-		Name:     "slot",
-		Label:    "slot",
-		Optional: true,
-		Type:     &Zt_TestSlot,
-	}, {
-		Name:     "txt",
-		Label:    "txt",
-		Optional: true,
-		Type:     &Zt_TestTxt,
-	}, {
-		Name:     "num",
-		Label:    "num",
-		Optional: true,
-		Type:     &Zt_TestNum,
-	}, {
-		Name:     "bool",
-		Label:    "bool",
-		Optional: true,
-		Type:     &Zt_TestBool,
-	}, {
-		Name:     "slots",
-		Label:    "slots",
-		Optional: true,
-		Repeats:  true,
-		Type:     &Zt_TestSlot,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_TestSlot,
-	},
-}
 
 // holds a slice of type test_flow
 type TestFlow_Slice []TestFlow
@@ -303,4 +259,55 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15951227895458002862: (*TestFlow)(nil),  /* test_slot=Flow txt:num:bool:slots: */
 	1596042300229332818:  (*TestFlow)(nil),  /* test_slot=Flow txt:num:slots: */
 	445595344264097156:   (*TestFlow)(nil),  /* test_slot=Flow txt:slots: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_TestEmbed = typeinfo.Flow{
+		Name: "test_embed",
+		Lede: "embed",
+		Terms: []typeinfo.Term{{
+			Name:  "test_flow",
+			Label: "test_flow",
+			Type:  &Zt_TestFlow,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_TestSlot,
+		},
+	}
+	Zt_TestFlow = typeinfo.Flow{
+		Name: "test_flow",
+		Lede: "flow",
+		Terms: []typeinfo.Term{{
+			Name:     "slot",
+			Label:    "slot",
+			Optional: true,
+			Type:     &Zt_TestSlot,
+		}, {
+			Name:     "txt",
+			Label:    "txt",
+			Optional: true,
+			Type:     &Zt_TestTxt,
+		}, {
+			Name:     "num",
+			Label:    "num",
+			Optional: true,
+			Type:     &Zt_TestNum,
+		}, {
+			Name:     "bool",
+			Label:    "bool",
+			Optional: true,
+			Type:     &Zt_TestBool,
+		}, {
+			Name:     "slots",
+			Label:    "slots",
+			Optional: true,
+			Repeats:  true,
+			Type:     &Zt_TestSlot,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_TestSlot,
+		},
+	}
 }

@@ -8,6 +8,9 @@ type {{Pascal .Name}} struct {
 	Markup map[string]any
 }
 
+// {{.Name}}, a type of flow.
+var Zt_{{Pascal .Name}} typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*{{Pascal .Name}}) TypeInfo() typeinfo.T {
 	return &Zt_{{Pascal .Name}}
@@ -28,30 +31,7 @@ var _ {{ScopedType $s}} = (*{{Pascal $.Name}})(nil)
 {{- end }}
 {{- end}}
 
-// {{.Name}}, a type of flow.
-var Zt_{{Pascal .Name}} = typeinfo.Flow{
-	Name: "{{.Name}}",
-	Lede: "{{.Lede}}",
-	Terms: []typeinfo.Term{
-{{- range $i, $t := .Terms -}}{{if $i}},{{end}}{
-		Name: "{{$t.Name}}",{{if $t.SimpleLabel}}
-		Label: "{{$t.SimpleLabel}}",{{end}}{{if $t.Private}}
-		Private: true,{{end}}{{if $t.Optional}}
-		Optional: true,{{end}}{{if $t.Repeats}}
-		Repeats: true,{{end}}{{if not $t.Private}}
-		Type: &{{PackageDot $t.Type}}Zt_{{Pascal $t.Type}},{{end}}
-	}
-{{- end -}}
-{{/**/}}		},
-	{{- if .Slots }} 
-	Slots: []*typeinfo.Slot{ 
-	{{- range $i, $s := .Slots }}
-		&{{PackageDot $s}}Zt_{{Pascal $s}},
-	{{- end }}
-	},
-	{{- end }}
-	{{- template "markup.tmpl" .}}
-}
+
 
 // holds a slice of type {{.Name}}
 type {{Pascal .Name}}_Slice []{{Pascal .Name}}

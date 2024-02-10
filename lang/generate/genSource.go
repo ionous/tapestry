@@ -6,7 +6,7 @@ import (
 )
 
 // after collecting groups, write them to targeted location
-// ( it tell format, with the tells extension )
+// ( in tell format, with the tells extension )
 func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 	// this uses the generation to determine inter package references
 	// so we have to build the body first, and later

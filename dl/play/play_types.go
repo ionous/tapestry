@@ -42,6 +42,9 @@ type PlayLog struct {
 	Markup map[string]any
 }
 
+// play_log, a type of flow.
+var Zt_PlayLog typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*PlayLog) TypeInfo() typeinfo.T {
 	return &Zt_PlayLog
@@ -57,23 +60,6 @@ func (op *PlayLog) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ PlayMessage = (*PlayLog)(nil)
-
-// play_log, a type of flow.
-var Zt_PlayLog = typeinfo.Flow{
-	Name: "play_log",
-	Lede: "play",
-	Terms: []typeinfo.Term{{
-		Name:  "log",
-		Label: "log",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_PlayMessage,
-	},
-	Markup: map[string]any{
-		"comment": "a log message that can optionally be displayed to the client.",
-	},
-}
 
 // holds a slice of type play_log
 type PlayLog_Slice []PlayLog
@@ -94,6 +80,9 @@ type PlayMode struct {
 	Markup map[string]any
 }
 
+// play_mode, a type of flow.
+var Zt_PlayMode typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*PlayMode) TypeInfo() typeinfo.T {
 	return &Zt_PlayMode
@@ -109,23 +98,6 @@ func (op *PlayMode) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ PlayMessage = (*PlayMode)(nil)
-
-// play_mode, a type of flow.
-var Zt_PlayMode = typeinfo.Flow{
-	Name: "play_mode",
-	Lede: "play",
-	Terms: []typeinfo.Term{{
-		Name:  "mode",
-		Label: "mode",
-		Type:  &Zt_PlayModes,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_PlayMessage,
-	},
-	Markup: map[string]any{
-		"comment": "app level change in state.",
-	},
-}
 
 // holds a slice of type play_mode
 type PlayMode_Slice []PlayMode
@@ -146,6 +118,9 @@ type PlayOut struct {
 	Markup map[string]any
 }
 
+// play_out, a type of flow.
+var Zt_PlayOut typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*PlayOut) TypeInfo() typeinfo.T {
 	return &Zt_PlayOut
@@ -161,23 +136,6 @@ func (op *PlayOut) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ PlayMessage = (*PlayOut)(nil)
-
-// play_out, a type of flow.
-var Zt_PlayOut = typeinfo.Flow{
-	Name: "play_out",
-	Lede: "play",
-	Terms: []typeinfo.Term{{
-		Name:  "out",
-		Label: "out",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_PlayMessage,
-	},
-	Markup: map[string]any{
-		"comment": "output from the game itself.",
-	},
-}
 
 // holds a slice of type play_out
 type PlayOut_Slice []PlayOut
@@ -267,4 +225,54 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17624726337788752012: (*PlayLog)(nil),  /* play_message=Play log: */
 	4988029522939467359:  (*PlayMode)(nil), /* play_message=Play mode: */
 	14741822345399231886: (*PlayOut)(nil),  /* play_message=Play out: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_PlayLog = typeinfo.Flow{
+		Name: "play_log",
+		Lede: "play",
+		Terms: []typeinfo.Term{{
+			Name:  "log",
+			Label: "log",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_PlayMessage,
+		},
+		Markup: map[string]any{
+			"comment": "a log message that can optionally be displayed to the client.",
+		},
+	}
+	Zt_PlayMode = typeinfo.Flow{
+		Name: "play_mode",
+		Lede: "play",
+		Terms: []typeinfo.Term{{
+			Name:  "mode",
+			Label: "mode",
+			Type:  &Zt_PlayModes,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_PlayMessage,
+		},
+		Markup: map[string]any{
+			"comment": "app level change in state.",
+		},
+	}
+	Zt_PlayOut = typeinfo.Flow{
+		Name: "play_out",
+		Lede: "play",
+		Terms: []typeinfo.Term{{
+			Name:  "out",
+			Label: "out",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_PlayMessage,
+		},
+		Markup: map[string]any{
+			"comment": "output from the game itself.",
+		},
+	}
 }

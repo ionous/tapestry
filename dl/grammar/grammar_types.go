@@ -72,6 +72,9 @@ type Action struct {
 	Markup    map[string]any
 }
 
+// action, a type of flow.
+var Zt_Action typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Action) TypeInfo() typeinfo.T {
 	return &Zt_Action
@@ -87,28 +90,6 @@ func (op *Action) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Action)(nil)
-
-// action, a type of flow.
-var Zt_Action = typeinfo.Flow{
-	Name: "action",
-	Lede: "action",
-	Terms: []typeinfo.Term{{
-		Name: "action",
-		Type: &prim.Zt_Text,
-	}, {
-		Name:     "arguments",
-		Label:    "args",
-		Optional: true,
-		Repeats:  true,
-		Type:     &assign.Zt_Arg,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "makes a parser scanner producing a script defined action.",
-	},
-}
 
 // holds a slice of type action
 type Action_Slice []Action
@@ -129,6 +110,9 @@ type Sequence struct {
 	Markup map[string]any
 }
 
+// sequence, a type of flow.
+var Zt_Sequence typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Sequence) TypeInfo() typeinfo.T {
 	return &Zt_Sequence
@@ -144,23 +128,6 @@ func (op *Sequence) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Sequence)(nil)
-
-// sequence, a type of flow.
-var Zt_Sequence = typeinfo.Flow{
-	Name: "sequence",
-	Lede: "sequence",
-	Terms: []typeinfo.Term{{
-		Name:    "series",
-		Repeats: true,
-		Type:    &Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "makes a parser scanner.",
-	},
-}
 
 // holds a slice of type sequence
 type Sequence_Slice []Sequence
@@ -181,6 +148,9 @@ type ChooseOne struct {
 	Markup  map[string]any
 }
 
+// choose_one, a type of flow.
+var Zt_ChooseOne typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ChooseOne) TypeInfo() typeinfo.T {
 	return &Zt_ChooseOne
@@ -196,24 +166,6 @@ func (op *ChooseOne) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*ChooseOne)(nil)
-
-// choose_one, a type of flow.
-var Zt_ChooseOne = typeinfo.Flow{
-	Name: "choose_one",
-	Lede: "one",
-	Terms: []typeinfo.Term{{
-		Name:    "options",
-		Label:   "of",
-		Repeats: true,
-		Type:    &Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "makes a parser scanner.",
-	},
-}
 
 // holds a slice of type choose_one
 type ChooseOne_Slice []ChooseOne
@@ -235,6 +187,9 @@ type Directive struct {
 	Markup map[string]any
 }
 
+// directive, a type of flow.
+var Zt_Directive typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Directive) TypeInfo() typeinfo.T {
 	return &Zt_Directive
@@ -250,28 +205,6 @@ func (op *Directive) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ GrammarMaker = (*Directive)(nil)
-
-// directive, a type of flow.
-var Zt_Directive = typeinfo.Flow{
-	Name: "directive",
-	Lede: "interpret",
-	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "name",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "series",
-		Label:   "with",
-		Repeats: true,
-		Type:    &Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_GrammarMaker,
-	},
-	Markup: map[string]any{
-		"comment": "starts a parser scanner.",
-	},
-}
 
 // holds a slice of type directive
 type Directive_Slice []Directive
@@ -292,6 +225,9 @@ type Noun struct {
 	Markup map[string]any
 }
 
+// noun, a type of flow.
+var Zt_Noun typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Noun) TypeInfo() typeinfo.T {
 	return &Zt_Noun
@@ -307,23 +243,6 @@ func (op *Noun) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Noun)(nil)
-
-// noun, a type of flow.
-var Zt_Noun = typeinfo.Flow{
-	Name: "noun",
-	Lede: "one",
-	Terms: []typeinfo.Term{{
-		Name:  "kind",
-		Label: "noun",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "makes a parser scanner.",
-	},
-}
 
 // holds a slice of type noun
 type Noun_Slice []Noun
@@ -344,6 +263,9 @@ type Refine struct {
 	Markup map[string]any
 }
 
+// refine, a type of flow.
+var Zt_Refine typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Refine) TypeInfo() typeinfo.T {
 	return &Zt_Refine
@@ -359,24 +281,6 @@ func (op *Refine) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Refine)(nil)
-
-// refine, a type of flow.
-var Zt_Refine = typeinfo.Flow{
-	Name: "refine",
-	Lede: "refine",
-	Terms: []typeinfo.Term{{
-		Name:    "series",
-		Label:   "sequence",
-		Repeats: true,
-		Type:    &Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "Change to the bounds of the most recent result.",
-	},
-}
 
 // holds a slice of type refine
 type Refine_Slice []Refine
@@ -397,6 +301,9 @@ type Reverse struct {
 	Markup   map[string]any
 }
 
+// reverse, a type of flow.
+var Zt_Reverse typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Reverse) TypeInfo() typeinfo.T {
 	return &Zt_Reverse
@@ -412,23 +319,6 @@ func (op *Reverse) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Reverse)(nil)
-
-// reverse, a type of flow.
-var Zt_Reverse = typeinfo.Flow{
-	Name: "reverse",
-	Lede: "reverse",
-	Terms: []typeinfo.Term{{
-		Name:    "reverses",
-		Repeats: true,
-		Type:    &Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "Swap the first and last matching results.",
-	},
-}
 
 // holds a slice of type reverse
 type Reverse_Slice []Reverse
@@ -450,6 +340,9 @@ type Focus struct {
 	Markup map[string]any
 }
 
+// focus, a type of flow.
+var Zt_Focus typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Focus) TypeInfo() typeinfo.T {
 	return &Zt_Focus
@@ -465,27 +358,6 @@ func (op *Focus) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Focus)(nil)
-
-// focus, a type of flow.
-var Zt_Focus = typeinfo.Flow{
-	Name: "focus",
-	Lede: "focus",
-	Terms: []typeinfo.Term{{
-		Name: "player",
-		Type: &prim.Zt_Text,
-	}, {
-		Name:    "series",
-		Label:   "sequence",
-		Repeats: true,
-		Type:    &Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "Select a specific set of bounds for the scanner.",
-	},
-}
 
 // holds a slice of type focus
 type Focus_Slice []Focus
@@ -506,6 +378,9 @@ type Words struct {
 	Markup map[string]any
 }
 
+// words, a type of flow.
+var Zt_Words typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Words) TypeInfo() typeinfo.T {
 	return &Zt_Words
@@ -521,24 +396,6 @@ func (op *Words) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ ScannerMaker = (*Words)(nil)
-
-// words, a type of flow.
-var Zt_Words = typeinfo.Flow{
-	Name: "words",
-	Lede: "one",
-	Terms: []typeinfo.Term{{
-		Name:    "words",
-		Label:   "word",
-		Repeats: true,
-		Type:    &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_ScannerMaker,
-	},
-	Markup: map[string]any{
-		"comment": "makes a parser scanner.",
-	},
-}
 
 // holds a slice of type words
 type Words_Slice []Words
@@ -595,4 +452,161 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11402479949132197621: (*Refine)(nil),    /* scanner_maker=Refine sequence: */
 	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
 	10728359537834940094: (*Sequence)(nil),  /* scanner_maker=Sequence: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_Action = typeinfo.Flow{
+		Name: "action",
+		Lede: "action",
+		Terms: []typeinfo.Term{{
+			Name: "action",
+			Type: &prim.Zt_Text,
+		}, {
+			Name:     "arguments",
+			Label:    "args",
+			Optional: true,
+			Repeats:  true,
+			Type:     &assign.Zt_Arg,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "makes a parser scanner producing a script defined action.",
+		},
+	}
+	Zt_Sequence = typeinfo.Flow{
+		Name: "sequence",
+		Lede: "sequence",
+		Terms: []typeinfo.Term{{
+			Name:    "series",
+			Repeats: true,
+			Type:    &Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "makes a parser scanner.",
+		},
+	}
+	Zt_ChooseOne = typeinfo.Flow{
+		Name: "choose_one",
+		Lede: "one",
+		Terms: []typeinfo.Term{{
+			Name:    "options",
+			Label:   "of",
+			Repeats: true,
+			Type:    &Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "makes a parser scanner.",
+		},
+	}
+	Zt_Directive = typeinfo.Flow{
+		Name: "directive",
+		Lede: "interpret",
+		Terms: []typeinfo.Term{{
+			Name:  "name",
+			Label: "name",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "series",
+			Label:   "with",
+			Repeats: true,
+			Type:    &Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_GrammarMaker,
+		},
+		Markup: map[string]any{
+			"comment": "starts a parser scanner.",
+		},
+	}
+	Zt_Noun = typeinfo.Flow{
+		Name: "noun",
+		Lede: "one",
+		Terms: []typeinfo.Term{{
+			Name:  "kind",
+			Label: "noun",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "makes a parser scanner.",
+		},
+	}
+	Zt_Refine = typeinfo.Flow{
+		Name: "refine",
+		Lede: "refine",
+		Terms: []typeinfo.Term{{
+			Name:    "series",
+			Label:   "sequence",
+			Repeats: true,
+			Type:    &Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "Change to the bounds of the most recent result.",
+		},
+	}
+	Zt_Reverse = typeinfo.Flow{
+		Name: "reverse",
+		Lede: "reverse",
+		Terms: []typeinfo.Term{{
+			Name:    "reverses",
+			Repeats: true,
+			Type:    &Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "Swap the first and last matching results.",
+		},
+	}
+	Zt_Focus = typeinfo.Flow{
+		Name: "focus",
+		Lede: "focus",
+		Terms: []typeinfo.Term{{
+			Name: "player",
+			Type: &prim.Zt_Text,
+		}, {
+			Name:    "series",
+			Label:   "sequence",
+			Repeats: true,
+			Type:    &Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "Select a specific set of bounds for the scanner.",
+		},
+	}
+	Zt_Words = typeinfo.Flow{
+		Name: "words",
+		Lede: "one",
+		Terms: []typeinfo.Term{{
+			Name:    "words",
+			Label:   "word",
+			Repeats: true,
+			Type:    &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_ScannerMaker,
+		},
+		Markup: map[string]any{
+			"comment": "makes a parser scanner.",
+		},
+	}
 }

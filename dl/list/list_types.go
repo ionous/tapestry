@@ -16,6 +16,9 @@ type EraseEdge struct {
 	Markup map[string]any
 }
 
+// erase_edge, a type of flow.
+var Zt_EraseEdge typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*EraseEdge) TypeInfo() typeinfo.T {
 	return &Zt_EraseEdge
@@ -31,27 +34,6 @@ func (op *EraseEdge) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*EraseEdge)(nil)
-
-// erase_edge, a type of flow.
-var Zt_EraseEdge = typeinfo.Flow{
-	Name: "erase_edge",
-	Lede: "erase",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:     "at_edge",
-		Label:    "at_front",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Erase at edge: Remove one or more values from a list.",
-	},
-}
 
 // holds a slice of type erase_edge
 type EraseEdge_Slice []EraseEdge
@@ -74,6 +56,9 @@ type EraseIndex struct {
 	Markup  map[string]any
 }
 
+// erase_index, a type of flow.
+var Zt_EraseIndex typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*EraseIndex) TypeInfo() typeinfo.T {
 	return &Zt_EraseIndex
@@ -89,30 +74,6 @@ func (op *EraseIndex) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*EraseIndex)(nil)
-
-// erase_index, a type of flow.
-var Zt_EraseIndex = typeinfo.Flow{
-	Name: "erase_index",
-	Lede: "erase",
-	Terms: []typeinfo.Term{{
-		Name: "count",
-		Type: &rtti.Zt_NumberEval,
-	}, {
-		Name:  "target",
-		Label: "from",
-		Type:  &assign.Zt_Address,
-	}, {
-		Name:  "at_index",
-		Label: "at_index",
-		Type:  &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Erase at index: Remove one or more values from a list.",
-	},
-}
 
 // holds a slice of type erase_index
 type EraseIndex_Slice []EraseIndex
@@ -136,6 +97,9 @@ type Erasing struct {
 	Markup  map[string]any
 }
 
+// erasing, a type of flow.
+var Zt_Erasing typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Erasing) TypeInfo() typeinfo.T {
 	return &Zt_Erasing
@@ -151,39 +115,6 @@ func (op *Erasing) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*Erasing)(nil)
-
-// erasing, a type of flow.
-var Zt_Erasing = typeinfo.Flow{
-	Name: "erasing",
-	Lede: "erasing",
-	Terms: []typeinfo.Term{{
-		Name: "count",
-		Type: &rtti.Zt_NumberEval,
-	}, {
-		Name:  "target",
-		Label: "from",
-		Type:  &assign.Zt_Address,
-	}, {
-		Name:  "at_index",
-		Label: "at_index",
-		Type:  &rtti.Zt_NumberEval,
-	}, {
-		Name:  "as",
-		Label: "as",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Erase elements from the front or back of a list.", "Runs a pattern with a list containing the erased values.", "If nothing was erased, the pattern will be called with an empty list."},
-	},
-}
 
 // holds a slice of type erasing
 type Erasing_Slice []Erasing
@@ -207,6 +138,9 @@ type ErasingEdge struct {
 	Markup map[string]any
 }
 
+// erasing_edge, a type of flow.
+var Zt_ErasingEdge typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ErasingEdge) TypeInfo() typeinfo.T {
 	return &Zt_ErasingEdge
@@ -222,41 +156,6 @@ func (op *ErasingEdge) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ErasingEdge)(nil)
-
-// erasing_edge, a type of flow.
-var Zt_ErasingEdge = typeinfo.Flow{
-	Name: "erasing_edge",
-	Lede: "erasing",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:     "at_edge",
-		Label:    "at_front",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}, {
-		Name:  "as",
-		Label: "as",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}, {
-		Name:     "else",
-		Label:    "else",
-		Optional: true,
-		Type:     &core.Zt_Brancher,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Erase one element from the front or back of a list.", "Runs an activity with a list containing the erased values;", "the list can be empty if nothing was erased."},
-	},
-}
 
 // holds a slice of type erasing_edge
 type ErasingEdge_Slice []ErasingEdge
@@ -280,6 +179,9 @@ type ListEach struct {
 	Markup map[string]any
 }
 
+// list_each, a type of flow.
+var Zt_ListEach typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListEach) TypeInfo() typeinfo.T {
 	return &Zt_ListEach
@@ -295,37 +197,6 @@ func (op *ListEach) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListEach)(nil)
-
-// list_each, a type of flow.
-var Zt_ListEach = typeinfo.Flow{
-	Name: "list_each",
-	Lede: "repeating",
-	Terms: []typeinfo.Term{{
-		Name:  "list",
-		Label: "across",
-		Type:  &rtti.Zt_Assignment,
-	}, {
-		Name:  "as",
-		Label: "as",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}, {
-		Name:     "else",
-		Label:    "else",
-		Optional: true,
-		Type:     &core.Zt_Brancher,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
-	},
-}
 
 // holds a slice of type list_each
 type ListEach_Slice []ListEach
@@ -347,6 +218,9 @@ type ListFind struct {
 	Markup map[string]any
 }
 
+// list_find, a type of flow.
+var Zt_ListFind typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListFind) TypeInfo() typeinfo.T {
 	return &Zt_ListFind
@@ -363,27 +237,6 @@ func (op *ListFind) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.BoolEval = (*ListFind)(nil)
 var _ rtti.NumberEval = (*ListFind)(nil)
-
-// list_find, a type of flow.
-var Zt_ListFind = typeinfo.Flow{
-	Name: "list_find",
-	Lede: "find",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_Assignment,
-	}, {
-		Name:  "list",
-		Label: "in_list",
-		Type:  &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
-	},
-	Markup: map[string]any{
-		"comment": "Search a list for a specific value.",
-	},
-}
 
 // holds a slice of type list_find
 type ListFind_Slice []ListFind
@@ -405,6 +258,9 @@ type ListGather struct {
 	Markup map[string]any
 }
 
+// list_gather, a type of flow.
+var Zt_ListGather typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListGather) TypeInfo() typeinfo.T {
 	return &Zt_ListGather
@@ -416,27 +272,6 @@ func (op *ListGather) GetMarkup(ensure bool) map[string]any {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
-}
-
-// list_gather, a type of flow.
-var Zt_ListGather = typeinfo.Flow{
-	Name: "list_gather",
-	Lede: "gather",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:  "from",
-		Label: "from",
-		Type:  &rtti.Zt_Assignment,
-	}, {
-		Name:  "using",
-		Label: "using",
-		Type:  &prim.Zt_Text,
-	}},
-	Markup: map[string]any{
-		"comment": []interface{}{"Transform the values from a list.", "The named pattern gets with with two parameters for each value in the list:", "'in' as each value from the list, and 'out' as the var passed to the gather."},
-	},
 }
 
 // holds a slice of type list_gather
@@ -458,6 +293,9 @@ type ListLen struct {
 	Markup map[string]any
 }
 
+// list_len, a type of flow.
+var Zt_ListLen typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListLen) TypeInfo() typeinfo.T {
 	return &Zt_ListLen
@@ -473,22 +311,6 @@ func (op *ListLen) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.NumberEval = (*ListLen)(nil)
-
-// list_len, a type of flow.
-var Zt_ListLen = typeinfo.Flow{
-	Name: "list_len",
-	Lede: "len",
-	Terms: []typeinfo.Term{{
-		Name: "list",
-		Type: &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_NumberEval,
-	},
-	Markup: map[string]any{
-		"comment": "Determines the number of values in a list.",
-	},
-}
 
 // holds a slice of type list_len
 type ListLen_Slice []ListLen
@@ -508,6 +330,9 @@ type MakeTextList struct {
 	Markup map[string]any
 }
 
+// make_text_list, a type of flow.
+var Zt_MakeTextList typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*MakeTextList) TypeInfo() typeinfo.T {
 	return &Zt_MakeTextList
@@ -523,21 +348,6 @@ func (op *MakeTextList) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextListEval = (*MakeTextList)(nil)
-
-// make_text_list, a type of flow.
-var Zt_MakeTextList = typeinfo.Flow{
-	Name: "make_text_list",
-	Lede: "list",
-	Terms: []typeinfo.Term{{
-		Name:    "values",
-		Label:   "of_text",
-		Repeats: true,
-		Type:    &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextListEval,
-	},
-}
 
 // holds a slice of type make_text_list
 type MakeTextList_Slice []MakeTextList
@@ -557,6 +367,9 @@ type MakeNumList struct {
 	Markup map[string]any
 }
 
+// make_num_list, a type of flow.
+var Zt_MakeNumList typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*MakeNumList) TypeInfo() typeinfo.T {
 	return &Zt_MakeNumList
@@ -572,21 +385,6 @@ func (op *MakeNumList) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.NumListEval = (*MakeNumList)(nil)
-
-// make_num_list, a type of flow.
-var Zt_MakeNumList = typeinfo.Flow{
-	Name: "make_num_list",
-	Lede: "list",
-	Terms: []typeinfo.Term{{
-		Name:    "values",
-		Label:   "of_numbers",
-		Repeats: true,
-		Type:    &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_NumListEval,
-	},
-}
 
 // holds a slice of type make_num_list
 type MakeNumList_Slice []MakeNumList
@@ -607,6 +405,9 @@ type MakeRecordList struct {
 	Markup map[string]any
 }
 
+// make_record_list, a type of flow.
+var Zt_MakeRecordList typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*MakeRecordList) TypeInfo() typeinfo.T {
 	return &Zt_MakeRecordList
@@ -622,25 +423,6 @@ func (op *MakeRecordList) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.RecordListEval = (*MakeRecordList)(nil)
-
-// make_record_list, a type of flow.
-var Zt_MakeRecordList = typeinfo.Flow{
-	Name: "make_record_list",
-	Lede: "list",
-	Terms: []typeinfo.Term{{
-		Name:    "values",
-		Label:   "of_records",
-		Repeats: true,
-		Type:    &rtti.Zt_RecordEval,
-	}, {
-		Name:  "kind",
-		Label: "of_type",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_RecordListEval,
-	},
-}
 
 // holds a slice of type make_record_list
 type MakeRecordList_Slice []MakeRecordList
@@ -662,6 +444,9 @@ type ListMap struct {
 	Markup      map[string]any
 }
 
+// list_map, a type of flow.
+var Zt_ListMap typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListMap) TypeInfo() typeinfo.T {
 	return &Zt_ListMap
@@ -677,30 +462,6 @@ func (op *ListMap) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListMap)(nil)
-
-// list_map, a type of flow.
-var Zt_ListMap = typeinfo.Flow{
-	Name: "list_map",
-	Lede: "map",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:  "list",
-		Label: "from_list",
-		Type:  &rtti.Zt_Assignment,
-	}, {
-		Name:  "pattern_name",
-		Label: "using",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Transform the values from one list and place the results in another list.", "The designated pattern is called with each value from the 'from list', one value at a time."},
-	},
-}
 
 // holds a slice of type list_map
 type ListMap_Slice []ListMap
@@ -722,6 +483,9 @@ type ListReduce struct {
 	Markup      map[string]any
 }
 
+// list_reduce, a type of flow.
+var Zt_ListReduce typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListReduce) TypeInfo() typeinfo.T {
 	return &Zt_ListReduce
@@ -737,31 +501,6 @@ func (op *ListReduce) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListReduce)(nil)
-
-// list_reduce, a type of flow.
-var Zt_ListReduce = typeinfo.Flow{
-	Name: "list_reduce",
-	Lede: "reduce",
-	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "into",
-		Type:  &assign.Zt_Address,
-	}, {
-		Name:  "list",
-		Label: "from_list",
-		Type:  &rtti.Zt_Assignment,
-	}, {
-		Name:  "pattern_name",
-		Label: "using",
-		Type:  &prim.Zt_Text,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Combine all of the values in a list into a single value.", "The designated pattern is called with two parameters:", "  1. each element of the list; and,", "  2. the value being combined.", "And, that pattern is expected to return the newly updated value."},
-	},
-}
 
 // holds a slice of type list_reduce
 type ListReduce_Slice []ListReduce
@@ -782,6 +521,9 @@ type ListReverse struct {
 	Markup map[string]any
 }
 
+// list_reverse, a type of flow.
+var Zt_ListReverse typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListReverse) TypeInfo() typeinfo.T {
 	return &Zt_ListReverse
@@ -797,23 +539,6 @@ func (op *ListReverse) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListReverse)(nil)
-
-// list_reverse, a type of flow.
-var Zt_ListReverse = typeinfo.Flow{
-	Name: "list_reverse",
-	Lede: "reverse",
-	Terms: []typeinfo.Term{{
-		Name:  "target",
-		Label: "list",
-		Type:  &assign.Zt_Address,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Reverse a list.",
-	},
-}
 
 // holds a slice of type list_reverse
 type ListReverse_Slice []ListReverse
@@ -835,6 +560,9 @@ type ListSlice struct {
 	Markup map[string]any
 }
 
+// list_slice, a type of flow.
+var Zt_ListSlice typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListSlice) TypeInfo() typeinfo.T {
 	return &Zt_ListSlice
@@ -852,34 +580,6 @@ func (op *ListSlice) GetMarkup(ensure bool) map[string]any {
 var _ rtti.NumListEval = (*ListSlice)(nil)
 var _ rtti.TextListEval = (*ListSlice)(nil)
 var _ rtti.RecordListEval = (*ListSlice)(nil)
-
-// list_slice, a type of flow.
-var Zt_ListSlice = typeinfo.Flow{
-	Name: "list_slice",
-	Lede: "slice",
-	Terms: []typeinfo.Term{{
-		Name: "list",
-		Type: &rtti.Zt_Assignment,
-	}, {
-		Name:     "start",
-		Label:    "start",
-		Optional: true,
-		Type:     &rtti.Zt_NumberEval,
-	}, {
-		Name:     "end",
-		Label:    "end",
-		Optional: true,
-		Type:     &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Create a new list from a section of another list.", "Start is optional, if omitted slice starts at the first element.", "If start is greater the length, an empty array is returned.", "Slice doesnt include the ending index.", "Negatives indices indicates an offset from the end.", "When end is omitted, copy up to and including the last element;", "and do the same if the end is greater than the length"},
-	},
-}
 
 // holds a slice of type list_slice
 type ListSlice_Slice []ListSlice
@@ -901,6 +601,9 @@ type ListSortNumbers struct {
 	Markup     map[string]any
 }
 
+// list_sort_numbers, a type of flow.
+var Zt_ListSortNumbers typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListSortNumbers) TypeInfo() typeinfo.T {
 	return &Zt_ListSortNumbers
@@ -916,28 +619,6 @@ func (op *ListSortNumbers) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListSortNumbers)(nil)
-
-// list_sort_numbers, a type of flow.
-var Zt_ListSortNumbers = typeinfo.Flow{
-	Name: "list_sort_numbers",
-	Lede: "sort_numbers",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:  "by_field",
-		Label: "by_field",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:     "descending",
-		Label:    "descending",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type list_sort_numbers
 type ListSortNumbers_Slice []ListSortNumbers
@@ -961,6 +642,9 @@ type ListSortText struct {
 	Markup     map[string]any
 }
 
+// list_sort_text, a type of flow.
+var Zt_ListSortText typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListSortText) TypeInfo() typeinfo.T {
 	return &Zt_ListSortText
@@ -976,36 +660,6 @@ func (op *ListSortText) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListSortText)(nil)
-
-// list_sort_text, a type of flow.
-var Zt_ListSortText = typeinfo.Flow{
-	Name: "list_sort_text",
-	Lede: "sort_texts",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:  "by_field",
-		Label: "by_field",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:     "descending",
-		Label:    "descending",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}, {
-		Name:     "using_case",
-		Label:    "using_case",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
-	},
-}
 
 // holds a slice of type list_sort_text
 type ListSortText_Slice []ListSortText
@@ -1028,6 +682,9 @@ type ListSplice struct {
 	Markup map[string]any
 }
 
+// list_splice, a type of flow.
+var Zt_ListSplice typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListSplice) TypeInfo() typeinfo.T {
 	return &Zt_ListSplice
@@ -1046,37 +703,6 @@ var _ rtti.Execute = (*ListSplice)(nil)
 var _ rtti.NumListEval = (*ListSplice)(nil)
 var _ rtti.TextListEval = (*ListSplice)(nil)
 var _ rtti.RecordListEval = (*ListSplice)(nil)
-
-// list_splice, a type of flow.
-var Zt_ListSplice = typeinfo.Flow{
-	Name: "list_splice",
-	Lede: "splice",
-	Terms: []typeinfo.Term{{
-		Name: "target",
-		Type: &assign.Zt_Address,
-	}, {
-		Name:  "start",
-		Label: "start",
-		Type:  &rtti.Zt_NumberEval,
-	}, {
-		Name:  "remove",
-		Label: "remove",
-		Type:  &rtti.Zt_NumberEval,
-	}, {
-		Name:  "insert",
-		Label: "insert",
-		Type:  &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Modify a list by adding and removing elements.", "The type of the elements being added must match the type of the list.", "Text cant be added to a list of numbers, numbers cant be added to a list of text.", "If the starting index is negative, this begins that many elements from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all elements from the start to the end;", "if the remove count is zero or negative, no elements are removed."},
-	},
-}
 
 // holds a slice of type list_splice
 type ListSplice_Slice []ListSplice
@@ -1099,6 +725,9 @@ type ListPush struct {
 	Markup map[string]any
 }
 
+// list_push, a type of flow.
+var Zt_ListPush typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ListPush) TypeInfo() typeinfo.T {
 	return &Zt_ListPush
@@ -1114,31 +743,6 @@ func (op *ListPush) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*ListPush)(nil)
-
-// list_push, a type of flow.
-var Zt_ListPush = typeinfo.Flow{
-	Name: "list_push",
-	Lede: "push",
-	Terms: []typeinfo.Term{{
-		Name: "value",
-		Type: &rtti.Zt_Assignment,
-	}, {
-		Name:  "target",
-		Label: "into",
-		Type:  &assign.Zt_Address,
-	}, {
-		Name:     "at_edge",
-		Label:    "at_front",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Add a value to a list.",
-	},
-}
 
 // holds a slice of type list_push
 type ListPush_Slice []ListPush
@@ -1160,6 +764,9 @@ type Range struct {
 	Markup map[string]any
 }
 
+// range, a type of flow.
+var Zt_Range typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Range) TypeInfo() typeinfo.T {
 	return &Zt_Range
@@ -1175,32 +782,6 @@ func (op *Range) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.NumListEval = (*Range)(nil)
-
-// range, a type of flow.
-var Zt_Range = typeinfo.Flow{
-	Name: "range",
-	Lede: "range",
-	Terms: []typeinfo.Term{{
-		Name: "to",
-		Type: &rtti.Zt_NumberEval,
-	}, {
-		Name:     "from",
-		Label:    "from",
-		Optional: true,
-		Type:     &rtti.Zt_NumberEval,
-	}, {
-		Name:     "by_step",
-		Label:    "by_step",
-		Optional: true,
-		Type:     &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_NumListEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Generates a series of numbers r[i] = (start + step*i) where i>=0.", "Start and step default to 1, stop defaults to start;", "the inputs are truncated to produce whole numbers;", "a zero step returns an error.", "A positive step ends the series when the returned value would exceed stop", "while a negative step ends before generating a value less than stop."},
-	},
-}
 
 // holds a slice of type range
 type Range_Slice []Range
@@ -1298,4 +879,448 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6201472222981604265:  (*ListSplice)(nil),      /* num_list_eval=Splice:start:remove:insert: */
 	15778591428898251294: (*ListSplice)(nil),      /* record_list_eval=Splice:start:remove:insert: */
 	11160578659475180120: (*ListSplice)(nil),      /* text_list_eval=Splice:start:remove:insert: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_EraseEdge = typeinfo.Flow{
+		Name: "erase_edge",
+		Lede: "erase",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:     "at_edge",
+			Label:    "at_front",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Erase at edge: Remove one or more values from a list.",
+		},
+	}
+	Zt_EraseIndex = typeinfo.Flow{
+		Name: "erase_index",
+		Lede: "erase",
+		Terms: []typeinfo.Term{{
+			Name: "count",
+			Type: &rtti.Zt_NumberEval,
+		}, {
+			Name:  "target",
+			Label: "from",
+			Type:  &assign.Zt_Address,
+		}, {
+			Name:  "at_index",
+			Label: "at_index",
+			Type:  &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Erase at index: Remove one or more values from a list.",
+		},
+	}
+	Zt_Erasing = typeinfo.Flow{
+		Name: "erasing",
+		Lede: "erasing",
+		Terms: []typeinfo.Term{{
+			Name: "count",
+			Type: &rtti.Zt_NumberEval,
+		}, {
+			Name:  "target",
+			Label: "from",
+			Type:  &assign.Zt_Address,
+		}, {
+			Name:  "at_index",
+			Label: "at_index",
+			Type:  &rtti.Zt_NumberEval,
+		}, {
+			Name:  "as",
+			Label: "as",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Erase elements from the front or back of a list.", "Runs a pattern with a list containing the erased values.", "If nothing was erased, the pattern will be called with an empty list."},
+		},
+	}
+	Zt_ErasingEdge = typeinfo.Flow{
+		Name: "erasing_edge",
+		Lede: "erasing",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:     "at_edge",
+			Label:    "at_front",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}, {
+			Name:  "as",
+			Label: "as",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}, {
+			Name:     "else",
+			Label:    "else",
+			Optional: true,
+			Type:     &core.Zt_Brancher,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Erase one element from the front or back of a list.", "Runs an activity with a list containing the erased values;", "the list can be empty if nothing was erased."},
+		},
+	}
+	Zt_ListEach = typeinfo.Flow{
+		Name: "list_each",
+		Lede: "repeating",
+		Terms: []typeinfo.Term{{
+			Name:  "list",
+			Label: "across",
+			Type:  &rtti.Zt_Assignment,
+		}, {
+			Name:  "as",
+			Label: "as",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}, {
+			Name:     "else",
+			Label:    "else",
+			Optional: true,
+			Type:     &core.Zt_Brancher,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
+		},
+	}
+	Zt_ListFind = typeinfo.Flow{
+		Name: "list_find",
+		Lede: "find",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_Assignment,
+		}, {
+			Name:  "list",
+			Label: "in_list",
+			Type:  &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumberEval,
+		},
+		Markup: map[string]any{
+			"comment": "Search a list for a specific value.",
+		},
+	}
+	Zt_ListGather = typeinfo.Flow{
+		Name: "list_gather",
+		Lede: "gather",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:  "from",
+			Label: "from",
+			Type:  &rtti.Zt_Assignment,
+		}, {
+			Name:  "using",
+			Label: "using",
+			Type:  &prim.Zt_Text,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"Transform the values from a list.", "The named pattern gets with with two parameters for each value in the list:", "'in' as each value from the list, and 'out' as the var passed to the gather."},
+		},
+	}
+	Zt_ListLen = typeinfo.Flow{
+		Name: "list_len",
+		Lede: "len",
+		Terms: []typeinfo.Term{{
+			Name: "list",
+			Type: &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumberEval,
+		},
+		Markup: map[string]any{
+			"comment": "Determines the number of values in a list.",
+		},
+	}
+	Zt_MakeTextList = typeinfo.Flow{
+		Name: "make_text_list",
+		Lede: "list",
+		Terms: []typeinfo.Term{{
+			Name:    "values",
+			Label:   "of_text",
+			Repeats: true,
+			Type:    &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+		},
+	}
+	Zt_MakeNumList = typeinfo.Flow{
+		Name: "make_num_list",
+		Lede: "list",
+		Terms: []typeinfo.Term{{
+			Name:    "values",
+			Label:   "of_numbers",
+			Repeats: true,
+			Type:    &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumListEval,
+		},
+	}
+	Zt_MakeRecordList = typeinfo.Flow{
+		Name: "make_record_list",
+		Lede: "list",
+		Terms: []typeinfo.Term{{
+			Name:    "values",
+			Label:   "of_records",
+			Repeats: true,
+			Type:    &rtti.Zt_RecordEval,
+		}, {
+			Name:  "kind",
+			Label: "of_type",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_RecordListEval,
+		},
+	}
+	Zt_ListMap = typeinfo.Flow{
+		Name: "list_map",
+		Lede: "map",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:  "list",
+			Label: "from_list",
+			Type:  &rtti.Zt_Assignment,
+		}, {
+			Name:  "pattern_name",
+			Label: "using",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Transform the values from one list and place the results in another list.", "The designated pattern is called with each value from the 'from list', one value at a time."},
+		},
+	}
+	Zt_ListReduce = typeinfo.Flow{
+		Name: "list_reduce",
+		Lede: "reduce",
+		Terms: []typeinfo.Term{{
+			Name:  "target",
+			Label: "into",
+			Type:  &assign.Zt_Address,
+		}, {
+			Name:  "list",
+			Label: "from_list",
+			Type:  &rtti.Zt_Assignment,
+		}, {
+			Name:  "pattern_name",
+			Label: "using",
+			Type:  &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Combine all of the values in a list into a single value.", "The designated pattern is called with two parameters:", "  1. each element of the list; and,", "  2. the value being combined.", "And, that pattern is expected to return the newly updated value."},
+		},
+	}
+	Zt_ListReverse = typeinfo.Flow{
+		Name: "list_reverse",
+		Lede: "reverse",
+		Terms: []typeinfo.Term{{
+			Name:  "target",
+			Label: "list",
+			Type:  &assign.Zt_Address,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Reverse a list.",
+		},
+	}
+	Zt_ListSlice = typeinfo.Flow{
+		Name: "list_slice",
+		Lede: "slice",
+		Terms: []typeinfo.Term{{
+			Name: "list",
+			Type: &rtti.Zt_Assignment,
+		}, {
+			Name:     "start",
+			Label:    "start",
+			Optional: true,
+			Type:     &rtti.Zt_NumberEval,
+		}, {
+			Name:     "end",
+			Label:    "end",
+			Optional: true,
+			Type:     &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Create a new list from a section of another list.", "Start is optional, if omitted slice starts at the first element.", "If start is greater the length, an empty array is returned.", "Slice doesnt include the ending index.", "Negatives indices indicates an offset from the end.", "When end is omitted, copy up to and including the last element;", "and do the same if the end is greater than the length"},
+		},
+	}
+	Zt_ListSortNumbers = typeinfo.Flow{
+		Name: "list_sort_numbers",
+		Lede: "sort_numbers",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:  "by_field",
+			Label: "by_field",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:     "descending",
+			Label:    "descending",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_ListSortText = typeinfo.Flow{
+		Name: "list_sort_text",
+		Lede: "sort_texts",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:  "by_field",
+			Label: "by_field",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:     "descending",
+			Label:    "descending",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}, {
+			Name:     "using_case",
+			Label:    "using_case",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+		},
+	}
+	Zt_ListSplice = typeinfo.Flow{
+		Name: "list_splice",
+		Lede: "splice",
+		Terms: []typeinfo.Term{{
+			Name: "target",
+			Type: &assign.Zt_Address,
+		}, {
+			Name:  "start",
+			Label: "start",
+			Type:  &rtti.Zt_NumberEval,
+		}, {
+			Name:  "remove",
+			Label: "remove",
+			Type:  &rtti.Zt_NumberEval,
+		}, {
+			Name:  "insert",
+			Label: "insert",
+			Type:  &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Modify a list by adding and removing elements.", "The type of the elements being added must match the type of the list.", "Text cant be added to a list of numbers, numbers cant be added to a list of text.", "If the starting index is negative, this begins that many elements from the end of the array;", "if list's length plus the start is less than zero, this begins from index zero.", "If the remove count is missing, this removes all elements from the start to the end;", "if the remove count is zero or negative, no elements are removed."},
+		},
+	}
+	Zt_ListPush = typeinfo.Flow{
+		Name: "list_push",
+		Lede: "push",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &rtti.Zt_Assignment,
+		}, {
+			Name:  "target",
+			Label: "into",
+			Type:  &assign.Zt_Address,
+		}, {
+			Name:     "at_edge",
+			Label:    "at_front",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Add a value to a list.",
+		},
+	}
+	Zt_Range = typeinfo.Flow{
+		Name: "range",
+		Lede: "range",
+		Terms: []typeinfo.Term{{
+			Name: "to",
+			Type: &rtti.Zt_NumberEval,
+		}, {
+			Name:     "from",
+			Label:    "from",
+			Optional: true,
+			Type:     &rtti.Zt_NumberEval,
+		}, {
+			Name:     "by_step",
+			Label:    "by_step",
+			Optional: true,
+			Type:     &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumListEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Generates a series of numbers r[i] = (start + step*i) where i>=0.", "Start and step default to 1, stop defaults to start;", "the inputs are truncated to produce whole numbers;", "a zero step returns an error.", "A positive step ends the series when the returned value would exceed stop", "while a negative step ends before generating a value less than stop."},
+		},
+	}
 }

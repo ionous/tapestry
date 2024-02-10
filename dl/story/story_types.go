@@ -76,6 +76,9 @@ type Comment struct {
 	Markup map[string]any
 }
 
+// comment, a type of flow.
+var Zt_Comment typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*Comment) TypeInfo() typeinfo.T {
 	return &Zt_Comment
@@ -92,23 +95,6 @@ func (op *Comment) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*Comment)(nil)
 var _ rtti.Execute = (*Comment)(nil)
-
-// comment, a type of flow.
-var Zt_Comment = typeinfo.Flow{
-	Name: "comment",
-	Lede: "comment",
-	Terms: []typeinfo.Term{{
-		Name: "lines",
-		Type: &prim.Zt_Lines,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Add a note.", "Information about the story for you and other authors."},
-	},
-}
 
 // holds a slice of type comment
 type Comment_Slice []Comment
@@ -132,6 +118,9 @@ type DefineTest struct {
 	Markup     map[string]any
 }
 
+// define_test, a type of flow.
+var Zt_DefineTest typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineTest) TypeInfo() typeinfo.T {
 	return &Zt_DefineTest
@@ -148,40 +137,6 @@ func (op *DefineTest) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineTest)(nil)
 var _ rtti.Execute = (*DefineTest)(nil)
-
-// define_test, a type of flow.
-var Zt_DefineTest = typeinfo.Flow{
-	Name: "define_test",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "test_name",
-		Label: "test",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:     "scene_names",
-		Label:    "requires",
-		Optional: true,
-		Type:     &rtti.Zt_TextListEval,
-	}, {
-		Name:     "statements",
-		Label:    "scene",
-		Optional: true,
-		Repeats:  true,
-		Type:     &Zt_StoryStatement,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Create a scene",
-	},
-}
 
 // holds a slice of type define_test
 type DefineTest_Slice []DefineTest
@@ -204,6 +159,9 @@ type DefineScene struct {
 	Markup     map[string]any
 }
 
+// define_scene, a type of flow.
+var Zt_DefineScene typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineScene) TypeInfo() typeinfo.T {
 	return &Zt_DefineScene
@@ -219,33 +177,6 @@ func (op *DefineScene) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineScene)(nil)
-
-// define_scene, a type of flow.
-var Zt_DefineScene = typeinfo.Flow{
-	Name: "define_scene",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "scene",
-		Label: "scene",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "scene_names",
-		Label:    "requires",
-		Optional: true,
-		Type:     &rtti.Zt_TextListEval,
-	}, {
-		Name:    "with",
-		Label:   "with",
-		Repeats: true,
-		Type:    &Zt_StoryStatement,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "Define a sub world.",
-	},
-}
 
 // holds a slice of type define_scene
 type DefineScene_Slice []DefineScene
@@ -268,6 +199,9 @@ type DefineAction struct {
 	Markup   map[string]any
 }
 
+// define_action, a type of flow.
+var Zt_DefineAction typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineAction) TypeInfo() typeinfo.T {
 	return &Zt_DefineAction
@@ -284,35 +218,6 @@ func (op *DefineAction) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineAction)(nil)
 var _ rtti.Execute = (*DefineAction)(nil)
-
-// define_action, a type of flow.
-var Zt_DefineAction = typeinfo.Flow{
-	Name: "define_action",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "action",
-		Label: "action",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:    "requires",
-		Label:   "requires",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}, {
-		Name:     "provides",
-		Label:    "provides",
-		Optional: true,
-		Repeats:  true,
-		Type:     &Zt_FieldDefinition,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
-	},
-}
 
 // holds a slice of type define_action
 type DefineAction_Slice []DefineAction
@@ -334,6 +239,9 @@ type DefineAspect struct {
 	Markup map[string]any
 }
 
+// define_aspect, a type of flow.
+var Zt_DefineAspect typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineAspect) TypeInfo() typeinfo.T {
 	return &Zt_DefineAspect
@@ -350,28 +258,6 @@ func (op *DefineAspect) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineAspect)(nil)
 var _ rtti.Execute = (*DefineAspect)(nil)
-
-// define_aspect, a type of flow.
-var Zt_DefineAspect = typeinfo.Flow{
-	Name: "define_aspect",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "aspect",
-		Label: "aspect",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "traits",
-		Label: "traits",
-		Type:  &rtti.Zt_TextListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Add traits to an aspect",
-	},
-}
 
 // holds a slice of type define_aspect
 type DefineAspect_Slice []DefineAspect
@@ -391,6 +277,9 @@ type AspectField struct {
 	Markup map[string]any
 }
 
+// aspect_field, a type of flow.
+var Zt_AspectField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*AspectField) TypeInfo() typeinfo.T {
 	return &Zt_AspectField
@@ -406,22 +295,6 @@ func (op *AspectField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*AspectField)(nil)
-
-// aspect_field, a type of flow.
-var Zt_AspectField = typeinfo.Flow{
-	Name: "aspect_field",
-	Lede: "aspect",
-	Terms: []typeinfo.Term{{
-		Name: "aspect",
-		Type: &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"tbd: is a separate interface required for object kinds separate from everything else?", "in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that."},
-	},
-}
 
 // holds a slice of type aspect_field
 type AspectField_Slice []AspectField
@@ -443,6 +316,9 @@ type BoolField struct {
 	Markup    map[string]any
 }
 
+// bool_field, a type of flow.
+var Zt_BoolField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*BoolField) TypeInfo() typeinfo.T {
 	return &Zt_BoolField
@@ -458,29 +334,6 @@ func (op *BoolField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*BoolField)(nil)
-
-// bool_field, a type of flow.
-var Zt_BoolField = typeinfo.Flow{
-	Name: "bool_field",
-	Lede: "bool",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type bool_field
 type BoolField_Slice []BoolField
@@ -501,6 +354,9 @@ type CountOf struct {
 	Markup  map[string]any
 }
 
+// count_of, a type of flow.
+var Zt_CountOf typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*CountOf) TypeInfo() typeinfo.T {
 	return &Zt_CountOf
@@ -516,26 +372,6 @@ func (op *CountOf) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.BoolEval = (*CountOf)(nil)
-
-// count_of, a type of flow.
-var Zt_CountOf = typeinfo.Flow{
-	Name: "count_of",
-	Lede: "count_of",
-	Terms: []typeinfo.Term{{
-		Name: "trigger",
-		Type: &core.Zt_Trigger,
-	}, {
-		Name:  "num",
-		Label: "num",
-		Type:  &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_BoolEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard gets checked."},
-	},
-}
 
 // holds a slice of type count_of
 type CountOf_Slice []CountOf
@@ -556,6 +392,9 @@ type CycleText struct {
 	Markup map[string]any
 }
 
+// cycle_text, a type of flow.
+var Zt_CycleText typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*CycleText) TypeInfo() typeinfo.T {
 	return &Zt_CycleText
@@ -571,23 +410,6 @@ func (op *CycleText) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*CycleText)(nil)
-
-// cycle_text, a type of flow.
-var Zt_CycleText = typeinfo.Flow{
-	Name: "cycle_text",
-	Lede: "cycle_text",
-	Terms: []typeinfo.Term{{
-		Name:    "parts",
-		Repeats: true,
-		Type:    &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": "When called multiple times, returns each of its inputs in turn.",
-	},
-}
 
 // holds a slice of type cycle_text
 type CycleText_Slice []CycleText
@@ -609,6 +431,9 @@ type DefineAlias struct {
 	Markup   map[string]any
 }
 
+// define_alias, a type of flow.
+var Zt_DefineAlias typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineAlias) TypeInfo() typeinfo.T {
 	return &Zt_DefineAlias
@@ -625,28 +450,6 @@ func (op *DefineAlias) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DefineAlias)(nil)
 var _ StoryStatement = (*DefineAlias)(nil)
-
-// define_alias, a type of flow.
-var Zt_DefineAlias = typeinfo.Flow{
-	Name: "define_alias",
-	Lede: "interpret",
-	Terms: []typeinfo.Term{{
-		Name:  "names",
-		Label: "alias",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "noun_name",
-		Label: "as",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "allows the player to refer to a noun by one or more other terms.",
-	},
-}
 
 // holds a slice of type define_alias
 type DefineAlias_Slice []DefineAlias
@@ -668,6 +471,9 @@ type DefineLeadingGrammar struct {
 	Markup map[string]any
 }
 
+// define_leading_grammar, a type of flow.
+var Zt_DefineLeadingGrammar typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineLeadingGrammar) TypeInfo() typeinfo.T {
 	return &Zt_DefineLeadingGrammar
@@ -684,29 +490,6 @@ func (op *DefineLeadingGrammar) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DefineLeadingGrammar)(nil)
 var _ StoryStatement = (*DefineLeadingGrammar)(nil)
-
-// define_leading_grammar, a type of flow.
-var Zt_DefineLeadingGrammar = typeinfo.Flow{
-	Name: "define_leading_grammar",
-	Lede: "interpret",
-	Terms: []typeinfo.Term{{
-		Name:    "lede",
-		Repeats: true,
-		Type:    &prim.Zt_Text,
-	}, {
-		Name:    "scans",
-		Label:   "with",
-		Repeats: true,
-		Type:    &grammar.Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "starts a parser scanner.",
-	},
-}
 
 // holds a slice of type define_leading_grammar
 type DefineLeadingGrammar_Slice []DefineLeadingGrammar
@@ -728,6 +511,9 @@ type DefineNamedGrammar struct {
 	Markup map[string]any
 }
 
+// define_named_grammar, a type of flow.
+var Zt_DefineNamedGrammar typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineNamedGrammar) TypeInfo() typeinfo.T {
 	return &Zt_DefineNamedGrammar
@@ -744,29 +530,6 @@ func (op *DefineNamedGrammar) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*DefineNamedGrammar)(nil)
 var _ StoryStatement = (*DefineNamedGrammar)(nil)
-
-// define_named_grammar, a type of flow.
-var Zt_DefineNamedGrammar = typeinfo.Flow{
-	Name: "define_named_grammar",
-	Lede: "interpret",
-	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "name",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "scans",
-		Label:   "with",
-		Repeats: true,
-		Type:    &grammar.Zt_ScannerMaker,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "starts a parser scanner.",
-	},
-}
 
 // holds a slice of type define_named_grammar
 type DefineNamedGrammar_Slice []DefineNamedGrammar
@@ -789,6 +552,9 @@ type DefinePhrase struct {
 	Markup   map[string]any
 }
 
+// define_phrase, a type of flow.
+var Zt_DefinePhrase typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefinePhrase) TypeInfo() typeinfo.T {
 	return &Zt_DefinePhrase
@@ -804,32 +570,6 @@ func (op *DefinePhrase) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePhrase)(nil)
-
-// define_phrase, a type of flow.
-var Zt_DefinePhrase = typeinfo.Flow{
-	Name: "define_phrase",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "phrase",
-		Label: "phrase",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "macro",
-		Label: "as_macro",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "reversed",
-		Label:    "reversed",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "Define a phrase that can be used with 'natural language' statements.",
-	},
-}
 
 // holds a slice of type define_phrase
 type DefinePhrase_Slice []DefinePhrase
@@ -850,6 +590,9 @@ type DeclareStatement struct {
 	Markup map[string]any
 }
 
+// declare_statement, a type of flow.
+var Zt_DeclareStatement typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DeclareStatement) TypeInfo() typeinfo.T {
 	return &Zt_DeclareStatement
@@ -865,22 +608,6 @@ func (op *DeclareStatement) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DeclareStatement)(nil)
-
-// declare_statement, a type of flow.
-var Zt_DeclareStatement = typeinfo.Flow{
-	Name: "declare_statement",
-	Lede: "declare",
-	Terms: []typeinfo.Term{{
-		Name: "text",
-		Type: &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "Simple english like definitions of nouns, kinds, and their relatives.",
-	},
-}
 
 // holds a slice of type declare_statement
 type DeclareStatement_Slice []DeclareStatement
@@ -903,6 +630,9 @@ type DefineRelation struct {
 	Markup      map[string]any
 }
 
+// define_relation, a type of flow.
+var Zt_DefineRelation typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineRelation) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelation
@@ -919,33 +649,6 @@ func (op *DefineRelation) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineRelation)(nil)
 var _ rtti.Execute = (*DefineRelation)(nil)
-
-// define_relation, a type of flow.
-var Zt_DefineRelation = typeinfo.Flow{
-	Name: "define_relation",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "relation",
-		Label: "relation",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "kind",
-		Label: "kind",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "other_kind",
-		Label: "other_kind",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "cardinality",
-		Label: "cardinality",
-		Type:  &Zt_RelationCardinality,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type define_relation
 type DefineRelation_Slice []DefineRelation
@@ -967,6 +670,9 @@ type DefineFields struct {
 	Markup map[string]any
 }
 
+// define_fields, a type of flow.
+var Zt_DefineFields typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineFields) TypeInfo() typeinfo.T {
 	return &Zt_DefineFields
@@ -983,29 +689,6 @@ func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineFields)(nil)
 var _ rtti.Execute = (*DefineFields)(nil)
-
-// define_fields, a type of flow.
-var Zt_DefineFields = typeinfo.Flow{
-	Name: "define_fields",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "kind",
-		Label: "kind",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:    "fields",
-		Label:   "fields",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Add properties to a kind",
-	},
-}
 
 // holds a slice of type define_fields
 type DefineFields_Slice []DefineFields
@@ -1026,6 +709,9 @@ type DefineKinds struct {
 	Markup   map[string]any
 }
 
+// define_kinds, a type of flow.
+var Zt_DefineKinds typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineKinds) TypeInfo() typeinfo.T {
 	return &Zt_DefineKinds
@@ -1042,25 +728,6 @@ func (op *DefineKinds) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineKinds)(nil)
 var _ rtti.Execute = (*DefineKinds)(nil)
-
-// define_kinds, a type of flow.
-var Zt_DefineKinds = typeinfo.Flow{
-	Name: "define_kinds",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "kinds",
-		Label: "kinds",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "ancestor",
-		Label: "as",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type define_kinds
 type DefineKinds_Slice []DefineKinds
@@ -1081,6 +748,9 @@ type DefineOpposite struct {
 	Markup   map[string]any
 }
 
+// define_opposite, a type of flow.
+var Zt_DefineOpposite typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineOpposite) TypeInfo() typeinfo.T {
 	return &Zt_DefineOpposite
@@ -1097,28 +767,6 @@ func (op *DefineOpposite) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineOpposite)(nil)
 var _ rtti.Execute = (*DefineOpposite)(nil)
-
-// define_opposite, a type of flow.
-var Zt_DefineOpposite = typeinfo.Flow{
-	Name: "define_opposite",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "opposite",
-		Label: "opposite",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "word",
-		Label: "word",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Opposites are used at runtime and during weave to", "interpret traits, directions, and other terms.", "For example:", "\"The opposite of east is west.\""},
-	},
-}
 
 // holds a slice of type define_opposite
 type DefineOpposite_Slice []DefineOpposite
@@ -1139,6 +787,9 @@ type DefinePlural struct {
 	Markup   map[string]any
 }
 
+// define_plural, a type of flow.
+var Zt_DefinePlural typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefinePlural) TypeInfo() typeinfo.T {
 	return &Zt_DefinePlural
@@ -1155,28 +806,6 @@ func (op *DefinePlural) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePlural)(nil)
 var _ rtti.Execute = (*DefinePlural)(nil)
-
-// define_plural, a type of flow.
-var Zt_DefinePlural = typeinfo.Flow{
-	Name: "define_plural",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "singular",
-		Label: "singular",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "plural",
-		Label: "plural",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Plurals are used at runtime and during weave to", "guide the interpretation of nouns and kinds.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
-	},
-}
 
 // holds a slice of type define_plural
 type DefinePlural_Slice []DefinePlural
@@ -1200,6 +829,9 @@ type MapDeparting struct {
 	Markup        map[string]any
 }
 
+// map_departing, a type of flow.
+var Zt_MapDeparting typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*MapDeparting) TypeInfo() typeinfo.T {
 	return &Zt_MapDeparting
@@ -1216,36 +848,6 @@ func (op *MapDeparting) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*MapDeparting)(nil)
 var _ rtti.Execute = (*MapDeparting)(nil)
-
-// map_departing, a type of flow.
-var Zt_MapDeparting = typeinfo.Flow{
-	Name: "map_departing",
-	Lede: "departing",
-	Terms: []typeinfo.Term{{
-		Name:  "room_name",
-		Label: "from",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "door_name",
-		Label: "via",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "map_connection",
-		Label: "and",
-		Type:  &Zt_MapConnection,
-	}, {
-		Name:  "other_room_name",
-		Label: "other_room",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
-	},
-}
 
 // holds a slice of type map_departing
 type MapDeparting_Slice []MapDeparting
@@ -1270,6 +872,9 @@ type MapHeading struct {
 	Markup        map[string]any
 }
 
+// map_heading, a type of flow.
+var Zt_MapHeading typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*MapHeading) TypeInfo() typeinfo.T {
 	return &Zt_MapHeading
@@ -1286,40 +891,6 @@ func (op *MapHeading) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*MapHeading)(nil)
 var _ rtti.Execute = (*MapHeading)(nil)
-
-// map_heading, a type of flow.
-var Zt_MapHeading = typeinfo.Flow{
-	Name: "map_heading",
-	Lede: "heading",
-	Terms: []typeinfo.Term{{
-		Name: "dir",
-		Type: &Zt_MapDirection,
-	}, {
-		Name:  "room_name",
-		Label: "from",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "door_name",
-		Label:    "via",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:  "map_connection",
-		Label: "and",
-		Type:  &Zt_MapConnection,
-	}, {
-		Name:  "other_room_name",
-		Label: "other_room",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
-	},
-}
 
 // holds a slice of type map_heading
 type MapHeading_Slice []MapHeading
@@ -1342,6 +913,9 @@ type DefineValue struct {
 	Markup    map[string]any
 }
 
+// define_value, a type of flow.
+var Zt_DefineValue typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineValue) TypeInfo() typeinfo.T {
 	return &Zt_DefineValue
@@ -1358,32 +932,6 @@ func (op *DefineValue) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineValue)(nil)
 var _ rtti.Execute = (*DefineValue)(nil)
-
-// define_value, a type of flow.
-var Zt_DefineValue = typeinfo.Flow{
-	Name: "define_value",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "field_name",
-		Label: "value",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "nouns",
-		Label: "of",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "value",
-		Label: "as",
-		Type:  &rtti.Zt_Assignment,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Assign a starting value to the field of one or nouns.",
-	},
-}
 
 // holds a slice of type define_value
 type DefineValue_Slice []DefineValue
@@ -1404,6 +952,9 @@ type DefineNouns struct {
 	Markup map[string]any
 }
 
+// define_nouns, a type of flow.
+var Zt_DefineNouns typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineNouns) TypeInfo() typeinfo.T {
 	return &Zt_DefineNouns
@@ -1420,25 +971,6 @@ func (op *DefineNouns) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineNouns)(nil)
 var _ rtti.Execute = (*DefineNouns)(nil)
-
-// define_nouns, a type of flow.
-var Zt_DefineNouns = typeinfo.Flow{
-	Name: "define_nouns",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "nouns",
-		Label: "nouns",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "kind",
-		Label: "as",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type define_nouns
 type DefineNouns_Slice []DefineNouns
@@ -1459,6 +991,9 @@ type DefineNounTraits struct {
 	Markup map[string]any
 }
 
+// define_noun_traits, a type of flow.
+var Zt_DefineNounTraits typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineNounTraits) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounTraits
@@ -1475,25 +1010,6 @@ func (op *DefineNounTraits) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineNounTraits)(nil)
 var _ rtti.Execute = (*DefineNounTraits)(nil)
-
-// define_noun_traits, a type of flow.
-var Zt_DefineNounTraits = typeinfo.Flow{
-	Name: "define_noun_traits",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "nouns",
-		Label: "nouns",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "traits",
-		Label: "traits",
-		Type:  &rtti.Zt_TextListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type define_noun_traits
 type DefineNounTraits_Slice []DefineNounTraits
@@ -1515,6 +1031,9 @@ type NumListField struct {
 	Markup    map[string]any
 }
 
+// num_list_field, a type of flow.
+var Zt_NumListField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*NumListField) TypeInfo() typeinfo.T {
 	return &Zt_NumListField
@@ -1530,29 +1049,6 @@ func (op *NumListField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*NumListField)(nil)
-
-// num_list_field, a type of flow.
-var Zt_NumListField = typeinfo.Flow{
-	Name: "num_list_field",
-	Lede: "num_list",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_NumListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type num_list_field
 type NumListField_Slice []NumListField
@@ -1574,6 +1070,9 @@ type NumberField struct {
 	Markup    map[string]any
 }
 
+// number_field, a type of flow.
+var Zt_NumberField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*NumberField) TypeInfo() typeinfo.T {
 	return &Zt_NumberField
@@ -1589,29 +1088,6 @@ func (op *NumberField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*NumberField)(nil)
-
-// number_field, a type of flow.
-var Zt_NumberField = typeinfo.Flow{
-	Name: "number_field",
-	Lede: "number",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_NumberEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type number_field
 type NumberField_Slice []NumberField
@@ -1632,6 +1108,9 @@ type RuleProvides struct {
 	Markup      map[string]any
 }
 
+// rule_provides, a type of flow.
+var Zt_RuleProvides typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RuleProvides) TypeInfo() typeinfo.T {
 	return &Zt_RuleProvides
@@ -1648,26 +1127,6 @@ func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleProvides)(nil)
 var _ rtti.Execute = (*RuleProvides)(nil)
-
-// rule_provides, a type of flow.
-var Zt_RuleProvides = typeinfo.Flow{
-	Name: "rule_provides",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "rule",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:    "provides",
-		Label:   "provides",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-}
 
 // holds a slice of type rule_provides
 type RuleProvides_Slice []RuleProvides
@@ -1689,6 +1148,9 @@ type RuleForPattern struct {
 	Markup      map[string]any
 }
 
+// rule_for_pattern, a type of flow.
+var Zt_RuleForPattern typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RuleForPattern) TypeInfo() typeinfo.T {
 	return &Zt_RuleForPattern
@@ -1705,34 +1167,6 @@ func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForPattern)(nil)
 var _ rtti.Execute = (*RuleForPattern)(nil)
-
-// rule_for_pattern, a type of flow.
-var Zt_RuleForPattern = typeinfo.Flow{
-	Name: "rule_for_pattern",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "rule",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "rule_name",
-		Label:    "named",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Change the behavior of an existing pattern.", "For events, this adds a listener that responds to the targeted object only when triggered by the player.", "By default, rules with filters continue on to the next rule automatically.", "Because event listeners have filters they continue to the next listener unless specifically stopped."},
-	},
-}
 
 // holds a slice of type rule_for_pattern
 type RuleForPattern_Slice []RuleForPattern
@@ -1755,6 +1189,9 @@ type RuleForNoun struct {
 	Markup      map[string]any
 }
 
+// rule_for_noun, a type of flow.
+var Zt_RuleForNoun typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RuleForNoun) TypeInfo() typeinfo.T {
 	return &Zt_RuleForNoun
@@ -1771,38 +1208,6 @@ func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForNoun)(nil)
 var _ rtti.Execute = (*RuleForNoun)(nil)
-
-// rule_for_noun, a type of flow.
-var Zt_RuleForNoun = typeinfo.Flow{
-	Name: "rule_for_noun",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "rule",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "noun_name",
-		Label: "noun",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "rule_name",
-		Label:    "named",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
-	},
-}
 
 // holds a slice of type rule_for_noun
 type RuleForNoun_Slice []RuleForNoun
@@ -1826,6 +1231,9 @@ type RuleForKind struct {
 	Markup      map[string]any
 }
 
+// rule_for_kind, a type of flow.
+var Zt_RuleForKind typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RuleForKind) TypeInfo() typeinfo.T {
 	return &Zt_RuleForKind
@@ -1842,43 +1250,6 @@ func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForKind)(nil)
 var _ rtti.Execute = (*RuleForKind)(nil)
-
-// rule_for_kind, a type of flow.
-var Zt_RuleForKind = typeinfo.Flow{
-	Name: "rule_for_kind",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "rule",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "kind_name",
-		Label: "kind",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:     "exactly",
-		Label:    "exactly",
-		Optional: true,
-		Type:     &rtti.Zt_BoolEval,
-	}, {
-		Name:     "rule_name",
-		Label:    "named",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:    "exe",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
-	},
-}
 
 // holds a slice of type rule_for_kind
 type RuleForKind_Slice []RuleForKind
@@ -1901,6 +1272,9 @@ type DefineMacro struct {
 	Markup          map[string]any
 }
 
+// define_macro, a type of flow.
+var Zt_DefineMacro typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineMacro) TypeInfo() typeinfo.T {
 	return &Zt_DefineMacro
@@ -1917,39 +1291,6 @@ func (op *DefineMacro) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineMacro)(nil)
 var _ rtti.Execute = (*DefineMacro)(nil)
-
-// define_macro, a type of flow.
-var Zt_DefineMacro = typeinfo.Flow{
-	Name: "define_macro",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "macro_name",
-		Label: "macro",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:    "requires",
-		Label:   "requires",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}, {
-		Name:    "provides",
-		Label:   "provides",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}, {
-		Name:    "macro_statements",
-		Label:   "do",
-		Repeats: true,
-		Type:    &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Declare a function which can produce statements about the game world.", "They are processed at import time, and they cannot call patterns", "nor can patterns -- which are processed during play -- call macros.", "Unlike patterns, they cannot be extended; the entire definition must live in one place."},
-	},
-}
 
 // holds a slice of type define_macro
 type DefineMacro_Slice []DefineMacro
@@ -1970,6 +1311,9 @@ type CallMacro struct {
 	Arguments []assign.Arg
 	Markup    map[string]any
 }
+
+// call_macro, a type of flow.
+var Zt_CallMacro typeinfo.Flow
 
 // implements typeinfo.Instance
 func (*CallMacro) TypeInfo() typeinfo.T {
@@ -1995,36 +1339,6 @@ var _ rtti.TextListEval = (*CallMacro)(nil)
 var _ rtti.RecordListEval = (*CallMacro)(nil)
 var _ StoryStatement = (*CallMacro)(nil)
 
-// call_macro, a type of flow.
-var Zt_CallMacro = typeinfo.Flow{
-	Name: "call_macro",
-	Lede: "call",
-	Terms: []typeinfo.Term{{
-		Name:  "macro_name",
-		Label: "macro",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:    "arguments",
-		Label:   "args",
-		Repeats: true,
-		Type:    &assign.Zt_Arg,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
-		&rtti.Zt_TextEval,
-		&rtti.Zt_RecordEval,
-		&rtti.Zt_NumListEval,
-		&rtti.Zt_TextListEval,
-		&rtti.Zt_RecordListEval,
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": "Executes a macro, and potentially returns a value.",
-	},
-}
-
 // holds a slice of type call_macro
 type CallMacro_Slice []CallMacro
 
@@ -2046,6 +1360,9 @@ type DefinePattern struct {
 	Markup      map[string]any
 }
 
+// define_pattern, a type of flow.
+var Zt_DefinePattern typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefinePattern) TypeInfo() typeinfo.T {
 	return &Zt_DefinePattern
@@ -2062,40 +1379,6 @@ func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePattern)(nil)
 var _ rtti.Execute = (*DefinePattern)(nil)
-
-// define_pattern, a type of flow.
-var Zt_DefinePattern = typeinfo.Flow{
-	Name: "define_pattern",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "pattern_name",
-		Label: "pattern",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:    "requires",
-		Label:   "requires",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}, {
-		Name:    "provides",
-		Label:   "provides",
-		Repeats: true,
-		Type:    &Zt_FieldDefinition,
-	}, {
-		Name:     "exe",
-		Label:    "do",
-		Optional: true,
-		Repeats:  true,
-		Type:     &rtti.Zt_Execute,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Declare a new pattern.", "A pattern is a bundle of functions which can either change the game world or provide information about it.", "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."},
-	},
-}
 
 // holds a slice of type define_pattern
 type DefinePattern_Slice []DefinePattern
@@ -2117,6 +1400,9 @@ type RecordListField struct {
 	Markup    map[string]any
 }
 
+// record_list_field, a type of flow.
+var Zt_RecordListField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RecordListField) TypeInfo() typeinfo.T {
 	return &Zt_RecordListField
@@ -2132,29 +1418,6 @@ func (op *RecordListField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*RecordListField)(nil)
-
-// record_list_field, a type of flow.
-var Zt_RecordListField = typeinfo.Flow{
-	Name: "record_list_field",
-	Lede: "record_list",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_RecordListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type record_list_field
 type RecordListField_Slice []RecordListField
@@ -2176,6 +1439,9 @@ type RecordField struct {
 	Markup    map[string]any
 }
 
+// record_field, a type of flow.
+var Zt_RecordField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*RecordField) TypeInfo() typeinfo.T {
 	return &Zt_RecordField
@@ -2191,29 +1457,6 @@ func (op *RecordField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*RecordField)(nil)
-
-// record_field, a type of flow.
-var Zt_RecordField = typeinfo.Flow{
-	Name: "record_field",
-	Lede: "record",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_RecordEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type record_field
 type RecordField_Slice []RecordField
@@ -2236,6 +1479,9 @@ type DefineRelatives struct {
 	Markup     map[string]any
 }
 
+// define_relatives, a type of flow.
+var Zt_DefineRelatives typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineRelatives) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelatives
@@ -2252,32 +1498,6 @@ func (op *DefineRelatives) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineRelatives)(nil)
 var _ rtti.Execute = (*DefineRelatives)(nil)
-
-// define_relatives, a type of flow.
-var Zt_DefineRelatives = typeinfo.Flow{
-	Name: "define_relatives",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "nouns",
-		Label: "nouns",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "relation",
-		Label: "relative_to",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "other_nouns",
-		Label: "other_nouns",
-		Type:  &rtti.Zt_TextListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Relate nouns to each other",
-	},
-}
 
 // holds a slice of type define_relatives
 type DefineRelatives_Slice []DefineRelatives
@@ -2300,6 +1520,9 @@ type DefineOtherRelatives struct {
 	Markup     map[string]any
 }
 
+// define_other_relatives, a type of flow.
+var Zt_DefineOtherRelatives typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*DefineOtherRelatives) TypeInfo() typeinfo.T {
 	return &Zt_DefineOtherRelatives
@@ -2316,32 +1539,6 @@ func (op *DefineOtherRelatives) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineOtherRelatives)(nil)
 var _ rtti.Execute = (*DefineOtherRelatives)(nil)
-
-// define_other_relatives, a type of flow.
-var Zt_DefineOtherRelatives = typeinfo.Flow{
-	Name: "define_other_relatives",
-	Lede: "define",
-	Terms: []typeinfo.Term{{
-		Name:  "relation",
-		Label: "relative_to",
-		Type:  &rtti.Zt_TextEval,
-	}, {
-		Name:  "nouns",
-		Label: "nouns",
-		Type:  &rtti.Zt_TextListEval,
-	}, {
-		Name:  "other_nouns",
-		Label: "other_nouns",
-		Type:  &rtti.Zt_TextListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-		&rtti.Zt_Execute,
-	},
-	Markup: map[string]any{
-		"comment": "Relate nouns to each other",
-	},
-}
 
 // holds a slice of type define_other_relatives
 type DefineOtherRelatives_Slice []DefineOtherRelatives
@@ -2361,6 +1558,9 @@ type SayTemplate struct {
 	Markup   map[string]any
 }
 
+// say_template, a type of flow.
+var Zt_SayTemplate typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SayTemplate) TypeInfo() typeinfo.T {
 	return &Zt_SayTemplate
@@ -2377,23 +1577,6 @@ func (op *SayTemplate) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SayTemplate)(nil)
 var _ rtti.TextEval = (*SayTemplate)(nil)
-
-// say_template, a type of flow.
-var Zt_SayTemplate = typeinfo.Flow{
-	Name: "say_template",
-	Lede: "say",
-	Terms: []typeinfo.Term{{
-		Name: "template",
-		Type: &prim.Zt_Lines,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Used for displaying text to the player.", "The text can contain 'inline-templates';", "mini-commands that help to simplify printing text.", "See also: https://github.com/ionous/iffy/wiki/Templates.", "( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )"},
-	},
-}
 
 // holds a slice of type say_template
 type SayTemplate_Slice []SayTemplate
@@ -2414,6 +1597,9 @@ type SayResponse struct {
 	Markup map[string]any
 }
 
+// say_response, a type of flow.
+var Zt_SayResponse typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*SayResponse) TypeInfo() typeinfo.T {
 	return &Zt_SayResponse
@@ -2430,28 +1616,6 @@ func (op *SayResponse) GetMarkup(ensure bool) map[string]any {
 // ensure the command implements its specified slots:
 var _ rtti.Execute = (*SayResponse)(nil)
 var _ rtti.TextEval = (*SayResponse)(nil)
-
-// say_response, a type of flow.
-var Zt_SayResponse = typeinfo.Flow{
-	Name: "say_response",
-	Lede: "say",
-	Terms: []typeinfo.Term{{
-		Name:  "name",
-		Label: "response",
-		Type:  &prim.Zt_Text,
-	}, {
-		Name:  "text",
-		Label: "with",
-		Type:  &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_Execute,
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"Generate text in a replaceable manner.", "( note: this is transformed for the runtime into a named 'RenderResponse'. )"},
-	},
-}
 
 // holds a slice of type say_response
 type SayResponse_Slice []SayResponse
@@ -2472,6 +1636,9 @@ type ShuffleText struct {
 	Markup map[string]any
 }
 
+// shuffle_text, a type of flow.
+var Zt_ShuffleText typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*ShuffleText) TypeInfo() typeinfo.T {
 	return &Zt_ShuffleText
@@ -2487,23 +1654,6 @@ func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*ShuffleText)(nil)
-
-// shuffle_text, a type of flow.
-var Zt_ShuffleText = typeinfo.Flow{
-	Name: "shuffle_text",
-	Lede: "shuffle_text",
-	Terms: []typeinfo.Term{{
-		Name:    "parts",
-		Repeats: true,
-		Type:    &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": "When called multiple times returns its inputs at random.",
-	},
-}
 
 // holds a slice of type shuffle_text
 type ShuffleText_Slice []ShuffleText
@@ -2524,6 +1674,9 @@ type StoppingText struct {
 	Markup map[string]any
 }
 
+// stopping_text, a type of flow.
+var Zt_StoppingText typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*StoppingText) TypeInfo() typeinfo.T {
 	return &Zt_StoppingText
@@ -2539,23 +1692,6 @@ func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ rtti.TextEval = (*StoppingText)(nil)
-
-// stopping_text, a type of flow.
-var Zt_StoppingText = typeinfo.Flow{
-	Name: "stopping_text",
-	Lede: "stopping_text",
-	Terms: []typeinfo.Term{{
-		Name:    "parts",
-		Repeats: true,
-		Type:    &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&rtti.Zt_TextEval,
-	},
-	Markup: map[string]any{
-		"comment": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
-	},
-}
 
 // holds a slice of type stopping_text
 type StoppingText_Slice []StoppingText
@@ -2574,6 +1710,9 @@ type StoryBreak struct {
 	Markup map[string]any
 }
 
+// story_break, a type of flow.
+var Zt_StoryBreak typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*StoryBreak) TypeInfo() typeinfo.T {
 	return &Zt_StoryBreak
@@ -2589,19 +1728,6 @@ func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*StoryBreak)(nil)
-
-// story_break, a type of flow.
-var Zt_StoryBreak = typeinfo.Flow{
-	Name:  "story_break",
-	Lede:  "--",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&Zt_StoryStatement,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: debug.do_nothing"},
-	},
-}
 
 // holds a slice of type story_break
 type StoryBreak_Slice []StoryBreak
@@ -2622,6 +1748,9 @@ type StoryFile struct {
 	Markup          map[string]any
 }
 
+// story_file, a type of flow.
+var Zt_StoryFile typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*StoryFile) TypeInfo() typeinfo.T {
 	return &Zt_StoryFile
@@ -2633,22 +1762,6 @@ func (op *StoryFile) GetMarkup(ensure bool) map[string]any {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
-}
-
-// story_file, a type of flow.
-var Zt_StoryFile = typeinfo.Flow{
-	Name: "story_file",
-	Lede: "tapestry",
-	Terms: []typeinfo.Term{{
-		Name:    "story_statements",
-		Repeats: true,
-		Type:    &Zt_StoryStatement,
-	}},
-	Markup: map[string]any{
-		"blockly-color": "TAP_HUE_ROOT",
-		"comment":       "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
-		"mosaic-root":   true,
-	},
 }
 
 // holds a slice of type story_file
@@ -2671,6 +1784,9 @@ type TextListField struct {
 	Markup    map[string]any
 }
 
+// text_list_field, a type of flow.
+var Zt_TextListField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*TextListField) TypeInfo() typeinfo.T {
 	return &Zt_TextListField
@@ -2686,29 +1802,6 @@ func (op *TextListField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*TextListField)(nil)
-
-// text_list_field, a type of flow.
-var Zt_TextListField = typeinfo.Flow{
-	Name: "text_list_field",
-	Lede: "text_list",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_TextListEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type text_list_field
 type TextListField_Slice []TextListField
@@ -2730,6 +1823,9 @@ type TextField struct {
 	Markup    map[string]any
 }
 
+// text_field, a type of flow.
+var Zt_TextField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*TextField) TypeInfo() typeinfo.T {
 	return &Zt_TextField
@@ -2745,29 +1841,6 @@ func (op *TextField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*TextField)(nil)
-
-// text_field, a type of flow.
-var Zt_TextField = typeinfo.Flow{
-	Name: "text_field",
-	Lede: "text",
-	Terms: []typeinfo.Term{{
-		Name: "name",
-		Type: &rtti.Zt_TextEval,
-	}, {
-		Name:     "type",
-		Label:    "kind",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}, {
-		Name:     "initially",
-		Label:    "initially",
-		Optional: true,
-		Type:     &rtti.Zt_TextEval,
-	}},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-}
 
 // holds a slice of type text_field
 type TextField_Slice []TextField
@@ -2786,6 +1859,9 @@ type NothingField struct {
 	Markup map[string]any
 }
 
+// nothing_field, a type of flow.
+var Zt_NothingField typeinfo.Flow
+
 // implements typeinfo.Instance
 func (*NothingField) TypeInfo() typeinfo.T {
 	return &Zt_NothingField
@@ -2801,19 +1877,6 @@ func (op *NothingField) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ FieldDefinition = (*NothingField)(nil)
-
-// nothing_field, a type of flow.
-var Zt_NothingField = typeinfo.Flow{
-	Name:  "nothing_field",
-	Lede:  "nothing",
-	Terms: []typeinfo.Term{},
-	Slots: []*typeinfo.Slot{
-		&Zt_FieldDefinition,
-	},
-	Markup: map[string]any{
-		"comment": []interface{}{"A valueless field.", "Intended mainly for patterns which don't need to return a value."},
-	},
-}
 
 // holds a slice of type nothing_field
 type NothingField_Slice []NothingField
@@ -3112,4 +2175,992 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15743255383721832504: (*TextListField)(nil),        /* field_definition=TextList:initially: */
 	2011197685129757745:  (*TextListField)(nil),        /* field_definition=TextList:kind: */
 	3232692879001227038:  (*TextListField)(nil),        /* field_definition=TextList:kind:initially: */
+}
+
+// init the terms of all flows in init
+// so that they can refer to each other when needed.
+func init() {
+	Zt_Comment = typeinfo.Flow{
+		Name: "comment",
+		Lede: "comment",
+		Terms: []typeinfo.Term{{
+			Name: "lines",
+			Type: &prim.Zt_Lines,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Add a note.", "Information about the story for you and other authors."},
+		},
+	}
+	Zt_DefineTest = typeinfo.Flow{
+		Name: "define_test",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "test_name",
+			Label: "test",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:     "scene_names",
+			Label:    "requires",
+			Optional: true,
+			Type:     &rtti.Zt_TextListEval,
+		}, {
+			Name:     "statements",
+			Label:    "scene",
+			Optional: true,
+			Repeats:  true,
+			Type:     &Zt_StoryStatement,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Create a scene",
+		},
+	}
+	Zt_DefineScene = typeinfo.Flow{
+		Name: "define_scene",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "scene",
+			Label: "scene",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "scene_names",
+			Label:    "requires",
+			Optional: true,
+			Type:     &rtti.Zt_TextListEval,
+		}, {
+			Name:    "with",
+			Label:   "with",
+			Repeats: true,
+			Type:    &Zt_StoryStatement,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Define a sub world.",
+		},
+	}
+	Zt_DefineAction = typeinfo.Flow{
+		Name: "define_action",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "action",
+			Label: "action",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:    "requires",
+			Label:   "requires",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:     "provides",
+			Label:    "provides",
+			Optional: true,
+			Repeats:  true,
+			Type:     &Zt_FieldDefinition,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
+		},
+	}
+	Zt_DefineAspect = typeinfo.Flow{
+		Name: "define_aspect",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "aspect",
+			Label: "aspect",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "traits",
+			Label: "traits",
+			Type:  &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Add traits to an aspect",
+		},
+	}
+	Zt_AspectField = typeinfo.Flow{
+		Name: "aspect_field",
+		Lede: "aspect",
+		Terms: []typeinfo.Term{{
+			Name: "aspect",
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"tbd: is a separate interface required for object kinds separate from everything else?", "in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that."},
+		},
+	}
+	Zt_BoolField = typeinfo.Flow{
+		Name: "bool_field",
+		Lede: "bool",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_CountOf = typeinfo.Flow{
+		Name: "count_of",
+		Lede: "count_of",
+		Terms: []typeinfo.Term{{
+			Name: "trigger",
+			Type: &core.Zt_Trigger,
+		}, {
+			Name:  "num",
+			Label: "num",
+			Type:  &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_BoolEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard gets checked."},
+		},
+	}
+	Zt_CycleText = typeinfo.Flow{
+		Name: "cycle_text",
+		Lede: "cycle_text",
+		Terms: []typeinfo.Term{{
+			Name:    "parts",
+			Repeats: true,
+			Type:    &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "When called multiple times, returns each of its inputs in turn.",
+		},
+	}
+	Zt_DefineAlias = typeinfo.Flow{
+		Name: "define_alias",
+		Lede: "interpret",
+		Terms: []typeinfo.Term{{
+			Name:  "names",
+			Label: "alias",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "noun_name",
+			Label: "as",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "allows the player to refer to a noun by one or more other terms.",
+		},
+	}
+	Zt_DefineLeadingGrammar = typeinfo.Flow{
+		Name: "define_leading_grammar",
+		Lede: "interpret",
+		Terms: []typeinfo.Term{{
+			Name:    "lede",
+			Repeats: true,
+			Type:    &prim.Zt_Text,
+		}, {
+			Name:    "scans",
+			Label:   "with",
+			Repeats: true,
+			Type:    &grammar.Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "starts a parser scanner.",
+		},
+	}
+	Zt_DefineNamedGrammar = typeinfo.Flow{
+		Name: "define_named_grammar",
+		Lede: "interpret",
+		Terms: []typeinfo.Term{{
+			Name:  "name",
+			Label: "name",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "scans",
+			Label:   "with",
+			Repeats: true,
+			Type:    &grammar.Zt_ScannerMaker,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "starts a parser scanner.",
+		},
+	}
+	Zt_DefinePhrase = typeinfo.Flow{
+		Name: "define_phrase",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "phrase",
+			Label: "phrase",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "macro",
+			Label: "as_macro",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "reversed",
+			Label:    "reversed",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Define a phrase that can be used with 'natural language' statements.",
+		},
+	}
+	Zt_DeclareStatement = typeinfo.Flow{
+		Name: "declare_statement",
+		Lede: "declare",
+		Terms: []typeinfo.Term{{
+			Name: "text",
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Simple english like definitions of nouns, kinds, and their relatives.",
+		},
+	}
+	Zt_DefineRelation = typeinfo.Flow{
+		Name: "define_relation",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "relation",
+			Label: "relation",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "kind",
+			Label: "kind",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "other_kind",
+			Label: "other_kind",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "cardinality",
+			Label: "cardinality",
+			Type:  &Zt_RelationCardinality,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_DefineFields = typeinfo.Flow{
+		Name: "define_fields",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "kind",
+			Label: "kind",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:    "fields",
+			Label:   "fields",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Add properties to a kind",
+		},
+	}
+	Zt_DefineKinds = typeinfo.Flow{
+		Name: "define_kinds",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "kinds",
+			Label: "kinds",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "ancestor",
+			Label: "as",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_DefineOpposite = typeinfo.Flow{
+		Name: "define_opposite",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "opposite",
+			Label: "opposite",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "word",
+			Label: "word",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Opposites are used at runtime and during weave to", "interpret traits, directions, and other terms.", "For example:", "\"The opposite of east is west.\""},
+		},
+	}
+	Zt_DefinePlural = typeinfo.Flow{
+		Name: "define_plural",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "singular",
+			Label: "singular",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "plural",
+			Label: "plural",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Plurals are used at runtime and during weave to", "guide the interpretation of nouns and kinds.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
+		},
+	}
+	Zt_MapDeparting = typeinfo.Flow{
+		Name: "map_departing",
+		Lede: "departing",
+		Terms: []typeinfo.Term{{
+			Name:  "room_name",
+			Label: "from",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "door_name",
+			Label: "via",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "map_connection",
+			Label: "and",
+			Type:  &Zt_MapConnection,
+		}, {
+			Name:  "other_room_name",
+			Label: "other_room",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
+		},
+	}
+	Zt_MapHeading = typeinfo.Flow{
+		Name: "map_heading",
+		Lede: "heading",
+		Terms: []typeinfo.Term{{
+			Name: "dir",
+			Type: &Zt_MapDirection,
+		}, {
+			Name:  "room_name",
+			Label: "from",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "door_name",
+			Label:    "via",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:  "map_connection",
+			Label: "and",
+			Type:  &Zt_MapConnection,
+		}, {
+			Name:  "other_room_name",
+			Label: "other_room",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
+		},
+	}
+	Zt_DefineValue = typeinfo.Flow{
+		Name: "define_value",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "field_name",
+			Label: "value",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "nouns",
+			Label: "of",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "value",
+			Label: "as",
+			Type:  &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Assign a starting value to the field of one or nouns.",
+		},
+	}
+	Zt_DefineNouns = typeinfo.Flow{
+		Name: "define_nouns",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "kind",
+			Label: "as",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_DefineNounTraits = typeinfo.Flow{
+		Name: "define_noun_traits",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "traits",
+			Label: "traits",
+			Type:  &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_NumListField = typeinfo.Flow{
+		Name: "num_list_field",
+		Lede: "num_list",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_NumListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_NumberField = typeinfo.Flow{
+		Name: "number_field",
+		Lede: "number",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_NumberEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_RuleProvides = typeinfo.Flow{
+		Name: "rule_provides",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "pattern_name",
+			Label: "rule",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:    "provides",
+			Label:   "provides",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+	}
+	Zt_RuleForPattern = typeinfo.Flow{
+		Name: "rule_for_pattern",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "pattern_name",
+			Label: "rule",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "rule_name",
+			Label:    "named",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Change the behavior of an existing pattern.", "For events, this adds a listener that responds to the targeted object only when triggered by the player.", "By default, rules with filters continue on to the next rule automatically.", "Because event listeners have filters they continue to the next listener unless specifically stopped."},
+		},
+	}
+	Zt_RuleForNoun = typeinfo.Flow{
+		Name: "rule_for_noun",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "pattern_name",
+			Label: "rule",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "noun_name",
+			Label: "noun",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "rule_name",
+			Label:    "named",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
+		},
+	}
+	Zt_RuleForKind = typeinfo.Flow{
+		Name: "rule_for_kind",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "pattern_name",
+			Label: "rule",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "kind_name",
+			Label: "kind",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:     "exactly",
+			Label:    "exactly",
+			Optional: true,
+			Type:     &rtti.Zt_BoolEval,
+		}, {
+			Name:     "rule_name",
+			Label:    "named",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
+		},
+	}
+	Zt_DefineMacro = typeinfo.Flow{
+		Name: "define_macro",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "macro_name",
+			Label: "macro",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:    "requires",
+			Label:   "requires",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:    "provides",
+			Label:   "provides",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:    "macro_statements",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Declare a function which can produce statements about the game world.", "They are processed at import time, and they cannot call patterns", "nor can patterns -- which are processed during play -- call macros.", "Unlike patterns, they cannot be extended; the entire definition must live in one place."},
+		},
+	}
+	Zt_CallMacro = typeinfo.Flow{
+		Name: "call_macro",
+		Lede: "call",
+		Terms: []typeinfo.Term{{
+			Name:  "macro_name",
+			Label: "macro",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "arguments",
+			Label:   "args",
+			Repeats: true,
+			Type:    &assign.Zt_Arg,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&rtti.Zt_BoolEval,
+			&rtti.Zt_NumberEval,
+			&rtti.Zt_TextEval,
+			&rtti.Zt_RecordEval,
+			&rtti.Zt_NumListEval,
+			&rtti.Zt_TextListEval,
+			&rtti.Zt_RecordListEval,
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Executes a macro, and potentially returns a value.",
+		},
+	}
+	Zt_DefinePattern = typeinfo.Flow{
+		Name: "define_pattern",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "pattern_name",
+			Label: "pattern",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:    "requires",
+			Label:   "requires",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:    "provides",
+			Label:   "provides",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:     "exe",
+			Label:    "do",
+			Optional: true,
+			Repeats:  true,
+			Type:     &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Declare a new pattern.", "A pattern is a bundle of functions which can either change the game world or provide information about it.", "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."},
+		},
+	}
+	Zt_RecordListField = typeinfo.Flow{
+		Name: "record_list_field",
+		Lede: "record_list",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_RecordListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_RecordField = typeinfo.Flow{
+		Name: "record_field",
+		Lede: "record",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_RecordEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_DefineRelatives = typeinfo.Flow{
+		Name: "define_relatives",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "relation",
+			Label: "relative_to",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "other_nouns",
+			Label: "other_nouns",
+			Type:  &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Relate nouns to each other",
+		},
+	}
+	Zt_DefineOtherRelatives = typeinfo.Flow{
+		Name: "define_other_relatives",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "relation",
+			Label: "relative_to",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &rtti.Zt_TextListEval,
+		}, {
+			Name:  "other_nouns",
+			Label: "other_nouns",
+			Type:  &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Relate nouns to each other",
+		},
+	}
+	Zt_SayTemplate = typeinfo.Flow{
+		Name: "say_template",
+		Lede: "say",
+		Terms: []typeinfo.Term{{
+			Name: "template",
+			Type: &prim.Zt_Lines,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Used for displaying text to the player.", "The text can contain 'inline-templates';", "mini-commands that help to simplify printing text.", "See also: https://github.com/ionous/iffy/wiki/Templates.", "( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )"},
+		},
+	}
+	Zt_SayResponse = typeinfo.Flow{
+		Name: "say_response",
+		Lede: "say",
+		Terms: []typeinfo.Term{{
+			Name:  "name",
+			Label: "response",
+			Type:  &prim.Zt_Text,
+		}, {
+			Name:  "text",
+			Label: "with",
+			Type:  &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Generate text in a replaceable manner.", "( note: this is transformed for the runtime into a named 'RenderResponse'. )"},
+		},
+	}
+	Zt_ShuffleText = typeinfo.Flow{
+		Name: "shuffle_text",
+		Lede: "shuffle_text",
+		Terms: []typeinfo.Term{{
+			Name:    "parts",
+			Repeats: true,
+			Type:    &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "When called multiple times returns its inputs at random.",
+		},
+	}
+	Zt_StoppingText = typeinfo.Flow{
+		Name: "stopping_text",
+		Lede: "stopping_text",
+		Terms: []typeinfo.Term{{
+			Name:    "parts",
+			Repeats: true,
+			Type:    &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
+		},
+	}
+	Zt_StoryBreak = typeinfo.Flow{
+		Name:  "story_break",
+		Lede:  "--",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: debug.do_nothing"},
+		},
+	}
+	Zt_StoryFile = typeinfo.Flow{
+		Name: "story_file",
+		Lede: "tapestry",
+		Terms: []typeinfo.Term{{
+			Name:    "story_statements",
+			Repeats: true,
+			Type:    &Zt_StoryStatement,
+		}},
+		Markup: map[string]any{
+			"blockly-color": "TAP_HUE_ROOT",
+			"comment":       "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
+			"mosaic-root":   true,
+		},
+	}
+	Zt_TextListField = typeinfo.Flow{
+		Name: "text_list_field",
+		Lede: "text_list",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_TextField = typeinfo.Flow{
+		Name: "text_field",
+		Lede: "text",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "type",
+			Label:    "kind",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}, {
+			Name:     "initially",
+			Label:    "initially",
+			Optional: true,
+			Type:     &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+	}
+	Zt_NothingField = typeinfo.Flow{
+		Name:  "nothing_field",
+		Lede:  "nothing",
+		Terms: []typeinfo.Term{},
+		Slots: []*typeinfo.Slot{
+			&Zt_FieldDefinition,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"A valueless field.", "Intended mainly for patterns which don't need to return a value."},
+		},
+	}
 }

@@ -20,3 +20,36 @@ var z_signatures = map[uint64]typeinfo.Instance{
 {{- end }}
 }
 {{- end }}
+
+
+{{- range .Types }}{{ if and (eq .Type "flow") .List }}
+// init the terms of all flows in init 
+// so that they can refer to each other when needed.
+func init() {
+{{- range .List }}
+	Zt_{{Pascal .Name}} = typeinfo.Flow{
+		Name: "{{.Name}}",
+		Lede: "{{.Lede}}",
+		Terms: []typeinfo.Term{
+	{{- range $i, $t := .Terms -}}{{if $i}},{{end}}{
+			Name: "{{$t.Name}}",{{if $t.SimpleLabel}}
+			Label: "{{$t.SimpleLabel}}",{{end}}{{if $t.Private}}
+			Private: true,{{end}}{{if $t.Optional}}
+			Optional: true,{{end}}{{if $t.Repeats}}
+			Repeats: true,{{end}}{{if not $t.Private}}
+			Type: &{{PackageDot $t.Type}}Zt_{{Pascal $t.Type}},{{end}}
+		}
+	{{- end -}}
+	{{/**/}}		},
+		{{- if .Slots }} 
+		Slots: []*typeinfo.Slot{ 
+		{{- range $i, $s := .Slots }}
+			&{{PackageDot $s}}Zt_{{Pascal $s}},
+		{{- end }}
+		},
+		{{- end }}
+		{{- template "markup.tmpl" .}}
+	}
+{{- end }}
+}
+{{- end }}{{- end }}
