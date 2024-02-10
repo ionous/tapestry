@@ -97,14 +97,14 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 	return
 }
 
-func optionalLast(list []grok.Match) (ret grok.Match) {
+func optionalLast(list []grok.Matched) (ret grok.Matched) {
 	if cnt := len(list); cnt > 0 {
 		ret = list[cnt-1]
 	}
 	return
 }
 
-func grokKind(pen *mdl.Pen, k, a grok.Match, traits []grok.Match) (err error) {
+func grokKind(pen *mdl.Pen, k, a grok.Matched, traits []grok.Matched) (err error) {
 	kind := inflect.Normalize(grok.MatchedString(k))
 	ancestor := inflect.Normalize(grok.MatchedString(a))
 	if e := pen.AddKind(kind, ancestor); e != nil {

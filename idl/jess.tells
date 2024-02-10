@@ -1,0 +1,66 @@
+# shuttle communication
+Spec:with group:
+  - "jess"
+  - Group contains:
+    - # a snippet of matching text
+      # defined via an interface to allow instances
+      # to track additional information (ex. db row)
+      Spec:with slot:
+      - "matched"
+      - Slot: true
+
+    - # one of a predefined set of determiners:
+      # the, a, some, etc.
+      # see 'count' for leading numbers
+      Spec:with flow:
+      - "article"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+
+    - # conjunction
+      Spec:with flow:
+      - "comma_and"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+
+    - # matches the name of an (existing) trait.
+      Spec:with flow:
+      - "trait_name"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+    - # matches the name of an (existing) kind.
+      Spec:with flow:
+      - "kind_name"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+
+    - # matches at least one trait.
+      Spec:with flow:
+      - "traits"
+      - Flow uses:
+        - # while an article can precede every trait
+          # it doesn't influence which trait gets matched.
+          Term:optional:
+          - "article"
+          - true
+        - Term: "trait_name"
+        - Term:optional:
+          - "additional_traits"
+          - true
+
+    - # matches a trait following another trait
+      Spec:with flow:
+      - "additional_traits"
+      - Flow uses:
+        - Term:optional:
+          - "comma_and"
+          - true
+        - Term: "traits"
