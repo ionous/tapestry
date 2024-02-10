@@ -12,7 +12,7 @@ type Word = grok.Word
 type Span = grok.Span
 type MacroType = grok.MacroType
 type Macro = grok.Macro
-type Match = grok.Match
+type Match = grok.Matched
 
 func TestPhrases(t *testing.T) {
 	groktest.Phrases(t, &known)

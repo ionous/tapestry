@@ -19,14 +19,14 @@ func FindArticle(ws Span) (ret Article, err error) {
 	if ws.NumWords() > 0 {
 		if cnt, ok := WordsToNum(ws[0].String()); ok {
 			ret = Article{
-				Match: Span(ws[:1]),
-				Count: cnt,
+				Matched: Span(ws[:1]),
+				Count:   cnt,
 			}
 		} else if m, e := FindCommonArticles(ws); e != nil {
 			err = e
 		} else {
 			ret = Article{
-				Match: m,
+				Matched: m,
 			}
 		}
 	}
@@ -40,7 +40,7 @@ func FindArticle(ws Span) (ret Article, err error) {
 // ( it would take some work to lightly hold the relation between a name and an article
 // then parse a sentence matching names to nouns in the
 // fwiw: the articles in inform also seems to be predetermined in this way.  )
-func FindCommonArticles(ws Span) (ret Match, err error) {
+func FindCommonArticles(ws Span) (ret Matched, err error) {
 	return determiners.FindMatch(ws)
 }
 

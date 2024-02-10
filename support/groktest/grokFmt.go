@@ -30,7 +30,7 @@ func nounsIntoMap(m map[string]any, field string, ns []grok.Name) {
 func nounToMap(n grok.Name) map[string]any {
 	m := make(map[string]any)
 	matchIntoMap(m, "name", n.Span)
-	matchIntoMap(m, "det", n.Article.Match)
+	matchIntoMap(m, "det", n.Article.Matched)
 	matchesIntoMap(m, "traits", n.Traits)
 	matchesIntoMap(m, "kinds", n.Kinds)
 	if n.Exact {
@@ -42,7 +42,7 @@ func nounToMap(n grok.Name) map[string]any {
 	return m
 }
 
-func matchesIntoMap(m map[string]any, field string, ws []grok.Match) {
+func matchesIntoMap(m map[string]any, field string, ws []grok.Matched) {
 	if cnt := len(ws); cnt > 0 {
 		out := make([]string, cnt)
 		for i, w := range ws {
@@ -53,14 +53,14 @@ func matchesIntoMap(m map[string]any, field string, ws []grok.Match) {
 	return
 }
 
-func matchIntoMap(m map[string]any, field string, match grok.Match) {
+func matchIntoMap(m map[string]any, field string, match grok.Matched) {
 	if match != nil && match.NumWords() > 0 {
 		m[field] = match.String()
 	}
 }
 
 func macroIntoMap(m map[string]any, field string, macro grok.Macro) {
-	if macro.Match != nil && macro.Match.NumWords() > 0 {
+	if macro.Matched != nil && macro.Matched.NumWords() > 0 {
 		m[field] = macro.Name
 	}
 }

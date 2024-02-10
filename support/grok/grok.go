@@ -9,11 +9,11 @@ type Grokker interface {
 
 	// if the passed words starts with a kind,
 	// return the number of words that matched.
-	FindKind(Span) (Match, error)
+	FindKind(Span) (Matched, error)
 
 	// if the passed words starts with a trait,
 	// return the number of words that matched.
-	FindTrait(Span) (Match, error)
+	FindTrait(Span) (Matched, error)
 
 	// if the passed words starts with a macro,
 	// return information about that match.
@@ -21,30 +21,30 @@ type Grokker interface {
 }
 
 type Article struct {
-	Match
+	Matched
 	Count int // for counted nouns: "seven (apples)"
 }
 
 func (a Article) Len() int {
-	return MatchedLen(a.Match)
+	return MatchedLen(a.Matched)
 }
 
 func (a Article) String() (ret string) {
-	if a.Match != nil {
-		ret = a.Match.String()
+	if a.Matched != nil {
+		ret = a.Matched.String()
 	}
 	return
 }
 
 type Macro struct {
-	Match
+	Matched
 	Name     string
 	Type     MacroType
 	Reversed bool
 }
 
 func (m Macro) Len() int {
-	return MatchedLen(m.Match)
+	return MatchedLen(m.Matched)
 }
 
 type Results struct {
@@ -57,8 +57,8 @@ type Name struct {
 	Article Article
 	Span    Span
 	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
-	Traits  []Match
-	Kinds   []Match // it's possible, if rare, to apply multiple kinds
+	Traits  []Matched
+	Kinds   []Matched // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
 }
 
@@ -66,16 +66,16 @@ func (n *Name) String() string {
 	return n.Span.String()
 }
 
-// Match - generic interface so Grokker implementations can track their own backchannel data.
+// Matched - generic interface so Grokker implementations can track their own backchannel data.
 // ex. a row id for kinds.
-type Match interface {
+type Matched interface {
 	String() string
 	NumWords() int // should match strings.Fields(Str)
 }
 
 // returns the size of a match;
 // 0 if the match is nil.
-func MatchedLen(m Match) (ret int) {
+func MatchedLen(m Matched) (ret int) {
 	if m != nil {
 		ret = m.NumWords()
 	}
@@ -84,7 +84,7 @@ func MatchedLen(m Match) (ret int) {
 
 // returns the string of a match;
 // empty if the match is nil.
-func MatchedString(m Match) (ret string) {
+func MatchedString(m Matched) (ret string) {
 	if m != nil {
 		ret = m.String()
 	}
@@ -143,7 +143,7 @@ func GrokSpan(known Grokker, words Span) (ret Results, err error) {
 		} else if macro, e := known.FindMacro(words[i:]); e != nil {
 			err = e
 		} else if len(macro.Name) > 0 {
-			ret, err = macroPhrase(known, macro, words[i+macro.Match.NumWords():])
+			ret, err = macroPhrase(known, macro, words[i+macro.Matched.NumWords():])
 			break
 		}
 	}

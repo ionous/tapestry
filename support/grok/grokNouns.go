@@ -26,7 +26,7 @@ func grokNouns(known Grokker, out *[]Name, ws []Word, flag genFlag) (err error) 
 	for nextName := ws; len(nextName) > 0; {
 		if det, e := known.FindArticle(nextName); e != nil {
 			err = e
-		} else if skip := MatchedLen(det.Match); skip >= len(nextName) {
+		} else if skip := MatchedLen(det.Matched); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
 			name := nextName[skip:]
@@ -54,7 +54,7 @@ func grokNouns(known Grokker, out *[]Name, ws []Word, flag genFlag) (err error) 
 					if !called {
 						// case 2a: a counted kind: "two cats are on the bed."
 						// case 2b: an anonymous kind: "a container is in the lobby."
-						det.Match = nil // erases the article, leaves the count if any ( ex. 2 )
+						det.Matched = nil // erases the article, leaves the count if any ( ex. 2 )
 						name = nil
 					} else {
 						if det.Count > 0 {
@@ -109,7 +109,7 @@ func chopArticle(known Grokker, ws []Word) (retDet Article, retName []Word, err 
 		err = errutil.New("empty name")
 	} else if det, e := known.FindArticle(ws); e != nil {
 		err = e
-	} else if skip := MatchedLen(det.Match); skip >= len(ws) {
+	} else if skip := MatchedLen(det.Matched); skip >= len(ws) {
 		err = makeWordError(ws[0], "no name found")
 	} else {
 		retDet, retName = det, ws[skip:]

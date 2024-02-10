@@ -31,7 +31,7 @@ func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
 
 // if the passed words starts with a kind,
 // return the number of words in  that match.
-func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
+func (d *dbSource) FindKind(ws grok.Span) (ret grok.Matched, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
 	words := strings.ToLower(ws.String()) + blank
@@ -120,7 +120,7 @@ func getPath(db *tables.Cache, kind kindsOf.Kinds, out *string) (ret string, err
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Match, err error) {
+func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Matched, err error) {
 	if ap, e := d.getAspectPath(); e != nil {
 		err = e
 	} else {
@@ -235,7 +235,7 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 			width := strings.Count(found.phrase, blank) + 1
 			ret = grok.Macro{
 				Name:     found.name,
-				Match:    grok.Span(ws[:width]),
+				Matched:  grok.Span(ws[:width]),
 				Type:     flag,
 				Reversed: found.reversed,
 			}

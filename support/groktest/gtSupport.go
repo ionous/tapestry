@@ -18,7 +18,7 @@ func (n MacroList) FindMacro(ws []grok.Word) (ret grok.Macro, err error) {
 		var match grok.Span = n.SpanList[i]
 		info := n.info[i]
 		ret = grok.Macro{
-			Match:    match,
+			Matched:  match,
 			Name:     info.name,
 			Type:     info.macroType,
 			Reversed: info.reversed,

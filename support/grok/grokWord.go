@@ -1,7 +1,7 @@
 package grok
 
 import (
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 type wordError struct {
@@ -16,7 +16,7 @@ func makeWordError(w Word, reason string) error {
 func (w *wordError) Error() string {
 	// i suppose if you wanted to be evil, you would unsafe pointer this string
 	// back it up by start to get the actual position
-	return errutil.Sprint(w.reason, ">", w.word.slice)
+	return fmt.Sprintf("%s in %q", w.reason, w.word.slice)
 }
 
 type Word struct {

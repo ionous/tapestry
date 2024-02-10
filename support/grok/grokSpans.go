@@ -2,7 +2,7 @@ package grok
 
 type SpanList [][]Word
 
-func (ws SpanList) FindMatch(words Span) (ret Match, none error) {
+func (ws SpanList) FindMatch(words Span) (ret Matched, none error) {
 	if i, skip := ws.FindPrefix(words); skip > 0 {
 		ret = Span(ws[i])
 	}

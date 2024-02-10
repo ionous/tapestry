@@ -43,7 +43,7 @@ Hack:
 		} else {
 			// case 2: found a macro:
 			out.Macro = macro
-			postMacro := afterRightLede[macro.Match.NumWords():]
+			postMacro := afterRightLede[macro.Matched.NumWords():]
 			var lhsFlag, rhsFlag genFlag
 			switch macro.Type {
 			case Macro_PrimaryOnly:

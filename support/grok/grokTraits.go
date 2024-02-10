@@ -1,18 +1,18 @@
 package grok
 
 type TraitSet struct {
-	Kind      Match
-	Traits    []Match
-	WordCount int // including any deleted ands
+	Kind      Matched
+	Traits    []Matched
+	WordCount int // including any deleted ands; used during scanning to skip over the complete set of traits
 }
 
 func (ts *TraitSet) hasKind() bool {
 	return ts.Kind != nil
 }
 
-func (ts *TraitSet) kinds() (ret []Match) {
+func (ts *TraitSet) kinds() (ret []Matched) {
 	if ts.hasKind() {
-		ret = []Match{ts.Kind}
+		ret = []Matched{ts.Kind}
 	}
 	return ret
 }
