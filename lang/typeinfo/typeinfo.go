@@ -62,12 +62,13 @@ func (t *Flow) TypeMarkup() map[string]any {
 
 // a member of a Flow.
 type Term struct {
-	Name     string // go lang name; unique within its flow.
-	Label    string // the compact format signature
-	Private  bool   // a member that only exists in memory; never serialized
-	Optional bool   // true when the term can be omitted for instances of the flow.
-	Repeats  bool   // true when the term can have multiple values ( all of the same type )
-	Type     T      // a pointer to Flow, Slot, Str, or Num; or, nil if private
+	Name     string         // go lang name; unique within its flow.
+	Label    string         // the compact format signature
+	Private  bool           // a member that only exists in memory; never serialized
+	Optional bool           // true when the term can be omitted for instances of the flow.
+	Repeats  bool           // true when the term can have multiple values ( all of the same type )
+	Markup   map[string]any // per-term markup
+	Type     T              // a pointer to Flow, Slot, Str, or Num; or, nil if private
 }
 
 // anonymous terms have empty labels.

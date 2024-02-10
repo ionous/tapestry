@@ -58,6 +58,7 @@ type numData struct {
 type termData struct {
 	Name, Label, Type          string
 	Private, Optional, Repeats bool
+	Markup                     markup
 }
 
 // handle transforming _ into a blank string

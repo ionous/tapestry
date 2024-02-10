@@ -130,7 +130,7 @@ func readFlow(spec specData, msg compact.Message, slots []string) (ret flowData,
 					private,
 					optional,
 					repeats,
-					// td.Markup,
+					td.Markup,
 				}
 			}
 		}

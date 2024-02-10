@@ -37,6 +37,7 @@ func init() {
 			Private: true,{{end}}{{if $t.Optional}}
 			Optional: true,{{end}}{{if $t.Repeats}}
 			Repeats: true,{{end}}{{if not $t.Private}}
+			{{- template "markup.tmpl" .}}
 			Type: &{{PackageDot $t.Type}}Zt_{{Pascal $t.Type}},{{end}}
 		}
 	{{- end -}}

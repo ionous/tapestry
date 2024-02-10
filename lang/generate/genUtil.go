@@ -52,7 +52,7 @@ func parseMessages(v any) (ret []compact.Message, err error) {
 
 type MessageMap map[string]any
 
-// turn labels, args into a map of label => arg
+// turn slices of labels and args into a map of { label => arg }
 func messageMap(msg compact.Message) MessageMap {
 	out := make(MessageMap)
 	for i, l := range msg.Labels {

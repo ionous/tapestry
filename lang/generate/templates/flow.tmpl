@@ -24,14 +24,12 @@ func (op *{{Pascal .Name}}) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-{{if .Slots }}
+{{ if .Slots }}
 // ensure the command implements its specified slots:
 {{- range $i, $s := .Slots }}
 var _ {{ScopedType $s}} = (*{{Pascal $.Name}})(nil)
 {{- end }}
 {{- end}}
-
-
 
 // holds a slice of type {{.Name}}
 type {{Pascal .Name}}_Slice []{{Pascal .Name}}
