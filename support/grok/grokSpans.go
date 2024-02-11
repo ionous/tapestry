@@ -3,8 +3,9 @@ package grok
 type SpanList [][]Word
 
 func (ws SpanList) FindMatch(words Span) (ret Matched, none error) {
-	if i, skip := ws.FindPrefix(words); skip > 0 {
-		ret = Span(ws[i])
+	// i is the index of the span in the list
+	if _, skip := ws.FindPrefix(words); skip > 0 {
+		ret = Span(words[:skip])
 	}
 	return
 }

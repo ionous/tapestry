@@ -15,7 +15,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 	})
 }
 
-// test the grokker trait matching algorithm with
+// verify the grokker trait matching algorithm with
 // an arbitrary implementation of the grokker model
 func Traits(t *testing.T, g grok.Grokker) {
 	RunTraitTests(t, func(testPhrase string) (ret grok.TraitSet, err error) {
@@ -30,7 +30,7 @@ func Traits(t *testing.T, g grok.Grokker) {
 	})
 }
 
-// test a standard set of phrases using some function that takes each of those phrases
+// verify a standard set of phrases using some function that takes each of those phrases
 // and produces a set of grokked results.
 func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) {
 	var phrases = []struct {
@@ -50,8 +50,23 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 				"macro": "implies",
 				"primary": []map[string]any{
 					{
-						"name":   "Containers",
+						"kinds":  []string{"Containers"},
 						"traits": []string{"closed"},
+					},
+				},
+			},
+		},
+		{
+			test: `Containers and supporters are usually fixed in place.`,
+			result: map[string]any{
+				"macro": "implies",
+				"primary": []map[string]any{
+					{
+						"kinds":  []string{"Containers"},
+						"traits": []string{"fixed in place"},
+					}, {
+						"kinds":  []string{"supporters"},
+						"traits": []string{"fixed in place"},
 					},
 				},
 			},
@@ -69,7 +84,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// multi Word trait:
 		{
-			//  test: `The tree is fixed in place.`,
+			test: `The tree is fixed in place.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -80,7 +95,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// multiple trailing properties, using the kind as a property.
 		{
-			//  test: `The bottle is a transparent, open, container.`,
+			test: `The bottle is a transparent, open, container.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -92,7 +107,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// multiple nouns of different kinds
 		{
-			// test: `The box and the top are closed containers.`,
+			test: `The box and the top are closed containers.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the",
@@ -109,7 +124,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// using 'called' without a macro
 		{
-			//  test: `The container called the sarcophagus is open.`,
+			test: `The container called the sarcophagus is open.`,
 			result: map[string]any{
 				"primary": []map[string]any{{
 					"det":    "the", // note: this is the bit closes to the noun
@@ -121,7 +136,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 			},
 		},
 		{
-			// test: `Devices are a kind of thing.`,
+			test: `Devices are a kind of thing.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{
@@ -138,7 +153,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 			// "Two circles are in the Lab."
 			// it only works if "circles" is a known kind
 			// otherwise, it assumes "two circles" is the complete name of a single noun.
-			// test: `Two things are in the kitchen.`,
+			test: `Two things are in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -153,7 +168,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 
 		{
-			//  test: `Hershel is carrying scissors and a pen.`,
+			test: `Hershel is carrying scissors and a pen.`,
 			result: map[string]any{
 				"macro": "carry",
 				"primary": []map[string]any{{
@@ -169,7 +184,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// reverse carrying relation.
 		{
-			//  test: `The scissors and a pen are carried by Hershel.`,
+			test: `The scissors and a pen are carried by Hershel.`,
 			result: map[string]any{
 				"macro": "carry",
 				"primary": []map[string]any{{
@@ -188,7 +203,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// a kind of declaration ( uses a 'macro' verb )
 		// "is" left of macro
 		{
-			//  test: `A casket is a kind of container.`,
+			test: `A casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{{
@@ -201,7 +216,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// kind of: adding trailing properties
 		// "is" left of macro
 		{
-			//  test: `A casket is a kind of closed container.`,
+			test: `A casket is a kind of closed container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{{
@@ -217,7 +232,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// similarly, "The kind of the casket is a container", yields a name "kind of the casket".
 		// "is" left of macro.
 		{
-			//  test: `The closed casket is a kind of container.`,
+			test: `The closed casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{{
@@ -231,12 +246,12 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// tbd: not allowed, but maybe it should be....
 		// "is" left of macro
 		{
-			//  test:   `The casket is a closed kind of container.`,
+			test:   `The casket is a closed kind of container.`,
 			result: errutil.New("not allowed"),
 		},
 		// in inform, these become the plural kind "Bucketss" and "basketss"
 		{
-			//  test: `Buckets and baskets are kinds of container.`,
+			test: `Buckets and baskets are kinds of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"primary": []map[string]any{
@@ -251,12 +266,12 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 				}},
 		},
 		{
-			//  test:   `A container is in the lobby.`,
+			test:   `A container is in the lobby.`,
 			result: errutil.New("this is specifically disallowed, and should generate an error"),
 		},
 		// rhs-contains; "in" is
 		{
-			//  test: `The unhappy man is in the closed bottle.`,
+			test: `The unhappy man is in the closed bottle.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -272,7 +287,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 			}},
 		// same pattern as the middle properties above; but not using kind of
 		{
-			//  test: `The coffin is a closed container in the antechamber.`,
+			test: `The coffin is a closed container in the antechamber.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -289,7 +304,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// note, this is allowed even though it implies something different than what is written:
 		{
-			//  test: `The bottle is openable in the kitchen.`,
+			test: `The bottle is openable in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
 				"secondary": []map[string]any{{
@@ -307,7 +322,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// note: The closed openable container called the trunk and the box is in the lobby.
 		// would create a noun called "the trunk and the box"
 		{
-			//  test: `The thing called the stake is on the supporter called the altar.`,
+			test: `The thing called the stake is on the supporter called the altar.`,
 			result: map[string]any{
 				"macro": "support",
 				"secondary": []map[string]any{{
@@ -329,7 +344,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// slightly different parsing than "kind/s of":
 		// those expect only expect one set of nouns; these have two.
 		{
-			//  test: `A closed openable container called the trunk is in the lobby.`,
+			test: `A closed openable container called the trunk is in the lobby.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -348,7 +363,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		// multiple primary:
 		// "is" left of the macro "in".
 		{
-			//  test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
+			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -369,7 +384,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// multiple primary with a leading macro
 		{
-			//  test: `In the coffin are some coins, a notebook, and the gripping hand.`,
+			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -390,7 +405,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// multiple anonymous nouns.
 		{
-			//  test: `In the lobby are a supporter and a container.`,
+			test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -406,7 +421,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// the special nxn description: no properties are allowed.
 		{
-			//  test: `Hector and Maria are suspicious of Santa and Santana.`,
+			test: `Hector and Maria are suspicious of Santa and Santana.`,
 			result: map[string]any{
 				"macro": "suspect",
 				"primary": []map[string]any{{
@@ -423,7 +438,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// fix: trailing properties applying to the lhs
 		{
-			//  test: `The bottle in the kitchen is openable.`,
+			test: `The bottle in the kitchen is openable.`,
 			skip: map[string]any{
 				"macro": "contain",
 				"primary": []map[string]any{{
@@ -439,10 +454,10 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// TODO: values.
 		{
-			////  test:  `The bottle in the kitchen is openable and has age 42.`,
+			//test :  `The bottle in the kitchen is openable and has age 42.`,
 		},
 		{
-			////  test: `The age of the bottle is 42.`,
+			//test : `The age of the bottle is 42.`,
 		},
 		// todo:  the device called the detonator is on the supporter called the shelf and is proper named"
 		// todo: In the lobby are two supporters" ( and "Two supporters are in..." works fine. )

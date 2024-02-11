@@ -41,7 +41,10 @@ func FindArticle(ws Span) (ret Article, err error) {
 // then parse a sentence matching names to nouns in the
 // fwiw: the articles in inform also seems to be predetermined in this way.  )
 func FindCommonArticles(ws Span) (ret Matched, err error) {
-	return determiners.FindMatch(ws)
+	if i, skip := determiners.FindPrefix(ws); skip > 0 {
+		ret = Span(determiners[i])
+	}
+	return
 }
 
 var determiners = PanicSpans("the", "a", "an", "some", "our")
