@@ -44,12 +44,30 @@ Spec:with group:
       # there are some assumptions for optimization:
       # the words "is/are/comma/and" are never part of noun names.
       # future: allow quoted "titles" ( which are then allowed to break those assumptions )
+      # ( see also called )
       Spec:with flow:
       - "name"
       - Flow uses:
         - # the match is always implemented as a span.
           Term:name:
           - "_"
+          - "matched"
+
+    - # called defines a noun and its kind in a single phrase.
+      # as per inform, the name of the noun is everything after the word called
+      # until "is" or "are" or the end of the line.
+      # For instance: `The container called the trunk and the box is in the lobby`
+      # generates a single noun named "the trunk and the box."
+      Spec:with flow:
+      - "called"
+      - Flow uses:
+        - Term: "named_kind"
+        - # the word "called"
+          Term:type:
+          - "called"
+          - "words"
+        - Term:type:
+          - "name"
           - "matched"
 
     - # matches at least one name.
@@ -136,18 +154,15 @@ Spec:with group:
         - Term: "traits"
 
     - # matches one or more predefined words
-      # the specific words are specified via metadata
-      # on the term where this flow is declared.
       Spec:with flow:
-      - "keywords"
+      - "words"
       - Flow uses:
         - Term:name:
           - "_"
           - "matched"
 
     - # matches one or more predefined words
-      # and returns a macro. like keywords
-      # the phrase and macro are on defined via metadata
+      # and returns a macro. like words
       Spec:with flow:
       - "macro_name"
       - Flow uses:
@@ -170,7 +185,6 @@ Spec:with group:
           Term:type:
           - "usually"
           - "macro_name"
-          phrase: "usually"
         - Term: "traits"
 
     - # declares nouns with traits and kinds.

@@ -3,18 +3,17 @@ package jess
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
 func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
-	t := Zt_KindsAreTraits
-	if i := t.TermIndex("usually"); i < 0 {
-		panic("missing typeinfo")
-	} else if next := *input; //
+	if next := *input; //
 	op.Kinds.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
-		op.Usually.Match(q, &next, t.Terms[i].Markup) &&
+		op.Usually.Match(q, &next, usually) &&
 		op.Traits.Match(q, &next) {
 		*input, okay = next, true
 	}
 	return
 }
+
+var usually = grok.PanicSpan("usually")
 
 func (op *KindsAreTraits) GetMatch() ([]grok.Name, grok.Macro) {
 	var out []grok.Name

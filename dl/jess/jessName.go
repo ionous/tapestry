@@ -64,3 +64,18 @@ Loop:
 	}
 	return
 }
+
+// similar to keyword scan; but only breaks on is/are.
+func beScan(ws []grok.Word) (ret int) {
+	ret = len(ws) // provisionally the whole thing.
+Loop:
+	for i, w := range ws {
+		switch w.Hash() {
+		case grok.Keyword.Are,
+			grok.Keyword.Is:
+			ret = i
+			break Loop
+		}
+	}
+	return
+}

@@ -1,13 +1,14 @@
 
-
 Unexpected success
 ------------------
 There are sentences that don't make sense in English, that jess will read perfectly fine. And others that mean something in English slightly different than how they are understood here.
 
 For instance:
-`Some containers are usually closed.`: actually means are containers start closed by default.
-`The box is a container. The box is a closed.`: jess ignores the 'a' in front of the trait.
-`The box is a transparent and container.`: because phrases like: "The box is transparent and a container" are supported, it permits some other less than sensible phrases as well.
+
+* `Some containers are usually closed.`: actually means are containers start closed by default.
+* `The box is a container. The box is a closed.`: jess ignores the 'a' in front of the trait.
+* `The box is a transparent and container.`: because phrases like: "The box is transparent and a container" are supported, it permits some other less than sensible phrases as well.
+* `The container called the trunk and the box is in the lobby.`: creates one single container with an unusual name.
 
 Inform has these same issues.
 

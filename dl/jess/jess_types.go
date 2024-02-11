@@ -201,6 +201,42 @@ func (op *Name_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+type Called struct {
+	NamedKind NamedKind
+	Called    Words
+	Name      Matched
+	Markup    map[string]any
+}
+
+// called, a type of flow.
+var Zt_Called typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Called) TypeInfo() typeinfo.T {
+	return &Zt_Called
+}
+
+// implements typeinfo.Markup
+func (op *Called) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type called
+type Called_Slice []Called
+
+// implements typeinfo.Instance
+func (*Called_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Called
+}
+
+// implements typeinfo.Repeats
+func (op *Called_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // matches at least one name.
 type Names struct {
 	Article         *Article
@@ -490,37 +526,38 @@ func (op *AdditionalTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type Keywords struct {
+// matches one or more predefined words
+type Words struct {
 	Matched Matched
 	Markup  map[string]any
 }
 
-// keywords, a type of flow.
-var Zt_Keywords typeinfo.Flow
+// words, a type of flow.
+var Zt_Words typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*Keywords) TypeInfo() typeinfo.T {
-	return &Zt_Keywords
+func (*Words) TypeInfo() typeinfo.T {
+	return &Zt_Words
 }
 
 // implements typeinfo.Markup
-func (op *Keywords) GetMarkup(ensure bool) map[string]any {
+func (op *Words) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type keywords
-type Keywords_Slice []Keywords
+// holds a slice of type words
+type Words_Slice []Words
 
 // implements typeinfo.Instance
-func (*Keywords_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Keywords
+func (*Words_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Words
 }
 
 // implements typeinfo.Repeats
-func (op *Keywords_Slice) Repeats() bool {
+func (op *Words_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -662,6 +699,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_CommaAnd,
 	&Zt_Are,
 	&Zt_Name,
+	&Zt_Called,
 	&Zt_Names,
 	&Zt_AdditionalNames,
 	&Zt_NamedKind,
@@ -670,7 +708,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_NamedTrait,
 	&Zt_Traits,
 	&Zt_AdditionalTraits,
-	&Zt_Keywords,
+	&Zt_Words,
 	&Zt_MacroName,
 	&Zt_KindsAreTraits,
 	&Zt_NounsTraitsKinds,
@@ -685,8 +723,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1887918947148326916:  (*AdditionalTraits)(nil), /* AdditionalTraits traits: */
 	503552734697422485:   (*Are)(nil),              /* Are: */
 	8854300316672007225:  (*Article)(nil),          /* Article: */
+	2973134911577547915:  (*Called)(nil),           /* Called namedKind:called:name: */
 	4230553755039810705:  (*CommaAnd)(nil),         /* CommaAnd: */
-	3748071630827580029:  (*Keywords)(nil),         /* Keywords: */
 	906205099353614907:   (*Kinds)(nil),            /* Kinds article:namedKind: */
 	13757561154068086581: (*Kinds)(nil),            /* Kinds article:namedKind:additionalKinds: */
 	5500689320692290603:  (*Kinds)(nil),            /* Kinds namedKind: */
@@ -703,6 +741,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	9701794894107240735:  (*Traits)(nil),           /* Traits article:namedTrait:additionalTraits: */
 	931939769765876491:   (*Traits)(nil),           /* Traits namedTrait: */
 	15792725219640924031: (*Traits)(nil),           /* Traits namedTrait:additionalTraits: */
+	1154838578286238320:  (*Words)(nil),            /* Words: */
 	14842108735299651344: (*KindsAreTraits)(nil),   /* matches=KindsAreTraits kinds:are:usually:traits: */
 	3419427774986167184:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are: */
 	7089760760810957754:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd: */
@@ -761,7 +800,30 @@ func init() {
 			Type: &Zt_Matched,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches a name of unknown type ( usually nouns... )", "there are some assumptions for optimization:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )"},
+			"comment": []interface{}{"matches a name of unknown type ( usually nouns... )", "there are some assumptions for optimization:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also called )"},
+		},
+	}
+	Zt_Called = typeinfo.Flow{
+		Name: "called",
+		Lede: "called",
+		Terms: []typeinfo.Term{{
+			Name:  "named_kind",
+			Label: "named_kind",
+			Type:  &Zt_NamedKind,
+		}, {
+			Name:  "called",
+			Label: "called",
+			Markup: map[string]any{
+				"comment": "the word \"called\"",
+			},
+			Type: &Zt_Words,
+		}, {
+			Name:  "name",
+			Label: "name",
+			Type:  &Zt_Matched,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"called defines a noun and its kind in a single phrase.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
 		},
 	}
 	Zt_Names = typeinfo.Flow{
@@ -913,15 +975,15 @@ func init() {
 			"comment": "matches a trait following another trait",
 		},
 	}
-	Zt_Keywords = typeinfo.Flow{
-		Name: "keywords",
-		Lede: "keywords",
+	Zt_Words = typeinfo.Flow{
+		Name: "words",
+		Lede: "words",
 		Terms: []typeinfo.Term{{
 			Name: "matched",
 			Type: &Zt_Matched,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches one or more predefined words", "the specific words are specified via metadata", "on the term where this flow is declared."},
+			"comment": "matches one or more predefined words",
 		},
 	}
 	Zt_MacroName = typeinfo.Flow{
@@ -936,7 +998,7 @@ func init() {
 			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches one or more predefined words", "and returns a macro. like keywords", "the phrase and macro are on defined via metadata"},
+			"comment": []interface{}{"matches one or more predefined words", "and returns a macro. like words"},
 		},
 	}
 	Zt_KindsAreTraits = typeinfo.Flow{
@@ -955,7 +1017,6 @@ func init() {
 			Label: "usually",
 			Markup: map[string]any{
 				"comment": "always the \"implies\" macro",
-				"phrase":  "usually",
 			},
 			Type: &Zt_MacroName,
 		}, {
