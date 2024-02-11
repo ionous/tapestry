@@ -9,7 +9,7 @@ import (
 var Zt_Matched = typeinfo.Slot{
 	Name: "matched",
 	Markup: map[string]any{
-		"comment": []interface{}{"a snippet of matching text", "defined via an interface to allow instances", "to track additional information (ex. db row)"},
+		"comment": []interface{}{"a snippet of matching text;", "defined via an interface to allow instances", "to track additional information (ex. db row)."},
 	},
 }
 
@@ -31,6 +31,35 @@ func (*Matched_Slots) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *Matched_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches, a type of slot.
+var Zt_Matches = typeinfo.Slot{
+	Name: "matches",
+	Markup: map[string]any{
+		"comment": "the root of a sentence matching tree.",
+	},
+}
+
+// holds a single slot.
+type Matches_Slot struct{ Value Matches }
+
+// implements typeinfo.Instance for a single slot.
+func (*Matches_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Matches
+}
+
+// holds a slice of slots.
+type Matches_Slots []Matches
+
+// implements typeinfo.Instance for a series of slots.
+func (*Matches_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Matches
+}
+
+// implements typeinfo.Repeats
+func (op *Matches_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -138,80 +167,152 @@ func (op *Are_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches the name of an (existing) trait.
-type TraitName struct {
+type Name struct {
 	Matched Matched
 	Markup  map[string]any
 }
 
-// trait_name, a type of flow.
-var Zt_TraitName typeinfo.Flow
+// name, a type of flow.
+var Zt_Name typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*TraitName) TypeInfo() typeinfo.T {
-	return &Zt_TraitName
+func (*Name) TypeInfo() typeinfo.T {
+	return &Zt_Name
 }
 
 // implements typeinfo.Markup
-func (op *TraitName) GetMarkup(ensure bool) map[string]any {
+func (op *Name) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type trait_name
-type TraitName_Slice []TraitName
+// holds a slice of type name
+type Name_Slice []Name
 
 // implements typeinfo.Instance
-func (*TraitName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_TraitName
+func (*Name_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Name
 }
 
 // implements typeinfo.Repeats
-func (op *TraitName_Slice) Repeats() bool {
+func (op *Name_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches at least one name.
+type Names struct {
+	Article         *Article
+	Name            Name
+	AdditionalNames *AdditionalNames
+	Markup          map[string]any
+}
+
+// names, a type of flow.
+var Zt_Names typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Names) TypeInfo() typeinfo.T {
+	return &Zt_Names
+}
+
+// implements typeinfo.Markup
+func (op *Names) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type names
+type Names_Slice []Names
+
+// implements typeinfo.Instance
+func (*Names_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Names
+}
+
+// implements typeinfo.Repeats
+func (op *Names_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches a name following another name.
+type AdditionalNames struct {
+	CommaAnd CommaAnd
+	Names    Names
+	Markup   map[string]any
+}
+
+// additional_names, a type of flow.
+var Zt_AdditionalNames typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AdditionalNames) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalNames
+}
+
+// implements typeinfo.Markup
+func (op *AdditionalNames) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type additional_names
+type AdditionalNames_Slice []AdditionalNames
+
+// implements typeinfo.Instance
+func (*AdditionalNames_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalNames
+}
+
+// implements typeinfo.Repeats
+func (op *AdditionalNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
 // matches the name of an (existing) kind.
-type KindName struct {
+type NamedKind struct {
 	Matched Matched
 	Markup  map[string]any
 }
 
-// kind_name, a type of flow.
-var Zt_KindName typeinfo.Flow
+// named_kind, a type of flow.
+var Zt_NamedKind typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*KindName) TypeInfo() typeinfo.T {
-	return &Zt_KindName
+func (*NamedKind) TypeInfo() typeinfo.T {
+	return &Zt_NamedKind
 }
 
 // implements typeinfo.Markup
-func (op *KindName) GetMarkup(ensure bool) map[string]any {
+func (op *NamedKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type kind_name
-type KindName_Slice []KindName
+// holds a slice of type named_kind
+type NamedKind_Slice []NamedKind
 
 // implements typeinfo.Instance
-func (*KindName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_KindName
+func (*NamedKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NamedKind
 }
 
 // implements typeinfo.Repeats
-func (op *KindName_Slice) Repeats() bool {
+func (op *NamedKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
 // matches at least one kind.
 type Kinds struct {
 	Article         *Article
-	KindName        KindName
+	NamedKind       NamedKind
 	AdditionalKinds *AdditionalKinds
 	Markup          map[string]any
 }
@@ -281,10 +382,45 @@ func (op *AdditionalKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// matches the name of an (existing) trait.
+type NamedTrait struct {
+	Matched Matched
+	Markup  map[string]any
+}
+
+// named_trait, a type of flow.
+var Zt_NamedTrait typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*NamedTrait) TypeInfo() typeinfo.T {
+	return &Zt_NamedTrait
+}
+
+// implements typeinfo.Markup
+func (op *NamedTrait) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type named_trait
+type NamedTrait_Slice []NamedTrait
+
+// implements typeinfo.Instance
+func (*NamedTrait_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NamedTrait
+}
+
+// implements typeinfo.Repeats
+func (op *NamedTrait_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // matches at least one trait.
 type Traits struct {
 	Article          *Article
-	TraitName        TraitName
+	NamedTrait       NamedTrait
 	AdditionalTraits *AdditionalTraits
 	Markup           map[string]any
 }
@@ -447,6 +583,9 @@ func (op *KindsAreTraits) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
+// ensure the command implements its specified slots:
+var _ Matches = (*KindsAreTraits)(nil)
+
 // holds a slice of type kinds_are_traits
 type KindsAreTraits_Slice []KindsAreTraits
 
@@ -457,6 +596,46 @@ func (*KindsAreTraits_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *KindsAreTraits_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type NounsTraitsKinds struct {
+	Names  Names
+	Are    Are
+	Traits *Traits
+	Kinds  *Kinds
+	Markup map[string]any
+}
+
+// nouns_traits_kinds, a type of flow.
+var Zt_NounsTraitsKinds typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*NounsTraitsKinds) TypeInfo() typeinfo.T {
+	return &Zt_NounsTraitsKinds
+}
+
+// implements typeinfo.Markup
+func (op *NounsTraitsKinds) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// ensure the command implements its specified slots:
+var _ Matches = (*NounsTraitsKinds)(nil)
+
+// holds a slice of type nouns_traits_kinds
+type NounsTraitsKinds_Slice []NounsTraitsKinds
+
+// implements typeinfo.Instance
+func (*NounsTraitsKinds_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NounsTraitsKinds
+}
+
+// implements typeinfo.Repeats
+func (op *NounsTraitsKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -472,6 +651,7 @@ var Z_Types = typeinfo.TypeSet{
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_Matched,
+	&Zt_Matches,
 }
 
 // a list of all flows in this this package
@@ -480,39 +660,53 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Article,
 	&Zt_CommaAnd,
 	&Zt_Are,
-	&Zt_TraitName,
-	&Zt_KindName,
+	&Zt_Name,
+	&Zt_Names,
+	&Zt_AdditionalNames,
+	&Zt_NamedKind,
 	&Zt_Kinds,
 	&Zt_AdditionalKinds,
+	&Zt_NamedTrait,
 	&Zt_Traits,
 	&Zt_AdditionalTraits,
 	&Zt_Keywords,
 	&Zt_MacroName,
 	&Zt_KindsAreTraits,
+	&Zt_NounsTraitsKinds,
 }
 
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	12174030489678544826: (*AdditionalKinds)(nil),  /* AdditionalKinds commaAnd:kinds: */
+	16975120945491427296: (*AdditionalNames)(nil),  /* AdditionalNames commaAnd:names: */
 	508023169458945308:   (*AdditionalTraits)(nil), /* AdditionalTraits commaAnd:traits: */
 	1887918947148326916:  (*AdditionalTraits)(nil), /* AdditionalTraits traits: */
 	503552734697422485:   (*Are)(nil),              /* Are: */
 	8854300316672007225:  (*Article)(nil),          /* Article: */
 	4230553755039810705:  (*CommaAnd)(nil),         /* CommaAnd: */
 	3748071630827580029:  (*Keywords)(nil),         /* Keywords: */
-	11329968067422663542: (*KindName)(nil),         /* KindName: */
-	15353016293503155145: (*Kinds)(nil),            /* Kinds article:kindName: */
-	17419590393612191931: (*Kinds)(nil),            /* Kinds article:kindName:additionalKinds: */
-	13886720188876609497: (*Kinds)(nil),            /* Kinds kindName: */
-	753813325420165419:   (*Kinds)(nil),            /* Kinds kindName:additionalKinds: */
-	8826794343109131276:  (*KindsAreTraits)(nil),   /* KindsAreTraits kinds:are:usually:traits: */
+	906205099353614907:   (*Kinds)(nil),            /* Kinds article:namedKind: */
+	13757561154068086581: (*Kinds)(nil),            /* Kinds article:namedKind:additionalKinds: */
+	5500689320692290603:  (*Kinds)(nil),            /* Kinds namedKind: */
+	3201719486692867525:  (*Kinds)(nil),            /* Kinds namedKind:additionalKinds: */
 	15972029076576488422: (*MacroName)(nil),        /* MacroName: */
-	13073468751382026622: (*TraitName)(nil),        /* TraitName: */
-	12266123994356951879: (*Traits)(nil),           /* Traits article:traitName: */
-	9462642200558625635:  (*Traits)(nil),           /* Traits article:traitName:additionalTraits: */
-	10912000954309087975: (*Traits)(nil),           /* Traits traitName: */
-	11584307469651821251: (*Traits)(nil),           /* Traits traitName:additionalTraits: */
+	7786819852959314004:  (*Name)(nil),             /* Name: */
+	7841004129963498806:  (*NamedKind)(nil),        /* NamedKind: */
+	10153339211572068944: (*NamedTrait)(nil),       /* NamedTrait: */
+	10073336598044816960: (*Names)(nil),            /* Names article:name: */
+	15330476688882292167: (*Names)(nil),            /* Names article:name:additionalNames: */
+	4500297491524973516:  (*Names)(nil),            /* Names name: */
+	17351915174502247643: (*Names)(nil),            /* Names name:additionalNames: */
+	5152227064767964907:  (*Traits)(nil),           /* Traits article:namedTrait: */
+	9701794894107240735:  (*Traits)(nil),           /* Traits article:namedTrait:additionalTraits: */
+	931939769765876491:   (*Traits)(nil),           /* Traits namedTrait: */
+	15792725219640924031: (*Traits)(nil),           /* Traits namedTrait:additionalTraits: */
+	14842108735299651344: (*KindsAreTraits)(nil),   /* matches=KindsAreTraits kinds:are:usually:traits: */
+	3419427774986167184:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are: */
+	14150606450452057931: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:kinds: */
+	16839405364450437245: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits: */
+	13829425671282372374: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:kinds: */
 }
 
 // init the terms of all flows in init
@@ -551,25 +745,66 @@ func init() {
 			"comment": "matches \"is\" or \"are\".",
 		},
 	}
-	Zt_TraitName = typeinfo.Flow{
-		Name: "trait_name",
-		Lede: "trait_name",
-		Terms: []typeinfo.Term{{
-			Name: "matched",
-			Type: &Zt_Matched,
-		}},
-		Markup: map[string]any{
-			"comment": "matches the name of an (existing) trait.",
-		},
-	}
-	Zt_KindName = typeinfo.Flow{
-		Name: "kind_name",
-		Lede: "kind_name",
+	Zt_Name = typeinfo.Flow{
+		Name: "name",
+		Lede: "name",
 		Terms: []typeinfo.Term{{
 			Name: "matched",
 			Markup: map[string]any{
 				"comment": "the matched type is always a span.",
 			},
+			Type: &Zt_Matched,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"matches a name of unknown type ( usually nouns... )", "there are some assumptions for optimization:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )"},
+		},
+	}
+	Zt_Names = typeinfo.Flow{
+		Name: "names",
+		Lede: "names",
+		Terms: []typeinfo.Term{{
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "name",
+			Label: "name",
+			Type:  &Zt_Name,
+		}, {
+			Name:     "additional_names",
+			Label:    "additional_names",
+			Optional: true,
+			Type:     &Zt_AdditionalNames,
+		}},
+		Markup: map[string]any{
+			"comment": "matches at least one name.",
+		},
+	}
+	Zt_AdditionalNames = typeinfo.Flow{
+		Name: "additional_names",
+		Lede: "additional_names",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and",
+			Label: "comma_and",
+			Markup: map[string]any{
+				"comment": "unlike traits, a separator is required between the names of names",
+			},
+			Type: &Zt_CommaAnd,
+		}, {
+			Name:  "names",
+			Label: "names",
+			Type:  &Zt_Names,
+		}},
+		Markup: map[string]any{
+			"comment": "matches a name following another name.",
+		},
+	}
+	Zt_NamedKind = typeinfo.Flow{
+		Name: "named_kind",
+		Lede: "named_kind",
+		Terms: []typeinfo.Term{{
+			Name: "matched",
 			Type: &Zt_Matched,
 		}},
 		Markup: map[string]any{
@@ -588,9 +823,9 @@ func init() {
 			},
 			Type: &Zt_Article,
 		}, {
-			Name:  "kind_name",
-			Label: "kind_name",
-			Type:  &Zt_KindName,
+			Name:  "named_kind",
+			Label: "named_kind",
+			Type:  &Zt_NamedKind,
 		}, {
 			Name:     "additional_kinds",
 			Label:    "additional_kinds",
@@ -620,6 +855,17 @@ func init() {
 			"comment": "matches a kind following another kind.",
 		},
 	}
+	Zt_NamedTrait = typeinfo.Flow{
+		Name: "named_trait",
+		Lede: "named_trait",
+		Terms: []typeinfo.Term{{
+			Name: "matched",
+			Type: &Zt_Matched,
+		}},
+		Markup: map[string]any{
+			"comment": "matches the name of an (existing) trait.",
+		},
+	}
 	Zt_Traits = typeinfo.Flow{
 		Name: "traits",
 		Lede: "traits",
@@ -632,9 +878,9 @@ func init() {
 			},
 			Type: &Zt_Article,
 		}, {
-			Name:  "trait_name",
-			Label: "trait_name",
-			Type:  &Zt_TraitName,
+			Name:  "named_trait",
+			Label: "named_trait",
+			Type:  &Zt_NamedTrait,
 		}, {
 			Name:     "additional_traits",
 			Label:    "additional_traits",
@@ -712,8 +958,40 @@ func init() {
 			Label: "traits",
 			Type:  &Zt_Traits,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Matches,
+		},
 		Markup: map[string]any{
 			"comment": []interface{}{"assigns default traits to a kind.", "[the] <kind> are \"usually\" <traits>"},
+		},
+	}
+	Zt_NounsTraitsKinds = typeinfo.Flow{
+		Name: "nouns_traits_kinds",
+		Lede: "nouns_traits_kinds",
+		Terms: []typeinfo.Term{{
+			Name:  "names",
+			Label: "names",
+			Type:  &Zt_Names,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:     "traits",
+			Label:    "traits",
+			Optional: true,
+			Type:     &Zt_Traits,
+		}, {
+			Name:     "kinds",
+			Label:    "kinds",
+			Optional: true,
+			Type:     &Zt_Kinds,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Matches,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"declares nouns with traits and kinds.", "[the] <nouns> are <traits> <kinds>", "although traits and kinds are both optional,", "at least one is required to match"},
 		},
 	}
 }

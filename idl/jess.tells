@@ -2,11 +2,16 @@
 Spec:with group:
   - "jess"
   - Group contains:
-    - # a snippet of matching text
+    - # a snippet of matching text;
       # defined via an interface to allow instances
-      # to track additional information (ex. db row)
+      # to track additional information (ex. db row).
       Spec:with slot:
       - "matched"
+      - Slot: true
+
+    - # the root of a sentence matching tree.
+      Spec:with slot:
+      - "matches"
       - Slot: true
 
     - # one of a predefined set of determiners:
@@ -35,22 +40,47 @@ Spec:with group:
           - "_"
           - "matched"
 
-    - # matches the name of an (existing) trait.
+    - # matches a name of unknown type ( usually nouns... )
+      # there are some assumptions for optimization:
+      # the words "is/are/comma/and" are never part of noun names.
+      # future: allow quoted "titles" ( which are then allowed to break those assumptions )
       Spec:with flow:
-      - "trait_name"
+      - "name"
+      - Flow uses:
+        - # the match is always implemented as a span.
+          Term:name:
+          - "_"
+          - "matched"
+
+    - # matches at least one name.
+      Spec:with flow:
+      - "names"
+      - Flow uses:
+        - Term:optional:
+          - "article"
+          - true
+        - Term: "name"
+        - Term:optional:
+          - "additional_names"
+          - true
+
+    - # matches a name following another name.
+      Spec:with flow:
+      - "additional_names"
+      - Flow uses:
+        - # unlike traits, a separator is required between the names of names
+          Term: "comma_and"
+        - Term: "names"
+
+
+    - # matches the name of an (existing) kind.
+      Spec:with flow:
+      - "named_kind"
       - Flow uses:
         - Term:name:
           - "_"
           - "matched"
 
-    - # matches the name of an (existing) kind.
-      Spec:with flow:
-      - "kind_name"
-      - Flow uses:
-        - # the matched type is always a span.
-          Term:name:
-          - "_"
-          - "matched"
 
     - # matches at least one kind.
       Spec:with flow:
@@ -61,7 +91,7 @@ Spec:with group:
           Term:optional:
           - "article"
           - true
-        - Term: "kind_name"
+        - Term: "named_kind"
         - Term:optional:
           - "additional_kinds"
           - true
@@ -74,6 +104,14 @@ Spec:with group:
           Term: "comma_and"
         - Term: "kinds"
 
+    - # matches the name of an (existing) trait.
+      Spec:with flow:
+      - "named_trait"
+      - Flow uses:
+        - Term:name:
+          - "_"
+          - "matched"
+
     - # matches at least one trait.
       Spec:with flow:
       - "traits"
@@ -83,7 +121,7 @@ Spec:with group:
           Term:optional:
           - "article"
           - true
-        - Term: "trait_name"
+        - Term: "named_trait"
         - Term:optional:
           - "additional_traits"
           - true
@@ -122,8 +160,9 @@ Spec:with group:
 
     - # assigns default traits to a kind.
       # [the] <kind> are "usually" <traits>
-      Spec:with flow:
+      Spec:slots:with flow:
       - "kinds_are_traits"
+      - "matches"
       - Flow uses:
         - Term: "kinds"
         - Term: "are"
@@ -133,3 +172,20 @@ Spec:with group:
           - "macro_name"
           phrase: "usually"
         - Term: "traits"
+
+    - # declares nouns with traits and kinds.
+      # [the] <nouns> are <traits> <kinds>
+      # although traits and kinds are both optional,
+      # at least one is required to match
+      Spec:slots:with flow:
+      - "nouns_traits_kinds"
+      - "matches"
+      - Flow uses:
+        - Term: "names"
+        - Term: "are"
+        - Term:optional:
+          - "traits"
+          - true
+        - Term:optional:
+          - "kinds"
+          - true

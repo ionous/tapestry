@@ -1,5 +1,7 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/support/grok"
+
 func (op *Article) Match(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindArticle(*input); width > 0 {
 		op.Matched, *input, okay = m, input.Skip(width), true
@@ -7,7 +9,16 @@ func (op *Article) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *TraitName) Match(q Query, input *InputState) (okay bool) {
+func ReduceArticle(op *Article) (ret grok.Article) {
+	if op != nil {
+		ret = grok.Article{
+			Matched: op.Matched,
+		}
+	}
+	return
+}
+
+func (op *NamedTrait) Match(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindTrait(*input); width > 0 {
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
@@ -18,7 +29,7 @@ func (op *TraitName) Match(q Query, input *InputState) (okay bool) {
 // all the trait info is in this... even additional traits.
 func (op *Traits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; Optionally(q, &next, &op.Article) &&
-		op.TraitName.Match(q, &next) &&
+		op.NamedTrait.Match(q, &next) &&
 		Optionally(q, &next, &op.AdditionalTraits) {
 		*input, okay = next, true
 	}
@@ -28,7 +39,7 @@ func (op *Traits) Match(q Query, input *InputState) (okay bool) {
 func (op *Traits) GetTraits() []Matched {
 	var out []Matched
 	for t := *op; ; {
-		out = append(out, t.TraitName.Matched)
+		out = append(out, t.NamedTrait.Matched)
 		if next := t.AdditionalTraits; next == nil {
 			break
 		} else {
