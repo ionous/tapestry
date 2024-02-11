@@ -9,6 +9,62 @@ func (op *KindName) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+// its interesting that we dont have to store anything else
+// all the trait info is in this... even additional traits.
+func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	Optionally(q, &next, &op.Article) &&
+		op.KindName.Match(q, &next) &&
+		Optionally(q, &next, &op.AdditionalKinds) {
+		*input, okay = next, true
+	}
+	return
+}
+
+// for backwards compatibility, kinds are sometimes understood as names
+func (op *Kinds) GetKinds() []grok.Matched {
+	var out []grok.Matched
+	for t := *op; ; {
+		out = append(out, t.KindName.Matched)
+		if next := t.AdditionalKinds; next == nil {
+			break
+		} else {
+			t = next.Kinds
+		}
+	}
+	return out
+}
+
+// // for backwards compatibility, kinds are sometimes understood as names
+// func (op *Kinds) GetNames() []grok.Name {
+// 	var out []grok.Name
+// 	for t := *op; ; {
+// 		var art grok.Article
+// 		if a := t.Article; a != nil {
+// 			art.Matched = a.Matched
+// 		}
+// 		out = append(out, grok.Name{
+// 			Article: art,
+// 			Span:    t.KindName.Matched.(Span),
+// 		})
+// 		if next := t.AdditionalKinds; next == nil {
+// 			break
+// 		} else {
+// 			t = next.Kinds
+// 		}
+// 	}
+// 	return out
+// }
+
+func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	op.CommaAnd.Match(q, &next) &&
+		op.Kinds.Match(q, &next) {
+		*input, okay = next, true
+	}
+	return
+}
+
 type TraitsKind struct {
 	Traits
 	*KindName
@@ -17,7 +73,8 @@ type TraitsKind struct {
 // its interesting that we dont have to store anything else
 // all the trait info is in this... even additional traits.
 func (op *TraitsKind) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; op.Traits.Match(q, &next) &&
+	if next := *input; //
+	op.Traits.Match(q, &next) &&
 		Optionally(q, &next, &op.KindName) {
 		*input, okay = next, true
 	}
@@ -39,8 +96,8 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	t := Zt_KindsAreTraits
 	if i := t.TermIndex("usually"); i < 0 {
 		panic("missing typeinfo")
-	} else if next := *input; Optionally(q, &next, &op.Article) &&
-		op.KindName.Match(q, &next) &&
+	} else if next := *input; //
+	op.Kinds.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Usually.Match(q, &next, t.Terms[i].Markup) &&
 		op.Traits.Match(q, &next) {
@@ -49,15 +106,16 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-// FIX: multiple kinds
-func (op *KindsAreTraits) GetMatch() (retNames []grok.Name, retMacro grok.Macro) {
-	n := grok.Name{
-		// fix: the current grok tests ( and code ) assume that this phrase produces names
-		// not kinds... even though they *are* and have to be kinds
-		Span:   op.KindName.Matched.(Span),
-		Traits: op.Traits.GetTraits(),
+func (op *KindsAreTraits) GetMatch() ([]grok.Name, grok.Macro) {
+	var out []grok.Name
+	traits := op.Traits.GetTraits()
+	for _, k := range op.Kinds.GetKinds() {
+		out = append(out, grok.Name{
+			Kinds:  []Matched{k},
+			Traits: traits,
+		})
 	}
-	return []grok.Name{n}, op.Usually.Macro
+	return out, op.Usually.Macro
 }
 
 func (op *KindsAreTraits) GetResults() (ret grok.Results) {

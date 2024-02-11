@@ -52,6 +52,28 @@ Spec:with group:
           - "_"
           - "matched"
 
+    - # matches at least one kind.
+      Spec:with flow:
+      - "kinds"
+      - Flow uses:
+        - # while an article can precede every kind
+          # it doesn't influence which kind gets matched.
+          Term:optional:
+          - "article"
+          - true
+        - Term: "kind_name"
+        - Term:optional:
+          - "additional_kinds"
+          - true
+
+    - # matches a kind following another kind.
+      Spec:with flow:
+      - "additional_kinds"
+      - Flow uses:
+        - # unlike traits, a separator is required between the names of kinds
+          Term: "comma_and"
+        - Term: "kinds"
+
     - # matches at least one trait.
       Spec:with flow:
       - "traits"
@@ -103,14 +125,11 @@ Spec:with group:
       Spec:with flow:
       - "kinds_are_traits"
       - Flow uses:
-        - Term:optional:
-          - "article"
-          - true
-        - Term: "kind_name"
+        - Term: "kinds"
         - Term: "are"
-        - Term:type:
+        - # always the "implies" macro
+          Term:type:
           - "usually"
           - "macro_name"
           phrase: "usually"
-          macro: "implies"
         - Term: "traits"

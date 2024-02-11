@@ -14,6 +14,17 @@ func (op *TraitName) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+// its interesting that we dont have to store anything else
+// all the trait info is in this... even additional traits.
+func (op *Traits) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; Optionally(q, &next, &op.Article) &&
+		op.TraitName.Match(q, &next) &&
+		Optionally(q, &next, &op.AdditionalTraits) {
+		*input, okay = next, true
+	}
+	return
+}
+
 func (op *Traits) GetTraits() []Matched {
 	var out []Matched
 	for t := *op; ; {
@@ -25,17 +36,6 @@ func (op *Traits) GetTraits() []Matched {
 		}
 	}
 	return out
-}
-
-// its interesting that we dont have to store anything else
-// all the trait info is in this... even additional traits.
-func (op *Traits) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; Optionally(q, &next, &op.Article) &&
-		op.TraitName.Match(q, &next) &&
-		Optionally(q, &next, &op.AdditionalTraits) {
-		*input, okay = next, true
-	}
-	return
 }
 
 func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
