@@ -7,8 +7,9 @@ There are sentences that don't make sense in English, that jess will read perfec
 For instance:
 `Some containers are usually closed.`: actually means are containers start closed by default.
 `The box is a container. The box is a closed.`: jess ignores the 'a' in front of the trait.
+`The box is a transparent and container.`: because phrases like: "The box is transparent and a container" are supported, it permits some other less than sensible phrases as well.
 
-Inform has similar issues.
+Inform has these same issues.
 
 
 # regarding traits there are a a few patterns:

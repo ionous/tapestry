@@ -600,11 +600,12 @@ func (op *KindsAreTraits_Slice) Repeats() bool {
 }
 
 type NounsTraitsKinds struct {
-	Names  Names
-	Are    Are
-	Traits *Traits
-	Kinds  *Kinds
-	Markup map[string]any
+	Names    Names
+	Are      Are
+	Traits   *Traits
+	CommaAnd *CommaAnd
+	Kinds    *Kinds
+	Markup   map[string]any
 }
 
 // nouns_traits_kinds, a type of flow.
@@ -704,8 +705,12 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15792725219640924031: (*Traits)(nil),           /* Traits namedTrait:additionalTraits: */
 	14842108735299651344: (*KindsAreTraits)(nil),   /* matches=KindsAreTraits kinds:are:usually:traits: */
 	3419427774986167184:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are: */
+	7089760760810957754:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd: */
+	5233850846045406501:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd:kinds: */
 	14150606450452057931: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:kinds: */
 	16839405364450437245: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits: */
+	5883225696954482601:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:commaAnd: */
+	16875727907901245378: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:commaAnd:kinds: */
 	13829425671282372374: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:kinds: */
 }
 
@@ -751,7 +756,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "matched",
 			Markup: map[string]any{
-				"comment": "the matched type is always a span.",
+				"comment": "the match is always implemented as a span.",
 			},
 			Type: &Zt_Matched,
 		}},
@@ -981,6 +986,14 @@ func init() {
 			Label:    "traits",
 			Optional: true,
 			Type:     &Zt_Traits,
+		}, {
+			Name:     "comma_and",
+			Label:    "comma_and",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"exists to support phrases like:", "`the box is transparent and a container.`"},
+			},
+			Type: &Zt_CommaAnd,
 		}, {
 			Name:     "kinds",
 			Label:    "kinds",

@@ -33,12 +33,14 @@ func (op *KindsAreTraits) GetResults() (ret grok.Results) {
 	return grok.Results{Primary: ns, Macro: m}
 }
 
+// NounsTraitsKinds
 func (op *NounsTraitsKinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		len(next) > 0 && // something needs to be after "is/are"
 		Optionally(q, &next, &op.Traits) &&
+		Optionally(q, &next, &op.CommaAnd) &&
 		Optionally(q, &next, &op.Kinds) {
 		*input, okay = next, true
 	}

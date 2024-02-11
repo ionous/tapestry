@@ -51,6 +51,7 @@ func (op *Names) Reduce(traits, kinds []Matched) []grok.Name {
 // or the end of the string if none found
 func keywordScan(ws []grok.Word) (ret int) {
 	ret = len(ws) // provisionally the whole thing.
+Loop:
 	for i, w := range ws {
 		switch w.Hash() {
 		case grok.Keyword.And,
@@ -58,7 +59,7 @@ func keywordScan(ws []grok.Word) (ret int) {
 			grok.Keyword.Comma,
 			grok.Keyword.Is:
 			ret = i
-			break
+			break Loop
 		}
 	}
 	return

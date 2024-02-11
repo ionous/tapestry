@@ -186,6 +186,11 @@ Spec:with group:
         - Term:optional:
           - "traits"
           - true
+        - # exists to support phrases like:
+          # `the box is transparent and a container.`
+          Term:optional:
+          - "comma_and"
+          - true
         - Term:optional:
           - "kinds"
           - true
