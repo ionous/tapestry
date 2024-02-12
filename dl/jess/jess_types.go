@@ -634,7 +634,7 @@ func (op *MacroName_Slice) Repeats() bool {
 type KindsAreTraits struct {
 	Kinds   Kinds
 	Are     Are
-	Usually MacroName
+	Usually Words
 	Traits  Traits
 	Markup  map[string]any
 }
@@ -712,6 +712,47 @@ func (op *NounsTraitsKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+type KindsOf struct {
+	Names     Names
+	Are       Are
+	KindsOf   Words
+	Traits    *Traits
+	NamedKind NamedKind
+	Markup    map[string]any
+}
+
+// kinds_of, a type of flow.
+var Zt_KindsOf typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*KindsOf) TypeInfo() typeinfo.T {
+	return &Zt_KindsOf
+}
+
+// implements typeinfo.Markup
+func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// ensure the command implements its specified slots:
+var _ Matches = (*KindsOf)(nil)
+
+// holds a slice of type kinds_of
+type KindsOf_Slice []KindsOf
+
+// implements typeinfo.Instance
+func (*KindsOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsOf
+}
+
+// implements typeinfo.Repeats
+func (op *KindsOf_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
@@ -748,6 +789,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_MacroName,
 	&Zt_KindsAreTraits,
 	&Zt_NounsTraitsKinds,
+	&Zt_KindsOf,
 }
 
 // a list of all command signatures
@@ -779,6 +821,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	5895523973570511286:  (*Called)(nil),           /* name_called=Called namedKind:called:article:matched: */
 	6380748083159177382:  (*Called)(nil),           /* name_called=Called namedKind:called:matched: */
 	14842108735299651344: (*KindsAreTraits)(nil),   /* matches=KindsAreTraits kinds:are:usually:traits: */
+	10391873763224249146: (*KindsOf)(nil),          /* matches=KindsOf names:are:kindsOf:namedKind: */
+	16052356479879584997: (*KindsOf)(nil),          /* matches=KindsOf names:are:kindsOf:traits:namedKind: */
 	10568809665568612324: (*Name)(nil),             /* name_called=Name: */
 	3419427774986167184:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are: */
 	7089760760810957754:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd: */
@@ -840,7 +884,7 @@ func init() {
 			&Zt_NameCalled,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches a name of unknown type ( usually nouns... )", "there are some assumptions for optimization:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also called )"},
+			"comment": []interface{}{"matches a name of unknown type", "for nouns, these names may be treated as aliases for existing nouns.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "The name \"chest\" implies the treasure chest.", "there are some assumptions for optimizing matching:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also called )"},
 		},
 	}
 	Zt_Called = typeinfo.Flow{
@@ -871,7 +915,7 @@ func init() {
 			&Zt_NameCalled,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"called defines a noun and its kind in a single phrase.", "<kind> *called* [the] _name_.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
+			"comment": []interface{}{"called defines a noun and its kind in a single phrase.", "<kind> \"called\" [the] _name_.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
 		},
 	}
 	Zt_Names = typeinfo.Flow{
@@ -1063,10 +1107,7 @@ func init() {
 		}, {
 			Name:  "usually",
 			Label: "usually",
-			Markup: map[string]any{
-				"comment": "always the \"implies\" macro",
-			},
-			Type: &Zt_MacroName,
+			Type:  &Zt_Words,
 		}, {
 			Name:  "traits",
 			Label: "traits",
@@ -1076,7 +1117,7 @@ func init() {
 			&Zt_Matches,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns default traits to a kind.", "[the] <kind> are \"usually\" <traits>"},
+			"comment": []interface{}{"assigns default traits to a kind.", "<the kind> are \"usually\" <traits>"},
 		},
 	}
 	Zt_NounsTraitsKinds = typeinfo.Flow{
@@ -1113,7 +1154,48 @@ func init() {
 			&Zt_Matches,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"declares nouns with traits and kinds.", "[the] <nouns> are <traits> <kinds>", "although traits and kinds are both optional,", "at least one is required to match"},
+			"comment": []interface{}{"declares nouns with traits and kinds.", "<names> are <traits> <kinds>.", "although traits and kinds are both optional,", "at least one is required to match"},
+		},
+	}
+	Zt_KindsOf = typeinfo.Flow{
+		Name: "kinds_of",
+		Lede: "kinds_of",
+		Terms: []typeinfo.Term{{
+			Name:  "names",
+			Label: "names",
+			Type:  &Zt_Names,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "kinds_of",
+			Label: "kinds_of",
+			Markup: map[string]any{
+				"comment": "the phrases \"a kind of\" or \"kinds of\"",
+			},
+			Type: &Zt_Words,
+		}, {
+			Name:     "traits",
+			Label:    "traits",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"inform doesnt allow commas or ands here,", "since this definition reuses the traits list: it does allow comma/and."},
+			},
+			Type: &Zt_Traits,
+		}, {
+			Name:  "named_kind",
+			Label: "named_kind",
+			Markup: map[string]any{
+				"comment": []interface{}{"inform (weirdly) allows multiple kinds:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there.", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
+			},
+			Type: &Zt_NamedKind,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_Matches,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"<names> <are> \"a kind of\"/\"kinds of\" <traits> <kind>.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform this doesn't try to limit the names", "`The animals called kittens are a kind of things.` is legal."},
 		},
 	}
 }

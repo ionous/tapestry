@@ -65,7 +65,7 @@ Spec:with group:
           - "matched"
 
     - # called defines a noun and its kind in a single phrase.
-      # <kind> *called* [the] _name_.
+      # <kind> "called" [the] _name_.
       # as per inform, the name of the noun is everything after the word called
       # until "is" or "are" or the end of the line.
       # For instance: `The container called the trunk and the box is in the lobby`
@@ -187,21 +187,20 @@ Spec:with group:
           - true
 
     - # assigns default traits to a kind.
-      # [the] <kind> are "usually" <traits>
+      # <the kind> are "usually" <traits>
       Spec:slots:with flow:
       - "kinds_are_traits"
       - "matches"
       - Flow uses:
         - Term: "kinds"
         - Term: "are"
-        - # always the "implies" macro
-          Term:type:
+        - Term:type:
           - "usually"
-          - "macro_name"
+          - "words"
         - Term: "traits"
 
     - # declares nouns with traits and kinds.
-      # [the] <nouns> are <traits> <kinds>
+      # <names> are <traits> <kinds>.
       # although traits and kinds are both optional,
       # at least one is required to match
       Spec:slots:with flow:
@@ -221,3 +220,29 @@ Spec:with group:
         - Term:optional:
           - "kinds"
           - true
+
+    - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
+      # interesting to note that inform allows "some kind/s of"
+      # this is more strict.
+      # like inform this doesn't try to limit the names
+      # `The animals called kittens are a kind of things.` is legal.
+      Spec:slots:with flow:
+      - "kinds_of"
+      - "matches"
+      - Flow uses:
+        - Term: "names"
+        - Term: "are"
+        - # the phrases "a kind of" or "kinds of"
+          Term:type:
+          - "kinds_of"
+          - "words"
+        - # inform doesnt allow commas or ands here,
+          # since this definition reuses the traits list: it does allow comma/and.
+          Term:optional:
+          - "traits"
+          - true
+        - # inform (weirdly) allows multiple kinds:
+          # `A box is a kind of container and things.`
+          # but not if traits are specified, suggesting a switch there.
+          # this doesnt switch to special traits, and doesnt allow multiple kinds.
+          Term: "named_kind"

@@ -34,6 +34,10 @@ func (op *Words) Match(q Query, input *InputState, hashes ...uint64) (okay bool)
 	return
 }
 
+func (op *Words) Span() grok.Span {
+	return op.Matched.(grok.Span)
+}
+
 func (op *MacroName) Match(q Query, input *InputState, phrase grok.Span) (okay bool) {
 	if m, e := q.g.FindMacro(phrase); e != nil {
 		q.error("find macro", e)

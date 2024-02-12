@@ -11,6 +11,10 @@ func (op *NamedKind) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+func (op *NamedKind) Span() grok.Span {
+	return op.Matched.(Span)
+}
+
 func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optionally(q, &next, &op.Article) &&

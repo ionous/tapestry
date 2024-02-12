@@ -10,7 +10,7 @@ func (op *Called) GetName(_ grok.Article, traits, kinds []Matched) grok.Name {
 		Span:    op.Matched.(Span),
 		Exact:   true,
 		Traits:  traits,
-		Kinds:   append(kinds, op.NamedKind.Matched.(Span)),
+		Kinds:   append(kinds, op.NamedKind.Span()),
 	}
 }
 

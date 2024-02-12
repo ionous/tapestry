@@ -15,7 +15,7 @@ type Interpreter interface {
 // can produce full results when matched,
 type Matches interface {
 	Interpreter
-	GetResults() grok.Results
+	GetResults(Query) (grok.Results, error)
 }
 
 type NameCalled interface {

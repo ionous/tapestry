@@ -19,7 +19,7 @@ func xTestTraits(t *testing.T) {
 			var t jess.TraitsKind //
 			input := jess.InputState(ws)
 			if !t.Match(jess.MakeQuery(&known), &input) {
-				err = errors.New("failed to match")
+				err = errors.New("failed to match traits")
 			} else if cnt := len(input); cnt != 0 {
 				err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
 			} else {
@@ -37,29 +37,17 @@ func TestPhrases(t *testing.T) {
 			err = e
 		} else {
 			q := jess.MakeQuery(&known)
-			for _, m := range matches() {
-				input := jess.InputState(ws)
-				if !m.Match(q, &input) {
-					err = errors.New("failed to match")
-				} else if cnt := len(input); cnt != 0 {
-					err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
-				} else {
-					ret = m.GetResults()
-					err = nil // clear any previous error
-					break
-				}
+			input := jess.InputState(ws)
+			if m, ok := jess.Match(q, &input); !ok {
+				err = errors.New("failed to match phrase")
+			} else if cnt := len(input); cnt != 0 {
+				err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
+			} else {
+				ret, err = m.GetResults(q)
 			}
 		}
 		return
 	})
-}
-
-// could also autogenerate this list
-func matches() []jess.Matches {
-	return []jess.Matches{
-		new(jess.NounsTraitsKinds),
-		new(jess.KindsAreTraits),
-	}
 }
 
 type Word = grok.Word
@@ -108,7 +96,10 @@ var known = info{
 		"on", "support", grok.Macro_ManySecondary, true,
 		//
 		"suspicious of", "suspect", grok.Macro_ManyMany, false,
-		// fix: should this really be a macro?
+		// kinds: should these really be a macro?
+		"kinds of", "inherit", grok.Macro_PrimaryOnly, false, // for "are kinds of containers"
+		"a kind of", "inherit", grok.Macro_PrimaryOnly, false, // for "a kind of container"
+		// fix: should these really be a macro?
 		"usually", "implies", grok.Macro_PrimaryOnly, false,
 	),
 	kinds: grok.PanicSpans(
