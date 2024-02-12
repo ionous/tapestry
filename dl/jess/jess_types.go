@@ -63,6 +63,35 @@ func (op *Matches_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// name_called, a type of slot.
+var Zt_NameCalled = typeinfo.Slot{
+	Name: "name_called",
+	Markup: map[string]any{
+		"comment": []interface{}{"represents a single name or \"x called y\" phrase", "both can generate a name.", "todo: find a better name for this slot."},
+	},
+}
+
+// holds a single slot.
+type NameCalled_Slot struct{ Value NameCalled }
+
+// implements typeinfo.Instance for a single slot.
+func (*NameCalled_Slot) TypeInfo() typeinfo.T {
+	return &Zt_NameCalled
+}
+
+// holds a slice of slots.
+type NameCalled_Slots []NameCalled
+
+// implements typeinfo.Instance for a series of slots.
+func (*NameCalled_Slots) TypeInfo() typeinfo.T {
+	return &Zt_NameCalled
+}
+
+// implements typeinfo.Repeats
+func (op *NameCalled_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
 type Article struct {
 	Matched Matched
 	Markup  map[string]any
@@ -188,6 +217,9 @@ func (op *Name) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
+// ensure the command implements its specified slots:
+var _ NameCalled = (*Name)(nil)
+
 // holds a slice of type name
 type Name_Slice []Name
 
@@ -204,7 +236,8 @@ func (op *Name_Slice) Repeats() bool {
 type Called struct {
 	NamedKind NamedKind
 	Called    Words
-	Name      Matched
+	Article   *Article
+	Matched   Matched
 	Markup    map[string]any
 }
 
@@ -224,6 +257,9 @@ func (op *Called) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
+// ensure the command implements its specified slots:
+var _ NameCalled = (*Called)(nil)
+
 // holds a slice of type called
 type Called_Slice []Called
 
@@ -237,10 +273,9 @@ func (op *Called_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches at least one name.
 type Names struct {
 	Article         *Article
-	Name            Name
+	NameCalled      NameCalled
 	AdditionalNames *AdditionalNames
 	Markup          map[string]any
 }
@@ -690,6 +725,7 @@ var Z_Types = typeinfo.TypeSet{
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_Matched,
 	&Zt_Matches,
+	&Zt_NameCalled,
 }
 
 // a list of all flows in this this package
@@ -723,26 +759,27 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1887918947148326916:  (*AdditionalTraits)(nil), /* AdditionalTraits traits: */
 	503552734697422485:   (*Are)(nil),              /* Are: */
 	8854300316672007225:  (*Article)(nil),          /* Article: */
-	2973134911577547915:  (*Called)(nil),           /* Called namedKind:called:name: */
 	4230553755039810705:  (*CommaAnd)(nil),         /* CommaAnd: */
 	906205099353614907:   (*Kinds)(nil),            /* Kinds article:namedKind: */
 	13757561154068086581: (*Kinds)(nil),            /* Kinds article:namedKind:additionalKinds: */
 	5500689320692290603:  (*Kinds)(nil),            /* Kinds namedKind: */
 	3201719486692867525:  (*Kinds)(nil),            /* Kinds namedKind:additionalKinds: */
 	15972029076576488422: (*MacroName)(nil),        /* MacroName: */
-	7786819852959314004:  (*Name)(nil),             /* Name: */
 	7841004129963498806:  (*NamedKind)(nil),        /* NamedKind: */
 	10153339211572068944: (*NamedTrait)(nil),       /* NamedTrait: */
-	10073336598044816960: (*Names)(nil),            /* Names article:name: */
-	15330476688882292167: (*Names)(nil),            /* Names article:name:additionalNames: */
-	4500297491524973516:  (*Names)(nil),            /* Names name: */
-	17351915174502247643: (*Names)(nil),            /* Names name:additionalNames: */
+	15953681829948563039: (*Names)(nil),            /* Names article:nameCalled: */
+	12663491820257483728: (*Names)(nil),            /* Names article:nameCalled:additionalNames: */
+	2885167070626735883:  (*Names)(nil),            /* Names nameCalled: */
+	13348099214983340196: (*Names)(nil),            /* Names nameCalled:additionalNames: */
 	5152227064767964907:  (*Traits)(nil),           /* Traits article:namedTrait: */
 	9701794894107240735:  (*Traits)(nil),           /* Traits article:namedTrait:additionalTraits: */
 	931939769765876491:   (*Traits)(nil),           /* Traits namedTrait: */
 	15792725219640924031: (*Traits)(nil),           /* Traits namedTrait:additionalTraits: */
 	1154838578286238320:  (*Words)(nil),            /* Words: */
+	5895523973570511286:  (*Called)(nil),           /* name_called=Called namedKind:called:article:matched: */
+	6380748083159177382:  (*Called)(nil),           /* name_called=Called namedKind:called:matched: */
 	14842108735299651344: (*KindsAreTraits)(nil),   /* matches=KindsAreTraits kinds:are:usually:traits: */
+	10568809665568612324: (*Name)(nil),             /* name_called=Name: */
 	3419427774986167184:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are: */
 	7089760760810957754:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd: */
 	5233850846045406501:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd:kinds: */
@@ -799,6 +836,9 @@ func init() {
 			},
 			Type: &Zt_Matched,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NameCalled,
+		},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches a name of unknown type ( usually nouns... )", "there are some assumptions for optimization:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also called )"},
 		},
@@ -818,12 +858,20 @@ func init() {
 			},
 			Type: &Zt_Words,
 		}, {
-			Name:  "name",
-			Label: "name",
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "matched",
+			Label: "matched",
 			Type:  &Zt_Matched,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NameCalled,
+		},
 		Markup: map[string]any{
-			"comment": []interface{}{"called defines a noun and its kind in a single phrase.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
+			"comment": []interface{}{"called defines a noun and its kind in a single phrase.", "<kind> *called* [the] _name_.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
 		},
 	}
 	Zt_Names = typeinfo.Flow{
@@ -835,9 +883,9 @@ func init() {
 			Optional: true,
 			Type:     &Zt_Article,
 		}, {
-			Name:  "name",
-			Label: "name",
-			Type:  &Zt_Name,
+			Name:  "name_called",
+			Label: "name_called",
+			Type:  &Zt_NameCalled,
 		}, {
 			Name:     "additional_names",
 			Label:    "additional_names",
@@ -845,7 +893,7 @@ func init() {
 			Type:     &Zt_AdditionalNames,
 		}},
 		Markup: map[string]any{
-			"comment": "matches at least one name.",
+			"comment": []interface{}{"matches at least one name.", "fix: maybe this should be called \"nouns\" ( and additional nouns )"},
 		},
 	}
 	Zt_AdditionalNames = typeinfo.Flow{

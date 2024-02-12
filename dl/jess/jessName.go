@@ -2,6 +2,15 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
+func (op *Name) GetName(art grok.Article, traits, kinds []Matched) grok.Name {
+	return grok.Name{
+		Article: art,
+		Span:    op.Matched.(Span),
+		Traits:  traits,
+		Kinds:   kinds,
+	}
+}
+
 func (op *Name) Match(q Query, input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
@@ -12,7 +21,7 @@ func (op *Name) Match(q Query, input *InputState) (okay bool) {
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optionally(q, &next, &op.Article) &&
-		op.Name.Match(q, &next) &&
+		TryNameCalled(q, &next, &op.NameCalled) &&
 		Optionally(q, &next, &op.AdditionalNames) {
 		*input, okay = next, true
 	}
@@ -31,12 +40,12 @@ func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
 func (op *Names) Reduce(traits, kinds []Matched) []grok.Name {
 	var out []grok.Name
 	for t := *op; ; {
-		out = append(out, grok.Name{
-			Article: ReduceArticle(t.Article),
-			Span:    t.Name.Matched.(Span),
-			Traits:  traits,
-			Kinds:   kinds,
-		})
+		// fix? move t.Article into the sub-phrases?
+		// name, and named_kind, named_trait would become:
+		// TheName, TheKind, TheTrait maybe (article would move out of kinds, names, traits )
+		a := ReduceArticle(op.Article)
+		n := t.NameCalled.GetName(a, traits, kinds)
+		out = append(out, n)
 		// next name:
 		if next := t.AdditionalNames; next == nil {
 			break

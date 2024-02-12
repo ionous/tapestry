@@ -40,13 +40,24 @@ Spec:with group:
           - "_"
           - "matched"
 
-    - # matches a name of unknown type ( usually nouns... )
-      # there are some assumptions for optimization:
+    - # represents a single name or "x called y" phrase
+      # both can generate a name.
+      # todo: find a better name for this slot.
+      Spec:with slot:
+      - "name_called"
+      - Slot: true
+
+    - # matches a name of unknown type
+      # for nouns, these names may be treated as aliases for existing nouns.
+      # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
+      # The name "chest" implies the treasure chest.
+      # there are some assumptions for optimizing matching:
       # the words "is/are/comma/and" are never part of noun names.
       # future: allow quoted "titles" ( which are then allowed to break those assumptions )
       # ( see also called )
-      Spec:with flow:
+      Spec:slots:with flow:
       - "name"
+      - "name_called"
       - Flow uses:
         - # the match is always implemented as a span.
           Term:name:
@@ -54,30 +65,34 @@ Spec:with group:
           - "matched"
 
     - # called defines a noun and its kind in a single phrase.
+      # <kind> *called* [the] _name_.
       # as per inform, the name of the noun is everything after the word called
       # until "is" or "are" or the end of the line.
       # For instance: `The container called the trunk and the box is in the lobby`
       # generates a single noun named "the trunk and the box."
-      Spec:with flow:
+      Spec:slots:with flow:
       - "called"
+      - "name_called"
       - Flow uses:
         - Term: "named_kind"
         - # the word "called"
           Term:type:
           - "called"
           - "words"
-        - Term:type:
-          - "name"
-          - "matched"
+        - Term:optional:
+          - "article"
+          - true
+        - Term: "matched"
 
     - # matches at least one name.
+      # fix: maybe this should be called "nouns" ( and additional nouns )
       Spec:with flow:
       - "names"
       - Flow uses:
         - Term:optional:
           - "article"
           - true
-        - Term: "name"
+        - Term: "name_called"
         - Term:optional:
           - "additional_names"
           - true
@@ -90,7 +105,6 @@ Spec:with group:
           Term: "comma_and"
         - Term: "names"
 
-
     - # matches the name of an (existing) kind.
       Spec:with flow:
       - "named_kind"
@@ -98,7 +112,6 @@ Spec:with group:
         - Term:name:
           - "_"
           - "matched"
-
 
     - # matches at least one kind.
       Spec:with flow:

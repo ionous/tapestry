@@ -17,3 +17,7 @@ type Matches interface {
 	Interpreter
 	GetResults() grok.Results
 }
+
+type NameCalled interface {
+	GetName(art grok.Article, traits, kinds []Matched) grok.Name
+}
