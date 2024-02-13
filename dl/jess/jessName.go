@@ -2,16 +2,25 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
-func (op *Name) GetName(art grok.Article, traits, kinds []Matched) grok.Name {
+func (op *TheName) GetName(traits, kinds []Matched) grok.Name {
 	return grok.Name{
-		Article: art,
+		Article: ReduceArticle(op.Article),
 		Span:    op.Matched.(Span),
 		Traits:  traits,
 		Kinds:   kinds,
 	}
 }
 
-func (op *Name) Match(q Query, input *InputState) (okay bool) {
+func (op *TheName) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	Optionally(q, &next, &op.Article) &&
+		op.matchName(q, &next) {
+		*input, okay = next, true
+	}
+	return
+}
+
+func (op *TheName) matchName(q Query, input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
@@ -20,8 +29,7 @@ func (op *Name) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	Optionally(q, &next, &op.Article) &&
-		TryNameCalled(q, &next, &op.NameCalled) &&
+	TryNameCalled(q, &next, &op.NameCalled) &&
 		Optionally(q, &next, &op.AdditionalNames) {
 		*input, okay = next, true
 	}
@@ -43,8 +51,7 @@ func (op *Names) Reduce(traits, kinds []Matched) []grok.Name {
 		// fix? move t.Article into the sub-phrases?
 		// name, and named_kind, named_trait would become:
 		// TheName, TheKind, TheTrait maybe (article would move out of kinds, names, traits )
-		a := ReduceArticle(op.Article)
-		n := t.NameCalled.GetName(a, traits, kinds)
+		n := t.NameCalled.GetName(traits, kinds)
 		out = append(out, n)
 		// next name:
 		if next := t.AdditionalNames; next == nil {

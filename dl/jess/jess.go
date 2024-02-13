@@ -19,5 +19,5 @@ type Matches interface {
 }
 
 type NameCalled interface {
-	GetName(art grok.Article, traits, kinds []Matched) grok.Name
+	GetName(traits, kinds []Matched) grok.Name
 }

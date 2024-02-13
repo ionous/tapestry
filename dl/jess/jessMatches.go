@@ -87,7 +87,7 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 		op.Are.Match(q, &next) &&
 		op.kindsOf(q, &next) &&
 		Optionally(q, &next, &op.Traits) &&
-		op.NamedKind.Match(q, &next) {
+		op.TheKind.Match(q, &next) {
 		*input, okay = next, true
 	}
 	return
@@ -115,7 +115,7 @@ func (op *KindsOf) GetResults(q Query) (ret grok.Results, err error) {
 		if op.Traits != nil {
 			traits = op.Traits.GetTraits()
 		}
-		kinds = []grok.Matched{op.NamedKind.Span()}
+		kinds = []grok.Matched{op.TheKind.Span()}
 		names := op.Names.Reduce(traits, kinds)
 		// Primary, Secondary, Macro
 		// get the names

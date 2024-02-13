@@ -38,7 +38,7 @@ func (op *Words) Span() grok.Span {
 	return op.Matched.(grok.Span)
 }
 
-func (op *MacroName) Match(q Query, input *InputState, phrase grok.Span) (okay bool) {
+func (op *Verb) Match(q Query, input *InputState, phrase grok.Span) (okay bool) {
 	if m, e := q.g.FindMacro(phrase); e != nil {
 		q.error("find macro", e)
 	} else if grok.HasPrefix(input.Words(), phrase) {

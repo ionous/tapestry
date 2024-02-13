@@ -9,10 +9,22 @@ For instance:
 * `The box is a container. The box is a closed.`: jess ignores the 'a' in front of the trait.
 * `The box is a transparent and container.`: because phrases like: "The box is transparent and a container" are supported, it permits some other less than sensible phrases as well.
 * `The container called the trunk and the box is in the lobby.`: creates one single container with an unusual name.
+* `The containers called boxes are a kind of closed thing.`: 
 
 Inform has these same issues.
 
+## Some known differences from Inform
 
+1. A box is a kind of closed and transparent container.
+2. A box is a kind of closed transparent container.
+3. A box is a kind of container and thing.
+
+The first two are okay with jess, the third one is not; 
+In inform <sup>1.68.1</sup>, the first and third are okay.
+
+* `Buckets and baskets are kinds of container.` in inform becomes two kinds: "Bucketss" and "basketss".
+
+ 
 # regarding traits there are a a few patterns:
 
 1. "(det) traits kind are verbing names."
