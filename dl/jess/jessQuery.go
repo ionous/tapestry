@@ -6,13 +6,21 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/grok"
 )
 
+type LogLevel int
+
+const (
+	LogNothing LogLevel = iota
+	LogWarning
+	LogEverything
+)
+
 type Query struct {
-	g     grok.Grokker
-	Quiet bool
+	g   grok.Grokker
+	Log LogLevel
 }
 
 func MakeQuery(g grok.Grokker) Query {
-	return Query{g: g}
+	return Query{g: g, Log: LogWarning}
 }
 
 // returns -1 on error
@@ -73,13 +81,19 @@ func (q Query) FindMacro(ws InputState) (ret grok.Macro, retWidth int) {
 }
 
 func (q Query) error(fn string, e error) {
-	if !q.Quiet {
+	if q.Log > LogNothing {
 		log.Println(fn, e)
 	}
 }
 
 func (q Query) log(msg string) {
-	if !q.Quiet {
+	if q.Log > LogNothing {
 		log.Println(msg)
+	}
+}
+
+func (q Query) note(msg string) {
+	if q.Log > LogWarning {
+		log.Println("note:", msg)
 	}
 }

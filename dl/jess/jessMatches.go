@@ -6,10 +6,9 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kinds.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
-		// fix: move macro to results...?
-		// ( only match words here )
 		op.usually(q, &next) &&
 		op.Traits.Match(q, &next) {
+		q.note("matched KindsAreTraits")
 		*input, okay = next, true
 	}
 	return
@@ -57,6 +56,7 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 		op.kindsOf(q, &next) &&
 		(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) {
+		q.note("matched KindsOf")
 		*input, okay = next, true
 	}
 	return
@@ -86,9 +86,6 @@ func (op *KindsOf) GetResults(q Query) (ret grok.Results, err error) {
 		}
 		kinds = []grok.Matched{op.Kind.Span()}
 		names := op.Nouns.Reduce(traits, kinds)
-		// Primary, Secondary, Macro
-		// get the names
-		// apply the kinds and traits to them
 		ret = grok.Results{
 			Macro:   m,
 			Primary: names,
@@ -97,41 +94,24 @@ func (op *KindsOf) GetResults(q Query) (ret grok.Results, err error) {
 	return
 }
 
-// func (op *NounsTraitsKinds) GetResults(Query) (ret grok.Results, err error) {
-// 	var traits, kinds []grok.Matched
-// 	if op.Traits != nil {
-// 		traits = op.Traits.GetTraits()
-// 	}
-// 	if op.Kinds != nil {
-// 		kinds = op.Kinds.GetKinds()
-// 	}
-// 	names := op.Names.Reduce(traits, kinds)
-// 	// Primary, Secondary, Macro
-// 	// get the names
-// 	// apply the kinds and traits to them
-// 	return grok.Results{
-// 		Primary: names,
-// 	}, nil
-// }
-
 func (op *VerbLinks) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Verb.Match(q, &next) &&
 		op.Nouns.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.OtherNouns.Match(q, &next) {
+		q.note("matched VerbLinks")
 		*input, okay = next, true
 	}
 	return
 }
 
 func (op *VerbLinks) GetResults(Query) (ret grok.Results, _ error) {
-	// fix: swapping
-	ret = grok.Results{
-		Primary:   op.Nouns.Reduce(nil, nil),      // ASLKLA+
-		Secondary: op.OtherNouns.Reduce(nil, nil), // ASLKLA+
-		Macro:     op.Verb.Macro,
-	}
+	ret = makeResult(
+		op.Verb.Macro,
+		op.Nouns.Reduce(nil, nil),      // fix?
+		op.OtherNouns.Reduce(nil, nil), // fix?
+	)
 	return
 }
 
@@ -141,17 +121,18 @@ func (op *LinksVerb) Match(q Query, input *InputState) (okay bool) {
 		op.Are.Match(q, &next) &&
 		op.Verb.Match(q, &next) &&
 		op.OtherNouns.Match(q, &next) {
+		q.note("matched LinksVerb")
 		*input, okay = next, true
 	}
 	return
 }
 
 func (op *LinksVerb) GetResults(Query) (ret grok.Results, _ error) {
-	ret = grok.Results{
-		Primary:   op.Nouns.Reduce(nil, nil),      // ASLKLA+
-		Secondary: op.OtherNouns.Reduce(nil, nil), // ASLKLA+
-		Macro:     op.Verb.Macro,
-	}
+	ret = makeResult(
+		op.Verb.Macro,
+		op.Nouns.Reduce(nil, nil),      // fix?
+		op.OtherNouns.Reduce(nil, nil), // fix?
+	)
 	return
 }
 
@@ -160,6 +141,7 @@ func (op *LinksAdjectives) Match(q Query, input *InputState) (okay bool) {
 	op.Nouns.LimitedMatch(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
+		q.note("matched LinksAdjectives")
 		Optional(q, &next, &op.VerbPhrase)
 		*input, okay = next, true
 	}
@@ -173,10 +155,6 @@ func (op *LinksAdjectives) GetResults(Query) (ret grok.Results, _ error) {
 		m, twos = c.Verb.Macro, c.Names.Reduce(nil, nil) // traits and kinds?
 	}
 	ones := op.Nouns.Reduce(op.Adjectives.Reduce())
-	ret = grok.Results{
-		Primary:   ones,
-		Secondary: twos,
-		Macro:     m,
-	}
+	ret = makeResult(m, ones, twos)
 	return
 }
