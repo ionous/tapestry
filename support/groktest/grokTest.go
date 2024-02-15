@@ -39,6 +39,18 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		skip   any
 	}{
 		{
+			test: `Devices are a kind of thing.`,
+			result: map[string]any{
+				"macro": "inherit",
+				"primary": []map[string]any{
+					{
+						"kinds": []string{"thing"},
+						"name":  "Devices",
+					},
+				},
+			},
+		},
+		{
 			// note: "Devices are fixed in place" will parse properly
 			// but storyGrok will assume that the name "devices" refers to a noun
 			// and ( probably, hopefully ) some error will occur.
@@ -71,6 +83,58 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 				},
 			},
 		},
+		{
+			// note: in inform...	 §4.14. Duplicates
+			// "Two circles are in the Lab."
+			// it only works if "circles" is a known kind
+			// otherwise, it assumes "two circles" is the complete name of a single noun.
+			test: `Two things are in the kitchen.`,
+			result: map[string]any{
+				"macro": "contain",
+				"secondary": []map[string]any{{
+					"count": 2,
+					"kinds": []string{"things"},
+				}},
+				"primary": []map[string]any{{
+					"det":  "the",
+					"name": "kitchen",
+				}},
+			},
+		},
+
+		{
+			test: `Hershel is carrying scissors and a pen.`,
+			result: map[string]any{
+				"macro": "carry",
+				"primary": []map[string]any{{
+					"name": "Hershel",
+				}},
+				"secondary": []map[string]any{{
+					"name": "scissors",
+				}, {
+					"det":  "a",
+					"name": "pen",
+				}},
+			},
+		},
+		// reverse carrying relation.
+		{
+			test: `The scissors and a pen are carried by Hershel.`,
+			result: map[string]any{
+				"macro": "carry",
+				"primary": []map[string]any{{
+					"name": "Hershel",
+				}},
+				"secondary": []map[string]any{{
+					"det":  "the",
+					"name": "scissors",
+				}, {
+					"det":  "a",
+					"name": "pen",
+				}},
+			},
+		},
+
 		// simple trait:
 		{
 			test: `The bottle is closed.`,
@@ -135,71 +199,6 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 				}},
 			},
 		},
-		{
-			test: `Devices are a kind of thing.`,
-			result: map[string]any{
-				"macro": "inherit",
-				"primary": []map[string]any{
-					{
-						"kinds": []string{"thing"},
-						"name":  "Devices",
-					},
-				},
-			},
-		},
-
-		{
-			// note: in inform...	 §4.14. Duplicates
-			// "Two circles are in the Lab."
-			// it only works if "circles" is a known kind
-			// otherwise, it assumes "two circles" is the complete name of a single noun.
-			test: `Two things are in the kitchen.`,
-			result: map[string]any{
-				"macro": "contain",
-				"secondary": []map[string]any{{
-					"count": 2,
-					"kinds": []string{"things"},
-				}},
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "kitchen",
-				}},
-			},
-		},
-
-		{
-			test: `Hershel is carrying scissors and a pen.`,
-			result: map[string]any{
-				"macro": "carry",
-				"primary": []map[string]any{{
-					"name": "Hershel",
-				}},
-				"secondary": []map[string]any{{
-					"name": "scissors",
-				}, {
-					"det":  "a",
-					"name": "pen",
-				}},
-			},
-		},
-		// reverse carrying relation.
-		{
-			test: `The scissors and a pen are carried by Hershel.`,
-			result: map[string]any{
-				"macro": "carry",
-				"primary": []map[string]any{{
-					"name": "Hershel",
-				}},
-				"secondary": []map[string]any{{
-					"det":  "the",
-					"name": "scissors",
-				}, {
-					"det":  "a",
-					"name": "pen",
-				}},
-			},
-		},
-
 		// a kind of declaration ( uses a 'macro' verb )
 		// "is" left of macro
 		{
@@ -454,10 +453,10 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		},
 		// TODO: values.
 		{
-			//test :  `The bottle in the kitchen is openable and has age 42.`,
+			//test:  `The bottle in the kitchen is openable and has age 42.`,
 		},
 		{
-			//test : `The age of the bottle is 42.`,
+			//test: `The age of the bottle is 42.`,
 		},
 		// todo:  the device called the detonator is on the supporter called the shelf and is proper named"
 		// todo: In the lobby are two supporters" ( and "Two supporters are in..." works fine. )
