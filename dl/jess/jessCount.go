@@ -3,6 +3,17 @@ package jess
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
 func (op *CountedNoun) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	(Optional(q, &next, &op.Article) || true) &&
+		op.matchNumber(q, &next) &&
+		op.Kind.Match(q, &next) {
+		*input, okay = next, true
+	}
+	return
+}
+
+// try a word as a number...
+func (op *CountedNoun) matchNumber(q Query, input *InputState) (okay bool) {
 	if ws := input.Words(); len(ws) > 0 {
 		word := ws[0].String()
 		if v, ok := grok.WordsToNum(word); ok && v > 0 {
