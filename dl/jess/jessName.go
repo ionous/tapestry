@@ -13,7 +13,7 @@ func (op *Name) GetName(traits, kinds []Matched) grok.Name {
 
 func (op *Name) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	Optionally(q, &next, &op.Article) &&
+	(Optional(q, &next, &op.Article) || true) &&
 		op.matchName(q, &next) {
 		*input, okay = next, true
 	}
@@ -30,7 +30,7 @@ func (op *Name) matchName(q Query, input *InputState) (okay bool) {
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Name.Match(q, &next) &&
-		Optionally(q, &next, &op.AdditionalNames) {
+		(Optional(q, &next, &op.AdditionalNames) || true) {
 		*input, okay = next, true
 	}
 	return

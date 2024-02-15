@@ -4,13 +4,13 @@ import "git.sr.ht/~ionous/tapestry/support/grok"
 
 func (op *Adjectives) Match(q Query, input *InputState) (okay bool) {
 	next := *input
-	traits := Optionally(q, &next, &op.Traits)
+	traits := Optional(q, &next, &op.Traits)
 	if traits {
-		Optionally(q, &next, &op.CommaAnd)
+		Optional(q, &next, &op.CommaAnd)
 	}
-	kind := Optionally(q, &next, &op.Kind)
+	kind := Optional(q, &next, &op.Kind)
 	if kind {
-		Optionally(q, &next, &op.AdditionalAdjectives)
+		Optional(q, &next, &op.AdditionalAdjectives)
 	}
 	if traits || kind {
 		*input, okay = next, true

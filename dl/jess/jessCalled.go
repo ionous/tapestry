@@ -18,7 +18,7 @@ func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kind.Match(q, &next) &&
 		op.Called.Match(q, &next, grok.Keyword.Called) &&
-		Optionally(q, &next, &op.Article) &&
+		(Optional(q, &next, &op.Article) || true) &&
 		op.matchName(q, &next) {
 		*input, okay = next, true
 	}

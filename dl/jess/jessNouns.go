@@ -12,13 +12,14 @@ func (op *Nouns) LimitedMatch(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Nouns) match(q Query, input *InputState, skipAnon bool) (okay bool) {
-	if Optionally(q, input, &op.CountedNoun) ||
-		Optionally(q, input, &op.KindCalled) ||
-		(!skipAnon && Optionally(q, input, &op.Kind)) ||
-		Optionally(q, input, &op.Name) {
+	if next := *input; // optionally always returns true.
+	Optional(q, &next, &op.CountedNoun) ||
+		Optional(q, &next, &op.KindCalled) ||
+		(!skipAnon && Optional(q, &next, &op.Kind)) ||
+		Optional(q, &next, &op.Name) {
 		// as long as one succeeded, try matching additional nouns too...
-		Optionally(q, input, &op.AdditionalNouns)
-		okay = true
+		Optional(q, &next, &op.AdditionalNouns)
+		*input, okay = next, true
 	}
 	return
 }

@@ -55,7 +55,7 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 	op.Nouns.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.kindsOf(q, &next) &&
-		Optionally(q, &next, &op.Traits) &&
+		(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) {
 		*input, okay = next, true
 	}
@@ -159,8 +159,8 @@ func (op *LinksAdjectives) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Nouns.LimitedMatch(q, &next) &&
 		op.Are.Match(q, &next) &&
-		op.Adjectives.Match(q, &next) &&
-		Optionally(q, &next, &op.VerbPhrase) {
+		op.Adjectives.Match(q, &next) {
+		Optional(q, &next, &op.VerbPhrase)
 		*input, okay = next, true
 	}
 	return

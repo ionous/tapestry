@@ -20,7 +20,7 @@ func ReduceArticle(op *Article) (ret grok.Article) {
 
 func (op *Trait) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	Optionally(q, &next, &op.Article) &&
+	(Optional(q, &next, &op.Article) || true) &&
 		op.matchTrait(q, &next) {
 		*input, okay = next, true
 	}
@@ -38,8 +38,8 @@ func (op *Trait) matchTrait(q Query, input *InputState) (okay bool) {
 // all the trait info is in this... even additional traits.
 func (op *Traits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	op.Trait.Match(q, &next) &&
-		Optionally(q, &next, &op.AdditionalTraits) {
+	op.Trait.Match(q, &next) {
+		Optional(q, &next, &op.AdditionalTraits)
 		*input, okay = next, true
 	}
 	return
@@ -59,31 +59,10 @@ func (op *Traits) GetTraits() []Matched {
 }
 
 func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; Optionally(q, &next, &op.CommaAnd) &&
+	if next := *input; //
+	(Optional(q, &next, &op.CommaAnd) || true) &&
 		op.Traits.Match(q, &next) {
 		*input, okay = next, true
 	}
 	return
-}
-
-// a generic method to read an optional element.
-// always returns true.
-// optional elements are implemented by pointer types
-// the pointers are required to implement Interpreter
-func Optionally[M any,
-	IM interface {
-		// the syntax for this feels very strange
-		// the method takes an 'out' pointer ( so go can determine the type by inference )
-		// the "interface" is a reused keyword, signifying a type constraint
-		// indicating we want pointers to M to also be (implement) Interpreter.
-		// *phew*
-		*M
-		Interpreter
-	}](q Query, input *InputState, out **M) bool {
-	var v M
-	if next := *input; IM(&v).Match(q, &next) {
-		*out = &v
-		*input = next
-	}
-	return true
 }
