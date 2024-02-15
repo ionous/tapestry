@@ -57,7 +57,7 @@ func (op *Nouns) GetName(traits, kinds []Matched) (ret grok.Name) {
 	return
 }
 
-func (op *Nouns) Reduce(traits, kinds []Matched) (ret []grok.Name) {
+func (op *Nouns) GetNames(traits, kinds []Matched) (ret []grok.Name) {
 	for t := *op; ; {
 		n := t.GetName(traits, kinds)
 		ret = append(ret, n)

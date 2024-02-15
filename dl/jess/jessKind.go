@@ -26,10 +26,10 @@ func (op *Kind) Span() grok.Span {
 
 func (op *Kind) GetName(traits, kinds []Matched) (ret grok.Name) {
 	return grok.Name{
-		Article: ReduceArticle(op.Article),
-		Traits:  traits,
-		Kinds:   append(kinds, op.Matched),
-		// no name, anonymous.
+		Traits: traits,
+		Kinds:  append(kinds, op.Matched),
+		// no name and no article because, the object itself is anonymous.
+		// ( the article associated with the kind gets eaten )
 	}
 }
 

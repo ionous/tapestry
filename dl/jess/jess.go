@@ -51,8 +51,8 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Matches, okay 
 	return
 }
 
-func makeResult(macro grok.Macro, a, b []grok.Name) grok.Results {
-	if macro.Reversed {
+func makeResult(macro grok.Macro, reverse bool, a, b []grok.Name) grok.Results {
+	if reverse {
 		a, b = b, a
 	}
 	return grok.Results{

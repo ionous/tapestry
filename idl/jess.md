@@ -26,6 +26,9 @@ In inform <sup>1.68.1</sup>, the first and third are okay.
 
 * `Buckets and baskets are kinds of container.` in inform becomes two kinds: "Bucketss" and "basketss". The extra s isnt present with jess.
 
+Inform is looser with its article matching in some cases:
+
+*  `The the closed box called the Pandorica is open.` and `The a a a openable container called the vase is in the kitchen.` are valid in inform for reasons i don't entirely understand.
  
 # regarding traits there are a few patterns:
 

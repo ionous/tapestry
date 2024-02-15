@@ -34,7 +34,7 @@ Spec:with group:
       # The name "chest" implies the treasure chest.
       # To optimizing matching the words "is/are/comma/and" are never part of noun names.
       # future: allow quoted "titles" ( which are then allowed to break those assumptions )
-      # ( see also kind_called )
+      # ( see also 'kind_called' )
       Spec:with flow:
       - "name"
       - Flow uses:
@@ -56,7 +56,7 @@ Spec:with group:
       Spec:with flow:
       - "additional_names"
       - Flow uses:
-        - # unlike traits, a separator is required between the names of names
+        - # a separator is required between the names of names
           Term: "comma_and"
         - Term: "names"
 
@@ -69,6 +69,11 @@ Spec:with group:
       Spec:with flow:
       - "kind_called"
       - Flow uses:
+        - # note: doesn't use 'adjectives' because this doesn't allow
+          # repetitions of the traits and kind.
+          Term:optional:
+          - "traits"
+          - true
         - Term: "kind"
         - # the word "called"
           Term:type:
@@ -111,7 +116,7 @@ Spec:with group:
       Spec:with flow:
       - "additional_nouns"
       - Flow uses:
-        - # unlike traits, a separator is required between the nouns of nouns
+        - # a separator is required between the nouns of nouns
           Term: "comma_and"
         - Term: "nouns"
 
@@ -150,7 +155,7 @@ Spec:with group:
       Spec:with flow:
       - "additional_kinds"
       - Flow uses:
-        - # unlike traits, a separator is required between the names of kinds
+        - # a separator is required between the names of kinds
           Term: "comma_and"
         - Term: "kinds"
 
@@ -238,7 +243,7 @@ Spec:with group:
           - "kinds_of"
           - "words"
         - # inform doesnt allow commas or ands here,
-          # since this definition reuses the traits list: it does allow comma/and.
+          # jess reuses the traits list here, so it does allow comma/and.
           Term:optional:
           - "traits"
           - true
@@ -248,8 +253,11 @@ Spec:with group:
           # this doesnt switch to special traits, and doesnt allow multiple kinds.
           Term: "kind"
 
-    - # verb called are called.
+    - # verb nouns are (other) nouns.
       # ex. `In the coffin are some coins, a notebook, and the gripping hand.`
+      # This intentionally doesn't recognize adjectives attached to named nouns.
+      # "In the closed coffin" generates a noun with the name "closed coffin"
+      # not a coffin in an initially closed state.
       Spec:with flow:
       - "verb_links"
       - Flow uses:
@@ -260,7 +268,7 @@ Spec:with group:
           - "other_nouns"
           - "nouns"
 
-    - # verb called are called.
+    - # nouns are verb (other) nouns.
       # ex. `The thing called the stake is on the supporter called the altar.`
       Spec:with flow:
       - "links_verb"
@@ -272,9 +280,11 @@ Spec:with group:
           - "other_nouns"
           - "nouns"
 
-    - # verb called are called.
+    - # nouns are adjectives [verb names].
       # ex. `The bottle is a transparent, open, container.`
       # `The coffin is a closed container in the antechamber.`
+      # This is the *only* way of assigning nouns initial states directly.
+      # All other phrases require a kind to be involved, here the kind is optional.
       Spec:with flow:
       - "links_adjectives"
       - Flow uses:

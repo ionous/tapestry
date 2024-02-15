@@ -37,6 +37,7 @@ func TestPhrases(t *testing.T) {
 			err = e
 		} else {
 			q := jess.MakeQuery(&known)
+			// q.Log = jess.LogEverything
 			input := jess.InputState(ws)
 			if m, ok := jess.Match(q, &input); !ok {
 				err = errors.New("failed to match phrase")

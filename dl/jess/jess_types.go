@@ -247,6 +247,7 @@ func (op *AdditionalNames_Slice) Repeats() bool {
 }
 
 type KindCalled struct {
+	Traits  *Traits
 	Kind    Kind
 	Called  Words
 	Article *Article
@@ -1093,6 +1094,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17757668305058379307: (*Kind)(nil),                 /* Kind matched: */
 	2217456341527734037:  (*KindCalled)(nil),           /* KindCalled kind:called:article:matched: */
 	7883278166734757597:  (*KindCalled)(nil),           /* KindCalled kind:called:matched: */
+	11434548771906794500: (*KindCalled)(nil),           /* KindCalled traits:kind:called:article:matched: */
+	15204937038648752928: (*KindCalled)(nil),           /* KindCalled traits:kind:called:matched: */
 	13796388782242617656: (*Kinds)(nil),                /* Kinds kind: */
 	9107577515600022414:  (*Kinds)(nil),                /* Kinds kind:additionalKinds: */
 	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
@@ -1247,6 +1250,11 @@ func init() {
 		Name: "kind_called",
 		Lede: "kind_called",
 		Terms: []typeinfo.Term{{
+			Name:     "traits",
+			Label:    "traits",
+			Optional: true,
+			Type:     &Zt_Traits,
+		}, {
 			Name:  "kind",
 			Label: "kind",
 			Type:  &Zt_Kind,
@@ -1698,7 +1706,7 @@ func init() {
 			Type:     &Zt_AdditionalAdjectives,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"one or more phrases consisting of traits and a kind.", "while all parts are marked as optional, the matching expects", "there will be at least one trait or one kind", "and that there can only be additional adjective phrases", "if the previous one ended with a kind.", "ex. `a container`", "    `closed and fixed in place`,", "    `a closed container and a fixed in place thing`."},
+			"comment": []interface{}{"one or more phrases consisting of traits and a kind.", "while all parts are marked as optional, matching expects", "there will be at least one trait or one kind", "and that there can only be additional adjective phrases", "if the previous one ended with a kind.", "ex. `a container`", "    `closed and fixed in place`,", "    `a closed container and a fixed in place thing`."},
 		},
 	}
 	Zt_AdditionalAdjectives = typeinfo.Flow{
