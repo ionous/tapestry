@@ -35,64 +35,6 @@ func (op *Matched_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches, a type of slot.
-var Zt_Matches = typeinfo.Slot{
-	Name: "matches",
-	Markup: map[string]any{
-		"comment": "the root of a sentence matching tree.",
-	},
-}
-
-// holds a single slot.
-type Matches_Slot struct{ Value Matches }
-
-// implements typeinfo.Instance for a single slot.
-func (*Matches_Slot) TypeInfo() typeinfo.T {
-	return &Zt_Matches
-}
-
-// holds a slice of slots.
-type Matches_Slots []Matches
-
-// implements typeinfo.Instance for a series of slots.
-func (*Matches_Slots) TypeInfo() typeinfo.T {
-	return &Zt_Matches
-}
-
-// implements typeinfo.Repeats
-func (op *Matches_Slots) Repeats() bool {
-	return len(*op) > 0
-}
-
-// name_called, a type of slot.
-var Zt_NameCalled = typeinfo.Slot{
-	Name: "name_called",
-	Markup: map[string]any{
-		"comment": []interface{}{"represents a single name or \"x called y\" phrase", "both can generate a name.", "todo: find a better name for this slot."},
-	},
-}
-
-// holds a single slot.
-type NameCalled_Slot struct{ Value NameCalled }
-
-// implements typeinfo.Instance for a single slot.
-func (*NameCalled_Slot) TypeInfo() typeinfo.T {
-	return &Zt_NameCalled
-}
-
-// holds a slice of slots.
-type NameCalled_Slots []NameCalled
-
-// implements typeinfo.Instance for a series of slots.
-func (*NameCalled_Slots) TypeInfo() typeinfo.T {
-	return &Zt_NameCalled
-}
-
-// implements typeinfo.Repeats
-func (op *NameCalled_Slots) Repeats() bool {
-	return len(*op) > 0
-}
-
 type Article struct {
 	Matched Matched
 	Markup  map[string]any
@@ -197,120 +139,44 @@ func (op *Are_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type Counted struct {
-	Number float64
-	Markup map[string]any
-}
-
-// counted, a type of flow.
-var Zt_Counted typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*Counted) TypeInfo() typeinfo.T {
-	return &Zt_Counted
-}
-
-// implements typeinfo.Markup
-func (op *Counted) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// holds a slice of type counted
-type Counted_Slice []Counted
-
-// implements typeinfo.Instance
-func (*Counted_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Counted
-}
-
-// implements typeinfo.Repeats
-func (op *Counted_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-type TheName struct {
+type Name struct {
 	Article *Article
 	Matched Matched
 	Markup  map[string]any
 }
 
-// the_name, a type of flow.
-var Zt_TheName typeinfo.Flow
+// name, a type of flow.
+var Zt_Name typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*TheName) TypeInfo() typeinfo.T {
-	return &Zt_TheName
+func (*Name) TypeInfo() typeinfo.T {
+	return &Zt_Name
 }
 
 // implements typeinfo.Markup
-func (op *TheName) GetMarkup(ensure bool) map[string]any {
+func (op *Name) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
-var _ NameCalled = (*TheName)(nil)
-
-// holds a slice of type the_name
-type TheName_Slice []TheName
+// holds a slice of type name
+type Name_Slice []Name
 
 // implements typeinfo.Instance
-func (*TheName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_TheName
+func (*Name_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Name
 }
 
 // implements typeinfo.Repeats
-func (op *TheName_Slice) Repeats() bool {
+func (op *Name_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type Called struct {
-	TheKind TheKind
-	Called  Words
-	Article *Article
-	Matched Matched
-	Markup  map[string]any
-}
-
-// called, a type of flow.
-var Zt_Called typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*Called) TypeInfo() typeinfo.T {
-	return &Zt_Called
-}
-
-// implements typeinfo.Markup
-func (op *Called) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ NameCalled = (*Called)(nil)
-
-// holds a slice of type called
-type Called_Slice []Called
-
-// implements typeinfo.Instance
-func (*Called_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Called
-}
-
-// implements typeinfo.Repeats
-func (op *Called_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
+// matches at least one name.
 type Names struct {
-	NameCalled      NameCalled
+	Name            Name
 	AdditionalNames *AdditionalNames
 	Markup          map[string]any
 }
@@ -380,45 +246,192 @@ func (op *AdditionalNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches the name of an (existing) kind.
-type TheKind struct {
+type KindCalled struct {
+	Kind    Kind
+	Called  Words
 	Article *Article
 	Matched Matched
 	Markup  map[string]any
 }
 
-// the_kind, a type of flow.
-var Zt_TheKind typeinfo.Flow
+// kind_called, a type of flow.
+var Zt_KindCalled typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*TheKind) TypeInfo() typeinfo.T {
-	return &Zt_TheKind
+func (*KindCalled) TypeInfo() typeinfo.T {
+	return &Zt_KindCalled
 }
 
 // implements typeinfo.Markup
-func (op *TheKind) GetMarkup(ensure bool) map[string]any {
+func (op *KindCalled) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type the_kind
-type TheKind_Slice []TheKind
+// holds a slice of type kind_called
+type KindCalled_Slice []KindCalled
 
 // implements typeinfo.Instance
-func (*TheKind_Slice) TypeInfo() typeinfo.T {
-	return &Zt_TheKind
+func (*KindCalled_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindCalled
 }
 
 // implements typeinfo.Repeats
-func (op *TheKind_Slice) Repeats() bool {
+func (op *KindCalled_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type Nouns struct {
+	CountedNoun     *CountedNoun
+	KindCalled      *KindCalled
+	Kind            *Kind
+	Name            *Name
+	AdditionalNouns *AdditionalNouns
+	Markup          map[string]any
+}
+
+// nouns, a type of flow.
+var Zt_Nouns typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Nouns) TypeInfo() typeinfo.T {
+	return &Zt_Nouns
+}
+
+// implements typeinfo.Markup
+func (op *Nouns) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type nouns
+type Nouns_Slice []Nouns
+
+// implements typeinfo.Instance
+func (*Nouns_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Nouns
+}
+
+// implements typeinfo.Repeats
+func (op *Nouns_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches a noun following another noun.
+type AdditionalNouns struct {
+	CommaAnd CommaAnd
+	Nouns    Nouns
+	Markup   map[string]any
+}
+
+// additional_nouns, a type of flow.
+var Zt_AdditionalNouns typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AdditionalNouns) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalNouns
+}
+
+// implements typeinfo.Markup
+func (op *AdditionalNouns) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type additional_nouns
+type AdditionalNouns_Slice []AdditionalNouns
+
+// implements typeinfo.Instance
+func (*AdditionalNouns_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalNouns
+}
+
+// implements typeinfo.Repeats
+func (op *AdditionalNouns_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type CountedNoun struct {
+	Article *Article
+	Number  float64
+	Kind    Kind
+	Markup  map[string]any
+}
+
+// counted_noun, a type of flow.
+var Zt_CountedNoun typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*CountedNoun) TypeInfo() typeinfo.T {
+	return &Zt_CountedNoun
+}
+
+// implements typeinfo.Markup
+func (op *CountedNoun) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type counted_noun
+type CountedNoun_Slice []CountedNoun
+
+// implements typeinfo.Instance
+func (*CountedNoun_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CountedNoun
+}
+
+// implements typeinfo.Repeats
+func (op *CountedNoun_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches the name of an (existing) kind.
+type Kind struct {
+	Article *Article
+	Matched Matched
+	Markup  map[string]any
+}
+
+// kind, a type of flow.
+var Zt_Kind typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Kind) TypeInfo() typeinfo.T {
+	return &Zt_Kind
+}
+
+// implements typeinfo.Markup
+func (op *Kind) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type kind
+type Kind_Slice []Kind
+
+// implements typeinfo.Instance
+func (*Kind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Kind
+}
+
+// implements typeinfo.Repeats
+func (op *Kind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
 // matches at least one kind.
 type Kinds struct {
-	TheKind         TheKind
+	Kind            Kind
 	AdditionalKinds *AdditionalKinds
 	Markup          map[string]any
 }
@@ -489,44 +502,44 @@ func (op *AdditionalKinds_Slice) Repeats() bool {
 }
 
 // matches the name of an (existing) trait.
-type TheTrait struct {
+type Trait struct {
 	Article *Article
 	Matched Matched
 	Markup  map[string]any
 }
 
-// the_trait, a type of flow.
-var Zt_TheTrait typeinfo.Flow
+// trait, a type of flow.
+var Zt_Trait typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*TheTrait) TypeInfo() typeinfo.T {
-	return &Zt_TheTrait
+func (*Trait) TypeInfo() typeinfo.T {
+	return &Zt_Trait
 }
 
 // implements typeinfo.Markup
-func (op *TheTrait) GetMarkup(ensure bool) map[string]any {
+func (op *Trait) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type the_trait
-type TheTrait_Slice []TheTrait
+// holds a slice of type trait
+type Trait_Slice []Trait
 
 // implements typeinfo.Instance
-func (*TheTrait_Slice) TypeInfo() typeinfo.T {
-	return &Zt_TheTrait
+func (*Trait_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Trait
 }
 
 // implements typeinfo.Repeats
-func (op *TheTrait_Slice) Repeats() bool {
+func (op *Trait_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
 // matches at least one trait.
 type Traits struct {
-	TheTrait         TheTrait
+	Trait            Trait
 	AdditionalTraits *AdditionalTraits
 	Markup           map[string]any
 }
@@ -691,9 +704,6 @@ func (op *KindsAreTraits) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
-var _ Matches = (*KindsAreTraits)(nil)
-
 // holds a slice of type kinds_are_traits
 type KindsAreTraits_Slice []KindsAreTraits
 
@@ -707,6 +717,194 @@ func (op *KindsAreTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+type MatchingPhrases struct {
+	KindsAreTraits  KindsAreTraits
+	KindsOf         KindsOf
+	VerbLinks       VerbLinks
+	LinksVerb       LinksVerb
+	LinksAdjectives LinksAdjectives
+	Markup          map[string]any
+}
+
+// matching_phrases, a type of flow.
+var Zt_MatchingPhrases typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MatchingPhrases) TypeInfo() typeinfo.T {
+	return &Zt_MatchingPhrases
+}
+
+// implements typeinfo.Markup
+func (op *MatchingPhrases) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type matching_phrases
+type MatchingPhrases_Slice []MatchingPhrases
+
+// implements typeinfo.Instance
+func (*MatchingPhrases_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MatchingPhrases
+}
+
+// implements typeinfo.Repeats
+func (op *MatchingPhrases_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type KindsOf struct {
+	Nouns   Nouns
+	Are     Are
+	KindsOf Words
+	Traits  *Traits
+	Kind    Kind
+	Markup  map[string]any
+}
+
+// kinds_of, a type of flow.
+var Zt_KindsOf typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*KindsOf) TypeInfo() typeinfo.T {
+	return &Zt_KindsOf
+}
+
+// implements typeinfo.Markup
+func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type kinds_of
+type KindsOf_Slice []KindsOf
+
+// implements typeinfo.Instance
+func (*KindsOf_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsOf
+}
+
+// implements typeinfo.Repeats
+func (op *KindsOf_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type VerbLinks struct {
+	Verb       Verb
+	Nouns      Nouns
+	Are        Are
+	OtherNouns Nouns
+	Markup     map[string]any
+}
+
+// verb_links, a type of flow.
+var Zt_VerbLinks typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*VerbLinks) TypeInfo() typeinfo.T {
+	return &Zt_VerbLinks
+}
+
+// implements typeinfo.Markup
+func (op *VerbLinks) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type verb_links
+type VerbLinks_Slice []VerbLinks
+
+// implements typeinfo.Instance
+func (*VerbLinks_Slice) TypeInfo() typeinfo.T {
+	return &Zt_VerbLinks
+}
+
+// implements typeinfo.Repeats
+func (op *VerbLinks_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type LinksVerb struct {
+	Nouns      Nouns
+	Are        Are
+	Verb       Verb
+	OtherNouns Nouns
+	Markup     map[string]any
+}
+
+// links_verb, a type of flow.
+var Zt_LinksVerb typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*LinksVerb) TypeInfo() typeinfo.T {
+	return &Zt_LinksVerb
+}
+
+// implements typeinfo.Markup
+func (op *LinksVerb) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type links_verb
+type LinksVerb_Slice []LinksVerb
+
+// implements typeinfo.Instance
+func (*LinksVerb_Slice) TypeInfo() typeinfo.T {
+	return &Zt_LinksVerb
+}
+
+// implements typeinfo.Repeats
+func (op *LinksVerb_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type LinksAdjectives struct {
+	Nouns      Nouns
+	Are        Are
+	Adjectives Adjectives
+	VerbPhrase *VerbPhrase
+	Markup     map[string]any
+}
+
+// links_adjectives, a type of flow.
+var Zt_LinksAdjectives typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*LinksAdjectives) TypeInfo() typeinfo.T {
+	return &Zt_LinksAdjectives
+}
+
+// implements typeinfo.Markup
+func (op *LinksAdjectives) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type links_adjectives
+type LinksAdjectives_Slice []LinksAdjectives
+
+// implements typeinfo.Instance
+func (*LinksAdjectives_Slice) TypeInfo() typeinfo.T {
+	return &Zt_LinksAdjectives
+}
+
+// implements typeinfo.Repeats
+func (op *LinksAdjectives_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// ex. ".... in the kitchen.", or "... carries the football and sousaphone."
 type VerbPhrase struct {
 	Verb   Verb
 	Names  Names
@@ -742,85 +940,76 @@ func (op *VerbPhrase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type NounsTraitsKinds struct {
-	Names    Names
-	Are      Are
-	Traits   *Traits
-	CommaAnd *CommaAnd
-	Kinds    *Kinds
-	Markup   map[string]any
+type Adjectives struct {
+	Traits               *Traits
+	CommaAnd             *CommaAnd
+	Kind                 *Kind
+	AdditionalAdjectives *AdditionalAdjectives
+	Markup               map[string]any
 }
 
-// nouns_traits_kinds, a type of flow.
-var Zt_NounsTraitsKinds typeinfo.Flow
+// adjectives, a type of flow.
+var Zt_Adjectives typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*NounsTraitsKinds) TypeInfo() typeinfo.T {
-	return &Zt_NounsTraitsKinds
+func (*Adjectives) TypeInfo() typeinfo.T {
+	return &Zt_Adjectives
 }
 
 // implements typeinfo.Markup
-func (op *NounsTraitsKinds) GetMarkup(ensure bool) map[string]any {
+func (op *Adjectives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
-var _ Matches = (*NounsTraitsKinds)(nil)
-
-// holds a slice of type nouns_traits_kinds
-type NounsTraitsKinds_Slice []NounsTraitsKinds
+// holds a slice of type adjectives
+type Adjectives_Slice []Adjectives
 
 // implements typeinfo.Instance
-func (*NounsTraitsKinds_Slice) TypeInfo() typeinfo.T {
-	return &Zt_NounsTraitsKinds
+func (*Adjectives_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Adjectives
 }
 
 // implements typeinfo.Repeats
-func (op *NounsTraitsKinds_Slice) Repeats() bool {
+func (op *Adjectives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type KindsOf struct {
-	Names   Names
-	Are     Are
-	KindsOf Words
-	Traits  *Traits
-	TheKind TheKind
-	Markup  map[string]any
+// an additional set of traits and a kind
+type AdditionalAdjectives struct {
+	CommaAnd   CommaAnd
+	Adjectives Adjectives
+	Markup     map[string]any
 }
 
-// kinds_of, a type of flow.
-var Zt_KindsOf typeinfo.Flow
+// additional_adjectives, a type of flow.
+var Zt_AdditionalAdjectives typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*KindsOf) TypeInfo() typeinfo.T {
-	return &Zt_KindsOf
+func (*AdditionalAdjectives) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalAdjectives
 }
 
 // implements typeinfo.Markup
-func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
+func (op *AdditionalAdjectives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
-var _ Matches = (*KindsOf)(nil)
-
-// holds a slice of type kinds_of
-type KindsOf_Slice []KindsOf
+// holds a slice of type additional_adjectives
+type AdditionalAdjectives_Slice []AdditionalAdjectives
 
 // implements typeinfo.Instance
-func (*KindsOf_Slice) TypeInfo() typeinfo.T {
-	return &Zt_KindsOf
+func (*AdditionalAdjectives_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalAdjectives
 }
 
 // implements typeinfo.Repeats
-func (op *KindsOf_Slice) Repeats() bool {
+func (op *AdditionalAdjectives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -836,8 +1025,6 @@ var Z_Types = typeinfo.TypeSet{
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_Matched,
-	&Zt_Matches,
-	&Zt_NameCalled,
 }
 
 // a list of all flows in this this package
@@ -846,64 +1033,119 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Article,
 	&Zt_CommaAnd,
 	&Zt_Are,
-	&Zt_Counted,
-	&Zt_TheName,
-	&Zt_Called,
+	&Zt_Name,
 	&Zt_Names,
 	&Zt_AdditionalNames,
-	&Zt_TheKind,
+	&Zt_KindCalled,
+	&Zt_Nouns,
+	&Zt_AdditionalNouns,
+	&Zt_CountedNoun,
+	&Zt_Kind,
 	&Zt_Kinds,
 	&Zt_AdditionalKinds,
-	&Zt_TheTrait,
+	&Zt_Trait,
 	&Zt_Traits,
 	&Zt_AdditionalTraits,
 	&Zt_Words,
 	&Zt_Verb,
 	&Zt_KindsAreTraits,
-	&Zt_VerbPhrase,
-	&Zt_NounsTraitsKinds,
+	&Zt_MatchingPhrases,
 	&Zt_KindsOf,
+	&Zt_VerbLinks,
+	&Zt_LinksVerb,
+	&Zt_LinksAdjectives,
+	&Zt_VerbPhrase,
+	&Zt_Adjectives,
+	&Zt_AdditionalAdjectives,
 }
 
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	12174030489678544826: (*AdditionalKinds)(nil),  /* AdditionalKinds commaAnd:kinds: */
-	16975120945491427296: (*AdditionalNames)(nil),  /* AdditionalNames commaAnd:names: */
-	508023169458945308:   (*AdditionalTraits)(nil), /* AdditionalTraits commaAnd:traits: */
-	1887918947148326916:  (*AdditionalTraits)(nil), /* AdditionalTraits traits: */
-	14557216947727331217: (*Are)(nil),              /* Are matched: */
-	3899130289676196213:  (*Article)(nil),          /* Article matched: */
-	5180090635119408685:  (*CommaAnd)(nil),         /* CommaAnd matched: */
-	1185530102945670924:  (*Counted)(nil),          /* Counted number: */
-	10421923522043872481: (*Kinds)(nil),            /* Kinds theKind: */
-	18280685063133167459: (*Kinds)(nil),            /* Kinds theKind:additionalKinds: */
-	2885167070626735883:  (*Names)(nil),            /* Names nameCalled: */
-	13348099214983340196: (*Names)(nil),            /* Names nameCalled:additionalNames: */
-	12076317517271379796: (*TheKind)(nil),          /* TheKind article:matched: */
-	6230264765648121104:  (*TheKind)(nil),          /* TheKind matched: */
-	7468431442424932014:  (*TheTrait)(nil),         /* TheTrait article:matched: */
-	14778705293893825422: (*TheTrait)(nil),         /* TheTrait matched: */
-	11945901594929875297: (*Traits)(nil),           /* Traits theTrait: */
-	16728500392330698885: (*Traits)(nil),           /* Traits theTrait:additionalTraits: */
-	4698992564801604870:  (*Verb)(nil),             /* Verb matched: */
-	17939229312172807626: (*VerbPhrase)(nil),       /* VerbPhrase verb:names: */
-	17678340847396548932: (*Words)(nil),            /* Words matched: */
-	12822082579973214140: (*Called)(nil),           /* name_called=Called theKind:called:article:matched: */
-	15500595481135520776: (*Called)(nil),           /* name_called=Called theKind:called:matched: */
-	14842108735299651344: (*KindsAreTraits)(nil),   /* matches=KindsAreTraits kinds:are:usually:traits: */
-	17030040669174033088: (*KindsOf)(nil),          /* matches=KindsOf names:are:kindsOf:theKind: */
-	12963855546066833119: (*KindsOf)(nil),          /* matches=KindsOf names:are:kindsOf:traits:theKind: */
-	3419427774986167184:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are: */
-	7089760760810957754:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd: */
-	5233850846045406501:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:commaAnd:kinds: */
-	14150606450452057931: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:kinds: */
-	16839405364450437245: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits: */
-	5883225696954482601:  (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:commaAnd: */
-	16875727907901245378: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:commaAnd:kinds: */
-	13829425671282372374: (*NounsTraitsKinds)(nil), /* matches=NounsTraitsKinds names:are:traits:kinds: */
-	6248925786232291787:  (*TheName)(nil),          /* name_called=TheName article:matched: */
-	15540175724772968887: (*TheName)(nil),          /* name_called=TheName matched: */
+	12489206644669467772: (*AdditionalAdjectives)(nil), /* AdditionalAdjectives commaAnd:adjectives: */
+	12174030489678544826: (*AdditionalKinds)(nil),      /* AdditionalKinds commaAnd:kinds: */
+	16975120945491427296: (*AdditionalNames)(nil),      /* AdditionalNames commaAnd:names: */
+	13374021760918108674: (*AdditionalNouns)(nil),      /* AdditionalNouns commaAnd:nouns: */
+	508023169458945308:   (*AdditionalTraits)(nil),     /* AdditionalTraits commaAnd:traits: */
+	1887918947148326916:  (*AdditionalTraits)(nil),     /* AdditionalTraits traits: */
+	10618851046870477413: (*Adjectives)(nil),           /* Adjectives */
+	12215120732458766748: (*Adjectives)(nil),           /* Adjectives additionalAdjectives: */
+	724420376605497959:   (*Adjectives)(nil),           /* Adjectives commaAnd: */
+	17477522713582243508: (*Adjectives)(nil),           /* Adjectives commaAnd:additionalAdjectives: */
+	1568830118683768373:  (*Adjectives)(nil),           /* Adjectives commaAnd:kind: */
+	7021517372525507842:  (*Adjectives)(nil),           /* Adjectives commaAnd:kind:additionalAdjectives: */
+	7663368451290651677:  (*Adjectives)(nil),           /* Adjectives kind: */
+	16725271580009929658: (*Adjectives)(nil),           /* Adjectives kind:additionalAdjectives: */
+	13544991759812118088: (*Adjectives)(nil),           /* Adjectives traits: */
+	13327572087367323885: (*Adjectives)(nil),           /* Adjectives traits:additionalAdjectives: */
+	2209109858568160146:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd: */
+	11777076077986952519: (*Adjectives)(nil),           /* Adjectives traits:commaAnd:additionalAdjectives: */
+	5997117370605758938:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd:kind: */
+	5841657992957591039:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd:kind:additionalAdjectives: */
+	11552995266309396480: (*Adjectives)(nil),           /* Adjectives traits:kind: */
+	8078288476520567765:  (*Adjectives)(nil),           /* Adjectives traits:kind:additionalAdjectives: */
+	14557216947727331217: (*Are)(nil),                  /* Are matched: */
+	3899130289676196213:  (*Article)(nil),              /* Article matched: */
+	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
+	13180123069201369440: (*CountedNoun)(nil),          /* CountedNoun article:number:kind: */
+	12328458318554246008: (*CountedNoun)(nil),          /* CountedNoun number:kind: */
+	17839012382227179591: (*Kind)(nil),                 /* Kind article:matched: */
+	17757668305058379307: (*Kind)(nil),                 /* Kind matched: */
+	2217456341527734037:  (*KindCalled)(nil),           /* KindCalled kind:called:article:matched: */
+	7883278166734757597:  (*KindCalled)(nil),           /* KindCalled kind:called:matched: */
+	13796388782242617656: (*Kinds)(nil),                /* Kinds kind: */
+	9107577515600022414:  (*Kinds)(nil),                /* Kinds kind:additionalKinds: */
+	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
+	8917729412665361914:  (*KindsOf)(nil),              /* KindsOf nouns:are:kindsOf:kind: */
+	161687535277183765:   (*KindsOf)(nil),              /* KindsOf nouns:are:kindsOf:traits:kind: */
+	2236426384911965727:  (*LinksAdjectives)(nil),      /* LinksAdjectives nouns:are:adjectives: */
+	5603491238557286483:  (*LinksAdjectives)(nil),      /* LinksAdjectives nouns:are:adjectives:verbPhrase: */
+	671822503588375800:   (*LinksVerb)(nil),            /* LinksVerb nouns:are:verb:otherNouns: */
+	3902253155971379051:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbLinks:linksVerb:linksAdjectives: */
+	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
+	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
+	4500297491524973516:  (*Names)(nil),                /* Names name: */
+	17351915174502247643: (*Names)(nil),                /* Names name:additionalNames: */
+	571241199603894638:   (*Nouns)(nil),                /* Nouns */
+	15522897197644601362: (*Nouns)(nil),                /* Nouns additionalNouns: */
+	90904721485984294:    (*Nouns)(nil),                /* Nouns countedNoun: */
+	17345770831319974302: (*Nouns)(nil),                /* Nouns countedNoun:additionalNouns: */
+	815845367948396310:   (*Nouns)(nil),                /* Nouns countedNoun:kind: */
+	7020595868583236110:  (*Nouns)(nil),                /* Nouns countedNoun:kind:additionalNouns: */
+	16043938601931106685: (*Nouns)(nil),                /* Nouns countedNoun:kind:name: */
+	6075116994981710269:  (*Nouns)(nil),                /* Nouns countedNoun:kind:name:additionalNouns: */
+	383389916511901737:   (*Nouns)(nil),                /* Nouns countedNoun:kindCalled: */
+	8817665470132297817:  (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:additionalNouns: */
+	8209047376301113367:  (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:kind: */
+	2247279062003439379:  (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:kind:additionalNouns: */
+	14193704883558113834: (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:kind:name: */
+	18208319842353087090: (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:kind:name:additionalNouns: */
+	10487576877212847592: (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:name: */
+	9985460459999564828:  (*Nouns)(nil),                /* Nouns countedNoun:kindCalled:name:additionalNouns: */
+	1499804244892011213:  (*Nouns)(nil),                /* Nouns countedNoun:name: */
+	20386738400184717:    (*Nouns)(nil),                /* Nouns countedNoun:name:additionalNouns: */
+	1705055546001010626:  (*Nouns)(nil),                /* Nouns kind: */
+	2050916548742283130:  (*Nouns)(nil),                /* Nouns kind:additionalNouns: */
+	8540350875807612009:  (*Nouns)(nil),                /* Nouns kind:name: */
+	7885774459811157529:  (*Nouns)(nil),                /* Nouns kind:name:additionalNouns: */
+	5494359243779524901:  (*Nouns)(nil),                /* Nouns kindCalled: */
+	15657545839609915285: (*Nouns)(nil),                /* Nouns kindCalled:additionalNouns: */
+	12414461911427773851: (*Nouns)(nil),                /* Nouns kindCalled:kind: */
+	10039843639951942455: (*Nouns)(nil),                /* Nouns kindCalled:kind:additionalNouns: */
+	1772479472696980046:  (*Nouns)(nil),                /* Nouns kindCalled:kind:name: */
+	10924434051238487382: (*Nouns)(nil),                /* Nouns kindCalled:kind:name:additionalNouns: */
+	14823931083456926324: (*Nouns)(nil),                /* Nouns kindCalled:name: */
+	8864989738975986616:  (*Nouns)(nil),                /* Nouns kindCalled:name:additionalNouns: */
+	1259604044625390865:  (*Nouns)(nil),                /* Nouns name: */
+	17689290676836418865: (*Nouns)(nil),                /* Nouns name:additionalNouns: */
+	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
+	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
+	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
+	2878025327467574768:  (*Traits)(nil),               /* Traits trait:additionalTraits: */
+	4698992564801604870:  (*Verb)(nil),                 /* Verb matched: */
+	6447764050422072696:  (*VerbLinks)(nil),            /* VerbLinks verb:nouns:are:otherNouns: */
+	17939229312172807626: (*VerbPhrase)(nil),           /* VerbPhrase verb:names: */
+	17678340847396548932: (*Words)(nil),                /* Words matched: */
 }
 
 // init the terms of all flows in init
@@ -945,21 +1187,9 @@ func init() {
 			"comment": "matches \"is\" or \"are\".",
 		},
 	}
-	Zt_Counted = typeinfo.Flow{
-		Name: "counted",
-		Lede: "counted",
-		Terms: []typeinfo.Term{{
-			Name:  "number",
-			Label: "number",
-			Type:  &prim.Zt_Number,
-		}},
-		Markup: map[string]any{
-			"comment": []interface{}{"provides english specification of a number of objects.", "can be used in many places an article can."},
-		},
-	}
-	Zt_TheName = typeinfo.Flow{
-		Name: "the_name",
-		Lede: "the_name",
+	Zt_Name = typeinfo.Flow{
+		Name: "name",
+		Lede: "name",
 		Terms: []typeinfo.Term{{
 			Name:     "article",
 			Label:    "article",
@@ -973,51 +1203,17 @@ func init() {
 			},
 			Type: &Zt_Matched,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_NameCalled,
-		},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches a name of unknown type", "for nouns, these names may be treated as aliases for existing nouns.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "The name \"chest\" implies the treasure chest.", "there are some assumptions for optimizing matching:", "the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also called )"},
-		},
-	}
-	Zt_Called = typeinfo.Flow{
-		Name: "called",
-		Lede: "called",
-		Terms: []typeinfo.Term{{
-			Name:  "the_kind",
-			Label: "the_kind",
-			Type:  &Zt_TheKind,
-		}, {
-			Name:  "called",
-			Label: "called",
-			Markup: map[string]any{
-				"comment": "the word \"called\"",
-			},
-			Type: &Zt_Words,
-		}, {
-			Name:     "article",
-			Label:    "article",
-			Optional: true,
-			Type:     &Zt_Article,
-		}, {
-			Name:  "matched",
-			Label: "matched",
-			Type:  &Zt_Matched,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_NameCalled,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"called defines a noun and its kind in a single phrase.", "<kind> \"called\" [the] _name_.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
+			"comment": []interface{}{"Declares a new name or match an existing one, in full or in part.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "The name \"chest\" implies the treasure chest.", "To optimizing matching the words \"is/are/comma/and\" are never part of noun names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also kind_called )"},
 		},
 	}
 	Zt_Names = typeinfo.Flow{
 		Name: "names",
 		Lede: "names",
 		Terms: []typeinfo.Term{{
-			Name:  "name_called",
-			Label: "name_called",
-			Type:  &Zt_NameCalled,
+			Name:  "name",
+			Label: "name",
+			Type:  &Zt_Name,
 		}, {
 			Name:     "additional_names",
 			Label:    "additional_names",
@@ -1025,7 +1221,7 @@ func init() {
 			Type:     &Zt_AdditionalNames,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches at least one name.", "fix: maybe this should be called \"nouns\" ( and additional nouns )"},
+			"comment": "matches at least one name.",
 		},
 	}
 	Zt_AdditionalNames = typeinfo.Flow{
@@ -1047,9 +1243,116 @@ func init() {
 			"comment": "matches a name following another name.",
 		},
 	}
-	Zt_TheKind = typeinfo.Flow{
-		Name: "the_kind",
-		Lede: "the_kind",
+	Zt_KindCalled = typeinfo.Flow{
+		Name: "kind_called",
+		Lede: "kind_called",
+		Terms: []typeinfo.Term{{
+			Name:  "kind",
+			Label: "kind",
+			Type:  &Zt_Kind,
+		}, {
+			Name:  "called",
+			Label: "called",
+			Markup: map[string]any{
+				"comment": "the word \"called\"",
+			},
+			Type: &Zt_Words,
+		}, {
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "matched",
+			Label: "matched",
+			Type:  &Zt_Matched,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"Defines a noun and its kind in a single phrase.", "<kind> \"called\" [the] _name_.", "as per inform, the name of the noun is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single noun named \"the trunk and the box.\""},
+		},
+	}
+	Zt_Nouns = typeinfo.Flow{
+		Name: "nouns",
+		Lede: "nouns",
+		Terms: []typeinfo.Term{{
+			Name:     "counted_noun",
+			Label:    "counted_noun",
+			Optional: true,
+			Type:     &Zt_CountedNoun,
+		}, {
+			Name:     "kind_called",
+			Label:    "kind_called",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"note: because this phrase is greedy", "once used, no additional nouns will match."},
+			},
+			Type: &Zt_KindCalled,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"anonymous nouns", "nothing that anonymous nouns arent prohibited from starting a sentence."},
+			},
+			Type: &Zt_Kind,
+		}, {
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Type:     &Zt_Name,
+		}, {
+			Name:     "additional_nouns",
+			Label:    "additional_nouns",
+			Optional: true,
+			Type:     &Zt_AdditionalNouns,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"Defines one or more new names ( or matches some existing ones. )", "This works similar to 'names' but has more options.", "Whether 'names' or 'nouns' is used in a particular situation", "depends on the grammar and structure of the sentence.", "Only one of the options, plus 'additional_names' will match."},
+		},
+	}
+	Zt_AdditionalNouns = typeinfo.Flow{
+		Name: "additional_nouns",
+		Lede: "additional_nouns",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and",
+			Label: "comma_and",
+			Markup: map[string]any{
+				"comment": "unlike traits, a separator is required between the nouns of nouns",
+			},
+			Type: &Zt_CommaAnd,
+		}, {
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &Zt_Nouns,
+		}},
+		Markup: map[string]any{
+			"comment": "matches a noun following another noun.",
+		},
+	}
+	Zt_CountedNoun = typeinfo.Flow{
+		Name: "counted_noun",
+		Lede: "counted_noun",
+		Terms: []typeinfo.Term{{
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "number",
+			Label: "number",
+			Type:  &prim.Zt_Number,
+		}, {
+			Name:  "kind",
+			Label: "kind",
+			Type:  &Zt_Kind,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"provides english specification of a number of objects.", "note: yes, `the five the containers` is permitted."},
+		},
+	}
+	Zt_Kind = typeinfo.Flow{
+		Name: "kind",
+		Lede: "kind",
 		Terms: []typeinfo.Term{{
 			Name:     "article",
 			Label:    "article",
@@ -1071,9 +1374,9 @@ func init() {
 		Name: "kinds",
 		Lede: "kinds",
 		Terms: []typeinfo.Term{{
-			Name:  "the_kind",
-			Label: "the_kind",
-			Type:  &Zt_TheKind,
+			Name:  "kind",
+			Label: "kind",
+			Type:  &Zt_Kind,
 		}, {
 			Name:     "additional_kinds",
 			Label:    "additional_kinds",
@@ -1103,9 +1406,9 @@ func init() {
 			"comment": "matches a kind following another kind.",
 		},
 	}
-	Zt_TheTrait = typeinfo.Flow{
-		Name: "the_trait",
-		Lede: "the_trait",
+	Zt_Trait = typeinfo.Flow{
+		Name: "trait",
+		Lede: "trait",
 		Terms: []typeinfo.Term{{
 			Name:     "article",
 			Label:    "article",
@@ -1127,9 +1430,9 @@ func init() {
 		Name: "traits",
 		Lede: "traits",
 		Terms: []typeinfo.Term{{
-			Name:  "the_trait",
-			Label: "the_trait",
-			Type:  &Zt_TheTrait,
+			Name:  "trait",
+			Label: "trait",
+			Type:  &Zt_Trait,
 		}, {
 			Name:     "additional_traits",
 			Label:    "additional_traits",
@@ -1205,73 +1508,45 @@ func init() {
 			Label: "traits",
 			Type:  &Zt_Traits,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Matches,
-		},
 		Markup: map[string]any{
 			"comment": []interface{}{"assigns default traits to a kind.", "<the kind> are \"usually\" <traits>"},
 		},
 	}
-	Zt_VerbPhrase = typeinfo.Flow{
-		Name: "verb_phrase",
-		Lede: "verb_phrase",
+	Zt_MatchingPhrases = typeinfo.Flow{
+		Name: "matching_phrases",
+		Lede: "matching_phrases",
 		Terms: []typeinfo.Term{{
-			Name:  "verb",
-			Label: "verb",
-			Type:  &Zt_Verb,
+			Name:  "kinds_are_traits",
+			Label: "kinds_are_traits",
+			Type:  &Zt_KindsAreTraits,
 		}, {
-			Name:  "names",
-			Label: "names",
-			Type:  &Zt_Names,
+			Name:  "kinds_of",
+			Label: "kinds_of",
+			Type:  &Zt_KindsOf,
+		}, {
+			Name:  "verb_links",
+			Label: "verb_links",
+			Type:  &Zt_VerbLinks,
+		}, {
+			Name:  "links_verb",
+			Label: "links_verb",
+			Type:  &Zt_LinksVerb,
+		}, {
+			Name:  "links_adjectives",
+			Label: "links_adjectives",
+			Type:  &Zt_LinksAdjectives,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"ex. \".... in the kitchen.\", or \"... carries the football and sousaphone.\"", "jess expects these names to be nouns", "without traits ( adjectives )"},
-		},
-	}
-	Zt_NounsTraitsKinds = typeinfo.Flow{
-		Name: "nouns_traits_kinds",
-		Lede: "nouns_traits_kinds",
-		Terms: []typeinfo.Term{{
-			Name:  "names",
-			Label: "names",
-			Type:  &Zt_Names,
-		}, {
-			Name:  "are",
-			Label: "are",
-			Type:  &Zt_Are,
-		}, {
-			Name:     "traits",
-			Label:    "traits",
-			Optional: true,
-			Type:     &Zt_Traits,
-		}, {
-			Name:     "comma_and",
-			Label:    "comma_and",
-			Optional: true,
-			Markup: map[string]any{
-				"comment": []interface{}{"exists to support phrases like:", "`the box is transparent and a container.`"},
-			},
-			Type: &Zt_CommaAnd,
-		}, {
-			Name:     "kinds",
-			Label:    "kinds",
-			Optional: true,
-			Type:     &Zt_Kinds,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Matches,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"declares nouns with traits and kinds.", "<names> are <traits> <kinds>.", "ex. `The bottle is a closed container`, and `The bottle is closed.`", "note that although traits and kinds are both optional,", "at least one of the two are required to make a match."},
+			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
 		},
 	}
 	Zt_KindsOf = typeinfo.Flow{
 		Name: "kinds_of",
 		Lede: "kinds_of",
 		Terms: []typeinfo.Term{{
-			Name:  "names",
-			Label: "names",
-			Type:  &Zt_Names,
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &Zt_Nouns,
 		}, {
 			Name:  "are",
 			Label: "are",
@@ -1292,18 +1567,154 @@ func init() {
 			},
 			Type: &Zt_Traits,
 		}, {
-			Name:  "the_kind",
-			Label: "the_kind",
+			Name:  "kind",
+			Label: "kind",
 			Markup: map[string]any{
 				"comment": []interface{}{"inform (weirdly) allows multiple kinds:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there.", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
 			},
-			Type: &Zt_TheKind,
+			Type: &Zt_Kind,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Matches,
-		},
 		Markup: map[string]any{
 			"comment": []interface{}{"<names> <are> \"a kind of\"/\"kinds of\" <traits> <kind>.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform this doesn't try to limit the names", "`The animals called kittens are a kind of things.` is legal."},
+		},
+	}
+	Zt_VerbLinks = typeinfo.Flow{
+		Name: "verb_links",
+		Lede: "verb_links",
+		Terms: []typeinfo.Term{{
+			Name:  "verb",
+			Label: "verb",
+			Type:  &Zt_Verb,
+		}, {
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &Zt_Nouns,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "other_nouns",
+			Label: "other_nouns",
+			Type:  &Zt_Nouns,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"verb called are called.", "ex. `In the coffin are some coins, a notebook, and the gripping hand.`"},
+		},
+	}
+	Zt_LinksVerb = typeinfo.Flow{
+		Name: "links_verb",
+		Lede: "links_verb",
+		Terms: []typeinfo.Term{{
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &Zt_Nouns,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "verb",
+			Label: "verb",
+			Type:  &Zt_Verb,
+		}, {
+			Name:  "other_nouns",
+			Label: "other_nouns",
+			Type:  &Zt_Nouns,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"verb called are called.", "ex. `The thing called the stake is on the supporter called the altar.`"},
+		},
+	}
+	Zt_LinksAdjectives = typeinfo.Flow{
+		Name: "links_adjectives",
+		Lede: "links_adjectives",
+		Terms: []typeinfo.Term{{
+			Name:  "nouns",
+			Label: "nouns",
+			Type:  &Zt_Nouns,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "adjectives",
+			Label: "adjectives",
+			Markup: map[string]any{
+				"comment": []interface{}{"adjectives are *not* optional.", "if there are no adjectives present,", "then the links_verb pattern will match instead."},
+			},
+			Type: &Zt_Adjectives,
+		}, {
+			Name:     "verb_phrase",
+			Label:    "verb_phrase",
+			Optional: true,
+			Type:     &Zt_VerbPhrase,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"verb called are called.", "ex. `The bottle is a transparent, open, container.`", "`The coffin is a closed container in the antechamber.`"},
+		},
+	}
+	Zt_VerbPhrase = typeinfo.Flow{
+		Name: "verb_phrase",
+		Lede: "verb_phrase",
+		Terms: []typeinfo.Term{{
+			Name:  "verb",
+			Label: "verb",
+			Type:  &Zt_Verb,
+		}, {
+			Name:  "names",
+			Label: "names",
+			Type:  &Zt_Names,
+		}},
+		Markup: map[string]any{
+			"comment": "ex. \".... in the kitchen.\", or \"... carries the football and sousaphone.\"",
+		},
+	}
+	Zt_Adjectives = typeinfo.Flow{
+		Name: "adjectives",
+		Lede: "adjectives",
+		Terms: []typeinfo.Term{{
+			Name:     "traits",
+			Label:    "traits",
+			Optional: true,
+			Type:     &Zt_Traits,
+		}, {
+			Name:     "comma_and",
+			Label:    "comma_and",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"exists to support phrases like:", "`the box is transparent and a container.`"},
+			},
+			Type: &Zt_CommaAnd,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Type:     &Zt_Kind,
+		}, {
+			Name:     "additional_adjectives",
+			Label:    "additional_adjectives",
+			Optional: true,
+			Type:     &Zt_AdditionalAdjectives,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"one or more phrases consisting of traits and a kind.", "while all parts are marked as optional, the matching expects", "there will be at least one trait or one kind", "and that there can only be additional adjective phrases", "if the previous one ended with a kind.", "ex. `a container`", "    `closed and fixed in place`,", "    `a closed container and a fixed in place thing`."},
+		},
+	}
+	Zt_AdditionalAdjectives = typeinfo.Flow{
+		Name: "additional_adjectives",
+		Lede: "additional_adjectives",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and",
+			Label: "comma_and",
+			Type:  &Zt_CommaAnd,
+		}, {
+			Name:  "adjectives",
+			Label: "adjectives",
+			Type:  &Zt_Adjectives,
+		}},
+		Markup: map[string]any{
+			"comment": "an additional set of traits and a kind",
 		},
 	}
 }

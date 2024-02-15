@@ -2,7 +2,7 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
-func (op *TheKind) Match(q Query, input *InputState) (okay bool) {
+func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optionally(q, &next, &op.Article) &&
 		op.matchKind(q, &next) {
@@ -11,7 +11,7 @@ func (op *TheKind) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *TheKind) matchKind(q Query, input *InputState) (okay bool) {
+func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindKind(*input); width > 0 {
 		// we want to return the matched kind, not the span because
 		// it might have additional info about the match ( ex. a db key )
@@ -20,13 +20,22 @@ func (op *TheKind) matchKind(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *TheKind) Span() grok.Span {
+func (op *Kind) Span() grok.Span {
 	return op.Matched.(Span)
+}
+
+func (op *Kind) GetName(traits, kinds []Matched) (ret grok.Name) {
+	return grok.Name{
+		Article: ReduceArticle(op.Article),
+		Traits:  traits,
+		Kinds:   append(kinds, op.Matched),
+		// no name, anonymous.
+	}
 }
 
 func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	op.TheKind.Match(q, &next) &&
+	op.Kind.Match(q, &next) &&
 		Optionally(q, &next, &op.AdditionalKinds) {
 		*input, okay = next, true
 	}
@@ -37,7 +46,7 @@ func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
 func (op *Kinds) GetKinds() []grok.Matched {
 	var out []grok.Matched
 	for t := *op; ; {
-		out = append(out, t.TheKind.Matched)
+		out = append(out, t.Kind.Matched)
 		if next := t.AdditionalKinds; next == nil {
 			break
 		} else {
@@ -57,7 +66,7 @@ func (op *Kinds) GetKinds() []grok.Matched {
 // 		}
 // 		out = append(out, grok.Name{
 // 			Article: art,
-// 			Span:    t.TheKind.Matched.(Span),
+// 			Span:    t.Kind.Matched.(Span),
 // 		})
 // 		if next := t.AdditionalKinds; next == nil {
 // 			break
@@ -79,7 +88,7 @@ func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 
 type TraitsKind struct {
 	Traits
-	*TheKind
+	*Kind
 }
 
 // its interesting that we dont have to store anything else
@@ -87,7 +96,7 @@ type TraitsKind struct {
 func (op *TraitsKind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Traits.Match(q, &next) &&
-		Optionally(q, &next, &op.TheKind) {
+		Optionally(q, &next, &op.Kind) {
 		*input, okay = next, true
 	}
 	return
@@ -95,8 +104,8 @@ func (op *TraitsKind) Match(q Query, input *InputState) (okay bool) {
 
 func (op *TraitsKind) GetTraitSet() grok.TraitSet {
 	var k grok.Matched
-	if op.TheKind != nil {
-		k = op.TheKind.Matched
+	if op.Kind != nil {
+		k = op.Kind.Matched
 	}
 	return grok.TraitSet{
 		Kind:   k,

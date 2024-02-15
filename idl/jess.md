@@ -10,6 +10,8 @@ For instance:
 * `The box is a transparent and container.`: because phrases like: "The box is transparent and a container" are supported, it permits some other less than sensible phrases as well.
 * `The container called the trunk and the box is in the lobby.`: creates one single container with an unusual name.
 * `The containers called boxes are a kind of closed thing.`: 
+* `In a container are five things.`  is allowed, makes sense to English and to jess but is useless. The created objects are out of world, and are unaddressable.
+* `The five the containers are in the kitchen.` is permitted.
 
 Inform has these same issues.
 
@@ -22,10 +24,10 @@ Inform has these same issues.
 The first two are okay with jess, the third one is not; 
 In inform <sup>1.68.1</sup>, the first and third are okay.
 
-* `Buckets and baskets are kinds of container.` in inform becomes two kinds: "Bucketss" and "basketss".
+* `Buckets and baskets are kinds of container.` in inform becomes two kinds: "Bucketss" and "basketss". The extra s isnt present with jess.
 
  
-# regarding traits there are a a few patterns:
+# regarding traits there are a few patterns:
 
 1. "(det) traits kind are verbing names."
 	ex. `Five closed containers are in the kitchen.`

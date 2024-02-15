@@ -2,7 +2,7 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
-func (op *TheName) GetName(traits, kinds []Matched) grok.Name {
+func (op *Name) GetName(traits, kinds []Matched) grok.Name {
 	return grok.Name{
 		Article: ReduceArticle(op.Article),
 		Span:    op.Matched.(Span),
@@ -11,7 +11,7 @@ func (op *TheName) GetName(traits, kinds []Matched) grok.Name {
 	}
 }
 
-func (op *TheName) Match(q Query, input *InputState) (okay bool) {
+func (op *Name) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optionally(q, &next, &op.Article) &&
 		op.matchName(q, &next) {
@@ -20,7 +20,7 @@ func (op *TheName) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *TheName) matchName(q Query, input *InputState) (okay bool) {
+func (op *Name) matchName(q Query, input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
@@ -29,7 +29,7 @@ func (op *TheName) matchName(q Query, input *InputState) (okay bool) {
 
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	TryNameCalled(q, &next, &op.NameCalled) &&
+	op.Name.Match(q, &next) &&
 		Optionally(q, &next, &op.AdditionalNames) {
 		*input, okay = next, true
 	}
@@ -45,14 +45,10 @@ func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Names) Reduce(traits, kinds []Matched) []grok.Name {
-	var out []grok.Name
+func (op *Names) Reduce(traits, kinds []Matched) (ret []grok.Name) {
 	for t := *op; ; {
-		// fix? move t.Article into the sub-phrases?
-		// name, and named_kind, named_trait would become:
-		// TheName, TheKind, TheTrait maybe (article would move out of kinds, names, traits )
-		n := t.NameCalled.GetName(traits, kinds)
-		out = append(out, n)
+		n := t.Name.GetName(traits, kinds)
+		ret = append(ret, n)
 		// next name:
 		if next := t.AdditionalNames; next == nil {
 			break
@@ -60,7 +56,7 @@ func (op *Names) Reduce(traits, kinds []Matched) []grok.Name {
 			t = next.Names
 		}
 	}
-	return out
+	return
 }
 
 // returns index of an "important" keyword

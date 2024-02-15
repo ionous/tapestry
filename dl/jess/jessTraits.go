@@ -18,7 +18,7 @@ func ReduceArticle(op *Article) (ret grok.Article) {
 	return
 }
 
-func (op *TheTrait) Match(q Query, input *InputState) (okay bool) {
+func (op *Trait) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optionally(q, &next, &op.Article) &&
 		op.matchTrait(q, &next) {
@@ -27,7 +27,7 @@ func (op *TheTrait) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *TheTrait) matchTrait(q Query, input *InputState) (okay bool) {
+func (op *Trait) matchTrait(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindTrait(*input); width > 0 {
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
@@ -38,7 +38,7 @@ func (op *TheTrait) matchTrait(q Query, input *InputState) (okay bool) {
 // all the trait info is in this... even additional traits.
 func (op *Traits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	op.TheTrait.Match(q, &next) &&
+	op.Trait.Match(q, &next) &&
 		Optionally(q, &next, &op.AdditionalTraits) {
 		*input, okay = next, true
 	}
@@ -48,7 +48,7 @@ func (op *Traits) Match(q Query, input *InputState) (okay bool) {
 func (op *Traits) GetTraits() []Matched {
 	var out []Matched
 	for t := *op; ; {
-		out = append(out, t.TheTrait.Matched)
+		out = append(out, t.Trait.Matched)
 		if next := t.AdditionalTraits; next == nil {
 			break
 		} else {
