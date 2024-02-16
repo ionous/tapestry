@@ -25,7 +25,7 @@ type Article struct {
 	Count int // for counted nouns: "seven (apples)"
 }
 
-func (a Article) Len() int {
+func (a Article) NumWords() int {
 	return MatchedLen(a.Matched)
 }
 

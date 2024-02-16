@@ -73,10 +73,8 @@ func (op *KindsOf) kindsOf(q Query, input *InputState) (okay bool) {
 
 var kindsOf = grok.PanicSpans("a kind of", "kinds of")
 
-// needs macro "inherit"
-// wonder if maybe we should be finding the macro on GetResults
-// so we can return error.....
 func (op *KindsOf) GetResults(q Query) (ret grok.Results, err error) {
+	// usually matches macro "inherit"...
 	if m, e := q.g.FindMacro(op.KindsOf.Span()); e != nil {
 		err = e
 	} else {

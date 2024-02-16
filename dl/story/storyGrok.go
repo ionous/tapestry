@@ -62,13 +62,15 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 
 func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 	if len(res.Secondary) != 0 {
-		err = errutil.Fmt("%q only expected sources", res.Macro.Name)
+		// if there are two sets of names for "kind of", it means we dont know that the rhs is officially a kind yet.
+		err = mdl.Missing
+		// err = errutil.Fmt("%q only expected sources", res.Macro.Name)
 	} else {
 		pen := w.Pin()
 		for _, src := range res.Primary {
-			// fix? grok returns one of two two forms:
+			// fix? grok returns one of two forms:
 			// one where the kind is already known to be a kind;
-			// and one where its seen as a generic name.
+			// and one where it's seen as a generic name.
 			if grok.MatchedLen(src.Span) == 0 {
 				if kinds := len(src.Kinds); kinds == 0 {
 					err = errutil.Fmt("%q expected a primary kind", res.Macro.Name)

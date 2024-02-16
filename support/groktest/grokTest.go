@@ -17,6 +17,8 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 		result any
 		skip   any
 	}{
+		// when the kind being declared isn't yet known:
+		// it is recorded as a name
 		{
 			test: `Devices are a kind of thing.`,
 			result: map[string]any{
@@ -27,6 +29,17 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 						"name":  "Devices",
 					},
 				},
+			},
+		},
+		// when the kind being declared is already known:
+		// it is recorded as a kind
+		{
+			test: `A container is a kind of thing.`,
+			result: map[string]any{
+				"macro": "inherit",
+				"primary": []map[string]any{{
+					"kinds": []string{"container", "thing"},
+				}},
 			},
 		},
 		{
@@ -178,7 +191,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) 
 				}},
 			},
 		},
-		// a kind of declaration ( uses a 'macro' verb )
+
 		// "is" left of macro
 		{
 			test: `A casket is a kind of container.`,

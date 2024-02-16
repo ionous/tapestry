@@ -28,7 +28,10 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 func (op *Kind) GetName(traits, kinds []Matched) (ret grok.Name) {
 	return grok.Name{
 		Traits: traits,
-		Kinds:  append(kinds, op.Matched),
+		// the order of kinds matters for "kinds of"
+		// for: A container is a kind of thing.
+		// the kinds should appear in that order in this list:
+		Kinds: append([]Matched{op.Matched}, kinds...),
 		// no name and no article because, the object itself is anonymous.
 		// ( the article associated with the kind gets eaten )
 	}
