@@ -15,6 +15,13 @@ For instance:
 
 Inform has these same issues.
 
+Unexpected failures
+-------------------
+
+`Three things are fixed in place in the kitchen` will not generate three anonymous things; instead it will generate an object called "three things." Instead, adjectives for anonymous objects must sit between the number and the the kind. For example: `Three fixed in place things are in the kitchen.`
+
+Inform works the same way.
+
 ## Some known differences from Inform
 
 1. A box is a kind of closed and transparent container.
