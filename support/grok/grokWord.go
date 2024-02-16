@@ -1,24 +1,5 @@
 package grok
 
-import (
-	"fmt"
-)
-
-type wordError struct {
-	word   Word
-	reason string
-}
-
-func makeWordError(w Word, reason string) error {
-	return &wordError{w, reason}
-}
-
-func (w *wordError) Error() string {
-	// i suppose if you wanted to be evil, you would unsafe pointer this string
-	// back it up by start to get the actual position
-	return fmt.Sprintf("%s in %q", w.reason, w.word.slice)
-}
-
 type Word struct {
 	hash  uint64
 	slice string // go doesn't allocate a new string for a slice, it stores offset and length

@@ -5,6 +5,16 @@ import (
 	"strconv"
 )
 
+type genFlag int
+
+const (
+	// fix: anonymous kinds should be permitted to target the most recently named noun
+	AllowMany genFlag = 1 << iota
+	AllowAnonymous
+	OnlyOne
+	OnlyNamed
+)
+
 // Results used by the parser include, a list of results, a resolved object, a resolved action, etc.
 // On success, the parser generally returns a ResultList as its primary result.
 type Result interface {
@@ -41,7 +51,6 @@ func (f ResolvedAction) WordsMatched() int {
 	return 0
 }
 
-//
 func (f ResolvedMulti) String() string {
 	var b bytes.Buffer
 	b.WriteString("Nouns(")
@@ -59,7 +68,6 @@ func (f ResolvedMulti) WordsMatched() int {
 	return f.WordCount
 }
 
-//
 func (f ResolvedNoun) String() string {
 	return "Noun: " + f.NounInstance.String()
 }
@@ -67,7 +75,6 @@ func (f ResolvedNoun) WordsMatched() int {
 	return len(f.Words)
 }
 
-//
 func (f ResolvedWords) String() string {
 	return f.Words
 }

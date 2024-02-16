@@ -34,16 +34,17 @@ func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
 func (d *dbSource) FindKind(ws grok.Span) (ret grok.Matched, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
-	words := strings.ToLower(ws.String()) + blank
-	var found struct {
-		id   int
-		name string
-	}
-	// excludes patterns (and macros) from matching these physical kinds
-	if mp, e := d.getPatternPath(); e != nil {
-		log.Println(e)
-	} else {
-		e := d.db.QueryRow(`
+	if len(ws) > 0 {
+		words := strings.ToLower(ws.String()) + blank
+		var found struct {
+			id   int
+			name string
+		}
+		// excludes patterns (and macros) from matching these physical kinds
+		if mp, e := d.getPatternPath(); e != nil {
+			log.Println(e)
+		} else {
+			e := d.db.QueryRow(`
 	with kinds(id, name, alt) as (
 		select mk.rowid, mk.kind, mk.singular
 		from mdl_kind mk
@@ -63,18 +64,19 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Matched, err error) {
 	)
 	order by length(name) desc
 	limit 1`,
-			d.domain, words, mp).Scan(&found.id, &found.name)
-		switch e {
-		case nil:
-			width := strings.Count(found.name, blank) + 1
-			ret = dbMatch{
-				Id:   found.id,
-				Span: ws[:width],
+				d.domain, words, mp).Scan(&found.id, &found.name)
+			switch e {
+			case nil:
+				width := strings.Count(found.name, blank) + 1
+				ret = dbMatch{
+					Id:   found.id,
+					Span: ws[:width],
+				}
+			case sql.ErrNoRows:
+				// return nothing.
+			default:
+				log.Println(e)
 			}
-		case sql.ErrNoRows:
-			// return nothing.
-		default:
-			log.Println(e)
 		}
 	}
 	return
@@ -123,7 +125,7 @@ func getPath(db *tables.Cache, kind kindsOf.Kinds, out *string) (ret string, err
 func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Matched, err error) {
 	if ap, e := d.getAspectPath(); e != nil {
 		err = e
-	} else {
+	} else if len(ws) > 0 {
 		words := strings.ToLower(ws.String()) + blank
 		var found struct {
 			name string
@@ -173,15 +175,18 @@ func (d *dbSource) FindMacro(ws grok.Span) (ret grok.Macro, err error) {
 
 func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 	// uses spaces instead of underscores...
-	words := strings.ToLower(ws.String()) + blank
-	var found struct {
-		kid      int64  // id of the kind
-		name     string // name of the kind/macro
-		phrase   string // string of the macro phrase
-		reversed bool
-		result   sql.NullInt32 // from mdl_pat, number of result fields ( 0 or 1 )
-	}
-	if e := d.db.QueryRow(`
+	if len(ws) == 0 {
+		err = sql.ErrNoRows
+	} else {
+		words := strings.ToLower(ws.String()) + blank
+		var found struct {
+			kid      int64  // id of the kind
+			name     string // name of the kind/macro
+			phrase   string // string of the macro phrase
+			reversed bool
+			result   sql.NullInt32 // from mdl_pat, number of result fields ( 0 or 1 )
+		}
+		if e := d.db.QueryRow(`
 	select mk.rowid, mk.kind, mg.phrase, mg.reversed, length(mp.result)>0
 	from mdl_phrase mg
 	join mdl_kind mk 
@@ -194,50 +199,51 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 	and (phrase || ' ') = substr(?2 ,0, length(phrase)+2)
 	order by length(phrase) desc
 	limit 1`, d.domain, words).Scan(
-		&found.kid, &found.name, &found.phrase, &found.reversed, &found.result); e != nil {
-		err = e
-	} else if parts, e := tables.QueryStrings(d.db,
-		`select affinity 
+			&found.kid, &found.name, &found.phrase, &found.reversed, &found.result); e != nil {
+			err = e
+		} else if parts, e := tables.QueryStrings(d.db,
+			`select affinity 
 		from mdl_field 
 		where kind=?1
 		order by rowid`, found.kid); e != nil {
-		err = e
-	} else if numFields := len(parts) - int(found.result.Int32); numFields <= 0 {
-		err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
-			numFields, found.result.Int32)
-	} else {
-		var flag grok.MacroType
-		if numFields == 1 {
-			flag = grok.Macro_PrimaryOnly
+			err = e
+		} else if numFields := len(parts) - int(found.result.Int32); numFields <= 0 {
+			err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
+				numFields, found.result.Int32)
 		} else {
-			a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
-			if a == affine.Text {
-				if b == affine.Text {
-					err = errutil.New("one one not supported?")
-				} else if b == affine.TextList {
-					flag = grok.Macro_ManySecondary
-				} else {
-					err = errutil.New("unexpected aff", b)
-				}
-			} else if a == affine.TextList {
-				if b == affine.Text {
-					flag = grok.Macro_ManyPrimary
-				} else if b == affine.TextList {
-					flag = grok.Macro_ManyMany
-				} else {
-					err = errutil.New("unexpected aff", b)
-				}
+			var flag grok.MacroType
+			if numFields == 1 {
+				flag = grok.Macro_PrimaryOnly
 			} else {
-				err = errutil.New("unexpected aff", a)
+				a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
+				if a == affine.Text {
+					if b == affine.Text {
+						err = errutil.New("one one not supported?")
+					} else if b == affine.TextList {
+						flag = grok.Macro_ManySecondary
+					} else {
+						err = errutil.New("unexpected aff", b)
+					}
+				} else if a == affine.TextList {
+					if b == affine.Text {
+						flag = grok.Macro_ManyPrimary
+					} else if b == affine.TextList {
+						flag = grok.Macro_ManyMany
+					} else {
+						err = errutil.New("unexpected aff", b)
+					}
+				} else {
+					err = errutil.New("unexpected aff", a)
+				}
 			}
-		}
-		if err == nil {
-			width := strings.Count(found.phrase, blank) + 1
-			ret = grok.Macro{
-				Name:     found.name,
-				Matched:  grok.Span(ws[:width]),
-				Type:     flag,
-				Reversed: found.reversed,
+			if err == nil {
+				width := strings.Count(found.phrase, blank) + 1
+				ret = grok.Macro{
+					Name:     found.name,
+					Matched:  grok.Span(ws[:width]),
+					Type:     flag,
+					Reversed: found.reversed,
+				}
 			}
 		}
 	}

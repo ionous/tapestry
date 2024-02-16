@@ -9,27 +9,6 @@ import (
 	"github.com/kr/pretty"
 )
 
-func Phrases(t *testing.T, g grok.Grokker) {
-	RunPhraseTests(t, func(testPhrase string) (grok.Results, error) {
-		return grok.Grok(g, testPhrase)
-	})
-}
-
-// verify the grokker trait matching algorithm with
-// an arbitrary implementation of the grokker model
-func Traits(t *testing.T, g grok.Grokker) {
-	RunTraitTests(t, func(testPhrase string) (ret grok.TraitSet, err error) {
-		if span, e := grok.MakeSpan(testPhrase); e != nil {
-			err = e
-		} else if res, e := grok.ParseTraitSet(g, span); e != nil {
-			err = e
-		} else {
-			ret = res
-		}
-		return
-	})
-}
-
 // verify a standard set of phrases using some function that takes each of those phrases
 // and produces a set of grokked results.
 func RunPhraseTests(t *testing.T, interpret func(string) (grok.Results, error)) {

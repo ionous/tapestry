@@ -15,7 +15,7 @@ func (op *KindCalled) GetName(traits, kinds []Matched) grok.Name {
 		Span:    op.Matched.(Span),
 		Exact:   true,
 		Traits:  traits,
-		Kinds:   append(kinds, op.Kind.Span()),
+		Kinds:   append(kinds, op.Kind.Matched),
 	}
 }
 

@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/groktest"
 )
 
-func xTestTraits(t *testing.T) {
+func TestTraits(t *testing.T) {
 	groktest.RunTraitTests(t, func(testPhrase string) (ret grok.TraitSet, err error) {
 		t.Log("testing:", testPhrase)
 		if ws, e := grok.MakeSpan(testPhrase); e != nil {
@@ -36,16 +36,7 @@ func TestPhrases(t *testing.T) {
 		if ws, e := grok.MakeSpan(testPhrase); e != nil {
 			err = e
 		} else {
-			q := jess.MakeQuery(&known)
-			// q.Log = jess.LogEverything
-			input := jess.InputState(ws)
-			if m, ok := jess.Match(q, &input); !ok {
-				err = errors.New("failed to match phrase")
-			} else if cnt := len(input); cnt != 0 {
-				err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
-			} else {
-				ret, err = m.GetResults(q)
-			}
+			ret, err = jess.Match(&known, ws)
 		}
 		return
 	})

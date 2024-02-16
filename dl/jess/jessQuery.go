@@ -20,7 +20,11 @@ type Query struct {
 }
 
 func MakeQuery(g grok.Grokker) Query {
-	return Query{g: g, Log: LogWarning}
+	return MakeQueryLog(g, LogWarning)
+}
+
+func MakeQueryLog(g grok.Grokker, level LogLevel) Query {
+	return Query{g: g, Log: level}
 }
 
 // returns -1 on error

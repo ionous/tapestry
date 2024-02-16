@@ -1,6 +1,7 @@
 package grokdb
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
@@ -15,14 +16,18 @@ func NewSource(db *tables.Cache) Source {
 	return x
 }
 
-func (x *Source) Grok(domain, phrase string) (grok.Results, error) {
-	x.inner.domain = domain
-	return grok.Grok(&x.inner, phrase)
+func (x *Source) Grok(domain, phrase string) (ret grok.Results, err error) {
+	if ws, e := grok.MakeSpan(phrase); e != nil {
+		err = e
+	} else {
+		ret, err = x.GrokSpan(domain, ws)
+	}
+	return
 }
 
 func (x *Source) GrokSpan(domain string, span grok.Span) (grok.Results, error) {
 	x.inner.domain = domain
-	return grok.GrokSpan(&x.inner, span)
+	return jess.Match(&x.inner, span)
 }
 
 func (x *Source) MatchArticle(ws []string) (ret int, err error) {

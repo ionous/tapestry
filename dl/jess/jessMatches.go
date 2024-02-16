@@ -84,7 +84,7 @@ func (op *KindsOf) GetResults(q Query) (ret grok.Results, err error) {
 		if op.Traits != nil {
 			traits = op.Traits.GetTraits()
 		}
-		kinds = []grok.Matched{op.Kind.Span()}
+		kinds = []grok.Matched{op.Kind.Matched}
 		names := op.Nouns.GetNames(traits, kinds)
 		ret = grok.Results{
 			Macro:   m,

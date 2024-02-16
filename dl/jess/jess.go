@@ -1,6 +1,11 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
+import (
+	"errors"
+	"fmt"
+
+	"git.sr.ht/~ionous/tapestry/support/grok"
+)
 
 // matches
 type Matched = grok.Matched
@@ -18,7 +23,24 @@ type Matches interface {
 	GetResults(Query) (grok.Results, error)
 }
 
-func Match(q Query, input *InputState) (ret Matches, okay bool) {
+func Match(g grok.Grokker, ws grok.Span) (ret grok.Results, err error) {
+	return MatchLog(g, ws, LogWarning)
+}
+
+func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret grok.Results, err error) {
+	query := MakeQueryLog(g, level)
+	input := InputState(ws)
+	if m, ok := match(query, &input); !ok {
+		err = errors.New("failed to match phrase")
+	} else if cnt := len(input); cnt != 0 {
+		err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
+	} else {
+		ret, err = m.GetResults(query)
+	}
+	return
+}
+
+func match(q Query, input *InputState) (ret Matches, okay bool) {
 	var m MatchingPhrases
 	return m.Match(q, input)
 }

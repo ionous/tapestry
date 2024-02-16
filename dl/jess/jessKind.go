@@ -20,10 +20,6 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Kind) Span() grok.Span {
-	return op.Matched.(Span)
-}
-
 func (op *Kind) GetName(traits, kinds []Matched) (ret grok.Name) {
 	return grok.Name{
 		Traits: traits,

@@ -2,10 +2,14 @@ package grokdb
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/groktest"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -17,7 +21,14 @@ func TestPhrases(t *testing.T) {
 	} else {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		groktest.Phrases(t, &x)
+		groktest.RunPhraseTests(t, func(testPhrase string) (ret grok.Results, err error) {
+			if ws, e := grok.MakeSpan(testPhrase); e != nil {
+				err = e
+			} else {
+				ret, err = jess.Match(&x, ws)
+			}
+			return
+		})
 	}
 }
 
@@ -27,7 +38,22 @@ func TestTraits(t *testing.T) {
 	} else {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		groktest.Traits(t, &x)
+		groktest.RunTraitTests(t, func(testPhrase string) (ret grok.TraitSet, err error) {
+			if ws, e := grok.MakeSpan(testPhrase); e != nil {
+				err = e
+			} else {
+				var t jess.TraitsKind //
+				input := jess.InputState(ws)
+				if !t.Match(jess.MakeQuery(&x), &input) {
+					err = errors.New("failed to match traits")
+				} else if cnt := len(input); cnt != 0 {
+					err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
+				} else {
+					ret = t.GetTraitSet()
+				}
+			}
+			return
+		})
 	}
 }
 

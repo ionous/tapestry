@@ -1,5 +1,7 @@
 package grok
 
+import "fmt"
+
 // flags indicating the presence of a comma followed by an optional and.
 type Separator int
 
@@ -73,4 +75,19 @@ Loop:
 		}
 	}
 	return
+}
+
+type wordError struct {
+	word   Word
+	reason string
+}
+
+func makeWordError(w Word, reason string) error {
+	return &wordError{w, reason}
+}
+
+func (w *wordError) Error() string {
+	// i suppose if you wanted to be evil, you would unsafe pointer this string
+	// back it up by start to get the actual position
+	return fmt.Sprintf("%s in %q", w.reason, w.word.slice)
 }

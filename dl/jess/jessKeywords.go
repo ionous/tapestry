@@ -16,7 +16,7 @@ func (op *Are) Match(q Query, input *InputState) (okay bool) {
 func (op *CommaAnd) Match(q Query, input *InputState) (okay bool) {
 	if sep, e := grok.CommaAnd(input.Words()); e != nil {
 		q.error("comma and", e)
-	} else {
+	} else if sep != 0 {
 		width := sep.Len()
 		op.Matched = input.Cut(width)
 		*input = input.Skip(width)
