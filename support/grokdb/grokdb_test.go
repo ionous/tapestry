@@ -2,8 +2,6 @@ package grokdb
 
 import (
 	"database/sql"
-	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -42,15 +40,7 @@ func TestTraits(t *testing.T) {
 			if ws, e := grok.MakeSpan(testPhrase); e != nil {
 				err = e
 			} else {
-				var t jess.TraitsKind //
-				input := jess.InputState(ws)
-				if !t.Match(jess.MakeQuery(&x), &input) {
-					err = errors.New("failed to match traits")
-				} else if cnt := len(input); cnt != 0 {
-					err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
-				} else {
-					ret = t.GetTraitSet()
-				}
+				ret, err = jess.MatchTraits(jess.MakeQuery(&x), jess.InputState(ws))
 			}
 			return
 		})

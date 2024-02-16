@@ -1,6 +1,11 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
+import (
+	"errors"
+	"fmt"
+
+	"git.sr.ht/~ionous/tapestry/support/grok"
+)
 
 func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -61,29 +66,29 @@ func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-type TraitsKind struct {
-	Traits
-	*Kind
-}
-
-// its interesting that we dont have to store anything else
-// all the trait info is in this... even additional traits.
-func (op *TraitsKind) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.Traits.Match(q, &next) {
-		Optional(q, &next, &op.Kind)
-		*input, okay = next, true
+// exists for testing the matching of trait sets
+// not used directly during normal matching.
+func MatchTraits(q Query, in InputState) (ret grok.TraitSet, err error) {
+	var traits Traits
+	if next := in; //
+	!traits.Match(q, &next) {
+		err = errors.New("failed to match traits")
+	} else {
+		// after the traits, there might be a kind
+		var kind *Kind
+		Optional(q, &next, &kind)
+		if cnt := len(next); cnt != 0 {
+			err = fmt.Errorf("partially matched %d traits", len(in)-cnt)
+		} else {
+			var k grok.Matched
+			if kind != nil {
+				k = kind.Matched
+			}
+			ret = grok.TraitSet{
+				Kind:   k,
+				Traits: traits.GetTraits(),
+			}
+		}
 	}
 	return
-}
-
-func (op *TraitsKind) GetTraitSet() grok.TraitSet {
-	var k grok.Matched
-	if op.Kind != nil {
-		k = op.Kind.Matched
-	}
-	return grok.TraitSet{
-		Kind:   k,
-		Traits: op.Traits.GetTraits(),
-	}
 }
