@@ -7,12 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/grok"
 )
 
-// type Word = grok.Word
-// type Span = grok.Span
-// type MacroType = grok.MacroType
-// type Macro = grok.Macro
-// type Match = grok.Matched
-
 func TestSep(t *testing.T) {
 	cnt := []int{
 		grok.Separator(0).Len(),
