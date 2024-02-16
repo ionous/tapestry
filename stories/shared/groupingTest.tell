@@ -6,8 +6,9 @@ Tapestry:
             Clarence is an actor.
             Cats are kinds of animals.
             Two cats are in the lab.
-            An empire apple, a pen, and two triangles are props in the lab.
-            Scrabble tiles are kinds of prop.
+            An empire apple and a pen are props in the lab.
+            Triangles and scrabble tiles are kinds of props.
+            Two triangles are in the lab.
             An X, a W, an F, a Y, and a Z are scrabble tiles in the lab.
             """
         - Comment:
