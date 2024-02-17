@@ -3,7 +3,7 @@ package jess
 func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Verb.Match(q, &next) &&
-		op.Names.Match(q, &next) {
+		op.Names.MatchPlainly(q, &next) {
 		*input, okay = next, true
 	}
 	return

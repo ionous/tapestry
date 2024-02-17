@@ -29,10 +29,10 @@ Spec:with group:
       - Flow uses:
         - Term: "matched"
 
-    - # Declares a new name or match an existing one, in full or in part.
+    - # Specifies one or more names, in full or in part.
       # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
       # The name "chest" implies the treasure chest.
-      # To optimizing matching the words "is/are/comma/and" are never part of noun names.
+      # To optimizing matching the words "is/are/comma/and" are never part of name names.
       # future: allow quoted "titles" ( which are then allowed to break those assumptions )
       # ( see also 'kind_called' )
       Spec:with flow:
@@ -43,29 +43,12 @@ Spec:with group:
           - true
         - Term: "matched" # the match is always implemented as a span.
 
-    - # matches at least one name.
-      Spec:with flow:
-      - "names"
-      - Flow uses:
-        - Term: "name"
-        - Term:optional:
-          - "additional_names"
-          - true
-
-    - # matches a name following another name.
-      Spec:with flow:
-      - "additional_names"
-      - Flow uses:
-        - # a separator is required between the names of names
-          Term: "comma_and"
-        - Term: "names"
-
-    - # Defines a noun and its kind in a single phrase.
+    - # Defines a name and its kind in a single phrase.
       # <kind> "called" [the] _name_.
-      # as per inform, the name of the noun is everything after the word called
+      # as per inform, the name of the name is everything after the word called
       # until "is" or "are" or the end of the line.
       # For instance: `The container called the trunk and the box is in the lobby`
-      # generates a single noun named "the trunk and the box."
+      # generates a single name named "the trunk and the box."
       Spec:with flow:
       - "kind_called"
       - Flow uses:
@@ -84,24 +67,22 @@ Spec:with group:
           - true
         - Term: "matched"
 
-    - # Defines one or more new names ( or matches some existing ones. )
-      # This works similar to 'names' but has more options.
-      # Whether 'names' or 'nouns' is used in a particular situation
-      # depends on the grammar and structure of the sentence.
-      # Only one of the options, plus 'additional_names' will match.
+    - # Specifies one or more names, in full or in part.
+      # This works similar to 'names' but has more options controlled by context.
+      # Only one of the options, plus possibly 'additional_names', will match.
       Spec:with flow:
-      - "nouns"
+      - "names"
       - Flow uses:
         - Term:optional:
-          - "counted_noun"
+          - "counted_name"
           - true
         - # note: because this phrase is greedy
-          # once used, no additional nouns will match.
+          # once used, no additional names will match.
           Term:optional:
           - "kind_called"
           - true
-        - # anonymous nouns
-          # nothing that anonymous nouns arent prohibited from starting a sentence.
+        - # used primarily for anonymous nouns: "the container"
+          # noting that anonymous nouns are prohibited from starting a sentence.
           Term:optional:
           - "kind"
           - true
@@ -109,29 +90,32 @@ Spec:with group:
           - "name"
           - true
         - Term:optional:
-          - "additional_nouns"
+          - "additional_names"
           - true
 
-    - # matches a noun following another noun.
+    - # matches a name following another name.
       Spec:with flow:
-      - "additional_nouns"
+      - "additional_names"
       - Flow uses:
-        - # a separator is required between the nouns of nouns
+        - # a separator is required between names
           Term: "comma_and"
-        - Term: "nouns"
+        - Term: "names"
 
     - # provides english specification of a number of objects.
       # note: yes, `the five the containers` is permitted.
       Spec:with flow:
-      - "counted_noun"
+      - "counted_name"
       - Flow uses:
         - Term:optional:
           - "article"
           - true
         - Term: "number"
         - Term: "kind"
+        - Term:private:
+          - "matched"
+          - true
 
-    - # matches the name of an (existing) kind.
+    - # matches the name of an existing kind.
       Spec:with flow:
       - "kind"
       - Flow uses:
@@ -142,11 +126,19 @@ Spec:with group:
           - true
         - Term: "matched"
 
-    - # matches at least one kind.
+    - # matches a set of possible kinds
+      # fix: jess tests for and prohibits leading traits.
+      # ( for use with kinds_are_traits )
       Spec:with flow:
       - "kinds"
       - Flow uses:
-        - Term: "kind"
+        - # inform allows
+          Term:optional:
+          - "traits"
+          - true
+        - Term:type:
+          - "kind"
+          - "name"
         - Term:optional:
           - "additional_kinds"
           - true
@@ -206,6 +198,9 @@ Spec:with group:
 
     - # assigns default traits to a kind.
       # <the kind> are "usually" <traits>
+      # future: inform allows limiting traits to kinds with other traits:
+      # for example, `the closed containers are fixed in place.`
+      # makes any containers that are *initially* closed also immovable.
       Spec:with flow:
       - "kinds_are_traits"
       - Flow uses:
@@ -236,7 +231,9 @@ Spec:with group:
       Spec:with flow:
       - "kinds_of"
       - Flow uses:
-        - Term: "nouns"
+        - # a counted name here doesn't indicate multiple kinds
+          # instead it generates a kind that has a number leading its name.
+          Term: "names"
         - Term: "are"
         - # the phrases "a kind of" or "kinds of"
           Term:type:
@@ -253,42 +250,42 @@ Spec:with group:
           # this doesnt switch to special traits, and doesnt allow multiple kinds.
           Term: "kind"
 
-    - # verb nouns are (other) nouns.
+    - # verb names are (other) names.
       # ex. `In the coffin are some coins, a notebook, and the gripping hand.`
-      # This intentionally doesn't recognize adjectives attached to named nouns.
-      # "In the closed coffin" generates a noun with the name "closed coffin"
+      # This intentionally doesn't recognize adjectives attached to named names.
+      # "In the closed coffin" generates a name with the name "closed coffin"
       # not a coffin in an initially closed state.
       Spec:with flow:
       - "verb_links"
       - Flow uses:
         - Term: "verb"
-        - Term: "nouns"
+        - Term: "names"
         - Term: "are"
         - Term:type:
-          - "other_nouns"
-          - "nouns"
+          - "other_names"
+          - "names"
 
-    - # nouns are verb (other) nouns.
+    - # names are verb (other) names.
       # ex. `The thing called the stake is on the supporter called the altar.`
       Spec:with flow:
       - "links_verb"
       - Flow uses:
-        - Term: "nouns"
+        - Term: "names"
         - Term: "are"
         - Term: "verb"
         - Term:type:
-          - "other_nouns"
-          - "nouns"
+          - "other_names"
+          - "names"
 
-    - # nouns are adjectives [verb names].
+    - # names are adjectives [verb names].
       # ex. `The bottle is a transparent, open, container.`
       # `The coffin is a closed container in the antechamber.`
-      # This is the *only* way of assigning nouns initial states directly.
+      # This is the *only* way of assigning names initial states directly.
       # All other phrases require a kind to be involved, here the kind is optional.
       Spec:with flow:
       - "links_adjectives"
       - Flow uses:
-        - Term: "nouns"
+        - Term: "names"
         - Term: "are"
         - # adjectives are *not* optional.
           # if there are no adjectives present,
@@ -303,7 +300,8 @@ Spec:with group:
       - "verb_phrase"
       - Flow uses:
         - Term: "verb"
-        - Term: "names"
+        - # only succeeds on plain names.
+          Term: "names"
 
     - # one or more phrases consisting of traits and a kind.
       # while all parts are marked as optional, matching expects

@@ -1,12 +1,15 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
+import (
+	"git.sr.ht/~ionous/tapestry/support/grok"
+)
 
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
 func (op *KindCalled) GetName(traits, kinds []Matched) grok.Name {
-	if op.Traits != nil {
-		traits = append(traits, op.Traits.GetTraits()...)
+	for ts := op.GetTraits(); ts.HasNext(); {
+		t := ts.GetNext()
+		traits = append(traits, t.Matched)
 	}
 	return grok.Name{
 		// ignores the article of the kind,
@@ -17,6 +20,17 @@ func (op *KindCalled) GetName(traits, kinds []Matched) grok.Name {
 		Traits:  traits,
 		Kinds:   append(kinds, op.Kind.Matched),
 	}
+}
+
+func (op *KindCalled) GetTraits() (ret Traitor) {
+	if op.Traits != nil {
+		ret = op.Traits.GetTraits()
+	}
+	return
+}
+
+func (op *KindCalled) String() string {
+	return op.Matched.String()
 }
 
 func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {

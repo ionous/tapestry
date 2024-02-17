@@ -17,11 +17,18 @@ func (op *Adjectives) Match(q Query, input *InputState) (okay bool) {
 	}
 	return
 }
+func (op *Adjectives) GetTraits() (ret Traitor) {
+	if ts := op.Traits; ts != nil {
+		ret = ts.GetTraits()
+	}
+	return
+}
 
 func (op *Adjectives) Reduce() (retTraits, retKinds []grok.Matched) {
 	for t := *op; ; {
-		if n := t.Traits; n != nil {
-			retTraits = append(retTraits, n.GetTraits()...)
+		for ts := op.GetTraits(); ts.HasNext(); {
+			t := ts.GetNext()
+			retTraits = append(retTraits, t.Matched)
 		}
 		if k := t.Kind; k != nil {
 			retKinds = append(retKinds, k.Matched)

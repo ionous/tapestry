@@ -21,12 +21,12 @@ func TestTraits(t *testing.T) {
 }
 
 func TestPhrases(t *testing.T) {
-	groktest.RunPhraseTests(t, func(testPhrase string) (ret grok.Results, err error) {
+	groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Interpreter, err error) {
 		t.Log("testing:", testPhrase)
 		if ws, e := grok.MakeSpan(testPhrase); e != nil {
 			err = e
 		} else {
-			ret, err = jess.Match(&known, ws)
+			ret, err = jess.MatchLog(&known, ws, jess.LogWarning)
 		}
 		return
 	})
@@ -58,9 +58,6 @@ func (n *info) FindTrait(ws Span) (Match, error) {
 func (n *info) FindMacro(ws Span) (Macro, error) {
 	return n.macros.FindMacro(ws)
 }
-
-// "kinds of", "inherit", grok.Macro_PrimaryOnly, false
-// "a kind of", "inherit", grok.Macro_PrimaryOnly, false
 
 var known = info{
 	macros: groktest.PanicMacros(

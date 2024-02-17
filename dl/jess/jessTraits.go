@@ -1,19 +1,10 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
-
-func (op *Article) Match(q Query, input *InputState) (okay bool) {
-	if m, width := q.FindArticle(*input); width > 0 {
-		op.Matched, *input, okay = m, input.Skip(width), true
-	}
-	return
-}
-
-func ReduceArticle(op *Article) (ret grok.Article) {
-	if op != nil {
-		ret = grok.Article{
-			Matched: op.Matched,
-		}
+func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	(Optional(q, &next, &op.CommaAnd) || true) &&
+		op.Traits.Match(q, &next) {
+		*input, okay = next, true
 	}
 	return
 }
@@ -45,24 +36,25 @@ func (op *Traits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Traits) GetTraits() []Matched {
-	var out []Matched
-	for t := *op; ; {
-		out = append(out, t.Trait.Matched)
-		if next := t.AdditionalTraits; next == nil {
-			break
-		} else {
-			t = next.Traits
-		}
-	}
-	return out
+// unwind the tree of additional traits
+func (op *Traits) GetTraits() Traitor {
+	return Traitor{op}
 }
 
-func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	(Optional(q, &next, &op.CommaAnd) || true) &&
-		op.Traits.Match(q, &next) {
-		*input, okay = next, true
+// trait iterator
+type Traitor struct {
+	next *Traits
+}
+
+func (it Traitor) HasNext() bool {
+	return it.next != nil
+}
+
+func (it *Traitor) GetNext() (ret Trait) {
+	var next *Traits
+	if more := it.next.AdditionalTraits; more != nil {
+		next = &more.Traits
 	}
+	ret, it.next = it.next.Trait, next
 	return
 }

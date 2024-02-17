@@ -2,6 +2,15 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/grok"
 
+type MatchedName interface {
+	GetName(traits, kinds []Matched) grok.Name
+	String() string
+}
+
+func (op *Name) String() string {
+	return op.Matched.String()
+}
+
 func (op *Name) GetName(traits, kinds []Matched) grok.Name {
 	return grok.Name{
 		Article: ReduceArticle(op.Article),
@@ -23,38 +32,6 @@ func (op *Name) Match(q Query, input *InputState) (okay bool) {
 func (op *Name) matchName(q Query, input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
-	}
-	return
-}
-
-func (op *Names) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.Name.Match(q, &next) &&
-		(Optional(q, &next, &op.AdditionalNames) || true) {
-		*input, okay = next, true
-	}
-	return
-}
-
-func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.CommaAnd.Match(q, &next) &&
-		op.Names.Match(q, &next) {
-		*input, okay = next, true
-	}
-	return
-}
-
-func (op *Names) Reduce(traits, kinds []Matched) (ret []grok.Name) {
-	for t := *op; ; {
-		n := t.Name.GetName(traits, kinds)
-		ret = append(ret, n)
-		// next name:
-		if next := t.AdditionalNames; next == nil {
-			break
-		} else {
-			t = next.Names
-		}
 	}
 	return
 }

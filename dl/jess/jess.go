@@ -12,6 +12,11 @@ type Matched = grok.Matched
 type Span = grok.Span
 type Macro = grok.Macro
 
+type Applicant interface {
+	Interpreter
+	Apply(Registrar) error
+}
+
 type Interpreter interface {
 	Match(Query, *InputState) bool
 }
@@ -20,14 +25,14 @@ type Interpreter interface {
 // can produce full results when matched,
 type Matches interface {
 	Interpreter
-	GetResults(Query) (grok.Results, error)
+	GetResults() (grok.Results, error)
 }
 
-func Match(g grok.Grokker, ws grok.Span) (ret grok.Results, err error) {
+func Match(g grok.Grokker, ws grok.Span) (Interpreter, error) {
 	return MatchLog(g, ws, LogWarning)
 }
 
-func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret grok.Results, err error) {
+func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret Interpreter, err error) {
 	query := MakeQueryLog(g, level)
 	input := InputState(ws)
 	if m, ok := match(query, &input); !ok {
@@ -35,7 +40,7 @@ func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret grok.Results, e
 	} else if cnt := len(input); cnt != 0 {
 		err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
 	} else {
-		ret, err = m.GetResults(query)
+		ret = m
 	}
 	return
 }
