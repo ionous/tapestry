@@ -876,6 +876,12 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 	return
 }
 
+func (pen *Pen) AddKindTrait(kind, trait string) (err error) {
+	return pen.AddDefaultValue(kind, trait, &assign.FromBool{
+		Value: &literal.BoolValue{Value: true},
+	})
+}
+
 // the top level fields of kinds can hold runtime evaluated assignments.
 func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err error) {
 	if kind, e := pen.findRequiredKind(kind); e != nil {

@@ -75,11 +75,6 @@ var known = info{
 		"on", "support", grok.Macro_ManySecondary, true,
 		//
 		"suspicious of", "suspect", grok.Macro_ManyMany, false,
-		// kinds: should these really be a macro?
-		"kinds of", "inherit", grok.Macro_PrimaryOnly, false, // for "are kinds of containers"
-		"a kind of", "inherit", grok.Macro_PrimaryOnly, false, // for "a kind of container"
-		// fix: should these really be a macro?
-		"usually", "implies", grok.Macro_PrimaryOnly, false,
 	),
 	kinds: grok.PanicSpans(
 		"kind", "kinds",

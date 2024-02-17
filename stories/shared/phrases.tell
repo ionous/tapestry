@@ -1,13 +1,4 @@
 Tapestry:
-  - Define phrase:asMacro:
-      - "usually"
-      - "implies something"
-  - Define phrase:asMacro:
-      - "kinds of"
-      - "inheriting something"
-  - Define phrase:asMacro:
-      - "a kind of"
-      - "inheriting something"
   - Define phrase:asMacro:reversed:
       - "in"
       - "containing something"

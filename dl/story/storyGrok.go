@@ -7,6 +7,7 @@ import (
 	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -36,17 +37,20 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			for _, temp := range spans {
 				span := temp // pin otherwise the callback(s) all see the same last loop value
 				if e := cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
-					if res, e := w.GrokSpan(span); e != nil {
+					if i, e := w.Grok(span); e != nil {
 						err = errutil.Fmt("%w reading of %v b/c %v", mdl.Missing, span.String(), e)
 					} else {
-						if strings.HasPrefix(res.Macro.Name, "inherit") || strings.HasPrefix(res.Macro.Name, "implies") {
-							// handle "kinds of"
-							// alt, could maybe look at the number of fields of the macro
-							// it'd be amazing to handle all of validate and genNouns in macros
-							// (so no decisions are needed here ) but dont think that's easily possible.
-							err = grokKindPhrase(w, res)
-						} else {
-							err = grokNounPhrase(w, res)
+						switch i := i.(type) {
+						case jess.Applicant:
+							err = i.Apply(w.Pin())
+						case jess.Matches:
+							if res, e := i.GetResults(); e != nil {
+								err = e
+							} else {
+								err = grokNounPhrase(w, res)
+							}
+						default:
+							err = errutil.Fmt("unexpected result %T", i)
 						}
 					}
 					return
@@ -58,68 +62,6 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
-	if len(res.Secondary) != 0 {
-		// if there are two sets of names for "kind of", it means we dont know that the rhs is officially a kind yet.
-		err = mdl.Missing
-		// err = errutil.Fmt("%q only expected sources", res.Macro.Name)
-	} else {
-		pen := w.Pin()
-		for _, src := range res.Primary {
-			// fix? grok returns one of two forms:
-			// one where the kind is already known to be a kind;
-			// and one where it's seen as a generic name.
-			if grok.MatchedLen(src.Span) == 0 {
-				if kinds := len(src.Kinds); kinds == 0 {
-					err = errutil.Fmt("%q expected a primary kind", res.Macro.Name)
-				} else if kinds > 2 {
-					err = errutil.Fmt("%q expected no more than two kinds", res.Macro.Name)
-					break
-				} else {
-					if e := grokKind(pen, src.Kinds[0], optionalLast(src.Kinds[1:]), src.Traits); e != nil {
-						err = e
-						break
-					}
-				}
-			} else {
-				if kinds := len(src.Kinds); kinds > 1 {
-					err = errutil.Fmt("%q expects no more than a single kind per source.", res.Macro.Name)
-					break
-				} else {
-					if e := grokKind(pen, src.Span, optionalLast(src.Kinds), src.Traits); e != nil {
-						err = e
-						break
-					}
-				}
-			}
-		}
-	}
-	return
-}
-
-func optionalLast(list []grok.Matched) (ret grok.Matched) {
-	if cnt := len(list); cnt > 0 {
-		ret = list[cnt-1]
-	}
-	return
-}
-
-func grokKind(pen *mdl.Pen, k, a grok.Matched, traits []grok.Matched) (err error) {
-	kind := inflect.Normalize(grok.MatchedString(k))
-	ancestor := inflect.Normalize(grok.MatchedString(a))
-	if e := pen.AddKind(kind, ancestor); e != nil {
-		err = e
-	} else {
-		for _, t := range traits {
-			t := inflect.Normalize(t.String())
-			if e := pen.AddDefaultValue(kind, t, truly()); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-	}
-	return
 }
 
 func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {

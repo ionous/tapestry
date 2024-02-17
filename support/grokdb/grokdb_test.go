@@ -19,7 +19,7 @@ func TestPhrases(t *testing.T) {
 	} else {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		groktest.RunPhraseTests(t, func(testPhrase string) (ret grok.Results, err error) {
+		groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Interpreter, err error) {
 			if ws, e := grok.MakeSpan(testPhrase); e != nil {
 				err = e
 			} else {
@@ -71,8 +71,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		// macros
 		carry
 		contain
-		inherit
-		implies
 		support
 		suspect
 		// domain string
@@ -99,8 +97,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		// macros:
 		carry, domain, "carry", "", idPath(macros),
 		contain, domain, "contain", "", idPath(macros),
-		inherit, domain, "inherit", "", idPath(macros),
-		implies, domain, "implies", "", idPath(macros),
 		support, domain, "support", "", idPath(macros),
 		suspect, domain, "suspect", "", idPath(macros),
 	); e != nil {
@@ -122,12 +118,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, contain, "secondary", "text_list",
 		domain, contain, "error", "text",
 		//
-		domain, inherit, "primary", "text_list",
-		domain, inherit, "error", "text",
-
-		domain, implies, "primary", "text_list",
-		domain, implies, "error", "text",
-		//
 		domain, support, "primary", "text",
 		domain, support, "secondary", "text_list",
 		domain, support, "error", "text",
@@ -142,8 +132,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		//
 		carry, "error",
 		contain, "error",
-		inherit, "error",
-		implies, "error",
 		support, "error",
 		suspect, "error",
 	); e != nil {
@@ -154,9 +142,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, carry, "carried by", true, // ex. primary carrying secondary
 		domain, carry, "carrying", false, // ex. primary carrying secondary
 		domain, contain, "in", true,
-		domain, inherit, "kinds of", false, // for "are kinds of containers"
-		domain, inherit, "a kind of", false, // ex. "a kind of container"
-		domain, implies, "usually", false, // ex. "usually closed"
 		domain, support, "on", true, // on the x are the w,y,z
 		domain, suspect, "suspicious of", false,
 	); e != nil {

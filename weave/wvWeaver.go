@@ -3,6 +3,7 @@ package weave
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/grok"
@@ -19,8 +20,8 @@ type Weaver struct {
 	rt.Runtime
 }
 
-func (w *Weaver) GrokSpan(p grok.Span) (grok.Results, error) {
-	return w.Catalog.gdb.GrokSpan(w.Domain, p)
+func (w *Weaver) Grok(p grok.Span) (jess.Interpreter, error) {
+	return w.Catalog.gdb.Grok(w.Domain, p)
 }
 
 func (w *Weaver) MatchArticle(ws []string) (ret int, err error) {

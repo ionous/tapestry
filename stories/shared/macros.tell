@@ -1,16 +1,4 @@
 Tapestry:
-  - # ex. kinds are usually traits
-    Define macro:requires:provides:do:
-      - "implies something"
-      - - Text: "kind"
-      - - Nothing:
-      - []
-  - # ex. kinds are kinds of something.
-    Define macro:requires:provides:do:
-      - "inheriting something"
-      - - Text: "kind"
-      - - Nothing:
-      - []
   - Define macro:requires:provides:do:
       - "carrying something"
       - - Text: "actor"
