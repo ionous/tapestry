@@ -23,7 +23,7 @@ func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
 		} else {
 			pen := w.Pin()
 			for _, a := range op.Aliases {
-				if e := pen.AddName(n, a, -1); e != nil {
+				if e := pen.AddNounAlias(n, a, -1); e != nil {
 					err = e
 					break
 				}

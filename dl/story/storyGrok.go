@@ -2,15 +2,11 @@ package story
 
 import (
 	"errors"
-	"strings"
-	"unicode"
-	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
@@ -37,21 +33,10 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			for _, temp := range spans {
 				span := temp // pin otherwise the callback(s) all see the same last loop value
 				if e := cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
-					if i, e := w.Grok(span); e != nil {
+					if i, e := w.MatchSpan(span); e != nil {
 						err = errutil.Fmt("%w reading of %v b/c %v", mdl.Missing, span.String(), e)
 					} else {
-						switch i := i.(type) {
-						case jess.Applicant:
-							err = i.Apply(w.Pin())
-						case jess.Matches:
-							if res, e := i.GetResults(); e != nil {
-								err = e
-							} else {
-								err = grokNounPhrase(w, res)
-							}
-						default:
-							err = errutil.Fmt("unexpected result %T", i)
-						}
+						err = i.Apply(jessAdapter{w, w.Pin()})
 					}
 					return
 				}); e != nil {
@@ -64,33 +49,67 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 	})
 }
 
-func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {
-	if multiSrc, e := validSources(res.Primary, res.Macro.Type); e != nil {
+// fix... obviously.
+type jessAdapter struct {
+	w   *weave.Weaver
+	pen *mdl.Pen
+}
+
+func (ja jessAdapter) AddKind(kind, ancestor string) error {
+	return ja.pen.AddKind(kind, ancestor)
+}
+func (ja jessAdapter) AddKindTrait(kind, trait string) error {
+	return ja.pen.AddKindTrait(kind, trait)
+}
+func (ja jessAdapter) AddNoun(short, long, kind string) error {
+	return ja.pen.AddNoun(short, long, kind)
+}
+func (ja jessAdapter) AddNounAlias(noun, name string, rank int) error {
+	return ja.pen.AddNounAlias(noun, name, rank)
+}
+func (ja jessAdapter) AddNounTrait(noun, trait string) error {
+	return ja.w.AddInitialValue(ja.pen, noun, trait, truly())
+}
+func (ja jessAdapter) AddNounValue(noun, prop string, val rt.Assignment) error {
+	return ja.w.AddInitialValue(ja.pen, noun, prop, val)
+}
+func (ja jessAdapter) GetClosestNoun(name string) (string, error) {
+	return ja.w.GetClosestNoun(name)
+}
+func (ja jessAdapter) GetExactNoun(name string) (string, error) {
+	return ja.pen.GetExactNoun(name)
+}
+func (ja jessAdapter) GetPlural(word string) string {
+	return ja.w.PluralOf(word)
+}
+func (ja jessAdapter) GetSingular(word string) string {
+	return ja.w.SingularOf(word)
+}
+func (ja jessAdapter) GetUniqueName(category string) string {
+	return newCounter(ja.w.Catalog, category)
+}
+
+func (ja jessAdapter) Apply(macro jess.Macro, lhs, rhs []string) (err error) {
+	if multiSrc, e := validSources(lhs, macro.Type); e != nil {
 		err = e
-	} else if multiTgt, e := validTargets(res.Secondary, res.Macro.Type); e != nil {
-		err = e
-	} else if src, e := genNouns(w, res.Primary, multiSrc); e != nil {
-		err = e
-	} else if tgt, e := genNouns(w, res.Secondary, multiTgt); e != nil {
+	} else if multiTgt, e := validTargets(rhs, macro.Type); e != nil {
 		err = e
 	} else {
-		// note: some phrases "the box is open" dont have macros.
-		// in that case, genNouns does all the work.
-		if macro := res.Macro.Name; len(macro) > 0 {
-			if kind, e := w.GetKindByName(macro); e != nil {
+		src := namesToValues(lhs, multiSrc)
+		tgt := namesToValues(rhs, multiTgt)
+		if kind, e := ja.w.GetKindByName(macro.Name); e != nil {
+			err = e
+		} else if !kind.Implements(kindsOf.Macro.String()) {
+			err = errutil.Fmt("expected %q to be a macro", kind.Name())
+		} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
+			err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", kind.Name(), fieldCnt)
+		} else {
+			args := []g.Value{src, tgt}
+			if v, e := ja.w.Call(kind.Name(), affine.Text, nil, args); e != nil && !errors.Is(e, rt.NoResult) {
 				err = e
-			} else if !kind.Implements(kindsOf.Macro.String()) {
-				err = errutil.Fmt("expected %q to be a macro", macro)
-			} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
-				err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", macro, fieldCnt)
-			} else {
-				args := []g.Value{src, tgt}
-				if v, e := w.Call(kind.Name(), affine.Text, nil, args); e != nil && !errors.Is(e, rt.NoResult) {
-					err = e
-				} else if v != nil {
-					if msg := v.String(); len(msg) > 0 {
-						err = errutil.Fmt("Declare statement: %s", msg)
-					}
+			} else if v != nil {
+				if msg := v.String(); len(msg) > 0 {
+					err = errutil.Fmt("Declare statement: %s", msg)
 				}
 			}
 		}
@@ -98,20 +117,8 @@ func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {
 	return
 }
 
-// for logging errors
-func reduceNouns(ns []grok.Name) (ret string) {
-	var s strings.Builder
-	for i, n := range ns {
-		if i > 1 {
-			s.WriteString(", ")
-		}
-		s.WriteString(n.String())
-	}
-	return s.String()
-}
-
 // validate that the number of parsed primary names is as expected
-func validSources(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) {
+func validSources(ns []string, mtype grok.MacroType) (multi bool, err error) {
 	switch mtype {
 	case grok.Macro_PrimaryOnly, grok.Macro_ManyPrimary, grok.Macro_ManyMany:
 		if cnt := len(ns); cnt == 0 {
@@ -120,7 +127,7 @@ func validSources(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) 
 		multi = true
 	case grok.Macro_ManySecondary:
 		if cnt := len(ns); cnt > 1 {
-			err = errutil.New("expected exactly one noun, have:", reduceNouns(ns))
+			err = errutil.New("expected exactly one noun")
 		}
 	default:
 		err = errutil.New("invalid macro type")
@@ -129,7 +136,7 @@ func validSources(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) 
 }
 
 // validate that the number of parsed secondary names is as expected
-func validTargets(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) {
+func validTargets(ns []string, mtype grok.MacroType) (multi bool, err error) {
 	switch mtype {
 	case grok.Macro_PrimaryOnly:
 		if cnt := len(ns); cnt != 0 {
@@ -148,196 +155,13 @@ func validTargets(ns []grok.Name, mtype grok.MacroType) (multi bool, err error) 
 	return
 }
 
-// determine whether the noun seems to be a proper name
-func isProper(article grok.Article, name string) (okay bool) {
-	a := inflect.Normalize(article.String())
-	if len(name) > 1 || a == "our" {
-		first, _ := utf8.DecodeRuneInString(name)
-		okay = unicode.ToUpper(first) == first
-	}
-	return
-}
-
-// determine whether the noun will need a custom indefinite property
-// this uses a subset of the known articles, due to way object printing works.
-func getCustomArticle(article grok.Article) (ret string) {
-	switch a := inflect.Normalize(article.String()); a {
-	case "a", "an", "the":
-	default:
-		ret = a
-	}
-	return
-}
-
-// add nouns and values
-func genNouns(w *weave.Weaver, ns []grok.Name, multi bool) (ret g.Value, err error) {
-	names := make([]string, 0, len(ns))
-	for _, n := range ns {
-		if n.Article.Count > 0 {
-			if ns, e := importCountedNoun(w, n); e != nil {
-				err = e
-				break
-			} else {
-				names = append(names, ns...)
-			}
-		} else {
-			if name, e := importNamedNoun(w, w.Pin(), n); e != nil {
-				err = e
-				break
-			} else {
-				names = append(names, name)
-			}
-		}
-	} // end for loop
-	// all done?
-	if err == nil {
-		if multi {
-			ret = g.StringsOf(names)
-		} else if len(names) > 0 {
-			ret = g.StringOf(names[0])
-		} else {
-			ret = g.Empty
-		}
-	}
-	return
-}
-
-func importNamedNoun(w *weave.Weaver, pen *mdl.Pen, n grok.Name) (ret string, err error) {
-	var noun string
-	fullName := n.String()
-	if name := inflect.Normalize(fullName); name == "you" {
-		// tdb: the current thought is that "the player" should be a variable;
-		// currently its an "agent".
-		noun, err = pen.GetExactNoun("self")
+func namesToValues(names []string, multi bool) (ret g.Value) {
+	if multi {
+		ret = g.StringsOf(names)
+	} else if len(names) > 0 {
+		ret = g.StringOf(names[0])
 	} else {
-		if n.Exact { // ex. ".... called the spatula."
-			noun, err = pen.GetExactNoun(name)
-		} else if fold, e := pen.GetClosestNoun(name); e != nil {
-			err = e
-		} else {
-			noun = fold
-		}
-		// if it doesnt exist; we create it.
-		if errors.Is(err, mdl.Missing) {
-			base := "things" // ugh
-			if len(n.Kinds) > 0 {
-				base = inflect.Normalize(n.Kinds[0].String())
-			}
-			if e := pen.AddNoun(name, fullName, base); e != nil {
-				err = e
-			} else {
-				noun = name
-			}
-		}
-	}
-	// assign kinds
-	// fix consider a "noun builder" instead
-	if err == nil {
-		for _, k := range n.Kinds {
-			k := inflect.Normalize(k.String())
-			// since noun already exists: this ensures that the noun inherits from all of the specified kinds
-			if e := pen.AddNoun(noun, "", k); e != nil {
-				err = e
-				break
-			}
-		}
-	}
-	// add articles:
-	if err == nil {
-		if isProper(n.Article, fullName) {
-			if e := w.AddInitialValue(pen, noun, "proper named", truly()); e != nil {
-				err = e
-			}
-		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := w.AddInitialValue(pen, noun, "indefinite article", text(a, "")); e != nil {
-				err = e
-			}
-		}
-	}
-	// add traits:
-	if err == nil {
-		for _, t := range n.Traits {
-			t := inflect.Normalize(t.String())
-			if e := w.AddInitialValue(pen, noun, t, truly()); e != nil {
-				err = errutil.Append(err, e)
-				break // out of the traits to the next noun
-			}
-		}
-	}
-	// return
-	if err == nil {
-		ret = noun
-	}
-	return
-}
-
-// ex. "two triangles"
-// - adds ( and returns ) nouns: triangle_1, triangle_2, etc. of kind "triangle/s"
-// - uses "triangle" as an alias and printed name for each of the new nouns
-// - flags them all as "counted.
-// - ensures "triangle/s" are things
-func importCountedNoun(w *weave.Weaver, noun grok.Name) (ret []string, err error) {
-	// ..kindOrKinds string, article grok.Article, traits []grok.Match
-	if cnt := noun.Article.Count; cnt > 0 {
-		// generate unique names for each of the counted nouns.
-		// fix: we probably want nouns to "stack", and be have individually duplicated objects.
-		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
-		// and when you pick up one cat now you have two object stacks, both referring to the kind cats
-		// an empty stack acts like no object, and gets collected in some fashion.
-		name, parent := noun.String(), "thing"
-		if len(name) == 0 {
-			name = noun.Kinds[0].String()
-		} else if len(noun.Kinds) > 0 {
-			// ex. ""An empire apple, a pen, and two triangles are props in the lab."
-			// fix: grok should return that as an object *called* two triangles, not something counted.
-			parent = noun.Kinds[0].String()
-		}
-		name = inflect.Normalize(name)
-
-		names := make([]string, cnt)
-		for i := 0; i < cnt; i++ {
-			names[i] = newCounter(w.Catalog, name)
-		}
-
-		var kind, kinds string
-		// note: kind is phrased in the singular here when count is 1, plural otherwise.
-		if cnt == 1 {
-			kind = name
-			kinds = w.PluralOf(name)
-		} else {
-			kinds = name
-			kind = w.SingularOf(name)
-		}
-		pen := w.Pin()
-		if e := pen.AddKind(kinds, parent); e != nil {
-			err = e
-		} else {
-		Loop:
-			for _, n := range names {
-				if e := pen.AddNoun(n, n, kinds); e != nil {
-					err = e
-				} else if e := pen.AddName(n, kind, -1); e != nil {
-					err = e // ^ so that typing "triangle" means "triangles-1"
-					break
-				} else if e := w.AddInitialValue(pen, n, "counted", truly()); e != nil {
-					err = e
-					break
-				} else if e := w.AddInitialValue(pen, n, "printed name", text(kind, "")); e != nil {
-					err = e // so that printing "triangles-1" yields "triangle"
-					break   // FIX: itd make a lot more sense to have a default value for the kind
-				} else {
-					for _, t := range noun.Traits {
-						if e := w.AddInitialValue(pen, n, t.String(), truly()); e != nil {
-							err = e
-							break Loop
-						}
-					}
-				}
-			}
-			if err == nil {
-				ret = names
-			}
-		}
+		ret = g.Empty
 	}
 	return
 }

@@ -27,7 +27,7 @@ func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 			pen := w.Pin()
 			for _, a := range names.Strings() {
 				if a := inflect.Normalize(a); len(a) > 0 {
-					if e := pen.AddName(n, a, -1); e != nil {
+					if e := pen.AddNounAlias(n, a, -1); e != nil {
 						err = e
 						break
 					}

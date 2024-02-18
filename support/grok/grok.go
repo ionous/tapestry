@@ -43,7 +43,7 @@ type Macro struct {
 	Reversed bool
 }
 
-func (m Macro) Len() int {
+func (m Macro) NumWords() int {
 	return MatchedLen(m.Matched)
 }
 

@@ -279,7 +279,7 @@ Spec:with group:
 
     - # names are adjectives [verb names].
       # ex. `The bottle is a transparent, open, container.`
-      # `The coffin is a closed container in the antechamber.`
+      # `The coffin is a closed container [in the antechamber]`
       # This is the *only* way of assigning names initial states directly.
       # All other phrases require a kind to be involved, here the kind is optional.
       Spec:with flow:
@@ -289,7 +289,7 @@ Spec:with group:
         - Term: "are"
         - # adjectives are *not* optional.
           # if there are no adjectives present,
-          # then the links_verb pattern will match instead.
+          # then 'links_verb' (might) match instead.
           Term: "adjectives"
         - Term:optional:
           - "verb_phrase"

@@ -28,11 +28,11 @@ type Matches interface {
 	GetResults() (grok.Results, error)
 }
 
-func Match(g grok.Grokker, ws grok.Span) (Interpreter, error) {
+func Match(g grok.Grokker, ws grok.Span) (Applicant, error) {
 	return MatchLog(g, ws, LogWarning)
 }
 
-func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret Interpreter, err error) {
+func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret Applicant, err error) {
 	query := MakeQueryLog(g, level)
 	input := InputState(ws)
 	if m, ok := match(query, &input); !ok {
@@ -45,16 +45,16 @@ func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret Interpreter, er
 	return
 }
 
-func match(q Query, input *InputState) (ret Matches, okay bool) {
+func match(q Query, input *InputState) (ret Applicant, okay bool) {
 	var m MatchingPhrases
 	return m.Match(q, input)
 }
 
 // allows partial matches; test that there's no input left to verify a complete match.
-func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Matches, okay bool) {
+func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Applicant, okay bool) {
 	// fix? could change to reflect ( or expand type info ) to walk generically
 	var best InputState
-	for _, m := range []Matches{
+	for _, m := range []Applicant{
 		&op.KindsAreTraits,
 		&op.KindsOf,
 		&op.VerbLinks,

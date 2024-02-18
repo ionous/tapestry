@@ -2,7 +2,8 @@ package grok
 
 // the expected amount of names on the left and right hand sides of a macro phrase.
 // ( which side is primary and which side is secondary is fairly arbitrary;
-//   it depends on the definition of the phrase. )
+//
+//	it depends on the definition of the phrase. )
 type MacroType int
 
 const (
@@ -17,3 +18,19 @@ const (
 	// ex. `Hector and Maria are suspicious of Santa and Santana.`
 	Macro_ManyMany
 )
+
+func (m MacroType) MultiSource() (okay bool) {
+	switch m {
+	case Macro_PrimaryOnly, Macro_ManyPrimary, Macro_ManyMany:
+		okay = true
+	}
+	return
+}
+
+func (m MacroType) MultiTarget() (okay bool) {
+	switch m {
+	case Macro_ManySecondary, Macro_ManyMany:
+		okay = true
+	}
+	return
+}

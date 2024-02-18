@@ -21,7 +21,7 @@ func TestTraits(t *testing.T) {
 }
 
 func TestPhrases(t *testing.T) {
-	groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Interpreter, err error) {
+	groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
 		t.Log("testing:", testPhrase)
 		if ws, e := grok.MakeSpan(testPhrase); e != nil {
 			err = e

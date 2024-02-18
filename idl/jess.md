@@ -22,7 +22,15 @@ Unexpected failures
 
 Inform works the same way.
 
-## Some known differences from Inform
+Differences from Inform
+------------------------
+
+## Functional differences
+
+Inform allows limiting traits to kinds with other traits:
+For example, `the closed containers are fixed in place.`makes any containers that are *initially* closed also immovable. Jess is not that clever, and instead (theoretically) generates an error.
+
+## Syntax differences
 
 1. A box is a kind of closed and transparent container.
 2. A box is a kind of closed transparent container.

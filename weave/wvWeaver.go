@@ -20,8 +20,8 @@ type Weaver struct {
 	rt.Runtime
 }
 
-func (w *Weaver) Grok(p grok.Span) (jess.Interpreter, error) {
-	return w.Catalog.gdb.Grok(w.Domain, p)
+func (w *Weaver) MatchSpan(p grok.Span) (jess.Applicant, error) {
+	return w.Catalog.gdb.MatchSpan(w.Domain, p)
 }
 
 func (w *Weaver) MatchArticle(ws []string) (ret int, err error) {
@@ -33,8 +33,8 @@ func (w *Weaver) Pin() *mdl.Pen {
 }
 
 func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value rt.Assignment) (err error) {
-	// a little annoying this wrap;
-	// best that can be done without something like promises i think
+	// if we are adding an initial value for a different domain
+	// then that gets changed into "set value" triggered on "begin domain"
 	var u mdl.DomainValueError
 	if e := pen.AddInitialValue(noun, field, value); !errors.As(e, &u) {
 		err = e // nil or unexpected error.

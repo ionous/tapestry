@@ -16,13 +16,16 @@ func (op *VerbLinks) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *VerbLinks) GetResults() (ret grok.Results, _ error) {
-	ret = makeResult(
+func (op *VerbLinks) Apply(rar Registrar) error {
+	return grokNounPhrase(rar, op.GetResults())
+}
+
+func (op *VerbLinks) GetResults() grok.Results {
+	return makeResult(
 		op.Verb.Macro, !op.Verb.Macro.Reversed,
 		op.Names.GetNames(nil, nil),
 		op.OtherNames.GetNames(nil, nil),
 	)
-	return
 }
 
 func (op *LinksVerb) Match(q Query, input *InputState) (okay bool) {
@@ -38,14 +41,17 @@ func (op *LinksVerb) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *LinksVerb) GetResults() (ret grok.Results, _ error) {
-	ret = makeResult(
+func (op *LinksVerb) Apply(rar Registrar) error {
+	return grokNounPhrase(rar, op.GetResults())
+}
+
+func (op *LinksVerb) GetResults() (ret grok.Results) {
+	return makeResult(
 		op.Verb.Macro,
 		op.Verb.Macro.Reversed,
 		op.Names.GetNames(nil, nil),
 		op.OtherNames.GetNames(nil, nil),
 	)
-	return
 }
 
 func (op *LinksAdjectives) Match(q Query, input *InputState) (okay bool) {
@@ -82,16 +88,18 @@ func (op *LinksAdjectives) IsReversed() (okay bool) {
 	return
 }
 
-func (op *LinksAdjectives) GetResults() (ret grok.Results, _ error) {
+func (op *LinksAdjectives) Apply(rar Registrar) error {
+	return grokNounPhrase(rar, op.GetResults())
+}
+
+func (op *LinksAdjectives) GetResults() grok.Results {
 	var b []grok.Name
 	for it := op.GetOtherNames(); it.HasNext(); {
 		n := it.GetNext()
 		b = append(b, n.GetName(nil, nil))
 	}
 	a := op.Names.GetNames(op.Adjectives.Reduce())
-	ret = makeResult(
+	return makeResult(
 		op.GetMacro(), op.IsReversed(),
 		a, b)
-
-	return
 }

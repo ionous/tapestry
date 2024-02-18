@@ -79,7 +79,7 @@ func (q Query) FindMacro(ws InputState) (ret grok.Macro, retWidth int) {
 		retWidth = -1
 		q.error("FindMacro", e)
 	} else {
-		ret, retWidth = res, res.Len()
+		ret, retWidth = res, res.NumWords()
 	}
 	return
 }

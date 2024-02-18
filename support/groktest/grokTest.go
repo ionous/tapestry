@@ -2,6 +2,7 @@
 package groktest
 
 import (
+	"errors"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
@@ -12,7 +13,7 @@ import (
 
 // verify a standard set of phrases using some function that takes each of those phrases
 // and produces a result map, or a string list.
-func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, error)) {
+func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)) {
 	var phrases = []struct {
 		test   string
 		result any
@@ -25,8 +26,10 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 			// I like that usually specifically indicates and separates kinds from nouns --
 			// im not sure the other certainties (never, always) are really needed:
 			// if so: the "final" field for mdl_value, mdl_value_kind could be used.
-			test:   `Containers are usually closed.`,
-			result: []string{"AddKindTrait", "containers", "closed"},
+			test: `Containers are usually closed.`,
+			result: []string{
+				"AddKindTrait", "containers", "closed",
+			},
 		},
 		{
 			test: `Containers and supporters are usually fixed in place.`,
@@ -36,119 +39,78 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 			},
 		},
 		{
-			// note: in inform...	 §4.14. Duplicates
-			// "Two circles are in the Lab."
-			// it only works if "circles" is a known kind
-			// otherwise, it assumes "two circles" is the complete name of a single noun.
 			test: `Two things are in the kitchen.`,
-			result: map[string]any{
-				"macro": "contain",
-				"secondary": []map[string]any{{
-					"count": 2,
-					"kinds": []string{"things"},
-				}},
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "kitchen",
-				}},
+			result: []string{
+				// FIX: dont want this line
+				"AddKind", "things", "thing",
+				//
+				"AddNoun", "things-1", "things-1", "things",
+				"AddNounAlias", "things-1", "thing",
+				"AddNounTrait", "things-1", "counted",
+				"AddNounValue", "things-1", "printed name",
+				//
+				"AddNoun", "things-2", "things-2", "things",
+				"AddNounAlias", "things-2", "thing",
+				"AddNounTrait", "things-2", "counted",
+				"AddNounValue", "things-2", "printed name",
+				"ApplyMacro", "contain", "kitchen", "things-1", "things-2",
 			},
 		},
-
 		{
 			test: `Hershel is carrying scissors and a pen.`,
-			result: map[string]any{
-				"macro": "carry",
-				"primary": []map[string]any{{
-					"name": "Hershel",
-				}},
-				"secondary": []map[string]any{{
-					"name": "scissors",
-				}, {
-					"det":  "a",
-					"name": "pen",
-				}},
+			result: []string{
+				"AddNounTrait", "hershel", "proper named",
+				"ApplyMacro", "carry", "hershel", "scissors", "pen",
 			},
 		},
 		// reverse carrying relation.
 		{
 			test: `The scissors and a pen are carried by Hershel.`,
-			result: map[string]any{
-				"macro": "carry",
-				"primary": []map[string]any{{
-					"name": "Hershel",
-				}},
-				"secondary": []map[string]any{{
-					"det":  "the",
-					"name": "scissors",
-				}, {
-					"det":  "a",
-					"name": "pen",
-				}},
+			result: []string{
+				"AddNounTrait", "hershel", "proper named",
+				"ApplyMacro", "carry", "hershel", "scissors", "pen",
 			},
 		},
 
 		// simple trait:
 		{
 			test: `The bottle is closed.`,
-			result: map[string]any{
-				"primary": []map[string]any{{
-					"det":    "the",
-					"name":   "bottle",
-					"traits": []string{"closed"},
-				}},
+			result: []string{
+				"AddNounTrait", "bottle", "closed",
 			},
 		},
 		// multi Word trait:
 		{
 			test: `The tree is fixed in place.`,
-			result: map[string]any{
-				"primary": []map[string]any{{
-					"det":    "the",
-					"name":   "tree",
-					"traits": []string{"fixed in place"},
-				}},
+			result: []string{
+				"AddNounTrait", "tree", "fixed in place",
 			},
 		},
 		// multiple trailing properties, using the kind as a property.
 		{
 			test: `The bottle is a transparent, open, container.`,
-			result: map[string]any{
-				"primary": []map[string]any{{
-					"det":    "the",
-					"name":   "bottle",
-					"kinds":  []string{"container"},
-					"traits": []string{"transparent", "open"},
-				}},
+			result: []string{
+				"AddNoun", "bottle", "", "container",
+				"AddNounTrait", "bottle", "transparent",
+				"AddNounTrait", "bottle", "open",
 			},
 		},
 		// multiple nouns of different kinds
 		{
 			test: `The box and the top are closed containers.`,
-			result: map[string]any{
-				"primary": []map[string]any{{
-					"det":    "the",
-					"name":   "box",
-					"traits": []string{"closed"},
-					"kinds":  []string{"containers"},
-				}, {
-					"det":    "the",
-					"name":   "top",
-					"traits": []string{"closed"},
-					"kinds":  []string{"containers"},
-				}},
+			result: []string{
+				"AddNoun", "box", "", "containers",
+				"AddNounTrait", "box", "closed",
+				"AddNoun", "top", "", "containers",
+				"AddNounTrait", "top", "closed",
 			},
 		},
 		// using 'called' without a macro
 		{
 			test: `The container called the sarcophagus is open.`,
-			result: map[string]any{
-				"primary": []map[string]any{{
-					"det":    "the", // note: this is the bit closes to the noun
-					"name":   "sarcophagus",
-					"exact":  true,
-					"kinds":  []string{"container"},
-					"traits": []string{"open"},
-				}},
+			result: []string{
+				"AddNoun", "sarcophagus", "", "container",
+				"AddNounTrait", "sarcophagus", "open",
 			},
 		},
 		// ------------------------------------------------------------------------
@@ -158,13 +120,17 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 			// when the requested kind being declared isn't yet known.
 			// ( note: if the ancestor kind isnt known, and "inherits" is a macro
 			//   this can be parsed as LinksVerb )
-			test:   `Devices are a kind of thing.`,
-			result: []string{"AddKind", "devices", "thing"},
+			test: `Devices are a kind of thing.`,
+			result: []string{
+				"AddKind", "devices", "thing",
+			},
 		},
 		{
 			// when the kind being declared is already known:
-			test:   `A container is a kind of thing.`,
-			result: []string{"AddKind", "container", "thing"},
+			test: `A container is a kind of thing.`,
+			result: []string{
+				"AddKind", "container", "thing",
+			},
 		},
 		{
 			// adding trailing properties
@@ -209,55 +175,30 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 		// ------------------------------------------------------------------------
 		{
 			test:   `A container is in the lobby.`,
-			result: errutil.New("this is specifically disallowed, and should generate an error"),
+			result: errors.New("this is specifically disallowed, and should generate an error"),
 		},
 		// rhs-contains; "in" is
 		{
 			test: `The unhappy man is in the closed bottle.`,
-			result: map[string]any{
-				"macro": "contain",
-				"secondary": []map[string]any{{
-					"det": "the",
-					// giving properties to the rhs and right secondary isnt permitted:
-					// tbd: but it might be possible...
-					"name": "unhappy man",
-				}},
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "closed bottle",
-				}},
-			}},
+			result: []string{
+				"ApplyMacro", "contain", "closed bottle", "unhappy man",
+			},
+		},
 		// same pattern as the middle properties above; but not using kind of
 		{
 			test: `The coffin is a closed container in the antechamber.`,
-			result: map[string]any{
-				"macro": "contain",
-				"secondary": []map[string]any{{
-					"det":    "the",
-					"name":   "coffin",
-					"traits": []string{"closed"},
-					"kinds":  []string{"container"},
-				}},
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "antechamber",
-				}},
+			result: []string{
+				"AddNoun", "coffin", "", "container",
+				"AddNounTrait", "coffin", "closed",
+				"ApplyMacro", "contain", "antechamber", "coffin",
 			},
 		},
 		// note, this is allowed even though it implies something different than what is written:
 		{
 			test: `The bottle is openable in the kitchen.`,
-			result: map[string]any{
-				"macro": "contain",
-				"secondary": []map[string]any{{
-					"det":    "the",
-					"traits": []string{"openable"},
-					"name":   "bottle",
-				}},
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "kitchen",
-				}},
+			result: []string{
+				"AddNounTrait", "bottle", "openable",
+				"ApplyMacro", "contain", "kitchen", "bottle",
 			},
 		},
 		// called both before and after the macro
@@ -265,20 +206,10 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 		// would create a noun called "the trunk and the box"
 		{
 			test: `The thing called the stake is on the supporter called the altar.`,
-			result: map[string]any{
-				"macro": "support",
-				"secondary": []map[string]any{{
-					"det":   "the",
-					"name":  "stake",
-					"exact": true,
-					"kinds": []string{"thing"},
-				}},
-				"primary": []map[string]any{{
-					"det":   "the",
-					"name":  "altar",
-					"exact": true,
-					"kinds": []string{"supporter"},
-				}},
+			result: []string{
+				"AddNoun", "altar", "", "supporter",
+				"AddNoun", "stake", "", "thing",
+				"ApplyMacro", "support", "altar", "stake",
 			},
 		},
 		// add leading properties using 'called'
@@ -287,112 +218,67 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 		// those expect only expect one set of nouns; these have two.
 		{
 			test: `A closed openable container called the trunk is in the lobby.`,
-			result: map[string]any{
-				"macro": "contain",
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "lobby",
-				}},
-				"secondary": []map[string]any{{
-					"det":    "the", // closest to the trunk
-					"name":   "trunk",
-					"exact":  true,
-					"traits": []string{"closed", "openable"},
-					"kinds":  []string{"container"},
-				}},
+			result: []string{
+				"AddNoun", "trunk", "", "container",
+				"AddNounTrait", "trunk", "closed",
+				"AddNounTrait", "trunk", "openable",
+				"ApplyMacro", "contain", "lobby", "trunk",
 			},
 		},
 		// multiple primary:
 		// "is" left of the macro "in".
 		{
 			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
-			result: map[string]any{
-				"macro": "contain",
-				"primary": []map[string]any{{
-					"det":  "the", // closest to the coffin
-					"name": "coffin",
-				}},
-				"secondary": []map[string]any{{
-					"det":  "some",
-					"name": "coins",
-				}, {
-					"det":  "a",
-					"name": "notebook",
-				}, {
-					"det":  "the",
-					"name": "gripping hand",
-				}},
+			result: []string{
+				"AddNounValue", "coins", "indefinite article",
+				"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			},
 		},
 		// multiple primary with a leading macro
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
-			result: map[string]any{
-				"macro": "contain",
-				"primary": []map[string]any{{
-					"det":  "the", // lowercase, the closest to the trunk
-					"name": "coffin",
-				}},
-				"secondary": []map[string]any{{
-					"det":  "some",
-					"name": "coins",
-				}, {
-					"det":  "a",
-					"name": "notebook",
-				}, {
-					"det":  "the",
-					"name": "gripping hand",
-				}},
+			result: []string{
+				"AddNounValue", "coins", "indefinite article",
+				"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			},
 		},
+
 		// multiple anonymous nouns.
 		{
 			test: `In the lobby are a supporter and a container.`,
-			result: map[string]any{
-				"macro": "contain",
-				"primary": []map[string]any{{
-					"det":  "the",
-					"name": "lobby",
-				}},
-				"secondary": []map[string]any{{
-					"kinds": []string{"supporter"},
-				}, {
-					"kinds": []string{"container"},
-				}},
+			result: []string{
+				"AddNoun", "", "", "supporter",
+				"AddNoun", "", "", "container",
+				"ApplyMacro", "contain", "lobby", "", "",
 			},
 		},
 		// the special nxn description: no properties are allowed.
 		{
 			test: `Hector and Maria are suspicious of Santa and Santana.`,
-			result: map[string]any{
-				"macro": "suspect",
-				"primary": []map[string]any{{
-					"name": "Hector",
-				}, {
-					"name": "Maria",
-				}},
-				"secondary": []map[string]any{{
-					"name": "Santa",
-				}, {
-					"name": "Santana",
-				}},
+			result: []string{
+				"AddNounTrait", "hector", "proper named",
+				"AddNounTrait", "maria", "proper named",
+				"AddNounTrait", "santa", "proper named",
+				"AddNounTrait", "santana", "proper named",
+				"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
 			},
 		},
 		// fix: trailing properties applying to the lhs
 		{
 			test: `The bottle in the kitchen is openable.`,
-			skip: map[string]any{
-				"macro": "contain",
-				"primary": []map[string]any{{
-					"det":    "the",
-					"traits": []string{"openable"},
-					"name":   "bottle",
-				}},
-				"secondary": []map[string]any{{
-					"det":  "the",
-					"name": "kitchen",
-				}},
-			},
+			// skip: map[string]any{
+			// 	"macro": "contain",
+			// 	"primary": []map[string]any{{
+			// 		"det":    "the",
+			// 		"traits": []string{
+			// "openable",
+			// },
+			// 		"name":   "bottle",
+			// 	}},
+			// 	"secondary": []map[string]any{{
+			// 		"det":  "the",
+			// 		"name": "kitchen",
+			// 	}},
 		},
 		// TODO: values.
 		{
@@ -410,26 +296,16 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Interpreter, erro
 		if len(p.test) == 0 || p.result == nil {
 			skipped++
 		} else {
-			var haveRes any
+			var haveRes []string
 			got, haveError := interpret(p.test)
 			if haveError == nil {
-				switch n := got.(type) {
-				case jess.Applicant:
-					var m Mock
-					if e := n.Apply(&m); e != nil {
-						haveError = e
-					} else {
-						haveRes = []string(m) // cast down
-					}
-				case jess.Matches:
-					if a, e := n.GetResults(); e != nil {
-						haveError = e
-					} else {
-						haveRes = ResultMap(a)
-					}
+				var m Mock
+				if e := got.Apply(&m); e != nil {
+					haveError = e
+				} else {
+					haveRes = m.out
 				}
 			}
-
 			if expectError, ok := p.result.(error); ok {
 				if haveError != nil {
 					t.Log("ok, test", i, p.test, haveError)
@@ -466,24 +342,32 @@ func RunTraitTests(t *testing.T, interpret func(string) (grok.TraitSet, error)) 
 	}{{
 		test: "open container",
 		result: map[string]any{
-			"kind":   "container",
-			"traits": []string{"open"},
+			"kind": "container",
+			"traits": []string{
+				"open",
+			},
 		},
 	}, {
 		test: "the open and an openable container",
 		result: map[string]any{
-			"kind":   "container",
-			"traits": []string{"open", "openable"},
+			"kind": "container",
+			"traits": []string{
+				"open", "openable",
+			},
 		},
 	}, {
 		test: "open, and openable",
 		result: map[string]any{
-			"traits": []string{"open", "openable"},
+			"traits": []string{
+				"open", "openable",
+			},
 		},
 	}, {
 		test: "open, openable",
 		result: map[string]any{
-			"traits": []string{"open", "openable"},
+			"traits": []string{
+				"open", "openable",
+			},
 		},
 	}, {
 		test:   "open and and openable",

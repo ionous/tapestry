@@ -16,7 +16,7 @@ func NewSource(db *tables.Cache) Source {
 	return x
 }
 
-func (x *Source) Grok(domain string, span grok.Span) (jess.Interpreter, error) {
+func (x *Source) MatchSpan(domain string, span grok.Span) (jess.Applicant, error) {
 	x.inner.domain = domain
 	return jess.Match(&x.inner, span)
 }

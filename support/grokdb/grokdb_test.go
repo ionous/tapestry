@@ -19,7 +19,7 @@ func TestPhrases(t *testing.T) {
 	} else {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Interpreter, err error) {
+		groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
 			if ws, e := grok.MakeSpan(testPhrase); e != nil {
 				err = e
 			} else {

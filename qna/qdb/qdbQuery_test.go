@@ -320,7 +320,7 @@ func mdlName(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(int),
 			row[4].(string)
-		if e := m.Pin(domain, at).AddName(noun, name, rank); e != nil {
+		if e := m.Pin(domain, at).AddNounAlias(noun, name, rank); e != nil {
 			err = e
 			break
 		}

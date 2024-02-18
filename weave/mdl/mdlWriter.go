@@ -508,7 +508,7 @@ func genNames(short, long string) []string {
 	return out
 }
 
-func (pen *Pen) AddName(noun, name string, rank int) (err error) {
+func (pen *Pen) AddNounAlias(noun, name string, rank int) (err error) {
 	if n, e := pen.findRequiredNoun(noun, nounSansKind); e != nil {
 		err = e
 	} else {
