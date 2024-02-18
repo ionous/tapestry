@@ -1,10 +1,10 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
+import "git.sr.ht/~ionous/tapestry/support/match"
 
-type InputState []grok.Word
+type InputState []match.Word
 
-func (in InputState) Words() []grok.Word {
+func (in InputState) Words() []match.Word {
 	return in
 }
 
@@ -14,8 +14,8 @@ func (in InputState) Skip(skip int) InputState {
 }
 
 // return an input state that is the passed number of words after this one.
-func (in InputState) Cut(width int) grok.Span {
-	return grok.Span(in[:width])
+func (in InputState) Cut(width int) match.Span {
+	return match.Span(in[:width])
 }
 
 func (in InputState) MatchWord(choices ...uint64) (width int) {

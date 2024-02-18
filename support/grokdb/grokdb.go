@@ -6,32 +6,56 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
-// implements grok.Match; returned by dbSource.
+// implements jess.Match; returned by dbSource.
 type dbMatch struct {
 	Id int
-	grok.Span
+	match.Span
 }
 
-// implements grok.Grokker; returned by dbSource.
+// implements match.Grokker; returned by dbSource.
 type dbSource struct {
 	db                      *tables.Cache
 	domain                  string
 	aspectPath, patternPath string
 }
 
-func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
-	return grok.FindArticle(ws)
+func (d *dbSource) FindKind(ws match.Span) (ret jess.Matched, retWidth int) {
+	if res, e := d.findKind(ws); e != nil {
+		log.Println("FindKind", e)
+	} else if res != nil {
+		ret, retWidth = res, res.NumWords()
+	}
+	return
+}
+
+func (d *dbSource) FindTrait(ws match.Span) (ret jess.Matched, retWidth int) {
+	if res, e := d.findTrait(ws); e != nil {
+		log.Println("FindTrait", e)
+	} else if res != nil {
+		ret, retWidth = res, res.NumWords()
+	}
+	return
+}
+
+func (d *dbSource) FindMacro(ws match.Span) (ret jess.Macro, retWidth int) {
+	if res, e := d.findMacro(ws); e == nil {
+		ret, retWidth = res, res.NumWords()
+	} else if e != sql.ErrNoRows {
+		log.Println("FindMacro", e)
+	}
+	return
 }
 
 // if the passed words starts with a kind,
 // return the number of words in  that match.
-func (d *dbSource) FindKind(ws grok.Span) (ret grok.Matched, err error) {
+func (d *dbSource) findKind(ws match.Span) (ret jess.Matched, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
 	if len(ws) > 0 {
@@ -122,7 +146,7 @@ func getPath(db *tables.Cache, kind kindsOf.Kinds, out *string) (ret string, err
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Matched, err error) {
+func (d *dbSource) findTrait(ws match.Span) (ret jess.Matched, err error) {
 	if ap, e := d.getAspectPath(); e != nil {
 		err = e
 	} else if len(ws) > 0 {
@@ -152,7 +176,7 @@ func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Matched, err error) {
 		switch e {
 		case nil:
 			width := strings.Count(found.name, blank) + 1
-			ret = grok.Span(ws[:width])
+			ret = match.Span(ws[:width])
 		case sql.ErrNoRows:
 			// return nothing.
 		default:
@@ -162,18 +186,7 @@ func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Matched, err error) {
 	return
 }
 
-// if the passed words starts with a macro,
-// return information about that match
-func (d *dbSource) FindMacro(ws grok.Span) (ret grok.Macro, err error) {
-	if m, e := d.findMacro(ws); e != nil && e != sql.ErrNoRows {
-		err = e
-	} else if e == nil {
-		ret = m
-	}
-	return
-}
-
-func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
+func (d *dbSource) findMacro(ws match.Span) (ret jess.Macro, err error) {
 	// uses spaces instead of underscores...
 	if len(ws) == 0 {
 		err = sql.ErrNoRows
@@ -211,24 +224,24 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 			err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
 				numFields, found.result.Int32)
 		} else {
-			var flag grok.MacroType
+			var flag jess.MacroType
 			if numFields == 1 {
-				flag = grok.Macro_PrimaryOnly
+				flag = jess.Macro_PrimaryOnly
 			} else {
 				a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
 				if a == affine.Text {
 					if b == affine.Text {
 						err = errutil.New("one one not supported?")
 					} else if b == affine.TextList {
-						flag = grok.Macro_ManySecondary
+						flag = jess.Macro_ManySecondary
 					} else {
 						err = errutil.New("unexpected aff", b)
 					}
 				} else if a == affine.TextList {
 					if b == affine.Text {
-						flag = grok.Macro_ManyPrimary
+						flag = jess.Macro_ManyPrimary
 					} else if b == affine.TextList {
-						flag = grok.Macro_ManyMany
+						flag = jess.Macro_ManyMany
 					} else {
 						err = errutil.New("unexpected aff", b)
 					}
@@ -238,9 +251,9 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 			}
 			if err == nil {
 				width := strings.Count(found.phrase, blank) + 1
-				ret = grok.Macro{
+				ret = jess.Macro{
 					Name:     found.name,
-					Matched:  grok.Span(ws[:width]),
+					Matched:  match.Span(ws[:width]),
 					Type:     flag,
 					Reversed: found.reversed,
 				}

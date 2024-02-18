@@ -1,4 +1,4 @@
-package grok
+package jess
 
 // the expected amount of names on the left and right hand sides of a macro phrase.
 // ( which side is primary and which side is secondary is fairly arbitrary;
@@ -18,6 +18,17 @@ const (
 	// ex. `Hector and Maria are suspicious of Santa and Santana.`
 	Macro_ManyMany
 )
+
+type Macro struct {
+	Matched
+	Name     string
+	Type     MacroType
+	Reversed bool
+}
+
+func (m Macro) NumWords() int {
+	return MatchedLen(m.Matched)
+}
 
 func (m MacroType) MultiSource() (okay bool) {
 	switch m {

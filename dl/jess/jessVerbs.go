@@ -11,7 +11,7 @@ func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
 
 // the passed phrase is the macro to match
 func (op *Verb) Match(q Query, input *InputState) (okay bool) {
-	if m, width := q.FindMacro(*input); width > 0 {
+	if m, width := q.FindMacro(input.Words()); width > 0 {
 		op.Macro = m
 		op.Matched = input.Cut(width)
 		*input, okay = input.Skip(width), true

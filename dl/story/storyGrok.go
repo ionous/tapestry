@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
@@ -25,7 +25,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if text, e := safe.GetText(w, op.Text); e != nil {
 			err = e
-		} else if spans, e := grok.MakeSpans(text.String()); e != nil {
+		} else if spans, e := match.MakeSpans(text.String()); e != nil {
 			err = e
 		} else {
 			// split each statement into its own evaluation
@@ -118,14 +118,14 @@ func (ja jessAdapter) Apply(macro jess.Macro, lhs, rhs []string) (err error) {
 }
 
 // validate that the number of parsed primary names is as expected
-func validSources(ns []string, mtype grok.MacroType) (multi bool, err error) {
+func validSources(ns []string, mtype jess.MacroType) (multi bool, err error) {
 	switch mtype {
-	case grok.Macro_PrimaryOnly, grok.Macro_ManyPrimary, grok.Macro_ManyMany:
+	case jess.Macro_PrimaryOnly, jess.Macro_ManyPrimary, jess.Macro_ManyMany:
 		if cnt := len(ns); cnt == 0 {
 			err = errutil.New("expected at least one source noun")
 		}
 		multi = true
-	case grok.Macro_ManySecondary:
+	case jess.Macro_ManySecondary:
 		if cnt := len(ns); cnt > 1 {
 			err = errutil.New("expected exactly one noun")
 		}
@@ -136,17 +136,17 @@ func validSources(ns []string, mtype grok.MacroType) (multi bool, err error) {
 }
 
 // validate that the number of parsed secondary names is as expected
-func validTargets(ns []string, mtype grok.MacroType) (multi bool, err error) {
+func validTargets(ns []string, mtype jess.MacroType) (multi bool, err error) {
 	switch mtype {
-	case grok.Macro_PrimaryOnly:
+	case jess.Macro_PrimaryOnly:
 		if cnt := len(ns); cnt != 0 {
 			err = errutil.New("didn't expect any target nouns")
 		}
-	case grok.Macro_ManyPrimary:
+	case jess.Macro_ManyPrimary:
 		if cnt := len(ns); cnt > 1 {
 			err = errutil.New("expected at most one target noun")
 		}
-	case grok.Macro_ManySecondary, grok.Macro_ManyMany:
+	case jess.Macro_ManySecondary, jess.Macro_ManyMany:
 		// any number okay
 		multi = true
 	default:

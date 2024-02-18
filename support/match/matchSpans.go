@@ -1,11 +1,12 @@
-package grok
+package match
 
 type SpanList [][]Word
 
-func (ws SpanList) FindMatch(words Span) (ret Matched, none error) {
+func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {
 	// i is the index of the span in the list
 	if _, skip := ws.FindPrefix(words); skip > 0 {
 		ret = Span(words[:skip])
+		retLen = skip
 	}
 	return
 }

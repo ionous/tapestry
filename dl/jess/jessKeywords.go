@@ -1,11 +1,11 @@
 package jess
 
 import (
-	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
 func (op *Are) Match(q Query, input *InputState) (okay bool) {
-	if width := input.MatchWord(grok.Keyword.Are, grok.Keyword.Is); width > 0 {
+	if width := input.MatchWord(keywords.Are, keywords.Is); width > 0 {
 		op.Matched = input.Cut(width)
 		*input = input.Skip(width)
 		okay = true
@@ -14,9 +14,7 @@ func (op *Are) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *CommaAnd) Match(q Query, input *InputState) (okay bool) {
-	if sep, e := grok.CommaAnd(input.Words()); e != nil {
-		q.error("comma and", e)
-	} else if sep != 0 {
+	if sep, e := ReadCommaAnd(input.Words()); e == nil && sep != 0 {
 		width := sep.Len()
 		op.Matched = input.Cut(width)
 		*input = input.Skip(width)
@@ -34,6 +32,17 @@ func (op *Words) Match(q Query, input *InputState, hashes ...uint64) (okay bool)
 	return
 }
 
-func (op *Words) Span() grok.Span {
-	return op.Matched.(grok.Span)
+func (op *Words) Span() match.Span {
+	return op.Matched.(match.Span)
+}
+
+// make customizable?
+var keywords = struct {
+	And, Are, Called, Comma, Is uint64
+}{
+	And:    match.Hash("and"),
+	Are:    match.Hash("are"),
+	Called: match.Hash("called"),
+	Comma:  match.Hash(","),
+	Is:     match.Hash("is"),
 }

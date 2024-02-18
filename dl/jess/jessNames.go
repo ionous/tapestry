@@ -1,7 +1,5 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
-
 func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
@@ -71,7 +69,7 @@ func (op *Names) Pick() (ret MatchedName) {
 	return
 }
 
-func (op *Names) GetName(traits, kinds []Matched) (ret grok.Name) {
+func (op *Names) GetName(traits, kinds []Matched) (ret resultName) {
 	return op.Pick().GetName(traits, kinds)
 }
 
@@ -81,7 +79,7 @@ func (op *Names) String() (ret string) {
 	return op.Pick().String()
 }
 
-func (op *Names) GetNames(traits, kinds []Matched) (ret []grok.Name) {
+func (op *Names) GetNames(traits, kinds []Matched) (ret []resultName) {
 	for t := *op; ; {
 		n := t.GetName(traits, kinds)
 		ret = append(ret, n)

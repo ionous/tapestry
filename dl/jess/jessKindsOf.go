@@ -1,11 +1,11 @@
 package jess
 
 import (
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-func (op *KindsOf) GetResults() (ret grok.Results, err error) {
+func (op *KindsOf) GetResults() (ret localResults, err error) {
 	panic("xxx")
 }
 
@@ -17,7 +17,7 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 		op.kindsOf(q, &next) &&
 		(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) {
-		q.note("matched KindsOf")
+		// q.note("matched KindsOf")
 		*input, okay = next, true
 	}
 	return
@@ -32,7 +32,7 @@ func (op *KindsOf) kindsOf(q Query, input *InputState) (okay bool) {
 	return
 }
 
-var kindsOf = grok.PanicSpans("a kind of", "kinds of")
+var kindsOf = match.PanicSpans("a kind of", "kinds of")
 
 func (op *KindsOf) GetTraits() (ret Traitor) {
 	if op.Traits != nil {

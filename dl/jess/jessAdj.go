@@ -1,7 +1,5 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
-
 func (op *Adjectives) Match(q Query, input *InputState) (okay bool) {
 	next := *input
 	traits := Optional(q, &next, &op.Traits)
@@ -24,7 +22,7 @@ func (op *Adjectives) GetTraits() (ret Traitor) {
 	return
 }
 
-func (op *Adjectives) Reduce() (retTraits, retKinds []grok.Matched) {
+func (op *Adjectives) Reduce() (retTraits, retKinds []Matched) {
 	for t := *op; ; {
 		for ts := op.GetTraits(); ts.HasNext(); {
 			t := ts.GetNext()

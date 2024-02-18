@@ -2,12 +2,12 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -99,12 +99,12 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 		} else {
 			names := nouns.Strings()
 			if kind := kind.String(); len(kind) > 0 {
-				if kind, e := grok.StripArticle(kind); e != nil {
+				if kind, e := jess.StripArticle(kind); e != nil {
 					err = e
 				} else {
 					pen := w.Pin()
 					for _, noun := range names {
-						if noun, e := grok.StripArticle(noun); e != nil {
+						if noun, e := jess.StripArticle(noun); e != nil {
 							err = errutil.Append(err, e)
 						} else if e := pen.AddNoun(inflect.Normalize(noun), noun, kind); e != nil {
 							err = errutil.Append(err, e)
@@ -144,7 +144,7 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 				subjects := nouns.Strings()
 				field := field.String()
 				for _, noun := range subjects {
-					if name, e := grok.StripArticle(noun); e != nil {
+					if name, e := jess.StripArticle(noun); e != nil {
 						err = errutil.Append(err, e)
 					} else if noun, e := pen.GetClosestNoun(inflect.Normalize(name)); e != nil {
 						err = errutil.Append(err, e)

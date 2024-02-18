@@ -1,4 +1,4 @@
-// exercises implementations of grok.Grokker to ensure they produce good results.
+// exercises implementations of match.Grokker to ensure they produce good results.
 package groktest
 
 import (
@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -329,74 +328,5 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 	}
 	if skipped > 0 {
 		t.Logf("skipped %d tests", skipped)
-	}
-}
-
-// run a standard set of trait phases using some function that takes each of those phrases
-// and produces a bunch of traits, sometimes ending with a kind ( ex. open container )
-func RunTraitTests(t *testing.T, interpret func(string) (grok.TraitSet, error)) {
-	var phrases = []struct {
-		test   string
-		result any
-		skip   any
-	}{{
-		test: "open container",
-		result: map[string]any{
-			"kind": "container",
-			"traits": []string{
-				"open",
-			},
-		},
-	}, {
-		test: "the open and an openable container",
-		result: map[string]any{
-			"kind": "container",
-			"traits": []string{
-				"open", "openable",
-			},
-		},
-	}, {
-		test: "open, and openable",
-		result: map[string]any{
-			"traits": []string{
-				"open", "openable",
-			},
-		},
-	}, {
-		test: "open, openable",
-		result: map[string]any{
-			"traits": []string{
-				"open", "openable",
-			},
-		},
-	}, {
-		test:   "open and and openable",
-		result: errutil.New("two ands should fail"),
-	}, {
-		test:   "open and, openable",
-		result: errutil.New("backwards commas should fail"),
-	}}
-	var skipped int
-	for i, p := range phrases {
-		ts, haveError := interpret(p.test)
-		if len(p.test) == 0 || p.result == nil {
-			skipped++
-		} else if expectError, ok := p.result.(error); ok {
-			if haveError == nil {
-				t.Fatal(i, p.test, "expected an error", expectError, "but succeeded")
-			}
-		} else if haveError != nil {
-			t.Fatal(i, p.test, haveError)
-		} else if expectMap, ok := p.result.(map[string]any); ok {
-			m := traitSetMap(ts)
-			if d := pretty.Diff(expectMap, m); len(d) > 0 {
-				t.Log("test", i, p.test, "got:\n", pretty.Sprint(m))
-				//t.Log("want:", pretty.Sprint(p.result))
-				t.Fatal(d)
-			}
-		}
-	}
-	if skipped > 0 {
-		t.Fatalf("skipped %d tests", skipped)
 	}
 }

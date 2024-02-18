@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/groktest"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 )
@@ -20,27 +20,10 @@ func TestPhrases(t *testing.T) {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
 		groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
-			if ws, e := grok.MakeSpan(testPhrase); e != nil {
+			if ws, e := match.MakeSpan(testPhrase); e != nil {
 				err = e
 			} else {
 				ret, err = jess.Match(&x, ws)
-			}
-			return
-		})
-	}
-}
-
-func TestTraits(t *testing.T) {
-	if db, e := setupDB(t.Name()); e != nil {
-		t.Fatal(e)
-	} else {
-		defer db.Close()
-		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		groktest.RunTraitTests(t, func(testPhrase string) (ret grok.TraitSet, err error) {
-			if ws, e := grok.MakeSpan(testPhrase); e != nil {
-				err = e
-			} else {
-				ret, err = jess.MatchTraits(jess.MakeQuery(&x), jess.InputState(ws))
 			}
 			return
 		})

@@ -3,8 +3,8 @@ package groktest
 import (
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
@@ -38,7 +38,7 @@ func (m *Mock) AddNounValue(name, prop string, _ rt.Assignment) (_ error) {
 	m.out = append(m.out, "AddNounValue", name, prop)
 	return
 }
-func (m *Mock) Apply(verb grok.Macro, lhs, rhs []string) (_ error) {
+func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
 	m.out = append(m.out, "ApplyMacro", verb.Name)
 	m.out = append(m.out, lhs...)
 	m.out = append(m.out, rhs...)

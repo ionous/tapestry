@@ -1,20 +1,16 @@
 package jess
 
-import (
-	"git.sr.ht/~ionous/tapestry/support/grok"
-)
-
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) GetName(traits, kinds []Matched) grok.Name {
+func (op *KindCalled) GetName(traits, kinds []Matched) resultName {
 	for ts := op.GetTraits(); ts.HasNext(); {
 		t := ts.GetNext()
 		traits = append(traits, t.Matched)
 	}
-	return grok.Name{
+	return resultName{
 		// ignores the article of the kind,
 		// in favor of the article closest to the named noun
-		Article: ReduceArticle(op.Article),
+		Article: reduceArticle(op.Article),
 		Span:    op.Matched.(Span),
 		Exact:   true,
 		Traits:  traits,
@@ -37,7 +33,7 @@ func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) &&
-		op.Called.Match(q, &next, grok.Keyword.Called) &&
+		op.Called.Match(q, &next, keywords.Called) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		op.matchName(q, &next) {
 		*input, okay = next, true

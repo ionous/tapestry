@@ -1,13 +1,13 @@
-package grok
+package match
 
 import (
+	"errors"
+	"fmt"
 	"hash"
 	"hash/fnv"
 	"io"
 	"unicode"
 	"unicode/utf8"
-
-	"github.com/ionous/errutil"
 )
 
 // transform a string into a customized set of hash span.
@@ -21,7 +21,7 @@ func MakeSpan(sentence string) (ret Span, err error) {
 	if out, rem, e := makeSpan(sentence); e != nil {
 		err = e
 	} else if len(rem) > 0 {
-		err = errutil.New("expected at most a single sentence")
+		err = errors.New("expected at most a single sentence")
 	} else {
 		ret = out
 	}
@@ -86,12 +86,12 @@ Loop:
 
 		case r == ',':
 			flushWord(wordStart, i, sumReset(w))
-			flushWord(i, i+1, Keyword.Comma)
+			flushWord(i, i+1, comma)
 			wordStart = -1
 
 		case r != '-' && unicode.IsPunct(r):
 			// alt: eat like normalize does?
-			err = errutil.New("unexpected punctuation at", i)
+			err = fmt.Errorf("unexpected punctuation at %d", i)
 			break Loop
 
 		case unicode.IsSpace(r):
@@ -109,12 +109,14 @@ Loop:
 		}
 	}
 	if quoteMatching > 0 {
-		err = errutil.New("unmatched quotes at:", quoteMatching-1)
+		err = fmt.Errorf("unmatched quotes at %d", quoteMatching-1)
 	} else if err == nil {
 		flushWord(wordStart, len(s), sumReset(w))
 	}
 	return
 }
+
+var comma = Hash(",")
 
 func sumReset(w hash.Hash64) uint64 {
 	out := w.Sum64()

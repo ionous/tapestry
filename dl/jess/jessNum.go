@@ -1,7 +1,9 @@
-package grok
+package jess
 
 import (
 	"strconv"
+
+	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
 // Currently good up to twenty.
@@ -10,7 +12,7 @@ func WordsToNum(s string) (ret int, okay bool) {
 	if cnt, e := strconv.Atoi(s); e == nil {
 		ret, okay = cnt, true
 	} else {
-		hash := Hash(s)
+		hash := match.Hash(s)
 		for i, n := range smallNumbers {
 			if hash == n[0].Hash() {
 				ret, okay = i+1, true
@@ -21,7 +23,7 @@ func WordsToNum(s string) (ret int, okay bool) {
 	return
 }
 
-var smallNumbers = PanicSpans(
+var smallNumbers = match.PanicSpans(
 	"one",
 	"two",
 	"three",

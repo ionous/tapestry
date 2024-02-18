@@ -6,8 +6,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -20,12 +20,8 @@ type Weaver struct {
 	rt.Runtime
 }
 
-func (w *Weaver) MatchSpan(p grok.Span) (jess.Applicant, error) {
+func (w *Weaver) MatchSpan(p match.Span) (jess.Applicant, error) {
 	return w.Catalog.gdb.MatchSpan(w.Domain, p)
-}
-
-func (w *Weaver) MatchArticle(ws []string) (ret int, err error) {
-	return w.Catalog.gdb.MatchArticle(ws)
 }
 
 func (w *Weaver) Pin() *mdl.Pen {
@@ -46,7 +42,7 @@ func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value rt.Assi
 }
 
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
-	if bare, e := grok.StripArticle(name); e != nil {
+	if bare, e := jess.StripArticle(name); e != nil {
 		err = e
 	} else if n := inflect.Normalize(bare); len(n) == 0 {
 		err = errutil.New("empty name")

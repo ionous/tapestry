@@ -4,13 +4,31 @@ import (
 	"errors"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-// matches
-type Matched = grok.Matched
-type Span = grok.Span
-type Macro = grok.Macro
+type Span = match.Span
+
+// Matched - generic interface so implementations can track backchannel data.
+// ex. a row id for kinds.
+type Matched interface {
+	String() string
+	NumWords() int // should match strings.Fields(Str)
+}
+
+type Query interface {
+	// if the passed words starts with a kind,
+	// return the number of words that matched.
+	FindKind(Span) (Matched, int)
+
+	// if the passed words starts with a trait,
+	// return the number of words that matched.
+	FindTrait(Span) (Matched, int)
+
+	// if the passed words starts with a macro,
+	// return information about that match.
+	FindMacro(Span) (Macro, int)
+}
 
 type Applicant interface {
 	Interpreter
@@ -25,17 +43,12 @@ type Interpreter interface {
 // can produce full results when matched,
 type Matches interface {
 	Interpreter
-	GetResults() (grok.Results, error)
+	GetResults() (localResults, error)
 }
 
-func Match(g grok.Grokker, ws grok.Span) (Applicant, error) {
-	return MatchLog(g, ws, LogWarning)
-}
-
-func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret Applicant, err error) {
-	query := MakeQueryLog(g, level)
+func Match(q Query, ws match.Span) (ret Applicant, err error) {
 	input := InputState(ws)
-	if m, ok := match(query, &input); !ok {
+	if m, ok := matchit(q, &input); !ok {
 		err = errors.New("failed to match phrase")
 	} else if cnt := len(input); cnt != 0 {
 		err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
@@ -45,7 +58,7 @@ func MatchLog(g grok.Grokker, ws grok.Span, level LogLevel) (ret Applicant, err 
 	return
 }
 
-func match(q Query, input *InputState) (ret Applicant, okay bool) {
+func matchit(q Query, input *InputState) (ret Applicant, okay bool) {
 	var m MatchingPhrases
 	return m.Match(q, input)
 }
@@ -78,11 +91,11 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Applicant, oka
 	return
 }
 
-func makeResult(macro grok.Macro, reverse bool, a, b []grok.Name) grok.Results {
+func makeResult(macro Macro, reverse bool, a, b []resultName) localResults {
 	if reverse {
 		a, b = b, a
 	}
-	return grok.Results{
+	return localResults{
 		Primary:   a,
 		Secondary: b,
 		Macro:     macro,

@@ -1,9 +1,9 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -27,7 +27,7 @@ func (op *DefineKinds) Weave(cat *weave.Catalog) error {
 			ancestor := inflect.Normalize(ancestor.String())
 			for _, kind := range kinds.Strings() {
 				// tbd: are the determiners of kinds useful for anything?
-				if kind, e := grok.StripArticle(kind); e != nil {
+				if kind, e := jess.StripArticle(kind); e != nil {
 					err = errutil.Append(err, e)
 				} else {
 					kind := inflect.Normalize(kind)

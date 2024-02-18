@@ -8,13 +8,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
-func grokNounPhrase(rar Registrar, res grok.Results) (err error) {
+func grokNounPhrase(rar Registrar, res localResults) (err error) {
 	if src, e := genNouns(rar, res.Primary); e != nil {
 		err = e
 	} else if tgt, e := genNouns(rar, res.Secondary); e != nil {
@@ -37,7 +36,7 @@ func text(value, kind string) rt.Assignment {
 }
 
 // determine whether the noun seems to be a proper name
-func isProper(article grok.Article, name string) (okay bool) {
+func isProper(article articleResult, name string) (okay bool) {
 	a := inflect.Normalize(article.String())
 	if len(name) > 1 || a == "our" {
 		first, _ := utf8.DecodeRuneInString(name)
@@ -48,7 +47,7 @@ func isProper(article grok.Article, name string) (okay bool) {
 
 // determine whether the noun will need a custom indefinite property
 // this uses a subset of the known articles, due to way object printing works.
-func getCustomArticle(article grok.Article) (ret string) {
+func getCustomArticle(article articleResult) (ret string) {
 	switch a := inflect.Normalize(article.String()); a {
 	case "a", "an", "the":
 	default:
@@ -58,7 +57,7 @@ func getCustomArticle(article grok.Article) (ret string) {
 }
 
 // add nouns and values
-func genNouns(rar Registrar, ns []grok.Name) (ret []string, err error) {
+func genNouns(rar Registrar, ns []resultName) (ret []string, err error) {
 	names := make([]string, 0, len(ns))
 	for _, n := range ns {
 		if n.Article.Count > 0 {
@@ -83,7 +82,7 @@ func genNouns(rar Registrar, ns []grok.Name) (ret []string, err error) {
 	return
 }
 
-func importNamedNoun(rar Registrar, n grok.Name) (ret string, err error) {
+func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	var noun string
 	fullName := n.String()
 	if name := inflect.Normalize(fullName); name == "you" {
@@ -157,8 +156,8 @@ func importNamedNoun(rar Registrar, n grok.Name) (ret string, err error) {
 // - uses "triangle" as an alias and printed name for each of the new nouns
 // - flags them all as "counted.
 // - ensures "triangle/s" are things
-func importCountedNoun(rar Registrar, noun grok.Name) (ret []string, err error) {
-	// ..kindOrKinds string, article grok.Article, traits []grok.Match
+func importCountedNoun(rar Registrar, noun resultName) (ret []string, err error) {
+	// ..kindOrKinds string, article ArticleResult, traits []match.Match
 	if cnt := noun.Article.Count; cnt > 0 {
 		// generate unique names for each of the counted nouns.
 		// fix: we probably want nouns to "stack", and be have individually duplicated objects.

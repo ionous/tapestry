@@ -1,9 +1,9 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
+import "git.sr.ht/~ionous/tapestry/support/match"
 
 type MatchedName interface {
-	GetName(traits, kinds []Matched) grok.Name
+	GetName(traits, kinds []Matched) resultName
 	String() string
 }
 
@@ -11,9 +11,9 @@ func (op *Name) String() string {
 	return op.Matched.String()
 }
 
-func (op *Name) GetName(traits, kinds []Matched) grok.Name {
-	return grok.Name{
-		Article: ReduceArticle(op.Article),
+func (op *Name) GetName(traits, kinds []Matched) resultName {
+	return resultName{
+		Article: reduceArticle(op.Article),
 		Span:    op.Matched.(Span),
 		Traits:  traits,
 		Kinds:   kinds,
@@ -38,15 +38,15 @@ func (op *Name) matchName(q Query, input *InputState) (okay bool) {
 
 // returns index of an "important" keyword
 // or the end of the string if none found
-func keywordScan(ws []grok.Word) (ret int) {
+func keywordScan(ws []match.Word) (ret int) {
 	ret = len(ws) // provisionally the whole thing.
 Loop:
 	for i, w := range ws {
 		switch w.Hash() {
-		case grok.Keyword.And,
-			grok.Keyword.Are,
-			grok.Keyword.Comma,
-			grok.Keyword.Is:
+		case keywords.And,
+			keywords.Are,
+			keywords.Comma,
+			keywords.Is:
 			ret = i
 			break Loop
 		}
@@ -55,13 +55,13 @@ Loop:
 }
 
 // similar to keyword scan; but only breaks on is/are.
-func beScan(ws []grok.Word) (ret int) {
+func beScan(ws []match.Word) (ret int) {
 	ret = len(ws) // provisionally the whole thing.
 Loop:
 	for i, w := range ws {
 		switch w.Hash() {
-		case grok.Keyword.Are,
-			grok.Keyword.Is:
+		case keywords.Are,
+			keywords.Is:
 			ret = i
 			break Loop
 		}

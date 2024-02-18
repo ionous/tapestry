@@ -1,4 +1,4 @@
-package grok
+package match
 
 type Word struct {
 	hash  uint64

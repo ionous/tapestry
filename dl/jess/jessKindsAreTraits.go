@@ -3,11 +3,11 @@ package jess
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-func (op *KindsAreTraits) GetResults() (ret grok.Results, err error) {
+func (op *KindsAreTraits) GetResults() (ret localResults, err error) {
 	panic("xxx")
 }
 
@@ -17,7 +17,7 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 		op.Are.Match(q, &next) &&
 		op.usually(q, &next) &&
 		op.Traits.Match(q, &next) {
-		q.note("matched KindsAreTraits")
+		// q.note("matched KindsAreTraits")
 		*input, okay = next, true
 	}
 	return
@@ -32,7 +32,7 @@ func (op *KindsAreTraits) usually(q Query, input *InputState) (okay bool) {
 	return
 }
 
-var usually = grok.PanicSpans("usually")
+var usually = match.PanicSpans("usually")
 
 func (op *KindsAreTraits) Apply(rar Registrar) (err error) {
 	traits := op.Traits.GetTraits()
