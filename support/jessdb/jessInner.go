@@ -1,4 +1,4 @@
-package grokdb
+package jessdb
 
 import (
 	"database/sql"
@@ -19,7 +19,7 @@ type dbMatch struct {
 	match.Span
 }
 
-// implements match.Grokker; returned by dbSource.
+// implements jess.Query; returned by dbSource.
 type dbSource struct {
 	db                      *tables.Cache
 	domain                  string

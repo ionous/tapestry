@@ -11,7 +11,7 @@ import (
 )
 
 // transform a string into a customized set of hash span.
-// . lowercases and trims the string ( using ToLower since grok depends on english span and phrasing anyway )
+// . lowercases and trims the string ( using ToLower since matching depends on english span and phrasing anyway )
 // . considers commas their own words ( otherwise commas would wind up as part of span )
 // . combines double quoted text into a single Word ( errors on unmatched quote )
 // fix? quote escaping?

@@ -66,7 +66,7 @@ func ReadPhrase(phrase, label string) (ret RuleName) {
 	short, prefix := findPrefix(name)
 	// fix: probably want some sort of "try prefix/suffix" that attempts to chop the parts
 	// but restores them if it cant find them --
-	// maybe see grok -- it does that sort of partial matching
+	// maybe see jess -- it does that sort of partial matching
 	// and itd be neat to be able to use it here.
 	var excludesPlayer bool
 	const someone = "someone "

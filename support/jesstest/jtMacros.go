@@ -1,4 +1,4 @@
-package groktest
+package jesstest
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"

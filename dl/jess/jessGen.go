@@ -13,7 +13,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func grokNounPhrase(rar Registrar, res localResults) (err error) {
+func readNounPhrase(rar Registrar, res localResults) (err error) {
 	if src, e := genNouns(rar, res.Primary); e != nil {
 		err = e
 	} else if tgt, e := genNouns(rar, res.Secondary); e != nil {
@@ -169,7 +169,7 @@ func importCountedNoun(rar Registrar, noun resultName) (ret []string, err error)
 			name = noun.Kinds[0].String()
 		} else if len(noun.Kinds) > 0 {
 			// ex. ""An empire apple, a pen, and two triangles are props in the lab."
-			// fix: grok should return that as an object *called* two triangles, not something counted.
+			// fix: read should return that as an object *called* two triangles, not something counted.
 			parent = noun.Kinds[0].String()
 		}
 		name = inflect.Normalize(name)

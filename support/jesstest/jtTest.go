@@ -1,5 +1,7 @@
-// exercises implementations of match.Grokker to ensure they produce good results.
-package groktest
+// Package jesstest exercises implementations of jess.Query
+// to ensure they produce good results.
+// ( see for instance package jessdb_test, and package jess_test. )
+package jesstest
 
 import (
 	"errors"
@@ -20,7 +22,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 	}{
 		{
 			// note: "Devices are fixed in place" will parse properly
-			// but storyGrok will assume that the name "devices" refers to a noun
+			// but weave will assume that the name "devices" refers to a noun
 			// and ( probably, hopefully ) some error will occur.
 			// I like that usually specifically indicates and separates kinds from nouns --
 			// im not sure the other certainties (never, always) are really needed:

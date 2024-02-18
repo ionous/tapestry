@@ -13,7 +13,7 @@ func (op *VerbLinks) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *VerbLinks) Apply(rar Registrar) error {
-	return grokNounPhrase(rar, op.GetResults())
+	return readNounPhrase(rar, op.GetResults())
 }
 
 func (op *VerbLinks) GetResults() localResults {
@@ -38,7 +38,7 @@ func (op *LinksVerb) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *LinksVerb) Apply(rar Registrar) error {
-	return grokNounPhrase(rar, op.GetResults())
+	return readNounPhrase(rar, op.GetResults())
 }
 
 func (op *LinksVerb) GetResults() (ret localResults) {
@@ -85,7 +85,7 @@ func (op *LinksAdjectives) IsReversed() (okay bool) {
 }
 
 func (op *LinksAdjectives) Apply(rar Registrar) error {
-	return grokNounPhrase(rar, op.GetResults())
+	return readNounPhrase(rar, op.GetResults())
 }
 
 func (op *LinksAdjectives) GetResults() localResults {

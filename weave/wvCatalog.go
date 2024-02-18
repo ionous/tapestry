@@ -8,8 +8,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/grokdb"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
@@ -29,7 +29,7 @@ type Catalog struct {
 
 	cursor string        // current source position
 	run    rt.Runtime    // custom runtime for running macros
-	gdb    grokdb.Source // english parser
+	gdb    jessdb.Source // english parser
 	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
 }
 
@@ -65,7 +65,7 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 		panic(e)
 	}
 	cache := tables.NewCache(db)
-	gdb := grokdb.NewSource(cache)
+	gdb := jessdb.NewSource(cache)
 	// fix: this needs cleanup
 	// write should be called modeler
 	// initial cursor should be set externally or passed in

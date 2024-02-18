@@ -1,4 +1,4 @@
-package grokdb
+package jessdb
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"

@@ -1,4 +1,4 @@
-package grokdb
+package jessdb
 
 import (
 	"database/sql"
@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
-	"git.sr.ht/~ionous/tapestry/support/groktest"
+	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -19,7 +19,7 @@ func TestPhrases(t *testing.T) {
 	} else {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
+		jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
 			if ws, e := match.MakeSpan(testPhrase); e != nil {
 				err = e
 			} else {

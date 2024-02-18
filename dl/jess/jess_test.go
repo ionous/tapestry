@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
-	"git.sr.ht/~ionous/tapestry/support/groktest"
+	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
 func TestPhrases(t *testing.T) {
-	groktest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
+	jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
 		t.Log("testing:", testPhrase)
 		if ws, e := match.MakeSpan(testPhrase); e != nil {
 			err = e
@@ -25,7 +25,7 @@ type Span = match.Span
 
 type info struct {
 	kinds, traits match.SpanList
-	macros        groktest.MacroList
+	macros        jesstest.MacroList
 }
 
 func (n *info) FindKind(ws Span) (jess.Matched, int) {
@@ -41,7 +41,7 @@ func (n *info) FindMacro(ws Span) (jess.Macro, int) {
 }
 
 var known = info{
-	macros: groktest.PanicMacros(
+	macros: jesstest.PanicMacros(
 		// source carries/ is carrying the targets
 		// reverse would be: targets are carried by the source.
 		"carried by", "carry", jess.Macro_ManySecondary, true,

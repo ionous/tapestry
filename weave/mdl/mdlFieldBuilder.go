@@ -71,7 +71,7 @@ func (fs *Fields) rewriteImplicitAspects(pen *Pen, kind kindInfo, cache *classCa
 			field := &fs.fields[PatternLocals][i]
 			// rewrite Bool: "something" to an affinity with the opposite "not something" available.
 			// i originally wanted to limit or force these into the format "is something"
-			// but that screws with grok, sentences would have to be: "the noun is is something"
+			// but that screws with jess, sentences would have to be: "the noun is is something"
 			if field.Affinity == affine.Bool && len(field.Class) == 0 {
 				// default trait is the unset version
 				defaultTrait := inflect.Join([]string{"not", field.Name})
