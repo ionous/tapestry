@@ -7,27 +7,26 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-type Span = match.Span
-
 // Matched - generic interface so implementations can track backchannel data.
 // ex. a row id for kinds.
+// for any var m Matched, m.NumWords() should equal strings.Fields(m.String())
 type Matched interface {
 	String() string
-	NumWords() int // should match strings.Fields(Str)
+	NumWords() int
 }
 
 type Query interface {
 	// if the passed words starts with a kind,
 	// return the number of words that matched.
-	FindKind(Span) (Matched, int)
+	FindKind(match.Span) (Matched, int)
 
 	// if the passed words starts with a trait,
 	// return the number of words that matched.
-	FindTrait(Span) (Matched, int)
+	FindTrait(match.Span) (Matched, int)
 
 	// if the passed words starts with a macro,
 	// return information about that match.
-	FindMacro(Span) (Macro, int)
+	FindMacro(match.Span) (Macro, int)
 }
 
 type Applicant interface {

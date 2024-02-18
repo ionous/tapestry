@@ -37,9 +37,9 @@ func StripArticle(name string) (ret string, err error) {
 // ( it would take some work to lightly hold the relation between a name and an article
 // then parse a sentence matching names to nouns in the
 // fwiw: the articles in inform also seems to be predetermined in this way.  )
-func FindCommonArticles(ws Span) (ret Span, width int) {
+func FindCommonArticles(ws match.Span) (ret match.Span, width int) {
 	if i, skip := determiners.FindPrefix(ws); skip > 0 {
-		ret, width = Span(determiners[i]), skip
+		ret, width = match.Span(determiners[i]), skip
 	}
 	return
 }

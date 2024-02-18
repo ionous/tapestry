@@ -20,23 +20,20 @@ func TestPhrases(t *testing.T) {
 	})
 }
 
-type Word = match.Word
-type Span = match.Span
-
 type info struct {
 	kinds, traits match.SpanList
 	macros        jesstest.MacroList
 }
 
-func (n *info) FindKind(ws Span) (jess.Matched, int) {
+func (n *info) FindKind(ws match.Span) (jess.Matched, int) {
 	return n.kinds.FindMatch(ws)
 }
 
-func (n *info) FindTrait(ws Span) (jess.Matched, int) {
+func (n *info) FindTrait(ws match.Span) (jess.Matched, int) {
 	return n.traits.FindMatch(ws)
 }
 
-func (n *info) FindMacro(ws Span) (jess.Macro, int) {
+func (n *info) FindMacro(ws match.Span) (jess.Macro, int) {
 	return n.macros.FindMacro(ws)
 }
 

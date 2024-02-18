@@ -1,5 +1,7 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/support/match"
+
 type localResults struct {
 	Primary   []resultName
 	Secondary []resultName // usually just one, except for nxm relations
@@ -8,7 +10,7 @@ type localResults struct {
 
 type resultName struct {
 	Article articleResult
-	Span    Span
+	Span    match.Span
 	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
 	Traits  []Matched
 	Kinds   []Matched // it's possible, if rare, to apply multiple kinds

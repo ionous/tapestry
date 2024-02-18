@@ -1,5 +1,7 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/support/match"
+
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
 func (op *KindCalled) GetName(traits, kinds []Matched) resultName {
@@ -11,7 +13,7 @@ func (op *KindCalled) GetName(traits, kinds []Matched) resultName {
 		// ignores the article of the kind,
 		// in favor of the article closest to the named noun
 		Article: reduceArticle(op.Article),
-		Span:    op.Matched.(Span),
+		Span:    op.Matched.(match.Span),
 		Exact:   true,
 		Traits:  traits,
 		Kinds:   append(kinds, op.Kind.Matched),
