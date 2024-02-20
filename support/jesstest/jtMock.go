@@ -34,8 +34,12 @@ func (m *Mock) AddNounTrait(name, trait string) (_ error) {
 	m.out = append(m.out, "AddNounTrait", name, trait)
 	return
 }
-func (m *Mock) AddNounValue(name, prop string, _ rt.Assignment) (_ error) {
-	m.out = append(m.out, "AddNounValue", name, prop)
+func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
+	if str, e := Marshal(v); e != nil {
+		err = e
+	} else {
+		m.out = append(m.out, "AddNounValue", name, prop, str)
+	}
 	return
 }
 func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {

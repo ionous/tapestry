@@ -36,7 +36,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 					if i, e := w.MatchSpan(span); e != nil {
 						err = errutil.Fmt("%w reading of %v b/c %v", mdl.Missing, span.String(), e)
 					} else {
-						err = i.Apply(jessAdapter{w, w.Pin()})
+						err = i.Generate(jessAdapter{w, w.Pin()})
 					}
 					return
 				}); e != nil {

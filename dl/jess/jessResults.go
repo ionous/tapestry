@@ -8,6 +8,17 @@ type localResults struct {
 	Macro     Macro
 }
 
+func makeResult(macro Macro, reverse bool, a, b []resultName) localResults {
+	if reverse {
+		a, b = b, a
+	}
+	return localResults{
+		Primary:   a,
+		Secondary: b,
+		Macro:     macro,
+	}
+}
+
 type resultName struct {
 	Article articleResult
 	Span    match.Span
@@ -21,37 +32,21 @@ func (n *resultName) String() string {
 	return n.Span.String()
 }
 
-// FIX: just use article?
 type articleResult struct {
 	Matched
 	Count int // for counted nouns: "seven (apples)"
 }
 
-func (a articleResult) NumWords() int {
-	return MatchedLen(a.Matched)
+func (a articleResult) NumWords() (ret int) {
+	if a.Matched != nil {
+		ret = a.Matched.NumWords()
+	}
+	return
 }
 
 func (a articleResult) String() (ret string) {
 	if a.Matched != nil {
 		ret = a.Matched.String()
-	}
-	return
-}
-
-// returns the size of a match;
-// 0 if the match is nil.
-func MatchedLen(m Matched) (ret int) {
-	if m != nil {
-		ret = m.NumWords()
-	}
-	return
-}
-
-// returns the string of a match;
-// empty if the match is nil.
-func MatchedString(m Matched) (ret string) {
-	if m != nil {
-		ret = m.String()
 	}
 	return
 }

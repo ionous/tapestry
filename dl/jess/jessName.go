@@ -2,11 +2,6 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/match"
 
-type MatchedName interface {
-	GetName(traits, kinds []Matched) resultName
-	String() string
-}
-
 func (op *Name) String() string {
 	return op.Matched.String()
 }
@@ -64,6 +59,23 @@ Loop:
 			keywords.Is:
 			ret = i
 			break Loop
+		}
+	}
+	return
+}
+
+// returns the index of the matching word in the span
+// -1 if not found
+func scanUntil(span []match.Word, hashes ...uint64) (ret int) {
+	ret = -1
+Loop:
+	for i, w := range span {
+		m := w.Hash()
+		for _, h := range hashes {
+			if h == m {
+				ret = i
+				break Loop
+			}
 		}
 	}
 	return

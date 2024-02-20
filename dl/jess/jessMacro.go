@@ -26,8 +26,11 @@ type Macro struct {
 	Reversed bool
 }
 
-func (m Macro) NumWords() int {
-	return MatchedLen(m.Matched)
+func (m Macro) NumWords() (ret int) {
+	if m.Matched != nil {
+		ret = m.Matched.NumWords()
+	}
+	return
 }
 
 func (m MacroType) MultiSource() (okay bool) {

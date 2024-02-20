@@ -21,7 +21,7 @@ type Registrar interface {
 	//
 	Apply(verb Macro, lhs, rhs []string) error
 
-	// fix: move to "Query"?
+	// fix: move to "Query"
 	GetClosestNoun(name string) (string, error)
 	GetExactNoun(name string) (string, error)
 

@@ -2,6 +2,7 @@ package match
 
 type SpanList [][]Word
 
+// this is the same as FindPrefix only it returns a Span instead of an index
 func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {
 	// i is the index of the span in the list
 	if _, skip := ws.FindPrefix(words); skip > 0 {
@@ -11,7 +12,10 @@ func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {
 	return
 }
 
-// find the index and length of the longest prefix matching the passed words
+// see anything in our span list starts the passed words.
+// for instance, if the span list contains the span "oh hello"
+// then the words "oh hello world" will match
+// returns the index of the  index and length of the longest prefix
 func (ws SpanList) FindPrefix(words Span) (retWhich int, retLen int) {
 	if wordCount := len(words); wordCount > 0 {
 		for prefixIndex, prefix := range ws {

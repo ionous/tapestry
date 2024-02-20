@@ -19,7 +19,7 @@ func TestPhrases(t *testing.T) {
 	} else {
 		defer db.Close()
 		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
+		jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
 			if ws, e := match.MakeSpan(testPhrase); e != nil {
 				err = e
 			} else {

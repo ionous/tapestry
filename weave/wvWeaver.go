@@ -20,7 +20,7 @@ type Weaver struct {
 	rt.Runtime
 }
 
-func (w *Weaver) MatchSpan(p match.Span) (jess.Applicant, error) {
+func (w *Weaver) MatchSpan(p match.Span) (jess.Generator, error) {
 	return w.Catalog.gdb.MatchSpan(w.Domain, p)
 }
 

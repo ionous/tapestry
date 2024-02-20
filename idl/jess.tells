@@ -11,13 +11,15 @@ Spec:with group:
 
     - # one of a predefined set of determiners:
       # the, a, some, etc.
-      # see 'count' for leading numbers
+      # see 'counted_name' for names with leading numbers.
       Spec:with flow:
       - "article"
       - Flow uses:
         - Term: "matched"
 
     - # conjunction junction
+      # matches "," or "and" or ", and"
+      # relies on the fact package match treats commas and ands each as their own words.
       Spec:with flow:
       - "comma_and"
       - Flow uses:
@@ -29,7 +31,7 @@ Spec:with group:
       - Flow uses:
         - Term: "matched"
 
-    - # Specifies one or more names, in full or in part.
+    - # Specifies a single name, in full or in part.
       # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
       # The name "chest" implies the treasure chest.
       # To optimizing matching the words "is/are/comma/and" are never part of name names.
@@ -67,9 +69,11 @@ Spec:with group:
           - true
         - Term: "matched"
 
-    - # Specifies one or more names, in full or in part.
-      # This works similar to 'names' but has more options controlled by context.
+    - # Specifies one or more nouns, in full or in part.
       # Only one of the options, plus possibly 'additional_names', will match.
+      # Not all options are valid in all contexts;
+      # the users of 'names' may discard or avoid certain matches.
+      # ( the options could be represented as a slot; this feels easier for now )
       Spec:with flow:
       - "names"
       - Flow uses:
@@ -109,7 +113,7 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "number"
+        - Term: "matching_number"
         - Term: "kind"
         - Term:private:
           - "matched"
@@ -126,19 +130,21 @@ Spec:with group:
           - true
         - Term: "matched"
 
-    - # matches a set of possible kinds
-      # fix: jess tests for and prohibits leading traits.
-      # ( for use with kinds_are_traits )
+    - # matches a set of possible kinds as part of kinds_are_traits
+      # jess tests for but prohibits leading traits.
       Spec:with flow:
       - "kinds"
       - Flow uses:
-        - # inform allows
+        - # inform uses traits specified here to select
+          # matching nouns; jess is not that clever.
           Term:optional:
           - "traits"
           - true
-        - Term:type:
-          - "kind"
-          - "name"
+        - Term:optional:
+          - "article"
+          - true
+        - # matches a span ending with "is/are/comma/and"
+          Term: "matched"
         - Term:optional:
           - "additional_kinds"
           - true
@@ -222,6 +228,7 @@ Spec:with group:
         - Term: "verb_links"
         - Term: "links_verb"
         - Term: "links_adjectives"
+        - Term: "noun_value"
 
     - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
       # interesting to note that inform allows "some kind/s of"
@@ -335,3 +342,48 @@ Spec:with group:
       - Flow uses:
         - Term: "comma_and"
         - Term: "adjectives"
+
+    - # assigns a default value to a noun.
+      # The description of the pen is "mightier than the sword."
+      Spec:with flow:
+      - "noun_value"
+      - Flow uses:
+        - Term:optional:
+          - "article"
+          - true
+        - # a span ending with the word "of"
+          Term:type:
+          - "property"
+          - "matched"
+        - # note: "called the" isn't allowed here.
+          Term:type:
+          - "noun"
+          - "name"
+        - Term: "are"
+        - Term: "single_value"
+
+    - # matches only one of its options
+      # ( the options could be represented as a slot; this feels easier for now )
+      Spec:with flow:
+      - "single_value"
+      - Flow uses:
+        - Term:optional:
+          - "quoted_text"
+          - true
+        - Term:optional:
+          - "matching_number"
+          - true
+
+    - # text that begins and ends with double quotes.
+      # the quotes themselves are not part of the matched text.
+      Spec:with flow:
+      - "quoted_text"
+      - Flow uses:
+        - Term: "matched"
+
+    - # reads a number specified in words or as digits.
+      # stores the result as the parsed number.
+      Spec:with flow:
+      - "matching_number"
+      - Flow uses:
+        - Term: "number"

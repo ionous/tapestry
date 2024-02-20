@@ -10,13 +10,21 @@ import (
 	"unicode/utf8"
 )
 
-// transform a string into a customized set of hash span.
+var Keywords = struct {
+	Comma, QuotedText uint64
+}{Hash(`,`), Hash(`"`)}
+
+// transform a string into a slice of hashes.
 // . lowercases and trims the string ( using ToLower since matching depends on english span and phrasing anyway )
 // . considers commas their own words ( otherwise commas would wind up as part of span )
-// . combines double quoted text into a single Word ( errors on unmatched quote )
-// fix? quote escaping?
-// rationale: since trimming and separating by spaces would require string allocation (probably multiple)
-// we might as well generate some hashes instead.
+// . combines any double quoted or backtick'd text into two Words.
+//   - a leading double quote,
+//   - a word consisting of all the text until the end of the quote.
+//   - ( errors on unmatched quote or backtick )
+//
+// rationale: since trimming and separating by spaces would require string allocation;
+// might as well generate some hashes and slightly speed up comparisons.
+// .
 func MakeSpan(sentence string) (ret Span, err error) {
 	if out, rem, e := makeSpan(sentence); e != nil {
 		err = e
@@ -56,6 +64,7 @@ func makeSpan(s string) (out Span, rem string, err error) {
 	}
 	var wordStart int
 	var quoteMatching int // one indexed
+	var tickMatching int
 	var terminal int
 	w, rbs := fnv.New64a(), makeRuneWriter()
 Loop:
@@ -67,9 +76,25 @@ Loop:
 				break Loop
 			}
 
-		case r == '"':
+		// back ticks
+		case r == '`' && quoteMatching == 0:
+			if tickMatching <= 0 {
+				tickMatching = i + 1 // one indexed
+				flushWord(i, i+1, Keywords.QuotedText)
+			} else {
+				flushWord(tickMatching, i, sumReset(w))
+				tickMatching = 0
+				wordStart = -1
+			}
+
+		case tickMatching > 0:
+			rbs.writeRune(r, w)
+
+		// double quotes
+		case r == '"' && tickMatching == 0:
 			if quoteMatching <= 0 {
 				quoteMatching = i + 1 // one indexed
+				flushWord(i, i+1, Keywords.QuotedText)
 			} else {
 				flushWord(quoteMatching, i, sumReset(w))
 				quoteMatching = 0
@@ -86,7 +111,7 @@ Loop:
 
 		case r == ',':
 			flushWord(wordStart, i, sumReset(w))
-			flushWord(i, i+1, comma)
+			flushWord(i, i+1, Keywords.Comma)
 			wordStart = -1
 
 		case r != '-' && unicode.IsPunct(r):
@@ -109,14 +134,14 @@ Loop:
 		}
 	}
 	if quoteMatching > 0 {
-		err = fmt.Errorf("unmatched quotes at %d", quoteMatching-1)
+		err = fmt.Errorf("unmatched quote at %d", quoteMatching-1)
+	} else if tickMatching > 0 {
+		err = fmt.Errorf("unmatched tick at %d", tickMatching-1)
 	} else if err == nil {
 		flushWord(wordStart, len(s), sumReset(w))
 	}
 	return
 }
-
-var comma = Hash(",")
 
 func sumReset(w hash.Hash64) uint64 {
 	out := w.Sum64()

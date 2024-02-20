@@ -5,10 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-func (op *KindsOf) GetResults() (ret localResults, err error) {
-	panic("xxx")
-}
-
 // KindsOf
 func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -42,7 +38,7 @@ func (op *KindsOf) GetTraits() (ret Traitor) {
 }
 
 // The closed containers called safes are a kind of fixed in place thing.
-func (op *KindsOf) Apply(rar Registrar) (err error) {
+func (op *KindsOf) Generate(rar Registrar) (err error) {
 	parent := op.Kind.Matched
 	traits := op.GetTraits()
 	//

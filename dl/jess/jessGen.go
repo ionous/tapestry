@@ -5,15 +5,14 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
-func readNounPhrase(rar Registrar, res localResults) (err error) {
+// todo: remove. it should no longer be necessary to compile local results
+// before applying them; the various generate functions should be able to use Registrar directly
+func applyResults(rar Registrar, res localResults) (err error) {
 	if src, e := genNouns(rar, res.Primary); e != nil {
 		err = e
 	} else if tgt, e := genNouns(rar, res.Secondary); e != nil {
@@ -26,13 +25,6 @@ func readNounPhrase(rar Registrar, res localResults) (err error) {
 		}
 	}
 	return
-}
-
-// tbd: add this as a factory function to Registrar?
-func text(value, kind string) rt.Assignment {
-	return &assign.FromText{
-		Value: &literal.TextValue{Value: value, Kind: kind},
-	}
 }
 
 // determine whether the noun seems to be a proper name
@@ -82,6 +74,9 @@ func genNouns(rar Registrar, ns []resultName) (ret []string, err error) {
 	return
 }
 
+// fix: it doesnt seem like this should be *reading* nouns:
+// that should be part of matching; recording whatever it needs
+// then output the results here.
 func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	var noun string
 	fullName := n.String()

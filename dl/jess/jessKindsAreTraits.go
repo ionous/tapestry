@@ -7,10 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
-func (op *KindsAreTraits) GetResults() (ret localResults, err error) {
-	panic("xxx")
-}
-
 func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kinds.Match(q, &next) &&
@@ -34,11 +30,11 @@ func (op *KindsAreTraits) usually(q Query, input *InputState) (okay bool) {
 
 var usually = match.PanicSpans("usually")
 
-func (op *KindsAreTraits) Apply(rar Registrar) (err error) {
+func (op *KindsAreTraits) Generate(rar Registrar) (err error) {
 	traits := op.Traits.GetTraits()
 	for kt := op.Kinds.Iterate(); kt.HasNext(); {
 		k := kt.GetNext()
-		name := inflect.Normalize(k.Kind.String())
+		name := inflect.Normalize(k.Matched.String())
 		if lhs := k.GetTraits(); lhs.HasNext() {
 			err = fmt.Errorf("unexpected traits before %s", name)
 			break

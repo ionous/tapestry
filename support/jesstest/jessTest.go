@@ -5,21 +5,48 @@ package jesstest
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 // verify a standard set of phrases using some function that takes each of those phrases
 // and produces a result map, or a string list.
-func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)) {
+func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)) {
 	var phrases = []struct {
 		test   string
 		result any
 		skip   any
 	}{
+		// ------------------------
+		// noun_value
+		{
+			test: `The title of the story is "A Secret."`,
+			result: []string{
+				"AddNounValue", "story", "title", text("A Secret."),
+			},
+		},
+		{
+			// note: we don't validate properties while matching
+			// weave validates them when attempting to write them.
+			test: `The age of the bottle is 42.`,
+			result: []string{
+				"AddNounValue", "bottle", "age", number(42),
+			},
+		},
+		{
+			//test:  `The bottle in the kitchen is openable and has age 42.`,
+		},
+
+		// -------------------------
 		{
 			// note: "Devices are fixed in place" will parse properly
 			// but weave will assume that the name "devices" refers to a noun
@@ -48,12 +75,12 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 				"AddNoun", "things-1", "things-1", "things",
 				"AddNounAlias", "things-1", "thing",
 				"AddNounTrait", "things-1", "counted",
-				"AddNounValue", "things-1", "printed name",
+				"AddNounValue", "things-1", "printed name", text("thing"),
 				//
 				"AddNoun", "things-2", "things-2", "things",
 				"AddNounAlias", "things-2", "thing",
 				"AddNounTrait", "things-2", "counted",
-				"AddNounValue", "things-2", "printed name",
+				"AddNounValue", "things-2", "printed name", text("thing"),
 				"ApplyMacro", "contain", "kitchen", "things-1", "things-2",
 			},
 		},
@@ -231,7 +258,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 		{
 			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: []string{
-				"AddNounValue", "coins", "indefinite article",
+				"AddNounValue", "coins", "indefinite article", text("some"),
 				"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			},
 		},
@@ -239,7 +266,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: []string{
-				"AddNounValue", "coins", "indefinite article",
+				"AddNounValue", "coins", "indefinite article", text("some"),
 				"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			},
 		},
@@ -281,16 +308,6 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 			// 		"name": "kitchen",
 			// 	}},
 		},
-		// TODO: values.
-		{
-			//test:  `The bottle in the kitchen is openable and has age 42.`,
-		},
-		{
-			//test: `The age of the bottle is 42.`,
-		},
-		// todo:  the device called the detonator is on the supporter called the shelf and is proper named"
-		// todo: In the lobby are two supporters" ( and "Two supporters are in..." works fine. )
-		// note: "In the lobby are two supporters the bat and the hat." generates a noun called "two supporters..."
 	}
 	var skipped int
 	for i, p := range phrases {
@@ -301,7 +318,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 			got, haveError := interpret(p.test)
 			if haveError == nil {
 				var m Mock
-				if e := got.Apply(&m); e != nil {
+				if e := got.Generate(&m); e != nil {
 					haveError = e
 				} else {
 					haveRes = m.out
@@ -331,4 +348,29 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Applicant, error)
 	if skipped > 0 {
 		t.Logf("skipped %d tests", skipped)
 	}
+}
+
+func Marshal(a rt.Assignment) (ret string, err error) {
+	var enc encode.Encoder
+	if v, ok := a.(typeinfo.Instance); !ok {
+		err = errors.New("not a generated type?")
+	} else if d, e := enc.Encode(v); e != nil {
+		err = e
+	} else {
+		var str strings.Builder
+		if e := files.JsonEncoder(&str, files.RawJson).Encode(d); e != nil {
+			err = e
+		} else {
+			ret = str.String()
+		}
+	}
+	return
+}
+
+func text(str string) string {
+	return fmt.Sprintf(`{"FromText:":{"Text value:":%q}}`, str)
+}
+
+func number(num float64) string {
+	return fmt.Sprintf(`{"FromNumber:":{"Num value:":%g}}`, num)
 }

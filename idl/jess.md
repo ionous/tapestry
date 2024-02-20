@@ -69,3 +69,21 @@ Inform is looser with its article matching in some cases:
 1. ( kinds are "usually" traits ): this is a specific phrase
 xxx: ( traits noun ) isnt allowed ( ex. the unhappy man )
 
+
+
+# Noun Value 
+
+some notes from inform:
+
+* unknown nouns are allowed:
+  - `The description of the nep is "mightier than the sword."`
+
+* noun value doesnt support multiple nouns
+	- `The description of the box and the top`
+	
+* it doesnt support compond phraes:
+  - `The description of the pen is "mightier than the sword"  and the description of the box is "hello."`
+  
+* "called the" is only supported in leading phrases:
+	- ng: `The description of the container called the box is....`
+	- ok: `The container called the box has the description ... `

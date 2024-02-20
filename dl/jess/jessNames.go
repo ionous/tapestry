@@ -1,5 +1,11 @@
 package jess
 
+// all members of Names implement this so that they can be handled generically
+type MatchedName interface {
+	GetName(traits, kinds []Matched) resultName
+	String() string
+}
+
 func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
@@ -46,7 +52,7 @@ func (op *Names) MatchPlainly(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optional(q, &next, &op.Name) {
 		var and AdditionalNames
-		if and.MorePlainly(q, input) {
+		if and.MorePlainly(q, &next) {
 			op.AdditionalNames = &and
 		}
 		*input, okay = next, true

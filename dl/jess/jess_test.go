@@ -9,7 +9,7 @@ import (
 )
 
 func TestPhrases(t *testing.T) {
-	jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Applicant, err error) {
+	jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
 		t.Log("testing:", testPhrase)
 		if ws, e := match.MakeSpan(testPhrase); e != nil {
 			err = e

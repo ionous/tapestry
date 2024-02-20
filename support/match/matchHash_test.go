@@ -10,36 +10,40 @@ import (
 // Test that the hashing properly strips spaces, lowers phrases, and produces the right ranges.
 func TestHashing(t *testing.T) {
 	phrases := []string{
-		``,                     // 0
-		`a`,                    // 1 - single letter
-		`match`,                // 2
-		`  a  b  `,             // 3 - single letters
-		` some stuff   you`,    // 4
-		` trim spaces   yay  `, // 5
-		`APPLES`,               // 6
-		`    `,                 // 7
-		`me, and her`,          // 8
-		`"quote together" you`, // 9
-		`unmatched " quote`,    // 10
-		`sans full stop.`,      // 11
-		`nothing after. stops`, // 12
+		``,                                 // 0
+		`a`,                                // 1 - single letter
+		`match`,                            // 2
+		`  a  b  `,                         // 3 - single letters
+		` some stuff   you`,                // 4
+		` trim spaces   yay  `,             // 5
+		`APPLES`,                           // 6
+		`    `,                             // 7
+		`me, and her`,                      // 8
+		`"quote together" you`,             // 9
+		`unmatched " quote`,                // 10
+		`sans full stop.`,                  // 11
+		`nothing after. stops`,             // 12
+		"he said `\"quote unquote\"` what", // 13
+		"unmatched ` tick",                 // 14
 	}
 	// expects that the hashes wind up matching the hashes of these exact strings.
 	const expectsError = "<expects error>"
 	expect := [][]string{
-		nil,                       // 0
-		{"a"},                     // 1
-		{"match"},                 // 2
-		{"a", "b"},                // 3
-		{"some", "stuff", "you"},  // 4
-		{"trim", "spaces", "yay"}, // 5
-		{"apples"},                // 6
-		nil,                       // 7
-		{"me", ",", "and", "her"}, // 8
-		{"quote together", "you"}, // 9
-		{expectsError},            // 10
-		{"sans", "full", "stop"},  // 11
-		{expectsError},            // 12
+		nil,                            // 0
+		{"a"},                          // 1
+		{"match"},                      // 2
+		{"a", "b"},                     // 3
+		{"some", "stuff", "you"},       // 4
+		{"trim", "spaces", "yay"},      // 5
+		{"apples"},                     // 6
+		nil,                            // 7
+		{"me", ",", "and", "her"},      // 8
+		{`"`, "quote together", "you"}, // 9
+		{expectsError},                 // 10
+		{"sans", "full", "stop"},       // 11
+		{expectsError},                 // 12
+		{"he", "said", `"`, `"quote unquote"`, "what"}, // 13
+		{expectsError}, // 14
 	}
 	if len(phrases) != len(expect) {
 		panic("missing tests")
@@ -48,15 +52,15 @@ func TestHashing(t *testing.T) {
 		want := expect[i]
 		wantsError := len(want) > 0 && want[0] == expectsError
 		if have, e := match.MakeSpan(w); wantsError != (e != nil) {
-			t.Fatal("unexpected error", e)
+			t.Fatalf("test %d has unexpected error %v ( wanted %v )", i, e, expectsError)
 		} else if e == nil {
 			if len(have) != len(want) {
 				t.Fatal(i, "mismatch len; have:", len(have))
 			} else {
 				for j, s := range want {
 					el := have[j]
-					if el.Hash() != match.Hash(s) {
-						t.Fatal(i, "mismatch el")
+					if a, b := el.Hash(), match.Hash(s); a != b {
+						t.Fatalf("test %d mismatched %v(%s)!= %v(%s)", i, a, el.String(), b, s)
 					}
 					// lastly: test that the recorded start and end indices are correct
 					// ( except for ands... which are deliberately weird )
@@ -108,5 +112,4 @@ func TestMatching(t *testing.T) {
 			t.Fatalf("failed to match '%s', got %d instead", w, matched)
 		}
 	}
-
 }
