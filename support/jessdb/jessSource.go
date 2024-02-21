@@ -41,8 +41,19 @@ func (d dbWrapper) FindKind(ws match.Span) (ret string, width int) {
 }
 
 func (d dbWrapper) FindTrait(ws match.Span) (ret string, width int) {
-	if res, e := d.GetPartialTrait(ws); e != nil {
+	// turns out the code is actually testing all fields
+	// and not just traits .... fix? seems to work okay so far.
+	if res, e := d.GetPartialField(ws); e != nil {
 		log.Println("FindTrait", e)
+	} else {
+		ret, width = res.Name, res.Width
+	}
+	return
+}
+
+func (d dbWrapper) FindField(ws match.Span) (ret string, width int) {
+	if res, e := d.GetPartialField(ws); e != nil {
+		log.Println("FindField", e)
 	} else {
 		ret, width = res.Name, res.Width
 	}

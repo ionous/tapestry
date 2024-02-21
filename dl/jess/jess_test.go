@@ -22,8 +22,8 @@ func TestPhrases(t *testing.T) {
 }
 
 type info struct {
-	kinds, traits match.SpanList
-	macros        jesstest.MacroList
+	kinds, traits, fields match.SpanList
+	macros                jesstest.MacroList
 }
 
 func (n *info) GetContext() int {
@@ -33,12 +33,14 @@ func (n *info) FindKind(ws match.Span) (string, int) {
 	m, cnt := n.kinds.FindMatch(ws)
 	return m.String(), cnt
 }
-
 func (n *info) FindTrait(ws match.Span) (string, int) {
 	m, cnt := n.traits.FindMatch(ws)
 	return m.String(), cnt
 }
-
+func (n *info) FindField(ws match.Span) (string, int) {
+	m, cnt := n.fields.FindMatch(ws)
+	return m.String(), cnt
+}
 func (n *info) FindMacro(ws match.Span) (mdl.Macro, int) {
 	return n.macros.FindMacro(ws)
 }
@@ -72,5 +74,10 @@ var known = info{
 		"openable",
 		"transparent",
 		"fixed in place",
+	),
+	fields: match.PanicSpans(
+		"description",
+		"title",
+		"age",
 	),
 }

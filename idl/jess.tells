@@ -45,7 +45,6 @@ Spec:with group:
           - true
         - Term: "matched"
 
-
     - # Defines a name and its kind in a single phrase.
       # <kind> "called" [the] _name_.
       # as per inform, the name of the name is everything after the word called
@@ -158,6 +157,15 @@ Spec:with group:
           Term: "comma_and"
         - Term: "kinds"
 
+    - # matches the name of a field in a kind.
+      Spec:with flow:
+      - "property"
+      - Flow uses:
+        - Term:optional:
+          - "article"
+          - true
+        - Term: "matched"
+
     - # matches the name of an (existing) trait.
       Spec:with flow:
       - "trait"
@@ -229,7 +237,8 @@ Spec:with group:
         - Term: "verb_links"
         - Term: "links_verb"
         - Term: "links_adjectives"
-        - Term: "noun_value"
+        - Term: "property_noun_value"
+        - Term: "noun_property_value"
 
     - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
       # interesting to note that inform allows "some kind/s of"
@@ -345,23 +354,45 @@ Spec:with group:
         - Term: "adjectives"
 
     - # assigns a default value to a noun.
-      # The description of the pen is "mightier than the sword."
+      # ex. `The description of the pen is "mightier than the sword.`
       Spec:with flow:
-      - "noun_value"
+      - "property_noun_value"
       - Flow uses:
         - Term:optional:
           - "article"
           - true
-        - # a span ending with the word "of"
+        - Term: "property"
+        - # the word "of"
           Term:type:
-          - "property"
-          - "matched"
+          - "of"
+          - "words"
         - # note: "called the" isn't allowed here.
           Term:type:
           - "noun"
           - "name"
         - Term: "are"
         - Term: "single_value"
+
+    - # assigns a default value to a noun.
+      # ex. `The pen has the description "mightier than the sword.`
+      # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
+      Spec:with flow:
+      - "noun_property_value"
+      - Flow uses:
+        - # note: "called the" isn't allowed here.
+          Term:type:
+          - "noun"
+          - "name"
+        - # the word "has"
+          Term:type:
+          - "has"
+          - "words"
+        - Term:optional:
+          - "article"
+          - true
+        - Term: "property"
+        - Term: "single_value"
+
 
     - # matches only one of its options
       # ( the options could be represented as a slot; this feels easier for now )

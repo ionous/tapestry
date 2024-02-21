@@ -1,9 +1,31 @@
 package jess
 
-func (op *NounValue) Match(q Query, input *InputState) (okay bool) {
+func (op *Property) String() string {
+	return op.Matched.String()
+}
+
+func (op *Property) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
-		op.matchProperty(q, &next) && // ends with "of"
+		op.matchProperty(q, &next) {
+		*input, okay = next, true
+	}
+	return
+}
+
+func (op *Property) matchProperty(q Query, input *InputState) (okay bool) {
+	if m, width := q.FindField(input.Words()); width > 0 {
+		m := matchedString{m, width}
+		op.Matched, *input, okay = m, input.Skip(width), true
+	}
+	return
+}
+
+func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	(Optional(q, &next, &op.Article) || true) &&
+		op.Property.Match(q, &next) &&
+		op.Of.Match(q, &next, keywords.Of) &&
 		op.Noun.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.SingleValue.Match(q, &next) {
@@ -12,15 +34,22 @@ func (op *NounValue) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *NounValue) Generate(rar Registrar) (err error) {
+func (op *PropertyNounValue) Generate(rar Registrar) error {
 	return rar.AddNounValue(op.Noun.String(), op.Property.String(), op.SingleValue.Assignment())
 }
 
-// read until "of" is found
-func (op *NounValue) matchProperty(q Query, input *InputState) (okay bool) {
-	if width := scanUntil(input.Words(), keywords.Of); width > 0 {
-		// skip one more than the width to account for the size of the keyword (of)
-		op.Property, *input, okay = input.Cut(width), input.Skip(width+1), true
+func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	op.Noun.Match(q, &next) &&
+		op.Has.Match(q, &next, keywords.Has) &&
+		(Optional(q, &next, &op.Article) || true) &&
+		op.Property.Match(q, &next) &&
+		op.SingleValue.Match(q, &next) {
+		*input, okay = next, true
 	}
 	return
+}
+
+func (op *NounPropertyValue) Generate(rar Registrar) error {
+	return rar.AddNounValue(op.Noun.String(), op.Property.String(), op.SingleValue.Assignment())
 }

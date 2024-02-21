@@ -71,19 +71,34 @@ xxx: ( traits noun ) isnt allowed ( ex. the unhappy man )
 
 
 
-# Noun Value 
+# Noun Value Assignment
+
+This is a phrase that could really use some love.
 
 some notes from inform:
-
-* unknown nouns are allowed:
-  - `The description of the nep is "mightier than the sword."`
-
-* noun value doesnt support multiple nouns
-	- `The description of the box and the top`
+* there are two phrase variants: 
+	- property noun value: 
+	  - `The age of the bottle is 42.`
+	  
+	- noun property value: 
+		- `The bottle is/are/has age 42.`
+		- `The container called the box has the description ...`
 	
-* it doesnt support compond phraes:
-  - `The description of the pen is "mightier than the sword"  and the description of the box is "hello."`
+* unknown nouns are allowed:
+  - ok: `The description of the nep is "mightier than the sword."`
+  
+* supports multiple values for the same noun:
+  - ok: `The bottle in the kitchen is openable and has age 42.`
   
 * "called the" is only supported in leading phrases:
-	- ng: `The description of the container called the box is....`
 	- ok: `The container called the box has the description ... `
+	- ng: `The description of the container called the box is....`
+	
+* doesnt support multiple nouns:
+	- ng: `The description of the box and the top is...`
+	- ng: `The description of the pen is "mightier than the sword" and the description of the box is "hello."`
+	
+* undesirable results when using verb phrases:
+ - ng: `The age of the bottle in the kitchen is 42.` - generates an object called "bottle in the kitchen".
+ - ng: `The bottle in the kitchen has the age 42.` - ditto.
+ - ng: `The bottle is fixed in place and has age 42.` -- generates an object called "bottle is fixed in place".

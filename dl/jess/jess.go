@@ -27,6 +27,10 @@ type Query interface {
 	// return the number of words that matched.
 	FindTrait(match.Span) (string, int)
 
+	// if the passed words starts with a field,
+	// return the number of words that matched.
+	FindField(match.Span) (string, int)
+
 	// if the passed words starts with a macro,
 	// return information about that match.
 	FindMacro(match.Span) (Macro, int)

@@ -27,7 +27,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		skip   any
 	}{
 		// ------------------------
-		// noun_value
+		// PropertyNounValue
 		{
 			test: `The title of the story is "A Secret."`,
 			result: []string{
@@ -42,10 +42,22 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 				"AddNounValue", "bottle", "age", number(42),
 			},
 		},
+		// ------------------------
+		// NounPropertyValue
 		{
-			//test:  `The bottle in the kitchen is openable and has age 42.`,
+			test: `The story has the title "A Secret."`,
+			result: []string{
+				"AddNounValue", "story", "title", text("A Secret."),
+			},
 		},
-
+		{
+			// note: we don't validate properties while matching
+			// weave validates them when attempting to write them.
+			test: `The bottle has age 42.`,
+			result: []string{
+				"AddNounValue", "bottle", "age", number(42),
+			},
+		},
 		// -------------------------
 		{
 			// note: "Devices are fixed in place" will parse properly

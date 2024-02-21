@@ -13,7 +13,8 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		&op.VerbLinks,
 		&op.LinksVerb,
 		&op.LinksAdjectives,
-		&op.NounValue,
+		&op.PropertyNounValue,
+		&op.NounPropertyValue,
 	} {
 		if next := *input; //
 		m.Match(q, &next) /* && len(next) == 0 */ {

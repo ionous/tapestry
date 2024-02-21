@@ -431,6 +431,42 @@ func (op *AdditionalKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// matches the name of a field in a kind.
+type Property struct {
+	Article *Article
+	Matched Matched
+	Markup  map[string]any
+}
+
+// property, a type of flow.
+var Zt_Property typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Property) TypeInfo() typeinfo.T {
+	return &Zt_Property
+}
+
+// implements typeinfo.Markup
+func (op *Property) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type property
+type Property_Slice []Property
+
+// implements typeinfo.Instance
+func (*Property_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Property
+}
+
+// implements typeinfo.Repeats
+func (op *Property_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // matches the name of an (existing) trait.
 type Trait struct {
 	Article *Article
@@ -648,13 +684,14 @@ func (op *KindsAreTraits_Slice) Repeats() bool {
 }
 
 type MatchingPhrases struct {
-	KindsAreTraits  KindsAreTraits
-	KindsOf         KindsOf
-	VerbLinks       VerbLinks
-	LinksVerb       LinksVerb
-	LinksAdjectives LinksAdjectives
-	NounValue       NounValue
-	Markup          map[string]any
+	KindsAreTraits    KindsAreTraits
+	KindsOf           KindsOf
+	VerbLinks         VerbLinks
+	LinksVerb         LinksVerb
+	LinksAdjectives   LinksAdjectives
+	PropertyNounValue PropertyNounValue
+	NounPropertyValue NounPropertyValue
+	Markup            map[string]any
 }
 
 // matching_phrases, a type of flow.
@@ -944,41 +981,80 @@ func (op *AdditionalAdjectives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type NounValue struct {
+type PropertyNounValue struct {
 	Article     *Article
-	Property    Matched
+	Property    Property
+	Of          Words
 	Noun        Name
 	Are         Are
 	SingleValue SingleValue
 	Markup      map[string]any
 }
 
-// noun_value, a type of flow.
-var Zt_NounValue typeinfo.Flow
+// property_noun_value, a type of flow.
+var Zt_PropertyNounValue typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*NounValue) TypeInfo() typeinfo.T {
-	return &Zt_NounValue
+func (*PropertyNounValue) TypeInfo() typeinfo.T {
+	return &Zt_PropertyNounValue
 }
 
 // implements typeinfo.Markup
-func (op *NounValue) GetMarkup(ensure bool) map[string]any {
+func (op *PropertyNounValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type noun_value
-type NounValue_Slice []NounValue
+// holds a slice of type property_noun_value
+type PropertyNounValue_Slice []PropertyNounValue
 
 // implements typeinfo.Instance
-func (*NounValue_Slice) TypeInfo() typeinfo.T {
-	return &Zt_NounValue
+func (*PropertyNounValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PropertyNounValue
 }
 
 // implements typeinfo.Repeats
-func (op *NounValue_Slice) Repeats() bool {
+func (op *PropertyNounValue_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type NounPropertyValue struct {
+	Noun        Name
+	Has         Words
+	Article     *Article
+	Property    Property
+	SingleValue SingleValue
+	Markup      map[string]any
+}
+
+// noun_property_value, a type of flow.
+var Zt_NounPropertyValue typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*NounPropertyValue) TypeInfo() typeinfo.T {
+	return &Zt_NounPropertyValue
+}
+
+// implements typeinfo.Markup
+func (op *NounPropertyValue) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type noun_property_value
+type NounPropertyValue_Slice []NounPropertyValue
+
+// implements typeinfo.Instance
+func (*NounPropertyValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NounPropertyValue
+}
+
+// implements typeinfo.Repeats
+func (op *NounPropertyValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1113,6 +1189,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Kind,
 	&Zt_Kinds,
 	&Zt_AdditionalKinds,
+	&Zt_Property,
 	&Zt_Trait,
 	&Zt_Traits,
 	&Zt_AdditionalTraits,
@@ -1127,7 +1204,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_VerbPhrase,
 	&Zt_Adjectives,
 	&Zt_AdditionalAdjectives,
-	&Zt_NounValue,
+	&Zt_PropertyNounValue,
+	&Zt_NounPropertyValue,
 	&Zt_SingleValue,
 	&Zt_QuotedText,
 	&Zt_MatchingNumber,
@@ -1183,7 +1261,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	13051355243450165788: (*LinksAdjectives)(nil),      /* LinksAdjectives names:are:adjectives:verbPhrase: */
 	14912868615589777512: (*LinksVerb)(nil),            /* LinksVerb names:are:verb:otherNames: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	4465373173743747470:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbLinks:linksVerb:linksAdjectives:nounValue: */
+	17993010577723842255: (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbLinks:linksVerb:linksAdjectives:propertyNounValue:nounPropertyValue: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1218,8 +1296,12 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17641125891389017492: (*Names)(nil),                /* Names kindCalled:name:additionalNames: */
 	4500297491524973516:  (*Names)(nil),                /* Names name: */
 	17351915174502247643: (*Names)(nil),                /* Names name:additionalNames: */
-	10337279124314240622: (*NounValue)(nil),            /* NounValue article:property:noun:are:singleValue: */
-	17479735805403962906: (*NounValue)(nil),            /* NounValue property:noun:are:singleValue: */
+	9912988654777640387:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:singleValue: */
+	17930228889254639535: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:singleValue: */
+	11106580022094386190: (*Property)(nil),             /* Property article:matched: */
+	7038723543321541230:  (*Property)(nil),             /* Property matched: */
+	8361206308538973804:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:noun:are:singleValue: */
+	7473469395579866548:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:noun:are:singleValue: */
 	6626169867101049892:  (*QuotedText)(nil),           /* QuotedText matched: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
@@ -1285,10 +1367,7 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Markup: map[string]any{
-				"comment": "# the match is always implemented as a span.",
-			},
-			Type: &Zt_Matched,
+			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"Specifies a single name, in full or in part.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "The name \"chest\" implies the treasure chest.", "To optimizing matching the words \"is/are/comma/and\" are never part of name names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also 'kind_called' )"},
@@ -1485,6 +1564,23 @@ func init() {
 			"comment": "matches a kind following another kind.",
 		},
 	}
+	Zt_Property = typeinfo.Flow{
+		Name: "property",
+		Lede: "property",
+		Terms: []typeinfo.Term{{
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "matched",
+			Label: "matched",
+			Type:  &Zt_Matched,
+		}},
+		Markup: map[string]any{
+			"comment": "matches the name of a field in a kind.",
+		},
+	}
 	Zt_Trait = typeinfo.Flow{
 		Name: "trait",
 		Lede: "trait",
@@ -1615,9 +1711,13 @@ func init() {
 			Label: "links_adjectives",
 			Type:  &Zt_LinksAdjectives,
 		}, {
-			Name:  "noun_value",
-			Label: "noun_value",
-			Type:  &Zt_NounValue,
+			Name:  "property_noun_value",
+			Label: "property_noun_value",
+			Type:  &Zt_PropertyNounValue,
+		}, {
+			Name:  "noun_property_value",
+			Label: "noun_property_value",
+			Type:  &Zt_NounPropertyValue,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
@@ -1806,9 +1906,9 @@ func init() {
 			"comment": "an additional set of traits and a kind",
 		},
 	}
-	Zt_NounValue = typeinfo.Flow{
-		Name: "noun_value",
-		Lede: "noun_value",
+	Zt_PropertyNounValue = typeinfo.Flow{
+		Name: "property_noun_value",
+		Lede: "property_noun_value",
 		Terms: []typeinfo.Term{{
 			Name:     "article",
 			Label:    "article",
@@ -1817,10 +1917,14 @@ func init() {
 		}, {
 			Name:  "property",
 			Label: "property",
+			Type:  &Zt_Property,
+		}, {
+			Name:  "of",
+			Label: "of",
 			Markup: map[string]any{
-				"comment": "a span ending with the word \"of\"",
+				"comment": "the word \"of\"",
 			},
-			Type: &Zt_Matched,
+			Type: &Zt_Words,
 		}, {
 			Name:  "noun",
 			Label: "noun",
@@ -1838,7 +1942,42 @@ func init() {
 			Type:  &Zt_SingleValue,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns a default value to a noun.", "The description of the pen is \"mightier than the sword.\""},
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The description of the pen is \"mightier than the sword.`"},
+		},
+	}
+	Zt_NounPropertyValue = typeinfo.Flow{
+		Name: "noun_property_value",
+		Lede: "noun_property_value",
+		Terms: []typeinfo.Term{{
+			Name:  "noun",
+			Label: "noun",
+			Markup: map[string]any{
+				"comment": "note: \"called the\" isn't allowed here.",
+			},
+			Type: &Zt_Name,
+		}, {
+			Name:  "has",
+			Label: "has",
+			Markup: map[string]any{
+				"comment": "the word \"has\"",
+			},
+			Type: &Zt_Words,
+		}, {
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "property",
+			Label: "property",
+			Type:  &Zt_Property,
+		}, {
+			Name:  "single_value",
+			Label: "single_value",
+			Type:  &Zt_SingleValue,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has the description \"mightier than the sword.`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
 		},
 	}
 	Zt_SingleValue = typeinfo.Flow{

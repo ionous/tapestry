@@ -38,12 +38,13 @@ func (op *Words) Span() match.Span {
 
 // make customizable?
 var keywords = struct {
-	And, Are, Called, Comma, Is, Of, Quote uint64
+	And, Are, Called, Comma, Has, Is, Of, Quote uint64
 }{
 	And:    match.Hash("and"),
 	Are:    match.Hash("are"),
 	Called: match.Hash("called"),
 	Comma:  match.Hash(","),
+	Has:    match.Hash("has"),
 	Is:     match.Hash("is"),
 	Of:     match.Hash("of"),
 	Quote:  match.Hash(`"`),

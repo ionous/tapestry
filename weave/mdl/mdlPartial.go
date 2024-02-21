@@ -77,14 +77,14 @@ func (pen *Pen) GetPartialKind(ws match.Span) (ret PartialMatch, err error) {
 const blank = " "
 const space = ' '
 
-// if the passed words starts with a trait,
+// match the passed words with the known fields of all in-scope kinds.
 // return the number of words in that match.
 // tbd: technically there's some possibility that there might be three traits:
 // "wood", "veneer", and "wood veneer" -- subset names
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (pen *Pen) GetPartialTrait(ws match.Span) (ret PartialMatch, err error) {
+func (pen *Pen) GetPartialField(ws match.Span) (ret PartialMatch, err error) {
 	if ap, e := pen.getAspectPath(); e != nil {
 		err = e
 	} else if len(ws) > 0 {
@@ -93,7 +93,7 @@ func (pen *Pen) GetPartialTrait(ws match.Span) (ret PartialMatch, err error) {
 			name string
 		}
 		e := pen.db.QueryRow(`
-		with traits(name) as (
+		with fields(name) as (
 		select mf.field
 		from mdl_kind mk
 		join domain_tree dt
@@ -105,7 +105,7 @@ func (pen *Pen) GetPartialTrait(ws match.Span) (ret PartialMatch, err error) {
 	)
 	select name from (
 		select name, substr(?3 ,0, length(name)+2) as words
-		from traits
+		from fields
 		where words = (name || ' ')
 	)
 	order by length(name) desc

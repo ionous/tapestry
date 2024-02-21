@@ -41,6 +41,7 @@ Loop:
 		case keywords.And,
 			keywords.Are,
 			keywords.Comma,
+			keywords.Has,
 			keywords.Is:
 			ret = i
 			break Loop
