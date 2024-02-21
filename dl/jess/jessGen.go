@@ -80,10 +80,10 @@ func genNouns(rar Registrar, ns []resultName) (ret []string, err error) {
 func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	var noun string
 	fullName := n.String()
-	if name := inflect.Normalize(fullName); name == "you" {
+	if name := inflect.Normalize(fullName); name == PlayerYou {
 		// tdb: the current thought is that "the player" should be a variable;
 		// currently its an "agent".
-		noun, err = rar.GetExactNoun("self")
+		noun, err = rar.GetExactNoun(PlayerSelf)
 	} else {
 		if n.Exact { // ex. ".... called the spatula."
 			noun, err = rar.GetExactNoun(name)
@@ -94,7 +94,7 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 		}
 		// if it doesnt exist; we create it.
 		if errors.Is(err, mdl.Missing) {
-			base := "things" // ugh
+			base := DefaultKind // ugh
 			if len(n.Kinds) > 0 {
 				base = inflect.Normalize(n.Kinds[0].String())
 			}
@@ -120,11 +120,11 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	// add articles:
 	if err == nil {
 		if isProper(n.Article, fullName) {
-			if e := rar.AddNounTrait(noun, "proper named"); e != nil {
+			if e := rar.AddNounTrait(noun, ProperNameTrait); e != nil {
 				err = e
 			}
 		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := rar.AddNounValue(noun, "indefinite article", text(a, "")); e != nil {
+			if e := rar.AddNounValue(noun, IndefiniteArticle, text(a, "")); e != nil {
 				err = e
 			}
 		}
@@ -150,61 +150,31 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 // - adds ( and returns ) nouns: triangle_1, triangle_2, etc. of kind "triangle/s"
 // - uses "triangle" as an alias and printed name for each of the new nouns
 // - flags them all as "counted.
-// - ensures "triangle/s" are things
 func importCountedNoun(rar Registrar, noun resultName) (ret []string, err error) {
-	// ..kindOrKinds string, article ArticleResult, traits []match.Match
 	if cnt := noun.Article.Count; cnt > 0 {
-		// generate unique names for each of the counted nouns.
-		// fix: we probably want nouns to "stack", and be have individually duplicated objects.
-		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
-		// and when you pick up one cat now you have two object stacks, both referring to the kind cats
-		// an empty stack acts like no object, and gets collected in some fashion.
-		name, parent := noun.String(), "thing"
-		if len(name) == 0 {
-			name = noun.Kinds[0].String()
-		} else if len(noun.Kinds) > 0 {
-			// ex. ""An empire apple, a pen, and two triangles are props in the lab."
-			// fix: read should return that as an object *called* two triangles, not something counted.
-			parent = noun.Kinds[0].String()
-		}
-		name = inflect.Normalize(name)
-
+		kinds := noun.Kinds[0].String()
+		kind := rar.GetSingular(kinds)
 		names := make([]string, cnt)
+	Loop:
 		for i := 0; i < cnt; i++ {
-			names[i] = rar.GetUniqueName(name)
-		}
-
-		var kind, kinds string
-		// note: kind is phrased in the singular here when count is 1, plural otherwise.
-		if cnt == 1 {
-			kind = name
-			kinds = rar.GetPlural(name)
-		} else {
-			kinds = name
-			kind = rar.GetSingular(name)
-		}
-		if e := rar.AddKind(kinds, parent); e != nil {
-			err = e
-		} else {
-		Loop:
-			for _, n := range names {
-				if e := rar.AddNoun(n, n, kinds); e != nil {
-					err = e
-				} else if e := rar.AddNounAlias(n, kind, -1); e != nil {
-					err = e // ^ so that typing "triangle" means "triangles-1"
-					break
-				} else if e := rar.AddNounTrait(n, "counted"); e != nil {
-					err = e
-					break
-				} else if e := rar.AddNounValue(n, "printed name", text(kind, "")); e != nil {
-					err = e // so that printing "triangles-1" yields "triangle"
-					break   // FIX: itd make a lot more sense to have a default value for the kind
-				} else {
-					for _, t := range noun.Traits {
-						if e := rar.AddNounTrait(n, t.String()); e != nil {
-							err = e
-							break Loop
-						}
+			n := rar.GetUniqueName(kinds)
+			names[i] = n
+			if e := rar.AddNoun(n, n, kinds); e != nil {
+				err = e
+			} else if e := rar.AddNounAlias(n, kind, -1); e != nil {
+				err = e // ^ so that typing "triangle" means "triangles-1"
+				break
+			} else if e := rar.AddNounTrait(n, CountedTrait); e != nil {
+				err = e
+				break
+			} else if e := rar.AddNounValue(n, PrintedName, text(kind, "")); e != nil {
+				err = e // so that printing "triangles-1" yields "triangle"
+				break   // FIX: itd make a lot more sense to have a default value for the kind
+			} else {
+				for _, t := range noun.Traits {
+					if e := rar.AddNounTrait(n, t.String()); e != nil {
+						err = e
+						break Loop
 					}
 				}
 			}

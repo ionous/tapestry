@@ -69,9 +69,6 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `Two things are in the kitchen.`,
 			result: []string{
-				// FIX: dont want this line
-				"AddKind", "things", "thing",
-				//
 				"AddNoun", "things-1", "things-1", "things",
 				"AddNounAlias", "things-1", "thing",
 				"AddNounTrait", "things-1", "counted",
@@ -81,6 +78,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 				"AddNounAlias", "things-2", "thing",
 				"AddNounTrait", "things-2", "counted",
 				"AddNounValue", "things-2", "printed name", text("thing"),
+				//
 				"ApplyMacro", "contain", "kitchen", "things-1", "things-2",
 			},
 		},
