@@ -15,15 +15,6 @@ func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *AdditionalNames) MorePlainly(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.CommaAnd.Match(q, &next) &&
-		op.Names.MatchPlainly(q, &next) {
-		*input, okay = next, true
-	}
-	return
-}
-
 // some callers want to fail matching on anonymous leading kinds
 // tbd: would it be better to match, and error on generation?
 // ( ie. to produce a message )
@@ -33,9 +24,10 @@ func (op *Names) HasAnonymousKind() bool {
 
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	Optional(q, &next, &op.CountedName) ||
-		Optional(q, &next, &op.KindCalled) ||
-		Optional(q, &next, &op.Kind) ||
+	(matchKinds(q) &&
+		(Optional(q, &next, &op.CountedName) ||
+			Optional(q, &next, &op.KindCalled) ||
+			Optional(q, &next, &op.Kind))) ||
 		Optional(q, &next, &op.Name) {
 		// as long as one succeeded, try matching additional nouns too...
 		// FIX: as far as i can tell, inform only allows "kind called" at the front of a list of names
@@ -43,19 +35,6 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 		if !Optional(q, &next, &op.AdditionalNames) || op.AdditionalNames.Names.KindCalled == nil {
 			*input, okay = next, true
 		}
-	}
-	return
-}
-
-// only checks plain names for matches
-func (op *Names) MatchPlainly(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	Optional(q, &next, &op.Name) {
-		var and AdditionalNames
-		if and.MorePlainly(q, &next) {
-			op.AdditionalNames = &and
-		}
-		*input, okay = next, true
 	}
 	return
 }

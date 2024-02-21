@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -89,7 +88,7 @@ func (ja jessAdapter) GetUniqueName(category string) string {
 	return newCounter(ja.w.Catalog, category)
 }
 
-func (ja jessAdapter) Apply(macro jess.Macro, lhs, rhs []string) (err error) {
+func (ja jessAdapter) Apply(macro mdl.Macro, lhs, rhs []string) (err error) {
 	if multiSrc, e := validSources(lhs, macro.Type); e != nil {
 		err = e
 	} else if multiTgt, e := validTargets(rhs, macro.Type); e != nil {
@@ -118,14 +117,14 @@ func (ja jessAdapter) Apply(macro jess.Macro, lhs, rhs []string) (err error) {
 }
 
 // validate that the number of parsed primary names is as expected
-func validSources(ns []string, mtype jess.MacroType) (multi bool, err error) {
+func validSources(ns []string, mtype mdl.MacroType) (multi bool, err error) {
 	switch mtype {
-	case jess.Macro_PrimaryOnly, jess.Macro_ManyPrimary, jess.Macro_ManyMany:
+	case mdl.Macro_PrimaryOnly, mdl.Macro_ManyPrimary, mdl.Macro_ManyMany:
 		if cnt := len(ns); cnt == 0 {
 			err = errutil.New("expected at least one source noun")
 		}
 		multi = true
-	case jess.Macro_ManySecondary:
+	case mdl.Macro_ManySecondary:
 		if cnt := len(ns); cnt > 1 {
 			err = errutil.New("expected exactly one noun")
 		}
@@ -136,17 +135,17 @@ func validSources(ns []string, mtype jess.MacroType) (multi bool, err error) {
 }
 
 // validate that the number of parsed secondary names is as expected
-func validTargets(ns []string, mtype jess.MacroType) (multi bool, err error) {
+func validTargets(ns []string, mtype mdl.MacroType) (multi bool, err error) {
 	switch mtype {
-	case jess.Macro_PrimaryOnly:
+	case mdl.Macro_PrimaryOnly:
 		if cnt := len(ns); cnt != 0 {
 			err = errutil.New("didn't expect any target nouns")
 		}
-	case jess.Macro_ManyPrimary:
+	case mdl.Macro_ManyPrimary:
 		if cnt := len(ns); cnt > 1 {
 			err = errutil.New("expected at most one target noun")
 		}
-	case jess.Macro_ManySecondary, jess.Macro_ManyMany:
+	case mdl.Macro_ManySecondary, mdl.Macro_ManyMany:
 		// any number okay
 		multi = true
 	default:

@@ -9,7 +9,7 @@ func (op *Name) String() string {
 func (op *Name) GetName(traits, kinds []Matched) resultName {
 	return resultName{
 		Article: reduceArticle(op.Article),
-		Span:    op.Matched.(match.Span),
+		Match:   op.Matched,
 		Traits:  traits,
 		Kinds:   kinds,
 	}

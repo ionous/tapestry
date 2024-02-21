@@ -21,7 +21,7 @@ type Weaver struct {
 }
 
 func (w *Weaver) MatchSpan(p match.Span) (jess.Generator, error) {
-	return w.Catalog.gdb.MatchSpan(w.Domain, p)
+	return w.Catalog.MatchSpan(w.Domain, p)
 }
 
 func (w *Weaver) Pin() *mdl.Pen {

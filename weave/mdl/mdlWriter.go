@@ -2,7 +2,6 @@ package mdl
 
 import (
 	"database/sql"
-	"errors"
 	"slices"
 	"strings"
 
@@ -16,24 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
-
-type Pen struct {
-	db         *tables.Cache
-	paths      *paths
-	domain, at string
-	warn       Log
-}
-
-type Log func(fmt string, parts ...any)
-
-func eatDuplicates(l Log, e error) (err error) {
-	if e == nil || !errors.Is(e, Duplicate) {
-		err = e
-	} else if l != nil {
-		l(e.Error())
-	}
-	return
-}
 
 // tbd: perhaps writing the aspect to its own table would be best
 // join at runtime to synthesize fields; would fix the questions of adding bad traits ( see comments )

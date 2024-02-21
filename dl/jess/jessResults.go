@@ -1,7 +1,5 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/match"
-
 type localResults struct {
 	Primary   []resultName
 	Secondary []resultName // usually just one, except for nxm relations
@@ -21,15 +19,18 @@ func makeResult(macro Macro, reverse bool, a, b []resultName) localResults {
 
 type resultName struct {
 	Article articleResult
-	Span    match.Span
+	Match   Matched
 	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
 	Traits  []Matched
 	Kinds   []Matched // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
 }
 
-func (n *resultName) String() string {
-	return n.Span.String()
+func (n resultName) String() (ret string) {
+	if m := n.Match; m != nil {
+		ret = m.String()
+	}
+	return
 }
 
 type articleResult struct {

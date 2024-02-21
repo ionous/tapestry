@@ -1,4 +1,4 @@
-package jessdb
+package jessdb_test
 
 import (
 	"database/sql"
@@ -7,10 +7,12 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 func TestPhrases(t *testing.T) {
@@ -18,15 +20,19 @@ func TestPhrases(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		defer db.Close()
-		x := dbSource{domain: "a", db: tables.NewCache(db)}
-		jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
-			if ws, e := match.MakeSpan(testPhrase); e != nil {
-				err = e
-			} else {
-				ret, err = jess.Match(&x, ws)
-			}
-			return
-		})
+		if m, e := mdl.NewModeler(db); e != nil {
+			t.Fatal(e)
+		} else {
+			x := jessdb.NewSource(m)
+			jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
+				if ws, e := match.MakeSpan(testPhrase); e != nil {
+					err = e
+				} else {
+					ret, err = x.MatchSpan("a", ws)
+				}
+				return
+			})
+		}
 	}
 }
 

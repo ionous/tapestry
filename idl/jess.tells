@@ -43,7 +43,8 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "matched" # the match is always implemented as a span.
+        - Term: "matched"
+
 
     - # Defines a name and its kind in a single phrase.
       # <kind> "called" [the] _name_.

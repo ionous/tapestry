@@ -11,8 +11,7 @@ func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindKind(input.Words()); width > 0 {
-		// we want to return the matched kind, not the span because
-		// it might have additional info about the match ( ex. a db key )
+		m := matchedString{m, width}
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
 	return

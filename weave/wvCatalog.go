@@ -27,10 +27,10 @@ type Catalog struct {
 	processing     DomainStack
 	pendingDomains []*Domain
 
-	cursor string        // current source position
-	run    rt.Runtime    // custom runtime for running macros
-	gdb    jessdb.Source // english parser
-	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
+	cursor        string        // current source position
+	run           rt.Runtime    // custom runtime for running macros
+	jessdb.Source               // english parser
+	db            *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
 }
 
 type ScheduledCallback func(*Weaver) error
@@ -64,21 +64,14 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	if e != nil {
 		panic(e)
 	}
-	cache := tables.NewCache(db)
-	gdb := jessdb.NewSource(cache)
-	// fix: this needs cleanup
-	// write should be called modeler
-	// initial cursor should be set externally or passed in
-	// what should be public for Catalog?
-	// no panics on creation... etc.
 	return &Catalog{
 		Env:     make(Env),
 		cursor:  "x", // fix
-		db:      cache,
+		db:      tables.NewCache(db),
 		domains: make(map[string]*Domain),
 		Modeler: m,
 		run:     run,
-		gdb:     gdb,
+		Source:  jessdb.NewSource(m),
 	}
 }
 

@@ -20,6 +20,7 @@ func (op *Trait) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Trait) matchTrait(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindTrait(input.Words()); width > 0 {
+		m := matchedString{m, width}
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
 	return

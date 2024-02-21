@@ -21,7 +21,6 @@ func (n MacroList) FindMacro(ws []match.Word) (ret jess.Macro, width int) {
 		var match match.Span = n.SpanList[i]
 		info := n.info[i]
 		width, ret = len(match), jess.Macro{
-			Matched:  match,
 			Name:     info.name,
 			Type:     info.macroType,
 			Reversed: info.reversed,
