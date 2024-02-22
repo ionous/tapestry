@@ -59,7 +59,7 @@ func (fs *Fields) writeFields(pen *Pen) (err error) {
 		err = e
 	}
 	if err != nil {
-		err = errutil.Fmt("%w in pattern %q domain %q", err, fs.kind, pen.domain)
+		err = errutil.Fmt("%w in kind %q domain %q", err, fs.kind, pen.domain)
 	}
 	return
 }

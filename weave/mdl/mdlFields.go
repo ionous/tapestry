@@ -197,11 +197,15 @@ func (pen *Pen) digField(noun nounInfo, path []string) (retout, retin fieldInfo,
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
 func (pen *Pen) findDefaultTrait(kind classInfo) (ret string, err error) {
-	err = pen.db.QueryRow(`select field 
+	if e := pen.db.QueryRow(`select field 
 		from mdl_field 
 		where kind = ?1 
 		order by rowid`,
-		kind.id).Scan(&ret)
+		kind.id).Scan(&ret); e != sql.ErrNoRows {
+		err = e
+	} else {
+		err = errutil.Fmt("%w traits for %q in domain %q", Missing, kind.name, pen.domain)
+	}
 	return
 }
 
@@ -211,7 +215,7 @@ func (pen *Pen) findField(kind classInfo, field string) (ret fieldInfo, err erro
 	if e := pen.db.QueryRow(` 
 -- all possible traits:
 with allTraits as (	
-	select mk.rowid as kind,   -- id of the aspect,
+	select mk.rowid as kind,   -- id of the aspect
 				 field as name,      -- name of trait 
 				 mf.domain,          -- domain of the field
 	       mk.kind as aspect,  -- name of aspect
