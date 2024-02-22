@@ -37,6 +37,11 @@ func (op *RenderEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Handles changing a template like {.boombip} into text.
+// If the name is a variable containing an object name: return the printed object name ( via "print name" );
+// if the name is a variable with some other text: return that text;
+// if the name isn't a variable but refers to some object: return that object's printed object name;
+// otherwise, its an error.
 type RenderName struct {
 	Name   string
 	Markup map[string]any
@@ -74,6 +79,8 @@ func (op *RenderName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Pull a value from name that might refer either to a variable, or to an object.
+// If the name is an object, returns the object id.
 type RenderRef struct {
 	Name   rtti.TextEval
 	Dot    []assign.Dot
@@ -157,6 +164,8 @@ func (op *RenderValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A version of core's call pattern
+// that figures out how to evaluate its arguments at runtime.
 type RenderPattern struct {
 	PatternName string
 	Render      []RenderEval

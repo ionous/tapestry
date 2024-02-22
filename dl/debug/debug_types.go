@@ -8,6 +8,9 @@ import (
 	"strconv"
 )
 
+// a command with a signature of the comment marker metadata.
+// a cheat to allows nodes that have only a comment marker and no actual command.
+// see also: story.story_break
 type DoNothing struct {
 	Markup map[string]any
 }
@@ -155,6 +158,8 @@ func (op *ExpectText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// fake input as if the player had typed it themselves.
+// only works while running checks.
 type Fabricate struct {
 	Text   rtti.TextEval
 	Markup map[string]any

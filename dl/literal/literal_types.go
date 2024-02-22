@@ -113,6 +113,8 @@ func (op *FieldValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A series of values all for the same record.
+// While it can be specified wherever a literal value can, it only has meaning when the record type is known.
 type FieldList struct {
 	Fields []FieldValue
 	Markup map[string]any

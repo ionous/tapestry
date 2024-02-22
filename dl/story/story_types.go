@@ -71,6 +71,8 @@ func (op *StoryStatement_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Add a note.
+// Information about the story for you and other authors.
 type Comment struct {
 	Lines  string
 	Markup map[string]any
@@ -272,6 +274,8 @@ func (op *DefineAspect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// tbd: is a separate interface required for object kinds separate from everything else?
+// in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that.
 type AspectField struct {
 	Aspect rtti.TextEval
 	Markup map[string]any
@@ -348,6 +352,8 @@ func (op *BoolField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A guard which returns true based on a counter.
+// Counters start at zero and are incremented every time the guard gets checked.
 type CountOf struct {
 	Trigger core.Trigger
 	Num     rtti.NumberEval
@@ -742,6 +748,10 @@ func (op *DefineKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Opposites are used at runtime and during weave to
+// interpret traits, directions, and other terms.
+// For example:
+// "The opposite of east is west."
 type DefineOpposite struct {
 	Opposite rtti.TextEval
 	Word     rtti.TextEval
@@ -781,6 +791,11 @@ func (op *DefineOpposite_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Plurals are used at runtime and during weave to
+// guide the interpretation of nouns and kinds.
+// For example:
+// "The plural of person is people."
+// "The plural of person is persons."
 type DefinePlural struct {
 	Singular rtti.TextEval
 	Plural   rtti.TextEval
@@ -1141,6 +1156,10 @@ func (op *RuleProvides_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Change the behavior of an existing pattern.
+// For events, this adds a listener that responds to the targeted object only when triggered by the player.
+// By default, rules with filters continue on to the next rule automatically.
+// Because event listeners have filters they continue to the next listener unless specifically stopped.
 type RuleForPattern struct {
 	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
@@ -1181,6 +1200,8 @@ func (op *RuleForPattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Change the behavior of an existing pattern.
+// The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForNoun struct {
 	PatternName rtti.TextEval
 	NounName    rtti.TextEval
@@ -1222,6 +1243,8 @@ func (op *RuleForNoun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Change the behavior of an existing pattern.
+// The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForKind struct {
 	PatternName rtti.TextEval
 	KindName    rtti.TextEval
@@ -1264,6 +1287,10 @@ func (op *RuleForKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Declare a function which can produce statements about the game world.
+// They are processed at import time, and they cannot call patterns
+// nor can patterns -- which are processed during play -- call macros.
+// Unlike patterns, they cannot be extended; the entire definition must live in one place.
 type DefineMacro struct {
 	MacroName       rtti.TextEval
 	Requires        []FieldDefinition
@@ -1352,6 +1379,9 @@ func (op *CallMacro_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Declare a new pattern.
+// A pattern is a bundle of functions which can either change the game world or provide information about it.
+// Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
 type DefinePattern struct {
 	PatternName rtti.TextEval
 	Requires    []FieldDefinition
@@ -1553,6 +1583,11 @@ func (op *DefineOtherRelatives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Used for displaying text to the player.
+// The text can contain 'inline-templates';
+// mini-commands that help to simplify printing text.
+// See also: https://github.com/ionous/iffy/wiki/Templates.
+// ( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )
 type SayTemplate struct {
 	Template string
 	Markup   map[string]any
@@ -1591,6 +1626,8 @@ func (op *SayTemplate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Generate text in a replaceable manner.
+// ( note: this is transformed for the runtime into a named 'RenderResponse'. )
 type SayResponse struct {
 	Name   string
 	Text   rtti.TextEval
@@ -1706,6 +1743,9 @@ func (op *StoppingText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// a command with a signature of the comment marker metadata.
+// a cheat to allows nodes that have only a comment marker and no actual command.
+// see also: debug.do_nothing
 type StoryBreak struct {
 	Markup map[string]any
 }
@@ -1855,6 +1895,8 @@ func (op *TextField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A valueless field.
+// Intended mainly for patterns which don't need to return a value.
 type NothingField struct {
 	Markup map[string]any
 }
@@ -2580,7 +2622,10 @@ func init() {
 		}, {
 			Name:  "door_name",
 			Label: "via",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"todo? use soft suffix of 'noun_name' to indicate the field should pull autocomplete from pooled nouns.", "or, should there be pools per kind? ex. rooms", "and,or, should this use markup instead of naming convention?"},
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "map_connection",
 			Label: "and",

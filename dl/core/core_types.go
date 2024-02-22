@@ -255,6 +255,8 @@ func (op *BracketText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// In a repeating loop, exit the loop;
+// or, in a rule, stop processing rules.
 type Break struct {
 	Markup map[string]any
 }
@@ -524,6 +526,8 @@ func (op *Capitalize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// An if statement.
+// The provided local fields are evaluated before the if test itself.
 type ChooseBranch struct {
 	If     rtti.BoolEval
 	Args   []assign.Arg
@@ -1646,6 +1650,8 @@ func (op *Newline_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// In a repeating loop, try the next iteration of the loop;
+// or, in a rule, continue to the next rule.
 type Continue struct {
 	Markup map[string]any
 }
@@ -2064,6 +2070,8 @@ func (op *AbsValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Increases the value of a number held in by a variable or object field.
+// Returns the new value of the number.
 type Increment struct {
 	Target assign.Address
 	Step   rtti.NumberEval
@@ -2103,6 +2111,8 @@ func (op *Increment_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Decrease the value of a number held in by a variable or object field.
+// Returns the new value of the number.
 type Decrement struct {
 	Target assign.Address
 	Step   rtti.NumberEval
@@ -2142,6 +2152,8 @@ func (op *Decrement_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Increases the value of a trait held by an object aspect.
+// Returns the new value of the trait.
 type IncrementAspect struct {
 	Target rtti.TextEval
 	Aspect rtti.TextEval
@@ -2183,6 +2195,8 @@ func (op *IncrementAspect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Increases the value of a trait held by an object aspect.
+// Returns the new value of the trait.
 type DecrementAspect struct {
 	Target rtti.TextEval
 	Aspect rtti.TextEval
@@ -2262,6 +2276,8 @@ func (op *PrintText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Group text into a single line <li> as part of a list of lines.
+// See also: 'rows'.
 type Row struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -3257,7 +3273,10 @@ func init() {
 			Name:     "tolerance",
 			Label:    "within",
 			Optional: true,
-			Type:     &prim.Zt_Number,
+			Markup: map[string]any{
+				"comment": "a positive value that indicates how close the two numbers should be",
+			},
+			Type: &prim.Zt_Number,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -3427,7 +3446,10 @@ func init() {
 			Name:     "nothing",
 			Label:    "nothing",
 			Optional: true,
-			Type:     &prim.Zt_Bool,
+			Markup: map[string]any{
+				"comment": []interface{}{"try to check the type of nothing objects?", "normally, nothing objects have no kind."},
+			},
+			Type: &prim.Zt_Bool,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -3466,7 +3488,10 @@ func init() {
 			Name:     "nothing",
 			Label:    "nothing",
 			Optional: true,
-			Type:     &prim.Zt_Bool,
+			Markup: map[string]any{
+				"comment": []interface{}{"try to check the type of nothing objects?", "normally, nothing objects have no kind."},
+			},
+			Type: &prim.Zt_Bool,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -3793,7 +3818,10 @@ func init() {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Markup: map[string]any{
+				"comment": "if not specified, increments by 1.",
+			},
+			Type: &rtti.Zt_NumberEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumberEval,
@@ -3813,7 +3841,10 @@ func init() {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Markup: map[string]any{
+				"comment": "if not specified, decrements by 1.",
+			},
+			Type: &rtti.Zt_NumberEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumberEval,
@@ -3837,12 +3868,18 @@ func init() {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Markup: map[string]any{
+				"comment": "if not specified, increments by a single step.",
+			},
+			Type: &rtti.Zt_NumberEval,
 		}, {
 			Name:     "clamp",
 			Label:    "clamp",
 			Optional: true,
-			Type:     &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "if not specified, wraps.",
+			},
+			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -3866,12 +3903,18 @@ func init() {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Markup: map[string]any{
+				"comment": "if not specified, increments by a single step.",
+			},
+			Type: &rtti.Zt_NumberEval,
 		}, {
 			Name:     "clamp",
 			Label:    "clamp",
 			Optional: true,
-			Type:     &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "if not specified, wraps.",
+			},
+			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,

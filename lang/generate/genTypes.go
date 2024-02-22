@@ -1,19 +1,32 @@
 package generate
 
-import "sort"
+import (
+	"log"
+	"sort"
+
+	"git.sr.ht/~ionous/tapestry/lang/compact"
+)
 
 type specData struct {
 	Name   string
 	Markup markup
 }
 
-func (d specData) Comment() (ret []string) {
+func (d specData) Comments() (ret []string) {
 	if c, ok := d.Markup["comment"]; ok {
 		switch c := c.(type) {
+		case []any:
+			if els, ok := compact.SliceStrings(c); !ok {
+				log.Panicf("unexpected comment format %T", c)
+			} else {
+				ret = els
+			}
 		case string:
 			ret = []string{c}
 		case []string:
 			ret = c
+		default:
+			log.Panicf("unexpected comment format %T", c)
 		}
 	}
 	return

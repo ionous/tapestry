@@ -88,6 +88,9 @@ func (op *EraseIndex_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Erase elements from the front or back of a list.
+// Runs a pattern with a list containing the erased values.
+// If nothing was erased, the pattern will be called with an empty list.
 type Erasing struct {
 	Count   rtti.NumberEval
 	Target  assign.Address
@@ -129,6 +132,9 @@ func (op *Erasing_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Erase one element from the front or back of a list.
+// Runs an activity with a list containing the erased values;
+// the list can be empty if nothing was erased.
 type ErasingEdge struct {
 	Target assign.Address
 	AtEdge rtti.BoolEval
@@ -251,6 +257,9 @@ func (op *ListFind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Transform the values from a list.
+// The named pattern gets with with two parameters for each value in the list:
+// 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
 	Target assign.Address
 	From   rtti.Assignment
@@ -437,6 +446,8 @@ func (op *MakeRecordList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Transform the values from one list and place the results in another list.
+// The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
 	Target      assign.Address
 	List        rtti.Assignment
@@ -476,6 +487,12 @@ func (op *ListMap_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Combine all of the values in a list into a single value.
+// The designated pattern is called with two parameters:
+//  1. each element of the list; and,
+//  2. the value being combined.
+//
+// And, that pattern is expected to return the newly updated value.
 type ListReduce struct {
 	Target      assign.Address
 	List        rtti.Assignment
@@ -553,6 +570,13 @@ func (op *ListReverse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Create a new list from a section of another list.
+// Start is optional, if omitted slice starts at the first element.
+// If start is greater the length, an empty array is returned.
+// Slice doesnt include the ending index.
+// Negatives indices indicates an offset from the end.
+// When end is omitted, copy up to and including the last element;
+// and do the same if the end is greater than the length
 type ListSlice struct {
 	List   rtti.Assignment
 	Start  rtti.NumberEval
@@ -674,6 +698,13 @@ func (op *ListSortText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Modify a list by adding and removing elements.
+// The type of the elements being added must match the type of the list.
+// Text cant be added to a list of numbers, numbers cant be added to a list of text.
+// If the starting index is negative, this begins that many elements from the end of the array;
+// if list's length plus the start is less than zero, this begins from index zero.
+// If the remove count is missing, this removes all elements from the start to the end;
+// if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
 	Target assign.Address
 	Start  rtti.NumberEval
@@ -757,6 +788,12 @@ func (op *ListPush_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Generates a series of numbers r[i] = (start + step*i) where i>=0.
+// Start and step default to 1, stop defaults to start;
+// the inputs are truncated to produce whole numbers;
+// a zero step returns an error.
+// A positive step ends the series when the returned value would exceed stop
+// while a negative step ends before generating a value less than stop.
 type Range struct {
 	To     rtti.NumberEval
 	From   rtti.NumberEval

@@ -144,6 +144,8 @@ func (op *SetTrait_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Copy from one stored value to another.
+// Requires that the type of the two values match exactly
 type CopyValue struct {
 	Target Address
 	Source Address
@@ -429,6 +431,8 @@ func (op *Arg_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Adapts an execute statement to an assignment.
+// Used internally for package shuttle.
 type FromExe struct {
 	Exe    rtti.Execute
 	Markup map[string]any
