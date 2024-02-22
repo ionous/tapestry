@@ -3,6 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
@@ -11,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/template"
-	"git.sr.ht/~ionous/tapestry/template/types"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
@@ -68,51 +68,16 @@ func convertEval(txt rt.TextEval) (ret rt.TextEval, err error) {
 	if lit, ok := txt.(*literal.TextValue); !ok || len(lit.Kind) > 0 {
 		ret = txt
 	} else {
-		ret, err = convertText(lit.Value)
+		ret, err = jess.ConvertTextTemplate(lit.Value)
 	}
 	return
 }
 
 func convertTextAssignment(str string) (ret rt.Assignment, err error) {
-	if txt, e := convertText(str); e != nil {
+	if txt, e := jess.ConvertTextTemplate(str); e != nil {
 		err = e
 	} else {
 		ret = &assign.FromText{Value: txt}
-	}
-	return
-}
-
-// returns a string or a FromText assignment as a slice of bytes
-func convertText(str string) (ret rt.TextEval, err error) {
-	if xs, e := template.Parse(str); e != nil {
-		err = e
-	} else if str, ok := getSimpleString(xs); ok {
-		ret = &literal.TextValue{Value: str}
-	} else {
-		if got, e := express.Convert(xs); e != nil {
-			err = errutil.New(e, xs)
-		} else if eval, ok := got.(rt.TextEval); !ok {
-			// todo: could probably fix this now
-			// maybe passing in the expected aff to Convert or
-			// exposing / sharing unpackPatternArg
-			err = errutil.Fmt("render template has unknown expression %T", got)
-		} else {
-			ret = eval
-		}
-	}
-	return
-}
-
-// see if the parsed expression contained anything other than text
-// if true, return that text
-func getSimpleString(xs template.Expression) (ret string, okay bool) {
-	switch len(xs) {
-	case 0:
-		okay = true
-	case 1:
-		if quote, ok := xs[0].(types.Quote); ok {
-			ret, okay = quote.Value(), true
-		}
 	}
 	return
 }

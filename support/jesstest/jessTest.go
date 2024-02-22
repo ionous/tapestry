@@ -45,9 +45,10 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		// ------------------------
 		// NounPropertyValue
 		{
-			test: `The story has the title "A Secret."`,
+			test: `The story has the title "{15|print_num!}"`,
 			result: []string{
-				"AddNounValue", "story", "title", text("A Secret."),
+				// test that it can convert a template
+				"AddNounValue", "story", "title", `"{"FromText:":{"Numeral:":{"Num value:":15}}}"}`,
 			},
 		},
 		{
