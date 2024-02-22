@@ -33,9 +33,9 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 				span := temp // pin otherwise the callback(s) all see the same last loop value
 				if e := cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
 					if i, e := w.MatchSpan(span); e != nil {
-						err = errutil.Fmt("%w reading of %v b/c %v", mdl.Missing, span.String(), e)
-					} else {
-						err = i.Generate(jessAdapter{w, w.Pin()})
+						err = errutil.Fmt("%w reading of %q b/c %v", mdl.Missing, span.String(), e)
+					} else if e := i.Generate(jessAdapter{w, w.Pin()}); e != nil {
+						err = errutil.Fmt("%w reading of %q", e, span.String())
 					}
 					return
 				}); e != nil {
@@ -71,6 +71,9 @@ func (ja jessAdapter) AddNounTrait(noun, trait string) error {
 }
 func (ja jessAdapter) AddNounValue(noun, prop string, val rt.Assignment) error {
 	return ja.w.AddInitialValue(ja.pen, noun, prop, val)
+}
+func (ja jessAdapter) AddTraits(a string, ts []string) error {
+	return ja.pen.AddTraits(a, ts)
 }
 func (ja jessAdapter) GetClosestNoun(name string) (string, error) {
 	return ja.w.GetClosestNoun(name)
