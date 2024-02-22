@@ -165,27 +165,32 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		// KindsOf
 		// ------------------------------------------------------------------------
 		{
-			// when the requested kind being declared isn't yet known.
-			// ( note: if the ancestor kind isnt known, and "inherits" is a macro
-			//   this can be parsed as NamesVerbNames )
+			// when the requested kind being declared isn't yet known:
 			test: `Devices are a kind of thing.`,
 			result: []string{
 				"AddKind", "devices", "thing",
 			},
 		},
 		{
-			// when the kind being declared is already known:
+			// when the kind being declared is already known
 			test: `A container is a kind of thing.`,
 			result: []string{
-				"AddKind", "container", "thing",
+				"AddKind", "containers", "thing",
+			},
+		},
+		{
+			// determine pluralness based on trailing is/are
+			test: `A device is a kind of thing.`,
+			result: []string{
+				"AddKind", "devices", "thing",
 			},
 		},
 		{
 			// adding trailing properties
 			test: `A casket is a kind of closed container.`,
 			result: []string{
-				"AddKind", "casket", "container",
-				"AddKindTrait", "casket", "closed",
+				"AddKind", "caskets", "container",
+				"AddKindTrait", "caskets", "closed",
 			},
 		},
 		{
@@ -193,7 +198,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			test: `The closed containers called the safes are a kind of fixed in place thing.`,
 			result: []string{
 				"AddKind", "safes", "thing",
-				"AddKind", "safes", "containers",
+				"AddKind", "safes", "containers", // the parent can be singular or plural
 				"AddKindTrait", "safes", "closed",
 				"AddKindTrait", "safes", "fixed in place",
 			},
@@ -202,7 +207,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			// correctly producing unexpected results.
 			test: `The closed casket is a kind of container.`,
 			result: []string{
-				"AddKind", "closed casket", "container",
+				"AddKind", "closed caskets", "container",
 			},
 		},
 		{
@@ -218,9 +223,6 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 				"AddKind", "baskets", "container",
 			},
 		},
-		// add test? inform "The kind of the casket is a container", yields a name "kind of the casket".
-		{},
-		// ------------------------------------------------------------------------
 		{
 			test:   `A container is in the lobby.`,
 			result: errors.New("this is specifically disallowed, and should generate an error"),
@@ -310,23 +312,6 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 				"AddNounTrait", "santana", "proper named",
 				"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
 			},
-		},
-		// fix: trailing properties applying to the lhs
-		{
-			test: `The bottle in the kitchen is openable.`,
-			// skip: map[string]any{
-			// 	"macro": "contain",
-			// 	"primary": []map[string]any{{
-			// 		"det":    "the",
-			// 		"traits": []string{
-			// "openable",
-			// },
-			// 		"name":   "bottle",
-			// 	}},
-			// 	"secondary": []map[string]any{{
-			// 		"det":  "the",
-			// 		"name": "kitchen",
-			// 	}},
 		},
 	}
 	var skipped int

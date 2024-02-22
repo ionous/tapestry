@@ -43,24 +43,28 @@ func (op *KindsOf) Generate(rar Registrar) (err error) {
 	traits := op.GetTraits()
 	//
 	for it := op.Names.Iterate(); it.HasNext(); {
-		k := it.GetNext() // a 'Names'
-		name := inflect.Normalize(k.String())
-		if e := rar.AddKind(name, parent.String()); e != nil {
+		k := it.GetNext()    // a 'Names'
+		plural := k.String() // we assume plural, and use the trailing is/are to figure which is which.
+		if !op.Are.IsPlural() {
+			plural = rar.GetPlural(plural)
+		}
+		kind := inflect.Normalize(plural)
+		if e := rar.AddKind(kind, parent.String()); e != nil {
 			err = e
 			break
 		} else {
 			// "x called" can have its own traits and kind
 			if called := op.Names.KindCalled; called != nil {
-				if e := rar.AddKind(name, called.Kind.String()); e != nil {
+				if e := rar.AddKind(kind, called.Kind.String()); e != nil {
 					err = e // kind called already normalized because it matched the specific kind
 					break
-				} else if e := AddDefaultTraits(rar, name, called.GetTraits()); e != nil {
+				} else if e := AddDefaultTraits(rar, kind, called.GetTraits()); e != nil {
 					err = e
 					break
 				}
 			}
 			// add trailing traits.
-			if e := AddDefaultTraits(rar, name, traits); e != nil {
+			if e := AddDefaultTraits(rar, kind, traits); e != nil {
 				err = e
 				break
 			}

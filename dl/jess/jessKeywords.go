@@ -4,6 +4,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
+// only valid after matching
+func (op *Are) IsPlural() bool {
+	span := op.Matched.(match.Span) //yikes.
+	return span[0].Hash() == keywords.Are
+}
+
 func (op *Are) Match(q Query, input *InputState) (okay bool) {
 	if width := input.MatchWord(keywords.Are, keywords.Is); width > 0 {
 		op.Matched = input.Cut(width)
