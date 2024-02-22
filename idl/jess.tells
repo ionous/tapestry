@@ -211,21 +211,6 @@ Spec:with group:
           - "macro"
           - true
 
-    - # assigns default traits to a kind.
-      # <the kind> are "usually" <traits>
-      # future: inform allows limiting traits to kinds with other traits:
-      # for example, `the closed containers are fixed in place.`
-      # makes any containers that are *initially* closed also immovable.
-      Spec:with flow:
-      - "kinds_are_traits"
-      - Flow uses:
-        - Term: "kinds"
-        - Term: "are"
-        - Term:type:
-          - "usually"
-          - "words"
-        - Term: "traits"
-
     - # union of all possible matching sentences:
       # tests these in-order to find a match.
       # ( an alternative would be slots, and a registry; this is fine for now )
@@ -234,11 +219,12 @@ Spec:with group:
       - Flow uses:
         - Term: "kinds_are_traits"
         - Term: "kinds_of"
-        - Term: "verb_links"
-        - Term: "links_verb"
-        - Term: "links_adjectives"
+        - Term: "verb_names_are_names"
+        - Term: "names_verb_names"
+        - Term: "names_are_like_verbs"
         - Term: "property_noun_value"
         - Term: "noun_property_value"
+        - Term: "aspects_are_traits"
 
     - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
       # interesting to note that inform allows "some kind/s of"
@@ -267,13 +253,43 @@ Spec:with group:
           # this doesnt switch to special traits, and doesnt allow multiple kinds.
           Term: "kind"
 
+    - # assigns default traits to a kind.
+      # <the kind> are "usually" <traits>
+      # inform doesn't require the "usually" --
+      #  i like it as a way to differentiate phrases about kinds vs. phrases about nouns.
+      # future: inform allows limiting traits to kinds with other traits:
+      # for example, `the closed containers are fixed in place.`
+      # makes any containers that are *initially* closed also immovable.
+      Spec:with flow:
+      - "kinds_are_traits"
+      - Flow uses:
+        - Term: "kinds"
+        - Term: "are"
+        - Term:type:
+          - "usually"
+          - "words"
+        - Term: "traits"
+
+    - # defines traits for a kind of aspect.
+      # The colors are a kind of aspect. The colors are red, blue, and greasy green.
+      # aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
+      # this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)
+      Spec:with flow:
+      - "aspects_are_traits"
+      - Flow uses:
+        - Term:type:
+          - "aspect"
+          - "kind"
+        - Term: "are"
+        - Term: "names"
+
     - # verb names are (other) names.
       # ex. `In the coffin are some coins, a notebook, and the gripping hand.`
       # This intentionally doesn't recognize adjectives attached to named names.
       # "In the closed coffin" generates a name with the name "closed coffin"
       # not a coffin in an initially closed state.
       Spec:with flow:
-      - "verb_links"
+      - "verb_names_are_names"
       - Flow uses:
         - Term: "verb"
         - Term: "names"
@@ -285,7 +301,7 @@ Spec:with group:
     - # names are verb (other) names.
       # ex. `The thing called the stake is on the supporter called the altar.`
       Spec:with flow:
-      - "links_verb"
+      - "names_verb_names"
       - Flow uses:
         - Term: "names"
         - Term: "are"
@@ -300,13 +316,13 @@ Spec:with group:
       # This is the *only* way of assigning names initial states directly.
       # All other phrases require a kind to be involved, here the kind is optional.
       Spec:with flow:
-      - "links_adjectives"
+      - "names_are_like_verbs"
       - Flow uses:
         - Term: "names"
         - Term: "are"
         - # adjectives are *not* optional.
           # if there are no adjectives present,
-          # then 'links_verb' (might) match instead.
+          # then 'names_verb_names' (might) match instead.
           Term: "adjectives"
         - Term:optional:
           - "verb_phrase"

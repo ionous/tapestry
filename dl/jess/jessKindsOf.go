@@ -54,13 +54,13 @@ func (op *KindsOf) Generate(rar Registrar) (err error) {
 				if e := rar.AddKind(name, called.Kind.String()); e != nil {
 					err = e // kind called already normalized because it matched the specific kind
 					break
-				} else if e := AddTraitsToKind(rar, name, called.GetTraits()); e != nil {
+				} else if e := AddDefaultTraits(rar, name, called.GetTraits()); e != nil {
 					err = e
 					break
 				}
 			}
 			// add trailing traits.
-			if e := AddTraitsToKind(rar, name, traits); e != nil {
+			if e := AddDefaultTraits(rar, name, traits); e != nil {
 				err = e
 				break
 			}

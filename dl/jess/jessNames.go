@@ -22,6 +22,7 @@ func (op *Names) HasAnonymousKind() bool {
 	return op.Kind != nil
 }
 
+// checks Query flags for PlainNameMatching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(matchKinds(q) &&

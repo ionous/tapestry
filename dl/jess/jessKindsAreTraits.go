@@ -39,7 +39,7 @@ func (op *KindsAreTraits) Generate(rar Registrar) (err error) {
 			err = fmt.Errorf("unexpected traits before %s", name)
 			break
 		}
-		if e := AddTraitsToKind(rar, name, traits); e != nil {
+		if e := AddDefaultTraits(rar, name, traits); e != nil {
 			err = e
 			break
 		}

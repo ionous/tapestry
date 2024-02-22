@@ -10,11 +10,12 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 	}{
 		&op.KindsAreTraits,
 		&op.KindsOf,
-		&op.VerbLinks,
-		&op.LinksVerb,
-		&op.LinksAdjectives,
+		&op.VerbNamesAreNames,
+		&op.NamesVerbNames,
+		&op.NamesAreLikeVerbs,
 		&op.PropertyNounValue,
 		&op.NounPropertyValue,
+		&op.AspectsAreTraits,
 	} {
 		if next := *input; //
 		m.Match(q, &next) /* && len(next) == 0 */ {
@@ -33,23 +34,23 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 	return
 }
 
-func (op *VerbLinks) Match(q Query, input *InputState) (okay bool) {
+func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Verb.Match(q, &next) &&
 		op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
 		op.OtherNames.Match(q, &next) {
-		// q.note("matched VerbLinks")
+		// q.note("matched VerbNamesAreNames")
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *VerbLinks) Generate(rar Registrar) error {
+func (op *VerbNamesAreNames) Generate(rar Registrar) error {
 	return applyResults(rar, op.compile())
 }
 
-func (op *VerbLinks) compile() localResults {
+func (op *VerbNamesAreNames) compile() localResults {
 	return makeResult(
 		op.Verb.Macro, !op.Verb.Macro.Reversed,
 		op.Names.GetNames(nil, nil),
@@ -57,24 +58,24 @@ func (op *VerbLinks) compile() localResults {
 	)
 }
 
-func (op *LinksVerb) Match(q Query, input *InputState) (okay bool) {
+func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Names.Match(q, &next) &&
 		!op.Names.HasAnonymousKind() &&
 		op.Are.Match(q, &next) &&
 		op.Verb.Match(q, &next) &&
 		op.OtherNames.Match(q, &next) {
-		// q.note("matched LinksVerb")
+		// q.note("matched NamesVerbNames")
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *LinksVerb) Generate(rar Registrar) error {
+func (op *NamesVerbNames) Generate(rar Registrar) error {
 	return applyResults(rar, op.compile())
 }
 
-func (op *LinksVerb) compile() (ret localResults) {
+func (op *NamesVerbNames) compile() (ret localResults) {
 	return makeResult(
 		op.Verb.Macro,
 		op.Verb.Macro.Reversed,
@@ -83,45 +84,45 @@ func (op *LinksVerb) compile() (ret localResults) {
 	)
 }
 
-func (op *LinksAdjectives) Match(q Query, input *InputState) (okay bool) {
+func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Names.Match(q, &next) &&
 		!op.Names.HasAnonymousKind() &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
-		// q.note("matched LinksAdjectives")
+		// q.note("matched NamesAreLikeVerbs")
 		Optional(q, &next, &op.VerbPhrase)
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *LinksAdjectives) GetOtherNames() (ret Iterator) {
+func (op *NamesAreLikeVerbs) GetOtherNames() (ret Iterator) {
 	if v := op.VerbPhrase; v != nil {
 		ret = v.Names.Iterate()
 	}
 	return
 }
 
-func (op *LinksAdjectives) GetMacro() (ret Macro) {
+func (op *NamesAreLikeVerbs) GetMacro() (ret Macro) {
 	if v := op.VerbPhrase; v != nil {
 		ret = v.Verb.Macro
 	}
 	return
 }
 
-func (op *LinksAdjectives) IsReversed() (okay bool) {
+func (op *NamesAreLikeVerbs) IsReversed() (okay bool) {
 	if v := op.VerbPhrase; v != nil {
 		okay = v.Verb.Macro.Reversed
 	}
 	return
 }
 
-func (op *LinksAdjectives) Generate(rar Registrar) error {
+func (op *NamesAreLikeVerbs) Generate(rar Registrar) error {
 	return applyResults(rar, op.compile())
 }
 
-func (op *LinksAdjectives) compile() localResults {
+func (op *NamesAreLikeVerbs) compile() localResults {
 	var b []resultName
 	for it := op.GetOtherNames(); it.HasNext(); {
 		n := it.GetNext()

@@ -48,7 +48,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			test: `The story has the title "{15|print_num!}"`,
 			result: []string{
 				// test that it can convert a template
-				"AddNounValue", "story", "title", `"{"FromText:":{"Numeral:":{"Num value:":15}}}"}`,
+				"AddNounValue", "story", "title", `{"FromText:":{"Numeral:":{"Num value:":15}}}`,
 			},
 		},
 		{
@@ -57,6 +57,15 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			test: `The bottle has an age of 42.`,
 			result: []string{
 				"AddNounValue", "bottle", "age", number(42),
+			},
+		},
+		// ------------------------
+		// Aspects are traits
+		// ( for testing, "colors" is an established aspect with zero traits )
+		{
+			test: `The colors are red, blue, and cobalt.`,
+			result: []string{
+				"AddTraits", "colors", "red", "blue", "cobalt",
 			},
 		},
 		// -------------------------
@@ -158,7 +167,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			// when the requested kind being declared isn't yet known.
 			// ( note: if the ancestor kind isnt known, and "inherits" is a macro
-			//   this can be parsed as LinksVerb )
+			//   this can be parsed as NamesVerbNames )
 			test: `Devices are a kind of thing.`,
 			result: []string{
 				"AddKind", "devices", "thing",

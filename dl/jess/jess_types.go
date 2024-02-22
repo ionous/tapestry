@@ -35,6 +35,9 @@ func (op *Matched_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// one of a predefined set of determiners:
+// the, a, some, etc.
+// see 'counted_name' for names with leading numbers.
 type Article struct {
 	Matched Matched
 	Markup  map[string]any
@@ -69,6 +72,9 @@ func (op *Article_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// conjunction junction
+// matches "," or "and" or ", and"
+// relies on the fact package match treats commas and ands each as their own words.
 type CommaAnd struct {
 	Matched Matched
 	Markup  map[string]any
@@ -138,6 +144,12 @@ func (op *Are_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specifies a single name, in full or in part.
+// For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
+// The name "chest" implies the treasure chest.
+// To optimizing matching the words "is/are/comma/and" are never part of name names.
+// future: allow quoted "titles" ( which are then allowed to break those assumptions )
+// ( see also 'kind_called' )
 type Name struct {
 	Article *Article
 	Matched Matched
@@ -173,6 +185,12 @@ func (op *Name_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Defines a name and its kind in a single phrase.
+// <kind> "called" [the] _name_.
+// as per inform, the name of the name is everything after the word called
+// until "is" or "are" or the end of the line.
+// For instance: `The container called the trunk and the box is in the lobby`
+// generates a single name named "the trunk and the box."
 type KindCalled struct {
 	Traits  *Traits
 	Kind    Kind
@@ -211,6 +229,11 @@ func (op *KindCalled_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Specifies one or more nouns, in full or in part.
+// Only one of the options, plus possibly 'additional_names', will match.
+// Not all options are valid in all contexts;
+// the users of 'names' may discard or avoid certain matches.
+// ( the options could be represented as a slot; this feels easier for now )
 type Names struct {
 	CountedName     *CountedName
 	KindCalled      *KindCalled
@@ -285,6 +308,8 @@ func (op *AdditionalNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// provides english specification of a number of objects.
+// note: yes, `the five the containers` is permitted.
 type CountedName struct {
 	Article        *Article
 	MatchingNumber MatchingNumber
@@ -358,6 +383,8 @@ func (op *Kind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// matches a set of possible kinds as part of kinds_are_traits
+// jess tests for but prohibits leading traits.
 type Kinds struct {
 	Traits          *Traits
 	Article         *Article
@@ -646,51 +673,18 @@ func (op *Verb_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type KindsAreTraits struct {
-	Kinds   Kinds
-	Are     Are
-	Usually Words
-	Traits  Traits
-	Markup  map[string]any
-}
-
-// kinds_are_traits, a type of flow.
-var Zt_KindsAreTraits typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*KindsAreTraits) TypeInfo() typeinfo.T {
-	return &Zt_KindsAreTraits
-}
-
-// implements typeinfo.Markup
-func (op *KindsAreTraits) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// holds a slice of type kinds_are_traits
-type KindsAreTraits_Slice []KindsAreTraits
-
-// implements typeinfo.Instance
-func (*KindsAreTraits_Slice) TypeInfo() typeinfo.T {
-	return &Zt_KindsAreTraits
-}
-
-// implements typeinfo.Repeats
-func (op *KindsAreTraits_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
+// union of all possible matching sentences:
+// tests these in-order to find a match.
+// ( an alternative would be slots, and a registry; this is fine for now )
 type MatchingPhrases struct {
 	KindsAreTraits    KindsAreTraits
 	KindsOf           KindsOf
-	VerbLinks         VerbLinks
-	LinksVerb         LinksVerb
-	LinksAdjectives   LinksAdjectives
+	VerbNamesAreNames VerbNamesAreNames
+	NamesVerbNames    NamesVerbNames
+	NamesAreLikeVerbs NamesAreLikeVerbs
 	PropertyNounValue PropertyNounValue
 	NounPropertyValue NounPropertyValue
+	AspectsAreTraits  AspectsAreTraits
 	Markup            map[string]any
 }
 
@@ -723,6 +717,11 @@ func (op *MatchingPhrases_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// <names> <are> "a kind of"/"kinds of" <traits> <kind>.
+// interesting to note that inform allows "some kind/s of"
+// this is more strict.
+// like inform this doesn't try to limit the names
+// `The animals called kittens are a kind of things.` is legal.
 type KindsOf struct {
 	Names   Names
 	Are     Are
@@ -761,7 +760,98 @@ func (op *KindsOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type VerbLinks struct {
+// assigns default traits to a kind.
+// <the kind> are "usually" <traits>
+// inform doesn't require the "usually" --
+//
+//	i like it as a way to differentiate phrases about kinds vs. phrases about nouns.
+//
+// future: inform allows limiting traits to kinds with other traits:
+// for example, `the closed containers are fixed in place.`
+// makes any containers that are *initially* closed also immovable.
+type KindsAreTraits struct {
+	Kinds   Kinds
+	Are     Are
+	Usually Words
+	Traits  Traits
+	Markup  map[string]any
+}
+
+// kinds_are_traits, a type of flow.
+var Zt_KindsAreTraits typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*KindsAreTraits) TypeInfo() typeinfo.T {
+	return &Zt_KindsAreTraits
+}
+
+// implements typeinfo.Markup
+func (op *KindsAreTraits) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type kinds_are_traits
+type KindsAreTraits_Slice []KindsAreTraits
+
+// implements typeinfo.Instance
+func (*KindsAreTraits_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsAreTraits
+}
+
+// implements typeinfo.Repeats
+func (op *KindsAreTraits_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// defines traits for a kind of aspect.
+// The colors are a kind of aspect. The colors are red, blue, and greasy green.
+// aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
+// this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)
+type AspectsAreTraits struct {
+	Aspect Kind
+	Are    Are
+	Names  Names
+	Markup map[string]any
+}
+
+// aspects_are_traits, a type of flow.
+var Zt_AspectsAreTraits typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AspectsAreTraits) TypeInfo() typeinfo.T {
+	return &Zt_AspectsAreTraits
+}
+
+// implements typeinfo.Markup
+func (op *AspectsAreTraits) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type aspects_are_traits
+type AspectsAreTraits_Slice []AspectsAreTraits
+
+// implements typeinfo.Instance
+func (*AspectsAreTraits_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AspectsAreTraits
+}
+
+// implements typeinfo.Repeats
+func (op *AspectsAreTraits_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// verb names are (other) names.
+// ex. `In the coffin are some coins, a notebook, and the gripping hand.`
+// This intentionally doesn't recognize adjectives attached to named names.
+// "In the closed coffin" generates a name with the name "closed coffin"
+// not a coffin in an initially closed state.
+type VerbNamesAreNames struct {
 	Verb       Verb
 	Names      Names
 	Are        Are
@@ -769,36 +859,38 @@ type VerbLinks struct {
 	Markup     map[string]any
 }
 
-// verb_links, a type of flow.
-var Zt_VerbLinks typeinfo.Flow
+// verb_names_are_names, a type of flow.
+var Zt_VerbNamesAreNames typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*VerbLinks) TypeInfo() typeinfo.T {
-	return &Zt_VerbLinks
+func (*VerbNamesAreNames) TypeInfo() typeinfo.T {
+	return &Zt_VerbNamesAreNames
 }
 
 // implements typeinfo.Markup
-func (op *VerbLinks) GetMarkup(ensure bool) map[string]any {
+func (op *VerbNamesAreNames) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type verb_links
-type VerbLinks_Slice []VerbLinks
+// holds a slice of type verb_names_are_names
+type VerbNamesAreNames_Slice []VerbNamesAreNames
 
 // implements typeinfo.Instance
-func (*VerbLinks_Slice) TypeInfo() typeinfo.T {
-	return &Zt_VerbLinks
+func (*VerbNamesAreNames_Slice) TypeInfo() typeinfo.T {
+	return &Zt_VerbNamesAreNames
 }
 
 // implements typeinfo.Repeats
-func (op *VerbLinks_Slice) Repeats() bool {
+func (op *VerbNamesAreNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type LinksVerb struct {
+// names are verb (other) names.
+// ex. `The thing called the stake is on the supporter called the altar.`
+type NamesVerbNames struct {
 	Names      Names
 	Are        Are
 	Verb       Verb
@@ -806,36 +898,41 @@ type LinksVerb struct {
 	Markup     map[string]any
 }
 
-// links_verb, a type of flow.
-var Zt_LinksVerb typeinfo.Flow
+// names_verb_names, a type of flow.
+var Zt_NamesVerbNames typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*LinksVerb) TypeInfo() typeinfo.T {
-	return &Zt_LinksVerb
+func (*NamesVerbNames) TypeInfo() typeinfo.T {
+	return &Zt_NamesVerbNames
 }
 
 // implements typeinfo.Markup
-func (op *LinksVerb) GetMarkup(ensure bool) map[string]any {
+func (op *NamesVerbNames) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type links_verb
-type LinksVerb_Slice []LinksVerb
+// holds a slice of type names_verb_names
+type NamesVerbNames_Slice []NamesVerbNames
 
 // implements typeinfo.Instance
-func (*LinksVerb_Slice) TypeInfo() typeinfo.T {
-	return &Zt_LinksVerb
+func (*NamesVerbNames_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NamesVerbNames
 }
 
 // implements typeinfo.Repeats
-func (op *LinksVerb_Slice) Repeats() bool {
+func (op *NamesVerbNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type LinksAdjectives struct {
+// names are adjectives [verb names].
+// ex. `The bottle is a transparent, open, container.`
+// `The coffin is a closed container [in the antechamber]`
+// This is the *only* way of assigning names initial states directly.
+// All other phrases require a kind to be involved, here the kind is optional.
+type NamesAreLikeVerbs struct {
 	Names      Names
 	Are        Are
 	Adjectives Adjectives
@@ -843,32 +940,32 @@ type LinksAdjectives struct {
 	Markup     map[string]any
 }
 
-// links_adjectives, a type of flow.
-var Zt_LinksAdjectives typeinfo.Flow
+// names_are_like_verbs, a type of flow.
+var Zt_NamesAreLikeVerbs typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*LinksAdjectives) TypeInfo() typeinfo.T {
-	return &Zt_LinksAdjectives
+func (*NamesAreLikeVerbs) TypeInfo() typeinfo.T {
+	return &Zt_NamesAreLikeVerbs
 }
 
 // implements typeinfo.Markup
-func (op *LinksAdjectives) GetMarkup(ensure bool) map[string]any {
+func (op *NamesAreLikeVerbs) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type links_adjectives
-type LinksAdjectives_Slice []LinksAdjectives
+// holds a slice of type names_are_like_verbs
+type NamesAreLikeVerbs_Slice []NamesAreLikeVerbs
 
 // implements typeinfo.Instance
-func (*LinksAdjectives_Slice) TypeInfo() typeinfo.T {
-	return &Zt_LinksAdjectives
+func (*NamesAreLikeVerbs_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NamesAreLikeVerbs
 }
 
 // implements typeinfo.Repeats
-func (op *LinksAdjectives_Slice) Repeats() bool {
+func (op *NamesAreLikeVerbs_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -908,6 +1005,15 @@ func (op *VerbPhrase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// one or more phrases consisting of traits and a kind.
+// while all parts are marked as optional, matching expects
+// there will be at least one trait or one kind
+// and that there can only be additional adjective phrases
+// if the previous one ended with a kind.
+// ex. `a container`
+//
+//	`closed and fixed in place`,
+//	`a closed container and a fixed in place thing`.
 type Adjectives struct {
 	Traits               *Traits
 	CommaAnd             *CommaAnd
@@ -981,6 +1087,8 @@ func (op *AdditionalAdjectives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// assigns a default value to a noun.
+// ex. `The description of the pen is "mightier than the sword.`
 type PropertyNounValue struct {
 	Article     *Article
 	Property    Property
@@ -1020,6 +1128,9 @@ func (op *PropertyNounValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// assigns a default value to a noun.
+// ex. `The pen has the description "mightier than the sword.`
+// like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
 type NounPropertyValue struct {
 	Noun        Name
 	Has         Words
@@ -1059,6 +1170,8 @@ func (op *NounPropertyValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// matches only one of its options
+// ( the options could be represented as a slot; this feels easier for now )
 type SingleValue struct {
 	QuotedText     *QuotedText
 	MatchingNumber *MatchingNumber
@@ -1094,6 +1207,8 @@ func (op *SingleValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// text that begins and ends with double quotes.
+// the quotes themselves are not part of the matched text.
 type QuotedText struct {
 	Matched Matched
 	Markup  map[string]any
@@ -1128,6 +1243,8 @@ func (op *QuotedText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// reads a number specified in words or as digits.
+// stores the result as the parsed number.
 type MatchingNumber struct {
 	Number float64
 	Markup map[string]any
@@ -1196,12 +1313,13 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_AdditionalTraits,
 	&Zt_Words,
 	&Zt_Verb,
-	&Zt_KindsAreTraits,
 	&Zt_MatchingPhrases,
 	&Zt_KindsOf,
-	&Zt_VerbLinks,
-	&Zt_LinksVerb,
-	&Zt_LinksAdjectives,
+	&Zt_KindsAreTraits,
+	&Zt_AspectsAreTraits,
+	&Zt_VerbNamesAreNames,
+	&Zt_NamesVerbNames,
+	&Zt_NamesAreLikeVerbs,
 	&Zt_VerbPhrase,
 	&Zt_Adjectives,
 	&Zt_AdditionalAdjectives,
@@ -1238,6 +1356,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8078288476520567765:  (*Adjectives)(nil),           /* Adjectives traits:kind:additionalAdjectives: */
 	14557216947727331217: (*Are)(nil),                  /* Are matched: */
 	3899130289676196213:  (*Article)(nil),              /* Article matched: */
+	2432146112131878337:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:names: */
 	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
 	2237036151518779634:  (*CountedName)(nil),          /* CountedName article:matchingNumber:kind: */
 	6139323499442568526:  (*CountedName)(nil),          /* CountedName matchingNumber:kind: */
@@ -1258,11 +1377,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
 	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
 	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
-	7402680883116510138:  (*LinksAdjectives)(nil),      /* LinksAdjectives names:are:adjectives: */
-	13051355243450165788: (*LinksAdjectives)(nil),      /* LinksAdjectives names:are:adjectives:verbPhrase: */
-	14912868615589777512: (*LinksVerb)(nil),            /* LinksVerb names:are:verb:otherNames: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	17993010577723842255: (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbLinks:linksVerb:linksAdjectives:propertyNounValue:nounPropertyValue: */
+	7218328984986657749:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1297,6 +1413,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17641125891389017492: (*Names)(nil),                /* Names kindCalled:name:additionalNames: */
 	4500297491524973516:  (*Names)(nil),                /* Names name: */
 	17351915174502247643: (*Names)(nil),                /* Names name:additionalNames: */
+	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
+	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
+	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
 	6502702423569934278:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:of:singleValue: */
 	9912988654777640387:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:singleValue: */
 	11825351964218879050: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:of:singleValue: */
@@ -1315,7 +1434,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
 	2878025327467574768:  (*Traits)(nil),               /* Traits trait:additionalTraits: */
 	4698992564801604870:  (*Verb)(nil),                 /* Verb matched: */
-	16284439795500881562: (*VerbLinks)(nil),            /* VerbLinks verb:names:are:otherNames: */
+	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
 	17939229312172807626: (*VerbPhrase)(nil),           /* VerbPhrase verb:names: */
 	17678340847396548932: (*Words)(nil),                /* Words matched: */
 }
@@ -1666,30 +1785,6 @@ func init() {
 			"comment": "matches one or more predefined verbs",
 		},
 	}
-	Zt_KindsAreTraits = typeinfo.Flow{
-		Name: "kinds_are_traits",
-		Lede: "kinds_are_traits",
-		Terms: []typeinfo.Term{{
-			Name:  "kinds",
-			Label: "kinds",
-			Type:  &Zt_Kinds,
-		}, {
-			Name:  "are",
-			Label: "are",
-			Type:  &Zt_Are,
-		}, {
-			Name:  "usually",
-			Label: "usually",
-			Type:  &Zt_Words,
-		}, {
-			Name:  "traits",
-			Label: "traits",
-			Type:  &Zt_Traits,
-		}},
-		Markup: map[string]any{
-			"comment": []interface{}{"assigns default traits to a kind.", "<the kind> are \"usually\" <traits>", "future: inform allows limiting traits to kinds with other traits:", "for example, `the closed containers are fixed in place.`", "makes any containers that are *initially* closed also immovable."},
-		},
-	}
 	Zt_MatchingPhrases = typeinfo.Flow{
 		Name: "matching_phrases",
 		Lede: "matching_phrases",
@@ -1702,17 +1797,17 @@ func init() {
 			Label: "kinds_of",
 			Type:  &Zt_KindsOf,
 		}, {
-			Name:  "verb_links",
-			Label: "verb_links",
-			Type:  &Zt_VerbLinks,
+			Name:  "verb_names_are_names",
+			Label: "verb_names_are_names",
+			Type:  &Zt_VerbNamesAreNames,
 		}, {
-			Name:  "links_verb",
-			Label: "links_verb",
-			Type:  &Zt_LinksVerb,
+			Name:  "names_verb_names",
+			Label: "names_verb_names",
+			Type:  &Zt_NamesVerbNames,
 		}, {
-			Name:  "links_adjectives",
-			Label: "links_adjectives",
-			Type:  &Zt_LinksAdjectives,
+			Name:  "names_are_like_verbs",
+			Label: "names_are_like_verbs",
+			Type:  &Zt_NamesAreLikeVerbs,
 		}, {
 			Name:  "property_noun_value",
 			Label: "property_noun_value",
@@ -1721,6 +1816,10 @@ func init() {
 			Name:  "noun_property_value",
 			Label: "noun_property_value",
 			Type:  &Zt_NounPropertyValue,
+		}, {
+			Name:  "aspects_are_traits",
+			Label: "aspects_are_traits",
+			Type:  &Zt_AspectsAreTraits,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
@@ -1767,9 +1866,53 @@ func init() {
 			"comment": []interface{}{"<names> <are> \"a kind of\"/\"kinds of\" <traits> <kind>.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform this doesn't try to limit the names", "`The animals called kittens are a kind of things.` is legal."},
 		},
 	}
-	Zt_VerbLinks = typeinfo.Flow{
-		Name: "verb_links",
-		Lede: "verb_links",
+	Zt_KindsAreTraits = typeinfo.Flow{
+		Name: "kinds_are_traits",
+		Lede: "kinds_are_traits",
+		Terms: []typeinfo.Term{{
+			Name:  "kinds",
+			Label: "kinds",
+			Type:  &Zt_Kinds,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "usually",
+			Label: "usually",
+			Type:  &Zt_Words,
+		}, {
+			Name:  "traits",
+			Label: "traits",
+			Type:  &Zt_Traits,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"assigns default traits to a kind.", "<the kind> are \"usually\" <traits>", "inform doesn't require the \"usually\" --", " i like it as a way to differentiate phrases about kinds vs. phrases about nouns.", "future: inform allows limiting traits to kinds with other traits:", "for example, `the closed containers are fixed in place.`", "makes any containers that are *initially* closed also immovable."},
+		},
+	}
+	Zt_AspectsAreTraits = typeinfo.Flow{
+		Name: "aspects_are_traits",
+		Lede: "aspects_are_traits",
+		Terms: []typeinfo.Term{{
+			Name:  "aspect",
+			Label: "aspect",
+			Type:  &Zt_Kind,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "names",
+			Label: "names",
+			Type:  &Zt_Names,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"defines traits for a kind of aspect.", "The colors are a kind of aspect. The colors are red, blue, and greasy green.", "aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.", "this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)"},
+		},
+	}
+	Zt_VerbNamesAreNames = typeinfo.Flow{
+		Name: "verb_names_are_names",
+		Lede: "verb_names_are_names",
 		Terms: []typeinfo.Term{{
 			Name:  "verb",
 			Label: "verb",
@@ -1791,9 +1934,9 @@ func init() {
 			"comment": []interface{}{"verb names are (other) names.", "ex. `In the coffin are some coins, a notebook, and the gripping hand.`", "This intentionally doesn't recognize adjectives attached to named names.", "\"In the closed coffin\" generates a name with the name \"closed coffin\"", "not a coffin in an initially closed state."},
 		},
 	}
-	Zt_LinksVerb = typeinfo.Flow{
-		Name: "links_verb",
-		Lede: "links_verb",
+	Zt_NamesVerbNames = typeinfo.Flow{
+		Name: "names_verb_names",
+		Lede: "names_verb_names",
 		Terms: []typeinfo.Term{{
 			Name:  "names",
 			Label: "names",
@@ -1815,9 +1958,9 @@ func init() {
 			"comment": []interface{}{"names are verb (other) names.", "ex. `The thing called the stake is on the supporter called the altar.`"},
 		},
 	}
-	Zt_LinksAdjectives = typeinfo.Flow{
-		Name: "links_adjectives",
-		Lede: "links_adjectives",
+	Zt_NamesAreLikeVerbs = typeinfo.Flow{
+		Name: "names_are_like_verbs",
+		Lede: "names_are_like_verbs",
 		Terms: []typeinfo.Term{{
 			Name:  "names",
 			Label: "names",
@@ -1830,7 +1973,7 @@ func init() {
 			Name:  "adjectives",
 			Label: "adjectives",
 			Markup: map[string]any{
-				"comment": []interface{}{"adjectives are *not* optional.", "if there are no adjectives present,", "then 'links_verb' (might) match instead."},
+				"comment": []interface{}{"adjectives are *not* optional.", "if there are no adjectives present,", "then 'names_verb_names' (might) match instead."},
 			},
 			Type: &Zt_Adjectives,
 		}, {

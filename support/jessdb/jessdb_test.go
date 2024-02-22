@@ -57,6 +57,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		things
 		containers
 		supporters
+		colors
 		// macros
 		carry
 		contain
@@ -83,11 +84,14 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		things, domain, "things", "thing", idPath(kinds),
 		containers, domain, "containers", "container", idPath(things, kinds),
 		supporters, domain, "supporters", "supporter", idPath(things, kinds),
+		colors, domain, "colors", "color", idPath(aspects),
 		// macros:
 		carry, domain, "carry", "", idPath(macros),
 		contain, domain, "contain", "", idPath(macros),
 		support, domain, "support", "", idPath(macros),
 		suspect, domain, "suspect", "", idPath(macros),
+		//
+
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_field",

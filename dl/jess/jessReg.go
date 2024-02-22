@@ -19,6 +19,8 @@ type Registrar interface {
 	AddNounTrait(noun, trait string) error
 	AddNounValue(noun, prop string, val rt.Assignment) error
 	//
+	AddTraits(aspect string, traits []string) error
+	//
 	Apply(verb Macro, lhs, rhs []string) error
 
 	// fix: move to "Query"
@@ -30,7 +32,8 @@ type Registrar interface {
 	GetUniqueName(category string) string
 }
 
-func AddTraitsToKind(rar Registrar, kind string, traits Traitor) (err error) {
+// setup the default traits for the passed kind
+func AddDefaultTraits(rar Registrar, kind string, traits Traitor) (err error) {
 	for ts := traits; ts.HasNext(); {
 		t := ts.GetNext()
 		str := t.Matched.String()

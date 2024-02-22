@@ -67,6 +67,7 @@ var known = info{
 		"thing", "things",
 		"container", "containers",
 		"supporter", "supporters",
+		"colors", "aspects",
 	),
 	traits: match.PanicSpans(
 		"closed",

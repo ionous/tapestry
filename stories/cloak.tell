@@ -58,20 +58,17 @@ Tapestry:
         The printed name of the bar is "Foyer Bar". The description of the bar is "The bar,
         much rougher than you'd have guessed after the opulence of the foyer to the north,
         is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
+
+        Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
+        Messages are a kind of thing. The scrawled message is a message.
         """ # "
+    - Define kind:fields:
+        - "messages"
+        - - Aspect: "neatness"
     - Interpret alias:as:
         - - "floor"
           - "sawdust"
         - "message"
-    - Define aspect:traits:
-        - "neatness"
-        - - "neat"
-          - "scuffed"
-          - "trampled"
-    - Define kind:fields:
-        - "messages"
-        - - Aspect: "neatness"
-    - Declare: "Messages are a kind of thing. The scrawled message is a message."
     - Define rule:noun:do:
         - "instead of examining"
         - "message"
