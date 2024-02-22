@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -29,7 +30,12 @@ func (op *DefineAspect) Weave(cat *weave.Catalog) error {
 			for i, t := range traits {
 				traits[i] = inflect.Normalize(t)
 			}
-			err = w.Pin().AddAspect(aspect, traits)
+			pen := w.Pin()
+			if e := pen.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
+				err = e
+			} else {
+				err = pen.AddTraits(aspect, traits)
+			}
 		}
 		return
 	})

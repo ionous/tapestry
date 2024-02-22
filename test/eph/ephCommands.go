@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -42,7 +43,13 @@ type Aspects struct {
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
-		return w.Pin().AddAspect(op.Aspects, op.Traits)
+		pen := w.Pin()
+		if e := pen.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
+			err = e
+		} else {
+			err = pen.AddTraits(op.Aspects, op.Traits)
+		}
+		return
 	})
 }
 

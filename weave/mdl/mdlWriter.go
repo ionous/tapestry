@@ -19,46 +19,55 @@ import (
 // tbd: perhaps writing the aspect to its own table would be best
 // join at runtime to synthesize fields; would fix the questions of adding bad traits ( see comments )
 // ( could potentially write both as a bridge )
-func (pen *Pen) AddAspect(aspect string, traits []string) (err error) {
-	_, err = pen.addAspect(aspect, traits)
+
+func (pen *Pen) AddTraits(aspect string, traits []string) (err error) {
+	if kid, e := pen.findRequiredKind(aspect); e != nil {
+		err = e // ^ hrm.
+	} else if isAspect := strings.HasSuffix(kid.fullpath(), pen.paths.aspectPath); !isAspect {
+		err = errutil.Fmt("kind %q in domain %q is not an aspect", aspect, pen.domain)
+	} else if strings.Count(kid.fullpath(), ",") != 3 {
+		// tbd: could loosen this; for now it simplifies writing the aspects;
+		// no need to check for conflicting fields if there's no derivation
+		// doesn't stop someone from adding derivation later though ...
+		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
+	} else {
+		err = pen.addTraits(kid, traits)
+	}
 	return
 }
 
 func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err error) {
-	domain, at := pen.domain, pen.at
-	if kid, e := pen.addKind(aspect, kindsOf.Aspect.String()); e != nil {
-		err = e // ^ hrm.
+	if cls, e := pen.addKind(aspect, kindsOf.Aspect.String()); e != nil {
+		err = e
 	} else {
-		if strings.Count(kid.fullpath(), ",") != 3 {
-			// tbd: could loosen this; for now it simplifies writing the aspects;
-			// no need to check for conflicting fields if there's no derivation
-			// doesn't stop someone from adding derivation later though ...
-			err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
-		} else if existingTraits, e := tables.QueryStrings(pen.db, `
+		err = pen.addTraits(cls, traits)
+	}
+	return
+}
+
+func (pen *Pen) addTraits(kid kindInfo, traits []string) (err error) {
+	domain, at := pen.domain, pen.at
+	if existingTraits, e := tables.QueryStrings(pen.db, `
 			select mf.field	
 			from mdl_field mf 
 			where mf.kind = ?1
 			order by mf.rowid`, kid.id); e != nil {
-			err = errutil.New("database error", e)
-		} else if len(existingTraits) > 0 {
-			// fix? doesn't stop someone from adding new traits later though....
-			// field builder could check that it only builds kindsOf.Kind
-			if slices.Compare(traits, existingTraits) != 0 {
-				err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
-			}
-		} else if kid.domain != domain {
-			err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
-				aspect, kid.domain, domain)
-		} else {
-			for _, t := range traits {
-				if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
-					err = errutil.New("database error", e)
-					break
-				}
-			}
+		err = errutil.New("database error", e)
+	} else if len(existingTraits) > 0 {
+		// fix? doesn't stop someone from adding new traits later though....
+		// field builder could check that it only builds kindsOf.Kind
+		if slices.Compare(traits, existingTraits) != 0 {
+			err = errutil.Fmt("aspect %q from %q already has traits", kid.name, domain)
 		}
-		if err == nil {
-			ret = kid
+	} else if kid.domain != domain {
+		err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
+			kid.name, kid.domain, domain)
+	} else {
+		for _, t := range traits {
+			if _, e := pen.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
+				err = errutil.New("database error", e)
+				break
+			}
 		}
 	}
 	return
