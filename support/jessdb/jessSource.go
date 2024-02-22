@@ -3,6 +3,7 @@ package jessdb
 import (
 	"database/sql"
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -15,6 +16,13 @@ type Source struct {
 
 func NewSource(db *mdl.Modeler) Source {
 	return Source{db}
+}
+
+func countWords(str string) (ret int) {
+	if len(str) > 0 {
+		ret = 1 + strings.Count(str, " ")
+	}
+	return
 }
 
 func (x *Source) MatchSpan(domain string, span match.Span) (jess.Generator, error) {
@@ -35,7 +43,7 @@ func (d dbWrapper) FindKind(ws match.Span) (ret string, width int) {
 	if res, e := d.GetPartialKind(ws); e != nil {
 		log.Println("FindKind", e)
 	} else {
-		ret, width = res.Name, res.Width
+		ret, width = res, countWords(res)
 	}
 	return
 }
@@ -43,10 +51,10 @@ func (d dbWrapper) FindKind(ws match.Span) (ret string, width int) {
 func (d dbWrapper) FindTrait(ws match.Span) (ret string, width int) {
 	// turns out the code is actually testing all fields
 	// and not just traits .... fix? seems to work okay so far.
-	if res, e := d.GetPartialField(ws); e != nil {
+	if res, e := d.GetPartialTrait(ws); e != nil {
 		log.Println("FindTrait", e)
 	} else {
-		ret, width = res.Name, res.Width
+		ret, width = res, countWords(res)
 	}
 	return
 }
@@ -55,7 +63,7 @@ func (d dbWrapper) FindField(ws match.Span) (ret string, width int) {
 	if res, e := d.GetPartialField(ws); e != nil {
 		log.Println("FindField", e)
 	} else {
-		ret, width = res.Name, res.Width
+		ret, width = res, countWords(res)
 	}
 	return
 }

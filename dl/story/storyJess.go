@@ -25,7 +25,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 		if text, e := safe.GetText(w, op.Text); e != nil {
 			err = e
 		} else if spans, e := match.MakeSpans(text.String()); e != nil {
-			err = e
+			err = errutil.New("couldn't make span", text, "because", e)
 		} else {
 			// split each statement into its own evaluation
 			// ( to break up interdependence )

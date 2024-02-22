@@ -92,12 +92,16 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_field",
 		"domain", "kind", "field", "affinity"},
-		//
+		// traits
 		domain, traits, "closed", "bool",
 		domain, traits, "open", "bool",
 		domain, traits, "openable", "bool",
 		domain, traits, "transparent", "bool",
 		domain, traits, "fixed in place", "bool",
+		// fields
+		domain, things, "description", "text",
+		domain, things, "title", "text",
+		domain, things, "age", "text",
 		// macros:
 		domain, carry, "primary", "text",
 		domain, carry, "secondary", "text_list",

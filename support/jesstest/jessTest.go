@@ -53,7 +53,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			// note: we don't validate properties while matching
 			// weave validates them when attempting to write them.
-			test: `The bottle has age 42.`,
+			test: `The bottle has an age of 42.`,
 			result: []string{
 				"AddNounValue", "bottle", "age", number(42),
 			},

@@ -391,8 +391,12 @@ Spec:with group:
           - "article"
           - true
         - Term: "property"
+        - # the word "of", sometimes reads better this way
+          Term:type:optional:
+          - "of"
+          - "words"
+          - true
         - Term: "single_value"
-
 
     - # matches only one of its options
       # ( the options could be represented as a slot; this feels easier for now )

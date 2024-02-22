@@ -34,8 +34,13 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *PropertyNounValue) Generate(rar Registrar) error {
-	return rar.AddNounValue(op.Noun.String(), op.Property.String(), op.SingleValue.Assignment())
+func (op *PropertyNounValue) Generate(rar Registrar) (err error) {
+	if n, e := rar.GetClosestNoun(op.Noun.String()); e != nil {
+		err = e
+	} else {
+		err = rar.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
+	}
+	return
 }
 
 func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
@@ -44,12 +49,26 @@ func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
 		op.Has.Match(q, &next, keywords.Has) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		op.Property.Match(q, &next) &&
+		(op.matchOf(q, &next) || true) &&
 		op.SingleValue.Match(q, &next) {
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *NounPropertyValue) Generate(rar Registrar) error {
-	return rar.AddNounValue(op.Noun.String(), op.Property.String(), op.SingleValue.Assignment())
+func (op *NounPropertyValue) matchOf(q Query, input *InputState) (okay bool) {
+	var w Words
+	if w.Match(q, input, keywords.Of) {
+		op.Of, okay = &w, true
+	}
+	return
+}
+
+func (op *NounPropertyValue) Generate(rar Registrar) (err error) {
+	if n, e := rar.GetClosestNoun(op.Noun.String()); e != nil {
+		err = e
+	} else {
+		err = rar.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
+	}
+	return
 }

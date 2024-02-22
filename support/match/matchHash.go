@@ -42,6 +42,7 @@ func MakeSpans(sentences string) (ret []Span, err error) {
 	for len(next) > 0 {
 		if out, rem, e := makeSpan(next); e != nil {
 			err = e
+			break
 		} else {
 			ret = append(ret, out)
 			next = rem
@@ -63,45 +64,55 @@ func makeSpan(s string) (out Span, rem string, err error) {
 		}
 	}
 	var wordStart int
-	var quoteMatching int // one indexed
-	var tickMatching int
+	var quoteStart int // one indexed
+	var tickStart int
+	var quoteTerminal bool
 	var terminal int
 	w, rbs := fnv.New64a(), makeRuneWriter()
 Loop:
 	for i, r := range s {
 		switch {
 		case terminal > 0:
+			// eat spaces after terminal; anything else is a new sentence.
 			if !unicode.IsSpace(r) {
 				rem = s[i:]
 				break Loop
 			}
 
 		// back ticks
-		case r == '`' && quoteMatching == 0:
-			if tickMatching <= 0 {
-				tickMatching = i + 1 // one indexed
+		case r == '`' && quoteStart == 0:
+			// start reading quoted text:
+			if tickStart == 0 {
+				tickStart = i + 1 // one indexed
 				flushWord(i, i+1, Keywords.QuotedText)
 			} else {
-				flushWord(tickMatching, i, sumReset(w))
-				tickMatching = 0
+				// done reading quoted text
+				flushWord(tickStart, i, sumReset(w))
+				if quoteTerminal {
+					terminal, quoteTerminal = i, false
+				}
+				tickStart = 0
 				wordStart = -1
 			}
-
-		case tickMatching > 0:
-			rbs.writeRune(r, w)
 
 		// double quotes
-		case r == '"' && tickMatching == 0:
-			if quoteMatching <= 0 {
-				quoteMatching = i + 1 // one indexed
+		case r == '"' && tickStart == 0:
+			// start reading quoted text:
+			if quoteStart == 0 {
+				quoteStart = i + 1 // one indexed
 				flushWord(i, i+1, Keywords.QuotedText)
 			} else {
-				flushWord(quoteMatching, i, sumReset(w))
-				quoteMatching = 0
+				// done reading quoted text
+				if quoteTerminal {
+					terminal, quoteTerminal = i, false
+				}
+				flushWord(quoteStart, i, sumReset(w))
+				quoteStart = 0
 				wordStart = -1
 			}
 
-		case quoteMatching > 0:
+		case quoteStart > 0 || tickStart > 0:
+			quoteTerminal = unicode.Is(unicode.Sentence_Terminal, r)
 			rbs.writeRune(r, w)
 
 		case r == '.':
@@ -133,10 +144,10 @@ Loop:
 			}
 		}
 	}
-	if quoteMatching > 0 {
-		err = fmt.Errorf("unmatched quote at %d", quoteMatching-1)
-	} else if tickMatching > 0 {
-		err = fmt.Errorf("unmatched tick at %d", tickMatching-1)
+	if quoteStart > 0 {
+		err = fmt.Errorf("unmatched quote at %d", quoteStart-1)
+	} else if tickStart > 0 {
+		err = fmt.Errorf("unmatched tick at %d", tickStart-1)
 	} else if err == nil {
 		flushWord(wordStart, len(s), sumReset(w))
 	}

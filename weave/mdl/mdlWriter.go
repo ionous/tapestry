@@ -383,8 +383,8 @@ var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 // ( the same as - or a child of - the domain of the kind )
 var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
-func (pen *Pen) AddNoun(short, long, kind string) (err error) {
-	if n, e := pen.addNoun(short, kind); e != nil {
+func (pen *Pen) AddNoun(primary, long, kind string) (err error) {
+	if n, e := pen.addNoun(primary, kind); e != nil {
 		err = eatDuplicates(pen.warn, e)
 	} else if len(long) != 0 {
 		parts := genNames(n.name, long)

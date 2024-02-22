@@ -68,7 +68,7 @@ func (pen *Pen) getClosestNoun(name string) (ret nounInfo, err error) {
 		Scan(&out.domain, &out.id, &out.name, &out.kind, &out.fullpath); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if out.id == 0 {
-		err = errutil.Fmt("%w noun %q in domain %q", Missing, name, pen.domain)
+		err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
 	} else {
 		ret = out
 	}
@@ -80,7 +80,7 @@ func (pen *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err e
 	if out, e := pen.findNoun(noun, q); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if out.id == 0 {
-		err = errutil.Fmt("%w noun %q in domain %q", Missing, noun, pen.domain)
+		err = errutil.Fmt("%w required noun %q in domain %q", Missing, noun, pen.domain)
 	} else {
 		ret = out
 	}

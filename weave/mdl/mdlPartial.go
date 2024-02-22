@@ -2,7 +2,6 @@ package mdl
 
 import (
 	"database/sql"
-	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -11,11 +10,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type PartialMatch struct {
-	Name  string
-	Width int
-}
-
 type MacroMatch struct {
 	Macro Macro
 	Width int
@@ -23,20 +17,15 @@ type MacroMatch struct {
 
 // if the passed words starts with a kind,
 // return the number of words in  that match.
-func (pen *Pen) GetPartialKind(ws match.Span) (ret PartialMatch, err error) {
+func (pen *Pen) GetPartialKind(ws match.Span) (ret string, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
 	if len(ws) > 0 {
 		words := strings.ToLower(ws.String()) + blank
-		var found struct {
-			id   int
-			name string
-		}
 		// excludes patterns (and macros) from matching these physical kinds
 		if mp, e := pen.getPatternPath(); e != nil {
-			log.Println(e)
-		} else {
-			e := pen.db.QueryRow(`
+			err = e
+		} else if e := pen.db.QueryRow(`
 	with kinds(id, name, alt) as (
 		select mk.rowid, mk.kind, mk.singular
 		from mdl_kind mk
@@ -45,7 +34,7 @@ func (pen *Pen) GetPartialKind(ws match.Span) (ret PartialMatch, err error) {
  		where base = ?1
  		and not instr(',' || mk.path, ?3 )
 	)
-	select id, name  from (
+	select name from (
 		select id, name, substr(?2 ,0, length(name)+2) as words
 		from kinds
 		where words = (name || ' ')
@@ -56,19 +45,8 @@ func (pen *Pen) GetPartialKind(ws match.Span) (ret PartialMatch, err error) {
 	)
 	order by length(name) desc
 	limit 1`,
-				pen.domain, words, mp).Scan(&found.id, &found.name)
-			switch e {
-			case nil:
-				width := strings.Count(found.name, blank) + 1
-				ret = PartialMatch{
-					Name:  found.name,
-					Width: width,
-				}
-			case sql.ErrNoRows:
-				// return nothing.
-			default:
-				log.Println(e)
-			}
+			pen.domain, words, mp).Scan(&ret); e != sql.ErrNoRows {
+			err = e // could be nil or error
 		}
 	}
 	return
@@ -79,49 +57,66 @@ const space = ' '
 
 // match the passed words with the known fields of all in-scope kinds.
 // return the number of words in that match.
-// tbd: technically there's some possibility that there might be three traits:
-// "wood", "veneer", and "wood veneer" -- subset names
-// with the first two applying to one kind, and the third applying to a different kind;
-// all in scope.  this would always match the second -- even if its not applicable.
-// ( i guess that's where commas can be used by the user to separate things )
-func (pen *Pen) GetPartialField(ws match.Span) (ret PartialMatch, err error) {
-	if ap, e := pen.getAspectPath(); e != nil {
-		err = e
-	} else if len(ws) > 0 {
+func (pen *Pen) GetPartialField(ws match.Span) (ret string, err error) {
+	if len(ws) > 0 {
 		words := strings.ToLower(ws.String()) + blank
-		var found struct {
-			name string
-		}
-		e := pen.db.QueryRow(`
-		with fields(name) as (
-		select mf.field
+		if e := pen.db.QueryRow(`
+	with fields(name) as (
+		select distinct mf.field
 		from mdl_kind mk
 		join domain_tree dt
 			on (dt.uses = mk.domain)
 		join mdl_field mf 
 			on(mf.kind = mk.rowid)	
 		where dt.base = ?1
-		and instr(',' || mk.path, ?2 )
+		and mf.type is null 
 	)
 	select name from (
-		select name, substr(?3 ,0, length(name)+2) as words
+		select name, substr(?2 ,0, length(name)+2) as words
 		from fields
 		where words = (name || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, ap, words).Scan(&found.name)
-		switch e {
-		case nil:
-			width := strings.Count(found.name, blank) + 1
-			ret = PartialMatch{
-				Name:  found.name,
-				Width: width,
-			}
-		case sql.ErrNoRows:
-			// return nothing.
-		default:
-			err = e
+			pen.domain, words).Scan(&ret); e != sql.ErrNoRows {
+			err = e // could be nil or error
+		}
+	}
+	return
+}
+
+// return the number of words in that match.
+// tbd: technically there's some possibility that there might be three traits:
+// "wood", "veneer", and "wood veneer" -- subset names
+// with the first two applying to one kind, and the third applying to a different kind;
+// all in scope.  this would always match the second -- even if its not applicable.
+// ( i guess that's where commas can be used by the user to separate things )
+func (pen *Pen) GetPartialTrait(ws match.Span) (ret string, err error) {
+	if ap, e := pen.getAspectPath(); e != nil {
+		err = e
+	} else if len(ws) > 0 {
+		words := strings.ToLower(ws.String()) + blank
+		if e := pen.db.QueryRow(`
+	with traits(name) as (
+		select distinct mf.field
+		from mdl_kind mk
+		join domain_tree dt
+			on (dt.uses = mk.domain)
+		join mdl_field mf 
+			on(mf.kind = mk.rowid)	
+		where dt.base = ?1
+		-- ?2 is the aspect path  to filter for traits
+		and instr(',' || mk.path, ?2 )
+	)
+	select name from (
+		select name, substr(?3 ,0, length(name)+2) as words
+		from traits
+		where words = (name || ' ')
+	)
+	order by length(name) desc
+	limit 1`,
+			pen.domain, ap, words).Scan(&ret); e != sql.ErrNoRows {
+			err = e // could be nil or error
 		}
 	}
 	return

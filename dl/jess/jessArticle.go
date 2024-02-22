@@ -18,6 +18,7 @@ func reduceArticle(op *Article) (ret articleResult) {
 	return
 }
 
+// return the name after removing leading articles
 func StripArticle(name string) (ret string, err error) {
 	if parts, e := match.MakeSpan(name); e != nil {
 		err = e
@@ -26,6 +27,8 @@ func StripArticle(name string) (ret string, err error) {
 	} else if _, width := FindCommonArticles(parts); width > 0 {
 		words := parts[width:]
 		ret = words.String()
+	} else {
+		ret = name
 	}
 	return
 }

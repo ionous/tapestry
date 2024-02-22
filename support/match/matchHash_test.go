@@ -21,10 +21,12 @@ func TestHashing(t *testing.T) {
 		`me, and her`,                      // 8
 		`"quote together" you`,             // 9
 		`unmatched " quote`,                // 10
-		`sans full stop.`,                  // 11
-		`nothing after. stops`,             // 12
-		"he said `\"quote unquote\"` what", // 13
-		"unmatched ` tick",                 // 14
+		`sans full stop.`,                  // 11 - the full stop should end the sentence; but not be in the sentence
+		`"quote stop."`,                    // 12- okay, fullstop before quote
+		`nothing after. stops`,             // 13 - an error because more text after fullstop
+		`"quote stop." here`,               // 14 - error
+		"he said `\"quote unquote\"` what", // 15
+		"unmatched ` tick",                 // 16
 	}
 	// expects that the hashes wind up matching the hashes of these exact strings.
 	const expectsError = "<expects error>"
@@ -41,9 +43,11 @@ func TestHashing(t *testing.T) {
 		{`"`, "quote together", "you"}, // 9
 		{expectsError},                 // 10
 		{"sans", "full", "stop"},       // 11
-		{expectsError},                 // 12
-		{"he", "said", `"`, `"quote unquote"`, "what"}, // 13
-		{expectsError}, // 14
+		{`"`, "quote stop."},           // 12
+		{expectsError},                 // 13
+		{expectsError},                 // 14
+		{"he", "said", `"`, `"quote unquote"`, "what"}, // 15
+		{expectsError}, // 16
 	}
 	if len(phrases) != len(expect) {
 		panic("missing tests")

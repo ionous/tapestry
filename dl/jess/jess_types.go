@@ -1025,6 +1025,7 @@ type NounPropertyValue struct {
 	Has         Words
 	Article     *Article
 	Property    Property
+	Of          *Words
 	SingleValue SingleValue
 	Markup      map[string]any
 }
@@ -1296,7 +1297,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17641125891389017492: (*Names)(nil),                /* Names kindCalled:name:additionalNames: */
 	4500297491524973516:  (*Names)(nil),                /* Names name: */
 	17351915174502247643: (*Names)(nil),                /* Names name:additionalNames: */
+	6502702423569934278:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:of:singleValue: */
 	9912988654777640387:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:singleValue: */
+	11825351964218879050: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:of:singleValue: */
 	17930228889254639535: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:singleValue: */
 	11106580022094386190: (*Property)(nil),             /* Property article:matched: */
 	7038723543321541230:  (*Property)(nil),             /* Property matched: */
@@ -1971,6 +1974,14 @@ func init() {
 			Name:  "property",
 			Label: "property",
 			Type:  &Zt_Property,
+		}, {
+			Name:     "of",
+			Label:    "of",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "the word \"of\", sometimes reads better this way",
+			},
+			Type: &Zt_Words,
 		}, {
 			Name:  "single_value",
 			Label: "single_value",
