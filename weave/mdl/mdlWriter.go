@@ -39,8 +39,10 @@ func (pen *Pen) AddTraits(aspect string, traits []string) (err error) {
 func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err error) {
 	if cls, e := pen.addKind(aspect, kindsOf.Aspect.String()); e != nil {
 		err = e
+	} else if e := pen.addTraits(cls, traits); e != nil {
+		err = e
 	} else {
-		err = pen.addTraits(cls, traits)
+		ret = cls
 	}
 	return
 }
@@ -268,7 +270,7 @@ func (pen *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 
 var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "at")
 
-// singular name of kind and materialized hierarchy of ancestors separated by commas
+// plural name of kind and materialized hierarchy of ancestors separated by commas
 // this (somewhat) duplicates the algorithm used by Noun()
 func (pen *Pen) AddKind(name, parent string) (err error) {
 	_, err = pen.addKind(name, parent)
