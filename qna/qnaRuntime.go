@@ -333,7 +333,9 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 
 		// all objects of the named kind
 		case meta.ObjectsOfKind:
-			if ns, e := run.query.NounsByKind(field); e != nil {
+			if k, e := run.getKind(field); e != nil {
+				err = run.reportError(e)
+			} else if ns, e := run.query.NounsByKind(k.Name()); e != nil {
 				err = run.reportError(e)
 			} else {
 				ret = g.StringsOf(ns)

@@ -44,6 +44,8 @@ type Query interface {
 	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
 	// every field exclusive to the passed kind
 	FieldsOf(kind string) ([]FieldData, error)
+	// given a plural or singular kind
+	// return the names of the ancestors, ending with the kind itself
 	KindOfAncestors(kind string) ([]string, error)
 	KindValues(id string) ([]ValueData, error)
 	NounInfo(name string) (NounInfo, error)

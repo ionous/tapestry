@@ -79,7 +79,8 @@ Spec:with group:
                     - "field_definition"
                     - true
                     - true
-      - # Add traits to an aspect
+      - # Declare an aspect and its traits.
+        # Aspects here are assumed to be singularly named.
         Spec:slots:with flow:
           - "define_aspect"
           - - "story_statement"

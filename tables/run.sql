@@ -23,7 +23,7 @@ where rd.active > 0;
 
 create view if not exists
 active_kinds as 
-select ds.domain, mk.rowid as kind, mk.kind as name, mk.path, mk.at
+select ds.domain, mk.rowid as kind, mk.kind as name, mk.singular, mk.path, mk.at
 from active_domains ds
 join mdl_kind mk 
 	using (domain);

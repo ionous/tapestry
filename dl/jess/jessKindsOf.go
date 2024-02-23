@@ -1,6 +1,7 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
@@ -21,14 +22,14 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 
 // match the words after "called" ending with either "is/are" or the end of the string.
 func (op *KindsOf) kindsOf(q Query, input *InputState) (okay bool) {
-	if m, _ := kindsOf.FindMatch(input.Words()); m != nil {
+	if m, _ := kindsSpan.FindMatch(input.Words()); m != nil {
 		width := m.NumWords()
 		op.KindsOf.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return
 }
 
-var kindsOf = match.PanicSpans("a kind of", "kinds of")
+var kindsSpan = match.PanicSpans("a kind of", "kinds of")
 
 func (op *KindsOf) GetTraits() (ret Traitor) {
 	if op.Traits != nil {
@@ -39,17 +40,33 @@ func (op *KindsOf) GetTraits() (ret Traitor) {
 
 // The closed containers called safes are a kind of fixed in place thing.
 func (op *KindsOf) Generate(rar Registrar) (err error) {
-	parent := op.Kind.Matched
+	parent := op.Kind.Matched.String()
 	traits := op.GetTraits()
 	//
 	for it := op.Names.Iterate(); it.HasNext(); {
-		k := it.GetNext()    // a 'Names'
-		plural := k.String() // we assume plural, and use the trailing is/are to figure which is which.
-		if !op.Are.IsPlural() {
-			plural = rar.GetPlural(plural)
+		k := it.GetNext()
+		// ugh. aspects are expected to be singular right now
+		// ( see also AspectsAreTraits )
+		var name string
+		aspectType := kindsOf.Aspect.String() // "kinds of aspects", "a kind of aspect"
+		if match.HasPrefix(kindsSpan[0], op.KindsOf.Matched.(match.Span)) {
+			aspectType = aspectType[:len(aspectType)-1]
 		}
-		kind := inflect.Normalize(plural)
-		if e := rar.AddKind(kind, parent.String()); e != nil {
+		if parent == aspectType {
+			if n := k.String(); op.Are.IsPlural() {
+				name = rar.GetSingular(n)
+			} else {
+				name = n
+			}
+		} else {
+			if n := k.String(); op.Are.IsPlural() {
+				name = n
+			} else {
+				name = rar.GetPlural(n)
+			}
+		}
+		kind := inflect.Normalize(name)
+		if e := rar.AddKind(kind, parent); e != nil {
 			err = e
 			break
 		} else {

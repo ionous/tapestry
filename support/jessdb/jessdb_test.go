@@ -84,7 +84,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		things, domain, "things", "thing", idPath(kinds),
 		containers, domain, "containers", "container", idPath(things, kinds),
 		supporters, domain, "supporters", "supporter", idPath(things, kinds),
-		colors, domain, "colors", "color", idPath(aspects),
+		colors, domain, "color", nil, idPath(aspects),
 		// macros:
 		carry, domain, "carry", "", idPath(macros),
 		contain, domain, "contain", "", idPath(macros),

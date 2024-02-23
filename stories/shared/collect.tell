@@ -1,6 +1,6 @@
 Tapestry:
   - # future: it'd be nice to separate this from main scripts. inject a domain dependency at weave time, or some sort of runtime 'attach domain'.
-    Declare: "A object collection is a kind of record."
+    Declare: "An object collection is a kind of record."
   - Define kind:fields:
       - "object collection"
       - - Text: "id"

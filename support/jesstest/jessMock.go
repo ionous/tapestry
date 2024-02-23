@@ -43,7 +43,7 @@ func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 	return
 }
 func (m *Mock) AddTraits(name string, traits []string) (err error) {
-	if name != "colors" {
+	if name != "color" { // aspects are singular :/
 		err = fmt.Errorf("unknown aspect %s", name)
 	} else {
 		m.out = append(m.out, "AddTraits", name)

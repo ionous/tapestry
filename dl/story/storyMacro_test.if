@@ -97,7 +97,7 @@
         "Objects",
         [
           {
-            "Aspect:": "noun types"
+            "Aspect:": "noun type"
           }
         ]
       ]
@@ -112,7 +112,7 @@
     },
     {
       "Define aspect:traits:": [
-        "noun types",
+        "noun type",
         [
           "common named",
           "proper named",

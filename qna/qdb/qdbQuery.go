@@ -146,8 +146,10 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 	return
 }
 
-// returns the ancestor hierarchy, not including the kind itself
-// ex. for doors that might be: kinds, objects, things, props, openers.
+// returns the ancestor hierarchy, including the kind itself.
+// accepts both the plural and singular kind.
+// in the db, more root is to the right; in the returned paths its reversed.
+// ex. for "door" the list might be: kinds, objects, things, props, openers, doors.
 func (q *Query) KindOfAncestors(kind string) ([]string, error) {
 	return scanStrings(q.kindOfAncestors, kind)
 }
@@ -357,7 +359,8 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				-- is Y (is their name) a part of X (our path)
 				on instr(',' || ks.path, 
 								 ',' || mk.rowid || ',' )
-			where ks.name = ?1
+				or (ks.kind == mk.rowid) -- the kind itself ( to get its real name )
+			where (ks.name = ?1) or (ks.singular = ?1)
 			order by mk.rowid`,
 		),
 		// this *isnt* hierarchical, it's all the inits for the kind

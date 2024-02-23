@@ -79,22 +79,24 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 	//	and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
 	if path, e := run.query.KindOfAncestors(k); e != nil {
 		err = errutil.Fmt("error while getting kind %q, %w", k, e)
-	} else if cnt := len(path); cnt == 0 {
+	} else if cnt := len(path); cnt < 2 {
 		err = errutil.Fmt("invalid kind %q", k)
-	} else if parent, e := run.getKind(path[cnt-1]); e != nil {
-		err = e
-	} else if fields, e := run.getExclusiveFields(k); e != nil {
-		err = errutil.Fmt("error while building kind %q, %w", k, e)
 	} else {
-		// we never actually use the field values of the kind:
-		// instead we pull individual defaults from the db.
-		// because of that, weave generates reasonable default values for kinds with traits
-
-		if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
-			traits := aspects.MakeAspects(run, fields)
-			ret = g.NewKindWithTraits(k, parent, fields, traits)
+		k := path[cnt-1] // the kind's real name is at the end.
+		if parent, e := run.getKind(path[cnt-2]); e != nil {
+			err = e // ^ recurses upwards
+		} else if fields, e := run.getExclusiveFields(k); e != nil {
+			err = errutil.Fmt("error while building kind %q, %w", k, e)
 		} else {
-			ret = g.NewKind(k, parent, fields)
+			// we never actually use the field values of the kind:
+			// instead we pull individual defaults from the db.
+			// because of that, weave generates reasonable default values for kinds with traits
+			if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
+				traits := aspects.MakeAspects(run, fields)
+				ret = g.NewKindWithTraits(k, parent, fields, traits)
+			} else {
+				ret = g.NewKind(k, parent, fields)
+			}
 		}
 	}
 	return

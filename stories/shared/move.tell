@@ -18,7 +18,7 @@ Tapestry:
                 KindOf:is:
                   - "@obj"
                   - "things"
-            - - # check for tangibleness instead?
+            - - # check for tangibility instead?
                 Set:value:
                   - "@response"
                   - FromText:

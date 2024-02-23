@@ -4,25 +4,25 @@ Tapestry:
       - "Objects"
       - - Text: "description"
         - Text: "indefinite article"
-        - Aspect: "noun types"
-        - Aspect: "private names"
-        - Aspect: "tangibleness"
+        - Aspect: "noun type"
+        - Aspect: "name status"
+        - Aspect: "tangibility"
         - Text: "printed name"
   - Define aspect:traits:
-      - "noun types"
+      - "noun type"
       - - "common named"
         - "proper named"
         - "counted"
   - # when objects are publicly named, their name can appear in the output text.
     # by default, the names of privately named objects will never be displayed to the player.
     Define aspect:traits:
-      - "private names"
+      - "name status"
       - - "publicly named"
         - "privately named"
   - # An object must be tangible in order to touch or interact with it.
     # A 'thing' is, by definition, a tangible object.
     Define aspect:traits:
-      - "tangibleness"
+      - "tangibility"
       - - "intangible"
         - "tangible"
   - Declare: "Things are kinds of object. Things are usually tangible."

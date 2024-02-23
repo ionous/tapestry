@@ -77,7 +77,7 @@ func (fs *Fields) rewriteImplicitAspects(pen *Pen, kind kindInfo, cache *classCa
 				defaultTrait := inflect.Join([]string{"not", field.Name})
 				traits := []string{defaultTrait, field.Name}
 				// rewrite bool fields as implicit aspects
-				aspect := inflect.Join([]string{field.Name, "aspect"})
+				aspect := inflect.Join([]string{field.Name, "status"})
 				cls, e := pen.addAspect(aspect, traits)
 				if e := eatDuplicates(pen.warn, e); e != nil {
 					err = e

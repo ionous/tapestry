@@ -65,7 +65,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `The colors are red, blue, and cobalt.`,
 			result: []string{
-				"AddTraits", "colors", "red", "blue", "cobalt",
+				"AddTraits", "color", "red", "blue", "cobalt",
 			},
 		},
 		// -------------------------
