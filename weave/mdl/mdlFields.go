@@ -14,6 +14,11 @@ import (
 
 var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
 
+// adds a field to a kind, looking for conflicts in the kind and its ancestors.
+// conflicts include fields with the same name but a different type, or fields with the name of assigned traits.
+// for example: adding a field called "red" would conflict if there was an assigned aspect "color" with trait red.
+// fix? i dont think there's anything to stop a "record" of an object kind, or a "record" of text type from being added.
+// is it worth considering making all such references text, and generating anonymous nouns for each noun's records?
 func (pen *Pen) addField(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
 	domain, at := pen.domain, pen.at
 	if rows, e := pen.db.Query(`

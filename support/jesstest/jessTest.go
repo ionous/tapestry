@@ -61,6 +61,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		},
 		// ------------------------
 		// Aspects are traits
+		// note: "The colors can be..." isn't allowed.
 		// ( for testing, "colors" is an established aspect with zero traits )
 		{
 			test: `The colors are red, blue, and cobalt.`,
@@ -68,6 +69,64 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 				"AddTraits", "color", "red", "blue", "cobalt",
 			},
 		},
+		// ------------------------
+		// Kinds have properties
+		{
+			test:   "Containers are either opened or closed.",
+			result: nil,
+		},
+		{
+			// can be [either] ...
+			test:   "A thing can be opened or closed.",
+			result: nil,
+		},
+		{
+			// inform doesnt allow [either] here; i'm fine however it works.
+			test:   "A thing can be scenery.",
+			result: nil,
+		},
+		{
+			test:   "Things have some text called a description.",
+			result: nil,
+		},
+		{
+			test:   "Things have some text.",
+			result: errors.New("unnamed text fields are prohibited."),
+		},
+		{
+			test:   "Things have a number.",
+			result: errors.New("unnamed number fields are prohibited."),
+		},
+		{
+			test:   "Supporters have a number called carrying capacity.",
+			result: nil,
+		},
+		{
+			// except for number and text, inform allows "bare" properties: a "list of text" creates a member called "list of text"
+			test:   "Things have a list of text called frenemies.",
+			result: nil,
+		},
+		{
+			test:   "Things have a list of numbers called the lotto numbers.",
+			result: nil,
+		},
+		{
+			// groups are a pre-defined type of record; anonymous fields are allowed.
+			// references to kinds become text; except for records which are embedded.
+			test:   "Things have a color.",
+			result: nil,
+		},
+		{
+			// groups are a pre-defined type of record; anonymous fields are allowed.
+			// references to kinds become text; except for records which are embedded.
+			test:   "Things have a group.",
+			result: nil,
+		},
+		{
+			test:   "Things have a list of groups.",
+			result: nil,
+		},
+
 		// -------------------------
 		{
 			// note: "Devices are fixed in place" will parse properly

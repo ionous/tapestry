@@ -10,20 +10,12 @@ type PatternBuilder struct {
 	Pattern
 }
 
+// public snapshot of the desired pattern
 type Pattern struct {
-	name, parent string
-	fields       fieldSet
-	rules        []Rule
-	ruleOfs      int // tracks how many rules were successfully written ( for retru )
-}
-
-func (p Pattern) Copy(name string) Pattern {
-	return Pattern{
-		name:   name,
-		parent: p.parent,
-		fields: p.fields,
-		rules:  p.rules,
-	}
+	name, parent            string
+	params, results, locals []FieldInfo // the order here reflects the order in the db
+	rules                   []Rule
+	ruleOfs                 int // number of successfully written rules
 }
 
 func (p *Pattern) Name() string {
@@ -54,34 +46,19 @@ func NewPatternSubtype(name string, parent string) *PatternBuilder {
 		}}
 }
 
-// the order here determines the grouping of the fields in the db:
-// parameters, results, and locals
-// PatternLocals gets reused (by FieldBuilder) for the fields of normal kinds
-// ( those dont have the first two groups of parameters )
-//
-//go:generate stringer -type=FieldType -linecomment
-const (
-	PatternParameters FieldType = iota // pattern parameters
-	PatternResults
-	PatternLocals
-	NumFieldTypes
-)
-
-type FieldType int
+// defers execution; so no return value.
+func (b *PatternBuilder) AddParams(fs []FieldInfo) {
+	b.params = append(b.params, fs...)
+}
 
 // defers execution; so no return value.
-func (b *PatternBuilder) AddField(ft FieldType, fn FieldInfo) {
-	b.fields.fields[ft] = append(b.fields.fields[ft], fn)
+func (b *PatternBuilder) AddResult(f FieldInfo) {
+	b.results = append(b.results, f)
 }
 
-func (b *PatternBuilder) AddLocal(fn FieldInfo) {
-	b.AddField(PatternLocals, fn)
-}
-func (b *PatternBuilder) AddResult(fn FieldInfo) {
-	b.AddField(PatternResults, fn)
-}
-func (b *PatternBuilder) AddParam(fn FieldInfo) {
-	b.AddField(PatternParameters, fn)
+// defers execution; so no return value.
+func (b *PatternBuilder) AddLocals(fs []FieldInfo) {
+	b.locals = append(b.locals, fs...)
 }
 
 // defers execution; so no return value.
@@ -91,17 +68,34 @@ func (b *PatternBuilder) AppendRule(rank int, rule rt.Rule) {
 }
 
 func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
-	if cache, e := pat.fields.cache(pen); e != nil {
-		err = e
+	var cache fieldCache
+	var parts = [3]struct {
+		fields []FieldInfo
+		fieldHandler
+	}{{
+		pat.params,
+		pen.addParameter,
+	}, {
+		pat.results,
+		pen.addResult,
+	}, {
+		pat.locals,
+		pen.addField,
+	},
+	}
+	var kid kindInfo
+	if create {
+		kid, err = pen.addKind(pat.name, pat.parent)
 	} else {
-		var kid kindInfo
-		if create {
-			kid, err = pen.addKind(pat.name, pat.parent)
-		} else {
-			kid, err = pen.findRequiredKind(pat.name)
-		}
-		if err == nil {
-			if e := pat.fields.writeFieldSet(pen, kid, cache); e != nil {
+		kid, err = pen.findRequiredKind(pat.name)
+	}
+	if err == nil {
+		var blank FieldInfo
+		for _, p := range parts {
+			if len(p.fields) == 1 && p.fields[0] == blank {
+				// the Nothing type generates a blank field info
+				// fix; should probably be an error if nothing is used for locals
+			} else if e := cache.writeFields(pen, kid, p.fields, p.fieldHandler); e != nil {
 				err = e
 			} else {
 				for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {

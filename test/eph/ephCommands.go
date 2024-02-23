@@ -98,11 +98,7 @@ func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
 		if e := pen.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
 		} else if ps := op.Contain; len(ps) > 0 {
-			fields := mdl.NewFieldBuilder(op.Kind)
-			for _, p := range ps {
-				fields.AddField(p.FieldInfo())
-			}
-			err = pen.AddFields(fields.Fields)
+			err = pen.AddFields(op.Kind, reduceFields(ps))
 		}
 		return
 	})
@@ -150,18 +146,10 @@ type Patterns struct {
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
-		if ps := op.Params; err == nil && len(ps) > 0 {
-			for _, p := range ps {
-				kb.AddParam(p.FieldInfo())
-			}
-		}
-		if p := op.Result; err == nil && p != nil {
-			kb.AddResult(p.FieldInfo())
-		}
-		if ps := op.Locals; err == nil {
-			for _, p := range ps {
-				kb.AddLocal(p.FieldInfo())
-			}
+		kb.AddLocals(reduceFields(op.Locals))
+		kb.AddParams(reduceFields(op.Params))
+		if p := op.Result; p != nil {
+			kb.AddResult(p.GetFieldInfo())
 		}
 		return w.Pin().AddPattern(kb.Pattern)
 	})

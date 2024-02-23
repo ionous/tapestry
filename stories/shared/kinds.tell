@@ -43,8 +43,8 @@ Tapestry:
         - Aspect: "wearability"
         - # for printing locale description.
           Text: "grouping label"
-        - Bool: "scenery"
         - Text: "initial appearance"
+        - Bool: "scenery"
         - Bool: "mentioned"
         - Bool: "handled"
   - Declare: "Wearability is a kind of aspect."

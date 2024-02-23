@@ -36,10 +36,12 @@ func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, er
 			ret = &render.RenderResponse{Text: txt}
 		} else {
 			// otherwise store the value
-			fields := mdl.NewFieldBuilder(kindsOf.Response.String())
-			fields.AddField(mdl.FieldInfo{Name: name, Affinity: affine.Text, Init: &assign.FromText{Value: txt}})
-			if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
-				return w.Pin().AddFields(fields.Fields)
+			if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+				return w.Pin().AddFields(kindsOf.Response.String(), []mdl.FieldInfo{{
+					Name:     name,
+					Affinity: affine.Text,
+					Init:     &assign.FromText{Value: txt}},
+				})
 			}); e != nil {
 				err = e
 			} else {

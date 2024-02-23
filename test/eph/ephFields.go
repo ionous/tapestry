@@ -17,7 +17,7 @@ type Params struct {
 	Initially rt.Assignment   `if:"label=initially,optional"`
 }
 
-func (p Params) FieldInfo() mdl.FieldInfo {
+func (p Params) GetFieldInfo() mdl.FieldInfo {
 	return mdl.FieldInfo{
 		Name:     inflect.Normalize(p.Name),
 		Class:    inflect.Normalize(p.Class),
@@ -29,4 +29,12 @@ func (p Params) FieldInfo() mdl.FieldInfo {
 // ensure fields which reference aspects use the necessary formatting
 func AspectParam(aspectName string) Params {
 	return Params{Name: aspectName, Affinity: affine.Text, Class: aspectName}
+}
+
+func reduceFields(fd []Params) []mdl.FieldInfo {
+	out := make([]mdl.FieldInfo, len(fd))
+	for i, fd := range fd {
+		out[i] = fd.GetFieldInfo()
+	}
+	return out
 }

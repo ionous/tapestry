@@ -10,18 +10,30 @@ import (
 )
 
 type FieldDefinition interface {
-	FieldInfo(rt.Runtime) (mdl.FieldInfo, error)
+	// since field creation is delayed anyway, rather than generate an error,
+	// field info stores an error for later reporting
+	GetFieldInfo(rt.Runtime) mdl.FieldInfo
 }
 
-func (op *NothingField) FieldInfo(run rt.Runtime) (_ mdl.FieldInfo, _ error) {
+func reduceFields(run rt.Runtime, fd []FieldDefinition) []mdl.FieldInfo {
+	out := make([]mdl.FieldInfo, len(fd))
+	for i, fd := range fd {
+		if fd != nil {
+			out[i] = fd.GetFieldInfo(run)
+		}
+	}
+	return out
+}
+
+func (op *NothingField) GetFieldInfo(run rt.Runtime) (_ mdl.FieldInfo) {
 	return
 }
 
-func (op *AspectField) FieldInfo(run rt.Runtime) (ret mdl.FieldInfo, err error) {
+func (op *AspectField) GetFieldInfo(run rt.Runtime) (ret mdl.FieldInfo) {
 	return defineField(run, op.Aspect, op.Aspect, affine.Text, nil)
 }
 
-func (op *BoolField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromBool{Value: i}
@@ -29,7 +41,7 @@ func (op *BoolField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.Bool, init)
 }
 
-func (op *NumberField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *NumberField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumber{Value: i}
@@ -37,7 +49,7 @@ func (op *NumberField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.Number, init)
 }
 
-func (op *TextField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *TextField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromText{Value: i}
@@ -45,7 +57,7 @@ func (op *TextField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.Text, init)
 }
 
-func (op *RecordField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *RecordField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecord{Value: i}
@@ -53,7 +65,7 @@ func (op *RecordField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.Record, init)
 }
 
-func (op *NumListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *NumListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumList{Value: i}
@@ -61,7 +73,7 @@ func (op *NumListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.NumList, init)
 }
 
-func (op *TextListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *TextListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromTextList{Value: i}
@@ -69,7 +81,7 @@ func (op *TextListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.TextList, init)
 }
 
-func (op *RecordListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
+func (op *RecordListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecordList{Value: i}
@@ -77,11 +89,11 @@ func (op *RecordListField) FieldInfo(run rt.Runtime) (mdl.FieldInfo, error) {
 	return defineField(run, op.Name, op.Type, affine.RecordList, init)
 }
 
-func defineField(run rt.Runtime, name, cls rt.TextEval, aff affine.Affinity, init rt.Assignment) (ret mdl.FieldInfo, err error) {
+func defineField(run rt.Runtime, name, cls rt.TextEval, aff affine.Affinity, init rt.Assignment) (ret mdl.FieldInfo) {
 	if name, e := safe.GetText(run, name); e != nil {
-		err = e
+		ret = mdl.FieldInfo{Error: e}
 	} else if cls, e := safe.GetOptionalText(run, cls, ""); e != nil {
-		err = e
+		ret = mdl.FieldInfo{Error: e}
 	} else {
 		ret = mdl.FieldInfo{
 			Name:     inflect.Normalize(name.String()),

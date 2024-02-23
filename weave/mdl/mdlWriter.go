@@ -223,8 +223,9 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 	return
 }
 
-func (pen *Pen) AddFields(fields Fields) error {
-	return fields.writeFields(pen)
+func (pen *Pen) AddFields(kind string, fields []FieldInfo) error {
+	fs := fieldSet{kind, fields}
+	return fs.writeFields(pen)
 }
 
 var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")

@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -50,23 +49,12 @@ func (op *DefineFields) Execute(macro rt.Runtime) error {
 // ex. horses have an aspect called speed.
 func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
-		if kind, e := safe.GetText(cat.Runtime(), op.Kind); e != nil {
+		run := cat.Runtime()
+		if kind, e := safe.GetText(run, op.Kind); e != nil {
 			err = e
 		} else {
-			pen := w.Pin()
-			fields := mdl.NewFieldBuilder(kind.String())
-			for _, field := range op.Fields {
-				// bools here become implicit aspects.
-				// ( vs. bool pattern vars which stay bools -- see reduceProps )
-				if el, e := field.FieldInfo(w); e != nil {
-					err = errutil.Append(err, e)
-				} else {
-					fields.AddField(el)
-				}
-			}
-			if err == nil {
-				err = pen.AddFields(fields.Fields)
-			}
+			k := inflect.Normalize(kind.String())
+			err = w.Pin().AddFields(k, reduceFields(run, op.Fields))
 		}
 		return
 	})

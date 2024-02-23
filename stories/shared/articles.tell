@@ -1,14 +1,10 @@
 Tapestry:
+  - Declare: "Pluralization is a kind of aspect. The pluralizations are singular named, and plural named."
   - Define kind:fields:
       - "Objects"
       - - # when not set it will use the article from the declaration of the noun; example: "some" soldiers.
           Text: "indefinite article"
         - Aspect: "pluralization"
-  - Define aspect:traits:
-      - "pluralization"
-      - - "singular named"
-        - "plural named"
-  - Declare: "Pluralization is a kind of aspect."
   - # 
     Define test:scene:do:
       - "articles"

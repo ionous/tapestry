@@ -32,8 +32,8 @@ func TableCols(table_cols ...string) []string {
 	return table_cols
 }
 
-// if you run the test as go test ... -args write
-// it'll write the db out in your user directory
+// if you run the test as "go test ... -args write"
+// it'll write the db out in your user (home) directory
 func Create(name string) (ret *sql.DB) {
 	path, driver := Memory, ""
 	if os.Args[len(os.Args)-1] == "write" {

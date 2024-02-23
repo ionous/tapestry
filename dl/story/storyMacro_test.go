@@ -25,11 +25,9 @@ func TestMacros(t *testing.T) {
 	name := t.Name()
 	db := testdb.Create(name)
 	defer db.Close()
-
 	if e := tables.CreateAll(db); e != nil {
 		panic(e)
 	}
-
 	qx, e := qdb.NewQueries(db, false)
 	if e != nil {
 		panic(e)

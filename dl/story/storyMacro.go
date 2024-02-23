@@ -25,16 +25,16 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			pb := mdl.NewPatternSubtype(name.String(), kindsOf.Macro.String())
-			if e := addRequiredFields(w, pb, op.Requires); e != nil {
-				err = e
-			} else if e := addProvidingFields(w, pb, op.Provides); e != nil {
-				err = e
-			} else {
-				pb.AppendRule(0, rt.Rule{Exe: op.MacroStatements})
-				err = cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) error {
-					return w.Pin().AddPattern(pb.Pattern)
-				})
+			pb.AddParams(reduceFields(w, op.Requires))
+			// assumes the first field ( if any ) is the result
+			if ps := op.Provides; len(ps) > 0 {
+				pb.AddResult(ps[0].GetFieldInfo(w))
+				pb.AddLocals(reduceFields(w, ps[1:]))
 			}
+			pb.AppendRule(0, rt.Rule{Exe: op.MacroStatements})
+			err = cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) error {
+				return w.Pin().AddPattern(pb.Pattern)
+			})
 		}
 		return
 	})
