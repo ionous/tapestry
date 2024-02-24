@@ -46,6 +46,7 @@ func Element(list Affinity) (ret Affinity) {
 }
 
 // true if a structured type.
+// ( ie. if its affinity record )
 func HasFields(a Affinity) bool {
 	return a == Record
 }
