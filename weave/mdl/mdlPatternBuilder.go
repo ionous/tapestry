@@ -10,12 +10,17 @@ type PatternBuilder struct {
 	Pattern
 }
 
+type Rule struct {
+	rt.Rule
+	Rank int
+}
+
 // public snapshot of the desired pattern
 type Pattern struct {
-	name, parent            string
-	params, results, locals []FieldInfo // the order here reflects the order in the db
-	rules                   []Rule
-	ruleOfs                 int // number of successfully written rules
+	name, parent string
+	fields       patternFields
+	rules        []Rule
+	ruleOfs      int // number of successfully written rules
 }
 
 func (p *Pattern) Name() string {
@@ -24,11 +29,6 @@ func (p *Pattern) Name() string {
 
 func (p *Pattern) Parent() string {
 	return p.parent
-}
-
-type Rule struct {
-	rt.Rule
-	Rank int
 }
 
 func NewPatternBuilder(name string) *PatternBuilder {
@@ -48,17 +48,20 @@ func NewPatternSubtype(name string, parent string) *PatternBuilder {
 
 // defers execution; so no return value.
 func (b *PatternBuilder) AddParams(fs []FieldInfo) {
-	b.params = append(b.params, fs...)
+	const i = patternParameters
+	b.fields[i] = append(b.fields[i], fs...)
 }
 
 // defers execution; so no return value.
 func (b *PatternBuilder) AddResult(f FieldInfo) {
-	b.results = append(b.results, f)
+	const i = patternResults
+	b.fields[i] = append(b.fields[i], f)
 }
 
 // defers execution; so no return value.
 func (b *PatternBuilder) AddLocals(fs []FieldInfo) {
-	b.locals = append(b.locals, fs...)
+	const i = patternLocals
+	b.fields[i] = append(b.fields[i], fs...)
 }
 
 // defers execution; so no return value.
@@ -68,61 +71,73 @@ func (b *PatternBuilder) AppendRule(rank int, rule rt.Rule) {
 }
 
 func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
-	var parts = [3]struct {
-		fields []FieldInfo
-		fieldHandler
-	}{{
-		pat.params,
-		pen.addParameter,
-	}, {
-		pat.results,
-		pen.addResult,
-	}, {
-		pat.locals,
-		pen.addField,
-	},
-	}
-	var kid kindInfo
-	if create {
-		kid, err = pen.addKind(pat.name, pat.parent)
-	} else {
-		kid, err = pen.findRequiredKind(pat.name)
+	// make sure all of the pattern dependencies are known before trying to generate anything.
+	// note: patterns marked "create" will block out the other kinds
+	var kind kindInfo
+	if !create {
+		kind, err = pen.findRequiredKind(pat.name)
 	}
 	if err == nil {
-		// make sure all of the pattern dependencies are known before trying to generate it
-		var cache fieldCache
-		for _, p := range parts {
-			if e := cache.precache(pen, p.fields); e != nil {
-				err = e
-				break
+		if cache, e := pat.fields.precache(pen); e != nil {
+			err = e
+		} else {
+			if create {
+				kind, err = pen.addKind(pat.name, pat.parent)
+			}
+			if err == nil {
+				err = pat.writeFields(pen, kind, cache)
 			}
 		}
-		if err == nil {
-			var blank FieldInfo
-			for _, p := range parts {
-				if len(p.fields) == 1 && p.fields[0] == blank {
-					// the Nothing type generates a blank field info
-					// fix; should probably be an error if nothing is used for locals
-				} else {
-					fs := fieldSet{kid, p.fields, cache}
-					if e := fs.addFields(pen, p.fieldHandler); e != nil {
+	}
+	return
+}
+
+func (pat *Pattern) writeFields(pen *Pen, kind kindInfo, cache fieldCache) (err error) {
+	var blank FieldInfo
+	var handlers = [3]fieldHandler{pen.addParameter, pen.addResult, pen.addField}
+	for i, fields := range pat.fields {
+		fieldHandler := handlers[i]
+		if len(fields) == 1 && fields[0] == blank {
+			// the Nothing type generates a blank field info
+			// fix; should probably be an error if nothing is used for locals
+		} else {
+			fs := fieldSet{kind, fields, cache}
+			if e := fs.addFields(pen, fieldHandler); e != nil {
+				err = e
+			} else {
+				for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
+					rule := pat.rules[pat.ruleOfs]
+					if prog, e := marshalprog(rule.Exe); e != nil {
 						err = e
-					} else {
-						for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
-							rule := pat.rules[pat.ruleOfs]
-							if prog, e := marshalprog(rule.Exe); e != nil {
-								err = e
-							} else if e := pen.addRule(kid,
-								rule.Name, rule.Rank,
-								rule.Stop, int(rule.Jump),
-								rule.Updates, prog); e != nil {
-								err = e
-								break
-							}
-						}
+					} else if e := pen.addRule(kind,
+						rule.Name, rule.Rank,
+						rule.Stop, int(rule.Jump),
+						rule.Updates, prog); e != nil {
+						err = e
+						break
 					}
 				}
 			}
+		}
+	}
+	return
+}
+
+type patternFields [numPatternParts][]FieldInfo
+
+// the order here reflects the order in the db
+const (
+	patternParameters int = iota // pattern parameters
+	patternResults
+	patternLocals
+	numPatternParts
+)
+
+func (parts *patternFields) precache(pen *Pen) (cache fieldCache, err error) {
+	for _, fields := range *parts {
+		if e := cache.precache(pen, fields); e != nil {
+			err = e
+			break
 		}
 	}
 	return
