@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
@@ -21,7 +22,7 @@ type Query interface {
 
 	// if the passed words starts with a kind,
 	// return the number of words that matched.
-	FindKind(match.Span) (string, int)
+	FindKind(match.Span, *kindsOf.Kinds) (string, int)
 
 	// if the passed words starts with a trait,
 	// return the number of words that matched.

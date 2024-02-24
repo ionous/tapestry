@@ -23,6 +23,7 @@ func TestPhrases(t *testing.T) {
 		if m, e := mdl.NewModeler(db); e != nil {
 			t.Fatal(e)
 		} else {
+			m.PrecachePaths()
 			x := jessdb.NewSource(m)
 			jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
 				if ws, e := match.MakeSpan(testPhrase); e != nil {

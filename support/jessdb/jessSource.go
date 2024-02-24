@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
@@ -39,8 +40,8 @@ func (d dbWrapper) GetContext() int {
 	return 0
 }
 
-func (d dbWrapper) FindKind(ws match.Span) (ret string, width int) {
-	if res, e := d.GetPartialKind(ws); e != nil {
+func (d dbWrapper) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width int) {
+	if res, e := d.GetPartialKind(ws, out); e != nil {
 		log.Println("FindKind", e)
 	} else {
 		ret, width = res, countWords(res)

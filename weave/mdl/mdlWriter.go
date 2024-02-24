@@ -323,14 +323,11 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 					newlyCreated: true,
 				}
 				// hacky: cache result...
-				for _, k := range kindsOf.DefaultKinds {
-					if name == k.String() {
-						if path, e := updatePath(res, parent.fullpath()); e != nil {
-							err = e
-						} else {
-							pen.paths[k] = pathEntry{path: path}
-						}
-						break
+				if k := kindsOf.FindDefaultKind(name); k != 0 {
+					if path, e := updatePath(res, parent.fullpath()); e != nil {
+						err = e
+					} else {
+						pen.paths[k] = pathEntry{path: path}
 					}
 				}
 				// super hacky....

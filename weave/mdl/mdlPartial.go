@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
@@ -15,38 +16,46 @@ type MacroMatch struct {
 	Width int
 }
 
-// if the passed words starts with a kind,
-// return the number of words in  that match.
-func (pen *Pen) GetPartialKind(ws match.Span) (ret string, err error) {
+func (pen *Pen) GetPartialKind(ws match.Span, out *kindsOf.Kinds) (ret string, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
 	if len(ws) > 0 {
+		var path string
 		words := strings.ToLower(ws.String()) + blank
-		// excludes patterns (and macros) from matching these physical kinds
-		if mp, e := pen.getPatternPath(); e != nil {
-			err = e
-		} else if e := pen.db.QueryRow(`
-	with kinds(id, name, alt) as (
-		select mk.rowid, mk.kind, mk.singular
+		switch e := pen.db.QueryRow(`
+	with kinds(id, name, alt, path) as (
+		select mk.rowid, mk.kind, mk.singular, mk.path
 		from mdl_kind mk
  		join domain_tree
  		on (uses = domain)
  		where base = ?1
- 		and not instr(',' || mk.path, ?3 )
 	)
-	select name from (
-		select id, name, substr(?2 ,0, length(name)+2) as words
+	select name, path from (
+		select id, name, substr(?2 ,0, length(name)+2) as words, path
 		from kinds
 		where words = (name || ' ')
 		union all 
-		select id, alt, substr(?2, 0, length(alt)+2) as words
+		select id, alt, substr(?2, 0, length(alt)+2) as words, path
 		from kinds
 		where alt is not null and words = (alt || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, words, mp).Scan(&ret); e != sql.ErrNoRows {
-			err = e // could be nil or error
+			pen.domain, words).Scan(&ret, &path); e {
+		case nil:
+			if out != nil {
+				parentPath := "," + path
+				for _, k := range kindsOf.DefaultKinds {
+					if strings.HasSuffix(parentPath, pen.getPath(k)) {
+						*out = k
+						break
+					}
+				}
+			}
+		case sql.ErrNoRows:
+			// return nothing when unmatched
+		default:
+			err = e
 		}
 	}
 	return

@@ -2,8 +2,10 @@ package mdl
 
 import (
 	"database/sql"
+
 	"github.com/ionous/errutil"
 
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
@@ -48,4 +50,11 @@ type Modeler struct {
 
 func (m *Modeler) Pin(domain, at string) *Pen {
 	return &Pen{db: m.db, paths: m.paths, domain: domain, at: at, warn: m.warn}
+}
+
+// meant for tests which inject their own data outside of weave
+func (m *Modeler) PrecachePaths() {
+	for _, k := range kindsOf.DefaultKinds {
+		m.paths.cachePath(m.db, k)
+	}
 }

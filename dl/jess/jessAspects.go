@@ -1,6 +1,7 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
@@ -17,7 +18,8 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 		plural := next.Cut(index)                   // cut up to the index of "are"
 		one := inflect.Singularize(plural.String()) // fix! should use the db
 		span, _ := match.MakeSpan(one)              // fix! should find kind without span
-		if k, w := q.FindKind(span); w == index {
+		var ks kindsOf.Kinds
+		if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
 			op.Aspect.Matched = matchedString{k, w}
 			//
 			next := next.Skip(w)         // skip the kind

@@ -1,5 +1,7 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
+
 func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
@@ -10,7 +12,8 @@ func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
-	if m, width := q.FindKind(input.Words()); width > 0 {
+	var ks kindsOf.Kinds
+	if m, width := q.FindKind(input.Words(), &ks); width > 0 && ks == kindsOf.Kind {
 		m := matchedString{m, width}
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}

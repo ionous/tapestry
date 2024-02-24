@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -29,8 +30,17 @@ type info struct {
 func (n *info) GetContext() int {
 	return 0
 }
-func (n *info) FindKind(ws match.Span) (string, int) {
+func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (string, int) {
 	m, cnt := n.kinds.FindMatch(ws)
+	if cnt > 0 && out != nil {
+		str := m.String()
+		// hack for testing
+		if str == "color" {
+			*out = kindsOf.Aspect
+		} else {
+			*out = kindsOf.Kind
+		}
+	}
 	return m.String(), cnt
 }
 func (n *info) FindTrait(ws match.Span) (string, int) {
@@ -63,11 +73,14 @@ var known = info{
 		"suspicious of", "suspect", mdl.Macro_ManyMany, false,
 	),
 	kinds: match.PanicSpans(
+		// note: these are just a list of names
+		// these arent pairs of kinds
 		"kind", "kinds",
 		"thing", "things",
 		"container", "containers",
 		"supporter", "supporters",
-		"color", "aspects",
+		"aspect", "aspects",
+		"color",
 	),
 	traits: match.PanicSpans(
 		"closed",

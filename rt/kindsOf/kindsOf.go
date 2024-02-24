@@ -33,3 +33,14 @@ func (k Kinds) Parent() (ret Kinds) {
 	}
 	return
 }
+
+// given a string, return the default kind that it exactly matches (if any)
+func FindDefaultKind(str string) (ret Kinds) {
+	for _, k := range DefaultKinds {
+		if str == k.String() {
+			ret = k
+			break
+		}
+	}
+	return
+}
