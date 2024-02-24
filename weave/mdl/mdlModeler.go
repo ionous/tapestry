@@ -33,7 +33,7 @@ func NewModelerWithWarnings(db *sql.DB, warn Log) (ret *Modeler, err error) {
 	ret = &Modeler{
 		db:    tables.NewCache(db),
 		warn:  warn,
-		paths: newPaths(),
+		paths: make(paths),
 	}
 	return
 }
@@ -42,7 +42,7 @@ func NewModelerWithWarnings(db *sql.DB, warn Log) (ret *Modeler, err error) {
 // so the implementation can handle verifying dependent names when needed.
 type Modeler struct {
 	db    *tables.Cache
-	paths *paths
+	paths paths
 	warn  Log
 }
 

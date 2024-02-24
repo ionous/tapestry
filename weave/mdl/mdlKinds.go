@@ -21,7 +21,7 @@ func trimPath(fullpath string) (ret string) {
 
 // fix? it would probably be better to have a separate table of: domain, aspect, trait
 // currently, the runtime expects that aspects are a kind, and its traits are fields.
-func updatePath(res sql.Result, parent string, path *string) (err error) {
+func updatePath(res sql.Result, parent string) (ret string, err error) {
 	if i, e := res.LastInsertId(); e != nil {
 		err = e
 	} else {
@@ -31,7 +31,7 @@ func updatePath(res sql.Result, parent string, path *string) (err error) {
 		} else {
 			part += ","
 		}
-		*path = part
+		ret = part
 	}
 	return
 }

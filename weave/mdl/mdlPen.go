@@ -8,7 +8,7 @@ import (
 
 type Pen struct {
 	db         *tables.Cache
-	paths      *paths
+	paths      paths
 	domain, at string
 	warn       Log
 }

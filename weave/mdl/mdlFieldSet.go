@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
@@ -44,7 +45,7 @@ func (pen *Pen) writeFields(kind string, fields []FieldInfo) (err error) {
 // ex. "bool portable" -> "portable status" aspect with "portable" and "not portable" states.
 // the default value is the "not" version.
 func (fs *fieldSet) rewriteBooleans(pen *Pen) (err error) {
-	if isObject := strings.HasSuffix(fs.kind.fullpath(), pen.paths.kindsPath); isObject {
+	if isObject := strings.HasSuffix(fs.kind.fullpath(), pen.getPath(kindsOf.Kind)); isObject {
 		for i, field := range fs.fields {
 			// rewrite Bool: "something" to an affinity with the opposite "not something"
 			if field.Affinity == affine.Bool && len(field.Class) == 0 {
@@ -103,11 +104,11 @@ func (fs *fieldSet) addFields(pen *Pen, call fieldHandler) (err error) {
 // give aspect fields a provisional default
 func (fs *fieldSet) writeDefaultTraits(pen *Pen) (err error) {
 	kind := fs.kind
-	if isObject := strings.HasSuffix(kind.fullpath(), pen.paths.kindsPath); isObject {
+	if isObject := strings.HasSuffix(kind.fullpath(), pen.getPath(kindsOf.Kind)); isObject {
 		for _, field := range fs.fields {
 			if field.isAspectLike() {
 				aspect := fs.cache[field.getClass()]
-				if strings.HasSuffix(aspect.fullpath(), pen.paths.aspectPath) {
+				if strings.HasSuffix(aspect.fullpath(), pen.getPath(kindsOf.Aspect)) {
 					if defaultTrait, e := pen.findDefaultTrait(aspect.class()); e != nil {
 						err = e
 						break

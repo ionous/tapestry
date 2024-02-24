@@ -23,7 +23,7 @@ import (
 func (pen *Pen) AddTraits(aspect string, traits []string) (err error) {
 	if kid, e := pen.findRequiredKind(aspect); e != nil {
 		err = e // ^ hrm.
-	} else if isAspect := strings.HasSuffix(kid.fullpath(), pen.paths.aspectPath); !isAspect {
+	} else if isAspect := strings.HasSuffix(kid.fullpath(), pen.getPath(kindsOf.Aspect)); !isAspect {
 		err = errutil.Fmt("kind %q in domain %q is not an aspect", aspect, pen.domain)
 	} else if strings.Count(kid.fullpath(), ",") != 3 {
 		// tbd: could loosen this; for now it simplifies writing the aspects;
@@ -322,23 +322,24 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 					exactName:    true,
 					newlyCreated: true,
 				}
-				// cache result...
-				switch name {
-				case kindsOf.Aspect.String():
-					err = updatePath(res, parent.fullpath(), &pen.paths.aspectPath)
-				case kindsOf.Kind.String():
-					err = updatePath(res, parent.fullpath(), &pen.paths.kindsPath)
-				case kindsOf.Macro.String():
-					err = updatePath(res, parent.fullpath(), &pen.paths.macroPath)
-				case kindsOf.Pattern.String():
-					err = updatePath(res, parent.fullpath(), &pen.paths.patternPath)
-				default:
-					// super hacky..... hmmm...
-					// if we've declared a new kind of a pattern:
-					// write blanks into the mdl_pat; parameters and results use update only.
-					if strings.HasSuffix(parent.fullpath(), pen.paths.patternPath) {
-						_, err = pen.db.Exec(`insert into mdl_pat(kind) values(?1)`, newid)
+				// hacky: cache result...
+				for _, k := range kindsOf.DefaultKinds {
+					if name == k.String() {
+						if path, e := updatePath(res, parent.fullpath()); e != nil {
+							err = e
+						} else {
+							pen.paths[k] = pathEntry{path: path}
+						}
+						break
 					}
+				}
+				// super hacky....
+				// if we've declared a new kind of a pattern:
+				// write blanks into the mdl_pat; parameters and results use update only.
+				// would be better in "createPattern" but some tests ( TestQueries )
+				// create fake patterns via AddKind :/
+				if strings.HasSuffix(parent.fullpath(), pen.getPath(kindsOf.Pattern)) {
+					_, err = pen.db.Exec(`insert into mdl_pat(kind) values(?1)`, newid)
 				}
 			}
 		}
@@ -346,19 +347,10 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 	return
 }
 
+// hacky: if we've declared a new kind of a pattern:
+// write blanks into the mdl_pat; parameters and results use update only.
 func (pen *Pen) createPattern(name, parent string) (ret kindInfo, err error) {
-	if k, e := pen.addKind(name, parent); e != nil {
-		err = e
-	} else if !k.newlyCreated {
-		ret = k
-	} else if _, e := pen.db.Exec(`insert into mdl_pat(kind) values(?1)`, k.id); e != nil {
-		// hacky: if we've declared a new kind of a pattern:
-		// write blanks into the mdl_pat; parameters and results use update only.
-		err = e
-	} else {
-		ret = k
-	}
-	return
+	return pen.addKind(name, parent)
 }
 
 func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
@@ -698,7 +690,7 @@ func (pen *Pen) AddPhrase(macro, phrase string, reversed bool) (err error) {
 	domain, at := pen.domain, pen.at
 	if kind, e := pen.findRequiredKind(macro); e != nil {
 		err = e
-	} else if isMacro := strings.HasSuffix(kind.fullpath(), pen.paths.macroPath); !isMacro {
+	} else if isMacro := strings.HasSuffix(kind.fullpath(), pen.getPath(kindsOf.Macro)); !isMacro {
 		err = errutil.Fmt("kind %q in domain %q is not a macro", macro, domain)
 	} else {
 		// search for conflicting phrases within this domain.

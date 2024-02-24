@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -76,7 +77,7 @@ select origin, name, affinity, typeName, aspect
 from existingFields
 join pendingFields
 using(name)
-`, kid.fullpath(), field, cls.id, pen.paths.aspectPath); e != nil {
+`, kid.fullpath(), field, cls.id, pen.getPath(kindsOf.Aspect)); e != nil {
 		err = errutil.New("database error", e)
 	} else {
 		var prev struct {
@@ -260,7 +261,7 @@ from allTraits ma
 join fieldsInKind fk
 	on (ma.kind = fk.typeId)
 where ma.name = @fieldName`,
-		sql.Named("aspects", pen.paths.aspectPath),
+		sql.Named("aspects", pen.getPath(kindsOf.Aspect)),
 		sql.Named("ancestry", kind.fullpath),
 		sql.Named("fieldName", field)).
 		Scan(&ret.id, &ret.name, &ret.domain, &ret.aff, &ret.cls.id, &ret.cls.name, &ret.cls.fullpath); e != nil {
