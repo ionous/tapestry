@@ -26,6 +26,6 @@ func buildFlags() (flags flag.FlagSet) {
 	flags.StringVar(&checkFlags.srcPath, "in", inPath, `input file or directory name.`)
 	flags.StringVar(&checkFlags.checkOne, "run", "", "run check on a particular test")
 	flags.BoolVar(&checkFlags.responses, "responses", false, "print response names instead of values")
-	flags.StringVar(&checkFlags.logLevel, "log", debug.C_LoggingLevel_Note.String(), levels)
+	flags.StringVar(&checkFlags.logLevel, "log", debug.C_LoggingLevel_Debug.String(), levels)
 	return
 }
