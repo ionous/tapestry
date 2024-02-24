@@ -68,7 +68,6 @@ func (b *PatternBuilder) AppendRule(rank int, rule rt.Rule) {
 }
 
 func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
-	var cache fieldCache
 	var parts = [3]struct {
 		fields []FieldInfo
 		fieldHandler
@@ -90,24 +89,37 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 		kid, err = pen.findRequiredKind(pat.name)
 	}
 	if err == nil {
-		var blank FieldInfo
+		// make sure all of the pattern dependencies are known before trying to generate it
+		var cache fieldCache
 		for _, p := range parts {
-			if len(p.fields) == 1 && p.fields[0] == blank {
-				// the Nothing type generates a blank field info
-				// fix; should probably be an error if nothing is used for locals
-			} else if e := cache.writeFields(pen, kid, p.fields, p.fieldHandler); e != nil {
+			if e := cache.precache(pen, p.fields); e != nil {
 				err = e
-			} else {
-				for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
-					rule := pat.rules[pat.ruleOfs]
-					if prog, e := marshalprog(rule.Exe); e != nil {
+				break
+			}
+		}
+		if err == nil {
+			var blank FieldInfo
+			for _, p := range parts {
+				if len(p.fields) == 1 && p.fields[0] == blank {
+					// the Nothing type generates a blank field info
+					// fix; should probably be an error if nothing is used for locals
+				} else {
+					fs := fieldSet{kid, p.fields, cache}
+					if e := fs.addFields(pen, p.fieldHandler); e != nil {
 						err = e
-					} else if e := pen.addRule(kid,
-						rule.Name, rule.Rank,
-						rule.Stop, int(rule.Jump),
-						rule.Updates, prog); e != nil {
-						err = e
-						break
+					} else {
+						for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
+							rule := pat.rules[pat.ruleOfs]
+							if prog, e := marshalprog(rule.Exe); e != nil {
+								err = e
+							} else if e := pen.addRule(kid,
+								rule.Name, rule.Rank,
+								rule.Stop, int(rule.Jump),
+								rule.Updates, prog); e != nil {
+								err = e
+								break
+							}
+						}
 					}
 				}
 			}

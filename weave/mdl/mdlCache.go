@@ -1,40 +1,12 @@
 package mdl
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
 	"github.com/ionous/errutil"
 )
 
 // used by fields to map field name to referenced class ( if any )
 // future: wrap the fieldset with a "promise" to avoid looking up the same info repeatedly
 type fieldCache map[string]kindInfo
-
-type fieldHandler func(kid, cls kindInfo, field string, aff affine.Affinity) error
-
-func (c *fieldCache) writeFields(pen *Pen, target kindInfo, fields []FieldInfo, call fieldHandler) (err error) {
-	for _, f := range fields {
-		if e := f.validate(); e != nil {
-			err = e
-		} else if cls, e := c.getClass(pen, f); e != nil {
-			err = e
-		} else {
-			e := call(target, cls, f.Name, f.Affinity)
-			if e := eatDuplicates(pen.warn, e); e != nil {
-				err = e
-			} else if f.Init != nil {
-				e := pen.addDefaultValue(target, f.Name, f.Init)
-				if e := eatDuplicates(pen.warn, e); e != nil {
-					err = e
-				}
-			}
-			if err != nil {
-				err = errutil.Fmt("%w trying to write field %q", err, f.Name)
-				break
-			}
-		}
-	}
-	return
-}
 
 func (c *fieldCache) store(name string, cls kindInfo) {
 	if *c == nil {
@@ -54,6 +26,16 @@ func (c *fieldCache) getClass(pen *Pen, field FieldInfo) (ret kindInfo, err erro
 		} else {
 			c.store(clsName, cls)
 			ret = cls
+		}
+	}
+	return
+}
+
+func (c *fieldCache) precache(pen *Pen, fields []FieldInfo) (err error) {
+	for _, f := range fields {
+		if _, e := c.getClass(pen, f); e != nil {
+			err = e
+			break
 		}
 	}
 	return

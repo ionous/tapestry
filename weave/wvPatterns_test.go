@@ -214,7 +214,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := testweave.OkayError(t, e, `unexpected result`); !ok {
+	if ok, e := testweave.OkayError(t, e, `result already exists`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("okay", e)
