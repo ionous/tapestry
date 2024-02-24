@@ -82,7 +82,7 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 			err = e
 		} else {
 			if create {
-				kind, err = pen.addKind(pat.name, pat.parent)
+				kind, err = pen.createPattern(pat.name, pat.parent)
 			}
 			if err == nil {
 				err = pat.writeFields(pen, kind, cache)

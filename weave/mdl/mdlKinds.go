@@ -44,12 +44,13 @@ type classInfo struct {
 }
 
 type kindInfo struct {
-	id        int64  // unique id of the kind
-	name      string // validated name of the kind
-	domain    string // validated domain name
-	path      string // comma separated ids of ancestors: ,2,1,
-	exact     bool   // allows plural named kinds for nouns, etc. not for patterns and built in kinds.
-	_fullpath string
+	id           int64  // unique id of the kind
+	name         string // validated name of the kind
+	domain       string // validated domain name
+	path         string // comma separated ids of ancestors: ,2,1,
+	exactName    bool   // allows plural named kinds for nouns, etc. not for patterns and built in kinds.
+	newlyCreated bool
+	_fullpath    string
 }
 
 func (ki *kindInfo) class() classInfo {
@@ -129,7 +130,7 @@ func (pen *Pen) findKind(kind string) (ret kindInfo, err error) {
 			&ret.domain, &ret.id, &ret.name, &ret.path, &rank)
 		switch e {
 		case nil:
-			ret.exact = rank == 1
+			ret.exactName = rank == 1
 		case sql.ErrNoRows:
 			// nothing found? still set the name for easier logging;
 			// the empty id can disambiguate success from not found

@@ -315,11 +315,12 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 				err = e
 			} else {
 				ret = kindInfo{
-					id:     newid,
-					name:   name,
-					domain: domain,
-					path:   path,
-					exact:  true,
+					id:           newid,
+					name:         name,
+					domain:       domain,
+					path:         path,
+					exactName:    true,
+					newlyCreated: true,
 				}
 				// cache result...
 				switch name {
@@ -345,10 +346,25 @@ func (pen *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 	return
 }
 
+func (pen *Pen) createPattern(name, parent string) (ret kindInfo, err error) {
+	if k, e := pen.addKind(name, parent); e != nil {
+		err = e
+	} else if !k.newlyCreated {
+		ret = k
+	} else if _, e := pen.db.Exec(`insert into mdl_pat(kind) values(?1)`, k.id); e != nil {
+		// hacky: if we've declared a new kind of a pattern:
+		// write blanks into the mdl_pat; parameters and results use update only.
+		err = e
+	} else {
+		ret = k
+	}
+	return
+}
+
 func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 	name := kind.name
 	domain := pen.domain
-	if !kind.exact && parent.numAncestors() < 2 {
+	if !kind.exactName && parent.numAncestors() < 2 {
 		// we allow plural named kinds for nouns, etc. not for patterns and built in kinds.
 		err = errutil.Fmt("%w ambiguously named kinds: %q (in domain %q) and %q (in %q)",
 			Conflict, name, domain, kind.name, kind.domain)
