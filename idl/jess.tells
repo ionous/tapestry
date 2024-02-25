@@ -225,15 +225,18 @@ Spec:with group:
       Spec:with flow:
       - "matching_phrases"
       - Flow uses:
-        - Term: "kinds_are_traits"
+        - # fix? combine similar starts to speed matching?
+          # (nothing that the kinds have different filters)
+          Term: "kinds_are_traits"
         - Term: "kinds_of"
+        - Term: "kinds_have_properties"
+        - Term: "kinds_are_either"
         - Term: "verb_names_are_names"
         - Term: "names_verb_names"
         - Term: "names_are_like_verbs"
         - Term: "property_noun_value"
         - Term: "noun_property_value"
         - Term: "aspects_are_traits"
-        - Term: "kinds_have_properties"
 
     - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
       # interesting to note that inform allows "some kind/s of"
@@ -482,4 +485,26 @@ Spec:with group:
         - # kinds|aspects|records
           Term:optional:
           - "kind"
+          - true
+
+    - # ex. A thing can be open or closed.
+      Spec:with flow:
+      - "kinds_are_either"
+      - Flow uses:
+        - Term: "kind"
+        - Term:type:
+          - "can_be"   # ("can be"|"are either")
+          - "words"
+        - Term:type:
+          - "traits"
+          - "new_trait"
+
+    - # one or more new trait names,
+      # separated by the word "or"
+      Spec:with flow:
+      - "new_trait"
+      - Flow uses:
+        - Term: "matched"
+        - Term:optional:
+          - "new_trait"
           - true

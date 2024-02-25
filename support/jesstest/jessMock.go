@@ -2,6 +2,7 @@ package jesstest
 
 import (
 	"fmt"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -51,11 +52,11 @@ func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 	}
 	return
 }
-func (m *Mock) AddTraits(name string, traits []string) (err error) {
-	if name != "color" { // aspects are singular :/
-		err = fmt.Errorf("unknown aspect %q", name)
+func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
+	if aspect != "color" && !strings.HasSuffix(aspect, " status") { // aspects are singular :/
+		err = fmt.Errorf("unknown aspect %q", aspect)
 	} else {
-		m.out = append(m.out, "AddTraits", name)
+		m.out = append(m.out, "AddTraits", aspect)
 		m.out = append(m.out, traits...)
 	}
 	return

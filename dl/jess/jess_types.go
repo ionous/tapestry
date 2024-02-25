@@ -714,13 +714,14 @@ func (op *Verb_Slice) Repeats() bool {
 type MatchingPhrases struct {
 	KindsAreTraits      KindsAreTraits
 	KindsOf             KindsOf
+	KindsHaveProperties KindsHaveProperties
+	KindsAreEither      KindsAreEither
 	VerbNamesAreNames   VerbNamesAreNames
 	NamesVerbNames      NamesVerbNames
 	NamesAreLikeVerbs   NamesAreLikeVerbs
 	PropertyNounValue   PropertyNounValue
 	NounPropertyValue   NounPropertyValue
 	AspectsAreTraits    AspectsAreTraits
-	KindsHaveProperties KindsHaveProperties
 	Markup              map[string]any
 }
 
@@ -1393,6 +1394,80 @@ func (op *PropertyType_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// ex. A thing can be open or closed.
+type KindsAreEither struct {
+	Kind   Kind
+	CanBe  Words
+	Traits NewTrait
+	Markup map[string]any
+}
+
+// kinds_are_either, a type of flow.
+var Zt_KindsAreEither typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*KindsAreEither) TypeInfo() typeinfo.T {
+	return &Zt_KindsAreEither
+}
+
+// implements typeinfo.Markup
+func (op *KindsAreEither) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type kinds_are_either
+type KindsAreEither_Slice []KindsAreEither
+
+// implements typeinfo.Instance
+func (*KindsAreEither_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsAreEither
+}
+
+// implements typeinfo.Repeats
+func (op *KindsAreEither_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// one or more new trait names,
+// separated by the word "or"
+type NewTrait struct {
+	Matched  Matched
+	NewTrait *NewTrait
+	Markup   map[string]any
+}
+
+// new_trait, a type of flow.
+var Zt_NewTrait typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*NewTrait) TypeInfo() typeinfo.T {
+	return &Zt_NewTrait
+}
+
+// implements typeinfo.Markup
+func (op *NewTrait) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type new_trait
+type NewTrait_Slice []NewTrait
+
+// implements typeinfo.Instance
+func (*NewTrait_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NewTrait
+}
+
+// implements typeinfo.Repeats
+func (op *NewTrait_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
@@ -1445,6 +1520,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_MatchingNumber,
 	&Zt_KindsHaveProperties,
 	&Zt_PropertyType,
+	&Zt_KindsAreEither,
+	&Zt_NewTrait,
 }
 
 // a list of all command signatures
@@ -1491,6 +1568,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1182820540821259821:  (*Kinds)(nil),                /* Kinds traits:article:matched:additionalKinds: */
 	831875526186841727:   (*Kinds)(nil),                /* Kinds traits:matched: */
 	3736619607479472409:  (*Kinds)(nil),                /* Kinds traits:matched:additionalKinds: */
+	2480868085776671009:  (*KindsAreEither)(nil),       /* KindsAreEither kind:canBe:traits: */
 	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
 	17116270036433389047: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType: */
 	17156006172306843757: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType:calledName: */
@@ -1503,7 +1581,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
 	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	2578010724793589915:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits:kindsHaveProperties: */
+	3520818575063928683:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1541,6 +1619,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
 	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
+	8736862563783456239:  (*NewTrait)(nil),             /* NewTrait matched: */
+	8812100125409583293:  (*NewTrait)(nil),             /* NewTrait matched:newTrait: */
 	6502702423569934278:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:of:singleValue: */
 	9912988654777640387:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:singleValue: */
 	11825351964218879050: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:of:singleValue: */
@@ -1933,11 +2013,22 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "kinds_are_traits",
 			Label: "kinds_are_traits",
-			Type:  &Zt_KindsAreTraits,
+			Markup: map[string]any{
+				"comment": "fix? combine similar starts to speed matching.",
+			},
+			Type: &Zt_KindsAreTraits,
 		}, {
 			Name:  "kinds_of",
 			Label: "kinds_of",
 			Type:  &Zt_KindsOf,
+		}, {
+			Name:  "kinds_have_properties",
+			Label: "kinds_have_properties",
+			Type:  &Zt_KindsHaveProperties,
+		}, {
+			Name:  "kinds_are_either",
+			Label: "kinds_are_either",
+			Type:  &Zt_KindsAreEither,
 		}, {
 			Name:  "verb_names_are_names",
 			Label: "verb_names_are_names",
@@ -1962,10 +2053,6 @@ func init() {
 			Name:  "aspects_are_traits",
 			Label: "aspects_are_traits",
 			Type:  &Zt_AspectsAreTraits,
-		}, {
-			Name:  "kinds_have_properties",
-			Label: "kinds_have_properties",
-			Type:  &Zt_KindsHaveProperties,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
@@ -2376,6 +2463,43 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches text, number, kind ( kind|aspect|record )", "as part of 'kinds_have_properties'", "exactly one member can match"},
+		},
+	}
+	Zt_KindsAreEither = typeinfo.Flow{
+		Name: "kinds_are_either",
+		Lede: "kinds_are_either",
+		Terms: []typeinfo.Term{{
+			Name:  "kind",
+			Label: "kind",
+			Type:  &Zt_Kind,
+		}, {
+			Name:  "can_be",
+			Label: "can_be",
+			Type:  &Zt_Words,
+		}, {
+			Name:  "traits",
+			Label: "traits",
+			Type:  &Zt_NewTrait,
+		}},
+		Markup: map[string]any{
+			"comment": "ex. A thing can be open or closed.",
+		},
+	}
+	Zt_NewTrait = typeinfo.Flow{
+		Name: "new_trait",
+		Lede: "new_trait",
+		Terms: []typeinfo.Term{{
+			Name:  "matched",
+			Label: "matched",
+			Type:  &Zt_Matched,
+		}, {
+			Name:     "new_trait",
+			Label:    "new_trait",
+			Optional: true,
+			Type:     &Zt_NewTrait,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"one or more new trait names,", "separated by the word \"or\""},
 		},
 	}
 }

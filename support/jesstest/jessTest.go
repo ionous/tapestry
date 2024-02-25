@@ -26,7 +26,6 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		result any
 		skip   any
 	}{
-
 		// ------------------------
 		// PropertyNounValue
 		{
@@ -71,21 +70,36 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			},
 		},
 		// ------------------------
-		// Kinds have properties
+		// KindsAreEither
+		// A thing is either tall or short.
+		// ng: Things are either tall or short. [ i dont see a reason not to allow this ]
+		// A thing can be [either]
+		// Things can be [either] tall or short.
 		{
-			test:   "Containers are either opened or closed.",
-			result: nil,
+			test: "Containers are either opened or closed.",
+			result: []string{
+				// inform names these: "container status", "container status 2", etc.
+				"AddKind", "opened status", "aspects",
+				"AddTraits", "opened status", "opened", "closed",
+				"AddFields", "containers", "opened status", "text", "opened status",
+			},
 		},
 		{
 			// can be [either] ...
-			test:   "A thing can be opened or closed.",
-			result: nil,
+			test: "A thing can be opened or closed or ajar.",
+			result: []string{
+				"AddKind", "opened status", "aspects",
+				"AddTraits", "opened status", "opened", "closed", "ajar",
+				"AddFields", "things", "opened status", "text", "opened status",
+			},
 		},
 		{
-			// inform doesnt allow [either] here; i'm fine however it works.
+			// inform doesnt allow [either] here; i'm fine with whatever.
 			test:   "A thing can be scenery.",
-			result: nil,
+			result: []string{"AddFields", "things", "scenery", "bool", ""},
 		},
+		// ------------------------
+		// Kinds have properties
 		{
 			test:   "Things have some text called a description.",
 			result: []string{"AddFields", "things", "description", "text", ""},
