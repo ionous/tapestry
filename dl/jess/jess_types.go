@@ -192,12 +192,10 @@ func (op *Name_Slice) Repeats() bool {
 // For instance: `The container called the trunk and the box is in the lobby`
 // generates a single name named "the trunk and the box."
 type KindCalled struct {
-	Traits  *Traits
-	Kind    Kind
-	Called  Words
-	Article *Article
-	Matched Matched
-	Markup  map[string]any
+	Traits     *Traits
+	Kind       Kind
+	CalledName CalledName
+	Markup     map[string]any
 }
 
 // kind_called, a type of flow.
@@ -226,6 +224,42 @@ func (*KindCalled_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *KindCalled_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+type CalledName struct {
+	Called  Words
+	Article *Article
+	Matched Matched
+	Markup  map[string]any
+}
+
+// called_name, a type of flow.
+var Zt_CalledName typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*CalledName) TypeInfo() typeinfo.T {
+	return &Zt_CalledName
+}
+
+// implements typeinfo.Markup
+func (op *CalledName) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type called_name
+type CalledName_Slice []CalledName
+
+// implements typeinfo.Instance
+func (*CalledName_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CalledName
+}
+
+// implements typeinfo.Repeats
+func (op *CalledName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -349,9 +383,10 @@ func (op *CountedName_Slice) Repeats() bool {
 
 // matches the name of an existing kind.
 type Kind struct {
-	Article *Article
-	Matched Matched
-	Markup  map[string]any
+	Article      *Article
+	Matched      Matched
+	DeclaredKind DeclaredKind
+	Markup       map[string]any
 }
 
 // kind, a type of flow.
@@ -677,15 +712,16 @@ func (op *Verb_Slice) Repeats() bool {
 // tests these in-order to find a match.
 // ( an alternative would be slots, and a registry; this is fine for now )
 type MatchingPhrases struct {
-	KindsAreTraits    KindsAreTraits
-	KindsOf           KindsOf
-	VerbNamesAreNames VerbNamesAreNames
-	NamesVerbNames    NamesVerbNames
-	NamesAreLikeVerbs NamesAreLikeVerbs
-	PropertyNounValue PropertyNounValue
-	NounPropertyValue NounPropertyValue
-	AspectsAreTraits  AspectsAreTraits
-	Markup            map[string]any
+	KindsAreTraits      KindsAreTraits
+	KindsOf             KindsOf
+	VerbNamesAreNames   VerbNamesAreNames
+	NamesVerbNames      NamesVerbNames
+	NamesAreLikeVerbs   NamesAreLikeVerbs
+	PropertyNounValue   PropertyNounValue
+	NounPropertyValue   NounPropertyValue
+	AspectsAreTraits    AspectsAreTraits
+	KindsHaveProperties KindsHaveProperties
+	Markup              map[string]any
 }
 
 // matching_phrases, a type of flow.
@@ -1279,6 +1315,84 @@ func (op *MatchingNumber_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// ex. Things have some text called a description.
+type KindsHaveProperties struct {
+	Kind         Kind
+	Have         Words
+	Article      *Article
+	ListOf       Matched
+	PropertyType PropertyType
+	CalledName   *CalledName
+	Markup       map[string]any
+}
+
+// kinds_have_properties, a type of flow.
+var Zt_KindsHaveProperties typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*KindsHaveProperties) TypeInfo() typeinfo.T {
+	return &Zt_KindsHaveProperties
+}
+
+// implements typeinfo.Markup
+func (op *KindsHaveProperties) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type kinds_have_properties
+type KindsHaveProperties_Slice []KindsHaveProperties
+
+// implements typeinfo.Instance
+func (*KindsHaveProperties_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsHaveProperties
+}
+
+// implements typeinfo.Repeats
+func (op *KindsHaveProperties_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches text, number, kind ( kind|aspect|record )
+// as part of 'kinds_have_properties'
+// exactly one member can match
+type PropertyType struct {
+	Primitive Matched
+	Kind      *Kind
+	Markup    map[string]any
+}
+
+// property_type, a type of flow.
+var Zt_PropertyType typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*PropertyType) TypeInfo() typeinfo.T {
+	return &Zt_PropertyType
+}
+
+// implements typeinfo.Markup
+func (op *PropertyType) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type property_type
+type PropertyType_Slice []PropertyType
+
+// implements typeinfo.Instance
+func (*PropertyType_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PropertyType
+}
+
+// implements typeinfo.Repeats
+func (op *PropertyType_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
@@ -1301,6 +1415,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Are,
 	&Zt_Name,
 	&Zt_KindCalled,
+	&Zt_CalledName,
 	&Zt_Names,
 	&Zt_AdditionalNames,
 	&Zt_CountedName,
@@ -1328,6 +1443,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_SingleValue,
 	&Zt_QuotedText,
 	&Zt_MatchingNumber,
+	&Zt_KindsHaveProperties,
+	&Zt_PropertyType,
 }
 
 // a list of all command signatures
@@ -1357,15 +1474,15 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	14557216947727331217: (*Are)(nil),                  /* Are matched: */
 	3899130289676196213:  (*Article)(nil),              /* Article matched: */
 	2432146112131878337:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:names: */
+	4459312168816416564:  (*CalledName)(nil),           /* CalledName called:article:matched: */
+	5598625672403523312:  (*CalledName)(nil),           /* CalledName called:matched: */
 	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
 	2237036151518779634:  (*CountedName)(nil),          /* CountedName article:matchingNumber:kind: */
 	6139323499442568526:  (*CountedName)(nil),          /* CountedName matchingNumber:kind: */
 	17839012382227179591: (*Kind)(nil),                 /* Kind article:matched: */
 	17757668305058379307: (*Kind)(nil),                 /* Kind matched: */
-	2217456341527734037:  (*KindCalled)(nil),           /* KindCalled kind:called:article:matched: */
-	7883278166734757597:  (*KindCalled)(nil),           /* KindCalled kind:called:matched: */
-	11434548771906794500: (*KindCalled)(nil),           /* KindCalled traits:kind:called:article:matched: */
-	15204937038648752928: (*KindCalled)(nil),           /* KindCalled traits:kind:called:matched: */
+	14410370178407404046: (*KindCalled)(nil),           /* KindCalled kind:calledName: */
+	17999201427714166607: (*KindCalled)(nil),           /* KindCalled traits:kind:calledName: */
 	16939996019861136326: (*Kinds)(nil),                /* Kinds article:matched: */
 	16946855517465005572: (*Kinds)(nil),                /* Kinds article:matched:additionalKinds: */
 	17808071339216334934: (*Kinds)(nil),                /* Kinds matched: */
@@ -1375,10 +1492,18 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	831875526186841727:   (*Kinds)(nil),                /* Kinds traits:matched: */
 	3736619607479472409:  (*Kinds)(nil),                /* Kinds traits:matched:additionalKinds: */
 	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
+	17116270036433389047: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType: */
+	17156006172306843757: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType:calledName: */
+	8108884175448666030:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:propertyType: */
+	5228896930769074198:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:propertyType:calledName: */
+	2093759548632112131:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType: */
+	11010766076935860857: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType:calledName: */
+	13822756587399879234: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType: */
+	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
 	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
 	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	7218328984986657749:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
+	2578010724793589915:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits:kindsHaveProperties: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1424,6 +1549,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7038723543321541230:  (*Property)(nil),             /* Property matched: */
 	8361206308538973804:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:noun:are:singleValue: */
 	7473469395579866548:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:noun:are:singleValue: */
+	3271806062429822368:  (*PropertyType)(nil),         /* PropertyType */
+	11567946081716077320: (*PropertyType)(nil),         /* PropertyType kind: */
+	8224056348026199873:  (*PropertyType)(nil),         /* PropertyType primitive: */
+	8660980422311242175:  (*PropertyType)(nil),         /* PropertyType primitive:kind: */
 	6626169867101049892:  (*QuotedText)(nil),           /* QuotedText matched: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
@@ -1511,6 +1640,18 @@ func init() {
 			Label: "kind",
 			Type:  &Zt_Kind,
 		}, {
+			Name:  "called_name",
+			Label: "called_name",
+			Type:  &Zt_CalledName,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "<kind> \"called\" [the] _name_.", "as per inform, the name of the name is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single name named \"the trunk and the box.\""},
+		},
+	}
+	Zt_CalledName = typeinfo.Flow{
+		Name: "called_name",
+		Lede: "called_name",
+		Terms: []typeinfo.Term{{
 			Name:  "called",
 			Label: "called",
 			Markup: map[string]any{
@@ -1527,9 +1668,6 @@ func init() {
 			Label: "matched",
 			Type:  &Zt_Matched,
 		}},
-		Markup: map[string]any{
-			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "<kind> \"called\" [the] _name_.", "as per inform, the name of the name is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single name named \"the trunk and the box.\""},
-		},
 	}
 	Zt_Names = typeinfo.Flow{
 		Name: "names",
@@ -1629,6 +1767,10 @@ func init() {
 			Name:  "matched",
 			Label: "matched",
 			Type:  &Zt_Matched,
+		}, {
+			Name:    "declared_kind",
+			Label:   "declared_kind",
+			Private: true,
 		}},
 		Markup: map[string]any{
 			"comment": "matches the name of an existing kind.",
@@ -1820,6 +1962,10 @@ func init() {
 			Name:  "aspects_are_traits",
 			Label: "aspects_are_traits",
 			Type:  &Zt_AspectsAreTraits,
+		}, {
+			Name:  "kinds_have_properties",
+			Label: "kinds_have_properties",
+			Type:  &Zt_KindsHaveProperties,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
@@ -2174,6 +2320,62 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"reads a number specified in words or as digits.", "stores the result as the parsed number."},
+		},
+	}
+	Zt_KindsHaveProperties = typeinfo.Flow{
+		Name: "kinds_have_properties",
+		Lede: "kinds_have_properties",
+		Terms: []typeinfo.Term{{
+			Name:  "kind",
+			Label: "kind",
+			Type:  &Zt_Kind,
+		}, {
+			Name:  "have",
+			Label: "have",
+			Type:  &Zt_Words,
+		}, {
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:     "list_of",
+			Label:    "list_of",
+			Optional: true,
+			Type:     &Zt_Matched,
+		}, {
+			Name:  "property_type",
+			Label: "property_type",
+			Type:  &Zt_PropertyType,
+		}, {
+			Name:     "called_name",
+			Label:    "called_name",
+			Optional: true,
+			Type:     &Zt_CalledName,
+		}},
+		Markup: map[string]any{
+			"comment": "ex. Things have some text called a description.",
+		},
+	}
+	Zt_PropertyType = typeinfo.Flow{
+		Name: "property_type",
+		Lede: "property_type",
+		Terms: []typeinfo.Term{{
+			Name:     "primitive",
+			Label:    "primitive",
+			Optional: true,
+			Type:     &Zt_Matched,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "kinds|aspects|records",
+			},
+			Type: &Zt_Kind,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"matches text, number, kind ( kind|aspect|record )", "as part of 'kinds_have_properties'", "exactly one member can match"},
 		},
 	}
 }

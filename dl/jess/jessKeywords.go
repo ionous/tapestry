@@ -42,16 +42,22 @@ func (op *Words) Span() match.Span {
 	return op.Matched.(match.Span)
 }
 
+func (op *Words) String() string {
+	return op.Span().String()
+}
+
 // make customizable?
 var keywords = struct {
-	And, Are, Called, Comma, Has, Is, Of, Quote uint64
+	And, Are, Called, Comma, Has, Have, Is, Of, Quote, Usually uint64
 }{
-	And:    match.Hash("and"),
-	Are:    match.Hash("are"),
-	Called: match.Hash("called"),
-	Comma:  match.Hash(","),
-	Has:    match.Hash("has"),
-	Is:     match.Hash("is"),
-	Of:     match.Hash("of"),
-	Quote:  match.Hash(`"`),
+	And:     match.Hash("and"),
+	Are:     match.Hash("are"),
+	Called:  match.Hash("called"),
+	Comma:   match.Hash(","),
+	Has:     match.Hash("has"),
+	Have:    match.Hash("have"),
+	Is:      match.Hash("is"),
+	Of:      match.Hash("of"),
+	Quote:   match.Hash(`"`),
+	Usually: match.Hash("usually"),
 }

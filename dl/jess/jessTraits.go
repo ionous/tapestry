@@ -1,5 +1,7 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/support/inflect"
+
 func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.CommaAnd) || true) &&
@@ -7,6 +9,10 @@ func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
 		*input, okay = next, true
 	}
 	return
+}
+
+func (op *Trait) String() string {
+	return inflect.Normalize(op.Matched.String())
 }
 
 func (op *Trait) Match(q Query, input *InputState) (okay bool) {

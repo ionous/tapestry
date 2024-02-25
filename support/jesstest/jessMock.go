@@ -6,12 +6,21 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // implements Registrar to watch incoming calls.
 type Mock struct {
 	out    []string
 	unique map[string]int
+}
+
+func (m *Mock) AddFields(kind string, fields []mdl.FieldInfo) (_ error) {
+	m.out = append(m.out, "AddFields", kind)
+	for _, f := range fields {
+		m.out = append(m.out, f.Name, f.Affinity.String(), f.Class)
+	}
+	return
 }
 
 func (m *Mock) AddKind(kind, ancestor string) (_ error) {
@@ -44,7 +53,7 @@ func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 }
 func (m *Mock) AddTraits(name string, traits []string) (err error) {
 	if name != "color" { // aspects are singular :/
-		err = fmt.Errorf("unknown aspect %s", name)
+		err = fmt.Errorf("unknown aspect %q", name)
 	} else {
 		m.out = append(m.out, "AddTraits", name)
 		m.out = append(m.out, traits...)

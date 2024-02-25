@@ -22,14 +22,14 @@ func (op *Adjectives) GetTraits() (ret Traitor) {
 	return
 }
 
-func (op *Adjectives) Reduce() (retTraits, retKinds []Matched) {
+func (op *Adjectives) Reduce() (retTraits, retKinds []string) {
 	for t := *op; ; {
 		for ts := op.GetTraits(); ts.HasNext(); {
 			t := ts.GetNext()
-			retTraits = append(retTraits, t.Matched)
+			retTraits = append(retTraits, t.String())
 		}
 		if k := t.Kind; k != nil {
-			retKinds = append(retKinds, k.Matched)
+			retKinds = append(retKinds, k.String())
 		}
 		if next := t.AdditionalAdjectives; next == nil {
 			break

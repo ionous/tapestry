@@ -1,5 +1,7 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/support/inflect"
+
 func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.CommaAnd.Match(q, &next) &&
@@ -26,6 +28,10 @@ func (op *Kinds) matchName(q Query, input *InputState) (okay bool) {
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return
+}
+
+func (op *Kinds) String() string {
+	return inflect.Normalize(op.Matched.String())
 }
 
 // unwind the tree of traits

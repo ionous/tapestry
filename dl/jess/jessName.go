@@ -6,7 +6,7 @@ func (op *Name) String() string {
 	return op.Matched.String()
 }
 
-func (op *Name) GetName(traits, kinds []Matched) resultName {
+func (op *Name) GetName(traits, kinds []string) resultName {
 	return resultName{
 		Article: reduceArticle(op.Article),
 		Match:   op.Matched, // a span cut from the input

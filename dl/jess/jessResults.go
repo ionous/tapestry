@@ -21,8 +21,8 @@ type resultName struct {
 	Article articleResult
 	Match   Matched
 	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
-	Traits  []Matched
-	Kinds   []Matched // it's possible, if rare, to apply multiple kinds
+	Traits  []string
+	Kinds   []string // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
 }
 

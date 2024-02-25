@@ -20,7 +20,9 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 		span, _ := match.MakeSpan(one)              // fix! should find kind without span
 		var ks kindsOf.Kinds
 		if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
-			op.Aspect.Matched = matchedString{k, w}
+			// fix: clean this up some.
+			op.Aspect.DeclaredKind = DeclaredKind{k, ks}
+			op.Aspect.Matched = span
 			//
 			next := next.Skip(w)         // skip the kind
 			op.Are.Matched = next.Cut(1) // cut the word are

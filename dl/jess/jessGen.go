@@ -96,7 +96,7 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 		if errors.Is(err, mdl.Missing) {
 			base := DefaultKind // ugh
 			if len(n.Kinds) > 0 {
-				base = inflect.Normalize(n.Kinds[0].String())
+				base = n.Kinds[0]
 			}
 			if e := rar.AddNoun(name, fullName, base); e != nil {
 				err = e
@@ -109,7 +109,6 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	// fix consider a "noun builder" instead
 	if err == nil {
 		for _, k := range n.Kinds {
-			k := inflect.Normalize(k.String())
 			// since noun already exists: this ensures that the noun inherits from all of the specified kinds
 			if e := rar.AddNoun(noun, "", k); e != nil {
 				err = e
@@ -132,7 +131,6 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	// add traits:
 	if err == nil {
 		for _, t := range n.Traits {
-			t := inflect.Normalize(t.String())
 			if e := rar.AddNounTrait(noun, t); e != nil {
 				err = errutil.Append(err, e)
 				break // out of the traits to the next noun
@@ -152,7 +150,7 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 // - flags them all as "counted.
 func importCountedNoun(rar Registrar, noun resultName) (ret []string, err error) {
 	if cnt := noun.Article.Count; cnt > 0 {
-		kinds := noun.Kinds[0].String()
+		kinds := noun.Kinds[0]
 		kind := rar.GetSingular(kinds)
 		names := make([]string, cnt)
 	Loop:
@@ -172,7 +170,7 @@ func importCountedNoun(rar Registrar, noun resultName) (ret []string, err error)
 				break   // FIX: itd make a lot more sense to have a default value for the kind
 			} else {
 				for _, t := range noun.Traits {
-					if e := rar.AddNounTrait(n, t.String()); e != nil {
+					if e := rar.AddNounTrait(n, t); e != nil {
 						err = e
 						break Loop
 					}

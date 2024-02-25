@@ -4,10 +4,9 @@ type SpanList [][]Word
 
 // this is the same as FindPrefix only it returns a Span instead of an index
 func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {
-	// i is the index of the span in the list
-	if _, skip := ws.FindPrefix(words); skip > 0 {
-		ret = Span(words[:skip])
-		retLen = skip
+	// idx is the index of the span in the list
+	if idx, skip := ws.FindPrefix(words); skip > 0 {
+		ret, retLen = ws[idx], skip
 	}
 	return
 }

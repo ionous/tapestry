@@ -1,6 +1,7 @@
 package jess_test
 
 import (
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
@@ -23,25 +24,37 @@ func TestPhrases(t *testing.T) {
 }
 
 type info struct {
-	kinds, traits, fields match.SpanList
-	macros                jesstest.MacroList
+	kinds          []string
+	traits, fields match.SpanList
+	macros         jesstest.MacroList
 }
 
 func (n *info) GetContext() int {
 	return 0
 }
-func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (string, int) {
-	m, cnt := n.kinds.FindMatch(ws)
-	if cnt > 0 && out != nil {
-		str := m.String()
-		// hack for testing
-		if str == "color" {
-			*out = kindsOf.Aspect
-		} else {
-			*out = kindsOf.Kind
+func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width int) {
+	str := strings.ToLower(ws.String())
+	for i, k := range n.kinds {
+		if strings.HasPrefix(str, k) {
+			if i&1 == 0 { // singular are the even numbers
+				k = n.kinds[i+1]
+			}
+			ret, width = k, 1 // always in the tests
+			if out != nil {
+				// hacks for testing
+				k := kindsOf.Kind
+				switch ret {
+				case "color":
+					k = kindsOf.Aspect
+				case "groups":
+					k = kindsOf.Record
+				}
+				*out = k
+			}
+			break
 		}
 	}
-	return m.String(), cnt
+	return
 }
 func (n *info) FindTrait(ws match.Span) (string, int) {
 	m, cnt := n.traits.FindMatch(ws)
@@ -72,16 +85,15 @@ var known = info{
 		//
 		"suspicious of", "suspect", mdl.Macro_ManyMany, false,
 	),
-	kinds: match.PanicSpans(
-		// note: these are just a list of names
-		// these arent pairs of kinds
+	kinds: []string{
 		"kind", "kinds",
 		"thing", "things",
 		"container", "containers",
 		"supporter", "supporters",
 		"aspect", "aspects",
-		"color",
-	),
+		"color", "color", // aspect; uses the singular
+		"group", "groups", // record
+	},
 	traits: match.PanicSpans(
 		"closed",
 		"open",

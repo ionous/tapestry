@@ -54,11 +54,13 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		macros
 		kinds
 		traits
+		records
 		// kinds of nouns
 		things
 		containers
 		supporters
 		colors
+		groups
 		// macros
 		carry
 		contain
@@ -79,6 +81,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		"ROWID", "domain", "kind", "singular", "path"},
 		aspects, domain, "aspects", "aspect", idPath(),
 		patterns, domain, "patterns", "pattern", idPath(),
+		records, domain, "records", "record", idPath(),
 		macros, domain, "macros", "macro", idPath(patterns),
 		kinds, domain, "kinds", "kind", idPath(),
 		traits, domain, "traits", "", idPath(aspects),
@@ -86,6 +89,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		containers, domain, "containers", "container", idPath(things, kinds),
 		supporters, domain, "supporters", "supporter", idPath(things, kinds),
 		colors, domain, "color", nil, idPath(aspects),
+		groups, domain, "groups", "group", idPath(records),
 		// macros:
 		carry, domain, "carry", "", idPath(macros),
 		contain, domain, "contain", "", idPath(macros),

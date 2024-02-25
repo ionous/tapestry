@@ -2,19 +2,19 @@ package jess
 
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) GetName(traits, kinds []Matched) resultName {
+func (op *KindCalled) GetName(traits, kinds []string) resultName {
 	for ts := op.GetTraits(); ts.HasNext(); {
 		t := ts.GetNext()
-		traits = append(traits, t.Matched)
+		traits = append(traits, t.String())
 	}
 	return resultName{
 		// ignores the article of the kind,
 		// in favor of the article closest to the named noun
-		Article: reduceArticle(op.Article),
-		Match:   op.Matched,
+		Article: reduceArticle(op.CalledName.Article),
+		Match:   op.CalledName.Matched,
 		Exact:   true,
 		Traits:  traits,
-		Kinds:   append(kinds, op.Kind.Matched),
+		Kinds:   append(kinds, op.Kind.String()),
 	}
 }
 
@@ -26,14 +26,26 @@ func (op *KindCalled) GetTraits() (ret Traitor) {
 }
 
 func (op *KindCalled) String() string {
-	return op.Matched.String()
+	return op.CalledName.Matched.String()
 }
 
 func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) &&
-		op.Called.Match(q, &next, keywords.Called) &&
+		op.CalledName.Match(q, &next) {
+		*input, okay = next, true
+	}
+	return
+}
+
+func (op *CalledName) String() string {
+	return op.Matched.String()
+}
+
+func (op *CalledName) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	op.Called.Match(q, &next, keywords.Called) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		op.matchName(q, &next) {
 		*input, okay = next, true
@@ -44,7 +56,7 @@ func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
 // match the words after "called" ending with either "is/are" or the end of the string.
 // this means that something like "a container called the bottle and a woman called the genie"
 // generates a single object with a long, strange name.
-func (op *KindCalled) matchName(q Query, input *InputState) (okay bool) {
+func (op *CalledName) matchName(q Query, input *InputState) (okay bool) {
 	if width := beScan(input.Words()); width > 0 {
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}

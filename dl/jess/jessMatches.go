@@ -10,6 +10,7 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 	}{
 		&op.KindsAreTraits,
 		&op.KindsOf,
+		&op.KindsHaveProperties,
 		&op.VerbNamesAreNames,
 		&op.NamesVerbNames,
 		&op.NamesAreLikeVerbs,

@@ -26,6 +26,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		result any
 		skip   any
 	}{
+
 		// ------------------------
 		// PropertyNounValue
 		{
@@ -87,7 +88,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		},
 		{
 			test:   "Things have some text called a description.",
-			result: nil,
+			result: []string{"AddFields", "things", "description", "text", ""},
 		},
 		{
 			test:   "Things have some text.",
@@ -98,33 +99,35 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			result: errors.New("unnamed number fields are prohibited."),
 		},
 		{
-			test:   "Supporters have a number called carrying capacity.",
-			result: nil,
+			test:   "A supporter has a number called carrying capacity.",
+			result: []string{"AddFields", "supporters", "carrying capacity", "number", ""},
 		},
 		{
 			// except for number and text, inform allows "bare" properties: a "list of text" creates a member called "list of text"
 			test:   "Things have a list of text called frenemies.",
-			result: nil,
+			result: []string{"AddFields", "things", "frenemies", "text_list", ""},
 		},
 		{
 			test:   "Things have a list of numbers called the lotto numbers.",
-			result: nil,
+			result: []string{"AddFields", "things", "lotto numbers", "num_list", ""},
 		},
 		{
 			// groups are a pre-defined type of record; anonymous fields are allowed.
 			// references to kinds become text; except for records which are embedded.
 			test:   "Things have a color.",
-			result: nil,
+			result: []string{"AddFields", "things", "color", "text", "color"},
 		},
 		{
-			// groups are a pre-defined type of record; anonymous fields are allowed.
-			// references to kinds become text; except for records which are embedded.
 			test:   "Things have a group.",
-			result: nil,
+			result: []string{"AddFields", "things", "group", "record", "groups"},
+		},
+		{
+			test:   "Things have a group called the set.",
+			result: []string{"AddFields", "things", "set", "record", "groups"},
 		},
 		{
 			test:   "Things have a list of groups.",
-			result: nil,
+			result: []string{"AddFields", "things", "groups", "record_list", "groups"},
 		},
 
 		// -------------------------
@@ -197,7 +200,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `The bottle is a transparent, open, container.`,
 			result: []string{
-				"AddNoun", "bottle", "", "container",
+				"AddNoun", "bottle", "", "containers",
 				"AddNounTrait", "bottle", "transparent",
 				"AddNounTrait", "bottle", "open",
 			},
@@ -216,7 +219,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `The container called the sarcophagus is open.`,
 			result: []string{
-				"AddNoun", "sarcophagus", "", "container",
+				"AddNoun", "sarcophagus", "", "containers",
 				"AddNounTrait", "sarcophagus", "open",
 			},
 		},
@@ -227,28 +230,28 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			// when the requested kind being declared isn't yet known:
 			test: `Devices are a kind of thing.`,
 			result: []string{
-				"AddKind", "devices", "thing",
+				"AddKind", "devices", "things",
 			},
 		},
 		{
 			// when the kind being declared is already known
 			test: `A container is a kind of thing.`,
 			result: []string{
-				"AddKind", "containers", "thing",
+				"AddKind", "containers", "things",
 			},
 		},
 		{
 			// determine pluralness based on trailing is/are
 			test: `A device is a kind of thing.`,
 			result: []string{
-				"AddKind", "devices", "thing",
+				"AddKind", "devices", "things",
 			},
 		},
 		{
 			// adding trailing properties
 			test: `A casket is a kind of closed container.`,
 			result: []string{
-				"AddKind", "caskets", "container",
+				"AddKind", "caskets", "containers",
 				"AddKindTrait", "caskets", "closed",
 			},
 		},
@@ -256,7 +259,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			// complex parsing
 			test: `The closed containers called the safes are a kind of fixed in place thing.`,
 			result: []string{
-				"AddKind", "safes", "thing",
+				"AddKind", "safes", "things",
 				"AddKind", "safes", "containers", // the parent can be singular or plural
 				"AddKindTrait", "safes", "closed",
 				"AddKindTrait", "safes", "fixed in place",
@@ -266,7 +269,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			// correctly producing unexpected results.
 			test: `The closed casket is a kind of container.`,
 			result: []string{
-				"AddKind", "closed caskets", "container",
+				"AddKind", "closed caskets", "containers",
 			},
 		},
 		{
@@ -278,8 +281,8 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			// in inform, these become the plural kind "Bucketss" and "basketss"
 			test: `Buckets and baskets are kinds of container.`,
 			result: []string{
-				"AddKind", "buckets", "container",
-				"AddKind", "baskets", "container",
+				"AddKind", "buckets", "containers",
+				"AddKind", "baskets", "containers",
 			},
 		},
 		{
@@ -297,7 +300,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `The coffin is a closed container in the antechamber.`,
 			result: []string{
-				"AddNoun", "coffin", "", "container",
+				"AddNoun", "coffin", "", "containers",
 				"AddNounTrait", "coffin", "closed",
 				"ApplyMacro", "contain", "antechamber", "coffin",
 			},
@@ -316,8 +319,8 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `The thing called the stake is on the supporter called the altar.`,
 			result: []string{
-				"AddNoun", "altar", "", "supporter",
-				"AddNoun", "stake", "", "thing",
+				"AddNoun", "altar", "", "supporters",
+				"AddNoun", "stake", "", "things",
 				"ApplyMacro", "support", "altar", "stake",
 			},
 		},
@@ -328,7 +331,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `A closed openable container called the trunk is in the lobby.`,
 			result: []string{
-				"AddNoun", "trunk", "", "container",
+				"AddNoun", "trunk", "", "containers",
 				"AddNounTrait", "trunk", "closed",
 				"AddNounTrait", "trunk", "openable",
 				"ApplyMacro", "contain", "lobby", "trunk",
@@ -356,8 +359,8 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		{
 			test: `In the lobby are a supporter and a container.`,
 			result: []string{
-				"AddNoun", "", "", "supporter",
-				"AddNoun", "", "", "container",
+				"AddNoun", "", "", "supporters",
+				"AddNoun", "", "", "containers",
 				"ApplyMacro", "contain", "lobby", "", "",
 			},
 		},

@@ -35,7 +35,7 @@ func (pen *Pen) GetPartialKind(ws match.Span, out *kindsOf.Kinds) (ret string, e
 		from kinds
 		where words = (name || ' ')
 		union all 
-		select id, alt, substr(?2, 0, length(alt)+2) as words, path
+		select id, name, substr(?2, 0, length(alt)+2) as words, path
 		from kinds
 		where alt is not null and words = (alt || ' ')
 	)

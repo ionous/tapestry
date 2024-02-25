@@ -60,6 +60,11 @@ Spec:with group:
           - "traits"
           - true
         - Term: "kind"
+        - Term: "called_name"
+
+    - Spec:with flow:
+      - "called_name"
+      - Flow uses:
         - # the word "called"
           Term:type:
           - "called"
@@ -129,6 +134,9 @@ Spec:with group:
           - "article"
           - true
         - Term: "matched"
+        - Term:private:
+          - "declared_kind"
+          - true
 
     - # matches a set of possible kinds as part of kinds_are_traits
       # jess tests for but prohibits leading traits.
@@ -225,6 +233,7 @@ Spec:with group:
         - Term: "property_noun_value"
         - Term: "noun_property_value"
         - Term: "aspects_are_traits"
+        - Term: "kinds_have_properties"
 
     - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
       # interesting to note that inform allows "some kind/s of"
@@ -439,3 +448,38 @@ Spec:with group:
       - "matching_number"
       - Flow uses:
         - Term: "number"
+
+    - # ex. Things have some text called a description.
+      Spec:with flow:
+      - "kinds_have_properties"
+      - Flow uses:
+        - Term: "kind"
+        - Term:type:
+          - "have"   # or has
+          - "words"
+        - Term:optional:
+          - "article"
+          - true
+        - Term:type:optional:
+          - "list_of"
+          - "matched"
+          - true
+        - Term: "property_type"
+        - Term:optional:
+          - "called_name"
+          - true
+
+    - # matches text, number, kind ( kind|aspect|record )
+      # as part of 'kinds_have_properties'
+      # exactly one member can match
+      Spec:with flow:
+      - "property_type"
+      - Flow uses:
+        - Term:type:optional:
+          - "primitive"
+          - "matched"
+          - true
+        - # kinds|aspects|records
+          Term:optional:
+          - "kind"
+          - true

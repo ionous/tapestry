@@ -40,7 +40,7 @@ func (op *KindsOf) GetTraits() (ret Traitor) {
 
 // The closed containers called safes are a kind of fixed in place thing.
 func (op *KindsOf) Generate(rar Registrar) (err error) {
-	parent := op.Kind.Matched.String()
+	parent := op.Kind.String()
 	traits := op.GetTraits()
 	//
 	for it := op.Names.Iterate(); it.HasNext(); {

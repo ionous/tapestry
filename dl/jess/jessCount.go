@@ -17,13 +17,13 @@ func (op *CountedName) String() string {
 	return op.Matched.String()
 }
 
-func (op *CountedName) GetName(traits, kinds []Matched) (ret resultName) {
+func (op *CountedName) GetName(traits, kinds []string) (ret resultName) {
 	return resultName{
 		Article: articleResult{
 			Count: int(op.MatchingNumber.Number),
 		},
 		Traits: traits,
-		Kinds:  append(kinds, op.Kind.Matched),
+		Kinds:  append(kinds, op.Kind.String()),
 		// no name, anonymous and counted.
 	}
 }
