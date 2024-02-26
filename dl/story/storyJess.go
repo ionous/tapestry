@@ -49,37 +49,20 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 }
 
 // fix... obviously.
+// mostly its the same as Pen, but there are some overrides, and renames
 type jessAdapter struct {
-	w   *weave.Weaver
-	pen *mdl.Pen
+	w *weave.Weaver
+	*mdl.Pen
 }
 
-func (ja jessAdapter) AddKind(kind, ancestor string) error {
-	return ja.pen.AddKind(kind, ancestor)
-}
-func (ja jessAdapter) AddKindTrait(kind, trait string) error {
-	return ja.pen.AddKindTrait(kind, trait)
-}
-func (ja jessAdapter) AddNoun(short, long, kind string) error {
-	return ja.pen.AddNoun(short, long, kind)
-}
-func (ja jessAdapter) AddNounAlias(noun, name string, rank int) error {
-	return ja.pen.AddNounAlias(noun, name, rank)
-}
 func (ja jessAdapter) AddNounTrait(noun, trait string) error {
-	return ja.w.AddInitialValue(ja.pen, noun, trait, truly())
+	return ja.w.AddInitialValue(ja.Pen, noun, trait, truly())
 }
 func (ja jessAdapter) AddNounValue(noun, prop string, val rt.Assignment) error {
-	return ja.w.AddInitialValue(ja.pen, noun, prop, val)
-}
-func (ja jessAdapter) AddTraits(a string, ts []string) error {
-	return ja.pen.AddTraits(a, ts)
+	return ja.w.AddInitialValue(ja.Pen, noun, prop, val)
 }
 func (ja jessAdapter) GetClosestNoun(name string) (string, error) {
 	return ja.w.GetClosestNoun(name)
-}
-func (ja jessAdapter) GetExactNoun(name string) (string, error) {
-	return ja.pen.GetExactNoun(name)
 }
 func (ja jessAdapter) GetPlural(word string) string {
 	return ja.w.PluralOf(word)
