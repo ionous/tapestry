@@ -21,7 +21,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 		var ks kindsOf.Kinds
 		if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
 			// fix: clean this up some.
-			op.Aspect.DeclaredKind = DeclaredKind{k, ks}
+			op.Aspect.ActualKind = ActualKind{k, ks}
 			op.Aspect.Matched = span
 			//
 			next := next.Skip(w)         // skip the kind
@@ -36,10 +36,15 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *AspectsAreTraits) Generate(rar Registrar) (err error) {
-	var names []string
-	for it := op.Names.Iterate(); it.HasNext(); {
-		n := it.GetNext()
-		names = append(names, inflect.Normalize(n.String()))
+	if aspect, e := op.Aspect.Validate(kindsOf.Aspect); e != nil {
+		err = e
+	} else {
+		var names []string
+		for it := op.Names.Iterate(); it.HasNext(); {
+			n := it.GetNext()
+			names = append(names, inflect.Normalize(n.String()))
+		}
+		err = rar.AddTraits(aspect, names)
 	}
-	return rar.AddTraits(op.Aspect.String(), names)
+	return
 }

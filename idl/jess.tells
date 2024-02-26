@@ -46,7 +46,7 @@ Spec:with group:
         - Term: "matched"
 
     - # Defines a name and its kind in a single phrase.
-      # <kind> "called" [the] _name_.
+      # kind "called" [the] _name_.
       # as per inform, the name of the name is everything after the word called
       # until "is" or "are" or the end of the line.
       # For instance: `The container called the trunk and the box is in the lobby`
@@ -135,7 +135,7 @@ Spec:with group:
           - true
         - Term: "matched"
         - Term:private:
-          - "declared_kind"
+          - "actual_kind"
           - true
 
     - # matches a set of possible kinds as part of kinds_are_traits
@@ -238,7 +238,7 @@ Spec:with group:
         - Term: "noun_property_value"
         - Term: "aspects_are_traits"
 
-    - # <names> <are> "a kind of"/"kinds of" <traits> <kind>.
+    - # names are "a kind of"/"kinds of" traits kind:any.
       # interesting to note that inform allows "some kind/s of"
       # this is more strict.
       # like inform this doesn't try to limit the names
@@ -266,7 +266,7 @@ Spec:with group:
           Term: "kind"
 
     - # assigns default traits to a kind.
-      # <the kind> are "usually" <traits>
+      # kinds:objects are "usually" traits
       # inform doesn't require the "usually" --
       #  i like it as a way to differentiate phrases about kinds vs. phrases about nouns.
       # future: inform allows limiting traits to kinds with other traits:
@@ -283,7 +283,8 @@ Spec:with group:
         - Term: "traits"
 
     - # defines traits for a kind of aspect.
-      # The colors are a kind of aspect. The colors are red, blue, and greasy green.
+      # aspect are names
+      # ex. The colors are a kind of aspect. The colors are red, blue, and greasy green.
       # aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
       # this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)
       Spec:with flow:
@@ -293,7 +294,8 @@ Spec:with group:
           - "aspect"
           - "kind"
         - Term: "are"
-        - Term: "names"
+        - # plain names, no kinds.
+          Term: "names"
 
     - # verb names are (other) names.
       # ex. `In the coffin are some coins, a notebook, and the gripping hand.`
@@ -452,7 +454,8 @@ Spec:with group:
       - Flow uses:
         - Term: "number"
 
-    - # ex. Things have some text called a description.
+    - # kinds "have" a ["list of"] type ["called a" ...]
+      # ex. Things have some text called a description.
       Spec:with flow:
       - "kinds_have_properties"
       - Flow uses:
@@ -487,7 +490,8 @@ Spec:with group:
           - "kind"
           - true
 
-    - # ex. A thing can be open or closed.
+    - # kinds ("can be"|"are either") new_trait [or new_trait...]
+      # ex. A thing can be open or closed.
       Spec:with flow:
       - "kinds_are_either"
       - Flow uses:

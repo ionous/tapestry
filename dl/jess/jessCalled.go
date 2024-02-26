@@ -1,21 +1,32 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
+
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) GetName(traits, kinds []string) resultName {
-	for ts := op.GetTraits(); ts.HasNext(); {
-		t := ts.GetNext()
-		traits = append(traits, t.String())
+func (op *KindCalled) GetName(traits, kinds []string) (ret resultName, err error) {
+	if kind, e := op.GetKind(); e != nil {
+		err = e
+	} else {
+		for ts := op.GetTraits(); ts.HasNext(); {
+			t := ts.GetNext()
+			traits = append(traits, t.String())
+		}
+		ret = resultName{
+			// ignores the article of the kind,
+			// in favor of the article closest to the named noun
+			Article: reduceArticle(op.CalledName.Article),
+			Match:   op.CalledName.Matched,
+			Exact:   true,
+			Traits:  traits,
+			Kinds:   append(kinds, kind),
+		}
 	}
-	return resultName{
-		// ignores the article of the kind,
-		// in favor of the article closest to the named noun
-		Article: reduceArticle(op.CalledName.Article),
-		Match:   op.CalledName.Matched,
-		Exact:   true,
-		Traits:  traits,
-		Kinds:   append(kinds, op.Kind.String()),
-	}
+	return
+}
+
+func (op *KindCalled) GetKind() (string, error) {
+	return op.Kind.Validate(kindsOf.Kind)
 }
 
 func (op *KindCalled) GetTraits() (ret Traitor) {

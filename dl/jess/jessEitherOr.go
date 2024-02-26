@@ -28,22 +28,26 @@ func (op *KindsAreEither) matchEither(q Query, input *InputState) (okay bool) {
 }
 
 func (op *KindsAreEither) Generate(rar Registrar) (err error) {
-	if op.Traits.NewTrait == nil {
-		// mdl is smart enough to generate "not" aspects from bool fields
-		name := inflect.Normalize(op.Traits.String())
-		err = rar.AddFields(op.Kind.String(), []mdl.FieldInfo{{
-			Name:     name,
-			Affinity: affine.Bool,
-		}})
+	if k, e := op.Kind.Validate(kindsOf.Kind); e != nil {
+		err = e
 	} else {
-		if name, e := op.generateAspect(rar); e != nil {
-			err = e
-		} else {
-			err = rar.AddFields(op.Kind.String(), []mdl.FieldInfo{{
+		if op.Traits.NewTrait == nil {
+			// mdl is smart enough to generate "not" aspects from bool fields
+			name := inflect.Normalize(op.Traits.String())
+			err = rar.AddFields(k, []mdl.FieldInfo{{
 				Name:     name,
-				Affinity: affine.Text,
-				Class:    name,
+				Affinity: affine.Bool,
 			}})
+		} else {
+			if name, e := op.generateAspect(rar); e != nil {
+				err = e
+			} else {
+				err = rar.AddFields(k, []mdl.FieldInfo{{
+					Name:     name,
+					Affinity: affine.Text,
+					Class:    name,
+				}})
+			}
 		}
 	}
 	return

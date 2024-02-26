@@ -8,16 +8,21 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		Generator
 		Interpreter
 	}{
-		&op.KindsAreTraits,
+		// names are "a kind of"/"kinds of" [traits] kind:any.
 		&op.KindsOf,
+		// kind:objects are "usually" traits.
+		&op.KindsAreTraits,
+		// kinds:records|objects "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
 		&op.KindsHaveProperties,
+		// kinds:objects ("can be"|"are either") new_trait [or new_trait...]
 		&op.KindsAreEither,
+		// kind:aspects are names
+		&op.AspectsAreTraits,
 		&op.VerbNamesAreNames,
 		&op.NamesVerbNames,
 		&op.NamesAreLikeVerbs,
 		&op.PropertyNounValue,
 		&op.NounPropertyValue,
-		&op.AspectsAreTraits,
 	} {
 		if next := *input; //
 		m.Match(q, &next) /* && len(next) == 0 */ {
@@ -48,16 +53,24 @@ func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *VerbNamesAreNames) Generate(rar Registrar) error {
-	return applyResults(rar, op.compile())
+func (op *VerbNamesAreNames) Generate(rar Registrar) (err error) {
+	if res, e := op.compile(); e != nil {
+		err = e
+	} else {
+		err = applyResults(rar, res)
+	}
+	return
 }
 
-func (op *VerbNamesAreNames) compile() localResults {
-	return makeResult(
-		op.Verb.Macro, !op.Verb.Macro.Reversed,
-		op.Names.GetNames(nil, nil),
-		op.OtherNames.GetNames(nil, nil),
-	)
+func (op *VerbNamesAreNames) compile() (ret localResults, err error) {
+	if lhs, e := op.Names.GetNames(nil, nil); e != nil {
+		err = e
+	} else if rhs, e := op.OtherNames.GetNames(nil, nil); e != nil {
+		err = e
+	} else {
+		ret = makeResult(op.Verb.Macro, !op.Verb.Macro.Reversed, lhs, rhs)
+	}
+	return
 }
 
 func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
@@ -73,17 +86,24 @@ func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *NamesVerbNames) Generate(rar Registrar) error {
-	return applyResults(rar, op.compile())
+func (op *NamesVerbNames) Generate(rar Registrar) (err error) {
+	if res, e := op.compile(); e != nil {
+		err = e
+	} else {
+		err = applyResults(rar, res)
+	}
+	return
 }
 
-func (op *NamesVerbNames) compile() (ret localResults) {
-	return makeResult(
-		op.Verb.Macro,
-		op.Verb.Macro.Reversed,
-		op.Names.GetNames(nil, nil),
-		op.OtherNames.GetNames(nil, nil),
-	)
+func (op *NamesVerbNames) compile() (ret localResults, err error) {
+	if lhs, e := op.Names.GetNames(nil, nil); e != nil {
+		err = e
+	} else if rhs, e := op.OtherNames.GetNames(nil, nil); e != nil {
+		err = e
+	} else {
+		ret = makeResult(op.Verb.Macro, op.Verb.Macro.Reversed, lhs, rhs)
+	}
+	return
 }
 
 func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
@@ -99,9 +119,9 @@ func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *NamesAreLikeVerbs) GetOtherNames() (ret Iterator) {
+func (op *NamesAreLikeVerbs) GetOtherNames() (ret []resultName, err error) {
 	if v := op.VerbPhrase; v != nil {
-		ret = v.Names.Iterate()
+		ret, err = op.VerbPhrase.Names.GetNames(nil, nil)
 	}
 	return
 }
@@ -120,18 +140,24 @@ func (op *NamesAreLikeVerbs) IsReversed() (okay bool) {
 	return
 }
 
-func (op *NamesAreLikeVerbs) Generate(rar Registrar) error {
-	return applyResults(rar, op.compile())
+func (op *NamesAreLikeVerbs) Generate(rar Registrar) (err error) {
+	if res, e := op.compile(); e != nil {
+		err = e
+	} else {
+		err = applyResults(rar, res)
+	}
+	return
 }
 
-func (op *NamesAreLikeVerbs) compile() localResults {
-	var b []resultName
-	for it := op.GetOtherNames(); it.HasNext(); {
-		n := it.GetNext()
-		b = append(b, n.GetName(nil, nil))
+func (op *NamesAreLikeVerbs) compile() (ret localResults, err error) {
+	if rhs, e := op.GetOtherNames(); e != nil {
+		err = e
+	} else if ts, ks, e := op.Adjectives.Reduce(); e != nil {
+		err = e
+	} else if lhs, e := op.Names.GetNames(ts, ks); e != nil {
+		err = e
+	} else {
+		ret = makeResult(op.GetMacro(), op.IsReversed(), lhs, rhs)
 	}
-	a := op.Names.GetNames(op.Adjectives.Reduce())
-	return makeResult(
-		op.GetMacro(), op.IsReversed(),
-		a, b)
+	return
 }

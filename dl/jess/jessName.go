@@ -6,13 +6,14 @@ func (op *Name) String() string {
 	return op.Matched.String()
 }
 
-func (op *Name) GetName(traits, kinds []string) resultName {
-	return resultName{
+func (op *Name) GetName(traits, kinds []string) (ret resultName, err error) {
+	ret = resultName{
 		Article: reduceArticle(op.Article),
 		Match:   op.Matched, // a span cut from the input
 		Traits:  traits,
 		Kinds:   kinds,
 	}
+	return
 }
 
 func (op *Name) Match(q Query, input *InputState) (okay bool) {

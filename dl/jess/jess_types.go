@@ -186,7 +186,7 @@ func (op *Name_Slice) Repeats() bool {
 }
 
 // Defines a name and its kind in a single phrase.
-// <kind> "called" [the] _name_.
+// kind "called" [the] _name_.
 // as per inform, the name of the name is everything after the word called
 // until "is" or "are" or the end of the line.
 // For instance: `The container called the trunk and the box is in the lobby`
@@ -383,10 +383,10 @@ func (op *CountedName_Slice) Repeats() bool {
 
 // matches the name of an existing kind.
 type Kind struct {
-	Article      *Article
-	Matched      Matched
-	DeclaredKind DeclaredKind
-	Markup       map[string]any
+	Article    *Article
+	Matched    Matched
+	ActualKind ActualKind
+	Markup     map[string]any
 }
 
 // kind, a type of flow.
@@ -754,7 +754,7 @@ func (op *MatchingPhrases_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// <names> <are> "a kind of"/"kinds of" <traits> <kind>.
+// names are "a kind of"/"kinds of" traits kind:any.
 // interesting to note that inform allows "some kind/s of"
 // this is more strict.
 // like inform this doesn't try to limit the names
@@ -798,7 +798,7 @@ func (op *KindsOf_Slice) Repeats() bool {
 }
 
 // assigns default traits to a kind.
-// <the kind> are "usually" <traits>
+// kinds:objects are "usually" traits
 // inform doesn't require the "usually" --
 //
 //	i like it as a way to differentiate phrases about kinds vs. phrases about nouns.
@@ -844,7 +844,8 @@ func (op *KindsAreTraits_Slice) Repeats() bool {
 }
 
 // defines traits for a kind of aspect.
-// The colors are a kind of aspect. The colors are red, blue, and greasy green.
+// aspect are names
+// ex. The colors are a kind of aspect. The colors are red, blue, and greasy green.
 // aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
 // this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)
 type AspectsAreTraits struct {
@@ -1316,6 +1317,7 @@ func (op *MatchingNumber_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// kinds "have" a ["list of"] type ["called a" ...]
 // ex. Things have some text called a description.
 type KindsHaveProperties struct {
 	Kind         Kind
@@ -1394,6 +1396,7 @@ func (op *PropertyType_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// kinds ("can be"|"are either") new_trait [or new_trait...]
 // ex. A thing can be open or closed.
 type KindsAreEither struct {
 	Kind   Kind
@@ -1725,7 +1728,7 @@ func init() {
 			Type:  &Zt_CalledName,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "<kind> \"called\" [the] _name_.", "as per inform, the name of the name is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single name named \"the trunk and the box.\""},
+			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "kind \"called\" [the] _name_.", "as per inform, the name of the name is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single name named \"the trunk and the box.\""},
 		},
 	}
 	Zt_CalledName = typeinfo.Flow{
@@ -1848,8 +1851,8 @@ func init() {
 			Label: "matched",
 			Type:  &Zt_Matched,
 		}, {
-			Name:    "declared_kind",
-			Label:   "declared_kind",
+			Name:    "actual_kind",
+			Label:   "actual_kind",
 			Private: true,
 		}},
 		Markup: map[string]any{
@@ -2014,7 +2017,7 @@ func init() {
 			Name:  "kinds_are_traits",
 			Label: "kinds_are_traits",
 			Markup: map[string]any{
-				"comment": "fix? combine similar starts to speed matching.",
+				"comment": []interface{}{"fix? combine similar starts to speed matching?", "(nothing that the kinds have different filters)"},
 			},
 			Type: &Zt_KindsAreTraits,
 		}, {
@@ -2096,7 +2099,7 @@ func init() {
 			Type: &Zt_Kind,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"<names> <are> \"a kind of\"/\"kinds of\" <traits> <kind>.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform this doesn't try to limit the names", "`The animals called kittens are a kind of things.` is legal."},
+			"comment": []interface{}{"names are \"a kind of\"/\"kinds of\" traits kind:any.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform this doesn't try to limit the names", "`The animals called kittens are a kind of things.` is legal."},
 		},
 	}
 	Zt_KindsAreTraits = typeinfo.Flow{
@@ -2120,7 +2123,7 @@ func init() {
 			Type:  &Zt_Traits,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns default traits to a kind.", "<the kind> are \"usually\" <traits>", "inform doesn't require the \"usually\" --", " i like it as a way to differentiate phrases about kinds vs. phrases about nouns.", "future: inform allows limiting traits to kinds with other traits:", "for example, `the closed containers are fixed in place.`", "makes any containers that are *initially* closed also immovable."},
+			"comment": []interface{}{"assigns default traits to a kind.", "kinds:objects are \"usually\" traits", "inform doesn't require the \"usually\" --", " i like it as a way to differentiate phrases about kinds vs. phrases about nouns.", "future: inform allows limiting traits to kinds with other traits:", "for example, `the closed containers are fixed in place.`", "makes any containers that are *initially* closed also immovable."},
 		},
 	}
 	Zt_AspectsAreTraits = typeinfo.Flow{
@@ -2137,10 +2140,13 @@ func init() {
 		}, {
 			Name:  "names",
 			Label: "names",
-			Type:  &Zt_Names,
+			Markup: map[string]any{
+				"comment": "plain names, no kinds.",
+			},
+			Type: &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"defines traits for a kind of aspect.", "The colors are a kind of aspect. The colors are red, blue, and greasy green.", "aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.", "this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)"},
+			"comment": []interface{}{"defines traits for a kind of aspect.", "aspect are names", "ex. The colors are a kind of aspect. The colors are red, blue, and greasy green.", "aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.", "this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)"},
 		},
 	}
 	Zt_VerbNamesAreNames = typeinfo.Flow{
@@ -2441,7 +2447,7 @@ func init() {
 			Type:     &Zt_CalledName,
 		}},
 		Markup: map[string]any{
-			"comment": "ex. Things have some text called a description.",
+			"comment": []interface{}{"kinds \"have\" a [\"list of\"] type [\"called a\" ...]", "ex. Things have some text called a description."},
 		},
 	}
 	Zt_PropertyType = typeinfo.Flow{
@@ -2482,7 +2488,7 @@ func init() {
 			Type:  &Zt_NewTrait,
 		}},
 		Markup: map[string]any{
-			"comment": "ex. A thing can be open or closed.",
+			"comment": []interface{}{"kinds (\"can be\"|\"are either\") new_trait [or new_trait...]", "ex. A thing can be open or closed."},
 		},
 	}
 	Zt_NewTrait = typeinfo.Flow{

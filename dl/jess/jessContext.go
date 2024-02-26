@@ -3,9 +3,6 @@ package jess
 const (
 	// exclude kinds when matching names
 	PlainNameMatching = iota
-	// kinds|aspects|records
-	// by default, only matches kindsOf.Kinds ( concrete and abstract nouns )
-	PropertyKinds
 )
 
 // set the query flags to the passed flags

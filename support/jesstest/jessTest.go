@@ -230,6 +230,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			},
 		},
 		// using 'called' without a macro
+		// NamesAreLikeVerbs
 		{
 			test: `The container called the sarcophagus is open.`,
 			result: []string{

@@ -1,10 +1,21 @@
 package jess
 
 import (
+	"fmt"
 	"slices"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
+
+// returns the real ( generally plural ) name of the kind
+func (op *Kind) Validate(ks ...kindsOf.Kinds) (ret string, err error) {
+	if k := op.ActualKind.base; len(ks) > 0 && !slices.Contains(ks, k) {
+		err = fmt.Errorf("matched an unexpected kind %q", k)
+	} else {
+		ret = op.ActualKind.name
+	}
+	return
+}
 
 func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -17,8 +28,8 @@ func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	var k kindsOf.Kinds
-	if m, width := q.FindKind(input.Words(), &k); width > 0 && filterKinds(q, k) {
-		op.DeclaredKind = DeclaredKind{m, k}
+	if m, width := q.FindKind(input.Words(), &k); width > 0 {
+		op.ActualKind = ActualKind{m, k}
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return
@@ -26,32 +37,27 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 
 // returns the real ( generally plural ) name of the kind
 func (op *Kind) String() string {
-	return op.DeclaredKind.actual
+	return op.ActualKind.name
 }
 
-func (op *Kind) GetName(traits, kinds []string) (ret resultName) {
-	return resultName{
-		Traits: traits,
-		// the order of kinds matters for "kinds of"
-		// for: A container is a kind of thing.
-		// the kinds should appear in that order in this list:
-		Kinds: append([]string{op.String()}, kinds...),
-		// no name and no article because, the object itself is anonymous.
-		// ( the article associated with the kind gets eaten )
-	}
-}
-
-func filterKinds(q Query, k kindsOf.Kinds) (okay bool) {
-	flags := q.GetContext()
-	if (flags & PropertyKinds) != 0 {
-		okay = slices.Contains([]kindsOf.Kinds{kindsOf.Kind, kindsOf.Aspect, kindsOf.Record}, k)
+func (op *Kind) GetName(traits, kinds []string) (ret resultName, err error) {
+	if kind, e := op.Validate(kindsOf.Kind); e != nil {
+		err = e
 	} else {
-		okay = k == kindsOf.Kind
+		ret = resultName{
+			Traits: traits,
+			// the order of kinds matters for "kinds of"
+			// for: A container is a kind of thing.
+			// the kinds should appear in that order in this list:
+			Kinds: append([]string{kind}, kinds...),
+			// no name and no article because, the object itself is anonymous.
+			// ( the article associated with the kind gets eaten )
+		}
 	}
 	return
 }
 
-type DeclaredKind struct {
-	actual string // as opposed to just what matched
-	base   kindsOf.Kinds
+type ActualKind struct {
+	name string // as opposed to just what matched
+	base kindsOf.Kinds
 }

@@ -2,7 +2,7 @@ package jess
 
 // all members of Names implement this so that they can be handled generically
 type MatchedName interface {
-	GetName(traits, kinds []string) resultName
+	GetName(traits, kinds []string) (resultName, error)
 	String() string
 }
 
@@ -55,7 +55,7 @@ func (op *Names) Pick() (ret MatchedName) {
 	return
 }
 
-func (op *Names) GetName(traits, kinds []string) (ret resultName) {
+func (op *Names) GetName(traits, kinds []string) (resultName, error) {
 	return op.Pick().GetName(traits, kinds)
 }
 
@@ -65,15 +65,19 @@ func (op *Names) String() (ret string) {
 	return op.Pick().String()
 }
 
-func (op *Names) GetNames(traits, kinds []string) (ret []resultName) {
+func (op *Names) GetNames(traits, kinds []string) (ret []resultName, err error) {
 	for t := *op; ; {
-		n := t.GetName(traits, kinds)
-		ret = append(ret, n)
-		// next name:
-		if next := t.AdditionalNames; next == nil {
+		if n, e := t.GetName(traits, kinds); e != nil {
+			err = e
 			break
 		} else {
-			t = next.Names
+			ret = append(ret, n)
+			// next name:
+			if next := t.AdditionalNames; next == nil {
+				break
+			} else {
+				t = next.Names
+			}
 		}
 	}
 	return

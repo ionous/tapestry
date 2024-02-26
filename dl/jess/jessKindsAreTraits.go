@@ -10,7 +10,6 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 		op.Are.Match(q, &next) &&
 		op.Usually.Match(q, &next, keywords.Usually) &&
 		op.Traits.Match(q, &next) {
-		// q.note("matched KindsAreTraits")
 		*input, okay = next, true
 	}
 	return
