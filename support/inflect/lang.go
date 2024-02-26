@@ -166,3 +166,9 @@ func MixedCaseToSpaces(s string) string {
 	}
 	return out.String()
 }
+
+func init() {
+	// status is a weird word that can be both singular and plural
+	// add a special case rule to prevent "status" from being chopped to "statu"
+	inflect.AddSingular("status", "status")
+}
