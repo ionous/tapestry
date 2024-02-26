@@ -23,45 +23,34 @@ func (s Separator) Len() int {
 // errors if it detects an unexpected sequence of commas or ands.
 // note: when words were hashed, commas became their own Word.
 func ReadCommaAnd(ws []match.Word) (ret Separator, err error) {
-	_, ret, err = countCommaAnd(ws, true /*atStart*/)
-	return
+	return countCommaAnd(ws, false)
 }
 
-// scan for an and,  the span of the and, the number of words to skip after
-// returns 0,0,nil if no ands found.
-func anyAnd(ws []match.Word) (retStart, retEnd int, err error) {
-	if start, sep, e := countCommaAnd(ws, false /*atStart*/); e != nil {
-		err = e
-	} else if skip := sep.Len(); skip > 0 {
-		retStart, retEnd = start, start+skip
-	}
-	return
+func ReadCommaAndOr(ws []match.Word) (ret Separator, err error) {
+	return countCommaAnd(ws, true)
 }
 
-// when at start is false, keeps scanning forward to find an and.
-func countCommaAnd(ws []match.Word, atStart bool) (retStart int, retFlag Separator, err error) {
+func countCommaAnd(ws []match.Word, alsoOr bool) (retFlag Separator, err error) {
 	var flag Separator
-	var start, skip int
+	var skip int
 Loop:
-	for i, w := range ws {
-		switch w.Hash() {
+	for _, w := range ws {
+		switch h := w.Hash(); {
 		default:
 			// anything other than a comma or and?
-			if atStart || flag != 0 {
-				break Loop
-			}
+			break Loop
 
-		case keywords.Comma:
+		case h == keywords.Comma:
 			if flag != 0 {
 				err = makeWordError(w, "unexpected comma")
 				break Loop
 			}
 			flag |= CommaSep
-			start, skip = i, skip+1
+			skip = skip + 1
 
-		case keywords.And:
+		case h == keywords.And || (alsoOr && h == keywords.Or):
 			if flag == 0 {
-				start = i
+				// start = i
 			} else if flag&AndSep != 0 {
 				err = makeWordError(w, "unexpected and")
 				break Loop
@@ -75,7 +64,7 @@ Loop:
 		if skip == len(ws) {
 			err = makeWordError(ws[0], "unexpected ending")
 		} else {
-			retStart, retFlag = start, flag
+			retFlag = flag
 		}
 	}
 	return

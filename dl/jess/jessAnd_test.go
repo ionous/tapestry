@@ -7,7 +7,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 )
 
-func TestCommaAnd(t *testing.T) {
+// verify the returned length of various separator values
+func TestCommaLength(t *testing.T) {
 	cnt := []int{
 		jess.Separator(0).Len(),
 		jess.CommaSep.Len(),

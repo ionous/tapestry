@@ -25,6 +25,14 @@ Spec:with group:
       - Flow uses:
         - Term: "matched"
 
+    - # conjunction junction 2.
+      # matches commas, ands, and ors.
+      # relies on the fact package match treats commas and ands each as their own words.
+      Spec:with flow:
+      - "comma_and_or"
+      - Flow uses:
+        - Term: "matched"
+
     - # matches "is" or "are".
       Spec:with flow:
       - "are"
@@ -225,6 +233,7 @@ Spec:with group:
       Spec:with flow:
       - "matching_phrases"
       - Flow uses:
+        - Term: "understandings"
         - # fix? combine similar starts to speed matching?
           # (nothing that the kinds have different filters)
           Term: "kinds_are_traits"
@@ -512,3 +521,57 @@ Spec:with group:
         - Term:optional:
           - "new_trait"
           - true
+
+    - # one or more strings of quoted text
+      # separated by the words "and", "comma", or "or".
+      Spec:with flow:
+      - "quoted_texts"
+      - Flow uses:
+        - Term: "quoted_text"
+        - Term:optional:
+          - "additional_text"
+          - true
+
+    - # matches a text following another some previous text.
+      Spec:with flow:
+      - "additional_text"
+      - Flow uses:
+        - Term: "comma_and_or"
+        - Term: "quoted_texts"
+
+    - # various phrases, all starting with the word "Understand"
+      # inform supports defining plurals, aliases,
+      # command synonyms, actions, references for actions,
+      # trait, kind, and value substitutions....
+      # possibly some others.
+      Spec:with flow:
+      - "understandings"
+      - Flow uses:
+        - Term:type:
+          - "understand" # the word "understand"
+          - "words"
+        - # some of inform's understandings dont start with quoted strings
+          # all of jess's do.
+          Term: "quoted_texts"
+        - Term:type:
+          - "as"
+          - "words"
+        - # inform is smart enough to *not* allow articles before actions.
+          # i am lazy.
+          Term:optional:
+          - "article"
+          - true
+        - # ex. Understand "birds" and "ruddy ducks" as the plural of duck.
+          # fix? in jess this (also) influences the story interpretation.
+          Term:type:optional:
+          - "plural_of"
+          - "matched"
+          - true
+        - # this matches one or more nouns or kinds:
+          # generation susses out what to do with those nouns or kinds.
+          # * aliases for nouns: Understand "floor" or "sawdust" as the message.
+          # * aliases for kinds: Understand "cupboard" or "cupboards" or "cabinets" as a cabinet.
+          # * grammar for actions: Understand "reach underneath/under/beneath/-- [something]" as looking under.
+          # jess doesn't permit aliases for kinds, those generate errors.
+          # ( note: in inform, aliases for kinds are simply applied to all nouns of that type during code generation )
+          Term: "names"

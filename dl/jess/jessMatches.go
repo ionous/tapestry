@@ -8,6 +8,8 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		Generator
 		Interpreter
 	}{
+		// understand "..." as .....
+		&op.Understandings,
 		// names are "a kind of"/"kinds of" [traits] kind:any.
 		&op.KindsOf,
 		// kind:objects are "usually" traits.

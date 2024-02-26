@@ -25,12 +25,16 @@ func (op *Names) HasAnonymousKind() bool {
 // checks Query flags for PlainNameMatching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	(matchKinds(q) &&
+	// "5 containers", "the container called the bottle"
+	(allowNounCreation(q) &&
 		(Optional(q, &next, &op.CountedName) ||
-			Optional(q, &next, &op.KindCalled) ||
-			Optional(q, &next, &op.Kind))) ||
+			Optional(q, &next, &op.KindCalled))) ||
+		// "the container"
+		(matchKinds(q) &&
+			(Optional(q, &next, &op.Kind))) ||
+		// "the bottle"
 		Optional(q, &next, &op.Name) {
-		// as long as one succeeded, try matching additional nouns too...
+		// as long as one succeeded, try matching additional names too...
 		// FIX: as far as i can tell, inform only allows "kind called" at the front of a list of names
 		// maybe it'd be better to match and reject when used.
 		if !Optional(q, &next, &op.AdditionalNames) || op.AdditionalNames.Names.KindCalled == nil {

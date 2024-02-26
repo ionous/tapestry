@@ -1,8 +1,11 @@
 package jess
 
 const (
-	// exclude kinds when matching names
+	// only allow simple names when matching.
 	PlainNameMatching = iota
+	// when matching names, some phrases imply the creation of new nouns
+	// this flag prevents those from matching
+	ExcludeNounCreation
 )
 
 // set the query flags to the passed flags
@@ -31,4 +34,10 @@ func (q queryContext) GetContext() int {
 func matchKinds(q Query) bool {
 	flags := q.GetContext()
 	return (flags & PlainNameMatching) == 0
+}
+
+func allowNounCreation(q Query) bool {
+	flags := q.GetContext()
+	return (flags&PlainNameMatching) == 0 &&
+		(flags&ExcludeNounCreation) == 0
 }

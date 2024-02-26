@@ -109,6 +109,43 @@ func (op *CommaAnd_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// conjunction junction 2.
+// matches commas, ands, and ors.
+// relies on the fact package match treats commas and ands each as their own words.
+type CommaAndOr struct {
+	Matched Matched
+	Markup  map[string]any
+}
+
+// comma_and_or, a type of flow.
+var Zt_CommaAndOr typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*CommaAndOr) TypeInfo() typeinfo.T {
+	return &Zt_CommaAndOr
+}
+
+// implements typeinfo.Markup
+func (op *CommaAndOr) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type comma_and_or
+type CommaAndOr_Slice []CommaAndOr
+
+// implements typeinfo.Instance
+func (*CommaAndOr_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CommaAndOr
+}
+
+// implements typeinfo.Repeats
+func (op *CommaAndOr_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // matches "is" or "are".
 type Are struct {
 	Matched Matched
@@ -712,6 +749,7 @@ func (op *Verb_Slice) Repeats() bool {
 // tests these in-order to find a match.
 // ( an alternative would be slots, and a registry; this is fine for now )
 type MatchingPhrases struct {
+	Understandings      Understandings
 	KindsAreTraits      KindsAreTraits
 	KindsOf             KindsOf
 	KindsHaveProperties KindsHaveProperties
@@ -1471,6 +1509,123 @@ func (op *NewTrait_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// one or more strings of quoted text
+// separated by the words "and", "comma", or "or".
+type QuotedTexts struct {
+	QuotedText     QuotedText
+	AdditionalText *AdditionalText
+	Markup         map[string]any
+}
+
+// quoted_texts, a type of flow.
+var Zt_QuotedTexts typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*QuotedTexts) TypeInfo() typeinfo.T {
+	return &Zt_QuotedTexts
+}
+
+// implements typeinfo.Markup
+func (op *QuotedTexts) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type quoted_texts
+type QuotedTexts_Slice []QuotedTexts
+
+// implements typeinfo.Instance
+func (*QuotedTexts_Slice) TypeInfo() typeinfo.T {
+	return &Zt_QuotedTexts
+}
+
+// implements typeinfo.Repeats
+func (op *QuotedTexts_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches a text following another some previous text.
+type AdditionalText struct {
+	CommaAndOr  CommaAndOr
+	QuotedTexts QuotedTexts
+	Markup      map[string]any
+}
+
+// additional_text, a type of flow.
+var Zt_AdditionalText typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AdditionalText) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalText
+}
+
+// implements typeinfo.Markup
+func (op *AdditionalText) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type additional_text
+type AdditionalText_Slice []AdditionalText
+
+// implements typeinfo.Instance
+func (*AdditionalText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalText
+}
+
+// implements typeinfo.Repeats
+func (op *AdditionalText_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// various phrases, all starting with the word "Understand"
+// inform supports defining plurals, aliases,
+// command synonyms, actions, references for actions,
+// trait, kind, and value substitutions....
+// possibly some others.
+type Understandings struct {
+	Understand  Words
+	QuotedTexts QuotedTexts
+	As          Words
+	Article     *Article
+	PluralOf    Matched
+	Names       Names
+	Markup      map[string]any
+}
+
+// understandings, a type of flow.
+var Zt_Understandings typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Understandings) TypeInfo() typeinfo.T {
+	return &Zt_Understandings
+}
+
+// implements typeinfo.Markup
+func (op *Understandings) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type understandings
+type Understandings_Slice []Understandings
+
+// implements typeinfo.Instance
+func (*Understandings_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Understandings
+}
+
+// implements typeinfo.Repeats
+func (op *Understandings_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
@@ -1490,6 +1645,7 @@ var z_slot_list = []*typeinfo.Slot{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_Article,
 	&Zt_CommaAnd,
+	&Zt_CommaAndOr,
 	&Zt_Are,
 	&Zt_Name,
 	&Zt_KindCalled,
@@ -1525,6 +1681,9 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PropertyType,
 	&Zt_KindsAreEither,
 	&Zt_NewTrait,
+	&Zt_QuotedTexts,
+	&Zt_AdditionalText,
+	&Zt_Understandings,
 }
 
 // a list of all command signatures
@@ -1533,6 +1692,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12489206644669467772: (*AdditionalAdjectives)(nil), /* AdditionalAdjectives commaAnd:adjectives: */
 	12174030489678544826: (*AdditionalKinds)(nil),      /* AdditionalKinds commaAnd:kinds: */
 	16975120945491427296: (*AdditionalNames)(nil),      /* AdditionalNames commaAnd:names: */
+	12949801356443185096: (*AdditionalText)(nil),       /* AdditionalText commaAndOr:quotedTexts: */
 	508023169458945308:   (*AdditionalTraits)(nil),     /* AdditionalTraits commaAnd:traits: */
 	1887918947148326916:  (*AdditionalTraits)(nil),     /* AdditionalTraits traits: */
 	10618851046870477413: (*Adjectives)(nil),           /* Adjectives */
@@ -1557,6 +1717,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4459312168816416564:  (*CalledName)(nil),           /* CalledName called:article:matched: */
 	5598625672403523312:  (*CalledName)(nil),           /* CalledName called:matched: */
 	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
+	4143979682086652670:  (*CommaAndOr)(nil),           /* CommaAndOr matched: */
 	2237036151518779634:  (*CountedName)(nil),          /* CountedName article:matchingNumber:kind: */
 	6139323499442568526:  (*CountedName)(nil),          /* CountedName matchingNumber:kind: */
 	17839012382227179591: (*Kind)(nil),                 /* Kind article:matched: */
@@ -1584,7 +1745,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
 	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	3520818575063928683:  (*MatchingPhrases)(nil),      /* MatchingPhrases kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
+	7075509426930269508:  (*MatchingPhrases)(nil),      /* MatchingPhrases understandings:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1637,6 +1798,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8224056348026199873:  (*PropertyType)(nil),         /* PropertyType primitive: */
 	8660980422311242175:  (*PropertyType)(nil),         /* PropertyType primitive:kind: */
 	6626169867101049892:  (*QuotedText)(nil),           /* QuotedText matched: */
+	15490383194906526516: (*QuotedTexts)(nil),          /* QuotedTexts quotedText: */
+	18124669431880345752: (*QuotedTexts)(nil),          /* QuotedTexts quotedText:additionalText: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
 	3958109237643295925:  (*SingleValue)(nil),          /* SingleValue quotedText: */
@@ -1645,6 +1808,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
 	2878025327467574768:  (*Traits)(nil),               /* Traits trait:additionalTraits: */
+	10685631184629907536: (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:article:names: */
+	15860802588944019059: (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:article:pluralOf:names: */
+	6588976909168664852:  (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:names: */
+	12935963997887575479: (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:pluralOf:names: */
 	4698992564801604870:  (*Verb)(nil),                 /* Verb matched: */
 	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
 	17939229312172807626: (*VerbPhrase)(nil),           /* VerbPhrase verb:names: */
@@ -1676,6 +1843,18 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"conjunction junction", "matches \",\" or \"and\" or \", and\"", "relies on the fact package match treats commas and ands each as their own words."},
+		},
+	}
+	Zt_CommaAndOr = typeinfo.Flow{
+		Name: "comma_and_or",
+		Lede: "comma_and_or",
+		Terms: []typeinfo.Term{{
+			Name:  "matched",
+			Label: "matched",
+			Type:  &Zt_Matched,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"conjunction junction 2.", "matches commas, ands, and ors.", "relies on the fact package match treats commas and ands each as their own words."},
 		},
 	}
 	Zt_Are = typeinfo.Flow{
@@ -2014,6 +2193,10 @@ func init() {
 		Name: "matching_phrases",
 		Lede: "matching_phrases",
 		Terms: []typeinfo.Term{{
+			Name:  "understandings",
+			Label: "understandings",
+			Type:  &Zt_Understandings,
+		}, {
 			Name:  "kinds_are_traits",
 			Label: "kinds_are_traits",
 			Markup: map[string]any{
@@ -2506,6 +2689,85 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"one or more new trait names,", "separated by the word \"or\""},
+		},
+	}
+	Zt_QuotedTexts = typeinfo.Flow{
+		Name: "quoted_texts",
+		Lede: "quoted_texts",
+		Terms: []typeinfo.Term{{
+			Name:  "quoted_text",
+			Label: "quoted_text",
+			Type:  &Zt_QuotedText,
+		}, {
+			Name:     "additional_text",
+			Label:    "additional_text",
+			Optional: true,
+			Type:     &Zt_AdditionalText,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"one or more strings of quoted text", "separated by the words \"and\", \"comma\", or \"or\"."},
+		},
+	}
+	Zt_AdditionalText = typeinfo.Flow{
+		Name: "additional_text",
+		Lede: "additional_text",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and_or",
+			Label: "comma_and_or",
+			Type:  &Zt_CommaAndOr,
+		}, {
+			Name:  "quoted_texts",
+			Label: "quoted_texts",
+			Type:  &Zt_QuotedTexts,
+		}},
+		Markup: map[string]any{
+			"comment": "matches a text following another some previous text.",
+		},
+	}
+	Zt_Understandings = typeinfo.Flow{
+		Name: "understandings",
+		Lede: "understandings",
+		Terms: []typeinfo.Term{{
+			Name:  "understand",
+			Label: "understand",
+			Type:  &Zt_Words,
+		}, {
+			Name:  "quoted_texts",
+			Label: "quoted_texts",
+			Markup: map[string]any{
+				"comment": []interface{}{"some of inform's understandings dont start with quoted strings", "all of jess's do."},
+			},
+			Type: &Zt_QuotedTexts,
+		}, {
+			Name:  "as",
+			Label: "as",
+			Type:  &Zt_Words,
+		}, {
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"inform is smart enough to *not* allow articles before actions.", "i am lazy."},
+			},
+			Type: &Zt_Article,
+		}, {
+			Name:     "plural_of",
+			Label:    "plural_of",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"ex. Understand \"birds\" and \"ruddy ducks\" as the plural of duck.", "fix? in jess this (also) influences the story interpretation."},
+			},
+			Type: &Zt_Matched,
+		}, {
+			Name:  "names",
+			Label: "names",
+			Markup: map[string]any{
+				"comment": []interface{}{"this matches one or more nouns or kinds:", "generation susses out what to do with those nouns or kinds.", "* aliases for nouns: Understand \"floor\" or \"sawdust\" as the message.", "* aliases for kinds: Understand \"cupboard\" or \"cupboards\" or \"cabinets\" as a cabinet.", "* grammar for actions: Understand \"reach underneath/under/beneath/-- [something]\" as looking under.", "jess doesn't permit aliases for kinds, those generate errors.", "( note: in inform, aliases for kinds are simply applied to all nouns of that type during code generation )"},
+			},
+			Type: &Zt_Names,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"various phrases, all starting with the word \"Understand\"", "inform supports defining plurals, aliases,", "command synonyms, actions, references for actions,", "trait, kind, and value substitutions....", "possibly some others."},
 		},
 	}
 }

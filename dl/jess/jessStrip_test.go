@@ -2,6 +2,8 @@ package jess
 
 import "testing"
 
+// ensure that StripArticle correctly detects and removes
+// common leading words such as "the", "a", "some", etc.
 func TestStripArticle(t *testing.T) {
 	type Pair struct {
 		src, article, text string
