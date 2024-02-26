@@ -60,11 +60,8 @@ Tapestry:
         is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
 
         Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
-        Messages are a kind of thing. The scrawled message is a message.
+        Messages are a kind of thing. Messages have a neatness. The scrawled message is a message.
         """ # "
-    - Define kind:fields:
-        - "messages"
-        - - Aspect: "neatness"
     - Interpret alias:as:
         - - "floor"
           - "sawdust"
