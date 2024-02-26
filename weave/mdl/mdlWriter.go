@@ -354,9 +354,9 @@ func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 	name := kind.name
 	domain := pen.domain
 	if !kind.exactName && parent.numAncestors() < 2 {
-		// we allow plural named kinds for nouns, etc. not for patterns and built in kinds.
-		err = errutil.Fmt("%w ambiguously named kinds: %q (in domain %q) and %q (in %q)",
-			Conflict, name, domain, kind.name, kind.domain)
+		// we only allow plural named kinds for nouns ( kinds of kind )
+		err = errutil.Fmt("%w plural singular conflict for %q (in %q)",
+			Conflict, name, domain)
 	} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
 		err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
 			Conflict, parent.name, name)
