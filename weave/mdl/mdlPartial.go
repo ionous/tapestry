@@ -20,17 +20,18 @@ func (pen *Pen) GetPartialKind(ws match.Span, out *kindsOf.Kinds) (ret string, e
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
 	if len(ws) > 0 {
-		var path string
-		words := strings.ToLower(ws.String()) + blank
+		var k kindInfo
+		str := ws.String()
+		words := strings.ToLower(str) + blank
 		switch e := pen.db.QueryRow(`
 	with kinds(id, name, alt, path) as (
-		select mk.rowid, mk.kind, mk.singular, mk.path
+		select mk.rowid, mk.kind, mk.singular, ',' || mk.path
 		from mdl_kind mk
  		join domain_tree
  		on (uses = domain)
  		where base = ?1
 	)
-	select name, path from (
+	select id, name, path from (
 		select id, name, substr(?2 ,0, length(name)+2) as words, path
 		from kinds
 		where words = (name || ' ')
@@ -41,12 +42,13 @@ func (pen *Pen) GetPartialKind(ws match.Span, out *kindsOf.Kinds) (ret string, e
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, words).Scan(&ret, &path); e {
+			pen.domain, words).Scan(&k.id, &k.name, &k.path); e {
 		case nil:
+			ret = k.name
 			if out != nil {
-				parentPath := "," + path
+				fullPath := k.fullpath()
 				for _, k := range kindsOf.DefaultKinds {
-					if strings.HasSuffix(parentPath, pen.getPath(k)) {
+					if strings.HasSuffix(fullPath, pen.getPath(k)) {
 						*out = k
 						break
 					}
