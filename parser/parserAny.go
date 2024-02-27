@@ -1,6 +1,8 @@
 package parser
 
-import "github.com/ionous/errutil"
+import (
+	"errors"
+)
 
 // AnyOf matches any one of the passed Scanners; whichever first matches.
 type AnyOf struct {
@@ -10,7 +12,7 @@ type AnyOf struct {
 // Scan implements Scanner.
 func (m *AnyOf) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err error) {
 	if cnt := len(m.Match); cnt == 0 {
-		err = errutil.New("no rules specified for any of")
+		err = errors.New("no rules specified for any of")
 	} else {
 		i, errorDepth := 0, -1 // keep the most informative error
 		for ; i < cnt; i++ {
@@ -21,6 +23,9 @@ func (m *AnyOf) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err err
 				err, errorDepth = e, d // we track the "deepest" / latest error.
 				// keep looking for success
 			}
+		}
+		if ret == nil && err == nil {
+			err = errors.New("nothing matched")
 		}
 	}
 	return
