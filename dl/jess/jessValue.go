@@ -33,6 +33,10 @@ func (op *SingleValue) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+func (op *QuotedText) String() string {
+	return op.Matched.String()
+}
+
 func (op *QuotedText) Assignment() (ret rt.Assignment) {
 	str := op.Matched.String()
 	if v, e := ConvertTextTemplate(str); e == nil {

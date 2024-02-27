@@ -32,6 +32,10 @@ func (m *Mock) AddKindTrait(kind, trait string) (_ error) {
 	m.out = append(m.out, "AddKindTrait", kind, trait)
 	return
 }
+func (m *Mock) AddPlural(many, one string) (_ error) {
+	m.out = append(m.out, "AddPlural", many, one)
+	return
+}
 func (m *Mock) AddNoun(short, long, kind string) (_ error) {
 	m.out = append(m.out, "AddNoun", short, long, kind)
 	return

@@ -21,8 +21,15 @@ func (op *QuotedTexts) Match(q Query, input *InputState) (okay bool) {
 }
 
 // unwind the tree of additional traits
-func (op *QuotedTexts) GetTextList() TextListIterator {
+func (op *QuotedTexts) Iterate() TextListIterator {
 	return TextListIterator{op}
+}
+
+func (op *QuotedTexts) Reduce() (ret []string) {
+	for it := op.Iterate(); it.HasNext(); {
+		ret = append(ret, it.GetNext())
+	}
+	return
 }
 
 // trait iterator
@@ -34,11 +41,11 @@ func (it TextListIterator) HasNext() bool {
 	return it.next != nil
 }
 
-func (it *TextListIterator) GetNext() (ret Matched) {
+func (it *TextListIterator) GetNext() (ret string) {
 	var next *QuotedTexts
 	if more := it.next.AdditionalText; more != nil {
 		next = &more.QuotedTexts
 	}
-	ret, it.next = it.next.QuotedText.Matched, next
+	ret, it.next = it.next.QuotedText.String(), next
 	return
 }

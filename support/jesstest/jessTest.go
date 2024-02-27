@@ -29,16 +29,20 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		// ------------------------
 		// Understandings
 		{
-			test:   `Understand "floor" or "sawdust" as the message.`,
-			result: errors.New("not implemented"),
+			test: `Understand "floor" or "sawdust" as the message.`,
+			// result: errors.New("not implemented"),
 		},
 		{
-			test:   `Understand "missives" as the plural of missive and message.`,
-			result: errors.New("not implemented"),
+			test: `Understand "missives" as the plural of missive and message.`,
+			// errors.New("not implemented"),
+			result: []string{
+				"AddPlural", "missives", "missive",
+				"AddPlural", "missives", "message",
+			},
 		},
 		{
-			test:   `Understand "hang [objects] on/onto/-- [objects]" as storing.`,
-			result: errors.New("not implemented"),
+			test: `Understand "hang [objects] on/onto/-- [objects]" as storing.`,
+			// result: errors.New("not implemented"),
 		},
 		// ------------------------
 		// PropertyNounValue

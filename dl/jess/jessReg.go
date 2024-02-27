@@ -13,6 +13,7 @@ type Registrar interface {
 	AddFields(kind string, fields []mdl.FieldInfo) error
 	AddKind(kind, ancestor string) error
 	AddKindTrait(kind, trait string) error
+	AddPlural(many, one string) error
 	AddNoun(short, long, kind string) error
 	AddNounAlias(noun, name string, rank int) error
 	AddNounTrait(noun, trait string) error
