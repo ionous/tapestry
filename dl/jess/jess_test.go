@@ -48,6 +48,8 @@ func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width in
 					k = kindsOf.Aspect
 				case "groups":
 					k = kindsOf.Record
+				case "storing":
+					k = kindsOf.Action
 				}
 				*out = k
 			}
@@ -93,6 +95,7 @@ var known = info{
 		"aspect", "aspects",
 		"color", "color", // aspect; uses the singular
 		"group", "groups", // record
+		"storing", "storing", //
 	},
 	traits: match.PanicSpans(
 		"closed",
