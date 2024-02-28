@@ -38,13 +38,6 @@ type articleResult struct {
 	Count int // for counted nouns: "seven (apples)"
 }
 
-func (a articleResult) NumWords() (ret int) {
-	if a.Matched != nil {
-		ret = a.Matched.NumWords()
-	}
-	return
-}
-
 func (a articleResult) String() (ret string) {
 	if a.Matched != nil {
 		ret = a.Matched.String()

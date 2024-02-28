@@ -20,8 +20,7 @@ func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 
 // match "can be", "are either", etc.
 func (op *KindsAreEither) matchEither(q Query, input *InputState) (okay bool) {
-	if m, _ := canBeEither.FindMatch(input.Words()); m != nil {
-		width := m.NumWords()
+	if m, width := canBeEither.FindMatch(input.Words()); m != nil {
 		op.CanBe.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return

@@ -38,11 +38,8 @@ type Query interface {
 }
 
 // Matched - generic interface so implementations can track backchannel data.
-// ex. a row id for kinds.
-// for any var m Matched, m.NumWords() should equal strings.Fields(m.String())
 type Matched interface {
 	String() string
-	NumWords() int
 }
 
 // implemented by phrases so that they can create story fragments based on

@@ -24,8 +24,7 @@ func (op *Understand) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Understand) matchPluralOf(q Query, input *InputState) (okay bool) {
-	if m, _ := pluralOf.FindMatch(input.Words()); m != nil {
-		width := m.NumWords()
+	if m, width := pluralOf.FindMatch(input.Words()); m != nil {
 		op.PluralOf, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return

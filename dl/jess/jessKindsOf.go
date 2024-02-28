@@ -21,8 +21,7 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 
 // match "a kind of" or "kinds of"
 func (op *KindsOf) matchKindsOf(q Query, input *InputState) (okay bool) {
-	if m, _ := kindsSpan.FindMatch(input.Words()); m != nil {
-		width := m.NumWords()
+	if m, width := kindsSpan.FindMatch(input.Words()); m != nil {
 		op.KindsOf.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return

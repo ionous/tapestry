@@ -44,14 +44,15 @@ func (d dbWrapper) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, widt
 	if res, e := d.GetPartialKind(ws, out); e != nil {
 		log.Println("FindKind", e)
 	} else {
+		// fix: this is probably wrong --
+		// it shouldnt be the width of the final kind;
+		// it should be the number of words used to find that kind
 		ret, width = res, countWords(res)
 	}
 	return
 }
 
 func (d dbWrapper) FindTrait(ws match.Span) (ret string, width int) {
-	// turns out the code is actually testing all fields
-	// and not just traits .... fix? seems to work okay so far.
 	if res, e := d.GetPartialTrait(ws); e != nil {
 		log.Println("FindTrait", e)
 	} else {
