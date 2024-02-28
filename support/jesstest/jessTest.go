@@ -12,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -30,11 +29,13 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		// Understandings
 		{
 			test: `Understand "floor" or "sawdust" as the message.`,
-			// result: errors.New("not implemented"),
+			result: []string{
+				"AddNounAlias", "message", "floor",
+				"AddNounAlias", "message", "sawdust",
+			},
 		},
 		{
 			test: `Understand "missives" as the plural of missive and message.`,
-			// errors.New("not implemented"),
 			result: []string{
 				"AddPlural", "missives", "missive",
 				"AddPlural", "missives", "message",
@@ -42,7 +43,15 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 		},
 		{
 			test: `Understand "hang [objects] on/onto/-- [objects]" as storing.`,
-			// result: errors.New("not implemented"),
+			result: []string{
+				"AddGrammar",
+				"hang [objects] on/onto/-- [objects]",
+				`{"One word:":["hang"]}`,
+				`{"One noun:":"objects"}`,
+				`{"One word:":["on","onto",""]}`,
+				`{"One noun:":"objects"}`,
+				`{"Action:":"storing"}`,
+			},
 		},
 		// ------------------------
 		// PropertyNounValue
@@ -450,7 +459,7 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 	}
 }
 
-func Marshal(a rt.Assignment) (ret string, err error) {
+func Marshal(a any) (ret string, err error) {
 	var enc encode.Encoder
 	if v, ok := a.(typeinfo.Instance); !ok {
 		err = errors.New("not a generated type?")

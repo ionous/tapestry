@@ -749,7 +749,7 @@ func (op *Verb_Slice) Repeats() bool {
 // tests these in-order to find a match.
 // ( an alternative would be slots, and a registry; this is fine for now )
 type MatchingPhrases struct {
-	Understandings      Understandings
+	Understand          Understand
 	KindsAreTraits      KindsAreTraits
 	KindsOf             KindsOf
 	KindsHaveProperties KindsHaveProperties
@@ -1583,11 +1583,7 @@ func (op *AdditionalText_Slice) Repeats() bool {
 }
 
 // various phrases, all starting with the word "Understand"
-// inform supports defining plurals, aliases,
-// command synonyms, actions, references for actions,
-// trait, kind, and value substitutions....
-// possibly some others.
-type Understandings struct {
+type Understand struct {
 	Understand  Words
 	QuotedTexts QuotedTexts
 	As          Words
@@ -1597,32 +1593,32 @@ type Understandings struct {
 	Markup      map[string]any
 }
 
-// understandings, a type of flow.
-var Zt_Understandings typeinfo.Flow
+// understand, a type of flow.
+var Zt_Understand typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*Understandings) TypeInfo() typeinfo.T {
-	return &Zt_Understandings
+func (*Understand) TypeInfo() typeinfo.T {
+	return &Zt_Understand
 }
 
 // implements typeinfo.Markup
-func (op *Understandings) GetMarkup(ensure bool) map[string]any {
+func (op *Understand) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type understandings
-type Understandings_Slice []Understandings
+// holds a slice of type understand
+type Understand_Slice []Understand
 
 // implements typeinfo.Instance
-func (*Understandings_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Understandings
+func (*Understand_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Understand
 }
 
 // implements typeinfo.Repeats
-func (op *Understandings_Slice) Repeats() bool {
+func (op *Understand_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1683,7 +1679,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_NewTrait,
 	&Zt_QuotedTexts,
 	&Zt_AdditionalText,
-	&Zt_Understandings,
+	&Zt_Understand,
 }
 
 // a list of all command signatures
@@ -1745,7 +1741,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
 	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	7075509426930269508:  (*MatchingPhrases)(nil),      /* MatchingPhrases understandings:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
+	7194637704405545739:  (*MatchingPhrases)(nil),      /* MatchingPhrases understand:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1808,10 +1804,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
 	2878025327467574768:  (*Traits)(nil),               /* Traits trait:additionalTraits: */
-	10685631184629907536: (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:article:names: */
-	15860802588944019059: (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:article:pluralOf:names: */
-	6588976909168664852:  (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:names: */
-	12935963997887575479: (*Understandings)(nil),       /* Understandings understand:quotedTexts:as:pluralOf:names: */
+	15200598710934343751: (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:names: */
+	8602404775723907374:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:pluralOf:names: */
+	4257336208718925827:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:names: */
+	1299769703937557498:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:pluralOf:names: */
 	4698992564801604870:  (*Verb)(nil),                 /* Verb matched: */
 	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
 	17939229312172807626: (*VerbPhrase)(nil),           /* VerbPhrase verb:names: */
@@ -2193,9 +2189,9 @@ func init() {
 		Name: "matching_phrases",
 		Lede: "matching_phrases",
 		Terms: []typeinfo.Term{{
-			Name:  "understandings",
-			Label: "understandings",
-			Type:  &Zt_Understandings,
+			Name:  "understand",
+			Label: "understand",
+			Type:  &Zt_Understand,
 		}, {
 			Name:  "kinds_are_traits",
 			Label: "kinds_are_traits",
@@ -2724,9 +2720,9 @@ func init() {
 			"comment": "matches a text following another some previous text.",
 		},
 	}
-	Zt_Understandings = typeinfo.Flow{
-		Name: "understandings",
-		Lede: "understandings",
+	Zt_Understand = typeinfo.Flow{
+		Name: "understand",
+		Lede: "understand",
 		Terms: []typeinfo.Term{{
 			Name:  "understand",
 			Label: "understand",
@@ -2735,7 +2731,7 @@ func init() {
 			Name:  "quoted_texts",
 			Label: "quoted_texts",
 			Markup: map[string]any{
-				"comment": []interface{}{"some of inform's understandings dont start with quoted strings", "all of jess's do."},
+				"comment": "all of jess's understand start with quoted text",
 			},
 			Type: &Zt_QuotedTexts,
 		}, {
@@ -2762,12 +2758,12 @@ func init() {
 			Name:  "names",
 			Label: "names",
 			Markup: map[string]any{
-				"comment": []interface{}{"this matches one or more nouns or kinds:", "generation susses out what to do with those nouns or kinds.", "* aliases for nouns: Understand \"floor\" or \"sawdust\" as the message.", "* aliases for kinds: Understand \"cupboard\" or \"cupboards\" or \"cabinets\" as a cabinet.", "* grammar for actions: Understand \"reach underneath/under/beneath/-- [something]\" as looking under.", "jess doesn't permit aliases for kinds, those generate errors.", "( note: in inform, aliases for kinds are simply applied to all nouns of that type during code generation )"},
+				"comment": []interface{}{"this matches one or more nouns or kinds:", "generation susses out what to do with those nouns or kinds.", "* aliases for nouns: Understand \"floor\" or \"sawdust\" as the message.", "* aliases for kinds: Understand \"cupboard\" or \"cupboards\" or \"cabinets\" as a cabinet.", "* grammar for actions: Understand \"reach underneath/under/beneath/-- [something]\" as looking under.", "jess doesn't permit aliases for kinds, those generate errors."},
 			},
 			Type: &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"various phrases, all starting with the word \"Understand\"", "inform supports defining plurals, aliases,", "command synonyms, actions, references for actions,", "trait, kind, and value substitutions....", "possibly some others."},
+			"comment": "various phrases, all starting with the word \"Understand\"",
 		},
 	}
 }

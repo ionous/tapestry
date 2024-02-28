@@ -55,12 +55,15 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		kinds
 		traits
 		records
+		actions
 		// kinds of nouns
 		things
 		containers
 		supporters
 		colors
 		groups
+		// actions
+		storing
 		// macros
 		carry
 		contain
@@ -83,6 +86,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		patterns, domain, "patterns", "pattern", idPath(),
 		records, domain, "records", "record", idPath(),
 		macros, domain, "macros", "macro", idPath(patterns),
+		actions, domain, "actions", "action", idPath(patterns),
 		kinds, domain, "kinds", "kind", idPath(),
 		traits, domain, "traits", "", idPath(aspects),
 		things, domain, "things", "thing", idPath(kinds),
@@ -91,12 +95,12 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		colors, domain, "color", nil, idPath(aspects),
 		groups, domain, "groups", "group", idPath(records),
 		// macros:
-		carry, domain, "carry", "", idPath(macros),
-		contain, domain, "contain", "", idPath(macros),
-		support, domain, "support", "", idPath(macros),
-		suspect, domain, "suspect", "", idPath(macros),
-		//
-
+		carry, domain, "carry", nil, idPath(macros),
+		contain, domain, "contain", nil, idPath(macros),
+		support, domain, "support", nil, idPath(macros),
+		suspect, domain, "suspect", nil, idPath(macros),
+		// actions
+		storing, domain, "storing", nil, idPath(actions),
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_field",

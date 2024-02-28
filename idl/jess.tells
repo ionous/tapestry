@@ -233,7 +233,7 @@ Spec:with group:
       Spec:with flow:
       - "matching_phrases"
       - Flow uses:
-        - Term: "understandings"
+        - Term: "understand"
         - # fix? combine similar starts to speed matching?
           # (nothing that the kinds have different filters)
           Term: "kinds_are_traits"
@@ -540,18 +540,13 @@ Spec:with group:
         - Term: "quoted_texts"
 
     - # various phrases, all starting with the word "Understand"
-      # inform supports defining plurals, aliases,
-      # command synonyms, actions, references for actions,
-      # trait, kind, and value substitutions....
-      # possibly some others.
       Spec:with flow:
-      - "understandings"
+      - "understand"
       - Flow uses:
         - Term:type:
           - "understand" # the word "understand"
           - "words"
-        - # some of inform's understandings dont start with quoted strings
-          # all of jess's do.
+        - # all of jess's understand start with quoted text
           Term: "quoted_texts"
         - Term:type:
           - "as"
@@ -573,5 +568,4 @@ Spec:with group:
           # * aliases for kinds: Understand "cupboard" or "cupboards" or "cabinets" as a cabinet.
           # * grammar for actions: Understand "reach underneath/under/beneath/-- [something]" as looking under.
           # jess doesn't permit aliases for kinds, those generate errors.
-          # ( note: in inform, aliases for kinds are simply applied to all nouns of that type during code generation )
           Term: "names"

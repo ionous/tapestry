@@ -1,6 +1,7 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -11,6 +12,7 @@ import (
 // alternatively, an implementation could generate story commands if that were useful for some reason.
 type Registrar interface {
 	AddFields(kind string, fields []mdl.FieldInfo) error
+	AddGrammar(name string, prog *grammar.Directive) error
 	AddKind(kind, ancestor string) error
 	AddKindTrait(kind, trait string) error
 	AddPlural(many, one string) error
@@ -19,14 +21,14 @@ type Registrar interface {
 	AddNounTrait(noun, trait string) error
 	AddNounValue(noun, prop string, val rt.Assignment) error // tbd: or would g.Value be better at this point?
 	AddTraits(aspect string, traits []string) error
-
-	Apply(verb Macro, lhs, rhs []string) error
-
+	//
 	GetClosestNoun(name string) (string, error)
 	GetExactNoun(name string) (string, error)
 	GetPlural(string) string
 	GetSingular(string) string
 	GetUniqueName(category string) string
+	// apply the passed macro to the passed nouns
+	Apply(verb Macro, lhs, rhs []string) error
 }
 
 // setup the default traits for the passed kind

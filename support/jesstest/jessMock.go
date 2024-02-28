@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -23,7 +24,22 @@ func (m *Mock) AddFields(kind string, fields []mdl.FieldInfo) (_ error) {
 	}
 	return
 }
-
+func (m *Mock) AddGrammar(name string, prog *grammar.Directive) (err error) {
+	m.out = append(m.out, "AddGrammar", name)
+	// we know the top level format of the grammar;
+	// so break it open to make the test output easier to read
+	action := prog.Series[1].(*grammar.Action)
+	series := prog.Series[0].(*grammar.Sequence)
+	for _, n := range append(series.Series, action) {
+		if str, e := Marshal(n); e != nil {
+			err = e
+			break
+		} else {
+			m.out = append(m.out, str)
+		}
+	}
+	return
+}
 func (m *Mock) AddKind(kind, ancestor string) (_ error) {
 	m.out = append(m.out, "AddKind", kind, ancestor)
 	return
