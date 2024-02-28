@@ -34,11 +34,11 @@ func (op *SingleValue) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *QuotedText) String() string {
-	return op.Matched.String()
+	return op.Matched
 }
 
 func (op *QuotedText) Assignment() (ret rt.Assignment) {
-	str := op.Matched.String()
+	str := op.Matched
 	if v, e := ConvertTextTemplate(str); e == nil {
 		ret = &assign.FromText{Value: v}
 	} else {

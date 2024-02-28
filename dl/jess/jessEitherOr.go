@@ -77,8 +77,8 @@ func (op *NewTrait) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; len(next) > 0 {
 		// look for 1) the end of the string, or 2) the separator "or"
 		if firstSpan := scanUntil(next.Words(), keywords.Or); firstSpan < 0 {
-			op.Matched = match.Span(next) // eat everything
-			*input, okay = nil, true      // all done.
+			op.Matched = match.Span(next).String() // eat everything
+			*input, okay = nil, true               // all done.
 		} else {
 			// found the word "or":
 			op.Matched = next.Cut(firstSpan)
@@ -98,7 +98,7 @@ func (op *NewTrait) Iterate() NewTraitIterator {
 }
 
 func (op *NewTrait) String() string {
-	return inflect.Normalize(op.Matched.String())
+	return inflect.Normalize(op.Matched)
 }
 
 type NewTraitIterator struct {

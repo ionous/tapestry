@@ -31,7 +31,7 @@ func (op *Kinds) matchName(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Kinds) String() string {
-	return inflect.Normalize(op.Matched.String())
+	return inflect.Normalize(op.Matched)
 }
 
 // unwind the tree of traits

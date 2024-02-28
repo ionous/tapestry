@@ -16,7 +16,7 @@ func (op *KindCalled) GetName(traits, kinds []string) (ret resultName, err error
 			// ignores the article of the kind,
 			// in favor of the article closest to the named noun
 			Article: reduceArticle(op.CalledName.Article),
-			Match:   op.CalledName.Matched,
+			Matched: op.CalledName.Matched,
 			Exact:   true,
 			Traits:  traits,
 			Kinds:   append(kinds, kind),
@@ -37,7 +37,7 @@ func (op *KindCalled) GetTraits() (ret Traitor) {
 }
 
 func (op *KindCalled) String() string {
-	return op.CalledName.Matched.String()
+	return op.CalledName.Matched
 }
 
 func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
@@ -51,7 +51,7 @@ func (op *KindCalled) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *CalledName) String() string {
-	return op.Matched.String()
+	return op.Matched
 }
 
 func (op *CalledName) Match(q Query, input *InputState) (okay bool) {

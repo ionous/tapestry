@@ -15,8 +15,11 @@ func (op *CountedName) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+// for CountedNoun's private field
+type CountedText = string
+
 func (op *CountedName) String() string {
-	return op.Matched.String()
+	return op.Matched
 }
 
 func (op *CountedName) GetName(traits, kinds []string) (ret resultName, err error) {

@@ -2,20 +2,15 @@
 Spec:with group:
   - "jess"
   - Group contains:
-    - # a snippet of matching text;
-      # defined via an interface to allow instances
-      # to track additional information (ex. db row).
-      Spec:with slot:
-      - "matched"
-      - Slot: true
-
     - # one of a predefined set of determiners:
       # the, a, some, etc.
       # see 'counted_name' for names with leading numbers.
       Spec:with flow:
       - "article"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # conjunction junction
       # matches "," or "and" or ", and"
@@ -23,7 +18,9 @@ Spec:with group:
       Spec:with flow:
       - "comma_and"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # conjunction junction 2.
       # matches commas, ands, and ors.
@@ -31,13 +28,17 @@ Spec:with group:
       Spec:with flow:
       - "comma_and_or"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # matches "is" or "are".
       Spec:with flow:
       - "are"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # Specifies a single name, in full or in part.
       # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
@@ -51,7 +52,21 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
+
+    - # matches an existing noun
+      # by checking multiple words for the best match.
+      Spec:with flow:
+      - "noun"
+      - Flow uses:
+        - Term:optional:
+          - "article"
+          - true
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # Defines a name and its kind in a single phrase.
       # kind "called" [the] _name_.
@@ -80,7 +95,9 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # Specifies one or more nouns, in full or in part.
       # Only one of the options, plus possibly 'additional_names', will match.
@@ -97,6 +114,10 @@ Spec:with group:
           # once used, no additional names will match.
           Term:optional:
           - "kind_called"
+          - true
+        - # matches existing nouns
+          Term:optional:
+          - "noun"
           - true
         - # used primarily for anonymous nouns: "the container"
           # noting that anonymous nouns are prohibited from starting a sentence.
@@ -128,8 +149,9 @@ Spec:with group:
           - true
         - Term: "matching_number"
         - Term: "kind"
-        - Term:private:
+        - Term:type:private:
           - "matched"
+          - "counted_text"
           - true
 
     - # matches the name of an existing kind.
@@ -141,7 +163,9 @@ Spec:with group:
           Term:optional:
           - "article"
           - true
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
         - Term:private:
           - "actual_kind"
           - true
@@ -160,7 +184,9 @@ Spec:with group:
           - "article"
           - true
         - # matches a span ending with "is/are/comma/and"
-          Term: "matched"
+          Term:type:
+          - "matched"
+          - "text"
         - Term:optional:
           - "additional_kinds"
           - true
@@ -180,7 +206,9 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # matches the name of an (existing) trait.
       Spec:with flow:
@@ -191,7 +219,9 @@ Spec:with group:
           Term:optional:
           - "article"
           - true
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # matches at least one trait.
       Spec:with flow:
@@ -215,13 +245,17 @@ Spec:with group:
       Spec:with flow:
       - "words"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # matches one or more predefined verbs
       Spec:with flow:
       - "verb"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
         - # verbs are represented by "macros" in tapestry.
           Term:private:
           - "macro"
@@ -454,7 +488,9 @@ Spec:with group:
       Spec:with flow:
       - "quoted_text"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
 
     - # reads a number specified in words or as digits.
       # stores the result as the parsed number.
@@ -477,7 +513,7 @@ Spec:with group:
           - true
         - Term:type:optional:
           - "list_of"
-          - "matched"
+          - "text"
           - true
         - Term: "property_type"
         - Term:optional:
@@ -492,7 +528,7 @@ Spec:with group:
       - Flow uses:
         - Term:type:optional:
           - "primitive"
-          - "matched"
+          - "text"
           - true
         - # kinds|aspects|records
           Term:optional:
@@ -517,7 +553,9 @@ Spec:with group:
       Spec:with flow:
       - "new_trait"
       - Flow uses:
-        - Term: "matched"
+        - Term:type:
+          - "matched"
+          - "text"
         - Term:optional:
           - "new_trait"
           - true
@@ -560,7 +598,7 @@ Spec:with group:
           # fix? in jess this (also) influences the story interpretation.
           Term:type:optional:
           - "plural_of"
-          - "matched"
+          - "text"
           - true
         - # this matches one or more nouns or kinds:
           # generation susses out what to do with those nouns or kinds.

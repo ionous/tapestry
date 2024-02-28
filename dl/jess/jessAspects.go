@@ -15,14 +15,14 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	// ideally, fix. but the use of those aspects in kinds as fields is also singular
 	// and matching of the field to the field's type is used as a filter to detect aspects
 	if index := scanUntil(next.Words(), keywords.Are); index > 0 {
-		plural := next.Cut(index)                   // cut up to the index of "are"
-		one := inflect.Singularize(plural.String()) // fix! should use the db
-		span, _ := match.MakeSpan(one)              // fix! should find kind without span
+		plural := next.Cut(index)          // cut up to the index of "are"
+		one := inflect.Singularize(plural) // fix! should use the db
+		span, _ := match.MakeSpan(one)     // fix! should find kind without span
 		var ks kindsOf.Kinds
 		if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
 			// fix: clean this up some.
 			op.Aspect.ActualKind = ActualKind{k, ks}
-			op.Aspect.Matched = span
+			op.Aspect.Matched = span.String()
 			//
 			next := next.Skip(w)         // skip the kind
 			op.Are.Matched = next.Cut(1) // cut the word are

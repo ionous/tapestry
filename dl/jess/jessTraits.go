@@ -12,7 +12,7 @@ func (op *AdditionalTraits) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Trait) String() string {
-	return inflect.Normalize(op.Matched.String())
+	return inflect.Normalize(op.Matched)
 }
 
 func (op *Trait) Match(q Query, input *InputState) (okay bool) {
@@ -25,9 +25,8 @@ func (op *Trait) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Trait) matchTrait(q Query, input *InputState) (okay bool) {
-	if m, width := q.FindTrait(input.Words()); width > 0 {
-		m := matchedString{m, width}
-		op.Matched, *input, okay = m, input.Skip(width), true
+	if str, width := q.FindTrait(input.Words()); width > 0 {
+		op.Matched, *input, okay = str, input.Skip(width), true
 	}
 	return
 }

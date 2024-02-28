@@ -19,7 +19,7 @@ func makeResult(macro Macro, reverse bool, a, b []resultName) localResults {
 
 type resultName struct {
 	Article articleResult
-	Match   Matched
+	Matched string
 	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
 	Traits  []string
 	Kinds   []string // it's possible, if rare, to apply multiple kinds
@@ -27,20 +27,14 @@ type resultName struct {
 }
 
 func (n resultName) String() (ret string) {
-	if m := n.Match; m != nil {
-		ret = m.String()
-	}
-	return
+	return n.Matched
 }
 
 type articleResult struct {
-	Matched
-	Count int // for counted nouns: "seven (apples)"
+	Matched string
+	Count   int // for counted nouns: "seven (apples)"
 }
 
-func (a articleResult) String() (ret string) {
-	if a.Matched != nil {
-		ret = a.Matched.String()
-	}
-	return
+func (a articleResult) String() string {
+	return a.Matched
 }

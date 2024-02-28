@@ -1,7 +1,7 @@
 package jess
 
 func (op *Property) String() string {
-	return op.Matched.String()
+	return op.Matched
 }
 
 func (op *Property) Match(q Query, input *InputState) (okay bool) {
@@ -15,7 +15,6 @@ func (op *Property) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Property) matchProperty(q Query, input *InputState) (okay bool) {
 	if m, width := q.FindField(input.Words()); width > 0 {
-		m := matchedString{m, width}
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
 	return

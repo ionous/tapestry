@@ -4,7 +4,7 @@ import "git.sr.ht/~ionous/tapestry/support/match"
 
 func (op *Article) Match(q Query, input *InputState) (okay bool) {
 	if m, width := FindCommonArticles(input.Words()); width > 0 {
-		op.Matched, *input, okay = m, input.Skip(width), true
+		op.Matched, *input, okay = m.String(), input.Skip(width), true
 	}
 	return
 }

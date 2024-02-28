@@ -33,7 +33,7 @@ func (op *Understand) matchPluralOf(q Query, input *InputState) (okay bool) {
 var pluralOf = match.PanicSpans("plural of")
 
 func (op *Understand) Generate(rar Registrar) (err error) {
-	if op.PluralOf != nil {
+	if len(op.PluralOf) > 0 {
 		err = op.applyPlurals(rar)
 	} else {
 		// check whether kind matches an action
@@ -50,7 +50,6 @@ func (op *Understand) Generate(rar Registrar) (err error) {
 		} else {
 			err = errors.New("what's there to understand?")
 		}
-
 	}
 	return
 }

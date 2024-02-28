@@ -36,7 +36,7 @@ func (op *KindsHaveProperties) matchListOf(q Query, input *InputState) (okay boo
 func (op *KindsHaveProperties) Generate(rar Registrar) (err error) {
 	if kind, e := op.Kind.Validate(kindsOf.Kind, kindsOf.Record); e != nil {
 		err = e
-	} else if f, e := op.PropertyType.GetType(op.ListOf != nil); e != nil {
+	} else if f, e := op.PropertyType.GetType(len(op.ListOf) > 0); e != nil {
 		err = e
 	} else {
 		if op.CalledName != nil {
@@ -77,11 +77,11 @@ func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
 	var aff affine.Affinity
 	var cls string
 
-	if p := op.Primitive; p != nil {
-		aff, cls = getTypeOfPrim(p.String())
+	if prim := op.Primitive; len(prim) > 0 {
+		aff, cls = getTypeOfPrim(prim)
 	} else {
 		// use the name the author specified for the field
-		name = inflect.Normalize(op.Kind.Matched.String())
+		name = inflect.Normalize(op.Kind.Matched)
 		// even if that differs from the actual name of the kind...
 		aff, cls, err = getTypeOfKind(op.Kind)
 	}

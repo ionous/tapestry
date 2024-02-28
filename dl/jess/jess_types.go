@@ -6,40 +6,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// matched, a type of slot.
-var Zt_Matched = typeinfo.Slot{
-	Name: "matched",
-	Markup: map[string]any{
-		"comment": []interface{}{"a snippet of matching text;", "defined via an interface to allow instances", "to track additional information (ex. db row)."},
-	},
-}
-
-// holds a single slot.
-type Matched_Slot struct{ Value Matched }
-
-// implements typeinfo.Instance for a single slot.
-func (*Matched_Slot) TypeInfo() typeinfo.T {
-	return &Zt_Matched
-}
-
-// holds a slice of slots.
-type Matched_Slots []Matched
-
-// implements typeinfo.Instance for a series of slots.
-func (*Matched_Slots) TypeInfo() typeinfo.T {
-	return &Zt_Matched
-}
-
-// implements typeinfo.Repeats
-func (op *Matched_Slots) Repeats() bool {
-	return len(*op) > 0
-}
-
 // one of a predefined set of determiners:
 // the, a, some, etc.
 // see 'counted_name' for names with leading numbers.
 type Article struct {
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -76,7 +47,7 @@ func (op *Article_Slice) Repeats() bool {
 // matches "," or "and" or ", and"
 // relies on the fact package match treats commas and ands each as their own words.
 type CommaAnd struct {
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -113,7 +84,7 @@ func (op *CommaAnd_Slice) Repeats() bool {
 // matches commas, ands, and ors.
 // relies on the fact package match treats commas and ands each as their own words.
 type CommaAndOr struct {
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -148,7 +119,7 @@ func (op *CommaAndOr_Slice) Repeats() bool {
 
 // matches "is" or "are".
 type Are struct {
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -189,7 +160,7 @@ func (op *Are_Slice) Repeats() bool {
 // ( see also 'kind_called' )
 type Name struct {
 	Article *Article
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -219,6 +190,43 @@ func (*Name_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *Name_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches an existing noun
+// by checking multiple words for the best match.
+type Noun struct {
+	Article *Article
+	Matched string
+	Markup  map[string]any
+}
+
+// noun, a type of flow.
+var Zt_Noun typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Noun) TypeInfo() typeinfo.T {
+	return &Zt_Noun
+}
+
+// implements typeinfo.Markup
+func (op *Noun) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type noun
+type Noun_Slice []Noun
+
+// implements typeinfo.Instance
+func (*Noun_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Noun
+}
+
+// implements typeinfo.Repeats
+func (op *Noun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -267,7 +275,7 @@ func (op *KindCalled_Slice) Repeats() bool {
 type CalledName struct {
 	Called  Words
 	Article *Article
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -308,6 +316,7 @@ func (op *CalledName_Slice) Repeats() bool {
 type Names struct {
 	CountedName     *CountedName
 	KindCalled      *KindCalled
+	Noun            *Noun
 	Kind            *Kind
 	Name            *Name
 	AdditionalNames *AdditionalNames
@@ -385,7 +394,7 @@ type CountedName struct {
 	Article        *Article
 	MatchingNumber MatchingNumber
 	Kind           Kind
-	Matched        Matched
+	Matched        CountedText
 	Markup         map[string]any
 }
 
@@ -421,7 +430,7 @@ func (op *CountedName_Slice) Repeats() bool {
 // matches the name of an existing kind.
 type Kind struct {
 	Article    *Article
-	Matched    Matched
+	Matched    string
 	ActualKind ActualKind
 	Markup     map[string]any
 }
@@ -460,7 +469,7 @@ func (op *Kind_Slice) Repeats() bool {
 type Kinds struct {
 	Traits          *Traits
 	Article         *Article
-	Matched         Matched
+	Matched         string
 	AdditionalKinds *AdditionalKinds
 	Markup          map[string]any
 }
@@ -533,7 +542,7 @@ func (op *AdditionalKinds_Slice) Repeats() bool {
 // matches the name of a field in a kind.
 type Property struct {
 	Article *Article
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -569,7 +578,7 @@ func (op *Property_Slice) Repeats() bool {
 // matches the name of an (existing) trait.
 type Trait struct {
 	Article *Article
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -676,7 +685,7 @@ func (op *AdditionalTraits_Slice) Repeats() bool {
 
 // matches one or more predefined words
 type Words struct {
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -711,7 +720,7 @@ func (op *Words_Slice) Repeats() bool {
 
 // matches one or more predefined verbs
 type Verb struct {
-	Matched Matched
+	Matched string
 	Macro   Macro
 	Markup  map[string]any
 }
@@ -1286,7 +1295,7 @@ func (op *SingleValue_Slice) Repeats() bool {
 // text that begins and ends with double quotes.
 // the quotes themselves are not part of the matched text.
 type QuotedText struct {
-	Matched Matched
+	Matched string
 	Markup  map[string]any
 }
 
@@ -1361,7 +1370,7 @@ type KindsHaveProperties struct {
 	Kind         Kind
 	Have         Words
 	Article      *Article
-	ListOf       Matched
+	ListOf       string
 	PropertyType PropertyType
 	CalledName   *CalledName
 	Markup       map[string]any
@@ -1400,7 +1409,7 @@ func (op *KindsHaveProperties_Slice) Repeats() bool {
 // as part of 'kinds_have_properties'
 // exactly one member can match
 type PropertyType struct {
-	Primitive Matched
+	Primitive string
 	Kind      *Kind
 	Markup    map[string]any
 }
@@ -1475,7 +1484,7 @@ func (op *KindsAreEither_Slice) Repeats() bool {
 // one or more new trait names,
 // separated by the word "or"
 type NewTrait struct {
-	Matched  Matched
+	Matched  string
 	NewTrait *NewTrait
 	Markup   map[string]any
 }
@@ -1588,7 +1597,7 @@ type Understand struct {
 	QuotedTexts QuotedTexts
 	As          Words
 	Article     *Article
-	PluralOf    Matched
+	PluralOf    string
 	Names       Names
 	Markup      map[string]any
 }
@@ -1625,15 +1634,8 @@ func (op *Understand_Slice) Repeats() bool {
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
-	Slot:       z_slot_list,
 	Flow:       z_flow_list,
 	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_Matched,
 }
 
 // a list of all flows in this this package
@@ -1644,6 +1646,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_CommaAndOr,
 	&Zt_Are,
 	&Zt_Name,
+	&Zt_Noun,
 	&Zt_KindCalled,
 	&Zt_CalledName,
 	&Zt_Names,
@@ -1760,8 +1763,24 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6118560200350627847:  (*Names)(nil),                /* Names countedName:kindCalled:kind:name:additionalNames: */
 	10095315050340635774: (*Names)(nil),                /* Names countedName:kindCalled:name: */
 	12303183222075615441: (*Names)(nil),                /* Names countedName:kindCalled:name:additionalNames: */
+	16016006553657500507: (*Names)(nil),                /* Names countedName:kindCalled:noun: */
+	10974813615439306964: (*Names)(nil),                /* Names countedName:kindCalled:noun:additionalNames: */
+	9330812819590436241:  (*Names)(nil),                /* Names countedName:kindCalled:noun:kind: */
+	7495635724182262182:  (*Names)(nil),                /* Names countedName:kindCalled:noun:kind:additionalNames: */
+	61991847326186512:    (*Names)(nil),                /* Names countedName:kindCalled:noun:kind:name: */
+	16567691826379993975: (*Names)(nil),                /* Names countedName:kindCalled:noun:kind:name:additionalNames: */
+	1954798977107529870:  (*Names)(nil),                /* Names countedName:kindCalled:noun:name: */
+	1453720914422785985:  (*Names)(nil),                /* Names countedName:kindCalled:noun:name:additionalNames: */
 	4084573660669905687:  (*Names)(nil),                /* Names countedName:name: */
 	4746500019507238408:  (*Names)(nil),                /* Names countedName:name:additionalNames: */
+	1565612388169232770:  (*Names)(nil),                /* Names countedName:noun: */
+	9885660877016308621:  (*Names)(nil),                /* Names countedName:noun:additionalNames: */
+	7544737702340487242:  (*Names)(nil),                /* Names countedName:noun:kind: */
+	6225774588617267381:  (*Names)(nil),                /* Names countedName:noun:kind:additionalNames: */
+	6758483912899777873:  (*Names)(nil),                /* Names countedName:noun:kind:name: */
+	2370394761308054758:  (*Names)(nil),                /* Names countedName:noun:kind:name:additionalNames: */
+	14324195655603457449: (*Names)(nil),                /* Names countedName:noun:name: */
+	7648223350549942782:  (*Names)(nil),                /* Names countedName:noun:name:additionalNames: */
 	10083583177877560579: (*Names)(nil),                /* Names kind: */
 	10358197305705491068: (*Names)(nil),                /* Names kind:additionalNames: */
 	4765472119311194486:  (*Names)(nil),                /* Names kind:name: */
@@ -1774,13 +1793,31 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6231970138046816860:  (*Names)(nil),                /* Names kindCalled:kind:name:additionalNames: */
 	2889757484689352859:  (*Names)(nil),                /* Names kindCalled:name: */
 	17641125891389017492: (*Names)(nil),                /* Names kindCalled:name:additionalNames: */
+	18252619704094206206: (*Names)(nil),                /* Names kindCalled:noun: */
+	16719037751160036689: (*Names)(nil),                /* Names kindCalled:noun:additionalNames: */
+	10760810840429172254: (*Names)(nil),                /* Names kindCalled:noun:kind: */
+	1058091307719820081:  (*Names)(nil),                /* Names kindCalled:noun:kind:additionalNames: */
+	6350622555029621989:  (*Names)(nil),                /* Names kindCalled:noun:kind:name: */
+	15500822951422585506: (*Names)(nil),                /* Names kindCalled:noun:kind:name:additionalNames: */
+	17526846413198169413: (*Names)(nil),                /* Names kindCalled:noun:name: */
+	1527596859810085826:  (*Names)(nil),                /* Names kindCalled:noun:name:additionalNames: */
 	4500297491524973516:  (*Names)(nil),                /* Names name: */
 	17351915174502247643: (*Names)(nil),                /* Names name:additionalNames: */
+	4129390381581869393:  (*Names)(nil),                /* Names noun: */
+	941988050790936806:   (*Names)(nil),                /* Names noun:additionalNames: */
+	14246399898236767247: (*Names)(nil),                /* Names noun:kind: */
+	4100879738227378912:  (*Names)(nil),                /* Names noun:kind:additionalNames: */
+	141678822577381250:   (*Names)(nil),                /* Names noun:kind:name: */
+	17169799669968570765: (*Names)(nil),                /* Names noun:kind:name:additionalNames: */
+	13508960775707565904: (*Names)(nil),                /* Names noun:name: */
+	13465500415858101815: (*Names)(nil),                /* Names noun:name:additionalNames: */
 	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
 	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
 	8736862563783456239:  (*NewTrait)(nil),             /* NewTrait matched: */
 	8812100125409583293:  (*NewTrait)(nil),             /* NewTrait matched:newTrait: */
+	9135030775569670221:  (*Noun)(nil),                 /* Noun article:matched: */
+	3627847602484306981:  (*Noun)(nil),                 /* Noun matched: */
 	6502702423569934278:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:of:singleValue: */
 	9912988654777640387:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:singleValue: */
 	11825351964218879050: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:of:singleValue: */
@@ -1823,7 +1860,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"one of a predefined set of determiners:", "the, a, some, etc.", "see 'counted_name' for names with leading numbers."},
@@ -1835,7 +1872,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"conjunction junction", "matches \",\" or \"and\" or \", and\"", "relies on the fact package match treats commas and ands each as their own words."},
@@ -1847,7 +1884,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"conjunction junction 2.", "matches commas, ands, and ors.", "relies on the fact package match treats commas and ands each as their own words."},
@@ -1859,7 +1896,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": "matches \"is\" or \"are\".",
@@ -1876,10 +1913,27 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"Specifies a single name, in full or in part.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "The name \"chest\" implies the treasure chest.", "To optimizing matching the words \"is/are/comma/and\" are never part of name names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also 'kind_called' )"},
+		},
+	}
+	Zt_Noun = typeinfo.Flow{
+		Name: "noun",
+		Lede: "noun",
+		Terms: []typeinfo.Term{{
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &Zt_Article,
+		}, {
+			Name:  "matched",
+			Label: "matched",
+			Type:  &prim.Zt_Text,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"matches an existing noun", "by checking multiple words for the best match."},
 		},
 	}
 	Zt_KindCalled = typeinfo.Flow{
@@ -1924,7 +1978,7 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 	}
 	Zt_Names = typeinfo.Flow{
@@ -1943,6 +1997,14 @@ func init() {
 				"comment": []interface{}{"note: because this phrase is greedy", "once used, no additional names will match."},
 			},
 			Type: &Zt_KindCalled,
+		}, {
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "matches existing nouns",
+			},
+			Type: &Zt_Noun,
 		}, {
 			Name:     "kind",
 			Label:    "kind",
@@ -2024,7 +2086,7 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}, {
 			Name:    "actual_kind",
 			Label:   "actual_kind",
@@ -2056,7 +2118,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "matches a span ending with \"is/are/comma/and\"",
 			},
-			Type: &Zt_Matched,
+			Type: &prim.Zt_Text,
 		}, {
 			Name:     "additional_kinds",
 			Label:    "additional_kinds",
@@ -2097,7 +2159,7 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": "matches the name of a field in a kind.",
@@ -2117,7 +2179,7 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": "matches the name of an (existing) trait.",
@@ -2163,7 +2225,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": "matches one or more predefined words",
@@ -2175,7 +2237,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}, {
 			Name:    "macro",
 			Label:   "macro",
@@ -2576,7 +2638,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"text that begins and ends with double quotes.", "the quotes themselves are not part of the matched text."},
@@ -2614,7 +2676,7 @@ func init() {
 			Name:     "list_of",
 			Label:    "list_of",
 			Optional: true,
-			Type:     &Zt_Matched,
+			Type:     &prim.Zt_Text,
 		}, {
 			Name:  "property_type",
 			Label: "property_type",
@@ -2636,7 +2698,7 @@ func init() {
 			Name:     "primitive",
 			Label:    "primitive",
 			Optional: true,
-			Type:     &Zt_Matched,
+			Type:     &prim.Zt_Text,
 		}, {
 			Name:     "kind",
 			Label:    "kind",
@@ -2676,7 +2738,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &Zt_Matched,
+			Type:  &prim.Zt_Text,
 		}, {
 			Name:     "new_trait",
 			Label:    "new_trait",
@@ -2753,7 +2815,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": []interface{}{"ex. Understand \"birds\" and \"ruddy ducks\" as the plural of duck.", "fix? in jess this (also) influences the story interpretation."},
 			},
-			Type: &Zt_Matched,
+			Type: &prim.Zt_Text,
 		}, {
 			Name:  "names",
 			Label: "names",

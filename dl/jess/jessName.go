@@ -3,13 +3,13 @@ package jess
 import "git.sr.ht/~ionous/tapestry/support/match"
 
 func (op *Name) String() string {
-	return op.Matched.String()
+	return op.Matched
 }
 
 func (op *Name) GetName(traits, kinds []string) (ret resultName, err error) {
 	ret = resultName{
 		Article: reduceArticle(op.Article),
-		Match:   op.Matched, // a span cut from the input
+		Matched: op.Matched, // a span cut from the input
 		Traits:  traits,
 		Kinds:   kinds,
 	}

@@ -14,8 +14,8 @@ func (in InputState) Skip(skip int) InputState {
 }
 
 // return an input state that is the passed number of words after this one.
-func (in InputState) Cut(width int) match.Span {
-	return match.Span(in[:width])
+func (in InputState) Cut(width int) string {
+	return match.Span(in[:width]).String()
 }
 
 func (in InputState) MatchWord(choices ...uint64) (width int) {
