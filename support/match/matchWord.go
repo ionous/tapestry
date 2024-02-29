@@ -2,8 +2,8 @@ package match
 
 type Word struct {
 	hash  uint64
-	slice string // go doesn't allocate a new string for a slice, it stores offset and length
-	start int    // but doesn't seem to be a way of finding the offset from the string itself
+	slice string // go interally stores string slices as offset and length
+	start int    // but there doesn't seem to be a way of getting that offest
 }
 
 func (w *Word) isValid() bool {

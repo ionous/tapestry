@@ -68,6 +68,7 @@ func makeSpan(s string) (out Span, rem string, err error) {
 	var tickStart int
 	var quoteTerminal bool
 	var terminal int
+	// the rune writer writes into w to accumulate the hash.
 	w, rbs := fnv.New64a(), makeRuneWriter()
 Loop:
 	for i, r := range s {
@@ -79,7 +80,9 @@ Loop:
 				break Loop
 			}
 
-		// back ticks
+		// backticked text is written with two "words":
+		// 1. a word containing a single doubleQuote ( ie. the leading backtick is replaced )
+		// 2. a word containing the entire contents of the quoted text
 		case r == '`' && quoteStart == 0:
 			// start reading quoted text:
 			if tickStart == 0 {
@@ -95,7 +98,9 @@ Loop:
 				wordStart = -1
 			}
 
-		// double quotes
+		// double quoted text is written with two "words":
+		// 1. a word containing a single doubleQuote
+		// 2. a word containing the entire contents of the quoted text
 		case r == '"' && tickStart == 0:
 			// start reading quoted text:
 			if quoteStart == 0 {
@@ -120,6 +125,7 @@ Loop:
 			terminal = i
 			wordStart = -1
 
+		// commas are written as their own word.
 		case r == ',':
 			flushWord(wordStart, i, sumReset(w))
 			flushWord(i, i+1, Keywords.Comma)
