@@ -1715,7 +1715,7 @@ func (op *MapDirections_Slice) Repeats() bool {
 // The destination of a door is always a room or nowhere.
 // ( Inform doesn't allow nowhere, but it seems like a good idea. )
 type MapConnections struct {
-	Through Words
+	Through bool
 	Doors   Names
 	Are     Are
 	Links   Links
@@ -1825,8 +1825,9 @@ func (op *Direction_Slice) Repeats() bool {
 
 // generates a room, a door, or nowhere.
 type Links struct {
-	Nowhere    *Words
+	Nowhere    bool
 	KindCalled *KindCalled
+	Noun       *Noun
 	Name       *Name
 	Markup     map[string]any
 }
@@ -2024,11 +2025,19 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8672209626647792302:  (*Links)(nil),                /* Links */
 	128535242801121637:   (*Links)(nil),                /* Links kindCalled: */
 	2802244085810550836:  (*Links)(nil),                /* Links kindCalled:name: */
+	7798942202746856361:  (*Links)(nil),                /* Links kindCalled:noun: */
+	17546188669915431016: (*Links)(nil),                /* Links kindCalled:noun:name: */
 	14719373152386746961: (*Links)(nil),                /* Links name: */
+	22185471341627372:    (*Links)(nil),                /* Links noun: */
+	18097222233010326407: (*Links)(nil),                /* Links noun:name: */
 	17837338516789911186: (*Links)(nil),                /* Links nowhere: */
 	2610912198093370717:  (*Links)(nil),                /* Links nowhere:kindCalled: */
 	4644985483233181356:  (*Links)(nil),                /* Links nowhere:kindCalled:name: */
+	10263443644107177649: (*Links)(nil),                /* Links nowhere:kindCalled:noun: */
+	3802101473355515056:  (*Links)(nil),                /* Links nowhere:kindCalled:noun:name: */
 	12007660852507028345: (*Links)(nil),                /* Links nowhere:name: */
+	15135457201233769604: (*Links)(nil),                /* Links nowhere:noun: */
+	11798005628414224191: (*Links)(nil),                /* Links nowhere:noun:name: */
 	4501525654191083187:  (*MapConnections)(nil),       /* MapConnections through:doors:are:links: */
 	11094774905081326439: (*MapDirections)(nil),        /* MapDirections directionFromLinks: */
 	17032334246046354982: (*MapDirections)(nil),        /* MapDirections directionFromLinks:links: */
@@ -3202,7 +3211,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "through",
 			Label: "through",
-			Type:  &Zt_Words,
+			Type:  &prim.Zt_Bool,
 		}, {
 			Name:  "doors",
 			Label: "doors",
@@ -3265,20 +3274,22 @@ func init() {
 			Name:     "nowhere",
 			Label:    "nowhere",
 			Optional: true,
-			Type:     &Zt_Words,
+			Type:     &prim.Zt_Bool,
 		}, {
 			Name:     "kind_called",
 			Label:    "kind_called",
 			Optional: true,
 			Type:     &Zt_KindCalled,
 		}, {
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Type:     &Zt_Noun,
+		}, {
 			Name:     "name",
 			Label:    "name",
 			Optional: true,
-			Markup: map[string]any{
-				"comment": []interface{}{"this will try to match existing nouns first", "and then will generate a noun if none was found."},
-			},
-			Type: &Zt_Name,
+			Type:     &Zt_Name,
 		}},
 		Markup: map[string]any{
 			"comment": "generates a room, a door, or nowhere.",

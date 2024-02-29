@@ -654,7 +654,7 @@ Spec:with group:
       - Flow uses:
         - Term:type:
           - "through"
-          - "words"
+          - "bool"
         - Term:type:
           - "doors"
           - "names"
@@ -685,14 +685,15 @@ Spec:with group:
       - Flow uses:
         - Term:type:optional:
           - "nowhere"
-          - "words"
+          - "bool"
           - true
         - Term:optional:
           - "kind_called"
           - true
-        - # this will try to match existing nouns first
-          # and then will generate a noun if none was found.
-          Term:optional:
+        - Term:optional:
+          - "noun"
+          - true
+        - Term:optional:
           - "name"
           - true
 

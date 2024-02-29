@@ -40,8 +40,7 @@ func matchKinds(q Query) bool {
 
 func matchNouns(q Query) bool {
 	flags := q.GetContext()
-	return (flags&PlainNameMatching) == 0 &&
-		(flags&IncludeExistingNouns) != 0
+	return (flags & IncludeExistingNouns) != 0
 }
 
 func allowNounCreation(q Query) bool {
