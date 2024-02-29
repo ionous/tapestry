@@ -30,6 +30,15 @@ func (n resultName) String() (ret string) {
 	return n.Matched
 }
 
+func (n resultName) GetKind(defaultKind string) (ret string) {
+	if len(n.Kinds) > 0 {
+		ret = n.Kinds[0]
+	} else {
+		ret = defaultKind
+	}
+	return
+}
+
 type articleResult struct {
 	Matched string
 	Count   int // for counted nouns: "seven (apples)"

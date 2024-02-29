@@ -81,26 +81,19 @@ func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
 	var noun string
 	fullName := n.String()
 	if name := inflect.Normalize(fullName); name == PlayerYou {
-		// tdb: the current thought is that "the player" should be a variable;
-		// currently its an "agent".
-		noun, err = rar.GetExactNoun(PlayerSelf)
+		// it should be safe to assume that the self exists
+		// but if need be could query for it to check for missing.
+		noun = PlayerSelf
 	} else {
 		if n.Exact { // ex. ".... called the spatula."
-			noun, err = rar.GetExactNoun(name)
-		} else if fold, e := rar.GetClosestNoun(name); e != nil {
-			err = e
+			err = mdl.Missing // force trying to create this noun.
 		} else {
-			noun = fold
+			noun, err = rar.GetClosestNoun(name)
 		}
-		// if it doesnt exist; we create it.
+		// if it doesnt exist; try to create it.
 		if errors.Is(err, mdl.Missing) {
-			base := DefaultKind // ugh
-			if len(n.Kinds) > 0 {
-				base = n.Kinds[0]
-			}
-			if e := rar.AddNoun(name, fullName, base); e != nil {
-				err = e
-			} else {
+			k := n.GetKind(DefaultKind) // add noun will eat duplicates.
+			if err = rar.AddNoun(name, fullName, k); err == nil {
 				noun = name
 			}
 		}

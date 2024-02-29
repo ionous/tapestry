@@ -25,19 +25,6 @@ func (n *nounInfo) class() classInfo {
 	}
 }
 
-// find the noun named as specified;
-// assumes the name is lower cased, with spaces normalized.
-// fix? could we GetClose and then have the caller see if the matched name is exact name we found?
-// ( to simplify the interface and queries )
-func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
-	if n, e := pen.findRequiredNoun(name, nounWithKind); e != nil {
-		err = e
-	} else {
-		ret = n.name
-	}
-	return
-}
-
 // find the noun with the closest name in this scope;
 // assumes the name is lower cased, with spaces normalized.
 // skips aliases for the sake of backwards compatibility:

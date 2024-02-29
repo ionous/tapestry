@@ -23,7 +23,6 @@ type Registrar interface {
 	AddTraits(aspect string, traits []string) error
 	//
 	GetClosestNoun(name string) (string, error)
-	GetExactNoun(name string) (string, error)
 	GetPlural(string) string
 	GetSingular(string) string
 	GetUniqueName(category string) string
