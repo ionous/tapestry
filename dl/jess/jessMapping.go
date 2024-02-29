@@ -79,7 +79,7 @@ var fromOf = match.PanicSpans("from", "of")
 
 // ----
 func (op *Direction) Match(q Query, input *InputState) (okay bool) {
-	panic("xxx")
+	return false // FIX!
 }
 
 // ----

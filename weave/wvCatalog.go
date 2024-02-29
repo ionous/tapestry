@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
@@ -27,10 +26,9 @@ type Catalog struct {
 	processing     DomainStack
 	pendingDomains []*Domain
 
-	cursor        string        // current source position
-	run           rt.Runtime    // custom runtime for running macros
-	jessdb.Source               // english parser
-	db            *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
+	cursor string        // current source position
+	run    rt.Runtime    // custom runtime for running macros
+	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
 }
 
 type ScheduledCallback func(*Weaver) error
@@ -71,7 +69,6 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 		domains: make(map[string]*Domain),
 		Modeler: m,
 		run:     run,
-		Source:  jessdb.NewSource(m),
 	}
 }
 

@@ -29,7 +29,11 @@ type Registrar interface {
 	GetUniqueName(category string) string
 	// apply the passed macro to the passed nouns
 	Apply(verb Macro, lhs, rhs []string) error
+	// register a function for later processing
+	PostProcess(PostProcess) error
 }
+
+type PostProcess func(Query, Registrar) error
 
 // setup the default traits for the passed kind
 func AddDefaultTraits(rar Registrar, kind string, traits Traitor) (err error) {

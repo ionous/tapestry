@@ -4,7 +4,9 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -53,6 +55,14 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 type jessAdapter struct {
 	w *weave.Weaver
 	*mdl.Pen
+}
+
+// PostProcess schedules a jess command for later handling
+func (ja jessAdapter) PostProcess(post jess.PostProcess) error {
+	return ja.w.Catalog.Schedule(weave.RequireAll, func(w *weave.Weaver) error {
+		q := jessdb.MakeQuery(w.Catalog.Modeler, w.Domain)
+		return post(q, ja)
+	})
 }
 
 func (ja jessAdapter) AddNounTrait(noun, trait string) error {

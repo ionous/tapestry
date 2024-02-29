@@ -12,9 +12,28 @@ import (
 )
 
 // implements Registrar to watch incoming calls.
+// posted makes it more like a stub than a mock maybe? oh well.
 type Mock struct {
 	out    []string
 	unique map[string]int
+	posted []jess.PostProcess
+}
+
+func (m *Mock) PostProcess(p jess.PostProcess) (_ error) {
+	m.posted = append(m.posted, p)
+	return
+}
+
+func (m *Mock) RunPost(q jess.Query) (err error) {
+	for len(m.posted) > 0 {
+		next, rest := m.posted[0], m.posted[1:]
+		if e := next(q, m); e != nil {
+			err = e
+		} else {
+			m.posted = rest
+		}
+	}
+	return
 }
 
 func (m *Mock) AddFields(kind string, fields []mdl.FieldInfo) (_ error) {
@@ -88,9 +107,6 @@ func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
 	return
 }
 func (m *Mock) GetClosestNoun(name string) (string, error) {
-	return name, nil
-}
-func (m *Mock) GetExactNoun(name string) (string, error) {
 	return name, nil
 }
 func (m *Mock) GetPlural(word string) string {

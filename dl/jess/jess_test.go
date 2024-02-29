@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -12,15 +11,7 @@ import (
 )
 
 func TestPhrases(t *testing.T) {
-	jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
-		t.Log("testing:", testPhrase)
-		if ws, e := match.MakeSpan(testPhrase); e != nil {
-			err = e
-		} else {
-			ret, err = jess.Match(&known, ws)
-		}
-		return
-	})
+	jesstest.TestPhrases(t, &known)
 }
 
 type info struct {

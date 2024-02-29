@@ -13,13 +13,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/files"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 // verify a standard set of phrases using some function that takes each of those phrases
 // and produces a result map, or a string list.
-func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)) {
+func TestPhrases(t *testing.T, q jess.Query) {
 	var phrases = []struct {
 		test   string
 		result any
@@ -424,10 +425,12 @@ func RunPhraseTests(t *testing.T, interpret func(string) (jess.Generator, error)
 			skipped++
 		} else {
 			var haveRes []string
-			got, haveError := interpret(p.test)
+			got, haveError := jess.Match(q, match.PanicSpan(p.test))
 			if haveError == nil {
 				var m Mock
 				if e := got.Generate(&m); e != nil {
+					haveError = e
+				} else if e := m.RunPost(q); e != nil {
 					haveError = e
 				} else {
 					haveRes = m.out

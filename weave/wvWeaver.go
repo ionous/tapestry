@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
@@ -21,7 +22,8 @@ type Weaver struct {
 }
 
 func (w *Weaver) MatchSpan(p match.Span) (jess.Generator, error) {
-	return w.Catalog.MatchSpan(w.Domain, p)
+	q := jessdb.MakeQuery(w.Catalog.Modeler, w.Domain)
+	return jess.Match(q, p)
 }
 
 func (w *Weaver) Pin() *mdl.Pen {

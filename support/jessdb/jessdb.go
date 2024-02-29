@@ -11,12 +11,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-type Source struct {
-	inner *mdl.Modeler
-}
-
-func NewSource(db *mdl.Modeler) Source {
-	return Source{db}
+func MakeQuery(m *mdl.Modeler, domain string) jess.Query {
+	return dbWrapper{m.Pin(domain, "jess")}
 }
 
 func countWords(str string) (ret int) {
@@ -24,11 +20,6 @@ func countWords(str string) (ret int) {
 		ret = 1 + strings.Count(str, " ")
 	}
 	return
-}
-
-func (x *Source) MatchSpan(domain string, span match.Span) (jess.Generator, error) {
-	w := dbWrapper{x.inner.Pin(domain, "jess")}
-	return jess.Match(w, span)
 }
 
 // implements jess.Query; returned by dbWrapper.

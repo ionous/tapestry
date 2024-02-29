@@ -6,10 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -24,15 +22,8 @@ func TestPhrases(t *testing.T) {
 			t.Fatal(e)
 		} else {
 			m.PrecachePaths()
-			x := jessdb.NewSource(m)
-			jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
-				if ws, e := match.MakeSpan(testPhrase); e != nil {
-					err = e
-				} else {
-					ret, err = x.MatchSpan("a", ws)
-				}
-				return
-			})
+			q := jessdb.MakeQuery(m, "a")
+			jesstest.TestPhrases(t, q)
 		}
 	}
 }
