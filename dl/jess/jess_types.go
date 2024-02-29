@@ -770,6 +770,9 @@ type MatchingPhrases struct {
 	PropertyNounValue   PropertyNounValue
 	NounPropertyValue   NounPropertyValue
 	AspectsAreTraits    AspectsAreTraits
+	MapLocations        MapLocations
+	MapDirections       MapDirections
+	MapConnections      MapConnections
 	Markup              map[string]any
 }
 
@@ -1632,6 +1635,269 @@ func (op *Understand_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A mapping declaration starting with a room or door.
+// ex. `A dead end called the Airport is west of the room called the Airport Road and north of the Farm.`
+type MapLocations struct {
+	Links              Links
+	Are                Are
+	DirectionFromLinks DirectionFromLinks
+	AdditionalLinks    *AdditionalLinks
+	Markup             map[string]any
+}
+
+// map_locations, a type of flow.
+var Zt_MapLocations typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MapLocations) TypeInfo() typeinfo.T {
+	return &Zt_MapLocations
+}
+
+// implements typeinfo.Markup
+func (op *MapLocations) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type map_locations
+type MapLocations_Slice []MapLocations
+
+// implements typeinfo.Instance
+func (*MapLocations_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MapLocations
+}
+
+// implements typeinfo.Repeats
+func (op *MapLocations_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// A mapping declaration starting with a direction.
+type MapDirections struct {
+	DirectionFromLinks DirectionFromLinks
+	Links              *Links
+	Redirect           *DirectionFromLinks
+	Markup             map[string]any
+}
+
+// map_directions, a type of flow.
+var Zt_MapDirections typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MapDirections) TypeInfo() typeinfo.T {
+	return &Zt_MapDirections
+}
+
+// implements typeinfo.Markup
+func (op *MapDirections) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type map_directions
+type MapDirections_Slice []MapDirections
+
+// implements typeinfo.Instance
+func (*MapDirections_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MapDirections
+}
+
+// implements typeinfo.Repeats
+func (op *MapDirections_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// A mapping declaration to set the destination of doors.
+// The destination of a door is always a room or nowhere.
+// ( Inform doesn't allow nowhere, but it seems like a good idea. )
+type MapConnections struct {
+	Through Words
+	Doors   Names
+	Are     Are
+	Links   Links
+	Markup  map[string]any
+}
+
+// map_connections, a type of flow.
+var Zt_MapConnections typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MapConnections) TypeInfo() typeinfo.T {
+	return &Zt_MapConnections
+}
+
+// implements typeinfo.Markup
+func (op *MapConnections) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type map_connections
+type MapConnections_Slice []MapConnections
+
+// implements typeinfo.Instance
+func (*MapConnections_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MapConnections
+}
+
+// implements typeinfo.Repeats
+func (op *MapConnections_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// partial phrase for mapping declarations.
+type DirectionFromLinks struct {
+	Direction Direction
+	FromOf    Words
+	Links     Links
+	Markup    map[string]any
+}
+
+// direction_from_links, a type of flow.
+var Zt_DirectionFromLinks typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*DirectionFromLinks) TypeInfo() typeinfo.T {
+	return &Zt_DirectionFromLinks
+}
+
+// implements typeinfo.Markup
+func (op *DirectionFromLinks) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type direction_from_links
+type DirectionFromLinks_Slice []DirectionFromLinks
+
+// implements typeinfo.Instance
+func (*DirectionFromLinks_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DirectionFromLinks
+}
+
+// implements typeinfo.Repeats
+func (op *DirectionFromLinks_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches some existing compass direction.
+type Direction struct {
+	Text   string
+	Markup map[string]any
+}
+
+// direction, a type of flow.
+var Zt_Direction typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Direction) TypeInfo() typeinfo.T {
+	return &Zt_Direction
+}
+
+// implements typeinfo.Markup
+func (op *Direction) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type direction
+type Direction_Slice []Direction
+
+// implements typeinfo.Instance
+func (*Direction_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Direction
+}
+
+// implements typeinfo.Repeats
+func (op *Direction_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// generates a room, a door, or nowhere.
+type Links struct {
+	Nowhere    *Words
+	KindCalled *KindCalled
+	Name       *Name
+	Markup     map[string]any
+}
+
+// links, a type of flow.
+var Zt_Links typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Links) TypeInfo() typeinfo.T {
+	return &Zt_Links
+}
+
+// implements typeinfo.Markup
+func (op *Links) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type links
+type Links_Slice []Links
+
+// implements typeinfo.Instance
+func (*Links_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Links
+}
+
+// implements typeinfo.Repeats
+func (op *Links_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches additional directions
+// only used by map_locations
+type AdditionalLinks struct {
+	CommaAnd        CommaAnd
+	Links           Links
+	AdditionalLinks *AdditionalLinks
+	Markup          map[string]any
+}
+
+// additional_links, a type of flow.
+var Zt_AdditionalLinks typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AdditionalLinks) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalLinks
+}
+
+// implements typeinfo.Markup
+func (op *AdditionalLinks) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type additional_links
+type AdditionalLinks_Slice []AdditionalLinks
+
+// implements typeinfo.Instance
+func (*AdditionalLinks_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalLinks
+}
+
+// implements typeinfo.Repeats
+func (op *AdditionalLinks_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
@@ -1684,6 +1950,13 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_QuotedTexts,
 	&Zt_AdditionalText,
 	&Zt_Understand,
+	&Zt_MapLocations,
+	&Zt_MapDirections,
+	&Zt_MapConnections,
+	&Zt_DirectionFromLinks,
+	&Zt_Direction,
+	&Zt_Links,
+	&Zt_AdditionalLinks,
 }
 
 // a list of all command signatures
@@ -1691,6 +1964,8 @@ var z_flow_list = []*typeinfo.Flow{
 var z_signatures = map[uint64]typeinfo.Instance{
 	12489206644669467772: (*AdditionalAdjectives)(nil), /* AdditionalAdjectives commaAnd:adjectives: */
 	12174030489678544826: (*AdditionalKinds)(nil),      /* AdditionalKinds commaAnd:kinds: */
+	10613216392745479822: (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:links: */
+	15328492540292077202: (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:links:additionalLinks: */
 	16975120945491427296: (*AdditionalNames)(nil),      /* AdditionalNames commaAnd:names: */
 	12949801356443185096: (*AdditionalText)(nil),       /* AdditionalText commaAndOr:quotedTexts: */
 	508023169458945308:   (*AdditionalTraits)(nil),     /* AdditionalTraits commaAnd:traits: */
@@ -1720,6 +1995,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4143979682086652670:  (*CommaAndOr)(nil),           /* CommaAndOr matched: */
 	2237036151518779634:  (*CountedName)(nil),          /* CountedName article:matchingNumber:kind: */
 	6139323499442568526:  (*CountedName)(nil),          /* CountedName matchingNumber:kind: */
+	11748118905044300293: (*Direction)(nil),            /* Direction text: */
+	981763865627419040:   (*DirectionFromLinks)(nil),   /* DirectionFromLinks direction:fromOf:links: */
 	17839012382227179591: (*Kind)(nil),                 /* Kind article:matched: */
 	17757668305058379307: (*Kind)(nil),                 /* Kind matched: */
 	14410370178407404046: (*KindCalled)(nil),           /* KindCalled kind:calledName: */
@@ -1744,8 +2021,23 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
 	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
 	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
+	8672209626647792302:  (*Links)(nil),                /* Links */
+	128535242801121637:   (*Links)(nil),                /* Links kindCalled: */
+	2802244085810550836:  (*Links)(nil),                /* Links kindCalled:name: */
+	14719373152386746961: (*Links)(nil),                /* Links name: */
+	17837338516789911186: (*Links)(nil),                /* Links nowhere: */
+	2610912198093370717:  (*Links)(nil),                /* Links nowhere:kindCalled: */
+	4644985483233181356:  (*Links)(nil),                /* Links nowhere:kindCalled:name: */
+	12007660852507028345: (*Links)(nil),                /* Links nowhere:name: */
+	4501525654191083187:  (*MapConnections)(nil),       /* MapConnections through:doors:are:links: */
+	11094774905081326439: (*MapDirections)(nil),        /* MapDirections directionFromLinks: */
+	17032334246046354982: (*MapDirections)(nil),        /* MapDirections directionFromLinks:links: */
+	18226657932891012800: (*MapDirections)(nil),        /* MapDirections directionFromLinks:links:redirect: */
+	11850703041485702439: (*MapDirections)(nil),        /* MapDirections directionFromLinks:redirect: */
+	11861036655369001584: (*MapLocations)(nil),         /* MapLocations links:are:directionFromLinks: */
+	7690470907203573092:  (*MapLocations)(nil),         /* MapLocations links:are:directionFromLinks:additionalLinks: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	7194637704405545739:  (*MatchingPhrases)(nil),      /* MatchingPhrases understand:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
+	15320753925577366738: (*MatchingPhrases)(nil),      /* MatchingPhrases understand:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits:mapLocations:mapDirections:mapConnections: */
 	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
 	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
 	7786741787633711023:  (*Names)(nil),                /* Names */
@@ -1932,7 +2224,7 @@ func init() {
 			Name:  "matched",
 			Label: "matched",
 			Markup: map[string]any{
-				"comment": "the string that matched ( ex. an alias )",
+				"comment": "the string that matched ( a noun name or alias )",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -2308,6 +2600,18 @@ func init() {
 			Name:  "aspects_are_traits",
 			Label: "aspects_are_traits",
 			Type:  &Zt_AspectsAreTraits,
+		}, {
+			Name:  "map_locations",
+			Label: "map_locations",
+			Type:  &Zt_MapLocations,
+		}, {
+			Name:  "map_directions",
+			Label: "map_directions",
+			Type:  &Zt_MapDirections,
+		}, {
+			Name:  "map_connections",
+			Label: "map_connections",
+			Type:  &Zt_MapConnections,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
@@ -2837,6 +3141,168 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"comment": "various phrases, all starting with the word \"Understand\"",
+		},
+	}
+	Zt_MapLocations = typeinfo.Flow{
+		Name: "map_locations",
+		Lede: "map_locations",
+		Terms: []typeinfo.Term{{
+			Name:  "links",
+			Label: "links",
+			Type:  &Zt_Links,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "direction_from_links",
+			Label: "direction_from_links",
+			Type:  &Zt_DirectionFromLinks,
+		}, {
+			Name:     "additional_links",
+			Label:    "additional_links",
+			Optional: true,
+			Type:     &Zt_AdditionalLinks,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"A mapping declaration starting with a room or door.", "ex. `A dead end called the Airport is west of the room called the Airport Road and north of the Farm.`"},
+		},
+	}
+	Zt_MapDirections = typeinfo.Flow{
+		Name: "map_directions",
+		Lede: "map_directions",
+		Terms: []typeinfo.Term{{
+			Name:  "direction_from_links",
+			Label: "direction_from_links",
+			Type:  &Zt_DirectionFromLinks,
+		}, {
+			Name:     "links",
+			Label:    "links",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "ex. `Inside from the Meadow is the woodcutter's hut.`",
+			},
+			Type: &Zt_Links,
+		}, {
+			Name:     "redirect",
+			Label:    "redirect",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "ex. `West of the Garden is south of the Meadow.`",
+			},
+			Type: &Zt_DirectionFromLinks,
+		}},
+		Markup: map[string]any{
+			"comment": "A mapping declaration starting with a direction.",
+		},
+	}
+	Zt_MapConnections = typeinfo.Flow{
+		Name: "map_connections",
+		Lede: "map_connections",
+		Terms: []typeinfo.Term{{
+			Name:  "through",
+			Label: "through",
+			Type:  &Zt_Words,
+		}, {
+			Name:  "doors",
+			Label: "doors",
+			Type:  &Zt_Names,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "links",
+			Label: "links",
+			Markup: map[string]any{
+				"comment": "this is always a room, or nowhere.",
+			},
+			Type: &Zt_Links,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"A mapping declaration to set the destination of doors.", "The destination of a door is always a room or nowhere.", "( Inform doesn't allow nowhere, but it seems like a good idea. )"},
+		},
+	}
+	Zt_DirectionFromLinks = typeinfo.Flow{
+		Name: "direction_from_links",
+		Lede: "direction_from_links",
+		Terms: []typeinfo.Term{{
+			Name:  "direction",
+			Label: "direction",
+			Type:  &Zt_Direction,
+		}, {
+			Name:  "from_of",
+			Label: "from_of",
+			Type:  &Zt_Words,
+		}, {
+			Name:  "links",
+			Label: "links",
+			Markup: map[string]any{
+				"comment": "a room or door.",
+			},
+			Type: &Zt_Links,
+		}},
+		Markup: map[string]any{
+			"comment": "partial phrase for mapping declarations.",
+		},
+	}
+	Zt_Direction = typeinfo.Flow{
+		Name: "direction",
+		Lede: "direction",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "text",
+			Type:  &prim.Zt_Text,
+		}},
+		Markup: map[string]any{
+			"comment": "matches some existing compass direction.",
+		},
+	}
+	Zt_Links = typeinfo.Flow{
+		Name: "links",
+		Lede: "links",
+		Terms: []typeinfo.Term{{
+			Name:     "nowhere",
+			Label:    "nowhere",
+			Optional: true,
+			Type:     &Zt_Words,
+		}, {
+			Name:     "kind_called",
+			Label:    "kind_called",
+			Optional: true,
+			Type:     &Zt_KindCalled,
+		}, {
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"this will try to match existing nouns first", "and then will generate a noun if none was found."},
+			},
+			Type: &Zt_Name,
+		}},
+		Markup: map[string]any{
+			"comment": "generates a room, a door, or nowhere.",
+		},
+	}
+	Zt_AdditionalLinks = typeinfo.Flow{
+		Name: "additional_links",
+		Lede: "additional_links",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and",
+			Label: "comma_and",
+			Type:  &Zt_CommaAnd,
+		}, {
+			Name:  "links",
+			Label: "links",
+			Type:  &Zt_Links,
+		}, {
+			Name:     "additional_links",
+			Label:    "additional_links",
+			Optional: true,
+			Type:     &Zt_AdditionalLinks,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"matches additional directions", "only used by map_locations"},
 		},
 	}
 }

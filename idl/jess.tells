@@ -1,6 +1,7 @@
 # shuttle communication
 Spec:with group:
   - "jess"
+
   - Group contains:
     - # one of a predefined set of determiners:
       # the, a, some, etc.
@@ -287,6 +288,9 @@ Spec:with group:
         - Term: "property_noun_value"
         - Term: "noun_property_value"
         - Term: "aspects_are_traits"
+        - Term: "map_locations"
+        - Term: "map_directions"
+        - Term: "map_connections"
 
     - # names are "a kind of"/"kinds of" traits kind:any.
       # interesting to note that inform allows "some kind/s of"
@@ -614,3 +618,91 @@ Spec:with group:
           # * grammar for actions: Understand "reach underneath/under/beneath/-- [something]" as looking under.
           # jess doesn't permit aliases for kinds, those generate errors.
           Term: "names"
+
+    - # A mapping declaration starting with a room or door.
+      # ex. `A dead end called the Airport is west of the room called the Airport Road and north of the Farm.`
+      Spec:with flow:
+      - "map_locations"
+      - Flow uses:
+        - Term: "links"
+        - Term: "are"
+        - Term: "direction_from_links"
+        - Term:optional:
+          - "additional_links"
+          - true
+
+    - # A mapping declaration starting with a direction.
+      Spec:with flow:
+      - "map_directions"
+      - Flow uses:
+        - Term: "direction_from_links"
+        - # ex. `Inside from the Meadow is the woodcutter's hut.`
+          Term:optional:
+          - "links"
+          - true
+        - # ex. `West of the Garden is south of the Meadow.`
+          Term:type:optional:
+          - "redirect"
+          - "direction_from_links"
+          - true
+
+    - # A mapping declaration to set the destination of doors.
+      # The destination of a door is always a room or nowhere.
+      # ( Inform doesn't allow nowhere, but it seems like a good idea. )
+      Spec:with flow:
+      - "map_connections"
+      - Flow uses:
+        - Term:type:
+          - "through"
+          - "words"
+        - Term:type:
+          - "doors"
+          - "names"
+        - Term: "are"
+        - # this is always a room, or nowhere.
+          Term: "links"
+
+    - # partial phrase for mapping declarations.
+      Spec:with flow:
+      - "direction_from_links"
+      - Flow uses:
+        - Term: "direction"
+        - Term:type:
+          - "from_of"
+          - "words"
+        - # a room or door.
+          Term: "links"
+
+    - # matches some existing compass direction.
+      Spec:with flow:
+      - "direction"
+      - Flow uses:
+        - Term: "text"
+
+    - # generates a room, a door, or nowhere.
+      Spec:with flow:
+      - "links"
+      - Flow uses:
+        - Term:type:optional:
+          - "nowhere"
+          - "words"
+          - true
+        - Term:optional:
+          - "kind_called"
+          - true
+        - # this will try to match existing nouns first
+          # and then will generate a noun if none was found.
+          Term:optional:
+          - "name"
+          - true
+
+    - # matches additional directions
+      # only used by map_locations
+      Spec:with flow:
+      - "additional_links"
+      - Flow uses:
+        - Term: "comma_and"
+        - Term: "links"
+        - Term:optional:
+          - "additional_links"
+          - true

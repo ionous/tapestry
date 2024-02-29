@@ -25,6 +25,9 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		&op.NamesAreLikeVerbs,
 		&op.PropertyNounValue,
 		&op.NounPropertyValue,
+		&op.MapLocations,
+		&op.MapDirections,
+		&op.MapConnections,
 	} {
 		if next := *input; //
 		m.Match(q, &next) /* && len(next) == 0 */ {
