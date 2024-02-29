@@ -32,20 +32,19 @@ Tapestry:
         - "the Foyer"
         - "connecting_to"
         - "the Cloakroom"
-    - Declare: """
+    - # The Cloakroom
+      Declare: """
         The Cloakroom is a room.
-        In the Cloakroom is a supporter called the small brass hook.
-        The hook is scenery.
         The Cloakroom has the description "In the Opera's better days the walls of this small room must have been lined with coat hooks.
         Now, only one remains. The exit is a door to the west."
-        """ # "
-    - Interpret alias:as:
-        - "peg"
-        - "hook"
-    - Declare: """
+
+        In the Cloakroom is a scenery supporter called the small brass hook.
         The hook has the description "A brass hook{if children_of: .hook}
         with {children_of: .hook | print_inline_objects!}
         hanging on it{else} screwed into the wall{end}."
+
+        Understand "peg" as the hook.
+        Understand "hang [objects] on/onto [objects]" as storing.
         """ # "
     - # The Bar
       Heading:from:and:otherRoom:
@@ -61,11 +60,8 @@ Tapestry:
 
         Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
         Messages are a kind of thing. Messages have a neatness. The scrawled message is a message.
+        Understand "floor" or "sawdust" as the message.
         """ # "
-    - Interpret alias:as:
-        - - "floor"
-          - "sawdust"
-        - "message"
     - Define rule:noun:do:
         - "instead of examining"
         - "message"
@@ -76,7 +72,11 @@ Tapestry:
           - Say: "The message, {if .message.neat}neatly {end}marked in the sawdust, reads..."
           - EndGame finally:
               FromBool: true
-    - Define rule:noun:do:
+    - # when multiple rules for the same action exist
+      # the later rule is considered a refinement.
+      # it "overrides" rules described earlier
+      # a sort of, i may have said that before but actually...
+      Define rule:noun:do:
         - "instead of examining"
         - "message"
         - - If:do:
@@ -113,7 +113,8 @@ Tapestry:
                     - "message"
                     - "trampled"
                 - Say: "Blundering around in the dark isn't a good idea!"
-    - Define rule:do:
+    - # block actions other than "going" when in the darkened bar:
+      Define rule:do:
         - "instead of running action"
         - - If:do:
               - AllTrue:
@@ -153,6 +154,7 @@ Tapestry:
               - "bar"
               - "unlit"
     - # FIX: generic way to capture is/not in possession
+      # FIX: cant you keep taking/storing the cloak and increasing your score?
       Define rule:noun:do:
         - "after dropping"
         - "cloak"
@@ -191,14 +193,6 @@ Tapestry:
                   - "other_than"
                   - "cloakroom"
               - - Say: "This isn't the best place to leave such a nice piece of clothing."
-    - Interpret:with:
-        - "hang"
-        - - One noun: "objects"
-          - One word:
-              - "on"
-              - "onto"
-          - One noun: "objects"
-          - Action: "storing"
     - Define test:do:
         - "cloak of dropping"
         - - StartGame actor:quietly:
@@ -227,7 +221,7 @@ Tapestry:
                     - "player"
                     - "pawn"
               - FromBool: true
-          - Fabricate input: "e; take off cloak; put cloak on hook; w; s; x message"
+          - Fabricate input: "e; take off cloak; put cloak on peg; w; s; x message"
           - Expect:
               Object:field:
                 - "story"
@@ -253,7 +247,7 @@ Tapestry:
               Object:field:
                 - "story"
                 - "concluded"
-          - # and you should have scored nothing for dropping the cloak.
+          - # dropping the cloak shouldn't have earned you any points.
             Expect:
               Is:matching:num:
                 - Object:field:

@@ -25,8 +25,10 @@ func (n *nounInfo) class() classInfo {
 	}
 }
 
-// find the noun named exactly as specified.
-// FIX: can we GetClose and then have the caller see if the matched name is exact name we found?
+// find the noun named as specified;
+// assumes the name is lower cased, with spaces normalized.
+// fix? could we GetClose and then have the caller see if the matched name is exact name we found?
+// ( to simplify the interface and queries )
 func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
 	if n, e := pen.findRequiredNoun(name, nounWithKind); e != nil {
 		err = e
@@ -36,10 +38,11 @@ func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
 	return
 }
 
-// find the noun with the closest name in this scope
+// find the noun with the closest name in this scope;
+// assumes the name is lower cased, with spaces normalized.
 // skips aliases for the sake of backwards compatibility:
 // there should be a difference between "a noun is known as"
-// and "understand this word by the player as" -- and currently there's not.
+// and "understand this word typed by the player as" -- and currently there's not.
 func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
 	if noun, e := pen.getClosestNoun(name); e != nil {
 		err = e

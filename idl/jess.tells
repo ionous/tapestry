@@ -64,9 +64,14 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term:type:
+        - # the string that matched ( a noun name or alias )
+          Term:type:
           - "matched"
           - "text"
+        - # the database info that matched
+          Term:private:
+          - "actual_noun"
+          - true
 
     - # Defines a name and its kind in a single phrase.
       # kind "called" [the] _name_.
@@ -163,10 +168,12 @@ Spec:with group:
           Term:optional:
           - "article"
           - true
-        - Term:type:
+        - # the string that matched
+          Term:type:
           - "matched"
           - "text"
-        - Term:private:
+        - # the database info that matched
+          Term:private:
           - "actual_kind"
           - true
 

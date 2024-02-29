@@ -17,7 +17,7 @@ func (op *Understand) Match(q Query, input *InputState) (okay bool) {
 		op.As.Match(q, &next, keywords.As) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		(op.matchPluralOf(q, &next) || true) &&
-		op.Names.Match(AddContext(q, ExcludeNounCreation), &next) {
+		op.Names.Match(AddContext(q, IncludeExistingNouns), &next) {
 		*input, okay = next, true
 	}
 	return
@@ -119,32 +119,16 @@ func (op *Understand) applyPlurals(rar Registrar) (err error) {
 Loop:
 	for as := op.Names.Iterate(); as.HasNext(); {
 		// determine the "single" side of the plural request
-		var name string
-		if n := as.GetNext(); n.Kind != nil {
-			err = errors.New("plural kinds not supported") // yet?
-			break Loop
-		} else if n.Name == nil {
-			panic("missing expected name")
+		if n := as.GetNext(); n.Noun == nil {
+			err = fmt.Errorf("unknown name %q, expected the name of an existing noun.", n)
 		} else {
-			// in inform these have to be real objects
-			// we attempt to do the same thing here....
-			// but the parser doesn't really handle plurals all that well yet.
-			shortName := n.Name.String()
-			if _, e := rar.GetClosestNoun(shortName); e != nil {
-				err = e
-				break
-			} else {
-				// for now, after establishing the noun exists;
-				// we use the name originally specified for the plurals table.
-				name = shortName
-			}
-		}
-		// the left hand side:
-		for it := op.QuotedTexts.Iterate(); it.HasNext(); {
-			plural := it.GetNext()
-			if e := rar.AddPlural(plural, name); e != nil {
-				err = e
-				break Loop
+			name := n.Noun.ActualNoun
+			for it := op.QuotedTexts.Iterate(); it.HasNext(); {
+				plural := it.GetNext()
+				if e := rar.AddPlural(plural, name); e != nil {
+					err = e
+					break Loop
+				}
 			}
 		}
 	}

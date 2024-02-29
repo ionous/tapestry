@@ -6,6 +6,8 @@ const (
 	// when matching names, some phrases imply the creation of new nouns
 	// this flag prevents those from matching
 	ExcludeNounCreation
+	// when matching names, try to match nouns
+	IncludeExistingNouns
 )
 
 // set the query flags to the passed flags
@@ -36,8 +38,15 @@ func matchKinds(q Query) bool {
 	return (flags & PlainNameMatching) == 0
 }
 
+func matchNouns(q Query) bool {
+	flags := q.GetContext()
+	return (flags&PlainNameMatching) == 0 &&
+		(flags&IncludeExistingNouns) != 0
+}
+
 func allowNounCreation(q Query) bool {
 	flags := q.GetContext()
 	return (flags&PlainNameMatching) == 0 &&
-		(flags&ExcludeNounCreation) == 0
+		(flags&ExcludeNounCreation) == 0 &&
+		(flags&IncludeExistingNouns) == 0
 }

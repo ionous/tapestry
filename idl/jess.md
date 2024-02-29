@@ -1,4 +1,15 @@
 
+
+// KindsAreEither
+		// A thing is either tall or short.
+		// ng: Things are either tall or short. [ i dont see a reason not to allow this ]
+		// A thing can be [either]
+		// Things can be [either] tall or short.
+		
+			// inform doesnt allow [either] here; i'm fine with whatever.
+			test:   "A thing can be scenery.",
+		
+		
 Unexpected success
 ------------------
 There are sentences that don't make sense in English, that jess will read perfectly fine. And others that mean something in English slightly different than how they are understood here.
@@ -102,3 +113,19 @@ some notes from inform:
  - ng: `The age of the bottle in the kitchen is 42.` - generates an object called "bottle in the kitchen".
  - ng: `The bottle in the kitchen has the age 42.` - ditto.
  - ng: `The bottle is fixed in place and has age 42.` -- generates an object called "bottle is fixed in place".
+ 
+ 
+ # Understandings
+ 
+inform supports defining plurals, aliases, command synonyms, actions, references for actions,  trait, kind, and value substitutions....and possibly some others.
+ 
+ In inform, it seems aliases (even for kinds) are applied to the noun name, while plurals add to the rules of parsing that noun:
+ 
+ ```
+ 		with name 'cardboard' 'box' 'containers//p' 
+    with parse_name Parse_Name_GV93  ! = a routine
+ ```
+ 
+ For inform, since `Understand "uniqueword [something]" as looking under and box.` both generate parser rules.... if there's a scene described with `The cardboard box is an open container in the kitchen. The rose is in the kitchen.` then the user can say `> x uniqueword rose` and it will say `The cardboard box is empty.` -- which is pretty neat
+ 
+ For `Understand "uniqueword" as the box.` it will add "uniqueword" as an alias to the noun definition -- `Object -> I126_cardboard_box... with name 'cardboard' 'box' 'containers//p' 'uniqueword'`. it analyzes the lhs for the brackets to determine if its grammar or not.

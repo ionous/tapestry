@@ -2,6 +2,15 @@ package jess
 
 import "git.sr.ht/~ionous/tapestry/support/match"
 
+// the input state consists of a series of hashes
+// and chunks of the original string.
+//
+// fix? rather than pre-processing the string
+// a "reader" might make more sense.
+// especially as seeing some pieces of the string
+// ( ex. quoted text ) need to be processed again later on.
+// first pass would be change makeSpan into a reader ( MakeSpans uses that reader )
+// and then expose that reader here.
 type InputState []match.Word
 
 func (in InputState) Words() []match.Word {

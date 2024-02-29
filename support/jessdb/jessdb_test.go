@@ -69,6 +69,9 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		contain
 		support
 		suspect
+		// nouns
+		message
+		missive
 		// domain string
 		domain = "a"
 	)
@@ -150,6 +153,20 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, contain, "in", true,
 		domain, support, "on", true, // on the x are the w,y,z
 		domain, suspect, "suspicious of", false,
+	); e != nil {
+		err = e
+	} else if e := testdb.Ins(db, []string{"mdl_noun",
+		"ROWID", "domain", "noun", "kind"},
+		//
+		message, domain, "message", things,
+		missive, domain, "missive", things,
+	); e != nil {
+		err = e
+	} else if e := testdb.Ins(db, []string{"mdl_name",
+		"domain", "noun", "name", "rank"},
+		//
+		domain, message, "message", 0,
+		domain, missive, "missive", 0,
 	); e != nil {
 		err = e
 	}

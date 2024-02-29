@@ -41,58 +41,58 @@ func (d dbWrapper) GetContext() int {
 }
 
 func (d dbWrapper) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width int) {
-	if res, e := d.GetPartialKind(ws, out); e != nil {
+	str := strings.ToLower(ws.String()) // fix: so not a fan of these string lowers
+	if m, e := d.GetPartialKind(str); e != nil {
 		log.Println("FindKind", e)
 	} else {
-		// fix: this is probably wrong --
-		// it shouldnt be the width of the final kind;
-		// it should be the number of words used to find that kind
-		ret, width = res, countWords(res)
+		if out != nil {
+			*out = m.Base
+		}
+		ret, width = m.Name, countWords(m.Match)
 	}
 	return
 }
 
 func (d dbWrapper) FindTrait(ws match.Span) (ret string, width int) {
-	if res, e := d.GetPartialTrait(ws); e != nil {
+	str := strings.ToLower(ws.String())
+	if trait, e := d.GetPartialTrait(str); e != nil {
 		log.Println("FindTrait", e)
 	} else {
-		ret, width = res, countWords(res)
+		// the returned name is the name of the trait from the db
+		// it was used to match the front of the passed string
+		// so the words in the trait are the words in the string.
+		ret, width = trait, countWords(trait)
 	}
 	return
 }
 
 func (d dbWrapper) FindField(ws match.Span) (ret string, width int) {
-	if res, e := d.GetPartialField(ws); e != nil {
+	str := strings.ToLower(ws.String())
+	if field, e := d.GetPartialField(str); e != nil {
 		log.Println("FindField", e)
 	} else {
-		ret, width = res, countWords(res)
+		// re: countWords, same logic as find trait.
+		ret, width = field, countWords(field)
 	}
 	return
 }
 
 func (d dbWrapper) FindMacro(ws match.Span) (ret jess.Macro, width int) {
-	if res, e := d.GetPartialMacro(ws); e == nil {
-		ret, width = res.Macro, res.Width
+	str := strings.ToLower(ws.String())
+	if m, e := d.GetPartialMacro(str); e == nil {
+		ret, width = m.Macro, countWords(m.Phrase)
 	} else if e != sql.ErrNoRows {
 		log.Println("FindMacro", e)
 	}
 	return
 }
 
-func (d dbWrapper) FindClosestNoun(ws match.Span) (ret string, width int) {
-	if n, e := d.GetClosestNoun(ws.String()); e != nil {
-		log.Println("FindClosestNoun", e)
+func (d dbWrapper) FindNoun(ws match.Span) (ret string, width int) {
+	str := strings.ToLower(ws.String())
+	if m, e := d.GetPartialNoun(str); e != nil {
+		log.Println("FindNoun", e)
 	} else {
-		ret, width = n, ws.NumWords()
-	}
-	return
-}
-
-func (d dbWrapper) FindExactNoun(ws match.Span) (ret string, width int) {
-	if n, e := d.GetExactNoun(ws.String()); e != nil {
-		log.Println("FindExactNoun", e)
-	} else {
-		ret, width = n, ws.NumWords()
+		ret, width = m.Name, countWords(m.Match)
 	}
 	return
 }

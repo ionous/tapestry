@@ -6,23 +6,36 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
-type MacroMatch struct {
-	Macro Macro
-	Width int
+type MatchedMacro struct {
+	Macro  Macro
+	Phrase string // phrase that was used to match
 }
 
-func (pen *Pen) GetPartialKind(ws match.Span, out *kindsOf.Kinds) (ret string, err error) {
+type MatchedKind struct {
+	Name  string        // the name of the kind in the db
+	Base  kindsOf.Kinds // which of the built-in kinds is the returned kind most like?
+	Match string        // the word(s) (singular or plural) used to match
+}
+
+type MatchedNoun struct {
+	Name  string // the name of the noun in the db
+	Match string // the words (singular or plural) used to match
+}
+
+// searches for the kind which uses the most number of words from the front of the passed string.
+// for example: the words "container of the apocalypse" would match the kind "container."
+// assumes the words are lowercased and whitespace is normalized.
+func (pen *Pen) GetPartialKind(str string) (ret MatchedKind, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
-	if len(ws) > 0 {
+	if len(str) > 0 {
 		var k kindInfo
-		str := ws.String()
-		words := strings.ToLower(str) + blank
+		var match string
+		words := str + blank
 		switch e := pen.db.QueryRow(`
 	with kinds(id, name, alt, path) as (
 		select mk.rowid, mk.kind, mk.singular, ',' || mk.path
@@ -31,28 +44,35 @@ func (pen *Pen) GetPartialKind(ws match.Span, out *kindsOf.Kinds) (ret string, e
  		on (uses = domain)
  		where base = ?1
 	)
-	select id, name, path from (
-		select id, name, substr(?2 ,0, length(name)+2) as words, path
-		from kinds
+	select id, name, match, path from (
+		select id, name, name as match, substr(?2 ,0, length(name)+2) as words, path
+			from kinds
 		where words = (name || ' ')
 		union all 
-		select id, name, substr(?2, 0, length(alt)+2) as words, path
-		from kinds
+		select id, name, alt as match, substr(?2, 0, length(alt)+2) as words, path
+			from kinds
 		where alt is not null and words = (alt || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, words).Scan(&k.id, &k.name, &k.path); e {
+			pen.domain, words).Scan(&k.id, &k.name, &match, &k.path); e {
 		case nil:
-			ret = k.name
-			if out != nil {
-				fullPath := k.fullpath()
-				for _, k := range kindsOf.DefaultKinds {
-					if strings.HasSuffix(fullPath, pen.getPath(k)) {
-						*out = k
-						break
-					}
+			var base kindsOf.Kinds
+			fullPath := k.fullpath() // walk backwards to grab "actions" before "patterns"
+			for i := len(kindsOf.DefaultKinds) - 1; i >= 0; i-- {
+				k := kindsOf.DefaultKinds[i]
+				if strings.HasSuffix(fullPath, pen.getPath(k)) {
+					base = k
+					break
 				}
+			}
+			ret = MatchedKind{
+				Name: k.name,
+				Base: base,
+				// 99.99% of the time the singular and plural kind will be the same number of words
+				// so match is superfluous. potentially could assert that expectation on creation.
+				// although having arbitrary aliases for kinds (in a separate table) might be nicest.
+				Match: match,
 			}
 		case sql.ErrNoRows:
 			// return nothing when unmatched
@@ -67,10 +87,9 @@ const blank = " "
 const space = ' '
 
 // match the passed words with the known fields of all in-scope kinds.
-// return the number of words in that match.
-func (pen *Pen) GetPartialField(ws match.Span) (ret string, err error) {
-	if len(ws) > 0 {
-		words := strings.ToLower(ws.String()) + blank
+func (pen *Pen) GetPartialField(str string) (ret string, err error) {
+	if len(str) > 0 {
+		words := str + blank
 		if e := pen.db.QueryRow(`
 	with fields(name) as (
 		select distinct mf.field
@@ -96,17 +115,50 @@ func (pen *Pen) GetPartialField(ws match.Span) (ret string, err error) {
 	return
 }
 
-// return the number of words in that match.
+func (pen *Pen) GetPartialNoun(str string) (ret MatchedNoun, err error) {
+	if len(str) > 0 {
+		words := str + blank
+		if e := pen.db.QueryRow(`
+		with nouns(noun, name) as (
+			select mn.noun, my.name 
+			from mdl_name my
+			join mdl_noun mn
+				on (mn.rowid = my.noun)
+			join mdl_kind mk 
+				on (mn.kind = mk.rowid)
+			join domain_tree dt
+				on (dt.uses = my.domain)
+			where base = ?1
+			and my.rank >= 0
+			order by my.rank, my.rowid asc
+		)
+		-- for each possible pair chop a chunk of words from our input string
+		-- that's the length of the noun name, to see if it matches the noun name.
+		select noun, name from (
+			select noun, name, substr(?2 ,0, length(name)+2) as words
+			from nouns
+			where words = (name || ' ')
+		)
+		order by length(name) desc
+		limit 1`,
+			pen.domain, words).
+			Scan(&ret.Name, &ret.Match); e != sql.ErrNoRows {
+			err = e // could be nil or error
+		}
+	}
+	return
+}
+
 // tbd: technically there's some possibility that there might be three traits:
 // "wood", "veneer", and "wood veneer" -- subset names
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (pen *Pen) GetPartialTrait(ws match.Span) (ret string, err error) {
+func (pen *Pen) GetPartialTrait(str string) (ret string, err error) {
 	if ap, e := pen.getAspectPath(); e != nil {
 		err = e
-	} else if len(ws) > 0 {
-		words := strings.ToLower(ws.String()) + blank
+	} else if len(str) > 0 {
+		words := str + blank
 		if e := pen.db.QueryRow(`
 	with traits(name) as (
 		select distinct mf.field
@@ -133,12 +185,11 @@ func (pen *Pen) GetPartialTrait(ws match.Span) (ret string, err error) {
 	return
 }
 
-func (pen *Pen) GetPartialMacro(ws match.Span) (ret MacroMatch, err error) {
-	// uses spaces instead of underscores...
-	if len(ws) == 0 {
+func (pen *Pen) GetPartialMacro(str string) (ret MatchedMacro, err error) {
+	if len(str) == 0 {
 		err = sql.ErrNoRows
 	} else {
-		words := strings.ToLower(ws.String()) + blank
+		words := str + blank
 		var found struct {
 			kid      int64  // id of the kind
 			name     string // name of the kind/macro
@@ -197,9 +248,8 @@ func (pen *Pen) GetPartialMacro(ws match.Span) (ret MacroMatch, err error) {
 				}
 			}
 			if err == nil {
-				width := strings.Count(found.phrase, blank) + 1
-				ret = MacroMatch{
-					Width: width,
+				ret = MatchedMacro{
+					Phrase: found.phrase,
 					Macro: Macro{
 						Name:     found.name,
 						Type:     flag,

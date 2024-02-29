@@ -22,13 +22,16 @@ func (op *Names) HasAnonymousKind() bool {
 	return op.Kind != nil
 }
 
-// checks Query flags for PlainNameMatching
+// checks Query flags to control matching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	// "5 containers", "the container called the bottle"
-	(allowNounCreation(q) &&
-		(Optional(q, &next, &op.CountedName) ||
-			Optional(q, &next, &op.KindCalled))) ||
+	// "the bottle"
+	(matchNouns(q) &&
+		Optional(q, &next, &op.Noun)) ||
+		// "5 containers", "the container called the bottle"
+		(allowNounCreation(q) &&
+			(Optional(q, &next, &op.CountedName) ||
+				Optional(q, &next, &op.KindCalled))) ||
 		// "the container"
 		(matchKinds(q) &&
 			(Optional(q, &next, &op.Kind))) ||
@@ -52,6 +55,8 @@ func (op *Names) Pick() (ret MatchedName) {
 	} else if n := op.Kind; n != nil {
 		ret = n
 	} else if n := op.Name; n != nil {
+		ret = n
+	} else if n := op.Noun; n != nil {
 		ret = n
 	} else {
 		panic("well that was unexpected")

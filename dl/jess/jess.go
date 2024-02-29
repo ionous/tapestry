@@ -10,31 +10,33 @@ import (
 
 // Matching requires identifying kinds, traits, and macros.
 // tdb: the returned objects are all "string" --
-// but it might be interesting if they were "resources"
+// but it might be more useful if they were "resources"
 // and if generator functions required those resources as targets.
-// fix? may want to merge this with mdl.Pen --
-// but i do like jess saying exactly ( and only ) what it needs.
 type Query interface {
 	// provides for customization of individual queries.
 	// implementations should return 0;
 	// individual parse trees can then wrap the query with their own context specific information..
 	GetContext() int
 
-	// if the passed words starts with a kind,
+	// find the name of the kind which best matches the passed span ( if any )
 	// return the number of words that matched.
 	FindKind(match.Span, *kindsOf.Kinds) (string, int)
 
-	// if the passed words starts with a trait,
+	// find the name of the trait which best matches the passed span ( if any )
 	// return the number of words that matched.
 	FindTrait(match.Span) (string, int)
 
-	// if the passed words starts with a field,
+	// find the name of the field which best matches the passed span ( if any )
 	// return the number of words that matched.
 	FindField(match.Span) (string, int)
 
-	// if the passed words starts with a macro,
-	// return information about that match.
+	// find the macro which best matches the passed span ( if any )
+	// return the number of words that matched.
 	FindMacro(match.Span) (Macro, int)
+
+	/// find the name of the kind which best matches the passed span ( if any )
+	// return the number of words that matched.
+	FindNoun(match.Span) (string, int)
 }
 
 // Matched - generic interface so implementations can track backchannel data.

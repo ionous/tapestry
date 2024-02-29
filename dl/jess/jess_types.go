@@ -196,9 +196,10 @@ func (op *Name_Slice) Repeats() bool {
 // matches an existing noun
 // by checking multiple words for the best match.
 type Noun struct {
-	Article *Article
-	Matched string
-	Markup  map[string]any
+	Article    *Article
+	Matched    string
+	ActualNoun ActualNoun
+	Markup     map[string]any
 }
 
 // noun, a type of flow.
@@ -1930,7 +1931,14 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "the string that matched ( ex. an alias )",
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:    "actual_noun",
+			Label:   "actual_noun",
+			Private: true,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches an existing noun", "by checking multiple words for the best match."},
@@ -2086,7 +2094,10 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "the string that matched",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:    "actual_kind",
 			Label:   "actual_kind",
