@@ -2,7 +2,6 @@ package jess
 
 import (
 	"errors"
-	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -17,7 +16,7 @@ func (op *Understand) Match(q Query, input *InputState) (okay bool) {
 		op.As.Match(q, &next, keywords.As) &&
 		(Optional(q, &next, &op.Article) || true) &&
 		(op.matchPluralOf(q, &next) || true) &&
-		op.Names.Match(AddContext(q, IncludeExistingNouns), &next) {
+		op.Names.Match(q, &next) {
 		*input, okay = next, true
 	}
 	return
@@ -39,7 +38,7 @@ func (op *Understand) Generate(rar Registrar) (err error) {
 		// check whether kind matches an action
 		// ( although inform appears to eval the lhs first to see it matches any parser statement )
 		// will need to understand (ahg. puns) that better.
-		if actions, nouns, e := op.readRhs(rar); e != nil {
+		if actions, nouns, e := op.readRhs(); e != nil {
 			err = e
 		} else if len(actions) > 0 && len(nouns) > 0 {
 			err = errors.New("jess doesn't support mixing noun and action understandings")
@@ -88,7 +87,7 @@ func (op *Understand) applyAliases(rar Registrar, nouns []string) (err error) {
 				alias := it.GetNext()
 				if alias = inflect.Normalize(alias); len(alias) > 0 {
 					// the -1 indicates that this is an alias; hrm.
-					if e := rar.AddNounAlias(noun, alias, -1); e != nil {
+					if e := rar.AddNounName(noun, alias, -1); e != nil {
 						err = e
 						break
 					}
@@ -99,17 +98,16 @@ func (op *Understand) applyAliases(rar Registrar, nouns []string) (err error) {
 	return
 }
 
-func (op *Understand) readRhs(rar Registrar) (actions, nouns []string, err error) {
+func (op *Understand) readRhs() (actions, nouns []string, err error) {
 	for it := op.Names.Iterate(); it.HasNext(); {
 		next := it.GetNext()
-		if k := next.Kind; k != nil {
-			if kt := k.ActualKind.base; kt != kindsOf.Action {
-				err = fmt.Errorf("expected an action, but %q is a %s", k.String(), kt.String())
-			} else {
-				actions = append(actions, k.String())
-			}
+		if n := next.Noun; n != nil {
+			nouns = append(nouns, n.ActualNoun)
+		} else if k := next.Kind; k != nil && k.ActualKind.base == kindsOf.Action {
+			actions = append(actions, k.ActualKind.name)
 		} else {
-			nouns = append(nouns, next.String())
+			err = errors.New("Understandings can only match existing nouns or existing actions")
+			break
 		}
 	}
 	return
@@ -120,7 +118,7 @@ Loop:
 	for as := op.Names.Iterate(); as.HasNext(); {
 		// determine the "single" side of the plural request
 		if n := as.GetNext(); n.Noun == nil {
-			err = fmt.Errorf("unknown name %q, expected the name of an existing noun.", n)
+			err = errors.New("unknown name, expected the name of an existing noun.")
 		} else {
 			name := n.Noun.ActualNoun
 			for it := op.QuotedTexts.Iterate(); it.HasNext(); {

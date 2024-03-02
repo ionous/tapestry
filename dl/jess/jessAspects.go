@@ -27,7 +27,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 			next := next.Skip(w)         // skip the kind
 			op.Are.Matched = next.Cut(1) // cut the word are
 			next = next.Skip(1)          // move past are
-			if op.Names.Match(AddContext(q, PlainNameMatching), &next) {
+			if op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
 				*input, okay = next, true
 			}
 		}
@@ -40,9 +40,9 @@ func (op *AspectsAreTraits) Generate(rar Registrar) (err error) {
 		err = e
 	} else {
 		var names []string
-		for it := op.Names.Iterate(); it.HasNext(); {
+		for it := op.PlainNames.Iterate(); it.HasNext(); {
 			n := it.GetNext()
-			names = append(names, inflect.Normalize(n.String()))
+			names = append(names, n.Name.GetNormalizedName())
 		}
 		err = rar.AddTraits(aspect, names)
 	}

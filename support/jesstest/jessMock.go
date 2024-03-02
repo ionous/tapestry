@@ -71,14 +71,30 @@ func (m *Mock) AddPlural(many, one string) (_ error) {
 	m.out = append(m.out, "AddPlural", many, one)
 	return
 }
-func (m *Mock) AddNoun(short, long, kind string) (_ error) {
-	m.out = append(m.out, "AddNoun", short, long, kind)
+func (m *Mock) AddNounKind(noun, kind string) (_ error) {
+	m.out = append(m.out, "AddNounKind", noun, kind)
 	return
 }
-func (m *Mock) AddNounAlias(noun, name string, _ int) (_ error) {
-	m.out = append(m.out, "AddNounAlias", noun, name)
+
+var lastNamedNoun string
+var lastNamedSize int
+
+// slightly limit the name spew; name generation gets tested elsewhere
+func (m *Mock) AddNounName(noun, name string, r int) (_ error) {
+	if lastNamedSize != len(m.out) {
+		lastNamedNoun = ""
+	}
+	if r < 0 {
+		m.out = append(m.out, "AddNounAlias", noun, name)
+	} else if lastNamedNoun != noun || r < 0 {
+		m.out = append(m.out, "AddNounName", noun, name)
+	}
+
+	lastNamedNoun = noun
+	lastNamedSize = len(m.out)
 	return
 }
+
 func (m *Mock) AddNounTrait(name, trait string) (_ error) {
 	m.out = append(m.out, "AddNounTrait", name, trait)
 	return

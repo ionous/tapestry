@@ -2,8 +2,7 @@ package jess
 
 // all members of Names implement this so that they can be handled generically
 type MatchedName interface {
-	GetName(traits, kinds []string) (resultName, error)
-	String() string
+	BuildNoun(traits, kinds []string) (DesiredNoun, error)
 }
 
 func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
@@ -24,22 +23,24 @@ func (op *Names) HasAnonymousKind() bool {
 
 // checks Query flags to control matching
 func (op *Names) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	// "the bottle"
-	(matchNouns(q) &&
-		Optional(q, &next, &op.Noun)) ||
-		// "5 containers", "the container called the bottle"
-		(allowNounCreation(q) &&
-			(Optional(q, &next, &op.CountedName) ||
-				Optional(q, &next, &op.KindCalled))) ||
-		// "the container"
-		(matchKinds(q) &&
-			(Optional(q, &next, &op.Kind))) ||
+	matchNouns := matchNouns(q)
+	matchKinds := matchKinds(q)
+	if next := *input; ( //
+	matchNouns &&
 		// "the bottle"
-		Optional(q, &next, &op.Name) {
+		Optional(q, &next, &op.Noun)) || ( //
+	matchKinds &&
+		// "5 containers",
+		Optional(q, &next, &op.CountedKind) ||
+		// "the container called the bottle"
+		Optional(q, &next, &op.KindCalled) ||
+		// "the container"
+		Optional(q, &next, &op.Kind)) || ( //
+	// "the unknown name"
+	Optional(q, &next, &op.Name)) {
 		// as long as one succeeded, try matching additional names too...
-		// FIX: as far as i can tell, inform only allows "kind called" at the front of a list of names
-		// maybe it'd be better to match and reject when used.
+		// inform seems to only allow "kind called" at the front of a list of names...
+		// fix? but maybe it'd be better to match and reject when used incorrectly.
 		if !Optional(q, &next, &op.AdditionalNames) || op.AdditionalNames.Names.KindCalled == nil {
 			*input, okay = next, true
 		}
@@ -47,40 +48,31 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *Names) Pick() (ret MatchedName) {
-	if n := op.CountedName; n != nil {
-		ret = n
-	} else if n := op.KindCalled; n != nil {
-		ret = n
-	} else if n := op.Kind; n != nil {
-		ret = n
-	} else if n := op.Name; n != nil {
-		ret = n
-	} else if n := op.Noun; n != nil {
-		ret = n
+func (op *Names) GetMatchedName() (ret MatchedName) {
+	if m := op.CountedKind; m != nil {
+		ret = m
+	} else if m := op.KindCalled; m != nil {
+		ret = m
+	} else if m := op.Kind; m != nil {
+		ret = m
+	} else if m := op.Name; m != nil {
+		ret = m
+	} else if m := op.Noun; m != nil {
+		ret = m
 	} else {
 		panic("well that was unexpected")
 	}
 	return
 }
 
-func (op *Names) GetName(traits, kinds []string) (resultName, error) {
-	return op.Pick().GetName(traits, kinds)
-}
-
-// return the match of this, without any additional nouns
-// panics if there wasn't actually a match
-func (op *Names) String() (ret string) {
-	return op.Pick().String()
-}
-
-func (op *Names) GetNames(traits, kinds []string) (ret []resultName, err error) {
+func (op *Names) BuildNouns(traits, kinds []string) (ret []DesiredNoun, err error) {
 	for t := *op; ; {
-		if n, e := t.GetName(traits, kinds); e != nil {
+		m := t.GetMatchedName()
+		if m, e := m.BuildNoun(traits, kinds); e != nil {
 			err = e
 			break
 		} else {
-			ret = append(ret, n)
+			ret = append(ret, m)
 			// next name:
 			if next := t.AdditionalNames; next == nil {
 				break

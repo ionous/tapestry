@@ -26,6 +26,17 @@ For instance:
 
 Inform has these same issues.
 
+Article edge cases 
+-----
+This is funny, if only because its accidentally the same in both jess and inform. 
+
+Article determination differs based on capitalization and location in the sentence, so a sentence like "The Kitchen is a room" recognizes "The" is an article. However, that's also true if it was written "THE", "tHE", or "the".
+
+As expected, for "A thing is in the Kitchen." 'the' is recognized as an article, whereas for "A thing is in The Kitchen." it becomes part of the name. Here, "THE" becomes "THE Kitchen" while "tHE"? it's seen as a normal article.
+
+Categorization depends on the first letter only.
+
+
 Unexpected failures
 -------------------
 

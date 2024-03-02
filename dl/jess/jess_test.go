@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -15,9 +16,10 @@ func TestPhrases(t *testing.T) {
 }
 
 type info struct {
-	kinds                 []string
-	traits, fields, nouns match.SpanList
-	macros                jesstest.MacroList
+	kinds []string
+	traits, fields,
+	nouns, directions match.SpanList
+	macros jesstest.MacroList
 }
 
 func (n *info) GetContext() int {
@@ -60,8 +62,14 @@ func (n *info) FindField(ws match.Span) (string, int) {
 func (n *info) FindMacro(ws match.Span) (mdl.Macro, int) {
 	return n.macros.FindMacro(ws)
 }
-func (n *info) FindNoun(ws match.Span) (string, int) {
-	m, cnt := n.nouns.FindMatch(ws)
+func (n *info) FindNoun(ws match.Span, kind string) (string, int) {
+	var focus match.SpanList
+	if kind == jess.Directions {
+		focus = n.directions
+	} else {
+		focus = n.nouns
+	}
+	m, cnt := focus.FindMatch(ws)
 	return m.String(), cnt
 }
 
@@ -84,6 +92,10 @@ var known = info{
 	),
 	kinds: []string{
 		"kind", "kinds",
+		"object", "objects",
+		"door", "doors",
+		"room", "rooms",
+		"direction", "directions",
 		"thing", "things",
 		"container", "containers",
 		"supporter", "supporters",
@@ -98,6 +110,7 @@ var known = info{
 		"openable",
 		"transparent",
 		"fixed in place",
+		"dark",
 	),
 	fields: match.PanicSpans(
 		"description",
@@ -105,7 +118,13 @@ var known = info{
 		"age",
 	),
 	nouns: match.PanicSpans(
+		"story",
 		"message",
 		"missive",
+		"river",
+		"ocean",
+	),
+	directions: match.PanicSpans(
+		"north", "south", "east", "west",
 	),
 }

@@ -27,6 +27,41 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		skip   any
 	}{
 		// ------------------------
+		// MapConnection
+		{
+			test: `Through the long slide is nowhere.`,
+			result: []string{
+				"AddNounKind", "long slide", "doors",
+				"AddNounName", "long slide", "long slide",
+				"AddNounValue", "long slide", "destination", textKind("", "rooms"),
+			},
+		},
+		{
+			test: `Through the blue door is the Flat Landing.`,
+			result: []string{
+				"AddNounKind", "flat landing", "rooms",
+				"AddNounName", "flat landing", "Flat Landing",
+				"AddNounKind", "blue door", "doors",
+				"AddNounName", "blue door", "blue door",
+				"AddNounValue", "blue door", "destination", textKind("flat landing", "rooms"),
+			},
+		},
+		{
+			test: `Through the gate and the hatch is a dark room called An End.`,
+			result: []string{
+				"AddNounKind", "an end", "rooms",
+				"AddNounName", "an end", "An End",
+				"AddNounTrait", "an end", "dark",
+				"AddNounTrait", "an end", "proper named",
+				"AddNounKind", "gate", "doors",
+				"AddNounName", "gate", "gate",
+				"AddNounValue", "gate", "destination", textKind("an end", "rooms"),
+				"AddNounKind", "hatch", "doors",
+				"AddNounName", "hatch", "hatch",
+				"AddNounValue", "hatch", "destination", textKind("an end", "rooms"),
+			},
+		},
+		// ------------------------
 		// Understandings
 		{
 			test: `Understand "floor" or "sawdust" as the message.`,
@@ -59,6 +94,7 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The title of the story is "A Secret."`,
 			result: []string{
+				// no noun declaration because the story is a known noun ( in these tests )
 				"AddNounValue", "story", "title", text("A Secret."),
 			},
 		},
@@ -67,6 +103,8 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			// weave validates them when attempting to write them.
 			test: `The age of the bottle is 42.`,
 			result: []string{
+				"AddNounKind", "bottle", "things",
+				"AddNounName", "bottle", "bottle",
 				"AddNounValue", "bottle", "age", number(42),
 			},
 		},
@@ -84,6 +122,8 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			// weave validates them when attempting to write them.
 			test: `The bottle has an age of 42.`,
 			result: []string{
+				"AddNounKind", "bottle", "things",
+				"AddNounName", "bottle", "bottle",
 				"AddNounValue", "bottle", "age", number(42),
 			},
 		},
@@ -195,23 +235,37 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `Two things are in the kitchen.`,
 			result: []string{
-				"AddNoun", "things-1", "things-1", "things",
-				"AddNounAlias", "things-1", "thing",
-				"AddNounTrait", "things-1", "counted",
-				"AddNounValue", "things-1", "printed name", text("thing"),
+				"AddNounKind", "kitchen", "things", // FIX: what's the best kind for this?
+				"AddNounName", "kitchen", "kitchen",
 				//
-				"AddNoun", "things-2", "things-2", "things",
-				"AddNounAlias", "things-2", "thing",
-				"AddNounTrait", "things-2", "counted",
-				"AddNounValue", "things-2", "printed name", text("thing"),
+				"AddNounKind", "thing-1", "things",
+				"AddNounName", "thing-1", "thing-1",
+				"AddNounAlias", "thing-1", "thing",
+				"AddNounTrait", "thing-1", "counted",
+				"AddNounValue", "thing-1", "printed name", text("thing"),
 				//
-				"ApplyMacro", "contain", "kitchen", "things-1", "things-2",
+				"AddNounKind", "thing-2", "things",
+				"AddNounName", "thing-2", "thing-2",
+				"AddNounAlias", "thing-2", "thing",
+				"AddNounTrait", "thing-2", "counted",
+				"AddNounValue", "thing-2", "printed name", text("thing"),
+				//
+				"ApplyMacro", "contain", "kitchen", "thing-1", "thing-2",
 			},
 		},
 		{
 			test: `Hershel is carrying scissors and a pen.`,
 			result: []string{
+				"AddNounKind", "hershel", "things", // FIX: what's the best kind for this?
+				"AddNounName", "hershel", "Hershel",
 				"AddNounTrait", "hershel", "proper named",
+				//
+				"AddNounKind", "scissors", "things",
+				"AddNounName", "scissors", "scissors",
+				"AddNounTrait", "scissors", "proper named", // yes; this conforms with inform.
+				//
+				"AddNounKind", "pen", "things",
+				"AddNounName", "pen", "pen",
 				"ApplyMacro", "carry", "hershel", "scissors", "pen",
 			},
 		},
@@ -219,7 +273,15 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The scissors and a pen are carried by Hershel.`,
 			result: []string{
+				"AddNounKind", "hershel", "things", // FIX: what's the best kind for this?
+				"AddNounName", "hershel", "Hershel",
 				"AddNounTrait", "hershel", "proper named",
+				//
+				"AddNounKind", "scissors", "things",
+				"AddNounName", "scissors", "scissors",
+				//
+				"AddNounKind", "pen", "things",
+				"AddNounName", "pen", "pen",
 				"ApplyMacro", "carry", "hershel", "scissors", "pen",
 			},
 		},
@@ -228,6 +290,8 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The bottle is closed.`,
 			result: []string{
+				"AddNounKind", "bottle", "things",
+				"AddNounName", "bottle", "bottle",
 				"AddNounTrait", "bottle", "closed",
 			},
 		},
@@ -235,6 +299,8 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The tree is fixed in place.`,
 			result: []string{
+				"AddNounKind", "tree", "things",
+				"AddNounName", "tree", "tree",
 				"AddNounTrait", "tree", "fixed in place",
 			},
 		},
@@ -242,7 +308,8 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The bottle is a transparent, open, container.`,
 			result: []string{
-				"AddNoun", "bottle", "", "containers",
+				"AddNounKind", "bottle", "containers",
+				"AddNounName", "bottle", "bottle",
 				"AddNounTrait", "bottle", "transparent",
 				"AddNounTrait", "bottle", "open",
 			},
@@ -251,9 +318,11 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The box and the top are closed containers.`,
 			result: []string{
-				"AddNoun", "box", "", "containers",
+				"AddNounKind", "box", "containers",
+				"AddNounName", "box", "box",
 				"AddNounTrait", "box", "closed",
-				"AddNoun", "top", "", "containers",
+				"AddNounKind", "top", "containers",
+				"AddNounName", "top", "top",
 				"AddNounTrait", "top", "closed",
 			},
 		},
@@ -262,8 +331,10 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The container called the sarcophagus is open.`,
 			result: []string{
-				"AddNoun", "sarcophagus", "", "containers",
+				"AddNounKind", "sarcophagus", "containers",
+				"AddNounName", "sarcophagus", "sarcophagus",
 				"AddNounTrait", "sarcophagus", "open",
+				"AddNounValue", "sarcophagus", "indefinite article", text("the"),
 			},
 		},
 		// ------------------------------------------------------------------------
@@ -303,7 +374,7 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			test: `The closed containers called the safes are a kind of fixed in place thing.`,
 			result: []string{
 				"AddKind", "safes", "things",
-				"AddKind", "safes", "containers", // the parent can be singular or plural
+				"AddKind", "safes", "containers",
 				"AddKindTrait", "safes", "closed",
 				"AddKindTrait", "safes", "fixed in place",
 			},
@@ -336,6 +407,10 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The unhappy man is in the closed bottle.`,
 			result: []string{
+				"AddNounKind", "closed bottle", "things",
+				"AddNounName", "closed bottle", "closed bottle",
+				"AddNounKind", "unhappy man", "things",
+				"AddNounName", "unhappy man", "unhappy man",
 				"ApplyMacro", "contain", "closed bottle", "unhappy man",
 			},
 		},
@@ -343,8 +418,13 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The coffin is a closed container in the antechamber.`,
 			result: []string{
-				"AddNoun", "coffin", "", "containers",
+				"AddNounKind", "antechamber", "things",
+				"AddNounName", "antechamber", "antechamber",
+				//
+				"AddNounKind", "coffin", "containers",
+				"AddNounName", "coffin", "coffin",
 				"AddNounTrait", "coffin", "closed",
+				//
 				"ApplyMacro", "contain", "antechamber", "coffin",
 			},
 		},
@@ -352,6 +432,12 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The bottle is openable in the kitchen.`,
 			result: []string{
+
+				"AddNounKind", "kitchen", "things",
+				"AddNounName", "kitchen", "kitchen",
+				//
+				"AddNounKind", "bottle", "things",
+				"AddNounName", "bottle", "bottle",
 				"AddNounTrait", "bottle", "openable",
 				"ApplyMacro", "contain", "kitchen", "bottle",
 			},
@@ -362,8 +448,14 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `The thing called the stake is on the supporter called the altar.`,
 			result: []string{
-				"AddNoun", "altar", "", "supporters",
-				"AddNoun", "stake", "", "things",
+				"AddNounKind", "altar", "supporters",
+				"AddNounName", "altar", "altar",
+				"AddNounValue", "altar", "indefinite article", text("the"),
+				//
+				"AddNounKind", "stake", "things",
+				"AddNounName", "stake", "stake",
+				"AddNounValue", "stake", "indefinite article", text("the"),
+				//
 				"ApplyMacro", "support", "altar", "stake",
 			},
 		},
@@ -374,9 +466,14 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `A closed openable container called the trunk is in the lobby.`,
 			result: []string{
-				"AddNoun", "trunk", "", "containers",
+				"AddNounKind", "lobby", "things",
+				"AddNounName", "lobby", "lobby",
+				//
+				"AddNounKind", "trunk", "containers",
+				"AddNounName", "trunk", "trunk",
 				"AddNounTrait", "trunk", "closed",
 				"AddNounTrait", "trunk", "openable",
+				"AddNounValue", "trunk", "indefinite article", text("the"),
 				"ApplyMacro", "contain", "lobby", "trunk",
 			},
 		},
@@ -385,7 +482,19 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: []string{
-				"AddNounValue", "coins", "indefinite article", text("some"),
+				"AddNounKind", "coffin", "things",
+				"AddNounName", "coffin", "coffin",
+				//
+				"AddNounKind", "coins", "things",
+				"AddNounName", "coins", "coins",
+				"AddNounTrait", "coins", "plural named",
+				//
+				"AddNounKind", "notebook", "things",
+				"AddNounName", "notebook", "notebook",
+				//
+				"AddNounKind", "gripping hand", "things",
+				"AddNounName", "gripping hand", "gripping hand",
+				//
 				"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			},
 		},
@@ -393,28 +502,64 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: []string{
-				"AddNounValue", "coins", "indefinite article", text("some"),
+				"AddNounKind", "coffin", "things",
+				"AddNounName", "coffin", "coffin",
+				//
+				"AddNounKind", "coins", "things",
+				"AddNounName", "coins", "coins",
+				"AddNounTrait", "coins", "plural named",
+				//
+				"AddNounKind", "notebook", "things",
+				"AddNounName", "notebook", "notebook",
+				//
+				"AddNounKind", "gripping hand", "things",
+				"AddNounName", "gripping hand", "gripping hand",
+				//
 				"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			},
 		},
-
 		// multiple anonymous nouns.
 		{
 			test: `In the lobby are a supporter and a container.`,
 			result: []string{
-				"AddNoun", "", "", "supporters",
-				"AddNoun", "", "", "containers",
-				"ApplyMacro", "contain", "lobby", "", "",
+				"AddNounKind", "lobby", "things",
+				"AddNounName", "lobby", "lobby",
+				//
+				"AddNounKind", "supporter-1", "supporters",
+				"AddNounName", "supporter-1", "supporter-1",
+				"AddNounAlias", "supporter-1", "supporter",
+				"AddNounTrait", "supporter-1", "counted",
+				"AddNounValue", "supporter-1", "printed name", text("supporter"),
+				//
+				"AddNounKind", "container-1", "containers",
+				"AddNounName", "container-1", "container-1",
+				"AddNounAlias", "container-1", "container",
+				"AddNounTrait", "container-1", "counted",
+				"AddNounValue", "container-1", "printed name", text("container"),
+				//
+				"ApplyMacro", "contain", "lobby", "supporter-1", "container-1",
 			},
 		},
 		// the special nxn description: no properties are allowed.
 		{
 			test: `Hector and Maria are suspicious of Santa and Santana.`,
 			result: []string{
+				"AddNounKind", "hector", "things",
+				"AddNounName", "hector", "Hector",
 				"AddNounTrait", "hector", "proper named",
+				//
+				"AddNounKind", "maria", "things",
+				"AddNounName", "maria", "Maria",
 				"AddNounTrait", "maria", "proper named",
+				//
+				"AddNounKind", "santa", "things",
+				"AddNounName", "santa", "Santa",
 				"AddNounTrait", "santa", "proper named",
+				//
+				"AddNounKind", "santana", "things",
+				"AddNounName", "santana", "Santana",
 				"AddNounTrait", "santana", "proper named",
+				//
 				"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
 			},
 		},
@@ -449,8 +594,7 @@ func TestPhrases(t *testing.T, q jess.Query) {
 				t.Fail()
 			} else {
 				if d := pretty.Diff(p.result, haveRes); len(d) > 0 {
-					t.Log("NG! test", i, p.test, "got:\n", pretty.Sprint(haveRes))
-					//t.Log("want:", pretty.Sprint(p.result))
+					t.Logf("NG! test %d %q got: %#v", i, p.test, haveRes)
 					t.Log(d)
 					t.Fail()
 				}
@@ -481,6 +625,10 @@ func Marshal(a any) (ret string, err error) {
 
 func text(str string) string {
 	return fmt.Sprintf(`{"FromText:":{"Text value:":%q}}`, str)
+}
+
+func textKind(str, kind string) string {
+	return fmt.Sprintf(`{"FromText:":{"Text value:kind:":[%q,%q]}}`, str, kind)
 }
 
 func number(num float64) string {

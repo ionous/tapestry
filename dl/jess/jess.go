@@ -18,25 +18,26 @@ type Query interface {
 	// individual parse trees can then wrap the query with their own context specific information..
 	GetContext() int
 
-	// find the name of the kind which best matches the passed span ( if any )
-	// return the number of words that matched.
+	// find the name of the kind which best matches the passed span.
+	// return the number of words that matched ( if any. )
 	FindKind(match.Span, *kindsOf.Kinds) (string, int)
 
-	// find the name of the trait which best matches the passed span ( if any )
-	// return the number of words that matched.
+	// find the name of the trait which best matches the passed span.
+	// return the number of words that matched ( if any. )
 	FindTrait(match.Span) (string, int)
 
-	// find the name of the field which best matches the passed span ( if any )
-	// return the number of words that matched.
+	// find the name of the field which best matches the passed span.
+	// return the number of words that matched ( if any. )
 	FindField(match.Span) (string, int)
 
-	// find the macro which best matches the passed span ( if any )
-	// return the number of words that matched.
+	// find the macro which best matches the passed span.
+	// return the number of words that matched ( if any. )
 	FindMacro(match.Span) (Macro, int)
 
-	/// find the name of the kind which best matches the passed span ( if any )
-	// return the number of words that matched.
-	FindNoun(match.Span) (string, int)
+	/// find the name of the noun which best matches the passed span.
+	// return the number of words that matched ( if any. )
+	// the kind, if specified, will focus the search to that one kind.
+	FindNoun(name match.Span, kind string) (string, int)
 }
 
 // Matched - generic interface so implementations can track backchannel data.
@@ -59,10 +60,10 @@ type Interpreter interface {
 // returns an object which can create nouns, define kinds, set properties, and so on.
 func Match(q Query, ws match.Span) (ret Generator, err error) {
 	var m MatchingPhrases
-	input := InputState(ws)
+	input := MakeInput(ws)
 	if m, ok := m.Match(q, &input); !ok {
 		err = errors.New("failed to match phrase")
-	} else if cnt := len(input); cnt != 0 {
+	} else if cnt := input.Len(); cnt != 0 {
 		err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
 	} else {
 		ret = m

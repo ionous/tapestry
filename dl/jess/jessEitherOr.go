@@ -13,7 +13,7 @@ func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 	op.Kind.Match(q, &next) &&
 		op.matchEither(q, &next) &&
 		op.Traits.Match(q, &next) {
-		*input, okay = nil, true
+		*input, okay = next, true
 	}
 	return
 }
@@ -74,11 +74,12 @@ func (op *KindsAreEither) generateAspect(rar Registrar) (ret string, err error) 
 var canBeEither = match.PanicSpans("can be", "are either", "is either", "can be either")
 
 func (op *NewTrait) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; len(next) > 0 {
+	if next := *input; next.Len() > 0 {
 		// look for 1) the end of the string, or 2) the separator "or"
 		if firstSpan := scanUntil(next.Words(), keywords.Or); firstSpan < 0 {
-			op.Matched = match.Span(next).String() // eat everything
-			*input, okay = nil, true               // all done.
+			width := next.Len()
+			op.Matched = next.Cut(width)          // eat everything
+			*input, okay = next.Skip(width), true // all done.
 		} else {
 			// found the word "or":
 			op.Matched = next.Cut(firstSpan)

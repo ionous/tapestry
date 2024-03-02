@@ -1,6 +1,6 @@
 package match
 
-type SpanList [][]Word
+type SpanList []Span
 
 // this is the same as FindPrefix only it returns a Span instead of an index
 func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {

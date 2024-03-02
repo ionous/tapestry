@@ -18,6 +18,15 @@ func (op *Are) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+func (op *Called) Match(q Query, input *InputState) (okay bool) {
+	if width := input.MatchWord(keywords.Called); width > 0 {
+		op.Matched = input.Cut(width)
+		*input = input.Skip(width)
+		okay = true
+	}
+	return
+}
+
 func (op *CommaAnd) Match(q Query, input *InputState) (okay bool) {
 	if sep, e := ReadCommaAnd(input.Words()); e == nil && sep != 0 {
 		width := sep.Len()
@@ -55,7 +64,7 @@ func (op *Words) String() string {
 var keywords = struct {
 	And, Are, As, Called, Comma, Has, Have,
 	Is, Nowhere, Of, Or, Quote,
-	Through, Understand, Usually uint64
+	Through, Understand, Usually, You uint64
 }{
 	And:    match.Hash("and"),
 	Are:    match.Hash("are"),
@@ -74,4 +83,5 @@ var keywords = struct {
 	Through:    match.Hash("through"),
 	Understand: match.Hash("understand"),
 	Usually:    match.Hash("usually"),
+	You:        match.Hash("you"),
 }

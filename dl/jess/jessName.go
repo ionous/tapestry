@@ -1,17 +1,22 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/match"
+import (
+	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
+)
 
-func (op *Name) String() string {
-	return op.Matched
+func (op *Name) GetNormalizedName() string {
+	return inflect.Normalize(op.Text)
 }
 
-func (op *Name) GetName(traits, kinds []string) (ret resultName, err error) {
-	ret = resultName{
-		Article: reduceArticle(op.Article),
-		Matched: op.Matched, // a span cut from the input
-		Traits:  traits,
-		Kinds:   kinds,
+func (op *Name) BuildNoun(traits, kinds []string) (ret DesiredNoun, err error) {
+	a, flags := getOptionalArticle(op.Article)
+	ret = DesiredNoun{
+		Article:     a,
+		Flags:       flags,
+		DesiredName: op.Text, // cut from the input
+		Traits:      traits,
+		Kinds:       kinds,
 	}
 	return
 }
@@ -19,15 +24,15 @@ func (op *Name) GetName(traits, kinds []string) (ret resultName, err error) {
 func (op *Name) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
-		op.matchName(q, &next) {
+		op.matchName(&next) {
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *Name) matchName(q Query, input *InputState) (okay bool) {
+func (op *Name) matchName(input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
-		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+		op.Text, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return
 }

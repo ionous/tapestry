@@ -1,17 +1,18 @@
 package jess
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
 // KindsOf
 func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	op.Names.Match(q, &next) &&
+	op.Names.Match(AddContext(q, ExcludeNounMatching), &next) &&
 		op.Are.Match(q, &next) &&
-		op.matchKindsOf(q, &next) &&
+		op.matchKindsOf(&next) &&
 		(Optional(q, &next, &op.Traits) || true) &&
 		op.Kind.Match(q, &next) {
 		*input, okay = next, true
@@ -20,7 +21,7 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 }
 
 // match "a kind of" or "kinds of"
-func (op *KindsOf) matchKindsOf(q Query, input *InputState) (okay bool) {
+func (op *KindsOf) matchKindsOf(input *InputState) (okay bool) {
 	if m, width := kindsSpan.FindMatch(input.Words()); m != nil {
 		op.KindsOf.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
@@ -36,55 +37,86 @@ func (op *KindsOf) GetTraits() (ret Traitor) {
 	return
 }
 
+// ex. "... are a kind of aspect."
+// panics if not matched.
+func (op *KindsOf) IsAspect() bool {
+	return op.Kind.ActualKind.base == kindsOf.Aspect
+}
+
 // The closed containers called safes are a kind of fixed in place thing.
 func (op *KindsOf) Generate(rar Registrar) (err error) {
 	if parent, e := op.Kind.Validate(); e != nil {
 		err = e
 	} else {
 		traits := op.GetTraits()
-		//
+		isPlural, isAspect := op.Are.IsPlural(), op.IsAspect()
+		// the names are kinds we have not yet created
 		for it := op.Names.Iterate(); it.HasNext(); {
-			k := it.GetNext()
-			// ugh. aspects are expected to be singular right now
-			// ( see also AspectsAreTraits )
-			var name string
-			if op.Kind.ActualKind.base == kindsOf.Aspect {
-				if n := k.String(); op.Are.IsPlural() {
-					name = rar.GetSingular(n)
-				} else {
-					name = n
-				}
-			} else {
-				if n := k.String(); op.Are.IsPlural() {
-					name = n
-				} else {
-					name = rar.GetPlural(n)
-				}
-			}
-			kind := inflect.Normalize(name)
-			if e := rar.AddKind(kind, parent); e != nil {
-				err = e
+			at := it.GetNext()
+			if at.CountedKind != nil {
+				err = errors.New(countedKindMsg)
 				break
 			} else {
-				// "x called" can have its own traits and kind
-				if called := op.Names.KindCalled; called != nil {
-					if calledKind, e := called.GetKind(); e != nil {
-						err = e
-					} else if e := rar.AddKind(kind, calledKind); e != nil {
-						err = e // kind called already normalized because it matched the specific kind
-						break
-					} else if e := AddDefaultTraits(rar, kind, called.GetTraits()); e != nil {
+				// determine the name of the desired kind
+				// ex. the rhs of "the k called desired kind"
+				var kind string
+				if k := at.Kind; k != nil {
+					// if it was a known kind, then that's easy.
+					kind = k.ActualKind.name
+				} else {
+					// otherwise, get the specified name
+					if n := getKindOfName(at); isAspect && isPlural {
+						// ick. aspects are expected to be singular
+						kind = rar.GetSingular(n)
+					} else if !isAspect && !isPlural {
+						// all other kinds are are expected to be plural
+						kind = rar.GetPlural(n)
+					} else {
+						kind = n
+					}
+				}
+				// register our new kind ( or new kind of hierarchy )
+				if e := rar.AddKind(kind, parent); e != nil {
+					err = e
+					break
+				} else {
+					// "x called" can have its own traits and kind
+					if called := op.Names.KindCalled; called != nil {
+						if calledKind, e := called.GetKind(); e != nil {
+							err = e
+						} else if e := rar.AddKind(kind, calledKind); e != nil {
+							err = e // kind called already normalized because it matched the specific kind
+							break
+						} else if e := AddKindTraits(rar, kind, called.GetTraits()); e != nil {
+							err = e
+							break
+						}
+					}
+					// add trailing traits.
+					if e := AddKindTraits(rar, kind, traits); e != nil {
 						err = e
 						break
 					}
-				}
-				// add trailing traits.
-				if e := AddDefaultTraits(rar, kind, traits); e != nil {
-					err = e
-					break
 				}
 			}
 		}
 	}
 	return
 }
+
+func getKindOfName(at *Names) string {
+	var name *Name
+	if n := at.Name; n != nil {
+		name = n
+	} else if kc := at.KindCalled; kc != nil {
+		// we excluded existing nouns; so only names must exist
+		name = kc.NamedNoun.Name
+	}
+	if name == nil {
+		panic("unexpected match")
+	}
+	return name.GetNormalizedName()
+}
+
+const countedKindMsg = `Defining a new kind using a leading number is prohibited. 
+If you're sure you'd like a number to be part of the name, use "called the" instead.`

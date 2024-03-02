@@ -3,15 +3,20 @@ Spec:with group:
   - "jess"
 
   - Group contains:
-    - # one of a predefined set of determiners:
-      # the, a, some, etc.
-      # see 'counted_name' for names with leading numbers.
+    - # one of a predefined set of determiners: the, a/n, some, our.
+      # only matches if the first letter is lowercase, or uppercase at the start of a sentence;
+      # otherwise, the article gets treated as part of the name.
+      # the lack of a recognized article makes something proper-named.
+      # see 'counted_kind' for names with leading numbers: (ex. five or 27)
+      # using "some"  (ex. "some coins") will set nouns as "plural named"
       Spec:with flow:
       - "article"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "text"
+        - Term:type:private:
+          - "flags"
+          - "article_flags"
+          - true
 
     - # conjunction junction
       # matches "," or "and" or ", and"
@@ -41,21 +46,27 @@ Spec:with group:
           - "matched"
           - "text"
 
-    - # Specifies a single name, in full or in part.
+    - # matches the word "called".
+      Spec:with flow:
+      - "called"
+      - Flow uses:
+        - Term:type:
+          - "matched"
+          - "text"
+
+    - # Specifies a name who's meaning depends on context.
       # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
-      # The name "chest" implies the treasure chest.
+      # the "chest" implies the noun "treasure chest."
+      # In other cases, the name might be a kind, or trait, or pretty much anything else.
       # To optimizing matching the words "is/are/comma/and" are never part of name names.
       # future: allow quoted "titles" ( which are then allowed to break those assumptions )
-      # ( see also 'kind_called' )
       Spec:with flow:
       - "name"
       - Flow uses:
         - Term:optional:
           - "article"
           - true
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "text"
 
     - # matches an existing noun
       # by checking multiple words for the best match.
@@ -74,12 +85,23 @@ Spec:with group:
           - "actual_noun"
           - true
 
+    - # matches an existing noun, or if not: then something new.
+      Spec:with flow:
+      - "named_noun"
+      - Flow uses:
+        - Term:optional:
+          - "noun"
+          - true
+        - Term:optional:
+          - "name"
+          - true
+
     - # Defines a name and its kind in a single phrase.
-      # kind "called" [the] _name_.
-      # as per inform, the name of the name is everything after the word called
-      # until "is" or "are" or the end of the line.
-      # For instance: `The container called the trunk and the box is in the lobby`
-      # generates a single name named "the trunk and the box."
+      # Matches: (traits) kind "called" {the name}.
+      # For example: `The closed container called the trunk is in the lobby.`
+      # As per inform, the name includes all text after the word "called"
+      # until "is", "are", or the end of the sentence;
+      # and specifying "called the/our ..." gives the noun an indefinite article.
       Spec:with flow:
       - "kind_called"
       - Flow uses:
@@ -89,34 +111,19 @@ Spec:with group:
           - "traits"
           - true
         - Term: "kind"
-        - Term: "called_name"
-
-    - Spec:with flow:
-      - "called_name"
-      - Flow uses:
-        - # the word "called"
-          Term:type:
-          - "called"
-          - "words"
-        - Term:optional:
-          - "article"
-          - true
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "called"
+        - Term: "named_noun"
 
     - # Specifies one or more nouns, in full or in part.
       # Only one of the options, plus possibly 'additional_names', will match.
-      # Not all options are valid in all contexts;
-      # the users of 'names' may discard or avoid certain matches.
-      # ( the options could be represented as a slot; this feels easier for now )
+      # Not all options are valid in all contexts.
       Spec:with flow:
       - "names"
       - Flow uses:
         - Term:optional:
-          - "counted_name"
+          - "counted_kind"
           - true
-        - # note: because this phrase is greedy
+        - # note that because this phrase is greedy
           # once used, no additional names will match.
           Term:optional:
           - "kind_called"
@@ -125,8 +132,8 @@ Spec:with group:
           Term:optional:
           - "noun"
           - true
-        - # used primarily for anonymous nouns: "the container"
-          # noting that anonymous nouns are prohibited from starting a sentence.
+        - # used primarily for anonymous nouns: ex. "the container"
+          # note that anonymous nouns are prohibited from starting a sentence.
           Term:optional:
           - "kind"
           - true
@@ -148,7 +155,7 @@ Spec:with group:
     - # provides english specification of a number of objects.
       # note: yes, `the five the containers` is permitted.
       Spec:with flow:
-      - "counted_name"
+      - "counted_kind"
       - Flow uses:
         - Term:optional:
           - "article"
@@ -295,13 +302,12 @@ Spec:with group:
     - # names are "a kind of"/"kinds of" traits kind:any.
       # interesting to note that inform allows "some kind/s of"
       # this is more strict.
-      # like inform this doesn't try to limit the names
-      # `The animals called kittens are a kind of things.` is legal.
+      # like inform `The animals called kittens are a kind of things.` is legal.
       Spec:with flow:
       - "kinds_of"
       - Flow uses:
-        - # a counted name here doesn't indicate multiple kinds
-          # instead it generates a kind that has a number leading its name.
+        - # can match plain names and existing kinds;
+          # only allows a leading kind called, and errors on all counted kinds.
           Term: "names"
         - Term: "are"
         - # the phrases "a kind of" or "kinds of"
@@ -336,11 +342,9 @@ Spec:with group:
           - "words"
         - Term: "traits"
 
-    - # defines traits for a kind of aspect.
-      # aspect are names
-      # ex. The colors are a kind of aspect. The colors are red, blue, and greasy green.
+    - # defines traits for aspects that can be (re)used by various other kinds.
+      # ex. `The colors are a kind of aspect. The colors are red, blue, and greasy green.`
       # aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
-      # this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)
       Spec:with flow:
       - "aspects_are_traits"
       - Flow uses:
@@ -348,8 +352,9 @@ Spec:with group:
           - "aspect"
           - "kind"
         - Term: "are"
-        - # plain names, no kinds.
-          Term: "names"
+        - Term:type:
+          - "plain_names"
+          - "names"
 
     - # verb names are (other) names.
       # ex. `In the coffin are some coins, a notebook, and the gripping hand.`
@@ -401,8 +406,9 @@ Spec:with group:
       - "verb_phrase"
       - Flow uses:
         - Term: "verb"
-        - # only succeeds on plain names.
-          Term: "names"
+        - Term:type:
+          - "plain_names"
+          - "names"
 
     - # one or more phrases consisting of traits and a kind.
       # while all parts are marked as optional, matching expects
@@ -450,10 +456,7 @@ Spec:with group:
           Term:type:
           - "of"
           - "words"
-        - # note: "called the" isn't allowed here.
-          Term:type:
-          - "noun"
-          - "name"
+        - Term: "named_noun"
         - Term: "are"
         - Term: "single_value"
 
@@ -463,12 +466,8 @@ Spec:with group:
       Spec:with flow:
       - "noun_property_value"
       - Flow uses:
-        - # note: "called the" isn't allowed here.
-          Term:type:
-          - "noun"
-          - "name"
-        - # the word "has"
-          Term:type:
+        - Term: "named_noun"
+        - Term:type:
           - "has"
           - "words"
         - Term:optional:
@@ -510,7 +509,7 @@ Spec:with group:
       - Flow uses:
         - Term: "number"
 
-    - # kinds "have" a ["list of"] type ["called a" ...]
+    - # kinds "have" a ("list of") type ("called" name)
       # ex. Things have some text called a description.
       Spec:with flow:
       - "kinds_have_properties"
@@ -530,6 +529,14 @@ Spec:with group:
         - Term:optional:
           - "called_name"
           - true
+
+    - # for kinds_have_properties
+      # like kind_called, specifying "called the/our ..." gives the noun an indefinite article.
+      Spec:with flow:
+      - "called_name"
+      - Flow uses:
+        - Term: "called"
+        - Term: "name"
 
     - # matches text, number, kind ( kind|aspect|record )
       # as part of 'kinds_have_properties'
@@ -620,34 +627,47 @@ Spec:with group:
           Term: "names"
 
     - # A mapping declaration starting with a room or door.
-      # ex. `A dead end called the Airport is west of the room called the Airport Road and north of the Farm.`
+      # ex. `A dead end called the Airport is west of the Road and north of the Farm.`
       Spec:with flow:
       - "map_locations"
       - Flow uses:
-        - Term: "links"
+        - Term: "linking"
         - Term: "are"
-        - Term: "direction_from_links"
+        - Term: "direction_of_linking"
         - Term:optional:
-          - "additional_links"
+          - "additional_directions"
+          - true
+
+    - # matches additional directions
+      # only used by map_locations
+      Spec:with flow:
+      - "additional_directions"
+      - Flow uses:
+        - Term: "comma_and"
+        - Term: "direction_of_linking"
+        - Term:optional:
+          - "additional_directions"
           - true
 
     - # A mapping declaration starting with a direction.
       Spec:with flow:
       - "map_directions"
       - Flow uses:
-        - Term: "direction_from_links"
+        - Term: "direction_of_linking"
         - # ex. `Inside from the Meadow is the woodcutter's hut.`
           Term:optional:
-          - "links"
+          - "linking"
           - true
         - # ex. `West of the Garden is south of the Meadow.`
           Term:type:optional:
           - "redirect"
-          - "direction_from_links"
+          - "direction_of_linking"
           - true
 
     - # A mapping declaration to set the destination of doors.
-      # The destination of a door is always a room or nowhere.
+      # ex. `Through the long slide is the cellar.`
+      #     ` Through the blue door and the red door is the kitchen.`
+      # The destination of a door is always treated as a room or nowhere.
       # ( Inform doesn't allow nowhere, but it seems like a good idea. )
       Spec:with flow:
       - "map_connections"
@@ -657,21 +677,25 @@ Spec:with group:
           - "bool"
         - Term:type:
           - "doors"
-          - "names"
+          - "linking"
+        - Term:optional:
+          - "additional_links"
+          - true
         - Term: "are"
-        - # this is always a room, or nowhere.
-          Term: "links"
+        - Term:type:
+          - "room"
+          - "linking"
 
     - # partial phrase for mapping declarations.
       Spec:with flow:
-      - "direction_from_links"
+      - "direction_of_linking"
       - Flow uses:
         - Term: "direction"
         - Term:type:
           - "from_of"
           - "words"
         - # a room or door.
-          Term: "links"
+          Term: "linking"
 
     - # matches some existing compass direction.
       Spec:with flow:
@@ -679,9 +703,10 @@ Spec:with group:
       - Flow uses:
         - Term: "text"
 
-    - # generates a room, a door, or nowhere.
+   - # generates a room, a door, or nowhere.
+      # ( similar to, but distinct from other noun matching phrases. )
       Spec:with flow:
-      - "links"
+      - "linking"
       - Flow uses:
         - Term:type:optional:
           - "nowhere"
@@ -697,13 +722,14 @@ Spec:with group:
           - "name"
           - true
 
-    - # matches additional directions
-      # only used by map_locations
+    - # partial phrase used for map connections
+      # allows multiple doors, etc. on the lhs.
       Spec:with flow:
       - "additional_links"
       - Flow uses:
         - Term: "comma_and"
-        - Term: "links"
+        - Term: "linking"
         - Term:optional:
           - "additional_links"
           - true
+

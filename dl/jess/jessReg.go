@@ -16,8 +16,8 @@ type Registrar interface {
 	AddKind(kind, ancestor string) error
 	AddKindTrait(kind, trait string) error
 	AddPlural(many, one string) error
-	AddNoun(short, long, kind string) error
-	AddNounAlias(noun, name string, rank int) error
+	AddNounKind(noun, kind string) error
+	AddNounName(noun, name string, rank int) error
 	AddNounTrait(noun, trait string) error
 	AddNounValue(noun, prop string, val rt.Assignment) error // tbd: or would g.Value be better at this point?
 	AddTraits(aspect string, traits []string) error
@@ -35,7 +35,7 @@ type Registrar interface {
 type PostProcess func(Query, Registrar) error
 
 // setup the default traits for the passed kind
-func AddDefaultTraits(rar Registrar, kind string, traits Traitor) (err error) {
+func AddKindTraits(rar Registrar, kind string, traits Traitor) (err error) {
 	for ts := traits; ts.HasNext(); {
 		t := ts.GetNext()
 		str := t.String()

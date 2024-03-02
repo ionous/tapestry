@@ -35,16 +35,15 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	return
 }
 
-// returns the real ( generally plural ) name of the kind
-func (op *Kind) String() string {
-	return op.ActualKind.name
-}
-
-func (op *Kind) GetName(traits, kinds []string) (ret resultName, err error) {
+// anonymous kinds: "the supporter"
+func (op *Kind) BuildNoun(traits, kinds []string) (ret DesiredNoun, err error) {
 	if kind, e := op.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
-		ret = resultName{
+		ret = DesiredNoun{
+			// use the importCountedNoun() path
+			// it will give us a good enough anonymous name.
+			Count:  1,
 			Traits: traits,
 			// the order of kinds matters for "kinds of"
 			// for: A container is a kind of thing.

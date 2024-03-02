@@ -19,9 +19,7 @@ func TestStripArticle(t *testing.T) {
 	}
 
 	for _, p := range p {
-		if b, e := StripArticle(p.src); e != nil {
-			t.Fatal(e)
-		} else if p.text != b {
+		if b := StripArticle(p.src); p.text != b {
 			t.Fatalf("text: %q: expected: %q != got: %q", p.src, p.article, b)
 		}
 		// else if p.article != a {

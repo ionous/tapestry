@@ -3,20 +3,17 @@ package jess
 const (
 	// only allow simple names when matching.
 	PlainNameMatching = iota
-	// when matching names, some phrases imply the creation of new nouns
-	// this flag prevents those from matching
-	ExcludeNounCreation
-	// when matching names, try to match nouns
-	IncludeExistingNouns
+	ExcludeNounMatching
+	//
+	CheckIndefiniteArticles
 )
 
-// set the query flags to the passed flags
-// tbd: if this should or the existing flags; currently it doesnt
+// adds flags to the query ( via or )
 func AddContext(q Query, flags int) (ret Query) {
 	if ctx, ok := q.(queryContext); ok {
-		// since the query context is an object not a pointer
+		// since the query context isnt a reference
 		// this creates new flags for the scope
-		ctx.flags = flags
+		ctx.flags |= flags
 		ret = ctx
 	} else {
 		ret = queryContext{Query: q, flags: flags}
@@ -40,12 +37,11 @@ func matchKinds(q Query) bool {
 
 func matchNouns(q Query) bool {
 	flags := q.GetContext()
-	return (flags & IncludeExistingNouns) != 0
+	return (flags&PlainNameMatching) == 0 &&
+		(flags&ExcludeNounMatching) == 0
 }
 
-func allowNounCreation(q Query) bool {
+func useIndefinite(q Query) bool {
 	flags := q.GetContext()
-	return (flags&PlainNameMatching) == 0 &&
-		(flags&ExcludeNounCreation) == 0 &&
-		(flags&IncludeExistingNouns) == 0
+	return (flags & CheckIndefiniteArticles) != 0
 }

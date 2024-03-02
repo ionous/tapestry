@@ -4,24 +4,39 @@ import "git.sr.ht/~ionous/tapestry/support/match"
 
 func (op *Article) Match(q Query, input *InputState) (okay bool) {
 	if m, width := FindCommonArticles(input.Words()); width > 0 {
-		op.Matched, *input, okay = m.String(), input.Skip(width), true
-	}
-	return
-}
-
-func reduceArticle(op *Article) (ret articleResult) {
-	if op != nil {
-		ret = articleResult{
-			Matched: op.Matched,
+		if words := input.Cut(width); input.Offset() == 0 || !startsUpper(words) {
+			// build flags:
+			if match.FindMatch(m, pluralNamed) >= 0 {
+				op.Flags.Plural = true
+			} else if useIndefinite(q) && match.FindMatch(m, indefinite) >= 0 {
+				op.Flags.Indefinite = true
+			}
+			// return okay:
+			op.Text, *input = m.String(), input.Skip(width)
+			okay = true
 		}
 	}
 	return
 }
 
+type ArticleFlags struct {
+	Indefinite bool
+	Plural     bool
+}
+
+func getOptionalArticle(art *Article) (retText string, retFlags ArticleFlags) {
+	if art != nil {
+		retText = art.Text
+		retFlags = art.Flags
+	}
+	return
+}
+
 // return the name after removing leading articles
-func StripArticle(name string) (ret string, err error) {
+// eats any errors it encounters and returns the original name
+func StripArticle(name string) (ret string) {
 	if parts, e := match.MakeSpan(name); e != nil {
-		err = e
+		ret = name
 	} else if len(parts) <= 1 {
 		ret = name
 	} else if _, width := FindCommonArticles(parts); width > 0 {
@@ -48,3 +63,5 @@ func FindCommonArticles(ws match.Span) (ret match.Span, width int) {
 }
 
 var determiners = match.PanicSpans("the", "a", "an", "some", "our")
+var indefinite = match.PanicSpans("the", "our")
+var pluralNamed = match.PanicSpans("some")

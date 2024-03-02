@@ -31,10 +31,10 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 	} {
 		if next := *input; //
 		m.Match(q, &next) /* && len(next) == 0 */ {
-			if !okay || len(next) < len(best) {
+			if !okay || next.Len() < best.Len() {
 				best = next
 				ret, okay = m, true
-				if len(best) == 0 {
+				if best.Len() == 0 {
 					break
 				}
 			}
@@ -68,9 +68,9 @@ func (op *VerbNamesAreNames) Generate(rar Registrar) (err error) {
 }
 
 func (op *VerbNamesAreNames) compile() (ret localResults, err error) {
-	if lhs, e := op.Names.GetNames(nil, nil); e != nil {
+	if lhs, e := op.Names.BuildNouns(nil, nil); e != nil {
 		err = e
-	} else if rhs, e := op.OtherNames.GetNames(nil, nil); e != nil {
+	} else if rhs, e := op.OtherNames.BuildNouns(nil, nil); e != nil {
 		err = e
 	} else {
 		ret = makeResult(op.Verb.Macro, !op.Verb.Macro.Reversed, lhs, rhs)
@@ -101,9 +101,9 @@ func (op *NamesVerbNames) Generate(rar Registrar) (err error) {
 }
 
 func (op *NamesVerbNames) compile() (ret localResults, err error) {
-	if lhs, e := op.Names.GetNames(nil, nil); e != nil {
+	if lhs, e := op.Names.BuildNouns(nil, nil); e != nil {
 		err = e
-	} else if rhs, e := op.OtherNames.GetNames(nil, nil); e != nil {
+	} else if rhs, e := op.OtherNames.BuildNouns(nil, nil); e != nil {
 		err = e
 	} else {
 		ret = makeResult(op.Verb.Macro, op.Verb.Macro.Reversed, lhs, rhs)
@@ -117,16 +117,15 @@ func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
 		!op.Names.HasAnonymousKind() &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
-		// q.note("matched NamesAreLikeVerbs")
 		Optional(q, &next, &op.VerbPhrase)
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *NamesAreLikeVerbs) GetOtherNames() (ret []resultName, err error) {
+func (op *NamesAreLikeVerbs) BuildOtherNouns() (ret []DesiredNoun, err error) {
 	if v := op.VerbPhrase; v != nil {
-		ret, err = op.VerbPhrase.Names.GetNames(nil, nil)
+		ret, err = op.VerbPhrase.BuildNouns(nil, nil)
 	}
 	return
 }
@@ -155,11 +154,11 @@ func (op *NamesAreLikeVerbs) Generate(rar Registrar) (err error) {
 }
 
 func (op *NamesAreLikeVerbs) compile() (ret localResults, err error) {
-	if rhs, e := op.GetOtherNames(); e != nil {
+	if rhs, e := op.BuildOtherNouns(); e != nil {
 		err = e
 	} else if ts, ks, e := op.Adjectives.Reduce(); e != nil {
 		err = e
-	} else if lhs, e := op.Names.GetNames(ts, ks); e != nil {
+	} else if lhs, e := op.Names.BuildNouns(ts, ks); e != nil {
 		err = e
 	} else {
 		ret = makeResult(op.GetMacro(), op.IsReversed(), lhs, rhs)
