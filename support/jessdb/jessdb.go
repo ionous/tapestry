@@ -78,9 +78,9 @@ func (d dbWrapper) FindMacro(ws match.Span) (ret jess.Macro, width int) {
 	return
 }
 
-func (d dbWrapper) FindNoun(ws match.Span) (ret string, width int) {
+func (d dbWrapper) FindNoun(ws match.Span, kind string) (ret string, width int) {
 	str := strings.ToLower(ws.String())
-	if m, e := d.GetPartialNoun(str); e != nil {
+	if m, e := d.GetPartialNoun(str, kind); e != nil {
 		log.Println("FindNoun", e)
 	} else {
 		ret, width = m.Name, countWords(m.Match)

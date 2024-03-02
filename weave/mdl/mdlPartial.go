@@ -115,9 +115,9 @@ func (pen *Pen) GetPartialField(str string) (ret string, err error) {
 	return
 }
 
-func (pen *Pen) GetPartialNoun(str string) (ret MatchedNoun, err error) {
-	if len(str) > 0 {
-		words := str + blank
+func (pen *Pen) GetPartialNoun(name, kind string) (ret MatchedNoun, err error) {
+	if len(name) > 0 {
+		words := name + blank
 		if e := pen.db.QueryRow(`
 		with nouns(noun, name) as (
 			select mn.noun, my.name 
@@ -130,6 +130,7 @@ func (pen *Pen) GetPartialNoun(str string) (ret MatchedNoun, err error) {
 				on (dt.uses = my.domain)
 			where base = ?1
 			and my.rank >= 0
+			and (?3 = "" or mk.kind = ?3)
 			order by my.rank, my.rowid asc
 		)
 		-- for each possible pair chop a chunk of words from our input string
@@ -141,7 +142,7 @@ func (pen *Pen) GetPartialNoun(str string) (ret MatchedNoun, err error) {
 		)
 		order by length(name) desc
 		limit 1`,
-			pen.domain, words).
+			pen.domain, words, kind).
 			Scan(&ret.Name, &ret.Match); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}

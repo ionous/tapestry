@@ -24,7 +24,7 @@ func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
 		} else {
 			pen := w.Pin()
 			for _, a := range op.Aliases {
-				if e := pen.AddNounAlias(n, a, -1); e != nil {
+				if e := pen.AddNounName(n, a, -1); e != nil {
 					err = e
 					break
 				}
@@ -112,7 +112,8 @@ type Nouns struct {
 
 func (op *Nouns) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDefaults, func(w *weave.Weaver) error {
-		return w.Pin().AddNoun(op.Noun, op.Noun, op.Kind)
+		_, err := mdl.AddNamedNoun(w.Pin(), op.Noun, op.Kind)
+		return err
 	})
 }
 

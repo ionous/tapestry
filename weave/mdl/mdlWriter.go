@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -399,18 +398,11 @@ var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 // ( the same as - or a child of - the domain of the kind )
 var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
-func (pen *Pen) AddNoun(primary, long, kind string) (err error) {
-	if n, e := pen.addNoun(primary, kind); e != nil {
-		err = eatDuplicates(pen.warn, e)
-	} else if len(long) != 0 {
-		parts := genNames(n.name, long)
-		for i, name := range parts {
-			if e := pen.addName(n, name, i); e != nil {
-				err = e
-				break
-			}
-		}
-	}
+// add a noun with the passed identifier and kind ( both normalized ) the kind must exist.
+// note: returns mdl.Duplicate if the noun is already know.
+// see also: the utility function AddNamedNoun()
+func (pen *Pen) AddNounKind(noun, kind string) (err error) {
+	_, err = pen.addNoun(noun, kind)
 	return
 }
 
@@ -474,38 +466,9 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 	return
 }
 
-// tbd: anyway to remove or improve?
-// i especially don't like this is the one dependency on lang.
-// and really... it should have explicit tests
-// a Noun builder maybe? and let story be the one to genNames
-func genNames(short, long string) []string {
-	// if the original got transformed into underscores
-	// write the original name (ex. "toy boat" vs "toy_boat" )
-	var out []string
-	if clip := strings.TrimSpace(long); clip != short {
-		out = append(out, clip)
-	}
-	out = append(out, short)
-
-	// generate additional names by splitting the name into parts
-	split := inflect.Fields(short)
-	if cnt := len(split); cnt > 1 {
-		// in case the name was reduced due to multiple separators
-		if breaks := strings.Join(split, " "); breaks != short {
-			out = append(out, breaks)
-		}
-		// write individual words in increasing rank ( ex. "boat", then "toy" )
-		// note: trailing words are considered "stronger"
-		// because adjectives in noun names tend to be first ( ie. "toy boat" )
-		for i := len(split) - 1; i >= 0; i-- {
-			word := split[i]
-			out = append(out, word)
-		}
-	}
-	return out
-}
-
-func (pen *Pen) AddNounAlias(noun, name string, rank int) (err error) {
+// currently negative ranks are runtime aliases,
+// and positive values are weave time.
+func (pen *Pen) AddNounName(noun, name string, rank int) (err error) {
 	if n, e := pen.findRequiredNoun(noun, nounSansKind); e != nil {
 		err = e
 	} else {

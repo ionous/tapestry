@@ -25,14 +25,9 @@ func (op *DefineKinds) Weave(cat *weave.Catalog) error {
 			pen := w.Pin()
 			ancestor := inflect.Normalize(ancestor.String())
 			for _, kind := range kinds.Strings() {
-				// tbd: are the determiners of kinds useful for anything?
-				if kind, e := jess.StripArticle(kind); e != nil {
+				kind := jess.StripArticle(inflect.Normalize(kind))
+				if e := pen.AddKind(kind, ancestor); e != nil {
 					err = errutil.Append(err, e)
-				} else {
-					kind := inflect.Normalize(kind)
-					if e := pen.AddKind(kind, ancestor); e != nil {
-						err = errutil.Append(err, e)
-					}
 				}
 			}
 		}

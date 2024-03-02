@@ -40,19 +40,23 @@ func idPath(ids ...int) string {
 func setupDB(name string) (ret *sql.DB, err error) {
 	const (
 		// built in kinds
-		aspects = iota + 1
+		kinds = iota + 1
 		patterns
 		macros
-		kinds
+		aspects
 		traits
 		records
 		actions
 		// kinds of nouns
+		objects // base for concrete and abstract nouns
 		things
 		containers
 		supporters
-		colors
-		groups
+		colors     // aspects
+		groups     // records
+		directions // umm... directions
+		doors
+		rooms
 		// actions
 		storing
 		// macros
@@ -61,8 +65,15 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		support
 		suspect
 		// nouns
-		message
+		story
+		message // thing
 		missive
+		north // directions
+		south
+		east
+		west
+		river // predefined door
+		ocean // predefined room
 		// domain string
 		domain = "a"
 	)
@@ -76,17 +87,25 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_kind",
 		"ROWID", "domain", "kind", "singular", "path"},
+		//
 		aspects, domain, "aspects", "aspect", idPath(),
+		traits, domain, "traits", "", idPath(aspects),
+		colors, domain, "color", nil, idPath(aspects),
+		//
 		patterns, domain, "patterns", "pattern", idPath(),
-		records, domain, "records", "record", idPath(),
 		macros, domain, "macros", "macro", idPath(patterns),
 		actions, domain, "actions", "action", idPath(patterns),
+		//
 		kinds, domain, "kinds", "kind", idPath(),
-		traits, domain, "traits", "", idPath(aspects),
-		things, domain, "things", "thing", idPath(kinds),
-		containers, domain, "containers", "container", idPath(things, kinds),
-		supporters, domain, "supporters", "supporter", idPath(things, kinds),
-		colors, domain, "color", nil, idPath(aspects),
+		objects, domain, "objects", "object", idPath(kinds),
+		directions, domain, "directions", "direction", idPath(objects, kinds),
+		rooms, domain, "rooms", "room", idPath(objects, kinds),
+		things, domain, "things", "thing", idPath(objects, kinds),
+		doors, domain, "doors", "door", idPath(objects, things, kinds),
+		containers, domain, "containers", "container", idPath(objects, things, kinds),
+		supporters, domain, "supporters", "supporter", idPath(objects, things, kinds),
+		//
+		records, domain, "records", "record", idPath(),
 		groups, domain, "groups", "group", idPath(records),
 		// macros:
 		carry, domain, "carry", nil, idPath(macros),
@@ -105,6 +124,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, traits, "openable", "bool",
 		domain, traits, "transparent", "bool",
 		domain, traits, "fixed in place", "bool",
+		domain, traits, "dark", "bool",
 		// fields
 		domain, things, "description", "text",
 		domain, things, "title", "text",
@@ -147,17 +167,32 @@ func setupDB(name string) (ret *sql.DB, err error) {
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_noun",
-		"ROWID", "domain", "noun", "kind"},
+		"domain", "ROWID", "noun", "kind"},
 		//
-		message, domain, "message", things,
-		missive, domain, "missive", things,
+		domain, story, "story", things,
+		domain, message, "message", things,
+		domain, missive, "missive", things,
+		domain, north, "north", directions,
+		domain, west, "west", directions,
+		domain, east, "east", directions,
+		domain, south, "south", directions,
+		//
+		domain, river, "river", doors,
+		domain, ocean, "ocean", rooms,
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_name",
 		"domain", "noun", "name", "rank"},
 		//
+		domain, story, "story", 0,
 		domain, message, "message", 0,
 		domain, missive, "missive", 0,
+		domain, north, "north", 0,
+		domain, west, "west", 0,
+		domain, east, "east", 0,
+		domain, south, "south", 0,
+		domain, river, "river", 0,
+		domain, ocean, "ocean", 0,
 	); e != nil {
 		err = e
 	}

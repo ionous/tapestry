@@ -44,9 +44,8 @@ func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value rt.Assi
 }
 
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
-	if bare, e := jess.StripArticle(name); e != nil {
-		err = e
-	} else if n := inflect.Normalize(bare); len(n) == 0 {
+	bare := jess.StripArticle(name)
+	if n := inflect.Normalize(bare); len(n) == 0 {
 		err = errutil.New("empty name")
 	} else if n, e := w.Pin().GetClosestNoun(n); e != nil {
 		err = e
