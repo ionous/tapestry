@@ -11,7 +11,7 @@ import (
 func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kind.Match(q, &next) &&
-		op.matchEither(q, &next) &&
+		op.matchEither(&next) &&
 		op.Traits.Match(q, &next) {
 		*input, okay = next, true
 	}
@@ -19,8 +19,8 @@ func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 }
 
 // match "can be", "are either", etc.
-func (op *KindsAreEither) matchEither(q Query, input *InputState) (okay bool) {
-	if m, width := canBeEither.FindMatch(input.Words()); m != nil {
+func (op *KindsAreEither) matchEither(input *InputState) (okay bool) {
+	if m, width := canBeEither.FindPrefix(input.Words()); m != nil {
 		op.CanBe.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return

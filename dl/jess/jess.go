@@ -34,7 +34,7 @@ type Query interface {
 	// return the number of words that matched ( if any. )
 	FindMacro(match.Span) (Macro, int)
 
-	/// find the name of the noun which best matches the passed span.
+	// find the name of the noun which best matches the passed span.
 	// return the number of words that matched ( if any. )
 	// the kind, if specified, will focus the search to that one kind.
 	FindNoun(name match.Span, kind string) (string, int)

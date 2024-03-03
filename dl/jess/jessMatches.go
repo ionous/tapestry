@@ -1,13 +1,22 @@
 package jess
 
+import (
+	"log"
+
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+)
+
 // allows partial matches; test that there's no input left to verify a complete match.
 func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, okay bool) {
-	// fix? could change to reflect ( or expand type info ) to walk generically
-	var best InputState
-	for _, m := range []interface {
+	type matcher interface {
 		Generator
 		Interpreter
-	}{
+		typeinfo.Instance
+	}
+	var best InputState
+	var bestMatch matcher
+	// fix? could change to reflect ( or expand type info ) to walk generically
+	for _, m := range []matcher{
 		// understand "..." as .....
 		&op.Understand,
 		// names are "a kind of"/"kinds of" [traits] kind:any.
@@ -33,7 +42,7 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		m.Match(q, &next) /* && len(next) == 0 */ {
 			if !okay || next.Len() < best.Len() {
 				best = next
-				ret, okay = m, true
+				bestMatch, okay = m, true
 				if best.Len() == 0 {
 					break
 				}
@@ -41,7 +50,10 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		}
 	}
 	if okay {
-		*input = best
+		ret, *input = bestMatch, best
+		if useLogging(q) {
+			log.Println("matched", bestMatch.TypeInfo().TypeName())
+		}
 	}
 	return
 }

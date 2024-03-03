@@ -12,7 +12,7 @@ import (
 )
 
 func TestPhrases(t *testing.T) {
-	jesstest.TestPhrases(t, &known)
+	jesstest.TestPhrases(t, jess.AddContext(&known, jess.LogMatches))
 }
 
 type info struct {
@@ -52,25 +52,26 @@ func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width in
 	return
 }
 func (n *info) FindTrait(ws match.Span) (string, int) {
-	m, cnt := n.traits.FindMatch(ws)
+	m, cnt := n.traits.FindPrefix(ws)
 	return m.String(), cnt
 }
 func (n *info) FindField(ws match.Span) (string, int) {
-	m, cnt := n.fields.FindMatch(ws)
+	m, cnt := n.fields.FindPrefix(ws)
 	return m.String(), cnt
 }
 func (n *info) FindMacro(ws match.Span) (mdl.Macro, int) {
 	return n.macros.FindMacro(ws)
 }
-func (n *info) FindNoun(ws match.Span, kind string) (string, int) {
-	var focus match.SpanList
+func (n *info) FindNoun(ws match.Span, kind string) (ret string, width int) {
+	var m match.Span
 	if kind == jess.Directions {
-		focus = n.directions
+		m, width = n.directions.FindPrefix(ws)
+		ret = m.String()
 	} else {
-		focus = n.nouns
+		m, width = n.nouns.FindExactMatch(ws)
+		ret = m.String()
 	}
-	m, cnt := focus.FindMatch(ws)
-	return m.String(), cnt
+	return
 }
 
 var known = info{

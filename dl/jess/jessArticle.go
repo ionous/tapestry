@@ -6,9 +6,9 @@ func (op *Article) Match(q Query, input *InputState) (okay bool) {
 	if m, width := FindCommonArticles(input.Words()); width > 0 {
 		if words := input.Cut(width); input.Offset() == 0 || !startsUpper(words) {
 			// build flags:
-			if match.FindMatch(m, pluralNamed) >= 0 {
+			if match.FindExactMatch(m, pluralNamed) >= 0 {
 				op.Flags.Plural = true
-			} else if useIndefinite(q) && match.FindMatch(m, indefinite) >= 0 {
+			} else if useIndefinite(q) && match.FindExactMatch(m, indefinite) >= 0 {
 				op.Flags.Indefinite = true
 			}
 			// return okay:
@@ -56,8 +56,8 @@ func StripArticle(name string) (ret string) {
 // then parse a sentence matching names to nouns in the
 // fwiw: the articles in inform also seems to be predetermined in this way.  )
 func FindCommonArticles(ws match.Span) (ret match.Span, width int) {
-	if i, skip := determiners.FindPrefix(ws); skip > 0 {
-		ret, width = match.Span(determiners[i]), skip
+	if m, skip := determiners.FindPrefix(ws); skip > 0 {
+		ret, width = m, skip
 	}
 	return
 }

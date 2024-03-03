@@ -22,16 +22,20 @@ func (op *Noun) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *Noun) matchNoun(q Query, input *InputState) (okay bool) {
-	if ws := input.Words(); len(ws) > 0 {
-		if m, width := q.FindNoun(ws, ""); width > 0 {
-			op.ActualNoun = m
-			op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
-		} else if ws[0].Hash() == keywords.You {
-			// fix? it'd be nice if the mapping of "you" to "self" was handled by script;
-			// or even not necessary at all.
-			width := 1
+	if cnt := keywordScan(input.Words()); cnt > 0 {
+		sub := input.CutSpan(cnt)
+		// fix? it'd be nice if the mapping of "you" to "self" was handled by script;
+		// or even not necessary at all.
+		if width := 1; len(sub) == width && sub[0].Hash() == keywords.You {
 			op.ActualNoun = PlayerSelf
 			op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+		} else {
+			// match the subsection normally:
+			if m, width := q.FindNoun(sub, ""); width > 0 {
+				op.ActualNoun = m
+				op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+			}
+
 		}
 	}
 	return

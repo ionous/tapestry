@@ -15,15 +15,15 @@ func (op *Understand) Match(q Query, input *InputState) (okay bool) {
 		op.QuotedTexts.Match(q, &next) &&
 		op.As.Match(q, &next, keywords.As) &&
 		(Optional(q, &next, &op.Article) || true) &&
-		(op.matchPluralOf(q, &next) || true) &&
+		(op.matchPluralOf(&next) || true) &&
 		op.Names.Match(q, &next) {
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *Understand) matchPluralOf(q Query, input *InputState) (okay bool) {
-	if m, width := pluralOf.FindMatch(input.Words()); m != nil {
+func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
+	if m, width := pluralOf.FindPrefix(input.Words()); m != nil {
 		op.PluralOf, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return
@@ -78,6 +78,7 @@ Loop:
 func (op *Understand) applyAliases(rar Registrar, nouns []string) (err error) {
 	// for every noun on the rhs
 	for _, noun := range nouns {
+		// FIX! shouldnt it already have matched?!
 		if noun, e := rar.GetClosestNoun(inflect.Normalize(noun)); e != nil {
 			err = e
 			break

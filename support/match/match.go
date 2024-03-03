@@ -46,7 +46,7 @@ func HasPrefix(s, prefix []Word) (okay bool) {
 	return
 }
 
-func FindMatch(s Span, spans []Span) (ret int) {
+func FindExactMatch(s Span, spans []Span) (ret int) {
 	ret = -1 // provisionally
 	for i, el := range spans {
 		if s.Equals(el) {

@@ -2,10 +2,11 @@ package jess
 
 const (
 	// only allow simple names when matching.
-	PlainNameMatching = iota
+	PlainNameMatching = (1 << iota)
 	ExcludeNounMatching
 	//
 	CheckIndefiniteArticles
+	LogMatches
 )
 
 // adds flags to the query ( via or )
@@ -44,4 +45,9 @@ func matchNouns(q Query) bool {
 func useIndefinite(q Query) bool {
 	flags := q.GetContext()
 	return (flags & CheckIndefiniteArticles) != 0
+}
+
+func useLogging(q Query) bool {
+	flags := q.GetContext()
+	return (flags & LogMatches) != 0
 }

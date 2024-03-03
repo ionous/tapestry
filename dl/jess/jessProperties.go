@@ -37,7 +37,7 @@ func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *KindsHaveProperties) matchListOf(input *InputState) (okay bool) {
-	if m, width := listOf.FindMatch(input.Words()); m != nil {
+	if m, width := listOf.FindPrefix(input.Words()); m != nil {
 		op.ListOf = input.Cut(width)
 		*input = input.Skip(width)
 		okay = true
@@ -76,7 +76,7 @@ func (op *PropertyType) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *PropertyType) matchPrimitive(input *InputState) (okay bool) {
-	if m, width := primitiveTypes.FindMatch(input.Words()); m != nil {
+	if m, width := primitiveTypes.FindPrefix(input.Words()); m != nil {
 		op.Primitive = input.Cut(width)
 		*input = input.Skip(width)
 		okay = true

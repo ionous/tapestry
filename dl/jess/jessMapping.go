@@ -100,7 +100,7 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *DirectionOfLinking) matchFromOf(input *InputState) (okay bool) {
-	if m, width := fromOf.FindMatch(input.Words()); m != nil {
+	if m, width := fromOf.FindPrefix(input.Words()); m != nil {
 		op.FromOf.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 	}
 	return

@@ -44,7 +44,8 @@ func keywordScan(ws []match.Word) (ret int) {
 Loop:
 	for i, w := range ws {
 		switch w.Hash() {
-		case keywords.And,
+		case //
+			keywords.And,
 			keywords.Are,
 			keywords.Comma,
 			keywords.Has,

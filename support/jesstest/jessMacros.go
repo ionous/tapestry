@@ -17,7 +17,7 @@ type macroInfo struct {
 }
 
 func (n MacroList) FindMacro(ws []match.Word) (ret jess.Macro, width int) {
-	if i, skip := n.FindPrefix(ws); skip > 0 {
+	if i, skip := n.FindPrefixIndex(ws); skip > 0 {
 		var match match.Span = n.SpanList[i]
 		info := n.info[i]
 		width, ret = len(match), jess.Macro{

@@ -108,8 +108,16 @@ func TestPhrases(t *testing.T, q jess.Query) {
 				"AddNounValue", "bottle", "age", number(42),
 			},
 		},
-		// ------------------------
-		// NounPropertyValue
+		{
+			// this should properly create a new noun "story teller"
+			// and not try to match the existing noun "story."
+			test: `The age of the story teller is 42.`,
+			result: []string{
+				"AddNounKind", "story teller", "things",
+				"AddNounName", "story teller", "story teller",
+				"AddNounValue", "story teller", "age", number(42),
+			},
+		},
 		{
 			test: `The story has the title "{15|print_num!}"`,
 			result: []string{
