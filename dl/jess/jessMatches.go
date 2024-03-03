@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
 // allows partial matches; test that there's no input left to verify a complete match.
@@ -50,10 +51,11 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 		}
 	}
 	if okay {
-		ret, *input = bestMatch, best
 		if useLogging(q) {
-			log.Println("matched", bestMatch.TypeInfo().TypeName())
+			log.Printf("matched %v %s %q\n", okay, bestMatch.TypeInfo().TypeName(), match.Span(input.Words()).String())
 		}
+		ret, *input = bestMatch, best
+
 	}
 	return
 }
