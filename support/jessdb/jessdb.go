@@ -2,6 +2,7 @@ package jessdb
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"strings"
 
@@ -79,11 +80,22 @@ func (d dbWrapper) FindMacro(ws match.Span) (ret jess.Macro, width int) {
 }
 
 func (d dbWrapper) FindNoun(ws match.Span, kind string) (ret string, width int) {
-	str := strings.ToLower(ws.String())
-	if m, e := d.GetPartialNoun(str, kind); e != nil {
+	if n, e := d.findNoun(ws, kind); e == nil {
+		ret, width = n, countWords(n)
+	} else if !errors.Is(e, mdl.Missing) {
 		log.Println("FindNoun", e)
+	}
+	return
+}
+
+func (d dbWrapper) findNoun(ws match.Span, kind string) (ret string, err error) {
+	str := strings.ToLower(ws.String())
+	if len(kind) == 0 {
+		ret, err = d.GetClosestNoun(str)
+	} else if m, e := d.GetPartialNoun(str, kind); e != nil {
+		err = e
 	} else {
-		ret, width = m.Name, countWords(m.Match)
+		ret = m.Name
 	}
 	return
 }
