@@ -16,21 +16,25 @@ import (
 type Mock struct {
 	out    []string
 	unique map[string]int
-	posted []jess.PostProcess
+	posted [jess.PriorityCount][]jess.Process
 }
 
-func (m *Mock) PostProcess(p jess.PostProcess) (_ error) {
-	m.posted = append(m.posted, p)
+func (m *Mock) PostProcess(i jess.Priority, p jess.Process) (_ error) {
+	m.posted[i] = append(m.posted[i], p)
 	return
 }
 
 func (m *Mock) RunPost(q jess.Query) (err error) {
-	for len(m.posted) > 0 {
-		next, rest := m.posted[0], m.posted[1:]
-		if e := next(q, m); e != nil {
-			err = e
-		} else {
-			m.posted = rest
+	for _, posted := range m.posted {
+		// fix: can we really add new processes during post?
+		// and if so, shouldnt mock panic on misorders?
+		for len(posted) > 0 {
+			next, rest := posted[0], posted[1:]
+			if e := next(q, m); e != nil {
+				err = e
+			} else {
+				posted = rest
+			}
 		}
 	}
 	return

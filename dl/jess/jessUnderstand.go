@@ -31,26 +31,28 @@ func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 
 var pluralOf = match.PanicSpans("plural of")
 
-func (op *Understand) Generate(rar Registrar) (err error) {
-	if len(op.PluralOf) > 0 {
-		err = op.applyPlurals(rar)
-	} else {
-		// check whether kind matches an action
-		// ( although inform appears to eval the lhs first to see it matches any parser statement )
-		// will need to understand (ahg. puns) that better.
-		if actions, nouns, e := op.readRhs(); e != nil {
-			err = e
-		} else if len(actions) > 0 && len(nouns) > 0 {
-			err = errors.New("jess doesn't support mixing noun and action understandings")
-		} else if len(actions) > 0 {
-			err = op.applyActions(rar, actions)
-		} else if len(nouns) > 0 {
-			err = op.applyAliases(rar, nouns)
+func (op *Understand) Generate(rar Registrar) error {
+	return rar.PostProcess(Understandings, func(Query, Registrar) (err error) {
+		if len(op.PluralOf) > 0 {
+			err = op.applyPlurals(rar)
 		} else {
-			err = errors.New("what's there to understand?")
+			// check whether kind matches an action
+			// ( although inform appears to eval the lhs first to see it matches any parser statement )
+			// will need to understand (ahg. puns) that better.
+			if actions, nouns, e := op.readRhs(); e != nil {
+				err = e
+			} else if len(actions) > 0 && len(nouns) > 0 {
+				err = errors.New("jess doesn't support mixing noun and action understandings")
+			} else if len(actions) > 0 {
+				err = op.applyActions(rar, actions)
+			} else if len(nouns) > 0 {
+				err = op.applyAliases(rar, nouns)
+			} else {
+				err = errors.New("what's there to understand?")
+			}
 		}
-	}
-	return
+		return
+	})
 }
 
 func (op *Understand) applyActions(rar Registrar, actions []string) (err error) {

@@ -9,21 +9,15 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-// todo: remove. it should no longer be necessary to compile local results
-// before applying them; the various generate functions should be able to use Registrar directly
-func applyResults(rar Registrar, res localResults) (err error) {
-	if src, e := genNouns(rar, res.Primary); e != nil {
-		err = e
-	} else if tgt, e := genNouns(rar, res.Secondary); e != nil {
-		err = e
-	} else {
+func applyResults(rar Registrar, res localResults) error {
+	return genNouns(rar, res.Primary, res.Secondary, func(src, tgt []string) (err error) {
 		// note: some phrases "the box is open" dont have macros.
 		// in that case, genNouns does all the work.
 		if macro := res.Macro.Name; len(macro) > 0 {
 			err = rar.Apply(res.Macro, src, tgt)
 		}
-	}
-	return
+		return
+	})
 }
 
 func startsUpper(str string) bool {
@@ -31,28 +25,66 @@ func startsUpper(str string) bool {
 	return unicode.IsUpper(first) // this works okay even if the string was empty
 }
 
-// add nouns and values
-func genNouns(rar Registrar, ns []DesiredNoun) (ret []string, err error) {
-	names := make([]string, 0, len(ns))
-	for _, n := range ns {
-		if n.Count > 0 {
-			if ns, e := importCountedNoun(rar, n); e != nil {
-				err = e
-				break
-			} else {
-				names = append(names, ns...)
-			}
+// even one name can generate several nouns ( ex. "two things" )
+// after gets called for each one.1
+func genNoun(rar Registrar, n DesiredNoun, after postGenOne) error {
+	return rar.PostProcess(NounSettings, func(Query, Registrar) (err error) {
+		if names, e := importNoun(rar, n, nil); e != nil {
+			err = e
 		} else {
-			if name, e := importNamedNoun(rar, n); e != nil {
-				err = e
+			for _, name := range names {
+				if e := after(name); e != nil {
+					err = e
+					break
+				}
+			}
+		}
+		return
+	})
+}
+
+type postGenOne func(a string) error
+type postGenMany func(a, b []string) error
+
+// add nouns and values
+func genNouns(rar Registrar, a, b []DesiredNoun, after postGenMany) error {
+	return rar.PostProcess(NounSettings, func(Query, Registrar) (err error) {
+		if src, e := importNouns(rar, a); e != nil {
+			err = e
+		} else if tgt, e := importNouns(rar, b); e != nil {
+			err = e
+		} else {
+			err = after(src, tgt)
+		}
+		return
+	})
+}
+
+func importNouns(rar Registrar, ns []DesiredNoun) (ret []string, err error) {
+	if cnt := len(ns); cnt > 0 {
+		ret = make([]string, 0, cnt)
+		for _, n := range ns {
+			if ret, err = importNoun(rar, n, ret); err != nil {
 				break
-			} else {
-				names = append(names, name)
 			}
 		}
 	}
-	if err == nil {
-		ret = names
+	return
+}
+
+func importNoun(rar Registrar, n DesiredNoun, names []string) (ret []string, err error) {
+	if n.Count > 0 {
+		if res, e := importCountedNoun(rar, n); e != nil {
+			err = e
+		} else {
+			ret = append(names, res...)
+		}
+	} else {
+		if res, e := importNamedNoun(rar, n); e != nil {
+			err = e
+		} else {
+			ret = append(names, res)
+		}
 	}
 	return
 }

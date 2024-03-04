@@ -8,7 +8,6 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -21,9 +20,10 @@ type Weaver struct {
 	rt.Runtime
 }
 
-func (w *Weaver) MatchSpan(p match.Span) (jess.Generator, error) {
+func (w *Weaver) Generate(str string) error {
 	q := jessdb.MakeQuery(w.Catalog.Modeler, w.Domain)
-	return jess.Match(q, p)
+	gen := jessAdapter{w, w.Pin()}
+	return jess.Generate(q, gen, str)
 }
 
 func (w *Weaver) Pin() *mdl.Pen {

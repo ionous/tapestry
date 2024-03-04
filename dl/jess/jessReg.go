@@ -29,10 +29,18 @@ type Registrar interface {
 	// apply the passed macro to the passed nouns
 	Apply(verb Macro, lhs, rhs []string) error
 	// register a function for later processing
-	PostProcess(PostProcess) error
+	PostProcess(Priority, Process) error
 }
 
-type PostProcess func(Query, Registrar) error
+type Priority int
+type Process func(Query, Registrar) error
+
+const (
+	NounSettings Priority = iota
+	// NounPairings
+	Understandings
+	PriorityCount
+)
 
 // setup the default traits for the passed kind
 func AddKindTraits(rar Registrar, kind string, traits Traitor) (err error) {
