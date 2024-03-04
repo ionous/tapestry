@@ -14,9 +14,26 @@ import (
 // implements Registrar to watch incoming calls.
 // posted makes it more like a stub than a mock maybe? oh well.
 type Mock struct {
-	out    []string
-	unique map[string]int
-	posted [jess.PriorityCount][]jess.Process
+	q        jess.Query
+	out      []string
+	unique   map[string]int
+	posted   [jess.PriorityCount][]jess.Process
+	nounPool map[string]bool
+}
+
+func MakeMock(q jess.Query, nounPool map[string]bool) Mock {
+	return Mock{q: q, nounPool: nounPool}
+}
+
+func (m *Mock) Generate(str string) (ret []string, err error) {
+	if e := jess.Generate(m.q, m, str); e != nil {
+		err = e
+	} else if e := m.RunPost(m.q); e != nil {
+		err = e
+	} else {
+		ret = m.out
+	}
+	return
 }
 
 func (m *Mock) PostProcess(i jess.Priority, p jess.Process) (_ error) {
@@ -32,6 +49,7 @@ func (m *Mock) RunPost(q jess.Query) (err error) {
 			next, rest := posted[0], posted[1:]
 			if e := next(q, m); e != nil {
 				err = e
+				break
 			} else {
 				posted = rest
 			}
@@ -47,6 +65,7 @@ func (m *Mock) AddFields(kind string, fields []mdl.FieldInfo) (_ error) {
 	}
 	return
 }
+
 func (m *Mock) AddGrammar(name string, prog *grammar.Directive) (err error) {
 	m.out = append(m.out, "AddGrammar", name)
 	// we know the top level format of the grammar;
@@ -76,6 +95,7 @@ func (m *Mock) AddPlural(many, one string) (_ error) {
 	return
 }
 func (m *Mock) AddNounKind(noun, kind string) (_ error) {
+	m.nounPool[noun] = true
 	m.out = append(m.out, "AddNounKind", noun, kind)
 	return
 }
@@ -125,9 +145,6 @@ func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
 	m.out = append(m.out, lhs...)
 	m.out = append(m.out, rhs...)
 	return
-}
-func (m *Mock) GetClosestNoun(name string) (string, error) {
-	return name, nil
 }
 func (m *Mock) GetPlural(word string) string {
 	return inflect.Pluralize(word)

@@ -6,7 +6,7 @@ import (
 )
 
 func (op *Name) GetNormalizedName() string {
-	return inflect.Normalize(op.Text)
+	return inflect.Normalize(op.Matched.String())
 }
 
 func (op *Name) BuildNoun(traits, kinds []string) (ret DesiredNoun, err error) {
@@ -14,7 +14,7 @@ func (op *Name) BuildNoun(traits, kinds []string) (ret DesiredNoun, err error) {
 	ret = DesiredNoun{
 		Article:     a,
 		Flags:       flags,
-		DesiredName: op.Text, // cut from the input
+		DesiredName: op.Matched.String(), // cut from the input
 		Traits:      traits,
 		Kinds:       kinds,
 	}
@@ -32,7 +32,8 @@ func (op *Name) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Name) matchName(input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
-		op.Text, *input, okay = input.Cut(width), input.Skip(width), true
+		op.Matched = input.CutSpan(width)
+		*input, okay = input.Skip(width), true
 	}
 	return
 }

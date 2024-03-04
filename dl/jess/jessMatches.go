@@ -52,7 +52,7 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 	}
 	if okay {
 		if useLogging(q) {
-			log.Printf("matched %v %s %q\n", okay, bestMatch.TypeInfo().TypeName(), match.Span(input.Words()).String())
+			log.Printf("matched %s %q\n", bestMatch.TypeInfo().TypeName(), match.Span(input.Words()).String())
 		}
 		ret, *input = bestMatch, best
 

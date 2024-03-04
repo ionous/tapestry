@@ -22,7 +22,6 @@ type Registrar interface {
 	AddNounValue(noun, prop string, val rt.Assignment) error // tbd: or would g.Value be better at this point?
 	AddTraits(aspect string, traits []string) error
 	//
-	GetClosestNoun(name string) (string, error)
 	GetPlural(string) string
 	GetSingular(string) string
 	GetUniqueName(category string) string

@@ -2,6 +2,7 @@ package jess
 
 import (
 	"errors"
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -32,14 +33,15 @@ func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 var pluralOf = match.PanicSpans("plural of")
 
 func (op *Understand) Generate(rar Registrar) error {
-	return rar.PostProcess(Understandings, func(Query, Registrar) (err error) {
+	// fix: parse lhs first, into a map keyed by its string
+	// then we can error better when strings or grammars appear on the wrong side.
+	// (and probably simplify some)
+	return rar.PostProcess(Understandings, func(q Query, _ Registrar) (err error) {
 		if len(op.PluralOf) > 0 {
 			err = op.applyPlurals(rar)
 		} else {
-			// check whether kind matches an action
-			// ( although inform appears to eval the lhs first to see it matches any parser statement )
-			// will need to understand (ahg. puns) that better.
-			if actions, nouns, e := op.readRhs(); e != nil {
+			// check whether kind matches an action or noun
+			if actions, nouns, e := op.readRhs(q); e != nil {
 				err = e
 			} else if len(actions) > 0 && len(nouns) > 0 {
 				err = errors.New("jess doesn't support mixing noun and action understandings")
@@ -77,23 +79,17 @@ Loop:
 	return
 }
 
-func (op *Understand) applyAliases(rar Registrar, nouns []string) (err error) {
+func (op *Understand) applyAliases(rar Registrar, rhsNouns []string) (err error) {
 	// for every noun on the rhs
-	for _, noun := range nouns {
-		// FIX! shouldnt it already have matched?!
-		if noun, e := rar.GetClosestNoun(inflect.Normalize(noun)); e != nil {
-			err = e
-			break
-		} else {
-			//  add the alias specified on the lhs
-			for it := op.QuotedTexts.Iterate(); it.HasNext(); {
-				alias := it.GetNext()
-				if alias = inflect.Normalize(alias); len(alias) > 0 {
-					// the -1 indicates that this is an alias; hrm.
-					if e := rar.AddNounName(noun, alias, -1); e != nil {
-						err = e
-						break
-					}
+	for _, noun := range rhsNouns {
+		//  add the alias specified on the lhs
+		for it := op.QuotedTexts.Iterate(); it.HasNext(); {
+			alias := it.GetNext()
+			if alias = inflect.Normalize(alias); len(alias) > 0 {
+				// the -1 indicates that this is an alias; hrm.
+				if e := rar.AddNounName(noun, alias, -1); e != nil {
+					err = e
+					break
 				}
 			}
 		}
@@ -101,16 +97,26 @@ func (op *Understand) applyAliases(rar Registrar, nouns []string) (err error) {
 	return
 }
 
-func (op *Understand) readRhs() (actions, nouns []string, err error) {
+func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	for it := op.Names.Iterate(); it.HasNext(); {
 		next := it.GetNext()
 		if n := next.Noun; n != nil {
 			nouns = append(nouns, n.ActualNoun)
 		} else if k := next.Kind; k != nil && k.ActualKind.base == kindsOf.Action {
 			actions = append(actions, k.ActualKind.name)
-		} else {
+		} else if n := next.Name; n == nil {
 			err = errors.New("Understandings can only match existing nouns or existing actions")
 			break
+		} else {
+			// fix? if we're going to check at the end; maybe shift to plain names instead.
+			// fix? pass a filter to FindNoun so you can't understand things that arent objects.
+			span := n.Matched.(match.Span)
+			if noun, width := q.FindNoun(span, ""); width < 0 {
+				err = fmt.Errorf("no noun found called %q", span.String())
+				break
+			} else {
+				nouns = append(nouns, noun)
+			}
 		}
 	}
 	return

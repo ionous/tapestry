@@ -12,14 +12,37 @@ import (
 )
 
 func TestPhrases(t *testing.T) {
-	jesstest.TestPhrases(t, jess.AddContext(&known, jess.LogMatches))
+	var skipped int
+	for _, p := range jesstest.Phrases {
+		if str, ok := p.Test(); !ok {
+			if len(str) > 0 {
+				t.Log("skipped", str)
+				skipped++
+			}
+		} else {
+			// reset the dynamic noun pool every test
+			known.dynamicNouns = make(map[string]bool)
+			// request on logging
+			q := jess.AddContext(&known, jess.LogMatches)
+			// create the test helper
+			m := jesstest.MakeMock(q, known.dynamicNouns)
+			// run the test:
+			if !p.Verify(m.Generate(str)) {
+				t.Fail()
+			}
+		}
+	}
+	if skipped > 0 {
+		t.Logf("skipped %d tests", skipped)
+	}
 }
 
 type info struct {
 	kinds []string
 	traits, fields,
 	nouns, directions match.SpanList
-	macros jesstest.MacroList
+	macros       jesstest.MacroList
+	dynamicNouns map[string]bool
 }
 
 func (n *info) GetContext() int {
@@ -68,8 +91,12 @@ func (n *info) FindNoun(ws match.Span, kind string) (ret string, width int) {
 		m, width = n.directions.FindPrefix(ws)
 		ret = m.String()
 	} else {
-		m, width = n.nouns.FindExactMatch(ws)
-		ret = m.String()
+		if str := ws.String(); n.dynamicNouns[str] {
+			ret, width = str, len(ws)
+		} else {
+			m, width = n.nouns.FindExactMatch(ws)
+			ret = m.String()
+		}
 	}
 	return
 }

@@ -3,6 +3,10 @@ Spec:with group:
   - "jess"
 
   - Group contains:
+    - # Used to store matching text
+      Spec:with slot:
+      - "matched"
+      - Slot: true
     - # one of a predefined set of determiners: the, a/n, some, our.
       # only matches if the first letter is lowercase, or uppercase at the start of a sentence;
       # otherwise, the article gets treated as part of the name.
@@ -66,7 +70,7 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "text"
+        - Term: "matched"
 
     - # matches an existing noun
       # by checking multiple words for the best match.
@@ -654,11 +658,12 @@ Spec:with group:
       - "map_directions"
       - Flow uses:
         - Term: "direction_of_linking"
-        - # ex. `Inside from the Meadow is the woodcutter's hut.`
+        - Term: "are"
+        - # ex. `[Inside from the Meadow] is... the woodcutter's hut.`
           Term:optional:
           - "linking"
           - true
-        - # ex. `West of the Garden is south of the Meadow.`
+        - # ex. `[West of the Garden] is ... south of the Meadow.`
           Term:type:optional:
           - "redirect"
           - "direction_of_linking"
@@ -703,7 +708,7 @@ Spec:with group:
       - Flow uses:
         - Term: "text"
 
-   - # generates a room, a door, or nowhere.
+    - # generates a room, a door, or nowhere.
       # ( similar to, but distinct from other noun matching phrases. )
       Spec:with flow:
       - "linking"

@@ -68,6 +68,7 @@ func Generate(q Query, w Registrar, str string) (err error) {
 				break
 			} else if e := m.Generate(w); e != nil {
 				err = fmt.Errorf("%w generating %s", e, str)
+				break
 			}
 		}
 	}
