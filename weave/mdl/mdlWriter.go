@@ -545,7 +545,7 @@ func (pen *Pen) AddOpposite(a, b string) (err error) {
 var mdl_pair = tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at")
 
 // currently assumes exact noun names
-func (pen *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
+func (pen *Pen) AddNounPair(rel, oneNoun, otherNoun string) (err error) {
 	if rel, e := pen.findRequiredKind(rel); e != nil {
 		err = e
 	} else if one, e := pen.findRequiredNoun(oneNoun, nounSansKind); e != nil {
@@ -852,7 +852,7 @@ func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err er
 
 // the top level fields of nouns can hold runtime evaluated assignments.
 // note: assumes noun is an exact name
-func (pen *Pen) AddInitialValue(noun, field string, value rt.Assignment) (err error) {
+func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
 		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
@@ -863,7 +863,9 @@ func (pen *Pen) AddInitialValue(noun, field string, value rt.Assignment) (err er
 
 // store a literal value somewhere within a record held by a noun.
 // note: assumes noun is an exact name
-func (pen *Pen) AddPathValue(noun, path string, value literal.LiteralValue) (err error) {
+// fix: merge with AddNounValue; use the bits inside marshalAssignment
+// ... and strip assignment down to a literal value
+func (pen *Pen) AddNounPath(noun, path string, value literal.LiteralValue) (err error) {
 	if parts := strings.Split(path, "."); len(parts) == 1 {
 		err = pen.addFieldValue(noun, path, assign.Literal(value))
 	} else {

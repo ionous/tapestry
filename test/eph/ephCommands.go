@@ -202,7 +202,7 @@ type Relatives struct {
 
 func (op *Relatives) Assert(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
-		return w.Pin().AddPair(op.Rel, op.Noun, op.OtherNoun)
+		return w.Pin().AddNounPair(op.Rel, op.Noun, op.OtherNoun)
 	})
 }
 
@@ -240,10 +240,10 @@ func (op *Values) Assert(cat *weave.Catalog) error {
 		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
 			err = e
 		} else if field, path := op.Field, op.Path; len(path) == 0 {
-			err = pen.AddInitialValue(n, field, assign.Literal(op.Value))
+			err = pen.AddNounValue(n, field, assign.Literal(op.Value))
 		} else {
 			path := append(path, field)
-			err = pen.AddPathValue(n, mdl.MakePath(path...), op.Value)
+			err = pen.AddNounPath(n, mdl.MakePath(path...), op.Value)
 		}
 		return
 	})

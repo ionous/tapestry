@@ -71,6 +71,7 @@ func (ki *kindInfo) fullpath() string {
 	return ki._fullpath
 }
 
+// see if the named kind exists.
 func (pen *Pen) GetKind(name string) (ret string, err error) {
 	if n, e := pen.findRequiredKind(name); e != nil {
 		err = e

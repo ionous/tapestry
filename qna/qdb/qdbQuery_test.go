@@ -353,7 +353,7 @@ func mdlPair(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.Pin(domain, at).AddPair(relKind, oneNoun, otherNoun); e != nil {
+		if e := m.Pin(domain, at).AddNounPair(relKind, oneNoun, otherNoun); e != nil {
 			err = e
 			break
 		}

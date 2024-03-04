@@ -66,10 +66,10 @@ func (ja jessAdapter) PostProcess(post jess.PostProcess) error {
 }
 
 func (ja jessAdapter) AddNounTrait(noun, trait string) error {
-	return ja.w.AddInitialValue(ja.Pen, noun, trait, truly())
+	return ja.w.AddNounValue(ja.Pen, noun, trait, truly())
 }
 func (ja jessAdapter) AddNounValue(noun, prop string, val rt.Assignment) error {
-	return ja.w.AddInitialValue(ja.Pen, noun, prop, val)
+	return ja.w.AddNounValue(ja.Pen, noun, prop, val)
 }
 func (ja jessAdapter) GetClosestNoun(name string) (string, error) {
 	return ja.w.GetClosestNoun(name)

@@ -129,7 +129,7 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 					err = e // ^ put the exit in the current room
 				} else if e := pen.AddNounKind(door, "doors"); e != nil && !errors.Is(e, mdl.Duplicate) {
 					err = e // ^ ensure the exit exists as a door.
-				} else if e := w.AddInitialValue(pen, door, "destination", text(otherRoom, "rooms")); e != nil {
+				} else if e := w.AddNounValue(pen, door, "destination", text(otherRoom, "rooms")); e != nil {
 					err = e // ^ set the door's target to the other room; todo:
 				}
 				return
@@ -162,16 +162,16 @@ func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir string)
 				// ( keeps it unlisted, and stops the player from being able to refer to it )
 				if e := pen.AddNounName(exitDoor, exitDoor, 0); e != nil {
 					err = e
-				} else if e := w.AddInitialValue(pen, exitDoor, "scenery", truly()); e != nil {
+				} else if e := w.AddNounValue(pen, exitDoor, "scenery", truly()); e != nil {
 					err = e
-				} else if e := w.AddInitialValue(pen, exitDoor, "privately named", truly()); e != nil {
+				} else if e := w.AddNounValue(pen, exitDoor, "privately named", truly()); e != nil {
 					err = e
 				}
 			}
 			if err == nil {
-				if e := pen.AddPathValue(room, mdl.MakePath("compass", dir), Tx(exitDoor, "door")); e != nil {
+				if e := pen.AddNounPath(room, mdl.MakePath("compass", dir), Tx(exitDoor, "door")); e != nil {
 					err = errutil.Fmt("%w going %s in %q via %q", e, dir, room, exitDoor) // ^ set the room's compass to the exit
-				} else if e := pen.AddPathValue(exitDoor, "destination", Tx(otherRoom, "rooms")); e != nil {
+				} else if e := pen.AddNounPath(exitDoor, "destination", Tx(otherRoom, "rooms")); e != nil {
 					err = errutil.Fmt("%w arriving at %q via %q", e, otherRoom, exitDoor) // ^ set the room's compass to the exit
 				}
 			}
@@ -187,6 +187,6 @@ func (op MapConnection) isTwoWay() bool {
 // queue this as its own commands helps ensure the relation gets built properly
 func relateNouns(w *weave.Weaver, noun, other string) error {
 	return w.Catalog.Schedule(weave.RequireNames, func(w *weave.Weaver) error {
-		return w.Pin().AddPair("whereabouts", noun, other)
+		return w.Pin().AddNounPair("whereabouts", noun, other)
 	})
 }

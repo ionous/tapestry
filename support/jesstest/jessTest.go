@@ -121,8 +121,14 @@ func TestPhrases(t *testing.T, q jess.Query) {
 				"AddNounValue", "story teller", "age", number(42),
 			},
 		},
+		{
+			// fix: currently succeeds with "thing called the cat"
+			// inform gets confused, but we could handle this okay
+			// test:   `The description of the thing called the cat is "meow."`,
+			// result: errors.New("can't use property noun value this way."),
+		},
 		// ------------------------------------------------------------------------
-		// NounPropertValue
+		// NounPropertyValue
 		// ------------------------------------------------------------------------
 		{
 			test: `The story has the title "{15|print_num!}"`,
@@ -141,9 +147,15 @@ func TestPhrases(t *testing.T, q jess.Query) {
 				"AddNounValue", "bottle", "age", number(42),
 			},
 		},
+		{
+			// fix: inform allows this, and jess does not.
+			// 	test: `The thing called the cat has the description "meow."`,
+			// 	result: []string{
+			// 	},
+		},
+
 		// ------------------------------------------------------------------------
 		// AspectsAreTraits
-		// note: "The colors can be..." isn't allowed.
 		// ( for testing, "colors" is an established aspect with zero traits )
 		// ------------------------------------------------------------------------
 		{
@@ -151,6 +163,11 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			result: []string{
 				"AddTraits", "color", "red", "blue", "cobalt",
 			},
+		},
+		{
+			// not allowed. matches KindsAreEither, but "aspect" is prohibited for that phrase.
+			test:   `The colors can be red, blue, and cobalt.`,
+			result: errors.New("not allowed?"),
 		},
 		// ------------------------------------------------------------------------
 		// KindsAreTraits
@@ -305,7 +322,7 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `Two things are in the kitchen.`,
 			result: []string{
-				"AddNounKind", "kitchen", "things", // FIX: what's the best kind for this?
+				"AddNounKind", "kitchen", "things", // uses things unless some other constraint exists
 				"AddNounName", "kitchen", "kitchen",
 				//
 				"AddNounKind", "thing-1", "things",
@@ -326,7 +343,7 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			test: `Hershel is carrying scissors and a pen.`,
 			result: []string{
-				"AddNounKind", "hershel", "things", // FIX: what's the best kind for this?
+				"AddNounKind", "hershel", "things", // FIX: carries should be actor
 				"AddNounName", "hershel", "Hershel",
 				"AddNounTrait", "hershel", "proper named",
 				//
@@ -343,7 +360,7 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			// reverse carrying relation.
 			test: `The scissors and a pen are carried by Hershel.`,
 			result: []string{
-				"AddNounKind", "hershel", "things", // FIX: what's the best kind for this?
+				"AddNounKind", "hershel", "things",
 				"AddNounName", "hershel", "Hershel",
 				"AddNounTrait", "hershel", "proper named",
 				//
@@ -454,13 +471,15 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			// simple trait:
 			test: `The bottle is closed.`,
 			result: []string{
+				// FIX? inform would error on this saying "Properties depend on kind"
+				// because it would auto define a bottle as a thing; and things cant be "closed."
 				"AddNounKind", "bottle", "things",
 				"AddNounName", "bottle", "bottle",
 				"AddNounTrait", "bottle", "closed",
 			},
 		},
 		{
-			// multi Word trait:
+			// multi word trait:
 			test: `The tree is fixed in place.`,
 			result: []string{
 				"AddNounKind", "tree", "things",
@@ -471,6 +490,16 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		{
 			// multiple trailing properties, using the kind as a property.
 			test: `The bottle is a transparent, open, container.`,
+			result: []string{
+				"AddNounKind", "bottle", "containers",
+				"AddNounName", "bottle", "bottle",
+				"AddNounTrait", "bottle", "transparent",
+				"AddNounTrait", "bottle", "open",
+			},
+		},
+		{
+			// multiple trailing properties without commas.
+			test: `The bottle is a transparent open container.`,
 			result: []string{
 				"AddNounKind", "bottle", "containers",
 				"AddNounName", "bottle", "bottle",
@@ -530,7 +559,6 @@ func TestPhrases(t *testing.T, q jess.Query) {
 			// allowed even though it implies something different than what is written:
 			test: `The bottle is openable in the kitchen.`,
 			result: []string{
-
 				"AddNounKind", "kitchen", "things",
 				"AddNounName", "kitchen", "kitchen",
 				//

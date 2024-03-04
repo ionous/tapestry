@@ -30,11 +30,11 @@ func (w *Weaver) Pin() *mdl.Pen {
 	return w.Catalog.Modeler.Pin(w.Domain, w.At)
 }
 
-func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value rt.Assignment) (err error) {
+func (w *Weaver) AddNounValue(pen *mdl.Pen, noun, field string, value rt.Assignment) (err error) {
 	// if we are adding an initial value for a different domain
 	// then that gets changed into "set value" triggered on "begin domain"
 	var u mdl.DomainValueError
-	if e := pen.AddInitialValue(noun, field, value); !errors.As(e, &u) {
+	if e := pen.AddNounValue(noun, field, value); !errors.As(e, &u) {
 		err = e // nil or unexpected error.
 	} else {
 		d := w.Catalog.domains[w.Domain]

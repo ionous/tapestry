@@ -59,7 +59,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			for _, t := range traits {
 				t := inflect.Normalize(t)
 				for _, n := range names {
-					if e := w.AddInitialValue(pen, n, t, truly()); e != nil {
+					if e := w.AddNounValue(pen, n, t, truly()); e != nil {
 						err = errutil.Append(err, e)
 						break // out of the traits to the next noun
 					}
@@ -150,7 +150,7 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 					name := jess.StripArticle(noun)
 					if noun, e := pen.GetClosestNoun(inflect.Normalize(name)); e != nil {
 						err = errutil.Append(err, e)
-					} else if e := w.AddInitialValue(pen, noun, field, value); e != nil {
+					} else if e := w.AddNounValue(pen, noun, field, value); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}
@@ -218,7 +218,7 @@ func defineRelatives(w *weave.Weaver, rel string, nouns, otherNouns []string) (e
 				if b, e := w.GetClosestNoun(inflect.Normalize(other)); e != nil {
 					err = errutil.Append(err, e)
 				} else {
-					if e := pen.AddPair(rel, a, b); e != nil {
+					if e := pen.AddNounPair(rel, a, b); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}
