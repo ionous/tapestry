@@ -56,6 +56,24 @@ type Interpreter interface {
 	Match(Query, *InputState) bool
 }
 
+// match one or more sentences and use the registrar
+// to create  nouns, define kinds, set properties, and so on.
+func Generate(q Query, w Registrar, str string) (err error) {
+	if spans, e := match.MakeSpans(str); e != nil {
+		err = fmt.Errorf("%w reading %s", e, str)
+	} else {
+		for _, span := range spans {
+			if m, e := Match(q, span); e != nil {
+				err = fmt.Errorf("%w matching %s", e, span)
+				break
+			} else if e := m.Generate(w); e != nil {
+				err = fmt.Errorf("%w generating %s", e, str)
+			}
+		}
+	}
+	return
+}
+
 // matches an english like sentence against jess's parse trees.
 // returns an object which can create nouns, define kinds, set properties, and so on.
 func Match(q Query, ws match.Span) (ret Generator, err error) {

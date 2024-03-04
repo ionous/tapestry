@@ -13,7 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/files"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -619,17 +618,15 @@ func TestPhrases(t *testing.T, q jess.Query) {
 		if len(p.test) == 0 || p.result == nil {
 			skipped++
 		} else {
+			var m Mock
 			var haveRes []string
-			got, haveError := jess.Match(q, match.PanicSpan(p.test))
-			if haveError == nil {
-				var m Mock
-				if e := got.Generate(&m); e != nil {
-					haveError = e
-				} else if e := m.RunPost(q); e != nil {
-					haveError = e
-				} else {
-					haveRes = m.out
-				}
+			var haveError error
+			if e := jess.Generate(q, &m, p.test); e != nil {
+				haveError = e
+			} else if e := m.RunPost(q); e != nil {
+				haveError = e
+			} else {
+				haveRes = m.out
 			}
 			if expectError, ok := p.result.(error); ok {
 				if haveError != nil {
