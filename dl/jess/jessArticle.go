@@ -24,14 +24,6 @@ type ArticleFlags struct {
 	Plural     bool
 }
 
-func getOptionalArticle(art *Article) (retText string, retFlags ArticleFlags) {
-	if art != nil {
-		retText = art.Text
-		retFlags = art.Flags
-	}
-	return
-}
-
 // return the name after removing leading articles
 // eats any errors it encounters and returns the original name
 func StripArticle(name string) (ret string) {

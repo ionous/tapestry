@@ -36,7 +36,7 @@ func (op *Understand) Generate(rar Registrar) error {
 	// fix: parse lhs first, into a map keyed by its string
 	// then we can error better when strings or grammars appear on the wrong side.
 	// (and probably simplify some)
-	return rar.PostProcess(Understandings, func(q Query, _ Registrar) (err error) {
+	return rar.PostProcess(GenerateUnderstanding, func(q Query) (err error) {
 		if len(op.PluralOf) > 0 {
 			err = op.applyPlurals(rar)
 		} else {
@@ -79,6 +79,7 @@ Loop:
 	return
 }
 
+// fix: should this work through desired noun instead?
 func (op *Understand) applyAliases(rar Registrar, rhsNouns []string) (err error) {
 	// for every noun on the rhs
 	for _, noun := range rhsNouns {
@@ -98,7 +99,7 @@ func (op *Understand) applyAliases(rar Registrar, rhsNouns []string) (err error)
 }
 
 func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
-	for it := op.Names.Iterate(); it.HasNext(); {
+	for it := op.Names.GetNames(); it.HasNext(); {
 		next := it.GetNext()
 		if n := next.Noun; n != nil {
 			nouns = append(nouns, n.ActualNoun)
@@ -124,7 +125,7 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 
 func (op *Understand) applyPlurals(rar Registrar) (err error) {
 Loop:
-	for as := op.Names.Iterate(); as.HasNext(); {
+	for as := op.Names.GetNames(); as.HasNext(); {
 		// determine the "single" side of the plural request
 		if n := as.GetNext(); n.Noun == nil {
 			err = errors.New("unknown name, expected the name of an existing noun.")

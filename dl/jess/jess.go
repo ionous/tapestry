@@ -36,7 +36,8 @@ type Query interface {
 
 	// find the name of the noun which best matches the passed span.
 	// return the number of words that matched ( if any. )
-	// the kind, if specified, will focus the search to that one kind.
+	// the kind, if specified, will ensure the noun is of that kind;
+	// [ so that the caller doesn't have to validate materialized kind paths ]
 	FindNoun(name match.Span, kind string) (string, int)
 }
 
@@ -58,16 +59,16 @@ type Interpreter interface {
 
 // match one or more sentences and use the registrar
 // to create  nouns, define kinds, set properties, and so on.
-func Generate(q Query, w Registrar, str string) (err error) {
-	if spans, e := match.MakeSpans(str); e != nil {
-		err = fmt.Errorf("%w reading %s", e, str)
+func Generate(q Query, w Registrar, paragraph string) (err error) {
+	if spans, e := match.MakeSpans(paragraph); e != nil {
+		err = fmt.Errorf("%w reading %s", e, paragraph)
 	} else {
 		for _, span := range spans {
 			if m, e := Match(q, span); e != nil {
 				err = fmt.Errorf("%w matching %s", e, span)
 				break
 			} else if e := m.Generate(w); e != nil {
-				err = fmt.Errorf("%w generating %s", e, str)
+				err = fmt.Errorf("%w generating %s", e, paragraph)
 				break
 			}
 		}

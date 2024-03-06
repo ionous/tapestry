@@ -36,21 +36,15 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 }
 
 // anonymous kinds: "the supporter"
-func (op *Kind) BuildNoun(traits, kinds []string) (ret DesiredNoun, err error) {
-	if kind, e := op.Validate(kindsOf.Kind); e != nil {
+func (op *Kind) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+	if plural, e := op.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
-		ret = DesiredNoun{
-			// use the importCountedNoun() path
-			// it will give us a good enough anonymous name.
-			Count:  1,
-			Traits: traits,
-			// the order of kinds matters for "kinds of"
-			// for: A container is a kind of thing.
-			// the kinds should appear in that order in this list:
-			Kinds: append([]string{kind}, kinds...),
-			// no name and no article because, the object itself is anonymous.
-			// ( the article associated with the kind gets eaten )
+		singular := rar.GetSingular(plural)
+		if n, e := buildAnon(rar, plural, singular, ts, ks); e != nil {
+			err = e
+		} else {
+			ret = []DesiredNoun{n}
 		}
 	}
 	return

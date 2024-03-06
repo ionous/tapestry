@@ -1,6 +1,10 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/match"
+import (
+	"errors"
+
+	"git.sr.ht/~ionous/tapestry/support/match"
+)
 
 // ----
 func (op *MapLocations) Match(q Query, input *InputState) (okay bool) {
@@ -64,24 +68,34 @@ func (op *MapConnections) matchThrough(input *InputState) (okay bool) {
 // 2. ensure all of the lhs links are doors
 // 3. set the destination of those doors to the rhs room.
 func (op *MapConnections) Generate(rar Registrar) (err error) {
-	// how to handle link?
-	if room, e := op.Room.GenerateNoun(rar, Rooms); e != nil {
-		err = e
-	} else {
-		for it := op.GetDoors(); it.HasNext(); {
-			link := it.GetNext()
-			if door, e := link.GenerateNoun(rar, Doors); e != nil {
-				err = e
-				break
-			} else {
-				if e := rar.AddNounValue(door, DoorDestination, text(room, Rooms)); e != nil {
+	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
+		if room, e := op.Room.BuildNoun(q, rar, nil, []string{Rooms}); e != nil {
+			err = e
+		} else {
+			for it := op.GetDoors(); it.HasNext(); {
+				link := it.GetNext()
+				// fix: rather than lists of things;
+				// what about passing a "noun properties" instead
+				// then the shared function could apply at the right time
+				// rather than callers managing the timing.
+				if doors, e := link.BuildNouns(q, rar, nil, []string{Doors}); e != nil {
 					err = e
 					break
+				} else if len(doors) == 0 {
+					err = errors.New("expected at least one door")
+					break
+				} else {
+					if e := genNoun(rar, doors, func(n string) error {
+						return rar.AddNounValue(n, DoorDestination, text(room, Rooms))
+					}); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}
-	}
-	return
+		return
+	})
 }
 
 func (op *MapConnections) GetDoors() LinkIt {
@@ -142,27 +156,27 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 
 // generate a room or door; an object if there's not enough information to know;
 // or nothing for nowhere.
-func (op *Linking) GenerateNoun(rar Registrar, kind string) (ret string, err error) {
+func (op *Linking) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
 	if !op.Nowhere {
-		p := op.GetMatchedName()
-		if n, e := p.BuildNoun(nil, []string{kind}); e != nil {
-			err = e
-		} else {
-			ret, err = importNamedNoun(rar, n)
-		}
+		ret, err = buildNounsFrom(q, rar, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name))
 	}
 	return
 }
 
-func (op *Linking) GetMatchedName() (ret MatchedName) {
-	if kind := op.KindCalled; kind != nil {
-		ret = kind
-	} else if noun := op.Noun; noun != nil {
-		ret = noun
-	} else if name := op.Name; name != nil {
-		ret = name
-	} else {
-		panic("unmatched link")
+// helper since we know there's linking doesnt support counted nouns, but does support nowhere;
+// BuildNouns will always return a list of one or none.
+func (op *Linking) BuildNoun(q Query, rar Registrar, ts, ks []string) (ret string, err error) {
+	if els, e := op.BuildNouns(q, rar, ts, ks); e != nil {
+		err = e
+	} else if len(els) > 0 {
+		n := els[0]
+		if e := rar.PostProcess(GenerateValues, func(Query) error {
+			return n.generateValues(rar)
+		}); e != nil {
+			err = e
+		} else {
+			ret = n.Noun
+		}
 	}
 	return
 }

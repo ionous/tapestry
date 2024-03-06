@@ -18,17 +18,18 @@ type Mock struct {
 	out      []string
 	unique   map[string]int
 	posted   [jess.PriorityCount][]jess.Process
-	nounPool map[string]bool
+	nounPool map[string]string
+	phase    jess.Priority
 }
 
-func MakeMock(q jess.Query, nounPool map[string]bool) Mock {
+func MakeMock(q jess.Query, nounPool map[string]string) Mock {
 	return Mock{q: q, nounPool: nounPool}
 }
 
-func (m *Mock) Generate(str string) (ret []string, err error) {
-	if e := jess.Generate(m.q, m, str); e != nil {
+func (m *Mock) Generate(paragraph string) (ret []string, err error) {
+	if e := jess.Generate(m.q, m, paragraph); e != nil {
 		err = e
-	} else if e := m.RunPost(m.q); e != nil {
+	} else if e := m.runPost(m.q); e != nil {
 		err = e
 	} else {
 		ret = m.out
@@ -41,20 +42,83 @@ func (m *Mock) PostProcess(i jess.Priority, p jess.Process) (_ error) {
 	return
 }
 
-func (m *Mock) RunPost(q jess.Query) (err error) {
-	for _, posted := range m.posted {
+// upgrade anything that hasn't been assigned an explicit kind to become a "thing"
+// func (m *Mock) makeEverythingSomething() (err error) {
+// 	var names []string
+// 	for n, k := range m.nounPool {
+// 		if len(k) == 0 {
+// 			names = append(names, n[1:])
+// 		}
+// 	}
+// 	sort.Strings(names)
+// 	for _, n := range names {
+// 		if e := m.AddNounKind(n, "things"); e != nil {
+// 			err = e
+// 			break
+// 		}
+// 	}
+// 	return
+// }
+
+func (m *Mock) runPost(q jess.Query) (err error) {
+Loop:
+	for i := jess.Priority(0); i < jess.PriorityCount; i++ {
+		m.phase = i
 		// fix: can we really add new processes during post?
 		// and if so, shouldnt mock panic on misorders?
-		for len(posted) > 0 {
+		for len(m.posted[i]) > 0 {
+			posted := m.posted[i]
 			next, rest := posted[0], posted[1:]
-			if e := next(q, m); e != nil {
+			if e := next(q); e != nil {
 				err = e
-				break
+				break Loop
 			} else {
-				posted = rest
+				m.posted[i] = rest
 			}
 		}
+		// if p := jess.GenerateNouns; i == p {
+		// 	if e := m.makeEverythingSomething(); e != nil {
+		// 		err = e
+		// 		break
+		// 	}
+		// }
 	}
+	return
+}
+func (m *Mock) AddNounKind(noun, kind string) (err error) {
+	m.nounPool[noun] = noun
+	// for weave, we'd add these blank kinds "objects"
+	// we absorb it for cleaner tests;
+	if len(kind) > 0 {
+		if prev, ok := m.nounPool["$"+noun]; ok {
+			err = fmt.Errorf("%w %s already declared as %s", mdl.Duplicate, noun, prev)
+		} else {
+			m.out = append(m.out, "AddNounKind", noun, kind)
+			m.nounPool["$"+noun] = kind
+		}
+	}
+	// else if m.phase > jess.GenerateNouns {
+	// 	err = errors.New("this will never make a noun")
+	// }
+	return
+}
+
+var lastNamedNoun string
+var lastNamedSize int
+
+// slightly limit the name spew; name generation gets tested elsewhere
+func (m *Mock) AddNounName(noun, name string, r int) (_ error) {
+	if lastNamedSize != len(m.out) {
+		lastNamedNoun = ""
+	}
+	if r < 0 {
+		m.out = append(m.out, "AddNounAlias", noun, name)
+	} else if lastNamedNoun != noun || r < 0 {
+		m.out = append(m.out, "AddNounName", noun, name)
+	}
+	m.nounPool[name] = noun
+	lastNamedNoun = noun
+	lastNamedSize = len(m.out)
 	return
 }
 
@@ -94,31 +158,6 @@ func (m *Mock) AddPlural(many, one string) (_ error) {
 	m.out = append(m.out, "AddPlural", many, one)
 	return
 }
-func (m *Mock) AddNounKind(noun, kind string) (_ error) {
-	m.nounPool[noun] = true
-	m.out = append(m.out, "AddNounKind", noun, kind)
-	return
-}
-
-var lastNamedNoun string
-var lastNamedSize int
-
-// slightly limit the name spew; name generation gets tested elsewhere
-func (m *Mock) AddNounName(noun, name string, r int) (_ error) {
-	if lastNamedSize != len(m.out) {
-		lastNamedNoun = ""
-	}
-	if r < 0 {
-		m.out = append(m.out, "AddNounAlias", noun, name)
-	} else if lastNamedNoun != noun || r < 0 {
-		m.out = append(m.out, "AddNounName", noun, name)
-	}
-
-	lastNamedNoun = noun
-	lastNamedSize = len(m.out)
-	return
-}
-
 func (m *Mock) AddNounTrait(name, trait string) (_ error) {
 	m.out = append(m.out, "AddNounTrait", name, trait)
 	return

@@ -1,15 +1,4 @@
 
-
-// KindsAreEither
-		// A thing is either tall or short.
-		// ng: Things are either tall or short. [ i dont see a reason not to allow this ]
-		// A thing can be [either]
-		// Things can be [either] tall or short.
-		
-			// inform doesnt allow [either] here; i'm fine with whatever.
-			test:   "A thing can be scenery.",
-		
-		
 Unexpected success
 ------------------
 There are sentences that don't make sense in English, that jess will read perfectly fine. And others that mean something in English slightly different than how they are understood here.
@@ -66,6 +55,9 @@ In inform <sup>1.68.1</sup>, the first and third are okay.
 Inform is looser with its article matching in some cases:
 
 *  `The the closed box called the Pandorica is open.` and `The a a a openable container called the vase is in the kitchen.` are valid in inform for reasons i don't entirely understand.
+
+
+
  
 # regarding traits there are a few patterns:
 
@@ -140,3 +132,27 @@ inform supports defining plurals, aliases, command synonyms, actions, references
  For inform, since `Understand "uniqueword [something]" as looking under and box.` both generate parser rules.... if there's a scene described with `The cardboard box is an open container in the kitchen. The rose is in the kitchen.` then the user can say `> x uniqueword rose` and it will say `The cardboard box is empty.` -- which is pretty neat
  
  For `Understand "uniqueword" as the box.` it will add "uniqueword" as an alias to the noun definition -- `Object -> I126_cardboard_box... with name 'cardboard' 'box' 'containers//p' 'uniqueword'`. it analyzes the lhs for the brackets to determine if its grammar or not.
+ 
+
+Notes on scheduling
+-----------
+
+As phrases matched, generation within a "paragraph" ( meaning a "Declare:" block ) are "sorted" so that first kinds are declared, then nouns, then values of nouns, and finally relationships between them. 
+
+Key to the implementation is that when values are assigned to nouns, if the noun does not yet exist: it becomes a `thing.` ( That is except for nouns that were referenced via directional phrases. Those become `rooms` or `doors` depending on the context. )
+
+For instance:
+
+`A thing is either ended or started. The bother is an ended container.` works fine; the reverse does not. Same with `Two boggles are in the kitchen. A boggles is a kind of thing.` `The glass bottle is in the kitchen. The bottle is fixed in place.` creates one noun, the reverse creates two.
+
+However:
+
+`The bottle is in the kitchen. The bottle is a container. The kitchen is a room.` correctly creates one container and one room. And, `Understand "donut" as the doughnut. The doughnut is an animal.` works fine.
+
+Inform doesn't delay processing of kinds. The following, perhaps unexpectedly, generates two objects: a thing called "five trees" and a tree called the "sapling."
+
+```
+The five trees are in the kitchen.
+A tree is a kind of thing.
+The sapling is a tree.
+```

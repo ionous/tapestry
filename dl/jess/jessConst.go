@@ -7,15 +7,15 @@ const (
 	PrintedName       = "printed name"
 	DoorDestination   = "destination"
 	// traits
-	PluralNamed     = "plural named"
-	ProperNameTrait = "proper named"
-	CountedTrait    = "counted"
+	PluralNamedTrait = "plural named"
+	ProperNameTrait  = "proper named"
+	CountedTrait     = "counted"
 	// special names:
 	PlayerSelf = "self"
 	// kinds:
-	Things     = "things"
 	Objects    = "objects"    // the kind of a potential room or door
-	Rooms      = "rooms"      // possible player locale
-	Doors      = "doors"      // portals which connect rooms
 	Directions = "directions" // a special kind of object representing movement of travel
+	Rooms      = "rooms"      // possible player locale
+	Things     = "things"
+	Doors      = "doors" // portals which connect rooms
 )

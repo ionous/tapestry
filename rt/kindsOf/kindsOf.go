@@ -9,6 +9,7 @@ const None Kinds = 0 //
 
 // note: iota increases even when not specified so every kind has a unique bit;
 // re-specifying it combines with earlier kinds to indicate sub-types.
+// ( Kind is an abstract or concrete noun defined by some story. )
 const (
 	Aspect   Kinds = 1 << iota         // aspects
 	Kind                               // kinds

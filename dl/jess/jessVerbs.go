@@ -1,9 +1,5 @@
 package jess
 
-func (op *VerbPhrase) BuildNouns(traits, kinds []string) (ret []DesiredNoun, err error) {
-	return op.PlainNames.BuildNouns(traits, kinds)
-}
-
 func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Verb.Match(q, &next) &&

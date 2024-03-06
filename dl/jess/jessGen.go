@@ -6,19 +6,9 @@ import (
 	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
-
-func applyResults(rar Registrar, res localResults) error {
-	return genNouns(rar, res.Primary, res.Secondary, func(src, tgt []string) (err error) {
-		// note: some phrases "the box is open" dont have macros.
-		// in that case, genNouns does all the work.
-		if macro := res.Macro.Name; len(macro) > 0 {
-			err = rar.Apply(res.Macro, src, tgt)
-		}
-		return
-	})
-}
 
 func startsUpper(str string) bool {
 	first, _ := utf8.DecodeRuneInString(str)
@@ -26,17 +16,13 @@ func startsUpper(str string) bool {
 }
 
 // even one name can generate several nouns ( ex. "two things" )
-// after gets called for each one.1
-func genNoun(rar Registrar, n DesiredNoun, after postGenOne) error {
-	return rar.PostProcess(NounSettings, func(Query, Registrar) (err error) {
-		if names, e := importNoun(rar, n, nil); e != nil {
-			err = e
-		} else {
-			for _, name := range names {
-				if e := after(name); e != nil {
-					err = e
-					break
-				}
+// after gets called for each one.
+func genNoun(rar Registrar, ns []DesiredNoun, after postGenOne) error {
+	return genNouns(rar, ns, nil, func(ns, _ []DesiredNoun) (err error) {
+		for _, n := range ns {
+			if e := after(n.Noun); e != nil {
+				err = e
+				break
 			}
 		}
 		return
@@ -44,107 +30,58 @@ func genNoun(rar Registrar, n DesiredNoun, after postGenOne) error {
 }
 
 type postGenOne func(a string) error
-type postGenMany func(a, b []string) error
+type postGenMany func(a, b []DesiredNoun) error
 
-// add nouns and values
-func genNouns(rar Registrar, a, b []DesiredNoun, after postGenMany) error {
-	return rar.PostProcess(NounSettings, func(Query, Registrar) (err error) {
-		if src, e := importNouns(rar, a); e != nil {
+func genNouns(rar Registrar, a, b []DesiredNoun, after postGenMany) (err error) {
+	return rar.PostProcess(GenerateValues, func(Query) (err error) {
+		if e := generateValues(rar, a); e != nil {
 			err = e
-		} else if tgt, e := importNouns(rar, b); e != nil {
+		} else if e := generateValues(rar, b); e != nil {
 			err = e
 		} else {
-			err = after(src, tgt)
+			err = after(a, b)
 		}
 		return
 	})
 }
 
-func importNouns(rar Registrar, ns []DesiredNoun) (ret []string, err error) {
-	if cnt := len(ns); cnt > 0 {
-		ret = make([]string, 0, cnt)
-		for _, n := range ns {
-			if ret, err = importNoun(rar, n, ret); err != nil {
-				break
-			}
-		}
-	}
-	return
-}
-
-func importNoun(rar Registrar, n DesiredNoun, names []string) (ret []string, err error) {
-	if n.Count > 0 {
-		if res, e := importCountedNoun(rar, n); e != nil {
-			err = e
-		} else {
-			ret = append(names, res...)
-		}
-	} else {
-		if res, e := importNamedNoun(rar, n); e != nil {
-			err = e
-		} else {
-			ret = append(names, res)
-		}
-	}
-	return
-}
-
-func importNamedNoun(rar Registrar, n DesiredNoun) (ret string, err error) {
-	if noun := n.Noun; len(noun) > 0 {
-		if e := registerKinds(rar, noun, n.Kinds); e != nil {
-			err = e
-		} else if e := registerTraits(rar, noun, n.Traits); e != nil {
-			err = e
-		} else {
-			ret = noun
-		}
-	} else {
-		noun := inflect.Normalize(n.DesiredName)
-		kinds, traits := n.Kinds, n.Traits
-		if len(kinds) == 0 {
-			kinds = []string{Things} // default
-		}
-		// the lack of a recognized article makes something proper-named.
-		if len(n.Article) == 0 {
-			traits = append(traits, ProperNameTrait)
-		}
-		if e := registerKinds(rar, noun, kinds); e != nil {
-			err = e
-		} else if e := registerNames(rar, noun, n.DesiredName); e != nil {
-			err = e
-		} else if e := registerTraits(rar, noun, traits); e != nil {
-			err = e
-		} else if e := registerArticle(rar, noun, n.Article, n.Flags); e != nil {
-			err = e
-		} else {
-			ret = noun
-		}
-	}
-	return
-}
-
-func registerArticle(rar Registrar, noun, a string, f ArticleFlags) (err error) {
-	if f.Plural {
-		err = rar.AddNounTrait(noun, PluralNamed)
-	}
-	if f.Indefinite && err == nil {
-		err = rar.AddNounValue(noun, IndefiniteArticle, text(a, ""))
-	}
-	return
-}
-
-// ensure the noun inherits from all of the specified kinds
 func registerKinds(rar Registrar, noun string, kinds []string) (err error) {
-	// fix? it's a little hard in some cases to filter out common kinds (eg. rooms)
-	// it doesnt really matter -- AddNounKind can handle it; but it makes the tests ugly.
-	dedupe := make(map[string]bool)
 	for _, k := range kinds {
-		if !dedupe[k] {
-			dedupe[k] = true
-			if e := rar.AddNounKind(noun, k); e != nil && !errors.Is(e, mdl.Duplicate) {
-				err = e
-				break
-			}
+		if e := rar.AddNounKind(noun, k); e != nil && !errors.Is(e, mdl.Duplicate) {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func generateValues(rar Registrar, ns []DesiredNoun) (err error) {
+	for _, n := range ns {
+		if e := n.generateValues(rar); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+// creates a noun as a placeholder
+// later, a pass ensures that all placeholder nouns have been given kinds;
+// or it upgrades them to things.
+// to simplify the code, this happens even if the kind might possibly be known.
+func ensureNoun(q Query, rar Registrar, name match.Span) (ret string, created bool, err error) {
+	if noun, w := q.FindNoun(name, ""); w > 0 {
+		ret = noun
+	} else {
+		name := name.String()
+		noun := inflect.Normalize(name)
+		if e := rar.AddNounKind(noun, ""); e != nil {
+			err = e // if duplicate, FindNoun should have triggered; so return all errors
+		} else if e := registerNames(rar, noun, name); e != nil {
+			err = e
+		} else {
+			ret = noun
+			created = true
 		}
 	}
 	return
@@ -156,59 +93,6 @@ func registerNames(rar Registrar, noun, name string) (err error) {
 		if e := rar.AddNounName(noun, n, i); e != nil {
 			err = e
 			break
-		}
-	}
-	return
-}
-
-func registerTraits(rar Registrar, noun string, traits []string) (err error) {
-	for _, t := range traits {
-		if e := rar.AddNounTrait(noun, t); e != nil {
-			err = e
-			break
-		}
-	}
-	return
-}
-
-// ex. "two triangles"
-// - adds ( and returns ) nouns: triangle_1, triangle_2, etc. of kind "triangle/s"
-// - uses "triangle" as an alias and printed name for each of the new nouns
-// - flags them all as "counted.
-func importCountedNoun(rar Registrar, noun DesiredNoun) (ret []string, err error) {
-	if cnt := noun.Count; cnt > 0 {
-		kinds := noun.Kinds[0]
-		kind := rar.GetSingular(kinds)
-		names := make([]string, cnt)
-	Loop:
-		for i := 0; i < cnt; i++ {
-			n := rar.GetUniqueName(kind)
-			names[i] = n
-			if e := rar.AddNounKind(n, kinds); e != nil {
-				err = e
-			} else if e := rar.AddNounName(n, n, 0); e != nil {
-				err = e // ^ so authors can refer to it by the dashed name
-				break
-			} else if e := rar.AddNounName(n, kind, -1); e != nil {
-				err = e // ^ so that typing "triangle" means "triangles-1"
-				break
-			} else if e := rar.AddNounTrait(n, CountedTrait); e != nil {
-				err = e
-				break
-			} else if e := rar.AddNounValue(n, PrintedName, text(kind, "")); e != nil {
-				err = e // so that printing "triangles-1" yields "triangle"
-				break   // FIX: itd make a lot more sense to have a default value for the kind
-			} else {
-				for _, t := range noun.Traits {
-					if e := rar.AddNounTrait(n, t); e != nil {
-						err = e
-						break Loop
-					}
-				}
-			}
-			if err == nil {
-				ret = names
-			}
 		}
 	}
 	return

@@ -64,3 +64,12 @@ func (it *Traitor) GetNext() (ret Trait) {
 	ret, it.next = it.next.Trait, next
 	return
 }
+
+// fix: is this all trait iteration is being used for?
+func ReduceTraits(it Traitor) (ret []string) {
+	for it.HasNext() {
+		t := it.GetNext()
+		ret = append(ret, t.String())
+	}
+	return
+}

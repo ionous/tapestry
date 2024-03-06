@@ -7,6 +7,7 @@ Spec:with group:
       Spec:with slot:
       - "matched"
       - Slot: true
+
     - # one of a predefined set of determiners: the, a/n, some, our.
       # only matches if the first letter is lowercase, or uppercase at the start of a sentence;
       # otherwise, the article gets treated as part of the name.
@@ -58,14 +59,19 @@ Spec:with group:
           - "matched"
           - "text"
 
+    - Spec:with slot:
+      - "noun_builder"
+      - Slot: true
+
     - # Specifies a name who's meaning depends on context.
       # For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
       # the "chest" implies the noun "treasure chest."
       # In other cases, the name might be a kind, or trait, or pretty much anything else.
       # To optimizing matching the words "is/are/comma/and" are never part of name names.
       # future: allow quoted "titles" ( which are then allowed to break those assumptions )
-      Spec:with flow:
+      Spec:slots:with flow:
       - "name"
+      - "noun_builder"
       - Flow uses:
         - Term:optional:
           - "article"
@@ -74,8 +80,9 @@ Spec:with group:
 
     - # matches an existing noun
       # by checking multiple words for the best match.
-      Spec:with flow:
+      Spec:slots:with flow:
       - "noun"
+      - "noun_builder"
       - Flow uses:
         - Term:optional:
           - "article"
@@ -90,8 +97,9 @@ Spec:with group:
           - true
 
     - # matches an existing noun, or if not: then something new.
-      Spec:with flow:
+      Spec:slots:with flow:
       - "named_noun"
+      - "noun_builder"
       - Flow uses:
         - Term:optional:
           - "noun"
@@ -121,8 +129,9 @@ Spec:with group:
     - # Specifies one or more nouns, in full or in part.
       # Only one of the options, plus possibly 'additional_names', will match.
       # Not all options are valid in all contexts.
-      Spec:with flow:
+      Spec:slots:with flow:
       - "names"
+      - "noun_builder"
       - Flow uses:
         - Term:optional:
           - "counted_kind"
@@ -157,9 +166,10 @@ Spec:with group:
         - Term: "names"
 
     - # provides english specification of a number of objects.
-      # note: yes, `the five the containers` is permitted.
-      Spec:with flow:
+      # ( note: yes, `the five the containers` is permitted. )
+      Spec:slots:with flow:
       - "counted_kind"
+      - "noun_builder"
       - Flow uses:
         - Term:optional:
           - "article"
@@ -171,9 +181,11 @@ Spec:with group:
           - "counted_text"
           - true
 
-    - # matches the name of an existing kind.
-      Spec:with flow:
+    - # matches the name of an existing kind;
+      # can generate a single anonymous noun.
+      Spec:slots:with flow:
       - "kind"
+      - "noun_builder"
       - Flow uses:
         - # while an article can precede every kind
           # it doesn't influence which kind gets matched.

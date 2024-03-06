@@ -51,7 +51,7 @@ func (op *KindsOf) Generate(rar Registrar) (err error) {
 		traits := op.GetTraits()
 		isPlural, isAspect := op.Are.IsPlural(), op.IsAspect()
 		// the names are kinds we have not yet created
-		for it := op.Names.Iterate(); it.HasNext(); {
+		for it := op.Names.GetNames(); it.HasNext(); {
 			at := it.GetNext()
 			if at.CountedKind != nil {
 				err = errors.New(countedKindMsg)

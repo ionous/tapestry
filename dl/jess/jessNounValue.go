@@ -33,15 +33,17 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *PropertyNounValue) Generate(rar Registrar) (err error) {
-	if b, e := op.NamedNoun.BuildNoun(nil, nil); e != nil {
-		err = e
-	} else {
-		err = genNoun(rar, b, func(n string) error {
-			return rar.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
-		})
-	}
-	return
+func (op *PropertyNounValue) Generate(rar Registrar) error {
+	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
+		if ns, e := op.NamedNoun.BuildNouns(q, rar, nil, nil); e != nil {
+			err = e
+		} else {
+			err = genNoun(rar, ns, func(n string) error {
+				return rar.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
+			})
+		}
+		return
+	})
 }
 
 func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
@@ -66,12 +68,14 @@ func (op *NounPropertyValue) matchOf(q Query, input *InputState) (okay bool) {
 }
 
 func (op *NounPropertyValue) Generate(rar Registrar) (err error) {
-	if b, e := op.NamedNoun.BuildNoun(nil, nil); e != nil {
-		err = e
-	} else {
-		err = genNoun(rar, b, func(n string) error {
-			return rar.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
-		})
-	}
-	return
+	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
+		if ns, e := op.NamedNoun.BuildNouns(q, rar, nil, nil); e != nil {
+			err = e
+		} else {
+			err = genNoun(rar, ns, func(n string) error {
+				return rar.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
+			})
+		}
+		return
+	})
 }

@@ -40,7 +40,7 @@ func (op *AspectsAreTraits) Generate(rar Registrar) (err error) {
 		err = e
 	} else {
 		var names []string
-		for it := op.PlainNames.Iterate(); it.HasNext(); {
+		for it := op.PlainNames.GetNames(); it.HasNext(); {
 			n := it.GetNext()
 			names = append(names, n.Name.GetNormalizedName())
 		}

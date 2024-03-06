@@ -9,14 +9,32 @@ func (op *Name) GetNormalizedName() string {
 	return inflect.Normalize(op.Matched.String())
 }
 
-func (op *Name) BuildNoun(traits, kinds []string) (ret DesiredNoun, err error) {
-	a, flags := getOptionalArticle(op.Article)
-	ret = DesiredNoun{
-		Article:     a,
-		Flags:       flags,
-		DesiredName: op.Matched.String(), // cut from the input
-		Traits:      traits,
-		Kinds:       kinds,
+func (op *Name) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+	if n, e := op.buildNoun(q, rar, Things, ts, ks); e != nil {
+		err = e
+	} else {
+		ret = []DesiredNoun{n}
+	}
+	return
+}
+
+func (op *Name) buildNoun(q Query, rar Registrar, defaultKind string, ts, ks []string) (ret DesiredNoun, err error) {
+	if noun, c, e := ensureNoun(q, rar, op.Matched.(match.Span)); e != nil {
+		err = e
+	} else if e := registerKinds(rar, noun, ks); e != nil {
+		err = e
+	} else {
+		n := DesiredNoun{Noun: noun, Traits: ts}
+		if c {
+			n.addArticle(op.Article)
+			rar.PostProcess(GenerateFallbacks, func(q Query) (err error) {
+				// eats the error; if got an incompatible kind,
+				// that's cool: this is just a fallback.
+				_ = rar.AddNounKind(noun, defaultKind)
+				return
+			})
+		}
+		ret = n
 	}
 	return
 }
