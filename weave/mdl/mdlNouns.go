@@ -29,14 +29,17 @@ func (pen *Pen) GetRelativeNouns(noun, relation string, primary bool) (ret []str
 	if rows, e := pen.db.Query(`
 	select one.noun as oneName, other.noun as otherName
 from mdl_pair mp
+join domain_tree dt
+	on (dt.uses = mp.domain)
 join mdl_kind mk
   on (mk.rowid = mp.relKind)
 join mdl_noun one
   on (one.rowid = mp.oneNoun)
 join mdl_noun other
   on (other.rowid = mp.otherNoun)
-where (relKind = ?1)
-and ((?3 and oneName = ?2) or (not ?3 and otherName=?2))`,
+where base = ?1
+and relKind = ?2
+and ((?4 and oneName = ?3) or (not ?4 and otherName=?3))`,
 		pen.domain, relation, noun, primary); e != nil {
 		err = e
 	} else {

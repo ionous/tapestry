@@ -69,7 +69,7 @@ func (op *MapConnections) Generate(rar Registrar) (err error) {
 						if e := door.generateValues(rar); e != nil {
 							err = e
 						} else {
-							err = rar.AddNounValue(door.Noun, DoorDestination, text(room, Rooms))
+							err = setDestination(rar, door.Noun, room)
 						}
 						return
 					}); e != nil {
@@ -117,7 +117,7 @@ func (op *Direction) Match(q Query, input *InputState) (okay bool) {
 	// 1. look at the fields of the compass
 	// 2. look at the noun instances of kind directions
 	if m, width := q.FindNoun(input.Words(), Directions); width > 0 {
-		op.Text = m
+		op.Text = m // holds the normalized name
 		*input, okay = input.Skip(width), true
 	}
 	return

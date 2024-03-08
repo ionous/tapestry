@@ -2,6 +2,7 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -19,12 +20,16 @@ type Registrar interface {
 	AddNounKind(noun, kind string) error
 	AddNounName(noun, name string, rank int) error
 	AddNounTrait(noun, trait string) error
-	AddNounValue(noun, prop string, val rt.Assignment) error // tbd: or would g.Value be better at this point?
+	AddNounValue(noun, prop string, val rt.Assignment) error
+	AddNounPath(noun string, path []string, val literal.LiteralValue) error
+	AddNounPair(rel, noun, otherNoun string) error
 	AddTraits(aspect string, traits []string) error
+	AddFact(key string, partsAndValue ...string) error
 	//
 	GetPlural(string) string
 	GetSingular(string) string
 	GetUniqueName(category string) string
+	GetOpposite(string) (string, error)
 	// apply the passed macro to the passed nouns
 	Apply(verb Macro, lhs, rhs []string) error
 	// register a function for later processing
@@ -46,7 +51,7 @@ const (
 	GenerateNouns
 	GenerateDefaultKinds
 	GenerateValues // generates implied nouns
-	GenerateDefaultLocations
+	GenerateConnections
 	GenerateUnderstanding // awww. love and peas.
 	PriorityCount
 )

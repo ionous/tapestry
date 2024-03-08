@@ -1,11 +1,13 @@
 package jesstest
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -19,7 +21,6 @@ type Mock struct {
 	unique   map[string]int
 	posted   [jess.PriorityCount][]jess.Process
 	nounPool map[string]string
-	phase    jess.Priority
 }
 
 func MakeMock(q jess.Query, nounPool map[string]string) Mock {
@@ -42,28 +43,9 @@ func (m *Mock) PostProcess(i jess.Priority, p jess.Process) (_ error) {
 	return
 }
 
-// upgrade anything that hasn't been assigned an explicit kind to become a "thing"
-// func (m *Mock) makeEverythingSomething() (err error) {
-// 	var names []string
-// 	for n, k := range m.nounPool {
-// 		if len(k) == 0 {
-// 			names = append(names, n[1:])
-// 		}
-// 	}
-// 	sort.Strings(names)
-// 	for _, n := range names {
-// 		if e := m.AddNounKind(n, "things"); e != nil {
-// 			err = e
-// 			break
-// 		}
-// 	}
-// 	return
-// }
-
 func (m *Mock) runPost(q jess.Query) (err error) {
 Loop:
 	for i := jess.Priority(0); i < jess.PriorityCount; i++ {
-		m.phase = i
 		// fix: can we really add new processes during post?
 		// and if so, shouldnt mock panic on misorders?
 		for len(m.posted[i]) > 0 {
@@ -76,12 +58,6 @@ Loop:
 				m.posted[i] = rest
 			}
 		}
-		// if p := jess.GenerateNouns; i == p {
-		// 	if e := m.makeEverythingSomething(); e != nil {
-		// 		err = e
-		// 		break
-		// 	}
-		// }
 	}
 	return
 }
@@ -91,15 +67,17 @@ func (m *Mock) AddNounKind(noun, kind string) (err error) {
 	// we absorb it for cleaner tests;
 	if len(kind) > 0 {
 		if prev, ok := m.nounPool["$"+noun]; ok {
-			err = fmt.Errorf("%w %s already declared as %s", mdl.Duplicate, noun, prev)
+			// these hacks for testing sure are getting painful
+			if prev == kind {
+				err = fmt.Errorf("%w %s already declared as %s", mdl.Duplicate, noun, prev)
+			} else {
+				err = fmt.Errorf("%w %s already declared as %s", mdl.Conflict, noun, prev)
+			}
 		} else {
 			m.out = append(m.out, "AddNounKind", noun, kind)
 			m.nounPool["$"+noun] = kind
 		}
 	}
-	// else if m.phase > jess.GenerateNouns {
-	// 	err = errors.New("this will never make a noun")
-	// }
 	return
 }
 
@@ -170,6 +148,19 @@ func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 	}
 	return
 }
+func (m *Mock) AddNounPair(rel, many, one string) (_ error) {
+	m.out = append(m.out, "AddNounPair", rel, many, one)
+	return
+}
+func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) (err error) {
+	path := strings.Join(parts, ".")
+	if str, e := Marshal(v); e != nil {
+		err = e
+	} else {
+		m.out = append(m.out, "AddNounValue", name, path, str)
+	}
+	return
+}
 func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
 	if aspect != "color" && !strings.HasSuffix(aspect, " status") { // aspects are singular :/
 		err = fmt.Errorf("unknown aspect %q", aspect)
@@ -177,6 +168,11 @@ func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
 		m.out = append(m.out, "AddTraits", aspect)
 		m.out = append(m.out, traits...)
 	}
+	return
+}
+func (m *Mock) AddFact(key string, partsAndValue ...string) (_ error) {
+	m.out = append(m.out, "AddFact", key)
+	m.out = append(m.out, partsAndValue...)
 	return
 }
 func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
@@ -198,4 +194,20 @@ func (m *Mock) GetUniqueName(category string) string {
 	next := m.unique[category] + 1
 	m.unique[category] = next
 	return fmt.Sprintf("%s-%d", category, next)
+}
+
+func (m *Mock) GetOpposite(word string) (ret string, err error) {
+	switch word {
+	case "north":
+		ret = "south"
+	case "south":
+		ret = "north"
+	case "east":
+		ret = "west"
+	case "west":
+		ret = "east"
+	default:
+		err = errors.New("what the?")
+	}
+	return
 }

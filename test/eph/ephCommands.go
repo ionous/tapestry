@@ -243,7 +243,7 @@ func (op *Values) Assert(cat *weave.Catalog) error {
 			err = pen.AddNounValue(n, field, assign.Literal(op.Value))
 		} else {
 			path := append(path, field)
-			err = pen.AddNounPath(n, mdl.MakePath(path...), op.Value)
+			err = pen.AddNounPath(n, path, op.Value)
 		}
 		return
 	})

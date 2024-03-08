@@ -169,9 +169,9 @@ func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor string, mapDir string)
 				}
 			}
 			if err == nil {
-				if e := pen.AddNounPath(room, mdl.MakePath("compass", dir), Tx(exitDoor, "door")); e != nil {
+				if e := pen.AddNounPath(room, []string{"compass", dir}, Tx(exitDoor, "door")); e != nil {
 					err = errutil.Fmt("%w going %s in %q via %q", e, dir, room, exitDoor) // ^ set the room's compass to the exit
-				} else if e := pen.AddNounPath(exitDoor, "destination", Tx(otherRoom, "rooms")); e != nil {
+				} else if e := pen.AddNounPath(exitDoor, []string{"destination"}, Tx(otherRoom, "rooms")); e != nil {
 					err = errutil.Fmt("%w arriving at %q via %q", e, otherRoom, exitDoor) // ^ set the room's compass to the exit
 				}
 			}

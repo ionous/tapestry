@@ -21,7 +21,6 @@ when A is a door, then, for every rhs element (B):
   2. set the compass of B to A ( `B.compass[direction] = A`. )
     ( a room's compass points to a door; there is no destination for the door )
 
-
 ## LHS Rooms
 
 when A is a room, then, for every rhs element (B):
@@ -36,21 +35,7 @@ if B were a door (ex. in some other room O), we'd want something like:
 
 we can also manufacture a private door in A that leads into O in the reverse direction; guarding against the case where A already has a door on the reverse side.
 
-**TODO**: to find room O, jess needs to be able to ask about B's whereabouts... after the explicit phrases have been played out. ( GenerateDefaultLocations )
-
-something like: query for the mdl_kind with the named kind (whereabouts), search mdl_pair with that kind, join mdl_noun twice to get the names, return as a list.
-
-```
-select one.noun as oneName, other.noun as otherName
-from mdl_pair mp
-join mdl_kind mk
-  on (mk.rowid = mp.relKind)
-join mdl_noun one
-  on (one.rowid = mp.oneNoun)
-join mdl_noun other
-  on (other.rowid = mp.otherNoun)
-where (relKind = ?1) -> whereabouts
-```
+to find room O, jess needs to be able to ask about B's whereabouts... after the explicit phrases have been played out. ( GenerateDefaultLocations )
 
 tbd: if this has to be limited to the domain... im think sub-domains write pairs as eval'd changes (rather than initial relations), which means the query wouldn't see them. overall this should probably be limited to the originating domain for simplicity anyway. ( the code would also miss changes to door destinations, etc. in child domains. )
 
@@ -84,7 +69,7 @@ connecting:
 a "connect" function which takes a room, door, desiredDirection, otherRoom.
  adds/checks for conflicting facts;
     probably returns okay if connected , to let caller fail in this case ]
-    AddFact("dir" <-- the literal string, room, desiredDirection, otherRoom)
+    AddFact("dir", room, desiredDirection, otherRoom)
 
 `room.compass[direction]= door`
 

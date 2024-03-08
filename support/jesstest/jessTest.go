@@ -27,11 +27,31 @@ var Phrases = []Phrase{
 	{
 		// unless otherwise specified, both lhs and rhs default to rooms.
 		test: `The passageway is south of the kitchen.`,
-		// result: []string{
-		// "AddNounName", "long slide", "long slide",
-		// "AddNounKind", "long slide", "doors",
-		// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
-		// },
+		result: []string{
+			"AddNounName", "passageway", "passageway",
+			"AddNounName", "kitchen", "kitchen",
+			// default to rooms:
+			"AddNounKind", "passageway", "rooms",
+			"AddNounKind", "kitchen", "rooms",
+			// room to room conflict detection.
+			"AddFact", "dir", "kitchen", "south", "passageway",
+			// private door leading south to the passageway
+			"AddNounValue", "kitchen", "compass.south", textKind("kitchen-south-door", "doors"),
+			"AddNounKind", "kitchen-south-door", "doors",
+			"AddNounName", "kitchen-south-door", "kitchen-south-door",
+			"AddNounTrait", "kitchen-south-door", "scenery",
+			"AddNounTrait", "kitchen-south-door", "privately named",
+			"AddNounValue", "kitchen-south-door", "destination", textKind("passageway", "rooms"),
+			// room to room conflict detection.
+			"AddFact", "dir", "passageway", "north", "kitchen",
+			// private door leading north to the kitchen
+			"AddNounValue", "passageway", "compass.north", textKind("passageway-north-door", "doors"),
+			"AddNounKind", "passageway-north-door", "doors",
+			"AddNounName", "passageway-north-door", "passageway-north-door",
+			"AddNounTrait", "passageway-north-door", "scenery",
+			"AddNounTrait", "passageway-north-door", "privately named",
+			"AddNounValue", "kitchen-south-door", "destination", textKind("kitchen", "rooms"),
+		},
 	},
 	{
 		// doors and nowhere can be used on the lhs;

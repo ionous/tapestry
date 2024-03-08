@@ -46,6 +46,9 @@ func (ja jessAdapter) AddNounTrait(noun, trait string) error {
 func (ja jessAdapter) AddNounValue(noun, prop string, val rt.Assignment) error {
 	return ja.w.AddNounValue(ja.Pen, noun, prop, val)
 }
+func (ja jessAdapter) AddNounPath(noun string, path []string, val literal.LiteralValue) error {
+	return ja.w.AddNounPath(ja.Pen, noun, path, val)
+}
 func (ja jessAdapter) GetClosestNoun(name string) (string, error) {
 	return ja.w.GetClosestNoun(name)
 }
