@@ -17,6 +17,62 @@ import (
 )
 
 var Phrases = []Phrase{
+
+	// ------------------------------------------------------------------------
+	// MapLocations
+	// starts with a single room or door, and maps to rooms or doors.
+	// note: in inform, doors can live in multiple places;
+	// in tapestry, they cannot.
+	// ------------------------------------------------------------------------
+	{
+		// unless otherwise specified, both lhs and rhs default to rooms.
+		test: `The passageway is south of the kitchen.`,
+		// result: []string{
+		// "AddNounName", "long slide", "long slide",
+		// "AddNounKind", "long slide", "doors",
+		// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		// },
+	},
+	{
+		// doors and nowhere can be used on the lhs;
+		// but doors cant be mapped to multiple places.
+		// ( ie, ng: The door is south of one place and north of another place. )
+		// fix: testing that would require mock support some sort of fake relations.
+		test: `The passageway is south of the kitchen. The passageway is a door.`,
+		// result: []string{
+		// "AddNounName", "long slide", "long slide",
+		// "AddNounKind", "long slide", "doors",
+		// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		// },
+	},
+	{
+		test: `The mystery spot is west of the waterfall and south of the sea.`,
+		// result: []string{
+		// "AddNounName", "long slide", "long slide",
+		// "AddNounKind", "long slide", "doors",
+		// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		// },
+	},
+
+	// ------------------------------------------------------------------------
+	// MapDirections
+	// ------------------------------------------------------------------------
+	{
+		test: `Inside from the Meadow is the woodcutter's hut.`,
+		// result: []string{
+		// 	"AddNounName", "long slide", "long slide",
+		// 	"AddNounKind", "long slide", "doors",
+		// 	"AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		// },
+	},
+	{
+		test: `West of the Garden] is south of the Meadow.`,
+		// result: []string{
+		// 	"AddNounName", "long slide", "long slide",
+		// 	"AddNounKind", "long slide", "doors",
+		// 	"AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		// },
+	},
 	// ------------------------------------------------------------------------
 	// MapConnection
 	// ------------------------------------------------------------------------

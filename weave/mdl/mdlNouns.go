@@ -25,6 +25,26 @@ func (n *nounInfo) class() classInfo {
 	}
 }
 
+func (pen *Pen) GetRelativeNouns(noun, relation string, primary bool) (ret []string, err error) {
+	if rows, e := pen.db.Query(`
+	select one.noun as oneName, other.noun as otherName
+from mdl_pair mp
+join mdl_kind mk
+  on (mk.rowid = mp.relKind)
+join mdl_noun one
+  on (one.rowid = mp.oneNoun)
+join mdl_noun other
+  on (other.rowid = mp.otherNoun)
+where (relKind = ?1)
+and ((?3 and oneName = ?2) or (not ?3 and otherName=?2))`,
+		pen.domain, relation, noun, primary); e != nil {
+		err = e
+	} else {
+		ret, err = tables.ScanStrings(rows)
+	}
+	return
+}
+
 // find the noun with the closest name in this scope;
 // assumes the name is lower cased, with spaces normalized.
 // skips aliases for the sake of backwards compatibility:

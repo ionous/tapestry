@@ -42,11 +42,11 @@ const (
 	GenerateKinds Priority = iota
 	// turn specified nouns into desired nouns
 	// waits until after GenerateKinds so that all specified kind names are known
-	// however: `The sapling is a tree. A tree is a kind of thing.` doesnt work in inform.
+	// ex. `The sapling is a tree. A tree is a kind of thing.` ( though that doesnt work in inform. )
 	GenerateNouns
-	GenerateFallbacks
+	GenerateDefaultKinds
 	GenerateValues // generates implied nouns
-	// GeneratePairs?
+	GenerateDefaultLocations
 	GenerateUnderstanding // awww. love and peas.
 	PriorityCount
 )

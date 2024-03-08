@@ -27,7 +27,7 @@ func (op *Name) buildNoun(q Query, rar Registrar, defaultKind string, ts, ks []s
 		n := DesiredNoun{Noun: noun, Traits: ts}
 		if c {
 			n.addArticle(op.Article)
-			rar.PostProcess(GenerateFallbacks, func(q Query) (err error) {
+			rar.PostProcess(GenerateDefaultKinds, func(q Query) (err error) {
 				// eats the error; if got an incompatible kind,
 				// that's cool: this is just a fallback.
 				_ = rar.AddNounKind(noun, defaultKind)

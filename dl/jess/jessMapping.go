@@ -7,27 +7,6 @@ import (
 )
 
 // ----
-func (op *MapLocations) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.Linking.Match(q, &next) &&
-		op.Are.Match(q, &next) &&
-		op.DirectionOfLinking.Match(q, &next) {
-		Optional(q, &next, &op.AdditionalDirections)
-		*input, okay = next, true
-	}
-	return
-}
-
-// return an iterator that is capable of walking over the left hand side of the mapping.
-func (op *MapLocations) GetLhs() DirectIt {
-	return IterateDirections(&op.DirectionOfLinking, op.AdditionalDirections)
-}
-
-func (op *MapLocations) Generate(Registrar) (err error) {
-	panic("yyy")
-}
-
-// ----
 func (op *MapDirections) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.DirectionOfLinking.Match(q, &next) &&
@@ -69,7 +48,7 @@ func (op *MapConnections) matchThrough(input *InputState) (okay bool) {
 // 3. set the destination of those doors to the rhs room.
 func (op *MapConnections) Generate(rar Registrar) (err error) {
 	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
-		if room, e := op.Room.BuildNoun(q, rar, nil, []string{Rooms}); e != nil {
+		if room, e := op.Room.GenerateNoun(q, rar, nil, []string{Rooms}); e != nil {
 			err = e
 		} else {
 			for it := op.GetDoors(); it.HasNext(); {
@@ -78,15 +57,21 @@ func (op *MapConnections) Generate(rar Registrar) (err error) {
 				// what about passing a "noun properties" instead
 				// then the shared function could apply at the right time
 				// rather than callers managing the timing.
-				if doors, e := link.BuildNouns(q, rar, nil, []string{Doors}); e != nil {
+				if door, e := link.BuildNoun(q, rar, nil, []string{Doors}); e != nil {
 					err = e
 					break
-				} else if len(doors) == 0 {
+				} else if door == nil {
+					// fix; we can go nowhere.
 					err = errors.New("expected at least one door")
 					break
 				} else {
-					if e := genNoun(rar, doors, func(n string) error {
-						return rar.AddNounValue(n, DoorDestination, text(room, Rooms))
+					if e := rar.PostProcess(GenerateValues, func(Query) (err error) {
+						if e := door.generateValues(rar); e != nil {
+							err = e
+						} else {
+							err = rar.AddNounValue(door.Noun, DoorDestination, text(room, Rooms))
+						}
+						return
 					}); e != nil {
 						err = e
 						break
@@ -111,6 +96,10 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 		*input, okay = next, true
 	}
 	return
+}
+
+func (op *DirectionOfLinking) BuildNoun(q Query, rar Registrar, ts, ks []string) (*DesiredNoun, error) {
+	return op.Linking.BuildNoun(q, rar, ts, ks)
 }
 
 func (op *DirectionOfLinking) matchFromOf(input *InputState) (okay bool) {
@@ -154,22 +143,25 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 	return
 }
 
-// generate a room or door; an object if there's not enough information to know;
-// or nothing for nowhere.
-func (op *Linking) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+// generate a room or door; an object if there's not enough information to know; or nil for nowhere.
+func (op *Linking) BuildNoun(q Query, rar Registrar, ts, ks []string) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
-		ret, err = buildNounsFrom(q, rar, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name))
+		if els, e := buildNounsFrom(q, rar, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
+			err = e
+		} else {
+			a := els[0]
+			ret = &a
+		}
 	}
 	return
 }
 
 // helper since we know there's linking doesnt support counted nouns, but does support nowhere;
 // BuildNouns will always return a list of one or none.
-func (op *Linking) BuildNoun(q Query, rar Registrar, ts, ks []string) (ret string, err error) {
-	if els, e := op.BuildNouns(q, rar, ts, ks); e != nil {
+func (op *Linking) GenerateNoun(q Query, rar Registrar, ts, ks []string) (ret string, err error) {
+	if n, e := op.BuildNoun(q, rar, ts, ks); e != nil {
 		err = e
-	} else if len(els) > 0 {
-		n := els[0]
+	} else if n != nil {
 		if e := rar.PostProcess(GenerateValues, func(Query) error {
 			return n.generateValues(rar)
 		}); e != nil {
