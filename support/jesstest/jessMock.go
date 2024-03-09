@@ -142,13 +142,16 @@ func (m *Mock) AddNounTrait(name, trait string) (_ error) {
 	return
 }
 func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
-	var el any
+	// prettify the output slightly
+	var el any = v
 	if t, ok := v.(*assign.FromText); ok {
-		el = t.Value
+		if _, ok := t.Value.(*literal.TextValue); ok {
+			el = t.Value
+		}
 	} else if n, ok := v.(*assign.FromNumber); ok {
-		el = n.Value
-	} else {
-		el = "unknown assignment"
+		if _, ok := n.Value.(literal.LiteralValue); ok {
+			el = n.Value
+		}
 	}
 	if str, e := Marshal(el); e != nil {
 		err = e
@@ -168,7 +171,7 @@ func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) 
 	return
 }
 func (m *Mock) AddNounPair(rel, many, one string) (_ error) {
-	m.out = append(m.out, "AddNounPair", rel, many, one)
+	m.out = append(m.out, "AddNounPair", many, rel, one)
 	return
 }
 func (m *Mock) AddTraits(aspect string, traits []string) (err error) {

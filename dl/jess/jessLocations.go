@@ -116,11 +116,17 @@ func (a *postConnect) genRoom(rar Registrar, ps []postConnect) (err error) {
 	return
 }
 
+// ex. door A is direction from room B.
+// aka: direction from B is door A.
 func (a *postConnect) connectDoorToRoom(rar Registrar, b postConnect) (err error) {
-	// put the door (a) into room (b)
-	// set the compass of (b) to (a)
-	// - `B.compass[direction] = A`
-	panic("not implemented")
+	room, door := b.Noun, a.Noun
+	if e := addDoor(rar, room, door); e != nil {
+		err = e
+	} else {
+		// ? setDirection(rar, b.Noun, b.direction, a.Noun) ?
+		err = setCompass(rar, room, b.direction, door)
+	}
+	return
 }
 
 // room A is direction through door B.
@@ -153,11 +159,6 @@ func (a *postConnect) connectRoomToRoom(rar Registrar, b postConnect) (err error
 	return
 }
 
-// assumes a is "room like"
-func (a *postConnect) addDoor(rar Registrar, door string) error {
-	return rar.AddNounPair(Whereabouts, a.Noun, door)
-}
-
 // generate a door on the given side of the room
 // can return the empty string if there was already a door on that side of the room.
 func createPrivateDoor(rar Registrar, room, direction, otherRoom string) (ret string, err error) {
@@ -181,6 +182,8 @@ func createPrivateDoor(rar Registrar, room, direction, otherRoom string) (ret st
 			} else if e := rar.AddNounTrait(door, Private); e != nil {
 				err = e
 			} else if e := setDestination(rar, door, otherRoom); e != nil {
+				err = e
+			} else if e := addDoor(rar, room, door); e != nil {
 				err = e
 			} else {
 				ret = door
@@ -210,6 +213,12 @@ func translateError(e error) (ret int, err error) {
 	return
 }
 
+// assumes a is "room like"
+func addDoor(rar Registrar, room, door string) error {
+	return rar.AddNounPair(Whereabouts, room, door)
+}
+
+// FIX: do we need this!?
 // create a fact which indicates the direction of movement from room to room
 // these facts help with tracking and conflict detection
 func setDirection(rar Registrar, room, direction, otherRoom string) (int, error) {
@@ -227,10 +236,7 @@ func setCompass(rar Registrar, room, direction, door string) error {
 
 // set the destination of the named door
 func setDestination(rar Registrar, door, otherRoom string) (err error) {
-	if len(otherRoom) > 0 { // fix: should try to set ... something ( but what? ) to ensure nowhere.
-		err = rar.AddNounValue(door, DoorDestination, text(otherRoom, Rooms))
-	}
-	return
+	return rar.AddNounValue(door, DoorDestination, text(otherRoom, Rooms))
 }
 
 // -

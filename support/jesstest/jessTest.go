@@ -42,6 +42,7 @@ var Phrases = []Phrase{
 			"AddNounTrait", "kitchen-south-door", "scenery",
 			"AddNounTrait", "kitchen-south-door", "privately named",
 			"AddNounValue", "kitchen-south-door", "destination", textKind("passageway", "rooms"),
+			"AddNounPair", "kitchen", "whereabouts", "kitchen-south-door",
 			// room to room conflict detection.
 			"AddFact", "dir", "passageway", "north", "kitchen",
 			// private door leading north to the kitchen
@@ -51,18 +52,22 @@ var Phrases = []Phrase{
 			"AddNounTrait", "passageway-north-door", "scenery",
 			"AddNounTrait", "passageway-north-door", "privately named",
 			"AddNounValue", "passageway-north-door", "destination", textKind("kitchen", "rooms"),
+			"AddNounPair", "passageway", "whereabouts", "passageway-north-door",
 		},
 	},
 	{
 		// doors and nowhere can be used on the lhs;
 		// but doors cant be mapped to multiple places.
 		// ( ie, ng: The door is south of one place and north of another place. )
-		// fix: testing that would require mock support some sort of fake relations.
-		test:   `The passageway is south of the kitchen. The passageway is a door.`,
+		// fix: proper testing that would require mock support some sort of fake relations.
+		test: `The passageway is south of the kitchen. The passageway is a door.`,
 		result: []string{
-			// "AddNounName", "long slide", "long slide",
-			// "AddNounKind", "long slide", "doors",
-			// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
+			"AddNounName", "passageway", "passageway",
+			"AddNounName", "kitchen", "kitchen",
+			"AddNounKind", "passageway", "doors",
+			"AddNounKind", "kitchen", "rooms",
+			"AddNounPair", "kitchen", "whereabouts", "passageway",
+			"AddNounValue", "kitchen", "compass.south", textKind("passageway", "doors"),
 		},
 	},
 	{
