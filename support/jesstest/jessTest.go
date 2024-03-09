@@ -50,7 +50,7 @@ var Phrases = []Phrase{
 			"AddNounName", "passageway-north-door", "passageway-north-door",
 			"AddNounTrait", "passageway-north-door", "scenery",
 			"AddNounTrait", "passageway-north-door", "privately named",
-			"AddNounValue", "kitchen-south-door", "destination", textKind("kitchen", "rooms"),
+			"AddNounValue", "passageway-north-door", "destination", textKind("kitchen", "rooms"),
 		},
 	},
 	{
@@ -58,12 +58,12 @@ var Phrases = []Phrase{
 		// but doors cant be mapped to multiple places.
 		// ( ie, ng: The door is south of one place and north of another place. )
 		// fix: testing that would require mock support some sort of fake relations.
-		test: `The passageway is south of the kitchen. The passageway is a door.`,
-		// result: []string{
-		// "AddNounName", "long slide", "long slide",
-		// "AddNounKind", "long slide", "doors",
-		// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
-		// },
+		test:   `The passageway is south of the kitchen. The passageway is a door.`,
+		result: []string{
+			// "AddNounName", "long slide", "long slide",
+			// "AddNounKind", "long slide", "doors",
+			// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		},
 	},
 	{
 		test: `The mystery spot is west of the waterfall and south of the sea.`,
@@ -764,13 +764,13 @@ func Marshal(a any) (ret string, err error) {
 }
 
 func text(str string) string {
-	return fmt.Sprintf(`{"FromText:":{"Text value:":%q}}`, str)
+	return fmt.Sprintf(`{"Text value:":%q}`, str)
 }
 
 func textKind(str, kind string) string {
-	return fmt.Sprintf(`{"FromText:":{"Text value:kind:":[%q,%q]}}`, str, kind)
+	return fmt.Sprintf(`{"Text value:kind:":[%q,%q]}`, str, kind)
 }
 
 func number(num float64) string {
-	return fmt.Sprintf(`{"FromNumber:":{"Num value:":%g}}`, num)
+	return fmt.Sprintf(`{"Num value:":%g}`, num)
 }

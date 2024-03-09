@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -141,17 +142,22 @@ func (m *Mock) AddNounTrait(name, trait string) (_ error) {
 	return
 }
 func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
-	if str, e := Marshal(v); e != nil {
+	var el any
+	if t, ok := v.(*assign.FromText); ok {
+		el = t.Value
+	} else if n, ok := v.(*assign.FromNumber); ok {
+		el = n.Value
+	} else {
+		el = "unknown assignment"
+	}
+	if str, e := Marshal(el); e != nil {
 		err = e
 	} else {
 		m.out = append(m.out, "AddNounValue", name, prop, str)
 	}
 	return
 }
-func (m *Mock) AddNounPair(rel, many, one string) (_ error) {
-	m.out = append(m.out, "AddNounPair", rel, many, one)
-	return
-}
+
 func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) (err error) {
 	path := strings.Join(parts, ".")
 	if str, e := Marshal(v); e != nil {
@@ -159,6 +165,10 @@ func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) 
 	} else {
 		m.out = append(m.out, "AddNounValue", name, path, str)
 	}
+	return
+}
+func (m *Mock) AddNounPair(rel, many, one string) (_ error) {
+	m.out = append(m.out, "AddNounPair", rel, many, one)
 	return
 }
 func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
