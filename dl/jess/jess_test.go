@@ -27,10 +27,11 @@ func TestPhrases(t *testing.T) {
 		} else {
 			// reset the dynamic noun pool every test
 			known.dynamicNouns = make(map[string]string)
+			known.nounPairs = make(map[string]string)
 			// request on logging
 			q := jess.AddContext(&known, jess.LogMatches)
 			// create the test helper
-			m := jesstest.MakeMock(q, known.dynamicNouns)
+			m := jesstest.MakeMock(q, known.dynamicNouns, known.nounPairs)
 			// run the test:
 			if !p.Verify(m.Generate(str)) {
 				t.Logf("failed %d", i)
@@ -47,8 +48,8 @@ type info struct {
 	kinds []string
 	traits, fields,
 	nouns, directions match.SpanList
-	macros       jesstest.MacroList
-	dynamicNouns map[string]string
+	macros                  jesstest.MacroList
+	dynamicNouns, nounPairs map[string]string
 }
 
 func (n *info) GetContext() int {

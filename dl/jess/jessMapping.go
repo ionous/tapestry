@@ -69,7 +69,7 @@ func (op *MapConnections) Generate(rar Registrar) (err error) {
 						if e := door.generateValues(rar); e != nil {
 							err = e
 						} else {
-							err = setDestination(rar, door.Noun, room)
+							err = rar.AddNounValue(door.Noun, DoorDestination, text(room, Rooms))
 						}
 						return
 					}); e != nil {

@@ -1,7 +1,6 @@
 package jesstest
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -17,15 +16,15 @@ import (
 // implements Registrar to watch incoming calls.
 // posted makes it more like a stub than a mock maybe? oh well.
 type Mock struct {
-	q        jess.Query
-	out      []string
-	unique   map[string]int
-	posted   [jess.PriorityCount][]jess.Process
-	nounPool map[string]string
+	q                  jess.Query
+	out                []string
+	unique             map[string]int
+	posted             [jess.PriorityCount][]jess.Process
+	nounPool, nounPair map[string]string
 }
 
-func MakeMock(q jess.Query, nounPool map[string]string) Mock {
-	return Mock{q: q, nounPool: nounPool}
+func MakeMock(q jess.Query, nounPool, nounPair map[string]string) Mock {
+	return Mock{q: q, nounPool: nounPool, nounPair: nounPair}
 }
 
 func (m *Mock) Generate(paragraph string) (ret []string, err error) {
@@ -171,6 +170,9 @@ func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) 
 	return
 }
 func (m *Mock) AddNounPair(rel, many, one string) (_ error) {
+	if rel == "whereabouts" {
+		m.nounPair[one] = many
+	}
 	m.out = append(m.out, "AddNounPair", many, rel, one)
 	return
 }
@@ -209,6 +211,17 @@ func (m *Mock) GetUniqueName(category string) string {
 	return fmt.Sprintf("%s-%d", category, next)
 }
 
+func (m *Mock) GetRelativeNouns(noun, relation string, primary bool) (ret []string, err error) {
+	if relation != "whereabouts" || primary {
+		err = fmt.Errorf("unexpected relation %v(primary: %v)", relation, primary)
+	} else {
+		if a, ok := m.nounPair[noun]; ok {
+			ret = []string{a}
+		}
+	}
+	return
+}
+
 func (m *Mock) GetOpposite(word string) (ret string, err error) {
 	switch word {
 	case "north":
@@ -220,7 +233,7 @@ func (m *Mock) GetOpposite(word string) (ret string, err error) {
 	case "west":
 		ret = "east"
 	default:
-		err = errors.New("what the?")
+		err = fmt.Errorf("unexpected opposition %q", word)
 	}
 	return
 }

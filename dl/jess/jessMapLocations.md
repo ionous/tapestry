@@ -1,4 +1,4 @@
-A is SOUTH of B and NORTH of C
+R is SOUTH of P and NORTH of C
 --------------------
 the behavior here has enough complexity to merit some documentation:
 
@@ -7,44 +7,52 @@ the behavior here has enough complexity to merit some documentation:
 2. in GenerateDefaultKinds: try as a "room" -- if it succeeded or duped; its now a room; 
 otherwise, assume or ensure that its a door.
 
-3. in GenerateValues:  determine whether the lhs(A) is a room or a door.
+3. in GenerateValues:  determine whether the lhs(R) is a room or a door.
 
 ## LHS Doors
 
-when A is a door, then, for every rhs element (B):
+when R is a door, then, for every rhs element (P):
     
-* A door, B door: fail. 
+* R door, P door: fail. 
   * both can't be doors.
   
-* A door, B room:     
-  1. put the door A into room B;
-  2. set the compass of B to A ( `B.compass[direction] = A`. )
+* R door, P room:     
+  1. put the door R into room P;
+  2. set the compass of P to R ( `P.compass[direction] = R`. )
     ( a room's compass points to a door; there is no destination for the door )
 
 ## LHS Rooms
 
-when A is a room, then, for every rhs element (B):
+when R is a room, then, for every rhs element (P):
 
-### A room, B door:
-ie. room A is direction through door B. `O(B)->A`; and implying `A(p)->O`.
+### R room, P door:
+ex. room R is direction from door P.
+
+There are two different interpretations:
+1. the door is inside the room on its opposite side.
+2. the door is in some other room. in that room, moving in the specified direction leads to the door, and the door exits into room R.
+
+Inform only handles the first; but it seems either are valid here.
+
+`O(P)->R`; and implying `R(p)->O`.
     
-if B were a door (ex. in some other room O), we'd want something like:
-* `B.destination = A`
-* `O.compass[direction] = B`
-* `fact: 'dir -> <room>.dir -> B`
+if P were a door (ex. in some other room O), we'd want something like:
+* `P.destination = R`
+* `O.compass[direction] = P`
+* `fact: 'dir -> <room>.dir -> P`
 
-we can also manufacture a private door in A that leads into O in the reverse direction; guarding against the case where A already has a door on the reverse side.
+we can also manufacture a private door in R that leads into O in the reverse direction; guarding against the case where R already has a door on the reverse side.
 
-to find room O, jess needs to be able to ask about B's whereabouts... after the explicit phrases have been played out. ( GenerateDefaultLocations )
+to find room O, jess needs to be able to ask about P's whereabouts... after the explicit phrases have been played out. ( GenerateDefaultLocations )
 
 tbd: if this has to be limited to the domain... im think sub-domains write pairs as eval'd changes (rather than initial relations), which means the query wouldn't see them. overall this should probably be limited to the originating domain for simplicity anyway. ( the code would also miss changes to door destinations, etc. in child domains. )
 
-### A room, B room:
-room A is direction from room B.
+### R room, P room:
+room R is direction from room P.
 
-approximately: `B.compass[dir] = A;` and try: `A.compass[reverseDir] = B;`
+approximately: `P.compass[dir] = R;` and try: `R.compass[reverseDir] = P;`
 
-this can implicitly create two private doors ( guarding against the case where a room already has a door on that particular side; for B to A it's a contradiction if it does. for A to B, that's fine; then do nothing. )
+this can implicitly create two private doors ( guarding against the case where a room already has a door on that particular side; for P to R it's a contradiction if it does. for R to P, that's fine; then do nothing. )
 
 in both cases, also setting the fact of movement from room to room.
 

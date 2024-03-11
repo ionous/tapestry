@@ -26,10 +26,11 @@ type Registrar interface {
 	AddTraits(aspect string, traits []string) error
 	AddFact(key string, partsAndValue ...string) error
 	//
+	GetOpposite(string) (string, error)
 	GetPlural(string) string
+	GetRelativeNouns(noun, relation string, primary bool) ([]string, error)
 	GetSingular(string) string
 	GetUniqueName(category string) string
-	GetOpposite(string) (string, error)
 	// apply the passed macro to the passed nouns
 	Apply(verb Macro, lhs, rhs []string) error
 	// register a function for later processing

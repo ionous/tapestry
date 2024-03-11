@@ -56,10 +56,9 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// doors and nowhere can be used on the lhs;
-		// but doors cant be mapped to multiple places.
+		// doors (and nowhere) can be used on the lhs.
+		// but note: doors cant be mapped to multiple places.
 		// ( ie, ng: The door is south of one place and north of another place. )
-		// fix: proper testing that would require mock support some sort of fake relations.
 		test: `The passageway is south of the kitchen. The passageway is a door.`,
 		result: []string{
 			"AddNounName", "passageway", "passageway",
@@ -67,16 +66,79 @@ var Phrases = []Phrase{
 			"AddNounKind", "passageway", "doors",
 			"AddNounKind", "kitchen", "rooms",
 			"AddNounPair", "kitchen", "whereabouts", "passageway",
+			// the direction is what the direction says.
 			"AddNounValue", "kitchen", "compass.south", textKind("passageway", "doors"),
 		},
 	},
 	{
+		// reverse the order of declaration.
+		test: `The kitchen is south of the passageway. The passageway is a door.`,
+		result: []string{
+			"AddNounName", "kitchen", "kitchen",
+			"AddNounName", "passageway", "passageway",
+			"AddNounKind", "passageway", "doors",
+			"AddNounKind", "kitchen", "rooms",
+			"AddNounPair", "kitchen", "whereabouts", "passageway",
+			// if the room is south from the door; then the door is north from room.
+			"AddNounValue", "kitchen", "compass.north", textKind("passageway", "doors"),
+		},
+	},
+	{
+		// doors can't exist on both sides of this equation.
+		test:   `The gate is south of the passageway. The passageway is a door. The gate is a door.`,
+		result: errors.New("nope"),
+	},
+	{
+		// the phrase also works with multiple rooms.
 		test: `The mystery spot is west of the waterfall and south of the sea.`,
-		// result: []string{
-		// "AddNounName", "long slide", "long slide",
-		// "AddNounKind", "long slide", "doors",
-		// "AddNounValue", "long slide", "destination", textKind("", "rooms"),
-		// },
+		result: []string{
+			// the places mentiond:
+			"AddNounName", "mystery spot", "mystery spot",
+			"AddNounName", "waterfall", "waterfall",
+			"AddNounName", "sea", "sea",
+			// all default to rooms:
+			"AddNounKind", "mystery spot", "rooms",
+			"AddNounKind", "waterfall", "rooms",
+			"AddNounKind", "sea", "rooms",
+			// movement via a private door:
+			"AddFact", "dir", "waterfall", "west", "mystery spot",
+			// fix? the uniform dash join creates some small potential for conflict
+			// maybe leading the name with a dash would be good enough.
+			"AddNounValue", "waterfall", "compass.west", textKind("waterfall-west-door", "doors"),
+			"AddNounKind", "waterfall-west-door", "doors",
+			"AddNounName", "waterfall-west-door", "waterfall-west-door",
+			"AddNounTrait", "waterfall-west-door", "scenery",
+			"AddNounTrait", "waterfall-west-door", "privately named",
+			"AddNounValue", "waterfall-west-door", "destination", textKind("mystery spot", "rooms"),
+			"AddNounPair", "waterfall", "whereabouts", "waterfall-west-door",
+			// reverse direction via an implicit private door:
+			"AddFact", "dir", "mystery spot", "east", "waterfall",
+			"AddNounValue", "mystery spot", "compass.east", textKind("mystery-spot-east-door", "doors"),
+			"AddNounKind", "mystery-spot-east-door", "doors",
+			"AddNounName", "mystery-spot-east-door", "mystery-spot-east-door",
+			"AddNounTrait", "mystery-spot-east-door", "scenery",
+			"AddNounTrait", "mystery-spot-east-door", "privately named",
+			"AddNounValue", "mystery-spot-east-door", "destination", textKind("waterfall", "rooms"),
+			"AddNounPair", "mystery spot", "whereabouts", "mystery-spot-east-door",
+			// movement via a private door:
+			"AddFact", "dir", "sea", "south", "mystery spot",
+			"AddNounValue", "sea", "compass.south", textKind("sea-south-door", "doors"),
+			"AddNounKind", "sea-south-door", "doors",
+			"AddNounName", "sea-south-door", "sea-south-door",
+			"AddNounTrait", "sea-south-door", "scenery",
+			"AddNounTrait", "sea-south-door", "privately named",
+			"AddNounValue", "sea-south-door", "destination", textKind("mystery spot", "rooms"),
+			"AddNounPair", "sea", "whereabouts", "sea-south-door",
+			// reverse direction via an implicit private door:
+			"AddFact", "dir", "mystery spot", "north", "sea",
+			"AddNounValue", "mystery spot", "compass.north", textKind("mystery-spot-north-door", "doors"),
+			"AddNounKind", "mystery-spot-north-door", "doors",
+			"AddNounName", "mystery-spot-north-door", "mystery-spot-north-door",
+			"AddNounTrait", "mystery-spot-north-door", "scenery",
+			"AddNounTrait", "mystery-spot-north-door", "privately named",
+			"AddNounValue", "mystery-spot-north-door", "destination", textKind("sea", "rooms"),
+			"AddNounPair", "mystery spot", "whereabouts", "mystery-spot-north-door",
+		},
 	},
 
 	// ------------------------------------------------------------------------
@@ -228,7 +290,7 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// fix: currently succeeds with "thing called the cat"
+		// fix: currently succeeds with a noun called "thing called the cat"
 		// inform gets confused, but we could handle this okay
 		test: `The description of the thing called the cat is "meow."`,
 		// result: errors.New("can't use property noun value this way."),
