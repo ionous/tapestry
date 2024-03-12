@@ -54,7 +54,6 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 			log.Printf("matched %s %q\n", bestMatch.TypeInfo().TypeName(), match.Span(input.Words()).String())
 		}
 		ret, *input = bestMatch, best
-
 	}
 	return
 }

@@ -96,7 +96,7 @@ func connectDoorToRoom(rar Registrar, door, room jessLink, direction string) (er
 	if e := room.addDoor(rar, door.Noun); e != nil {
 		err = e
 	} else {
-		// ? setDirection ?
+		// doesn't set the room to room direction because we don't have a known destination for the door.
 		err = room.setCompass(rar, direction, door.Noun)
 	}
 	return
@@ -117,9 +117,8 @@ func connectRoomToDoor(rar Registrar, room, door jessLink, direction string) (er
 		// put the door in the room; traveling reverse gets us there.
 		err = connectDoorToRoom(rar, door, room, back)
 	} else {
-		panic("xxx")
-		otherRoom := makeRoom(parent) // FIX: this cant possibly be correct
-		if res, e := setDirection(rar, direction, door, room); e != nil {
+		otherRoom := makeRoom(parent)
+		if res, e := setDirection(rar, direction, otherRoom, room); e != nil {
 			err = e
 		} else if res == setDirectionConflict || res == setDirectionDupe {
 			err = errors.New("direction already set") // fix? might be to handle dupe in some cases

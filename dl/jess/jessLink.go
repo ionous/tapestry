@@ -54,7 +54,7 @@ func (room jessLink) addDoor(rar Registrar, door string) (err error) {
 	return
 }
 
-// FIX: do we need this!?
+// fix: i think this can be removed if the story direction setup is removed.
 // create room fact which indicates the direction of movement from room to room
 // these facts help with tracking and conflict detection
 func setDirection(rar Registrar, direction string, room, otherRoom jessLink) (ret int, err error) {

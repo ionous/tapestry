@@ -33,6 +33,7 @@ func TestPhrases(t *testing.T) {
 			// create the test helper
 			m := jesstest.MakeMock(q, known.dynamicNouns, known.nounPairs)
 			// run the test:
+			t.Logf("testing: %d %s", i, str)
 			if !p.Verify(m.Generate(str)) {
 				t.Logf("failed %d", i)
 				t.Fail()

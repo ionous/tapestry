@@ -169,11 +169,11 @@ func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) 
 	}
 	return
 }
-func (m *Mock) AddNounPair(rel, many, one string) (_ error) {
+func (m *Mock) AddNounPair(rel, lhs, rhs string) (_ error) {
 	if rel == "whereabouts" {
-		m.nounPair[one] = many
+		m.nounPair[rhs] = lhs
 	}
-	m.out = append(m.out, "AddNounPair", many, rel, one)
+	m.out = append(m.out, "AddNounPair", lhs, rel, rhs)
 	return
 }
 func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
@@ -194,6 +194,13 @@ func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
 	m.out = append(m.out, "ApplyMacro", verb.Name)
 	m.out = append(m.out, lhs...)
 	m.out = append(m.out, rhs...)
+	if verb.Name == "contain" {
+		for _, left := range lhs {
+			for _, right := range rhs {
+				m.nounPair[right] = left
+			}
+		}
+	}
 	return
 }
 func (m *Mock) GetPlural(word string) string {

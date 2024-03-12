@@ -17,7 +17,6 @@ import (
 )
 
 var Phrases = []Phrase{
-
 	// ------------------------------------------------------------------------
 	// MapDirections
 	// ------------------------------------------------------------------------
@@ -143,6 +142,42 @@ var Phrases = []Phrase{
 			"AddNounPair", "kitchen", "whereabouts", "passageway",
 			// if the room is south from the door; then the door is north from room.
 			"AddNounValue", "kitchen", "compass.north", textKind("passageway", "doors"),
+		},
+	},
+	{
+		// the door can located in another room.
+		test: `The kitchen is south of the passageway. The door called the passageway is in the room called the basement.`,
+		result: []string{
+			// the nouns and their types
+			"AddNounName", "kitchen", "kitchen",
+			"AddNounName", "passageway", "passageway",
+			"AddNounKind", "passageway", "doors",
+			"AddNounName", "basement", "basement",
+			"AddNounKind", "basement", "rooms",
+			"AddNounKind", "kitchen", "rooms", // kitchen defaults to room because its mentioned in a directional phrase
+			// fix? inform seems to *always* set indefinite article for "called the" ( re: passageway )
+			// but tapestry only does so when the noun is new.
+			// it's possible that inform elevates "called the" sub-phrases ahead of everything else.
+			"AddNounValue", "basement", "indefinite article", text("the"),
+			//  containment macro (which implies a relation -- recorded: but not output by mock)
+			"ApplyMacro", "contain", "basement", "passageway",
+			// movement via the existing door
+			// the kitchen is south of the passageway,
+			// and the passageway is in the basement,
+			// so moving south from the basement arrives in the kitchen.
+			"AddFact", "dir", "basement", "south", "kitchen",
+			"AddNounValue", "passageway", "destination", textKind("kitchen", "rooms"),
+			"AddNounValue", "basement", "compass.south", textKind("passageway", "doors"),
+			// implies reverse direction via a private door:
+			// ie. north from the kitchen is the basement.
+			"AddFact", "dir", "kitchen", "north", "basement",
+			"AddNounValue", "kitchen", "compass.north", textKind("kitchen-north-door", "doors"),
+			"AddNounKind", "kitchen-north-door", "doors",
+			"AddNounName", "kitchen-north-door", "kitchen-north-door",
+			"AddNounTrait", "kitchen-north-door", "scenery",
+			"AddNounTrait", "kitchen-north-door", "privately named",
+			"AddNounValue", "kitchen-north-door", "destination", textKind("basement", "rooms"),
+			"AddNounPair", "kitchen", "whereabouts", "kitchen-north-door",
 		},
 	},
 	{
@@ -323,8 +358,8 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// this should properly create a new noun "story teller"
-		// and not try to match the existing noun "story."
+		// create a new noun "story teller";
+		// shouldnt match the existing noun "story."
 		test: `The age of the story teller is 42.`,
 		result: []string{
 			"AddNounName", "story teller", "story teller",
