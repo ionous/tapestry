@@ -18,26 +18,25 @@ func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, oka
 	var bestMatch matcher
 	// fix? could change to reflect ( or expand type info ) to walk generically
 	for _, m := range []matcher{
-		// understand "..." as .....
-		&op.Understand,
-		// names are "a kind of"/"kinds of" [traits] kind:any.
-		&op.KindsOf,
-		// kind:objects are "usually" traits.
-		&op.KindsAreTraits,
-		// kinds:records|objects "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-		&op.KindsHaveProperties,
-		// kinds:objects ("can be"|"are either") new_trait [or new_trait...]
-		&op.KindsAreEither,
-		// kind:aspects are names
-		&op.AspectsAreTraits,
-		&op.VerbNamesAreNames,
-		&op.NamesVerbNames,
-		&op.NamesAreLikeVerbs,
-		&op.PropertyNounValue,
-		&op.NounPropertyValue,
-		&op.MapLocations,
-		&op.MapDirections,
-		&op.MapConnections,
+		//
+		&op.Understand, // understand "..." as .....
+		// kinds
+		&op.KindsOf,             // names {are} "a kind of"/"kinds of" [traits] kind.
+		&op.KindsAreTraits,      // objects {are} "usually" traits.
+		&op.KindsHaveProperties, // records|objects "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
+		&op.KindsAreEither,      // objects ("can be"|"are either") new_trait [or new_trait...]
+		&op.AspectsAreTraits,    // aspects {are} names
+		// before phrases that might think the directions are part of the names.
+		&op.MapConnections, // "through" door {is} place.
+		&op.MapDirections,  // direction "of/from" place {is} place.
+		&op.MapLocations,   // place {is} direction "of/from" places.
+		// noun phrases
+		&op.VerbNamesAreNames, // verb nouns {are} nouns
+		&op.NamesVerbNames,    // nouns {are} verbing nouns
+		&op.NamesAreLikeVerbs, // nouns {are} adjectives [verb nouns]
+		&op.PropertyNounValue, // property "of" noun is value
+		&op.NounPropertyValue, // noun "has" property value
+
 	} {
 		if next := *input; //
 		m.Match(q, &next) /* && len(next) == 0 */ {

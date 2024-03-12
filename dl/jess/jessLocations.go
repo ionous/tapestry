@@ -117,8 +117,9 @@ func connectRoomToDoor(rar Registrar, room, door jessLink, direction string) (er
 		// put the door in the room; traveling reverse gets us there.
 		err = connectDoorToRoom(rar, door, room, back)
 	} else {
-		otherRoom := makeRoom(parent)
-		if res, e := door.setDirection(rar, direction, room.Noun); e != nil {
+		panic("xxx")
+		otherRoom := makeRoom(parent) // FIX: this cant possibly be correct
+		if res, e := setDirection(rar, direction, door, room); e != nil {
 			err = e
 		} else if res == setDirectionConflict || res == setDirectionDupe {
 			err = errors.New("direction already set") // fix? might be to handle dupe in some cases
@@ -127,7 +128,7 @@ func connectRoomToDoor(rar Registrar, room, door jessLink, direction string) (er
 		} else if e := otherRoom.setCompass(rar, direction, door.Noun); e != nil {
 			err = e
 		} else {
-			_, err = createPrivateDoor(rar, room, otherRoom, back)
+			_, err = createPrivateDoor(rar, back, room, otherRoom)
 		}
 	}
 	return
@@ -137,7 +138,7 @@ func connectRoomToDoor(rar Registrar, room, door jessLink, direction string) (er
 // the primary goal is to ensure there's door in room P that leads to room R;
 // secondarily, try to put a door in room R leading to P.
 func connectRoomToRoom(rar Registrar, room, otherRoom jessLink, direction string) (err error) {
-	if door, e := createPrivateDoor(rar, otherRoom, room, direction); e != nil {
+	if door, e := createPrivateDoor(rar, direction, otherRoom, room); e != nil {
 		err = e
 	} else if len(door) == 0 {
 		err = errors.New("room already has a door")
@@ -145,7 +146,7 @@ func connectRoomToRoom(rar Registrar, room, otherRoom jessLink, direction string
 		err = e
 	} else {
 		// try to create the reverse door; dont worry if it creates nothing.
-		_, err = createPrivateDoor(rar, room, otherRoom, back)
+		_, err = createPrivateDoor(rar, back, room, otherRoom)
 	}
 	return
 }
@@ -154,10 +155,11 @@ func reverse(rar Registrar, direction string) (string, error) {
 	return rar.GetOpposite(direction)
 }
 
-// generate a door in this room, leading in this direction, to the other room.
+// generate a door in the first room so that going in the specified direction leads into the other room.
+// ex. SOUTH from Lhs is Rhs.
 // can return the empty string if there was already room door on that side of the room.
-func createPrivateDoor(rar Registrar, room, otherRoom jessLink, direction string) (ret string, err error) {
-	if res, e := room.setDirection(rar, direction, otherRoom.Noun); e != nil {
+func createPrivateDoor(rar Registrar, direction string, room, otherRoom jessLink) (ret string, err error) {
+	if res, e := setDirection(rar, direction, room, otherRoom); e != nil {
 		err = e
 	} else if res == setDirectionConflict || res == setDirectionDupe {
 		err = errors.New("direction already set") // fix? might be to handle dupe in some cases

@@ -54,11 +54,31 @@ var Phrases = []Phrase{
 	{
 		// redirection
 		test: `West of the Garden is south of the Meadow.`,
-		// result: []string{
-		// 	"AddNounName", "long slide", "long slide",
-		// 	"AddNounKind", "long slide", "doors",
-		// 	"AddNounValue", "long slide", "destination", textKind("", "rooms"),
-		// },
+		result: []string{
+			// nouns; defaulting to rooms:
+			"AddNounName", "garden", "Garden",
+			"AddNounName", "meadow", "Meadow",
+			"AddNounKind", "garden", "rooms",
+			"AddNounKind", "meadow", "rooms",
+			// movement via a private door:
+			"AddFact", "dir", "garden", "west", "meadow",
+			"AddNounValue", "garden", "compass.west", textKind("garden-west-door", "doors"),
+			"AddNounKind", "garden-west-door", "doors",
+			"AddNounName", "garden-west-door", "garden-west-door",
+			"AddNounTrait", "garden-west-door", "scenery",
+			"AddNounTrait", "garden-west-door", "privately named",
+			"AddNounValue", "garden-west-door", "destination", textKind("meadow", "rooms"),
+			"AddNounPair", "garden", "whereabouts", "garden-west-door",
+			// redirect via a another private door:
+			"AddFact", "dir", "meadow", "south", "garden",
+			"AddNounValue", "meadow", "compass.south", textKind("meadow-south-door", "doors"),
+			"AddNounKind", "meadow-south-door", "doors",
+			"AddNounName", "meadow-south-door", "meadow-south-door",
+			"AddNounTrait", "meadow-south-door", "scenery",
+			"AddNounTrait", "meadow-south-door", "privately named",
+			"AddNounValue", "meadow-south-door", "destination", textKind("garden", "rooms"),
+			"AddNounPair", "meadow", "whereabouts", "meadow-south-door",
+		},
 	},
 	// ------------------------------------------------------------------------
 	// MapLocations
@@ -651,13 +671,13 @@ var Phrases = []Phrase{
 			"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
 		},
 	},
-	// ------------------------------------------------------------------------
-	// NamesAreLikeVerbs
-	// ------------------------------------------------------------------------
 	{
 		test:   `A container is in the lobby.`,
 		result: errors.New("this is specifically disallowed, and should generate an error"),
 	},
+	// ------------------------------------------------------------------------
+	// NamesAreLikeVerbs
+	// ------------------------------------------------------------------------
 	{
 		// simple trait:
 		test: `The bottle is closed.`,

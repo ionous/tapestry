@@ -1,3 +1,18 @@
+MapDirections
+----------------
+ex. SOUTH from L is R. 
+and: SOUTH from L is EAST from R.
+
+the first is a reordering of the map locations phrase such that: "SOUTH from L is R" == "R is SOUTH from L"
+	
+the second is redirection. it describes two rooms with two (private) doors with unequal connections. 
+
+* SOUTH from L is R.
+* L is EAST from R; aka EAST from R is L.
+
+ex. L->s->R; R->e->L. ( best to stick with rooms only. while the same door can exist in two directions, this phrases is confusing enough as it is. ) 
+
+
 MapLocations:
 --------------------
 ex. R is SOUTH of P and NORTH of C.
