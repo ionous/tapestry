@@ -10,15 +10,80 @@ import (
 func (op *MapDirections) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.DirectionOfLinking.Match(q, &next) &&
-		op.Linking.Match(q, &next) &&
-		op.Redirect.Match(q, &next) {
+		op.Are.Match(q, &next) &&
+		(Optional(q, &next, &op.Redirect) ||
+			Optional(q, &next, &op.Linking)) {
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *MapDirections) Generate(Registrar) (err error) {
-	panic("yyy")
+func (op *MapDirections) Generate(rar Registrar) (err error) {
+	if op.Linking != nil {
+		err = op.simpleLink(rar)
+	} else if op.Redirect != nil {
+		err = op.multiLink(rar)
+	} else {
+		panic("unhandled link")
+	}
+	return
+}
+
+// uses .Linking
+func (op *MapDirections) simpleLink(rar Registrar) (err error) {
+	var links []jessLink
+	if e := rar.PostProcess(GenerateNouns, func(q Query) (err error) {
+		if start, e := op.DirectionOfLinking.buildLink(q, rar); e != nil {
+			err = e
+		} else if end, e := op.Linking.BuildNoun(q, rar, nil, nil); e != nil {
+			err = e
+		} else {
+			end := makeLink(end, "")
+			links = []jessLink{start, end}
+		}
+		return
+	}); e != nil {
+		err = e
+	} else if e := rar.PostProcess(GenerateDefaultKinds, func(Query) error {
+		return generateDefaultKinds(rar, links)
+	}); e != nil {
+		err = e
+	} else {
+		err = rar.PostProcess(GenerateConnections, func(Query) error {
+			return connectPlaceToPlaces(rar, links[1], links[:1])
+		})
+	}
+	return
+}
+
+// uses .Redirect
+func (op *MapDirections) multiLink(rar Registrar) (err error) {
+	var links []jessLink
+	if e := rar.PostProcess(GenerateNouns, func(q Query) (err error) {
+		if start, e := op.DirectionOfLinking.buildLink(q, rar); e != nil {
+			err = e
+		} else if end, e := op.Redirect.buildLink(q, rar); e != nil {
+			err = e
+		} else {
+			links = []jessLink{start, end}
+		}
+		return
+	}); e != nil {
+		err = e
+	} else if e := rar.PostProcess(GenerateDefaultKinds, func(Query) error {
+		return generateDefaultKinds(rar, links)
+	}); e != nil {
+		err = e
+	} else if door, e := createPrivateDoor(rar, links[0], links[1], links[0].direction); e != nil {
+		err = e
+	} else if len(door) == 0 {
+		err = errors.New("room already has a door")
+	} else if door, e := createPrivateDoor(rar, links[1], links[2], links[1].direction); e != nil {
+		err = e
+	} else if len(door) == 0 {
+		err = errors.New("room already has a door")
+	}
+	return
 }
 
 // ----
@@ -98,8 +163,15 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *DirectionOfLinking) BuildNoun(q Query, rar Registrar, ts, ks []string) (*DesiredNoun, error) {
-	return op.Linking.BuildNoun(q, rar, ts, ks)
+func (op *DirectionOfLinking) buildLink(q Query, rar Registrar) (ret jessLink, err error) {
+	// fix:what's the exact difference between "" and nil again?
+	if n, e := op.Linking.BuildNoun(q, rar, nil, []string{""}); e != nil {
+		err = e
+	} else {
+		// direction is already normalized...
+		ret = makeLink(n, op.Direction.Text)
+	}
+	return
 }
 
 func (op *DirectionOfLinking) matchFromOf(input *InputState) (okay bool) {

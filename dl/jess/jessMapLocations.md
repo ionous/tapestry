@@ -1,5 +1,6 @@
-R is SOUTH of P and NORTH of C
+MapLocations:
 --------------------
+ex. R is SOUTH of P and NORTH of C.
 the behavior here has enough complexity to merit some documentation:
 
 1. build the locations as "" kind

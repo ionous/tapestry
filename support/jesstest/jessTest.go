@@ -19,6 +19,48 @@ import (
 var Phrases = []Phrase{
 
 	// ------------------------------------------------------------------------
+	// MapDirections
+	// ------------------------------------------------------------------------
+	{
+		// FIX: some punctuation should be allowed in the names i guess.
+		// woodcutter's
+		test: `North of the Meadow is the woodcutter hut.`,
+		result: []string{
+			// nouns; defaulting to rooms:
+			"AddNounName", "meadow", "Meadow",
+			"AddNounName", "woodcutter hut", "woodcutter hut",
+			"AddNounKind", "meadow", "rooms",
+			"AddNounKind", "woodcutter hut", "rooms",
+			// movement via a private door:
+			"AddFact", "dir", "meadow", "north", "woodcutter hut",
+			"AddNounValue", "meadow", "compass.north", textKind("meadow-north-door", "doors"),
+			"AddNounKind", "meadow-north-door", "doors",
+			"AddNounName", "meadow-north-door", "meadow-north-door",
+			"AddNounTrait", "meadow-north-door", "scenery",
+			"AddNounTrait", "meadow-north-door", "privately named",
+			"AddNounValue", "meadow-north-door", "destination", textKind("woodcutter hut", "rooms"),
+			"AddNounPair", "meadow", "whereabouts", "meadow-north-door",
+			// implies reverse direction via another private door:
+			"AddFact", "dir", "woodcutter hut", "south", "meadow",
+			"AddNounValue", "woodcutter hut", "compass.south", textKind("woodcutter-hut-south-door", "doors"),
+			"AddNounKind", "woodcutter-hut-south-door", "doors",
+			"AddNounName", "woodcutter-hut-south-door", "woodcutter-hut-south-door",
+			"AddNounTrait", "woodcutter-hut-south-door", "scenery",
+			"AddNounTrait", "woodcutter-hut-south-door", "privately named",
+			"AddNounValue", "woodcutter-hut-south-door", "destination", textKind("meadow", "rooms"),
+			"AddNounPair", "woodcutter hut", "whereabouts", "woodcutter-hut-south-door",
+		},
+	},
+	{
+		// redirection
+		test: `West of the Garden is south of the Meadow.`,
+		// result: []string{
+		// 	"AddNounName", "long slide", "long slide",
+		// 	"AddNounKind", "long slide", "doors",
+		// 	"AddNounValue", "long slide", "destination", textKind("", "rooms"),
+		// },
+	},
+	// ------------------------------------------------------------------------
 	// MapLocations
 	// starts with a single room or door, and maps to rooms or doors.
 	// note: in inform, doors can live in multiple places;
@@ -28,9 +70,9 @@ var Phrases = []Phrase{
 		// unless otherwise specified, both lhs and rhs default to rooms.
 		test: `The passageway is south of the kitchen.`,
 		result: []string{
+			// nouns; defaulting to rooms:
 			"AddNounName", "passageway", "passageway",
 			"AddNounName", "kitchen", "kitchen",
-			// default to rooms:
 			"AddNounKind", "passageway", "rooms",
 			"AddNounKind", "kitchen", "rooms",
 			// room to room conflict detection.
@@ -90,6 +132,7 @@ var Phrases = []Phrase{
 	},
 	{
 		// the phrase also works with multiple rooms.
+		// fix? the uniform dash join creates some small potential for conflict
 		test: `The mystery spot is west of the waterfall and south of the sea.`,
 		result: []string{
 			// the places mentiond:
@@ -102,7 +145,6 @@ var Phrases = []Phrase{
 			"AddNounKind", "sea", "rooms",
 			// movement via a private door:
 			"AddFact", "dir", "waterfall", "west", "mystery spot",
-			// fix? the uniform dash join creates some small potential for conflict
 			// maybe leading the name with a dash would be good enough.
 			"AddNounValue", "waterfall", "compass.west", textKind("waterfall-west-door", "doors"),
 			"AddNounKind", "waterfall-west-door", "doors",
@@ -111,7 +153,7 @@ var Phrases = []Phrase{
 			"AddNounTrait", "waterfall-west-door", "privately named",
 			"AddNounValue", "waterfall-west-door", "destination", textKind("mystery spot", "rooms"),
 			"AddNounPair", "waterfall", "whereabouts", "waterfall-west-door",
-			// reverse direction via an implicit private door:
+			/// implies reverse direction via another private door:
 			"AddFact", "dir", "mystery spot", "east", "waterfall",
 			"AddNounValue", "mystery spot", "compass.east", textKind("mystery-spot-east-door", "doors"),
 			"AddNounKind", "mystery-spot-east-door", "doors",
@@ -129,7 +171,7 @@ var Phrases = []Phrase{
 			"AddNounTrait", "sea-south-door", "privately named",
 			"AddNounValue", "sea-south-door", "destination", textKind("mystery spot", "rooms"),
 			"AddNounPair", "sea", "whereabouts", "sea-south-door",
-			// reverse direction via an implicit private door:
+			// implies reverse direction via another private door:
 			"AddFact", "dir", "mystery spot", "north", "sea",
 			"AddNounValue", "mystery spot", "compass.north", textKind("mystery-spot-north-door", "doors"),
 			"AddNounKind", "mystery-spot-north-door", "doors",
@@ -141,25 +183,6 @@ var Phrases = []Phrase{
 		},
 	},
 
-	// ------------------------------------------------------------------------
-	// MapDirections
-	// ------------------------------------------------------------------------
-	{
-		test: `Inside from the Meadow is the woodcutter's hut.`,
-		// result: []string{
-		// 	"AddNounName", "long slide", "long slide",
-		// 	"AddNounKind", "long slide", "doors",
-		// 	"AddNounValue", "long slide", "destination", textKind("", "rooms"),
-		// },
-	},
-	{
-		test: `West of the Garden] is south of the Meadow.`,
-		// result: []string{
-		// 	"AddNounName", "long slide", "long slide",
-		// 	"AddNounKind", "long slide", "doors",
-		// 	"AddNounValue", "long slide", "destination", textKind("", "rooms"),
-		// },
-	},
 	// ------------------------------------------------------------------------
 	// MapConnection
 	// ------------------------------------------------------------------------

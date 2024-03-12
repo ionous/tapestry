@@ -19,9 +19,9 @@ func makeLink(n *DesiredNoun, direction string) jessLink {
 	return jessLink{DesiredNoun: n, direction: direction}
 }
 
-func makeRoom(noun, direction string) jessLink {
+func makeRoom(noun string) jessLink {
 	n := &DesiredNoun{Noun: noun}
-	return jessLink{DesiredNoun: n, direction: direction, roomLike: true}
+	return jessLink{DesiredNoun: n, roomLike: true}
 }
 
 const (
@@ -57,20 +57,20 @@ func (room jessLink) addDoor(rar Registrar, door string) (err error) {
 // FIX: do we need this!?
 // create room fact which indicates the direction of movement from room to room
 // these facts help with tracking and conflict detection
-func (room jessLink) setDirection(rar Registrar, otherRoom string) (ret int, err error) {
+func (room jessLink) setDirection(rar Registrar, direction, otherRoom string) (ret int, err error) {
 	if !room.roomLike {
 		err = errors.New("can only move directions within a room")
 	} else {
-		e := rar.AddFact(FactDirection, room.Noun, room.direction, otherRoom)
+		e := rar.AddFact(FactDirection, room.Noun, direction, otherRoom)
 		ret, err = translateError(e)
 	}
 	return
 }
 
 // set the compass on the indicated side of the room to the named door
-func (room jessLink) setCompass(rar Registrar, door string) error {
+func (room jessLink) setCompass(rar Registrar, direction, door string) error {
 	return rar.AddNounPath(room.Noun,
-		[]string{Compass, room.direction},
+		[]string{Compass, direction},
 		&literal.TextValue{Value: door, Kind: Doors},
 	)
 }
