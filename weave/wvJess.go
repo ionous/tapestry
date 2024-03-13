@@ -6,12 +6,10 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -23,31 +21,13 @@ type jessAdapter struct {
 	*mdl.Pen
 }
 
-// PostProcess schedules a jess command for later handling
-func (ja jessAdapter) PostProcess(pri jess.Priority, post jess.Process) error {
-	var phase Phase
-	switch pri {
-	case jess.NounSettings:
-		phase = RequireNouns
-	case jess.Understandings:
-		phase = RequireAll
-	default:
-		panic("unexpected priority")
-	}
-	return ja.w.Catalog.Schedule(phase, func(w *Weaver) error {
-		q := jessdb.MakeQuery(w.Catalog.Modeler, w.Domain)
-		return post(q, ja)
-	})
-}
-
 func (ja jessAdapter) AddNounTrait(noun, trait string) error {
 	return ja.w.AddNounValue(ja.Pen, noun, trait, truly())
 }
+
+// fix: shouldn't there also be an AddNounPath? ( better to merge the two if at all possible )
 func (ja jessAdapter) AddNounValue(noun, prop string, val rt.Assignment) error {
 	return ja.w.AddNounValue(ja.Pen, noun, prop, val)
-}
-func (ja jessAdapter) AddNounPath(noun string, path []string, val literal.LiteralValue) error {
-	return ja.w.AddNounPath(ja.Pen, noun, path, val)
 }
 func (ja jessAdapter) GetClosestNoun(name string) (string, error) {
 	return ja.w.GetClosestNoun(name)
@@ -60,6 +40,14 @@ func (ja jessAdapter) GetSingular(word string) string {
 }
 func (ja jessAdapter) GetUniqueName(category string) string {
 	return newCounter(ja.w.Catalog, category)
+}
+func (ja jessAdapter) AddFact(key string, parts ...string) (err error) {
+	if ok, e := ja.Pen.AddFact(key, parts...); e != nil {
+		err = e
+	} else if !ok {
+		err = mdl.Duplicate
+	}
+	return
 }
 
 func (ja jessAdapter) Apply(macro mdl.Macro, lhs, rhs []string) (err error) {
