@@ -49,7 +49,7 @@ type Matched interface {
 // implemented by phrases so that they can create story fragments based on
 // the english language text they have parsed.
 type Generator interface {
-	Generate(Registrar) error
+	Generate(*Context) error
 }
 
 // used internally for matching some kinds of phrases.
@@ -59,18 +59,26 @@ type Interpreter interface {
 
 // match one or more sentences and use the registrar
 // to create  nouns, define kinds, set properties, and so on.
-func Generate(q Query, w Registrar, paragraph string) (err error) {
+func Generate(q Query, rar Registrar, paragraph string) (err error) {
+	ctx := Context{Registrar: rar}
 	if spans, e := match.MakeSpans(paragraph); e != nil {
 		err = fmt.Errorf("%w reading %s", e, paragraph)
+	} else if e := generateSpans(q, &ctx, spans); e != nil {
+		err = fmt.Errorf("%w generating %s", e, paragraph)
 	} else {
-		for _, span := range spans {
-			if m, e := Match(q, span); e != nil {
-				err = fmt.Errorf("%w matching %s", e, span)
-				break
-			} else if e := m.Generate(w); e != nil {
-				err = fmt.Errorf("%w generating %s", e, paragraph)
-				break
-			}
+		err = ctx.proc.ProcessAll(q)
+	}
+	return
+}
+
+func generateSpans(q Query, ctx *Context, spans []match.Span) (err error) {
+	for _, span := range spans {
+		if m, e := Match(q, span); e != nil {
+			err = fmt.Errorf("%w matching %s", e, span)
+			break
+		} else if e := m.Generate(ctx); e != nil {
+			err = e
+			break
 		}
 	}
 	return

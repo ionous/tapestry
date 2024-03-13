@@ -4,7 +4,7 @@ import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
 
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *KindCalled) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	if kind, e := op.GetKind(); e != nil {
 		err = e
 	} else {

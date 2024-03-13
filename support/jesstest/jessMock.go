@@ -16,21 +16,18 @@ import (
 // implements Registrar to watch incoming calls.
 // posted makes it more like a stub than a mock maybe? oh well.
 type Mock struct {
-	q                  jess.Query
-	out                []string
-	unique             map[string]int
-	posted             [jess.PriorityCount][]jess.Process
-	nounPool, nounPair map[string]string
+	q                   jess.Query
+	out                 []string
+	unique              map[string]int
+	nounPool, nounPairs map[string]string
 }
 
-func MakeMock(q jess.Query, nounPool, nounPair map[string]string) Mock {
-	return Mock{q: q, nounPool: nounPool, nounPair: nounPair}
+func MakeMock(q jess.Query, nounPool map[string]string) Mock {
+	return Mock{q: q, nounPool: nounPool, nounPairs: make(map[string]string)}
 }
 
 func (m *Mock) Generate(paragraph string) (ret []string, err error) {
 	if e := jess.Generate(m.q, m, paragraph); e != nil {
-		err = e
-	} else if e := m.runPost(m.q); e != nil {
 		err = e
 	} else {
 		ret = m.out
@@ -38,29 +35,6 @@ func (m *Mock) Generate(paragraph string) (ret []string, err error) {
 	return
 }
 
-func (m *Mock) PostProcess(i jess.Priority, p jess.Process) (_ error) {
-	m.posted[i] = append(m.posted[i], p)
-	return
-}
-
-func (m *Mock) runPost(q jess.Query) (err error) {
-Loop:
-	for i := jess.Priority(0); i < jess.PriorityCount; i++ {
-		// fix: can we really add new processes during post?
-		// and if so, shouldnt mock panic on misorders?
-		for len(m.posted[i]) > 0 {
-			posted := m.posted[i]
-			next, rest := posted[0], posted[1:]
-			if e := next(q); e != nil {
-				err = e
-				break Loop
-			} else {
-				m.posted[i] = rest
-			}
-		}
-	}
-	return
-}
 func (m *Mock) AddNounKind(noun, kind string) (err error) {
 	m.nounPool[noun] = noun
 	// for weave, we'd add these blank kinds "objects"
@@ -171,7 +145,7 @@ func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) 
 }
 func (m *Mock) AddNounPair(rel, lhs, rhs string) (_ error) {
 	if rel == "whereabouts" {
-		m.nounPair[rhs] = lhs
+		m.nounPairs[rhs] = lhs
 	}
 	m.out = append(m.out, "AddNounPair", lhs, rel, rhs)
 	return
@@ -185,6 +159,8 @@ func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
 	}
 	return
 }
+
+// mock assumes all facts valid and new
 func (m *Mock) AddFact(key string, partsAndValue ...string) (_ error) {
 	m.out = append(m.out, "AddFact", key)
 	m.out = append(m.out, partsAndValue...)
@@ -197,7 +173,7 @@ func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
 	if verb.Name == "contain" {
 		for _, left := range lhs {
 			for _, right := range rhs {
-				m.nounPair[right] = left
+				m.nounPairs[right] = left
 			}
 		}
 	}
@@ -222,7 +198,7 @@ func (m *Mock) GetRelativeNouns(noun, relation string, primary bool) (ret []stri
 	if relation != "whereabouts" || primary {
 		err = fmt.Errorf("unexpected relation %v(primary: %v)", relation, primary)
 	} else {
-		if a, ok := m.nounPair[noun]; ok {
+		if a, ok := m.nounPairs[noun]; ok {
 			ret = []string{a}
 		}
 	}

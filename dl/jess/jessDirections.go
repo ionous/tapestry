@@ -15,7 +15,7 @@ func (op *MapDirections) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *MapDirections) Generate(rar Registrar) (err error) {
+func (op *MapDirections) Generate(rar *Context) (err error) {
 	if op.Linking != nil {
 		err = op.simpleLink(rar)
 	} else if op.Redirect != nil {
@@ -27,7 +27,7 @@ func (op *MapDirections) Generate(rar Registrar) (err error) {
 }
 
 // uses .Linking
-func (op *MapDirections) simpleLink(rar Registrar) (err error) {
+func (op *MapDirections) simpleLink(rar *Context) (err error) {
 	var links []jessLink
 	if e := rar.PostProcess(GenerateNouns, func(q Query) (err error) {
 		if lhs, e := op.DirectionOfLinking.buildLink(q, rar); e != nil {
@@ -54,7 +54,7 @@ func (op *MapDirections) simpleLink(rar Registrar) (err error) {
 }
 
 // uses .Redirect
-func (op *MapDirections) multiLink(rar Registrar) (err error) {
+func (op *MapDirections) multiLink(rar *Context) (err error) {
 	var links []jessLink
 	if e := rar.PostProcess(GenerateNouns, func(q Query) (err error) {
 		if lhs, e := op.DirectionOfLinking.buildLink(q, rar); e != nil {

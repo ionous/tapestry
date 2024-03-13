@@ -32,7 +32,7 @@ func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 
 var pluralOf = match.PanicSpans("plural of")
 
-func (op *Understand) Generate(rar Registrar) error {
+func (op *Understand) Generate(rar *Context) error {
 	// fix: parse lhs first, into a map keyed by its string
 	// then we can error better when strings or grammars appear on the wrong side.
 	// (and probably simplify some)
@@ -57,7 +57,7 @@ func (op *Understand) Generate(rar Registrar) error {
 	})
 }
 
-func (op *Understand) applyActions(rar Registrar, actions []string) (err error) {
+func (op *Understand) applyActions(rar *Context, actions []string) (err error) {
 Loop:
 	for it := op.QuotedTexts.Iterate(); it.HasNext(); {
 		phrase := it.GetNext()
@@ -80,7 +80,7 @@ Loop:
 }
 
 // fix: should this work through desired noun instead?
-func (op *Understand) applyAliases(rar Registrar, rhsNouns []string) (err error) {
+func (op *Understand) applyAliases(rar *Context, rhsNouns []string) (err error) {
 	// for every noun on the rhs
 	for _, noun := range rhsNouns {
 		//  add the alias specified on the lhs
@@ -123,7 +123,7 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	return
 }
 
-func (op *Understand) applyPlurals(rar Registrar) (err error) {
+func (op *Understand) applyPlurals(rar *Context) (err error) {
 Loop:
 	for as := op.Names.GetNames(); as.HasNext(); {
 		// determine the "single" side of the plural request

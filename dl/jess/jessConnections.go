@@ -28,7 +28,7 @@ func (op *MapConnections) matchThrough(input *InputState) (okay bool) {
 // 1. ensure the rhs link is a room.
 // 2. ensure all of the lhs links are doors
 // 3. set the destination of those doors to the rhs room.
-func (op *MapConnections) Generate(rar Registrar) (err error) {
+func (op *MapConnections) Generate(rar *Context) (err error) {
 	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
 		if room, e := op.Room.GenerateNoun(q, rar, nil, []string{Rooms}); e != nil {
 			err = e

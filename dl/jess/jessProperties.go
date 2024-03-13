@@ -46,7 +46,7 @@ func (op *KindsHaveProperties) matchListOf(input *InputState) (okay bool) {
 }
 
 // register a single field
-func (op *KindsHaveProperties) Generate(rar Registrar) (err error) {
+func (op *KindsHaveProperties) Generate(rar *Context) (err error) {
 	if kind, e := op.Kind.Validate(kindsOf.Kind, kindsOf.Record); e != nil {
 		err = e
 	} else if f, e := op.PropertyType.GetType(len(op.ListOf) > 0); e != nil {

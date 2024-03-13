@@ -19,7 +19,7 @@ func (op *VerbNamesAreNames) GetMacro() (ret Macro) {
 func (op *VerbNamesAreNames) IsReversed() bool {
 	return !op.Verb.Macro.Reversed
 }
-func (op *VerbNamesAreNames) Generate(rar Registrar) error {
+func (op *VerbNamesAreNames) Generate(rar *Context) error {
 	return generateVerbPhrase(rar, op)
 }
 func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
@@ -52,7 +52,7 @@ func (op *NamesVerbNames) GetMacro() (ret Macro) {
 func (op *NamesVerbNames) IsReversed() bool {
 	return op.Verb.Macro.Reversed
 }
-func (op *NamesVerbNames) Generate(rar Registrar) error {
+func (op *NamesVerbNames) Generate(rar *Context) error {
 	return generateVerbPhrase(rar, op)
 }
 func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
@@ -95,7 +95,7 @@ func (op *NamesAreLikeVerbs) IsReversed() (okay bool) {
 	}
 	return
 }
-func (op *NamesAreLikeVerbs) Generate(rar Registrar) error {
+func (op *NamesAreLikeVerbs) Generate(rar *Context) error {
 	return generateVerbPhrase(rar, op)
 }
 func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
@@ -127,7 +127,7 @@ type jessVerbPhrase interface {
 	IsReversed() bool
 }
 
-func generateVerbPhrase(rar Registrar, p jessVerbPhrase) error {
+func generateVerbPhrase(rar *Context, p jessVerbPhrase) error {
 	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
 		if ts, ks, e := p.GetAdjectives().Reduce(); e != nil {
 			err = e

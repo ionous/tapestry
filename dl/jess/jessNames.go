@@ -49,7 +49,7 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
-func (op Names) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op Names) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	for n := op.GetNames(); n.HasNext(); {
 		at := n.GetNext()
 		if ns, e := buildNounsFrom(q, rar, ts, ks,

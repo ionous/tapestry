@@ -4,11 +4,11 @@ package jess
 // to support "counted nouns" any given specification can generate multiple nouns
 // ( even though all, other than "names" and "counted nouns" only generate one a piece. )
 type NounBuilder interface {
-	BuildNouns(q Query, rar Registrar, traits, kinds []string) ([]DesiredNoun, error)
+	BuildNouns(q Query, rar *Context, traits, kinds []string) ([]DesiredNoun, error)
 }
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
-func buildNounsFrom(q Query, rar Registrar, ts, ks []string, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
+func buildNounsFrom(q Query, rar *Context, ts, ks []string, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
 	for _, opt := range options {
 		if !opt.IsNil {
 			ret, err = opt.BuildNouns(q, rar, ts, ks)
@@ -18,7 +18,7 @@ func buildNounsFrom(q Query, rar Registrar, ts, ks []string, options ...nounBuil
 	return
 }
 
-func buildAnon(rar Registrar, plural, singular string, ts, ks []string) (ret DesiredNoun, err error) {
+func buildAnon(rar *Context, plural, singular string, ts, ks []string) (ret DesiredNoun, err error) {
 	n := rar.GetUniqueName(singular)
 	if e := rar.AddNounKind(n, plural); e != nil {
 		err = e // all errors, including duplicates would be bad here.

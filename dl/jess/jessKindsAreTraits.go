@@ -15,7 +15,7 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *KindsAreTraits) Generate(rar Registrar) (err error) {
+func (op *KindsAreTraits) Generate(rar *Context) (err error) {
 	traits := op.Traits.GetTraits()
 	for kt := op.Kinds.Iterate(); kt.HasNext(); {
 		k := kt.GetNext()

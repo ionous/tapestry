@@ -17,7 +17,7 @@ func startsUpper(str string) bool {
 
 // even one name can generate several nouns ( ex. "two things" )
 // after gets called for each one.
-func genNoun(rar Registrar, ns []DesiredNoun, after postGenOne) error {
+func genNoun(rar *Context, ns []DesiredNoun, after postGenOne) error {
 	return genNouns(rar, ns, nil, func(ns, _ []DesiredNoun) (err error) {
 		for _, n := range ns {
 			if e := after(n.Noun); e != nil {
@@ -32,7 +32,7 @@ func genNoun(rar Registrar, ns []DesiredNoun, after postGenOne) error {
 type postGenOne func(a string) error
 type postGenMany func(a, b []DesiredNoun) error
 
-func genNouns(rar Registrar, a, b []DesiredNoun, after postGenMany) (err error) {
+func genNouns(rar *Context, a, b []DesiredNoun, after postGenMany) (err error) {
 	return rar.PostProcess(GenerateValues, func(Query) (err error) {
 		if e := generateValues(rar, a); e != nil {
 			err = e
@@ -45,7 +45,7 @@ func genNouns(rar Registrar, a, b []DesiredNoun, after postGenMany) (err error) 
 	})
 }
 
-func registerKinds(rar Registrar, noun string, kinds []string) (err error) {
+func registerKinds(rar *Context, noun string, kinds []string) (err error) {
 	for _, k := range kinds {
 		if e := rar.AddNounKind(noun, k); e != nil && !errors.Is(e, mdl.Duplicate) {
 			err = e
@@ -55,7 +55,7 @@ func registerKinds(rar Registrar, noun string, kinds []string) (err error) {
 	return
 }
 
-func generateValues(rar Registrar, ns []DesiredNoun) (err error) {
+func generateValues(rar *Context, ns []DesiredNoun) (err error) {
 	for _, n := range ns {
 		if e := n.generateValues(rar); e != nil {
 			err = e
@@ -69,7 +69,7 @@ func generateValues(rar Registrar, ns []DesiredNoun) (err error) {
 // later, a pass ensures that all placeholder nouns have been given kinds;
 // or it upgrades them to things.
 // to simplify the code, this happens even if the kind might possibly be known.
-func ensureNoun(q Query, rar Registrar, name match.Span) (ret string, created bool, err error) {
+func ensureNoun(q Query, rar *Context, name match.Span) (ret string, created bool, err error) {
 	if noun, w := q.FindNoun(name, ""); w > 0 {
 		ret = noun
 	} else {
@@ -87,7 +87,7 @@ func ensureNoun(q Query, rar Registrar, name match.Span) (ret string, created bo
 	return
 }
 
-func registerNames(rar Registrar, noun, name string) (err error) {
+func registerNames(rar *Context, noun, name string) (err error) {
 	names := mdl.MakeNames(name)
 	for i, n := range names {
 		if e := rar.AddNounName(noun, n, i); e != nil {

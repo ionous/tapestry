@@ -15,7 +15,7 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *DirectionOfLinking) buildLink(q Query, rar Registrar) (ret jessLink, err error) {
+func (op *DirectionOfLinking) buildLink(q Query, rar *Context) (ret jessLink, err error) {
 	// fix:what's the exact difference between "" and nil again?
 	if n, e := op.Linking.BuildNoun(q, rar, nil, []string{""}); e != nil {
 		err = e
@@ -68,7 +68,7 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 }
 
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
-func (op *Linking) BuildNoun(q Query, rar Registrar, ts, ks []string) (ret *DesiredNoun, err error) {
+func (op *Linking) BuildNoun(q Query, rar *Context, ts, ks []string) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
 		if els, e := buildNounsFrom(q, rar, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
 			err = e
@@ -82,7 +82,7 @@ func (op *Linking) BuildNoun(q Query, rar Registrar, ts, ks []string) (ret *Desi
 
 // helper since we know there's linking doesnt support counted nouns, but does support nowhere;
 // BuildNouns will always return a list of one or none.
-func (op *Linking) GenerateNoun(q Query, rar Registrar, ts, ks []string) (ret string, err error) {
+func (op *Linking) GenerateNoun(q Query, rar *Context, ts, ks []string) (ret string, err error) {
 	if n, e := op.BuildNoun(q, rar, ts, ks); e != nil {
 		err = e
 	} else if n != nil {

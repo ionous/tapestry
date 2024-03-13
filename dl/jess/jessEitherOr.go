@@ -26,7 +26,7 @@ func (op *KindsAreEither) matchEither(input *InputState) (okay bool) {
 	return
 }
 
-func (op *KindsAreEither) Generate(rar Registrar) (err error) {
+func (op *KindsAreEither) Generate(rar *Context) (err error) {
 	if k, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
@@ -52,7 +52,7 @@ func (op *KindsAreEither) Generate(rar Registrar) (err error) {
 	return
 }
 
-func (op *KindsAreEither) generateAspect(rar Registrar) (ret string, err error) {
+func (op *KindsAreEither) generateAspect(rar *Context) (ret string, err error) {
 	first := op.Traits
 	aspect := inflect.Join([]string{first.String(), "status"})
 	if e := rar.AddKind(aspect, kindsOf.Aspect.String()); e != nil {

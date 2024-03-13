@@ -9,7 +9,7 @@ func (op *Name) GetNormalizedName() string {
 	return inflect.Normalize(op.Matched.String())
 }
 
-func (op *Name) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *Name) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	if n, e := op.buildNoun(q, rar, Things, ts, ks); e != nil {
 		err = e
 	} else {
@@ -18,7 +18,7 @@ func (op *Name) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []Desir
 	return
 }
 
-func (op *Name) buildNoun(q Query, rar Registrar, defaultKind string, ts, ks []string) (ret DesiredNoun, err error) {
+func (op *Name) buildNoun(q Query, rar *Context, defaultKind string, ts, ks []string) (ret DesiredNoun, err error) {
 	if noun, c, e := ensureNoun(q, rar, op.Matched.(match.Span)); e != nil {
 		err = e
 	} else if e := registerKinds(rar, noun, ks); e != nil {

@@ -33,7 +33,7 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *PropertyNounValue) Generate(rar Registrar) error {
+func (op *PropertyNounValue) Generate(rar *Context) error {
 	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
 		if ns, e := op.NamedNoun.BuildNouns(q, rar, nil, nil); e != nil {
 			err = e
@@ -67,7 +67,7 @@ func (op *NounPropertyValue) matchOf(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *NounPropertyValue) Generate(rar Registrar) (err error) {
+func (op *NounPropertyValue) Generate(rar *Context) (err error) {
 	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
 		if ns, e := op.NamedNoun.BuildNouns(q, rar, nil, nil); e != nil {
 			err = e

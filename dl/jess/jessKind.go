@@ -36,7 +36,7 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 }
 
 // anonymous kinds: "the supporter"
-func (op *Kind) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *Kind) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	if plural, e := op.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {

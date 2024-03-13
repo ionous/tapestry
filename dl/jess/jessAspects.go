@@ -35,7 +35,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *AspectsAreTraits) Generate(rar Registrar) (err error) {
+func (op *AspectsAreTraits) Generate(rar *Context) (err error) {
 	if aspect, e := op.Aspect.Validate(kindsOf.Aspect); e != nil {
 		err = e
 	} else {

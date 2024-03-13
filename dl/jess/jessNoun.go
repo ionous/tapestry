@@ -1,6 +1,6 @@
 package jess
 
-func (op *Noun) BuildNouns(q Query, rar Registrar, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *Noun) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	n := op.ActualNoun
 	if e := registerKinds(rar, n, ks); e != nil {
 		err = e

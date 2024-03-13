@@ -37,7 +37,7 @@ func (n *DesiredNoun) addArticle(a *Article) {
 }
 
 // send the contents of the noun to the db
-func (n DesiredNoun) generateValues(rar Registrar) (err error) {
+func (n DesiredNoun) generateValues(rar *Context) (err error) {
 	if e := n.applyAliases(rar); e != nil {
 		err = e
 	} else if e := n.applyTraits(rar); e != nil {
@@ -47,7 +47,7 @@ func (n DesiredNoun) generateValues(rar Registrar) (err error) {
 	}
 	return
 }
-func (n DesiredNoun) applyAliases(rar Registrar) (err error) {
+func (n DesiredNoun) applyAliases(rar *Context) (err error) {
 	for _, a := range n.Aliases {
 		if e := rar.AddNounName(n.Noun, a, -1); e != nil {
 			err = e
@@ -56,7 +56,7 @@ func (n DesiredNoun) applyAliases(rar Registrar) (err error) {
 	}
 	return
 }
-func (n DesiredNoun) applyTraits(rar Registrar) (err error) {
+func (n DesiredNoun) applyTraits(rar *Context) (err error) {
 	for _, t := range n.Traits {
 		if e := rar.AddNounTrait(n.Noun, t); e != nil {
 			err = e
@@ -65,7 +65,7 @@ func (n DesiredNoun) applyTraits(rar Registrar) (err error) {
 	}
 	return
 }
-func (n DesiredNoun) applyValues(rar Registrar) (err error) {
+func (n DesiredNoun) applyValues(rar *Context) (err error) {
 	for _, v := range n.Values {
 		if e := rar.AddNounValue(n.Noun, v.Field, v.Assign); e != nil {
 			err = e

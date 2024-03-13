@@ -45,7 +45,7 @@ func translateError(e error) (ret int, err error) {
 }
 
 // assumes room is "room like"
-func (room jessLink) addDoor(rar Registrar, door string) (err error) {
+func (room jessLink) addDoor(rar *Context, door string) (err error) {
 	if !room.roomLike {
 		err = errors.New("can only add doors to rooms")
 	} else {
@@ -57,7 +57,7 @@ func (room jessLink) addDoor(rar Registrar, door string) (err error) {
 // fix: i think this can be removed if the story direction setup is removed.
 // create room fact which indicates the direction of movement from room to room
 // these facts help with tracking and conflict detection
-func setDirection(rar Registrar, direction string, room, otherRoom jessLink) (ret int, err error) {
+func setDirection(rar *Context, direction string, room, otherRoom jessLink) (ret int, err error) {
 	if !room.roomLike {
 		err = errors.New("can only move directions within a room")
 	} else {
@@ -68,7 +68,7 @@ func setDirection(rar Registrar, direction string, room, otherRoom jessLink) (re
 }
 
 // set the compass on the indicated side of the room to the named door
-func (room jessLink) setCompass(rar Registrar, direction, door string) error {
+func (room jessLink) setCompass(rar *Context, direction, door string) error {
 	return rar.AddNounPath(room.Noun,
 		[]string{Compass, direction},
 		&literal.TextValue{Value: door, Kind: Doors},
@@ -76,7 +76,7 @@ func (room jessLink) setCompass(rar Registrar, direction, door string) error {
 }
 
 // set the destination of the named door
-func (door jessLink) setDestination(rar Registrar, otherRoom string) (err error) {
+func (door jessLink) setDestination(rar *Context, otherRoom string) (err error) {
 	if door.roomLike {
 		err = errors.New("can only set the destination of doors")
 	} else {
@@ -85,7 +85,7 @@ func (door jessLink) setDestination(rar Registrar, otherRoom string) (err error)
 	return
 }
 
-func (door jessLink) getParent(rar Registrar) (ret string, err error) {
+func (door jessLink) getParent(rar *Context) (ret string, err error) {
 	if door.roomLike {
 		err = errors.New("can only ask for the parents of doors")
 	} else if pairs, e := rar.GetRelativeNouns(door.Noun, Whereabouts, false); e != nil {
@@ -103,7 +103,7 @@ func (door jessLink) getParent(rar Registrar) (ret string, err error) {
 	return
 }
 
-func (p *jessLink) generateDefaultKind(rar Registrar) (err error) {
+func (p *jessLink) generateDefaultKind(rar *Context) (err error) {
 	noun := p.Noun
 	// either newly stamping it as room room, or duplicating room previous room definition is okay.
 	if e := rar.AddNounKind(noun, Rooms); e == nil || errors.Is(e, mdl.Duplicate) {
@@ -123,7 +123,7 @@ func (p *jessLink) generateDefaultKind(rar Registrar) (err error) {
 }
 
 // -
-func generateDefaultKinds(rar Registrar, ps []jessLink) (err error) {
+func generateDefaultKinds(rar *Context, ps []jessLink) (err error) {
 	for i, cnt := 0, len(ps); i < cnt; i++ {
 		// use indexing so generateDefaultKind can properly work on the shared memory
 		// range would be room copy

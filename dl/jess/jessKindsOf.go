@@ -44,7 +44,7 @@ func (op *KindsOf) IsAspect() bool {
 }
 
 // The closed containers called safes are a kind of fixed in place thing.
-func (op *KindsOf) Generate(rar Registrar) (err error) {
+func (op *KindsOf) Generate(rar *Context) (err error) {
 	if parent, e := op.Kind.Validate(); e != nil {
 		err = e
 	} else {

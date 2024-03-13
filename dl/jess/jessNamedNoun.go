@@ -12,7 +12,7 @@ func (op *NamedNoun) GetNormalizedName() (ret string) {
 }
 
 // panics if not matched
-func (op *NamedNoun) BuildNouns(q Query, rar Registrar, ts, ks []string) ([]DesiredNoun, error) {
+func (op *NamedNoun) BuildNouns(q Query, rar *Context, ts, ks []string) ([]DesiredNoun, error) {
 	return buildNounsFrom(q, rar, ts, ks, ref(op.Noun), ref(op.Name))
 }
 
