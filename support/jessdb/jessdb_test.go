@@ -6,8 +6,10 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -22,10 +24,40 @@ func TestPhrases(t *testing.T) {
 			t.Fatal(e)
 		} else {
 			m.PrecachePaths()
-			q := jessdb.MakeQuery(m, "a")
-			jesstest.TestPhrases(t, q)
+
+			for i, p := range jesstest.Phrases {
+				if str, ok := p.Test(); !ok {
+					continue // skip unused tests
+				} else {
+					// reset the dynamic noun pool every test
+					dynamicNouns := make(map[string]string)
+					q := testAdapter{jessdb.MakeQuery(m, "a"), dynamicNouns}
+					// create the test helper
+					m := jesstest.MakeMock(q, dynamicNouns)
+					// run the test:
+					t.Logf("testing: %d %s", i, str)
+					if !p.Verify(m.Generate(str)) {
+						t.Logf("failed %d", i)
+						t.Fail()
+					}
+				}
+			}
 		}
 	}
+}
+
+type testAdapter struct {
+	jess.Query
+	dynamicNouns map[string]string
+}
+
+func (ta testAdapter) FindNoun(ws match.Span, kind string) (ret string, width int) {
+	if n, w := ta.Query.FindNoun(ws, kind); w > 0 {
+		ret, width = n, w
+	} else if noun, ok := ta.dynamicNouns[ws.String()]; ok {
+		ret, width = noun, len(ws)
+	}
+	return
 }
 
 func idPath(ids ...int) string {
