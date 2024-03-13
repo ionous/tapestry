@@ -42,7 +42,9 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
 func (op *CallMacro) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireNouns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+		// suspend additional scheduling because we dont capture the calling context
+		// if we cant process it all *right now* we'll lose the arguments being passed to pattern
 		cat.SuspendSchedule++
 		err = op.Execute(w)
 		cat.SuspendSchedule--
