@@ -105,7 +105,7 @@ func (door jessLink) getParent(rar *Context) (ret string, err error) {
 
 func (p *jessLink) generateDefaultKind(rar *Context) (err error) {
 	noun := p.Noun
-	// either newly stamping it as room room, or duplicating room previous room definition is okay.
+	// both newly stamping the noun as room, or re-stamping it as such is okay.
 	if e := rar.AddNounKind(noun, Rooms); e == nil || errors.Is(e, mdl.Duplicate) {
 		p.roomLike = true
 	} else {
@@ -123,7 +123,7 @@ func (p *jessLink) generateDefaultKind(rar *Context) (err error) {
 }
 
 // -
-func generateDefaultKinds(rar *Context, ps []jessLink) (err error) {
+func assignDefaultKinds(rar *Context, ps []jessLink) (err error) {
 	for i, cnt := 0, len(ps); i < cnt; i++ {
 		// use indexing so generateDefaultKind can properly work on the shared memory
 		// range would be room copy

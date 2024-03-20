@@ -8,7 +8,13 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
+
+// runs in the LanguagePhase phase
+func (op *Understand) Phase() Phase {
+	return mdl.LanguagePhase
+}
 
 func (op *Understand) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -32,29 +38,30 @@ func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 
 var pluralOf = match.PanicSpans("plural of")
 
-func (op *Understand) Generate(rar *Context) error {
-	// fix: parse lhs first, into a map keyed by its string
-	// then we can error better when strings or grammars appear on the wrong side.
-	// (and probably simplify some)
-	return rar.PostProcess(GenerateUnderstanding, func(q Query) (err error) {
-		if len(op.PluralOf) > 0 {
-			err = op.applyPlurals(rar)
-		} else {
+func (op *Understand) Generate(ctx *Context) (err error) {
+	if len(op.PluralOf) > 0 {
+		err = op.applyPlurals(ctx)
+	} else {
+		// fix: parse lhs first, into a map keyed by its string
+		// then we can error better when strings or grammars appear on the wrong side.
+		// (and probably simplify some)
+		err = ctx.PostProcess(mdl.ValuePhase, func() (err error) {
 			// check whether kind matches an action or noun
-			if actions, nouns, e := op.readRhs(q); e != nil {
+			if actions, nouns, e := op.readRhs(ctx); e != nil {
 				err = e
 			} else if len(actions) > 0 && len(nouns) > 0 {
 				err = errors.New("jess doesn't support mixing noun and action understandings")
 			} else if len(actions) > 0 {
-				err = op.applyActions(rar, actions)
+				err = op.applyActions(ctx, actions)
 			} else if len(nouns) > 0 {
-				err = op.applyAliases(rar, nouns)
+				err = op.applyAliases(ctx, nouns)
 			} else {
 				err = errors.New("what's there to understand?")
 			}
-		}
-		return
-	})
+			return
+		})
+	}
+	return
 }
 
 func (op *Understand) applyActions(rar *Context, actions []string) (err error) {

@@ -36,12 +36,12 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 }
 
 // anonymous kinds: "the supporter"
-func (op *Kind) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *Kind) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	if plural, e := op.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
-		singular := rar.GetSingular(plural)
-		if n, e := buildAnon(rar, plural, singular, ts, ks); e != nil {
+		singular := ctx.GetSingular(plural)
+		if n, e := buildAnon(ctx, plural, singular, ts, ks); e != nil {
 			err = e
 		} else {
 			ret = []DesiredNoun{n}

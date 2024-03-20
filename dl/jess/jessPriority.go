@@ -1,49 +1,90 @@
 package jess
 
-type Priority int
-type Process func(Query) error
+import (
+	"errors"
+	"fmt"
 
-const (
-	// these happen immediately after matching
-	// primarily so that multi part traits can match correctly.
-	// re: The bother is a fixed in place closed container in the kitchen.
-	// another option would be to match the whole span and break it up into actual traits later.
-	GenerateKinds Priority = iota
-	// turn specified nouns into desired nouns
-	// waits until after GenerateKinds so that all specified kind names are known
-	// ex. `The sapling is a tree. A tree is a kind of thing.` ( though that doesnt work in inform. )
-	GenerateNouns
-	GenerateDefaultKinds
-	GenerateValues // generates implied nouns
-	GenerateConnections
-	GenerateUnderstanding // awww. love and peas.
-	PriorityCount
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
+
+type Phase = mdl.Phase
+type Process func() error
+
+type Context struct {
+	Query
+	Registrar
+	ProcessingList
+}
+
+func NewContext(q Query, rar Registrar) *Context {
+	return &Context{Query: q, Registrar: rar}
+}
 
 // used internally to generate matched phrases in a good order.
 type ProcessingList struct {
-	posted [PriorityCount][]Process
+	pending   [mdl.NumPhases][]Process
+	lastPhase mdl.Phase
 }
 
-func (m *ProcessingList) AddToList(i Priority, p Process) {
-	m.posted[i] = append(m.posted[i], p)
+// add to the post processing list.
+func (m *ProcessingList) PostProcess(z Phase, p Process) (err error) {
+	if next := m.lastPhase + 1; z < next {
+		err = fmt.Errorf("scheduled %s(%d) while next phase is %s(%d)", z, z, next, next)
+	} else {
+		// fix: here out of curiosity; remove.
+		if z == next {
+			// log.Printf("scheduled for current phase %s", z)
+		}
+		m.pending[z] = append(m.pending[z], p)
+	}
+	return
 }
 
-func (m *ProcessingList) ProcessAll(q Query) (err error) {
-Loop:
-	for i := Priority(0); i < PriorityCount; i++ {
-		// fix: can we really add new processes during post?
-		// and if so, shouldnt mock panic on misorders?
-		for len(m.posted[i]) > 0 {
-			posted := m.posted[i]
-			next, rest := posted[0], posted[1:]
-			if e := next(q); e != nil {
+// can return with:
+// everything in this phase competed ( err is nil )
+// nothing was able to run ( err is mdl.Missing )
+// some other error
+func (m *ProcessingList) UpdatePhase(z Phase) (err error) {
+	m.lastPhase = z //
+	for prev := m.pending[z]; len(prev) > 0; m.pending[z] = prev {
+		// run the set of post process callbacks
+		if next, e := updatePhase(z, prev); e != nil && !errors.Is(e, mdl.Missing) {
+			err = e
+			break
+		} else if e != nil && len(next) == len(prev) {
+			// return missing only if nothing in the list moved forward
+			err = e
+			break
+		} else {
+			// otherwise update the list
+			prev = next
+		}
+	}
+	return
+}
+
+// run through the passed processing list one time
+// return mdl.Missing if any of them failed to process
+func updatePhase(z Phase, pending []Process) (ret []Process, err error) {
+	var retry int
+	var firstMissing error
+	for _, callback := range pending {
+		if e := callback(); e != nil {
+			if !errors.Is(e, mdl.Missing) {
 				err = e
-				break Loop
+				break // return any critical errors
 			} else {
-				m.posted[i] = rest
+				pending[retry] = callback
+				retry++ // remember any callbacks that need to try again
+				if firstMissing == nil {
+					firstMissing = e // remember the first reason
+				}
 			}
 		}
+	}
+	if err == nil {
+		ret = pending[:retry]
+		err = firstMissing
 	}
 	return
 }

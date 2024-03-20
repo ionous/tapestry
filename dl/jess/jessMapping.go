@@ -2,6 +2,7 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // ----
@@ -15,9 +16,9 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *DirectionOfLinking) buildLink(q Query, rar *Context) (ret jessLink, err error) {
+func (op *DirectionOfLinking) buildLink(ctx *Context) (ret jessLink, err error) {
 	// fix:what's the exact difference between "" and nil again?
-	if n, e := op.Linking.BuildNoun(q, rar, nil, []string{""}); e != nil {
+	if n, e := op.Linking.BuildNoun(ctx, nil, []string{""}); e != nil {
 		err = e
 	} else {
 		// direction is already normalized...
@@ -68,9 +69,9 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 }
 
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
-func (op *Linking) BuildNoun(q Query, rar *Context, ts, ks []string) (ret *DesiredNoun, err error) {
+func (op *Linking) BuildNoun(ctx *Context, ts, ks []string) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
-		if els, e := buildNounsFrom(q, rar, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
+		if els, e := buildNounsFrom(ctx, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
 			err = e
 		} else {
 			a := els[0]
@@ -82,12 +83,12 @@ func (op *Linking) BuildNoun(q Query, rar *Context, ts, ks []string) (ret *Desir
 
 // helper since we know there's linking doesnt support counted nouns, but does support nowhere;
 // BuildNouns will always return a list of one or none.
-func (op *Linking) GenerateNoun(q Query, rar *Context, ts, ks []string) (ret string, err error) {
-	if n, e := op.BuildNoun(q, rar, ts, ks); e != nil {
+func (op *Linking) GenerateNoun(ctx *Context, ts, ks []string) (ret string, err error) {
+	if n, e := op.BuildNoun(ctx, ts, ks); e != nil {
 		err = e
 	} else if n != nil {
-		if e := rar.PostProcess(GenerateValues, func(Query) error {
-			return n.generateValues(rar)
+		if e := ctx.PostProcess(mdl.ValuePhase, func() error {
+			return n.generateValues(ctx)
 		}); e != nil {
 			err = e
 		} else {

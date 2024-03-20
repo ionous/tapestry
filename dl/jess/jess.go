@@ -1,9 +1,6 @@
 package jess
 
 import (
-	"errors"
-	"fmt"
-
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
@@ -55,46 +52,4 @@ type Generator interface {
 // used internally for matching some kinds of phrases.
 type Interpreter interface {
 	Match(Query, *InputState) bool
-}
-
-// match one or more sentences and use the registrar
-// to create  nouns, define kinds, set properties, and so on.
-func Generate(q Query, rar Registrar, paragraph string) (err error) {
-	ctx := Context{Registrar: rar}
-	if spans, e := match.MakeSpans(paragraph); e != nil {
-		err = fmt.Errorf("%w reading %s", e, paragraph)
-	} else if e := generateSpans(q, &ctx, spans); e != nil {
-		err = fmt.Errorf("%w generating %s", e, paragraph)
-	} else {
-		err = ctx.proc.ProcessAll(q)
-	}
-	return
-}
-
-func generateSpans(q Query, ctx *Context, spans []match.Span) (err error) {
-	for _, span := range spans {
-		if m, e := Match(q, span); e != nil {
-			err = fmt.Errorf("%w matching %s", e, span)
-			break
-		} else if e := m.Generate(ctx); e != nil {
-			err = e
-			break
-		}
-	}
-	return
-}
-
-// matches an english like sentence against jess's parse trees.
-// returns an object which can create nouns, define kinds, set properties, and so on.
-func Match(q Query, ws match.Span) (ret Generator, err error) {
-	var m MatchingPhrases
-	input := MakeInput(ws)
-	if m, ok := m.Match(q, &input); !ok {
-		err = errors.New("failed to match phrase")
-	} else if cnt := input.Len(); cnt != 0 {
-		err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
-	} else {
-		ret = m
-	}
-	return
 }

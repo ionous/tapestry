@@ -3,14 +3,15 @@ package jess
 import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 func (op *Name) GetNormalizedName() string {
 	return inflect.Normalize(op.Matched.String())
 }
 
-func (op *Name) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
-	if n, e := op.buildNoun(q, rar, Things, ts, ks); e != nil {
+func (op *Name) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+	if n, e := op.buildNoun(ctx, Things, ts, ks); e != nil {
 		err = e
 	} else {
 		ret = []DesiredNoun{n}
@@ -18,19 +19,19 @@ func (op *Name) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []Desire
 	return
 }
 
-func (op *Name) buildNoun(q Query, rar *Context, defaultKind string, ts, ks []string) (ret DesiredNoun, err error) {
-	if noun, c, e := ensureNoun(q, rar, op.Matched.(match.Span)); e != nil {
+func (op *Name) buildNoun(ctx *Context, defaultKind string, ts, ks []string) (ret DesiredNoun, err error) {
+	if noun, c, e := ensureNoun(ctx, op.Matched.(match.Span)); e != nil {
 		err = e
-	} else if e := registerKinds(rar, noun, ks); e != nil {
+	} else if e := registerKinds(ctx, noun, ks); e != nil {
 		err = e
 	} else {
 		n := DesiredNoun{Noun: noun, Traits: ts}
 		if c {
 			n.addArticle(op.Article)
-			rar.PostProcess(GenerateDefaultKinds, func(q Query) (err error) {
+			err = ctx.PostProcess(mdl.FallbackPhase, func() (err error) {
 				// eats the error; if got an incompatible kind,
 				// that's cool: this is just a fallback.
-				_ = rar.AddNounKind(noun, defaultKind)
+				_ = ctx.AddNounKind(noun, defaultKind)
 				return
 			})
 		}
@@ -57,7 +58,8 @@ func (op *Name) matchName(input *InputState) (okay bool) {
 }
 
 // returns index of an "important" keyword
-// or the end of the string if none found
+// or the end of the string if none found.
+// inform also has troubles with names like "the has been."
 func keywordScan(ws []match.Word) (ret int) {
 	ret = len(ws) // provisionally the whole thing.
 Loop:

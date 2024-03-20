@@ -4,14 +4,14 @@ package jess
 // to support "counted nouns" any given specification can generate multiple nouns
 // ( even though all, other than "names" and "counted nouns" only generate one a piece. )
 type NounBuilder interface {
-	BuildNouns(q Query, rar *Context, traits, kinds []string) ([]DesiredNoun, error)
+	BuildNouns(ctx *Context, traits, kinds []string) ([]DesiredNoun, error)
 }
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
-func buildNounsFrom(q Query, rar *Context, ts, ks []string, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
+func buildNounsFrom(ctx *Context, ts, ks []string, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
 	for _, opt := range options {
 		if !opt.IsNil {
-			ret, err = opt.BuildNouns(q, rar, ts, ks)
+			ret, err = opt.BuildNouns(ctx, ts, ks)
 			break
 		}
 	}

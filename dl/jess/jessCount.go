@@ -25,15 +25,15 @@ func (op *CountedKind) String() string {
 // generates n initial instances (and their aliases, cause why not.)
 // delays the desired traits and additional kinds
 // ( tbd if that makes sense or not )
-func (op *CountedKind) BuildNouns(q Query, rar *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *CountedKind) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
 	if plural, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
 		if cnt := int(op.MatchingNumber.Number); cnt > 0 {
-			singular := rar.GetSingular(plural)
+			singular := ctx.GetSingular(plural)
 			ret = make([]DesiredNoun, cnt)
 			for i := 0; i < cnt; i++ {
-				if n, e := buildAnon(rar, plural, singular, ts, ks); e != nil {
+				if n, e := buildAnon(ctx, plural, singular, ts, ks); e != nil {
 					err = e
 					break
 				} else {

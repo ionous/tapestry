@@ -117,9 +117,10 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// doors (and nowhere) can be used on the lhs.
+		// ensure that a door can be used on the lhs.
 		// but note: doors cant be mapped to multiple places.
 		// ( ie, ng: The door is south of one place and north of another place. )
+		// fix: verify the use of nowhere
 		test: `The passageway is south of the kitchen. The passageway is a door.`,
 		result: []string{
 			"AddNounName", "passageway", "passageway",
@@ -132,7 +133,7 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// reverse the order of declaration.
+		// ensure that a door can be used on the rhs,
 		test: `The kitchen is south of the passageway. The passageway is a door.`,
 		result: []string{
 			"AddNounName", "kitchen", "kitchen",
@@ -152,15 +153,12 @@ var Phrases = []Phrase{
 			"AddNounName", "kitchen", "kitchen",
 			"AddNounName", "passageway", "passageway",
 			"AddNounKind", "passageway", "doors",
+			//
 			"AddNounName", "basement", "basement",
 			"AddNounKind", "basement", "rooms",
-			"AddNounKind", "kitchen", "rooms", // kitchen defaults to room because its mentioned in a directional phrase
-			// fix? inform seems to *always* set indefinite article for "called the" ( re: passageway )
-			// but tapestry only does so when the noun is new.
-			// it's possible that inform elevates "called the" sub-phrases ahead of everything else.
-			"AddNounValue", "basement", "indefinite article", text("the"),
-			//  containment macro (which implies a relation -- recorded: but not output by mock)
 			"ApplyMacro", "contain", "basement", "passageway",
+			//
+			"AddNounKind", "kitchen", "rooms", // kitchen defaults to room because its mentioned in a directional phrase
 			// movement via the existing door
 			// the kitchen is south of the passageway,
 			// and the passageway is in the basement,
@@ -178,6 +176,11 @@ var Phrases = []Phrase{
 			"AddNounTrait", "kitchen-north-door", "privately named",
 			"AddNounValue", "kitchen-north-door", "destination", textKind("basement", "rooms"),
 			"AddNounPair", "kitchen", "whereabouts", "kitchen-north-door",
+			//
+			// fix? inform seems to *always* set indefinite article for "called the" ( re: passageway )
+			// but tapestry only does so when the noun is new.
+			// it's possible that inform elevates "called the" sub-phrases ahead of everything else.
+			"AddNounValue", "basement", "indefinite article", text("the"),
 		},
 	},
 	{
@@ -237,7 +240,6 @@ var Phrases = []Phrase{
 			"AddNounPair", "mystery spot", "whereabouts", "mystery-spot-north-door",
 		},
 	},
-
 	// ------------------------------------------------------------------------
 	// MapConnection
 	// ------------------------------------------------------------------------
@@ -572,6 +574,7 @@ var Phrases = []Phrase{
 			"AddNounName", "thing-2", "thing-2",
 			//
 			"AddNounName", "kitchen", "kitchen",
+			"ApplyMacro", "contain", "kitchen", "thing-1", "thing-2",
 			"AddNounKind", "kitchen", "things",
 			//
 			"AddNounAlias", "thing-1", "thing",
@@ -581,8 +584,6 @@ var Phrases = []Phrase{
 			"AddNounAlias", "thing-2", "thing",
 			"AddNounTrait", "thing-2", "counted",
 			"AddNounValue", "thing-2", "printed name", text("thing"),
-			//
-			"ApplyMacro", "contain", "kitchen", "thing-1", "thing-2",
 		},
 	},
 	{
@@ -592,6 +593,7 @@ var Phrases = []Phrase{
 			"AddNounName", "hershel", "Hershel",
 			"AddNounName", "scissors", "scissors",
 			"AddNounName", "pen", "pen",
+			"ApplyMacro", "carry", "hershel", "scissors", "pen",
 			//
 			"AddNounKind", "hershel", "things", // FIX: carries should be actor
 			"AddNounKind", "scissors", "things",
@@ -599,7 +601,6 @@ var Phrases = []Phrase{
 			//
 			"AddNounTrait", "hershel", "proper named",
 			"AddNounTrait", "scissors", "proper named", // yes; this conforms with inform.
-			"ApplyMacro", "carry", "hershel", "scissors", "pen",
 		},
 	},
 	{
@@ -609,13 +610,13 @@ var Phrases = []Phrase{
 			"AddNounName", "scissors", "scissors",
 			"AddNounName", "pen", "pen",
 			"AddNounName", "hershel", "Hershel",
+			"ApplyMacro", "carry", "hershel", "scissors", "pen",
 			//
 			"AddNounKind", "scissors", "things",
 			"AddNounKind", "pen", "things",
 			"AddNounKind", "hershel", "things",
 			//
 			"AddNounTrait", "hershel", "proper named",
-			"ApplyMacro", "carry", "hershel", "scissors", "pen",
 		},
 	},
 	{
@@ -623,10 +624,9 @@ var Phrases = []Phrase{
 		result: []string{
 			"AddNounName", "unhappy man", "unhappy man",
 			"AddNounName", "closed bottle", "closed bottle",
-			//
+			"ApplyMacro", "contain", "closed bottle", "unhappy man",
 			"AddNounKind", "unhappy man", "things",
 			"AddNounKind", "closed bottle", "things",
-			"ApplyMacro", "contain", "closed bottle", "unhappy man",
 		},
 	},
 	{
@@ -640,11 +640,10 @@ var Phrases = []Phrase{
 			//
 			"AddNounName", "altar", "altar",
 			"AddNounKind", "altar", "supporters",
+			"ApplyMacro", "support", "altar", "stake",
 			//
 			"AddNounValue", "altar", "indefinite article", text("the"),
 			"AddNounValue", "stake", "indefinite article", text("the"),
-			//
-			"ApplyMacro", "support", "altar", "stake",
 		},
 	},
 	{
@@ -658,12 +657,12 @@ var Phrases = []Phrase{
 			"AddNounKind", "trunk", "containers",
 			//
 			"AddNounName", "lobby", "lobby",
+			"ApplyMacro", "contain", "lobby", "trunk",
 			"AddNounKind", "lobby", "things",
 			//
 			"AddNounTrait", "trunk", "closed",
 			"AddNounTrait", "trunk", "openable",
 			"AddNounValue", "trunk", "indefinite article", text("the"),
-			"ApplyMacro", "contain", "lobby", "trunk",
 		},
 	},
 	{
@@ -674,6 +673,7 @@ var Phrases = []Phrase{
 			"AddNounName", "notebook", "notebook",
 			"AddNounName", "gripping hand", "gripping hand",
 			"AddNounName", "coffin", "coffin",
+			"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			//
 			"AddNounKind", "coins", "things",
 			"AddNounKind", "notebook", "things",
@@ -681,7 +681,6 @@ var Phrases = []Phrase{
 			"AddNounKind", "coffin", "things", // FIX: auto container.
 			//
 			"AddNounTrait", "coins", "plural named",
-			"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 		},
 	},
 	{
@@ -692,6 +691,7 @@ var Phrases = []Phrase{
 			"AddNounName", "maria", "Maria",
 			"AddNounName", "santa", "Santa",
 			"AddNounName", "santana", "Santana",
+			"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
 			//
 			"AddNounKind", "hector", "things",
 			"AddNounKind", "maria", "things",
@@ -702,8 +702,6 @@ var Phrases = []Phrase{
 			"AddNounTrait", "maria", "proper named",
 			"AddNounTrait", "santa", "proper named",
 			"AddNounTrait", "santana", "proper named",
-			//
-			"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
 		},
 	},
 	{
@@ -795,12 +793,10 @@ var Phrases = []Phrase{
 		result: []string{
 			"AddNounName", "coffin", "coffin",
 			"AddNounKind", "coffin", "containers",
-			//
 			"AddNounName", "antechamber", "antechamber",
+			"ApplyMacro", "contain", "antechamber", "coffin",
 			"AddNounKind", "antechamber", "things",
 			"AddNounTrait", "coffin", "closed",
-			//
-			"ApplyMacro", "contain", "antechamber", "coffin",
 		},
 	},
 	{
@@ -809,12 +805,10 @@ var Phrases = []Phrase{
 		result: []string{
 			"AddNounName", "bottle", "bottle",
 			"AddNounName", "kitchen", "kitchen",
-			//
+			"ApplyMacro", "contain", "kitchen", "bottle",
 			"AddNounKind", "bottle", "things",
 			"AddNounKind", "kitchen", "things",
-			//
 			"AddNounTrait", "bottle", "openable",
-			"ApplyMacro", "contain", "kitchen", "bottle",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -828,6 +822,7 @@ var Phrases = []Phrase{
 			"AddNounName", "coins", "coins",
 			"AddNounName", "notebook", "notebook",
 			"AddNounName", "gripping hand", "gripping hand",
+			"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 			// implicit kinds are sorted by name
 			"AddNounKind", "coffin", "things",
 			"AddNounKind", "coins", "things",
@@ -835,7 +830,6 @@ var Phrases = []Phrase{
 			"AddNounKind", "gripping hand", "things",
 			// then values
 			"AddNounTrait", "coins", "plural named",
-			"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
 		},
 	},
 	{
@@ -847,6 +841,7 @@ var Phrases = []Phrase{
 			"AddNounName", "supporter-1", "supporter-1",
 			"AddNounKind", "container-1", "containers",
 			"AddNounName", "container-1", "container-1",
+			"ApplyMacro", "contain", "lobby", "supporter-1", "container-1",
 			"AddNounKind", "lobby", "things",
 			"AddNounAlias", "supporter-1", "supporter",
 			"AddNounTrait", "supporter-1", "counted",
@@ -854,7 +849,6 @@ var Phrases = []Phrase{
 			"AddNounAlias", "container-1", "container",
 			"AddNounTrait", "container-1", "counted",
 			"AddNounValue", "container-1", "printed name", text("container"),
-			"ApplyMacro", "contain", "lobby", "supporter-1", "container-1",
 		},
 	},
 }

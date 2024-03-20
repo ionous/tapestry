@@ -5,9 +5,14 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-// KindsOf
+// runs in the AncestryPhase phase
+func (op *KindsOf) Phase() Phase {
+	return mdl.AncestryPhase
+}
+
 func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Names.Match(AddContext(q, ExcludeNounMatching), &next) &&

@@ -8,6 +8,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
+// runs in the PropertyPhase phase
+func (op *KindsAreEither) Phase() Phase {
+	return mdl.PropertyPhase
+}
 func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kind.Match(q, &next) &&

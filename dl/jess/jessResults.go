@@ -37,6 +37,7 @@ func (n *DesiredNoun) addArticle(a *Article) {
 }
 
 // send the contents of the noun to the db
+// assumes that the noun key is already set.
 func (n DesiredNoun) generateValues(rar *Context) (err error) {
 	if e := n.applyAliases(rar); e != nil {
 		err = e
@@ -47,6 +48,8 @@ func (n DesiredNoun) generateValues(rar *Context) (err error) {
 	}
 	return
 }
+
+// assumes that the noun key is already set.
 func (n DesiredNoun) applyAliases(rar *Context) (err error) {
 	for _, a := range n.Aliases {
 		if e := rar.AddNounName(n.Noun, a, -1); e != nil {
@@ -56,6 +59,8 @@ func (n DesiredNoun) applyAliases(rar *Context) (err error) {
 	}
 	return
 }
+
+// assumes that the noun key is already set.
 func (n DesiredNoun) applyTraits(rar *Context) (err error) {
 	for _, t := range n.Traits {
 		if e := rar.AddNounTrait(n.Noun, t); e != nil {
@@ -65,6 +70,8 @@ func (n DesiredNoun) applyTraits(rar *Context) (err error) {
 	}
 	return
 }
+
+// assumes that the noun key is already set.
 func (n DesiredNoun) applyValues(rar *Context) (err error) {
 	for _, v := range n.Values {
 		if e := rar.AddNounValue(n.Noun, v.Field, v.Assign); e != nil {

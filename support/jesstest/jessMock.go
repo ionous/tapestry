@@ -27,10 +27,32 @@ func MakeMock(q jess.Query, nounPool map[string]string) Mock {
 }
 
 func (m *Mock) Generate(paragraph string) (ret []string, err error) {
-	if e := jess.Generate(m.q, m, paragraph); e != nil {
+	if e := m.generate(paragraph); e != nil {
 		err = e
 	} else {
 		ret = m.out
+	}
+	return
+}
+
+func (m *Mock) generate(paragraph string) (err error) {
+	if p, e := jess.NewParagraph(paragraph); e != nil {
+		err = e
+	} else {
+		ctx := jess.NewContext(m.q, m)
+		for z := mdl.Phase(0); z < mdl.NumPhases; z++ {
+			if _, e := p.Generate(ctx, z); e != nil {
+				err = e // match, and schedule callbacks for (later) phases
+				break
+			} else {
+				// update callbacks for the current phase
+				// in story; these would be intermixed with other scheduled elements for the phase
+				if e := ctx.UpdatePhase(z); e != nil {
+					err = e
+					break
+				}
+			}
+		}
 	}
 	return
 }

@@ -35,16 +35,6 @@ type Registrar interface {
 	Apply(verb Macro, lhs, rhs []string) error
 }
 
-type Context struct {
-	Registrar
-	proc ProcessingList
-}
-
-func (ctx *Context) PostProcess(i Priority, p Process) (_ error) {
-	ctx.proc.AddToList(i, p)
-	return
-}
-
 // setup the default traits for the passed kind
 func AddKindTraits(rar Registrar, kind string, traits Traitor) (err error) {
 	for ts := traits; ts.HasNext(); {

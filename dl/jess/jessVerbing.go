@@ -1,9 +1,15 @@
 package jess
 
+import "git.sr.ht/~ionous/tapestry/weave/mdl"
+
 // -------------------------------------------------------------------------
 // VerbNamesAreNames
 // -------------------------------------------------------------------------
 
+// runs in the NounPhase phase
+func (op *VerbNamesAreNames) Phase() Phase {
+	return mdl.NounPhase
+}
 func (op *VerbNamesAreNames) GetNouns() Names {
 	return op.Names
 }
@@ -36,7 +42,10 @@ func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
 // -------------------------------------------------------------------------
 // NamesVerbNames
 // -------------------------------------------------------------------------
-
+// runs in the NounPhase phase
+func (op *NamesVerbNames) Phase() Phase {
+	return mdl.NounPhase
+}
 func (op *NamesVerbNames) GetNouns() Names {
 	return op.Names
 }
@@ -70,7 +79,10 @@ func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
 // -------------------------------------------------------------------------
 // NamesAreLikeVerbs
 // -------------------------------------------------------------------------
-
+// runs in the NounPhase phase
+func (op *NamesAreLikeVerbs) Phase() Phase {
+	return mdl.NounPhase
+}
 func (op *NamesAreLikeVerbs) GetNouns() Names {
 	return op.Names
 }
@@ -127,30 +139,32 @@ type jessVerbPhrase interface {
 	IsReversed() bool
 }
 
-func generateVerbPhrase(rar *Context, p jessVerbPhrase) error {
-	return rar.PostProcess(GenerateNouns, func(q Query) (err error) {
-		if ts, ks, e := p.GetAdjectives().Reduce(); e != nil {
-			err = e
-		} else if lhs, e := p.GetNouns().BuildNouns(q, rar, ts, ks); e != nil {
-			err = e
-		} else if rhs, e := p.GetOtherNouns().BuildNouns(q, rar, nil, nil); e != nil {
-			err = e
-		} else {
+func generateVerbPhrase(ctx *Context, p jessVerbPhrase) (err error) {
+	if ts, ks, e := p.GetAdjectives().Reduce(); e != nil {
+		err = e
+	} else if lhs, e := p.GetNouns().BuildNouns(ctx, ts, ks); e != nil {
+		err = e
+	} else if rhs, e := p.GetOtherNouns().BuildNouns(ctx, nil, nil); e != nil {
+		err = e
+	} else {
+		err = ctx.PostProcess(mdl.MacroPhase, func() (err error) {
+			// applies macros immediately ( in NounPhase ) because otherwise the ConnectionPhase
+			// can apply default locations even if the macro declares them explicitly.
 			macro := p.GetMacro()
 			if p.IsReversed() {
 				lhs, rhs = rhs, lhs
+			} // note: some phrases "the box is open" dont have macros.
+			// in that case, genValuesForNouns itself does all the work.
+			if len(macro.Name) > 0 {
+				err = ctx.Apply(macro, reduceNouns(lhs), reduceNouns(rhs))
 			}
-			err = genNouns(rar, lhs, rhs, func(src, tgt []DesiredNoun) (err error) {
-				// note: some phrases "the box is open" dont have macros.
-				// in that case, genNouns itself does all the work.
-				if len(macro.Name) > 0 {
-					err = rar.Apply(macro, reduceNouns(src), reduceNouns(tgt))
-				}
-				return
-			})
-		}
-		return
-	})
+			if err == nil {
+				err = genValuesForNouns(ctx, lhs, rhs, nil)
+			}
+			return
+		})
+	}
+	return
 }
 
 // fix: this seems silly

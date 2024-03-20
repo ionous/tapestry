@@ -23,6 +23,11 @@ func (op *CalledName) GetNormalizedName() string {
 	return op.Name.GetNormalizedName()
 }
 
+// runs in the PropertyPhase phase
+func (op *KindsHaveProperties) Phase() Phase {
+	return mdl.PropertyPhase
+}
+
 func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kind.Match(q, &next) &&

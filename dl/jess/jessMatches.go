@@ -5,55 +5,95 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-// allows partial matches; test that there's no input left to verify a complete match.
-func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, okay bool) {
-	type matcher interface {
-		Generator
-		Interpreter
-		typeinfo.Instance
-	}
-	var best InputState
-	var bestMatch matcher
-	// fix? could change to reflect ( or expand type info ) to walk generically
-	for _, m := range []matcher{
-		//
-		&op.Understand, // understand "..." as .....
-		// kinds
-		&op.KindsOf,             // names {are} "a kind of"/"kinds of" [traits] kind.
-		&op.KindsAreTraits,      // objects {are} "usually" traits.
-		&op.KindsHaveProperties, // records|objects "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-		&op.KindsAreEither,      // objects ("can be"|"are either") new_trait [or new_trait...]
-		&op.AspectsAreTraits,    // aspects {are} names
-		// before phrases that might think the directions are part of the names.
-		&op.MapConnections, // "through" door {is} place.
-		&op.MapDirections,  // direction "of/from" place {is} place.
-		&op.MapLocations,   // place {is} direction "of/from" places.
-		// noun phrases
-		&op.VerbNamesAreNames, // verb nouns {are} nouns
-		&op.NamesVerbNames,    // nouns {are} verbing nouns
-		&op.NamesAreLikeVerbs, // nouns {are} adjectives [verb nouns]
-		&op.PropertyNounValue, // property "of" noun is value
-		&op.NounPropertyValue, // noun "has" property value
+// different phases (z) can match different phrases (ws)
+// should a match occur, return true; and set 'out' to the matched phrase.
+func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) {
+	var op MatchingPhrases
+	next := MakeInput(ws)
+	switch z {
+	case mdl.LanguagePhase:
+		// "understand" {quoted text} as .....
+		okay = matchPhrase(q, next, &op.Understand, out)
 
-	} {
-		if next := *input; //
-		m.Match(q, &next) /* && len(next) == 0 */ {
-			if !okay || next.Len() < best.Len() {
-				best = next
-				bestMatch, okay = m, true
-				if best.Len() == 0 {
-					break
-				}
-			}
-		}
+	case mdl.AncestryPhase:
+		// FIX -- these need TRAITS to *match*
+		// to do the idea of match once, generate often;
+		// this would have to delay parsing the trailing phrase.
+		// probably part of the phase has to be scheduled; while the basic naming does not.
+		// ---
+		// names {are} "a kind of"/"kinds of" [traits] kind.
+		okay = matchPhrase(q, next, &op.KindsOf, out)
+
+	case mdl.PropertyPhase:
+		// fix: it'd be nice to re-factor these so they dont each have to match kinds
+		// ex. kinds(of aspects, out) {are} names
+		// The colors are red, blue, and greasy green
+		okay = matchPhrase(q, next, &op.AspectsAreTraits, out) ||
+			// kinds(of objects, out) {are} "usually" traits.
+			matchPhrase(q, next, &op.KindsAreTraits, out) ||
+			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
+			matchPhrase(q, next, &op.KindsHaveProperties, out) ||
+			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
+			matchPhrase(q, next, &op.KindsAreEither, out)
+
+	case mdl.MappingPhase:
+		// "through" door {is} place.
+		okay = matchPhrase(q, next, &op.MapConnections, out) ||
+			// direction "of/from" place {is} place.
+			matchPhrase(q, next, &op.MapDirections, out) ||
+			// place {is} direction "of/from" places.
+			matchPhrase(q, next, &op.MapLocations, out)
+
+	case mdl.NounPhase:
+		// verb nouns {are} nouns
+		okay = matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
+			// nouns {are} verbing nouns
+			matchPhrase(q, next, &op.NamesVerbNames, out) ||
+			// nouns {are} adjectives [verb nouns]
+			matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
+
+	case mdl.FallbackPhase:
+		// property "of" noun {are} value
+		okay = matchPhrase(q, next, &op.PropertyNounValue, out) ||
+			// noun "has" property value
+			matchPhrase(q, next, &op.NounPropertyValue, out)
 	}
-	if okay {
-		if useLogging(q) {
-			log.Printf("matched %s %q\n", bestMatch.TypeInfo().TypeName(), match.Span(input.Words()).String())
+	return
+}
+
+// fix: actually declare all the members with this interface as a slot?
+type matcher interface {
+	Generator
+	Interpreter
+	typeinfo.Instance
+	Phase() mdl.Phase
+}
+
+type bestMatch struct {
+	match    Generator
+	numWords int
+}
+
+// match the input against the passed parse tree.
+// passes out an object which can create nouns, define kinds, set properties, and so on.
+// returns the number of words *not* matched
+func matchPhrase(q Query, input InputState, op matcher, out *bestMatch) (okay bool) {
+	// "understand" {quoted text} as .....
+	if next := input; op.Match(q, &next) {
+		if remaining := next.Len(); remaining > 0 {
+			if cnt := input.Len() - remaining; cnt > out.numWords {
+				out.numWords = cnt
+			}
+		} else {
+			if useLogging(q) {
+				log.Printf("matched %s %q\n", op.TypeInfo().TypeName(), match.Span(input.Words()).String())
+			}
+			(*out) = bestMatch{match: op}
+			okay = true
 		}
-		ret, *input = bestMatch, best
 	}
 	return
 }
