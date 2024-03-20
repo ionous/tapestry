@@ -20,7 +20,7 @@ func (op *DefineMacro) Execute(macro rt.Runtime) error {
 // Schedule - register the macro with the importer;
 // subsequent CallMacro(s) will be able to run it.
 func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.MacroName); e != nil {
 			err = e
 		} else {
@@ -32,7 +32,7 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 				pb.AddLocals(reduceFields(w, ps[1:]))
 			}
 			pb.AppendRule(0, rt.Rule{Exe: op.MacroStatements})
-			err = cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) error {
+			err = cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
 			})
 		}
@@ -42,7 +42,7 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
 func (op *CallMacro) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
 		// suspend additional scheduling because we dont capture the calling context
 		// if we cant process it all *right now* we'll lose the arguments being passed to pattern
 		cat.SuspendSchedule++

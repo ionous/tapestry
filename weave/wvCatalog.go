@@ -3,6 +3,7 @@ package weave
 import (
 	"database/sql"
 	"log"
+	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
@@ -32,6 +33,7 @@ type Catalog struct {
 }
 
 type ScheduledCallback func(*Weaver) error
+type ScheduledStep func(Phase) error
 
 func NewCatalog(db *sql.DB) *Catalog {
 	return NewCatalogWithWarnings(db, nil, nil)
@@ -105,6 +107,11 @@ func (cat *Catalog) AssembleCatalog() (err error) {
 	return
 }
 
+func (cat *Catalog) NewCounter(name string) (ret string) {
+	next := cat.Env.Inc(name, 1)
+	return name + "-" + strconv.Itoa(next)
+}
+
 func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	found := -1 // tbd: a better way?
 	for i := 0; i < len(cat.pendingDomains); i++ {
@@ -133,8 +140,9 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 		} else {
 			cat.processing.Push(d)
 			//
-			for p := Phase(0); p <= RequireAll; p++ {
+			for p := Phase(0); p < NumPhases; p++ {
 				w := Weaver{Catalog: cat, Domain: d.name, Phase: p, Runtime: cat.run}
+				//
 				if e := d.runPhase(&w); e != nil {
 					err = e
 					break
@@ -186,6 +194,15 @@ func (cat *Catalog) Schedule(when Phase, what ScheduledCallback) (err error) {
 	return
 }
 
+func (cat *Catalog) Step(fn ScheduledStep) (err error) {
+	if d, ok := cat.processing.Top(); !ok {
+		err = errutil.New("unknown top level domain")
+	} else {
+		d.scheduleStep(cat.cursor, fn)
+	}
+	return
+}
+
 // return the uniformly named domain ( creating it if necessary )
 func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err error) {
 	// find or create the domain
@@ -197,7 +214,7 @@ func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err
 		cat.domains[n] = d
 	}
 
-	if d.currPhase < 0 || d.currPhase >= RequireDependencies {
+	if d.currPhase < 0 || d.currPhase >= DependencyPhase {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain

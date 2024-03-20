@@ -10,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
@@ -40,7 +41,7 @@ func (m *Mock) generate(paragraph string) (err error) {
 		err = e
 	} else {
 		ctx := jess.NewContext(m.q, m)
-		for z := mdl.Phase(0); z < mdl.NumPhases; z++ {
+		for z := weave.Phase(0); z < weave.NumPhases; z++ {
 			if _, e := p.Generate(ctx, z); e != nil {
 				err = e // match, and schedule callbacks for (later) phases
 				break

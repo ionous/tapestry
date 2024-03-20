@@ -3,12 +3,12 @@ package jess
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // runs in the MappingPhase phase
 func (op *MapConnections) Phase() Phase {
-	return mdl.MappingPhase
+	return weave.MappingPhase
 }
 func (op *MapConnections) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -52,7 +52,7 @@ func (op *MapConnections) Generate(ctx *Context) (err error) {
 				err = errors.New("expected at least one door")
 				break
 			} else {
-				if e := ctx.PostProcess(mdl.ValuePhase, func() (err error) {
+				if e := ctx.PostProcess(weave.ValuePhase, func() (err error) {
 					if e := door.generateValues(ctx); e != nil {
 						err = e
 					} else {

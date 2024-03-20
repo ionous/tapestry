@@ -3,7 +3,7 @@ package jess
 import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 func (op *Name) GetNormalizedName() string {
@@ -28,7 +28,7 @@ func (op *Name) buildNoun(ctx *Context, defaultKind string, ts, ks []string) (re
 		n := DesiredNoun{Noun: noun, Traits: ts}
 		if c {
 			n.addArticle(op.Article)
-			err = ctx.PostProcess(mdl.FallbackPhase, func() (err error) {
+			err = ctx.PostProcess(weave.FallbackPhase, func() (err error) {
 				// eats the error; if got an incompatible kind,
 				// that's cool: this is just a fallback.
 				_ = ctx.AddNounKind(noun, defaultKind)

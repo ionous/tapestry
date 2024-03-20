@@ -24,7 +24,6 @@ func TestPhrases(t *testing.T) {
 			t.Fatal(e)
 		} else {
 			m.PrecachePaths()
-
 			for i, p := range jesstest.Phrases {
 				if str, ok := p.Test(); !ok {
 					continue // skip unused tests

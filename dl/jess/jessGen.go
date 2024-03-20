@@ -7,6 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
@@ -33,7 +34,7 @@ type postGenOne func(a string) error
 type postGenMany func(a, b []DesiredNoun) error
 
 func genValuesForNouns(ctx *Context, a, b []DesiredNoun, after postGenMany) (err error) {
-	return ctx.PostProcess(mdl.ValuePhase, func() (err error) {
+	return ctx.PostProcess(weave.ValuePhase, func() (err error) {
 		if e := generateValues(ctx, a); e != nil {
 			err = e
 		} else if e := generateValues(ctx, b); e != nil {

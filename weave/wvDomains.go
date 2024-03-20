@@ -14,10 +14,11 @@ import (
 type Domain struct {
 	name          string
 	cat           *Catalog
-	currPhase     Phase                     // updated during weave, ends at NumPhases
-	scheduling    [RequireAll + 1][]memento // separates commands into phases
-	suspended     []memento                 // for missing definitions
-	initialValues initialValues             // all of type assign.SetValue
+	currPhase     Phase                // updated during weave, ends at NumPhases
+	scheduling    [NumPhases][]memento // separates commands into phases
+	steps         []step
+	suspended     []memento     // for missing definitions
+	initialValues initialValues // all of type assign.SetValue
 }
 
 type initialValue struct {
@@ -42,6 +43,11 @@ type memento struct {
 	at    string
 	phase Phase
 	err   error
+}
+
+type step struct {
+	fn ScheduledStep
+	at string
 }
 
 func (d *Domain) writeInitialValues() (err error) {
@@ -97,6 +103,10 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 	return
 }
 
+func (d *Domain) scheduleStep(at string, fn ScheduledStep) {
+	d.steps = append(d.steps, step{fn, at})
+}
+
 func (d *Domain) schedule(at string, when Phase, what ScheduledCallback) (err error) {
 	if d.currPhase < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
@@ -118,11 +128,11 @@ func (d *Domain) schedule(at string, when Phase, what ScheduledCallback) (err er
 }
 
 func (d *Domain) runPhase(w *Weaver) (err error) {
-	phase := w.Phase
-	d.currPhase = phase // hrmm
+	z := w.Phase
+	d.currPhase = z // hrmm
 	// don't range over the slice since the contents can change during traversal.
 	// tbd; may no longer be true.
-	els := &d.scheduling[phase]
+	els := &d.scheduling[z]
 
 	for len(*els) > 0 {
 		// slice the next element out of the list
@@ -138,7 +148,11 @@ func (d *Domain) runPhase(w *Weaver) (err error) {
 			err = errutil.Append(err, e)
 		}
 	}
-	d.currPhase++
+	for _, el := range d.steps {
+		if e := el.fn(z); e != nil {
+			err = errutil.Append(err, e)
+		}
+	}
 	return
 }
 

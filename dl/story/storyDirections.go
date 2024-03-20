@@ -18,7 +18,7 @@ func (op *MapHeading) Execute(macro rt.Runtime) error {
 
 // departing from the current room in a direction
 func (op *MapHeading) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		//
 		if room, e := safe.GetText(w, op.RoomName); e != nil {
 			err = e
@@ -29,7 +29,7 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 		} else {
 			err = findClosestNouns(cat, func(w *weave.Weaver, nouns []string) (err error) {
 				room, otherRoom, door := nouns[0], nouns[1], nouns[2]
-				if e := cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+				if e := cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) error {
 					// exit this room moving through the (optional) door
 					return mapDirect(w, room, otherRoom, door, op.Dir)
 				}); e != nil {
@@ -55,7 +55,7 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 							if ok, e := pen.AddFact("dir", otherRoom, otherDir, room); e != nil {
 								err = e
 							} else if ok {
-								err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+								err = cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) error {
 									// create the reverse door, etc.
 									return mapDirect(w, otherRoom, room, "", otherDir)
 								})
@@ -82,7 +82,7 @@ type closestNouns struct {
 // searches for a list of existing nouns
 func findClosestNouns(cat *weave.Catalog, next afterClosestNouns, names ...string) error {
 	c := closestNouns{names: names, nouns: make([]string, 0, len(names)), next: next}
-	return cat.Schedule(weave.RequireNouns, c.schedule)
+	return cat.Schedule(weave.ValuePhase, c.schedule)
 }
 
 // matches weave.ScheduleCallback
@@ -114,7 +114,7 @@ func (op *MapDeparting) Execute(macro rt.Runtime) error {
 
 // departing from the current room via a door
 func (op *MapDeparting) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if room, e := safe.GetText(w, op.RoomName); e != nil {
 			err = e
 		} else if otherRoom, e := safe.GetText(w, op.OtherRoomName); e != nil {
@@ -186,7 +186,7 @@ func (op MapConnection) isTwoWay() bool {
 
 // queue this as its own commands helps ensure the relation gets built properly
 func relateNouns(w *weave.Weaver, noun, other string) error {
-	return w.Catalog.Schedule(weave.RequireNames, func(w *weave.Weaver) error {
+	return w.Catalog.Schedule(weave.ConnectionPhase, func(w *weave.Weaver) error {
 		return w.Pin().AddNounPair("whereabouts", noun, other)
 	})
 }

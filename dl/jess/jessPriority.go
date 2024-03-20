@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-type Phase = mdl.Phase
+type Phase = weave.Phase
 type Process func() error
 
 type Context struct {
@@ -22,8 +23,8 @@ func NewContext(q Query, rar Registrar) *Context {
 
 // used internally to generate matched phrases in a good order.
 type ProcessingList struct {
-	pending   [mdl.NumPhases][]Process
-	lastPhase mdl.Phase
+	pending   [weave.NumPhases][]Process
+	lastPhase weave.Phase
 }
 
 // add to the post processing list.

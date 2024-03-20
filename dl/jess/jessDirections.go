@@ -3,12 +3,12 @@ package jess
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // runs in the MappingPhase phase
 func (op *MapDirections) Phase() Phase {
-	return mdl.MappingPhase
+	return weave.MappingPhase
 }
 
 func (op *MapDirections) Match(q Query, input *InputState) (okay bool) {
@@ -43,7 +43,7 @@ func (op *MapDirections) simpleLink(ctx *Context) (err error) {
 	} else {
 		rhs := makeLink(rhs, "")
 		links = []jessLink{lhs, rhs}
-		err = ctx.PostProcess(mdl.ConnectionPhase, func() (err error) {
+		err = ctx.PostProcess(weave.ConnectionPhase, func() (err error) {
 			if e := assignDefaultKinds(ctx, links); e != nil {
 				err = e
 			} else {
@@ -62,7 +62,7 @@ func (op *MapDirections) multiLink(ctx *Context) (err error) {
 	} else if rhs, e := op.Redirect.buildLink(ctx); e != nil {
 		err = e
 	} else {
-		err = ctx.PostProcess(mdl.ConnectionPhase, func() (err error) {
+		err = ctx.PostProcess(weave.ConnectionPhase, func() (err error) {
 			links := []jessLink{lhs, rhs}
 			if e := assignDefaultKinds(ctx, links); e != nil {
 				err = e

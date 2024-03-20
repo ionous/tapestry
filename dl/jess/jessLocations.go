@@ -4,12 +4,12 @@ import (
 	"errors"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // runs in the MappingPhase phase
 func (op *MapLocations) Phase() Phase {
-	return mdl.MappingPhase
+	return weave.MappingPhase
 }
 func (op *MapLocations) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -31,7 +31,7 @@ func (op *MapLocations) Generate(ctx *Context) (err error) {
 	if links, e := op.generateLinks(ctx); e != nil {
 		err = e
 	} else {
-		err = ctx.PostProcess(mdl.ConnectionPhase, func() (err error) {
+		err = ctx.PostProcess(weave.ConnectionPhase, func() (err error) {
 			if e := assignDefaultKinds(ctx, links); e != nil {
 				err = e
 			} else {

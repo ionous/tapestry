@@ -4,12 +4,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // runs in the PropertyPhase phase
 func (op *AspectsAreTraits) Phase() Phase {
-	return mdl.PropertyPhase
+	return weave.PropertyPhase
 }
 
 // the colors are....

@@ -16,7 +16,7 @@ func (op *DefineAlias) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.ValuePhase, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.NounName); e != nil {
 			err = e
 		} else if names, e := safe.GetTextList(w, op.Names); e != nil {
@@ -50,7 +50,7 @@ func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := strings.Join(op.Lede, "/")
 	words := &grammar.Words{Words: op.Lede}
 	scans := append([]grammar.ScannerMaker{words}, op.Scans...)
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.RulePhase, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(name, &grammar.Directive{
 			Name:   name,
 			Series: scans,
@@ -67,7 +67,7 @@ func (op *DefineNamedGrammar) Execute(macro rt.Runtime) error {
 // isnt dependent on story / weave
 func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := inflect.Normalize(op.Name)
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.RulePhase, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(name, &grammar.Directive{
 			Name:   name,
 			Series: op.Scans,

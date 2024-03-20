@@ -8,20 +8,24 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[RequireDependencies-1]
-	_ = x[RequirePlurals-2]
-	_ = x[RequireAncestry-3]
-	_ = x[RequirePatterns-4]
-	_ = x[RequireDefaults-5]
-	_ = x[RequireNouns-6]
-	_ = x[RequireNames-7]
-	_ = x[RequireRules-8]
-	_ = x[RequireAll-9]
+	_ = x[DependencyPhase-1]
+	_ = x[LanguagePhase-2]
+	_ = x[AncestryPhase-3]
+	_ = x[PropertyPhase-4]
+	_ = x[MappingPhase-5]
+	_ = x[NounPhase-6]
+	_ = x[MacroPhase-7]
+	_ = x[ConnectionPhase-8]
+	_ = x[FallbackPhase-9]
+	_ = x[ValuePhase-10]
+	_ = x[RulePhase-11]
+	_ = x[FinalPhase-12]
+	_ = x[NumPhases-13]
 }
 
-const _Phase_name = "RequireDependenciesRequirePluralsRequireAncestryRequirePatternsRequireDefaultsRequireNounsRequireNamesRequireRulesRequireAll"
+const _Phase_name = "DependencyPhaseLanguagePhaseAncestryPhasePropertyPhaseMappingPhaseNounPhaseMacroPhaseConnectionPhaseFallbackPhaseValuePhaseRulePhaseFinalPhaseNumPhases"
 
-var _Phase_index = [...]uint8{0, 19, 33, 48, 63, 78, 90, 102, 114, 124}
+var _Phase_index = [...]uint8{0, 15, 28, 41, 54, 66, 75, 85, 100, 113, 123, 132, 142, 151}
 
 func (i Phase) String() string {
 	i -= 1

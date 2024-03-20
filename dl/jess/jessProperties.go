@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
@@ -25,7 +26,7 @@ func (op *CalledName) GetNormalizedName() string {
 
 // runs in the PropertyPhase phase
 func (op *KindsHaveProperties) Phase() Phase {
-	return mdl.PropertyPhase
+	return weave.PropertyPhase
 }
 
 func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {

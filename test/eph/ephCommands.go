@@ -17,7 +17,7 @@ type Aliases struct {
 }
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.FinalPhase, func(w *weave.Weaver) (err error) {
 		n := inflect.Normalize(op.ShortName)
 		if n, e := w.GetClosestNoun(n); e != nil {
 			err = e
@@ -42,7 +42,7 @@ type Aspects struct {
 }
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) (err error) {
 		pen := w.Pin()
 		if e := pen.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
 			err = e
@@ -68,7 +68,7 @@ type Directives struct {
 }
 
 func (op *Directives) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.RulePhase, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(op.Directive.Name, &op.Directive)
 	})
 }
@@ -93,7 +93,7 @@ type Kinds struct {
 }
 
 func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) (err error) {
 		pen := w.Pin()
 		if e := pen.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
@@ -111,7 +111,7 @@ type Nouns struct {
 }
 
 func (op *Nouns) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDefaults, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
 		_, err := mdl.AddNamedNoun(w.Pin(), op.Noun, op.Kind)
 		return err
 	})
@@ -126,7 +126,7 @@ type Opposites struct {
 }
 
 func (op *Opposites) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) error {
 		return w.Pin().AddOpposite(op.Opposite, op.Word)
 	})
 }
@@ -145,7 +145,7 @@ type Patterns struct {
 }
 
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		kb.AddLocals(reduceFields(op.Locals))
 		kb.AddParams(reduceFields(op.Params))
@@ -165,7 +165,7 @@ type Plurals struct {
 }
 
 func (op *Plurals) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) error {
 		return w.Pin().AddPlural(op.Plural, op.Singular)
 	})
 }
@@ -177,7 +177,7 @@ type Relations struct {
 }
 
 func (op *Relations) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) (err error) {
 		pen := w.Pin()
 		switch c := op.Cardinality.(type) {
 		case *OneOne:
@@ -201,7 +201,7 @@ type Relatives struct {
 }
 
 func (op *Relatives) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) error {
 		return w.Pin().AddNounPair(op.Rel, op.Noun, op.OtherNoun)
 	})
 }
@@ -213,7 +213,7 @@ type Rules struct {
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) error {
 		pb := mdl.NewPatternBuilder(op.PatternName)
 		pb.AppendRule(0, rt.Rule{
 			Exe: op.Exe,
@@ -235,7 +235,7 @@ type Values struct {
 }
 
 func (op *Values) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.DependencyPhase, func(w *weave.Weaver) (err error) {
 		pen := w.Pin()
 		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
 			err = e

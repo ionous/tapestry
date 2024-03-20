@@ -2,7 +2,7 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // ----
@@ -87,7 +87,7 @@ func (op *Linking) GenerateNoun(ctx *Context, ts, ks []string) (ret string, err 
 	if n, e := op.BuildNoun(ctx, ts, ks); e != nil {
 		err = e
 	} else if n != nil {
-		if e := ctx.PostProcess(mdl.ValuePhase, func() error {
+		if e := ctx.PostProcess(weave.ValuePhase, func() error {
 			return n.generateValues(ctx)
 		}); e != nil {
 			err = e

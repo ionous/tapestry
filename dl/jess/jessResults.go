@@ -4,7 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-// fix: maybe move this into mdl as a "noun builder" to reduce duplicate queries?
+// fix: maybe move this into weave as a "noun builder" to reduce duplicate queries?
 // maybe has an interface -- so that "AddKind" might be immediately adding for mock; but not for real
 type DesiredNoun struct {
 	Noun    string // key ( once it has been created; or if it already exists. )

@@ -1,6 +1,10 @@
 package jess
 
-import "testing"
+import (
+	"testing"
+
+	"git.sr.ht/~ionous/tapestry/support/match"
+)
 
 // ensure that StripArticle correctly detects and removes
 // common leading words such as "the", "a", "some", etc.
@@ -19,7 +23,7 @@ func TestStripArticle(t *testing.T) {
 	}
 
 	for _, p := range p {
-		if b := StripArticle(p.src); p.text != b {
+		if b := match.StripArticle(p.src); p.text != b {
 			t.Fatalf("text: %q: expected: %q != got: %q", p.src, p.article, b)
 		}
 		// else if p.article != a {

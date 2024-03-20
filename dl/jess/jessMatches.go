@@ -5,7 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // different phases (z) can match different phrases (ws)
@@ -14,11 +14,11 @@ func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) 
 	var op MatchingPhrases
 	next := MakeInput(ws)
 	switch z {
-	case mdl.LanguagePhase:
+	case weave.LanguagePhase:
 		// "understand" {quoted text} as .....
 		okay = matchPhrase(q, next, &op.Understand, out)
 
-	case mdl.AncestryPhase:
+	case weave.AncestryPhase:
 		// FIX -- these need TRAITS to *match*
 		// to do the idea of match once, generate often;
 		// this would have to delay parsing the trailing phrase.
@@ -27,7 +27,7 @@ func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) 
 		// names {are} "a kind of"/"kinds of" [traits] kind.
 		okay = matchPhrase(q, next, &op.KindsOf, out)
 
-	case mdl.PropertyPhase:
+	case weave.PropertyPhase:
 		// fix: it'd be nice to re-factor these so they dont each have to match kinds
 		// ex. kinds(of aspects, out) {are} names
 		// The colors are red, blue, and greasy green
@@ -39,7 +39,7 @@ func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) 
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
 			matchPhrase(q, next, &op.KindsAreEither, out)
 
-	case mdl.MappingPhase:
+	case weave.MappingPhase:
 		// "through" door {is} place.
 		okay = matchPhrase(q, next, &op.MapConnections, out) ||
 			// direction "of/from" place {is} place.
@@ -47,7 +47,7 @@ func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) 
 			// place {is} direction "of/from" places.
 			matchPhrase(q, next, &op.MapLocations, out)
 
-	case mdl.NounPhase:
+	case weave.NounPhase:
 		// verb nouns {are} nouns
 		okay = matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
 			// nouns {are} verbing nouns
@@ -55,7 +55,7 @@ func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) 
 			// nouns {are} adjectives [verb nouns]
 			matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
 
-	case mdl.FallbackPhase:
+	case weave.FallbackPhase:
 		// property "of" noun {are} value
 		okay = matchPhrase(q, next, &op.PropertyNounValue, out) ||
 			// noun "has" property value
@@ -69,7 +69,7 @@ type matcher interface {
 	Generator
 	Interpreter
 	typeinfo.Instance
-	Phase() mdl.Phase
+	Phase() weave.Phase
 }
 
 type bestMatch struct {

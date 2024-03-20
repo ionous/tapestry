@@ -3,12 +3,12 @@ package jess
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // runs in the PropertyPhase phase
 func (op *KindsAreTraits) Phase() Phase {
-	return mdl.PropertyPhase
+	return weave.PropertyPhase
 }
 
 func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {

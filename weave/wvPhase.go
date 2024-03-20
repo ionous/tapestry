@@ -7,13 +7,17 @@ type Phase int
 
 //go:generate stringer -type=Phase
 const (
-	RequireDependencies Phase = iota + 1 // domain
-	RequirePlurals                       // kinds and kinds of kinds
-	RequireAncestry                      // the actual kinds
-	RequirePatterns                      // pattern definitions
-	RequireDefaults
-	RequireNouns
-	RequireNames
-	RequireRules
-	RequireAll
+	DependencyPhase Phase = iota + 1
+	LanguagePhase         // definitions of words
+	AncestryPhase         // kinds and their derivation
+	PropertyPhase         // the members of kinds
+	MappingPhase          // match phrases that might otherwise treat directions as names.
+	NounPhase             // generate explicit nouns
+	MacroPhase            // tbd: merge with nouns?
+	ConnectionPhase       // pair up nouns, sometimes implying new nouns or specific kinds.
+	FallbackPhase         // generate kinds for nouns that didn't derive during connections
+	ValuePhase            // apply any collected values ( tbd: merge with rules? )
+	RulePhase
+	FinalPhase
+	NumPhases
 )

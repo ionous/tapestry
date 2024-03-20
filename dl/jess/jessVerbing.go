@@ -1,6 +1,6 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/weave/mdl"
+import "git.sr.ht/~ionous/tapestry/weave"
 
 // -------------------------------------------------------------------------
 // VerbNamesAreNames
@@ -8,7 +8,7 @@ import "git.sr.ht/~ionous/tapestry/weave/mdl"
 
 // runs in the NounPhase phase
 func (op *VerbNamesAreNames) Phase() Phase {
-	return mdl.NounPhase
+	return weave.NounPhase
 }
 func (op *VerbNamesAreNames) GetNouns() Names {
 	return op.Names
@@ -44,7 +44,7 @@ func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
 // -------------------------------------------------------------------------
 // runs in the NounPhase phase
 func (op *NamesVerbNames) Phase() Phase {
-	return mdl.NounPhase
+	return weave.NounPhase
 }
 func (op *NamesVerbNames) GetNouns() Names {
 	return op.Names
@@ -81,7 +81,7 @@ func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
 // -------------------------------------------------------------------------
 // runs in the NounPhase phase
 func (op *NamesAreLikeVerbs) Phase() Phase {
-	return mdl.NounPhase
+	return weave.NounPhase
 }
 func (op *NamesAreLikeVerbs) GetNouns() Names {
 	return op.Names
@@ -147,7 +147,7 @@ func generateVerbPhrase(ctx *Context, p jessVerbPhrase) (err error) {
 	} else if rhs, e := p.GetOtherNouns().BuildNouns(ctx, nil, nil); e != nil {
 		err = e
 	} else {
-		err = ctx.PostProcess(mdl.MacroPhase, func() (err error) {
+		err = ctx.PostProcess(weave.MacroPhase, func() (err error) {
 			// applies macros immediately ( in NounPhase ) because otherwise the ConnectionPhase
 			// can apply default locations even if the macro declares them explicitly.
 			macro := p.GetMacro()

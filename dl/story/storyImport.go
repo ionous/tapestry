@@ -1,17 +1,16 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
-
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/jess"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -21,7 +20,7 @@ func (op *DefineAspect) Execute(macro rt.Runtime) error {
 
 // (the) colors are red, blue, or green.
 func (op *DefineAspect) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if aspect, e := safe.GetText(w, op.Aspect); e != nil {
 			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
@@ -48,7 +47,7 @@ func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
@@ -76,7 +75,7 @@ func (op *DefinePhrase) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) (err error) {
 		if phrase, e := safe.GetText(w, op.Phrase); e != nil {
 			err = e
 		} else if macro, e := safe.GetText(w, op.Macro); e != nil {
@@ -98,7 +97,7 @@ func (op *DefineNouns) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineNouns) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
@@ -107,9 +106,9 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 			names := nouns.Strings()
 			if kind := kind.String(); len(kind) > 0 {
 				pen := w.Pin()
-				kind := jess.StripArticle(kind)
+				kind := match.StripArticle(kind)
 				for _, noun := range names {
-					noun := jess.StripArticle(noun)
+					noun := match.StripArticle(noun)
 					if _, e := mdl.AddNamedNoun(pen, noun, kind); e != nil {
 						err = errutil.Append(err, e)
 					}
@@ -127,7 +126,7 @@ func (op *DefineValue) Execute(macro rt.Runtime) error {
 
 // ex. The description of the nets is xxx
 func (op *DefineValue) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.ValuePhase, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if field, e := safe.GetText(w, op.FieldName); e != nil {
@@ -147,7 +146,7 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 				subjects := nouns.Strings()
 				field := field.String()
 				for _, noun := range subjects {
-					name := jess.StripArticle(noun)
+					name := match.StripArticle(noun)
 					if noun, e := pen.GetClosestNoun(inflect.Normalize(name)); e != nil {
 						err = errutil.Append(err, e)
 					} else if e := w.AddNounValue(pen, noun, field, value); e != nil {
@@ -166,7 +165,7 @@ func (op *DefineRelatives) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
 		} else if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
@@ -186,7 +185,7 @@ func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.LanguagePhase, func(w *weave.Weaver) (err error) {
 		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
 		} else if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {

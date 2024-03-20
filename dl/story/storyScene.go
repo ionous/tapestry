@@ -6,7 +6,7 @@ import (
 )
 
 func (op *DefineScene) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.FinalPhase, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetOptionalText(w, op.Scene, ""); e != nil {
 			err = e
 		} else if dependsOn, e := safe.GetOptionalTexts(w, op.SceneNames, nil); e != nil {

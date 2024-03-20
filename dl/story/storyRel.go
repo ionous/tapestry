@@ -14,7 +14,7 @@ func (op *DefineRelation) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineRelation) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) (err error) {
 		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
 		} else {

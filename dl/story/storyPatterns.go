@@ -24,7 +24,7 @@ func (op *DefinePattern) Execute(macro rt.Runtime) error {
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
@@ -45,7 +45,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 					// and so is the rule Rank
 				})
 			}
-			err = cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) error {
+			err = cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
 			})
 		}
@@ -58,7 +58,7 @@ func (op *DefineAction) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineAction) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
 		if act, e := safe.GetText(w, op.Action); e != nil {
 			err = e
 		} else {
@@ -66,7 +66,7 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 			// note: actions dont have an explicit return
 			act.AddParams(reduceFields(w, op.Requires))
 			act.AddLocals(reduceFields(w, op.Provides))
-			if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+			if e := cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(act.Pattern)
 			}); e != nil {
 				err = e
@@ -74,7 +74,7 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 				// derive the before and after phases
 				for _, phase := range []event.Phase{event.BeforePhase, event.AfterPhase} {
 					pb := mdl.NewPatternSubtype(phase.PatternName(act.Name()), act.Name())
-					if e := cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+					if e := cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
 						return w.Pin().AddPattern(pb.Pattern)
 					}); e != nil {
 						err = e
@@ -92,7 +92,7 @@ func (op *RuleProvides) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
 		if act, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else if act, e := w.Pin().GetKind(inflect.Normalize(act.String())); e != nil {
@@ -100,7 +100,7 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 		} else {
 			pb := mdl.NewPatternSubtype(act, kindsOf.Action.String())
 			pb.AddLocals(reduceFields(w, op.Provides))
-			err = cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+			err = cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
 				return w.Pin().AddPattern(pb.Pattern)
 			})
 		}
@@ -113,7 +113,7 @@ func (op *RuleForPattern) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
 		if phrase, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
@@ -146,7 +146,7 @@ func (op *RuleForNoun) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
 		if noun, e := safe.GetText(w, op.NounName); e != nil {
 			err = e
 		} else if noun, e := w.Pin().GetClosestNoun(noun.String()); e != nil {
@@ -176,7 +176,7 @@ func (op *RuleForKind) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequirePatterns, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
 		if kind, e := safe.GetText(w, op.KindName); e != nil {
 			err = e
 		} else if k, e := w.Pin().GetKind(inflect.Normalize(kind.String())); e != nil {
@@ -273,7 +273,7 @@ func weaveRule(w *weave.Weaver, rule rules.RuleName, filter rt.BoolEval, exe []r
 			Stop:    info.Stop,
 			Jump:    info.Jump,
 		})
-		err = w.Catalog.Schedule(weave.RequirePatterns, func(w *weave.Weaver) error {
+		err = w.Catalog.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
 			return w.Pin().ExtendPattern(pb.Pattern)
 		})
 	}

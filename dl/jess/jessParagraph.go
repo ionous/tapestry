@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // represents a block of text
@@ -37,7 +37,7 @@ func (p *Paragraph) Generate(ctx *Context, z Phase) (okay bool, err error) {
 		} else {
 			// retry if not in final phase
 			// otherwise generate an error
-			if z == mdl.FinalPhase {
+			if z == weave.FinalPhase {
 				err = fmt.Errorf("failed to match %s", u.String())
 				break
 			} else {

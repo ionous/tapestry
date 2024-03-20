@@ -8,12 +8,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // runs in the LanguagePhase phase
 func (op *Understand) Phase() Phase {
-	return mdl.LanguagePhase
+	return weave.LanguagePhase
 }
 
 func (op *Understand) Match(q Query, input *InputState) (okay bool) {
@@ -45,7 +45,7 @@ func (op *Understand) Generate(ctx *Context) (err error) {
 		// fix: parse lhs first, into a map keyed by its string
 		// then we can error better when strings or grammars appear on the wrong side.
 		// (and probably simplify some)
-		err = ctx.PostProcess(mdl.ValuePhase, func() (err error) {
+		err = ctx.PostProcess(weave.ValuePhase, func() (err error) {
 			// check whether kind matches an action or noun
 			if actions, nouns, e := op.readRhs(ctx); e != nil {
 				err = e

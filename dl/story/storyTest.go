@@ -25,7 +25,7 @@ func (op *DefineTest) Weave(cat *weave.Catalog) (err error) {
 			if e := WeaveStatements(cat, op.Statements); e != nil {
 				err = e
 			} else if len(op.Exe) > 0 {
-				err = cat.Schedule(weave.RequireAll, func(w *weave.Weaver) error {
+				err = cat.Schedule(weave.FinalPhase, func(w *weave.Weaver) error {
 					return w.Pin().AddCheck(name, nil, op.Exe)
 				})
 			}

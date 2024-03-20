@@ -3,11 +3,10 @@ package weave
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/support/jessdb"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -18,12 +17,6 @@ type Weaver struct {
 	At      string
 	Phase   Phase
 	rt.Runtime
-}
-
-func (w *Weaver) Generate(str string) error {
-	q := jessdb.MakeQuery(w.Catalog.Modeler, w.Domain)
-	gen := jessAdapter{w, w.Pin()}
-	return jess.Generate(q, gen, str)
 }
 
 func (w *Weaver) Pin() *mdl.Pen {
@@ -44,7 +37,7 @@ func (w *Weaver) AddNounValue(pen *mdl.Pen, noun, field string, value rt.Assignm
 }
 
 func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
-	bare := jess.StripArticle(name)
+	bare := match.StripArticle(name)
 	if n := inflect.Normalize(bare); len(n) == 0 {
 		err = errutil.New("empty name")
 	} else if n, e := w.Pin().GetClosestNoun(n); e != nil {
