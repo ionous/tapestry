@@ -3,7 +3,6 @@ package jess
 import (
 	"encoding/json"
 	"errors"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
@@ -91,18 +90,18 @@ Pairs:
 }
 
 func readVerb(ctx *Context, verb string) (ret verbInfo, err error) {
-	if subject, e := ctx.readString(verb, VerbSubject); e != nil {
+	if relation, e := ctx.readString(verb, VerbRelation); e != nil {
 		err = e
 	} else if object, e := ctx.readString(verb, VerbObject); e != nil {
 		err = e
-	} else if alternate, e := ctx.readString(verb, VerbAlternate); e != nil {
+	} else if subject, e := ctx.readString(verb, VerbSubject); e != nil {
 		err = e
-	} else if relation, e := ctx.readString(verb, VerbRelation); e != nil {
-		err = e
-	} else if implication, e := ctx.readString(verb, VerbImplication); e != nil {
-		err = e
-	} else if rev, e := ctx.readString(verb, VerbReversed); e != nil {
-		err = e
+	} else if alternate, e := ctx.readString(verb, VerbAlternate); e != nil && !errors.Is(e, mdl.Missing) {
+		err = e // alternate subects(s) are optional
+	} else if implication, e := ctx.readString(verb, VerbImplication); e != nil && !errors.Is(e, mdl.Missing) {
+		err = e // implication(s) are optional
+	} else if rev, revErr := ctx.readString(verb, VerbReversed); revErr != nil && !errors.Is(revErr, mdl.Missing) {
+		err = revErr // reverse is optional; false if not explicitly specified
 	} else {
 		ret = verbInfo{
 			subject:     subject,
@@ -110,7 +109,7 @@ func readVerb(ctx *Context, verb string) (ret verbInfo, err error) {
 			alternate:   alternate,
 			relation:    relation,
 			implication: implication,
-			reversed:    !strings.HasPrefix(rev, "not"),
+			reversed:    rev == ReversedTrait,
 		}
 	}
 	return

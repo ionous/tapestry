@@ -184,8 +184,6 @@ var known = info{
 		"story",
 		"message",
 		"missive",
-		"river",
-		"ocean",
 	),
 	directions: match.PanicSpans(
 		"north", "south", "east", "west",

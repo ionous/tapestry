@@ -32,4 +32,5 @@ const (
 	VerbRelation    = "relation"
 	VerbImplication = "implication"
 	VerbReversed    = "reversed status"
+	ReversedTrait   = "reversed"
 )

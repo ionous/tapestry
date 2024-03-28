@@ -1,7 +1,6 @@
 package jessdb
 
 import (
-	"database/sql"
 	"errors"
 	"log"
 	"strings"
