@@ -19,7 +19,7 @@ import (
 // join at runtime to synthesize fields; would fix the questions of adding bad traits ( see comments )
 // ( could potentially write both as a bridge )
 
-func (pen *Pen) AddTraits(aspect string, traits []string) (err error) {
+func (pen *Pen) AddAspectTraits(aspect string, traits []string) (err error) {
 	if kid, e := pen.findRequiredKind(aspect); e != nil {
 		err = e // ^ hrm.
 	} else if isAspect := strings.HasSuffix(kid.fullpath(), pen.getPath(kindsOf.Aspect)); !isAspect {
@@ -222,7 +222,7 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 	return
 }
 
-func (pen *Pen) AddFields(kind string, fields []FieldInfo) error {
+func (pen *Pen) AddKindFields(kind string, fields []FieldInfo) error {
 	return pen.writeFields(kind, fields)
 }
 

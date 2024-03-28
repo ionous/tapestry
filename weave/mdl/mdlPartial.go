@@ -4,16 +4,8 @@ import (
 	"database/sql"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
-
-type MatchedMacro struct {
-	Macro  Macro
-	Phrase string // phrase that was used to match
-}
 
 type MatchedKind struct {
 	Name  string        // the name of the kind in the db
@@ -181,83 +173,6 @@ func (pen *Pen) GetPartialTrait(str string) (ret string, err error) {
 	limit 1`,
 			pen.domain, ap, words).Scan(&ret); e != sql.ErrNoRows {
 			err = e // could be nil or error
-		}
-	}
-	return
-}
-
-func (pen *Pen) GetPartialMacro(str string) (ret MatchedMacro, err error) {
-	if len(str) == 0 {
-		err = sql.ErrNoRows
-	} else {
-		words := str + blank
-		var found struct {
-			kid      int64  // id of the kind
-			name     string // name of the kind/macro
-			phrase   string // string of the macro phrase
-			reversed bool
-			result   sql.NullInt32 // from mdl_pat, number of result fields ( 0 or 1 )
-		}
-		if e := pen.db.QueryRow(`
-	select mk.rowid, mk.kind, mg.phrase, mg.reversed, length(mp.result)>0
-	from mdl_phrase mg
-	join mdl_kind mk 
-		on (mk.rowid = mg.macro)
-	join mdl_pat mp 
-		on (mp.kind = mg.macro)
-	join domain_tree dt
-		on (dt.uses = mg.domain)
-	where base = ?1
-	and (phrase || ' ') = substr(?2 ,0, length(phrase)+2)
-	order by length(phrase) desc
-	limit 1`, pen.domain, words).Scan(
-			&found.kid, &found.name, &found.phrase, &found.reversed, &found.result); e != nil {
-			err = e
-		} else if parts, e := tables.QueryStrings(pen.db,
-			`select affinity 
-		from mdl_field 
-		where kind=?1
-		order by rowid`, found.kid); e != nil {
-			err = e
-		} else if numFields := len(parts) - int(found.result.Int32); numFields <= 0 {
-			err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
-				numFields, found.result.Int32)
-		} else {
-			var flag MacroType
-			if numFields == 1 {
-				flag = Macro_PrimaryOnly
-			} else {
-				a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
-				if a == affine.Text {
-					if b == affine.Text {
-						err = errutil.New("one one not supported?")
-					} else if b == affine.TextList {
-						flag = Macro_ManySecondary
-					} else {
-						err = errutil.New("unexpected aff", b)
-					}
-				} else if a == affine.TextList {
-					if b == affine.Text {
-						flag = Macro_ManyPrimary
-					} else if b == affine.TextList {
-						flag = Macro_ManyMany
-					} else {
-						err = errutil.New("unexpected aff", b)
-					}
-				} else {
-					err = errutil.New("unexpected aff", a)
-				}
-			}
-			if err == nil {
-				ret = MatchedMacro{
-					Phrase: found.phrase,
-					Macro: Macro{
-						Name:     found.name,
-						Type:     flag,
-						Reversed: found.reversed,
-					},
-				}
-			}
 		}
 	}
 	return

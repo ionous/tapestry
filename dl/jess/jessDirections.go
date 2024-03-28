@@ -35,16 +35,16 @@ func (op *MapDirections) Generate(ctx *Context) (err error) {
 
 // uses .Linking
 func (op *MapDirections) simpleLink(ctx *Context) (err error) {
-	var links []jessLink
+	var links []*jessLink
 	if lhs, e := op.DirectionOfLinking.buildLink(ctx); e != nil {
 		err = e
-	} else if rhs, e := op.Linking.BuildNoun(ctx, nil, nil); e != nil {
+	} else if rhs, e := op.Linking.BuildNoun(ctx, NounProperties{}); e != nil {
 		err = e
 	} else {
-		rhs := makeLink(rhs, "")
-		links = []jessLink{lhs, rhs}
 		err = ctx.PostProcess(weave.ConnectionPhase, func() (err error) {
-			if e := assignDefaultKinds(ctx, links); e != nil {
+			rhs := makeLink(*rhs, "")
+			links = []*jessLink{lhs, rhs}
+			if e := writeLinkTypes(ctx, links); e != nil {
 				err = e
 			} else {
 				err = connectPlaceToPlaces(ctx, links[1], links[:1])
@@ -62,9 +62,9 @@ func (op *MapDirections) multiLink(ctx *Context) (err error) {
 	} else if rhs, e := op.Redirect.buildLink(ctx); e != nil {
 		err = e
 	} else {
+		links := []*jessLink{lhs, rhs}
 		err = ctx.PostProcess(weave.ConnectionPhase, func() (err error) {
-			links := []jessLink{lhs, rhs}
-			if e := assignDefaultKinds(ctx, links); e != nil {
+			if e := writeLinkTypes(ctx, links); e != nil {
 				err = e
 			} else {
 				// "from l is redirect r" is

@@ -25,16 +25,16 @@ func (op *Adjectives) GetTraits() (ret Traitor) {
 	return
 }
 
-func (op Adjectives) Reduce() (retTraits, retKinds []string, err error) {
+func (op Adjectives) Reduce() (ret NounProperties, err error) {
 	for t := op; ; {
-		retTraits = append(retTraits, ReduceTraits(op.GetTraits())...)
+		ret.Traits = append(ret.Traits, ReduceTraits(op.GetTraits())...)
 		if k := t.Kind; k != nil {
 			// for something to have adjectives (ie. traits) it must be a noun of some sort
 			if kn, e := k.Validate(kindsOf.Kind); e != nil {
 				err = e
 				break
 			} else {
-				retKinds = append(retKinds, kn)
+				ret.Kinds = append(ret.Kinds, kn)
 			}
 		}
 		if next := t.AdditionalAdjectives; next == nil {

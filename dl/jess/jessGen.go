@@ -18,12 +18,16 @@ func startsUpper(str string) bool {
 
 // even one name can generate several nouns ( ex. "two things" )
 // after gets called for each one.
-func genNounValues(ctx *Context, ns []DesiredNoun, after postGenOne) error {
-	return genValuesForNouns(ctx, ns, nil, func(ns, _ []DesiredNoun) (err error) {
-		for _, n := range ns {
-			if e := after(n.Noun); e != nil {
-				err = e
-				break
+func genNounValues(ctx *Context, ns []DesiredNoun, after postGenOne) (err error) {
+	return ctx.PostProcess(weave.ValuePhase, func() (err error) {
+		if e := writeNounValues(ctx, ns); e != nil {
+			err = e
+		} else if after != nil {
+			for _, n := range ns {
+				if e := after(n.Noun); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 		return
@@ -33,20 +37,7 @@ func genNounValues(ctx *Context, ns []DesiredNoun, after postGenOne) error {
 type postGenOne func(a string) error
 type postGenMany func(a, b []DesiredNoun) error
 
-func genValuesForNouns(ctx *Context, a, b []DesiredNoun, after postGenMany) (err error) {
-	return ctx.PostProcess(weave.ValuePhase, func() (err error) {
-		if e := generateValues(ctx, a); e != nil {
-			err = e
-		} else if e := generateValues(ctx, b); e != nil {
-			err = e
-		} else if after != nil {
-			err = after(a, b)
-		}
-		return
-	})
-}
-
-func registerKinds(ctx *Context, noun string, kinds []string) (err error) {
+func writeKinds(ctx *Context, noun string, kinds []string) (err error) {
 	for _, k := range kinds {
 		if e := ctx.AddNounKind(noun, k); e != nil && !errors.Is(e, mdl.Duplicate) {
 			err = e
@@ -56,9 +47,9 @@ func registerKinds(ctx *Context, noun string, kinds []string) (err error) {
 	return
 }
 
-func generateValues(ctx *Context, ns []DesiredNoun) (err error) {
+func writeNounValues(ctx *Context, ns []DesiredNoun) (err error) {
 	for _, n := range ns {
-		if e := n.generateValues(ctx); e != nil {
+		if e := n.writeNounValues(ctx); e != nil {
 			err = e
 			break
 		}
@@ -76,7 +67,7 @@ func ensureNoun(ctx *Context, name match.Span) (ret string, created bool, err er
 	} else {
 		name := name.String()
 		noun := inflect.Normalize(name)
-		if e := ctx.AddNounKind(noun, ""); e != nil {
+		if e := ctx.AddNounKind(noun, Objects); e != nil {
 			err = e // if duplicate, FindNoun should have triggered; so return all errors
 		} else if e := registerNames(ctx, noun, name); e != nil {
 			err = e

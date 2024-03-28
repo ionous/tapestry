@@ -60,22 +60,35 @@ func (m *Mock) generate(paragraph string) (err error) {
 
 func (m *Mock) AddNounKind(noun, kind string) (err error) {
 	m.nounPool[noun] = noun
-	// for weave, we'd add these blank kinds "objects"
-	// we absorb it for cleaner tests;
-	if len(kind) > 0 {
-		if prev, ok := m.nounPool["$"+noun]; ok {
-			// these hacks for testing sure are getting painful
-			if prev == kind {
-				err = fmt.Errorf("%w %s already declared as %s", mdl.Duplicate, noun, prev)
-			} else {
-				err = fmt.Errorf("%w %s already declared as %s", mdl.Conflict, noun, prev)
-			}
-		} else {
-			m.out = append(m.out, "AddNounKind", noun, kind)
-			m.nounPool["$"+noun] = kind
+	if len(kind) == 0 {
+		err = fmt.Errorf("expected a valid kind for %q", noun)
+	} else if kind != jess.Objects {
+		// ^ absorb this for cleaner test ouptut
+		if prev, exists := m.nounPool["$"+noun]; !exists {
+			m.addNounKind(noun, kind)
+		} else if prev == kind {
+			err = fmt.Errorf("%w %s already declared as %s", mdl.Duplicate, noun, prev)
+		} else if prev == "things" && thingLike(kind) {
+			m.addNounKind(noun, kind)
+		} else if kind != "things" || !thingLike(prev) {
+			err = fmt.Errorf("%w %s already declared as %s", mdl.Conflict, noun, prev)
 		}
 	}
 	return
+}
+
+func thingLike(k string) (okay bool) {
+	switch k {
+	case "doors", "containers", "supporters":
+		okay = true
+	}
+	return
+}
+
+func (m *Mock) addNounKind(noun, kind string) {
+
+	m.out = append(m.out, "AddNounKind:", noun, kind)
+	m.nounPool["$"+noun] = kind
 }
 
 var lastNamedNoun string
@@ -87,9 +100,9 @@ func (m *Mock) AddNounName(noun, name string, r int) (_ error) {
 		lastNamedNoun = ""
 	}
 	if r < 0 {
-		m.out = append(m.out, "AddNounAlias", noun, name)
+		m.out = append(m.out, "AddNounAlias:", noun, name)
 	} else if lastNamedNoun != noun || r < 0 {
-		m.out = append(m.out, "AddNounName", noun, name)
+		m.out = append(m.out, "AddNounName:", noun, name)
 	}
 	m.nounPool[name] = noun
 	lastNamedNoun = noun
@@ -97,8 +110,8 @@ func (m *Mock) AddNounName(noun, name string, r int) (_ error) {
 	return
 }
 
-func (m *Mock) AddFields(kind string, fields []mdl.FieldInfo) (_ error) {
-	m.out = append(m.out, "AddFields", kind)
+func (m *Mock) AddKindFields(kind string, fields []mdl.FieldInfo) (_ error) {
+	m.out = append(m.out, "AddKindFields:", kind)
 	for _, f := range fields {
 		m.out = append(m.out, f.Name, f.Affinity.String(), f.Class)
 	}
@@ -106,7 +119,7 @@ func (m *Mock) AddFields(kind string, fields []mdl.FieldInfo) (_ error) {
 }
 
 func (m *Mock) AddGrammar(name string, prog *grammar.Directive) (err error) {
-	m.out = append(m.out, "AddGrammar", name)
+	m.out = append(m.out, "AddGrammar:", name)
 	// we know the top level format of the grammar;
 	// so break it open to make the test output easier to read
 	action := prog.Series[1].(*grammar.Action)
@@ -122,19 +135,19 @@ func (m *Mock) AddGrammar(name string, prog *grammar.Directive) (err error) {
 	return
 }
 func (m *Mock) AddKind(kind, ancestor string) (_ error) {
-	m.out = append(m.out, "AddKind", kind, ancestor)
+	m.out = append(m.out, "AddKind:", kind, ancestor)
 	return
 }
 func (m *Mock) AddKindTrait(kind, trait string) (_ error) {
-	m.out = append(m.out, "AddKindTrait", kind, trait)
+	m.out = append(m.out, "AddKindTrait:", kind, trait)
 	return
 }
 func (m *Mock) AddPlural(many, one string) (_ error) {
-	m.out = append(m.out, "AddPlural", many, one)
+	m.out = append(m.out, "AddPlural:", many, one)
 	return
 }
 func (m *Mock) AddNounTrait(name, trait string) (_ error) {
-	m.out = append(m.out, "AddNounTrait", name, trait)
+	m.out = append(m.out, "AddNounTrait:", name, trait)
 	return
 }
 func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
@@ -152,7 +165,7 @@ func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 	if str, e := Marshal(el); e != nil {
 		err = e
 	} else {
-		m.out = append(m.out, "AddNounValue", name, prop, str)
+		m.out = append(m.out, "AddNounValue:", name, prop, str)
 	}
 	return
 }
@@ -162,7 +175,7 @@ func (m *Mock) AddNounPath(name string, parts []string, v literal.LiteralValue) 
 	if str, e := Marshal(v); e != nil {
 		err = e
 	} else {
-		m.out = append(m.out, "AddNounValue", name, path, str)
+		m.out = append(m.out, "AddNounValue:", name, path, str)
 	}
 	return
 }
@@ -170,14 +183,14 @@ func (m *Mock) AddNounPair(rel, lhs, rhs string) (_ error) {
 	if rel == "whereabouts" {
 		m.nounPairs[rhs] = lhs
 	}
-	m.out = append(m.out, "AddNounPair", lhs, rel, rhs)
+	m.out = append(m.out, "AddNounPair:", rel, lhs, rhs)
 	return
 }
-func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
+func (m *Mock) AddAspectTraits(aspect string, traits []string) (err error) {
 	if aspect != "color" && !strings.HasSuffix(aspect, " status") { // aspects are singular :/
 		err = fmt.Errorf("unknown aspect %q", aspect)
 	} else {
-		m.out = append(m.out, "AddTraits", aspect)
+		m.out = append(m.out, "AddAspectTraits:", aspect)
 		m.out = append(m.out, traits...)
 	}
 	return
@@ -185,21 +198,8 @@ func (m *Mock) AddTraits(aspect string, traits []string) (err error) {
 
 // mock assumes all facts valid and new
 func (m *Mock) AddFact(key string, partsAndValue ...string) (_ error) {
-	m.out = append(m.out, "AddFact", key)
+	m.out = append(m.out, "AddFact:", key)
 	m.out = append(m.out, partsAndValue...)
-	return
-}
-func (m *Mock) Apply(verb jess.Macro, lhs, rhs []string) (_ error) {
-	m.out = append(m.out, "ApplyMacro", verb.Name)
-	m.out = append(m.out, lhs...)
-	m.out = append(m.out, rhs...)
-	if verb.Name == "contain" {
-		for _, left := range lhs {
-			for _, right := range rhs {
-				m.nounPairs[right] = left
-			}
-		}
-	}
 	return
 }
 func (m *Mock) GetPlural(word string) string {
@@ -208,7 +208,7 @@ func (m *Mock) GetPlural(word string) string {
 func (m *Mock) GetSingular(word string) string {
 	return inflect.Singularize(word)
 }
-func (m *Mock) GetUniqueName(category string) string {
+func (m *Mock) GenerateUniqueName(category string) string {
 	if m.unique == nil {
 		m.unique = make(map[string]int)
 	}

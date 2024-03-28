@@ -49,10 +49,10 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
-func (op Names) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op Names) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
 	for n := op.GetNames(); n.HasNext(); {
 		at := n.GetNext()
-		if ns, e := buildNounsFrom(ctx, ts, ks,
+		if ns, e := buildNounsFrom(ctx, props,
 			ref(at.CountedKind),
 			ref(at.KindCalled),
 			ref(at.Kind),

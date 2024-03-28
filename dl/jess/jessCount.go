@@ -25,7 +25,7 @@ func (op *CountedKind) String() string {
 // generates n initial instances (and their aliases, cause why not.)
 // delays the desired traits and additional kinds
 // ( tbd if that makes sense or not )
-func (op *CountedKind) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *CountedKind) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
 	if plural, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
@@ -33,7 +33,7 @@ func (op *CountedKind) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredN
 			singular := ctx.GetSingular(plural)
 			ret = make([]DesiredNoun, cnt)
 			for i := 0; i < cnt; i++ {
-				if n, e := buildAnon(ctx, plural, singular, ts, ks); e != nil {
+				if n, e := buildAnon(ctx, plural, singular, props); e != nil {
 					err = e
 					break
 				} else {

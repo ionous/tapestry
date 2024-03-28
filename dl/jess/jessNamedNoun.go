@@ -12,8 +12,8 @@ func (op *NamedNoun) GetNormalizedName() (ret string) {
 }
 
 // panics if not matched
-func (op *NamedNoun) BuildNouns(ctx *Context, ts, ks []string) ([]DesiredNoun, error) {
-	return buildNounsFrom(ctx, ts, ks, ref(op.Noun), ref(op.Name))
+func (op *NamedNoun) BuildNouns(ctx *Context, props NounProperties) ([]DesiredNoun, error) {
+	return buildNounsFrom(ctx, props, ref(op.Noun), ref(op.Name))
 }
 
 func (op *NamedNoun) Match(q Query, input *InputState) (okay bool) {

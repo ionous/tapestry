@@ -1,6 +1,36 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/weave"
+import (
+	"errors"
+
+	"git.sr.ht/~ionous/tapestry/weave"
+)
+
+// -------------------------------------------------------------------------
+// Verb
+// -------------------------------------------------------------------------
+
+// the passed phrase is the macro to match
+func (op *Verb) Match(q Query, input *InputState) (okay bool) {
+	if m, width := q.FindNoun(input.Words(), Verbs); width > 0 {
+		op.Text = m // holds the normalized name
+		*input, okay = input.Skip(width), true
+	}
+	return
+}
+
+// -------------------------------------------------------------------------
+// VerbPhrase
+// -------------------------------------------------------------------------
+
+func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	op.Verb.Match(q, &next) &&
+		op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
+		*input, okay = next, true
+	}
+	return
+}
 
 // -------------------------------------------------------------------------
 // VerbNamesAreNames
@@ -11,19 +41,16 @@ func (op *VerbNamesAreNames) Phase() Phase {
 	return weave.NounPhase
 }
 func (op *VerbNamesAreNames) GetNouns() Names {
-	return op.Names
+	return op.OtherNames // reverse left and right sides
 }
 func (op *VerbNamesAreNames) GetOtherNouns() Names {
-	return op.OtherNames
+	return op.Names
 }
 func (op *VerbNamesAreNames) GetAdjectives() (_ Adjectives) {
 	return
 }
-func (op *VerbNamesAreNames) GetMacro() (ret Macro) {
-	return op.Verb.Macro
-}
-func (op *VerbNamesAreNames) IsReversed() bool {
-	return !op.Verb.Macro.Reversed
+func (op *VerbNamesAreNames) GetVerb() string {
+	return op.Verb.Text
 }
 func (op *VerbNamesAreNames) Generate(rar *Context) error {
 	return generateVerbPhrase(rar, op)
@@ -55,11 +82,8 @@ func (op *NamesVerbNames) GetOtherNouns() Names {
 func (op *NamesVerbNames) GetAdjectives() (_ Adjectives) {
 	return
 }
-func (op *NamesVerbNames) GetMacro() (ret Macro) {
-	return op.Verb.Macro
-}
-func (op *NamesVerbNames) IsReversed() bool {
-	return op.Verb.Macro.Reversed
+func (op *NamesVerbNames) GetVerb() string {
+	return op.Verb.Text
 }
 func (op *NamesVerbNames) Generate(rar *Context) error {
 	return generateVerbPhrase(rar, op)
@@ -95,15 +119,9 @@ func (op *NamesAreLikeVerbs) GetOtherNouns() (ret Names) {
 func (op *NamesAreLikeVerbs) GetAdjectives() Adjectives {
 	return op.Adjectives
 }
-func (op *NamesAreLikeVerbs) GetMacro() (ret Macro) {
+func (op *NamesAreLikeVerbs) GetVerb() (ret string) {
 	if v := op.VerbPhrase; v != nil {
-		ret = v.Verb.Macro
-	}
-	return
-}
-func (op *NamesAreLikeVerbs) IsReversed() (okay bool) {
-	if v := op.VerbPhrase; v != nil {
-		okay = v.Verb.Macro.Reversed
+		ret = v.Verb.Text
 	}
 	return
 }
@@ -135,43 +153,43 @@ type jessVerbPhrase interface {
 	GetNouns() Names
 	GetOtherNouns() Names
 	GetAdjectives() Adjectives
-	GetMacro() Macro
-	IsReversed() bool
+	GetVerb() string
 }
 
 func generateVerbPhrase(ctx *Context, p jessVerbPhrase) (err error) {
-	if ts, ks, e := p.GetAdjectives().Reduce(); e != nil {
+	if props, e := p.GetAdjectives().Reduce(); e != nil {
 		err = e
-	} else if lhs, e := p.GetNouns().BuildNouns(ctx, ts, ks); e != nil {
+	} else if lhs, e := p.GetNouns().BuildNouns(ctx, props); e != nil {
 		err = e
-	} else if rhs, e := p.GetOtherNouns().BuildNouns(ctx, nil, nil); e != nil {
+	} else if rhs, e := p.GetOtherNouns().BuildNouns(ctx, NounProperties{}); e != nil {
+		err = e
+	} else if e := genNounValues(ctx, lhs, nil); e != nil {
 		err = e
 	} else {
-		err = ctx.PostProcess(weave.MacroPhase, func() (err error) {
-			// applies macros immediately ( in NounPhase ) because otherwise the ConnectionPhase
-			// can apply default locations even if the macro declares them explicitly.
-			macro := p.GetMacro()
-			if p.IsReversed() {
-				lhs, rhs = rhs, lhs
-			} // note: some phrases "the box is open" dont have macros.
-			// in that case, genValuesForNouns itself does all the work.
-			if len(macro.Name) > 0 {
-				err = ctx.Apply(macro, reduceNouns(lhs), reduceNouns(rhs))
+		if verbName := p.GetVerb(); len(verbName) > 0 {
+			if e := genNounValues(ctx, rhs, nil); e != nil {
+				err = e
+			} else {
+				err = applyVerb(ctx, verbName, lhs, rhs)
 			}
-			if err == nil {
-				err = genValuesForNouns(ctx, lhs, rhs, nil)
-			}
-			return
-		})
+		} else if len(rhs) > 0 {
+			err = errors.New("missing verb")
+		} else {
+			err = tryAsThings(ctx, lhs)
+		}
 	}
 	return
 }
 
-// fix: this seems silly
-func reduceNouns(ns []DesiredNoun) []string {
-	out := make([]string, len(ns))
-	for i, el := range ns {
-		out[i] = el.Noun
-	}
-	return out
+// note: some phrases "the box is open" dont have macros.
+// in that case, genNounValues itself does all the work.
+func applyVerb(ctx *Context, verbName string, lhs, rhs []DesiredNoun) (err error) {
+	return ctx.PostProcess(weave.VerbPhrase, func() (err error) {
+		if v, e := readVerb(ctx, verbName); e != nil {
+			err = e
+		} else {
+			err = v.applyVerb(ctx, lhs, rhs)
+		}
+		return
+	})
 }

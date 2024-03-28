@@ -1,6 +1,11 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/weave"
+import (
+	"errors"
+
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
+)
 
 func (op *Property) String() string {
 	return op.Matched
@@ -43,14 +48,7 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 }
 
 func (op *PropertyNounValue) Generate(ctx *Context) (err error) {
-	if ns, e := op.NamedNoun.BuildNouns(ctx, nil, nil); e != nil {
-		err = e
-	} else {
-		err = genNounValues(ctx, ns, func(n string) error {
-			return ctx.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
-		})
-	}
-	return
+	return generatePropertyPhrase(ctx, op.NamedNoun, op.Property, op.SingleValue)
 }
 
 // like PropertyNounValue, runs in FallbackPhase; see notes there.
@@ -79,13 +77,57 @@ func (op *NounPropertyValue) matchOf(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *NounPropertyValue) Generate(ctx *Context) (err error) {
-	if ns, e := op.NamedNoun.BuildNouns(ctx, nil, nil); e != nil {
+func (op *NounPropertyValue) Generate(ctx *Context) error {
+	return generatePropertyPhrase(ctx, op.NamedNoun, op.Property, op.SingleValue)
+}
+
+func generatePropertyPhrase(ctx *Context, n NamedNoun, p Property, v SingleValue) (err error) {
+	if ns, e := n.BuildNouns(ctx, NounProperties{}); e != nil {
+		err = e
+	} else if e := tryAsThings(ctx, ns); e != nil {
 		err = e
 	} else {
 		err = genNounValues(ctx, ns, func(n string) error {
-			return ctx.AddNounValue(n, op.Property.String(), op.SingleValue.Assignment())
+			// fix: can i add this to "desired noun" instead of as a callback
+			return ctx.AddNounValue(n, p.String(), v.Assignment())
 		})
 	}
 	return
+}
+
+// try to apply one of the passed kinds to each of the desired nouns
+// the first one not to generate a conflict succeeds.
+func generateFallbacks(ctx *Context, ns []DesiredNoun, kinds ...string) error {
+	return ctx.PostProcess(weave.FallbackPhase, func() (err error) {
+	Loop:
+		for _, n := range ns {
+			for _, k := range kinds {
+				if e := ctx.AddNounKind(n.Noun, k); e == nil || errors.Is(e, mdl.Duplicate) {
+					err = nil // applying a duplicate kind is considered a success
+					break Loop
+				} else {
+					err = e // keep one of the conflicts; only cleared on success
+					if !errors.Is(e, mdl.Conflict) {
+						break Loop // some other error is an immediate problem
+					}
+				}
+			}
+		}
+		return
+	})
+}
+
+// here, we don't care if we aren't able to set "Things"
+// this is really and truly a "if nothing else applied" situation.
+func tryAsThings(ctx *Context, ns []DesiredNoun) (err error) {
+	return ctx.PostProcess(weave.FallbackPhase, func() (err error) {
+		for _, n := range ns {
+			e := ctx.AddNounKind(n.Noun, Things)
+			if e != nil && !errors.Is(e, mdl.Conflict) && !errors.Is(e, mdl.Duplicate) {
+				err = e
+				break
+			}
+		}
+		return
+	})
 }

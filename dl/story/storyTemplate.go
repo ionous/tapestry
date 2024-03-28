@@ -37,7 +37,7 @@ func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, er
 		} else {
 			// otherwise store the value
 			if e := cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
-				return w.Pin().AddFields(kindsOf.Response.String(), []mdl.FieldInfo{{
+				return w.Pin().AddKindFields(kindsOf.Response.String(), []mdl.FieldInfo{{
 					Name:     name,
 					Affinity: affine.Text,
 					Init:     &assign.FromText{Value: txt}},

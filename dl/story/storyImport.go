@@ -34,7 +34,7 @@ func (op *DefineAspect) Weave(cat *weave.Catalog) error {
 			if e := pen.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
 				err = e
 			} else {
-				err = pen.AddTraits(aspect, traits)
+				err = pen.AddAspectTraits(aspect, traits)
 			}
 		}
 		return

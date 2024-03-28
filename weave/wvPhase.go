@@ -13,8 +13,8 @@ const (
 	PropertyPhase         // the members of kinds
 	MappingPhase          // match phrases that might otherwise treat directions as names.
 	NounPhase             // generate explicit nouns
-	MacroPhase            // tbd: merge with nouns?
-	ConnectionPhase       // pair up nouns, sometimes implying new nouns or specific kinds.
+	VerbPhrase            //
+	ConnectionPhase       // map connections
 	FallbackPhase         // generate kinds for nouns that didn't derive during connections
 	ValuePhase            // apply any collected values ( tbd: merge with rules? )
 	RulePhase

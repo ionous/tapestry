@@ -234,7 +234,8 @@ func (op *DefineAction_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Add traits to an aspect
+// Declare an aspect and its traits.
+// Aspects here are assumed to be singularly named.
 type DefineAspect struct {
 	Aspect rtti.TextEval
 	Traits rtti.TextListEval
@@ -2338,7 +2339,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Add traits to an aspect",
+			"comment": []interface{}{"Declare an aspect and its traits.", "Aspects here are assumed to be singularly named."},
 		},
 	}
 	Zt_AspectField = typeinfo.Flow{

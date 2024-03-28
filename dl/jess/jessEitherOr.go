@@ -38,7 +38,7 @@ func (op *KindsAreEither) Generate(rar *Context) (err error) {
 		if op.Traits.NewTrait == nil {
 			// mdl is smart enough to generate "not" aspects from bool fields
 			name := inflect.Normalize(op.Traits.String())
-			err = rar.AddFields(k, []mdl.FieldInfo{{
+			err = rar.AddKindFields(k, []mdl.FieldInfo{{
 				Name:     name,
 				Affinity: affine.Bool,
 			}})
@@ -46,7 +46,7 @@ func (op *KindsAreEither) Generate(rar *Context) (err error) {
 			if name, e := op.generateAspect(rar); e != nil {
 				err = e
 			} else {
-				err = rar.AddFields(k, []mdl.FieldInfo{{
+				err = rar.AddKindFields(k, []mdl.FieldInfo{{
 					Name:     name,
 					Affinity: affine.Text,
 					Class:    name,
@@ -67,7 +67,7 @@ func (op *KindsAreEither) generateAspect(rar *Context) (ret string, err error) {
 		for it := first.Iterate(); it.HasNext(); {
 			traits = append(traits, it.GetNext())
 		}
-		if e := rar.AddTraits(aspect, traits); e != nil {
+		if e := rar.AddAspectTraits(aspect, traits); e != nil {
 			err = e
 		} else {
 			ret = aspect

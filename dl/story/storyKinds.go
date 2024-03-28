@@ -49,7 +49,7 @@ func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			k := inflect.Normalize(kind.String())
-			err = w.Pin().AddFields(k, reduceFields(run, op.Fields))
+			err = w.Pin().AddKindFields(k, reduceFields(run, op.Fields))
 		}
 		return
 	})

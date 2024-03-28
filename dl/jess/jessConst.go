@@ -9,8 +9,9 @@ const (
 	Objects    = "objects"    // the kind of a potential room or door
 	Directions = "directions" // a special kind of object representing movement of travel
 	Rooms      = "rooms"      // possible player locale
-	Things     = "things"
-	Doors      = "doors" // portals which connect rooms
+	Things     = "things"     // the default for named objects if nothing else is specified
+	Doors      = "doors"      // portals which connect rooms
+	Verbs      = "verbs"      // nouns are used to describe verbs
 	// traits
 	CountedTrait     = "counted"
 	PluralNamedTrait = "plural named"
@@ -24,4 +25,11 @@ const (
 	Scenery           = "scenery"
 	// relations:
 	Whereabouts = "whereabouts"
+	// verbs:
+	VerbSubject     = "subject"
+	VerbAlternate   = "alternate subject"
+	VerbObject      = "object"
+	VerbRelation    = "relation"
+	VerbImplication = "implication"
+	VerbReversed    = "reversed status"
 )

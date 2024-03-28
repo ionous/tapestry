@@ -4,14 +4,16 @@ import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
 
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *KindCalled) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
 	if kind, e := op.GetKind(); e != nil {
 		err = e
 	} else {
-		ts = append(ts, ReduceTraits(op.GetTraits())...)
 		// ignores the article of the kind,
 		// in favor of the article closest to the named noun
-		ret, err = op.NamedNoun.BuildNouns(ctx, ts, append(ks, kind))
+		ret, err = op.NamedNoun.BuildNouns(ctx, NounProperties{
+			Traits: append(props.Traits, ReduceTraits(op.GetTraits())...),
+			Kinds:  append(props.Kinds, kind),
+		})
 	}
 	return
 }

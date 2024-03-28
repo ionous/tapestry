@@ -13,16 +13,25 @@ type DesiredNoun struct {
 	Values  []DesiredValue
 }
 
+type NounProperties struct {
+	Traits []string
+	Kinds  []string
+}
+
 type DesiredValue struct {
 	Field  string
 	Assign rt.Assignment
 }
 
-func (n *DesiredNoun) addValue(field string, assign rt.Assignment) {
+func (n *DesiredNoun) appendTrait(trait string) {
+	n.Traits = append(n.Traits, trait)
+}
+
+func (n *DesiredNoun) appendValue(field string, assign rt.Assignment) {
 	n.Values = append(n.Values, DesiredValue{field, assign})
 }
 
-func (n *DesiredNoun) addArticle(a *Article) {
+func (n *DesiredNoun) appendArticle(a *Article) {
 	if a == nil {
 		// the lack of a recognized article makes something proper-named.
 		n.Traits = append([]string{ProperNameTrait}, n.Traits...)
@@ -31,14 +40,14 @@ func (n *DesiredNoun) addArticle(a *Article) {
 			n.Traits = append([]string{PluralNamedTrait}, n.Traits...)
 		}
 		if a.Flags.Indefinite {
-			n.addValue(IndefiniteArticle, text(a.Text, ""))
+			n.appendValue(IndefiniteArticle, text(a.Text, ""))
 		}
 	}
 }
 
 // send the contents of the noun to the db
 // assumes that the noun key is already set.
-func (n DesiredNoun) generateValues(rar *Context) (err error) {
+func (n DesiredNoun) writeNounValues(rar *Context) (err error) {
 	if e := n.applyAliases(rar); e != nil {
 		err = e
 	} else if e := n.applyTraits(rar); e != nil {

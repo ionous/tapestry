@@ -2,6 +2,7 @@ package jess
 
 import (
 	"errors"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
@@ -14,6 +15,11 @@ func (op *KindsOf) Phase() Phase {
 }
 
 func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
+	str := match.Span(input.Words()).String()
+	if strings.Contains(str, "Doors") {
+		println("here", str)
+	}
+
 	if next := *input; //
 	op.Names.Match(AddContext(q, ExcludeNounMatching), &next) &&
 		op.Are.Match(q, &next) &&

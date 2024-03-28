@@ -281,16 +281,11 @@ Spec:with group:
           - "text"
 
     - # matches one or more predefined verbs
+      # ( verbs are nouns of the verb kind )
       Spec:with flow:
       - "verb"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
-        - # verbs are represented by "macros" in tapestry.
-          Term:private:
-          - "macro"
-          - true
+        - Term: "text"
 
     - # union of all possible matching sentences:
       # tests these in-order to find a match.

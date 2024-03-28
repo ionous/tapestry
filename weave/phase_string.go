@@ -14,7 +14,7 @@ func _() {
 	_ = x[PropertyPhase-4]
 	_ = x[MappingPhase-5]
 	_ = x[NounPhase-6]
-	_ = x[MacroPhase-7]
+	_ = x[VerbPhrase-7]
 	_ = x[ConnectionPhase-8]
 	_ = x[FallbackPhase-9]
 	_ = x[ValuePhase-10]
@@ -23,7 +23,7 @@ func _() {
 	_ = x[NumPhases-13]
 }
 
-const _Phase_name = "DependencyPhaseLanguagePhaseAncestryPhasePropertyPhaseMappingPhaseNounPhaseMacroPhaseConnectionPhaseFallbackPhaseValuePhaseRulePhaseFinalPhaseNumPhases"
+const _Phase_name = "DependencyPhaseLanguagePhaseAncestryPhasePropertyPhaseMappingPhaseNounPhaseVerbPhraseConnectionPhaseFallbackPhaseValuePhaseRulePhaseFinalPhaseNumPhases"
 
 var _Phase_index = [...]uint8{0, 15, 28, 41, 54, 66, 75, 85, 100, 113, 123, 132, 142, 151}
 

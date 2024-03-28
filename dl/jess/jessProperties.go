@@ -66,7 +66,7 @@ func (op *KindsHaveProperties) Generate(rar *Context) (err error) {
 			// erroring feels like more useful than failing to match...
 			err = fmt.Errorf("%s fields require an explicit name", f.Affinity)
 		} else {
-			err = rar.AddFields(kind, []mdl.FieldInfo{f})
+			err = rar.AddKindFields(kind, []mdl.FieldInfo{f})
 		}
 	}
 	return

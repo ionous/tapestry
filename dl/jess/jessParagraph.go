@@ -26,7 +26,7 @@ func NewParagraph(str string) (ret *Paragraph, err error) {
 // caller no longer needs to process subsequent phrases
 func (p *Paragraph) Generate(ctx *Context, z Phase) (okay bool, err error) {
 	var retry int
-	for _, u := range p.unmatched {
+	for i, u := range p.unmatched {
 		var best bestMatch
 		if matchSentence(ctx, z, u, &best) {
 			// try to generate if matched.
@@ -38,7 +38,7 @@ func (p *Paragraph) Generate(ctx *Context, z Phase) (okay bool, err error) {
 			// retry if not in final phase
 			// otherwise generate an error
 			if z == weave.FinalPhase {
-				err = fmt.Errorf("failed to match %s", u.String())
+				err = fmt.Errorf("failed to match line %d %s", i, u.String())
 				break
 			} else {
 				p.unmatched[retry] = u

@@ -2,7 +2,7 @@ Tapestry:
   - # Doors exist in rooms and connect to other rooms.
     # Every room has a compass which lists doors within the room.
     # Every direction is a both a noun, and the name of a field within the compass.
-   Declare: """
+    Declare: """
     A room is a kind of object.
     A compass is a kind of record. A room has a compass.
     Directions are a kind of object.
@@ -65,7 +65,7 @@ Tapestry:
                         - "@direction"
                         - FromText: "@dir"
                     - # since we've found a match; we're done.
-                      Break: true
+                      Break:
 
   - # given a room and direction, find the matching door ( if any. )
     Define pattern:requires:provides:do:

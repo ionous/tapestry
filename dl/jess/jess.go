@@ -27,15 +27,15 @@ type Query interface {
 	// return the number of words that matched ( if any. )
 	FindField(match.Span) (string, int)
 
-	// find the macro which best matches the passed span.
-	// return the number of words that matched ( if any. )
-	FindMacro(match.Span) (Macro, int)
-
 	// find the name of the noun which best matches the passed span.
 	// return the number of words that matched ( if any. )
 	// the kind, if specified, will ensure the noun is of that kind;
 	// [ so that the caller doesn't have to validate materialized kind paths ]
 	FindNoun(name match.Span, kind string) (string, int)
+
+	// provides some limited access to previous values assigned to nouns.
+	// ( assumes the caller already knows the affinity of the field )
+	GetNounValue(noun, field string) ([]byte, error)
 }
 
 // Matched - generic interface so implementations can track backchannel data.

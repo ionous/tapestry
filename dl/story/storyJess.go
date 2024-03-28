@@ -68,7 +68,7 @@ func (ja jessAdapter) GetPlural(word string) string {
 func (ja jessAdapter) GetSingular(word string) string {
 	return ja.w.SingularOf(word)
 }
-func (ja jessAdapter) GetUniqueName(category string) string {
+func (ja jessAdapter) GenerateUniqueName(category string) string {
 	return ja.w.Catalog.NewCounter(category)
 }
 func (ja jessAdapter) AddFact(key string, parts ...string) (err error) {
@@ -76,83 +76,6 @@ func (ja jessAdapter) AddFact(key string, parts ...string) (err error) {
 		err = e
 	} else if !ok {
 		err = mdl.Duplicate
-	}
-	return
-}
-
-func (ja jessAdapter) Apply(macro mdl.Macro, lhs, rhs []string) (err error) {
-	if multiSrc, e := validSources(lhs, macro.Type); e != nil {
-		err = e
-	} else if multiTgt, e := validTargets(rhs, macro.Type); e != nil {
-		err = e
-	} else {
-		src := namesToValues(lhs, multiSrc)
-		tgt := namesToValues(rhs, multiTgt)
-		if kind, e := ja.w.GetKindByName(macro.Name); e != nil {
-			err = e
-		} else if !kind.Implements(kindsOf.Macro.String()) {
-			err = errutil.Fmt("expected %q to be a macro", kind.Name())
-		} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
-			err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", kind.Name(), fieldCnt)
-		} else {
-			args := []g.Value{src, tgt}
-			if v, e := ja.w.Call(kind.Name(), affine.Text, nil, args); e != nil && !errors.Is(e, rt.NoResult) {
-				err = e
-			} else if v != nil {
-				if msg := v.String(); len(msg) > 0 {
-					err = errutil.Fmt("Declare statement: %s", msg)
-				}
-			}
-		}
-	}
-	return
-}
-
-// validate that the number of parsed primary names is as expected
-func validSources(ns []string, mtype mdl.MacroType) (multi bool, err error) {
-	switch mtype {
-	case mdl.Macro_PrimaryOnly, mdl.Macro_ManyPrimary, mdl.Macro_ManyMany:
-		if cnt := len(ns); cnt == 0 {
-			err = errutil.New("expected at least one source noun")
-		}
-		multi = true
-	case mdl.Macro_ManySecondary:
-		if cnt := len(ns); cnt > 1 {
-			err = errutil.New("expected exactly one noun")
-		}
-	default:
-		err = errutil.New("invalid macro type")
-	}
-	return
-}
-
-// validate that the number of parsed secondary names is as expected
-func validTargets(ns []string, mtype mdl.MacroType) (multi bool, err error) {
-	switch mtype {
-	case mdl.Macro_PrimaryOnly:
-		if cnt := len(ns); cnt != 0 {
-			err = errutil.New("didn't expect any target nouns")
-		}
-	case mdl.Macro_ManyPrimary:
-		if cnt := len(ns); cnt > 1 {
-			err = errutil.New("expected at most one target noun")
-		}
-	case mdl.Macro_ManySecondary, mdl.Macro_ManyMany:
-		// any number okay
-		multi = true
-	default:
-		err = errutil.New("invalid macro type")
-	}
-	return
-}
-
-func namesToValues(names []string, multi bool) (ret g.Value) {
-	if multi {
-		ret = g.StringsOf(names)
-	} else if len(names) > 0 {
-		ret = g.StringOf(names[0])
-	} else {
-		ret = g.Empty
 	}
 	return
 }

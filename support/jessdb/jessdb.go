@@ -69,16 +69,6 @@ func (d dbWrapper) FindField(ws match.Span) (ret string, width int) {
 	return
 }
 
-func (d dbWrapper) FindMacro(ws match.Span) (ret jess.Macro, width int) {
-	str := strings.ToLower(ws.String())
-	if m, e := d.GetPartialMacro(str); e == nil {
-		ret, width = m.Macro, countWords(m.Phrase)
-	} else if e != sql.ErrNoRows {
-		log.Println("FindMacro", e)
-	}
-	return
-}
-
 func (d dbWrapper) FindNoun(ws match.Span, kind string) (ret string, width int) {
 	if n, e := d.findNoun(ws, kind); e == nil {
 		ret, width = n, countWords(n)

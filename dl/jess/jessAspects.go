@@ -50,7 +50,7 @@ func (op *AspectsAreTraits) Generate(rar *Context) (err error) {
 			n := it.GetNext()
 			names = append(names, n.Name.GetNormalizedName())
 		}
-		err = rar.AddTraits(aspect, names)
+		err = rar.AddAspectTraits(aspect, names)
 	}
 	return
 }

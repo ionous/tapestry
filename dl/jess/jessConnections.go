@@ -35,7 +35,7 @@ func (op *MapConnections) matchThrough(input *InputState) (okay bool) {
 // 2. ensure all of the lhs links are doors
 // 3. set the destination of those doors to the rhs room.
 func (op *MapConnections) Generate(ctx *Context) (err error) {
-	if room, e := op.Room.GenerateNoun(ctx, nil, []string{Rooms}); e != nil {
+	if room, e := op.Room.GenerateNoun(ctx, NounProperties{Kinds: []string{Rooms}}); e != nil {
 		err = e
 	} else {
 		for it := op.GetDoors(); it.HasNext(); {
@@ -44,7 +44,7 @@ func (op *MapConnections) Generate(ctx *Context) (err error) {
 			// what about passing a "noun properties" instead
 			// then the shared function could apply at the right time
 			// rather than callers managing the timing.
-			if door, e := link.BuildNoun(ctx, nil, []string{Doors}); e != nil {
+			if door, e := link.BuildNoun(ctx, NounProperties{Kinds: []string{Doors}}); e != nil {
 				err = e
 				break
 			} else if door == nil {
@@ -53,7 +53,7 @@ func (op *MapConnections) Generate(ctx *Context) (err error) {
 				break
 			} else {
 				if e := ctx.PostProcess(weave.ValuePhase, func() (err error) {
-					if e := door.generateValues(ctx); e != nil {
+					if e := door.writeNounValues(ctx); e != nil {
 						err = e
 					} else {
 						err = ctx.AddNounValue(door.Noun, DoorDestination, text(room, Rooms))

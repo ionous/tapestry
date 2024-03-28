@@ -22,32 +22,32 @@ var Phrases = []Phrase{
 	// ------------------------------------------------------------------------
 	{
 		// FIX: some punctuation should be allowed in the names i guess.
-		// woodcutter's
+		// ( "woodcutter's")
 		test: `North of the Meadow is the woodcutter hut.`,
 		result: []string{
 			// nouns; defaulting to rooms:
-			"AddNounName", "meadow", "Meadow",
-			"AddNounName", "woodcutter hut", "woodcutter hut",
-			"AddNounKind", "meadow", "rooms",
-			"AddNounKind", "woodcutter hut", "rooms",
+			"AddNounName:", "meadow", "Meadow",
+			"AddNounName:", "woodcutter hut", "woodcutter hut",
+			"AddNounKind:", "meadow", "rooms",
+			"AddNounKind:", "woodcutter hut", "rooms",
 			// movement via a private door:
-			"AddFact", "dir", "meadow", "north", "woodcutter hut",
-			"AddNounValue", "meadow", "compass.north", textKind("meadow-north-door", "doors"),
-			"AddNounKind", "meadow-north-door", "doors",
-			"AddNounName", "meadow-north-door", "meadow-north-door",
-			"AddNounTrait", "meadow-north-door", "scenery",
-			"AddNounTrait", "meadow-north-door", "privately named",
-			"AddNounValue", "meadow-north-door", "destination", textKind("woodcutter hut", "rooms"),
-			"AddNounPair", "meadow", "whereabouts", "meadow-north-door",
+			"AddFact:", "dir", "meadow", "north", "woodcutter hut",
+			"AddNounValue:", "meadow", "compass.north", textKind("meadow-north-door", "doors"),
+			"AddNounKind:", "meadow-north-door", "doors",
+			"AddNounName:", "meadow-north-door", "meadow-north-door",
+			"AddNounTrait:", "meadow-north-door", "scenery",
+			"AddNounTrait:", "meadow-north-door", "privately named",
+			"AddNounValue:", "meadow-north-door", "destination", textKind("woodcutter hut", "rooms"),
+			"AddNounPair:", "whereabouts", "meadow", "meadow-north-door",
 			// implies reverse direction via another private door:
-			"AddFact", "dir", "woodcutter hut", "south", "meadow",
-			"AddNounValue", "woodcutter hut", "compass.south", textKind("woodcutter-hut-south-door", "doors"),
-			"AddNounKind", "woodcutter-hut-south-door", "doors",
-			"AddNounName", "woodcutter-hut-south-door", "woodcutter-hut-south-door",
-			"AddNounTrait", "woodcutter-hut-south-door", "scenery",
-			"AddNounTrait", "woodcutter-hut-south-door", "privately named",
-			"AddNounValue", "woodcutter-hut-south-door", "destination", textKind("meadow", "rooms"),
-			"AddNounPair", "woodcutter hut", "whereabouts", "woodcutter-hut-south-door",
+			"AddFact:", "dir", "woodcutter hut", "south", "meadow",
+			"AddNounValue:", "woodcutter hut", "compass.south", textKind("woodcutter-hut-south-door", "doors"),
+			"AddNounKind:", "woodcutter-hut-south-door", "doors",
+			"AddNounName:", "woodcutter-hut-south-door", "woodcutter-hut-south-door",
+			"AddNounTrait:", "woodcutter-hut-south-door", "scenery",
+			"AddNounTrait:", "woodcutter-hut-south-door", "privately named",
+			"AddNounValue:", "woodcutter-hut-south-door", "destination", textKind("meadow", "rooms"),
+			"AddNounPair:", "whereabouts", "woodcutter hut", "woodcutter-hut-south-door",
 		},
 	},
 	{
@@ -55,28 +55,28 @@ var Phrases = []Phrase{
 		test: `West of the Garden is south of the Meadow.`,
 		result: []string{
 			// nouns; defaulting to rooms:
-			"AddNounName", "garden", "Garden",
-			"AddNounName", "meadow", "Meadow",
-			"AddNounKind", "garden", "rooms",
-			"AddNounKind", "meadow", "rooms",
+			"AddNounName:", "garden", "Garden",
+			"AddNounName:", "meadow", "Meadow",
+			"AddNounKind:", "garden", "rooms",
+			"AddNounKind:", "meadow", "rooms",
 			// movement via a private door:
-			"AddFact", "dir", "garden", "west", "meadow",
-			"AddNounValue", "garden", "compass.west", textKind("garden-west-door", "doors"),
-			"AddNounKind", "garden-west-door", "doors",
-			"AddNounName", "garden-west-door", "garden-west-door",
-			"AddNounTrait", "garden-west-door", "scenery",
-			"AddNounTrait", "garden-west-door", "privately named",
-			"AddNounValue", "garden-west-door", "destination", textKind("meadow", "rooms"),
-			"AddNounPair", "garden", "whereabouts", "garden-west-door",
+			"AddFact:", "dir", "garden", "west", "meadow",
+			"AddNounValue:", "garden", "compass.west", textKind("garden-west-door", "doors"),
+			"AddNounKind:", "garden-west-door", "doors",
+			"AddNounName:", "garden-west-door", "garden-west-door",
+			"AddNounTrait:", "garden-west-door", "scenery",
+			"AddNounTrait:", "garden-west-door", "privately named",
+			"AddNounValue:", "garden-west-door", "destination", textKind("meadow", "rooms"),
+			"AddNounPair:", "whereabouts", "garden", "garden-west-door",
 			// redirect via a another private door:
-			"AddFact", "dir", "meadow", "south", "garden",
-			"AddNounValue", "meadow", "compass.south", textKind("meadow-south-door", "doors"),
-			"AddNounKind", "meadow-south-door", "doors",
-			"AddNounName", "meadow-south-door", "meadow-south-door",
-			"AddNounTrait", "meadow-south-door", "scenery",
-			"AddNounTrait", "meadow-south-door", "privately named",
-			"AddNounValue", "meadow-south-door", "destination", textKind("garden", "rooms"),
-			"AddNounPair", "meadow", "whereabouts", "meadow-south-door",
+			"AddFact:", "dir", "meadow", "south", "garden",
+			"AddNounValue:", "meadow", "compass.south", textKind("meadow-south-door", "doors"),
+			"AddNounKind:", "meadow-south-door", "doors",
+			"AddNounName:", "meadow-south-door", "meadow-south-door",
+			"AddNounTrait:", "meadow-south-door", "scenery",
+			"AddNounTrait:", "meadow-south-door", "privately named",
+			"AddNounValue:", "meadow-south-door", "destination", textKind("garden", "rooms"),
+			"AddNounPair:", "whereabouts", "meadow", "meadow-south-door",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -90,30 +90,30 @@ var Phrases = []Phrase{
 		test: `The passageway is south of the kitchen.`,
 		result: []string{
 			// nouns; defaulting to rooms:
-			"AddNounName", "passageway", "passageway",
-			"AddNounName", "kitchen", "kitchen",
-			"AddNounKind", "passageway", "rooms",
-			"AddNounKind", "kitchen", "rooms",
+			"AddNounName:", "passageway", "passageway",
+			"AddNounName:", "kitchen", "kitchen",
+			"AddNounKind:", "passageway", "rooms",
+			"AddNounKind:", "kitchen", "rooms",
 			// room to room conflict detection.
-			"AddFact", "dir", "kitchen", "south", "passageway",
+			"AddFact:", "dir", "kitchen", "south", "passageway",
 			// private door leading south to the passageway
-			"AddNounValue", "kitchen", "compass.south", textKind("kitchen-south-door", "doors"),
-			"AddNounKind", "kitchen-south-door", "doors",
-			"AddNounName", "kitchen-south-door", "kitchen-south-door",
-			"AddNounTrait", "kitchen-south-door", "scenery",
-			"AddNounTrait", "kitchen-south-door", "privately named",
-			"AddNounValue", "kitchen-south-door", "destination", textKind("passageway", "rooms"),
-			"AddNounPair", "kitchen", "whereabouts", "kitchen-south-door",
+			"AddNounValue:", "kitchen", "compass.south", textKind("kitchen-south-door", "doors"),
+			"AddNounKind:", "kitchen-south-door", "doors",
+			"AddNounName:", "kitchen-south-door", "kitchen-south-door",
+			"AddNounTrait:", "kitchen-south-door", "scenery",
+			"AddNounTrait:", "kitchen-south-door", "privately named",
+			"AddNounValue:", "kitchen-south-door", "destination", textKind("passageway", "rooms"),
+			"AddNounPair:", "whereabouts", "kitchen", "kitchen-south-door",
 			// room to room conflict detection.
-			"AddFact", "dir", "passageway", "north", "kitchen",
+			"AddFact:", "dir", "passageway", "north", "kitchen",
 			// private door leading north to the kitchen
-			"AddNounValue", "passageway", "compass.north", textKind("passageway-north-door", "doors"),
-			"AddNounKind", "passageway-north-door", "doors",
-			"AddNounName", "passageway-north-door", "passageway-north-door",
-			"AddNounTrait", "passageway-north-door", "scenery",
-			"AddNounTrait", "passageway-north-door", "privately named",
-			"AddNounValue", "passageway-north-door", "destination", textKind("kitchen", "rooms"),
-			"AddNounPair", "passageway", "whereabouts", "passageway-north-door",
+			"AddNounValue:", "passageway", "compass.north", textKind("passageway-north-door", "doors"),
+			"AddNounKind:", "passageway-north-door", "doors",
+			"AddNounName:", "passageway-north-door", "passageway-north-door",
+			"AddNounTrait:", "passageway-north-door", "scenery",
+			"AddNounTrait:", "passageway-north-door", "privately named",
+			"AddNounValue:", "passageway-north-door", "destination", textKind("kitchen", "rooms"),
+			"AddNounPair:", "whereabouts", "passageway", "passageway-north-door",
 		},
 	},
 	{
@@ -123,64 +123,64 @@ var Phrases = []Phrase{
 		// fix: verify the use of nowhere
 		test: `The passageway is south of the kitchen. The passageway is a door.`,
 		result: []string{
-			"AddNounName", "passageway", "passageway",
-			"AddNounName", "kitchen", "kitchen",
-			"AddNounKind", "passageway", "doors",
-			"AddNounKind", "kitchen", "rooms",
-			"AddNounPair", "kitchen", "whereabouts", "passageway",
+			"AddNounName:", "passageway", "passageway",
+			"AddNounName:", "kitchen", "kitchen",
+			"AddNounKind:", "passageway", "doors",
+			"AddNounKind:", "kitchen", "rooms",
+			"AddNounPair:", "whereabouts", "kitchen", "passageway",
 			// the direction is what the direction says.
-			"AddNounValue", "kitchen", "compass.south", textKind("passageway", "doors"),
+			"AddNounValue:", "kitchen", "compass.south", textKind("passageway", "doors"),
 		},
 	},
 	{
 		// ensure that a door can be used on the rhs,
 		test: `The kitchen is south of the passageway. The passageway is a door.`,
 		result: []string{
-			"AddNounName", "kitchen", "kitchen",
-			"AddNounName", "passageway", "passageway",
-			"AddNounKind", "passageway", "doors",
-			"AddNounKind", "kitchen", "rooms",
-			"AddNounPair", "kitchen", "whereabouts", "passageway",
+			"AddNounName:", "kitchen", "kitchen",
+			"AddNounName:", "passageway", "passageway",
+			"AddNounKind:", "passageway", "doors",
+			"AddNounKind:", "kitchen", "rooms",
+			"AddNounPair:", "whereabouts", "kitchen", "passageway",
 			// if the room is south from the door; then the door is north from room.
-			"AddNounValue", "kitchen", "compass.north", textKind("passageway", "doors"),
+			"AddNounValue:", "kitchen", "compass.north", textKind("passageway", "doors"),
 		},
 	},
 	{
 		// the door can located in another room.
 		test: `The kitchen is south of the passageway. The door called the passageway is in the room called the basement.`,
 		result: []string{
-			// the nouns and their types
-			"AddNounName", "kitchen", "kitchen",
-			"AddNounName", "passageway", "passageway",
-			"AddNounKind", "passageway", "doors",
-			//
-			"AddNounName", "basement", "basement",
-			"AddNounKind", "basement", "rooms",
-			"ApplyMacro", "contain", "basement", "passageway",
-			//
-			"AddNounKind", "kitchen", "rooms", // kitchen defaults to room because its mentioned in a directional phrase
+			"AddNounName:", "kitchen", "kitchen",
+			"AddNounName:", "passageway", "passageway",
+			"AddNounKind:", "passageway", "doors",
+			"AddNounName:", "basement", "basement",
+			"AddNounKind:", "basement", "rooms",
+			"AddNounPair:", "whereabouts", "basement", "passageway",
+			"AddNounKind:", "kitchen", "rooms", // kitchen defaults to room because its mentioned in a directional phrase
 			// movement via the existing door
 			// the kitchen is south of the passageway,
 			// and the passageway is in the basement,
 			// so moving south from the basement arrives in the kitchen.
-			"AddFact", "dir", "basement", "south", "kitchen",
-			"AddNounValue", "passageway", "destination", textKind("kitchen", "rooms"),
-			"AddNounValue", "basement", "compass.south", textKind("passageway", "doors"),
+			"AddFact:", "dir", "basement", "south", "kitchen",
+			"AddNounValue:", "passageway", "destination", textKind("kitchen", "rooms"),
+			"AddNounValue:", "basement", "compass.south", textKind("passageway", "doors"),
 			// implies reverse direction via a private door:
 			// ie. north from the kitchen is the basement.
-			"AddFact", "dir", "kitchen", "north", "basement",
-			"AddNounValue", "kitchen", "compass.north", textKind("kitchen-north-door", "doors"),
-			"AddNounKind", "kitchen-north-door", "doors",
-			"AddNounName", "kitchen-north-door", "kitchen-north-door",
-			"AddNounTrait", "kitchen-north-door", "scenery",
-			"AddNounTrait", "kitchen-north-door", "privately named",
-			"AddNounValue", "kitchen-north-door", "destination", textKind("basement", "rooms"),
-			"AddNounPair", "kitchen", "whereabouts", "kitchen-north-door",
-			//
+			"AddFact:", "dir", "kitchen", "north", "basement",
+			"AddNounValue:", "kitchen", "compass.north", textKind("kitchen-north-door", "doors"),
+			"AddNounKind:", "kitchen-north-door", "doors",
+			"AddNounName:", "kitchen-north-door", "kitchen-north-door",
+			"AddNounTrait:", "kitchen-north-door", "scenery",
+			"AddNounTrait:", "kitchen-north-door", "privately named",
+			"AddNounValue:", "kitchen-north-door", "destination", textKind("basement", "rooms"),
+			"AddNounPair:", "whereabouts", "kitchen", "kitchen-north-door",
+			// ugh. so horrible.
+			// inform has various checks about doors needing locations and exits,
+			// so it'd be hard or impossible to declare a worn door due to other restrictions.
+			"AddNounTrait:", "passageway", "not worn",
 			// fix? inform seems to *always* set indefinite article for "called the" ( re: passageway )
 			// but tapestry only does so when the noun is new.
 			// it's possible that inform elevates "called the" sub-phrases ahead of everything else.
-			"AddNounValue", "basement", "indefinite article", text("the"),
+			"AddNounValue:", "basement", "indefinite article", text("the"),
 		},
 	},
 	{
@@ -194,50 +194,50 @@ var Phrases = []Phrase{
 		test: `The mystery spot is west of the waterfall and south of the sea.`,
 		result: []string{
 			// the places mentiond:
-			"AddNounName", "mystery spot", "mystery spot",
-			"AddNounName", "waterfall", "waterfall",
-			"AddNounName", "sea", "sea",
+			"AddNounName:", "mystery spot", "mystery spot",
+			"AddNounName:", "waterfall", "waterfall",
+			"AddNounName:", "sea", "sea",
 			// all default to rooms:
-			"AddNounKind", "mystery spot", "rooms",
-			"AddNounKind", "waterfall", "rooms",
-			"AddNounKind", "sea", "rooms",
+			"AddNounKind:", "mystery spot", "rooms",
+			"AddNounKind:", "waterfall", "rooms",
+			"AddNounKind:", "sea", "rooms",
 			// movement via a private door:
-			"AddFact", "dir", "waterfall", "west", "mystery spot",
+			"AddFact:", "dir", "waterfall", "west", "mystery spot",
 			// maybe leading the name with a dash would be good enough.
-			"AddNounValue", "waterfall", "compass.west", textKind("waterfall-west-door", "doors"),
-			"AddNounKind", "waterfall-west-door", "doors",
-			"AddNounName", "waterfall-west-door", "waterfall-west-door",
-			"AddNounTrait", "waterfall-west-door", "scenery",
-			"AddNounTrait", "waterfall-west-door", "privately named",
-			"AddNounValue", "waterfall-west-door", "destination", textKind("mystery spot", "rooms"),
-			"AddNounPair", "waterfall", "whereabouts", "waterfall-west-door",
+			"AddNounValue:", "waterfall", "compass.west", textKind("waterfall-west-door", "doors"),
+			"AddNounKind:", "waterfall-west-door", "doors",
+			"AddNounName:", "waterfall-west-door", "waterfall-west-door",
+			"AddNounTrait:", "waterfall-west-door", "scenery",
+			"AddNounTrait:", "waterfall-west-door", "privately named",
+			"AddNounValue:", "waterfall-west-door", "destination", textKind("mystery spot", "rooms"),
+			"AddNounPair:", "whereabouts", "waterfall", "waterfall-west-door",
 			/// implies reverse direction via another private door:
-			"AddFact", "dir", "mystery spot", "east", "waterfall",
-			"AddNounValue", "mystery spot", "compass.east", textKind("mystery-spot-east-door", "doors"),
-			"AddNounKind", "mystery-spot-east-door", "doors",
-			"AddNounName", "mystery-spot-east-door", "mystery-spot-east-door",
-			"AddNounTrait", "mystery-spot-east-door", "scenery",
-			"AddNounTrait", "mystery-spot-east-door", "privately named",
-			"AddNounValue", "mystery-spot-east-door", "destination", textKind("waterfall", "rooms"),
-			"AddNounPair", "mystery spot", "whereabouts", "mystery-spot-east-door",
+			"AddFact:", "dir", "mystery spot", "east", "waterfall",
+			"AddNounValue:", "mystery spot", "compass.east", textKind("mystery-spot-east-door", "doors"),
+			"AddNounKind:", "mystery-spot-east-door", "doors",
+			"AddNounName:", "mystery-spot-east-door", "mystery-spot-east-door",
+			"AddNounTrait:", "mystery-spot-east-door", "scenery",
+			"AddNounTrait:", "mystery-spot-east-door", "privately named",
+			"AddNounValue:", "mystery-spot-east-door", "destination", textKind("waterfall", "rooms"),
+			"AddNounPair:", "whereabouts", "mystery spot", "mystery-spot-east-door",
 			// movement via a private door:
-			"AddFact", "dir", "sea", "south", "mystery spot",
-			"AddNounValue", "sea", "compass.south", textKind("sea-south-door", "doors"),
-			"AddNounKind", "sea-south-door", "doors",
-			"AddNounName", "sea-south-door", "sea-south-door",
-			"AddNounTrait", "sea-south-door", "scenery",
-			"AddNounTrait", "sea-south-door", "privately named",
-			"AddNounValue", "sea-south-door", "destination", textKind("mystery spot", "rooms"),
-			"AddNounPair", "sea", "whereabouts", "sea-south-door",
+			"AddFact:", "dir", "sea", "south", "mystery spot",
+			"AddNounValue:", "sea", "compass.south", textKind("sea-south-door", "doors"),
+			"AddNounKind:", "sea-south-door", "doors",
+			"AddNounName:", "sea-south-door", "sea-south-door",
+			"AddNounTrait:", "sea-south-door", "scenery",
+			"AddNounTrait:", "sea-south-door", "privately named",
+			"AddNounValue:", "sea-south-door", "destination", textKind("mystery spot", "rooms"),
+			"AddNounPair:", "whereabouts", "sea", "sea-south-door",
 			// implies reverse direction via another private door:
-			"AddFact", "dir", "mystery spot", "north", "sea",
-			"AddNounValue", "mystery spot", "compass.north", textKind("mystery-spot-north-door", "doors"),
-			"AddNounKind", "mystery-spot-north-door", "doors",
-			"AddNounName", "mystery-spot-north-door", "mystery-spot-north-door",
-			"AddNounTrait", "mystery-spot-north-door", "scenery",
-			"AddNounTrait", "mystery-spot-north-door", "privately named",
-			"AddNounValue", "mystery-spot-north-door", "destination", textKind("sea", "rooms"),
-			"AddNounPair", "mystery spot", "whereabouts", "mystery-spot-north-door",
+			"AddFact:", "dir", "mystery spot", "north", "sea",
+			"AddNounValue:", "mystery spot", "compass.north", textKind("mystery-spot-north-door", "doors"),
+			"AddNounKind:", "mystery-spot-north-door", "doors",
+			"AddNounName:", "mystery-spot-north-door", "mystery-spot-north-door",
+			"AddNounTrait:", "mystery-spot-north-door", "scenery",
+			"AddNounTrait:", "mystery-spot-north-door", "privately named",
+			"AddNounValue:", "mystery-spot-north-door", "destination", textKind("sea", "rooms"),
+			"AddNounPair:", "whereabouts", "mystery spot", "mystery-spot-north-door",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -246,34 +246,34 @@ var Phrases = []Phrase{
 	{
 		test: `Through the long slide is nowhere.`,
 		result: []string{
-			"AddNounName", "long slide", "long slide",
-			"AddNounKind", "long slide", "doors",
-			"AddNounValue", "long slide", "destination", textKind("", "rooms"),
+			"AddNounName:", "long slide", "long slide",
+			"AddNounKind:", "long slide", "doors",
+			"AddNounValue:", "long slide", "destination", textKind("", "rooms"),
 		},
 	},
 	{
 		test: `Through the blue door is the Flat Landing.`,
 		result: []string{
-			"AddNounName", "flat landing", "Flat Landing",
-			"AddNounKind", "flat landing", "rooms",
-			"AddNounName", "blue door", "blue door",
-			"AddNounKind", "blue door", "doors",
-			"AddNounValue", "blue door", "destination", textKind("flat landing", "rooms"),
+			"AddNounName:", "flat landing", "Flat Landing",
+			"AddNounKind:", "flat landing", "rooms",
+			"AddNounName:", "blue door", "blue door",
+			"AddNounKind:", "blue door", "doors",
+			"AddNounValue:", "blue door", "destination", textKind("flat landing", "rooms"),
 		},
 	},
 	{
 		test: `Through the gate and the hatch is a dark room called An End.`,
 		result: []string{
-			"AddNounName", "an end", "An End",
-			"AddNounKind", "an end", "rooms",
-			"AddNounName", "gate", "gate",
-			"AddNounKind", "gate", "doors",
-			"AddNounName", "hatch", "hatch",
-			"AddNounKind", "hatch", "doors",
-			"AddNounTrait", "an end", "proper named",
-			"AddNounTrait", "an end", "dark",
-			"AddNounValue", "gate", "destination", textKind("an end", "rooms"),
-			"AddNounValue", "hatch", "destination", textKind("an end", "rooms"),
+			"AddNounName:", "an end", "An End",
+			"AddNounKind:", "an end", "rooms",
+			"AddNounName:", "gate", "gate",
+			"AddNounKind:", "gate", "doors",
+			"AddNounName:", "hatch", "hatch",
+			"AddNounKind:", "hatch", "doors",
+			"AddNounTrait:", "an end", "proper named",
+			"AddNounTrait:", "an end", "dark",
+			"AddNounValue:", "gate", "destination", textKind("an end", "rooms"),
+			"AddNounValue:", "hatch", "destination", textKind("an end", "rooms"),
 		},
 	},
 	// ----------------
@@ -285,14 +285,15 @@ var Phrases = []Phrase{
 		test: `The bottle is in the kitchen. The bottle is a container. The kitchen is a room.`,
 		result: []string{
 			// the registration of the placeholder kind is hidden
-			"AddNounName", "bottle", "bottle",
-			"AddNounName", "kitchen", "kitchen",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounName:", "kitchen", "kitchen",
 			// before applying any relations the kinds are finalized
 			// ( sorted by name )
-			"AddNounKind", "bottle", "containers",
-			"AddNounKind", "kitchen", "rooms",
+			"AddNounKind:", "bottle", "containers",
+			"AddNounKind:", "kitchen", "rooms",
 			// all done.
-			"ApplyMacro", "contain", "kitchen", "bottle",
+			"AddNounPair:", "whereabouts", "kitchen", "bottle",
+			"AddNounTrait:", "bottle", "not worn",
 		},
 	},
 	{
@@ -301,9 +302,9 @@ var Phrases = []Phrase{
 		// as per inform: the nouns can be defined after the understanding references them.
 		test: `Understand "donut" as the doughnut. The doughnut is a thing.`,
 		result: []string{
-			"AddNounName", "doughnut", "doughnut",
-			"AddNounKind", "doughnut", "things",
-			"AddNounAlias", "doughnut", "donut",
+			"AddNounName:", "doughnut", "doughnut",
+			"AddNounKind:", "doughnut", "things",
+			"AddNounAlias:", "doughnut", "donut",
 		},
 	},
 
@@ -314,23 +315,23 @@ var Phrases = []Phrase{
 		// message and missive are built-in test nouns.
 		test: `Understand "floor" or "sawdust" as the message.`,
 		result: []string{
-			"AddNounAlias", "message", "floor",
-			"AddNounAlias", "message", "sawdust",
+			"AddNounAlias:", "message", "floor",
+			"AddNounAlias:", "message", "sawdust",
 		},
 	},
 	{
 		// message and missive are built-in test nouns.
 		test: `Understand "missives" as the plural of missive and message.`,
 		result: []string{
-			"AddPlural", "missives", "missive",
-			"AddPlural", "missives", "message",
+			"AddPlural:", "missives", "missive",
+			"AddPlural:", "missives", "message",
 		},
 	},
 	{
 		// storing is a built-in for testing.
 		test: `Understand "hang [objects] on/onto/-- [objects]" as storing.`,
 		result: []string{
-			"AddGrammar",
+			"AddGrammar:",
 			"hang [objects] on/onto/-- [objects]",
 			`{"One word:":["hang"]}`,
 			`{"One noun:":"objects"}`,
@@ -346,7 +347,7 @@ var Phrases = []Phrase{
 		test: `The title of the story is "A Secret."`,
 		result: []string{
 			// no noun declaration because the story is a known noun ( in these tests )
-			"AddNounValue", "story", "title", text("A Secret."),
+			"AddNounValue:", "story", "title", text("A Secret."),
 		},
 	},
 	{
@@ -354,9 +355,9 @@ var Phrases = []Phrase{
 		// weave validates them when attempting to write them.
 		test: `The age of the bottle is 42.`,
 		result: []string{
-			"AddNounName", "bottle", "bottle",
-			"AddNounKind", "bottle", "things",
-			"AddNounValue", "bottle", "age", number(42),
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "things",
+			"AddNounValue:", "bottle", "age", number(42),
 		},
 	},
 	{
@@ -364,9 +365,9 @@ var Phrases = []Phrase{
 		// shouldnt match the existing noun "story."
 		test: `The age of the story teller is 42.`,
 		result: []string{
-			"AddNounName", "story teller", "story teller",
-			"AddNounKind", "story teller", "things",
-			"AddNounValue", "story teller", "age", number(42),
+			"AddNounName:", "story teller", "story teller",
+			"AddNounKind:", "story teller", "things",
+			"AddNounValue:", "story teller", "age", number(42),
 		},
 	},
 	{
@@ -382,7 +383,7 @@ var Phrases = []Phrase{
 		test: `The story has the title "{15|print_num!}"`,
 		result: []string{
 			// test that it can convert a template
-			"AddNounValue", "story", "title", `{"FromText:":{"Numeral:":{"Num value:":15}}}`,
+			"AddNounValue:", "story", "title", `{"FromText:":{"Numeral:":{"Num value:":15}}}`,
 		},
 	},
 	{
@@ -390,9 +391,9 @@ var Phrases = []Phrase{
 		// weave validates them when attempting to write them.
 		test: `The bottle has an age of 42.`,
 		result: []string{
-			"AddNounName", "bottle", "bottle",
-			"AddNounKind", "bottle", "things",
-			"AddNounValue", "bottle", "age", number(42),
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "things",
+			"AddNounValue:", "bottle", "age", number(42),
 		},
 	},
 	{
@@ -409,7 +410,7 @@ var Phrases = []Phrase{
 	{
 		test: `The colors are red, blue, and cobalt.`,
 		result: []string{
-			"AddTraits", "color", "red", "blue", "cobalt",
+			"AddAspectTraits:", "color", "red", "blue", "cobalt",
 		},
 	},
 	{
@@ -429,14 +430,14 @@ var Phrases = []Phrase{
 		// if so: the "final" field for mdl_value, mdl_value_kind could be used.
 		test: `Containers are usually closed.`,
 		result: []string{
-			"AddKindTrait", "containers", "closed",
+			"AddKindTrait:", "containers", "closed",
 		},
 	},
 	{
 		test: `Containers and supporters are usually fixed in place.`,
 		result: []string{
-			"AddKindTrait", "containers", "fixed in place",
-			"AddKindTrait", "supporters", "fixed in place",
+			"AddKindTrait:", "containers", "fixed in place",
+			"AddKindTrait:", "supporters", "fixed in place",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -446,46 +447,46 @@ var Phrases = []Phrase{
 		// when the requested kind being declared isn't yet known:
 		test: `Devices are a kind of thing.`,
 		result: []string{
-			"AddKind", "devices", "things",
+			"AddKind:", "devices", "things",
 		},
 	},
 	{
 		// when the kind being declared is already known
 		test: `A container is a kind of thing.`,
 		result: []string{
-			"AddKind", "containers", "things",
+			"AddKind:", "containers", "things",
 		},
 	},
 	{
 		// determine pluralness based on trailing is/are
 		test: `A device is a kind of thing.`,
 		result: []string{
-			"AddKind", "devices", "things",
+			"AddKind:", "devices", "things",
 		},
 	},
 	{
 		// adding trailing properties
 		test: `A casket is a kind of closed container.`,
 		result: []string{
-			"AddKind", "caskets", "containers",
-			"AddKindTrait", "caskets", "closed",
+			"AddKind:", "caskets", "containers",
+			"AddKindTrait:", "caskets", "closed",
 		},
 	},
 	{
 		// complex parsing
 		test: `The closed containers called the safes are a kind of fixed in place thing.`,
 		result: []string{
-			"AddKind", "safes", "things",
-			"AddKind", "safes", "containers",
-			"AddKindTrait", "safes", "closed",
-			"AddKindTrait", "safes", "fixed in place",
+			"AddKind:", "safes", "things",
+			"AddKind:", "safes", "containers",
+			"AddKindTrait:", "safes", "closed",
+			"AddKindTrait:", "safes", "fixed in place",
 		},
 	},
 	{
 		// correctly producing unexpected results.
 		test: `The closed casket is a kind of container.`,
 		result: []string{
-			"AddKind", "closed caskets", "containers",
+			"AddKind:", "closed caskets", "containers",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -497,31 +498,36 @@ var Phrases = []Phrase{
 		test: "Containers are either opened or closed.",
 		result: []string{
 			// inform names these: "container status", "container status 2", etc.
-			"AddKind", "opened status", "aspects",
-			"AddTraits", "opened status", "opened", "closed",
-			"AddFields", "containers", "opened status", "text", "opened status",
+			"AddKind:", "opened status", "aspects",
+			"AddAspectTraits:", "opened status", "opened", "closed",
+			"AddKindFields:", "containers", "opened status", "text", "opened status",
 		},
 	},
 	{
 		// can be [either] ...
 		test: "A thing can be opened or closed or ajar.",
 		result: []string{
-			"AddKind", "opened status", "aspects",
-			"AddTraits", "opened status", "opened", "closed", "ajar",
-			"AddFields", "things", "opened status", "text", "opened status",
+			"AddKind:", "opened status", "aspects",
+			"AddAspectTraits:", "opened status", "opened", "closed", "ajar",
+			"AddKindFields:", "things", "opened status", "text", "opened status",
 		},
 	},
 	{
 		// inform doesnt allow [either] here; i'm fine with whatever works out.
-		test:   "A thing can be scenery.",
-		result: []string{"AddFields", "things", "scenery", "bool", ""},
+		test: "A thing can be scenery.",
+		result: []string{
+			"AddKindFields:", "things", "scenery", "bool", "",
+		},
 	},
 	// ------------------------------------------------------------------------
 	// KindsHaveProperties
+	// inform allows: things have some text called the one, and the two.
+	// i feel like if that's the case. then better would be forcing the type as well
+	// so you can mix numbers and text; maybe even "can be".
 	// ------------------------------------------------------------------------
 	{
 		test:   "Things have some text called a description.",
-		result: []string{"AddFields", "things", "description", "text", ""},
+		result: []string{"AddKindFields:", "things", "description", "text", ""},
 	},
 	{
 		test:   "Things have some text.",
@@ -533,100 +539,112 @@ var Phrases = []Phrase{
 	},
 	{
 		test:   "A supporter has a number called carrying capacity.",
-		result: []string{"AddFields", "supporters", "carrying capacity", "number", ""},
+		result: []string{"AddKindFields:", "supporters", "carrying capacity", "number", ""},
 	},
 	{
 		// except for number and text, inform allows "bare" properties: a "list of text" creates a member called "list of text"
 		test:   "Things have a list of text called frenemies.",
-		result: []string{"AddFields", "things", "frenemies", "text_list", ""},
+		result: []string{"AddKindFields:", "things", "frenemies", "text_list", ""},
 	},
 	{
 		test:   "Things have a list of numbers called the lotto numbers.",
-		result: []string{"AddFields", "things", "lotto numbers", "num_list", ""},
+		result: []string{"AddKindFields:", "things", "lotto numbers", "num_list", ""},
 	},
 	{
 		// groups are a pre-defined type of record; anonymous fields are allowed.
 		// references to kinds become text; except for records which are embedded.
 		test:   "Things have a color.",
-		result: []string{"AddFields", "things", "color", "text", "color"},
+		result: []string{"AddKindFields:", "things", "color", "text", "color"},
 	},
 	{
 		test:   "Things have a group.",
-		result: []string{"AddFields", "things", "group", "record", "groups"},
+		result: []string{"AddKindFields:", "things", "group", "record", "groups"},
 	},
 	{
 		test:   "Things have a group called the set.",
-		result: []string{"AddFields", "things", "set", "record", "groups"},
+		result: []string{"AddKindFields:", "things", "set", "record", "groups"},
 	},
 	{
 		test:   "Things have a list of groups.",
-		result: []string{"AddFields", "things", "groups", "record_list", "groups"},
+		result: []string{"AddKindFields:", "things", "groups", "record_list", "groups"},
 	},
 	// ------------------------------------------------------------------------
 	// NamesVerbNames
 	// ------------------------------------------------------------------------
 	{
-		test: `Two things are in the kitchen.`,
+		// "in" should use "containers" by default.
+		test: `Two things are in the bottle.`,
 		result: []string{
-			"AddNounKind", "thing-1", "things",
-			"AddNounName", "thing-1", "thing-1",
-			"AddNounKind", "thing-2", "things",
-			"AddNounName", "thing-2", "thing-2",
+			"AddNounName:", "thing-1", "thing-1",
+			"AddNounKind:", "thing-1", "things",
+			"AddNounName:", "thing-2", "thing-2",
+			"AddNounKind:", "thing-2", "things",
+			"AddNounName:", "bottle", "bottle",
 			//
-			"AddNounName", "kitchen", "kitchen",
-			"ApplyMacro", "contain", "kitchen", "thing-1", "thing-2",
-			"AddNounKind", "kitchen", "things",
+			"AddNounPair:", "whereabouts", "bottle", "thing-1",
+			"AddNounPair:", "whereabouts", "bottle", "thing-2",
+			"AddNounKind:", "bottle", "containers", // fallback implied by "in"
 			//
-			"AddNounAlias", "thing-1", "thing",
-			"AddNounTrait", "thing-1", "counted",
-			"AddNounValue", "thing-1", "printed name", text("thing"),
+			"AddNounAlias:", "thing-1", "thing",
+			"AddNounTrait:", "thing-1", "counted",
+			"AddNounTrait:", "thing-1", "not worn",
+			"AddNounValue:", "thing-1", "printed name", text("thing"),
 			//
-			"AddNounAlias", "thing-2", "thing",
-			"AddNounTrait", "thing-2", "counted",
-			"AddNounValue", "thing-2", "printed name", text("thing"),
+			"AddNounAlias:", "thing-2", "thing",
+			"AddNounTrait:", "thing-2", "counted",
+			"AddNounTrait:", "thing-2", "not worn",
+			"AddNounValue:", "thing-2", "printed name", text("thing"),
 		},
 	},
 	{
 		test: `Hershel is carrying scissors and a pen.`,
 		result: []string{
-			// fix: carrying should  be actor
-			"AddNounName", "hershel", "Hershel",
-			"AddNounName", "scissors", "scissors",
-			"AddNounName", "pen", "pen",
-			"ApplyMacro", "carry", "hershel", "scissors", "pen",
+			"AddNounName:", "hershel", "Hershel",
+			"AddNounName:", "scissors", "scissors",
+			"AddNounName:", "pen", "pen",
 			//
-			"AddNounKind", "hershel", "things", // FIX: carries should be actor
-			"AddNounKind", "scissors", "things",
-			"AddNounKind", "pen", "things",
+			"AddNounKind:", "hershel", "actors",
+			"AddNounKind:", "scissors", "things",
+			"AddNounKind:", "pen", "things",
 			//
-			"AddNounTrait", "hershel", "proper named",
-			"AddNounTrait", "scissors", "proper named", // yes; this conforms with inform.
+			"AddNounPair:", "whereabouts", "hershel", "scissors",
+			"AddNounPair:", "whereabouts", "hershel", "pen",
+			//
+			"AddNounTrait:", "hershel", "proper named",
+			"AddNounTrait:", "scissors", "proper named", // yes; this conforms with inform.
+			"AddNounTrait:", "scissors", "not worn",
+			"AddNounTrait:", "pen", "not worn",
 		},
 	},
 	{
 		// reverse carrying relation.
 		test: `The scissors and a pen are carried by Hershel.`,
 		result: []string{
-			"AddNounName", "scissors", "scissors",
-			"AddNounName", "pen", "pen",
-			"AddNounName", "hershel", "Hershel",
-			"ApplyMacro", "carry", "hershel", "scissors", "pen",
+			"AddNounName:", "scissors", "scissors",
+			"AddNounName:", "pen", "pen",
+			"AddNounName:", "hershel", "Hershel",
 			//
-			"AddNounKind", "scissors", "things",
-			"AddNounKind", "pen", "things",
-			"AddNounKind", "hershel", "things",
+			"AddNounKind:", "scissors", "things",
+			"AddNounKind:", "pen", "things",
+			"AddNounKind:", "hershel", "actors",
 			//
-			"AddNounTrait", "hershel", "proper named",
+			"AddNounPair:", "whereabouts", "hershel", "scissors",
+			"AddNounPair:", "whereabouts", "hershel", "pen",
+			//
+			"AddNounTrait:", "scissors", "not worn",
+			"AddNounTrait:", "pen", "not worn",
+			"AddNounTrait:", "hershel", "proper named",
 		},
 	},
 	{
 		test: `The unhappy man is in the closed bottle.`,
 		result: []string{
-			"AddNounName", "unhappy man", "unhappy man",
-			"AddNounName", "closed bottle", "closed bottle",
-			"ApplyMacro", "contain", "closed bottle", "unhappy man",
-			"AddNounKind", "unhappy man", "things",
-			"AddNounKind", "closed bottle", "things",
+			"AddNounName:", "unhappy man", "unhappy man",
+			"AddNounName:", "closed bottle", "closed bottle",
+			"AddNounKind:", "unhappy man", "things",
+			"AddNounPair:", "whereabouts", "closed bottle", "unhappy man",
+			"AddNounKind:", "closed bottle", "containers", // the implications of the verb "is in"
+			"AddNounTrait:", "unhappy man", "not worn",
 		},
 	},
 	{
@@ -635,15 +653,17 @@ var Phrases = []Phrase{
 		// would create a noun called "the trunk and the box"
 		test: `The thing called the stake is on the supporter called the altar.`,
 		result: []string{
-			"AddNounName", "stake", "stake",
-			"AddNounKind", "stake", "things",
+			"AddNounName:", "stake", "stake",
+			"AddNounKind:", "stake", "things",
 			//
-			"AddNounName", "altar", "altar",
-			"AddNounKind", "altar", "supporters",
-			"ApplyMacro", "support", "altar", "stake",
+			"AddNounName:", "altar", "altar",
+			"AddNounKind:", "altar", "supporters",
 			//
-			"AddNounValue", "altar", "indefinite article", text("the"),
-			"AddNounValue", "stake", "indefinite article", text("the"),
+			"AddNounPair:", "whereabouts", "altar", "stake",
+			//
+			"AddNounTrait:", "stake", "not worn",
+			"AddNounValue:", "stake", "indefinite article", text("the"),
+			"AddNounValue:", "altar", "indefinite article", text("the"),
 		},
 	},
 	{
@@ -653,55 +673,66 @@ var Phrases = []Phrase{
 		// those expect only expect one set of nouns; these have two.
 		test: `A closed openable container called the trunk is in the lobby.`,
 		result: []string{
-			"AddNounName", "trunk", "trunk",
-			"AddNounKind", "trunk", "containers",
+			"AddNounName:", "trunk", "trunk",
+			"AddNounKind:", "trunk", "containers",
 			//
-			"AddNounName", "lobby", "lobby",
-			"ApplyMacro", "contain", "lobby", "trunk",
-			"AddNounKind", "lobby", "things",
+			"AddNounName:", "lobby", "lobby",
+			"AddNounPair:", "whereabouts", "lobby", "trunk",
+			"AddNounKind:", "lobby", "containers", // in defaults to containers
 			//
-			"AddNounTrait", "trunk", "closed",
-			"AddNounTrait", "trunk", "openable",
-			"AddNounValue", "trunk", "indefinite article", text("the"),
+			"AddNounTrait:", "trunk", "closed",
+			"AddNounTrait:", "trunk", "openable",
+			"AddNounTrait:", "trunk", "not worn",
+			"AddNounValue:", "trunk", "indefinite article", text("the"),
 		},
 	},
 	{
 		// multiple primary: "is" left of the macro "in".
 		test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 		result: []string{
-			"AddNounName", "coins", "coins",
-			"AddNounName", "notebook", "notebook",
-			"AddNounName", "gripping hand", "gripping hand",
-			"AddNounName", "coffin", "coffin",
-			"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
+			"AddNounName:", "coins", "coins",
+			"AddNounName:", "notebook", "notebook",
+			"AddNounName:", "gripping hand", "gripping hand",
+			"AddNounName:", "coffin", "coffin",
 			//
-			"AddNounKind", "coins", "things",
-			"AddNounKind", "notebook", "things",
-			"AddNounKind", "gripping hand", "things",
-			"AddNounKind", "coffin", "things", // FIX: auto container.
+			"AddNounKind:", "coins", "things",
+			"AddNounKind:", "notebook", "things",
+			"AddNounKind:", "gripping hand", "things",
 			//
-			"AddNounTrait", "coins", "plural named",
+			"AddNounPair:", "whereabouts", "coffin", "coins",
+			"AddNounPair:", "whereabouts", "coffin", "notebook",
+			"AddNounPair:", "whereabouts", "coffin", "gripping hand",
+			"AddNounKind:", "coffin", "containers", // fallback implied by "in"
+			//
+			"AddNounTrait:", "coins", "plural named",
+			"AddNounTrait:", "coins", "not worn",
+			"AddNounTrait:", "notebook", "not worn",
+			"AddNounTrait:", "gripping hand", "not worn",
 		},
 	},
 	{
 		// the special nxn description: no properties are allowed.
 		test: `Hector and Maria are suspicious of Santa and Santana.`,
 		result: []string{
-			"AddNounName", "hector", "Hector",
-			"AddNounName", "maria", "Maria",
-			"AddNounName", "santa", "Santa",
-			"AddNounName", "santana", "Santana",
-			"ApplyMacro", "suspect", "hector", "maria", "santa", "santana",
+			"AddNounName:", "hector", "Hector",
+			"AddNounName:", "maria", "Maria",
+			"AddNounName:", "santa", "Santa",
+			"AddNounName:", "santana", "Santana",
 			//
-			"AddNounKind", "hector", "things",
-			"AddNounKind", "maria", "things",
-			"AddNounKind", "santa", "things",
-			"AddNounKind", "santana", "things",
+			"AddNounKind:", "hector", "actors",
+			"AddNounKind:", "maria", "actors",
+			"AddNounKind:", "santa", "actors",
+			"AddNounKind:", "santana", "actors",
 			//
-			"AddNounTrait", "hector", "proper named",
-			"AddNounTrait", "maria", "proper named",
-			"AddNounTrait", "santa", "proper named",
-			"AddNounTrait", "santana", "proper named",
+			"AddNounPair:", "suspicion", "hector", "santa",
+			"AddNounPair:", "suspicion", "hector", "santana",
+			"AddNounPair:", "suspicion", "maria", "santa",
+			"AddNounPair:", "suspicion", "maria", "santana",
+			//
+			"AddNounTrait:", "hector", "proper named",
+			"AddNounTrait:", "maria", "proper named",
+			"AddNounTrait:", "santa", "proper named",
+			"AddNounTrait:", "santana", "proper named",
 		},
 	},
 	{
@@ -717,62 +748,63 @@ var Phrases = []Phrase{
 		result: []string{
 			// FIX? inform would error on this saying "Properties depend on kind"
 			// because it would auto define a bottle as a thing; and things cant be "closed."
-			"AddNounName", "bottle", "bottle",
-			"AddNounKind", "bottle", "things",
-			"AddNounTrait", "bottle", "closed",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "things",
+			"AddNounTrait:", "bottle", "closed",
 		},
 	},
 	{
 		// multi word trait:
 		test: `The tree is fixed in place.`,
 		result: []string{
-			"AddNounName", "tree", "tree",
-			"AddNounKind", "tree", "things",
-			"AddNounTrait", "tree", "fixed in place",
+			"AddNounName:", "tree", "tree",
+			"AddNounKind:", "tree", "things",
+			"AddNounTrait:", "tree", "fixed in place",
 		},
 	},
 	{
 		// multiple trailing properties, using the kind as a property.
 		test: `The bottle is a transparent, open, container.`,
 		result: []string{
-			"AddNounName", "bottle", "bottle",
-			"AddNounKind", "bottle", "containers",
-			"AddNounTrait", "bottle", "transparent",
-			"AddNounTrait", "bottle", "open",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "containers",
+			"AddNounTrait:", "bottle", "transparent",
+			"AddNounTrait:", "bottle", "open",
 		},
 	},
 	{
 		// multiple trailing properties without commas.
 		test: `The bottle is a transparent open container.`,
 		result: []string{
-			"AddNounName", "bottle", "bottle",
-			"AddNounKind", "bottle", "containers",
-			"AddNounTrait", "bottle", "transparent",
-			"AddNounTrait", "bottle", "open",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounKind:", "bottle", "containers",
+			"AddNounTrait:", "bottle", "transparent",
+			"AddNounTrait:", "bottle", "open",
 		},
 	},
 	{
 		// multiple nouns of different kinds
 		test: `The box and the top are closed containers.`,
 		result: []string{
-			"AddNounName", "box", "box",
-			"AddNounKind", "box", "containers",
+			"AddNounName:", "box", "box",
+			"AddNounKind:", "box", "containers",
 			//
-			"AddNounName", "top", "top",
-			"AddNounKind", "top", "containers",
+			"AddNounName:", "top", "top",
+			"AddNounKind:", "top", "containers",
 			//
-			"AddNounTrait", "box", "closed",
-			"AddNounTrait", "top", "closed",
+			"AddNounTrait:", "box", "closed",
+			"AddNounTrait:", "top", "closed",
 		},
 	},
 	{
 		// using 'called' without a macro
+		// fix: inform specifically errors on commas "the kitchen contains a thing called the one, two."
 		test: `The container called the sarcophagus is open.`,
 		result: []string{
-			"AddNounName", "sarcophagus", "sarcophagus",
-			"AddNounKind", "sarcophagus", "containers",
-			"AddNounTrait", "sarcophagus", "open",
-			"AddNounValue", "sarcophagus", "indefinite article", text("the"),
+			"AddNounName:", "sarcophagus", "sarcophagus",
+			"AddNounKind:", "sarcophagus", "containers",
+			"AddNounTrait:", "sarcophagus", "open",
+			"AddNounValue:", "sarcophagus", "indefinite article", text("the"),
 		},
 	},
 	{
@@ -784,31 +816,37 @@ var Phrases = []Phrase{
 		// in inform, these become the plural kind "Bucketss" and "basketss"
 		test: `Buckets and baskets are kinds of container.`,
 		result: []string{
-			"AddKind", "buckets", "containers",
-			"AddKind", "baskets", "containers",
+			"AddKind:", "buckets", "containers",
+			"AddKind:", "baskets", "containers",
 		},
 	},
 	{
+		// inform doesnt allow this;
+		// it requires: The closed container called the coffin is in the antechamber.
 		test: `The coffin is a closed container in the antechamber.`,
 		result: []string{
-			"AddNounName", "coffin", "coffin",
-			"AddNounKind", "coffin", "containers",
-			"AddNounName", "antechamber", "antechamber",
-			"ApplyMacro", "contain", "antechamber", "coffin",
-			"AddNounKind", "antechamber", "things",
-			"AddNounTrait", "coffin", "closed",
+			"AddNounName:", "coffin", "coffin",
+			"AddNounKind:", "coffin", "containers",
+			"AddNounName:", "antechamber", "antechamber",
+			"AddNounPair:", "whereabouts", "antechamber", "coffin",
+			"AddNounKind:", "antechamber", "containers", // fallback implied by "in"
+			"AddNounTrait:", "coffin", "closed",
+			"AddNounTrait:", "coffin", "not worn",
 		},
 	},
 	{
 		// allowed even though it implies something different than what is written:
 		test: `The bottle is openable in the kitchen.`,
 		result: []string{
-			"AddNounName", "bottle", "bottle",
-			"AddNounName", "kitchen", "kitchen",
-			"ApplyMacro", "contain", "kitchen", "bottle",
-			"AddNounKind", "bottle", "things",
-			"AddNounKind", "kitchen", "things",
-			"AddNounTrait", "bottle", "openable",
+			"AddNounName:", "bottle", "bottle",
+			"AddNounName:", "kitchen", "kitchen",
+			//
+			"AddNounKind:", "bottle", "things",
+			"AddNounPair:", "whereabouts", "kitchen", "bottle",
+			"AddNounKind:", "kitchen", "containers", // fallback implied by "in"
+			//
+			"AddNounTrait:", "bottle", "openable",
+			"AddNounTrait:", "bottle", "not worn",
 		},
 	},
 	// ------------------------------------------------------------------------
@@ -818,37 +856,55 @@ var Phrases = []Phrase{
 		// multiple primary with a leading macro
 		test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 		result: []string{
-			"AddNounName", "coffin", "coffin",
-			"AddNounName", "coins", "coins",
-			"AddNounName", "notebook", "notebook",
-			"AddNounName", "gripping hand", "gripping hand",
-			"ApplyMacro", "contain", "coffin", "coins", "notebook", "gripping hand",
-			// implicit kinds are sorted by name
-			"AddNounKind", "coffin", "things",
-			"AddNounKind", "coins", "things",
-			"AddNounKind", "notebook", "things",
-			"AddNounKind", "gripping hand", "things",
-			// then values
-			"AddNounTrait", "coins", "plural named",
+			"AddNounName:", "coins", "coins",
+			"AddNounName:", "notebook", "notebook",
+			"AddNounName:", "gripping hand", "gripping hand",
+			"AddNounName:", "coffin", "coffin",
+			//
+			"AddNounKind:", "coins", "things",
+			"AddNounKind:", "notebook", "things",
+			"AddNounKind:", "gripping hand", "things",
+			//
+			"AddNounPair:", "whereabouts", "coffin", "coins",
+			"AddNounPair:", "whereabouts", "coffin", "notebook",
+			"AddNounPair:", "whereabouts", "coffin", "gripping hand",
+			"AddNounKind:", "coffin", "containers", // fallback implied from "in"
+			//
+			"AddNounTrait:", "coins", "plural named",
+			"AddNounTrait:", "coins", "not worn",
+			"AddNounTrait:", "notebook", "not worn",
+			"AddNounTrait:", "gripping hand", "not worn",
 		},
 	},
 	{
 		// multiple anonymous nouns.
 		test: `In the lobby are a supporter and a container.`,
 		result: []string{
-			"AddNounName", "lobby", "lobby",
-			"AddNounKind", "supporter-1", "supporters",
-			"AddNounName", "supporter-1", "supporter-1",
-			"AddNounKind", "container-1", "containers",
-			"AddNounName", "container-1", "container-1",
-			"ApplyMacro", "contain", "lobby", "supporter-1", "container-1",
-			"AddNounKind", "lobby", "things",
-			"AddNounAlias", "supporter-1", "supporter",
-			"AddNounTrait", "supporter-1", "counted",
-			"AddNounValue", "supporter-1", "printed name", text("supporter"),
-			"AddNounAlias", "container-1", "container",
-			"AddNounTrait", "container-1", "counted",
-			"AddNounValue", "container-1", "printed name", text("container"),
+			"AddNounName:", "supporter-1", "supporter-1",
+			"AddNounKind:", "supporter-1", "supporters",
+			"AddNounName:", "container-1", "container-1",
+			"AddNounKind:", "container-1", "containers",
+			// fix? at this point, lobby is an object
+			// whereabouts happens to be be object, objects
+			// but .... what if it weren't?
+			// we'd have to apply the relationship types to make things work.
+			// -- connections need to read pairs to determine parent
+			// -- so pairs need to be written before / as part of connections
+			// -- and fallbacks have to happen after connections
+			"AddNounName:", "lobby", "lobby",
+			"AddNounPair:", "whereabouts", "lobby", "supporter-1",
+			"AddNounPair:", "whereabouts", "lobby", "container-1",
+			"AddNounKind:", "lobby", "containers", // generated by fallback phase
+			//
+			"AddNounAlias:", "supporter-1", "supporter",
+			"AddNounTrait:", "supporter-1", "counted",
+			"AddNounTrait:", "supporter-1", "not worn",
+			"AddNounValue:", "supporter-1", "printed name", text("supporter"),
+			//
+			"AddNounAlias:", "container-1", "container",
+			"AddNounTrait:", "container-1", "counted",
+			"AddNounTrait:", "container-1", "not worn",
+			"AddNounValue:", "container-1", "printed name", text("container"),
 		},
 	},
 }
@@ -878,7 +934,17 @@ func (p *Phrase) Verify(haveRes []string, haveError error) (okay bool) {
 		if d := pretty.Diff(p.result, haveRes); len(d) == 0 {
 			okay = true
 		} else {
-			log.Printf("NG! test %q got: %#v\n", p.test, haveRes)
+			var out strings.Builder
+			for _, str := range haveRes {
+				if strings.HasSuffix(str, ":") {
+					out.WriteString("\n\t")
+				}
+				out.WriteRune('"')
+				out.WriteString(str)
+				out.WriteString(`", `)
+			}
+			log.Printf("NG! test %q got:%s", p.test, out.String())
+
 			log.Println(d)
 		}
 	}

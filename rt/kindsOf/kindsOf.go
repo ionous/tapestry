@@ -10,6 +10,7 @@ const None Kinds = 0 //
 // note: iota increases even when not specified so every kind has a unique bit;
 // re-specifying it combines with earlier kinds to indicate sub-types.
 // ( Kind is an abstract or concrete noun defined by some story. )
+// ( Verbs deserves to be part of jess; registered on startup; here is simpler for now )
 const (
 	Aspect   Kinds = 1 << iota         // aspects
 	Kind                               // kinds
@@ -17,6 +18,7 @@ const (
 	Record                             // records
 	Relation                           // relations
 	Response                           // responses
+	Verb                               // verbs
 	Macro    Kinds = Pattern | 1<<iota // macros
 	Action   Kinds = Pattern | 1<<iota // actions
 )

@@ -47,7 +47,7 @@ func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
 		if e := pen.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
 			err = e
 		} else {
-			err = pen.AddTraits(op.Aspects, op.Traits)
+			err = pen.AddAspectTraits(op.Aspects, op.Traits)
 		}
 		return
 	})
@@ -98,7 +98,7 @@ func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
 		if e := pen.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
 		} else if ps := op.Contain; len(ps) > 0 {
-			err = pen.AddFields(op.Kind, reduceFields(ps))
+			err = pen.AddKindFields(op.Kind, reduceFields(ps))
 		}
 		return
 	})

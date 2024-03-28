@@ -16,13 +16,12 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *DirectionOfLinking) buildLink(ctx *Context) (ret jessLink, err error) {
-	// fix:what's the exact difference between "" and nil again?
-	if n, e := op.Linking.BuildNoun(ctx, nil, []string{""}); e != nil {
+func (op *DirectionOfLinking) buildLink(ctx *Context) (ret *jessLink, err error) {
+	if n, e := op.Linking.BuildNoun(ctx, NounProperties{}); e != nil {
 		err = e
 	} else {
 		// direction is already normalized...
-		ret = makeLink(n, op.Direction.Text)
+		ret = makeLink(*n, op.Direction.Text)
 	}
 	return
 }
@@ -69,9 +68,9 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 }
 
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
-func (op *Linking) BuildNoun(ctx *Context, ts, ks []string) (ret *DesiredNoun, err error) {
+func (op *Linking) BuildNoun(ctx *Context, props NounProperties) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
-		if els, e := buildNounsFrom(ctx, ts, ks, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
+		if els, e := buildNounsFrom(ctx, props, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
 			err = e
 		} else {
 			a := els[0]
@@ -83,12 +82,12 @@ func (op *Linking) BuildNoun(ctx *Context, ts, ks []string) (ret *DesiredNoun, e
 
 // helper since we know there's linking doesnt support counted nouns, but does support nowhere;
 // BuildNouns will always return a list of one or none.
-func (op *Linking) GenerateNoun(ctx *Context, ts, ks []string) (ret string, err error) {
-	if n, e := op.BuildNoun(ctx, ts, ks); e != nil {
+func (op *Linking) GenerateNoun(ctx *Context, props NounProperties) (ret string, err error) {
+	if n, e := op.BuildNoun(ctx, props); e != nil {
 		err = e
 	} else if n != nil {
 		if e := ctx.PostProcess(weave.ValuePhase, func() error {
-			return n.generateValues(ctx)
+			return n.writeNounValues(ctx)
 		}); e != nil {
 			err = e
 		} else {

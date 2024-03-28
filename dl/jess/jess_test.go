@@ -1,6 +1,7 @@
 package jess_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -25,11 +26,16 @@ func TestPhrases(t *testing.T) {
 			}
 		} else {
 			// reset the dynamic noun pool every test
-			known.dynamicNouns = make(map[string]string)
+			known.nounPool = make(map[string]string)
+			for _, n := range known.nouns {
+				name := n.String()
+				known.nounPool[name] = name
+				known.nounPool["$"+name] = "things"
+			}
 			// request on logging
 			q := jess.AddContext(&known, jess.LogMatches)
 			// create the test helper
-			m := jesstest.MakeMock(q, known.dynamicNouns)
+			m := jesstest.MakeMock(q, known.nounPool)
 			// run the test:
 			t.Logf("testing: %d %s", i, str)
 			if !p.Verify(m.Generate(str)) {
@@ -43,12 +49,17 @@ func TestPhrases(t *testing.T) {
 	}
 }
 
+type rar struct {
+	jesstest.Mock
+	info
+}
+
 type info struct {
 	kinds []string
 	traits, fields,
-	nouns, directions match.SpanList
-	macros       jesstest.MacroList
-	dynamicNouns map[string]string
+	nouns, directions, verbNames match.SpanList
+	nounPool map[string]string
+	verbs    map[string]verbInfo
 }
 
 func (n *info) GetContext() int {
@@ -88,17 +99,18 @@ func (n *info) FindField(ws match.Span) (string, int) {
 	m, cnt := n.fields.FindPrefix(ws)
 	return m.String(), cnt
 }
-func (n *info) FindMacro(ws match.Span) (mdl.Macro, int) {
-	return n.macros.FindMacro(ws)
-}
 func (n *info) FindNoun(ws match.Span, kind string) (ret string, width int) {
 	var m match.Span
-	if kind == jess.Directions {
+	switch kind {
+	case jess.Directions:
 		m, width = n.directions.FindPrefix(ws)
 		ret = m.String()
-	} else {
+	case jess.Verbs:
+		m, width = n.verbNames.FindPrefix(ws)
+		ret = m.String()
+	default:
 		str := ws.String()
-		if noun, ok := n.dynamicNouns[str]; ok {
+		if noun, ok := n.nounPool[str]; ok {
 			ret, width = noun, len(ws)
 		} else {
 			m, width = n.nouns.FindExactMatch(ws)
@@ -108,23 +120,39 @@ func (n *info) FindNoun(ws match.Span, kind string) (ret string, width int) {
 	return
 }
 
+func (n *info) GetNounValue(noun, field string) (ret []byte, err error) {
+	if v, ok := n.verbs[noun]; !ok {
+		err = fmt.Errorf("%w %q %q", mdl.Missing, noun, field)
+	} else {
+		str := "$bad"
+		switch field {
+		case jess.VerbSubject:
+			str = v.subject
+		case jess.VerbAlternate:
+			str = v.alternate
+		case jess.VerbObject:
+			str = v.object
+		case jess.VerbRelation:
+			str = v.relation
+		case jess.VerbImplication:
+			str = v.implication
+		case jess.VerbReversed:
+			if v.reversed {
+				str = "reversed"
+			} else {
+				str = "not reversed"
+			}
+		}
+		if str == "bad" {
+			err = fmt.Errorf("%w %q %q", mdl.Missing, noun, field)
+		} else {
+			ret = []byte(`"` + str + `"`)
+		}
+	}
+	return
+}
+
 var known = info{
-	macros: jesstest.PanicMacros(
-		// source carries/ is carrying the targets
-		// reverse would be: targets are carried by the source.
-		"carried by", "carry", mdl.Macro_ManySecondary, true,
-		"carrying", "carry", mdl.Macro_ManySecondary, false,
-		// source contains the targets
-		// the targets are in the source ( rhs macro )
-		// in the source are the targets ( lhs macro; re-reversed )
-		"in", "contain", mdl.Macro_ManySecondary, true,
-		// source supports/is supporting the targets
-		// so, "targets are on source" is reversed ( rhs macro )
-		// and, "on source are targets" ( lhs macro; re-reversed )
-		"on", "support", mdl.Macro_ManySecondary, true,
-		//
-		"suspicious of", "suspect", mdl.Macro_ManyMany, false,
-	),
 	kinds: []string{
 		"kind", "kinds",
 		"object", "objects",
@@ -162,4 +190,59 @@ var known = info{
 	directions: match.PanicSpans(
 		"north", "south", "east", "west",
 	),
+	verbs:     verbs,
+	verbNames: panicVerbs(),
+}
+
+// reduce the keys into spans for matching
+func panicVerbs() match.SpanList {
+	vs := make([]string, len(verbs))
+	for v := range verbs {
+		vs = append(vs, v)
+	}
+	return match.PanicSpans(vs...)
+}
+
+// fix? maybe add "wearing" instead of carrying, to test implication better?
+var verbs = map[string]verbInfo{
+	"carrying": {
+		subject:     "actors",
+		object:      "things",
+		relation:    "whereabouts",
+		implication: "not worn",
+		reversed:    false, // (parent) is carrying (child)
+	},
+	"carried by": {
+		subject:     "actors",
+		object:      "things",
+		relation:    "whereabouts",
+		implication: "not worn",
+		reversed:    true, // (child) is carried by (parent)
+	},
+	"in": {
+		subject:     "containers",
+		alternate:   "rooms",
+		object:      "things",
+		relation:    "whereabouts",
+		implication: "not worn",
+		reversed:    true, // (child) is in (parent)
+	},
+	"on": {
+		subject:     "supporters",
+		object:      "things",
+		relation:    "whereabouts",
+		implication: "not worn",
+		reversed:    true, // (child) is on (parent)
+	},
+	"suspicious of": {
+		subject:  "actors",
+		object:   "actors",
+		relation: "suspicion",
+		reversed: false, // (parent) is suspicious of (child)
+	},
+}
+
+type verbInfo struct {
+	subject, object, alternate, relation, implication string
+	reversed                                          bool
 }

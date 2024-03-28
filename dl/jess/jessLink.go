@@ -8,20 +8,24 @@ import (
 )
 
 // represents a room or door
+// most everything uses *jessLink so that
+// roomLike can be set and seen across phases
 type jessLink struct {
-	*DesiredNoun
-	roomLike  bool // valid after generating default kinds
+	DesiredNoun
 	direction string
+	// if not a room, then a door
+	// valid after the ConnectionPhase
+	roomLike bool
 }
 
 // roomLike isnt set until after validating kinds
-func makeLink(n *DesiredNoun, direction string) jessLink {
-	return jessLink{DesiredNoun: n, direction: direction}
+func makeLink(n DesiredNoun, direction string) *jessLink {
+	return &jessLink{DesiredNoun: n, direction: direction}
 }
 
-func makeRoom(noun string) jessLink {
-	n := &DesiredNoun{Noun: noun}
-	return jessLink{DesiredNoun: n, roomLike: true}
+func makeRoom(noun string) *jessLink {
+	n := DesiredNoun{Noun: noun}
+	return &jessLink{DesiredNoun: n, roomLike: true}
 }
 
 const (
@@ -45,7 +49,7 @@ func translateError(e error) (ret int, err error) {
 }
 
 // assumes room is "room like"
-func (room jessLink) addDoor(rar *Context, door string) (err error) {
+func (room jessLink) writeDoor(rar *Context, door string) (err error) {
 	if !room.roomLike {
 		err = errors.New("can only add doors to rooms")
 	} else {
@@ -57,7 +61,7 @@ func (room jessLink) addDoor(rar *Context, door string) (err error) {
 // fix: i think this can be removed if the story direction setup is removed.
 // create room fact which indicates the direction of movement from room to room
 // these facts help with tracking and conflict detection
-func setDirection(rar *Context, direction string, room, otherRoom jessLink) (ret int, err error) {
+func writeDirection(rar *Context, direction string, room, otherRoom *jessLink) (ret int, err error) {
 	if !room.roomLike {
 		err = errors.New("can only move directions within a room")
 	} else {
@@ -68,7 +72,7 @@ func setDirection(rar *Context, direction string, room, otherRoom jessLink) (ret
 }
 
 // set the compass on the indicated side of the room to the named door
-func (room jessLink) setCompass(rar *Context, direction, door string) error {
+func (room jessLink) writeCompass(rar *Context, direction, door string) error {
 	return rar.AddNounPath(room.Noun,
 		[]string{Compass, direction},
 		&literal.TextValue{Value: door, Kind: Doors},
@@ -76,7 +80,7 @@ func (room jessLink) setCompass(rar *Context, direction, door string) error {
 }
 
 // set the destination of the named door
-func (door jessLink) setDestination(rar *Context, otherRoom string) (err error) {
+func (door jessLink) writeDestination(rar *Context, otherRoom string) (err error) {
 	if door.roomLike {
 		err = errors.New("can only set the destination of doors")
 	} else {
@@ -85,7 +89,7 @@ func (door jessLink) setDestination(rar *Context, otherRoom string) (err error) 
 	return
 }
 
-func (door jessLink) getParent(rar *Context) (ret string, err error) {
+func (door jessLink) readParent(rar *Context) (ret string, err error) {
 	if door.roomLike {
 		err = errors.New("can only ask for the parents of doors")
 	} else if pairs, e := rar.GetRelativeNouns(door.Noun, Whereabouts, false); e != nil {
@@ -103,7 +107,10 @@ func (door jessLink) getParent(rar *Context) (ret string, err error) {
 	return
 }
 
-func (p *jessLink) generateDefaultKind(rar *Context) (err error) {
+// first try to write a link as a room;
+// failing that, try to write it as a door.
+// similar to
+func (p *jessLink) writeLinkType(rar *Context) (err error) {
 	noun := p.Noun
 	// both newly stamping the noun as room, or re-stamping it as such is okay.
 	if e := rar.AddNounKind(noun, Rooms); e == nil || errors.Is(e, mdl.Duplicate) {
@@ -113,7 +120,8 @@ func (p *jessLink) generateDefaultKind(rar *Context) (err error) {
 		if !errors.Is(e, mdl.Conflict) {
 			err = e
 		} else {
-			// oto, if it was conflicted, maybe it was actually room door.
+			// oto, if it was conflicted, maybe it was actually room door;
+			// attempt to figure that out by saying it *is* a door.
 			if e := rar.AddNounKind(noun, Doors); e != nil && !errors.Is(e, mdl.Duplicate) {
 				err = e
 			}
@@ -122,12 +130,11 @@ func (p *jessLink) generateDefaultKind(rar *Context) (err error) {
 	return
 }
 
-// -
-func assignDefaultKinds(rar *Context, ps []jessLink) (err error) {
+func writeLinkTypes(ctx *Context, ps []*jessLink) (err error) {
 	for i, cnt := 0, len(ps); i < cnt; i++ {
-		// use indexing so generateDefaultKind can properly work on the shared memory
+		// use indexing so writeLinkType can properly work on the shared memory
 		// range would be room copy
-		if e := ps[i].generateDefaultKind(rar); e != nil {
+		if e := ps[i].writeLinkType(ctx); e != nil {
 			err = e
 			break
 		}

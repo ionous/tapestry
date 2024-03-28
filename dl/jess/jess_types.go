@@ -495,7 +495,7 @@ func (op *AdditionalNames_Slice) Repeats() bool {
 }
 
 // provides english specification of a number of objects.
-// note: yes, `the five the containers` is permitted.
+// ( note: yes, `the five the containers` is permitted. )
 type CountedKind struct {
 	Article        *Article
 	MatchingNumber MatchingNumber
@@ -536,7 +536,8 @@ func (op *CountedKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches the name of an existing kind.
+// matches the name of an existing kind;
+// can generate a single anonymous noun.
 type Kind struct {
 	Article    *Article
 	Matched    string
@@ -559,6 +560,9 @@ func (op *Kind) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
+
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*Kind)(nil)
 
 // holds a slice of type kind
 type Kind_Slice []Kind
@@ -828,10 +832,10 @@ func (op *Words_Slice) Repeats() bool {
 }
 
 // matches one or more predefined verbs
+// ( verbs are nouns of the verb kind )
 type Verb struct {
-	Matched string
-	Macro   Macro
-	Markup  map[string]any
+	Text   string
+	Markup map[string]any
 }
 
 // verb, a type of flow.
@@ -2189,13 +2193,13 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8078288476520567765:  (*Adjectives)(nil),           /* Adjectives traits:kind:additionalAdjectives: */
 	14557216947727331217: (*Are)(nil),                  /* Are matched: */
 	10435354424123783362: (*Article)(nil),              /* Article text: */
+	3333774278464825615:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:plainNames: */
 	1429396826658837670:  (*Called)(nil),               /* Called matched: */
+	1453048882349619361:  (*CalledName)(nil),           /* CalledName called:name: */
 	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
 	4143979682086652670:  (*CommaAndOr)(nil),           /* CommaAndOr matched: */
 	11748118905044300293: (*Direction)(nil),            /* Direction text: */
 	15872175738337217373: (*DirectionOfLinking)(nil),   /* DirectionOfLinking direction:fromOf:linking: */
-	17839012382227179591: (*Kind)(nil),                 /* Kind article:matched: */
-	17757668305058379307: (*Kind)(nil),                 /* Kind matched: */
 	381833413316053162:   (*KindCalled)(nil),           /* KindCalled kind:called:namedNoun: */
 	15647995089065713351: (*KindCalled)(nil),           /* KindCalled traits:kind:called:namedNoun: */
 	16939996019861136326: (*Kinds)(nil),                /* Kinds article:matched: */
@@ -2276,14 +2280,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8602404775723907374:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:pluralOf:names: */
 	4257336208718925827:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:names: */
 	1299769703937557498:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:pluralOf:names: */
-	4698992564801604870:  (*Verb)(nil),                 /* Verb matched: */
+	5125756836274165399:  (*Verb)(nil),                 /* Verb text: */
 	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
 	7322259980003111582:  (*VerbPhrase)(nil),           /* VerbPhrase verb:plainNames: */
 	17678340847396548932: (*Words)(nil),                /* Words matched: */
-	3874653647504210280:  (*AspectsAreTraits)(nil),     /* noun_builder=AspectsAreTraits aspect:are:plainNames: */
-	11146680513120421438: (*CalledName)(nil),           /* noun_builder=CalledName called:name: */
 	17929352418080814012: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind: */
 	11334937790230459436: (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind: */
+	643122070839149560:   (*Kind)(nil),                 /* noun_builder=Kind article:matched: */
+	12803964412357300908: (*Kind)(nil),                 /* noun_builder=Kind matched: */
 	16595966641928411799: (*Name)(nil),                 /* noun_builder=Name article:matched: */
 	4672836465996832923:  (*Name)(nil),                 /* noun_builder=Name matched: */
 	18272900946848200057: (*NamedNoun)(nil),            /* noun_builder=NamedNoun */
@@ -2615,7 +2619,7 @@ func init() {
 			&Zt_NounBuilder,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"provides english specification of a number of objects.", "note: yes, `the five the containers` is permitted."},
+			"comment": []interface{}{"provides english specification of a number of objects.", "( note: yes, `the five the containers` is permitted. )"},
 		},
 	}
 	Zt_Kind = typeinfo.Flow{
@@ -2641,8 +2645,11 @@ func init() {
 			Label:   "actual_kind",
 			Private: true,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
 		Markup: map[string]any{
-			"comment": "matches the name of an existing kind.",
+			"comment": []interface{}{"matches the name of an existing kind;", "can generate a single anonymous noun."},
 		},
 	}
 	Zt_Kinds = typeinfo.Flow{
@@ -2784,16 +2791,12 @@ func init() {
 		Name: "verb",
 		Lede: "verb",
 		Terms: []typeinfo.Term{{
-			Name:  "matched",
-			Label: "matched",
+			Name:  "text",
+			Label: "text",
 			Type:  &prim.Zt_Text,
-		}, {
-			Name:    "macro",
-			Label:   "macro",
-			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": "matches one or more predefined verbs",
+			"comment": []interface{}{"matches one or more predefined verbs", "( verbs are nouns of the verb kind )"},
 		},
 	}
 	Zt_MatchingPhrases = typeinfo.Flow{
@@ -2944,9 +2947,6 @@ func init() {
 			Label: "plain_names",
 			Type:  &Zt_Names,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_NounBuilder,
-		},
 		Markup: map[string]any{
 			"comment": []interface{}{"defines traits for aspects that can be (re)used by various other kinds.", "ex. `The colors are a kind of aspect. The colors are red, blue, and greasy green.`", "aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing."},
 		},
@@ -3252,9 +3252,6 @@ func init() {
 			Label: "name",
 			Type:  &Zt_Name,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_NounBuilder,
-		},
 		Markup: map[string]any{
 			"comment": []interface{}{"for kinds_have_properties", "like kind_called, specifying \"called the/our ...\" gives the noun an indefinite article."},
 		},

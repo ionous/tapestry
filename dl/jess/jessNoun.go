@@ -1,11 +1,11 @@
 package jess
 
-func (op *Noun) BuildNouns(ctx *Context, ts, ks []string) (ret []DesiredNoun, err error) {
+func (op *Noun) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
 	n := op.ActualNoun
-	if e := registerKinds(ctx, n, ks); e != nil {
+	if e := writeKinds(ctx, n, props.Kinds); e != nil {
 		err = e
 	} else {
-		ret = []DesiredNoun{{Noun: n, Traits: ts}}
+		ret = []DesiredNoun{{Noun: n, Traits: props.Traits}}
 	}
 	return
 }
