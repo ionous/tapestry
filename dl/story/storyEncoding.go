@@ -34,12 +34,6 @@ func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message
 	switch slot {
 	default:
 		err = compact.Unhandled("pattern")
-	case &Zt_StoryStatement:
-		if args, e := tryPatternArgs(dec, msg); e != nil {
-			err = e
-		} else {
-			ret = &CallMacro{MacroName: msg.Name, Arguments: args}
-		}
 	case
 		&rtti.Zt_Execute,
 		&rtti.Zt_BoolEval,

@@ -34,6 +34,12 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 		}
 	}
 	if err == nil {
+		// hrm: when there's only a comment { "--": "..." }
+		// report the key as having been the comment marker
+		// alt: give StoryBreak a blank key? "" instead of "--"
+		if len(out.Key) == 0 && len(compact.Markup) > 0 {
+			out.Key = compact.Markup
+		}
 		ret = out
 	}
 	return

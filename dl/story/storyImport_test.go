@@ -16,19 +16,19 @@ func TestImportStory(t *testing.T) {
 	var msg map[string]any
 	var curr story.StoryFile
 	if e := json.Unmarshal(debug.Blob, &msg); e != nil {
-		t.Fatal(e)
+		t.Fatal("couldn't unmarshal blob", e)
 	} else if e := story.Decode(&curr, msg); e != nil {
-		t.Fatal(e)
+		t.Fatal("couldn't decode story", e)
 	} else {
 		db := testdb.Create(t.Name())
 		defer db.Close()
 		k := weave.NewCatalog(db)
 		if e := k.DomainStart("tapestry", nil); e != nil {
-			t.Fatal("import", e)
+			t.Fatal("failed domain start", e)
 		} else if e := story.ImportStory(k, t.Name(), &curr); e != nil {
-			t.Fatal("import", e)
+			t.Fatal("failed story import", e)
 		} else if e := k.DomainEnd(); e != nil {
-			t.Fatal("import", e)
+			t.Fatal("failed domain end", e)
 		} else {
 			t.Log("ok")
 		}
