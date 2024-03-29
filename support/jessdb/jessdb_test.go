@@ -115,7 +115,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		west
 		river // predefined door
 		ocean // predefined room
-		//
+		// used when matching the names of verbs
 		verbCarrying
 		verbCarriedBy
 		verbIn
@@ -131,16 +131,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		fieldDesc
 		fieldTitle
 		fieldAge
-		fieldPrimary
-		fieldSecondary
-		fieldSuspectsOne
-		fieldSuspectOther
-		fieldSubject
-		fieldAlternate
-		fieldObject
-		fieldRelation
-		fieldImplies
-		fieldReversed
 	)
 	db := testdb.Create(name)
 	if e := tables.CreateModel(db); e != nil {
@@ -182,31 +172,17 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_field",
 		"domain", "kind", "ROWID", "field", "affinity"},
-		// traits
+		// traits: for matching traits to set
 		domain, traits, fieldClosed, "closed", "bool",
 		domain, traits, fieldOpen, "open", "bool",
 		domain, traits, fieldOpenable, "openable", "bool",
 		domain, traits, fieldTransparent, "transparent", "bool",
 		domain, traits, fieldFixed, "fixed in place", "bool",
 		domain, traits, fixedDark, "dark", "bool",
-		// fields
+		// fields: for matching properties to set
 		domain, things, fieldDesc, "description", "text",
 		domain, things, fieldTitle, "title", "text",
 		domain, things, fieldAge, "age", "text",
-		// macros:
-		domain, relWhereabouts, fieldPrimary, "primary", "text",
-		domain, relWhereabouts, fieldSecondary, "secondary", "text_list",
-
-		// suspicion: many-to-many
-		domain, relSuspicion, fieldSuspectsOne, "primary", "text_list",
-		domain, relSuspicion, fieldSuspectOther, "secondary", "text_list",
-		//
-		domain, verbs, fieldObject, "object", "text",
-		domain, verbs, fieldSubject, "subject", "text",
-		domain, verbs, fieldAlternate, "alternate subject", "text",
-		domain, verbs, fieldRelation, "relation", "text",
-		domain, verbs, fieldImplies, "implication", "text",
-		domain, verbs, fieldReversed, "reversed status", "text",
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_noun",
@@ -248,38 +224,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, verbIn, "in", 0,
 		domain, verbOn, "on", 0,
 		domain, verbSuspiciousOf, "suspicious of", 0,
-	); e != nil {
-		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_value",
-		"noun", "field", "value"},
-		//
-		verbCarrying, fieldSubject, `"actors"`,
-		verbCarrying, fieldObject, `"things"`,
-		verbCarrying, fieldRelation, `"whereabouts"`,
-		verbCarrying, fieldImplies, `"not worn"`,
-		//
-		verbCarriedBy, fieldSubject, `"actors"`,
-		verbCarriedBy, fieldObject, `"things"`,
-		verbCarriedBy, fieldRelation, `"whereabouts"`,
-		verbCarriedBy, fieldImplies, `"not worn"`,
-		verbCarriedBy, fieldReversed, `"reversed"`,
-		//
-		verbIn, fieldSubject, `"containers"`,
-		verbIn, fieldAlternate, `"rooms"`,
-		verbIn, fieldObject, `"things"`,
-		verbIn, fieldRelation, `"whereabouts"`,
-		verbIn, fieldImplies, `"not worn"`,
-		verbIn, fieldReversed, `"reversed"`,
-		//
-		verbOn, fieldSubject, `"supporters"`,
-		verbOn, fieldObject, `"things"`,
-		verbOn, fieldRelation, `"whereabouts"`,
-		verbOn, fieldImplies, `"not worn"`,
-		verbOn, fieldReversed, `"reversed"`,
-		//
-		verbSuspiciousOf, fieldSubject, `"actors"`,
-		verbSuspiciousOf, fieldObject, `"actors"`,
-		verbSuspiciousOf, fieldRelation, `"suspicion"`,
 	); e != nil {
 		err = e
 	}

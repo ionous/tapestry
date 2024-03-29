@@ -33,7 +33,7 @@ func TestPhrases(t *testing.T) {
 			// request on logging
 			q := jess.AddContext(&known, jess.LogMatches)
 			// create the test helper
-			m := jesstest.MakeMock(q, known.nounPool, known.verbs)
+			m := jesstest.MakeMock(q, known.nounPool)
 			// run the test:
 			t.Logf("testing: %d %s", i, str)
 			if !p.Verify(m.Generate(str)) {
@@ -57,7 +57,6 @@ type info struct {
 	traits, fields,
 	nouns, directions, verbNames match.SpanList
 	nounPool map[string]string
-	verbs    map[string]jesstest.MockVerb
 }
 
 func (n *info) GetContext() int {
@@ -154,54 +153,16 @@ var known = info{
 	directions: match.PanicSpans(
 		"north", "south", "east", "west",
 	),
-	verbs:     verbs,
+	// used to match specified verbs
 	verbNames: panicVerbs(),
 }
 
 // reduce the keys into spans for matching
 func panicVerbs() match.SpanList {
+	verbs := jesstest.KnownVerbs
 	vs := make([]string, len(verbs))
 	for v := range verbs {
 		vs = append(vs, v)
 	}
 	return match.PanicSpans(vs...)
-}
-
-// fix? maybe add "wearing" instead of carrying, to test implication better?
-var verbs = jesstest.MockVerbs{
-	"carrying": {
-		Subject:  "actors",
-		Object:   "things",
-		Relation: "whereabouts",
-		Implies:  "not worn",
-		Reversed: false, // (parent) is carrying (child)
-	},
-	"carried by": {
-		Subject:  "actors",
-		Object:   "things",
-		Relation: "whereabouts",
-		Implies:  "not worn",
-		Reversed: true, // (child) is carried by (parent)
-	},
-	"in": {
-		Subject:   "containers",
-		Alternate: "rooms", // alternate
-		Object:    "things",
-		Relation:  "whereabouts",
-		Implies:   "not worn",
-		Reversed:  true, // (child) is in (parent)
-	},
-	"on": {
-		Subject:  "supporters",
-		Object:   "things",
-		Relation: "whereabouts",
-		Implies:  "not worn",
-		Reversed: true, // (child) is on (parent)
-	},
-	"suspicious of": {
-		Subject:  "actors",
-		Object:   "actors",
-		Relation: "suspicion",
-		Reversed: false, // (parent) is suspicious of (child)
-	},
 }

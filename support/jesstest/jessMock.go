@@ -25,13 +25,13 @@ type Mock struct {
 	jessRt jessRt
 }
 
-func MakeMock(q jess.Query, nouns map[string]string, verbs map[string]MockVerb) Mock {
+func MakeMock(q jess.Query, nouns map[string]string) Mock {
 	pairs := make(map[string]string)
 	return Mock{
 		q:         q,
 		nounPool:  nouns,
 		nounPairs: pairs,
-		jessRt:    jessRt{nounPairs: pairs, verbs: verbs},
+		jessRt:    jessRt{nounPairs: pairs, verbs: KnownVerbs},
 	}
 }
 

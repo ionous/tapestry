@@ -12,6 +12,45 @@ type MockVerb struct {
 	Reversed                                      bool
 }
 
+// fix? maybe add "wearing" instead of carrying, to test implication better?
+var KnownVerbs = MockVerbs{
+	"carrying": {
+		Subject:  "actors",
+		Object:   "things",
+		Relation: "whereabouts",
+		Implies:  "not worn",
+		Reversed: false, // (parent) is carrying (child)
+	},
+	"carried by": {
+		Subject:  "actors",
+		Object:   "things",
+		Relation: "whereabouts",
+		Implies:  "not worn",
+		Reversed: true, // (child) is carried by (parent)
+	},
+	"in": {
+		Subject:   "containers",
+		Alternate: "rooms", // alternate
+		Object:    "things",
+		Relation:  "whereabouts",
+		Implies:   "not worn",
+		Reversed:  true, // (child) is in (parent)
+	},
+	"on": {
+		Subject:  "supporters",
+		Object:   "things",
+		Relation: "whereabouts",
+		Implies:  "not worn",
+		Reversed: true, // (child) is on (parent)
+	},
+	"suspicious of": {
+		Subject:  "actors",
+		Object:   "actors",
+		Relation: "suspicion",
+		Reversed: false, // (parent) is suspicious of (child)
+	},
+}
+
 type MockVerbs map[string]MockVerb
 
 func (vs MockVerbs) GetVerbValue(name, field string) (ret string, err error) {
