@@ -3,23 +3,16 @@ package mdl
 import (
 	"database/sql"
 
-	"github.com/ionous/errutil"
-
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// when the definition would contradict existing information:
-// the returned error wraps this tag. errors.Is can be used to detect it.
-const Conflict = errutil.Error("Conflict")
+const Conflict = weaver.Conflict
+const Duplicate = weaver.Duplicate
+const Missing = weaver.Missing
 
-// when the definition would repeat existing information:
-// the returned error wraps this tag. errors.Is can be used to detect it.
-const Duplicate = errutil.NoPanicError("Duplicate")
-
-// when the definition can't find some required information:
-// the returned error wraps this tag. errors.Is can be used to detect it.
-const Missing = errutil.NoPanicError("Missing")
+type FieldInfo = weaver.FieldInfo
 
 /**
  *
