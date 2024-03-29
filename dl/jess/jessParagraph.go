@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // represents a block of text
@@ -24,7 +24,7 @@ func NewParagraph(str string) (ret *Paragraph, err error) {
 
 // returns true when completely consumed;
 // caller no longer needs to process subsequent phrases
-func (p *Paragraph) Generate(ctx *Context, z Phase) (okay bool, err error) {
+func (p *Paragraph) Generate(ctx Context, z weaver.Phase) (okay bool, err error) {
 	var retry int
 	for i, u := range p.unmatched {
 		var best bestMatch
@@ -37,7 +37,7 @@ func (p *Paragraph) Generate(ctx *Context, z Phase) (okay bool, err error) {
 		} else {
 			// retry if not in final phase
 			// otherwise generate an error
-			if z == weave.FinalPhase {
+			if z == weaver.NextPhase {
 				err = fmt.Errorf("failed to match line %d %s", i, u.String())
 				break
 			} else {

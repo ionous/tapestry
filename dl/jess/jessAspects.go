@@ -1,15 +1,16 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // runs in the PropertyPhase phase
-func (op *AspectsAreTraits) Phase() Phase {
-	return weave.PropertyPhase
+func (op *AspectsAreTraits) Phase() weaver.Phase {
+	return weaver.PropertyPhase
 }
 
 // the colors are....
@@ -41,7 +42,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *AspectsAreTraits) Generate(rar *Context) (err error) {
+func (op *AspectsAreTraits) Weave(w weaver.Weaves, _ rt.Runtime) (err error) {
 	if aspect, e := op.Aspect.Validate(kindsOf.Aspect); e != nil {
 		err = e
 	} else {
@@ -50,7 +51,7 @@ func (op *AspectsAreTraits) Generate(rar *Context) (err error) {
 			n := it.GetNext()
 			names = append(names, n.Name.GetNormalizedName())
 		}
-		err = rar.AddAspectTraits(aspect, names)
+		err = w.AddAspectTraits(aspect, names)
 	}
 	return
 }

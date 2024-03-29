@@ -1,8 +1,9 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // ----
@@ -16,8 +17,8 @@ func (op *DirectionOfLinking) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *DirectionOfLinking) buildLink(ctx *Context) (ret *jessLink, err error) {
-	if n, e := op.Linking.BuildNoun(ctx, NounProperties{}); e != nil {
+func (op *DirectionOfLinking) buildLink(q Query, w weaver.Weaves, run rt.Runtime) (ret *jessLink, err error) {
+	if n, e := op.Linking.BuildNoun(q, w, run, NounProperties{}); e != nil {
 		err = e
 	} else {
 		// direction is already normalized...
@@ -68,30 +69,13 @@ func (op *Linking) matchNowhere(input *InputState) (okay bool) {
 }
 
 // generate a room or door; an object if there's not enough information to know; or nil for nowhere.
-func (op *Linking) BuildNoun(ctx *Context, props NounProperties) (ret *DesiredNoun, err error) {
+func (op *Linking) BuildNoun(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret *DesiredNoun, err error) {
 	if !op.Nowhere {
-		if els, e := buildNounsFrom(ctx, props, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
+		if els, e := buildNounsFrom(q, w, run, props, ref(op.KindCalled), ref(op.Noun), ref(op.Name)); e != nil {
 			err = e
 		} else {
 			a := els[0]
 			ret = &a
-		}
-	}
-	return
-}
-
-// helper since we know there's linking doesnt support counted nouns, but does support nowhere;
-// BuildNouns will always return a list of one or none.
-func (op *Linking) GenerateNoun(ctx *Context, props NounProperties) (ret string, err error) {
-	if n, e := op.BuildNoun(ctx, props); e != nil {
-		err = e
-	} else if n != nil {
-		if e := ctx.PostProcess(weave.ValuePhase, func() error {
-			return n.writeNounValues(ctx)
-		}); e != nil {
-			err = e
-		} else {
-			ret = n.Noun
 		}
 	}
 	return

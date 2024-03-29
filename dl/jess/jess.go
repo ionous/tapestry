@@ -32,10 +32,6 @@ type Query interface {
 	// the kind, if specified, will ensure the noun is of that kind;
 	// [ so that the caller doesn't have to validate materialized kind paths ]
 	FindNoun(name match.Span, kind string) (string, int)
-
-	// provides some limited access to previous values assigned to nouns.
-	// ( assumes the caller already knows the affinity of the field )
-	GetNounValue(noun, field string) ([]byte, error)
 }
 
 // Matched - generic interface so implementations can track backchannel data.
@@ -46,7 +42,7 @@ type Matched interface {
 // implemented by phrases so that they can create story fragments based on
 // the english language text they have parsed.
 type Generator interface {
-	Generate(*Context) error
+	Generate(Context) error
 }
 
 // used internally for matching some kinds of phrases.

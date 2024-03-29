@@ -1,16 +1,20 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
 
 // called can have its own kind, its own specific article, and its name is flagged as "exact"
 // ( where regular names are treated as potential aliases of existing names. )
-func (op *KindCalled) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *KindCalled) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if kind, e := op.GetKind(); e != nil {
 		err = e
 	} else {
 		// ignores the article of the kind,
 		// in favor of the article closest to the named noun
-		ret, err = op.NamedNoun.BuildNouns(ctx, NounProperties{
+		ret, err = op.NamedNoun.BuildNouns(q, w, run, NounProperties{
 			Traits: append(props.Traits, ReduceTraits(op.GetTraits())...),
 			Kinds:  append(props.Kinds, kind),
 		})

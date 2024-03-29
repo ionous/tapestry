@@ -4,42 +4,43 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // different phases (z) can match different phrases (ws)
 // should a match occur, return true; and set 'out' to the matched phrase.
-func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) {
+func matchSentence(q Query, z weaver.Phase, ws match.Span, out *bestMatch) (okay bool) {
 	var op MatchingPhrases
 	next := MakeInput(ws)
 	switch z {
-	case weave.LanguagePhase:
+	case weaver.LanguagePhase:
 		// "understand" {quoted text} as .....
 		okay = matchPhrase(q, next, &op.Understand, out)
 
-	case weave.AncestryPhase:
+	case weaver.AncestryPhase:
 		// FIX -- these need TRAITS to *match*
 		// to do the idea of match once, generate often;
 		// this would have to delay parsing the trailing phrase.
 		// probably part of the phase has to be scheduled; while the basic naming does not.
 		// ---
 		// names {are} "a kind of"/"kinds of" [traits] kind.
-		okay = matchPhrase(q, next, &op.KindsOf, out)
+		okay = matchPhrase(q, next, schedule(&op.KindsOf), out)
 
-	case weave.PropertyPhase:
+	case weaver.PropertyPhase:
 		// fix: it'd be nice to re-factor these so they dont each have to match kinds
 		// ex. kinds(of aspects, out) {are} names
 		// The colors are red, blue, and greasy green
-		okay = matchPhrase(q, next, &op.AspectsAreTraits, out) ||
+		okay = matchPhrase(q, next, schedule(&op.AspectsAreTraits), out) ||
 			// kinds(of objects, out) {are} "usually" traits.
-			matchPhrase(q, next, &op.KindsAreTraits, out) ||
+			matchPhrase(q, next, schedule(&op.KindsAreTraits), out) ||
 			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-			matchPhrase(q, next, &op.KindsHaveProperties, out) ||
+			matchPhrase(q, next, schedule(&op.KindsHaveProperties), out) ||
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
-			matchPhrase(q, next, &op.KindsAreEither, out)
+			matchPhrase(q, next, schedule(&op.KindsAreEither), out)
 
-	case weave.MappingPhase:
+	case weaver.MappingPhase:
 		// "through" door {is} place.
 		okay = matchPhrase(q, next, &op.MapConnections, out) ||
 			// direction "of/from" place {is} place.
@@ -47,34 +48,49 @@ func matchSentence(q Query, z Phase, ws match.Span, out *bestMatch) (okay bool) 
 			// place {is} direction "of/from" places.
 			matchPhrase(q, next, &op.MapLocations, out)
 
-	case weave.NounPhase:
+	case weaver.NounPhase:
 		// verb nouns {are} nouns
 		okay = matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
 			// nouns {are} verbing nouns
 			matchPhrase(q, next, &op.NamesVerbNames, out) ||
 			// nouns {are} adjectives [verb nouns]
-			matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
-
-	case weave.FallbackPhase:
-		// property "of" noun {are} value
-		okay = matchPhrase(q, next, &op.PropertyNounValue, out) ||
+			matchPhrase(q, next, &op.NamesAreLikeVerbs, out) ||
+			// property "of" noun {are} value
+			matchPhrase(q, next, &op.PropertyNounValue, out) ||
 			// noun "has" property value
 			matchPhrase(q, next, &op.NounPropertyValue, out)
 	}
 	return
 }
 
-// fix: actually declare all the members with this interface as a slot?
-type matcher interface {
-	Generator
-	Interpreter
-	typeinfo.Instance
-	Phase() weave.Phase
-}
-
 type bestMatch struct {
 	match    Generator
 	numWords int
+}
+
+type matcher interface {
+	Interpreter
+	Generator
+	typeinfo.Instance // for logging
+}
+
+type schedulee interface {
+	Interpreter
+	typeinfo.Instance // for logging
+	Phase() weaver.Phase
+	Weave(weaver.Weaves, rt.Runtime) error
+}
+
+// phases that can weave immediately, without needing to schedule more phases
+// can use this to define a Generate method
+func schedule(s schedulee) genericSchedule {
+	return genericSchedule{s}
+}
+
+type genericSchedule struct{ schedulee }
+
+func (g genericSchedule) Generate(ctx Context) error {
+	return ctx.Schedule(g.Phase(), g.Weave)
 }
 
 // match the input against the passed parse tree.

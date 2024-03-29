@@ -2,6 +2,7 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // fix: maybe move this into weave as a "noun builder" to reduce duplicate queries?
@@ -47,21 +48,21 @@ func (n *DesiredNoun) appendArticle(a *Article) {
 
 // send the contents of the noun to the db
 // assumes that the noun key is already set.
-func (n DesiredNoun) writeNounValues(rar *Context) (err error) {
-	if e := n.applyAliases(rar); e != nil {
+func (n DesiredNoun) writeNounValues(w weaver.Weaves) (err error) {
+	if e := n.applyAliases(w); e != nil {
 		err = e
-	} else if e := n.applyTraits(rar); e != nil {
+	} else if e := n.applyTraits(w); e != nil {
 		err = e
-	} else if e := n.applyValues(rar); e != nil {
+	} else if e := n.applyValues(w); e != nil {
 		err = e
 	}
 	return
 }
 
 // assumes that the noun key is already set.
-func (n DesiredNoun) applyAliases(rar *Context) (err error) {
+func (n DesiredNoun) applyAliases(w weaver.Weaves) (err error) {
 	for _, a := range n.Aliases {
-		if e := rar.AddNounName(n.Noun, a, -1); e != nil {
+		if e := w.AddNounName(n.Noun, a, -1); e != nil {
 			err = e
 			break
 		}
@@ -70,9 +71,9 @@ func (n DesiredNoun) applyAliases(rar *Context) (err error) {
 }
 
 // assumes that the noun key is already set.
-func (n DesiredNoun) applyTraits(rar *Context) (err error) {
+func (n DesiredNoun) applyTraits(w weaver.Weaves) (err error) {
 	for _, t := range n.Traits {
-		if e := rar.AddNounTrait(n.Noun, t); e != nil {
+		if e := w.AddNounTrait(n.Noun, t); e != nil {
 			err = e
 			break
 		}
@@ -81,9 +82,9 @@ func (n DesiredNoun) applyTraits(rar *Context) (err error) {
 }
 
 // assumes that the noun key is already set.
-func (n DesiredNoun) applyValues(rar *Context) (err error) {
+func (n DesiredNoun) applyValues(w weaver.Weaves) (err error) {
 	for _, v := range n.Values {
-		if e := rar.AddNounValue(n.Noun, v.Field, v.Assign); e != nil {
+		if e := w.AddNounValue(n.Noun, v.Field, v.Assign); e != nil {
 			err = e
 			break
 		}

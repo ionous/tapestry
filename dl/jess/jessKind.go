@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"slices"
 
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // returns the real ( generally plural ) name of the kind
@@ -36,12 +38,12 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 }
 
 // anonymous kinds: "the supporter"
-func (op *Kind) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *Kind) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if plural, e := op.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
-		singular := ctx.GetSingular(plural)
-		if n, e := buildAnon(ctx, plural, singular, props); e != nil {
+		singular := run.SingularOf(plural)
+		if n, e := buildAnon(w, plural, singular, props); e != nil {
 			err = e
 		} else {
 			ret = []DesiredNoun{n}

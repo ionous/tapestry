@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 func (op *CalledName) Match(q Query, input *InputState) (okay bool) {
@@ -25,8 +25,8 @@ func (op *CalledName) GetNormalizedName() string {
 }
 
 // runs in the PropertyPhase phase
-func (op *KindsHaveProperties) Phase() Phase {
-	return weave.PropertyPhase
+func (op *KindsHaveProperties) Phase() weaver.Phase {
+	return weaver.PropertyPhase
 }
 
 func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
@@ -52,7 +52,7 @@ func (op *KindsHaveProperties) matchListOf(input *InputState) (okay bool) {
 }
 
 // register a single field
-func (op *KindsHaveProperties) Generate(rar *Context) (err error) {
+func (op *KindsHaveProperties) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	if kind, e := op.Kind.Validate(kindsOf.Kind, kindsOf.Record); e != nil {
 		err = e
 	} else if f, e := op.PropertyType.GetType(len(op.ListOf) > 0); e != nil {
@@ -66,7 +66,7 @@ func (op *KindsHaveProperties) Generate(rar *Context) (err error) {
 			// erroring feels like more useful than failing to match...
 			err = fmt.Errorf("%s fields require an explicit name", f.Affinity)
 		} else {
-			err = rar.AddKindFields(kind, []mdl.FieldInfo{f})
+			err = w.AddKindFields(kind, []weaver.FieldInfo{f})
 		}
 	}
 	return
@@ -91,7 +91,7 @@ func (op *PropertyType) matchPrimitive(input *InputState) (okay bool) {
 }
 
 // return a default field name, its affine type and its optional class name
-func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
+func (op *PropertyType) GetType(listOf bool) (ret weaver.FieldInfo, err error) {
 	var name, cls string
 	var aff affine.Affinity
 	if prim := op.Primitive; len(prim) > 0 {
@@ -116,7 +116,7 @@ func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
 				aff = affine.RecordList
 			}
 		}
-		ret = mdl.FieldInfo{Name: name, Affinity: aff, Class: cls}
+		ret = weaver.FieldInfo{Name: name, Affinity: aff, Class: cls}
 	}
 	return
 }

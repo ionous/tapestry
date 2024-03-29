@@ -1,6 +1,10 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/rt/kindsOf"
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
 
 func (op *CountedKind) Match(q Query, input *InputState) (okay bool) {
 	if start := *input; //
@@ -25,15 +29,15 @@ func (op *CountedKind) String() string {
 // generates n initial instances (and their aliases, cause why not.)
 // delays the desired traits and additional kinds
 // ( tbd if that makes sense or not )
-func (op *CountedKind) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
+func (op *CountedKind) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if plural, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
 		if cnt := int(op.MatchingNumber.Number); cnt > 0 {
-			singular := ctx.GetSingular(plural)
+			singular := run.SingularOf(plural)
 			ret = make([]DesiredNoun, cnt)
 			for i := 0; i < cnt; i++ {
-				if n, e := buildAnon(ctx, plural, singular, props); e != nil {
+				if n, e := buildAnon(w, plural, singular, props); e != nil {
 					err = e
 					break
 				} else {

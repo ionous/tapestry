@@ -1,16 +1,18 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 func (op *Name) GetNormalizedName() string {
 	return inflect.Normalize(op.Matched.String())
 }
 
-func (op *Name) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
-	if n, e := op.buildNoun(ctx, props); e != nil {
+func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+	if n, e := op.buildNoun(q, w, props); e != nil {
 		err = e
 	} else {
 		ret = []DesiredNoun{n}
@@ -18,10 +20,10 @@ func (op *Name) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNou
 	return
 }
 
-func (op *Name) buildNoun(ctx *Context, props NounProperties) (ret DesiredNoun, err error) {
-	if noun, created, e := ensureNoun(ctx, op.Matched.(match.Span)); e != nil {
+func (op *Name) buildNoun(q Query, w weaver.Weaves, props NounProperties) (ret DesiredNoun, err error) {
+	if noun, created, e := ensureNoun(q, w, op.Matched.(match.Span)); e != nil {
 		err = e
-	} else if e := writeKinds(ctx, noun, props.Kinds); e != nil {
+	} else if e := writeKinds(w, noun, props.Kinds); e != nil {
 		err = e
 	} else {
 		n := DesiredNoun{Noun: noun, Traits: props.Traits}

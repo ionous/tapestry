@@ -1,5 +1,10 @@
 package jess
 
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
+
 // some callers want to fail matching on anonymous leading kinds
 // tbd: would it be better to match, and error on generation?
 // ( ie. to produce a message )
@@ -49,10 +54,10 @@ func (op *Names) Match(q Query, input *InputState) (okay bool) {
 }
 
 // implements NounBuilder by calling BuildNouns on all matched names
-func (op Names) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
+func (op Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	for n := op.GetNames(); n.HasNext(); {
 		at := n.GetNext()
-		if ns, e := buildNounsFrom(ctx, props,
+		if ns, e := buildNounsFrom(q, w, run, props,
 			ref(at.CountedKind),
 			ref(at.KindCalled),
 			ref(at.Kind),

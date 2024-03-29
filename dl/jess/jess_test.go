@@ -1,7 +1,6 @@
 package jess_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -9,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 func TestPhrases(t *testing.T) {
@@ -35,7 +33,7 @@ func TestPhrases(t *testing.T) {
 			// request on logging
 			q := jess.AddContext(&known, jess.LogMatches)
 			// create the test helper
-			m := jesstest.MakeMock(q, known.nounPool)
+			m := jesstest.MakeMock(q, known.nounPool, known.verbs)
 			// run the test:
 			t.Logf("testing: %d %s", i, str)
 			if !p.Verify(m.Generate(str)) {
@@ -49,7 +47,7 @@ func TestPhrases(t *testing.T) {
 	}
 }
 
-type rar struct {
+type w struct {
 	jesstest.Mock
 	info
 }
@@ -59,7 +57,7 @@ type info struct {
 	traits, fields,
 	nouns, directions, verbNames match.SpanList
 	nounPool map[string]string
-	verbs    map[string]verbInfo
+	verbs    map[string]jesstest.MockVerb
 }
 
 func (n *info) GetContext() int {
@@ -120,38 +118,6 @@ func (n *info) FindNoun(ws match.Span, kind string) (ret string, width int) {
 	return
 }
 
-func (n *info) GetNounValue(noun, field string) (ret []byte, err error) {
-	if v, ok := n.verbs[noun]; !ok {
-		err = fmt.Errorf("%w %q %q", mdl.Missing, noun, field)
-	} else {
-		str := "$bad"
-		switch field {
-		case jess.VerbSubject:
-			str = v.subject
-		case jess.VerbAlternate:
-			str = v.alternate
-		case jess.VerbObject:
-			str = v.object
-		case jess.VerbRelation:
-			str = v.relation
-		case jess.VerbImplication:
-			str = v.implication
-		case jess.VerbReversed:
-			if v.reversed {
-				str = "reversed"
-			} else {
-				str = "not reversed"
-			}
-		}
-		if str == "bad" {
-			err = fmt.Errorf("%w %q %q", mdl.Missing, noun, field)
-		} else {
-			ret = []byte(`"` + str + `"`)
-		}
-	}
-	return
-}
-
 var known = info{
 	kinds: []string{
 		"kind", "kinds",
@@ -202,45 +168,40 @@ func panicVerbs() match.SpanList {
 }
 
 // fix? maybe add "wearing" instead of carrying, to test implication better?
-var verbs = map[string]verbInfo{
+var verbs = jesstest.MockVerbs{
 	"carrying": {
-		subject:     "actors",
-		object:      "things",
-		relation:    "whereabouts",
-		implication: "not worn",
-		reversed:    false, // (parent) is carrying (child)
+		Subject:  "actors",
+		Object:   "things",
+		Relation: "whereabouts",
+		Implies:  "not worn",
+		Reversed: false, // (parent) is carrying (child)
 	},
 	"carried by": {
-		subject:     "actors",
-		object:      "things",
-		relation:    "whereabouts",
-		implication: "not worn",
-		reversed:    true, // (child) is carried by (parent)
+		Subject:  "actors",
+		Object:   "things",
+		Relation: "whereabouts",
+		Implies:  "not worn",
+		Reversed: true, // (child) is carried by (parent)
 	},
 	"in": {
-		subject:     "containers",
-		alternate:   "rooms",
-		object:      "things",
-		relation:    "whereabouts",
-		implication: "not worn",
-		reversed:    true, // (child) is in (parent)
+		Subject:   "containers",
+		Alternate: "rooms", // alternate
+		Object:    "things",
+		Relation:  "whereabouts",
+		Implies:   "not worn",
+		Reversed:  true, // (child) is in (parent)
 	},
 	"on": {
-		subject:     "supporters",
-		object:      "things",
-		relation:    "whereabouts",
-		implication: "not worn",
-		reversed:    true, // (child) is on (parent)
+		Subject:  "supporters",
+		Object:   "things",
+		Relation: "whereabouts",
+		Implies:  "not worn",
+		Reversed: true, // (child) is on (parent)
 	},
 	"suspicious of": {
-		subject:  "actors",
-		object:   "actors",
-		relation: "suspicion",
-		reversed: false, // (parent) is suspicious of (child)
+		Subject:  "actors",
+		Object:   "actors",
+		Relation: "suspicion",
+		Reversed: false, // (parent) is suspicious of (child)
 	},
-}
-
-type verbInfo struct {
-	subject, object, alternate, relation, implication string
-	reversed                                          bool
 }

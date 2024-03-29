@@ -4,18 +4,20 @@ import (
 	"errors"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // runs in the AncestryPhase phase
-func (op *KindsOf) Phase() Phase {
-	return weave.AncestryPhase
+func (op *KindsOf) Phase() weaver.Phase {
+	return weaver.AncestryPhase
 }
 
 func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 	str := match.Span(input.Words()).String()
+	/// fix
 	if strings.Contains(str, "Doors") {
 		println("here", str)
 	}
@@ -55,7 +57,7 @@ func (op *KindsOf) IsAspect() bool {
 }
 
 // The closed containers called safes are a kind of fixed in place thing.
-func (op *KindsOf) Generate(rar *Context) (err error) {
+func (op *KindsOf) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	if parent, e := op.Kind.Validate(); e != nil {
 		err = e
 	} else {
@@ -78,16 +80,16 @@ func (op *KindsOf) Generate(rar *Context) (err error) {
 					// otherwise, get the specified name
 					if n := getKindOfName(at); isAspect && isPlural {
 						// ick. aspects are expected to be singular
-						kind = rar.GetSingular(n)
+						kind = run.SingularOf(n)
 					} else if !isAspect && !isPlural {
 						// all other kinds are are expected to be plural
-						kind = rar.GetPlural(n)
+						kind = run.PluralOf(n)
 					} else {
 						kind = n
 					}
 				}
 				// register our new kind ( or new kind of hierarchy )
-				if e := rar.AddKind(kind, parent); e != nil {
+				if e := w.AddKind(kind, parent); e != nil {
 					err = e
 					break
 				} else {
@@ -95,16 +97,16 @@ func (op *KindsOf) Generate(rar *Context) (err error) {
 					if called := op.Names.KindCalled; called != nil {
 						if calledKind, e := called.GetKind(); e != nil {
 							err = e
-						} else if e := rar.AddKind(kind, calledKind); e != nil {
+						} else if e := w.AddKind(kind, calledKind); e != nil {
 							err = e // kind called already normalized because it matched the specific kind
 							break
-						} else if e := AddKindTraits(rar, kind, called.GetTraits()); e != nil {
+						} else if e := AddKindTraits(w, kind, called.GetTraits()); e != nil {
 							err = e
 							break
 						}
 					}
 					// add trailing traits.
-					if e := AddKindTraits(rar, kind, traits); e != nil {
+					if e := AddKindTraits(w, kind, traits); e != nil {
 						err = e
 						break
 					}

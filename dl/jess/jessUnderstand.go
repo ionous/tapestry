@@ -5,15 +5,16 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // runs in the LanguagePhase phase
-func (op *Understand) Phase() Phase {
-	return weave.LanguagePhase
+func (op *Understand) Phase() weaver.Phase {
+	return weaver.LanguagePhase
 }
 
 func (op *Understand) Match(q Query, input *InputState) (okay bool) {
@@ -38,33 +39,35 @@ func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 
 var pluralOf = match.PanicSpans("plural of")
 
-func (op *Understand) Generate(ctx *Context) (err error) {
-	if len(op.PluralOf) > 0 {
-		err = op.applyPlurals(ctx)
-	} else {
-		// fix: parse lhs first, into a map keyed by its string
-		// then we can error better when strings or grammars appear on the wrong side.
-		// (and probably simplify some)
-		err = ctx.PostProcess(weave.ValuePhase, func() (err error) {
-			// check whether kind matches an action or noun
-			if actions, nouns, e := op.readRhs(ctx); e != nil {
-				err = e
-			} else if len(actions) > 0 && len(nouns) > 0 {
-				err = errors.New("jess doesn't support mixing noun and action understandings")
-			} else if len(actions) > 0 {
-				err = op.applyActions(ctx, actions)
-			} else if len(nouns) > 0 {
-				err = op.applyAliases(ctx, nouns)
-			} else {
-				err = errors.New("what's there to understand?")
-			}
-			return
-		})
-	}
-	return
+func (op *Understand) Generate(ctx Context) error {
+	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if len(op.PluralOf) > 0 {
+			err = op.applyPlurals(w)
+		} else {
+			// fix: parse lhs first, into a map keyed by its string
+			// then we can error better when strings or grammars appear on the wrong side.
+			// (and probably simplify some)
+			err = ctx.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+				// check whether kind matches an action or noun
+				if actions, nouns, e := op.readRhs(ctx); e != nil {
+					err = e
+				} else if len(actions) > 0 && len(nouns) > 0 {
+					err = errors.New("jess doesn't support mixing noun and action understandings")
+				} else if len(actions) > 0 {
+					err = op.applyActions(w, actions)
+				} else if len(nouns) > 0 {
+					err = op.applyAliases(w, nouns)
+				} else {
+					err = errors.New("what's there to understand?")
+				}
+				return
+			})
+		}
+		return
+	})
 }
 
-func (op *Understand) applyActions(rar *Context, actions []string) (err error) {
+func (op *Understand) applyActions(w weaver.Weaves, actions []string) (err error) {
 Loop:
 	for it := op.QuotedTexts.Iterate(); it.HasNext(); {
 		phrase := it.GetNext()
@@ -72,7 +75,7 @@ Loop:
 			err = e
 		} else {
 			for _, act := range actions {
-				if e := rar.AddGrammar(phrase, &grammar.Directive{
+				if e := w.AddGrammar(phrase, &grammar.Directive{
 					Name: phrase,
 					Series: []grammar.ScannerMaker{
 						m, &grammar.Action{Action: act},
@@ -87,7 +90,7 @@ Loop:
 }
 
 // fix: should this work through desired noun instead?
-func (op *Understand) applyAliases(rar *Context, rhsNouns []string) (err error) {
+func (op *Understand) applyAliases(w weaver.Weaves, rhsNouns []string) (err error) {
 	// for every noun on the rhs
 	for _, noun := range rhsNouns {
 		//  add the alias specified on the lhs
@@ -95,7 +98,7 @@ func (op *Understand) applyAliases(rar *Context, rhsNouns []string) (err error) 
 			alias := it.GetNext()
 			if alias = inflect.Normalize(alias); len(alias) > 0 {
 				// the -1 indicates that this is an alias; hrm.
-				if e := rar.AddNounName(noun, alias, -1); e != nil {
+				if e := w.AddNounName(noun, alias, -1); e != nil {
 					err = e
 					break
 				}
@@ -130,7 +133,7 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	return
 }
 
-func (op *Understand) applyPlurals(rar *Context) (err error) {
+func (op *Understand) applyPlurals(w weaver.Weaves) (err error) {
 Loop:
 	for as := op.Names.GetNames(); as.HasNext(); {
 		// determine the "single" side of the plural request
@@ -140,7 +143,7 @@ Loop:
 			name := n.Noun.ActualNoun
 			for it := op.QuotedTexts.Iterate(); it.HasNext(); {
 				plural := it.GetNext()
-				if e := rar.AddPlural(plural, name); e != nil {
+				if e := w.AddPlural(plural, name); e != nil {
 					err = e
 					break Loop
 				}

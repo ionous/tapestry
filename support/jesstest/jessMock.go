@@ -1,6 +1,7 @@
 package jesstest
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -9,9 +10,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // implements Registrar to watch incoming calls.
@@ -21,10 +21,18 @@ type Mock struct {
 	out                 []string
 	unique              map[string]int
 	nounPool, nounPairs map[string]string
+	ProcessingList
+	jessRt jessRt
 }
 
-func MakeMock(q jess.Query, nounPool map[string]string) Mock {
-	return Mock{q: q, nounPool: nounPool, nounPairs: make(map[string]string)}
+func MakeMock(q jess.Query, nouns map[string]string, verbs map[string]MockVerb) Mock {
+	pairs := make(map[string]string)
+	return Mock{
+		q:         q,
+		nounPool:  nouns,
+		nounPairs: pairs,
+		jessRt:    jessRt{nounPairs: pairs, verbs: verbs},
+	}
 }
 
 func (m *Mock) Generate(paragraph string) (ret []string, err error) {
@@ -41,14 +49,16 @@ func (m *Mock) generate(paragraph string) (err error) {
 		err = e
 	} else {
 		ctx := jess.NewContext(m.q, m)
-		for z := weave.Phase(0); z < weave.NumPhases; z++ {
+		for z := weaver.Phase(0); z < weaver.NumPhases; z++ {
 			if _, e := p.Generate(ctx, z); e != nil {
 				err = e // match, and schedule callbacks for (later) phases
 				break
 			} else {
 				// update callbacks for the current phase
 				// in story; these would be intermixed with other scheduled elements for the phase
-				if e := ctx.UpdatePhase(z); e != nil {
+				cnt, e := m.UpdatePhase(z, m, &m.jessRt)
+				missing := errors.Is(e, weaver.Missing)
+				if (e != nil && !missing) || (missing && cnt == 0) {
 					err = e
 					break
 				}
@@ -67,11 +77,11 @@ func (m *Mock) AddNounKind(noun, kind string) (err error) {
 		if prev, exists := m.nounPool["$"+noun]; !exists {
 			m.addNounKind(noun, kind)
 		} else if prev == kind {
-			err = fmt.Errorf("%w %s already declared as %s", mdl.Duplicate, noun, prev)
+			err = fmt.Errorf("%w %s already declared as %s", weaver.Duplicate, noun, prev)
 		} else if prev == "things" && thingLike(kind) {
 			m.addNounKind(noun, kind)
 		} else if kind != "things" || !thingLike(prev) {
-			err = fmt.Errorf("%w %s already declared as %s", mdl.Conflict, noun, prev)
+			err = fmt.Errorf("%w %s already declared as %s", weaver.Conflict, noun, prev)
 		}
 	}
 	return
@@ -86,7 +96,6 @@ func thingLike(k string) (okay bool) {
 }
 
 func (m *Mock) addNounKind(noun, kind string) {
-
 	m.out = append(m.out, "AddNounKind:", noun, kind)
 	m.nounPool["$"+noun] = kind
 }
@@ -202,12 +211,7 @@ func (m *Mock) AddFact(key string, partsAndValue ...string) (_ error) {
 	m.out = append(m.out, partsAndValue...)
 	return
 }
-func (m *Mock) GetPlural(word string) string {
-	return inflect.Pluralize(word)
-}
-func (m *Mock) GetSingular(word string) string {
-	return inflect.Singularize(word)
-}
+
 func (m *Mock) GenerateUniqueName(category string) string {
 	if m.unique == nil {
 		m.unique = make(map[string]int)
@@ -215,31 +219,4 @@ func (m *Mock) GenerateUniqueName(category string) string {
 	next := m.unique[category] + 1
 	m.unique[category] = next
 	return fmt.Sprintf("%s-%d", category, next)
-}
-
-func (m *Mock) GetRelativeNouns(noun, relation string, primary bool) (ret []string, err error) {
-	if relation != "whereabouts" || primary {
-		err = fmt.Errorf("unexpected relation %v(primary: %v)", relation, primary)
-	} else {
-		if a, ok := m.nounPairs[noun]; ok {
-			ret = []string{a}
-		}
-	}
-	return
-}
-
-func (m *Mock) GetOpposite(word string) (ret string, err error) {
-	switch word {
-	case "north":
-		ret = "south"
-	case "south":
-		ret = "north"
-	case "east":
-		ret = "west"
-	case "west":
-		ret = "east"
-	default:
-		err = fmt.Errorf("unexpected opposition %q", word)
-	}
-	return
 }

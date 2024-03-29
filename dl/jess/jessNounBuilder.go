@@ -1,30 +1,35 @@
 package jess
 
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
+
 // really this builds "pending nouns"....
 // to support "counted nouns" any given specification can generate multiple nouns
 // ( even though all, other than "names" and "counted nouns" only generate one a piece. )
 type NounBuilder interface {
-	BuildNouns(*Context, NounProperties) ([]DesiredNoun, error)
+	BuildNouns(Query, weaver.Weaves, rt.Runtime, NounProperties) ([]DesiredNoun, error)
 }
 
 // useful for dispatching a parent's call to build nouns to one of its matched children.
-func buildNounsFrom(ctx *Context, props NounProperties, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
+func buildNounsFrom(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties, options ...nounBuilderRef) (ret []DesiredNoun, err error) {
 	for _, opt := range options {
 		if !opt.IsNil {
-			ret, err = opt.BuildNouns(ctx, props)
+			ret, err = opt.BuildNouns(q, w, run, props)
 			break
 		}
 	}
 	return
 }
 
-func buildAnon(rar *Context, plural, singular string, props NounProperties) (ret DesiredNoun, err error) {
-	n := rar.GenerateUniqueName(singular)
-	if e := rar.AddNounName(n, n, 0); e != nil {
+func buildAnon(w weaver.Weaves, plural, singular string, props NounProperties) (ret DesiredNoun, err error) {
+	n := w.GenerateUniqueName(singular)
+	if e := w.AddNounName(n, n, 0); e != nil {
 		err = e // ^ so authors can refer to it by the dashed name
-	} else if e := rar.AddNounKind(n, plural); e != nil {
+	} else if e := w.AddNounKind(n, plural); e != nil {
 		err = e // all errors, including duplicates would be bad here.
-	} else if e := writeKinds(rar, n, props.Kinds); e != nil {
+	} else if e := writeKinds(w, n, props.Kinds); e != nil {
 		err = e // any *additional* kinds.
 	} else {
 		ret = DesiredNoun{

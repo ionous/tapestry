@@ -76,7 +76,7 @@ func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 
 // tbd: i'm not sold on the idea that registar takes assignments
 // maybe it'd make more sense to pass in generic "any" values,
-// to have add factory functions to *Context,
+// to have add factory functions to Context,
 // or to have individual methods for the necessary types
 // ( maybe just three: trait, text, number )
 func number(value float64, kind string) rt.Assignment {

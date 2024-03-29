@@ -1,8 +1,13 @@
 package jess
 
-func (op *Noun) BuildNouns(ctx *Context, props NounProperties) (ret []DesiredNoun, err error) {
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
+
+func (op *Noun) BuildNouns(_ Query, w weaver.Weaves, _ rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	n := op.ActualNoun
-	if e := writeKinds(ctx, n, props.Kinds); e != nil {
+	if e := writeKinds(w, n, props.Kinds); e != nil {
 		err = e
 	} else {
 		ret = []DesiredNoun{{Noun: n, Traits: props.Traits}}

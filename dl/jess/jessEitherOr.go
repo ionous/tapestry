@@ -2,16 +2,16 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // runs in the PropertyPhase phase
-func (op *KindsAreEither) Phase() Phase {
-	return weave.PropertyPhase
+func (op *KindsAreEither) Phase() weaver.Phase {
+	return weaver.PropertyPhase
 }
 func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -31,22 +31,22 @@ func (op *KindsAreEither) matchEither(input *InputState) (okay bool) {
 	return
 }
 
-func (op *KindsAreEither) Generate(rar *Context) (err error) {
+func (op *KindsAreEither) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	if k, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
 		if op.Traits.NewTrait == nil {
 			// mdl is smart enough to generate "not" aspects from bool fields
 			name := inflect.Normalize(op.Traits.String())
-			err = rar.AddKindFields(k, []mdl.FieldInfo{{
+			err = w.AddKindFields(k, []weaver.FieldInfo{{
 				Name:     name,
 				Affinity: affine.Bool,
 			}})
 		} else {
-			if name, e := op.generateAspect(rar); e != nil {
+			if name, e := op.generateAspect(w); e != nil {
 				err = e
 			} else {
-				err = rar.AddKindFields(k, []mdl.FieldInfo{{
+				err = w.AddKindFields(k, []weaver.FieldInfo{{
 					Name:     name,
 					Affinity: affine.Text,
 					Class:    name,
@@ -57,17 +57,17 @@ func (op *KindsAreEither) Generate(rar *Context) (err error) {
 	return
 }
 
-func (op *KindsAreEither) generateAspect(rar *Context) (ret string, err error) {
+func (op *KindsAreEither) generateAspect(w weaver.Weaves) (ret string, err error) {
 	first := op.Traits
 	aspect := inflect.Join([]string{first.String(), "status"})
-	if e := rar.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
+	if e := w.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
 		err = e
 	} else {
 		var traits []string
 		for it := first.Iterate(); it.HasNext(); {
 			traits = append(traits, it.GetNext())
 		}
-		if e := rar.AddAspectTraits(aspect, traits); e != nil {
+		if e := w.AddAspectTraits(aspect, traits); e != nil {
 			err = e
 		} else {
 			ret = aspect
