@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -80,7 +81,7 @@ func ensureNoun(q Query, w weaver.Weaves, name match.Span) (ret string, created 
 }
 
 func registerNames(w weaver.Weaves, noun, name string) (err error) {
-	names := weaver.MakeNames(name)
+	names := mdl.MakeNames(name)
 	for i, n := range names {
 		if e := w.AddNounName(noun, n, i); e != nil {
 			err = e

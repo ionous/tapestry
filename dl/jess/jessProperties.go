@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -66,7 +67,7 @@ func (op *KindsHaveProperties) Weave(w weaver.Weaves, run rt.Runtime) (err error
 			// erroring feels like more useful than failing to match...
 			err = fmt.Errorf("%s fields require an explicit name", f.Affinity)
 		} else {
-			err = w.AddKindFields(kind, []weaver.FieldInfo{f})
+			err = w.AddKindFields(kind, []mdl.FieldInfo{f})
 		}
 	}
 	return
@@ -91,7 +92,7 @@ func (op *PropertyType) matchPrimitive(input *InputState) (okay bool) {
 }
 
 // return a default field name, its affine type and its optional class name
-func (op *PropertyType) GetType(listOf bool) (ret weaver.FieldInfo, err error) {
+func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
 	var name, cls string
 	var aff affine.Affinity
 	if prim := op.Primitive; len(prim) > 0 {
@@ -116,7 +117,7 @@ func (op *PropertyType) GetType(listOf bool) (ret weaver.FieldInfo, err error) {
 				aff = affine.RecordList
 			}
 		}
-		ret = weaver.FieldInfo{Name: name, Affinity: aff, Class: cls}
+		ret = mdl.FieldInfo{Name: name, Affinity: aff, Class: cls}
 	}
 	return
 }

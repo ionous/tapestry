@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
@@ -38,7 +39,7 @@ func (op *KindsAreEither) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 		if op.Traits.NewTrait == nil {
 			// mdl is smart enough to generate "not" aspects from bool fields
 			name := inflect.Normalize(op.Traits.String())
-			err = w.AddKindFields(k, []weaver.FieldInfo{{
+			err = w.AddKindFields(k, []mdl.FieldInfo{{
 				Name:     name,
 				Affinity: affine.Bool,
 			}})
@@ -46,7 +47,7 @@ func (op *KindsAreEither) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 			if name, e := op.generateAspect(w); e != nil {
 				err = e
 			} else {
-				err = w.AddKindFields(k, []weaver.FieldInfo{{
+				err = w.AddKindFields(k, []mdl.FieldInfo{{
 					Name:     name,
 					Affinity: affine.Text,
 					Class:    name,
