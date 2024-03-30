@@ -29,12 +29,13 @@ func NewRuntime(w io.Writer, q query.Query, d decoder.Decoder) *Runner {
 	return NewRuntimeOptions(w, q, d, Notifier{}, NewOptions())
 }
 func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, n Notifier, options Options) *Runner {
+	cacheErrors := options.cacheErrors()
 	run := &Runner{
 		query:      q,
 		decode:     d,
 		notify:     n,
-		values:     make(cache),
-		nounValues: make(cache),
+		values:     makeCache(cacheErrors),
+		nounValues: makeCache(cacheErrors),
 		counters:   make(counters),
 		options:    options,
 		scope:      scope.Chain{Scope: scope.Empty{}},
@@ -78,9 +79,9 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 				notify(ends)
 			}
 		}
-		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
+		run.values.reset() // fix? focus cache clear to just the domains that became inactive?
 		if len(domain) == 0 {
-			run.nounValues = make(cache)
+			run.nounValues.reset()
 		}
 		if len(begins) > 0 {
 			if e := run.domainChanged(begins, "begins"); e != nil {
@@ -292,6 +293,13 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 				ret = g.StringsOf(fs)
 			}
 
+		case meta.KindAncestry:
+			if ks, e := run.getAncestry(field); e != nil {
+				err = run.reportError(e)
+			} else {
+				ret = g.StringsOf(ks)
+			}
+
 		case meta.ObjectAliases:
 			if ns, e := run.getObjectNames(field); e != nil {
 				err = run.reportError(e)
@@ -317,10 +325,10 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		case meta.ObjectKinds:
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
-			} else if k, e := run.GetKindByName(ok.Kind); e != nil {
+			} else if ks, e := run.getAncestry(ok.Kind); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(g.Path(k))
+				ret = g.StringsOf(ks)
 			}
 
 		// given a noun, return the name declared by the author

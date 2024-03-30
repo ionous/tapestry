@@ -58,3 +58,10 @@ func (m Options) OptionByName(name string) (ret g.Value, err error) {
 func (m Options) Option(opt meta.Options) (ret g.Value, err error) {
 	return m.OptionByName(opt.String())
 }
+
+func (m Options) cacheErrors() (okay bool) {
+	if m, ok := m.options[meta.CacheErrors.String()]; ok {
+		okay = m.Affinity() == affine.Bool && m.Bool()
+	}
+	return
+}

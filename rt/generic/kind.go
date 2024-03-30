@@ -12,7 +12,6 @@ type Kinds interface {
 	GetKindByName(n string) (*Kind, error)
 }
 
-//
 type Kind struct {
 	name      string // keeping name *and* path makes debugging easier
 	parent    *Kind
@@ -85,7 +84,7 @@ func Base(k *Kind) string {
 }
 
 // Ancestor list, root towards the start; the name of this kind at the end.
-func Path(k *Kind) (ret []string) {
+func Ancestry(k *Kind) (ret []string) {
 	for ; k != nil; k = k.parent {
 		ret = append(ret, k.name)
 	}
