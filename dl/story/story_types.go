@@ -550,46 +550,6 @@ func (op *DefineNamedGrammar_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Define a phrase that can be used with 'natural language' statements.
-type DefinePhrase struct {
-	Phrase   rtti.TextEval
-	Macro    rtti.TextEval
-	Reversed rtti.BoolEval
-	Markup   map[string]any
-}
-
-// define_phrase, a type of flow.
-var Zt_DefinePhrase typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*DefinePhrase) TypeInfo() typeinfo.T {
-	return &Zt_DefinePhrase
-}
-
-// implements typeinfo.Markup
-func (op *DefinePhrase) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*DefinePhrase)(nil)
-
-// holds a slice of type define_phrase
-type DefinePhrase_Slice []DefinePhrase
-
-// implements typeinfo.Instance
-func (*DefinePhrase_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefinePhrase
-}
-
-// implements typeinfo.Repeats
-func (op *DefinePhrase_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Simple english like definitions of nouns, kinds, and their relatives.
 type DeclareStatement struct {
 	Text   rtti.TextEval
@@ -832,91 +792,6 @@ func (*DefinePlural_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *DefinePlural_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Leaving a room by by going through a door ( ex. departing the house via the front door... ).
-type MapDeparting struct {
-	RoomName      rtti.TextEval
-	DoorName      rtti.TextEval
-	MapConnection MapConnection
-	OtherRoomName rtti.TextEval
-	Markup        map[string]any
-}
-
-// map_departing, a type of flow.
-var Zt_MapDeparting typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*MapDeparting) TypeInfo() typeinfo.T {
-	return &Zt_MapDeparting
-}
-
-// implements typeinfo.Markup
-func (op *MapDeparting) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*MapDeparting)(nil)
-var _ rtti.Execute = (*MapDeparting)(nil)
-
-// holds a slice of type map_departing
-type MapDeparting_Slice []MapDeparting
-
-// implements typeinfo.Instance
-func (*MapDeparting_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MapDeparting
-}
-
-// implements typeinfo.Repeats
-func (op *MapDeparting_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Leaving a room by moving in a compass direction ( ex. heading east... ).
-type MapHeading struct {
-	Dir           string
-	RoomName      rtti.TextEval
-	DoorName      rtti.TextEval
-	MapConnection MapConnection
-	OtherRoomName rtti.TextEval
-	Markup        map[string]any
-}
-
-// map_heading, a type of flow.
-var Zt_MapHeading typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*MapHeading) TypeInfo() typeinfo.T {
-	return &Zt_MapHeading
-}
-
-// implements typeinfo.Markup
-func (op *MapHeading) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*MapHeading)(nil)
-var _ rtti.Execute = (*MapHeading)(nil)
-
-// holds a slice of type map_heading
-type MapHeading_Slice []MapHeading
-
-// implements typeinfo.Instance
-func (*MapHeading_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MapHeading
-}
-
-// implements typeinfo.Repeats
-func (op *MapHeading_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1841,49 +1716,6 @@ func (op *NothingField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// MapConnection, a type of str enum.
-type MapConnection int
-
-// enumerated values of MapConnection
-const (
-	C_MapConnection_ArrivingAt MapConnection = iota
-	C_MapConnection_ConnectingTo
-)
-
-func MakeMapConnection(str string) (ret MapConnection, okay bool) {
-	if i := Zt_MapConnection.FindOption(str); i >= 0 {
-		ret, okay = MapConnection(i), true
-	}
-	return
-}
-
-func (op MapConnection) String() (ret string) {
-	if i, opts := int(op), Zt_MapConnection.Options; i >= 0 && i < len(opts) {
-		ret = opts[i]
-	} else {
-		ret = "Invalid MapConnection(" + strconv.FormatInt(int64(i), 10) + ")"
-	}
-	return
-}
-
-// map_connection, a type of str enum.
-var Zt_MapConnection = typeinfo.Str{
-	Name: "map_connection",
-	Options: []string{
-		"arriving_at",
-		"connecting_to",
-	},
-	Markup: map[string]any{
-		"comment": "Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.",
-	},
-}
-var Zt_MapDirection = typeinfo.Str{
-	Name: "map_direction",
-	Markup: map[string]any{
-		"comment": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
-	},
-}
-
 // RelationCardinality, a type of str enum.
 type RelationCardinality int
 
@@ -1953,15 +1785,12 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineAlias,
 	&Zt_DefineLeadingGrammar,
 	&Zt_DefineNamedGrammar,
-	&Zt_DefinePhrase,
 	&Zt_DeclareStatement,
 	&Zt_DefineRelation,
 	&Zt_DefineFields,
 	&Zt_DefineKinds,
 	&Zt_DefineOpposite,
 	&Zt_DefinePlural,
-	&Zt_MapDeparting,
-	&Zt_MapHeading,
 	&Zt_DefineValue,
 	&Zt_DefineNouns,
 	&Zt_DefineNounTraits,
@@ -1989,8 +1818,6 @@ var z_flow_list = []*typeinfo.Flow{
 
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
-	&Zt_MapConnection,
-	&Zt_MapDirection,
 	&Zt_RelationCardinality,
 }
 
@@ -2031,8 +1858,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
 	2917659442779702699:  (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides:do: */
 	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
-	4650767708903763835:  (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro: */
-	89301097593785617:    (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro:reversed: */
 	10034565430437798858: (*DefineRelation)(nil),       /* execute=Define relation:kind:otherKind:cardinality: */
 	15951965898335032430: (*DefineRelation)(nil),       /* story_statement=Define relation:kind:otherKind:cardinality: */
 	2570506749320892411:  (*DefineOtherRelatives)(nil), /* execute=Define relativeTo:nouns:otherNouns: */
@@ -2069,12 +1894,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	13333326165932249009: (*DefineTest)(nil),           /* story_statement=Define test:scene:do: */
 	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
 	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
-	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
-	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
-	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
-	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
-	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
-	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
 	10612153415886771360: (*DefineAlias)(nil),          /* execute=Interpret alias:as: */
 	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
 	16304045397725596887: (*DefineNamedGrammar)(nil),   /* execute=Interpret name:with: */
@@ -2366,30 +2185,6 @@ func init() {
 			"comment": "starts a parser scanner.",
 		},
 	}
-	Zt_DefinePhrase = typeinfo.Flow{
-		Name: "define_phrase",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "phrase",
-			Label: "phrase",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "macro",
-			Label: "as_macro",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:     "reversed",
-			Label:    "reversed",
-			Optional: true,
-			Type:     &rtti.Zt_BoolEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment": "Define a phrase that can be used with 'natural language' statements.",
-		},
-	}
 	Zt_DeclareStatement = typeinfo.Flow{
 		Name: "declare_statement",
 		Lede: "declare",
@@ -2505,69 +2300,6 @@ func init() {
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Plurals are used at runtime and during weave to", "guide the interpretation of nouns and kinds.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
-		},
-	}
-	Zt_MapDeparting = typeinfo.Flow{
-		Name: "map_departing",
-		Lede: "departing",
-		Terms: []typeinfo.Term{{
-			Name:  "room_name",
-			Label: "from",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "door_name",
-			Label: "via",
-			Markup: map[string]any{
-				"comment": []interface{}{"todo? use soft suffix of 'noun_name' to indicate the field should pull autocomplete from pooled nouns.", "or, should there be pools per kind? ex. rooms", "and,or, should this use markup instead of naming convention?"},
-			},
-			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:  "map_connection",
-			Label: "and",
-			Type:  &Zt_MapConnection,
-		}, {
-			Name:  "other_room_name",
-			Label: "other_room",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
-		},
-	}
-	Zt_MapHeading = typeinfo.Flow{
-		Name: "map_heading",
-		Lede: "heading",
-		Terms: []typeinfo.Term{{
-			Name: "dir",
-			Type: &Zt_MapDirection,
-		}, {
-			Name:  "room_name",
-			Label: "from",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:     "door_name",
-			Label:    "via",
-			Optional: true,
-			Type:     &rtti.Zt_TextEval,
-		}, {
-			Name:  "map_connection",
-			Label: "and",
-			Type:  &Zt_MapConnection,
-		}, {
-			Name:  "other_room_name",
-			Label: "other_room",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
 		},
 	}
 	Zt_DefineValue = typeinfo.Flow{

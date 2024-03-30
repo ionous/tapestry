@@ -14,6 +14,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 	"github.com/ionous/errutil"
 )
 
@@ -36,8 +37,8 @@ func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, er
 			ret = &render.RenderResponse{Text: txt}
 		} else {
 			// otherwise store the value
-			if e := cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
-				return w.Pin().AddKindFields(kindsOf.Response.String(), []mdl.FieldInfo{{
+			if e := cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) error {
+				return w.AddKindFields(kindsOf.Response.String(), []mdl.FieldInfo{{
 					Name:     name,
 					Affinity: affine.Text,
 					Init:     &assign.FromText{Value: txt}},

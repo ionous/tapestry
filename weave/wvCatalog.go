@@ -12,6 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 	"github.com/ionous/errutil"
 )
 
@@ -19,8 +20,6 @@ import (
 type Catalog struct {
 	*mdl.Modeler     // db output
 	Env          Env // generic storage for command processing
-
-	SuspendSchedule int // hack until promises are available
 
 	// cleanup? seems redundant to have three views of the same domain
 	domains        map[string]*Domain
@@ -32,8 +31,7 @@ type Catalog struct {
 	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
 }
 
-type ScheduledCallback func(*Weaver) error
-type ScheduledStep func(Phase) error
+type StepFunction func(weaver.Phase) (bool, error)
 
 func NewCatalog(db *sql.DB) *Catalog {
 	return NewCatalogWithWarnings(db, nil, nil)
@@ -78,7 +76,7 @@ func (cat *Catalog) SetSource(x string) {
 	cat.cursor = x
 }
 
-func (cat *Catalog) Runtime() rt.Runtime {
+func (cat *Catalog) GetRuntime() rt.Runtime {
 	return cat.run
 }
 
@@ -86,6 +84,14 @@ func (cat *Catalog) Runtime() rt.Runtime {
 func (cat *Catalog) GetDomain(n string) (*Domain, bool) {
 	d, ok := cat.domains[n]
 	return d, ok
+}
+
+// return the uniformly named domain ( if it exists )
+func (cat *Catalog) CurrentDomain() (ret string) {
+	if d, ok := cat.processing.Top(); ok {
+		ret = d.Name()
+	}
+	return
 }
 
 // walk the domains and run the commands remaining in their queues
@@ -139,23 +145,12 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 			err = e
 		} else {
 			cat.processing.Push(d)
-			//
-			for p := Phase(0); p < NumPhases; p++ {
-				w := Weaver{Catalog: cat, Domain: d.name, Phase: p, Runtime: cat.run}
-				//
-				if e := d.runPhase(&w); e != nil {
-					err = e
-					break
-				} else if e := d.flush(true); e != nil {
+			for z := weaver.Phase(0); z < weaver.NumPhases; z++ {
+				if e := d.runPhase(z); e != nil {
 					err = e
 					break
 				}
 			}
-			// play out suspended actions:
-			if err == nil && len(d.suspended) > 0 {
-				err = d.flush(false)
-			}
-			//
 			cat.processing.Pop()
 			if err == nil {
 				d.currPhase = -1 // all done.
@@ -185,20 +180,20 @@ func (cat *Catalog) DomainEnd() (err error) {
 	return
 }
 
-func (cat *Catalog) Schedule(when Phase, what ScheduledCallback) (err error) {
+func (cat *Catalog) Step(cb StepFunction) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
 	} else {
-		err = d.schedule(cat.cursor, when, what)
+		d.steps = append(d.steps, cb)
 	}
 	return
 }
 
-func (cat *Catalog) Step(fn ScheduledStep) (err error) {
+func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
 	} else {
-		d.scheduleStep(cat.cursor, fn)
+		err = d.schedule(cat.cursor, when, cb)
 	}
 	return
 }
@@ -214,7 +209,7 @@ func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err
 		cat.domains[n] = d
 	}
 
-	if d.currPhase < 0 || d.currPhase >= DependencyPhase {
+	if d.currPhase < 0 || d.currPhase >= weaver.DependencyPhase {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain

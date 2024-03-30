@@ -22,15 +22,15 @@ func NewParagraph(str string) (ret *Paragraph, err error) {
 	return
 }
 
-// returns true when completely consumed;
-// caller no longer needs to process subsequent phrases
-func (p *Paragraph) Generate(ctx Context, z weaver.Phase) (okay bool, err error) {
+// a function that expects to be called every phase
+// returns true when it no longer needs to be called because everything is scheduled
+func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
 	var retry int
-	for i, u := range p.unmatched {
+	for i, n := range p.unmatched {
 		var best bestMatch
-		if matchSentence(ctx, z, u, &best) {
+		if matchSentence(Context{q, u}, z, n, &best) {
 			// try to generate if matched.
-			if e := best.match.Generate(ctx); e != nil {
+			if e := best.match.Generate(Context{q, u}); e != nil {
 				err = e
 				break
 			}
@@ -38,10 +38,10 @@ func (p *Paragraph) Generate(ctx Context, z weaver.Phase) (okay bool, err error)
 			// retry if not in final phase
 			// otherwise generate an error
 			if z == weaver.NextPhase {
-				err = fmt.Errorf("failed to match line %d %s", i, u.String())
+				err = fmt.Errorf("failed to match line %d %s", i, n.String())
 				break
 			} else {
-				p.unmatched[retry] = u
+				p.unmatched[retry] = n
 				retry++
 			}
 		}

@@ -84,7 +84,7 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 // expects that the runtime is the importer's own runtime.
 // ( as opposed to the story's playtime. )
 func Weave(run rt.Runtime, op StoryStatement) (err error) {
-	if cat := currentCatalog; cat.Runtime() != run {
+	if cat := currentCatalog; cat.GetRuntime() != run {
 		err = errutil.Fmt("mismatched runtimes?")
 	} else {
 		err = op.Weave(cat)

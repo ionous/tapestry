@@ -17,6 +17,7 @@ import (
 // implements Registrar to watch incoming calls.
 // posted makes it more like a stub than a mock maybe? oh well.
 type Mock struct {
+	weaver.PanicWeaves
 	q                   jess.Query
 	out                 []string
 	unique              map[string]int
@@ -48,9 +49,8 @@ func (m *Mock) generate(paragraph string) (err error) {
 	if p, e := jess.NewParagraph(paragraph); e != nil {
 		err = e
 	} else {
-		ctx := jess.NewContext(m.q, m)
 		for z := weaver.Phase(0); z < weaver.NumPhases; z++ {
-			if _, e := p.Generate(ctx, z); e != nil {
+			if _, e := p.Generate(z, m.q, m); e != nil {
 				err = e // match, and schedule callbacks for (later) phases
 				break
 			} else {

@@ -14,6 +14,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 	"github.com/ionous/errutil"
 )
 
@@ -24,17 +25,17 @@ func (op *DefinePattern) Execute(macro rt.Runtime) error {
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if name, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
 			name := inflect.Normalize(name.String())
 			pb := mdl.NewPatternBuilder(name)
-			pb.AddParams(reduceFields(w, op.Requires))
+			pb.AddParams(reduceFields(run, op.Requires))
 			// assumes the first field ( if any ) is the result
 			if ps := op.Provides; len(ps) > 0 {
-				pb.AddResult(ps[0].GetFieldInfo(w))
-				pb.AddLocals(reduceFields(w, ps[1:]))
+				pb.AddResult(ps[0].GetFieldInfo(run))
+				pb.AddLocals(reduceFields(run, ps[1:]))
 			}
 			if len(op.Exe) > 0 {
 				pb.AppendRule(0, rt.Rule{
@@ -45,9 +46,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 					// and so is the rule Rank
 				})
 			}
-			err = cat.Schedule(weave.AncestryPhase, func(w *weave.Weaver) error {
-				return w.Pin().AddPattern(pb.Pattern)
-			})
+			err = w.AddPattern(pb.Pattern)
 		}
 		return
 	})
@@ -58,25 +57,21 @@ func (op *DefineAction) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineAction) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
-		if act, e := safe.GetText(w, op.Action); e != nil {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if act, e := safe.GetText(run, op.Action); e != nil {
 			err = e
 		} else {
 			act := mdl.NewPatternSubtype(inflect.Normalize(act.String()), kindsOf.Action.String())
 			// note: actions dont have an explicit return
-			act.AddParams(reduceFields(w, op.Requires))
-			act.AddLocals(reduceFields(w, op.Provides))
-			if e := cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
-				return w.Pin().AddPattern(act.Pattern)
-			}); e != nil {
+			act.AddParams(reduceFields(run, op.Requires))
+			act.AddLocals(reduceFields(run, op.Provides))
+			if e := w.AddPattern(act.Pattern); e != nil {
 				err = e
 			} else {
 				// derive the before and after phases
 				for _, phase := range []event.Phase{event.BeforePhase, event.AfterPhase} {
 					pb := mdl.NewPatternSubtype(phase.PatternName(act.Name()), act.Name())
-					if e := cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
-						return w.Pin().AddPattern(pb.Pattern)
-					}); e != nil {
+					if e := w.AddPattern(pb.Pattern); e != nil {
 						err = e
 						break
 					}
@@ -92,17 +87,17 @@ func (op *RuleProvides) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
-		if act, e := safe.GetText(w, op.PatternName); e != nil {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
-		} else if act, e := w.Pin().GetKind(inflect.Normalize(act.String())); e != nil {
+		} else if ks, e := run.GetField(meta.KindAncestry, act.String()); e != nil {
 			err = e // ^ verify the kind exists
 		} else {
+			ks := ks.Strings()
+			act := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
 			pb := mdl.NewPatternSubtype(act, kindsOf.Action.String())
-			pb.AddLocals(reduceFields(w, op.Provides))
-			err = cat.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
-				return w.Pin().AddPattern(pb.Pattern)
-			})
+			pb.AddLocals(reduceFields(run, op.Provides))
+			err = w.AddPattern(pb.Pattern)
 		}
 		return
 	})
@@ -113,26 +108,25 @@ func (op *RuleForPattern) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
-		if phrase, e := safe.GetText(w, op.PatternName); e != nil {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if phrase, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
-		} else if label, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
+		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
 		} else {
 			rule := rules.ReadPhrase(phrase.String(), label.String())
 			if rule.IsDomainEvent() {
 				// are we in the domain?
 				domainName, eventName := rule.Short, rule.EventName()
-				if v, e := w.GetField(meta.Domain, domainName); e == nil && v.Bool() {
+				if v, e := run.GetField(meta.Domain, domainName); e == nil && v.Bool() {
 					// cheat by adding the pattern as if it were in the root domain
 					// regardless of where we are.
-					pin := cat.Modeler.Pin(domainName, w.At)
 					pb := mdl.NewPatternBuilder(eventName)
-					err = pin.AddPattern(pb.Pattern)
+					err = w.AddPattern(pb.Pattern)
 				}
 			}
 			if err == nil {
-				if e := weaveRule(w, rule, nil, op.Exe); e != nil {
+				if e := weaveRule(cat, w, run, rule, nil, op.Exe); e != nil {
 					err = errutil.Fmt("%w weaving a rule for a pattern", e)
 				}
 			}
@@ -146,14 +140,14 @@ func (op *RuleForNoun) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
-		if noun, e := safe.GetText(w, op.NounName); e != nil {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if noun, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
-		} else if noun, e := w.Pin().GetClosestNoun(noun.String()); e != nil {
+		} else if noun, e := run.GetField(meta.ObjectId, noun.String()); e != nil {
 			err = e
-		} else if phrase, e := safe.GetText(w, op.PatternName); e != nil {
+		} else if phrase, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
-		} else if label, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
+		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
 		} else if rule := rules.ReadPhrase(phrase.String(), label.String()); rule.IsDomainEvent() {
 			err = errutil.New("can't target nouns for domain events")
@@ -161,9 +155,9 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 			filter := &core.CompareText{
 				A:  core.Variable(event.Object, event.Target.String()),
 				Is: core.C_Comparison_EqualTo,
-				B:  &literal.TextValue{Value: noun},
+				B:  &literal.TextValue{Value: noun.String()},
 			}
-			if e := weaveRule(w, rule, filter, op.Exe); e != nil {
+			if e := weaveRule(cat, w, run, rule, filter, op.Exe); e != nil {
 				err = errutil.Fmt("%w weaving a rule for a noun", e)
 			}
 		}
@@ -176,20 +170,22 @@ func (op *RuleForKind) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.NounPhase, func(w *weave.Weaver) (err error) {
-		if kind, e := safe.GetText(w, op.KindName); e != nil {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if kind, e := safe.GetText(run, op.KindName); e != nil {
 			err = e
-		} else if k, e := w.Pin().GetKind(inflect.Normalize(kind.String())); e != nil {
+		} else if ks, e := run.GetField(meta.KindAncestry, kind.String()); e != nil {
 			err = e // ^ verify the kind exists
-		} else if exact, e := safe.GetOptionalBool(w, op.Exactly, false); e != nil {
+		} else if exact, e := safe.GetOptionalBool(run, op.Exactly, false); e != nil {
 			err = e
-		} else if phrase, e := safe.GetText(w, op.PatternName); e != nil {
+		} else if phrase, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
-		} else if label, e := safe.GetOptionalText(w, op.RuleName, ""); e != nil {
+		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
 		} else if rule := rules.ReadPhrase(phrase.String(), label.String()); rule.IsDomainEvent() {
 			err = errutil.New("can't target kinds for domain events")
 		} else {
+			ks := ks.Strings()
+			k := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
 			var filter rt.BoolEval
 			if exact.Bool() {
 				filter = &core.IsExactKindOf{Object: core.Variable(event.Object, event.Target.String()),
@@ -200,7 +196,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 					Kind: k,
 				}
 			}
-			if e := weaveRule(w, rule, filter, op.Exe); e != nil {
+			if e := weaveRule(cat, w, run, rule, filter, op.Exe); e != nil {
 				err = errutil.Fmt("%w weaving a rule for a kind", e)
 			}
 		}
@@ -215,10 +211,10 @@ type ruleKind struct {
 	exactly bool
 }
 
-func weaveRule(w *weave.Weaver, rule rules.RuleName, filter rt.BoolEval, exe []rt.Execute) (err error) {
-	if info, e := rule.GetRuleInfo(w); e != nil {
+func weaveRule(cat *weave.Catalog, w weaver.Weaves, run rt.Runtime, rule rules.RuleName, filter rt.BoolEval, exe []rt.Execute) (err error) {
+	if info, e := rule.GetRuleInfo(run); e != nil {
 		err = e
-	} else if k, e := w.GetKindByName(info.Name); e != nil {
+	} else if k, e := run.GetKindByName(info.Name); e != nil {
 		err = errutil.Fmt("finding base pattern %q %q %s", info.Name, info.Label, e)
 	} else if canFilterActor := rules.CanFilterActor(k); info.ExcludesPlayer && !canFilterActor {
 		rules.CanFilterActor(k)
@@ -273,8 +269,8 @@ func weaveRule(w *weave.Weaver, rule rules.RuleName, filter rt.BoolEval, exe []r
 			Stop:    info.Stop,
 			Jump:    info.Jump,
 		})
-		err = w.Catalog.Schedule(weave.NounPhase, func(w *weave.Weaver) error {
-			return w.Pin().ExtendPattern(pb.Pattern)
+		err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+			return w.ExtendPattern(pb.Pattern)
 		})
 	}
 	return
