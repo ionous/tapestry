@@ -15,26 +15,18 @@ Tapestry:
       The description of the Foyer is "You are standing in a spacious hall, splendidly decorated in red and gold,
       with glittering chandeliers overhead. The entrance from the street is to the north,
       and there are doorways south and east."
-      The street is a room. The entrance is a scenery door.
+      The entrance is a scenery door in the lobby.
+      North from the foyer is the entrance.
+      Through the entrance is the Street.
       """ # "
-    - Heading:from:via:and:otherRoom:
-        - "north"
-        - "the Foyer"
-        - "the entrance"
-        - "arriving_at"
-        - "the street"
     - Define rule:noun:do:
         - "instead of traveling"
         - "entrance"
         - - Say: "You've only just arrived and besides the weather outside is terrible."
-    - Heading:from:and:otherRoom:
-        - "east"
-        - "the Foyer"
-        - "connecting_to"
-        - "the Cloakroom"
+
     - # The Cloakroom
       Declare: """
-        The Cloakroom is a room.
+        The Cloakroom is a room. East from the Foyer is the Cloakroom.
         The Cloakroom has the description "In the Opera's better days the walls of this small room must have been lined with coat hooks.
         Now, only one remains. The exit is a door to the west."
 
@@ -47,15 +39,9 @@ Tapestry:
         Understand "hang [objects] on/onto [objects]" as storing.
         """ # "
     - # The Bar
-      Heading:from:and:otherRoom:
-        - "south"
-        - "the Foyer"
-        - "connecting_to"
-        - "the bar"
-    - Declare: """
-        The bar is a room. The bar is unlit. The scrawled message is scenery in the bar.
-        The printed name of the bar is "Foyer Bar". The description of the bar is "The bar,
-        much rougher than you'd have guessed after the opulence of the foyer to the north,
+      Declare: """
+        South from the Foyer is the Foyer Bar. The bar is unlit. The scrawled message is scenery in the bar.
+        The description of the bar is "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north,
         is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
 
         Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
@@ -141,12 +127,9 @@ Tapestry:
       Declare: """
       You are wearing a velvet cloak. The description of the cloak is "A handsome cloak made of velvet trimmed with satin.
         Its blackness is so deep that it seems to suck light from the room."
+      Understand "dark", "black", or "satin" as the cloak.
       """ # "
-    - Interpret alias:as:
-        - - "dark"
-          - "black"
-          - "satin"
-        - "cloak"
+
     - Define rule:noun:do:
         - "after taking"
         - "cloak"
