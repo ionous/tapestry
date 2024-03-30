@@ -18,7 +18,7 @@ func (c *fieldCache) store(name string, cls kindInfo) {
 // for patterns, waits to create the pattern after all fields are known
 // which ensures that "extend pattern" (to add locals) happens after define pattern (for parameters and locals)
 func (c *fieldCache) getClass(pen *Pen, field FieldInfo) (ret kindInfo, err error) {
-	if clsName := field.GetDefaultClass(); len(clsName) > 0 {
+	if clsName := field.getDefaultClass(); len(clsName) > 0 {
 		if a, ok := (*c)[clsName]; ok {
 			ret = a
 		} else if cls, e := pen.findOptionalKind(clsName); e != nil {

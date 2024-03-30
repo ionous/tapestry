@@ -25,11 +25,7 @@ func (n *nounInfo) class() classInfo {
 	}
 }
 
-// find the noun with the closest name in this scope;
-// assumes the name is lower cased, with spaces normalized.
-// skips aliases for the sake of backwards compatibility:
-// there should be a difference between "a noun is known as"
-// and "understand this word typed by the player as" -- and currently there's not.
+// prefer runtime meta.ObjectId
 func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
 	if noun, e := pen.getClosestNoun(name); e != nil {
 		err = e

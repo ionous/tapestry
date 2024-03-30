@@ -77,7 +77,7 @@ type fieldHandler func(kid, cls kindInfo, field string, aff affine.Affinity) err
 
 func (fs *fieldSet) addFields(pen *Pen, call fieldHandler) (err error) {
 	for _, f := range fs.fields {
-		if e := f.Validate(); e != nil {
+		if e := f.validate(); e != nil {
 			err = e
 		} else if cls, e := fs.cache.getClass(pen, f); e != nil {
 			err = e
@@ -106,8 +106,8 @@ func (fs *fieldSet) writeDefaultTraits(pen *Pen) (err error) {
 	kind := fs.kind
 	if isObject := strings.HasSuffix(kind.fullpath(), pen.getPath(kindsOf.Kind)); isObject {
 		for _, field := range fs.fields {
-			if field.IsAspectLike() {
-				aspect := fs.cache[field.GetDefaultClass()]
+			if field.isAspectLike() {
+				aspect := fs.cache[field.getDefaultClass()]
 				if strings.HasSuffix(aspect.fullpath(), pen.getPath(kindsOf.Aspect)) {
 					if defaultTrait, e := pen.findDefaultTrait(aspect.class()); e != nil {
 						err = e
