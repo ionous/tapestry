@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -19,9 +18,8 @@ type Aliases struct {
 }
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		n := inflect.Normalize(op.ShortName)
-		if n, e := run.GetField(meta.ObjectId, n); e != nil {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if n, e := run.GetField(meta.ObjectId, op.ShortName); e != nil {
 			err = e
 		} else {
 			n := n.String()
@@ -44,11 +42,18 @@ type Aspects struct {
 }
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := w.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
 			err = e
 		} else {
-			err = w.AddAspectTraits(op.Aspects, op.Traits)
+			err = cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+				if e := w.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
+					err = e
+				} else {
+					err = w.AddAspectTraits(op.Aspects, op.Traits)
+				}
+				return
+			})
 		}
 		return
 	})
@@ -94,11 +99,16 @@ type Kinds struct {
 }
 
 func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if e := w.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
-		} else if ps := op.Contain; len(ps) > 0 {
-			err = w.AddKindFields(op.Kind, reduceFields(ps))
+		} else {
+			err = cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+				if ps := op.Contain; len(ps) > 0 {
+					err = w.AddKindFields(op.Kind, reduceFields(ps))
+				}
+				return
+			})
 		}
 		return
 	})
@@ -126,7 +136,7 @@ type Opposites struct {
 }
 
 func (op *Opposites) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddOpposite(op.Opposite, op.Word)
 	})
 }
@@ -145,7 +155,7 @@ type Patterns struct {
 }
 
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		kb.AddLocals(reduceFields(op.Locals))
 		kb.AddParams(reduceFields(op.Params))
@@ -165,7 +175,7 @@ type Plurals struct {
 }
 
 func (op *Plurals) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddPlural(op.Plural, op.Singular)
 	})
 }
@@ -177,7 +187,7 @@ type Relations struct {
 }
 
 func (op *Relations) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		switch c := op.Cardinality.(type) {
 		case *OneOne:
 			err = w.AddRelation(op.Rel, c.Kind, c.OtherKind, false, false)
@@ -200,7 +210,7 @@ type Relatives struct {
 }
 
 func (op *Relatives) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) error {
+	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) error {
 		return w.AddNounPair(op.Rel, op.Noun, op.OtherNoun)
 	})
 }
@@ -234,7 +244,7 @@ type Values struct {
 }
 
 func (op *Values) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if n, e := run.GetField(meta.ObjectId, op.Noun); e != nil {
 			err = e
 		} else {

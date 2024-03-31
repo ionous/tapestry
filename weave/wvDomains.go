@@ -117,8 +117,8 @@ func (d *Domain) runPhase(z weaver.Phase) (err error) {
 			if keep, e := d.runSchedule(phase, &lastMissing); e != nil {
 				err = e
 				break
-			} else if add := len(d.scheduling); lastCnt == keep && add == 0 {
-				err = fmt.Errorf("couldn't finish phase %s %s", z, lastMissing)
+			} else if add := len(d.scheduling[z]); lastCnt == keep && add == 0 {
+				err = fmt.Errorf("%s; couldn't finish phase %s", lastMissing, z)
 				break
 			} else {
 				phase = phase[:keep]
@@ -138,7 +138,6 @@ func (d *Domain) runPhase(z weaver.Phase) (err error) {
 func (d *Domain) runSchedule(phase []memento, lastMissing *error) (ret int, err error) {
 	var keep int
 	for _, next := range phase {
-
 		pen := d.cat.Modeler.Pin(d.name, next.at)
 		w := localWeaver{d, pen}
 		run := d.cat.GetRuntime()
