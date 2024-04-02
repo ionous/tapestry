@@ -35,6 +35,7 @@ func (op *DefineAspect) Weave(cat *weave.Catalog) error {
 			if e := w.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
 				err = e
 			} else {
+				// we could wait till AncestryPhase, but now is fine too.
 				err = w.AddAspectTraits(aspect, traits)
 			}
 		}

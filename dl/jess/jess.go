@@ -17,6 +17,7 @@ type Query interface {
 
 	// find the name of the kind which best matches the passed span.
 	// return the number of words that matched ( if any. )
+	// optionally, return its base kind.
 	FindKind(match.Span, *kindsOf.Kinds) (string, int)
 
 	// find the name of the trait which best matches the passed span.

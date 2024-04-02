@@ -25,7 +25,7 @@ func (op *CalledName) GetNormalizedName() string {
 	return op.Name.GetNormalizedName()
 }
 
-// runs in the PropertyPhase phase
+// runs in the PropertyPhase
 func (op *KindsHaveProperties) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }

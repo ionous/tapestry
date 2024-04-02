@@ -101,7 +101,8 @@ func (fs *fieldSet) addFields(pen *Pen, call fieldHandler) (err error) {
 	return
 }
 
-// give aspect fields a provisional default
+// when adding fields of type aspect to a kind,
+// set a provisional default trait
 func (fs *fieldSet) writeDefaultTraits(pen *Pen) (err error) {
 	kind := fs.kind
 	if isObject := strings.HasSuffix(kind.fullpath(), pen.getPath(kindsOf.Kind)); isObject {

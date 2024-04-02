@@ -10,10 +10,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// runs in the PropertyPhase phase
+// runs in the PropertyPhase; relies on the named kind existing.
 func (op *KindsAreEither) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }
+
 func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kind.Match(q, &next) &&

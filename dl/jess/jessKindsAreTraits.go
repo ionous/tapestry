@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// runs in the PropertyPhase phase
+// runs in the PropertyPhase
 func (op *KindsAreTraits) Phase() weaver.Phase {
 	return weaver.PropertyPhase
 }

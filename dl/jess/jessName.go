@@ -11,6 +11,8 @@ func (op *Name) GetNormalizedName() string {
 	return inflect.Normalize(op.Matched.String())
 }
 
+// names are often potential nouns;
+// this helper generates them as such.
 func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
 	if n, e := op.buildNoun(q, w, props); e != nil {
 		err = e
