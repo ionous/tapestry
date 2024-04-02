@@ -21,6 +21,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdplay"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdserve"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdweave"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdxform"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
 	"github.com/ionous/errutil"
 )
@@ -183,5 +184,6 @@ func init() {
 		cmdplay.CmdPlay,
 		cmdserve.CmdServe,
 		cmdweave.CmdWeave,
+		cmdxform.CmdXform,
 	}
 }
