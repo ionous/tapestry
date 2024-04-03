@@ -28,10 +28,6 @@ func (s Span) String() string {
 	return b.String()
 }
 
-func (s Span) NumWords() int {
-	return len(s)
-}
-
 func HasPrefix(s, prefix []Word) (okay bool) {
 	// a prefix must be the same as or shorter than us
 	if len(prefix) <= len(s) {
@@ -46,6 +42,8 @@ func HasPrefix(s, prefix []Word) (okay bool) {
 	return
 }
 
+// search for a span in a list of spans;
+// return the index of the span that matched.
 func FindExactMatch(s Span, spans []Span) (ret int) {
 	ret = -1 // provisionally
 	for i, el := range spans {
