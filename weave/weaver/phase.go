@@ -11,7 +11,6 @@ const (
 	LanguagePhase         // definitions of words
 	AncestryPhase         // kinds and their derivation
 	PropertyPhase         // the members of kinds
-	MappingPhase          // match phrases that might otherwise treat directions as names.
 	NounPhase             // generate explicit nouns
 	VerbPhase             // apply existing verbs
 	ConnectionPhase       // pairings and map connections

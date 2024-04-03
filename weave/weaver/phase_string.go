@@ -12,19 +12,18 @@ func _() {
 	_ = x[LanguagePhase-2]
 	_ = x[AncestryPhase-3]
 	_ = x[PropertyPhase-4]
-	_ = x[MappingPhase-5]
-	_ = x[NounPhase-6]
-	_ = x[VerbPhase-7]
-	_ = x[ConnectionPhase-8]
-	_ = x[FallbackPhase-9]
-	_ = x[ValuePhase-10]
-	_ = x[NextPhase-11]
-	_ = x[NumPhases-12]
+	_ = x[NounPhase-5]
+	_ = x[VerbPhase-6]
+	_ = x[ConnectionPhase-7]
+	_ = x[FallbackPhase-8]
+	_ = x[ValuePhase-9]
+	_ = x[NextPhase-10]
+	_ = x[NumPhases-11]
 }
 
-const _Phase_name = "DependencyPhaseLanguagePhaseAncestryPhasePropertyPhaseMappingPhaseNounPhaseVerbPhaseConnectionPhaseFallbackPhaseValuePhaseNextPhaseNumPhases"
+const _Phase_name = "DependencyPhaseLanguagePhaseAncestryPhasePropertyPhaseNounPhaseVerbPhaseConnectionPhaseFallbackPhaseValuePhaseNextPhaseNumPhases"
 
-var _Phase_index = [...]uint8{0, 15, 28, 41, 54, 66, 75, 84, 99, 112, 122, 131, 140}
+var _Phase_index = [...]uint8{0, 15, 28, 41, 54, 63, 72, 87, 100, 110, 119, 128}
 
 func (i Phase) String() string {
 	i -= 1
