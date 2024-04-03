@@ -4,6 +4,11 @@ const (
 	// only allow simple names when matching.
 	PlainNameMatching = (1 << iota)
 	ExcludeNounMatching
+	// this limits matching to kinds which can be instanced
+	// so that names which match other kinds can still become nouns
+	// for instance, there can be a pattern called "on" and a verb called "on".
+	MatchKindsOfKinds
+	MatchKindsOfAspects
 	// "called" checks for when the indefinite article
 	// is *not* an indefinite article (a/an), and records it.
 	// printing references to the noun will the specified article.
@@ -43,6 +48,16 @@ func matchNouns(q Query) bool {
 	flags := q.GetContext()
 	return (flags&PlainNameMatching) == 0 &&
 		(flags&ExcludeNounMatching) == 0
+}
+
+func matchKindsOfKinds(q Query) bool {
+	flags := q.GetContext()
+	return (flags & MatchKindsOfKinds) != 0
+}
+
+func matchKindsOfAspects(q Query) bool {
+	flags := q.GetContext()
+	return (flags & MatchKindsOfAspects) != 0
 }
 
 func useIndefinite(q Query) bool {

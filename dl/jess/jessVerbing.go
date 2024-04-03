@@ -35,6 +35,7 @@ func (op *VerbPhrase) Match(q Query, input *InputState) (okay bool) {
 
 // -------------------------------------------------------------------------
 // VerbNamesAreNames
+// *In* the lobby is a supporter.
 // -------------------------------------------------------------------------
 
 // runs in the NounPhase phase
@@ -59,7 +60,7 @@ func (op *VerbNamesAreNames) Generate(ctx Context) error {
 }
 
 func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+	if next, q := *input, AddContext(q, MatchKindsOfKinds); //
 	op.Verb.Match(q, &next) &&
 		op.Names.Match(q, &next) &&
 		op.Are.Match(q, &next) &&
@@ -71,8 +72,9 @@ func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
 
 // -------------------------------------------------------------------------
 // NamesVerbNames
+// A container called the trunk is *in* the lobby.
 // -------------------------------------------------------------------------
-// runs in the NounPhase phase
+// matches in the NounPhase phase
 func (op *NamesVerbNames) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
@@ -88,13 +90,18 @@ func (op *NamesVerbNames) GetAdjectives() (_ Adjectives) {
 func (op *NamesVerbNames) GetVerb() string {
 	return op.Verb.Text
 }
-func (op *NamesVerbNames) Generate(ctx Context) error {
-	return generateVerbPhrase(ctx, op)
+func (op *NamesVerbNames) Generate(ctx Context) (err error) {
+	if op.Names.HasAnonymousKind() {
+		err = errors.New("can't start phrase with an anonymous leading kind.")
+	} else {
+		err = generateVerbPhrase(ctx, op)
+	}
+	return
 }
 func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+	if next, q := *input, AddContext(q, MatchKindsOfKinds); //
+	// like NamesAreLikeVerbs, this limits lhs matching to kinds which can be instanced
 	op.Names.Match(q, &next) &&
-		!op.Names.HasAnonymousKind() &&
 		op.Are.Match(q, &next) &&
 		op.Verb.Match(q, &next) &&
 		op.OtherNames.Match(q, &next) {
@@ -105,8 +112,11 @@ func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
 
 // -------------------------------------------------------------------------
 // NamesAreLikeVerbs
+// The bottle is closed [*in* the library.]
+// the adjectives ( traits and kinds ) are required;
+// the verb and other noun are optional.
 // -------------------------------------------------------------------------
-// runs in the NounPhase phase
+// matches in the NounPhase phase
 func (op *NamesAreLikeVerbs) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
@@ -128,13 +138,17 @@ func (op *NamesAreLikeVerbs) GetVerb() (ret string) {
 	}
 	return
 }
-func (op *NamesAreLikeVerbs) Generate(ctx Context) error {
-	return generateVerbPhrase(ctx, op)
+func (op *NamesAreLikeVerbs) Generate(ctx Context) (err error) {
+	if op.Names.HasAnonymousKind() {
+		err = errors.New("can't start phrase with an anonymous leading kind.")
+	} else {
+		err = generateVerbPhrase(ctx, op)
+	}
+	return
 }
 func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
+	if next, q := *input, AddContext(q, MatchKindsOfKinds); //
 	op.Names.Match(q, &next) &&
-		!op.Names.HasAnonymousKind() &&
 		op.Are.Match(q, &next) &&
 		op.Adjectives.Match(q, &next) {
 		Optional(q, &next, &op.VerbPhrase)

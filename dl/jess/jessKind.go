@@ -30,9 +30,20 @@ func (op *Kind) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	var k kindsOf.Kinds
-	if m, width := q.FindKind(input.Words(), &k); width > 0 {
+	if m, width := q.FindKind(input.Words(), &k); width > 0 && filterKind(q, k) {
 		op.ActualKind = ActualKind{m, k}
 		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+	}
+	return
+}
+
+func filterKind(q Query, k kindsOf.Kinds) (okay bool) {
+	if matchKindsOfAspects(q) {
+		okay = k == kindsOf.Aspect
+	} else if matchKindsOfKinds(q) {
+		okay = k == kindsOf.Kind
+	} else {
+		okay = true
 	}
 	return
 }
