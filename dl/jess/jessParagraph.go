@@ -48,8 +48,12 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 	}
 	// no errors? update the unmatched list
 	if err == nil {
-		p.unmatched = p.unmatched[:retry]
-		okay = true
+		if retry > 0 {
+			p.unmatched = p.unmatched[:retry]
+		} else {
+			p.unmatched = nil
+			okay = true
+		}
 	}
 	return
 }
