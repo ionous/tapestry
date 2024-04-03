@@ -180,6 +180,7 @@ func (cat *Catalog) DomainEnd() (err error) {
 	return
 }
 
+// the passed function will keep getting called until it returns true or errors
 func (cat *Catalog) Step(cb StepFunction) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")

@@ -94,12 +94,25 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 }
 
 func (d *Domain) schedule(at string, when weaver.Phase, what ScheduledCallback) (err error) {
-	if d.currPhase < 0 {
-		// past phase:
+	if z := d.currPhase; z < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
-	} else if d.currPhase <= when {
-		// current or future phase:
-		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
+	} else if z > when {
+		err = errutil.Fmt("domain %q processing %s phase %s already passed",
+			d.name, z, when)
+	} else {
+		m := memento{what, at}
+		if z < when {
+			d.scheduling[when] = append(d.scheduling[when], m)
+		} else {
+			// if its the same phase, try to run immediately;
+			// this is important for jess which matches and then immediately schedules:
+			// that way one sentence can match dependent on the results of the previous sentence.
+			if e := d.runOne(m); e != nil && !errors.Is(e, mdl.Missing) {
+				err = e
+			} else if e != nil {
+				d.scheduling[z] = append(d.scheduling[z], m)
+			}
+		}
 	}
 	return
 }
@@ -138,10 +151,7 @@ func (d *Domain) runPhase(z weaver.Phase) (err error) {
 func (d *Domain) runSchedule(phase []memento, lastMissing *error) (ret int, err error) {
 	var keep int
 	for _, next := range phase {
-		pen := d.cat.Modeler.Pin(d.name, next.at)
-		w := localWeaver{d, pen}
-		run := d.cat.GetRuntime()
-		if e := next.cb(w, run); e != nil && !errors.Is(e, mdl.Missing) {
+		if e := d.runOne(next); e != nil && !errors.Is(e, mdl.Missing) {
 			err = e
 			break
 		} else if e != nil {
@@ -154,6 +164,13 @@ func (d *Domain) runSchedule(phase []memento, lastMissing *error) (ret int, err 
 		ret = keep
 	}
 	return
+}
+
+func (d *Domain) runOne(m memento) error {
+	pen := d.cat.Modeler.Pin(d.name, m.at)
+	w := localWeaver{d, pen}
+	run := d.cat.GetRuntime()
+	return m.cb(w, run)
 }
 
 // primarily exists to simplify jess.... hrmmm...
