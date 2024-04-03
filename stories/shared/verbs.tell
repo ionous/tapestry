@@ -8,7 +8,7 @@ Tapestry:
       - - Set:value:
             - "@result"
             - FromText: "@verb"
-  - # print contain or support depending on the kind of container
+  - # Print the word "contain" or "support" depending on the kind of container.
     Define pattern:requires:provides:do:
       - "Contain"
       - - Text:kind:
@@ -22,7 +22,8 @@ Tapestry:
             - - Print: "contain"
             - Finally do:
                 - Print: "support"
-  - # 
+  - # Print the word "in" or "on" depending on whether the passed noun is a container or not.
+    # For example: "In/on the couch is yesterday's stale popcorn."
     Define pattern:requires:provides:do:
       - "On"
       - - Text:kind:
@@ -36,7 +37,8 @@ Tapestry:
             - - Print: "in"
             - Finally do:
                 - Print: "on"
-  - # 
+  - # Print the word "out" or "off" depending on whether the passed noun is a container or not.
+    # For example: "You would have to take that off/out first."
     Define pattern:requires:provides:do:
       - "Off"
       - - Text:kind:
@@ -50,7 +52,7 @@ Tapestry:
             - - Print: "out"
             - Finally do:
                 - Print: "off"
-  - # print "is" or "are" depending on the plurality of the noun, and (optionally) the length of the passed list of names.
+  - # Print "is" or "are" depending on the plurality of the noun, and (optionally) the length of the passed list of names.
     Define pattern:requires:provides:do:
       - "Are"
       - - Text:kind:
