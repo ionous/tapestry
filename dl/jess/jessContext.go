@@ -4,8 +4,11 @@ const (
 	// only allow simple names when matching.
 	PlainNameMatching = (1 << iota)
 	ExcludeNounMatching
-	//
+	// "called" checks for when the indefinite article
+	// is *not* an indefinite article (a/an), and records it.
+	// printing references to the noun will the specified article.
 	CheckIndefiniteArticles
+	// log each match automatically; used for testing
 	LogMatches
 )
 
