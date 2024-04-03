@@ -1,10 +1,17 @@
 Tapestry:
   - Declare: """
-    Verbs are a kind of kind. Verbs can be reversed.
-    Carrying is a verb. The subject of carrying is actors. The object of carrying is things. The relation of carrying is whereabouts. The implication of carrying is "not worn."
-    Carried by is a verb. The subject of carried by is actors. The object of carried by is things. The relation of carried by is whereabouts. The implication of carried by is "not worn." Carried by is reversed.
-    On is a verb. The subject of on is actors. The object of on is things. The relation of on is whereabouts. The implication of on is "not worn." On is reversed.
-    In is a verb. The subject of in is containers. The alternate subject of in is rooms. The object of in is things. The relation of in is whereabouts. The implication of in is "not worn." In is reversed.
-    Wearing is a verb. The subject of wearing is actors. The object of wearing is things. The relation of wearing is whereabouts. The implication of wearing is "worn."
-    Supporting is a verb. The subject of supporting is supporters. The object of supporting is things. The relation of supporting is whereabouts. The implication of supporting is "not worn." Supporting is reversed.
+    Verbs are a kind of kind.
+    Verbs have some text called a subject.
+    Verbs have some text called an alternate subject.
+    Verbs have some text called an object.
+    Verbs have some text called a relation.
+    Verbs have some text called an implication.
+
+    Verbs can be reversed.
+    Carrying is a verb. The subject of carrying is "actors." The object of carrying is "things." The relation of carrying is "whereabouts." The implication of carrying is "not worn."
+    Carried by is a verb. The subject of carried by is "actors." The object of carried by is "things." The relation of carried by is "whereabouts." The implication of carried by is "not worn." Carried by is reversed.
+    On is a verb. The subject of on is "actors." The object of on is "things." The relation of on is "whereabouts." The implication of on is "not worn." On is reversed.
+    In is a verb. The subject of in is "containers." The alternate subject of in is "rooms." The object of in is "things." The relation of in is "whereabouts." The implication of in is "not worn." In is reversed.
+    Wearing is a verb. The subject of wearing is "actors." The object of wearing is "things." The relation of wearing is "whereabouts." The implication of wearing is "worn."
+    Supporting is a verb. The subject of supporting is "supporters." The object of supporting is "things." The relation of supporting is "whereabouts." The implication of supporting is "not worn." Supporting is reversed.
     """ # "-
