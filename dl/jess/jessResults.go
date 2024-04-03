@@ -1,6 +1,8 @@
 package jess
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
@@ -12,6 +14,9 @@ type DesiredNoun struct {
 	Aliases []string
 	Traits  []string
 	Values  []DesiredValue
+	//
+	ArticleTrait      string
+	IndefiniteArticle string
 }
 
 type NounProperties struct {
@@ -35,13 +40,14 @@ func (n *DesiredNoun) appendValue(field string, assign rt.Assignment) {
 func (n *DesiredNoun) appendArticle(a *Article) {
 	if a == nil {
 		// the lack of a recognized article makes something proper-named.
-		n.Traits = append([]string{ProperNameTrait}, n.Traits...)
+		// if proper named, it's neither indefinite nor plural
+		n.ArticleTrait = ProperNameTrait
 	} else {
 		if a.Flags.Plural {
-			n.Traits = append([]string{PluralNamedTrait}, n.Traits...)
+			n.ArticleTrait = PluralNamedTrait
 		}
 		if a.Flags.Indefinite {
-			n.appendValue(IndefiniteArticle, text(a.Text, ""))
+			n.IndefiniteArticle = a.Text
 		}
 	}
 }
@@ -51,10 +57,29 @@ func (n *DesiredNoun) appendArticle(a *Article) {
 func (n DesiredNoun) writeNounValues(w weaver.Weaves) (err error) {
 	if e := n.applyAliases(w); e != nil {
 		err = e
+	} else if e := n.applyArticleTrait(w); e != nil && !errors.Is(e, weaver.Missing) {
+		err = e // article traits are considered optional because not all kinds have them.
 	} else if e := n.applyTraits(w); e != nil {
+		err = e
+	} else if e := n.applyArticleValue(w); e != nil && !errors.Is(e, weaver.Missing) {
 		err = e
 	} else if e := n.applyValues(w); e != nil {
 		err = e
+	}
+	return
+}
+
+func (n DesiredNoun) applyArticleTrait(w weaver.Weaves) (err error) {
+	if t := n.ArticleTrait; len(t) > 0 {
+		err = w.AddNounTrait(n.Noun, t)
+	}
+	return
+}
+
+// the value is split from the trait to match tests
+func (n DesiredNoun) applyArticleValue(w weaver.Weaves) (err error) {
+	if t := n.IndefiniteArticle; len(t) > 0 {
+		err = w.AddNounValue(n.Noun, IndefiniteArticle, text(t, ""))
 	}
 	return
 }
