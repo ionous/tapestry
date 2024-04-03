@@ -62,6 +62,7 @@ func (op *MatchingNumber) Assignment() rt.Assignment {
 	return number(op.Number, "")
 }
 
+// matches a natural number in words, or a literal natural number.
 func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 	if ws := input.Words(); len(ws) > 0 {
 		word := ws[0].String()

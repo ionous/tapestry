@@ -29,7 +29,7 @@ func (op *Property) matchProperty(q Query, input *InputState) (okay bool) {
 }
 
 // --------------------------------------------------------------
-// starts in the noun phase, but mostly runs in the fallback and value phase
+// matches in the noun phase, but mostly runs in the fallback and value phase
 func (op *PropertyNounValue) Phase() weaver.Phase {
 	return weaver.NounPhase
 }
@@ -61,7 +61,7 @@ func (op *PropertyNounValue) Generate(ctx Context) error {
 }
 
 // --------------------------------------------------------------
-// like PropertyNounValue, starts in the noun phase,
+// like PropertyNounValue, matches in the noun phase,
 // but mostly runs in the fallback and value phase
 func (op *NounPropertyValue) Phase() weaver.Phase {
 	return weaver.NounPhase
@@ -110,8 +110,8 @@ type nounValuePhrase interface {
 }
 
 func genNounValuePhrase(ctx Context, phrase nounValuePhrase) (err error) {
-	n, p, v := phrase.GetNamedNoun(), phrase.GetProperty(), phrase.GetValue()
 	return ctx.Schedule(phrase.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
+		n, p, v := phrase.GetNamedNoun(), phrase.GetProperty(), phrase.GetValue()
 		if ns, e := n.BuildNouns(ctx, w, run, NounProperties{}); e != nil {
 			err = e
 		} else if e := tryAsThings(ctx, ns); e != nil {
