@@ -330,11 +330,13 @@ Spec:with group:
           Term:optional:
           - "traits"
           - true
-        - # inform (weirdly) allows multiple kinds:
+        - # inform (weirdly) allows multiple kinds on the rhs:
           # `A box is a kind of container and things.`
-          # but not if traits are specified, suggesting a switch there.
+          # but not if traits are specified, suggesting a switch there;
+          # possibly to detect and reject `A box is a kind of closed and openable container.`
+          # which it wants written as `A box is a kind of closed openable container.`
           # this doesnt switch to special traits, and doesnt allow multiple kinds.
-          Term: "kind"
+          Term: "name"
 
     - # assigns default traits to a kind.
       # kinds:objects are "usually" traits

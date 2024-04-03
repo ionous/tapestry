@@ -926,7 +926,7 @@ type KindsOf struct {
 	Are     Are
 	KindsOf Words
 	Traits  *Traits
-	Kind    Kind
+	Name    Name
 	Markup  map[string]any
 }
 
@@ -2220,8 +2220,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11010766076935860857: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType:calledName: */
 	13822756587399879234: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType: */
 	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
-	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
-	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
+	11715331887122574628: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:name: */
+	17568620593785114477: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:name: */
 	1268488188857917463:  (*Linking)(nil),              /* Linking */
 	5424212330747857864:  (*Linking)(nil),              /* Linking kindCalled: */
 	6446505275065105379:  (*Linking)(nil),              /* Linking kindCalled:name: */
@@ -2896,12 +2896,12 @@ func init() {
 			},
 			Type: &Zt_Traits,
 		}, {
-			Name:  "kind",
-			Label: "kind",
+			Name:  "name",
+			Label: "name",
 			Markup: map[string]any{
-				"comment": []interface{}{"inform (weirdly) allows multiple kinds:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there.", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
+				"comment": []interface{}{"inform (weirdly) allows multiple kinds on the rhs:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there;", "possibly to detect and reject `A box is a kind of closed and openable container.`", "which it wants written as `A box is a kind of closed openable container.`", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
 			},
-			Type: &Zt_Kind,
+			Type: &Zt_Name,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"names are \"a kind of\"/\"kinds of\" traits kind:any.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform `The animals called kittens are a kind of things.` is legal."},
