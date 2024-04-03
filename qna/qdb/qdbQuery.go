@@ -4,6 +4,7 @@ package qdb
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
@@ -146,12 +147,18 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 	return
 }
 
-// returns the ancestor hierarchy, including the kind itself.
+// returns the ancestor hierarchy, including the kind itself;
+// empty if the kind doesnt exist, errors on a db error.
 // accepts both the plural and singular kind.
-// in the db, more root is to the right; in the returned paths its reversed.
+// in the db, more root is to the right; in the returned list it's reversed.
 // ex. for "door" the list might be: kinds, objects, things, props, openers, doors.
-func (q *Query) KindOfAncestors(kind string) ([]string, error) {
-	return scanStrings(q.kindOfAncestors, kind)
+func (q *Query) KindOfAncestors(kind string) (ret []string, err error) {
+	if ks, e := scanStrings(q.kindOfAncestors, kind); e != nil && !errors.Is(e, sql.ErrNoRows) {
+		err = e
+	} else if e == nil {
+		ret = ks
+	}
+	return
 }
 
 func (q *Query) KindValues(id string) (ret []query.ValueData, err error) {
