@@ -25,7 +25,7 @@ func (op *DefinePattern) Execute(macro rt.Runtime) error {
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
@@ -87,13 +87,14 @@ func (op *RuleProvides) Execute(macro rt.Runtime) error {
 }
 
 func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else if ks, e := run.GetField(meta.KindAncestry, act.String()); e != nil {
 			err = e // ^ verify the kind exists
+		} else if ks := ks.Strings(); len(ks) == 0 {
+			err = fmt.Errorf("%w kind %s", weaver.Missing, act)
 		} else {
-			ks := ks.Strings()
 			act := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
 			pb := mdl.NewPatternSubtype(act, kindsOf.Action.String())
 			pb.AddLocals(reduceFields(run, op.Provides))
@@ -175,6 +176,8 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if ks, e := run.GetField(meta.KindAncestry, kind.String()); e != nil {
 			err = e // ^ verify the kind exists
+		} else if ks := ks.Strings(); len(ks) == 0 {
+			err = fmt.Errorf("%w kind %s", weaver.Missing, kind)
 		} else if exact, e := safe.GetOptionalBool(run, op.Exactly, false); e != nil {
 			err = e
 		} else if phrase, e := safe.GetText(run, op.PatternName); e != nil {
@@ -184,7 +187,6 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 		} else if rule := rules.ReadPhrase(phrase.String(), label.String()); rule.IsDomainEvent() {
 			err = errutil.New("can't target kinds for domain events")
 		} else {
-			ks := ks.Strings()
 			k := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
 			var filter rt.BoolEval
 			if exact.Bool() {

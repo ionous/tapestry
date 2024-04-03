@@ -46,14 +46,8 @@ func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
 		if e := w.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
 			err = e
 		} else {
-			err = cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-				if e := w.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
-					err = e
-				} else {
-					err = w.AddAspectTraits(op.Aspects, op.Traits)
-				}
-				return
-			})
+			// no reason not to add the traits immediately since we have them already
+			err = w.AddAspectTraits(op.Aspects, op.Traits)
 		}
 		return
 	})
