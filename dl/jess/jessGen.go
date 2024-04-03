@@ -62,13 +62,18 @@ func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
 // later, a pass ensures that all placeholder nouns have been given kinds;
 // or it upgrades them to things.
 // to simplify the code, this happens even if the kind might possibly be known.
-func ensureNoun(q Query, w weaver.Weaves, name match.Span) (ret string, created bool, err error) {
+func ensureNoun(q Query, w weaver.Weaves, name match.Span, props *NounProperties) (ret string, created bool, err error) {
 	if noun, width := q.FindNoun(name, ""); width > 0 {
 		ret = noun
 	} else {
 		name := name.String()
 		noun := inflect.Normalize(name)
-		if e := w.AddNounKind(noun, Objects); e != nil {
+		defaultKind := Objects
+		if ks := props.Kinds; len(ks) > 0 {
+			defaultKind = ks[0]
+			props.Kinds = ks[1:]
+		}
+		if e := w.AddNounKind(noun, defaultKind); e != nil {
 			err = e // if duplicate, FindNoun should have triggered; so return all errors
 		} else if e := registerNames(w, noun, name); e != nil {
 			err = e

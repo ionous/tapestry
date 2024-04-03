@@ -152,8 +152,8 @@ var Phrases = []Phrase{
 			"AddNounName:", "kitchen", "kitchen",
 			"AddNounName:", "passageway", "passageway",
 			"AddNounKind:", "passageway", "doors",
+			"AddNounKind:", "basement", "rooms", // it can immediately determine this, so kind is before name.
 			"AddNounName:", "basement", "basement",
-			"AddNounKind:", "basement", "rooms",
 			"AddNounPair:", "whereabouts", "basement", "passageway",
 			"AddNounKind:", "kitchen", "rooms", // kitchen defaults to room because its mentioned in a directional phrase
 			// movement via the existing door
@@ -246,30 +246,30 @@ var Phrases = []Phrase{
 	{
 		test: `Through the long slide is nowhere.`,
 		result: []string{
+			"AddNounKind:", "long slide", "doors", // explicitly a door
 			"AddNounName:", "long slide", "long slide",
-			"AddNounKind:", "long slide", "doors",
 			"AddNounValue:", "long slide", "destination", textKind("", "rooms"),
 		},
 	},
 	{
 		test: `Through the blue door is the Flat Landing.`,
 		result: []string{
-			"AddNounName:", "flat landing", "Flat Landing",
 			"AddNounKind:", "flat landing", "rooms",
-			"AddNounName:", "blue door", "blue door",
+			"AddNounName:", "flat landing", "Flat Landing",
 			"AddNounKind:", "blue door", "doors",
+			"AddNounName:", "blue door", "blue door",
 			"AddNounValue:", "blue door", "destination", textKind("flat landing", "rooms"),
 		},
 	},
 	{
 		test: `Through the gate and the hatch is a dark room called An End.`,
 		result: []string{
-			"AddNounName:", "an end", "An End",
 			"AddNounKind:", "an end", "rooms",
-			"AddNounName:", "gate", "gate",
+			"AddNounName:", "an end", "An End",
 			"AddNounKind:", "gate", "doors",
-			"AddNounName:", "hatch", "hatch",
+			"AddNounName:", "gate", "gate",
 			"AddNounKind:", "hatch", "doors",
+			"AddNounName:", "hatch", "hatch",
 			"AddNounTrait:", "an end", "proper named",
 			"AddNounTrait:", "an end", "dark",
 			"AddNounValue:", "gate", "destination", textKind("an end", "rooms"),
@@ -302,8 +302,8 @@ var Phrases = []Phrase{
 		// as per inform: the nouns can be defined after the understanding references them.
 		test: `Understand "donut" as the doughnut. The doughnut is a thing.`,
 		result: []string{
-			"AddNounName:", "doughnut", "doughnut",
 			"AddNounKind:", "doughnut", "things",
+			"AddNounName:", "doughnut", "doughnut",
 			"AddNounAlias:", "doughnut", "donut",
 		},
 	},
@@ -653,11 +653,11 @@ var Phrases = []Phrase{
 		// would create a noun called "the trunk and the box"
 		test: `The thing called the stake is on the supporter called the altar.`,
 		result: []string{
-			"AddNounName:", "stake", "stake",
 			"AddNounKind:", "stake", "things",
+			"AddNounName:", "stake", "stake",
 			//
-			"AddNounName:", "altar", "altar",
 			"AddNounKind:", "altar", "supporters",
+			"AddNounName:", "altar", "altar",
 			//
 			"AddNounPair:", "whereabouts", "altar", "stake",
 			//
@@ -673,8 +673,8 @@ var Phrases = []Phrase{
 		// those expect only expect one set of nouns; these have two.
 		test: `A closed openable container called the trunk is in the lobby.`,
 		result: []string{
-			"AddNounName:", "trunk", "trunk",
 			"AddNounKind:", "trunk", "containers",
+			"AddNounName:", "trunk", "trunk",
 			//
 			"AddNounName:", "lobby", "lobby",
 			"AddNounPair:", "whereabouts", "lobby", "trunk",
@@ -766,8 +766,8 @@ var Phrases = []Phrase{
 		// multiple trailing properties, using the kind as a property.
 		test: `The bottle is a transparent, open, container.`,
 		result: []string{
-			"AddNounName:", "bottle", "bottle",
 			"AddNounKind:", "bottle", "containers",
+			"AddNounName:", "bottle", "bottle",
 			"AddNounTrait:", "bottle", "transparent",
 			"AddNounTrait:", "bottle", "open",
 		},
@@ -776,8 +776,8 @@ var Phrases = []Phrase{
 		// multiple trailing properties without commas.
 		test: `The bottle is a transparent open container.`,
 		result: []string{
-			"AddNounName:", "bottle", "bottle",
 			"AddNounKind:", "bottle", "containers",
+			"AddNounName:", "bottle", "bottle",
 			"AddNounTrait:", "bottle", "transparent",
 			"AddNounTrait:", "bottle", "open",
 		},
@@ -786,11 +786,11 @@ var Phrases = []Phrase{
 		// multiple nouns of different kinds
 		test: `The box and the top are closed containers.`,
 		result: []string{
-			"AddNounName:", "box", "box",
 			"AddNounKind:", "box", "containers",
+			"AddNounName:", "box", "box",
 			//
-			"AddNounName:", "top", "top",
 			"AddNounKind:", "top", "containers",
+			"AddNounName:", "top", "top",
 			//
 			"AddNounTrait:", "box", "closed",
 			"AddNounTrait:", "top", "closed",
@@ -801,8 +801,8 @@ var Phrases = []Phrase{
 		// fix: inform specifically errors on commas "the kitchen contains a thing called the one, two."
 		test: `The container called the sarcophagus is open.`,
 		result: []string{
-			"AddNounName:", "sarcophagus", "sarcophagus",
 			"AddNounKind:", "sarcophagus", "containers",
+			"AddNounName:", "sarcophagus", "sarcophagus",
 			"AddNounTrait:", "sarcophagus", "open",
 			"AddNounValue:", "sarcophagus", "indefinite article", text("the"),
 		},
@@ -825,8 +825,8 @@ var Phrases = []Phrase{
 		// it requires: The closed container called the coffin is in the antechamber.
 		test: `The coffin is a closed container in the antechamber.`,
 		result: []string{
-			"AddNounName:", "coffin", "coffin",
 			"AddNounKind:", "coffin", "containers",
+			"AddNounName:", "coffin", "coffin",
 			"AddNounName:", "antechamber", "antechamber",
 			"AddNounPair:", "whereabouts", "antechamber", "coffin",
 			"AddNounKind:", "antechamber", "containers", // fallback implied by "in"

@@ -23,7 +23,8 @@ func (op *Name) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounP
 }
 
 func (op *Name) buildNoun(q Query, w weaver.Weaves, props NounProperties) (ret DesiredNoun, err error) {
-	if noun, created, e := ensureNoun(q, w, op.Matched.(match.Span)); e != nil {
+	nounSpan := op.Matched.(match.Span)
+	if noun, created, e := ensureNoun(q, w, nounSpan, &props); e != nil {
 		err = e
 	} else if e := writeKinds(w, noun, props.Kinds); e != nil {
 		err = e
