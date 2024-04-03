@@ -7,9 +7,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// runs in the MappingPhase phase
+// runs in the NounPhase phase
 func (op *MapDirections) Phase() weaver.Phase {
-	return weaver.MappingPhase
+	return weaver.NounPhase
 }
 
 func (op *MapDirections) Match(q Query, input *InputState) (okay bool) {

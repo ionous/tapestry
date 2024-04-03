@@ -8,9 +8,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// runs in the PropertyPhase phase
+// runs in the AncestryPhase; but requires that the kind is known already.
+// so "The colors are a kind of aspect. The colors are black and blue." is fine;
+// but reversing those two sentences will fail.
 func (op *AspectsAreTraits) Phase() weaver.Phase {
-	return weaver.PropertyPhase
+	// needs to be before PropertyPhase so properties can find the aspect w/o spinning.
+	return weaver.AncestryPhase
 }
 
 // the colors are....

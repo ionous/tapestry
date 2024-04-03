@@ -1,6 +1,7 @@
 package jess
 
 import (
+	"fmt"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -20,37 +21,37 @@ func matchSentence(q Query, z weaver.Phase, ws match.Span, out *bestMatch) (okay
 		okay = matchPhrase(q, next, &op.Understand, out)
 
 	case weaver.AncestryPhase:
-		// FIX -- these need TRAITS to *match*
+		// FIX -- KindsOf needs TRAITS to *match*
 		// to do the idea of match once, generate often;
 		// this would have to delay parsing the trailing phrase.
 		// probably part of the phase has to be scheduled; while the basic naming does not.
 		// ---
 		// names {are} "a kind of"/"kinds of" [traits] kind.
-		okay = matchPhrase(q, next, schedule(&op.KindsOf), out)
+		okay = matchPhrase(q, next, &op.KindsOf, out) ||
+			// The colors are black and blue.
+			matchPhrase(q, next, schedule(&op.AspectsAreTraits), out)
 
 	case weaver.PropertyPhase:
-		// fix: it'd be nice to re-factor these so they dont each have to match kinds
-		// ex. kinds(of aspects, out) {are} names
-		// The colors are red, blue, and greasy green
-		okay = matchPhrase(q, next, schedule(&op.AspectsAreTraits), out) ||
-			// kinds(of objects, out) {are} "usually" traits.
-			matchPhrase(q, next, schedule(&op.KindsAreTraits), out) ||
+		// kinds {are} "usually"
+		okay = matchPhrase(q, next, schedule(&op.KindsAreTraits), out) ||
 			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
 			matchPhrase(q, next, schedule(&op.KindsHaveProperties), out) ||
 			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
 			matchPhrase(q, next, schedule(&op.KindsAreEither), out)
 
-	case weaver.MappingPhase:
+	case weaver.NounPhase:
+		// note: the direction phrases have to be first here
+		// so that the verbs phrases don't incorporate the names of directions
+		// into the names of nouns ( ex. so that "west of summit" isn't a place name. )
+		//
 		// "through" door {is} place.
 		okay = matchPhrase(q, next, &op.MapConnections, out) ||
 			// direction "of/from" place {is} place.
 			matchPhrase(q, next, &op.MapDirections, out) ||
 			// place {is} direction "of/from" places.
-			matchPhrase(q, next, &op.MapLocations, out)
-
-	case weaver.NounPhase:
-		// verb nouns {are} nouns
-		okay = matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
+			matchPhrase(q, next, &op.MapLocations, out) ||
+			// verb nouns {are} nouns
+			matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
 			// nouns {are} verbing nouns
 			matchPhrase(q, next, &op.NamesVerbNames, out) ||
 			// nouns {are} adjectives [verb nouns]
@@ -89,8 +90,13 @@ func schedule(s schedulee) genericSchedule {
 
 type genericSchedule struct{ schedulee }
 
-func (g genericSchedule) Generate(ctx Context) error {
-	return ctx.Schedule(g.Phase(), g.Weave)
+func (op genericSchedule) Generate(ctx Context) (err error) {
+	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if e := op.Weave(w, run); e != nil {
+			err = fmt.Errorf("%w during %q", e, op.TypeInfo().TypeName())
+		}
+		return
+	})
 }
 
 // match the input against the passed parse tree.
