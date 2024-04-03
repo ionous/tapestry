@@ -605,50 +605,6 @@ func (pen *Pen) addParameter(kid, cls kindInfo, field string, aff affine.Affinit
 	return
 }
 
-var mdl_phrase = tables.Insert("mdl_phrase", "domain", "macro", "phrase", "reversed", "at")
-
-// author text parsing
-func (pen *Pen) AddPhrase(macro, phrase string, reversed bool) (err error) {
-	domain, at := pen.domain, pen.at
-	if kind, e := pen.findRequiredKind(macro); e != nil {
-		err = e
-	} else if isMacro := strings.HasSuffix(kind.fullpath(), pen.getPath(kindsOf.Macro)); !isMacro {
-		err = errutil.Fmt("kind %q in domain %q is not a macro", macro, domain)
-	} else {
-		// search for conflicting phrases within this domain.
-		var prev struct {
-			domain   string
-			kind     string
-			reversed bool
-		}
-		e := pen.db.QueryRow(
-			`select mg.domain
-			from mdl_phrase mg
-			join domain_tree dt
-				on (dt.uses = mg.domain)
-			where base = ?1
-			and phrase = ?2
-		`, domain, phrase).Scan(&prev.domain, &prev.kind, &prev.reversed)
-		switch e {
-		case sql.ErrNoRows:
-			_, err = pen.db.Exec(mdl_phrase, domain, kind.id, phrase, reversed, at)
-
-		case nil:
-			if prev.kind != kind.name || prev.reversed != reversed {
-				err = errutil.Fmt("%w phrase %q meant %s in domain %q and now %s in domain %q",
-					Conflict, phrase, fmtMacro(prev.kind, prev.reversed), prev.domain,
-					fmtMacro(macro, reversed), domain)
-			} else {
-				pen.warn("%w phrase %q already declared in domain %q and now domain %q",
-					Duplicate, phrase, prev.domain, domain)
-			}
-		default:
-			err = errutil.New("database error", e)
-		}
-	}
-	return
-}
-
 // a plural word ("many") can have at most one singular definition per domain
 // ie. "people" and "persons" are valid plurals of "person",
 // but "people" as a singular can only be defined as "person" ( not also "human" )

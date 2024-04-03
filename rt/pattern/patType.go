@@ -25,10 +25,8 @@ func Categorize(k *g.Kind) (ret Category) {
 		case kindsOf.Pattern.String():
 			ret = Calls
 		}
-	case 3: // <pattern> <macro>(1) name; <pattern>(1) <action> name
+	case 3: // <pattern>(1) <action> name
 		switch base := path[1]; base {
-		case kindsOf.Macro.String():
-			ret = Calls
 		case kindsOf.Action.String():
 			ret = Sends
 		}

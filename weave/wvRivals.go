@@ -29,13 +29,6 @@ func findRivals(db tables.Querier, onConflict func(group, domain, key, value, at
 		using (domain)
 	),
 
-	active_phrases as (
-		select mx.*
-		from mdl_phrase mx
-		join active_domains
-		using (domain)
-	)
-	
 	select 'fact', a.domain, a.at, a.fact, a.value
 		from active_facts as a 
 		join active_facts as b 
