@@ -22,9 +22,14 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			err = e
 		} else {
 			q := jessdb.MakeQuery(cat.Modeler, cat.CurrentDomain())
-			err = cat.Step(func(z weaver.Phase) (bool, error) {
-				return p.Generate(z, q, cat)
-			})
+			// a little gross: run a step manually in the language phase
+			if ok, e := p.Generate(weaver.LanguagePhase, q, cat); e != nil {
+				err = e
+			} else if !ok {
+				err = cat.Step(func(z weaver.Phase) (bool, error) {
+					return p.Generate(z, q, cat)
+				})
+			}
 		}
 		return
 	})

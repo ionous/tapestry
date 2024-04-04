@@ -93,7 +93,17 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 	return
 }
 
+func (d *Domain) step(_ string, cb StepFunction) (err error) {
+	if z := d.currPhase; z < 0 {
+		err = errutil.Fmt("domain %q already finished", d.name)
+	} else {
+		d.steps = append(d.steps, cb)
+	}
+	return
+}
+
 func (d *Domain) schedule(at string, when weaver.Phase, what ScheduledCallback) (err error) {
+	// when we are not running we are in phase zero; the first active phase is index 1
 	if z := d.currPhase; z < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
 	} else if z > when {
@@ -178,18 +188,26 @@ func (d *Domain) runOne(m memento) error {
 // rather than having to generate a new function for every scheduled process.
 func (d *Domain) runSteps(z weaver.Phase) (err error) {
 	var keep int
-	for _, cb := range d.steps {
+	steps := d.steps
+	d.steps = nil // watch out for any steps scheduled while we are running
+	for _, cb := range steps {
 		if ok, e := cb(z); e != nil {
 			err = e
-		} else if !ok {
-			d.steps[keep] = cb
-			keep++
+		} else {
+			if !ok {
+				if z+1 == weaver.NumPhases {
+					err = errors.New("processing incomplete")
+				} else {
+					steps[keep] = cb
+					keep++
+				}
+			}
 		}
 	}
 	if err == nil {
 		// these wont garbage collect without copying
 		// that's probably fine.
-		d.steps = d.steps[:keep]
+		d.steps = append(steps[:keep], d.steps...)
 	}
 	return
 }

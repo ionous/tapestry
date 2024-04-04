@@ -180,16 +180,18 @@ func (cat *Catalog) DomainEnd() (err error) {
 	return
 }
 
-// the passed function will keep getting called until it returns true or errors
+// run passed function until it returns true or errors
+// if currently processing, the first step will execute next phase.
 func (cat *Catalog) Step(cb StepFunction) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
 	} else {
-		d.steps = append(d.steps, cb)
+		err = d.step(cat.cursor, cb)
 	}
 	return
 }
 
+// run the passed function now or in the future.
 func (cat *Catalog) Schedule(when weaver.Phase, cb func(weaver.Weaves, rt.Runtime) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
@@ -209,8 +211,7 @@ func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err
 		cat.pendingDomains = append(cat.pendingDomains, d)
 		cat.domains[n] = d
 	}
-
-	if d.currPhase < 0 || d.currPhase >= weaver.DependencyPhase {
+	if d.currPhase < 0 || d.currPhase > 0 {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain
