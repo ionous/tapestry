@@ -208,7 +208,7 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 		case nil:
 			if prev.value != value {
 				err = errutil.Fmt("%w fact %q was %q in domain %q and now %q in domain %q",
-					Conflict, fact, value, prev.domain, value, domain)
+					Conflict, fact, prev.value, prev.domain, value, domain)
 			} else {
 				// do we want to warn about duplicate facts? isnt that kind of the point of them?
 				// maybe eat at the weave level?

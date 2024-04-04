@@ -29,26 +29,6 @@ func makeRoom(noun string) *jessLink {
 	return &jessLink{DesiredNoun: n, roomLike: true}
 }
 
-const (
-	setDirectionError = iota
-	setDirectionOkay
-	setDirectionConflict
-	setDirectionDupe
-)
-
-func translateError(e error) (ret int, err error) {
-	if errors.Is(e, weaver.Conflict) {
-		ret = setDirectionConflict
-	} else if errors.Is(e, weaver.Duplicate) {
-		ret = setDirectionDupe
-	} else if e == nil {
-		ret = setDirectionOkay
-	} else {
-		err = e
-	}
-	return
-}
-
 // assumes room is "room like"
 func (room jessLink) writeDoor(w weaver.Weaves, door string) (err error) {
 	if !room.roomLike {
@@ -62,12 +42,11 @@ func (room jessLink) writeDoor(w weaver.Weaves, door string) (err error) {
 // fix: i think this can be removed if the story direction setup is removed.
 // create room fact which indicates the direction of movement from room to room
 // these facts help with tracking and conflict detection
-func writeDirection(w weaver.Weaves, direction string, room, otherRoom *jessLink) (ret int, err error) {
+func writeDirection(w weaver.Weaves, direction string, room, otherRoom *jessLink) (err error) {
 	if !room.roomLike {
 		err = errors.New("can only move directions within a room")
 	} else {
-		e := w.AddFact(FactDirection, room.Noun, direction, otherRoom.Noun)
-		ret, err = translateError(e)
+		err = w.AddFact(FactDirection, room.Noun, direction, otherRoom.Noun)
 	}
 	return
 }

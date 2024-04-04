@@ -2,6 +2,7 @@ package jess
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -130,10 +131,8 @@ func connectRoomToDoor(w weaver.Weaves, run rt.Runtime, room, door *jessLink, di
 		err = connectDoorToRoom(w, run, door, room, back)
 	} else {
 		otherRoom := makeRoom(parent)
-		if res, e := writeDirection(w, direction, otherRoom, room); e != nil {
-			err = e
-		} else if res == setDirectionConflict || res == setDirectionDupe {
-			err = errors.New("direction already set") // fix? might be to handle dupe in some cases
+		if e := writeDirection(w, direction, otherRoom, room); e != nil {
+			err = fmt.Errorf("%w when connecting room to door %s:%s->%s", e, room.Noun, direction, door.Noun)
 		} else if e := door.writeDestination(w, room.Noun); e != nil {
 			err = e
 		} else if e := otherRoom.writeCompass(w, direction, door.Noun); e != nil {
@@ -170,17 +169,19 @@ func readReverse(run rt.Runtime, direction string) (string, error) {
 // ex. SOUTH from Lhs is Rhs.
 // can return the empty string if there was already room door on that side of the room.
 func createPrivateDoor(w weaver.Weaves, direction string, room, otherRoom *jessLink) (ret string, err error) {
-	if res, e := writeDirection(w, direction, room, otherRoom); e != nil {
-		err = e
-	} else if res == setDirectionConflict || res == setDirectionDupe {
-		err = errors.New("direction already set") // fix? might be to handle dupe in some cases
+	if e := writeDirection(w, direction, room, otherRoom); e != nil {
+		// fix? might be to handle dupe in some cases
+		err = fmt.Errorf("%w when creating private door %s:%s->%s", e, room.Noun, direction, otherRoom.Noun)
 	} else {
 		// create room magic name: room-direction-door
 		door := strings.Replace(room.Noun, " ", "-", -1) + "-" + strings.Replace(direction, " ", "-", -1) + "-door"
 		e := room.writeCompass(w, direction, door)
-		if res, e := translateError(e); e != nil {
+		switch {
+		default:
 			err = e
-		} else if res == setDirectionOkay {
+		case errors.Is(e, weaver.Conflict), errors.Is(e, weaver.Duplicate):
+			// eat silently
+		case e == nil:
 			if e := w.AddNounKind(door, Doors); e != nil {
 				err = e
 			} else if e := w.AddNounName(door, door, 0); e != nil {
