@@ -14,10 +14,45 @@ type MatchedKind struct {
 	Match string        // the word(s) (singular or plural) used to match
 }
 
+func (m MatchedKind) WordCount() int {
+	return countWords(m.Match)
+}
+
+type MatchedField struct {
+	Name string // name of the trait in the db
+}
+
+// same logic as MatchedTrait
+func (m MatchedField) WordCount() int {
+	return countWords(m.Name)
+}
+
 type MatchedNoun struct {
-	Name  string // the name of the noun in the db
+	Name  string // the id of the noun in the db
 	Kind  string // the noun's kind
-	Match string // the words (singular or plural) used to match
+	Match string // the words used to match
+}
+
+func (m MatchedNoun) WordCount() int {
+	return countWords(m.Match)
+}
+
+type MatchedTrait struct {
+	Name string // name of the trait in the db
+}
+
+// the returned name is the name of the trait from the db
+// it was used to match the front of the passed string
+// so the words in the trait are the words in the string.
+func (m MatchedTrait) WordCount() int {
+	return countWords(m.Name)
+}
+
+func countWords(str string) (ret int) {
+	if len(str) > 0 {
+		ret = 1 + strings.Count(str, " ")
+	}
+	return
 }
 
 // searches for the kind which uses the most number of words from the front of the passed string.
@@ -83,7 +118,7 @@ const space = ' '
 // match the passed words with the known fields of all in-scope kinds.
 // return the full name of the field that matched.
 // an unmatched noun returns the empty string and no error.
-func (pen *Pen) GetPartialField(kind, field string) (ret string, err error) {
+func (pen *Pen) GetPartialField(kind, field string) (ret MatchedField, err error) {
 	if kind, e := pen.findRequiredKind(kind); e != nil {
 		err = e
 	} else if len(field) == 0 {
@@ -108,7 +143,7 @@ func (pen *Pen) GetPartialField(kind, field string) (ret string, err error) {
 	order by length(name) desc
 	limit 1`,
 			sql.Named("ancestry", kind.fullpath()),
-			sql.Named("words", words)).Scan(&ret); e != sql.ErrNoRows {
+			sql.Named("words", words)).Scan(&ret.Name); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}
 	}
@@ -158,7 +193,7 @@ func (pen *Pen) GetPartialNoun(name, kind string) (ret MatchedNoun, err error) {
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (pen *Pen) GetPartialTrait(str string) (ret string, err error) {
+func (pen *Pen) GetPartialTrait(str string) (ret MatchedTrait, err error) {
 	if ap, e := pen.getAspectPath(); e != nil {
 		err = e
 	} else if len(str) > 0 {
@@ -182,7 +217,7 @@ func (pen *Pen) GetPartialTrait(str string) (ret string, err error) {
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, ap, words).Scan(&ret); e != sql.ErrNoRows {
+			pen.domain, ap, words).Scan(&ret.Name); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}
 	}

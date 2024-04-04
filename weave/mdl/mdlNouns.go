@@ -76,7 +76,8 @@ func (pen *Pen) GetNounValue(noun, field string) (ret []byte, err error) {
 }
 
 // prefer runtime meta.ObjectId
-func (pen *Pen) GetClosestNoun(name string) (retNoun, retKind string, err error) {
+func (pen *Pen) GetClosestNoun(name string) (ret MatchedNoun, err error) {
+	var noun, kind string
 	if e := pen.db.QueryRow(`
 	select mn.noun, mk.kind
 	from mdl_name my
@@ -91,12 +92,12 @@ func (pen *Pen) GetClosestNoun(name string) (retNoun, retKind string, err error)
 	and my.rank >= 0
 	order by my.rank, my.rowid asc
 	limit 1`, pen.domain, name).
-		Scan(&retNoun, &retKind); e != nil {
-		if e != sql.ErrNoRows {
-			err = e
-		} else {
-			err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
-		}
+		Scan(&noun, &kind); e != nil && e != sql.ErrNoRows {
+		err = e
+	} else if e != nil {
+		err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
+	} else {
+		ret = MatchedNoun{Name: noun, Kind: kind, Match: name}
 	}
 	return
 }
