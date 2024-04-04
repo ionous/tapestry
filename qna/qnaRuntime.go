@@ -137,17 +137,6 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	return
 }
 
-func (run *Runner) OppositeOf(word string) (ret string) {
-	if n, e := run.query.OppositeOf(word); e != nil {
-		run.reportError(e)
-	} else if len(n) > 0 {
-		ret = n
-	} else {
-		ret = word
-	}
-	return
-}
-
 // doesnt reformat the names.
 func (run *Runner) RelateTo(a, b, rel string) (err error) {
 	if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {

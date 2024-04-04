@@ -32,25 +32,3 @@ func (op *DefinePlural) Weave(cat *weave.Catalog) error {
 		return
 	})
 }
-
-// Execute - called by the macro runtime during weave.
-func (op *DefineOpposite) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
-func (op *DefineOpposite) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.DependencyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if word, e := safe.GetText(run, op.Word); e != nil {
-			err = e
-		} else if opposite, e := safe.GetText(run, op.Opposite); e != nil {
-			err = e
-		} else if a := inflect.Normalize(word.String()); len(a) < 0 {
-			err = errutil.New("no word for opposite specified")
-		} else if b := inflect.Normalize(opposite.String()); len(b) < 0 {
-			err = errutil.New("no opposite for word specified")
-		} else {
-			err = w.AddOpposite(a, b)
-		}
-		return
-	})
-}

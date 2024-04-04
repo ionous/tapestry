@@ -253,24 +253,6 @@ Spec:with group:
                     - "as"
                     - "ancestor"
                     - "text_eval"
-      - # Opposites are used at runtime and during weave to
-        # interpret traits, directions, and other terms.
-        # For example:
-        # "The opposite of east is west."
-        Spec:slots:groups:with flow:
-          - "define_opposite"
-          - - "story_statement"
-            - "execute"
-          - "language"
-          - Flow:phrase:uses:
-              - "define"
-              - "The opposite of {$word} is the {$opposite}."
-              - - Term:type:
-                    - "opposite"
-                    - "text_eval"
-                - Term:type:
-                    - "word"
-                    - "text_eval"
       - # Plurals are used at runtime and during weave to
         # guide the interpretation of nouns and kinds.
         # For example:

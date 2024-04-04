@@ -30,7 +30,6 @@ type Query struct {
 	nounValues,
 	nounAliases,
 	nounsByKind,
-	oppositeOf,
 	patternOf,
 	newPairsFromDomain,
 	newPairsFromNames,
@@ -218,10 +217,6 @@ func (q *Query) PluralToSingular(plural string) (string, error) {
 
 func (q *Query) PluralFromSingular(singular string) (string, error) {
 	return scanString(q.pluralFromSingular, singular)
-}
-
-func (q *Query) OppositeOf(word string) (string, error) {
-	return scanString(q.oppositeOf, word)
 }
 
 // the last value is always the result, blank for execute statements
@@ -443,12 +438,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				on (mf.rowid = mv.field)
 			where (ns.name = ?1) and (mf.field = ?2) and (mv.noun = ns.noun)
 			order by length(mv.dot), mv.final desc`,
-		),
-		oppositeOf: ps.Prep(db,
-			`select otherWord
-			from active_rev
-			where oneWord = ?1
-			limit 1`,
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,

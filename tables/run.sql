@@ -44,13 +44,6 @@ from active_domains ds
 join mdl_noun mn 
 	using (domain);
 
-create view if not exists
-active_rev as 
-select ds.domain, mp.oneWord, mp.otherWord, mp.at
-from active_domains ds
-join mdl_rev mp 
-	using (domain);	
-
 /* for finding relatives and reciprocals: returns relName, nounName, otherName */
 create view if not exists
 rp_names as

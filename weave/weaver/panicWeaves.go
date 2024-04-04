@@ -76,11 +76,6 @@ func (p *PanicWeaves) AddNounValue(noun string, prop string, val rt.Assignment) 
 	panic("unimplemented")
 }
 
-// AddOpposite implements Weaves.
-func (p *PanicWeaves) AddOpposite(a string, b string) error {
-	panic("unimplemented")
-}
-
 // AddPattern implements Weaves.
 func (p *PanicWeaves) AddPattern(mdl.Pattern) error {
 	panic("unimplemented")

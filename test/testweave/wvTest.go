@@ -119,7 +119,8 @@ func (dt *TestWeave) ReadGrammar() ([]string, error) {
 // domain, kind, expanded materialized path
 // ordered by domain, length of path, and name
 // ( that erases their natural, dependency order --
-//   but independent siblings dont otherwise have a consistent order for testing )
+//
+//	but independent siblings dont otherwise have a consistent order for testing )
 func (dt *TestWeave) ReadKinds() (ret []string, err error) {
 	return mdl.ReadKinds(dt.db)
 }
@@ -137,11 +138,6 @@ func (dt *TestWeave) ReadNames() ([]string, error) {
 // domain, noun, kind
 func (dt *TestWeave) ReadNouns() ([]string, error) {
 	return mdl.ReadNouns(dt.db)
-}
-
-// domain, oneWord, otherWord
-func (dt *TestWeave) ReadOpposites() ([]string, error) {
-	return mdl.ReadOpposites(dt.db)
 }
 
 // domain, relation, noun, other noun

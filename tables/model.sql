@@ -74,10 +74,6 @@ create table mdl_plural( domain text not null, many text, one text, at text, pri
  */
 create table mdl_rel( relKind int not null, oneKind int not null, otherKind int not null, cardinality text, at text, primary key( relKind ));
 /* 
- * opposites 
- */
-create table mdl_rev( domain text not null, oneWord text, otherWord text, at text );
-/* 
  * the rules for a given kind of pattern within the specified domain are executed in increase rank, 
  * and within each rank, by last declared rule first ( largest row id. )
  + stop and jump describe the default handling of rules following a match:

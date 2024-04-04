@@ -61,7 +61,8 @@ func ReadGrammar(db *sql.DB) ([]string, error) {
 // domain, kind, expanded materialized path
 // ordered by domain, length of path, and name
 // ( that erases their natural, dependency order --
-//   but independent siblings dont otherwise have a consistent order for testing )
+//
+//	but independent siblings dont otherwise have a consistent order for testing )
 func ReadKinds(db *sql.DB) (ret []string, err error) {
 	type kind struct {
 		id           int
@@ -143,14 +144,6 @@ func ReadNouns(db *sql.DB) ([]string, error) {
 	join mdl_domain md
 		on(mn.domain = md.domain)
 	order by md.domain, mk.kind, mn.noun`)
-}
-
-// domain, oneWord, otherWord
-func ReadOpposites(db *sql.DB) ([]string, error) {
-	return tables.QueryStrings(db, `
-  select domain ||':'|| oneWord ||':'|| otherWord
-	from mdl_rev mp 
-	order by domain, oneWord`)
 }
 
 // domain, relation, noun, other noun

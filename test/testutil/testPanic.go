@@ -28,9 +28,6 @@ func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 func (PanicRuntime) GetRules(pattern, target string) ([]rt.Rule, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) OppositeOf(string) string {
-	panic("Runtime panic")
-}
 func (PanicRuntime) PluralOf(single string) string {
 	panic("Runtime panic")
 }

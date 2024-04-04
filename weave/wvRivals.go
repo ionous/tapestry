@@ -52,14 +52,6 @@ func findRivals(db tables.Querier, onConflict func(group, domain, key, value, at
 		and a.prog != b.prog
 	union all
 
-	select 'opposite', a.domain, a.at, a.oneWord, a.otherWord 
-		from active_rev as a 
-		join active_rev as b 
-			using(oneWord)
-		where a.domain != b.domain 
-		and a.otherWord != b.otherWord
-	union all
-
 	select 'plural', a.domain, a.at, a.many, a.one
 		from active_plurals as a 
 		join active_plurals as b 

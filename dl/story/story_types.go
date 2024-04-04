@@ -708,49 +708,6 @@ func (op *DefineKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Opposites are used at runtime and during weave to
-// interpret traits, directions, and other terms.
-// For example:
-// "The opposite of east is west."
-type DefineOpposite struct {
-	Opposite rtti.TextEval
-	Word     rtti.TextEval
-	Markup   map[string]any
-}
-
-// define_opposite, a type of flow.
-var Zt_DefineOpposite typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*DefineOpposite) TypeInfo() typeinfo.T {
-	return &Zt_DefineOpposite
-}
-
-// implements typeinfo.Markup
-func (op *DefineOpposite) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineOpposite)(nil)
-var _ rtti.Execute = (*DefineOpposite)(nil)
-
-// holds a slice of type define_opposite
-type DefineOpposite_Slice []DefineOpposite
-
-// implements typeinfo.Instance
-func (*DefineOpposite_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineOpposite
-}
-
-// implements typeinfo.Repeats
-func (op *DefineOpposite_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Plurals are used at runtime and during weave to
 // guide the interpretation of nouns and kinds.
 // For example:
@@ -1789,7 +1746,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineRelation,
 	&Zt_DefineFields,
 	&Zt_DefineKinds,
-	&Zt_DefineOpposite,
 	&Zt_DefinePlural,
 	&Zt_DefineValue,
 	&Zt_DefineNouns,
@@ -1852,8 +1808,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
 	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
 	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
-	13749527262166011841: (*DefineOpposite)(nil),       /* execute=Define opposite:word: */
-	17694415259589147741: (*DefineOpposite)(nil),       /* story_statement=Define opposite:word: */
 	811338311732531998:   (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides: */
 	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
 	2917659442779702699:  (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides:do: */
@@ -2260,26 +2214,6 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 			&rtti.Zt_Execute,
-		},
-	}
-	Zt_DefineOpposite = typeinfo.Flow{
-		Name: "define_opposite",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "opposite",
-			Label: "opposite",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "word",
-			Label: "word",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Opposites are used at runtime and during weave to", "interpret traits, directions, and other terms.", "For example:", "\"The opposite of east is west.\""},
 		},
 	}
 	Zt_DefinePlural = typeinfo.Flow{

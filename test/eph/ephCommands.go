@@ -121,20 +121,6 @@ func (op *Nouns) Assert(cat *weave.Catalog) error {
 	})
 }
 
-// Opposites Rules for transforming plural text to singular text and back again.
-// Used by the assembler to help interpret author definitions,
-// and at runtime to help the parser interpret user input.
-type Opposites struct {
-	Opposite string
-	Word     string
-}
-
-func (op *Opposites) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) error {
-		return w.AddOpposite(op.Opposite, op.Word)
-	})
-}
-
 // Patterns Patterns provide author reusable code.
 // The parameters define values provided by the caller.
 // Locals provide scratch values for use during pattern processing.

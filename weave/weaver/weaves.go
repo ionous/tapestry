@@ -35,7 +35,6 @@ type Weaves interface {
 	AddNounPath(noun string, path []string, val literal.LiteralValue) error
 	AddNounTrait(noun, trait string) error
 	AddNounValue(noun, prop string, val rt.Assignment) error
-	AddOpposite(a, b string) error
 	AddPattern(mdl.Pattern) error
 	AddPlural(many, one string) error
 	AddRelation(name, oneKind, otherKind string, amany bool, bmany bool) error
