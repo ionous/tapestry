@@ -23,6 +23,7 @@ const (
 	PrintedName       = "printed name"
 	Private           = "privately named"
 	Scenery           = "scenery"
+	DirectionOpposite = "opposite"
 	// relations:
 	Whereabouts = "whereabouts"
 	// verbs:

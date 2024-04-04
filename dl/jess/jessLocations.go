@@ -2,7 +2,6 @@ package jess
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -163,13 +162,8 @@ func connectRoomToRoom(w weaver.Weaves, run rt.Runtime, room, otherRoom *jessLin
 	return
 }
 
-func readReverse(run rt.Runtime, direction string) (ret string, err error) {
-	if rev := run.OppositeOf(direction); ret == direction {
-		err = fmt.Errorf("couldnt determine the opposite of %q", direction)
-	} else {
-		ret = rev
-	}
-	return
+func readReverse(run rt.Runtime, direction string) (string, error) {
+	return readString(run, direction, DirectionOpposite)
 }
 
 // generate a door in the first room so that going in the specified direction leads into the other room.

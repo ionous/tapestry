@@ -22,7 +22,7 @@ type VerbLookup interface {
 
 func (d *jessRt) ReciprocalsOf(b, relation string) (ret g.Value, err error) {
 	if relation != "whereabouts" {
-		err = fmt.Errorf("unexpected relation %q", relation)
+		err = fmt.Errorf("jess ret, unexpected relation %q", relation)
 	} else if a, ok := d.nounPairs[b]; !ok {
 		ret = g.StringsOf(nil)
 	} else {
@@ -31,7 +31,22 @@ func (d *jessRt) ReciprocalsOf(b, relation string) (ret g.Value, err error) {
 	return
 }
 func (d *jessRt) GetField(name, field string) (ret g.Value, err error) {
-	if str, e := d.verbs.GetVerbValue(name, field); e != nil {
+	if field == "opposite" {
+		var str string
+		switch name {
+		case "north":
+			str = "south"
+		case "south":
+			str = "north"
+		case "east":
+			str = "west"
+		case "west":
+			str = "east"
+		default:
+			err = fmt.Errorf("jess rt, unexpected opposite for %q", name)
+		}
+		ret = g.StringOf(str)
+	} else if str, e := d.verbs.GetVerbValue(name, field); e != nil {
 		err = e
 	} else {
 		ret = g.StringOf(str)
@@ -43,19 +58,4 @@ func (d *jessRt) PluralOf(single string) string {
 }
 func (d *jessRt) SingularOf(plural string) string {
 	return inflect.Singularize(plural)
-}
-func (d *jessRt) OppositeOf(word string) (ret string) {
-	switch word {
-	case "north":
-		ret = "south"
-	case "south":
-		ret = "north"
-	case "east":
-		ret = "west"
-	case "west":
-		ret = "east"
-	default:
-		ret = word
-	}
-	return
 }
