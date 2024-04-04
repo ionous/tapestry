@@ -40,26 +40,46 @@ func matchSentence(q Query, z weaver.Phase, ws match.Span, out *bestMatch) (okay
 			matchPhrase(q, next, schedule(&op.KindsAreEither), out)
 
 	case weaver.NounPhase:
-		// note: the direction phrases have to be first here
+		// note: the direction phrases have to be first
 		// so that the verbs phrases don't incorporate the names of directions
-		// into the names of nouns ( ex. so that "west of summit" isn't a place name. )
+		// ( ie. "west of summit" shouldn't be considered a noun. )
+		// similarly, we have to check for fields first so field names don't become noun names.
+		// ( ie. "the subject of carrying is actors" shouldn't be confused with
+		// ... "the bottle is a container." )
 		//
-		// "through" door {is} place.
-		okay = matchPhrase(q, next, &op.MapConnections, out) ||
-			// direction "of/from" place {is} place.
-			matchPhrase(q, next, &op.MapDirections, out) ||
-			// place {is} direction "of/from" places.
-			matchPhrase(q, next, &op.MapLocations, out) ||
-			// verb nouns {are} nouns
-			matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
-			// nouns {are} verbing nouns
-			matchPhrase(q, next, &op.NamesVerbNames, out) ||
-			// nouns {are} adjectives [verb nouns]
-			matchPhrase(q, next, &op.NamesAreLikeVerbs, out) ||
-			// property "of" noun {are} value
-			matchPhrase(q, next, &op.PropertyNounValue, out) ||
-			// noun "has" property value
-			matchPhrase(q, next, &op.NounPropertyValue, out)
+		// fix: the confusion with fields seems dangerous...
+		// the specific issue is allowing kinds to be used as text.
+		// inform doesn't allow the text of kinds ( its a tapestry hack for verbs )
+		// -- perhaps a special phrase for unquoted kinds:
+		//
+		// but also, in inform:
+		//   The friend is an animal.
+		//   Containers have a container called friend.
+		// errors with "'friend' is a nothing valued property, and it is too late to change now."
+		// it's globally distinguishing b/t fields and nouns of the same whole name.
+		// ( ex. maybe a "name table" that says what type things are )
+		// ( and then GetClosestNoun is GetClosestName and it returns a type )
+		// note: you can say "magic friend" is an animal; but you cant later refer to it as "friend"
+		// the property wins.
+		okay = //
+			// "through" door {is} place.
+			matchPhrase(q, next, &op.MapConnections, out) ||
+				// direction "of/from" place {is} place.
+				matchPhrase(q, next, &op.MapDirections, out) ||
+				// place {is} direction "of/from" places.
+				matchPhrase(q, next, &op.MapLocations, out) ||
+
+				// field "of" noun {are} value
+				matchPhrase(q, next, &op.PropertyNounValue, out) ||
+				// noun "has" field value
+				matchPhrase(q, next, &op.NounPropertyValue, out) ||
+
+				// verb nouns {are} nouns
+				matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
+				// nouns {are} verbing nouns
+				matchPhrase(q, next, &op.NamesVerbNames, out) ||
+				// nouns {are} adjectives [verb nouns]
+				matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
 	}
 	return
 }

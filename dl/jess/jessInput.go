@@ -47,6 +47,8 @@ func (in InputState) CutSpan(width int) match.Span {
 	return match.Span(in.ws[:width])
 }
 
+// see if the input begins with any of the passed choices
+// always returns 1.
 func (in InputState) MatchWord(choices ...uint64) (width int) {
 	if len(in.ws) > 0 {
 		w := in.ws[0]
