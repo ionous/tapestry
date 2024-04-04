@@ -15,7 +15,7 @@ Tapestry:
       The description of the Foyer is "You are standing in a spacious hall, splendidly decorated in red and gold,
       with glittering chandeliers overhead. The entrance from the street is to the north,
       and there are doorways south and east."
-      The entrance is a scenery door in the lobby.
+      The entrance is a scenery door in the foyer.
       North from the foyer is the entrance.
       Through the entrance is the Street.
       """ # "
@@ -26,7 +26,7 @@ Tapestry:
 
     - # The Cloakroom
       Declare: """
-        The Cloakroom is a room. East from the Foyer is the Cloakroom.
+        East from the Foyer is the Cloakroom.
         The Cloakroom has the description "In the Opera's better days the walls of this small room must have been lined with coat hooks.
         Now, only one remains. The exit is a door to the west."
 
