@@ -578,10 +578,10 @@ var Phrases = []Phrase{
 		// "in" should use "containers" by default.
 		test: `Two things are in the bottle.`,
 		result: []string{
-			"AddNounName:", "thing-1", "thing-1",
 			"AddNounKind:", "thing-1", "things",
-			"AddNounName:", "thing-2", "thing-2",
+			"AddNounName:", "thing-1", "thing-1",
 			"AddNounKind:", "thing-2", "things",
+			"AddNounName:", "thing-2", "thing-2",
 			"AddNounName:", "bottle", "bottle",
 			//
 			"AddNounPair:", "whereabouts", "bottle", "thing-1",
@@ -883,10 +883,10 @@ var Phrases = []Phrase{
 		// multiple anonymous nouns.
 		test: `In the lobby are a supporter and a container.`,
 		result: []string{
-			"AddNounName:", "supporter-1", "supporter-1",
 			"AddNounKind:", "supporter-1", "supporters",
-			"AddNounName:", "container-1", "container-1",
+			"AddNounName:", "supporter-1", "supporter-1",
 			"AddNounKind:", "container-1", "containers",
+			"AddNounName:", "container-1", "container-1",
 			// fix? at this point, lobby is an object
 			// whereabouts happens to be be object, objects
 			// but .... what if it weren't?

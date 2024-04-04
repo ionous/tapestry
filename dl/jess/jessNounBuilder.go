@@ -25,10 +25,10 @@ func buildNounsFrom(q Query, w weaver.Weaves, run rt.Runtime, props NounProperti
 
 func buildAnon(w weaver.Weaves, plural, singular string, props NounProperties) (ret DesiredNoun, err error) {
 	n := w.GenerateUniqueName(singular)
-	if e := w.AddNounName(n, n, 0); e != nil {
-		err = e // ^ so authors can refer to it by the dashed name
-	} else if e := w.AddNounKind(n, plural); e != nil {
+	if e := w.AddNounKind(n, plural); e != nil {
 		err = e // all errors, including duplicates would be bad here.
+	} else if e := w.AddNounName(n, n, 0); e != nil {
+		err = e // ^ so authors can refer to it by the dashed name
 	} else if e := writeKinds(w, n, props.Kinds); e != nil {
 		err = e // any *additional* kinds.
 	} else {
@@ -36,10 +36,10 @@ func buildAnon(w weaver.Weaves, plural, singular string, props NounProperties) (
 			// no name and no article because, the object itself is anonymous.
 			// ( the article associated with the kind gets eaten )
 			Noun:    n,
-			Aliases: []string{singular}, // at runtime, "triangle" means "triangles-1"
+			Aliases: []string{singular}, // at runtime, "triangle" means "triangle-1"
 			Traits:  append([]string{CountedTrait}, props.Traits...),
 			Values: []DesiredValue{{
-				// to print "triangles-1" as "triangle"
+				// to print "triangle-1" as "triangle"
 				PrintedName, text(singular, ""),
 			}},
 		}
