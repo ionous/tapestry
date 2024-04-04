@@ -9,9 +9,9 @@ Tapestry:
         - # fix: this should have made the doors 'plural named' automatically.
           Declare: """
             North of the lobby are the double doors. The double doors are plural named, closed, and openable doors. Through the double doors is the foyer.
-            Down from the lobby is the basement. Up from the basement is the nowhere.
+            Down from the lobby is the basement.
             North from the foyer is the street.
-            West from the foyer is the lobby. East from the lobby is nowhere.
+            West from the foyer is the lobby.
             South from the foyer is the curtain. Through the curtain is the cloak room. North from the cloak room is the foyer. South from the basement is the street.
             """ # "
       - - StartGame actor:quietly:
