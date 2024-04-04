@@ -7,11 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-type MockVerb struct {
-	Subject, Object, Alternate, Relation, Implies string
-	Reversed                                      bool
-}
-
 // fix? maybe add "wearing" instead of carrying, to test implication better?
 var KnownVerbs = MockVerbs{
 	"carrying": {
@@ -51,7 +46,7 @@ var KnownVerbs = MockVerbs{
 	},
 }
 
-type MockVerbs map[string]MockVerb
+type MockVerbs map[string]jess.VerbDesc
 
 func (vs MockVerbs) GetVerbValue(name, field string) (ret string, err error) {
 	if v, ok := vs[name]; !ok {

@@ -6,19 +6,20 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-type MockVerb struct {
-	subject,
-	object,
-	alternate,
-	relation,
-	implication string
-	reversed bool
+type VerbDesc struct {
+	Subject,
+	Object,
+	Alternate,
+	Relation,
+	Implies string
+	Reversed bool
 }
 
-func (v *MockVerb) applyVerb(u Scheduler, w weaver.Weaves, lhs, rhs []DesiredNoun) (err error) {
+func (v *VerbDesc) applyVerb(u Scheduler, w weaver.Weaves, lhs, rhs []DesiredNoun) (err error) {
 	// do some extra work to always generate the nouns on the left hand side first
 	lk, rk := v.getKinds()
 	if e := addKindToNouns(w, lk, lhs); e != nil {
@@ -28,42 +29,42 @@ func (v *MockVerb) applyVerb(u Scheduler, w weaver.Weaves, lhs, rhs []DesiredNou
 	} else {
 		// then pick the dependent side for implications and pairs
 		var subjects, objects []DesiredNoun
-		if !v.reversed {
+		if !v.Reversed {
 			subjects, objects = lhs, rhs
 		} else {
 			subjects, objects = rhs, lhs
 		}
-		if trait := v.implication; len(trait) > 0 {
+		if trait := v.Implies; len(trait) > 0 {
 			for i := range objects {
 				objects[i].appendTrait(trait)
 			}
 		}
-		if e := writePairs(w, v.relation, subjects, objects); e != nil {
+		if e := writePairs(w, v.Relation, subjects, objects); e != nil {
 			err = e
-		} else if len(v.alternate) > 0 {
+		} else if len(v.Alternate) > 0 {
 			// if there was an alternate kind for the subjects
 			// then we only set the noun to "Objects"
 			// and we need to fallback to something more specific
 			// at least one of the two kinds *must* successfully be applied.
-			err = generateFallbacks(u, subjects, v.subject, v.alternate)
+			err = generateFallbacks(u, subjects, v.Subject, v.Alternate)
 		}
 	}
 	return
 }
 
-func (v *MockVerb) getKinds() (lhs, rhs string) {
+func (v *VerbDesc) getKinds() (lhs, rhs string) {
 	// when "alternate" is set -- only mark the object as an object
 	// we'll do a pass to ensure all is well.
 	var subject string
-	if len(v.alternate) > 0 {
+	if len(v.Alternate) > 0 {
 		subject = Objects
 	} else {
-		subject = v.subject
+		subject = v.Subject
 	}
-	if !v.reversed {
-		lhs, rhs = subject, v.object
+	if !v.Reversed {
+		lhs, rhs = subject, v.Object
 	} else {
-		rhs, lhs = subject, v.object
+		rhs, lhs = subject, v.Object
 	}
 	return
 }
@@ -91,7 +92,7 @@ Pairs:
 	return
 }
 
-func readVerb(run rt.Runtime, verb string) (ret MockVerb, err error) {
+func readVerb(run rt.Runtime, verb string) (ret VerbDesc, err error) {
 	if relation, e := readString(run, verb, VerbRelation); e != nil {
 		err = e
 	} else if object, e := readString(run, verb, VerbObject); e != nil {
@@ -105,13 +106,14 @@ func readVerb(run rt.Runtime, verb string) (ret MockVerb, err error) {
 	} else if rev, revErr := readString(run, verb, VerbReversed); revErr != nil && !errors.Is(revErr, weaver.Missing) {
 		err = revErr // reverse is optional; false if not explicitly specified
 	} else {
-		ret = MockVerb{
-			subject:     subject,
-			object:      object,
-			alternate:   alternate,
-			relation:    relation,
-			implication: implication,
-			reversed:    rev == ReversedTrait,
+		ret = VerbDesc{
+			Subject:   subject,
+			Object:    object,
+			Alternate: alternate,
+			Relation:  relation,
+			// these are normally specified
+			Implies:  inflect.Normalize(implication),
+			Reversed: rev == ReversedTrait,
 		}
 	}
 	return
