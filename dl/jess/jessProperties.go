@@ -138,14 +138,14 @@ func getTypeOfPrim(str string) (retAff affine.Affinity, retCls string) {
 // - kind and aspect will generate affine text
 // - record will generate affine record
 func getTypeOfKind(k *Kind) (retAff affine.Affinity, retCls string, err error) {
-	kt := k.ActualKind.base
+	kt := k.ActualKind.BaseKind
 	switch kt {
 	case kindsOf.Kind, kindsOf.Aspect:
 		retAff = affine.Text
-		retCls = k.ActualKind.name
+		retCls = k.ActualKind.Name
 	case kindsOf.Record:
 		retAff = affine.Record
-		retCls = k.ActualKind.name
+		retCls = k.ActualKind.Name
 	default:
 		err = fmt.Errorf("unexpected kind of property %q", kt)
 	}

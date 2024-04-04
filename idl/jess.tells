@@ -474,7 +474,7 @@ Spec:with group:
         - Term: "single_value"
 
     - # assigns a default value to a noun.
-      # ex. `The pen has the description "mightier than the sword.`
+      # ex. `The pen has (the) description (of) "mightier than the sword.`
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
       Spec:with flow:
       - "noun_property_value"
@@ -504,6 +504,12 @@ Spec:with group:
           - true
         - Term:optional:
           - "matching_number"
+          - true
+        - Term:optional:
+          - "noun"
+          - true
+        - Term:optional:
+          - "kind"
           - true
 
     - # text that begins and ends with double quotes.

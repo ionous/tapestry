@@ -62,6 +62,7 @@ type info struct {
 func (n *info) GetContext() int {
 	return 0
 }
+
 func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width int) {
 	str := strings.ToLower(ws.String())
 	for i, k := range n.kinds {
@@ -88,30 +89,48 @@ func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width in
 	}
 	return
 }
+
 func (n *info) FindTrait(ws match.Span) (string, int) {
 	m, cnt := n.traits.FindPrefix(ws)
 	return m.String(), cnt
 }
-func (n *info) FindField(ws match.Span) (string, int) {
-	m, cnt := n.fields.FindPrefix(ws)
+
+// for testing, ignores the kind; matches any field
+func (n *info) FindField(_ string, field match.Span) (string, int) {
+	m, cnt := n.fields.FindPrefix(field)
 	return m.String(), cnt
 }
-func (n *info) FindNoun(ws match.Span, kind string) (ret string, width int) {
+
+func (n *info) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
 	var m match.Span
+	var kind string
+	if pkind != nil {
+		kind = *pkind
+	}
 	switch kind {
+	default:
+		panic("unexpected kind for find noun")
+
 	case jess.Directions:
 		m, width = n.directions.FindPrefix(ws)
 		ret = m.String()
 	case jess.Verbs:
 		m, width = n.verbNames.FindPrefix(ws)
 		ret = m.String()
-	default:
+	case "":
 		str := ws.String()
 		if noun, ok := n.nounPool[str]; ok {
 			ret, width = noun, len(ws)
+			if pkind != nil {
+				*pkind = n.nounPool["$"+str]
+			}
 		} else {
 			m, width = n.nouns.FindExactMatch(ws)
 			ret = m.String()
+			// sure... why not
+			if pkind != nil {
+				*pkind = jess.Things
+			}
 		}
 	}
 	return

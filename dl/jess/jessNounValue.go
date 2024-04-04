@@ -8,27 +8,34 @@ import (
 )
 
 // --------------------------------------------------------------
+// Property
+// --------------------------------------------------------------
+
 func (op *Property) String() string {
 	return op.Matched
 }
 
-func (op *Property) Match(q Query, input *InputState) (okay bool) {
+func (op *Property) Match(q Query, kind string, input *InputState) (okay bool) {
 	if next := *input; //
 	(Optional(q, &next, &op.Article) || true) &&
-		op.matchProperty(q, &next) {
+		op.matchProperty(q, kind, &next) {
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *Property) matchProperty(q Query, input *InputState) (okay bool) {
-	if m, width := q.FindField(input.Words()); width > 0 {
+func (op *Property) matchProperty(q Query, kind string, input *InputState) (okay bool) {
+	if m, width := q.FindField(kind, input.Words()); width > 0 {
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
 	return
 }
 
 // --------------------------------------------------------------
+// PropertyNounValue
+// `The description of the pen is "mightier than the sword.`
+// --------------------------------------------------------------
+
 // matches in the noun phase, but mostly runs in the fallback and value phase
 func (op *PropertyNounValue) Phase() weaver.Phase {
 	return weaver.NounPhase
@@ -44,14 +51,21 @@ func (op *PropertyNounValue) GetValue() SingleValue {
 }
 
 func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	(Optional(q, &next, &op.Article) || true) &&
-		op.Property.Match(q, &next) &&
-		op.Of.Match(q, &next, keywords.Of) &&
-		op.NamedNoun.Match(q, &next) &&
-		op.Are.Match(q, &next) &&
-		op.SingleValue.Match(q, &next) {
-		*input, okay = next, true
+	next := *input
+	Optional(q, &next, &op.Article)
+	if index := scanUntil(next.Words(), keywords.Of); index > 0 {
+		rest := next.Skip(index + 1) // everything after "of"
+		if op.NamedNoun.Match(q, &rest) &&
+			op.Are.Match(q, &rest) &&
+			op.SingleValue.Match(q, &rest) {
+			// try the phrase before the word "of"
+			// the whole string must be consumed
+			property := MakeInput(next.CutSpan(index))
+			if op.Property.Match(q, namedKind(op.NamedNoun), &property) && //
+				property.Len() == 0 {
+				*input, okay = rest, true
+			}
+		}
 	}
 	return
 }
@@ -61,6 +75,10 @@ func (op *PropertyNounValue) Generate(ctx Context) error {
 }
 
 // --------------------------------------------------------------
+// NounPropertyValue
+// `The pen has (a) description (of) "mightier than the sword.`
+// --------------------------------------------------------------
+
 // like PropertyNounValue, matches in the noun phase,
 // but mostly runs in the fallback and value phase
 func (op *NounPropertyValue) Phase() weaver.Phase {
@@ -81,7 +99,7 @@ func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
 	op.NamedNoun.Match(q, &next) &&
 		op.Has.Match(q, &next, keywords.Has) &&
 		(Optional(q, &next, &op.Article) || true) &&
-		op.Property.Match(q, &next) &&
+		op.Property.Match(q, namedKind(op.NamedNoun), &next) &&
 		(op.matchOf(q, &next) || true) &&
 		op.SingleValue.Match(q, &next) {
 		*input, okay = next, true
@@ -102,6 +120,20 @@ func (op *NounPropertyValue) Generate(ctx Context) error {
 }
 
 // --------------------------------------------------------------
+// support for noun property handling
+// --------------------------------------------------------------
+
+func namedKind(named NamedNoun) (ret string) {
+	if n := named.Noun; n != nil {
+		ret = n.ActualNoun.Kind
+	} else if n := named.Name; n != nil {
+		ret = Things // if it hasn't matched this is the default that will be generated
+	} else {
+		panic("unexpected namedKind")
+	}
+	return
+}
+
 type nounValuePhrase interface {
 	Phase() weaver.Phase
 	GetNamedNoun() NamedNoun

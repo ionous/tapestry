@@ -57,9 +57,9 @@ func (d dbWrapper) FindTrait(ws match.Span) (ret string, width int) {
 	return
 }
 
-func (d dbWrapper) FindField(ws match.Span) (ret string, width int) {
-	str := strings.ToLower(ws.String())
-	if field, e := d.GetPartialField(str); e != nil {
+func (d dbWrapper) FindField(kind string, field match.Span) (ret string, width int) {
+	str := strings.ToLower(field.String())
+	if field, e := d.GetPartialField(kind, str); e != nil {
 		log.Println("FindField", e)
 	} else {
 		// re: countWords, same logic as find trait.
@@ -68,8 +68,8 @@ func (d dbWrapper) FindField(ws match.Span) (ret string, width int) {
 	return
 }
 
-func (d dbWrapper) FindNoun(ws match.Span, kind string) (ret string, width int) {
-	if n, e := d.findNoun(ws, kind); e == nil {
+func (d dbWrapper) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
+	if n, e := d.findNoun(ws, pkind); e == nil {
 		ret, width = n, countWords(n)
 	} else if !errors.Is(e, mdl.Missing) {
 		log.Println("FindNoun", e)
@@ -77,14 +77,30 @@ func (d dbWrapper) FindNoun(ws match.Span, kind string) (ret string, width int) 
 	return
 }
 
-func (d dbWrapper) findNoun(ws match.Span, kind string) (ret string, err error) {
+func (d dbWrapper) findNoun(ws match.Span, pkind *string) (ret string, err error) {
 	str := strings.ToLower(ws.String())
+	var kind string
+	if pkind != nil {
+		kind = *pkind
+	}
 	if len(kind) == 0 {
-		ret, err = d.GetClosestNoun(str)
-	} else if m, e := d.GetPartialNoun(str, kind); e != nil {
-		err = e
+		if n, k, e := d.GetClosestNoun(str); e != nil {
+			err = e
+		} else {
+			ret = n
+			if pkind != nil {
+				*pkind = k
+			}
+		}
 	} else {
-		ret = m.Name
+		if m, e := d.GetPartialNoun(str, kind); e != nil {
+			err = e
+		} else {
+			ret = m.Name
+			if pkind != nil {
+				*pkind = m.Kind
+			}
+		}
 	}
 	return
 }

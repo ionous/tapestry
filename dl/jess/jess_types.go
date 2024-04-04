@@ -1373,6 +1373,8 @@ func (op *NounPropertyValue_Slice) Repeats() bool {
 type SingleValue struct {
 	QuotedText     *QuotedText
 	MatchingNumber *MatchingNumber
+	Noun           *Noun
+	Kind           *Kind
 	Markup         map[string]any
 }
 
@@ -2269,9 +2271,21 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15490383194906526516: (*QuotedTexts)(nil),          /* QuotedTexts quotedText: */
 	18124669431880345752: (*QuotedTexts)(nil),          /* QuotedTexts quotedText:additionalText: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
+	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
+	3199991737231408734:  (*SingleValue)(nil),          /* SingleValue matchingNumber:kind: */
+	17789670957933718200: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun: */
+	12644158024662816112: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun:kind: */
+	11550266937804910612: (*SingleValue)(nil),          /* SingleValue noun: */
+	15983631673684921876: (*SingleValue)(nil),          /* SingleValue noun:kind: */
 	3958109237643295925:  (*SingleValue)(nil),          /* SingleValue quotedText: */
+	5530597249301129963:  (*SingleValue)(nil),          /* SingleValue quotedText:kind: */
 	17617190106567464055: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber: */
+	13435854409171053573: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:kind: */
+	16335742359860243615: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun: */
+	8688649593759560061:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun:kind: */
+	7763015042528813017:  (*SingleValue)(nil),          /* SingleValue quotedText:noun: */
+	1174375068044253639:  (*SingleValue)(nil),          /* SingleValue quotedText:noun:kind: */
 	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
@@ -3176,6 +3190,16 @@ func init() {
 			Label:    "matching_number",
 			Optional: true,
 			Type:     &Zt_MatchingNumber,
+		}, {
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Type:     &Zt_Noun,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Type:     &Zt_Kind,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches only one of its options", "( the options could be represented as a slot; this feels easier for now )"},

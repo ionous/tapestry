@@ -63,7 +63,7 @@ func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
 // or it upgrades them to things.
 // to simplify the code, this happens even if the kind might possibly be known.
 func ensureNoun(q Query, w weaver.Weaves, name match.Span, props *NounProperties) (ret string, created bool, err error) {
-	if noun, width := q.FindNoun(name, ""); width > 0 {
+	if noun, width := q.FindNoun(name, nil); width > 0 {
 		ret = noun
 	} else {
 		name := name.String()

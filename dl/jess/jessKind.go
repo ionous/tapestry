@@ -11,10 +11,10 @@ import (
 
 // returns the real ( generally plural ) name of the kind
 func (op *Kind) Validate(ks ...kindsOf.Kinds) (ret string, err error) {
-	if k := op.ActualKind.base; len(ks) > 0 && !slices.Contains(ks, k) {
+	if k := op.ActualKind.BaseKind; len(ks) > 0 && !slices.Contains(ks, k) {
 		err = fmt.Errorf("matched an unexpected kind %q", k)
 	} else {
-		ret = op.ActualKind.name
+		ret = op.ActualKind.Name
 	}
 	return
 }
@@ -37,13 +37,15 @@ func (op *Kind) matchKind(q Query, input *InputState) (okay bool) {
 	return
 }
 
+// if no specific filter is set, then all kinds can match;
+// otherwise one of the specific kinds must match.
 func filterKind(q Query, k kindsOf.Kinds) (okay bool) {
-	if matchKindsOfAspects(q) {
-		okay = k == kindsOf.Aspect
-	} else if matchKindsOfKinds(q) {
-		okay = k == kindsOf.Kind
-	} else {
+	aspects, kinds := matchKindsOfAspects(q), matchKindsOfKinds(q)
+	if !aspects && !kinds {
 		okay = true
+	} else {
+		okay = (aspects && k == kindsOf.Aspect) ||
+			(kinds && k == kindsOf.Kind)
 	}
 	return
 }
@@ -64,6 +66,6 @@ func (op *Kind) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounP
 }
 
 type ActualKind struct {
-	name string // as opposed to just what matched
-	base kindsOf.Kinds
+	Name     string // as opposed to just what matched
+	BaseKind kindsOf.Kinds
 }

@@ -378,6 +378,8 @@ var Phrases = []Phrase{
 	},
 	// ------------------------------------------------------------------------
 	// NounPropertyValue
+	// note: we don't validate the values of properties while matching;
+	// weave validates values when attempting to write them to the db.
 	// ------------------------------------------------------------------------
 	{
 		test: `The story has the title "{15|print_num!}"`,
@@ -387,8 +389,9 @@ var Phrases = []Phrase{
 		},
 	},
 	{
-		// note: we don't validate properties while matching
-		// weave validates them when attempting to write them.
+		// inform specifically disallows this:
+		// "the 'of' here appears superfluous"
+		// that seems silly to me.
 		test: `The bottle has an age of 42.`,
 		result: []string{
 			"AddNounName:", "bottle", "bottle",

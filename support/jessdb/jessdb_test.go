@@ -59,11 +59,17 @@ type testAdapter struct {
 	dynamicNouns map[string]string
 }
 
-func (ta testAdapter) FindNoun(ws match.Span, kind string) (ret string, width int) {
-	if n, w := ta.Query.FindNoun(ws, kind); w > 0 {
+func (ta testAdapter) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
+	if n, w := ta.Query.FindNoun(ws, pkind); w > 0 {
 		ret, width = n, w
-	} else if noun, ok := ta.dynamicNouns[ws.String()]; ok {
-		ret, width = noun, len(ws)
+	} else {
+		str := ws.String()
+		if noun, ok := ta.dynamicNouns[str]; ok {
+			ret, width = noun, len(ws)
+			if pkind != nil {
+				*pkind = ta.dynamicNouns["$"+str]
+			}
+		}
 	}
 	return
 }

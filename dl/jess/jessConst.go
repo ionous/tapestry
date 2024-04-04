@@ -6,6 +6,7 @@ const (
 	PlayerSelf    = "self"
 	FactDirection = "dir"
 	// kinds:
+	Actors     = "actors"     // for player self
 	Objects    = "objects"    // the kind of a potential room or door
 	Directions = "directions" // a special kind of object representing movement of travel
 	Rooms      = "rooms"      // possible player locale

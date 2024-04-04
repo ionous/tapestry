@@ -41,7 +41,8 @@ func (op *Direction) Match(q Query, input *InputState) (okay bool) {
 	// options:
 	// 1. look at the fields of the compass
 	// 2. look at the noun instances of kind directions
-	if m, width := q.FindNoun(input.Words(), Directions); width > 0 {
+	kind := Directions
+	if m, width := q.FindNoun(input.Words(), &kind); width > 0 {
 		op.Text = m // holds the normalized name
 		*input, okay = input.Skip(width), true
 	}

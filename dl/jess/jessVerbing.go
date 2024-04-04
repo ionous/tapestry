@@ -13,7 +13,8 @@ import (
 
 // the passed phrase is the macro to match
 func (op *Verb) Match(q Query, input *InputState) (okay bool) {
-	if m, width := q.FindNoun(input.Words(), Verbs); width > 0 {
+	kind := Verbs
+	if m, width := q.FindNoun(input.Words(), &kind); width > 0 {
 		op.Text = m // holds the normalized name
 		*input, okay = input.Skip(width), true
 	}

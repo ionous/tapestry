@@ -6,7 +6,7 @@ import (
 )
 
 func (op *Noun) BuildNouns(_ Query, w weaver.Weaves, _ rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
-	n := op.ActualNoun
+	n := op.ActualNoun.Name
 	if e := writeKinds(w, n, props.Kinds); e != nil {
 		err = e
 	} else {
@@ -30,19 +30,22 @@ func (op *Noun) matchNoun(q Query, input *InputState) (okay bool) {
 		// fix? it'd be nice if the mapping of "you" to "self" was handled by script;
 		// or even not necessary at all.
 		if width := 1; len(sub) == width && sub[0].Hash() == keywords.You {
-			op.ActualNoun = PlayerSelf
+			op.ActualNoun = ActualNoun{Name: PlayerSelf, Kind: Actors}
 			op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 		} else {
 			// match the subsection normally:
-			if m, width := q.FindNoun(sub, ""); width > 0 {
-				op.ActualNoun = m
+			var kind string
+			if m, width := q.FindNoun(sub, &kind); width > 0 {
+				op.ActualNoun = ActualNoun{Name: m, Kind: kind}
 				op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
 			}
-
 		}
 	}
 	return
 }
 
 // the noun that matched ( as opposed to the name that matched )
-type ActualNoun = string
+type ActualNoun struct {
+	Name string
+	Kind string
+}

@@ -2,6 +2,7 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -15,6 +16,7 @@ type MatchedKind struct {
 
 type MatchedNoun struct {
 	Name  string // the name of the noun in the db
+	Kind  string // the noun's kind
 	Match string // the words (singular or plural) used to match
 }
 
@@ -79,40 +81,48 @@ const blank = " "
 const space = ' '
 
 // match the passed words with the known fields of all in-scope kinds.
-func (pen *Pen) GetPartialField(str string) (ret string, err error) {
-	if len(str) > 0 {
-		words := str + blank
+// return the full name of the field that matched.
+// an unmatched noun returns the empty string and no error.
+func (pen *Pen) GetPartialField(kind, field string) (ret string, err error) {
+	if kind, e := pen.findRequiredKind(kind); e != nil {
+		err = e
+	} else if len(field) == 0 {
+		err = errors.New("get partial field requires a non empty string")
+	} else {
+		words := field + blank
 		if e := pen.db.QueryRow(`
 	with fields(name) as (
-		select distinct mf.field
-		from mdl_kind mk
-		join domain_tree dt
-			on (dt.uses = mk.domain)
-		join mdl_field mf 
-			on(mf.kind = mk.rowid)	
-		where dt.base = ?1
-		and mf.type is null 
+		select field as name 		 
+		from mdl_field mf 
+		join mdl_kind mk 
+			-- does our ancestry (X) contain any of these kinds (Y)
+			on ((mf.kind = mk.rowid) and instr(@ancestry, ',' || mk.rowid || ',' ))
+		left join mdl_kind mt 
+			on (mt.rowid = mf.type)
 	)
 	select name from (
-		select name, substr(?2 ,0, length(name)+2) as words
+		select name, substr(@words ,0, length(name)+2) as words
 		from fields
 		where words = (name || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, words).Scan(&ret); e != sql.ErrNoRows {
+			sql.Named("ancestry", kind.fullpath()),
+			sql.Named("words", words)).Scan(&ret); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}
 	}
 	return
 }
 
+// if specified, kind must match exactly
+// an unmatched noun returns the empty string and no error.
 func (pen *Pen) GetPartialNoun(name, kind string) (ret MatchedNoun, err error) {
 	if len(name) > 0 {
 		words := name + blank
 		if e := pen.db.QueryRow(`
-		with nouns(noun, name) as (
-			select mn.noun, my.name 
+		with nouns(noun, name, kind) as (
+			select mn.noun, my.name, mk.kind
 			from mdl_name my
 			join mdl_noun mn
 				on (mn.rowid = my.noun)
@@ -127,21 +137,22 @@ func (pen *Pen) GetPartialNoun(name, kind string) (ret MatchedNoun, err error) {
 		)
 		-- for each possible pair chop a chunk of words from our input string
 		-- that's the length of the noun name, to see if it matches the noun name.
-		select noun, name from (
-			select noun, name, substr(?2 ,0, length(name)+2) as words
+		select noun, name, kind from (
+			select noun, name, kind, substr(?2 ,0, length(name)+2) as words
 			from nouns
 			where words = (name || ' ')
 		)
 		order by length(name) desc
 		limit 1`,
 			pen.domain, words, kind).
-			Scan(&ret.Name, &ret.Match); e != sql.ErrNoRows {
+			Scan(&ret.Name, &ret.Match, &ret.Kind); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}
 	}
 	return
 }
 
+// an unmatched trait returns the empty string and no error
 // tbd: technically there's some possibility that there might be three traits:
 // "wood", "veneer", and "wood veneer" -- subset names
 // with the first two applying to one kind, and the third applying to a different kind;

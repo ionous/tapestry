@@ -25,16 +25,6 @@ func (n *nounInfo) class() classInfo {
 	}
 }
 
-// prefer runtime meta.ObjectId
-func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
-	if noun, e := pen.getClosestNoun(name); e != nil {
-		err = e
-	} else {
-		ret = noun.name
-	}
-	return
-}
-
 func (pen *Pen) GetRelativeNouns(noun, relation string, primary bool) (ret []string, err error) {
 	if rows, e := pen.db.Query(`
 	select one.noun as oneName, other.noun as otherName
@@ -85,10 +75,10 @@ func (pen *Pen) GetNounValue(noun, field string) (ret []byte, err error) {
 	return
 }
 
-func (pen *Pen) getClosestNoun(name string) (ret nounInfo, err error) {
-	var out nounInfo
+// prefer runtime meta.ObjectId
+func (pen *Pen) GetClosestNoun(name string) (retNoun, retKind string, err error) {
 	if e := pen.db.QueryRow(`
-	select mn.domain, mn.rowid, mn.noun, mk.rowid, ',' || mk.rowid || ',' || mk.path
+	select mn.noun, mk.kind
 	from mdl_name my
 	join mdl_noun mn
 		on (mn.rowid = my.noun)
@@ -101,12 +91,12 @@ func (pen *Pen) getClosestNoun(name string) (ret nounInfo, err error) {
 	and my.rank >= 0
 	order by my.rank, my.rowid asc
 	limit 1`, pen.domain, name).
-		Scan(&out.domain, &out.id, &out.name, &out.kind, &out.fullpath); e != nil && e != sql.ErrNoRows {
-		err = e
-	} else if out.id == 0 {
-		err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
-	} else {
-		ret = out
+		Scan(&retNoun, &retKind); e != nil {
+		if e != sql.ErrNoRows {
+			err = e
+		} else {
+			err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
+		}
 	}
 	return
 }

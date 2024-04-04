@@ -112,9 +112,9 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 	for it := op.Names.GetNames(); it.HasNext(); {
 		next := it.GetNext()
 		if n := next.Noun; n != nil {
-			nouns = append(nouns, n.ActualNoun)
-		} else if k := next.Kind; k != nil && k.ActualKind.base == kindsOf.Action {
-			actions = append(actions, k.ActualKind.name)
+			nouns = append(nouns, n.ActualNoun.Name)
+		} else if k := next.Kind; k != nil && k.ActualKind.BaseKind == kindsOf.Action {
+			actions = append(actions, k.ActualKind.Name)
 		} else if n := next.Name; n == nil {
 			err = errors.New("Understandings can only match existing nouns or existing actions")
 			break
@@ -122,7 +122,7 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 			// fix? if we're going to check at the end; maybe shift to plain names instead.
 			// fix? pass a filter to FindNoun so you can't understand things that arent objects.
 			span := n.Matched.(match.Span)
-			if noun, width := q.FindNoun(span, ""); width < 0 {
+			if noun, width := q.FindNoun(span, nil); width < 0 {
 				err = fmt.Errorf("no noun found called %q", span.String())
 				break
 			} else {
@@ -140,7 +140,7 @@ Loop:
 		if n := as.GetNext(); n.Noun == nil {
 			err = errors.New("unknown name, expected the name of an existing noun.")
 		} else {
-			name := n.Noun.ActualNoun
+			name := n.Noun.ActualNoun.Name
 			for it := op.QuotedTexts.Iterate(); it.HasNext(); {
 				plural := it.GetNext()
 				if e := w.AddPlural(plural, name); e != nil {

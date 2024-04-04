@@ -26,13 +26,14 @@ type Query interface {
 
 	// find the name of the field which best matches the passed span.
 	// return the number of words that matched ( if any. )
-	FindField(match.Span) (string, int)
+	FindField(kind string, field match.Span) (string, int)
 
 	// find the name of the noun which best matches the passed span.
 	// return the number of words that matched ( if any. )
 	// the kind, if specified, will ensure the noun is of that kind;
 	// [ so that the caller doesn't have to validate materialized kind paths ]
-	FindNoun(name match.Span, kind string) (string, int)
+	// the actual kind of the noun is also optionally returned via kind.
+	FindNoun(name match.Span, pkind *string) (string, int)
 }
 
 // Matched - generic interface so implementations can track backchannel data.

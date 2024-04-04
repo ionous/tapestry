@@ -10,7 +10,7 @@ const (
 	DependencyPhase Phase = iota + 1
 	LanguagePhase         // definitions of words
 	AncestryPhase         // kinds and their derivation
-	PropertyPhase         // the members of kinds
+	PropertyPhase         // the members of kinds ( after ancestry because fields depend on kind )
 	NounPhase             // generate explicit nouns
 	VerbPhase             // apply existing verbs
 	ConnectionPhase       // pairings and map connections
