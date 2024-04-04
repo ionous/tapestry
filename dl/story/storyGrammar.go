@@ -12,11 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineAlias) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if name, e := safe.GetText(run, op.NounName); e != nil {
@@ -40,11 +35,6 @@ func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineLeadingGrammar) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // an ugly way to ensure that grammar ( and therefore the runtime )
 // isnt dependent on story / weave
 func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
@@ -58,11 +48,6 @@ func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 			Series: scans,
 		})
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *DefineNamedGrammar) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 // an ugly way to ensure that grammar ( and therefore the runtime )

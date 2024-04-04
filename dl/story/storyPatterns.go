@@ -18,11 +18,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefinePattern) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
@@ -52,10 +47,6 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-func (op *DefineAction) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineAction) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.Action); e != nil {
@@ -82,10 +73,6 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 	})
 }
 
-func (op *RuleProvides) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.PatternName); e != nil {
@@ -102,10 +89,6 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 		}
 		return
 	})
-}
-
-func (op *RuleForPattern) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
@@ -136,10 +119,6 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-func (op *RuleForNoun) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if noun, e := safe.GetText(run, op.NounName); e != nil {
@@ -164,10 +143,6 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 		}
 		return
 	})
-}
-
-func (op *RuleForKind) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {

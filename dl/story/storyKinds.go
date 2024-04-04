@@ -10,11 +10,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineKinds) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // ex. "cats are a kind of animal"
 func (op *DefineKinds) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
@@ -33,11 +28,6 @@ func (op *DefineKinds) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *DefineFields) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 // ex. cats have some text called breed.

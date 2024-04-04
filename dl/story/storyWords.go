@@ -9,11 +9,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefinePlural) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
 func (op *DefinePlural) Weave(cat *weave.Catalog) error {

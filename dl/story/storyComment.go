@@ -16,10 +16,9 @@ func (*Comment) Weave(*weave.Catalog) (_ error) {
 	return
 }
 
-// Execute - called by the macro runtime during weave.
-// since Schedule doesnt do anything, neither do we.
+// Execute - panics. PreImport should turn it into a DebugLog.
 func (*Comment) Execute(rt.Runtime) (_ error) {
-	return
+	panic("story comment should have been replaced during weave")
 }
 
 // PreImport turns a comment statement into a debug log.

@@ -15,11 +15,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineAspect) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // (the) colors are red, blue, or green.
 func (op *DefineAspect) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
@@ -41,11 +36,6 @@ func (op *DefineAspect) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
@@ -70,11 +60,6 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 	})
 }
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineNouns) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if nouns, e := safe.GetTextList(run, op.Nouns); e != nil {
@@ -95,11 +80,6 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *DefineValue) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 // ex. The description of the nets is xxx
@@ -136,11 +116,6 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 	})
 }
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineRelatives) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if rel, e := safe.GetText(run, op.Relation); e != nil {
@@ -154,11 +129,6 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
 }
 
 func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {

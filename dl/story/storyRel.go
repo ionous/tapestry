@@ -8,11 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineRelation) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineRelation) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if rel, e := safe.GetText(run, op.Relation); e != nil {

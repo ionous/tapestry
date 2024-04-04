@@ -17,8 +17,7 @@ Spec:with group:
       - # Create a scene
         Spec:slots:with flow:
           - "define_test"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:
@@ -62,8 +61,7 @@ Spec:with group:
       - # Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
         Spec:slots:groups:with flow:
           - "define_action"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "events"
           - Flow:uses:
               - "define"
@@ -83,8 +81,7 @@ Spec:with group:
         # Aspects here are assumed to be singularly named.
         Spec:slots:with flow:
           - "define_aspect"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -152,8 +149,7 @@ Spec:with group:
       - # allows the player to refer to a noun by one or more other terms.
         Spec:slots:with flow:
           - "define_alias"
-          - - "execute"
-            - "story_statement"
+          - "story_statement"
           - Flow:uses:
               - "interpret"
               - - Term:name:type:
@@ -167,8 +163,7 @@ Spec:with group:
       - # starts a parser scanner.
         Spec:slots:with flow:
           - "define_leading_grammar"
-          - - "execute"
-            - "story_statement"
+          - "story_statement"
           - Flow:uses:
               - "interpret"
               - - Term:name:type:repeats:
@@ -184,8 +179,7 @@ Spec:with group:
       - # starts a parser scanner.
         Spec:slots:with flow:
           - "define_named_grammar"
-          - - "execute"
-            - "story_statement"
+          - "story_statement"
           - Flow:uses:
               - "interpret"
               - - Term:type:
@@ -209,8 +203,7 @@ Spec:with group:
                     - "text_eval"
       - Spec:slots:groups:with flow:
           - "define_relation"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "relations"
           - Flow:uses:
               - "define"
@@ -229,8 +222,7 @@ Spec:with group:
       - # Add properties to a kind
         Spec:slots:with flow:
           - "define_fields"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -242,8 +234,7 @@ Spec:with group:
                     - true
       - Spec:slots:with flow:
           - "define_kinds"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -260,8 +251,7 @@ Spec:with group:
         # "The plural of person is persons."
         Spec:slots:groups:with flow:
           - "define_plural"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "language"
           - Flow:phrase:uses:
               - "define"
@@ -275,8 +265,7 @@ Spec:with group:
       - # Assign a starting value to the field of one or nouns.
         Spec:slots:with flow:
           - "define_value"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:
@@ -293,8 +282,7 @@ Spec:with group:
                     - "assignment"
       - Spec:slots:with flow:
           - "define_nouns"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -306,8 +294,7 @@ Spec:with group:
                     - "text_eval"
       - Spec:slots:with flow:
           - "define_noun_traits"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -356,8 +343,7 @@ Spec:with group:
                     - true
       - Spec:slots:groups:with flow:
           - "rule_provides"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -375,8 +361,7 @@ Spec:with group:
         # Because event listeners have filters they continue to the next listener unless specifically stopped.
         Spec:slots:groups:with flow:
           - "rule_for_pattern"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -398,8 +383,7 @@ Spec:with group:
         # The default behavior for events is to fall through to the next handler unless canceled or stopped.
         Spec:slots:groups:with flow:
           - "rule_for_noun"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -425,8 +409,7 @@ Spec:with group:
         # The default behavior for events is to fall through to the next handler unless canceled or stopped.
         Spec:slots:groups:with flow:
           - "rule_for_kind"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -457,8 +440,7 @@ Spec:with group:
         # Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
         Spec:slots:groups:with flow:
           - "define_pattern"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -534,8 +516,7 @@ Spec:with group:
       - # Relate nouns to each other
         Spec:slots:with flow:
           - "define_relatives"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -551,8 +532,7 @@ Spec:with group:
       - # Relate nouns to each other
         Spec:slots:with flow:
           - "define_other_relatives"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:

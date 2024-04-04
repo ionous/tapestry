@@ -1327,7 +1327,7 @@ func (op *PropertyNounValue_Slice) Repeats() bool {
 }
 
 // assigns a default value to a noun.
-// ex. `The pen has the description "mightier than the sword.`
+// ex. `The pen has (the) description (of) "mightier than the sword.`
 // like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
 type NounPropertyValue struct {
 	NamedNoun   NamedNoun
@@ -3174,7 +3174,7 @@ func init() {
 			Type:  &Zt_SingleValue,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has the description \"mightier than the sword.`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has (the) description (of) \"mightier than the sword.`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
 		},
 	}
 	Zt_SingleValue = typeinfo.Flow{

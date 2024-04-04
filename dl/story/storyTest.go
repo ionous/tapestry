@@ -9,11 +9,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineTest) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineTest) Weave(cat *weave.Catalog) (err error) {
 	if name := inflect.Normalize(op.TestName); len(name) == 0 {
 		errutil.New("test has empty name")
