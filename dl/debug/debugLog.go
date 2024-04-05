@@ -14,14 +14,14 @@ import (
 var LogLevel LoggingLevel
 
 func (op *DebugLog) Execute(run rt.Runtime) (err error) {
-	// fix? at this time we cant guarantee a lack of side-effects
-	// so we always eval even if we don't print.
+	// fix? currently, weave can't guarantee a lack of side-effects;
+	// so this always evals even if it doesn't print.
 	if v, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = CmdError(op, e)
 	} else {
 		global := LogLevel
 		level := op.LogLevel
-		if err == nil && ((global >= 0 && level >= global) || (global < 0 && level != 0)) {
+		if (global >= 0 && level >= global) || (global < 0 && level != 0) {
 			if level < 0 {
 				level = 0
 			}

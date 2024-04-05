@@ -24,12 +24,10 @@ func main() {
 	if !debugging {
 		log.SetOutput(io.Discard)
 	}
-	if cnt, e := player.PlayGame(inFile, testString, domain); e != nil {
+	if e := player.PlayGame(inFile, testString, domain); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")
 		}
-	} else {
-		log.Println("done", cnt, inFile)
 	}
 }
