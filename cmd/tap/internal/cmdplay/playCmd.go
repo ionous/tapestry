@@ -25,7 +25,7 @@ func run(ctx context.Context, _ *base.Command, args []string) (err error) {
 	} else if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
 		log.Println("Unknown logging level", cfg.logLevel)
 		log.Println("Expected one of:", strings.Join(debug.Zt_LoggingLevel.Options, ", "))
-		err = errutil.New("%w expected a valid logging level", base.UsageError)
+		err = fmt.Errorf("%w expected a valid logging level", base.UsageError)
 	} else {
 		scene := args[0]
 		debug.LogLevel = lvl
