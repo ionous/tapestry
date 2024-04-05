@@ -153,8 +153,12 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 			}
 			cat.processing.Pop()
 			if err == nil {
-				d.currPhase = -1 // all done.
-				ret = d
+				if e := d.finalizeDomain(); e != nil {
+					err = e
+				} else {
+					d.currPhase = -1 // all done.
+					ret = d
+				}
 			}
 		}
 	}
