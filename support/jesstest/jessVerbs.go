@@ -4,23 +4,25 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
+	"github.com/ionous/sliceOf"
 )
 
-// fix? maybe add "wearing" instead of carrying, to test implication better?
+// fix? maybe add "wearing" instead of carrying to test implications better?
 var KnownVerbs = MockVerbs{
 	"carrying": {
 		Subject:  "actors",
 		Object:   "things",
 		Relation: "whereabouts",
-		Implies:  "not worn",
+		Implies:  sliceOf.String("not worn", "portable"),
 		Reversed: false, // (parent) is carrying (child)
 	},
 	"carried by": {
 		Subject:  "actors",
 		Object:   "things",
 		Relation: "whereabouts",
-		Implies:  "not worn",
+		Implies:  sliceOf.String("not worn", "portable"),
 		Reversed: true, // (child) is carried by (parent)
 	},
 	"in": {
@@ -28,14 +30,14 @@ var KnownVerbs = MockVerbs{
 		Alternate: "rooms", // alternate
 		Object:    "things",
 		Relation:  "whereabouts",
-		Implies:   "not worn",
+		Implies:   sliceOf.String("not worn"),
 		Reversed:  true, // (child) is in (parent)
 	},
 	"on": {
 		Subject:  "supporters",
 		Object:   "things",
 		Relation: "whereabouts",
-		Implies:  "not worn",
+		Implies:  sliceOf.String("not worn"),
 		Reversed: true, // (child) is on (parent)
 	},
 	"suspicious of": {
@@ -48,33 +50,31 @@ var KnownVerbs = MockVerbs{
 
 type MockVerbs map[string]jess.VerbDesc
 
-func (vs MockVerbs) GetVerbValue(name, field string) (ret string, err error) {
+func (vs MockVerbs) GetVerbValue(name, field string) (ret g.Value, err error) {
 	if v, ok := vs[name]; !ok {
 		err = fmt.Errorf("%w %q %q", weaver.Missing, name, field)
 	} else {
-		str := "$bad"
 		switch field {
 		case jess.VerbSubject:
-			str = v.Subject
+			ret = g.StringOf(v.Subject)
 		case jess.VerbAlternate:
-			str = v.Alternate
+			ret = g.StringOf(v.Alternate)
 		case jess.VerbObject:
-			str = v.Object
+			ret = g.StringOf(v.Object)
 		case jess.VerbRelation:
-			str = v.Relation
-		case jess.VerbImplication:
-			str = v.Implies
+			ret = g.StringOf(v.Relation)
+		case jess.VerbImplies:
+			ret = g.StringsOf(v.Implies)
 		case jess.VerbReversed:
+			var str string
 			if v.Reversed {
 				str = "reversed"
 			} else {
 				str = "not reversed"
 			}
-		}
-		if str == "bad" {
+			ret = g.StringOf(str)
+		default:
 			err = fmt.Errorf("%w %q %q", weaver.Missing, name, field)
-		} else {
-			ret = str
 		}
 	}
 	return

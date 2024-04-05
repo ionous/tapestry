@@ -1287,13 +1287,16 @@ func (op *AdditionalAdjectives_Slice) Repeats() bool {
 
 // assigns a default value to a noun.
 // ex. `The description of the pen is "mightier than the sword.`
+// as a special case allows also allows a list of quoted text
+// indicated with "are" ( versus "is" )
 type PropertyNounValue struct {
 	Article     *Article
 	Property    Property
 	Of          Words
 	NamedNoun   NamedNoun
 	Are         Are
-	SingleValue SingleValue
+	SingleValue *SingleValue
+	QuotedTexts *QuotedTexts
 	Markup      map[string]any
 }
 
@@ -1327,7 +1330,7 @@ func (op *PropertyNounValue_Slice) Repeats() bool {
 }
 
 // assigns a default value to a noun.
-// ex. `The pen has (the) description (of) "mightier than the sword.`
+// ex. `The pen has (the) description (of) "mightier than the sword."`
 // like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
 type NounPropertyValue struct {
 	NamedNoun   NamedNoun
@@ -2261,8 +2264,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10878709482269586052: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:singleValue: */
 	11106580022094386190: (*Property)(nil),             /* Property article:matched: */
 	7038723543321541230:  (*Property)(nil),             /* Property matched: */
+	12495940289451013068: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are: */
+	3073222598673922702:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:quotedTexts: */
 	3232071257951321417:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue: */
+	12779492266059217511: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue:quotedTexts: */
+	9991119609101366868:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are: */
+	13706825447213238054: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:quotedTexts: */
 	9176481845249379681:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue: */
+	15509934208360069807: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue:quotedTexts: */
 	3271806062429822368:  (*PropertyType)(nil),         /* PropertyType */
 	11567946081716077320: (*PropertyType)(nil),         /* PropertyType kind: */
 	8224056348026199873:  (*PropertyType)(nil),         /* PropertyType primitive: */
@@ -3132,12 +3141,18 @@ func init() {
 			Label: "are",
 			Type:  &Zt_Are,
 		}, {
-			Name:  "single_value",
-			Label: "single_value",
-			Type:  &Zt_SingleValue,
+			Name:     "single_value",
+			Label:    "single_value",
+			Optional: true,
+			Type:     &Zt_SingleValue,
+		}, {
+			Name:     "quoted_texts",
+			Label:    "quoted_texts",
+			Optional: true,
+			Type:     &Zt_QuotedTexts,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The description of the pen is \"mightier than the sword.`"},
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The description of the pen is \"mightier than the sword.`", "as a special case allows also allows a list of quoted text", "indicated with \"are\" ( versus \"is\" )"},
 		},
 	}
 	Zt_NounPropertyValue = typeinfo.Flow{
@@ -3174,7 +3189,7 @@ func init() {
 			Type:  &Zt_SingleValue,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has (the) description (of) \"mightier than the sword.`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has (the) description (of) \"mightier than the sword.\"`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
 		},
 	}
 	Zt_SingleValue = typeinfo.Flow{

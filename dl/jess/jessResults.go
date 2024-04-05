@@ -33,6 +33,10 @@ func (n *DesiredNoun) appendTrait(trait string) {
 	n.Traits = append(n.Traits, trait)
 }
 
+func (n *DesiredNoun) appendTraits(traits []string) {
+	n.Traits = append(n.Traits, traits...)
+}
+
 func (n *DesiredNoun) appendValue(field string, assign rt.Assignment) {
 	n.Values = append(n.Values, DesiredValue{field, assign})
 }

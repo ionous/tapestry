@@ -59,12 +59,16 @@ func (op *QuotedText) String() string {
 	return op.Matched
 }
 
-func (op *QuotedText) Assignment() (ret rt.Assignment) {
+func (op *QuotedText) Assignment() rt.Assignment {
+	return &assign.FromText{Value: op.TextEval()}
+}
+
+func (op *QuotedText) TextEval() (ret rt.TextEval) {
 	str := op.Matched
 	if v, e := ConvertTextTemplate(str); e == nil {
-		ret = &assign.FromText{Value: v}
+		ret = v
 	} else {
-		ret = text(str, "")
+		ret = &literal.TextValue{Value: str}
 	}
 	return
 }
@@ -105,11 +109,10 @@ func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 // support
 // --------------------------------------------------------------
 
-// tbd: i'm not sold on the idea that registar takes assignments
-// maybe it'd make more sense to pass in generic "any" values,
-// to have add factory functions to Context,
+// tbd: i'm not sold on the idea that weave takes assignments
+// maybe it'd make more sense to pass in generic "any" values
+// but... note: text templates.
 // or to have individual methods for the necessary types
-// ( maybe just three: trait, text, number )
 func number(value float64, kind string) rt.Assignment {
 	return &assign.FromNumber{
 		Value: &literal.NumValue{Value: value, Kind: kind},

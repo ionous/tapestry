@@ -6,16 +6,16 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
+// a snapshot of the verb; represented as a noun in the db.
 type VerbDesc struct {
 	Subject,
 	Object,
 	Alternate,
-	Relation,
-	Implies string
+	Relation string
+	Implies  []string
 	Reversed bool
 }
 
@@ -34,9 +34,9 @@ func (v *VerbDesc) applyVerb(u Scheduler, w weaver.Weaves, lhs, rhs []DesiredNou
 		} else {
 			subjects, objects = rhs, lhs
 		}
-		if trait := v.Implies; len(trait) > 0 {
+		if ts := v.Implies; len(ts) > 0 {
 			for i := range objects {
-				objects[i].appendTrait(trait)
+				objects[i].appendTraits(ts)
 			}
 		}
 		if e := writePairs(w, v.Relation, subjects, objects); e != nil {
@@ -101,8 +101,8 @@ func readVerb(run rt.Runtime, verb string) (ret VerbDesc, err error) {
 		err = e
 	} else if alternate, e := readString(run, verb, VerbAlternate); e != nil && !errors.Is(e, weaver.Missing) {
 		err = e // alternate subects(s) are optional
-	} else if implication, e := readString(run, verb, VerbImplication); e != nil && !errors.Is(e, weaver.Missing) {
-		err = e // implication(s) are optional
+	} else if implies, e := readStringList(run, verb, VerbImplies); e != nil && !errors.Is(e, weaver.Missing) {
+		err = e // implications are optional
 	} else if rev, revErr := readString(run, verb, VerbReversed); revErr != nil && !errors.Is(revErr, weaver.Missing) {
 		err = revErr // reverse is optional; false if not explicitly specified
 	} else {
@@ -111,8 +111,9 @@ func readVerb(run rt.Runtime, verb string) (ret VerbDesc, err error) {
 			Object:    object,
 			Alternate: alternate,
 			Relation:  relation,
-			// these are normally specified
-			Implies:  inflect.Normalize(implication),
+			// these are normally specified as raw text
+			// any errors show up when they are applied
+			Implies:  implies,
 			Reversed: rev == ReversedTrait,
 		}
 	}
@@ -128,5 +129,15 @@ func readString(run rt.Runtime, noun, field string) (ret string, err error) {
 		ret = b.String()
 	}
 	return
+}
 
+func readStringList(run rt.Runtime, noun, field string) (ret []string, err error) {
+	if b, e := run.GetField(noun, field); e != nil {
+		err = e
+	} else if aff := b.Affinity(); aff != affine.TextList {
+		err = fmt.Errorf(`expected that "%s.%s" was a list of text, not %s`, noun, field, aff)
+	} else {
+		ret = b.Strings()
+	}
+	return
 }

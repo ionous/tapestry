@@ -458,6 +458,8 @@ Spec:with group:
 
     - # assigns a default value to a noun.
       # ex. `The description of the pen is "mightier than the sword.`
+      # as a special case allows also allows a list of quoted text
+      # indicated with "are" ( versus "is" )
       Spec:with flow:
       - "property_noun_value"
       - Flow uses:
@@ -471,10 +473,15 @@ Spec:with group:
           - "words"
         - Term: "named_noun"
         - Term: "are"
-        - Term: "single_value"
+        - Term:optional:
+          - "single_value"
+          - true
+        - Term:optional:
+          - "quoted_texts"
+          - true
 
     - # assigns a default value to a noun.
-      # ex. `The pen has (the) description (of) "mightier than the sword.`
+      # ex. `The pen has (the) description (of) "mightier than the sword."`
       # like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
       Spec:with flow:
       - "noun_property_value"

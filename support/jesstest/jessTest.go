@@ -616,7 +616,9 @@ var Phrases = []Phrase{
 			"AddNounTrait:", "hershel", "proper named",
 			"AddNounTrait:", "scissors", "proper named", // yes; this conforms with inform.
 			"AddNounTrait:", "scissors", "not worn",
+			"AddNounTrait:", "scissors", "portable",
 			"AddNounTrait:", "pen", "not worn",
+			"AddNounTrait:", "pen", "portable",
 		},
 	},
 	{
@@ -635,7 +637,9 @@ var Phrases = []Phrase{
 			"AddNounPair:", "whereabouts", "hershel", "pen",
 			//
 			"AddNounTrait:", "scissors", "not worn",
+			"AddNounTrait:", "scissors", "portable",
 			"AddNounTrait:", "pen", "not worn",
+			"AddNounTrait:", "pen", "portable",
 			"AddNounTrait:", "hershel", "proper named",
 		},
 	},

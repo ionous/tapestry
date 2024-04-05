@@ -28,11 +28,11 @@ const (
 	// relations:
 	Whereabouts = "whereabouts"
 	// verbs:
-	VerbSubject     = "subject"
-	VerbAlternate   = "alternate subject"
-	VerbObject      = "object"
-	VerbRelation    = "relation"
-	VerbImplication = "implication"
-	VerbReversed    = "reversed status"
-	ReversedTrait   = "reversed"
+	VerbSubject   = "subject"
+	VerbAlternate = "alternate subject"
+	VerbObject    = "object"
+	VerbRelation  = "relation"
+	VerbImplies   = "implications"
+	VerbReversed  = "reversed status"
+	ReversedTrait = "reversed"
 )

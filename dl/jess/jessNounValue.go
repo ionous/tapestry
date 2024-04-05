@@ -46,8 +46,15 @@ func (op *PropertyNounValue) GetNamedNoun() NamedNoun {
 func (op *PropertyNounValue) GetProperty() Property {
 	return op.Property
 }
-func (op *PropertyNounValue) GetValue() SingleValue {
-	return op.SingleValue
+func (op *PropertyNounValue) GetValue() (ret rt.Assignment) {
+	if v := op.SingleValue; v != nil {
+		ret = v.Assignment()
+	} else if v := op.QuotedTexts; v != nil {
+		ret = v.Assignment()
+	} else {
+		panic("not implemented")
+	}
+	return
 }
 
 func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
@@ -57,7 +64,10 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 		rest := next.Skip(index + 1) // everything after "of"
 		if op.NamedNoun.Match(q, &rest) &&
 			op.Are.Match(q, &rest) &&
-			op.SingleValue.Match(q, &rest) {
+			// either: single value or quoted texts
+			((op.Are.IsPlural() && Optional(q, &rest, &op.QuotedTexts)) ||
+				(!op.Are.IsPlural() && Optional(q, &rest, &op.SingleValue))) {
+
 			// try the phrase before the word "of"
 			// the whole string must be consumed
 			property := MakeInput(next.CutSpan(index))
@@ -90,8 +100,8 @@ func (op *NounPropertyValue) GetNamedNoun() NamedNoun {
 func (op *NounPropertyValue) GetProperty() Property {
 	return op.Property
 }
-func (op *NounPropertyValue) GetValue() SingleValue {
-	return op.SingleValue
+func (op *NounPropertyValue) GetValue() rt.Assignment {
+	return op.SingleValue.Assignment()
 }
 
 func (op *NounPropertyValue) Match(q Query, input *InputState) (okay bool) {
@@ -138,7 +148,7 @@ type nounValuePhrase interface {
 	Phase() weaver.Phase
 	GetNamedNoun() NamedNoun
 	GetProperty() Property
-	GetValue() SingleValue
+	GetValue() rt.Assignment
 }
 
 func genNounValuePhrase(ctx Context, phrase nounValuePhrase) (err error) {
@@ -151,7 +161,7 @@ func genNounValuePhrase(ctx Context, phrase nounValuePhrase) (err error) {
 		} else {
 			err = genNounValues(ctx, ns, func(n string) error {
 				// fix: can i add this to "desired noun" instead of as a callback
-				return w.AddNounValue(n, p.String(), v.Assignment())
+				return w.AddNounValue(n, p.String(), v)
 			})
 		}
 		return

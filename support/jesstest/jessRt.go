@@ -17,7 +17,7 @@ type jessRt struct {
 }
 
 type VerbLookup interface {
-	GetVerbValue(name, field string) (ret string, err error)
+	GetVerbValue(name, field string) (g.Value, error)
 }
 
 func (d *jessRt) ReciprocalsOf(b, relation string) (ret g.Value, err error) {
@@ -46,10 +46,8 @@ func (d *jessRt) GetField(name, field string) (ret g.Value, err error) {
 			err = fmt.Errorf("jess rt, unexpected opposite for %q", name)
 		}
 		ret = g.StringOf(str)
-	} else if str, e := d.verbs.GetVerbValue(name, field); e != nil {
-		err = e
 	} else {
-		ret = g.StringOf(str)
+		ret, err = d.verbs.GetVerbValue(name, field)
 	}
 	return
 }
