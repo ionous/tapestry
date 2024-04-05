@@ -769,6 +769,8 @@ func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err er
 }
 
 // the top level fields of nouns can hold runtime evaluated assignments.
+// wrap with "ProvisionalAssignment" to assign implied values
+// that can be overridden by explicit statements.
 // note: assumes noun is an exact name
 func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
