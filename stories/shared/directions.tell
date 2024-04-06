@@ -1,133 +1,43 @@
 Tapestry:
-  - # Every room has a compass. The compass defines connections to other rooms.
-    # Every direction is a both a noun, and a field of the compass.
-    # New directions are defined with the 'DefineCompass' macro.
-    Declare: "Compasses are kinds of records. Directions are kinds of objects."
-  - Define kind:fields:
-      - "Rooms"
-      - - Record: "compass"
-  - Define macro:requires:provides:do:
-      - "define compass"
-      - - # a unique name for this direction. ex. north.
-          Text: "direction"
-        - # an optional short name. additional names can be added using aliases.
-          Text: "short"
-        - # directions come in pairs. each should have a unique opposite direction.
-          Text: "opposite"
-      - - Nothing:
-      - - Define nouns:as:
-            - List ofText:
-                - "@direction"
-            - "direction"
-        - Define opposite:word:
-            - "@direction"
-            - "@opposite"
-        - Define kind:fields:
-            - "Compasses"
-            - - Text:kind:
-                  - "@direction"
-                  - "door"
-        - If:do:
-            - Not:
-                Is empty: "@short"
-            - - Interpret alias:as:
-                  - List ofText:
-                      - "@short"
-                  - "@direction"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "north"
-        - Arg:from:
-            - "short"
-            - FromText: "n"
-        - Arg:from:
-            - "opposite"
-            - FromText: "south"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "east"
-        - Arg:from:
-            - "short"
-            - FromText: "e"
-        - Arg:from:
-            - "opposite"
-            - FromText: "west"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "south"
-        - Arg:from:
-            - "short"
-            - FromText: "s"
-        - Arg:from:
-            - "opposite"
-            - FromText: "north"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "west"
-        - Arg:from:
-            - "short"
-            - FromText: "w"
-        - Arg:from:
-            - "opposite"
-            - FromText: "east"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "up"
-        - Arg:from:
-            - "short"
-            - FromText: "u"
-        - Arg:from:
-            - "opposite"
-            - FromText: "down"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "down"
-        - Arg:from:
-            - "short"
-            - FromText: "d"
-        - Arg:from:
-            - "opposite"
-            - FromText: "up"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "inside"
-        - Arg:from:
-            - "short"
-            - FromText: "in"
-        - Arg:from:
-            - "opposite"
-            - FromText: "outside"
-  - Call macro:args:
-      - "define_compass"
-      - - Arg:from:
-            - "direction"
-            - FromText: "outside"
-        - Arg:from:
-            - "short"
-            - FromText: "out"
-        - Arg:from:
-            - "opposite"
-            - FromText: "inside"
-  - Declare: "Doors are kinds of opener. Doors are usually fixed in place."
-  - Define kind:fields:
-      - "Doors"
-      - - Text:kind:
-            - "destination"
-            - "room"
+  - # Doors exist in rooms and connect to other rooms.
+    # Every room has a compass which lists doors within the room.
+    # Every direction is a both a noun, and the name of a field within the compass.
+    Declare: """
+    A room is a kind of object.
+    A compass is a kind of record. A room has a compass.
+    Directions are a kind of object.
+
+    The north is a direction. A compass has a door called north.
+    The northeast is a direction. A compass has a door called northeast.
+    The northwest is a direction. A compass has a door called northwest.
+    The south is a direction. A compass has a door called south.
+    The southeast is a direction. A compass has a door called southeast.
+    The southwest is a direction. A compass has a door called southwest.
+    The east is a direction. A compass has a door called east.
+    The west is a direction. A compass has a door called west.
+    The up is a direction. A compass has a door called up.
+    The down is a direction. A compass has a door called down.
+    The inside is a direction. A compass has a door called inside.
+    The outside is a direction. A compass has a door called outside.
+
+    A direction has a direction called an opposite.
+    The north has opposite south. Understand "n" as north.
+    The northeast has opposite southwest. Understand "ne" as northeast.
+    The northwest has opposite southeast. Understand "nw" as northwest.
+    The south has opposite north. Understand "s" as south.
+    The southeast has opposite northwest. Understand "se" as southeast.
+    The southwest has opposite northeast. Understand "sw" as southwest.
+    The east has opposite west. Understand "e" as east.
+    The west has opposite east. Understand "w" as west.
+    Up has opposite down. Understand "u" as up.
+    Down has opposite up. Understand "d" as down.
+    Inside has opposite outside. Understand "in" as inside.
+    Outside has opposite inside. Understand "out" as outside.
+
+    Doors are kinds of opener. Doors are usually fixed in place.
+    Doors have a room called the destination.
+    """ # "
+
   - # given a room and its door, find the named direction it represents, if any.
     Define pattern:requires:provides:do:
       - "direction through"
@@ -137,7 +47,7 @@ Tapestry:
         - Text:kind:
             - "door"
             - "door"
-      - - # one of the fields of compass
+      - - # names one of the fields of compass
           Text: "direction"
       - - Repeating across:as:do:
             - FromTextList:
@@ -154,7 +64,9 @@ Tapestry:
                   - - Set:value:
                         - "@direction"
                         - FromText: "@dir"
-                    - Break:
+                    - # since we've found a match; we're done.
+                      Break:
+
   - # given a room and direction, find the matching door ( if any. )
     Define pattern:requires:provides:do:
       - "door via"

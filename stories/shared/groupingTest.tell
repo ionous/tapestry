@@ -38,10 +38,10 @@ Tapestry:
                     - "Clarence"
                     - "apple"
                     - "pen"
-                    - "triangles-1"
-                    - "triangles-2"
-                    - "cats-1"
-                    - "cats-2"
+                    - "triangle-1"
+                    - "triangle-2"
+                    - "cat-1"
+                    - "cat-2"
               - Expect output: "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
         - # 
           Define test:do:
@@ -51,10 +51,10 @@ Tapestry:
                     - "Clarence"
                     - "apple"
                     - "pen"
-                    - "triangles-1"
-                    - "triangles-2"
-                    - "cats-1"
-                    - "cats-2"
+                    - "triangle-1"
+                    - "triangle-2"
+                    - "cat-1"
+                    - "cat-2"
               - Expect output: "Clarence, an empire apple, a pen, two triangles, and two cats"
         - # 
           Define test:scene:do:
@@ -100,15 +100,15 @@ Tapestry:
                           - "Clarence"
                           - "apple"
                           - "pen"
-                          - "triangles-1"
-                          - "triangles-2"
+                          - "triangle-1"
+                          - "triangle-2"
                     - Print: ";"
                     - PrintInlineObjects objs:
                         FromTextList:
                           - "Clarence"
                           - "apple"
                           - "pen"
-                          - "triangles-1"
+                          - "triangle-1"
               - Expect output: "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
         - # 
           Define test:scene:do:
@@ -141,8 +141,8 @@ Tapestry:
                           - "Clarence"
                           - "apple"
                           - "pen"
-                          - "triangles-1"
-                          - "triangles-2"
+                          - "triangle-1"
+                          - "triangle-2"
                     - Print: ";"
                     - PrintInlineObjects objs:
                         FromTextList:
@@ -285,15 +285,15 @@ Tapestry:
                           - "Clarence"
                           - "apple"
                           - "pen"
-                          - "triangles-1"
+                          - "triangle-1"
                     - Print: ";"
                     - PrintInlineObjects objs:
                         FromTextList:
                           - "Clarence"
                           - "apple"
                           - "pen"
-                          - "triangles-1"
-                          - "triangles-2"
+                          - "triangle-1"
+                          - "triangle-2"
               - Expect output: "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
       - - # do nothing
           Continue:

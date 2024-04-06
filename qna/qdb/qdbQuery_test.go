@@ -320,7 +320,7 @@ func mdlName(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(int),
 			row[4].(string)
-		if e := m.Pin(domain, at).AddNounAlias(noun, name, rank); e != nil {
+		if e := m.Pin(domain, at).AddNounName(noun, name, rank); e != nil {
 			err = e
 			break
 		}
@@ -336,7 +336,7 @@ func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.Pin(domain, at).AddNoun(noun, "", kind); e != nil {
+		if e := m.Pin(domain, at).AddNounKind(noun, kind); e != nil {
 			err = e
 			break
 		}
@@ -353,7 +353,7 @@ func mdlPair(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.Pin(domain, at).AddPair(relKind, oneNoun, otherNoun); e != nil {
+		if e := m.Pin(domain, at).AddNounPair(relKind, oneNoun, otherNoun); e != nil {
 			err = e
 			break
 		}

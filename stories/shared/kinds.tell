@@ -26,16 +26,8 @@ Tapestry:
       - - "intangible"
         - "tangible"
   - Declare: "Things are kinds of object. Things are usually tangible."
-  - Declare: "Possessiveness is a kind of aspect."
-  - Define aspect:traits:
-      - "possessiveness"
-      - - "not worn"
-        - "worn"
-  - Declare: "Portability is a kind of aspect."
-  - Define aspect:traits:
-      - "portability"
-      - - "portable"
-        - "fixed in place"
+  - Declare: "Possessiveness is a kind of aspect. The possessivenesses are not worn and worn."
+  - Declare: "Portability is a kind of aspect. The portabilities are portable and fixed in place."
   - Define kind:fields:
       - "Things"
       - - Aspect: "portability"

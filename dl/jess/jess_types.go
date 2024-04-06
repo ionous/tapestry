@@ -6,12 +6,71 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// one of a predefined set of determiners:
-// the, a, some, etc.
-// see 'counted_name' for names with leading numbers.
+// matched, a type of slot.
+var Zt_Matched = typeinfo.Slot{
+	Name: "matched",
+	Markup: map[string]any{
+		"comment": "Used to store matching text",
+	},
+}
+
+// holds a single slot.
+type Matched_Slot struct{ Value Matched }
+
+// implements typeinfo.Instance for a single slot.
+func (*Matched_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Matched
+}
+
+// holds a slice of slots.
+type Matched_Slots []Matched
+
+// implements typeinfo.Instance for a series of slots.
+func (*Matched_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Matched
+}
+
+// implements typeinfo.Repeats
+func (op *Matched_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
+// noun_builder, a type of slot.
+var Zt_NounBuilder = typeinfo.Slot{
+	Name: "noun_builder",
+}
+
+// holds a single slot.
+type NounBuilder_Slot struct{ Value NounBuilder }
+
+// implements typeinfo.Instance for a single slot.
+func (*NounBuilder_Slot) TypeInfo() typeinfo.T {
+	return &Zt_NounBuilder
+}
+
+// holds a slice of slots.
+type NounBuilder_Slots []NounBuilder
+
+// implements typeinfo.Instance for a series of slots.
+func (*NounBuilder_Slots) TypeInfo() typeinfo.T {
+	return &Zt_NounBuilder
+}
+
+// implements typeinfo.Repeats
+func (op *NounBuilder_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
+// one of a predefined set of determiners: the, a/n, some, our.
+// only matches if the first letter is lowercase, or uppercase at the start of a sentence;
+// otherwise, the article gets treated as part of the name.
+// the lack of a recognized article makes something proper-named.
+// see 'counted_kind' for names with leading numbers: (ex. five or 27)
+// using "some"  (ex. "some coins") will set nouns as "plural named"
 type Article struct {
-	Matched string
-	Markup  map[string]any
+	Text   string
+	Flags  ArticleFlags
+	Markup map[string]any
 }
 
 // article, a type of flow.
@@ -152,15 +211,50 @@ func (op *Are_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Specifies a single name, in full or in part.
+// matches the word "called".
+type Called struct {
+	Matched string
+	Markup  map[string]any
+}
+
+// called, a type of flow.
+var Zt_Called typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Called) TypeInfo() typeinfo.T {
+	return &Zt_Called
+}
+
+// implements typeinfo.Markup
+func (op *Called) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type called
+type Called_Slice []Called
+
+// implements typeinfo.Instance
+func (*Called_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Called
+}
+
+// implements typeinfo.Repeats
+func (op *Called_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Specifies a name who's meaning depends on context.
 // For example, when matching: "Gold Roger's treasure chest is a container. The chest is open."
-// The name "chest" implies the treasure chest.
+// the "chest" implies the noun "treasure chest."
+// In other cases, the name might be a kind, or trait, or pretty much anything else.
 // To optimizing matching the words "is/are/comma/and" are never part of name names.
 // future: allow quoted "titles" ( which are then allowed to break those assumptions )
-// ( see also 'kind_called' )
 type Name struct {
 	Article *Article
-	Matched string
+	Matched Matched
 	Markup  map[string]any
 }
 
@@ -179,6 +273,9 @@ func (op *Name) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
+
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*Name)(nil)
 
 // holds a slice of type name
 type Name_Slice []Name
@@ -218,6 +315,9 @@ func (op *Noun) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*Noun)(nil)
+
 // holds a slice of type noun
 type Noun_Slice []Noun
 
@@ -231,17 +331,57 @@ func (op *Noun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// matches an existing noun, or if not: then something new.
+type NamedNoun struct {
+	Noun   *Noun
+	Name   *Name
+	Markup map[string]any
+}
+
+// named_noun, a type of flow.
+var Zt_NamedNoun typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*NamedNoun) TypeInfo() typeinfo.T {
+	return &Zt_NamedNoun
+}
+
+// implements typeinfo.Markup
+func (op *NamedNoun) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*NamedNoun)(nil)
+
+// holds a slice of type named_noun
+type NamedNoun_Slice []NamedNoun
+
+// implements typeinfo.Instance
+func (*NamedNoun_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NamedNoun
+}
+
+// implements typeinfo.Repeats
+func (op *NamedNoun_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Defines a name and its kind in a single phrase.
-// kind "called" [the] _name_.
-// as per inform, the name of the name is everything after the word called
-// until "is" or "are" or the end of the line.
-// For instance: `The container called the trunk and the box is in the lobby`
-// generates a single name named "the trunk and the box."
+// Matches: (traits) kind "called" {the name}.
+// For example: `The closed container called the trunk is in the lobby.`
+// As per inform, the name includes all text after the word "called"
+// until "is", "are", or the end of the sentence;
+// and specifying "called the/our ..." gives the noun an indefinite article.
 type KindCalled struct {
-	Traits     *Traits
-	Kind       Kind
-	CalledName CalledName
-	Markup     map[string]any
+	Traits    *Traits
+	Kind      Kind
+	Called    Called
+	NamedNoun NamedNoun
+	Markup    map[string]any
 }
 
 // kind_called, a type of flow.
@@ -273,49 +413,11 @@ func (op *KindCalled_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type CalledName struct {
-	Called  Words
-	Article *Article
-	Matched string
-	Markup  map[string]any
-}
-
-// called_name, a type of flow.
-var Zt_CalledName typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*CalledName) TypeInfo() typeinfo.T {
-	return &Zt_CalledName
-}
-
-// implements typeinfo.Markup
-func (op *CalledName) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// holds a slice of type called_name
-type CalledName_Slice []CalledName
-
-// implements typeinfo.Instance
-func (*CalledName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CalledName
-}
-
-// implements typeinfo.Repeats
-func (op *CalledName_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Specifies one or more nouns, in full or in part.
 // Only one of the options, plus possibly 'additional_names', will match.
-// Not all options are valid in all contexts;
-// the users of 'names' may discard or avoid certain matches.
-// ( the options could be represented as a slot; this feels easier for now )
+// Not all options are valid in all contexts.
 type Names struct {
-	CountedName     *CountedName
+	CountedKind     *CountedKind
 	KindCalled      *KindCalled
 	Noun            *Noun
 	Kind            *Kind
@@ -339,6 +441,9 @@ func (op *Names) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
+
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*Names)(nil)
 
 // holds a slice of type names
 type Names_Slice []Names
@@ -390,8 +495,8 @@ func (op *AdditionalNames_Slice) Repeats() bool {
 }
 
 // provides english specification of a number of objects.
-// note: yes, `the five the containers` is permitted.
-type CountedName struct {
+// ( note: yes, `the five the containers` is permitted. )
+type CountedKind struct {
 	Article        *Article
 	MatchingNumber MatchingNumber
 	Kind           Kind
@@ -399,36 +504,40 @@ type CountedName struct {
 	Markup         map[string]any
 }
 
-// counted_name, a type of flow.
-var Zt_CountedName typeinfo.Flow
+// counted_kind, a type of flow.
+var Zt_CountedKind typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*CountedName) TypeInfo() typeinfo.T {
-	return &Zt_CountedName
+func (*CountedKind) TypeInfo() typeinfo.T {
+	return &Zt_CountedKind
 }
 
 // implements typeinfo.Markup
-func (op *CountedName) GetMarkup(ensure bool) map[string]any {
+func (op *CountedKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type counted_name
-type CountedName_Slice []CountedName
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*CountedKind)(nil)
+
+// holds a slice of type counted_kind
+type CountedKind_Slice []CountedKind
 
 // implements typeinfo.Instance
-func (*CountedName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CountedName
+func (*CountedKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CountedKind
 }
 
 // implements typeinfo.Repeats
-func (op *CountedName_Slice) Repeats() bool {
+func (op *CountedKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches the name of an existing kind.
+// matches the name of an existing kind;
+// can generate a single anonymous noun.
 type Kind struct {
 	Article    *Article
 	Matched    string
@@ -451,6 +560,9 @@ func (op *Kind) GetMarkup(ensure bool) map[string]any {
 	}
 	return op.Markup
 }
+
+// ensure the command implements its specified slots:
+var _ NounBuilder = (*Kind)(nil)
 
 // holds a slice of type kind
 type Kind_Slice []Kind
@@ -720,10 +832,10 @@ func (op *Words_Slice) Repeats() bool {
 }
 
 // matches one or more predefined verbs
+// ( verbs are nouns of the verb kind )
 type Verb struct {
-	Matched string
-	Macro   Macro
-	Markup  map[string]any
+	Text   string
+	Markup map[string]any
 }
 
 // verb, a type of flow.
@@ -770,6 +882,9 @@ type MatchingPhrases struct {
 	PropertyNounValue   PropertyNounValue
 	NounPropertyValue   NounPropertyValue
 	AspectsAreTraits    AspectsAreTraits
+	MapLocations        MapLocations
+	MapDirections       MapDirections
+	MapConnections      MapConnections
 	Markup              map[string]any
 }
 
@@ -805,14 +920,13 @@ func (op *MatchingPhrases_Slice) Repeats() bool {
 // names are "a kind of"/"kinds of" traits kind:any.
 // interesting to note that inform allows "some kind/s of"
 // this is more strict.
-// like inform this doesn't try to limit the names
-// `The animals called kittens are a kind of things.` is legal.
+// like inform `The animals called kittens are a kind of things.` is legal.
 type KindsOf struct {
 	Names   Names
 	Are     Are
 	KindsOf Words
 	Traits  *Traits
-	Kind    Kind
+	Name    Name
 	Markup  map[string]any
 }
 
@@ -891,16 +1005,14 @@ func (op *KindsAreTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// defines traits for a kind of aspect.
-// aspect are names
-// ex. The colors are a kind of aspect. The colors are red, blue, and greasy green.
+// defines traits for aspects that can be (re)used by various other kinds.
+// ex. `The colors are a kind of aspect. The colors are red, blue, and greasy green.`
 // aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.
-// this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)
 type AspectsAreTraits struct {
-	Aspect Kind
-	Are    Are
-	Names  Names
-	Markup map[string]any
+	Aspect     Kind
+	Are        Are
+	PlainNames Names
+	Markup     map[string]any
 }
 
 // aspects_are_traits, a type of flow.
@@ -1057,9 +1169,9 @@ func (op *NamesAreLikeVerbs_Slice) Repeats() bool {
 
 // ex. ".... in the kitchen.", or "... carries the football and sousaphone."
 type VerbPhrase struct {
-	Verb   Verb
-	Names  Names
-	Markup map[string]any
+	Verb       Verb
+	PlainNames Names
+	Markup     map[string]any
 }
 
 // verb_phrase, a type of flow.
@@ -1175,13 +1287,16 @@ func (op *AdditionalAdjectives_Slice) Repeats() bool {
 
 // assigns a default value to a noun.
 // ex. `The description of the pen is "mightier than the sword.`
+// as a special case allows also allows a list of quoted text
+// indicated with "are" ( versus "is" )
 type PropertyNounValue struct {
 	Article     *Article
 	Property    Property
 	Of          Words
-	Noun        Name
+	NamedNoun   NamedNoun
 	Are         Are
-	SingleValue SingleValue
+	SingleValue *SingleValue
+	QuotedTexts *QuotedTexts
 	Markup      map[string]any
 }
 
@@ -1215,10 +1330,10 @@ func (op *PropertyNounValue_Slice) Repeats() bool {
 }
 
 // assigns a default value to a noun.
-// ex. `The pen has the description "mightier than the sword.`
+// ex. `The pen has (the) description (of) "mightier than the sword."`
 // like inform, adjectives ( in phrases with "is" ) cannot be combined with property phrases ( "has/of" )
 type NounPropertyValue struct {
-	Noun        Name
+	NamedNoun   NamedNoun
 	Has         Words
 	Article     *Article
 	Property    Property
@@ -1261,6 +1376,8 @@ func (op *NounPropertyValue_Slice) Repeats() bool {
 type SingleValue struct {
 	QuotedText     *QuotedText
 	MatchingNumber *MatchingNumber
+	Noun           *Noun
+	Kind           *Kind
 	Markup         map[string]any
 }
 
@@ -1365,7 +1482,7 @@ func (op *MatchingNumber_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// kinds "have" a ["list of"] type ["called a" ...]
+// kinds "have" a ("list of") type ("called" name)
 // ex. Things have some text called a description.
 type KindsHaveProperties struct {
 	Kind         Kind
@@ -1403,6 +1520,43 @@ func (*KindsHaveProperties_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *KindsHaveProperties_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// for kinds_have_properties
+// like kind_called, specifying "called the/our ..." gives the noun an indefinite article.
+type CalledName struct {
+	Called Called
+	Name   Name
+	Markup map[string]any
+}
+
+// called_name, a type of flow.
+var Zt_CalledName typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*CalledName) TypeInfo() typeinfo.T {
+	return &Zt_CalledName
+}
+
+// implements typeinfo.Markup
+func (op *CalledName) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type called_name
+type CalledName_Slice []CalledName
+
+// implements typeinfo.Instance
+func (*CalledName_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CalledName
+}
+
+// implements typeinfo.Repeats
+func (op *CalledName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1632,11 +1786,328 @@ func (op *Understand_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// A mapping declaration starting with a room or door.
+// ex. `A dead end called the Airport is west of the Road and north of the Farm.`
+type MapLocations struct {
+	Linking              Linking
+	Are                  Are
+	DirectionOfLinking   DirectionOfLinking
+	AdditionalDirections *AdditionalDirections
+	Markup               map[string]any
+}
+
+// map_locations, a type of flow.
+var Zt_MapLocations typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MapLocations) TypeInfo() typeinfo.T {
+	return &Zt_MapLocations
+}
+
+// implements typeinfo.Markup
+func (op *MapLocations) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type map_locations
+type MapLocations_Slice []MapLocations
+
+// implements typeinfo.Instance
+func (*MapLocations_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MapLocations
+}
+
+// implements typeinfo.Repeats
+func (op *MapLocations_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches additional directions
+// only used by map_locations
+type AdditionalDirections struct {
+	CommaAnd             CommaAnd
+	DirectionOfLinking   DirectionOfLinking
+	AdditionalDirections *AdditionalDirections
+	Markup               map[string]any
+}
+
+// additional_directions, a type of flow.
+var Zt_AdditionalDirections typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AdditionalDirections) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalDirections
+}
+
+// implements typeinfo.Markup
+func (op *AdditionalDirections) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type additional_directions
+type AdditionalDirections_Slice []AdditionalDirections
+
+// implements typeinfo.Instance
+func (*AdditionalDirections_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalDirections
+}
+
+// implements typeinfo.Repeats
+func (op *AdditionalDirections_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// A mapping declaration starting with a direction.
+type MapDirections struct {
+	DirectionOfLinking DirectionOfLinking
+	Are                Are
+	Linking            *Linking
+	Redirect           *DirectionOfLinking
+	Markup             map[string]any
+}
+
+// map_directions, a type of flow.
+var Zt_MapDirections typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MapDirections) TypeInfo() typeinfo.T {
+	return &Zt_MapDirections
+}
+
+// implements typeinfo.Markup
+func (op *MapDirections) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type map_directions
+type MapDirections_Slice []MapDirections
+
+// implements typeinfo.Instance
+func (*MapDirections_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MapDirections
+}
+
+// implements typeinfo.Repeats
+func (op *MapDirections_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// A mapping declaration to set the destination of doors.
+// ex. `Through the long slide is the cellar.`
+//
+//	` Through the blue door and the red door is the kitchen.`
+//
+// The destination of a door is always treated as a room or nowhere.
+// ( Inform doesn't allow nowhere, but it seems like a good idea. )
+type MapConnections struct {
+	Through         bool
+	Doors           Linking
+	AdditionalLinks *AdditionalLinks
+	Are             Are
+	Room            Linking
+	Markup          map[string]any
+}
+
+// map_connections, a type of flow.
+var Zt_MapConnections typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*MapConnections) TypeInfo() typeinfo.T {
+	return &Zt_MapConnections
+}
+
+// implements typeinfo.Markup
+func (op *MapConnections) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type map_connections
+type MapConnections_Slice []MapConnections
+
+// implements typeinfo.Instance
+func (*MapConnections_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MapConnections
+}
+
+// implements typeinfo.Repeats
+func (op *MapConnections_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// partial phrase for mapping declarations.
+type DirectionOfLinking struct {
+	Direction Direction
+	FromOf    Words
+	Linking   Linking
+	Markup    map[string]any
+}
+
+// direction_of_linking, a type of flow.
+var Zt_DirectionOfLinking typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*DirectionOfLinking) TypeInfo() typeinfo.T {
+	return &Zt_DirectionOfLinking
+}
+
+// implements typeinfo.Markup
+func (op *DirectionOfLinking) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type direction_of_linking
+type DirectionOfLinking_Slice []DirectionOfLinking
+
+// implements typeinfo.Instance
+func (*DirectionOfLinking_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DirectionOfLinking
+}
+
+// implements typeinfo.Repeats
+func (op *DirectionOfLinking_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// matches some existing compass direction.
+type Direction struct {
+	Text   string
+	Markup map[string]any
+}
+
+// direction, a type of flow.
+var Zt_Direction typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Direction) TypeInfo() typeinfo.T {
+	return &Zt_Direction
+}
+
+// implements typeinfo.Markup
+func (op *Direction) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type direction
+type Direction_Slice []Direction
+
+// implements typeinfo.Instance
+func (*Direction_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Direction
+}
+
+// implements typeinfo.Repeats
+func (op *Direction_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// generates a room, a door, or nowhere.
+// ( similar to, but distinct from other noun matching phrases. )
+type Linking struct {
+	Nowhere    bool
+	KindCalled *KindCalled
+	Noun       *Noun
+	Name       *Name
+	Markup     map[string]any
+}
+
+// linking, a type of flow.
+var Zt_Linking typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*Linking) TypeInfo() typeinfo.T {
+	return &Zt_Linking
+}
+
+// implements typeinfo.Markup
+func (op *Linking) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type linking
+type Linking_Slice []Linking
+
+// implements typeinfo.Instance
+func (*Linking_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Linking
+}
+
+// implements typeinfo.Repeats
+func (op *Linking_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// partial phrase used for map connections
+// allows multiple doors, etc. on the lhs.
+type AdditionalLinks struct {
+	CommaAnd        CommaAnd
+	Linking         Linking
+	AdditionalLinks *AdditionalLinks
+	Markup          map[string]any
+}
+
+// additional_links, a type of flow.
+var Zt_AdditionalLinks typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*AdditionalLinks) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalLinks
+}
+
+// implements typeinfo.Markup
+func (op *AdditionalLinks) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type additional_links
+type AdditionalLinks_Slice []AdditionalLinks
+
+// implements typeinfo.Instance
+func (*AdditionalLinks_Slice) TypeInfo() typeinfo.T {
+	return &Zt_AdditionalLinks
+}
+
+// implements typeinfo.Repeats
+func (op *AdditionalLinks_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // package listing of type data
 var Z_Types = typeinfo.TypeSet{
 	Name:       "jess",
+	Slot:       z_slot_list,
 	Flow:       z_flow_list,
 	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_Matched,
+	&Zt_NounBuilder,
 }
 
 // a list of all flows in this this package
@@ -1646,13 +2117,14 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_CommaAnd,
 	&Zt_CommaAndOr,
 	&Zt_Are,
+	&Zt_Called,
 	&Zt_Name,
 	&Zt_Noun,
+	&Zt_NamedNoun,
 	&Zt_KindCalled,
-	&Zt_CalledName,
 	&Zt_Names,
 	&Zt_AdditionalNames,
-	&Zt_CountedName,
+	&Zt_CountedKind,
 	&Zt_Kind,
 	&Zt_Kinds,
 	&Zt_AdditionalKinds,
@@ -1678,19 +2150,32 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_QuotedText,
 	&Zt_MatchingNumber,
 	&Zt_KindsHaveProperties,
+	&Zt_CalledName,
 	&Zt_PropertyType,
 	&Zt_KindsAreEither,
 	&Zt_NewTrait,
 	&Zt_QuotedTexts,
 	&Zt_AdditionalText,
 	&Zt_Understand,
+	&Zt_MapLocations,
+	&Zt_AdditionalDirections,
+	&Zt_MapDirections,
+	&Zt_MapConnections,
+	&Zt_DirectionOfLinking,
+	&Zt_Direction,
+	&Zt_Linking,
+	&Zt_AdditionalLinks,
 }
 
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	12489206644669467772: (*AdditionalAdjectives)(nil), /* AdditionalAdjectives commaAnd:adjectives: */
+	13976572281991597662: (*AdditionalDirections)(nil), /* AdditionalDirections commaAnd:directionOfLinking: */
+	3987359216723603269:  (*AdditionalDirections)(nil), /* AdditionalDirections commaAnd:directionOfLinking:additionalDirections: */
 	12174030489678544826: (*AdditionalKinds)(nil),      /* AdditionalKinds commaAnd:kinds: */
+	3282054325918314061:  (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:linking: */
+	5988669985902941853:  (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:linking:additionalLinks: */
 	16975120945491427296: (*AdditionalNames)(nil),      /* AdditionalNames commaAnd:names: */
 	12949801356443185096: (*AdditionalText)(nil),       /* AdditionalText commaAndOr:quotedTexts: */
 	508023169458945308:   (*AdditionalTraits)(nil),     /* AdditionalTraits commaAnd:traits: */
@@ -1712,18 +2197,16 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11552995266309396480: (*Adjectives)(nil),           /* Adjectives traits:kind: */
 	8078288476520567765:  (*Adjectives)(nil),           /* Adjectives traits:kind:additionalAdjectives: */
 	14557216947727331217: (*Are)(nil),                  /* Are matched: */
-	3899130289676196213:  (*Article)(nil),              /* Article matched: */
-	2432146112131878337:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:names: */
-	4459312168816416564:  (*CalledName)(nil),           /* CalledName called:article:matched: */
-	5598625672403523312:  (*CalledName)(nil),           /* CalledName called:matched: */
+	10435354424123783362: (*Article)(nil),              /* Article text: */
+	3333774278464825615:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:plainNames: */
+	1429396826658837670:  (*Called)(nil),               /* Called matched: */
+	1453048882349619361:  (*CalledName)(nil),           /* CalledName called:name: */
 	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
 	4143979682086652670:  (*CommaAndOr)(nil),           /* CommaAndOr matched: */
-	2237036151518779634:  (*CountedName)(nil),          /* CountedName article:matchingNumber:kind: */
-	6139323499442568526:  (*CountedName)(nil),          /* CountedName matchingNumber:kind: */
-	17839012382227179591: (*Kind)(nil),                 /* Kind article:matched: */
-	17757668305058379307: (*Kind)(nil),                 /* Kind matched: */
-	14410370178407404046: (*KindCalled)(nil),           /* KindCalled kind:calledName: */
-	17999201427714166607: (*KindCalled)(nil),           /* KindCalled traits:kind:calledName: */
+	11748118905044300293: (*Direction)(nil),            /* Direction text: */
+	15872175738337217373: (*DirectionOfLinking)(nil),   /* DirectionOfLinking direction:fromOf:linking: */
+	381833413316053162:   (*KindCalled)(nil),           /* KindCalled kind:called:namedNoun: */
+	15647995089065713351: (*KindCalled)(nil),           /* KindCalled traits:kind:called:namedNoun: */
 	16939996019861136326: (*Kinds)(nil),                /* Kinds article:matched: */
 	16946855517465005572: (*Kinds)(nil),                /* Kinds article:matched:additionalKinds: */
 	17808071339216334934: (*Kinds)(nil),                /* Kinds matched: */
@@ -1742,91 +2225,53 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11010766076935860857: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType:calledName: */
 	13822756587399879234: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType: */
 	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
-	3548848131135117387:  (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:kind: */
-	16884802454329910582: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:kind: */
+	11715331887122574628: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:name: */
+	17568620593785114477: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:name: */
+	1268488188857917463:  (*Linking)(nil),              /* Linking */
+	5424212330747857864:  (*Linking)(nil),              /* Linking kindCalled: */
+	6446505275065105379:  (*Linking)(nil),              /* Linking kindCalled:name: */
+	2710323341843582806:  (*Linking)(nil),              /* Linking kindCalled:noun: */
+	3374566505223385661:  (*Linking)(nil),              /* Linking kindCalled:noun:name: */
+	6388981702446933508:  (*Linking)(nil),              /* Linking name: */
+	699798969473871641:   (*Linking)(nil),              /* Linking noun: */
+	7057336974261527000:  (*Linking)(nil),              /* Linking noun:name: */
+	12985609098990274833: (*Linking)(nil),              /* Linking nowhere: */
+	14771750539341337516: (*Linking)(nil),              /* Linking nowhere:kindCalled: */
+	5903702872919052743:  (*Linking)(nil),              /* Linking nowhere:kindCalled:name: */
+	5217319623359730706:  (*Linking)(nil),              /* Linking nowhere:kindCalled:noun: */
+	3495762696381881337:  (*Linking)(nil),              /* Linking nowhere:kindCalled:noun:name: */
+	5842644028483118736:  (*Linking)(nil),              /* Linking nowhere:name: */
+	6234445843544605613:  (*Linking)(nil),              /* Linking nowhere:noun: */
+	215166621636789820:   (*Linking)(nil),              /* Linking nowhere:noun:name: */
+	14338407882822574093: (*MapConnections)(nil),       /* MapConnections through:doors:additionalLinks:are:room: */
+	13548965473900735969: (*MapConnections)(nil),       /* MapConnections through:doors:are:room: */
+	8340425706814700105:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are: */
+	11792054126316928315: (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:linking: */
+	17410395297541184115: (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:linking:redirect: */
+	7836789797345891325:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:redirect: */
+	10172864188299309151: (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking: */
+	4228974132366036894:  (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking:additionalDirections: */
 	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	7194637704405545739:  (*MatchingPhrases)(nil),      /* MatchingPhrases understand:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits: */
-	8378947654433865548:  (*Name)(nil),                 /* Name article:matched: */
-	6273971456499216312:  (*Name)(nil),                 /* Name matched: */
-	7786741787633711023:  (*Names)(nil),                /* Names */
-	2651340957450283514:  (*Names)(nil),                /* Names additionalNames: */
-	14434599770315422844: (*Names)(nil),                /* Names countedName: */
-	9886115040157153195:  (*Names)(nil),                /* Names countedName:additionalNames: */
-	5713683783650676748:  (*Names)(nil),                /* Names countedName:kind: */
-	11696938860312845211: (*Names)(nil),                /* Names countedName:kind:additionalNames: */
-	758506744303684007:   (*Names)(nil),                /* Names countedName:kind:name: */
-	14864729949414126072: (*Names)(nil),                /* Names countedName:kind:name:additionalNames: */
-	7253272718308834379:  (*Names)(nil),                /* Names countedName:kindCalled: */
-	7381532013512958308:  (*Names)(nil),                /* Names countedName:kindCalled:additionalNames: */
-	8408184179066850945:  (*Names)(nil),                /* Names countedName:kindCalled:kind: */
-	7338366429769939062:  (*Names)(nil),                /* Names countedName:kindCalled:kind:additionalNames: */
-	2599493857747890432:  (*Names)(nil),                /* Names countedName:kindCalled:kind:name: */
-	6118560200350627847:  (*Names)(nil),                /* Names countedName:kindCalled:kind:name:additionalNames: */
-	10095315050340635774: (*Names)(nil),                /* Names countedName:kindCalled:name: */
-	12303183222075615441: (*Names)(nil),                /* Names countedName:kindCalled:name:additionalNames: */
-	16016006553657500507: (*Names)(nil),                /* Names countedName:kindCalled:noun: */
-	10974813615439306964: (*Names)(nil),                /* Names countedName:kindCalled:noun:additionalNames: */
-	9330812819590436241:  (*Names)(nil),                /* Names countedName:kindCalled:noun:kind: */
-	7495635724182262182:  (*Names)(nil),                /* Names countedName:kindCalled:noun:kind:additionalNames: */
-	61991847326186512:    (*Names)(nil),                /* Names countedName:kindCalled:noun:kind:name: */
-	16567691826379993975: (*Names)(nil),                /* Names countedName:kindCalled:noun:kind:name:additionalNames: */
-	1954798977107529870:  (*Names)(nil),                /* Names countedName:kindCalled:noun:name: */
-	1453720914422785985:  (*Names)(nil),                /* Names countedName:kindCalled:noun:name:additionalNames: */
-	4084573660669905687:  (*Names)(nil),                /* Names countedName:name: */
-	4746500019507238408:  (*Names)(nil),                /* Names countedName:name:additionalNames: */
-	1565612388169232770:  (*Names)(nil),                /* Names countedName:noun: */
-	9885660877016308621:  (*Names)(nil),                /* Names countedName:noun:additionalNames: */
-	7544737702340487242:  (*Names)(nil),                /* Names countedName:noun:kind: */
-	6225774588617267381:  (*Names)(nil),                /* Names countedName:noun:kind:additionalNames: */
-	6758483912899777873:  (*Names)(nil),                /* Names countedName:noun:kind:name: */
-	2370394761308054758:  (*Names)(nil),                /* Names countedName:noun:kind:name:additionalNames: */
-	14324195655603457449: (*Names)(nil),                /* Names countedName:noun:name: */
-	7648223350549942782:  (*Names)(nil),                /* Names countedName:noun:name:additionalNames: */
-	10083583177877560579: (*Names)(nil),                /* Names kind: */
-	10358197305705491068: (*Names)(nil),                /* Names kind:additionalNames: */
-	4765472119311194486:  (*Names)(nil),                /* Names kind:name: */
-	6827326204135250665:  (*Names)(nil),                /* Names kind:name:additionalNames: */
-	17127273420174886912: (*Names)(nil),                /* Names kindCalled: */
-	17398615419225362183: (*Names)(nil),                /* Names kindCalled:additionalNames: */
-	5709340463761574280:  (*Names)(nil),                /* Names kindCalled:kind: */
-	2606241887328501871:  (*Names)(nil),                /* Names kindCalled:kind:additionalNames: */
-	14491670955720618019: (*Names)(nil),                /* Names kindCalled:kind:name: */
-	6231970138046816860:  (*Names)(nil),                /* Names kindCalled:kind:name:additionalNames: */
-	2889757484689352859:  (*Names)(nil),                /* Names kindCalled:name: */
-	17641125891389017492: (*Names)(nil),                /* Names kindCalled:name:additionalNames: */
-	18252619704094206206: (*Names)(nil),                /* Names kindCalled:noun: */
-	16719037751160036689: (*Names)(nil),                /* Names kindCalled:noun:additionalNames: */
-	10760810840429172254: (*Names)(nil),                /* Names kindCalled:noun:kind: */
-	1058091307719820081:  (*Names)(nil),                /* Names kindCalled:noun:kind:additionalNames: */
-	6350622555029621989:  (*Names)(nil),                /* Names kindCalled:noun:kind:name: */
-	15500822951422585506: (*Names)(nil),                /* Names kindCalled:noun:kind:name:additionalNames: */
-	17526846413198169413: (*Names)(nil),                /* Names kindCalled:noun:name: */
-	1527596859810085826:  (*Names)(nil),                /* Names kindCalled:noun:name:additionalNames: */
-	4500297491524973516:  (*Names)(nil),                /* Names name: */
-	17351915174502247643: (*Names)(nil),                /* Names name:additionalNames: */
-	4129390381581869393:  (*Names)(nil),                /* Names noun: */
-	941988050790936806:   (*Names)(nil),                /* Names noun:additionalNames: */
-	14246399898236767247: (*Names)(nil),                /* Names noun:kind: */
-	4100879738227378912:  (*Names)(nil),                /* Names noun:kind:additionalNames: */
-	141678822577381250:   (*Names)(nil),                /* Names noun:kind:name: */
-	17169799669968570765: (*Names)(nil),                /* Names noun:kind:name:additionalNames: */
-	13508960775707565904: (*Names)(nil),                /* Names noun:name: */
-	13465500415858101815: (*Names)(nil),                /* Names noun:name:additionalNames: */
+	15320753925577366738: (*MatchingPhrases)(nil),      /* MatchingPhrases understand:kindsAreTraits:kindsOf:kindsHaveProperties:kindsAreEither:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs:propertyNounValue:nounPropertyValue:aspectsAreTraits:mapLocations:mapDirections:mapConnections: */
 	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
 	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
 	8736862563783456239:  (*NewTrait)(nil),             /* NewTrait matched: */
 	8812100125409583293:  (*NewTrait)(nil),             /* NewTrait matched:newTrait: */
-	9135030775569670221:  (*Noun)(nil),                 /* Noun article:matched: */
-	3627847602484306981:  (*Noun)(nil),                 /* Noun matched: */
-	6502702423569934278:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:of:singleValue: */
-	9912988654777640387:  (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:article:property:singleValue: */
-	11825351964218879050: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:of:singleValue: */
-	17930228889254639535: (*NounPropertyValue)(nil),    /* NounPropertyValue noun:has:property:singleValue: */
+	2974378055008641127:  (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:article:property:of:singleValue: */
+	15033098472290183804: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:article:property:singleValue: */
+	12848318806630146367: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:of:singleValue: */
+	10878709482269586052: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:singleValue: */
 	11106580022094386190: (*Property)(nil),             /* Property article:matched: */
 	7038723543321541230:  (*Property)(nil),             /* Property matched: */
-	8361206308538973804:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:noun:are:singleValue: */
-	7473469395579866548:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:noun:are:singleValue: */
+	12495940289451013068: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are: */
+	3073222598673922702:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:quotedTexts: */
+	3232071257951321417:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue: */
+	12779492266059217511: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue:quotedTexts: */
+	9991119609101366868:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are: */
+	13706825447213238054: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:quotedTexts: */
+	9176481845249379681:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue: */
+	15509934208360069807: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue:quotedTexts: */
 	3271806062429822368:  (*PropertyType)(nil),         /* PropertyType */
 	11567946081716077320: (*PropertyType)(nil),         /* PropertyType kind: */
 	8224056348026199873:  (*PropertyType)(nil),         /* PropertyType primitive: */
@@ -1835,9 +2280,21 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15490383194906526516: (*QuotedTexts)(nil),          /* QuotedTexts quotedText: */
 	18124669431880345752: (*QuotedTexts)(nil),          /* QuotedTexts quotedText:additionalText: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
+	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
+	3199991737231408734:  (*SingleValue)(nil),          /* SingleValue matchingNumber:kind: */
+	17789670957933718200: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun: */
+	12644158024662816112: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun:kind: */
+	11550266937804910612: (*SingleValue)(nil),          /* SingleValue noun: */
+	15983631673684921876: (*SingleValue)(nil),          /* SingleValue noun:kind: */
 	3958109237643295925:  (*SingleValue)(nil),          /* SingleValue quotedText: */
+	5530597249301129963:  (*SingleValue)(nil),          /* SingleValue quotedText:kind: */
 	17617190106567464055: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber: */
+	13435854409171053573: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:kind: */
+	16335742359860243615: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun: */
+	8688649593759560061:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun:kind: */
+	7763015042528813017:  (*SingleValue)(nil),          /* SingleValue quotedText:noun: */
+	1174375068044253639:  (*SingleValue)(nil),          /* SingleValue quotedText:noun:kind: */
 	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
@@ -1846,10 +2303,86 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8602404775723907374:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:pluralOf:names: */
 	4257336208718925827:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:names: */
 	1299769703937557498:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:pluralOf:names: */
-	4698992564801604870:  (*Verb)(nil),                 /* Verb matched: */
+	5125756836274165399:  (*Verb)(nil),                 /* Verb text: */
 	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
-	17939229312172807626: (*VerbPhrase)(nil),           /* VerbPhrase verb:names: */
+	7322259980003111582:  (*VerbPhrase)(nil),           /* VerbPhrase verb:plainNames: */
 	17678340847396548932: (*Words)(nil),                /* Words matched: */
+	17929352418080814012: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind: */
+	11334937790230459436: (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind: */
+	643122070839149560:   (*Kind)(nil),                 /* noun_builder=Kind article:matched: */
+	12803964412357300908: (*Kind)(nil),                 /* noun_builder=Kind matched: */
+	16595966641928411799: (*Name)(nil),                 /* noun_builder=Name article:matched: */
+	4672836465996832923:  (*Name)(nil),                 /* noun_builder=Name matched: */
+	18272900946848200057: (*NamedNoun)(nil),            /* noun_builder=NamedNoun */
+	15792878411416494446: (*NamedNoun)(nil),            /* noun_builder=NamedNoun name: */
+	4609637404391733803:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun: */
+	12436910703333794014: (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun:name: */
+	2640583889409900672:  (*Names)(nil),                /* noun_builder=Names */
+	12738701442995129767: (*Names)(nil),                /* noun_builder=Names additionalNames: */
+	18240362602181459374: (*Names)(nil),                /* noun_builder=Names countedKind: */
+	12037276021421474977: (*Names)(nil),                /* noun_builder=Names countedKind:additionalNames: */
+	11318456940554365262: (*Names)(nil),                /* noun_builder=Names countedKind:kind: */
+	2921561536254769409:  (*Names)(nil),                /* noun_builder=Names countedKind:kind:additionalNames: */
+	13682022206539604949: (*Names)(nil),                /* noun_builder=Names countedKind:kind:name: */
+	11386403162429699442: (*Names)(nil),                /* noun_builder=Names countedKind:kind:name:additionalNames: */
+	4820492468237421857:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled: */
+	4857057301878550486:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:additionalNames: */
+	4610133023990007327:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind: */
+	306331290473716240:   (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:additionalNames: */
+	12828387939941830738: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:name: */
+	13812482964698333117: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:name:additionalNames: */
+	3933914708907484064:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:name: */
+	5386185730384130791:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:name:additionalNames: */
+	2738021730814332381:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun: */
+	3703234872673498778:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:additionalNames: */
+	12823222385333700579: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind: */
+	10265094182115599260: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:additionalNames: */
+	10650274376302874710: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:name: */
+	14970606785357505161: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:name:additionalNames: */
+	7240077436469524524:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:name: */
+	16627837112229598459: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:name:additionalNames: */
+	15188605287333602229: (*Names)(nil),                /* noun_builder=Names countedKind:name: */
+	10005531180398488466: (*Names)(nil),                /* noun_builder=Names countedKind:name:additionalNames: */
+	2732786101127601032:  (*Names)(nil),                /* noun_builder=Names countedKind:noun: */
+	11074441579857580655: (*Names)(nil),                /* noun_builder=Names countedKind:noun:additionalNames: */
+	5699674351646236608:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind: */
+	11208875936483827527: (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:additionalNames: */
+	4114723026604174811:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:name: */
+	17665316277083130708: (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:name:additionalNames: */
+	7558135697584793123:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:name: */
+	4307309335598848092:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:name:additionalNames: */
+	8731626769408708840:  (*Names)(nil),                /* noun_builder=Names kind: */
+	5229708717675470479:  (*Names)(nil),                /* noun_builder=Names kind:additionalNames: */
+	10589513982817099011: (*Names)(nil),                /* noun_builder=Names kind:name: */
+	12371250482715634300: (*Names)(nil),                /* noun_builder=Names kind:name:additionalNames: */
+	1696243941719473959:  (*Names)(nil),                /* noun_builder=Names kindCalled: */
+	16924085558067939192: (*Names)(nil),                /* noun_builder=Names kindCalled:additionalNames: */
+	17975453262944337013: (*Names)(nil),                /* noun_builder=Names kindCalled:kind: */
+	1690461824825161682:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:additionalNames: */
+	8025575955095143172:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:name: */
+	4411930061699572051:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:name:additionalNames: */
+	8470829746237860794:  (*Names)(nil),                /* noun_builder=Names kindCalled:name: */
+	2285294953849975365:  (*Names)(nil),                /* noun_builder=Names kindCalled:name:additionalNames: */
+	456838907409351087:   (*Names)(nil),                /* noun_builder=Names kindCalled:noun: */
+	3607075457371268800:  (*Names)(nil),                /* noun_builder=Names kindCalled:noun:additionalNames: */
+	10428480112727021197: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind: */
+	14860782265429290474: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:additionalNames: */
+	14089547370513396124: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:name: */
+	18215615836863081227: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:name:additionalNames: */
+	15212080762452775330: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:name: */
+	15368829543700440685: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:name:additionalNames: */
+	5911903052848076411:  (*Names)(nil),                /* noun_builder=Names name: */
+	12319710271794432948: (*Names)(nil),                /* noun_builder=Names name:additionalNames: */
+	2828161936031789150:  (*Names)(nil),                /* noun_builder=Names noun: */
+	6435800613231659505:  (*Names)(nil),                /* noun_builder=Names noun:additionalNames: */
+	1013731956332121214:  (*Names)(nil),                /* noun_builder=Names noun:kind: */
+	2837764967510892753:  (*Names)(nil),                /* noun_builder=Names noun:kind:additionalNames: */
+	1168764988217479109:  (*Names)(nil),                /* noun_builder=Names noun:kind:name: */
+	14830046638313199170: (*Names)(nil),                /* noun_builder=Names noun:kind:name:additionalNames: */
+	7779767529101118373:  (*Names)(nil),                /* noun_builder=Names noun:name: */
+	8867758540341244642:  (*Names)(nil),                /* noun_builder=Names noun:name:additionalNames: */
+	4465529434619879510:  (*Noun)(nil),                 /* noun_builder=Noun article:matched: */
+	2598335774687055558:  (*Noun)(nil),                 /* noun_builder=Noun matched: */
 }
 
 // init the terms of all flows in init
@@ -1859,12 +2392,16 @@ func init() {
 		Name: "article",
 		Lede: "article",
 		Terms: []typeinfo.Term{{
-			Name:  "matched",
-			Label: "matched",
+			Name:  "text",
+			Label: "text",
 			Type:  &prim.Zt_Text,
+		}, {
+			Name:    "flags",
+			Label:   "flags",
+			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"one of a predefined set of determiners:", "the, a, some, etc.", "see 'counted_name' for names with leading numbers."},
+			"comment": []interface{}{"one of a predefined set of determiners: the, a/n, some, our.", "only matches if the first letter is lowercase, or uppercase at the start of a sentence;", "otherwise, the article gets treated as part of the name.", "the lack of a recognized article makes something proper-named.", "see 'counted_kind' for names with leading numbers: (ex. five or 27)", "using \"some\"  (ex. \"some coins\") will set nouns as \"plural named\""},
 		},
 	}
 	Zt_CommaAnd = typeinfo.Flow{
@@ -1903,6 +2440,18 @@ func init() {
 			"comment": "matches \"is\" or \"are\".",
 		},
 	}
+	Zt_Called = typeinfo.Flow{
+		Name: "called",
+		Lede: "called",
+		Terms: []typeinfo.Term{{
+			Name:  "matched",
+			Label: "matched",
+			Type:  &prim.Zt_Text,
+		}},
+		Markup: map[string]any{
+			"comment": "matches the word \"called\".",
+		},
+	}
 	Zt_Name = typeinfo.Flow{
 		Name: "name",
 		Lede: "name",
@@ -1914,10 +2463,13 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Specifies a single name, in full or in part.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "The name \"chest\" implies the treasure chest.", "To optimizing matching the words \"is/are/comma/and\" are never part of name names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )", "( see also 'kind_called' )"},
+			"comment": []interface{}{"Specifies a name who's meaning depends on context.", "For example, when matching: \"Gold Roger's treasure chest is a container. The chest is open.\"", "the \"chest\" implies the noun \"treasure chest.\"", "In other cases, the name might be a kind, or trait, or pretty much anything else.", "To optimizing matching the words \"is/are/comma/and\" are never part of name names.", "future: allow quoted \"titles\" ( which are then allowed to break those assumptions )"},
 		},
 	}
 	Zt_Noun = typeinfo.Flow{
@@ -1932,7 +2484,7 @@ func init() {
 			Name:  "matched",
 			Label: "matched",
 			Markup: map[string]any{
-				"comment": "the string that matched ( ex. an alias )",
+				"comment": "the string that matched ( a noun name or alias )",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -1940,8 +2492,32 @@ func init() {
 			Label:   "actual_noun",
 			Private: true,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches an existing noun", "by checking multiple words for the best match."},
+		},
+	}
+	Zt_NamedNoun = typeinfo.Flow{
+		Name: "named_noun",
+		Lede: "named_noun",
+		Terms: []typeinfo.Term{{
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Type:     &Zt_Noun,
+		}, {
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Type:     &Zt_Name,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
+		Markup: map[string]any{
+			"comment": "matches an existing noun, or if not: then something new.",
 		},
 	}
 	Zt_KindCalled = typeinfo.Flow{
@@ -1960,49 +2536,32 @@ func init() {
 			Label: "kind",
 			Type:  &Zt_Kind,
 		}, {
-			Name:  "called_name",
-			Label: "called_name",
-			Type:  &Zt_CalledName,
-		}},
-		Markup: map[string]any{
-			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "kind \"called\" [the] _name_.", "as per inform, the name of the name is everything after the word called", "until \"is\" or \"are\" or the end of the line.", "For instance: `The container called the trunk and the box is in the lobby`", "generates a single name named \"the trunk and the box.\""},
-		},
-	}
-	Zt_CalledName = typeinfo.Flow{
-		Name: "called_name",
-		Lede: "called_name",
-		Terms: []typeinfo.Term{{
 			Name:  "called",
 			Label: "called",
-			Markup: map[string]any{
-				"comment": "the word \"called\"",
-			},
-			Type: &Zt_Words,
+			Type:  &Zt_Called,
 		}, {
-			Name:     "article",
-			Label:    "article",
-			Optional: true,
-			Type:     &Zt_Article,
-		}, {
-			Name:  "matched",
-			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Name:  "named_noun",
+			Label: "named_noun",
+			Type:  &Zt_NamedNoun,
 		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"Defines a name and its kind in a single phrase.", "Matches: (traits) kind \"called\" {the name}.", "For example: `The closed container called the trunk is in the lobby.`", "As per inform, the name includes all text after the word \"called\"", "until \"is\", \"are\", or the end of the sentence;", "and specifying \"called the/our ...\" gives the noun an indefinite article."},
+		},
 	}
 	Zt_Names = typeinfo.Flow{
 		Name: "names",
 		Lede: "names",
 		Terms: []typeinfo.Term{{
-			Name:     "counted_name",
-			Label:    "counted_name",
+			Name:     "counted_kind",
+			Label:    "counted_kind",
 			Optional: true,
-			Type:     &Zt_CountedName,
+			Type:     &Zt_CountedKind,
 		}, {
 			Name:     "kind_called",
 			Label:    "kind_called",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"note: because this phrase is greedy", "once used, no additional names will match."},
+				"comment": []interface{}{"note that because this phrase is greedy", "once used, no additional names will match."},
 			},
 			Type: &Zt_KindCalled,
 		}, {
@@ -2018,7 +2577,7 @@ func init() {
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"used primarily for anonymous nouns: \"the container\"", "noting that anonymous nouns are prohibited from starting a sentence."},
+				"comment": []interface{}{"used primarily for anonymous nouns: ex. \"the container\"", "note that anonymous nouns are prohibited from starting a sentence."},
 			},
 			Type: &Zt_Kind,
 		}, {
@@ -2032,8 +2591,11 @@ func init() {
 			Optional: true,
 			Type:     &Zt_AdditionalNames,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Specifies one or more nouns, in full or in part.", "Only one of the options, plus possibly 'additional_names', will match.", "Not all options are valid in all contexts;", "the users of 'names' may discard or avoid certain matches.", "( the options could be represented as a slot; this feels easier for now )"},
+			"comment": []interface{}{"Specifies one or more nouns, in full or in part.", "Only one of the options, plus possibly 'additional_names', will match.", "Not all options are valid in all contexts."},
 		},
 	}
 	Zt_AdditionalNames = typeinfo.Flow{
@@ -2055,9 +2617,9 @@ func init() {
 			"comment": "matches a name following another name.",
 		},
 	}
-	Zt_CountedName = typeinfo.Flow{
-		Name: "counted_name",
-		Lede: "counted_name",
+	Zt_CountedKind = typeinfo.Flow{
+		Name: "counted_kind",
+		Lede: "counted_kind",
 		Terms: []typeinfo.Term{{
 			Name:     "article",
 			Label:    "article",
@@ -2076,8 +2638,11 @@ func init() {
 			Label:   "matched",
 			Private: true,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
 		Markup: map[string]any{
-			"comment": []interface{}{"provides english specification of a number of objects.", "note: yes, `the five the containers` is permitted."},
+			"comment": []interface{}{"provides english specification of a number of objects.", "( note: yes, `the five the containers` is permitted. )"},
 		},
 	}
 	Zt_Kind = typeinfo.Flow{
@@ -2103,8 +2668,11 @@ func init() {
 			Label:   "actual_kind",
 			Private: true,
 		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_NounBuilder,
+		},
 		Markup: map[string]any{
-			"comment": "matches the name of an existing kind.",
+			"comment": []interface{}{"matches the name of an existing kind;", "can generate a single anonymous noun."},
 		},
 	}
 	Zt_Kinds = typeinfo.Flow{
@@ -2246,16 +2814,12 @@ func init() {
 		Name: "verb",
 		Lede: "verb",
 		Terms: []typeinfo.Term{{
-			Name:  "matched",
-			Label: "matched",
+			Name:  "text",
+			Label: "text",
 			Type:  &prim.Zt_Text,
-		}, {
-			Name:    "macro",
-			Label:   "macro",
-			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": "matches one or more predefined verbs",
+			"comment": []interface{}{"matches one or more predefined verbs", "( verbs are nouns of the verb kind )"},
 		},
 	}
 	Zt_MatchingPhrases = typeinfo.Flow{
@@ -2308,6 +2872,18 @@ func init() {
 			Name:  "aspects_are_traits",
 			Label: "aspects_are_traits",
 			Type:  &Zt_AspectsAreTraits,
+		}, {
+			Name:  "map_locations",
+			Label: "map_locations",
+			Type:  &Zt_MapLocations,
+		}, {
+			Name:  "map_directions",
+			Label: "map_directions",
+			Type:  &Zt_MapDirections,
+		}, {
+			Name:  "map_connections",
+			Label: "map_connections",
+			Type:  &Zt_MapConnections,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"union of all possible matching sentences:", "tests these in-order to find a match.", "( an alternative would be slots, and a registry; this is fine for now )"},
@@ -2320,7 +2896,7 @@ func init() {
 			Name:  "names",
 			Label: "names",
 			Markup: map[string]any{
-				"comment": []interface{}{"a counted name here doesn't indicate multiple kinds", "instead it generates a kind that has a number leading its name."},
+				"comment": []interface{}{"can match plain names and existing kinds;", "only allows a leading kind called, and errors on all counted kinds."},
 			},
 			Type: &Zt_Names,
 		}, {
@@ -2343,15 +2919,15 @@ func init() {
 			},
 			Type: &Zt_Traits,
 		}, {
-			Name:  "kind",
-			Label: "kind",
+			Name:  "name",
+			Label: "name",
 			Markup: map[string]any{
-				"comment": []interface{}{"inform (weirdly) allows multiple kinds:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there.", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
+				"comment": []interface{}{"inform (weirdly) allows multiple kinds on the rhs:", "`A box is a kind of container and things.`", "but not if traits are specified, suggesting a switch there;", "possibly to detect and reject `A box is a kind of closed and openable container.`", "which it wants written as `A box is a kind of closed openable container.`", "this doesnt switch to special traits, and doesnt allow multiple kinds."},
 			},
-			Type: &Zt_Kind,
+			Type: &Zt_Name,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"names are \"a kind of\"/\"kinds of\" traits kind:any.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform this doesn't try to limit the names", "`The animals called kittens are a kind of things.` is legal."},
+			"comment": []interface{}{"names are \"a kind of\"/\"kinds of\" traits kind:any.", "interesting to note that inform allows \"some kind/s of\"", "this is more strict.", "like inform `The animals called kittens are a kind of things.` is legal."},
 		},
 	}
 	Zt_KindsAreTraits = typeinfo.Flow{
@@ -2390,15 +2966,12 @@ func init() {
 			Label: "are",
 			Type:  &Zt_Are,
 		}, {
-			Name:  "names",
-			Label: "names",
-			Markup: map[string]any{
-				"comment": "plain names, no kinds.",
-			},
-			Type: &Zt_Names,
+			Name:  "plain_names",
+			Label: "plain_names",
+			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"defines traits for a kind of aspect.", "aspect are names", "ex. The colors are a kind of aspect. The colors are red, blue, and greasy green.", "aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing.", "this is limited to a single kind of type aspect and matches plain names (the traits dont exist yet)"},
+			"comment": []interface{}{"defines traits for aspects that can be (re)used by various other kinds.", "ex. `The colors are a kind of aspect. The colors are red, blue, and greasy green.`", "aspects_are_traits, kinds_are_traits, and names_are_like_verbs all handle similar phrasing."},
 		},
 	}
 	Zt_VerbNamesAreNames = typeinfo.Flow{
@@ -2485,12 +3058,9 @@ func init() {
 			Label: "verb",
 			Type:  &Zt_Verb,
 		}, {
-			Name:  "names",
-			Label: "names",
-			Markup: map[string]any{
-				"comment": "only succeeds on plain names.",
-			},
-			Type: &Zt_Names,
+			Name:  "plain_names",
+			Label: "plain_names",
+			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
 			"comment": "ex. \".... in the kitchen.\", or \"... carries the football and sousaphone.\"",
@@ -2563,42 +3133,39 @@ func init() {
 			},
 			Type: &Zt_Words,
 		}, {
-			Name:  "noun",
-			Label: "noun",
-			Markup: map[string]any{
-				"comment": "note: \"called the\" isn't allowed here.",
-			},
-			Type: &Zt_Name,
+			Name:  "named_noun",
+			Label: "named_noun",
+			Type:  &Zt_NamedNoun,
 		}, {
 			Name:  "are",
 			Label: "are",
 			Type:  &Zt_Are,
 		}, {
-			Name:  "single_value",
-			Label: "single_value",
-			Type:  &Zt_SingleValue,
+			Name:     "single_value",
+			Label:    "single_value",
+			Optional: true,
+			Type:     &Zt_SingleValue,
+		}, {
+			Name:     "quoted_texts",
+			Label:    "quoted_texts",
+			Optional: true,
+			Type:     &Zt_QuotedTexts,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The description of the pen is \"mightier than the sword.`"},
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The description of the pen is \"mightier than the sword.`", "as a special case allows also allows a list of quoted text", "indicated with \"are\" ( versus \"is\" )"},
 		},
 	}
 	Zt_NounPropertyValue = typeinfo.Flow{
 		Name: "noun_property_value",
 		Lede: "noun_property_value",
 		Terms: []typeinfo.Term{{
-			Name:  "noun",
-			Label: "noun",
-			Markup: map[string]any{
-				"comment": "note: \"called the\" isn't allowed here.",
-			},
-			Type: &Zt_Name,
+			Name:  "named_noun",
+			Label: "named_noun",
+			Type:  &Zt_NamedNoun,
 		}, {
 			Name:  "has",
 			Label: "has",
-			Markup: map[string]any{
-				"comment": "the word \"has\"",
-			},
-			Type: &Zt_Words,
+			Type:  &Zt_Words,
 		}, {
 			Name:     "article",
 			Label:    "article",
@@ -2622,7 +3189,7 @@ func init() {
 			Type:  &Zt_SingleValue,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has the description \"mightier than the sword.`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
+			"comment": []interface{}{"assigns a default value to a noun.", "ex. `The pen has (the) description (of) \"mightier than the sword.\"`", "like inform, adjectives ( in phrases with \"is\" ) cannot be combined with property phrases ( \"has/of\" )"},
 		},
 	}
 	Zt_SingleValue = typeinfo.Flow{
@@ -2638,6 +3205,16 @@ func init() {
 			Label:    "matching_number",
 			Optional: true,
 			Type:     &Zt_MatchingNumber,
+		}, {
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Type:     &Zt_Noun,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Type:     &Zt_Kind,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches only one of its options", "( the options could be represented as a slot; this feels easier for now )"},
@@ -2699,7 +3276,23 @@ func init() {
 			Type:     &Zt_CalledName,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"kinds \"have\" a [\"list of\"] type [\"called a\" ...]", "ex. Things have some text called a description."},
+			"comment": []interface{}{"kinds \"have\" a (\"list of\") type (\"called\" name)", "ex. Things have some text called a description."},
+		},
+	}
+	Zt_CalledName = typeinfo.Flow{
+		Name: "called_name",
+		Lede: "called_name",
+		Terms: []typeinfo.Term{{
+			Name:  "called",
+			Label: "called",
+			Type:  &Zt_Called,
+		}, {
+			Name:  "name",
+			Label: "name",
+			Type:  &Zt_Name,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"for kinds_have_properties", "like kind_called, specifying \"called the/our ...\" gives the noun an indefinite article."},
 		},
 	}
 	Zt_PropertyType = typeinfo.Flow{
@@ -2837,6 +3430,197 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"comment": "various phrases, all starting with the word \"Understand\"",
+		},
+	}
+	Zt_MapLocations = typeinfo.Flow{
+		Name: "map_locations",
+		Lede: "map_locations",
+		Terms: []typeinfo.Term{{
+			Name:  "linking",
+			Label: "linking",
+			Type:  &Zt_Linking,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "direction_of_linking",
+			Label: "direction_of_linking",
+			Type:  &Zt_DirectionOfLinking,
+		}, {
+			Name:     "additional_directions",
+			Label:    "additional_directions",
+			Optional: true,
+			Type:     &Zt_AdditionalDirections,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"A mapping declaration starting with a room or door.", "ex. `A dead end called the Airport is west of the Road and north of the Farm.`"},
+		},
+	}
+	Zt_AdditionalDirections = typeinfo.Flow{
+		Name: "additional_directions",
+		Lede: "additional_directions",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and",
+			Label: "comma_and",
+			Type:  &Zt_CommaAnd,
+		}, {
+			Name:  "direction_of_linking",
+			Label: "direction_of_linking",
+			Type:  &Zt_DirectionOfLinking,
+		}, {
+			Name:     "additional_directions",
+			Label:    "additional_directions",
+			Optional: true,
+			Type:     &Zt_AdditionalDirections,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"matches additional directions", "only used by map_locations"},
+		},
+	}
+	Zt_MapDirections = typeinfo.Flow{
+		Name: "map_directions",
+		Lede: "map_directions",
+		Terms: []typeinfo.Term{{
+			Name:  "direction_of_linking",
+			Label: "direction_of_linking",
+			Type:  &Zt_DirectionOfLinking,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:     "linking",
+			Label:    "linking",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "ex. `[Inside from the Meadow] is... the woodcutter's hut.`",
+			},
+			Type: &Zt_Linking,
+		}, {
+			Name:     "redirect",
+			Label:    "redirect",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "ex. `[West of the Garden] is ... south of the Meadow.`",
+			},
+			Type: &Zt_DirectionOfLinking,
+		}},
+		Markup: map[string]any{
+			"comment": "A mapping declaration starting with a direction.",
+		},
+	}
+	Zt_MapConnections = typeinfo.Flow{
+		Name: "map_connections",
+		Lede: "map_connections",
+		Terms: []typeinfo.Term{{
+			Name:  "through",
+			Label: "through",
+			Type:  &prim.Zt_Bool,
+		}, {
+			Name:  "doors",
+			Label: "doors",
+			Type:  &Zt_Linking,
+		}, {
+			Name:     "additional_links",
+			Label:    "additional_links",
+			Optional: true,
+			Type:     &Zt_AdditionalLinks,
+		}, {
+			Name:  "are",
+			Label: "are",
+			Type:  &Zt_Are,
+		}, {
+			Name:  "room",
+			Label: "room",
+			Type:  &Zt_Linking,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"A mapping declaration to set the destination of doors.", "ex. `Through the long slide is the cellar.`", "    ` Through the blue door and the red door is the kitchen.`", "The destination of a door is always treated as a room or nowhere.", "( Inform doesn't allow nowhere, but it seems like a good idea. )"},
+		},
+	}
+	Zt_DirectionOfLinking = typeinfo.Flow{
+		Name: "direction_of_linking",
+		Lede: "direction_of_linking",
+		Terms: []typeinfo.Term{{
+			Name:  "direction",
+			Label: "direction",
+			Type:  &Zt_Direction,
+		}, {
+			Name:  "from_of",
+			Label: "from_of",
+			Type:  &Zt_Words,
+		}, {
+			Name:  "linking",
+			Label: "linking",
+			Markup: map[string]any{
+				"comment": "a room or door.",
+			},
+			Type: &Zt_Linking,
+		}},
+		Markup: map[string]any{
+			"comment": "partial phrase for mapping declarations.",
+		},
+	}
+	Zt_Direction = typeinfo.Flow{
+		Name: "direction",
+		Lede: "direction",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "text",
+			Type:  &prim.Zt_Text,
+		}},
+		Markup: map[string]any{
+			"comment": "matches some existing compass direction.",
+		},
+	}
+	Zt_Linking = typeinfo.Flow{
+		Name: "linking",
+		Lede: "linking",
+		Terms: []typeinfo.Term{{
+			Name:     "nowhere",
+			Label:    "nowhere",
+			Optional: true,
+			Type:     &prim.Zt_Bool,
+		}, {
+			Name:     "kind_called",
+			Label:    "kind_called",
+			Optional: true,
+			Type:     &Zt_KindCalled,
+		}, {
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Type:     &Zt_Noun,
+		}, {
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Type:     &Zt_Name,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"generates a room, a door, or nowhere.", "( similar to, but distinct from other noun matching phrases. )"},
+		},
+	}
+	Zt_AdditionalLinks = typeinfo.Flow{
+		Name: "additional_links",
+		Lede: "additional_links",
+		Terms: []typeinfo.Term{{
+			Name:  "comma_and",
+			Label: "comma_and",
+			Type:  &Zt_CommaAnd,
+		}, {
+			Name:  "linking",
+			Label: "linking",
+			Type:  &Zt_Linking,
+		}, {
+			Name:     "additional_links",
+			Label:    "additional_links",
+			Optional: true,
+			Type:     &Zt_AdditionalLinks,
+		}},
+		Markup: map[string]any{
+			"comment": []interface{}{"partial phrase used for map connections", "allows multiple doors, etc. on the lhs."},
 		},
 	}
 }

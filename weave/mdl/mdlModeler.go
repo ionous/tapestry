@@ -3,10 +3,9 @@ package mdl
 import (
 	"database/sql"
 
-	"github.com/ionous/errutil"
-
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"github.com/ionous/errutil"
 )
 
 // when the definition would contradict existing information:

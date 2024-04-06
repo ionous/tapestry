@@ -2,18 +2,11 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
-
-type MatchedMacro struct {
-	Macro  Macro
-	Phrase string // phrase that was used to match
-}
 
 type MatchedKind struct {
 	Name  string        // the name of the kind in the db
@@ -21,9 +14,45 @@ type MatchedKind struct {
 	Match string        // the word(s) (singular or plural) used to match
 }
 
+func (m MatchedKind) WordCount() int {
+	return countWords(m.Match)
+}
+
+type MatchedField struct {
+	Name string // name of the trait in the db
+}
+
+// same logic as MatchedTrait
+func (m MatchedField) WordCount() int {
+	return countWords(m.Name)
+}
+
 type MatchedNoun struct {
-	Name  string // the name of the noun in the db
-	Match string // the words (singular or plural) used to match
+	Name  string // the id of the noun in the db
+	Kind  string // the noun's kind
+	Match string // the words used to match
+}
+
+func (m MatchedNoun) WordCount() int {
+	return countWords(m.Match)
+}
+
+type MatchedTrait struct {
+	Name string // name of the trait in the db
+}
+
+// the returned name is the name of the trait from the db
+// it was used to match the front of the passed string
+// so the words in the trait are the words in the string.
+func (m MatchedTrait) WordCount() int {
+	return countWords(m.Name)
+}
+
+func countWords(str string) (ret int) {
+	if len(str) > 0 {
+		ret = 1 + strings.Count(str, " ")
+	}
+	return
 }
 
 // searches for the kind which uses the most number of words from the front of the passed string.
@@ -87,40 +116,48 @@ const blank = " "
 const space = ' '
 
 // match the passed words with the known fields of all in-scope kinds.
-func (pen *Pen) GetPartialField(str string) (ret string, err error) {
-	if len(str) > 0 {
-		words := str + blank
+// return the full name of the field that matched.
+// an unmatched noun returns the empty string and no error.
+func (pen *Pen) GetPartialField(kind, field string) (ret MatchedField, err error) {
+	if kind, e := pen.findRequiredKind(kind); e != nil {
+		err = e
+	} else if len(field) == 0 {
+		err = errors.New("get partial field requires a non empty string")
+	} else {
+		words := field + blank
 		if e := pen.db.QueryRow(`
 	with fields(name) as (
-		select distinct mf.field
-		from mdl_kind mk
-		join domain_tree dt
-			on (dt.uses = mk.domain)
-		join mdl_field mf 
-			on(mf.kind = mk.rowid)	
-		where dt.base = ?1
-		and mf.type is null 
+		select field as name 		 
+		from mdl_field mf 
+		join mdl_kind mk 
+			-- does our ancestry (X) contain any of these kinds (Y)
+			on ((mf.kind = mk.rowid) and instr(@ancestry, ',' || mk.rowid || ',' ))
+		left join mdl_kind mt 
+			on (mt.rowid = mf.type)
 	)
 	select name from (
-		select name, substr(?2 ,0, length(name)+2) as words
+		select name, substr(@words ,0, length(name)+2) as words
 		from fields
 		where words = (name || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, words).Scan(&ret); e != sql.ErrNoRows {
+			sql.Named("ancestry", kind.fullpath()),
+			sql.Named("words", words)).Scan(&ret.Name); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}
 	}
 	return
 }
 
-func (pen *Pen) GetPartialNoun(str string) (ret MatchedNoun, err error) {
-	if len(str) > 0 {
-		words := str + blank
+// if specified, kind must match exactly
+// an unmatched noun returns the empty string and no error.
+func (pen *Pen) GetPartialNoun(name, kind string) (ret MatchedNoun, err error) {
+	if len(name) > 0 {
+		words := name + blank
 		if e := pen.db.QueryRow(`
-		with nouns(noun, name) as (
-			select mn.noun, my.name 
+		with nouns(noun, name, kind) as (
+			select mn.noun, my.name, mk.kind
 			from mdl_name my
 			join mdl_noun mn
 				on (mn.rowid = my.noun)
@@ -130,31 +167,33 @@ func (pen *Pen) GetPartialNoun(str string) (ret MatchedNoun, err error) {
 				on (dt.uses = my.domain)
 			where base = ?1
 			and my.rank >= 0
+			and (?3 = "" or mk.kind = ?3)
 			order by my.rank, my.rowid asc
 		)
 		-- for each possible pair chop a chunk of words from our input string
 		-- that's the length of the noun name, to see if it matches the noun name.
-		select noun, name from (
-			select noun, name, substr(?2 ,0, length(name)+2) as words
+		select noun, name, kind from (
+			select noun, name, kind, substr(?2 ,0, length(name)+2) as words
 			from nouns
 			where words = (name || ' ')
 		)
 		order by length(name) desc
 		limit 1`,
-			pen.domain, words).
-			Scan(&ret.Name, &ret.Match); e != sql.ErrNoRows {
+			pen.domain, words, kind).
+			Scan(&ret.Name, &ret.Match, &ret.Kind); e != sql.ErrNoRows {
 			err = e // could be nil or error
 		}
 	}
 	return
 }
 
+// an unmatched trait returns the empty string and no error
 // tbd: technically there's some possibility that there might be three traits:
 // "wood", "veneer", and "wood veneer" -- subset names
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (pen *Pen) GetPartialTrait(str string) (ret string, err error) {
+func (pen *Pen) GetPartialTrait(str string) (ret MatchedTrait, err error) {
 	if ap, e := pen.getAspectPath(); e != nil {
 		err = e
 	} else if len(str) > 0 {
@@ -178,85 +217,8 @@ func (pen *Pen) GetPartialTrait(str string) (ret string, err error) {
 	)
 	order by length(name) desc
 	limit 1`,
-			pen.domain, ap, words).Scan(&ret); e != sql.ErrNoRows {
+			pen.domain, ap, words).Scan(&ret.Name); e != sql.ErrNoRows {
 			err = e // could be nil or error
-		}
-	}
-	return
-}
-
-func (pen *Pen) GetPartialMacro(str string) (ret MatchedMacro, err error) {
-	if len(str) == 0 {
-		err = sql.ErrNoRows
-	} else {
-		words := str + blank
-		var found struct {
-			kid      int64  // id of the kind
-			name     string // name of the kind/macro
-			phrase   string // string of the macro phrase
-			reversed bool
-			result   sql.NullInt32 // from mdl_pat, number of result fields ( 0 or 1 )
-		}
-		if e := pen.db.QueryRow(`
-	select mk.rowid, mk.kind, mg.phrase, mg.reversed, length(mp.result)>0
-	from mdl_phrase mg
-	join mdl_kind mk 
-		on (mk.rowid = mg.macro)
-	join mdl_pat mp 
-		on (mp.kind = mg.macro)
-	join domain_tree dt
-		on (dt.uses = mg.domain)
-	where base = ?1
-	and (phrase || ' ') = substr(?2 ,0, length(phrase)+2)
-	order by length(phrase) desc
-	limit 1`, pen.domain, words).Scan(
-			&found.kid, &found.name, &found.phrase, &found.reversed, &found.result); e != nil {
-			err = e
-		} else if parts, e := tables.QueryStrings(pen.db,
-			`select affinity 
-		from mdl_field 
-		where kind=?1
-		order by rowid`, found.kid); e != nil {
-			err = e
-		} else if numFields := len(parts) - int(found.result.Int32); numFields <= 0 {
-			err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
-				numFields, found.result.Int32)
-		} else {
-			var flag MacroType
-			if numFields == 1 {
-				flag = Macro_PrimaryOnly
-			} else {
-				a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
-				if a == affine.Text {
-					if b == affine.Text {
-						err = errutil.New("one one not supported?")
-					} else if b == affine.TextList {
-						flag = Macro_ManySecondary
-					} else {
-						err = errutil.New("unexpected aff", b)
-					}
-				} else if a == affine.TextList {
-					if b == affine.Text {
-						flag = Macro_ManyPrimary
-					} else if b == affine.TextList {
-						flag = Macro_ManyMany
-					} else {
-						err = errutil.New("unexpected aff", b)
-					}
-				} else {
-					err = errutil.New("unexpected aff", a)
-				}
-			}
-			if err == nil {
-				ret = MatchedMacro{
-					Phrase: found.phrase,
-					Macro: Macro{
-						Name:     found.name,
-						Type:     flag,
-						Reversed: found.reversed,
-					},
-				}
-			}
 		}
 	}
 	return

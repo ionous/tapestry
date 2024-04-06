@@ -17,8 +17,7 @@ Spec:with group:
       - # Create a scene
         Spec:slots:with flow:
           - "define_test"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:
@@ -62,8 +61,7 @@ Spec:with group:
       - # Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
         Spec:slots:groups:with flow:
           - "define_action"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "events"
           - Flow:uses:
               - "define"
@@ -83,8 +81,7 @@ Spec:with group:
         # Aspects here are assumed to be singularly named.
         Spec:slots:with flow:
           - "define_aspect"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -152,8 +149,7 @@ Spec:with group:
       - # allows the player to refer to a noun by one or more other terms.
         Spec:slots:with flow:
           - "define_alias"
-          - - "execute"
-            - "story_statement"
+          - "story_statement"
           - Flow:uses:
               - "interpret"
               - - Term:name:type:
@@ -167,8 +163,7 @@ Spec:with group:
       - # starts a parser scanner.
         Spec:slots:with flow:
           - "define_leading_grammar"
-          - - "execute"
-            - "story_statement"
+          - "story_statement"
           - Flow:uses:
               - "interpret"
               - - Term:name:type:repeats:
@@ -184,8 +179,7 @@ Spec:with group:
       - # starts a parser scanner.
         Spec:slots:with flow:
           - "define_named_grammar"
-          - - "execute"
-            - "story_statement"
+          - "story_statement"
           - Flow:uses:
               - "interpret"
               - - Term:type:
@@ -196,23 +190,7 @@ Spec:with group:
                     - "scans"
                     - "scanner_maker"
                     - true
-      - # Define a phrase that can be used with 'natural language' statements.
-        Spec:slots:with flow:
-          - "define_phrase"
-          - "story_statement"
-          - Flow:uses:
-              - "define"
-              - - Term:type:
-                    - "phrase"
-                    - "text_eval"
-                - Term:name:type:
-                    - "as_macro"
-                    - "macro"
-                    - "text_eval"
-                - Term:type:optional:
-                    - "reversed"
-                    - "bool_eval"
-                    - true
+
       - # Simple english like definitions of nouns, kinds, and their relatives.
         Spec:slots:with flow:
           - "declare_statement"
@@ -225,8 +203,7 @@ Spec:with group:
                     - "text_eval"
       - Spec:slots:groups:with flow:
           - "define_relation"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "relations"
           - Flow:uses:
               - "define"
@@ -245,8 +222,7 @@ Spec:with group:
       - # Add properties to a kind
         Spec:slots:with flow:
           - "define_fields"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -258,8 +234,7 @@ Spec:with group:
                     - true
       - Spec:slots:with flow:
           - "define_kinds"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -269,24 +244,6 @@ Spec:with group:
                     - "as"
                     - "ancestor"
                     - "text_eval"
-      - # Opposites are used at runtime and during weave to
-        # interpret traits, directions, and other terms.
-        # For example:
-        # "The opposite of east is west."
-        Spec:slots:groups:with flow:
-          - "define_opposite"
-          - - "story_statement"
-            - "execute"
-          - "language"
-          - Flow:phrase:uses:
-              - "define"
-              - "The opposite of {$word} is the {$opposite}."
-              - - Term:type:
-                    - "opposite"
-                    - "text_eval"
-                - Term:type:
-                    - "word"
-                    - "text_eval"
       - # Plurals are used at runtime and during weave to
         # guide the interpretation of nouns and kinds.
         # For example:
@@ -294,8 +251,7 @@ Spec:with group:
         # "The plural of person is persons."
         Spec:slots:groups:with flow:
           - "define_plural"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "language"
           - Flow:phrase:uses:
               - "define"
@@ -306,82 +262,10 @@ Spec:with group:
                 - Term:type:
                     - "plural"
                     - "text_eval"
-
-      - # Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.
-        Spec:groups:with str:
-          - "map_connection"
-          - "map_making"
-          - Str exclusively:uses:
-              - true
-              - - Option: "arriving_at"
-                - Option: "connecting_to"
-      - # Leaving a room by by going through a door ( ex. departing the house via the front door... ).
-        Spec:slots:groups:with flow:
-          - "map_departing"
-          - - "story_statement"
-            - "execute"
-          - - "map_making"
-            - "modeling"
-          - Flow:uses:
-              - "departing"
-              - - Term:name:type:
-                    - "from"
-                    - "room_name"
-                    - "text_eval"
-                - # todo? use soft suffix of 'noun_name' to indicate the field should pull autocomplete from pooled nouns.
-                  # or, should there be pools per kind? ex. rooms
-                  # and,or, should this use markup instead of naming convention?
-                  Term:name:type:
-                    - "via"
-                    - "door_name"
-                    - "text_eval"
-                - Term:name:
-                    - "and"
-                    - "map_connection"
-                - Term:name:type:
-                    - "other_room"
-                    - "other_room_name"
-                    - "text_eval"
-      - # A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.
-        Spec:groups:with str:
-          - "map_direction"
-          - - "map_making"
-            - "modeling"
-          - Str uses: []
-      - # Leaving a room by moving in a compass direction ( ex. heading east... ).
-        Spec:slots:groups:with flow:
-          - "map_heading"
-          - - "story_statement"
-            - "execute"
-          - - "map_making"
-            - "modeling"
-          - Flow:uses:
-              - "heading"
-              - - Term:name:type:
-                    - "_"
-                    - "dir"
-                    - "map_direction"
-                - Term:name:type:
-                    - "from"
-                    - "room_name"
-                    - "text_eval"
-                - Term:name:type:optional:
-                    - "via"
-                    - "door_name"
-                    - "text_eval"
-                    - true
-                - Term:name:
-                    - "and"
-                    - "map_connection"
-                - Term:name:type:
-                    - "other_room"
-                    - "other_room_name"
-                    - "text_eval"
       - # Assign a starting value to the field of one or nouns.
         Spec:slots:with flow:
           - "define_value"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:
@@ -398,8 +282,7 @@ Spec:with group:
                     - "assignment"
       - Spec:slots:with flow:
           - "define_nouns"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -411,8 +294,7 @@ Spec:with group:
                     - "text_eval"
       - Spec:slots:with flow:
           - "define_noun_traits"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -461,8 +343,7 @@ Spec:with group:
                     - true
       - Spec:slots:groups:with flow:
           - "rule_provides"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -480,8 +361,7 @@ Spec:with group:
         # Because event listeners have filters they continue to the next listener unless specifically stopped.
         Spec:slots:groups:with flow:
           - "rule_for_pattern"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -503,8 +383,7 @@ Spec:with group:
         # The default behavior for events is to fall through to the next handler unless canceled or stopped.
         Spec:slots:groups:with flow:
           - "rule_for_noun"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -530,8 +409,7 @@ Spec:with group:
         # The default behavior for events is to fall through to the next handler unless canceled or stopped.
         Spec:slots:groups:with flow:
           - "rule_for_kind"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -557,63 +435,12 @@ Spec:with group:
                     - "exe"
                     - "execute"
                     - true
-      - # Declare a function which can produce statements about the game world.
-        # They are processed at import time, and they cannot call patterns
-        # nor can patterns -- which are processed during play -- call macros.
-        # Unlike patterns, they cannot be extended; the entire definition must live in one place.
-        Spec:slots:with flow:
-          - "define_macro"
-          - - "story_statement"
-            - "execute"
-          - Flow:uses:
-              - "define"
-              - - Term:name:type:
-                    - "macro"
-                    - "macro_name"
-                    - "text_eval"
-                - Term:type:repeats:
-                    - "requires"
-                    - "field_definition"
-                    - true
-                - Term:type:repeats:
-                    - "provides"
-                    - "field_definition"
-                    - true
-                - Term:name:type:repeats:
-                    - "do"
-                    - "macro_statements"
-                    - "execute"
-                    - true
-      - # Executes a macro, and potentially returns a value.
-        Spec:slots:with flow:
-          - "call_macro"
-          - - "execute"
-            - "bool_eval"
-            - "number_eval"
-            - "text_eval"
-            - "record_eval"
-            - "num_list_eval"
-            - "text_list_eval"
-            - "record_list_eval"
-            - "story_statement"
-          - Flow:uses:
-              - "call"
-              - - Term:name:type:
-                    - "macro"
-                    - "macro_name"
-                    - "text"
-                - Term:name:type:repeats:
-                    - "args"
-                    - "arguments"
-                    - "arg"
-                    - true
       - # Declare a new pattern.
         # A pattern is a bundle of functions which can either change the game world or provide information about it.
         # Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
         Spec:slots:groups:with flow:
           - "define_pattern"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
@@ -689,8 +516,7 @@ Spec:with group:
       - # Relate nouns to each other
         Spec:slots:with flow:
           - "define_relatives"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:type:
@@ -706,8 +532,7 @@ Spec:with group:
       - # Relate nouns to each other
         Spec:slots:with flow:
           - "define_other_relatives"
-          - - "story_statement"
-            - "execute"
+          - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:

@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 )
@@ -75,19 +74,6 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 			err = e
 			break
 		}
-	}
-	return
-}
-
-// transform a story statement's execution ( ex. during a macro )
-// into a weave so that it can generate facts for the database
-// expects that the runtime is the importer's own runtime.
-// ( as opposed to the story's playtime. )
-func Weave(run rt.Runtime, op StoryStatement) (err error) {
-	if cat := currentCatalog; cat.Runtime() != run {
-		err = errutil.Fmt("mismatched runtimes?")
-	} else {
-		err = op.Weave(cat)
 	}
 	return
 }

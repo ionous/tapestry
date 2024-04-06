@@ -1,19 +1,9 @@
 package jess
 
-// all members of Names implement this so that they can be handled generically
-type MatchedName interface {
-	GetName(traits, kinds []string) (resultName, error)
-	String() string
-}
-
-func (op *AdditionalNames) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.CommaAnd.Match(q, &next) &&
-		op.Names.Match(q, &next) {
-		*input, okay = next, true
-	}
-	return
-}
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
 
 // some callers want to fail matching on anonymous leading kinds
 // tbd: would it be better to match, and error on generation?
@@ -22,78 +12,8 @@ func (op *Names) HasAnonymousKind() bool {
 	return op.Kind != nil
 }
 
-// checks Query flags to control matching
-func (op *Names) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	// "the bottle"
-	(matchNouns(q) &&
-		Optional(q, &next, &op.Noun)) ||
-		// "5 containers", "the container called the bottle"
-		(allowNounCreation(q) &&
-			(Optional(q, &next, &op.CountedName) ||
-				Optional(q, &next, &op.KindCalled))) ||
-		// "the container"
-		(matchKinds(q) &&
-			(Optional(q, &next, &op.Kind))) ||
-		// "the bottle"
-		Optional(q, &next, &op.Name) {
-		// as long as one succeeded, try matching additional names too...
-		// FIX: as far as i can tell, inform only allows "kind called" at the front of a list of names
-		// maybe it'd be better to match and reject when used.
-		if !Optional(q, &next, &op.AdditionalNames) || op.AdditionalNames.Names.KindCalled == nil {
-			*input, okay = next, true
-		}
-	}
-	return
-}
-
-func (op *Names) Pick() (ret MatchedName) {
-	if n := op.CountedName; n != nil {
-		ret = n
-	} else if n := op.KindCalled; n != nil {
-		ret = n
-	} else if n := op.Kind; n != nil {
-		ret = n
-	} else if n := op.Name; n != nil {
-		ret = n
-	} else if n := op.Noun; n != nil {
-		ret = n
-	} else {
-		panic("well that was unexpected")
-	}
-	return
-}
-
-func (op *Names) GetName(traits, kinds []string) (resultName, error) {
-	return op.Pick().GetName(traits, kinds)
-}
-
-// return the match of this, without any additional nouns
-// panics if there wasn't actually a match
-func (op *Names) String() (ret string) {
-	return op.Pick().String()
-}
-
-func (op *Names) GetNames(traits, kinds []string) (ret []resultName, err error) {
-	for t := *op; ; {
-		if n, e := t.GetName(traits, kinds); e != nil {
-			err = e
-			break
-		} else {
-			ret = append(ret, n)
-			// next name:
-			if next := t.AdditionalNames; next == nil {
-				break
-			} else {
-				t = next.Names
-			}
-		}
-	}
-	return
-}
-
 // unwind the tree of additional names
-func (op *Names) Iterate() Iterator {
+func (op *Names) GetNames() Iterator {
 	return Iterator{op}
 }
 
@@ -105,19 +25,50 @@ func (op *Names) GetTraits() (ret Traitor) {
 	return
 }
 
-type Iterator struct {
-	next *Names
-}
-
-func (it Iterator) HasNext() bool {
-	return it.next != nil
-}
-
-func (it *Iterator) GetNext() (ret *Names) {
-	var next *Names
-	if more := it.next.AdditionalNames; more != nil {
-		next = &more.Names
+// checks Query flags to control matching
+func (op *Names) Match(q Query, input *InputState) (okay bool) {
+	matchNouns := matchNouns(q)
+	matchKinds := matchKinds(q)
+	if next := *input; ( //
+	matchNouns &&
+		// "the bottle"
+		Optional(q, &next, &op.Noun)) || ( //
+	matchKinds &&
+		// "5 containers",
+		Optional(q, &next, &op.CountedKind) ||
+		// "the container called the bottle"
+		Optional(q, &next, &op.KindCalled) ||
+		// "the container"
+		Optional(q, &next, &op.Kind)) || ( //
+	// "the unknown name"
+	Optional(q, &next, &op.Name)) {
+		// as long as one succeeded, try matching additional names too...
+		// inform seems to only allow "kind called" at the front of a list of names...
+		// fix? but maybe it'd be better to match and reject when used incorrectly.
+		// [ an advantage is -- we could register a whole side ( lhs/rhs ) to nouns at once ]
+		if !Optional(q, &next, &op.AdditionalNames) || op.AdditionalNames.Names.KindCalled == nil {
+			*input, okay = next, true
+		}
 	}
-	ret, it.next = it.next, next
+	return
+}
+
+// implements NounBuilder by calling BuildNouns on all matched names
+func (op Names) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props NounProperties) (ret []DesiredNoun, err error) {
+	for n := op.GetNames(); n.HasNext(); {
+		at := n.GetNext()
+		if ns, e := buildNounsFrom(q, w, run, props,
+			ref(at.CountedKind),
+			ref(at.KindCalled),
+			ref(at.Kind),
+			ref(at.Name),
+			ref(at.Noun), //
+		); e != nil {
+			err = e
+			break
+		} else {
+			ret = append(ret, ns...)
+		}
+	}
 	return
 }

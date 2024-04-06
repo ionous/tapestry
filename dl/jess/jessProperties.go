@@ -4,18 +4,38 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
+
+func (op *CalledName) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	op.Called.Match(q, &next) &&
+		op.Name.Match(AddContext(q, CheckIndefiniteArticles), &next) {
+		*input, okay = next, true
+	}
+	return
+}
+
+func (op *CalledName) GetNormalizedName() string {
+	return op.Name.GetNormalizedName()
+}
+
+// runs in the PropertyPhase
+func (op *KindsHaveProperties) Phase() weaver.Phase {
+	return weaver.PropertyPhase
+}
 
 func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Kind.Match(q, &next) &&
 		op.Have.Match(q, &next, keywords.Have, keywords.Has) &&
 		(Optional(q, &next, &op.Article) || true) &&
-		(op.matchListOf(q, &next) || true) &&
+		(op.matchListOf(&next) || true) &&
 		op.PropertyType.Match(q, &next) {
 		Optional(q, &next, &op.CalledName)
 		*input, okay = next, true
@@ -23,8 +43,8 @@ func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *KindsHaveProperties) matchListOf(q Query, input *InputState) (okay bool) {
-	if m, width := listOf.FindMatch(input.Words()); m != nil {
+func (op *KindsHaveProperties) matchListOf(input *InputState) (okay bool) {
+	if m, width := listOf.FindPrefix(input.Words()); m != nil {
 		op.ListOf = input.Cut(width)
 		*input = input.Skip(width)
 		okay = true
@@ -33,20 +53,21 @@ func (op *KindsHaveProperties) matchListOf(q Query, input *InputState) (okay boo
 }
 
 // register a single field
-func (op *KindsHaveProperties) Generate(rar Registrar) (err error) {
+func (op *KindsHaveProperties) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	if kind, e := op.Kind.Validate(kindsOf.Kind, kindsOf.Record); e != nil {
 		err = e
 	} else if f, e := op.PropertyType.GetType(len(op.ListOf) > 0); e != nil {
 		err = e
 	} else {
+		// has the author explicitly overridden the default field name?
 		if op.CalledName != nil {
-			f.Name = op.CalledName.String()
+			f.Name = op.CalledName.GetNormalizedName()
 		}
 		if len(f.Name) == 0 {
 			// erroring feels like more useful than failing to match...
 			err = fmt.Errorf("%s fields require an explicit name", f.Affinity)
 		} else {
-			err = rar.AddFields(kind, []mdl.FieldInfo{f})
+			err = w.AddKindFields(kind, []mdl.FieldInfo{f})
 		}
 	}
 	return
@@ -54,15 +75,15 @@ func (op *KindsHaveProperties) Generate(rar Registrar) (err error) {
 
 func (op *PropertyType) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
-	op.matchPrimitive(q, &next) ||
+	op.matchPrimitive(&next) ||
 		Optional(q, &next, &op.Kind) {
 		*input, okay = next, true
 	}
 	return
 }
 
-func (op *PropertyType) matchPrimitive(q Query, input *InputState) (okay bool) {
-	if m, width := primitiveTypes.FindMatch(input.Words()); m != nil {
+func (op *PropertyType) matchPrimitive(input *InputState) (okay bool) {
+	if m, width := primitiveTypes.FindPrefix(input.Words()); m != nil {
 		op.Primitive = input.Cut(width)
 		*input = input.Skip(width)
 		okay = true
@@ -72,15 +93,12 @@ func (op *PropertyType) matchPrimitive(q Query, input *InputState) (okay bool) {
 
 // return a default field name, its affine type and its optional class name
 func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
-
-	var name string
+	var name, cls string
 	var aff affine.Affinity
-	var cls string
-
 	if prim := op.Primitive; len(prim) > 0 {
 		aff, cls = getTypeOfPrim(prim)
 	} else {
-		// use the name the author specified for the field
+		// re: singular or plural; use the author specified field name
 		name = inflect.Normalize(op.Kind.Matched)
 		// even if that differs from the actual name of the kind...
 		aff, cls, err = getTypeOfKind(op.Kind)
@@ -120,14 +138,14 @@ func getTypeOfPrim(str string) (retAff affine.Affinity, retCls string) {
 // - kind and aspect will generate affine text
 // - record will generate affine record
 func getTypeOfKind(k *Kind) (retAff affine.Affinity, retCls string, err error) {
-	kt := k.ActualKind.base
+	kt := k.ActualKind.BaseKind
 	switch kt {
 	case kindsOf.Kind, kindsOf.Aspect:
 		retAff = affine.Text
-		retCls = k.String()
+		retCls = k.ActualKind.Name
 	case kindsOf.Record:
 		retAff = affine.Record
-		retCls = k.String()
+		retCls = k.ActualKind.Name
 	default:
 		err = fmt.Errorf("unexpected kind of property %q", kt)
 	}

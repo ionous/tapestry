@@ -12,12 +12,20 @@ import (
 	"git.sr.ht/~ionous/tapestry/template/types"
 )
 
+// --------------------------------------------------------------
+// SingleValue
+// --------------------------------------------------------------
+
 // panics if unmatched
 func (op *SingleValue) Assignment() (ret rt.Assignment) {
 	if n := op.QuotedText; n != nil {
 		ret = n.Assignment()
 	} else if n := op.MatchingNumber; n != nil {
 		ret = n.Assignment()
+	} else if n := op.Noun; n != nil {
+		ret = nounAsTextValue(n.ActualNoun)
+	} else if k := op.Kind; k != nil {
+		ret = kindAsTextValue(k.ActualKind)
 	} else {
 		panic("unmatched assignment")
 	}
@@ -27,22 +35,40 @@ func (op *SingleValue) Assignment() (ret rt.Assignment) {
 func (op *SingleValue) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optional(q, &next, &op.QuotedText) ||
-		Optional(q, &next, &op.MatchingNumber) {
+		Optional(q, &next, &op.MatchingNumber) ||
+		Optional(q, &next, &op.Noun) ||
+		Optional(q, &next, &op.Kind) {
 		*input, okay = next, true
 	}
 	return
 }
 
+func nounAsTextValue(noun ActualNoun) rt.Assignment {
+	return text(noun.Name, noun.Kind)
+}
+
+func kindAsTextValue(kind ActualKind) rt.Assignment {
+	return text(kind.Name, "") // tbd: should these be typed? ex. as "kinds" or something?
+}
+
+// --------------------------------------------------------------
+// QuotedText
+// --------------------------------------------------------------
+
 func (op *QuotedText) String() string {
 	return op.Matched
 }
 
-func (op *QuotedText) Assignment() (ret rt.Assignment) {
+func (op *QuotedText) Assignment() rt.Assignment {
+	return &assign.FromText{Value: op.TextEval()}
+}
+
+func (op *QuotedText) TextEval() (ret rt.TextEval) {
 	str := op.Matched
 	if v, e := ConvertTextTemplate(str); e == nil {
-		ret = &assign.FromText{Value: v}
+		ret = v
 	} else {
-		ret = text(str, "")
+		ret = &literal.TextValue{Value: str}
 	}
 	return
 }
@@ -58,10 +84,15 @@ func (op *QuotedText) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
+// --------------------------------------------------------------
+// MatchingNumber
+// --------------------------------------------------------------
+
 func (op *MatchingNumber) Assignment() rt.Assignment {
 	return number(op.Number, "")
 }
 
+// matches a natural number in words, or a literal natural number.
 func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 	if ws := input.Words(); len(ws) > 0 {
 		word := ws[0].String()
@@ -74,11 +105,14 @@ func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-// tbd: i'm not sold on the idea that registar takes assignments
-// maybe it'd make more sense to pass in generic "any" values,
-// to have add factory functions to Registrar,
+// --------------------------------------------------------------
+// support
+// --------------------------------------------------------------
+
+// tbd: i'm not sold on the idea that weave takes assignments
+// maybe it'd make more sense to pass in generic "any" values
+// but... note: text templates.
 // or to have individual methods for the necessary types
-// ( maybe just three: trait, text, number )
 func number(value float64, kind string) rt.Assignment {
 	return &assign.FromNumber{
 		Value: &literal.NumValue{Value: value, Kind: kind},

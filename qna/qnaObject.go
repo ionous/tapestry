@@ -81,7 +81,7 @@ func (run *Runner) writeNounValue(obj query.NounInfo, field g.Field, val g.Value
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
 	} else {
 		key := makeKey(obj.Domain, obj.Id, field.Name)
-		run.nounValues[key] = cachedValue{v: g.CopyValue(val)}
+		run.nounValues.store[key] = cachedValue{v: g.CopyValue(val)}
 	}
 	return
 }

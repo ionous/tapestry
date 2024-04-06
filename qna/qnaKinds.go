@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
@@ -32,6 +33,23 @@ func (run *Runner) getKindOf(kn, kt string) (ret *g.Kind, err error) {
 	return
 }
 
+func (run *Runner) getAncestry(k string) (ret []string, err error) {
+	run.ensureBaseKinds()
+	if c, e := run.values.cache(func() (ret any, err error) {
+		if path, e := run.query.KindOfAncestors(k); e != nil {
+			err = errutil.Fmt("error while getting kind %q, %w", k, e)
+		} else {
+			ret = path
+		}
+		return
+	}, meta.KindAncestry, k); e != nil {
+		err = e
+	} else {
+		ret = c.([]string)
+	}
+	return
+}
+
 func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
 	run.ensureBaseKinds()
 	if c, e := run.values.cache(func() (ret any, err error) {
@@ -49,7 +67,7 @@ func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
 // it would simplify this, and re: Categorize the base shouldnt be needed anymore.
 func (run *Runner) ensureBaseKinds() {
 	key := makeKey("kinds", kindsOf.Kind.String())
-	if _, ok := run.values[key]; !ok {
+	if _, ok := run.values.store[key]; !ok {
 		for _, k := range kindsOf.DefaultKinds {
 			var err error
 			var kind *g.Kind
@@ -66,17 +84,17 @@ func (run *Runner) ensureBaseKinds() {
 				}
 			}
 			key := makeKey("kinds", k.String())
-			run.values[key] = cachedValue{kind, err}
+			run.values.store[key] = cachedValue{kind, err}
 		}
 	}
 	return
 }
 
-// gofmt will add extra lines if the "fix" comment below is here. :'(
+// fix? this is maybe a little odd... because when the domain changes, so will the kinds
+// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
+// - and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
 func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
-	// fix? this is maybe a little odd... because when the domain changes, so will the kinds
-	// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
-	//	and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
+	// fix: use getAncestry?
 	if path, e := run.query.KindOfAncestors(k); e != nil {
 		err = errutil.Fmt("error while getting kind %q, %w", k, e)
 	} else if cnt := len(path); cnt < 2 {

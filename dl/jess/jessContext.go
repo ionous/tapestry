@@ -2,21 +2,27 @@ package jess
 
 const (
 	// only allow simple names when matching.
-	PlainNameMatching = iota
-	// when matching names, some phrases imply the creation of new nouns
-	// this flag prevents those from matching
-	ExcludeNounCreation
-	// when matching names, try to match nouns
-	IncludeExistingNouns
+	PlainNameMatching = (1 << iota)
+	ExcludeNounMatching
+	// this limits matching to kinds which can be instanced
+	// so that names which match other kinds can still become nouns
+	// for instance, there can be a pattern called "on" and a verb called "on".
+	MatchKindsOfKinds
+	MatchKindsOfAspects
+	// "called" checks for when the indefinite article
+	// is *not* an indefinite article (a/an), and records it.
+	// printing references to the noun will the specified article.
+	CheckIndefiniteArticles
+	// log each match automatically; used for testing
+	LogMatches
 )
 
-// set the query flags to the passed flags
-// tbd: if this should or the existing flags; currently it doesnt
+// adds flags to the query ( via or )
 func AddContext(q Query, flags int) (ret Query) {
 	if ctx, ok := q.(queryContext); ok {
-		// since the query context is an object not a pointer
+		// since the query context isnt a reference
 		// this creates new flags for the scope
-		ctx.flags = flags
+		ctx.flags |= flags
 		ret = ctx
 	} else {
 		ret = queryContext{Query: q, flags: flags}
@@ -41,12 +47,25 @@ func matchKinds(q Query) bool {
 func matchNouns(q Query) bool {
 	flags := q.GetContext()
 	return (flags&PlainNameMatching) == 0 &&
-		(flags&IncludeExistingNouns) != 0
+		(flags&ExcludeNounMatching) == 0
 }
 
-func allowNounCreation(q Query) bool {
+func matchKindsOfKinds(q Query) bool {
 	flags := q.GetContext()
-	return (flags&PlainNameMatching) == 0 &&
-		(flags&ExcludeNounCreation) == 0 &&
-		(flags&IncludeExistingNouns) == 0
+	return (flags & MatchKindsOfKinds) != 0
+}
+
+func matchKindsOfAspects(q Query) bool {
+	flags := q.GetContext()
+	return (flags & MatchKindsOfAspects) != 0
+}
+
+func useIndefinite(q Query) bool {
+	flags := q.GetContext()
+	return (flags & CheckIndefiniteArticles) != 0
+}
+
+func useLogging(q Query) bool {
+	flags := q.GetContext()
+	return (flags & LogMatches) != 0
 }

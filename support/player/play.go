@@ -26,12 +26,12 @@ import (
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func PlayGame(inFile, testString, domain string) (ret int, err error) {
+func PlayGame(inFile, testString, domain string) (err error) {
 	opts := qna.NewOptions()
 	return PlayWithOptions(inFile, testString, domain, opts)
 }
 
-func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (ret int, err error) {
+func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (err error) {
 	const prompt = "> "
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e

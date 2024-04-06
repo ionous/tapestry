@@ -3,14 +3,7 @@
 // license that can be found in the LICENSE file.
 package base
 
-type UsageError struct {
-	Cmd   *Command
-	Cause error
-}
+import "errors"
 
-func (e UsageError) Error() (ret string) {
-	if e.Cause != nil {
-		ret = e.Cause.Error()
-	}
-	return
-}
+// ex. fmt.Errorf("%w expected at least one word to transform", base.UsageError)
+var UsageError = errors.New("error: ")

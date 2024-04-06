@@ -2,7 +2,6 @@
 // Copyright 2011 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
 // Adapted from https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/cmd/go/main.go
 package main
 
@@ -22,6 +21,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdplay"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdserve"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdweave"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdxform"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
 	"github.com/ionous/errutil"
 )
@@ -39,7 +39,7 @@ func main() {
 				if last := len(cfg.CmdNames) - 1; last > 0 {
 					helpArg = " " + cfg.CmdNames[last]
 				}
-				// for reasons i don't understand this path in go doesn't print the status number
+				// for reasons i don't understand this code path in go doesn't print the status number
 				// yet, here it does...
 				log.Printf("%s %s: unknown command\nRun 'tap help%s' for usage.\n", base.Exe, cfg.CmdNames, helpArg)
 				base.SetExitStatus(2)
@@ -48,9 +48,15 @@ func main() {
 					log.Println(cause)
 					base.SetExitStatus(2)
 				}
-				var u base.UsageError
+				var u usageError
 				if errors.As(e, &u) {
-					help.PrintUsage(os.Stderr, u.Cmd)
+					if u.Cmd == base.Go {
+						// this only seems to work for the root command
+						help.PrintUsage(os.Stderr, u.Cmd)
+					} else {
+						// fix: print the help of the particular command... somehow.
+						log.Println(`Run 'tap help' for usage.`)
+					}
 				}
 			}
 		}
@@ -60,7 +66,7 @@ func main() {
 
 func handleMain(args []string) (err error) {
 	if len(args) < 1 {
-		err = base.UsageError{Cmd: base.Go}
+		err = usageError{Cmd: base.Go}
 	} else {
 		// TODO: env for tap home?
 
@@ -93,7 +99,7 @@ func handleMain(args []string) (err error) {
 						break
 					}
 				} else if len(args) == 0 {
-					err = base.UsageError{Cmd: cmd}
+					err = usageError{Cmd: cmd}
 					break
 
 				} else {
@@ -169,7 +175,11 @@ func invoke(cmd *base.Command, args []string) (err error) {
 	ctx := context.Background()
 	// ctx = maybeStartTrace(ctx)
 	// ctx, span := trace.StartSpan(ctx, fmt.Sprint("Running ", cmd.Name(), " command"))
-	return cmd.Run(ctx, cmd, args)
+	if err = cmd.Run(ctx, cmd, args); errors.Is(err, base.UsageError) {
+		err = usageError{Cmd: cmd, Cause: err}
+	}
+	return
+
 	// span.Done()
 }
 
@@ -184,5 +194,18 @@ func init() {
 		cmdplay.CmdPlay,
 		cmdserve.CmdServe,
 		cmdweave.CmdWeave,
+		cmdxform.CmdXform,
 	}
+}
+
+type usageError struct {
+	Cmd   *base.Command
+	Cause error
+}
+
+func (e usageError) Error() (ret string) {
+	if e.Cause != nil {
+		ret = e.Cause.Error()
+	}
+	return
 }

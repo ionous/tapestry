@@ -1,9 +1,6 @@
 package jess
 
 import (
-	"errors"
-	"fmt"
-
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
@@ -18,25 +15,25 @@ type Query interface {
 	// individual parse trees can then wrap the query with their own context specific information..
 	GetContext() int
 
-	// find the name of the kind which best matches the passed span ( if any )
-	// return the number of words that matched.
+	// find the name of the kind which best matches the passed span.
+	// return the number of words that matched ( if any. )
+	// optionally, return its base kind.
 	FindKind(match.Span, *kindsOf.Kinds) (string, int)
 
-	// find the name of the trait which best matches the passed span ( if any )
-	// return the number of words that matched.
+	// find the name of the trait which best matches the passed span.
+	// return the number of words that matched ( if any. )
 	FindTrait(match.Span) (string, int)
 
-	// find the name of the field which best matches the passed span ( if any )
-	// return the number of words that matched.
-	FindField(match.Span) (string, int)
+	// find the name of the field which best matches the passed span.
+	// return the number of words that matched ( if any. )
+	FindField(kind string, field match.Span) (string, int)
 
-	// find the macro which best matches the passed span ( if any )
-	// return the number of words that matched.
-	FindMacro(match.Span) (Macro, int)
-
-	/// find the name of the kind which best matches the passed span ( if any )
-	// return the number of words that matched.
-	FindNoun(match.Span) (string, int)
+	// find the name of the noun which best matches the passed span.
+	// return the number of words that matched ( if any. )
+	// the kind, if specified, will ensure the noun is of that kind;
+	// [ so that the caller doesn't have to validate materialized kind paths ]
+	// the actual kind of the noun is also optionally returned via kind.
+	FindNoun(name match.Span, pkind *string) (string, int)
 }
 
 // Matched - generic interface so implementations can track backchannel data.
@@ -47,25 +44,10 @@ type Matched interface {
 // implemented by phrases so that they can create story fragments based on
 // the english language text they have parsed.
 type Generator interface {
-	Generate(Registrar) error
+	Generate(Context) error
 }
 
 // used internally for matching some kinds of phrases.
 type Interpreter interface {
 	Match(Query, *InputState) bool
-}
-
-// matches an english like sentence against jess's parse trees.
-// returns an object which can create nouns, define kinds, set properties, and so on.
-func Match(q Query, ws match.Span) (ret Generator, err error) {
-	var m MatchingPhrases
-	input := InputState(ws)
-	if m, ok := m.Match(q, &input); !ok {
-		err = errors.New("failed to match phrase")
-	} else if cnt := len(input); cnt != 0 {
-		err = fmt.Errorf("partially matched %d words", len(ws)-cnt)
-	} else {
-		ret = m
-	}
-	return
 }

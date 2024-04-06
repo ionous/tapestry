@@ -3,68 +3,50 @@ package weave
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/jess"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-type Weaver struct {
-	Catalog *Catalog
-	Domain  string
-	At      string
-	Phase   Phase
-	rt.Runtime
+type ScheduledCallback func(weaver.Weaves, rt.Runtime) error
+
+type localWeaver struct {
+	d *Domain
+	*mdl.Pen
 }
 
-func (w *Weaver) MatchSpan(p match.Span) (jess.Generator, error) {
-	return w.Catalog.MatchSpan(w.Domain, p)
+func (ja localWeaver) GenerateUniqueName(category string) string {
+	return ja.d.cat.NewCounter(category)
 }
 
-func (w *Weaver) Pin() *mdl.Pen {
-	return w.Catalog.Modeler.Pin(w.Domain, w.At)
+// fix: make the signature or caller transparent
+func (ja localWeaver) AddFact(key string, parts ...string) (err error) {
+	if ok, e := ja.Pen.AddFact(key, parts...); e != nil {
+		err = e
+	} else if !ok {
+		err = mdl.Duplicate
+	}
+	return
 }
-
-func (w *Weaver) AddInitialValue(pen *mdl.Pen, noun, field string, value rt.Assignment) (err error) {
+func (ja localWeaver) AddNounTrait(noun, trait string) (err error) {
+	return ja.AddNounValue(noun, trait, truly())
+}
+func (ja localWeaver) AddNounValue(noun, field string, value rt.Assignment) (err error) {
 	// if we are adding an initial value for a different domain
 	// then that gets changed into "set value" triggered on "begin domain"
 	var u mdl.DomainValueError
-	if e := pen.AddInitialValue(noun, field, value); !errors.As(e, &u) {
+	if e := ja.Pen.AddNounValue(noun, field, value); !errors.As(e, &u) {
 		err = e // nil or unexpected error.
 	} else {
-		d := w.Catalog.domains[w.Domain]
-		d.initialValues = d.initialValues.add(u.Noun, u.Field, u.Value)
+		ja.d.initialValues = ja.d.initialValues.add(u.Noun, u.Field, u.Value)
 	}
 	return
 }
 
-func (w *Weaver) GetClosestNoun(name string) (ret string, err error) {
-	if bare, e := jess.StripArticle(name); e != nil {
-		err = e
-	} else if n := inflect.Normalize(bare); len(n) == 0 {
-		err = errutil.New("empty name")
-	} else if n, e := w.Pin().GetClosestNoun(n); e != nil {
-		err = e
-	} else {
-		ret = n
+func truly() rt.Assignment {
+	return &assign.FromBool{
+		Value: &literal.BoolValue{Value: true},
 	}
-	return
-}
-
-func (w *Weaver) GetKindByName(name string) (ret *g.Kind, err error) {
-	// fix: we poll the db and once its there ask for more info
-	// if we ask for info first, qna returns "Unknown kind" --
-	// and even if it returned "missing kind" the error would get cached.
-	// option: return "Missing" from qnaKind and implement a runtime config that doest cache?
-	if _, e := w.Pin().GetKind(name); e != nil {
-		err = e
-	} else if k, e := w.Runtime.GetKindByName(name); e != nil {
-		err = e
-	} else {
-		ret = k
-	}
-	return
 }

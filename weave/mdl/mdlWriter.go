@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -20,7 +19,7 @@ import (
 // join at runtime to synthesize fields; would fix the questions of adding bad traits ( see comments )
 // ( could potentially write both as a bridge )
 
-func (pen *Pen) AddTraits(aspect string, traits []string) (err error) {
+func (pen *Pen) AddAspectTraits(aspect string, traits []string) (err error) {
 	if kid, e := pen.findRequiredKind(aspect); e != nil {
 		err = e // ^ hrm.
 	} else if isAspect := strings.HasSuffix(kid.fullpath(), pen.getPath(kindsOf.Aspect)); !isAspect {
@@ -209,7 +208,7 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 		case nil:
 			if prev.value != value {
 				err = errutil.Fmt("%w fact %q was %q in domain %q and now %q in domain %q",
-					Conflict, fact, value, prev.domain, value, domain)
+					Conflict, fact, prev.value, prev.domain, value, domain)
 			} else {
 				// do we want to warn about duplicate facts? isnt that kind of the point of them?
 				// maybe eat at the weave level?
@@ -223,7 +222,7 @@ func (pen *Pen) AddFact(key string, partsAndValue ...string) (okay bool, err err
 	return
 }
 
-func (pen *Pen) AddFields(kind string, fields []FieldInfo) error {
+func (pen *Pen) AddKindFields(kind string, fields []FieldInfo) error {
 	return pen.writeFields(kind, fields)
 }
 
@@ -355,6 +354,7 @@ func (pen *Pen) addAncestor(kind, parent kindInfo) (err error) {
 	domain := pen.domain
 	if !kind.exactName && parent.numAncestors() < 2 {
 		// we only allow plural named kinds for nouns ( kinds of kind )
+		// see notes in jessAspects.go
 		err = errutil.Fmt("%w plural singular conflict for %q (in %q)",
 			Conflict, name, domain)
 	} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
@@ -399,18 +399,11 @@ var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 // ( the same as - or a child of - the domain of the kind )
 var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
-func (pen *Pen) AddNoun(primary, long, kind string) (err error) {
-	if n, e := pen.addNoun(primary, kind); e != nil {
-		err = eatDuplicates(pen.warn, e)
-	} else if len(long) != 0 {
-		parts := genNames(n.name, long)
-		for i, name := range parts {
-			if e := pen.addName(n, name, i); e != nil {
-				err = e
-				break
-			}
-		}
-	}
+// add a noun with the passed identifier and kind ( both normalized ) the kind must exist.
+// note: returns mdl.Duplicate if the noun is already know.
+// see also: the utility function AddNamedNoun()
+func (pen *Pen) AddNounKind(noun, kind string) (err error) {
+	_, err = pen.addNoun(noun, kind)
 	return
 }
 
@@ -474,38 +467,9 @@ func (pen *Pen) addNoun(name, ancestor string) (ret nounInfo, err error) {
 	return
 }
 
-// tbd: anyway to remove or improve?
-// i especially don't like this is the one dependency on lang.
-// and really... it should have explicit tests
-// a Noun builder maybe? and let story be the one to genNames
-func genNames(short, long string) []string {
-	// if the original got transformed into underscores
-	// write the original name (ex. "toy boat" vs "toy_boat" )
-	var out []string
-	if clip := strings.TrimSpace(long); clip != short {
-		out = append(out, clip)
-	}
-	out = append(out, short)
-
-	// generate additional names by splitting the name into parts
-	split := inflect.Fields(short)
-	if cnt := len(split); cnt > 1 {
-		// in case the name was reduced due to multiple separators
-		if breaks := strings.Join(split, " "); breaks != short {
-			out = append(out, breaks)
-		}
-		// write individual words in increasing rank ( ex. "boat", then "toy" )
-		// note: trailing words are considered "stronger"
-		// because adjectives in noun names tend to be first ( ie. "toy boat" )
-		for i := len(split) - 1; i >= 0; i-- {
-			word := split[i]
-			out = append(out, word)
-		}
-	}
-	return out
-}
-
-func (pen *Pen) AddNounAlias(noun, name string, rank int) (err error) {
+// currently negative ranks are runtime aliases,
+// and positive values are weave time.
+func (pen *Pen) AddNounName(noun, name string, rank int) (err error) {
 	if n, e := pen.findRequiredNoun(noun, nounSansKind); e != nil {
 		err = e
 	} else {
@@ -537,52 +501,13 @@ func (pen *Pen) addName(noun nounInfo, name string, rank int) (err error) {
 	return
 }
 
-var mdl_opposite = `insert into mdl_rev(domain, oneWord, otherWord, at) 
-				values(?1, ?2, ?3, ?4), (?1, ?3, ?2, ?4)`
-
-// domain captures the scope in which the pairing was defined.
-// within that scope: the noun, relation, and otherNoun are all unique names --
-// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
-func (pen *Pen) AddOpposite(a, b string) (err error) {
-	domain, at := pen.domain, pen.at
-	if d, e := pen.findDomain(); e != nil {
-		err = e
-	} else if rows, e := pen.db.Query(
-		`select oneWord, otherWord, domain
-			from mdl_rev 
-			join domain_tree
-				on(uses=domain)
-			where base = ?1`, d); e != nil {
-		err = errutil.New("database error", e)
-	} else {
-		var x, y, from string
-		if e := tables.ScanAll(rows, func() (err error) {
-			// the testing is a bit weird so we handle it all app side
-			if (x == a && y == b) || (x == b && y == a) {
-				err = errutil.Fmt("%w opposite %q <=> %q in %q and %q", Duplicate, a, b, from, domain)
-			} else if x == a || y == a || x == b || y == b {
-				err = errutil.Fmt(
-					"%w %q <=> %q defined as opposites in %q now %q <=> %q in %q",
-					Conflict, x, y, from, a, b, domain)
-			}
-			return
-		}, &x, &y, &from); e != nil {
-			err = eatDuplicates(pen.warn, e)
-		} else {
-			// writes the opposite paring as well
-			_, err = pen.db.Exec(mdl_opposite, d, a, b, at)
-		}
-	}
-	return
-}
-
 // domain captures the scope in which the pairing was defined.
 // within that scope: the noun, relation, and otherNoun are all unique names --
 // even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
 var mdl_pair = tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at")
 
 // currently assumes exact noun names
-func (pen *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
+func (pen *Pen) AddNounPair(rel, oneNoun, otherNoun string) (err error) {
 	if rel, e := pen.findRequiredKind(rel); e != nil {
 		err = e
 	} else if one, e := pen.findRequiredNoun(oneNoun, nounSansKind); e != nil {
@@ -676,50 +601,6 @@ func (pen *Pen) addParameter(kid, cls kindInfo, field string, aff affine.Affinit
 	} else if rows == 0 {
 		// can happen if the result was already written.
 		err = errutil.Fmt("pattern parameters should be written before results")
-	}
-	return
-}
-
-var mdl_phrase = tables.Insert("mdl_phrase", "domain", "macro", "phrase", "reversed", "at")
-
-// author text parsing
-func (pen *Pen) AddPhrase(macro, phrase string, reversed bool) (err error) {
-	domain, at := pen.domain, pen.at
-	if kind, e := pen.findRequiredKind(macro); e != nil {
-		err = e
-	} else if isMacro := strings.HasSuffix(kind.fullpath(), pen.getPath(kindsOf.Macro)); !isMacro {
-		err = errutil.Fmt("kind %q in domain %q is not a macro", macro, domain)
-	} else {
-		// search for conflicting phrases within this domain.
-		var prev struct {
-			domain   string
-			kind     string
-			reversed bool
-		}
-		e := pen.db.QueryRow(
-			`select mg.domain
-			from mdl_phrase mg
-			join domain_tree dt
-				on (dt.uses = mg.domain)
-			where base = ?1
-			and phrase = ?2
-		`, domain, phrase).Scan(&prev.domain, &prev.kind, &prev.reversed)
-		switch e {
-		case sql.ErrNoRows:
-			_, err = pen.db.Exec(mdl_phrase, domain, kind.id, phrase, reversed, at)
-
-		case nil:
-			if prev.kind != kind.name || prev.reversed != reversed {
-				err = errutil.Fmt("%w phrase %q meant %s in domain %q and now %s in domain %q",
-					Conflict, phrase, fmtMacro(prev.kind, prev.reversed), prev.domain,
-					fmtMacro(macro, reversed), domain)
-			} else {
-				pen.warn("%w phrase %q already declared in domain %q and now domain %q",
-					Duplicate, phrase, prev.domain, domain)
-			}
-		default:
-			err = errutil.New("database error", e)
-		}
 	}
 	return
 }
@@ -888,8 +769,10 @@ func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err er
 }
 
 // the top level fields of nouns can hold runtime evaluated assignments.
+// wrap with "ProvisionalAssignment" to assign implied values
+// that can be overridden by explicit statements.
 // note: assumes noun is an exact name
-func (pen *Pen) AddInitialValue(noun, field string, value rt.Assignment) (err error) {
+func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error) {
 	if strings.IndexRune(field, '.') >= 0 {
 		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
@@ -900,11 +783,15 @@ func (pen *Pen) AddInitialValue(noun, field string, value rt.Assignment) (err er
 
 // store a literal value somewhere within a record held by a noun.
 // note: assumes noun is an exact name
-func (pen *Pen) AddPathValue(noun, path string, value literal.LiteralValue) (err error) {
-	if parts := strings.Split(path, "."); len(parts) == 1 {
-		err = pen.addFieldValue(noun, path, assign.Literal(value))
+// fix: merge with AddNounValue; use the bits inside marshalAssignment
+// ... and strip assignment down to a literal value
+func (pen *Pen) AddNounPath(noun string, path []string, value literal.LiteralValue) (err error) {
+	if len(path) == 0 {
+		err = errutil.New("can't set an empty path")
+	} else if len(path) == 1 {
+		err = pen.addFieldValue(noun, path[0], assign.Literal(value))
 	} else {
-		err = pen.addPathValue(noun, parts, value)
+		err = pen.addPathValue(noun, path, value)
 	}
 	return
 }

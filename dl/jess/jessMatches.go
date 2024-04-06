@@ -1,165 +1,141 @@
 package jess
 
-// allows partial matches; test that there's no input left to verify a complete match.
-func (op *MatchingPhrases) Match(q Query, input *InputState) (ret Generator, okay bool) {
-	// fix? could change to reflect ( or expand type info ) to walk generically
-	var best InputState
-	for _, m := range []interface {
-		Generator
-		Interpreter
-	}{
-		// understand "..." as .....
-		&op.Understand,
-		// names are "a kind of"/"kinds of" [traits] kind:any.
-		&op.KindsOf,
-		// kind:objects are "usually" traits.
-		&op.KindsAreTraits,
-		// kinds:records|objects "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
-		&op.KindsHaveProperties,
-		// kinds:objects ("can be"|"are either") new_trait [or new_trait...]
-		&op.KindsAreEither,
-		// kind:aspects are names
-		&op.AspectsAreTraits,
-		&op.VerbNamesAreNames,
-		&op.NamesVerbNames,
-		&op.NamesAreLikeVerbs,
-		&op.PropertyNounValue,
-		&op.NounPropertyValue,
-	} {
-		if next := *input; //
-		m.Match(q, &next) /* && len(next) == 0 */ {
-			if !okay || len(next) < len(best) {
-				best = next
-				ret, okay = m, true
-				if len(best) == 0 {
-					break
-				}
-			}
+import (
+	"fmt"
+	"log"
+
+	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
+)
+
+// different phases (z) can match different phrases (ws)
+// should a match occur, return true; and set 'out' to the matched phrase.
+func matchSentence(q Query, z weaver.Phase, ws match.Span, out *bestMatch) (okay bool) {
+	var op MatchingPhrases
+	next := MakeInput(ws)
+	switch z {
+	case weaver.LanguagePhase:
+		// "understand" {quoted text} as .....
+		okay = matchPhrase(q, next, &op.Understand, out)
+
+	case weaver.AncestryPhase:
+		// FIX -- KindsOf needs TRAITS to *match*
+		// to do the idea of match once, generate often;
+		// this would have to delay parsing the trailing phrase.
+		// probably part of the phase has to be scheduled; while the basic naming does not.
+		// ---
+		// names {are} "a kind of"/"kinds of" [traits] kind.
+		okay = matchPhrase(q, next, &op.KindsOf, out) ||
+			// The colors are black and blue.
+			matchPhrase(q, next, schedule(&op.AspectsAreTraits), out)
+
+	case weaver.PropertyPhase:
+		// kinds {are} "usually"
+		okay = matchPhrase(q, next, schedule(&op.KindsAreTraits), out) ||
+			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
+			matchPhrase(q, next, schedule(&op.KindsHaveProperties), out) ||
+			// kinds(of objects, out) ("can be"|"are either", out) new_trait [or new_trait...]
+			matchPhrase(q, next, schedule(&op.KindsAreEither), out)
+
+	case weaver.NounPhase:
+		// note: the direction phrases have to be first
+		// so that the verbs phrases don't incorporate the names of directions
+		// ( ie. "west of summit" shouldn't be considered a noun. )
+		// similarly, we have to check for fields first so field names don't become noun names.
+		// ( ie. "the subject of carrying is actors" shouldn't be confused with
+		// ... "the bottle is a container." )
+		//
+		// fix: the confusion with fields seems dangerous...
+		// the specific issue is allowing kinds to be used as text.
+		// inform doesn't allow the text of kinds ( its a tapestry hack for verbs )
+		// -- perhaps a special phrase for unquoted kinds:
+		//
+		// but also, in inform:
+		//   The friend is an animal.
+		//   Containers have a container called friend.
+		// errors with "'friend' is a nothing valued property, and it is too late to change now."
+		// it's globally distinguishing b/t fields and nouns of the same whole name.
+		// ( ex. maybe a "name table" that says what type things are )
+		// ( and then GetClosestNoun is GetClosestName and it returns a type )
+		// note: you can say "magic friend" is an animal; but you cant later refer to it as "friend"
+		// the property wins.
+		okay = //
+			// "through" door {is} place.
+			matchPhrase(q, next, &op.MapConnections, out) ||
+				// direction "of/from" place {is} place.
+				matchPhrase(q, next, &op.MapDirections, out) ||
+				// place {is} direction "of/from" places.
+				matchPhrase(q, next, &op.MapLocations, out) ||
+
+				// field "of" noun {are} value
+				matchPhrase(q, next, &op.PropertyNounValue, out) ||
+				// noun "has" field value
+				matchPhrase(q, next, &op.NounPropertyValue, out) ||
+
+				// verb nouns {are} nouns
+				matchPhrase(q, next, &op.VerbNamesAreNames, out) ||
+				// nouns {are} verbing nouns
+				matchPhrase(q, next, &op.NamesVerbNames, out) ||
+				// nouns {are} adjectives [verb nouns]
+				matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
+	}
+	return
+}
+
+type bestMatch struct {
+	match    Generator
+	numWords int
+}
+
+type matcher interface {
+	Interpreter
+	Generator
+	typeinfo.Instance // for logging
+}
+
+type schedulee interface {
+	Interpreter
+	typeinfo.Instance // for logging
+	Phase() weaver.Phase
+	Weave(weaver.Weaves, rt.Runtime) error
+}
+
+// phases that can weave immediately, without needing to schedule more phases
+// can use this to define a Generate method
+func schedule(s schedulee) genericSchedule {
+	return genericSchedule{s}
+}
+
+type genericSchedule struct{ schedulee }
+
+func (op genericSchedule) Generate(ctx Context) (err error) {
+	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if e := op.Weave(w, run); e != nil {
+			err = fmt.Errorf("%w during %q", e, op.TypeInfo().TypeName())
 		}
-	}
-	if okay {
-		*input = best
-	}
-	return
+		return
+	})
 }
 
-func (op *VerbNamesAreNames) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.Verb.Match(q, &next) &&
-		op.Names.Match(q, &next) &&
-		op.Are.Match(q, &next) &&
-		op.OtherNames.Match(q, &next) {
-		// q.note("matched VerbNamesAreNames")
-		*input, okay = next, true
-	}
-	return
-}
-
-func (op *VerbNamesAreNames) Generate(rar Registrar) (err error) {
-	if res, e := op.compile(); e != nil {
-		err = e
-	} else {
-		err = applyResults(rar, res)
-	}
-	return
-}
-
-func (op *VerbNamesAreNames) compile() (ret localResults, err error) {
-	if lhs, e := op.Names.GetNames(nil, nil); e != nil {
-		err = e
-	} else if rhs, e := op.OtherNames.GetNames(nil, nil); e != nil {
-		err = e
-	} else {
-		ret = makeResult(op.Verb.Macro, !op.Verb.Macro.Reversed, lhs, rhs)
-	}
-	return
-}
-
-func (op *NamesVerbNames) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.Names.Match(q, &next) &&
-		!op.Names.HasAnonymousKind() &&
-		op.Are.Match(q, &next) &&
-		op.Verb.Match(q, &next) &&
-		op.OtherNames.Match(q, &next) {
-		// q.note("matched NamesVerbNames")
-		*input, okay = next, true
-	}
-	return
-}
-
-func (op *NamesVerbNames) Generate(rar Registrar) (err error) {
-	if res, e := op.compile(); e != nil {
-		err = e
-	} else {
-		err = applyResults(rar, res)
-	}
-	return
-}
-
-func (op *NamesVerbNames) compile() (ret localResults, err error) {
-	if lhs, e := op.Names.GetNames(nil, nil); e != nil {
-		err = e
-	} else if rhs, e := op.OtherNames.GetNames(nil, nil); e != nil {
-		err = e
-	} else {
-		ret = makeResult(op.Verb.Macro, op.Verb.Macro.Reversed, lhs, rhs)
-	}
-	return
-}
-
-func (op *NamesAreLikeVerbs) Match(q Query, input *InputState) (okay bool) {
-	if next := *input; //
-	op.Names.Match(q, &next) &&
-		!op.Names.HasAnonymousKind() &&
-		op.Are.Match(q, &next) &&
-		op.Adjectives.Match(q, &next) {
-		// q.note("matched NamesAreLikeVerbs")
-		Optional(q, &next, &op.VerbPhrase)
-		*input, okay = next, true
-	}
-	return
-}
-
-func (op *NamesAreLikeVerbs) GetOtherNames() (ret []resultName, err error) {
-	if v := op.VerbPhrase; v != nil {
-		ret, err = op.VerbPhrase.Names.GetNames(nil, nil)
-	}
-	return
-}
-
-func (op *NamesAreLikeVerbs) GetMacro() (ret Macro) {
-	if v := op.VerbPhrase; v != nil {
-		ret = v.Verb.Macro
-	}
-	return
-}
-
-func (op *NamesAreLikeVerbs) IsReversed() (okay bool) {
-	if v := op.VerbPhrase; v != nil {
-		okay = v.Verb.Macro.Reversed
-	}
-	return
-}
-
-func (op *NamesAreLikeVerbs) Generate(rar Registrar) (err error) {
-	if res, e := op.compile(); e != nil {
-		err = e
-	} else {
-		err = applyResults(rar, res)
-	}
-	return
-}
-
-func (op *NamesAreLikeVerbs) compile() (ret localResults, err error) {
-	if rhs, e := op.GetOtherNames(); e != nil {
-		err = e
-	} else if ts, ks, e := op.Adjectives.Reduce(); e != nil {
-		err = e
-	} else if lhs, e := op.Names.GetNames(ts, ks); e != nil {
-		err = e
-	} else {
-		ret = makeResult(op.GetMacro(), op.IsReversed(), lhs, rhs)
+// match the input against the passed parse tree.
+// passes out an object which can create nouns, define kinds, set properties, and so on.
+// returns the number of words *not* matched
+func matchPhrase(q Query, input InputState, op matcher, out *bestMatch) (okay bool) {
+	// "understand" {quoted text} as .....
+	if next := input; op.Match(q, &next) {
+		if remaining := next.Len(); remaining > 0 {
+			if cnt := input.Len() - remaining; cnt > out.numWords {
+				out.numWords = cnt
+			}
+		} else {
+			if useLogging(q) {
+				log.Printf("matched %s %q\n", op.TypeInfo().TypeName(), match.Span(input.Words()).String())
+			}
+			(*out) = bestMatch{match: op}
+			okay = true
+		}
 	}
 	return
 }

@@ -2,7 +2,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
@@ -138,7 +137,6 @@ func (op *DefineTest) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineTest)(nil)
-var _ rtti.Execute = (*DefineTest)(nil)
 
 // holds a slice of type define_test
 type DefineTest_Slice []DefineTest
@@ -219,7 +217,6 @@ func (op *DefineAction) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineAction)(nil)
-var _ rtti.Execute = (*DefineAction)(nil)
 
 // holds a slice of type define_action
 type DefineAction_Slice []DefineAction
@@ -234,7 +231,8 @@ func (op *DefineAction_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Add traits to an aspect
+// Declare an aspect and its traits.
+// Aspects here are assumed to be singularly named.
 type DefineAspect struct {
 	Aspect rtti.TextEval
 	Traits rtti.TextListEval
@@ -259,7 +257,6 @@ func (op *DefineAspect) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineAspect)(nil)
-var _ rtti.Execute = (*DefineAspect)(nil)
 
 // holds a slice of type define_aspect
 type DefineAspect_Slice []DefineAspect
@@ -454,7 +451,6 @@ func (op *DefineAlias) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ rtti.Execute = (*DefineAlias)(nil)
 var _ StoryStatement = (*DefineAlias)(nil)
 
 // holds a slice of type define_alias
@@ -494,7 +490,6 @@ func (op *DefineLeadingGrammar) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ rtti.Execute = (*DefineLeadingGrammar)(nil)
 var _ StoryStatement = (*DefineLeadingGrammar)(nil)
 
 // holds a slice of type define_leading_grammar
@@ -534,7 +529,6 @@ func (op *DefineNamedGrammar) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ rtti.Execute = (*DefineNamedGrammar)(nil)
 var _ StoryStatement = (*DefineNamedGrammar)(nil)
 
 // holds a slice of type define_named_grammar
@@ -547,46 +541,6 @@ func (*DefineNamedGrammar_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *DefineNamedGrammar_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Define a phrase that can be used with 'natural language' statements.
-type DefinePhrase struct {
-	Phrase   rtti.TextEval
-	Macro    rtti.TextEval
-	Reversed rtti.BoolEval
-	Markup   map[string]any
-}
-
-// define_phrase, a type of flow.
-var Zt_DefinePhrase typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*DefinePhrase) TypeInfo() typeinfo.T {
-	return &Zt_DefinePhrase
-}
-
-// implements typeinfo.Markup
-func (op *DefinePhrase) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*DefinePhrase)(nil)
-
-// holds a slice of type define_phrase
-type DefinePhrase_Slice []DefinePhrase
-
-// implements typeinfo.Instance
-func (*DefinePhrase_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefinePhrase
-}
-
-// implements typeinfo.Repeats
-func (op *DefinePhrase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -654,7 +608,6 @@ func (op *DefineRelation) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineRelation)(nil)
-var _ rtti.Execute = (*DefineRelation)(nil)
 
 // holds a slice of type define_relation
 type DefineRelation_Slice []DefineRelation
@@ -694,7 +647,6 @@ func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineFields)(nil)
-var _ rtti.Execute = (*DefineFields)(nil)
 
 // holds a slice of type define_fields
 type DefineFields_Slice []DefineFields
@@ -733,7 +685,6 @@ func (op *DefineKinds) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineKinds)(nil)
-var _ rtti.Execute = (*DefineKinds)(nil)
 
 // holds a slice of type define_kinds
 type DefineKinds_Slice []DefineKinds
@@ -745,49 +696,6 @@ func (*DefineKinds_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *DefineKinds_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Opposites are used at runtime and during weave to
-// interpret traits, directions, and other terms.
-// For example:
-// "The opposite of east is west."
-type DefineOpposite struct {
-	Opposite rtti.TextEval
-	Word     rtti.TextEval
-	Markup   map[string]any
-}
-
-// define_opposite, a type of flow.
-var Zt_DefineOpposite typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*DefineOpposite) TypeInfo() typeinfo.T {
-	return &Zt_DefineOpposite
-}
-
-// implements typeinfo.Markup
-func (op *DefineOpposite) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineOpposite)(nil)
-var _ rtti.Execute = (*DefineOpposite)(nil)
-
-// holds a slice of type define_opposite
-type DefineOpposite_Slice []DefineOpposite
-
-// implements typeinfo.Instance
-func (*DefineOpposite_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineOpposite
-}
-
-// implements typeinfo.Repeats
-func (op *DefineOpposite_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -820,7 +728,6 @@ func (op *DefinePlural) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePlural)(nil)
-var _ rtti.Execute = (*DefinePlural)(nil)
 
 // holds a slice of type define_plural
 type DefinePlural_Slice []DefinePlural
@@ -832,91 +739,6 @@ func (*DefinePlural_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *DefinePlural_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Leaving a room by by going through a door ( ex. departing the house via the front door... ).
-type MapDeparting struct {
-	RoomName      rtti.TextEval
-	DoorName      rtti.TextEval
-	MapConnection MapConnection
-	OtherRoomName rtti.TextEval
-	Markup        map[string]any
-}
-
-// map_departing, a type of flow.
-var Zt_MapDeparting typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*MapDeparting) TypeInfo() typeinfo.T {
-	return &Zt_MapDeparting
-}
-
-// implements typeinfo.Markup
-func (op *MapDeparting) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*MapDeparting)(nil)
-var _ rtti.Execute = (*MapDeparting)(nil)
-
-// holds a slice of type map_departing
-type MapDeparting_Slice []MapDeparting
-
-// implements typeinfo.Instance
-func (*MapDeparting_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MapDeparting
-}
-
-// implements typeinfo.Repeats
-func (op *MapDeparting_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Leaving a room by moving in a compass direction ( ex. heading east... ).
-type MapHeading struct {
-	Dir           string
-	RoomName      rtti.TextEval
-	DoorName      rtti.TextEval
-	MapConnection MapConnection
-	OtherRoomName rtti.TextEval
-	Markup        map[string]any
-}
-
-// map_heading, a type of flow.
-var Zt_MapHeading typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*MapHeading) TypeInfo() typeinfo.T {
-	return &Zt_MapHeading
-}
-
-// implements typeinfo.Markup
-func (op *MapHeading) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*MapHeading)(nil)
-var _ rtti.Execute = (*MapHeading)(nil)
-
-// holds a slice of type map_heading
-type MapHeading_Slice []MapHeading
-
-// implements typeinfo.Instance
-func (*MapHeading_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MapHeading
-}
-
-// implements typeinfo.Repeats
-func (op *MapHeading_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -946,7 +768,6 @@ func (op *DefineValue) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineValue)(nil)
-var _ rtti.Execute = (*DefineValue)(nil)
 
 // holds a slice of type define_value
 type DefineValue_Slice []DefineValue
@@ -985,7 +806,6 @@ func (op *DefineNouns) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineNouns)(nil)
-var _ rtti.Execute = (*DefineNouns)(nil)
 
 // holds a slice of type define_nouns
 type DefineNouns_Slice []DefineNouns
@@ -1024,7 +844,6 @@ func (op *DefineNounTraits) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineNounTraits)(nil)
-var _ rtti.Execute = (*DefineNounTraits)(nil)
 
 // holds a slice of type define_noun_traits
 type DefineNounTraits_Slice []DefineNounTraits
@@ -1141,7 +960,6 @@ func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleProvides)(nil)
-var _ rtti.Execute = (*RuleProvides)(nil)
 
 // holds a slice of type rule_provides
 type RuleProvides_Slice []RuleProvides
@@ -1185,7 +1003,6 @@ func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForPattern)(nil)
-var _ rtti.Execute = (*RuleForPattern)(nil)
 
 // holds a slice of type rule_for_pattern
 type RuleForPattern_Slice []RuleForPattern
@@ -1228,7 +1045,6 @@ func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForNoun)(nil)
-var _ rtti.Execute = (*RuleForNoun)(nil)
 
 // holds a slice of type rule_for_noun
 type RuleForNoun_Slice []RuleForNoun
@@ -1272,7 +1088,6 @@ func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*RuleForKind)(nil)
-var _ rtti.Execute = (*RuleForKind)(nil)
 
 // holds a slice of type rule_for_kind
 type RuleForKind_Slice []RuleForKind
@@ -1284,98 +1099,6 @@ func (*RuleForKind_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *RuleForKind_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Declare a function which can produce statements about the game world.
-// They are processed at import time, and they cannot call patterns
-// nor can patterns -- which are processed during play -- call macros.
-// Unlike patterns, they cannot be extended; the entire definition must live in one place.
-type DefineMacro struct {
-	MacroName       rtti.TextEval
-	Requires        []FieldDefinition
-	Provides        []FieldDefinition
-	MacroStatements []rtti.Execute
-	Markup          map[string]any
-}
-
-// define_macro, a type of flow.
-var Zt_DefineMacro typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*DefineMacro) TypeInfo() typeinfo.T {
-	return &Zt_DefineMacro
-}
-
-// implements typeinfo.Markup
-func (op *DefineMacro) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineMacro)(nil)
-var _ rtti.Execute = (*DefineMacro)(nil)
-
-// holds a slice of type define_macro
-type DefineMacro_Slice []DefineMacro
-
-// implements typeinfo.Instance
-func (*DefineMacro_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineMacro
-}
-
-// implements typeinfo.Repeats
-func (op *DefineMacro_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Executes a macro, and potentially returns a value.
-type CallMacro struct {
-	MacroName string
-	Arguments []assign.Arg
-	Markup    map[string]any
-}
-
-// call_macro, a type of flow.
-var Zt_CallMacro typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*CallMacro) TypeInfo() typeinfo.T {
-	return &Zt_CallMacro
-}
-
-// implements typeinfo.Markup
-func (op *CallMacro) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ rtti.Execute = (*CallMacro)(nil)
-var _ rtti.BoolEval = (*CallMacro)(nil)
-var _ rtti.NumberEval = (*CallMacro)(nil)
-var _ rtti.TextEval = (*CallMacro)(nil)
-var _ rtti.RecordEval = (*CallMacro)(nil)
-var _ rtti.NumListEval = (*CallMacro)(nil)
-var _ rtti.TextListEval = (*CallMacro)(nil)
-var _ rtti.RecordListEval = (*CallMacro)(nil)
-var _ StoryStatement = (*CallMacro)(nil)
-
-// holds a slice of type call_macro
-type CallMacro_Slice []CallMacro
-
-// implements typeinfo.Instance
-func (*CallMacro_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CallMacro
-}
-
-// implements typeinfo.Repeats
-func (op *CallMacro_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1408,7 +1131,6 @@ func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefinePattern)(nil)
-var _ rtti.Execute = (*DefinePattern)(nil)
 
 // holds a slice of type define_pattern
 type DefinePattern_Slice []DefinePattern
@@ -1527,7 +1249,6 @@ func (op *DefineRelatives) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineRelatives)(nil)
-var _ rtti.Execute = (*DefineRelatives)(nil)
 
 // holds a slice of type define_relatives
 type DefineRelatives_Slice []DefineRelatives
@@ -1568,7 +1289,6 @@ func (op *DefineOtherRelatives) GetMarkup(ensure bool) map[string]any {
 
 // ensure the command implements its specified slots:
 var _ StoryStatement = (*DefineOtherRelatives)(nil)
-var _ rtti.Execute = (*DefineOtherRelatives)(nil)
 
 // holds a slice of type define_other_relatives
 type DefineOtherRelatives_Slice []DefineOtherRelatives
@@ -1933,49 +1653,6 @@ func (op *NothingField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// MapConnection, a type of str enum.
-type MapConnection int
-
-// enumerated values of MapConnection
-const (
-	C_MapConnection_ArrivingAt MapConnection = iota
-	C_MapConnection_ConnectingTo
-)
-
-func MakeMapConnection(str string) (ret MapConnection, okay bool) {
-	if i := Zt_MapConnection.FindOption(str); i >= 0 {
-		ret, okay = MapConnection(i), true
-	}
-	return
-}
-
-func (op MapConnection) String() (ret string) {
-	if i, opts := int(op), Zt_MapConnection.Options; i >= 0 && i < len(opts) {
-		ret = opts[i]
-	} else {
-		ret = "Invalid MapConnection(" + strconv.FormatInt(int64(i), 10) + ")"
-	}
-	return
-}
-
-// map_connection, a type of str enum.
-var Zt_MapConnection = typeinfo.Str{
-	Name: "map_connection",
-	Options: []string{
-		"arriving_at",
-		"connecting_to",
-	},
-	Markup: map[string]any{
-		"comment": "Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.",
-	},
-}
-var Zt_MapDirection = typeinfo.Str{
-	Name: "map_direction",
-	Markup: map[string]any{
-		"comment": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
-	},
-}
-
 // RelationCardinality, a type of str enum.
 type RelationCardinality int
 
@@ -2045,15 +1722,11 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineAlias,
 	&Zt_DefineLeadingGrammar,
 	&Zt_DefineNamedGrammar,
-	&Zt_DefinePhrase,
 	&Zt_DeclareStatement,
 	&Zt_DefineRelation,
 	&Zt_DefineFields,
 	&Zt_DefineKinds,
-	&Zt_DefineOpposite,
 	&Zt_DefinePlural,
-	&Zt_MapDeparting,
-	&Zt_MapHeading,
 	&Zt_DefineValue,
 	&Zt_DefineNouns,
 	&Zt_DefineNounTraits,
@@ -2063,8 +1736,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RuleForPattern,
 	&Zt_RuleForNoun,
 	&Zt_RuleForKind,
-	&Zt_DefineMacro,
-	&Zt_CallMacro,
 	&Zt_DefinePattern,
 	&Zt_RecordListField,
 	&Zt_RecordField,
@@ -2083,8 +1754,6 @@ var z_flow_list = []*typeinfo.Flow{
 
 // a list of all strs in this this package
 var z_str_list = []*typeinfo.Str{
-	&Zt_MapConnection,
-	&Zt_MapDirection,
 	&Zt_RelationCardinality,
 }
 
@@ -2098,93 +1767,42 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	18077675806901364237: (*BoolField)(nil),            /* field_definition=Bool:initially: */
 	17184788623765734642: (*BoolField)(nil),            /* field_definition=Bool:kind: */
 	124015053883609573:   (*BoolField)(nil),            /* field_definition=Bool:kind:initially: */
-	4843373105631259652:  (*CallMacro)(nil),            /* bool_eval=Call macro:args: */
-	10236024639985130132: (*CallMacro)(nil),            /* execute=Call macro:args: */
-	5651581957203069121:  (*CallMacro)(nil),            /* num_list_eval=Call macro:args: */
-	11693923858603804101: (*CallMacro)(nil),            /* number_eval=Call macro:args: */
-	1853884795003797121:  (*CallMacro)(nil),            /* record_eval=Call macro:args: */
-	12142382415765691372: (*CallMacro)(nil),            /* record_list_eval=Call macro:args: */
-	15275988251373739424: (*CallMacro)(nil),            /* story_statement=Call macro:args: */
-	14675240953305539039: (*CallMacro)(nil),            /* text_eval=Call macro:args: */
-	7066713272892250094:  (*CallMacro)(nil),            /* text_list_eval=Call macro:args: */
 	3991849378064754806:  (*Comment)(nil),              /* execute=Comment: */
 	16586092333187989882: (*Comment)(nil),              /* story_statement=Comment: */
 	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
 	9796202271034753943:  (*DeclareStatement)(nil),     /* story_statement=Declare: */
-	10109890763294157270: (*DefineAction)(nil),         /* execute=Define action:requires: */
 	14790755516297707674: (*DefineAction)(nil),         /* story_statement=Define action:requires: */
-	14322897916789725742: (*DefineAction)(nil),         /* execute=Define action:requires:provides: */
 	5312053119535959994:  (*DefineAction)(nil),         /* story_statement=Define action:requires:provides: */
-	14770055621982936367: (*DefineAspect)(nil),         /* execute=Define aspect:traits: */
 	4679255645834546435:  (*DefineAspect)(nil),         /* story_statement=Define aspect:traits: */
-	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */
 	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
-	17025532743550436003: (*DefineKinds)(nil),          /* execute=Define kinds:as: */
 	11622379079031968031: (*DefineKinds)(nil),          /* story_statement=Define kinds:as: */
-	18413110137608794005: (*DefineMacro)(nil),          /* execute=Define macro:requires:provides:do: */
-	17004191702311840201: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:provides:do: */
-	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
 	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
-	9839172640820177073:  (*DefineRelatives)(nil),      /* execute=Define nouns:relativeTo:otherNouns: */
 	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
-	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
 	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
-	13749527262166011841: (*DefineOpposite)(nil),       /* execute=Define opposite:word: */
-	17694415259589147741: (*DefineOpposite)(nil),       /* story_statement=Define opposite:word: */
-	811338311732531998:   (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides: */
 	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
-	2917659442779702699:  (*DefinePattern)(nil),        /* execute=Define pattern:requires:provides:do: */
 	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
-	4650767708903763835:  (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro: */
-	89301097593785617:    (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro:reversed: */
-	10034565430437798858: (*DefineRelation)(nil),       /* execute=Define relation:kind:otherKind:cardinality: */
 	15951965898335032430: (*DefineRelation)(nil),       /* story_statement=Define relation:kind:otherKind:cardinality: */
-	2570506749320892411:  (*DefineOtherRelatives)(nil), /* execute=Define relativeTo:nouns:otherNouns: */
 	16389453623741136831: (*DefineOtherRelatives)(nil), /* story_statement=Define relativeTo:nouns:otherNouns: */
-	10393873004445566457: (*RuleForPattern)(nil),       /* execute=Define rule:do: */
 	18093984368234904277: (*RuleForPattern)(nil),       /* story_statement=Define rule:do: */
-	6144114745580995665:  (*RuleForKind)(nil),          /* execute=Define rule:kind:do: */
 	12136992210577308757: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:do: */
-	12497780268362777975: (*RuleForKind)(nil),          /* execute=Define rule:kind:exactly:do: */
 	10538385905361340595: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:do: */
-	10044089009426244136: (*RuleForKind)(nil),          /* execute=Define rule:kind:exactly:named:do: */
 	11666026550766211860: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:named:do: */
-	14253827009100247466: (*RuleForKind)(nil),          /* execute=Define rule:kind:named:do: */
 	2951940010570883790:  (*RuleForKind)(nil),          /* story_statement=Define rule:kind:named:do: */
-	589486870138010946:   (*RuleForPattern)(nil),       /* execute=Define rule:named:do: */
 	2007307886252117326:  (*RuleForPattern)(nil),       /* story_statement=Define rule:named:do: */
-	5341208345720564107:  (*RuleForNoun)(nil),          /* execute=Define rule:noun:do: */
 	4344965134492972319:  (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:do: */
-	12048342630397883580: (*RuleForNoun)(nil),          /* execute=Define rule:noun:named:do: */
 	16133739979148445504: (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:named:do: */
-	16815703800760921520: (*RuleProvides)(nil),         /* execute=Define rule:provides: */
 	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
 	10209709135447127962: (*DefineScene)(nil),          /* story_statement=Define scene:requires:with: */
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
-	14046702858409070523: (*DefinePlural)(nil),         /* execute=Define singular:plural: */
 	1798652288281835623:  (*DefinePlural)(nil),         /* story_statement=Define singular:plural: */
-	9186540469433423003:  (*DefineTest)(nil),           /* execute=Define test:do: */
 	12489141410311466071: (*DefineTest)(nil),           /* story_statement=Define test:do: */
-	1317505351252968509:  (*DefineTest)(nil),           /* execute=Define test:requires:do: */
 	3712030102885900665:  (*DefineTest)(nil),           /* story_statement=Define test:requires:do: */
-	4534084067371425967:  (*DefineTest)(nil),           /* execute=Define test:requires:scene:do: */
 	16978239348269462739: (*DefineTest)(nil),           /* story_statement=Define test:requires:scene:do: */
-	2982226642886528461:  (*DefineTest)(nil),           /* execute=Define test:scene:do: */
 	13333326165932249009: (*DefineTest)(nil),           /* story_statement=Define test:scene:do: */
-	1692806160663601784:  (*DefineValue)(nil),          /* execute=Define value:of:as: */
 	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
-	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
-	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
-	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
-	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
-	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
-	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
-	10612153415886771360: (*DefineAlias)(nil),          /* execute=Interpret alias:as: */
 	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
-	16304045397725596887: (*DefineNamedGrammar)(nil),   /* execute=Interpret name:with: */
 	8001652437005351387:  (*DefineNamedGrammar)(nil),   /* story_statement=Interpret name:with: */
-	2895546536328156972:  (*DefineLeadingGrammar)(nil), /* execute=Interpret:with: */
 	6001249499689096432:  (*DefineLeadingGrammar)(nil), /* story_statement=Interpret:with: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
@@ -2263,7 +1881,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Create a scene",
@@ -2315,7 +1932,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
@@ -2335,10 +1951,9 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Add traits to an aspect",
+			"comment": []interface{}{"Declare an aspect and its traits.", "Aspects here are assumed to be singularly named."},
 		},
 	}
 	Zt_AspectField = typeinfo.Flow{
@@ -2422,7 +2037,6 @@ func init() {
 			Type:  &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
@@ -2443,7 +2057,6 @@ func init() {
 			Type:    &grammar.Zt_ScannerMaker,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
@@ -2464,35 +2077,10 @@ func init() {
 			Type:    &grammar.Zt_ScannerMaker,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
 			"comment": "starts a parser scanner.",
-		},
-	}
-	Zt_DefinePhrase = typeinfo.Flow{
-		Name: "define_phrase",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "phrase",
-			Label: "phrase",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "macro",
-			Label: "as_macro",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:     "reversed",
-			Label:    "reversed",
-			Optional: true,
-			Type:     &rtti.Zt_BoolEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment": "Define a phrase that can be used with 'natural language' statements.",
 		},
 	}
 	Zt_DeclareStatement = typeinfo.Flow{
@@ -2531,7 +2119,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 	}
 	Zt_DefineFields = typeinfo.Flow{
@@ -2549,7 +2136,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Add properties to a kind",
@@ -2569,27 +2155,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-	}
-	Zt_DefineOpposite = typeinfo.Flow{
-		Name: "define_opposite",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "opposite",
-			Label: "opposite",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "word",
-			Label: "word",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Opposites are used at runtime and during weave to", "interpret traits, directions, and other terms.", "For example:", "\"The opposite of east is west.\""},
 		},
 	}
 	Zt_DefinePlural = typeinfo.Flow{
@@ -2606,73 +2171,9 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Plurals are used at runtime and during weave to", "guide the interpretation of nouns and kinds.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
-		},
-	}
-	Zt_MapDeparting = typeinfo.Flow{
-		Name: "map_departing",
-		Lede: "departing",
-		Terms: []typeinfo.Term{{
-			Name:  "room_name",
-			Label: "from",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "door_name",
-			Label: "via",
-			Markup: map[string]any{
-				"comment": []interface{}{"todo? use soft suffix of 'noun_name' to indicate the field should pull autocomplete from pooled nouns.", "or, should there be pools per kind? ex. rooms", "and,or, should this use markup instead of naming convention?"},
-			},
-			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:  "map_connection",
-			Label: "and",
-			Type:  &Zt_MapConnection,
-		}, {
-			Name:  "other_room_name",
-			Label: "other_room",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
-		},
-	}
-	Zt_MapHeading = typeinfo.Flow{
-		Name: "map_heading",
-		Lede: "heading",
-		Terms: []typeinfo.Term{{
-			Name: "dir",
-			Type: &Zt_MapDirection,
-		}, {
-			Name:  "room_name",
-			Label: "from",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:     "door_name",
-			Label:    "via",
-			Optional: true,
-			Type:     &rtti.Zt_TextEval,
-		}, {
-			Name:  "map_connection",
-			Label: "and",
-			Type:  &Zt_MapConnection,
-		}, {
-			Name:  "other_room_name",
-			Label: "other_room",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
 		},
 	}
 	Zt_DefineValue = typeinfo.Flow{
@@ -2693,7 +2194,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Assign a starting value to the field of one or nouns.",
@@ -2713,7 +2213,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 	}
 	Zt_DefineNounTraits = typeinfo.Flow{
@@ -2730,7 +2229,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 	}
 	Zt_NumListField = typeinfo.Flow{
@@ -2790,7 +2288,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 	}
 	Zt_RuleForPattern = typeinfo.Flow{
@@ -2813,7 +2310,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Change the behavior of an existing pattern.", "For events, this adds a listener that responds to the targeted object only when triggered by the player.", "By default, rules with filters continue on to the next rule automatically.", "Because event listeners have filters they continue to the next listener unless specifically stopped."},
@@ -2843,7 +2339,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
@@ -2878,69 +2373,9 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
-		},
-	}
-	Zt_DefineMacro = typeinfo.Flow{
-		Name: "define_macro",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "macro_name",
-			Label: "macro",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:    "requires",
-			Label:   "requires",
-			Repeats: true,
-			Type:    &Zt_FieldDefinition,
-		}, {
-			Name:    "provides",
-			Label:   "provides",
-			Repeats: true,
-			Type:    &Zt_FieldDefinition,
-		}, {
-			Name:    "macro_statements",
-			Label:   "do",
-			Repeats: true,
-			Type:    &rtti.Zt_Execute,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Declare a function which can produce statements about the game world.", "They are processed at import time, and they cannot call patterns", "nor can patterns -- which are processed during play -- call macros.", "Unlike patterns, they cannot be extended; the entire definition must live in one place."},
-		},
-	}
-	Zt_CallMacro = typeinfo.Flow{
-		Name: "call_macro",
-		Lede: "call",
-		Terms: []typeinfo.Term{{
-			Name:  "macro_name",
-			Label: "macro",
-			Type:  &prim.Zt_Text,
-		}, {
-			Name:    "arguments",
-			Label:   "args",
-			Repeats: true,
-			Type:    &assign.Zt_Arg,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
-			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
-			&rtti.Zt_TextEval,
-			&rtti.Zt_RecordEval,
-			&rtti.Zt_NumListEval,
-			&rtti.Zt_TextListEval,
-			&rtti.Zt_RecordListEval,
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment": "Executes a macro, and potentially returns a value.",
 		},
 	}
 	Zt_DefinePattern = typeinfo.Flow{
@@ -2969,7 +2404,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Declare a new pattern.", "A pattern is a bundle of functions which can either change the game world or provide information about it.", "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."},
@@ -3035,7 +2469,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Relate nouns to each other",
@@ -3059,7 +2492,6 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Relate nouns to each other",

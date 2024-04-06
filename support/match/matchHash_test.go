@@ -108,7 +108,7 @@ func TestMatching(t *testing.T) {
 	prefixList := match.PanicSpans(prefixes...)
 	for i, w := range tests {
 		h := match.PanicSpan(w)
-		matched, skip := prefixList.FindPrefix(h)
+		matched, skip := prefixList.FindPrefixIndex(h)
 		if skip == 0 { // shh...
 			matched = -1
 		}

@@ -269,7 +269,7 @@ func TestPatternConflictingInit(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := testweave.OkayError(t, e, `mismatched assignment`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict assignment`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }

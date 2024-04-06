@@ -92,19 +92,23 @@ func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 func readComment(str string) (ret any) {
 	var last int
 	var out []any
-	for i, ch := range str {
-		if ch == '\n' {
-			add := str[last+2 : i]
-			out = append(out, add)
-			last = i + 1 // skip the newline
-		}
-	}
-	if last == 0 {
-		ret = str[last+2:]
+	if len(str) == 1 {
+		ret = "" // just the hash? then the empty string.
 	} else {
-		add := str[last+2:]
-		out = append(out, add)
-		ret = out
+		for i, ch := range str {
+			if ch == '\n' {
+				add := str[last+2 : i]
+				out = append(out, add)
+				last = i + 1 // skip the newline
+			}
+		}
+		if last == 0 {
+			ret = str[last+2:]
+		} else {
+			add := str[last+2:]
+			out = append(out, add)
+			ret = out
+		}
 	}
 	return
 }

@@ -5,180 +5,92 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// todo: remove. it should no longer be necessary to compile local results
-// before applying them; the various generate functions should be able to use Registrar directly
-func applyResults(rar Registrar, res localResults) (err error) {
-	if src, e := genNouns(rar, res.Primary); e != nil {
-		err = e
-	} else if tgt, e := genNouns(rar, res.Secondary); e != nil {
-		err = e
-	} else {
-		// note: some phrases "the box is open" dont have macros.
-		// in that case, genNouns does all the work.
-		if macro := res.Macro.Name; len(macro) > 0 {
-			err = rar.Apply(res.Macro, src, tgt)
-		}
-	}
-	return
+func startsUpper(str string) bool {
+	first, _ := utf8.DecodeRuneInString(str)
+	return unicode.IsUpper(first) // this works okay even if the string was empty
 }
 
-// determine whether the noun seems to be a proper name
-func isProper(article articleResult, name string) (okay bool) {
-	a := inflect.Normalize(article.String())
-	if len(name) > 1 || a == "our" {
-		first, _ := utf8.DecodeRuneInString(name)
-		okay = unicode.ToUpper(first) == first
-	}
-	return
-}
-
-// determine whether the noun will need a custom indefinite property
-// this uses a subset of the known articles, due to way object printing works.
-func getCustomArticle(article articleResult) (ret string) {
-	switch a := inflect.Normalize(article.String()); a {
-	case "a", "an", "the":
-	default:
-		ret = a
-	}
-	return
-}
-
-// add nouns and values
-func genNouns(rar Registrar, ns []resultName) (ret []string, err error) {
-	names := make([]string, 0, len(ns))
-	for _, n := range ns {
-		if n.Article.Count > 0 {
-			if ns, e := importCountedNoun(rar, n); e != nil {
-				err = e
-				break
-			} else {
-				names = append(names, ns...)
-			}
-		} else {
-			if name, e := importNamedNoun(rar, n); e != nil {
-				err = e
-				break
-			} else {
-				names = append(names, name)
-			}
-		}
-	}
-	if err == nil {
-		ret = names
-	}
-	return
-}
-
-// fix: it doesnt seem like this should be *reading* nouns:
-// that should be part of matching; recording whatever it needs
-// then output the results here.
-func importNamedNoun(rar Registrar, n resultName) (ret string, err error) {
-	var noun string
-	fullName := n.String()
-	if name := inflect.Normalize(fullName); name == PlayerYou {
-		// tdb: the current thought is that "the player" should be a variable;
-		// currently its an "agent".
-		noun, err = rar.GetExactNoun(PlayerSelf)
-	} else {
-		if n.Exact { // ex. ".... called the spatula."
-			noun, err = rar.GetExactNoun(name)
-		} else if fold, e := rar.GetClosestNoun(name); e != nil {
+// even one name can generate several nouns ( ex. "two things" )
+// after gets called for each one.
+func genNounValues(u Scheduler, ns []DesiredNoun, after postGenOne) (err error) {
+	return u.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if e := writeNounValues(w, ns); e != nil {
 			err = e
-		} else {
-			noun = fold
-		}
-		// if it doesnt exist; we create it.
-		if errors.Is(err, mdl.Missing) {
-			base := DefaultKind // ugh
-			if len(n.Kinds) > 0 {
-				base = n.Kinds[0]
-			}
-			if e := rar.AddNoun(name, fullName, base); e != nil {
-				err = e
-			} else {
-				noun = name
-			}
-		}
-	}
-	// assign kinds
-	// fix consider a "noun builder" instead
-	if err == nil {
-		for _, k := range n.Kinds {
-			// since noun already exists: this ensures that the noun inherits from all of the specified kinds
-			if e := rar.AddNoun(noun, "", k); e != nil {
-				err = e
-				break
-			}
-		}
-	}
-	// add articles:
-	if err == nil {
-		if isProper(n.Article, fullName) {
-			if e := rar.AddNounTrait(noun, ProperNameTrait); e != nil {
-				err = e
-			}
-		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := rar.AddNounValue(noun, IndefiniteArticle, text(a, "")); e != nil {
-				err = e
-			}
-		}
-	}
-	// add traits:
-	if err == nil {
-		for _, t := range n.Traits {
-			if e := rar.AddNounTrait(noun, t); e != nil {
-				err = errutil.Append(err, e)
-				break // out of the traits to the next noun
-			}
-		}
-	}
-	// return
-	if err == nil {
-		ret = noun
-	}
-	return
-}
-
-// ex. "two triangles"
-// - adds ( and returns ) nouns: triangle_1, triangle_2, etc. of kind "triangle/s"
-// - uses "triangle" as an alias and printed name for each of the new nouns
-// - flags them all as "counted.
-func importCountedNoun(rar Registrar, noun resultName) (ret []string, err error) {
-	if cnt := noun.Article.Count; cnt > 0 {
-		kinds := noun.Kinds[0]
-		kind := rar.GetSingular(kinds)
-		names := make([]string, cnt)
-	Loop:
-		for i := 0; i < cnt; i++ {
-			n := rar.GetUniqueName(kinds)
-			names[i] = n
-			if e := rar.AddNoun(n, n, kinds); e != nil {
-				err = e
-			} else if e := rar.AddNounAlias(n, kind, -1); e != nil {
-				err = e // ^ so that typing "triangle" means "triangles-1"
-				break
-			} else if e := rar.AddNounTrait(n, CountedTrait); e != nil {
-				err = e
-				break
-			} else if e := rar.AddNounValue(n, PrintedName, text(kind, "")); e != nil {
-				err = e // so that printing "triangles-1" yields "triangle"
-				break   // FIX: itd make a lot more sense to have a default value for the kind
-			} else {
-				for _, t := range noun.Traits {
-					if e := rar.AddNounTrait(n, t); e != nil {
-						err = e
-						break Loop
-					}
+		} else if after != nil {
+			for _, n := range ns {
+				if e := after(n.Noun); e != nil {
+					err = e
+					break
 				}
 			}
-			if err == nil {
-				ret = names
-			}
+		}
+		return
+	})
+}
+
+type postGenOne func(a string) error
+type postGenMany func(a, b []DesiredNoun) error
+
+func writeKinds(w weaver.Weaves, noun string, kinds []string) (err error) {
+	for _, k := range kinds {
+		if e := w.AddNounKind(noun, k); e != nil && !errors.Is(e, weaver.Duplicate) {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
+	for _, n := range ns {
+		if e := n.writeNounValues(w); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+// creates a noun as a placeholder
+// later, a pass ensures that all placeholder nouns have been given kinds;
+// or it upgrades them to things.
+// to simplify the code, this happens even if the kind might possibly be known.
+func ensureNoun(q Query, w weaver.Weaves, name match.Span, props *NounProperties) (ret string, created bool, err error) {
+	if noun, width := q.FindNoun(name, nil); width > 0 {
+		ret = noun
+	} else {
+		name := name.String()
+		noun := inflect.Normalize(name)
+		defaultKind := Objects
+		if ks := props.Kinds; len(ks) > 0 {
+			defaultKind = ks[0]
+			props.Kinds = ks[1:]
+		}
+		if e := w.AddNounKind(noun, defaultKind); e != nil {
+			err = e // if duplicate, FindNoun should have triggered; so return all errors
+		} else if e := registerNames(w, noun, name); e != nil {
+			err = e
+		} else {
+			ret = noun
+			created = true
+		}
+	}
+	return
+}
+
+func registerNames(w weaver.Weaves, noun, name string) (err error) {
+	names := mdl.MakeNames(name)
+	for i, n := range names {
+		if e := w.AddNounName(noun, n, i); e != nil {
+			err = e
+			break
 		}
 	}
 	return

@@ -4,6 +4,7 @@ package qdb
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/qna/query"
@@ -29,7 +30,6 @@ type Query struct {
 	nounValues,
 	nounAliases,
 	nounsByKind,
-	oppositeOf,
 	patternOf,
 	newPairsFromDomain,
 	newPairsFromNames,
@@ -146,12 +146,18 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 	return
 }
 
-// returns the ancestor hierarchy, including the kind itself.
+// returns the ancestor hierarchy, including the kind itself;
+// empty if the kind doesnt exist, errors on a db error.
 // accepts both the plural and singular kind.
-// in the db, more root is to the right; in the returned paths its reversed.
+// in the db, more root is to the right; in the returned list it's reversed.
 // ex. for "door" the list might be: kinds, objects, things, props, openers, doors.
-func (q *Query) KindOfAncestors(kind string) ([]string, error) {
-	return scanStrings(q.kindOfAncestors, kind)
+func (q *Query) KindOfAncestors(kind string) (ret []string, err error) {
+	if ks, e := scanStrings(q.kindOfAncestors, kind); e != nil && !errors.Is(e, sql.ErrNoRows) {
+		err = e
+	} else if e == nil {
+		ret = ks
+	}
+	return
 }
 
 func (q *Query) KindValues(id string) (ret []query.ValueData, err error) {
@@ -211,10 +217,6 @@ func (q *Query) PluralToSingular(plural string) (string, error) {
 
 func (q *Query) PluralFromSingular(singular string) (string, error) {
 	return scanString(q.pluralFromSingular, singular)
-}
-
-func (q *Query) OppositeOf(word string) (string, error) {
-	return scanString(q.oppositeOf, word)
 }
 
 // the last value is always the result, blank for execute statements
@@ -436,12 +438,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				on (mf.rowid = mv.field)
 			where (ns.name = ?1) and (mf.field = ?2) and (mv.noun = ns.noun)
 			order by length(mv.dot), mv.final desc`,
-		),
-		oppositeOf: ps.Prep(db,
-			`select otherWord
-			from active_rev
-			where oneWord = ?1
-			limit 1`,
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,

@@ -3,8 +3,10 @@ package weave_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 
 	"github.com/kr/pretty"
 )
@@ -127,8 +129,7 @@ func TestRivalConflict(t *testing.T) {
 type rivalFact string
 
 func (el rivalFact) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) error {
-		_, e := w.Pin().AddFact("rivalFact", string(el))
-		return e
+	return cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddFact("rivalFact", string(el))
 	})
 }

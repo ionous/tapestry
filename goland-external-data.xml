@@ -25,9 +25,6 @@
     <table path="main.mdl_noun">
       <column name="rowid" expr="ROWID"/>
     </table>
-    <table path="main.mdl_rev">
-      <column name="rowid" expr="ROWID"/>
-    </table>
     <table path="main.mdl_pair">
       <column name="rowid" expr="ROWID"/>
     </table>

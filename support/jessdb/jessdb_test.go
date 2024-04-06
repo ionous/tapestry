@@ -24,17 +24,54 @@ func TestPhrases(t *testing.T) {
 			t.Fatal(e)
 		} else {
 			m.PrecachePaths()
-			x := jessdb.NewSource(m)
-			jesstest.RunPhraseTests(t, func(testPhrase string) (ret jess.Generator, err error) {
-				if ws, e := match.MakeSpan(testPhrase); e != nil {
-					err = e
-				} else {
-					ret, err = x.MatchSpan("a", ws)
+			const at = -1
+			for i, p := range jesstest.Phrases {
+				if i != at && at >= 0 {
+					continue
 				}
-				return
-			})
+				if str, ok := p.Test(); !ok {
+					continue // skip unused tests
+				} else {
+					// reset the dynamic noun pool every test
+					dynamicNouns := make(map[string]string)
+					// block logging of known nouns to match jess_test
+					for _, name := range []string{"story"} {
+						dynamicNouns[name] = name
+						dynamicNouns["$"+name] = "things"
+					}
+					q := testAdapter{jessdb.MakeQuery(m, "a"), dynamicNouns}
+					// create the test helper
+					m := jesstest.MakeMock(q, dynamicNouns)
+					// run the test:
+					t.Logf("testing: %d %s", i, str)
+					if !p.Verify(m.Generate(str)) {
+						t.Logf("failed %d", i)
+						t.Fail()
+					}
+				}
+			}
 		}
 	}
+}
+
+type testAdapter struct {
+	jess.Query
+	dynamicNouns map[string]string
+}
+
+func (ta testAdapter) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
+	if n, w := ta.Query.FindNoun(ws, pkind); w > 0 {
+		ret, width = n, w
+	} else {
+		str := ws.String()
+		if noun, ok := ta.dynamicNouns[str]; ok {
+			ret, width = noun, len(ws)
+			if pkind != nil {
+				*pkind = ta.dynamicNouns["$"+str]
+			}
+		}
+	}
+	return
 }
 
 func idPath(ids ...int) string {
@@ -48,32 +85,58 @@ func idPath(ids ...int) string {
 
 func setupDB(name string) (ret *sql.DB, err error) {
 	const (
+		// domain string
+		domain = "a"
 		// built in kinds
-		aspects = iota + 1
+		kinds = iota + 1
 		patterns
-		macros
-		kinds
+		relations
+		verbs
+		aspects
 		traits
 		records
 		actions
 		// kinds of nouns
+		objects // base for concrete and abstract nouns
 		things
 		containers
 		supporters
-		colors
-		groups
+		colors     // aspects
+		groups     // records
+		directions // umm... directions
+		doors
+		rooms
 		// actions
 		storing
 		// macros
-		carry
-		contain
-		support
-		suspect
+		relSuspicion
+		relWhereabouts
 		// nouns
-		message
+		story
+		message // thing
 		missive
-		// domain string
-		domain = "a"
+		north // directions
+		south
+		east
+		west
+		river // predefined door
+		ocean // predefined room
+		// used when matching the names of verbs
+		verbCarrying
+		verbCarriedBy
+		verbIn
+		verbOn
+		verbSuspiciousOf
+		//
+		fieldOpen
+		fieldClosed
+		fieldOpenable
+		fieldTransparent
+		fieldFixed
+		fixedDark
+		fieldDesc
+		fieldTitle
+		fieldAge
 	)
 	db := testdb.Create(name)
 	if e := tables.CreateModel(db); e != nil {
@@ -85,88 +148,88 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_kind",
 		"ROWID", "domain", "kind", "singular", "path"},
+		//
+		verbs, domain, "verbs", "verb", idPath(),
 		aspects, domain, "aspects", "aspect", idPath(),
-		patterns, domain, "patterns", "pattern", idPath(),
-		records, domain, "records", "record", idPath(),
-		macros, domain, "macros", "macro", idPath(patterns),
-		actions, domain, "actions", "action", idPath(patterns),
-		kinds, domain, "kinds", "kind", idPath(),
 		traits, domain, "traits", "", idPath(aspects),
-		things, domain, "things", "thing", idPath(kinds),
-		containers, domain, "containers", "container", idPath(things, kinds),
-		supporters, domain, "supporters", "supporter", idPath(things, kinds),
 		colors, domain, "color", nil, idPath(aspects),
-		groups, domain, "groups", "group", idPath(records),
-		// macros:
-		carry, domain, "carry", nil, idPath(macros),
-		contain, domain, "contain", nil, idPath(macros),
-		support, domain, "support", nil, idPath(macros),
-		suspect, domain, "suspect", nil, idPath(macros),
-		// actions
+		//
+		relations, domain, "relations", "relation", idPath(),
+		patterns, domain, "patterns", "pattern", idPath(),
+		actions, domain, "actions", "action", idPath(patterns),
 		storing, domain, "storing", nil, idPath(actions),
+		//
+		kinds, domain, "kinds", "kind", idPath(),
+		objects, domain, "objects", "object", idPath(kinds),
+		directions, domain, "directions", "direction", idPath(objects, kinds),
+		rooms, domain, "rooms", "room", idPath(objects, kinds),
+		things, domain, "things", "thing", idPath(objects, kinds),
+		doors, domain, "doors", "door", idPath(objects, things, kinds),
+		containers, domain, "containers", "container", idPath(objects, things, kinds),
+		supporters, domain, "supporters", "supporter", idPath(objects, things, kinds),
+		//
+		records, domain, "records", "record", idPath(),
+		groups, domain, "groups", "group", idPath(records),
+		// relations:
+		relWhereabouts, domain, "whereabouts", nil, idPath(relations),
+		relSuspicion, domain, "suspects", nil, idPath(relations),
+		//,
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_field",
-		"domain", "kind", "field", "affinity"},
-		// traits
-		domain, traits, "closed", "bool",
-		domain, traits, "open", "bool",
-		domain, traits, "openable", "bool",
-		domain, traits, "transparent", "bool",
-		domain, traits, "fixed in place", "bool",
-		// fields
-		domain, things, "description", "text",
-		domain, things, "title", "text",
-		domain, things, "age", "text",
-		// macros:
-		domain, carry, "primary", "text",
-		domain, carry, "secondary", "text_list",
-		domain, carry, "error", "text",
-		//
-		domain, contain, "primary", "text",
-		domain, contain, "secondary", "text_list",
-		domain, contain, "error", "text",
-		//
-		domain, support, "primary", "text",
-		domain, support, "secondary", "text_list",
-		domain, support, "error", "text",
-		// suspicion: many-to-many
-		domain, suspect, "primary", "text_list",
-		domain, suspect, "secondary", "text_list",
-		domain, suspect, "error", "text",
-	); e != nil {
-		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_pat",
-		"kind", "result"},
-		//
-		carry, "error",
-		contain, "error",
-		support, "error",
-		suspect, "error",
-	); e != nil {
-		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_phrase",
-		"domain", "macro", "phrase", "reversed"},
-		//
-		domain, carry, "carried by", true, // ex. primary carrying secondary
-		domain, carry, "carrying", false, // ex. primary carrying secondary
-		domain, contain, "in", true,
-		domain, support, "on", true, // on the x are the w,y,z
-		domain, suspect, "suspicious of", false,
+		"domain", "kind", "ROWID", "field", "affinity"},
+		// traits: for matching traits to set
+		domain, traits, fieldClosed, "closed", "bool",
+		domain, traits, fieldOpen, "open", "bool",
+		domain, traits, fieldOpenable, "openable", "bool",
+		domain, traits, fieldTransparent, "transparent", "bool",
+		domain, traits, fieldFixed, "fixed in place", "bool",
+		domain, traits, fixedDark, "dark", "bool",
+		// fields: for matching properties to set
+		domain, things, fieldDesc, "description", "text",
+		domain, things, fieldTitle, "title", "text",
+		domain, things, fieldAge, "age", "text",
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_noun",
-		"ROWID", "domain", "noun", "kind"},
-		//
-		message, domain, "message", things,
-		missive, domain, "missive", things,
+		"domain", "ROWID", "noun", "kind"},
+		// things
+		domain, story, "story", things,
+		domain, message, "message", things,
+		domain, missive, "missive", things,
+		// directions
+		domain, north, "north", directions,
+		domain, west, "west", directions,
+		domain, east, "east", directions,
+		domain, south, "south", directions,
+		// links
+		domain, river, "river", doors,
+		domain, ocean, "ocean", rooms,
+		// verbs
+		domain, verbCarrying, "carrying", verbs,
+		domain, verbCarriedBy, "carried by", verbs,
+		domain, verbIn, "in", verbs,
+		domain, verbOn, "on", verbs,
+		domain, verbSuspiciousOf, "suspicious of", verbs,
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_name",
 		"domain", "noun", "name", "rank"},
 		//
+		domain, story, "story", 0,
 		domain, message, "message", 0,
 		domain, missive, "missive", 0,
+		domain, north, "north", 0,
+		domain, west, "west", 0,
+		domain, east, "east", 0,
+		domain, south, "south", 0,
+		domain, river, "river", 0,
+		domain, ocean, "ocean", 0,
+		domain, verbCarrying, "carrying", 0,
+		domain, verbCarriedBy, "carried by", 0,
+		domain, verbIn, "in", 0,
+		domain, verbOn, "on", 0,
+		domain, verbSuspiciousOf, "suspicious of", 0,
 	); e != nil {
 		err = e
 	}

@@ -8,6 +8,7 @@ const (
 	Counter        = "$counter"   // sequence counter
 	Domain         = "$scene"     // returns whether a named domain is active
 	FieldsOfKind   = "$fields"    // names of the fields of a kind as a text list
+	KindAncestry   = "$bases"     // text list, root towards the start the name of the kind at the end
 	ObjectAliases  = "$alias"     // similar to object name but returns a list of names
 	ObjectId       = "$object"    // returns the unique object id from a object name
 	ObjectKind     = "$kind"      // type of a game object
@@ -31,5 +32,7 @@ type Options int
 const (
 	// flag to print response names ( instead of values )
 	PrintResponseNames Options = iota
+	// by default we dont
+	CacheErrors
 	NumOptions
 )

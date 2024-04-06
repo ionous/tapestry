@@ -1,10 +1,20 @@
 package jess
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
+
+// runs in the AncestryPhase; but requires that the kind is known already.
+// so "The colors are a kind of aspect. The colors are black and blue." is fine;
+// but reversing those two sentences will fail.
+func (op *AspectsAreTraits) Phase() weaver.Phase {
+	// needs to be before PropertyPhase so properties can find the aspect w/o spinning.
+	return weaver.AncestryPhase
+}
 
 // the colors are....
 // ( see also KindsOf )
@@ -27,7 +37,7 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 			next := next.Skip(w)         // skip the kind
 			op.Are.Matched = next.Cut(1) // cut the word are
 			next = next.Skip(1)          // move past are
-			if op.Names.Match(AddContext(q, PlainNameMatching), &next) {
+			if op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
 				*input, okay = next, true
 			}
 		}
@@ -35,16 +45,16 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *AspectsAreTraits) Generate(rar Registrar) (err error) {
+func (op *AspectsAreTraits) Weave(w weaver.Weaves, _ rt.Runtime) (err error) {
 	if aspect, e := op.Aspect.Validate(kindsOf.Aspect); e != nil {
 		err = e
 	} else {
 		var names []string
-		for it := op.Names.Iterate(); it.HasNext(); {
+		for it := op.PlainNames.GetNames(); it.HasNext(); {
 			n := it.GetNext()
-			names = append(names, inflect.Normalize(n.String()))
+			names = append(names, n.Name.GetNormalizedName())
 		}
-		err = rar.AddTraits(aspect, names)
+		err = w.AddAspectTraits(aspect, names)
 	}
 	return
 }

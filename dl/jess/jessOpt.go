@@ -8,8 +8,8 @@ func Optional[M any,
 	IM interface {
 		// the syntax for this feels very strange
 		// the method takes an 'out' pointer ( so go can determine the type by inference )
-		// the "interface" is a reused keyword, signifying a type constraint
-		// indicating we want pointers to M to also be (implement) Interpreter.
+		// "interface" here is a reused keyword: signifying a type constraint.
+		// it means we want pointers to M to implement Interpreter.
 		// *phew*
 		*M
 		Interpreter
@@ -19,4 +19,20 @@ func Optional[M any,
 		*out, *input, okay = &v, next, true
 	}
 	return
+}
+
+// go is unable to reliably test typed interfaces for nil without reflection.
+// however, look how easy this is. *sigh*
+// https://go.dev/doc/faq#nil_error
+func ref[M any,
+	IM interface {
+		*M
+		NounBuilder
+	}](in *M) nounBuilderRef {
+	return nounBuilderRef{IM(in), in == nil}
+}
+
+type nounBuilderRef struct {
+	NounBuilder
+	IsNil bool
 }

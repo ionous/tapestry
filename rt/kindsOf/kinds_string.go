@@ -15,8 +15,7 @@ func _() {
 	_ = x[Record-8]
 	_ = x[Relation-16]
 	_ = x[Response-32]
-	_ = x[Macro-68]
-	_ = x[Action-132]
+	_ = x[Action-68]
 }
 
 const (
@@ -25,8 +24,7 @@ const (
 	_Kinds_name_2 = "records"
 	_Kinds_name_3 = "relations"
 	_Kinds_name_4 = "responses"
-	_Kinds_name_5 = "macros"
-	_Kinds_name_6 = "actions"
+	_Kinds_name_5 = "actions"
 )
 
 var (
@@ -47,8 +45,6 @@ func (i Kinds) String() string {
 		return _Kinds_name_4
 	case i == 68:
 		return _Kinds_name_5
-	case i == 132:
-		return _Kinds_name_6
 	default:
 		return "Kinds(" + strconv.FormatInt(int64(i), 10) + ")"
 	}

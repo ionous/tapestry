@@ -5,49 +5,15 @@ Tapestry:
             The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.
             You are in the Lobby.
             The faux door is a door in the Lobby.
-            """
+            """ # "
         - # fix: this should have made the doors 'plural named' automatically.
           Declare: """
-            The double doors are plural named, closed, and openable doors.
-            The curtain is a door.
-            """
-        - Heading:from:via:and:otherRoom:
-            - "North"
-            - "the Lobby"
-            - "the double doors"
-            - "arriving_at"
-            - "the foyer"
-        - Heading:from:and:otherRoom:
-            - "Down"
-            - "the Lobby"
-            - "arriving_at"
-            - "the basement"
-        - Heading:from:and:otherRoom:
-            - "Up"
-            - "the Lobby"
-            - "connecting_to"
-            - "the parapet"
-        - Heading:from:and:otherRoom:
-            - "North"
-            - "the foyer"
-            - "connecting_to"
-            - "the street"
-        - Heading:from:and:otherRoom:
-            - "West"
-            - "the foyer"
-            - "arriving_at"
-            - "the Lobby"
-        - Heading:from:via:and:otherRoom:
-            - "South"
-            - "the foyer"
-            - "the curtain"
-            - "connecting_to"
-            - "the cloak room"
-        - Heading:from:and:otherRoom:
-            - "South"
-            - "the basement"
-            - "arriving_at"
-            - "the street"
+            North of the lobby are the double doors. The double doors are plural named, closed, and openable doors. Through the double doors is the foyer.
+            Down from the lobby is the basement.
+            North from the foyer is the street.
+            West from the foyer is the lobby.
+            South from the foyer is the curtain. Through the curtain is the cloak room. North from the cloak room is the foyer. South from the basement is the street.
+            """ # "
       - - StartGame actor:quietly:
             - FromText:
                 Object:field:

@@ -57,7 +57,6 @@ type Query interface {
 	NounsByKind(kind string) ([]string, error)
 	PluralToSingular(plural string) (string, error)
 	PluralFromSingular(singular string) (string, error)
-	OppositeOf(word string) (string, error)
 	// includes the parameters, followed by the result
 	// the result can be a blank string for execute statements
 	PatternLabels(pat string) ([]string, error)

@@ -6,9 +6,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 type Aliases struct {
@@ -17,14 +18,13 @@ type Aliases struct {
 }
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-		n := inflect.Normalize(op.ShortName)
-		if n, e := w.GetClosestNoun(n); e != nil {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if n, e := run.GetField(meta.ObjectId, op.ShortName); e != nil {
 			err = e
 		} else {
-			pen := w.Pin()
+			n := n.String()
 			for _, a := range op.Aliases {
-				if e := pen.AddNounAlias(n, a, -1); e != nil {
+				if e := w.AddNounName(n, a, -1); e != nil {
 					err = e
 					break
 				}
@@ -42,12 +42,12 @@ type Aspects struct {
 }
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
-		pen := w.Pin()
-		if e := pen.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if e := w.AddKind(op.Aspects, kindsOf.Aspect.String()); e != nil {
 			err = e
 		} else {
-			err = pen.AddTraits(op.Aspects, op.Traits)
+			// no reason not to add the traits immediately since we have them already
+			err = w.AddAspectTraits(op.Aspects, op.Traits)
 		}
 		return
 	})
@@ -68,8 +68,8 @@ type Directives struct {
 }
 
 func (op *Directives) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
-		return w.Pin().AddGrammar(op.Directive.Name, &op.Directive)
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddGrammar(op.Directive.Name, &op.Directive)
 	})
 }
 
@@ -93,12 +93,16 @@ type Kinds struct {
 }
 
 func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
-		pen := w.Pin()
-		if e := pen.AddKind(op.Kind, op.Ancestor); e != nil {
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if e := w.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
-		} else if ps := op.Contain; len(ps) > 0 {
-			err = pen.AddFields(op.Kind, reduceFields(ps))
+		} else {
+			err = cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+				if ps := op.Contain; len(ps) > 0 {
+					err = w.AddKindFields(op.Kind, reduceFields(ps))
+				}
+				return
+			})
 		}
 		return
 	})
@@ -111,22 +115,9 @@ type Nouns struct {
 }
 
 func (op *Nouns) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDefaults, func(w *weave.Weaver) error {
-		return w.Pin().AddNoun(op.Noun, op.Noun, op.Kind)
-	})
-}
-
-// Opposites Rules for transforming plural text to singular text and back again.
-// Used by the assembler to help interpret author definitions,
-// and at runtime to help the parser interpret user input.
-type Opposites struct {
-	Opposite string
-	Word     string
-}
-
-func (op *Opposites) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
-		return w.Pin().AddOpposite(op.Opposite, op.Word)
+	return cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) error {
+		_, err := mdl.AddNamedNoun(w, op.Noun, op.Kind)
+		return err
 	})
 }
 
@@ -144,14 +135,14 @@ type Patterns struct {
 }
 
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		kb.AddLocals(reduceFields(op.Locals))
 		kb.AddParams(reduceFields(op.Params))
 		if p := op.Result; p != nil {
 			kb.AddResult(p.GetFieldInfo())
 		}
-		return w.Pin().AddPattern(kb.Pattern)
+		return w.AddPattern(kb.Pattern)
 	})
 }
 
@@ -164,8 +155,8 @@ type Plurals struct {
 }
 
 func (op *Plurals) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
-		return w.Pin().AddPlural(op.Plural, op.Singular)
+	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddPlural(op.Plural, op.Singular)
 	})
 }
 
@@ -176,17 +167,16 @@ type Relations struct {
 }
 
 func (op *Relations) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
-		pen := w.Pin()
+	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		switch c := op.Cardinality.(type) {
 		case *OneOne:
-			err = pen.AddRelation(op.Rel, c.Kind, c.OtherKind, false, false)
+			err = w.AddRelation(op.Rel, c.Kind, c.OtherKind, false, false)
 		case *OneMany:
-			err = pen.AddRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
+			err = w.AddRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
 		case *ManyOne:
-			err = pen.AddRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
+			err = w.AddRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
 		case *ManyMany:
-			err = pen.AddRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
+			err = w.AddRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
 		}
 		return
 	})
@@ -200,8 +190,8 @@ type Relatives struct {
 }
 
 func (op *Relatives) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
-		return w.Pin().AddPair(op.Rel, op.Noun, op.OtherNoun)
+	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddNounPair(op.Rel, op.Noun, op.OtherNoun)
 	})
 }
 
@@ -212,12 +202,12 @@ type Rules struct {
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 		pb := mdl.NewPatternBuilder(op.PatternName)
 		pb.AppendRule(0, rt.Rule{
 			Exe: op.Exe,
 		})
-		return w.Pin().ExtendPattern(pb.Pattern)
+		return w.ExtendPattern(pb.Pattern)
 	})
 }
 
@@ -234,15 +224,17 @@ type Values struct {
 }
 
 func (op *Values) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
-		pen := w.Pin()
-		if n, e := pen.GetClosestNoun(op.Noun); e != nil {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if n, e := run.GetField(meta.ObjectId, op.Noun); e != nil {
 			err = e
-		} else if field, path := op.Field, op.Path; len(path) == 0 {
-			err = pen.AddInitialValue(n, field, assign.Literal(op.Value))
 		} else {
-			path := append(path, field)
-			err = pen.AddPathValue(n, mdl.MakePath(path...), op.Value)
+			n := n.String()
+			if field, path := op.Field, op.Path; len(path) == 0 {
+				err = w.AddNounValue(n, field, assign.Literal(op.Value))
+			} else {
+				path := append(path, field)
+				err = w.AddNounPath(n, path, op.Value)
+			}
 		}
 		return
 	})

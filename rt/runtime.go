@@ -59,8 +59,6 @@ type Runtime interface {
 	// in that case the returned singular word is arbitrary ( if theoretically consistent )
 	// for example, "person" can have the plural "people" or "persons" and this could return either.
 	SingularOf(plural string) string
-	// returns true if found; the word if not
-	OppositeOf(string) string
 	// Random - return a pseudo-random number.
 	Random(inclusiveMin, exclusiveMax int) int
 	// Writer - Return the built-in writer, or the current override.

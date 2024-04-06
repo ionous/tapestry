@@ -5,80 +5,79 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineRelation) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineRelation) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
-		if rel, e := safe.GetText(w, op.Relation); e != nil {
+	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if rel, e := safe.GetText(run, op.Relation); e != nil {
 			err = e
 		} else {
 			rel := rel.String()
 			switch op.Cardinality {
 			case C_RelationCardinality_OneToOne:
-				err = op.addOneToOne(w, rel)
+				err = op.addOneToOne(cat, run, rel)
 			case C_RelationCardinality_OneToMany:
-				err = op.addOneToMany(w, rel)
+				err = op.addOneToMany(cat, run, rel)
 			case C_RelationCardinality_ManyToOne:
-				err = op.addManyToOne(w, rel)
+				err = op.addManyToOne(cat, run, rel)
 			case C_RelationCardinality_ManyToMany:
-				err = op.addManyToMany(w, rel)
+				err = op.addManyToMany(cat, run, rel)
 			}
 		}
 		return
 	})
 }
 
-func (op *DefineRelation) addOneToOne(w *weave.Weaver, rel string) (err error) {
-	if a, e := safe.GetText(w, op.Kind); e != nil {
+func (op *DefineRelation) addOneToOne(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
+	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
 		err = e
 	} else {
-		err = addRelation(w.Pin(), rel, a.String(), b.String(), false, false)
+		err = addRelation(cat, rel, a.String(), b.String(), false, false)
 	}
 	return
 }
 
-func (op *DefineRelation) addOneToMany(w *weave.Weaver, rel string) (err error) {
-	if a, e := safe.GetText(w, op.Kind); e != nil {
+func (op *DefineRelation) addOneToMany(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
+	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
 		err = e
 	} else {
-		err = addRelation(w.Pin(), rel, a.String(), b.String(), false, true)
+		err = addRelation(cat, rel, a.String(), b.String(), false, true)
 	}
 	return
 }
 
-func (op *DefineRelation) addManyToOne(w *weave.Weaver, rel string) (err error) {
-	if a, e := safe.GetText(w, op.Kind); e != nil {
+func (op *DefineRelation) addManyToOne(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
+	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
 		err = e
 	} else {
-		err = addRelation(w.Pin(), rel, a.String(), b.String(), true, false)
+		err = addRelation(cat, rel, a.String(), b.String(), true, false)
 	}
 	return
 }
 
-func (op *DefineRelation) addManyToMany(w *weave.Weaver, rel string) (err error) {
-	if a, e := safe.GetText(w, op.Kind); e != nil {
+func (op *DefineRelation) addManyToMany(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
+	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
-	} else if b, e := safe.GetText(w, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
 		err = e
 	} else {
-		err = addRelation(w.Pin(), rel, a.String(), b.String(), true, true)
+		err = addRelation(cat, rel, a.String(), b.String(), true, true)
 	}
 	return
 }
 
-func addRelation(pen *mdl.Pen, rel, a, b string, amany, bmany bool) error {
+func addRelation(cat *weave.Catalog, rel, a, b string, amany, bmany bool) error {
 	rn, an, bn := inflect.Normalize(rel), inflect.Normalize(a), inflect.Normalize(b)
-	return pen.AddRelation(rn, an, bn, amany, bmany)
+	// this can spin a bit until all members of the relation are known
+	// having it in ancestry ensures that the kinds will exist for the property phase
+	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddRelation(rn, an, bn, amany, bmany)
+	})
 }

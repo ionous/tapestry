@@ -1,12 +1,19 @@
 package match
 
-type SpanList [][]Word
+type SpanList []Span
 
-// this is the same as FindPrefix only it returns a Span instead of an index
-func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {
+func (ws SpanList) FindExactMatch(words Span) (ret Span, width int) {
+	if idx := FindExactMatch(words, ws); idx >= 0 {
+		ret, width = ws[idx], len(words)
+	}
+	return
+}
+
+// this is the same as FindPrefixIndex only it returns a Span instead of an index
+func (ws SpanList) FindPrefix(words Span) (ret Span, width int) {
 	// idx is the index of the span in the list
-	if idx, skip := ws.FindPrefix(words); skip > 0 {
-		ret, retLen = ws[idx], skip
+	if idx, skip := ws.FindPrefixIndex(words); skip > 0 {
+		ret, width = ws[idx], skip
 	}
 	return
 }
@@ -15,15 +22,15 @@ func (ws SpanList) FindMatch(words Span) (ret Span, retLen int) {
 // for instance, if the span list contains the span "oh hello"
 // then the words "oh hello world" will match
 // returns the index of the  index and length of the longest prefix
-func (ws SpanList) FindPrefix(words Span) (retWhich int, retLen int) {
+func (ws SpanList) FindPrefixIndex(words Span) (retWhich int, retWidth int) {
 	if wordCount := len(words); wordCount > 0 {
 		for prefixIndex, prefix := range ws {
 			// every Word in el has to exist in words for it to be a prefix
 			// and it has to be longer than any other previous match for it to be the best match
 			// ( tbd? try a sort search? my first attempt failed miserably )
-			if prefixLen := len(prefix); prefixLen <= wordCount && prefixLen > retLen {
+			if prefixLen := len(prefix); prefixLen <= wordCount && prefixLen > retWidth {
 				if HasPrefix(words, prefix) {
-					retWhich, retLen = prefixIndex, prefixLen
+					retWhich, retWidth = prefixIndex, prefixLen
 				}
 			}
 		}

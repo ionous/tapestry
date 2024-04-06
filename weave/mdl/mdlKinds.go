@@ -71,14 +71,15 @@ func (ki *kindInfo) fullpath() string {
 	return ki._fullpath
 }
 
-func (pen *Pen) GetKind(name string) (ret string, err error) {
-	if n, e := pen.findRequiredKind(name); e != nil {
-		err = e
-	} else {
-		ret = n.name
-	}
-	return
-}
+// use runtime KindAncestry
+// func (pen *Pen) GetKind(name string) (ret string, err error) {
+// 	if n, e := pen.findRequiredKind(name); e != nil {
+// 		err = e
+// 	} else {
+// 		ret = n.name
+// 	}
+// 	return
+// }
 
 // if specified, must exist.
 func (pen *Pen) findOptionalKind(kind string) (ret kindInfo, err error) {

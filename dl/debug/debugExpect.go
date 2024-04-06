@@ -38,6 +38,8 @@ func (op *Expect) Execute(run rt.Runtime) (err error) {
 	if condition, e := safe.GetBool(run, op.Value); e != nil {
 		err = e
 	} else if !condition.Bool() {
+		// print the comment at the point of expectation;
+		// or the value if that fails.
 		str, ok := op.Markup[compact.Comment]
 		if !ok {
 			str = fmt.Sprintf("%v", op.Value)

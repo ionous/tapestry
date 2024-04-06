@@ -16,9 +16,10 @@ type FieldInfo struct {
 func (f *FieldInfo) isAspectLike() (ret bool) {
 	return f.Affinity == affine.Text && f.Name == f.Class
 }
+
 // shortcut: if we specify a record affinity, but no class
 // the returned class is the name of the field.
-func (f *FieldInfo) getClass() (ret string) {
+func (f *FieldInfo) getDefaultClass() (ret string) {
 	if cls := f.Class; len(cls) > 0 {
 		ret = cls
 	} else if isRecordAffinity(f.Affinity) {

@@ -5,29 +5,26 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineAlias) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(w, op.NounName); e != nil {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if name, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
-		} else if names, e := safe.GetTextList(w, op.Names); e != nil {
+		} else if names, e := safe.GetTextList(run, op.Names); e != nil {
 			err = e
-		} else if n, e := w.GetClosestNoun(inflect.Normalize(name.String())); e != nil {
+		} else if n, e := run.GetField(meta.ObjectId, name.String()); e != nil {
 			err = e
 		} else {
-			pen := w.Pin()
+			n := n.String()
 			for _, a := range names.Strings() {
 				if a := inflect.Normalize(a); len(a) > 0 {
-					if e := pen.AddNounAlias(n, a, -1); e != nil {
+					if e := w.AddNounName(n, a, -1); e != nil {
 						err = e
 						break
 					}
@@ -38,11 +35,6 @@ func (op *DefineAlias) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineLeadingGrammar) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // an ugly way to ensure that grammar ( and therefore the runtime )
 // isnt dependent on story / weave
 func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
@@ -50,25 +42,20 @@ func (op *DefineLeadingGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := strings.Join(op.Lede, "/")
 	words := &grammar.Words{Words: op.Lede}
 	scans := append([]grammar.ScannerMaker{words}, op.Scans...)
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
-		return w.Pin().AddGrammar(name, &grammar.Directive{
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddGrammar(name, &grammar.Directive{
 			Name:   name,
 			Series: scans,
 		})
 	})
 }
 
-// Execute - called by the macro runtime during weave.
-func (op *DefineNamedGrammar) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
 // an ugly way to ensure that grammar ( and therefore the runtime )
 // isnt dependent on story / weave
 func (op *DefineNamedGrammar) Weave(cat *weave.Catalog) (err error) {
 	name := inflect.Normalize(op.Name)
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
-		return w.Pin().AddGrammar(name, &grammar.Directive{
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+		return w.AddGrammar(name, &grammar.Directive{
 			Name:   name,
 			Series: op.Scans,
 		})

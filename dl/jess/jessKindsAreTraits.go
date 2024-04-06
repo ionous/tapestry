@@ -2,7 +2,15 @@ package jess
 
 import (
 	"fmt"
+
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
+
+// runs in the PropertyPhase
+func (op *KindsAreTraits) Phase() weaver.Phase {
+	return weaver.PropertyPhase
+}
 
 func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -15,7 +23,7 @@ func (op *KindsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *KindsAreTraits) Generate(rar Registrar) (err error) {
+func (op *KindsAreTraits) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	traits := op.Traits.GetTraits()
 	for kt := op.Kinds.Iterate(); kt.HasNext(); {
 		k := kt.GetNext()
@@ -24,7 +32,7 @@ func (op *KindsAreTraits) Generate(rar Registrar) (err error) {
 			err = fmt.Errorf("unexpected traits before %s", name)
 			break
 		}
-		if e := AddDefaultTraits(rar, name, traits); e != nil {
+		if e := AddKindTraits(w, name, traits); e != nil {
 			err = e
 			break
 		}

@@ -25,37 +25,61 @@ func (n *nounInfo) class() classInfo {
 	}
 }
 
-// find the noun named as specified;
-// assumes the name is lower cased, with spaces normalized.
-// fix? could we GetClose and then have the caller see if the matched name is exact name we found?
-// ( to simplify the interface and queries )
-func (pen *Pen) GetExactNoun(name string) (ret string, err error) {
-	if n, e := pen.findRequiredNoun(name, nounWithKind); e != nil {
+func (pen *Pen) GetRelativeNouns(noun, relation string, primary bool) (ret []string, err error) {
+	if rows, e := pen.db.Query(`
+	select one.noun as oneName, other.noun as otherName
+from mdl_pair mp
+join domain_tree dt
+	on (dt.uses = mp.domain)
+join mdl_kind mk
+  on (mk.rowid = mp.relKind)
+join mdl_noun one
+  on (one.rowid = mp.oneNoun)
+join mdl_noun other
+  on (other.rowid = mp.otherNoun)
+where base = ?1
+and relKind = ?2
+and ((?4 and oneName = ?3) or (not ?4 and otherName=?3))`,
+		pen.domain, relation, noun, primary); e != nil {
 		err = e
 	} else {
-		ret = n.name
+		ret, err = tables.ScanStrings(rows)
 	}
 	return
 }
 
-// find the noun with the closest name in this scope;
-// assumes the name is lower cased, with spaces normalized.
-// skips aliases for the sake of backwards compatibility:
-// there should be a difference between "a noun is known as"
-// and "understand this word typed by the player as" -- and currently there's not.
-func (pen *Pen) GetClosestNoun(name string) (ret string, err error) {
-	if noun, e := pen.getClosestNoun(name); e != nil {
-		err = e
-	} else {
-		ret = noun.name
-	}
-	return
-}
-
-func (pen *Pen) getClosestNoun(name string) (ret nounInfo, err error) {
-	var out nounInfo
+// return a specific field of a specific noun.
+// this is a more limited form of the runtime version;
+// it doesn't attempt to unpack records.
+func (pen *Pen) GetNounValue(noun, field string) (ret []byte, err error) {
 	if e := pen.db.QueryRow(`
-	select mn.domain, mn.rowid, mn.noun, mk.rowid, ',' || mk.rowid || ',' || mk.path
+		select mv.value
+		from mdl_noun mn
+		join domain_tree dt
+			on(dt.uses = mn.domain)
+		join mdl_value mv   
+			on (mv.noun == mn.rowid)
+		join mdl_field mf
+			on (mv.field = mf.rowid)
+		where base = ?1 
+		and mn.noun = ?2
+		and mf.field = ?3
+		and dot is null`,
+		pen.domain, noun, field).Scan(&ret); e != nil {
+		if e != sql.ErrNoRows {
+			err = e
+		} else {
+			err = errutil.Fmt("%w noun %q value %q", Missing, noun, field)
+		}
+	}
+	return
+}
+
+// prefer runtime meta.ObjectId
+func (pen *Pen) GetClosestNoun(name string) (ret MatchedNoun, err error) {
+	var noun, kind string
+	if e := pen.db.QueryRow(`
+	select mn.noun, mk.kind
 	from mdl_name my
 	join mdl_noun mn
 		on (mn.rowid = my.noun)
@@ -68,12 +92,12 @@ func (pen *Pen) getClosestNoun(name string) (ret nounInfo, err error) {
 	and my.rank >= 0
 	order by my.rank, my.rowid asc
 	limit 1`, pen.domain, name).
-		Scan(&out.domain, &out.id, &out.name, &out.kind, &out.fullpath); e != nil && e != sql.ErrNoRows {
+		Scan(&noun, &kind); e != nil && e != sql.ErrNoRows {
 		err = e
-	} else if out.id == 0 {
+	} else if e != nil {
 		err = errutil.Fmt("%w closest noun %q in domain %q", Missing, name, pen.domain)
 	} else {
-		ret = out
+		ret = MatchedNoun{Name: noun, Kind: kind, Match: name}
 	}
 	return
 }
