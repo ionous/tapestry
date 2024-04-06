@@ -44,8 +44,8 @@ var CmdXform = &base.Command{
 	Run:       run,
 	UsageLine: buildUsage(),
 	Flag:      buildFlags(),
-	Short:     "Transform English words",
-	Long:      `Transform English words.`,
+	Short:     "transform english words",
+	Long:      `Transform English words in various helpful ways.`,
 }
 
 //go:generate stringer -type=options

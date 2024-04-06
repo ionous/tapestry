@@ -27,7 +27,7 @@ var CmdWeave = &base.Command{
 	Run:       runWeave,
 	Flag:      buildFlags(),
 	UsageLine: "tap weave [-in path] [-out path]",
-	Short:     "make a playable story",
+	Short:     "compile a story",
 	Long: `Turns story files into produces a playable database.
 
 Using '-check' or '-run=<name>' can run all unit tests, or a specific one.

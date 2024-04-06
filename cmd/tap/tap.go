@@ -20,6 +20,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdplay"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdserve"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdversion"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdweave"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdxform"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
@@ -193,6 +194,7 @@ func init() {
 		cmdmosaic.CmdMosaic,
 		cmdplay.CmdPlay,
 		cmdserve.CmdServe,
+		cmdversion.CmdVersion,
 		cmdweave.CmdWeave,
 		cmdxform.CmdXform,
 	}

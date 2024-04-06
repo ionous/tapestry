@@ -1,6 +1,6 @@
 // Copyright 2017 The Go Authors. All rights reserved.
 // Copyright 2022 - Modifications by Simon Travis.
-// 
+//
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -66,7 +66,7 @@ var Exe string = "tap"
 
 var Go = &Command{
 	UsageLine: Exe,
-	Long:      `Tap manages Tapestry stories.`,
+	Long:      `The 'tap' tool manages Tapestry stories.`,
 	// Commands initialized in package main init()
 }
 

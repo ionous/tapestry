@@ -25,7 +25,7 @@ var CmdGenerate = &base.Command{
 	Run:       runGenerate,
 	Flag:      buildFlags(),
 	UsageLine: "tap gen [-out ../../dl] [-db -dbFile]",
-	Short:     "language generator",
+	Short:     "extend tapestry with new golang code",
 	Long: `
 Generates .go source code for reading and writing story files from .tells files.`,
 }

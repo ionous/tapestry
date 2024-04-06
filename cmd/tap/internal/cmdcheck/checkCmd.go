@@ -43,8 +43,8 @@ var CmdCheck = &base.Command{
 	Run:       runCheck,
 	Flag:      buildFlags(),
 	UsageLine: "tap check [-in path]",
-	Short:     "tests a playable story",
-	Long: `Loads an assembled database and runs (one or more) test scripts that it contains.
+	Short:     "run tests on existing stories",
+	Long: `Loads an playable database and runs (one or more) test scripts that it contains.
 
 Runs all unit tests by default, use '-run=<name>' to run a specific one.
 `,

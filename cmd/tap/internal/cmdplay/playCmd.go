@@ -47,7 +47,7 @@ var CmdPlay = &base.Command{
 	Run:       run,
 	Flag:      buildFlags(),
 	UsageLine: `tap play [-in dbpath] "name of story"`,
-	Short:     "play a story",
+	Short:     "play an existing story",
 	Long: `Run a scene within a previously built story database.
 
 Using '-test' can run the list of specified commands as if a player had typed them one by one.
