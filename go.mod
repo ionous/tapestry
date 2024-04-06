@@ -12,7 +12,6 @@ require (
 	github.com/ionous/tell v0.8.0
 	github.com/kr/pretty v0.3.1
 	github.com/mattn/go-sqlite3 v1.14.16
-	github.com/reiver/go-porterstemmer v1.0.1
 )
 
 require (

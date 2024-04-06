@@ -2,6 +2,7 @@ _
 .vscode
 .idea
 .godot
+.sconsign.dblite
 __debug_bin
 node_modules
 cmd/atlas/atlas
@@ -18,4 +19,4 @@ www/dist
 *.zip
 *.go_
 _temp
-.sconsign.dblite
+_docs

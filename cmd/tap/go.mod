@@ -5,8 +5,9 @@ go 1.21
 toolchain go1.21.4
 
 require (
-	git.sr.ht/~ionous/tapestry v0.0.0-20220223221837-b25bd82d20fe
+	git.sr.ht/~ionous/tapestry v0.23.3
 	github.com/ionous/errutil v0.0.0-20231013205411-87ce252b8e2a
+	github.com/reiver/go-porterstemmer v1.0.1
 	github.com/wailsapp/wails/v2 v2.4.0
 	golang.org/x/sys v0.6.0
 )
@@ -40,9 +41,6 @@ require (
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 )
-
-// fix: not sure how to get rid of this:
-replace git.sr.ht/~ionous/tapestry => ../../../tapestry
 
 // for local debugging:
 // replace github.com/wailsapp/wails/v2 v2.0.0-beta.42 => C:\Dev\Go\pkg\mod\github.com\wailsapp\wails\v2@v2.0.0-beta.42
