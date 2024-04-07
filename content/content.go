@@ -12,18 +12,16 @@ var Sample embed.FS
 // a template for a default story
 var DefaultStory = `
 Tapestry:
-- # This story was created using 'tap new' by {{ .Author }}.
+- # This story was created by {{ .Author }} using 'tap new'.
   #
   Define scene:requires:with:
   - {{ printf "%q" .Story }}
   - - "Tapestry"
   - - Declare: """
-      The title of the story is {{ printf "%q," .Title }}
+      The title of the story is {{ printf "%q." .Title }}
       The author of the story is {{ printf "%q." .Author }}
-      The lobby is a room. You are in the lobby.
-      The description of the lobby is "An empty space, waiting to filled with life."
-      The chest is a container. The chest is in lobby.
-      Some coins are in the chest.
+      The Empty Space is a room. You are in the space.
+      The description of the space is "An empty space, waiting to be filled with life."
       """ # "
 `
 
