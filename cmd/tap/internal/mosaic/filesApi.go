@@ -1,8 +1,6 @@
 package mosaic
 
 import (
-	"path/filepath"
-
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
@@ -10,7 +8,7 @@ func FilesApi(cfg *Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			// by adding a trailing slash, walk will follow a symlink.
-			path := cfg.PathTo("stories") + string(filepath.Separator)
+			path := cfg.Stories()
 			switch name {
 			case "blocks":
 				// generates blockly files out of story files.

@@ -2,6 +2,7 @@ package cmdweave
 
 import (
 	"database/sql"
+	"io/fs"
 	"log"
 	"os"
 	"path"
@@ -19,8 +20,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// lets do this in the dumbest of ways for now.
-func WeavePath(srcPath, outFile string) (err error) {
+// Read all of the passed files and compile the output into
+// a NEW database at outFile. This will attempt to erase any existing outFile.
+// uses WalkDir which doesn't follow symlinks of sub-directories.
+func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 	if outFile, e := filepath.Abs(outFile); e != nil {
 		err = e
 	} else if e := os.Remove(outFile); e != nil && !os.IsNotExist(e) {
@@ -50,7 +53,7 @@ func WeavePath(srcPath, outFile string) (err error) {
 					err = e
 				} else if e := addDefaultKinds(cat.Pin("tapestry", "default kinds")); e != nil {
 					err = e
-				} else if e := importStoryFiles(cat, srcPath); e != nil {
+				} else if e := importAll(cat, stories...); e != nil {
 					err = e
 				} else if e := cat.DomainEnd(); e != nil {
 					err = e
@@ -73,37 +76,43 @@ func addDefaultKinds(pen *mdl.Pen) (err error) {
 	return
 }
 
+func importAll(cat *weave.Catalog, all ...fs.FS) (err error) {
+	for _, fsys := range all {
+		if fsys != nil {
+			if e := importStoryFiles(cat, fsys); e != nil {
+				err = e
+				break
+			}
+		}
+	}
+	return
+}
+
 // read a comma-separated list of files and directories
-func importStoryFiles(cat *weave.Catalog, srcPath string) (err error) {
-	recurse := true
-	if e := files.ReadPaths(srcPath, recurse, storyExts, func(p string) error {
-		return readOne(cat, p)
-	}); e != nil {
-		err = errutil.New("couldn't read file", srcPath, e)
-	}
-	return
-}
+func importStoryFiles(cat *weave.Catalog, fsys fs.FS) (err error) {
+	// note: walk does not expand symlinks in sub-directories.
+	return fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, e error) (err error) {
+		if e != nil { // e contains errors arising from visiting the file
+			err = e
+		} else if !d.IsDir() { // dirs are entered unless SkipDir is returned
+			if ext := files.Ext(path); ext.Story() {
+				log.Println("reading", path)
+				if fp, e := fsys.Open(path); e != nil {
+					err = e
+				} else {
+					var m map[string]any       // we "normalize" story files into json-like maps
+					var script story.StoryFile // and decode from those maps
 
-var storyExts = []string{
-	files.CompactExt.String(),
-	files.TellStory.String()}
-
-func readOne(cat *weave.Catalog, path string) (err error) {
-	log.Println("reading", path)
-	if script, e := decodeStory(path); e != nil {
-		err = errutil.New("couldn't decode", path, "b/c", e)
-	} else if e := story.ImportStory(cat, path, &script); e != nil {
-		err = errutil.New("couldn't import", path, "b/c", e)
-	}
-	return
-}
-
-func decodeStory(path string) (ret story.StoryFile, err error) {
-	var m map[string]any
-	if e := files.FormattedLoad(path, &m); e != nil {
-		err = e
-	} else {
-		err = story.Decode(&ret, m)
-	}
-	return
+					if e := files.FormattedRead(fp, ext, &m); e != nil {
+						err = errutil.New("couldn't read", path, "b/c", e)
+					} else if e := story.Decode(&script, m); e != nil {
+						err = errutil.New("couldn't decode", path, "b/c", e)
+					} else if e := story.ImportStory(cat, path, &script); e != nil {
+						err = errutil.New("couldn't import", path, "b/c", e)
+					}
+				}
+			}
+		}
+		return
+	})
 }

@@ -27,7 +27,7 @@ var CmdMosaic = &base.Command{
 
 The 'in' directory should contain two sub-directories:
 	1. "stories" - containing story files ( the target for save/load )
-	2. "ifspec"  - containing interface description files ( these define how to display the story content )
+	2. "shared"  - containing shared libraries ( defaults will be used if this folder is missing. )
 
 By default, attempts to use a directory called Tapestry in your Documents folder.
 `,

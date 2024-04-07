@@ -1,7 +1,7 @@
 // Runs external applications, and pipes http input to stdin; stdout to http output.
 package main
 
-// go run serve.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
+// go run serve.go -in /Users/ionous/Documents/Tapestry/shared -out /Users/ionous/Documents/Tapestry/build/play.db
 // go run serve.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	// var srcPath, outFile string

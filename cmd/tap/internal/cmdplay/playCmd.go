@@ -19,7 +19,7 @@ import (
 )
 
 // called by tap.go
-func run(ctx context.Context, _ *base.Command, args []string) (err error) {
+func playCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 	if len(args) != 1 {
 		err = fmt.Errorf("%w expected a scene name", base.UsageError)
 	} else if lvl, ok := debug.MakeLoggingLevel(cfg.logLevel); !ok {
@@ -44,7 +44,7 @@ func run(ctx context.Context, _ *base.Command, args []string) (err error) {
 
 // description of the play command; used by tap.go
 var CmdPlay = &base.Command{
-	Run:       run,
+	Run:       playCmd,
 	Flag:      buildFlags(),
 	UsageLine: `tap play [-in dbpath] "name of story"`,
 	Short:     "play an existing story",
