@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"os"
+	"strings"
 	"unicode"
 
 	"github.com/ionous/tell/collect"
@@ -86,29 +87,49 @@ func (m tapMap) MapValue(key string, val any) collect.MapWriter {
 	return m
 }
 
-// split into separate lines and chop the leading hashes.
+// split into separate lines and remove the leading hashes.
 // the returned data is either a string, or a plain data slice of strings
 // ( ie. any[]{"example"} )
 func readComment(str string) (ret any) {
 	var last int
-	var out []any
-	if len(str) == 1 {
-		ret = "" // just the hash? then the empty string.
-	} else {
+	var lines []any
+
+	if i := strings.IndexRune(str, '#'); i >= 0 {
+		// ignore any leading inline markers
+		str = str[i:]
+
+		// search for newlines
 		for i, ch := range str {
 			if ch == '\n' {
-				add := str[last+2 : i]
-				out = append(out, add)
+				line := chopHash(str[last:i])
+				lines = append(lines, line)
 				last = i + 1 // skip the newline
 			}
 		}
+		//
 		if last == 0 {
-			ret = str[last+2:]
+			// only ever one line? return a string.
+			ret = chopHash(str)
 		} else {
-			add := str[last+2:]
-			out = append(out, add)
-			ret = out
+			// chop any trailing comment that didnt end in a newline
+			if rest := str[last:]; len(rest) > 0 {
+				line := chopHash(rest)
+				ret = append(lines, line)
+			} else {
+				ret = lines
+			}
 		}
+	}
+	return
+}
+
+func chopHash(str string) (ret string) {
+	if cnt := len(str); cnt == 0 || str[0] != '#' {
+		panic("chopHash expected a comment line")
+	} else if cnt > 1 {
+		// just the hash means an empty comment line
+		// otherwise we assume a hash and a space
+		ret = str[2:]
 	}
 	return
 }
