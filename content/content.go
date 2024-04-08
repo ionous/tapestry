@@ -11,12 +11,11 @@ var Sample embed.FS
 
 // a template for a default story
 var DefaultStory = `
+# This story was created by {{ .Author }} using 'tap new'.
 Tapestry:
-- # This story was created by {{ .Author }} using 'tap new'.
-  #
-  Define scene:requires:with:
+- Define scene:requires:with:
   - {{ printf "%q" .Story }}
-  - - "Tapestry"
+  - "tapestry"  # this story requires the standard library.
   - - Declare: """
       The title of the story is {{ printf "%q." .Title }}
       The author of the story is {{ printf "%q." .Author }}
