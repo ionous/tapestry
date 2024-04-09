@@ -9,7 +9,7 @@ import (
 )
 
 func (dec *Decoder) decodeSlot(w inspect.It, slot *typeinfo.Slot, data any) (err error) {
-	if ptr, e := dec.innerDecode(w, slot, data); e != nil {
+	if ptr, e := dec.innerDecode(slot, data); e != nil {
 		err = e
 	} else if !w.SetSlot(ptr) {
 		err = fmt.Errorf("couldnt assign value of %T to %s", ptr, w.TypeInfo().TypeName())
@@ -17,8 +17,8 @@ func (dec *Decoder) decodeSlot(w inspect.It, slot *typeinfo.Slot, data any) (err
 	return
 }
 
-func (dec *Decoder) innerDecode(w inspect.It, slot *typeinfo.Slot, data any) (ret typeinfo.Instance, err error) {
-	if v, e := dec.customDecode(w, slot, data); !compact.IsUnhandled(e) {
+func (dec *Decoder) innerDecode(slot *typeinfo.Slot, data any) (ret typeinfo.Instance, err error) {
+	if v, e := dec.customDecode(slot, data); !compact.IsUnhandled(e) {
 		ret, err = v, e
 	} else {
 		if msg, e := ParseMessage(data); e != nil {
@@ -41,7 +41,7 @@ func (dec *Decoder) innerDecode(w inspect.It, slot *typeinfo.Slot, data any) (re
 	return
 }
 
-func (dec *Decoder) customDecode(w inspect.It, slot *typeinfo.Slot, arg any) (ret typeinfo.Instance, err error) {
+func (dec *Decoder) customDecode(slot *typeinfo.Slot, arg any) (ret typeinfo.Instance, err error) {
 	if c := dec.customDecoder; c == nil {
 		err = compact.Unhandled("custom decoder")
 	} else {
