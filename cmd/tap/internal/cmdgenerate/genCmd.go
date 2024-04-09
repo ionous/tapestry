@@ -21,15 +21,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-var CmdGenerate = &base.Command{
-	Run:       runGenerate,
-	Flag:      buildFlags(),
-	UsageLine: "tap gen [-out ../../dl] [-db -dbFile]",
-	Short:     "extend tapestry with new golang code",
-	Long: `
-Generates .go source code for reading and writing story files from .tells files.`,
-}
-
 func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	if outPath, e := filepath.Abs(genFlags.out); e != nil {
 		flag.Usage()
@@ -50,6 +41,41 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 			}
 		}
 	}
+	return
+}
+
+var CmdGenerate = &base.Command{
+	Run:       runGenerate,
+	Flag:      buildFlags(),
+	UsageLine: "tap gen [-in ../../idl] [-out ../../dl] [-db -dbFile]",
+	Short:     "extend tapestry with new golang code",
+	Long: `
+Generates .go source code for reading and writing story files from .tells files.`,
+}
+
+// collection of local flags
+var genFlags = struct {
+	dl     string // filter by group
+	in     string // input path
+	out    string // output directory
+	useDB  bool
+	dbPath string // output file or path
+}{}
+
+// fix: i'm not really sure what's best for the default in/out directories
+// possibly move idl files into the base dl directory
+// and then require that base as an argument ( via args, not flags )
+// use that base as a default for out
+func buildFlags() (fs flag.FlagSet) {
+	var dbPath string
+	if home, e := os.UserHomeDir(); e == nil {
+		dbPath = filepath.Join(home, "Documents", "Tapestry", "build", "idl.db")
+	}
+	fs.StringVar(&genFlags.dl, "dl", "", "limit to which groups")
+	fs.StringVar(&genFlags.in, "in", "../../idl", "input directory containing one or more spec files")
+	fs.StringVar(&genFlags.out, "out", "../../dl", "output directory")
+	fs.BoolVar(&genFlags.useDB, "db", false, "generate a sqlite representation")
+	fs.StringVar(&genFlags.dbPath, "dbFile", dbPath, "sqlite output file")
 	return
 }
 
