@@ -112,11 +112,11 @@ func (op *Comment_Slice) Repeats() bool {
 
 // Create a scene
 type DefineTest struct {
-	TestName   string
-	SceneNames rtti.TextListEval
-	Statements []StoryStatement
-	Exe        []rtti.Execute
-	Markup     map[string]any
+	TestName      string
+	RequireScenes rtti.TextListEval
+	Statements    []StoryStatement
+	Exe           []rtti.Execute
+	Markup        map[string]any
 }
 
 // define_test, a type of flow.
@@ -153,10 +153,10 @@ func (op *DefineTest_Slice) Repeats() bool {
 
 // Define a sub world.
 type DefineScene struct {
-	Scene      rtti.TextEval
-	SceneNames rtti.TextListEval
-	With       []StoryStatement
-	Markup     map[string]any
+	Scene         rtti.TextEval
+	RequireScenes rtti.TextListEval
+	Statements    []StoryStatement
+	Markup        map[string]any
 }
 
 // define_scene, a type of flow.
@@ -1504,8 +1504,8 @@ func (op *StoryBreak_Slice) Repeats() bool {
 
 // top level node, currently just for blockly might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
-	StoryStatements []StoryStatement
-	Markup          map[string]any
+	Statements []StoryStatement
+	Markup     map[string]any
 }
 
 // story_file, a type of flow.
@@ -1793,6 +1793,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4344965134492972319:  (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:do: */
 	16133739979148445504: (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:named:do: */
 	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
+	16728157364207612750: (*DefineScene)(nil),          /* story_statement=Define scene: */
+	10681959011863226668: (*DefineScene)(nil),          /* story_statement=Define scene:requires: */
 	10209709135447127962: (*DefineScene)(nil),          /* story_statement=Define scene:requires:with: */
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
 	1798652288281835623:  (*DefinePlural)(nil),         /* story_statement=Define singular:plural: */
@@ -1863,7 +1865,7 @@ func init() {
 			Label: "test",
 			Type:  &prim.Zt_Text,
 		}, {
-			Name:     "scene_names",
+			Name:     "require_scenes",
 			Label:    "requires",
 			Optional: true,
 			Type:     &rtti.Zt_TextListEval,
@@ -1894,15 +1896,16 @@ func init() {
 			Label: "scene",
 			Type:  &rtti.Zt_TextEval,
 		}, {
-			Name:     "scene_names",
+			Name:     "require_scenes",
 			Label:    "requires",
 			Optional: true,
 			Type:     &rtti.Zt_TextListEval,
 		}, {
-			Name:    "with",
-			Label:   "with",
-			Repeats: true,
-			Type:    &Zt_StoryStatement,
+			Name:     "statements",
+			Label:    "with",
+			Optional: true,
+			Repeats:  true,
+			Type:     &Zt_StoryStatement,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
@@ -2577,7 +2580,7 @@ func init() {
 		Name: "story_file",
 		Lede: "tapestry",
 		Terms: []typeinfo.Term{{
-			Name:    "story_statements",
+			Name:    "statements",
 			Repeats: true,
 			Type:    &Zt_StoryStatement,
 		}},

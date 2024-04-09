@@ -26,7 +26,7 @@ Spec:with group:
                     - "text"
                 - Term:name:type:optional:
                     - "requires"
-                    - "scene_names"
+                    - "require_scenes"
                     - "text_list_eval"
                     - true
                 - Term:name:type:optional:repeats:
@@ -51,12 +51,14 @@ Spec:with group:
                     - "text_eval"
                 - Term:name:type:optional:
                     - "requires"
-                    - "scene_names"
+                    - "require_scenes"
                     - "text_list_eval"
                     - true
-                - Term:type:repeats:
+                - Term:name:type:optional:repeats:
                     - "with"
+                    - "statements"
                     - "story_statement"
+                    - true
                     - true
       - # Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
         Spec:slots:groups:with flow:
@@ -619,7 +621,7 @@ Spec:with group:
               - "{_$story_lines}"
               - - Term:name:type:repeats:
                     - "_"
-                    - "story_statements"
+                    - "statements"
                     - "story_statement"
                     - true
         blockly-color: "TAP_HUE_ROOT"

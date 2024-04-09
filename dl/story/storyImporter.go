@@ -23,7 +23,7 @@ var currentCatalog *weave.Catalog
 
 func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
 	cat.SetSource(path)
-	return WeaveStatements(cat, tgt.StoryStatements)
+	return WeaveStatements(cat, tgt.Statements)
 }
 
 func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {

@@ -15,16 +15,52 @@ type Document struct {
 	k   Section
 }
 
+const DefaultScene = "Tapestry"
+
 // overwrites the story statements in the passed file
-func ReadStory(in Unreader, out *story.StoryFile) (err error) {
-	var a accum
+func ReadStory(name string, in Unreader, out *story.StoryFile) (err error) {
+	var els accum
 	if k := MakeSection(in); k.NextSection() {
-		if e := a.readHeader(&k); e != nil {
+		if e := els.readHeader(&k); e != nil {
 			err = e
-		} else if e := a.readBody(&k); e != nil {
+		} else if e := els.readBody(&k); e != nil {
 			err = e
 		} else {
-			out.StoryStatements = a
+			// lhs will have the leading comments, rhs everything else
+			// if rhs is empty -- everything is comments ( and/or there's nothing )
+			if lhs, rhs := splitStatements(els); len(rhs) == 0 {
+				out.Statements = lhs
+			} else {
+				// ensure the file has a top level scene;
+				// and move the right hand statements into it.
+				var scene *story.DefineScene
+				if n, ok := rhs[0].(*story.DefineScene); ok {
+					n.Statements = append(n.Statements, rhs[1:]...)
+					scene = n
+				} else {
+					scene = &story.DefineScene{
+						Scene: &literal.TextValue{Value: name},
+						RequireScenes: &literal.TextValues{Values: []string{
+							DefaultScene,
+						}},
+						Statements: rhs,
+					}
+				}
+				out.Statements = append(lhs, scene)
+			}
+		}
+	}
+	return
+}
+
+// split so that all leading comments are on the lhs;
+// the first statement and everything after are on the rhs
+func splitStatements(els []story.StoryStatement) (lhs, rhs []story.StoryStatement) {
+	lhs = els
+	for i, el := range els {
+		if _, ok := el.(*story.Comment); !ok {
+			lhs, rhs = els[:i], els[i:]
+			break
 		}
 	}
 	return

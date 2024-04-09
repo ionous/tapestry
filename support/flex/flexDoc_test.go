@@ -11,7 +11,7 @@ import (
 
 func TestDoc(t *testing.T) {
 	var out story.StoryFile
-	if e := flex.ReadStory(strings.NewReader(testDoc), &out); e != nil {
+	if e := flex.ReadStory("beep", strings.NewReader(testDoc), &out); e != nil {
 		t.Fatal(e)
 	} else {
 		pretty.Println(out)

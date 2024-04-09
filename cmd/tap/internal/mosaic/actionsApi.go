@@ -75,7 +75,7 @@ func ActionsApi(opt *Config, ws *Workspace) web.Resource {
 				} else if rel, e := chopPath(base, path); e != nil {
 					err = e
 				} else {
-					blank := story.StoryFile{StoryStatements: []story.StoryStatement{}}
+					blank := story.StoryFile{Statements: []story.StoryStatement{}}
 					if content, e := story.Encode(&blank); e != nil {
 						err = e
 					} else if e := files.FormattedSave(filepath.Join(base, rel), content, true); e != nil {

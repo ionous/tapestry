@@ -77,7 +77,7 @@ func TestSections(t *testing.T) {
 }
 
 var testDoc = `
-# Plain
+# Header:
 ---
 # Structured:
 Define scene:requires:with:
