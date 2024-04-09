@@ -2,6 +2,7 @@ package cmdweave
 
 import (
 	"database/sql"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -17,7 +18,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
-	"github.com/ionous/errutil"
 )
 
 // Read all of the passed files and compile the output into
@@ -27,14 +27,14 @@ func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 	if outFile, e := filepath.Abs(outFile); e != nil {
 		err = e
 	} else if e := os.Remove(outFile); e != nil && !os.IsNotExist(e) {
-		err = errutil.New("couldn't clean output file", outFile, e)
+		err = fmt.Errorf("couldn't clean output file %q because %s", outFile, e)
 	} else {
 		// 0755 -> readable by all but only writable by the user
 		// 0700 -> read/writable by user
 		// 0777 -> ModePerm ... read/writable by all
 		os.MkdirAll(path.Dir(outFile), os.ModePerm)
 		if db, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
-			err = errutil.New("couldn't create output file", outFile, e)
+			err = fmt.Errorf("couldn't create output file %q because %s", outFile, e)
 		} else {
 			defer db.Close()
 			// fix: why do we have to create qdb?
@@ -104,11 +104,11 @@ func importStoryFiles(cat *weave.Catalog, fsys fs.FS) (err error) {
 					var script story.StoryFile // and decode from those maps
 
 					if e := files.FormattedRead(fp, ext, &m); e != nil {
-						err = errutil.New("couldn't read", path, "b/c", e)
+						err = fmt.Errorf("couldn't read %q because %s", path, e)
 					} else if e := story.Decode(&script, m); e != nil {
-						err = errutil.New("couldn't decode", path, "b/c", e)
+						err = fmt.Errorf("couldn't decode %q because %s", path, e)
 					} else if e := story.ImportStory(cat, path, &script); e != nil {
-						err = errutil.New("couldn't import", path, "b/c", e)
+						err = fmt.Errorf("couldn't import %q because %s", path, e)
 					}
 				}
 			}
