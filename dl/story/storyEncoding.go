@@ -23,11 +23,16 @@ func Decode(out *StoryFile, msg map[string]any) error {
 
 // Create a story dl from native maps and slices.
 func DecodeMessage(out typeinfo.Instance, msg map[string]any) error {
+	dec := NewDecoder()
+	return dec.Decode(out, msg)
+}
+
+func NewDecoder() *decode.Decoder {
 	var dec decode.Decoder
 	dec.Signatures(AllSignatures...).
 		Customize(core.CustomDecoder).
 		Patternize(DecodePattern)
-	return dec.Decode(out, msg)
+	return &dec
 }
 
 func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message) (ret typeinfo.Instance, err error) {

@@ -23,7 +23,11 @@ func LoadTell(inPath string) (ret any, err error) {
 	return
 }
 
-func ReadTell(in io.Reader) (ret any, err error) {
+func ReadTell(in io.Reader) (any, error) {
+	return ReadTellRunes(bufio.NewReader(in))
+}
+
+func ReadTellRunes(in io.RuneReader) (ret any, err error) {
 	var docComments note.Book
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
 	dec.SetMapper(func(reserve bool) collect.MapWriter {
@@ -36,7 +40,7 @@ func ReadTell(in io.Reader) (ret any, err error) {
 		return make(tapSeq, 0, 0)
 	})
 	dec.UseNotes(&docComments)
-	return dec.Decode(bufio.NewReader(in))
+	return dec.Decode(in)
 }
 
 // tapestry sequences never have comments; so throw out the zeroth element
