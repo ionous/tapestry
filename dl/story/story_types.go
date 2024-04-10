@@ -73,7 +73,7 @@ func (op *StoryStatement_Slots) Repeats() bool {
 // Add a note.
 // Information about the story for you and other authors.
 type Comment struct {
-	Lines  string
+	Lines  []string
 	Markup map[string]any
 }
 
@@ -546,8 +546,9 @@ func (op *DefineNamedGrammar_Slice) Repeats() bool {
 
 // Simple english like definitions of nouns, kinds, and their relatives.
 type DeclareStatement struct {
-	Text   rtti.TextEval
-	Markup map[string]any
+	Text    rtti.TextEval
+	Matches JessMatches
+	Markup  map[string]any
 }
 
 // declare_statement, a type of flow.
@@ -1846,8 +1847,9 @@ func init() {
 		Name: "comment",
 		Lede: "comment",
 		Terms: []typeinfo.Term{{
-			Name: "lines",
-			Type: &prim.Zt_Lines,
+			Name:    "lines",
+			Repeats: true,
+			Type:    &prim.Zt_Lines,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
@@ -2092,6 +2094,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:    "matches",
+			Label:   "matches",
+			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,

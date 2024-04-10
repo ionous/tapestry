@@ -11,9 +11,10 @@ Spec:with group:
           - "language"
           - Flow phrase:uses:
               - "Note: {comment$lines}"
-              - - Term:name:
+              - - Term:name:repeats:
                     - "_"
                     - "lines"
+                    - true
       - # Create a scene
         Spec:slots:with flow:
           - "define_test"
@@ -203,6 +204,10 @@ Spec:with group:
                     - "_"
                     - "text"
                     - "text_eval"
+                - Term:type:private:
+                    - "matches"
+                    - "jess_matches"
+                    - true
       - Spec:slots:groups:with flow:
           - "define_relation"
           - "story_statement"

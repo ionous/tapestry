@@ -2,8 +2,8 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
@@ -27,7 +27,9 @@ func (op *Comment) PreImport(cat *weave.Catalog) (ret typeinfo.Instance, err err
 		ret = op
 	} else {
 		ret = &debug.DebugLog{
-			Value:    &assign.FromText{Value: core.T(op.Lines)},
+			Value: &assign.FromTextList{
+				Value: &literal.TextValues{Values: op.Lines},
+			},
 			LogLevel: debug.C_LoggingLevel_Note,
 		}
 	}

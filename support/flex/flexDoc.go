@@ -74,8 +74,7 @@ func (a *accum) readHeader(in io.RuneReader) (err error) {
 		err = e
 	} else {
 		(*a) = append((*a), &story.Comment{
-			// hrm. why isnt lines ... lines?
-			Lines: strings.Join(lines, "\n"),
+			Lines: lines,
 		})
 	}
 	return

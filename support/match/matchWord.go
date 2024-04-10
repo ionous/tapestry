@@ -2,8 +2,11 @@ package match
 
 type Word struct {
 	hash  uint64
-	slice string // go internally stores string slices as offset and length
-	start int    // but there doesn't seem to be a way of getting that offset
+	slice string
+}
+
+func MakeWord(h uint64, slice string) Word {
+	return Word{h, slice}
 }
 
 func (w *Word) isValid() bool {

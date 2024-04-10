@@ -11,6 +11,8 @@ import "git.sr.ht/~ionous/tapestry/support/match"
 // ( ex. quoted text ) need to be processed again later on.
 // first pass would be change makeSpan into a reader ( MakeSpans uses that reader )
 // and then expose that reader here.
+// that also might enable Word to become just the hash ( or hash + width )
+// so we can skip some string copies in flex
 type InputState struct {
 	ws    []match.Word
 	index int

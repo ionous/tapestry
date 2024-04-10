@@ -51,23 +51,25 @@ func MakeSpans(sentences string) (ret []Span, err error) {
 	return
 }
 
+// fix: replace this with flex plainText
+// ( in a way that keeps this independent of flex;
+// | a default implementation that doesnt generate commands;
+// | ignores or errors on comments; or that accumulates a different kind of output
+// )
 func makeSpan(s string) (out Span, rem string, err error) {
 	flushWord := func(start, end int, hash uint64) {
 		if start >= 0 {
 			if end > start {
-				out = append(out, Word{
-					start: start,
-					hash:  hash,
-					slice: s[start:end],
-				})
+				w := MakeWord(hash, s[start:end])
+				out = append(out, w)
 			}
 		}
 	}
 	var wordStart int
 	var quoteStart int // one indexed
 	var tickStart int
-	var quoteTerminal bool
-	var terminal int
+	var quoteTerminal bool // watches for fullstops at the end of a quote.
+	var terminal int       // flag for end of sentence; uses a number for debugging.
 	// the rune writer writes into w to accumulate the hash.
 	w, rbs := fnv.New64a(), makeRuneWriter()
 Loop:
