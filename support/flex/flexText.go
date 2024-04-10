@@ -13,19 +13,20 @@ import (
 )
 
 // consumes all text until eof ( and eats the eof error )
-// FIX: have to be able to pivot to tell subsections
 func ReadText(runes io.RuneReader) (ret []string, err error) {
-	var text plainText
+	var text PlainText
 	run := NewTokenizer(&text)
 	if e := charm.Read(runes, run); e != nil {
 		err = e
 	} else {
+		panic("fix")
 	}
 	return
 }
 
-type plainText struct {
-
+// translate a plain text section to a series of
+// comments and jess declarations
+type PlainText struct {
 	// declare statements, or comments
 	out []story.StoryStatement
 	// accumulator for declare, and comments
@@ -36,12 +37,13 @@ type plainText struct {
 	words match.Span
 }
 
-type span struct {
-	str   string
-	words match.Span
+func (pt *PlainText) Finalize() (ret []story.StoryStatement) {
+	pt.flush()
+	ret, pt.out = pt.out, nil
+	return
 }
 
-func (pt *plainText) Decoded(p Pos, t Type, v any) (err error) {
+func (pt *PlainText) Decoded(p Pos, t Type, v any) (err error) {
 	switch t {
 	case Comma:
 		pt.flushComment()
@@ -91,20 +93,21 @@ func (pt *plainText) Decoded(p Pos, t Type, v any) (err error) {
 	return
 }
 
-func (pt *plainText) flush() {
+func (pt *PlainText) flush() {
 	pt.flushPhrases()
 	pt.flushComment()
 }
 
-func (pt *plainText) endSentence() {
+func (pt *PlainText) endSentence() {
 	pt.phrases = append(pt.phrases, pt.words)
+	pt.words = nil
 }
 
-func (pt *plainText) writeStr(str string) {
+func (pt *PlainText) writeStr(str string) {
 	pt.writeHash(str, match.Hash(str))
 }
 
-func (pt *plainText) writeHash(str string, hash uint64) {
+func (pt *PlainText) writeHash(str string, hash uint64) {
 	pt.flushComment()
 	// because we write words ( and other such things )
 	// new text should have a space before;
@@ -118,7 +121,7 @@ func (pt *plainText) writeHash(str string, hash uint64) {
 
 // if there are pending phrases, flush them
 // ( ex. because a comment is about to be written )
-func (pt *plainText) flushPhrases() {
+func (pt *PlainText) flushPhrases() {
 	if ks, ws := pt.phrases, pt.words; len(ks) > 0 || len(ws) > 0 {
 		pt.phrases, pt.words = nil, nil
 		// flush in progress words
@@ -142,7 +145,7 @@ func (pt *plainText) flushPhrases() {
 
 // if there are pending comments, flush them
 // ( ex. because a phrase is about to be written )
-func (pt *plainText) flushComment() {
+func (pt *PlainText) flushComment() {
 	if cs := pt.comment; len(cs) > 0 {
 		pt.comment = nil
 		out := &story.Comment{Lines: cs}
