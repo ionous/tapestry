@@ -84,7 +84,7 @@ func TestSkippedSlot(t *testing.T) {
 // the stacks should all use the "stacked_kinds_of_kind" type
 func TestStoryLines(t *testing.T) {
 	if e := testBlocks(&story.StoryFile{
-		StoryStatements: []story.StoryStatement{
+		Statements: []story.StoryStatement{
 			&story.DefineKinds{
 				Kinds:    literal.Ts("cats"),
 				Ancestor: literal.T("animal"),
@@ -98,10 +98,10 @@ func TestStoryLines(t *testing.T) {
   "type": "story_file",
   "id": "test-1",
   "extraState": {
-    "STORY_STATEMENTS": 2
+    "STATEMENTS": 2
   },
   "inputs": {
-    "STORY_STATEMENTS": {
+    "STATEMENTS": {
       "block": {
         "type": "_define_kinds_stack",
         "id": "test-2",

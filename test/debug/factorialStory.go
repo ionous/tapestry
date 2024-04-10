@@ -20,7 +20,7 @@ var FactorialJs string
 
 // a program that can check factorials
 var FactorialStory = story.StoryFile{
-	StoryStatements: []story.StoryStatement{
+	Statements: []story.StoryStatement{
 		&story.DefineTest{
 			TestName: "factorial",
 			Exe:      FactorialCheck,

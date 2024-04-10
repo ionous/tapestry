@@ -26,7 +26,7 @@ func TestImportSequence(t *testing.T) {
 	}}}
 	// import that statement
 	if e := story.ImportStory(cat, t.Name(), &story.StoryFile{
-		StoryStatements: []story.StoryStatement{
+		Statements: []story.StoryStatement{
 			&story.DefineTest{
 				TestName: t.Name(),
 				Exe: []rt.Execute{

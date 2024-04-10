@@ -122,7 +122,7 @@ func TestStoryFileShape(t *testing.T) {
         "label": "Tapestry"
       },
       {
-        "name": "STORY_STATEMENTS",
+        "name": "STATEMENTS",
         "type": "input_statement",
         "checks": [
           "_story_statement_stack"
