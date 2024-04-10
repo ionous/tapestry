@@ -13,13 +13,14 @@ import (
 )
 
 // consumes all text until eof ( and eats the eof error )
-func ReadText(runes io.RuneReader) (ret []string, err error) {
-	var text PlainText
-	run := NewTokenizer(&text)
+// fix: allow line number offset
+func ReadText(runes io.RuneReader) (ret []story.StoryStatement, err error) {
+	var pt PlainText
+	run := NewTokenizer(&pt)
 	if e := charm.Read(runes, run); e != nil {
 		err = e
 	} else {
-		panic("fix")
+		ret = pt.Finalize()
 	}
 	return
 }

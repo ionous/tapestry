@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/support/flex"
 	"git.sr.ht/~ionous/tapestry/support/match"
-	"github.com/ionous/tell/charm"
 	"github.com/kr/pretty"
 )
 
@@ -47,18 +46,12 @@ No. Really.
 }
 
 func testText(t *testing.T, in string, expect ...story.StoryStatement) {
-	var pt flex.PlainText
 	runes := strings.NewReader(in)
-	run := flex.NewTokenizer(&pt)
-	if e := charm.Read(runes, run); e != nil {
+	if out, e := flex.ReadText(runes); e != nil {
 		t.Fatal(e)
-	} else {
-		out := pt.Finalize()
-		if !reflect.DeepEqual(out, expect) {
-			t.Log(pretty.Sprint(out))
-			t.Fatal("mismatch")
-		}
-
+	} else if !reflect.DeepEqual(out, expect) {
+		t.Log(pretty.Sprint(out))
+		t.Fatal("mismatch")
 	}
 	return
 }

@@ -3,7 +3,6 @@ package flex
 import (
 	"errors"
 	"io"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -104,16 +103,10 @@ func (a *accum) readStory(in io.RuneReader) (err error) {
 
 // read and record a plain text section
 func (a *accum) readText(in io.RuneReader) (err error) {
-	if lines, e := ReadText(in); e != nil {
+	if ops, e := ReadText(in); e != nil {
 		err = e
 	} else {
-		// fix: record the line number1
-		op := &story.DeclareStatement{
-			Text: &literal.TextValue{
-				Value: strings.Join(lines, "\n"),
-			},
-		}
-		(*a) = append((*a), op)
+		(*a) = append((*a), ops...)
 	}
 	return
 }

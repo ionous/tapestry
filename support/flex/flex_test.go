@@ -79,7 +79,7 @@ func TestSections(t *testing.T) {
 var testDoc = `
 # Header:
 ---
-# Structured:
+# First Structured:
 Define scene:requires:with:
 - "cloak"
 - "tapestry"
@@ -89,7 +89,7 @@ Define scene:requires:with:
 The title of the story is "The Cloak of Darkness."
 The story has the headline "An example story."
 ---
-# Structured:
+# Second Structured:
 Define rule:noun:do:
 - "instead of traveling"
 - "entrance"
