@@ -20,9 +20,7 @@ const DefaultScene = "Tapestry"
 func ReadStory(name string, in Unreader, out *story.StoryFile) (err error) {
 	var els accum
 	if k := MakeSection(in); k.NextSection() {
-		if e := els.readHeader(&k); e != nil {
-			err = e
-		} else if e := els.readBody(&k); e != nil {
+		if e := els.readBody(&k); e != nil {
 			err = e
 		} else {
 			// lhs will have the leading comments, rhs everything else
@@ -67,21 +65,9 @@ func splitStatements(els []story.StoryStatement) (lhs, rhs []story.StoryStatemen
 
 type accum []story.StoryStatement
 
-// header can only contain comments
-func (a *accum) readHeader(in io.RuneReader) (err error) {
-	if lines, e := ReadComments(in); e != nil {
-		err = e
-	} else {
-		(*a) = append((*a), &story.Comment{
-			Lines: lines,
-		})
-	}
-	return
-}
-
-// the body alternates between story and plain text
+// the body alternates between plain text and structured story ops
 func (a *accum) readBody(k *Section) (err error) {
-	for story := true; err == nil && k.NextSection(); story = !story {
+	for story := false; err == nil && k.NextSection(); story = !story {
 		if story {
 			err = a.readStory(k)
 		} else {
