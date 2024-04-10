@@ -62,10 +62,13 @@ var genFlags = struct {
 	dbPath string // output file or path
 }{}
 
-// fix: i'm not really sure what's best for the default in/out directories
-// possibly move idl files into the base dl directory
-// and then require that base as an argument ( via args, not flags )
-// use that base as a default for out
+// fix: maybe this should match go generate style (ish)
+// where it operates on a directory ( or file )
+// and move idl files into the their own directories
+// you could break out the /dl if needed or as appropriate
+// out would default to the same directory as in
+// ( either see if that directory code is portable
+// | or handle the more frequent patterns: ".", "...", and a directory )
 func buildFlags() (fs flag.FlagSet) {
 	var dbPath string
 	if home, e := os.UserHomeDir(); e == nil {
