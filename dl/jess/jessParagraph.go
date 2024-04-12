@@ -7,17 +7,15 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-// represents a block of text
-type Paragraph struct {
-	// individual sentences of the paragraph.
-	unmatched []match.Span
-}
+// represents a block of text;
+// holds individual sentences of the paragraph.
+type Paragraph []match.Span
 
-func NewParagraph(str string) (ret *Paragraph, err error) {
+func NewParagraph(str string) (ret Paragraph, err error) {
 	if spans, e := match.MakeSpans(str); e != nil {
 		err = fmt.Errorf("%w reading %s", e, str)
 	} else {
-		ret = &Paragraph{unmatched: spans}
+		ret = spans
 	}
 	return
 }
@@ -26,7 +24,8 @@ func NewParagraph(str string) (ret *Paragraph, err error) {
 // returns true when it no longer needs to be called because everything is scheduled
 func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
 	var retry int
-	for i, n := range p.unmatched {
+	unmatched := (*p)
+	for i, n := range unmatched {
 		var best bestMatch
 		if matchSentence(Context{q, u}, z, n, &best) {
 			// try to generate if matched.
@@ -41,7 +40,7 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 				err = fmt.Errorf("failed to match line %d %s", i, n.String())
 				break
 			} else {
-				p.unmatched[retry] = n
+				unmatched[retry] = n
 				retry++
 			}
 		}
@@ -49,9 +48,9 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 	// no errors? update the unmatched list
 	if err == nil {
 		if retry > 0 {
-			p.unmatched = p.unmatched[:retry]
+			(*p) = unmatched[:retry]
 		} else {
-			p.unmatched = nil
+			(*p) = nil
 			okay = true
 		}
 	}

@@ -13,12 +13,10 @@ import (
 // private member of DeclareStatement
 type JessMatches []match.Span
 
-// move into jess/dl
+// todo: move into jess/dl
 func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if txt, e := safe.GetText(run, op.Text); e != nil {
-			err = e
-		} else if p, e := jess.NewParagraph(txt.String()); e != nil {
+		if p, e := op.newParagraph(run); e != nil {
 			err = e
 		} else {
 			q := jessdb.MakeQuery(cat.Modeler, cat.CurrentDomain())
@@ -33,4 +31,17 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
+}
+
+func (op *DeclareStatement) newParagraph(run rt.Runtime) (ret jess.Paragraph, err error) {
+	if m := op.Matches; len(m) > 0 {
+		ret = jess.Paragraph(m)
+	} else {
+		if txt, e := safe.GetText(run, op.Text); e != nil {
+			err = e
+		} else {
+			ret, err = jess.NewParagraph(txt.String())
+		}
+	}
+	return
 }
