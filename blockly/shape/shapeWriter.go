@@ -94,7 +94,8 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType type
 	w.writeShapeDef(&partial, name, blockType, publicTerms(terms))
 
 	// are we stackable? ( ex. story statement or executable )
-	if len(stacks) > 0 {
+	// hack: prevents StoryFile from generating stacks
+	if len(stacks) > 0 && name != "Tapestry" {
 		block.Brace(js.Obj, func(out *js.Builder) {
 			out.Kv("type", bconst.StackedName(blockType.TypeName()))
 			checks := slotTypes(stacks)

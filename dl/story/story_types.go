@@ -1503,8 +1503,7 @@ func (op *StoryBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// top level node, currently just for blockly.
-// implements story_statement so flex can parse this element successfully.
+// top level node for story files.
 type StoryFile struct {
 	Statements []StoryStatement
 	Markup     map[string]any
@@ -2599,7 +2598,7 @@ func init() {
 		},
 		Markup: map[string]any{
 			"blockly-color": "TAP_HUE_ROOT",
-			"comment":       []interface{}{"top level node, currently just for blockly.", "implements story_statement so flex can parse this element successfully."},
+			"comment":       "top level node for story files.",
 			"mosaic-root":   true,
 		},
 	}

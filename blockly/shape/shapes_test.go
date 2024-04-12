@@ -110,7 +110,7 @@ func TestStoryFileShape(t *testing.T) {
 	expect := `{
   "type": "story_file",
   "colour": "%{BKY_TAP_HUE_ROOT}",
-  "tooltip": "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
+  "tooltip": "top level node for story files.",
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
@@ -136,13 +136,17 @@ func TestStoryFileShape(t *testing.T) {
 
 	var out js.Builder
 	w := shape.ShapeWriter{ts}
-	w.WriteShape(&out, x)
-	//
-	got := files.Indent(out.String())
-	if got != expect {
-		t.Log("have: \n", got)
-		t.Log("want: \n", expect)
-		t.Fatal("ng", len(got), len(expect))
+	if !w.WriteShape(&out, x) {
+		t.Fatal("couldn't write shape flie")
+	} else {
+		str := out.String()
+		if got := files.Indent(str); len(got) == 0 {
+			t.Fatal("failed to indent:\n", str)
+		} else if got != expect {
+			t.Log("have: \n", got)
+			t.Log("want: \n", expect)
+			t.Fatal("ng", len(got), len(expect))
+		}
 	}
 }
 
