@@ -15,8 +15,10 @@ const (
 	TellStory                       // .tell
 )
 
-func Ext(path string) (ret Extension) {
-	ext := filepath.Ext(path)
+// given a file name, return its extension
+// 0, Invalid if it isn't a known extension.
+func Ext(name string) (ret Extension) {
+	ext := filepath.Ext(name)
 	for i := 1; i < len(_Extension_index); i++ {
 		if n := Extension(i); n.String() == ext {
 			ret = n
@@ -24,6 +26,19 @@ func Ext(path string) (ret Extension) {
 		}
 	}
 	return
+}
+
+// given a file name, return its extension and the name without the extension.
+// 0, Invalid if it isn't a known extension.
+func SplitExt(name string) (ret string, ext Extension) {
+	if ext = Ext(name); ext.IsValid() {
+		ret = name[:len(name)-len(ext.String())]
+	}
+	return
+}
+
+func (ext Extension) IsValid() bool {
+	return ext > 0
 }
 
 func (ext Extension) Spec() bool {
