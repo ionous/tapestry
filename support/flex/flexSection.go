@@ -1,6 +1,7 @@
 package flex
 
 import (
+	"errors"
 	"io"
 )
 
@@ -22,34 +23,45 @@ type Unreader interface {
 	UnreadRune() error
 }
 
+// return a reader that ends and restarts
+// on every dashed divider in a flex document.
+// must call "NextSection" to start reading.
 func MakeSection(r Unreader) Section {
-	return Section{runes: r, lastError: io.EOF}
+	return Section{runes: r, lastError: nextSection}
 }
 
-// even on error returns true;
-// callers can see internal errors via ReadRune.
+var nextSection = errors.New("a call to NextSection was expected")
+
+// valid at the start of a document or the
+// after ReadRune() has returned eof; otherwise, panics.
+// returns false at the end of a document.
 func (k *Section) NextSection() bool {
 	var done bool
-	if k.lastError == io.EOF {
+	if k.lastError != nextSection {
+		panic("unexpected call to NextSection")
+	} else {
 		// waiting for start?
 		if k.line == 0 {
 			k.lastError = nil
 		} else {
-			// try to read to see if it was a fake EOF
+			// see if the last ReadRune() returned a real EOF
 			if _, _, e := k.runes.ReadRune(); e != nil {
-				k.lastError = e
-				done = e == io.EOF
+				k.lastError = e    // the document is probably
+				done = e == io.EOF // done.
 			} else if e := k.runes.UnreadRune(); e != nil {
 				k.lastError = e
 			} else {
+				// it was a faux eof, allow ReadRune() to proceeed.
 				k.lastError = nil
-				k.StartingLine = k.line
+				k.StartingLine = k.line - 1
 			}
 		}
 	}
 	return !done
 }
 
+// read the next rune unless the next rune is a dash.
+// this buffers the dashes, counting them to search for an end of section
 func (k *Section) ReadRune() (r rune, n int, err error) {
 	if k.lastError != nil {
 		err, k.lastError = k.lastError, nil
@@ -57,8 +69,13 @@ func (k *Section) ReadRune() (r rune, n int, err error) {
 		k.dashing--
 		r, n = dash, 1
 	} else {
-		// not dashing, read:
-		if r, n, err = k.runes.ReadRune(); err == nil {
+		// not handing out buffered dashes then read; and check the results.
+		r, n, err = k.runes.ReadRune()
+		switch err {
+		case io.EOF:
+			// ugly: if its a real eof; we need to allow calls to NextSection
+			k.lastError = nextSection
+		case nil:
 			switch {
 			// always check for newlines
 			// resets checks for dashes
@@ -97,7 +114,7 @@ func (k *Section) ReadRune() (r rune, n int, err error) {
 						if w == newline {
 							k.line++
 						}
-						k.lastError = io.EOF
+						k.lastError = nextSection
 						err = io.EOF
 					}
 				}

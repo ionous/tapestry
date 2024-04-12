@@ -66,7 +66,7 @@ line`,
 		testStr := tests[i+1].(string)
 		wantVal := tests[i+2]
 		whichTest := 1 + i/3
-		if e := testOne(wantType, testStr, wantVal); e != nil {
+		if e := testToken(wantType, testStr, wantVal); e != nil {
 			t.Logf("failed single %d: %s", whichTest, e)
 			t.Fail()
 		} else {
@@ -90,7 +90,7 @@ line`,
 	}
 }
 
-func testOne(tokenType flex.Type, testStr string, tokenValue any) (err error) {
+func testToken(tokenType flex.Type, testStr string, tokenValue any) (err error) {
 	var pairs results
 	run := flex.NewTokenizer(&pairs)
 	if _, e := charm.Parse(testStr+"\n", run); e != nil {

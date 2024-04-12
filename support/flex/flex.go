@@ -5,3 +5,18 @@
 // The plain text sections can also "jump out" into structured sections
 // on lines ending with colons.
 package flex
+
+import (
+	"git.sr.ht/~ionous/tapestry/dl/story"
+)
+
+func ReadStory(in Unreader) (ret []story.StoryStatement, err error) {
+	var els accum
+	k := MakeSection(in)
+	if e := els.readBody(&k); e != nil {
+		err = e
+	} else {
+		ret = els
+	}
+	return
+}

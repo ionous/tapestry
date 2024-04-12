@@ -57,13 +57,12 @@ func (pt *PlainText) Decoded(p Pos, t Type, v any) (err error) {
 		pt.endSentence()
 
 	case Word:
-		// fix: hash the string as its read, and send the pair of hash and string
 		str := v.(string)
 		pt.flushComment()
 		pt.writeStr(str)
 
 	case Quoted: // quoted string
-		// FIX FIX! to preserve the phrases we need to know what kind of string it was
+		// fix: to preserve the phrases we need to know what kind of string it was
 		// so we can reconstruct the quote markers...
 		// maybe the token should be a "string literal" struct containing the original string
 		// so there's no need to reconstruct

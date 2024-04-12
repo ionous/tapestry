@@ -4,64 +4,9 @@ import (
 	"errors"
 	"io"
 
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/support/files"
 )
-
-type Document struct {
-	cnt int
-	k   Section
-}
-
-const DefaultScene = "Tapestry"
-
-// overwrites the story statements in the passed file
-func ReadStory(name string, in Unreader, out *story.StoryFile) (err error) {
-	var els accum
-	if k := MakeSection(in); k.NextSection() {
-		if e := els.readBody(&k); e != nil {
-			err = e
-		} else {
-			// lhs will have the leading comments, rhs everything else
-			// if rhs is empty -- everything is comments ( and/or there's nothing )
-			if lhs, rhs := splitStatements(els); len(rhs) == 0 {
-				out.Statements = lhs
-			} else {
-				// ensure the file has a top level scene;
-				// and move the right hand statements into it.
-				var scene *story.DefineScene
-				if n, ok := rhs[0].(*story.DefineScene); ok {
-					n.Statements = append(n.Statements, rhs[1:]...)
-					scene = n
-				} else {
-					scene = &story.DefineScene{
-						Scene: &literal.TextValue{Value: name},
-						RequireScenes: &literal.TextValues{Values: []string{
-							DefaultScene,
-						}},
-						Statements: rhs,
-					}
-				}
-				out.Statements = append(lhs, scene)
-			}
-		}
-	}
-	return
-}
-
-// split so that all leading comments are on the lhs;
-// the first statement and everything after are on the rhs
-func splitStatements(els []story.StoryStatement) (lhs, rhs []story.StoryStatement) {
-	lhs = els
-	for i, el := range els {
-		if _, ok := el.(*story.Comment); !ok {
-			lhs, rhs = els[:i], els[i:]
-			break
-		}
-	}
-	return
-}
 
 type accum []story.StoryStatement
 
@@ -97,7 +42,10 @@ func (a *accum) readText(in io.RuneReader) (err error) {
 	return
 }
 
-// read a story file ( which just happens to actually be a section of a file )
+// read a story data
+// fix: maybe it'd be nice if the structured sections
+// could be of any uniform type ( same with plain text )
+// some sort of callback collector instead of specifically story/jess.
 func decodeStorySection(in io.RuneReader) (ret []story.StoryStatement, err error) {
 	var slots story.StoryStatement_Slots
 	dec := story.NewDecoder() // fix:  reusable?

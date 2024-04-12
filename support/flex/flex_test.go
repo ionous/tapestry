@@ -6,17 +6,16 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/support/flex"
 	"github.com/kr/pretty"
 )
 
 // count the number of sections in some sample data.
 func TestSectionCount(t *testing.T) {
-	expect := []int{0, 3, 9, 13}
+	expect := []int{0, 2, 8, 12}
 	var got []int
 	// break the text into lines
-	in := strings.NewReader(testDoc)
+	in := strings.NewReader(testOne)
 	for k := flex.MakeSection(in); k.NextSection(); {
 		got = append(got, k.StartingLine)
 		for {
@@ -35,19 +34,23 @@ func TestSectionCount(t *testing.T) {
 	}
 }
 
+// fix? doesnt compare against a particular result
+// because some things have line numbers, and some dont
+// probably they arent event correct yet
 func TestDoc(t *testing.T) {
-	var out story.StoryFile
-	if e := flex.ReadStory("beep", strings.NewReader(testDoc), &out); e != nil {
+	if out, e := flex.ReadStory(strings.NewReader(testTwo)); e != nil {
 		t.Fatal(e)
 	} else {
-		// fix? doesnt compare against a particular result
-		// because some things have line numbers, and some dont
-		// probably they arent event correct yet
+		pretty.Println(out)
+	}
+	if out, e := flex.ReadStory(strings.NewReader(testOne)); e != nil {
+		t.Fatal(e)
+	} else {
 		pretty.Println(out)
 	}
 }
 
-var testDoc = `
+var testOne = `
 # First Plain Text:
 ---
 # First Structured:
@@ -67,3 +70,7 @@ Define rule:noun:do:
 - Say: "You've only just arrived and besides the weather outside is terrible."
 ---
 `
+
+var testTwo = `---
+# Everything in the Tapestry directory
+Define scene: "tapestry"`

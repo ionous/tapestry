@@ -146,7 +146,7 @@ func (n *Tokenizer) tokenize() charm.State {
 // a single word -- roughly, letters and numbers ending with space (or eof)
 // but also, commas, fullstops, and maybe a few other things.
 func (n *Tokenizer) wordDecoder() charm.State {
-	// fix: might as well hash since that's what match/jess is based on.
+	// fix: hash the string as its read, and send the pair of hash and string
 	var b strings.Builder
 	return charm.Self("roxanne", func(self charm.State, q rune) (ret charm.State) {
 		// things that end words. words roxxane, words.
@@ -190,6 +190,8 @@ func (n *Tokenizer) commentDecoder() charm.State {
 }
 
 // quoted string and heredoc decoder
+// fix: remember the quoted string types ( for more/accurate reconstruction );
+// flag terminal in the process ( ex. return a quoted struct with the relevant info )
 func (n *Tokenizer) interpretDecoding() charm.State {
 	var d charmed.QuoteDecoder
 	return charm.Step(d.Interpret(), charm.Statement("interpreted", func(q rune) charm.State {

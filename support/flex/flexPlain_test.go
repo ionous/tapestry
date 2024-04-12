@@ -26,7 +26,7 @@ No. Really.
 				Value: "It is a good day for plain text.",
 			},
 			Matches: story.JessMatches(match.PanicSpans(
-				// FIX: currently can't handle It's
+				// fix: currently can't handle "It's"
 				"It is a good day for plain text", // no terminal
 			)),
 		},
