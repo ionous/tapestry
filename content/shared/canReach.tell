@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Determine whether an actor can touch some specific object.
     Define pattern:requires:provides:do:

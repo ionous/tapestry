@@ -1,3 +1,4 @@
+---
 Tapestry:
   - Declare: "Settings are kinds of kinds. Settings are usually brief."
   - # Settings is a global singleton for controlling various gameplay options.

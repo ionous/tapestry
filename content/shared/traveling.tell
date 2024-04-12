@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Traveling takes the actor moving, and the door for them to travel through.
     # FIX: optionally pass the direction so that it doesnt have to find it twice when 'going'

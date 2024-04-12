@@ -23,12 +23,13 @@ type Catalog struct {
 
 	// cleanup? seems redundant to have three views of the same domain
 	domains        map[string]*Domain
-	processing     DomainStack
 	pendingDomains []*Domain
 
-	cursor string        // current source position
-	run    rt.Runtime    // custom runtime for running macros
-	db     *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
+	cursor     string // current file
+	processing DomainStack
+
+	run rt.Runtime    // custom runtime for running macros
+	db  *tables.Cache // for domain processing, rival testing; tbd: move to mdl entirely?
 }
 
 type StepFunction func(weaver.Phase) (bool, error)
@@ -64,7 +65,6 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	}
 	return &Catalog{
 		Env:     make(Env),
-		cursor:  "x", // fix
 		db:      tables.NewCache(db),
 		domains: make(map[string]*Domain),
 		Modeler: m,
@@ -72,9 +72,9 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	}
 }
 
-func (cat *Catalog) SetSource(x string) {
-	cat.cursor = x
-}
+// func (cat *Catalog) SetSource(x string) {
+// 	cat.cursor = x
+// }
 
 func (cat *Catalog) GetRuntime() rt.Runtime {
 	return cat.run
@@ -165,7 +165,24 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	return
 }
 
+func (cat *Catalog) BeginFile(name string) (err error) {
+	if cur := cat.cursor; len(cur) > 0 {
+		err = errutil.New("file already in progress", cur)
+	} else {
+		cat.cursor = name
+	}
+	return
+}
+
+func (cat *Catalog) EndFile() {
+	if len(cat.cursor) == 0 {
+		panic("EndFile called but no BeginFile")
+	}
+	cat.cursor = ""
+}
+
 // calls to schedule() between begin/end domain write to this newly declared domain.
+// names dont have to be normalized.
 func (cat *Catalog) DomainStart(name string, requires []string) (err error) {
 	if d, e := cat.addDomain(name, cat.cursor, requires...); e != nil {
 		err = e
@@ -222,7 +239,7 @@ func (cat *Catalog) addDomain(name, at string, reqs ...string) (ret *Domain, err
 		if p, ok := cat.processing.Top(); ok {
 			reqs = append(reqs, p.name)
 		}
-		// probably asking for  trouble:
+		// probably asking for trouble:
 		// the tests have no top level domain (tapestry) the way weave does
 		// we still need them to wind up in the table eventually...
 		if len(reqs) == 0 {

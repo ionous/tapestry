@@ -23,7 +23,7 @@ func runWeave(ctx context.Context, cmd *base.Command, args []string) (err error)
 	if _, e := fs.Stat(shared, "."); errors.Is(e, fs.ErrNotExist) {
 		shared = content.Shared
 	}
-	if e := WeavePaths(weaveFlags.outFile, stories, shared); e != nil {
+	if e := WeavePaths(weaveFlags.outFile, shared, stories); e != nil {
 		err = e
 	} else if weaveFlags.checkAll || len(weaveFlags.checkOne) > 0 {
 		if cnt, e := CheckOutput(weaveFlags.outFile, weaveFlags.checkOne); e != nil {

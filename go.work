@@ -9,3 +9,4 @@ use (
 
 
 replace git.sr.ht/~ionous/tapestry@latest => ./
+replace github.com/ionous/tell@v0.8.0 => /Users/ionous/Dev/GitHub/tell

@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Generic action run by the parser before the specific one selected by the player.
     # Exists to support filtering for multiple actions simultaneously.

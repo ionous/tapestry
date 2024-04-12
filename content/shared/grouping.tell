@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Returns a list of the objects partitioned into groups.
     Define pattern:requires:provides:do:

@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Returns true if an object allows items to be stored inside it or on top of it.
     Define pattern:requires:provides:do:

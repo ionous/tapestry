@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Story data includes per turn global information about the story, and, questionably, some constant data about the story including title, author, etc.
     Declare: "Story data are kinds of kinds."

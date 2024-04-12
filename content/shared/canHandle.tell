@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Determines whether an actor can manipulate some specific object.
     Define pattern:requires:provides:do:

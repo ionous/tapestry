@@ -10,18 +10,14 @@ var Shared embed.FS
 var Sample embed.FS
 
 // a template for a default story
-var DefaultStory = `
+var DefaultStory = //
+`# --------------------------------------------------------
 # This story was created by {{ .Author }} using 'tap new'.
-Tapestry:
-- Define scene:requires:with:
-  - {{ printf "%q" .Story }}
-  - "tapestry"  # this story requires the standard library.
-  - - Declare: """
-      The title of the story is {{ printf "%q." .Title }}
-      The author of the story is {{ printf "%q." .Author }}
-      The Empty Space is a room. You are in the space.
-      The description of the space is "An empty space, waiting to be filled with life."
-      """ # "
+# --------------------------------------------------------
+The title of the story is {{ printf "%q." .Title }}
+The author of the story is {{ printf "%q." .Author }}
+The Empty Space is a room. You are in the space.
+The description of the space is "An empty space, waiting to be filled with life."
 `
 
 type DefaultDesc struct {

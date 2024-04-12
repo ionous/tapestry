@@ -25,7 +25,7 @@ func TestImportStory(t *testing.T) {
 		k := weave.NewCatalog(db)
 		if e := k.DomainStart("tapestry", nil); e != nil {
 			t.Fatal("failed domain start", e)
-		} else if e := story.ImportStory(k, t.Name(), &curr); e != nil {
+		} else if e := curr.Weave(k); e != nil {
 			t.Fatal("failed story import", e)
 		} else if e := k.DomainEnd(); e != nil {
 			t.Fatal("failed domain end", e)

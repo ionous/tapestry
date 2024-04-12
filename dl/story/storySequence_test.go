@@ -25,13 +25,11 @@ func TestImportSequence(t *testing.T) {
 		core.T("c"),
 	}}}
 	// import that statement
-	if e := story.ImportStory(cat, t.Name(), &story.StoryFile{
-		Statements: []story.StoryStatement{
-			&story.DefineTest{
-				TestName: t.Name(),
-				Exe: []rt.Execute{
-					printText,
-				},
+	if e := story.Weave(cat, []story.StoryStatement{
+		&story.DefineTest{
+			TestName: t.Name(),
+			Exe: []rt.Execute{
+				printText,
 			},
 		},
 	}); e != nil {

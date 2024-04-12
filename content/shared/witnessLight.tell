@@ -1,3 +1,4 @@
+---
 Tapestry:
   - Comment: "Used at the end of the turn to decide if the player has been plunged into darkness or thrust into the light."
   - # print news of light or darkness as needed.

@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # future: it'd be nice to separate this from main scripts. inject a domain dependency at weave time, or some sort of runtime 'attach domain'.
     Declare: "An object collection is a kind of record."

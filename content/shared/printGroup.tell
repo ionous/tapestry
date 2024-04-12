@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Prints the objects in a pre-determined group.
     # Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules.

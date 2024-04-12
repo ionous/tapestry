@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Going takes the actor who is moving, and a direction for them to move.
     # The standard behavior finds a door in the specified direction and uses 'traveling' to move through it.

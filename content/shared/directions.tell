@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # Doors exist in rooms and connect to other rooms.
     # Every room has a compass which lists doors within the room.

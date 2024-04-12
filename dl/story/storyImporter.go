@@ -21,12 +21,14 @@ type StoryStatement interface {
 // a global is fine for now.
 var currentCatalog *weave.Catalog
 
-func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
-	cat.SetSource(path)
-	return WeaveStatements(cat, tgt.Statements)
+// backcompat
+func (op *StoryFile) Weave(cat *weave.Catalog) error {
+	return Weave(cat, op.Statements)
 }
 
-func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
+// visits each statement calling PreImport and PostImport
+// to transform the statements; then calls Weave on each.
+func Weave(cat *weave.Catalog, all []StoryStatement) (err error) {
 	evts := inspect.Callbacks{
 		// given a slot, replace its command using PreImport or PostImport
 		// and, walk the contents of its (replaced) for additional pre or post imports.

@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # By default, can use allows most actions.
     # It exists as a hook for author customization.

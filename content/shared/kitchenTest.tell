@@ -1,3 +1,4 @@
+---
 Tapestry:
   - # this is a little painfully exact; but maybe is good for now.
     Define test:requires:do:

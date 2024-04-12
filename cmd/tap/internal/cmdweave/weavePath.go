@@ -1,6 +1,7 @@
 package cmdweave
 
 import (
+	"bufio"
 	"database/sql"
 	"fmt"
 	"io/fs"
@@ -15,13 +16,15 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
+	"git.sr.ht/~ionous/tapestry/support/flex"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // Read all of the passed files and compile the output into
-// a NEW database at outFile. This will attempt to erase any existing outFile.
+// ents NEW database at outFile. This will attempt to erase any existing outFile.
 // uses WalkDir which doesn't follow symlinks of sub-directories.
 func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 	if outFile, e := filepath.Abs(outFile); e != nil {
@@ -79,7 +82,7 @@ func addDefaultKinds(pen *mdl.Pen) (err error) {
 func importAll(cat *weave.Catalog, all ...fs.FS) (err error) {
 	for _, fsys := range all {
 		if fsys != nil {
-			if e := importStoryFiles(cat, fsys); e != nil {
+			if e := importDir(cat, loggingFS{fsys}, []string{"."}); e != nil {
 				err = e
 				break
 			}
@@ -88,31 +91,71 @@ func importAll(cat *weave.Catalog, all ...fs.FS) (err error) {
 	return
 }
 
-// read a comma-separated list of files and directories
-func importStoryFiles(cat *weave.Catalog, fsys fs.FS) (err error) {
-	// note: walk does not expand symlinks in sub-directories.
-	return fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, e error) (err error) {
-		if e != nil { // e contains errors arising from visiting the file
-			err = e
-		} else if !d.IsDir() { // dirs are entered unless SkipDir is returned
-			if ext := files.Ext(path); ext.Story() {
-				log.Println("reading", path)
-				if fp, e := fsys.Open(path); e != nil {
+// importDir recursively descends path
+func importDir(cat *weave.Catalog, fsys fs.FS, dirs []string) (err error) {
+	dir := path.Join(dirs...)
+	if ents, e := fs.ReadDir(fsys, dir); e != nil {
+		err = e
+	} else if scene, e := readIndexScene(fsys, dir, ents); e != nil {
+		err = e
+	} else {
+		// a scene index affects the whole directory
+		if scene != nil {
+			run := cat.GetRuntime()
+			if scene, req, e := scene.GetSceneReqs(run); e != nil {
+				err = e
+			} else if inflect.Normalize(scene) != "tapestry" {
+				// ^ hack for the shared library, so it doesnt try to depend on itself
+				if e := cat.DomainStart(scene, req); e != nil {
 					err = e
 				} else {
-					var m map[string]any       // we "normalize" story files into json-like maps
-					var script story.StoryFile // and decode from those maps
-
-					if e := files.FormattedRead(fp, ext, &m); e != nil {
-						err = fmt.Errorf("couldn't read %q because %s", path, e)
-					} else if e := story.Decode(&script, m); e != nil {
-						err = fmt.Errorf("couldn't decode %q because %s", path, e)
-					} else if e := story.ImportStory(cat, path, &script); e != nil {
-						err = fmt.Errorf("couldn't import %q because %s", path, e)
+					defer cat.DomainEnd() // called at end of function
+				}
+			}
+		}
+		// loop over the folders and files in the the directory:
+		for i, cnt := 0, len(ents); i < cnt && err == nil; i++ {
+			ent := ents[i]
+			if name := ent.Name(); name[0] == '_' || name[0] == '.' {
+				continue
+			} else if ent.IsDir() {
+				err = importDir(cat, fsys, append(dirs, name))
+			} else {
+				if shortName, ext := files.SplitExt(name); ext.Story() {
+					fullpath := path.Join(name)
+					if fp, e := fsys.Open(fullpath); e != nil {
+						err = e
+					} else {
+						cat.BeginFile(fullpath)
+						if els, e := flex.ReadStory(bufio.NewReader(fp)); e != nil {
+							err = fmt.Errorf("couldn't read %q because %s", fullpath, e)
+						} else {
+							// without a scene index we need to have one for the file itself.
+							if scene == nil {
+								els = wrapScene(shortName, els)
+							}
+							if e := story.Weave(cat, els); e != nil {
+								err = fmt.Errorf("couldn't import %q because %s", fullpath, e)
+							}
+						}
+						cat.EndFile()
+						fp.Close()
 					}
 				}
 			}
 		}
-		return
-	})
+	}
+	return
+}
+
+// helper to log every open
+type loggingFS struct {
+	fs.FS
+}
+
+func (l loggingFS) Open(fullpath string) (fs.File, error) {
+	if fullpath != "." { // avoid logging the root dir
+		log.Println("reading", fullpath)
+	}
+	return l.FS.Open(fullpath)
 }

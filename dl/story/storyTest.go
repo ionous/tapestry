@@ -18,7 +18,7 @@ func (op *DefineTest) Weave(cat *weave.Catalog) (err error) {
 		if e := cat.DomainStart(name, dependsOn.Strings()); e != nil {
 			err = e
 		} else {
-			if e := WeaveStatements(cat, op.Statements); e != nil {
+			if e := Weave(cat, op.Statements); e != nil {
 				err = e
 			} else if len(op.Exe) > 0 {
 				err = cat.Schedule(weaver.NextPhase, func(w weaver.Weaves, run rt.Runtime) error {

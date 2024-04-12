@@ -1,3 +1,4 @@
+---
 Tapestry:
   - Define test:requires:scene:do:
       - "dropping test"

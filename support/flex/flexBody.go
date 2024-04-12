@@ -59,17 +59,17 @@ func decodeStorySection(in io.RuneReader) (ret []story.StoryStatement, err error
 	return
 }
 
-// read the tell data, and normalize it into a series of statements
+// read one or more values; presumably mappings.
 func readTellSection(in io.RuneReader) (ret []any, err error) {
 	if d, e := files.ReadTellRunes(in); e != nil {
 		err = e
 	} else {
 		switch content := d.(type) {
 		case map[string]any:
-			// one tell block
+			// normalize one mapping into a series of values.
 			ret = []any{content}
 		case []any:
-			// possibly a series of tell statements
+			// a series of tell values
 			ret = content
 		default:
 			err = errors.New("expected one or more tell statements")

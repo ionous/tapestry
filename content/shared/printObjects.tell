@@ -1,3 +1,4 @@
+---
 Tapestry:
   - Define pattern:requires:provides:do:
       - "print inline objects"
