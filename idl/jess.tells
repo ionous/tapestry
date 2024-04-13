@@ -1,8 +1,8 @@
-# shuttle communication
+# English like parsing
 Spec:with group:
   - "jess"
-
   - Group contains:
+
     - # Used to store matching text
       Spec:with slot:
       - "matched"
@@ -23,7 +23,7 @@ Spec:with group:
           - "article_flags"
           - true
 
-    - # conjunction junction
+    - # conjunction junction.
       # matches "," or "and" or ", and"
       # relies on the fact package match treats commas and ands each as their own words.
       Spec:with flow:
@@ -33,7 +33,7 @@ Spec:with group:
           - "matched"
           - "text"
 
-    - # conjunction junction 2.
+    - # conjunction or junction.
       # matches commas, ands, and ors.
       # relies on the fact package match treats commas and ands each as their own words.
       Spec:with flow:
@@ -287,28 +287,31 @@ Spec:with group:
       - Flow uses:
         - Term: "text"
 
-    - # union of all possible matching sentences:
-      # tests these in-order to find a match.
-      # ( an alternative would be slots, and a registry; this is fine for now )
+    - # union of all possible matching phrases.
+      # for any given plain text sentence,
+      # jess tries each of these looking for the first to succeed.
+      # different phrases belong to different scheduled phases;
+      # scheduling is handled manually.
+      # ( an alternative might be slots and some scheduling metadata;
+      # | this is fine for now )
       Spec:with flow:
       - "matching_phrases"
       - Flow uses:
         - Term: "understand"
-        - # fix? combine similar starts to speed matching?
-          # (nothing that the kinds have different filters)
-          Term: "kinds_are_traits"
+        - Term: "timed_rule"
         - Term: "kinds_of"
+        - Term: "aspects_are_traits"
+        - Term: "kinds_are_traits"
         - Term: "kinds_have_properties"
         - Term: "kinds_are_either"
+        - Term: "map_connections"
+        - Term: "map_directions"
+        - Term: "map_locations"
+        - Term: "property_noun_value"
+        - Term: "noun_property_value"
         - Term: "verb_names_are_names"
         - Term: "names_verb_names"
         - Term: "names_are_like_verbs"
-        - Term: "property_noun_value"
-        - Term: "noun_property_value"
-        - Term: "aspects_are_traits"
-        - Term: "map_locations"
-        - Term: "map_directions"
-        - Term: "map_connections"
 
     - # names are "a kind of"/"kinds of" traits kind:any.
       # interesting to note that inform allows "some kind/s of"
@@ -620,6 +623,96 @@ Spec:with group:
       - Flow uses:
         - Term: "comma_and_or"
         - Term: "quoted_texts"
+
+    - # matches rule prefixes
+      # before, instead of, when, after, report
+      Spec:with flow:
+      - "rule_prefix"
+      - Flow uses:
+        - Term:type:
+          - "matched"
+          - "text"
+
+    - # controls what to do after matching a rule
+      # matches "then continue", "then stop", "then jump",
+      # and "begins", "ends" ( for domain rules )
+      # with an optional leading comma
+      Spec:with flow:
+      - "rule_suffix"
+      - Flow uses:
+        - Term:type:
+          - "matched"
+          - "text"
+
+    - # specific names can follow rule declarations
+      # "( this is the witness light rule )"
+      Spec:with flow:
+      - "short_rule_name"
+      - Flow uses:
+        - # "this is the"
+          Term:type:
+          - "prefix"
+          - "text"
+        - Term:type:
+          - "matched"
+          - "text"
+        - # the word "rule"
+          Term:type:
+          - "suffix"
+          - "text"
+
+    - # for people who are lazy typists
+      # "( witness light )"
+      Spec:with flow:
+      - "long_rule_name"
+      - Flow uses:
+        - # "this is the"
+          Term:type:
+          - "prefix"
+          - "text"
+        - Term:type:
+          - "matched"
+          - "text"
+        - # the word "rule"
+          Term:type:
+          - "suffix"
+          - "text"
+
+    - # phrases can break out of plain text and into structured tell docs.
+      # the documents start with a colon (:) followed by a newline
+      # the next line is assumed to be an indented tell mapping or sequence
+      # which ends with the first unindented line.
+      # sequences are treated as execute blocks
+      # mappings are assumed to be a valid eval
+      # ( ie. an implementation of one of the rtti interfaces. )
+      Spec:with flow:
+      - "sub_assignment"
+      - Flow uses:
+        - Term: "assignment"
+
+    - # matches pattern rule definitions
+      Spec:with flow:
+      - "timed_rule"
+      - Flow uses:
+        - Term: "rule_prefix"
+        - # the pattern this rule targets.
+          # the pattern must exist for this phrase to generate successfully.
+          Term:type:
+          - "pattern"
+          - "text"
+        - Term:optional:
+          - "rule_suffix"
+          - true
+        - # either short or long rule names can match
+          # or neither.
+          Term:optional:
+          - "short_rule_name"
+          - true
+        - # if not a short rule name, maybe the longer form.
+          Term:optional:
+          - "long_rule_name"
+          - true
+        - Term: "sub_assignment"
 
     - # various phrases, all starting with the word "Understand"
       Spec:with flow:

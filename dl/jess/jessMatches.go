@@ -32,6 +32,7 @@ func matchSentence(q Query, z weaver.Phase, ws match.Span, out *bestMatch) (okay
 			matchPhrase(q, next, schedule(&op.AspectsAreTraits), out)
 
 	case weaver.PropertyPhase:
+		// fix? combine these to speed matching?
 		// kinds {are} "usually"
 		okay = matchPhrase(q, next, schedule(&op.KindsAreTraits), out) ||
 			// kinds(of records|objects, out) "have" a ["list of"] number|text|records|objects|aspects ["called a" ...]
@@ -80,6 +81,10 @@ func matchSentence(q Query, z weaver.Phase, ws match.Span, out *bestMatch) (okay
 				matchPhrase(q, next, &op.NamesVerbNames, out) ||
 				// nouns {are} adjectives [verb nouns]
 				matchPhrase(q, next, &op.NamesAreLikeVerbs, out)
+
+	case weaver.VerbPhase:
+		okay = matchPhrase(q, next, &op.TimedRule, out)
+
 	}
 	return
 }
