@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 	"github.com/ionous/errutil"
@@ -20,7 +19,7 @@ func (op *DefineKinds) Weave(cat *weave.Catalog) error {
 		} else {
 			ancestor := inflect.Normalize(ancestor.String())
 			for _, kind := range kinds.Strings() {
-				kind := match.StripArticle(inflect.Normalize(kind))
+				kind := inflect.Normalize(kind)
 				if e := w.AddKind(kind, ancestor); e != nil {
 					err = errutil.Append(err, e)
 				}
