@@ -1,4 +1,4 @@
-package flex_test
+package match_test
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/support/flex"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"github.com/ionous/tell/charm"
 )
 
@@ -16,41 +16,41 @@ import (
 func TestTokens(t *testing.T) {
 	tests := []any{
 		// token, string to parse, result:
-		/*1*/ flex.String, `23`, "23",
-		/*2*/ flex.String, `hello`, "hello",
-		/*3*/ flex.Stop, `.`, '.',
-		/*4*/ flex.Stop, `!`, '!',
-		/*5*/ flex.Comma, `,`, ',',
+		/*1*/ match.String, `23`, "23",
+		/*2*/ match.String, `hello`, "hello",
+		/*3*/ match.Stop, `.`, '.',
+		/*4*/ match.Stop, `!`, '!',
+		/*5*/ match.Comma, `,`, ',',
 
-		flex.Parenthetical,
+		match.Parenthetical,
 		`( hello world )`,
 		`hello world`,
 
 		// ----------
-		flex.Quoted,
+		match.Quoted,
 		`"hello\\world"`,
 		`hello\world`,
 
 		// ----------
-		flex.Quoted,
+		match.Quoted,
 		"`" + `hello\\world` + "`",
 		`hello\\world`,
 
 		// -----
-		flex.Comment, "# comment", "comment",
-		// 		/*9*/ flex.Key, "-", "",
-		// 		/*10*/ flex.Key, "hello:world:", "hello:world:",
+		match.Comment, "# comment", "comment",
+		// 		/*9*/ match.Key, "-", "",
+		// 		/*10*/ match.Key, "hello:world:", "hello:world:",
 		// 		// make sure dash numbers are treated as negative numbers
-		// 		/*11*/ flex.Number, `-5`, -5,
+		// 		/*11*/ match.Number, `-5`, -5,
 		// ----------
-		flex.Quoted,
+		match.Quoted,
 		`"""
 hello
 doc
 """`,
 		`hello doc`,
 		// -------------
-		flex.Quoted,
+		match.Quoted,
 		strings.Join([]string{
 			"```",
 			"hello",
@@ -63,10 +63,10 @@ line`,
 	// test all of the above in both the same and separate buffers
 	// at the very least it helps to validate tokens must be separated by whitespace.
 	var combined results
-	run := flex.NewTokenizer(&combined)
+	run := match.NewTokenizer(&combined)
 
 	for i := 0; i < len(tests); i += 3 {
-		wantType := tests[i+0].(flex.Type)
+		wantType := tests[i+0].(match.Type)
 		testStr := tests[i+1].(string)
 		wantVal := tests[i+2]
 		whichTest := 1 + i/3
@@ -75,7 +75,7 @@ line`,
 			t.Fail()
 		} else {
 			sep := " "
-			if wantType == flex.Comment {
+			if wantType == match.Comment {
 				sep = "\n" // comments have to be ended with a newlne
 			}
 			if next, e := charm.Parse(testStr+sep, run); e != nil {
@@ -94,16 +94,16 @@ line`,
 	}
 }
 
-func testToken(tokenType flex.Type, testStr string, tokenValue any) (err error) {
+func testToken(tokenType match.Type, testStr string, tokenValue any) (err error) {
 	var pairs results
-	run := flex.NewTokenizer(&pairs)
+	run := match.NewTokenizer(&pairs)
 	if _, e := charm.Parse(testStr+"\n", run); e != nil {
 		err = compare(e, tokenValue)
 	} else if cnt := len(pairs); cnt == 0 {
 		err = errors.New("didn't collect any tokens")
 	} else {
 		last := pairs[cnt-1]
-		if e := compare(last.pos, flex.Pos{}); e != nil {
+		if e := compare(last.pos, match.Pos{}); e != nil {
 			err = e
 		} else {
 			err = last.compare(tokenType, tokenValue)
@@ -115,12 +115,12 @@ func testToken(tokenType flex.Type, testStr string, tokenValue any) (err error) 
 type results []result
 
 type result struct {
-	pos        flex.Pos
-	tokenType  flex.Type
+	pos        match.Pos
+	tokenType  match.Type
 	tokenValue any
 }
 
-func (res *results) Decoded(pos flex.Pos, tokenType flex.Type, tokenValue any) (_ error) {
+func (res *results) Decoded(pos match.Pos, tokenType match.Type, tokenValue any) (_ error) {
 	(*res) = append((*res), result{pos, tokenType, tokenValue})
 	return
 }
@@ -142,7 +142,7 @@ func (res results) compare(expects results) (err error) {
 	return
 }
 
-func (p result) compare(wantType flex.Type, wantValue any) (err error) {
+func (p result) compare(wantType match.Type, wantValue any) (err error) {
 	if tt := p.tokenType; tt != wantType {
 		err = fmt.Errorf("mismatched types want: %s, have: %s", wantType, tt)
 	} else {

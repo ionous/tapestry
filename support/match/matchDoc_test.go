@@ -1,11 +1,11 @@
-package flex_test
+package match_test
 
 import (
 	"errors"
 	"reflect"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/support/flex"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"github.com/ionous/tell/charm"
 	"github.com/kr/pretty"
 )
@@ -15,7 +15,7 @@ func TestSubDocument(t *testing.T) {
 		var doc any
 		var err charm.EndpointError
 		if e := charm.ParseEof(str,
-			flex.DecodeSubDoc(func(q rune, content any) charm.State {
+			match.DecodeDoc(func(q rune, content any) charm.State {
 				doc = content
 				return charm.Finished()
 			}, false)); e != nil && !errors.As(e, &err) {

@@ -1,4 +1,4 @@
-package flex
+package match
 
 import (
 	"errors"
@@ -114,7 +114,7 @@ func (n *Tokenizer) tokenize() charm.State {
 
 		case runes.Colon:
 			includeComments := true
-			ret = DecodeSubDoc(n.notifyTell, includeComments)
+			ret = DecodeDoc(n.notifyTell, includeComments)
 
 		case runeComma:
 			ret = n.notifyAfter(Comma, q)

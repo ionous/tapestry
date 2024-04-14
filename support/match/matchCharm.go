@@ -1,4 +1,4 @@
-package flex
+package match
 
 import (
 	"errors"

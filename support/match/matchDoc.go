@@ -1,6 +1,10 @@
-package flex
+package match
 
 import (
+	"io"
+	"unicode/utf8"
+
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/tell/charm"
 	"github.com/ionous/tell/runes"
 )
@@ -8,7 +12,8 @@ import (
 // hands the rune that ended the document, plus the content
 type AfterDocument func(q rune, content any) charm.State
 
-func DecodeSubDoc(notify AfterDocument, includeComments bool) (ret charm.State) {
+// public for testing
+func DecodeDoc(notify AfterDocument, includeComments bool) (ret charm.State) {
 	var indent int
 	return charm.Step(
 		// determine the indentation of the first line of the tell document
@@ -16,9 +21,9 @@ func DecodeSubDoc(notify AfterDocument, includeComments bool) (ret charm.State) 
 		charm.Statement("startSubDoc", func(q rune) (ret charm.State) {
 			// async routine receives runes via runes
 			// and posts final results to out
-			out := make(chan subDoc)
+			out := make(chan tellDoc)
 			runes := newAsyncDoc(out, includeComments)
-			dec := subDocDecoder{
+			dec := tellDocDecoder{
 				out:    out,
 				runes:  runes,
 				indent: indent,
@@ -28,21 +33,21 @@ func DecodeSubDoc(notify AfterDocument, includeComments bool) (ret charm.State) 
 		}))
 }
 
-type subDocDecoder struct {
-	out    chan subDoc
+type tellDocDecoder struct {
+	out    chan tellDoc
 	runes  chan<- rune
 	indent int
 	notify AfterDocument
 }
 
 // send the pending document and unhandled rune to the after document handler
-func (n *subDocDecoder) finishDoc(q rune) (ret charm.State) {
+func (n *tellDocDecoder) finishDoc(q rune) (ret charm.State) {
 	close(n.runes)
 	return n.notify(q, <-n.out)
 }
 
 // send runes to the document
-func (n *subDocDecoder) NewRune(q rune) (ret charm.State) {
+func (n *tellDocDecoder) NewRune(q rune) (ret charm.State) {
 	switch q {
 	case runes.Eof:
 		ret = n.finishDoc(q)
@@ -72,7 +77,7 @@ func (n *subDocDecoder) NewRune(q rune) (ret charm.State) {
 // waits until we've reached an equal indent then passes control to after;
 // treats everything other than a space (or newline) as unhandled.
 // assumes indent is at least 1.
-func (n *subDocDecoder) matchIndent() charm.State {
+func (n *tellDocDecoder) matchIndent() charm.State {
 	var spaces int
 	return charm.Self("matchIndent", func(matchIndent charm.State, q rune) (ret charm.State) {
 		switch q {
@@ -90,4 +95,35 @@ func (n *subDocDecoder) matchIndent() charm.State {
 		}
 		return
 	})
+}
+
+// a error, a mapping, or sequence
+type tellDoc any
+
+// read a tell document from a channel.
+// this posts the final document, or any error, to out;
+// returns a channel to put document runes into.
+func newAsyncDoc(out chan<- tellDoc, includeComments bool) chan<- rune {
+	in := make(channelReader)
+	go func() {
+		if content, e := files.ReadTellRunes(in, includeComments); e != nil {
+			out <- e
+		} else {
+			out <- content
+		}
+	}()
+	return in
+}
+
+// a rune reader that pulls from a channel.
+// uses a -1 rune to indicate eof.
+type channelReader chan rune
+
+func (c channelReader) ReadRune() (ret rune, size int, err error) {
+	if q, ok := <-c; q == -1 || !ok {
+		err = io.EOF
+	} else {
+		ret, size = q, utf8.RuneLen(q)
+	}
+	return
 }
