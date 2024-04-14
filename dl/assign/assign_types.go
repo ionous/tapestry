@@ -434,7 +434,7 @@ func (op *Arg_Slice) Repeats() bool {
 // Adapts an execute statement to an assignment.
 // Used internally for package shuttle.
 type FromExe struct {
-	Exe    rtti.Execute
+	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
@@ -1008,8 +1008,9 @@ func init() {
 		Name: "from_exe",
 		Lede: "from_exe",
 		Terms: []typeinfo.Term{{
-			Name: "exe",
-			Type: &rtti.Zt_Execute,
+			Name:    "exe",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Assignment,

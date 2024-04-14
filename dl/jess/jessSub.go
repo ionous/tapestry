@@ -1,13 +1,12 @@
 package jess
 
-import (
-	"git.sr.ht/~ionous/tapestry/rt"
-)
-
 func (op *SubAssignment) Match(input *InputState) (okay bool) {
-	return false
-}
-
-func (op *SubAssignment) Deduce() (ret rt.Assignment, err error) {
-	return nil, nil
+	if width := input.MatchWord(keywords.Colon); width > 0 {
+		if a, ok := input.Deassign(); ok {
+			*input = input.Skip(width)
+			op.Assignment = a
+			okay = true
+		}
+	}
+	return
 }

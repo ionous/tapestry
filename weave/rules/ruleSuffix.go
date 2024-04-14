@@ -16,14 +16,14 @@ const (
 	Begins                  // begins
 	Ends                    // end
 	//
-	numSuffixes = iota
+	NumSuffixes = iota
 )
 
 // return name sans any suffix, and any suffix the name had.
 // ( i believe names have been normalized by this point )
 func findSuffix(name string) (short string, suffix Suffix) {
-	short, suffix = name, numSuffixes // provisional
-	for i := 0; i < numSuffixes; i++ {
+	short, suffix = name, NumSuffixes // provisional
+	for i := 0; i < NumSuffixes; i++ {
 		n := Suffix(i)
 		if str := n.String(); strings.HasSuffix(name, str) {
 			// the suffix string doesnt have the padding space so check that manually

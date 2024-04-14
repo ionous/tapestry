@@ -547,6 +547,7 @@ func (op *DefineNamedGrammar_Slice) Repeats() bool {
 // Simple english like definitions of nouns, kinds, and their relatives.
 type DeclareStatement struct {
 	Text    rtti.TextEval
+	Assign  rtti.Assignment
 	Matches JessMatches
 	Markup  map[string]any
 }
@@ -1775,6 +1776,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
 	9796202271034753943:  (*DeclareStatement)(nil),     /* story_statement=Declare: */
+	11228697653156044284: (*DeclareStatement)(nil),     /* story_statement=Declare:assign: */
 	14790755516297707674: (*DefineAction)(nil),         /* story_statement=Define action:requires: */
 	5312053119535959994:  (*DefineAction)(nil),         /* story_statement=Define action:requires:provides: */
 	4679255645834546435:  (*DefineAspect)(nil),         /* story_statement=Define aspect:traits: */
@@ -2097,6 +2099,11 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "assign",
+			Label:    "assign",
+			Optional: true,
+			Type:     &rtti.Zt_Assignment,
 		}, {
 			Name:    "matches",
 			Label:   "matches",

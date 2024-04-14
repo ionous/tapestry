@@ -145,6 +145,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 			err = e
 		} else {
 			cat.processing.Push(d)
+			log.Printf("weaving %s...\n", d.name)
 			for z := weaver.Phase(0); z < weaver.NumPhases; z++ {
 				if e := d.runPhase(z); e != nil {
 					err = e

@@ -10,7 +10,7 @@ import (
 )
 
 func (op *FromExe) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
-	err = safe.Run(run, op.Exe)
+	err = safe.RunAll(run, op.Exe)
 	return // what should we return...?
 }
 func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {

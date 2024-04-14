@@ -3,19 +3,26 @@ package jess
 import (
 	"fmt"
 
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // represents a block of text;
 // holds individual sentences of the paragraph.
-type Paragraph []match.Span
+type Paragraph struct {
+	Spans  []match.Span
+	Assign rt.Assignment
+}
 
-func NewParagraph(str string) (ret Paragraph, err error) {
+func NewParagraph(str string, assign rt.Assignment) (ret Paragraph, err error) {
 	if spans, e := match.MakeSpans(str); e != nil {
 		err = fmt.Errorf("%w reading %s", e, str)
 	} else {
-		ret = spans
+		ret = Paragraph{
+			Spans:  spans,
+			Assign: assign,
+		}
 	}
 	return
 }
@@ -24,10 +31,11 @@ func NewParagraph(str string) (ret Paragraph, err error) {
 // returns true when it no longer needs to be called because everything is scheduled
 func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, err error) {
 	var retry int
-	unmatched := (*p)
+	unmatched := p.Spans
 	for i, n := range unmatched {
 		var best bestMatch
-		if matchSentence(Context{q, u}, z, n, &best) {
+		next := MakeInput(n, p.Assign)
+		if matchSentence(z, q, next, &best) {
 			// try to generate if matched.
 			if e := best.match.Generate(Context{q, u}); e != nil {
 				err = e
@@ -48,9 +56,9 @@ func (p *Paragraph) Generate(z weaver.Phase, q Query, u Scheduler) (okay bool, e
 	// no errors? update the unmatched list
 	if err == nil {
 		if retry > 0 {
-			(*p) = unmatched[:retry]
+			p.Spans = unmatched[:retry]
 		} else {
-			(*p) = nil
+			p.Spans = nil
 			okay = true
 		}
 	}

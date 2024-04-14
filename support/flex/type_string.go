@@ -9,17 +9,18 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[Invalid-0]
-	_ = x[Word-1]
-	_ = x[Comma-2]
-	_ = x[Stop-3]
-	_ = x[Comment-4]
-	_ = x[Quoted-5]
-	_ = x[TellBlock-6]
+	_ = x[Comma-1]
+	_ = x[Comment-2]
+	_ = x[Parenthetical-3]
+	_ = x[Quoted-4]
+	_ = x[Stop-5]
+	_ = x[String-6]
+	_ = x[Tell-7]
 }
 
-const _Type_name = "InvalidWordCommaStopCommentQuotedTellBlock"
+const _Type_name = "InvalidCommaCommentParentheticalQuotedStopStringTell"
 
-var _Type_index = [...]uint8{0, 7, 11, 16, 20, 27, 33, 42}
+var _Type_index = [...]uint8{0, 7, 12, 19, 32, 38, 42, 48, 52}
 
 func (i Type) String() string {
 	if i < 0 || i >= Type(len(_Type_index)-1) {

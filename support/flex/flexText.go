@@ -1,13 +1,17 @@
 package flex
 
 import (
+	"fmt"
 	"io"
+	"log"
 	"strings"
 	"unicode"
 	"unicode/utf8"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"github.com/ionous/tell/charm"
 )
@@ -20,7 +24,7 @@ func ReadText(runes io.RuneReader) (ret []story.StoryStatement, err error) {
 	if e := charm.Read(runes, run); e != nil {
 		err = e
 	} else {
-		ret = pt.Finalize()
+		ret, err = pt.Finalize()
 	}
 	return
 }
@@ -38,28 +42,43 @@ type PlainText struct {
 	words match.Span
 }
 
-func (pt *PlainText) Finalize() (ret []story.StoryStatement) {
-	pt.flush()
-	ret, pt.out = pt.out, nil
+func (pt *PlainText) Finalize() (ret []story.StoryStatement, err error) {
+	if e := pt.flushAll(); e != nil {
+		err = e
+	} else {
+		ret, pt.out = pt.out, nil
+	}
 	return
 }
 
 func (pt *PlainText) Decoded(p Pos, t Type, v any) (err error) {
 	switch t {
+	default:
+		log.Println("unhandled token", t, "at", p)
+		panic("unhandled token")
+
 	case Comma:
 		pt.flushComment()
 		pt.writeHash(",", match.Keywords.Comma)
 
-	case Stop:
-		w := v.(rune)
-		pt.flushComment()
-		pt.str.WriteRune(w)
-		pt.endSentence()
+	case Comment:
+		// fix? the tokenizer eats newlines;
+		// to accurately reconstruct the block we'd want them.
+		// and inline comments would be added to the declare
+		// not jumped into a new comment op.
+		str := v.(string)
+		if e := pt.flushPhrases(nil); e != nil {
+			err = e
+		} else {
+			pt.comment = append(pt.comment, str)
+		}
 
-	case Word:
+	case Parenthetical:
+		// fix: jess without flex needs to be able to match parens
+		// the "easiest" way would be to merge / move token parsing into match
 		str := v.(string)
 		pt.flushComment()
-		pt.writeStr(str)
+		pt.writeHash(str, match.Hash("()"))
 
 	case Quoted: // quoted string
 		// fix: to preserve the phrases we need to know what kind of string it was
@@ -81,21 +100,44 @@ func (pt *PlainText) Decoded(p Pos, t Type, v any) (err error) {
 			pt.endSentence()
 		}
 
-	case Comment:
-		// fix? the tokenizer eats newlines;
-		// to accurately reconstruct the block we'd want them.
-		// and inline comments would be added to the declare
-		// not jumped into a new comment op.
+	case Stop:
+		w := v.(rune)
+		pt.flushComment()
+		pt.str.WriteRune(w)
+		pt.endSentence()
+
+	case String:
 		str := v.(string)
-		pt.flushPhrases()
-		pt.comment = append(pt.comment, str)
+		pt.flushComment()
+		pt.writeStr(str)
+
+	case Tell:
+		switch msg := v.(type) {
+		case []any:
+			if exe, e := decodeExecute(msg); e != nil {
+				err = e
+			} else {
+				err = pt.flushPhrases(&assign.FromExe{
+					Exe: exe,
+				})
+			}
+		case map[string]any:
+			// for now requires, From*:
+			if a, e := decodeAssignment(msg); e != nil {
+				err = e
+			} else {
+				err = pt.flushPhrases(a)
+			}
+		default:
+			err = fmt.Errorf("can only handle tell sequences and maps, not %T", v)
+		}
 	}
 	return
 }
 
-func (pt *PlainText) flush() {
-	pt.flushPhrases()
+func (pt *PlainText) flushAll() (err error) {
 	pt.flushComment()
+	return pt.flushPhrases(nil)
 }
 
 func (pt *PlainText) endSentence() {
@@ -121,8 +163,12 @@ func (pt *PlainText) writeHash(str string, hash uint64) {
 
 // if there are pending phrases, flush them
 // ( ex. because a comment is about to be written )
-func (pt *PlainText) flushPhrases() {
-	if ks, ws := pt.phrases, pt.words; len(ks) > 0 || len(ws) > 0 {
+func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
+	if ks, ws := pt.phrases, pt.words; len(ks) == 0 && len(ws) == 0 {
+		if tail != nil {
+			err = fmt.Errorf("expected assignment to be part of a phrase")
+		}
+	} else {
 		pt.phrases, pt.words = nil, nil
 		// flush in progress words
 		if len(ws) > 0 {
@@ -135,8 +181,8 @@ func (pt *PlainText) flushPhrases() {
 		// write the declare statement
 		out := &story.DeclareStatement{
 			Text:    &literal.TextValue{Value: str},
+			Assign:  tail,
 			Matches: ks,
-			// TODO: trailing assignments
 		}
 		pt.out = append(pt.out, out)
 	}

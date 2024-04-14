@@ -1,6 +1,9 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/match"
+import (
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/match"
+)
 
 // the input state consists of a series of hashes
 // and chunks of the original string.
@@ -14,12 +17,13 @@ import "git.sr.ht/~ionous/tapestry/support/match"
 // that also might enable Word to become just the hash ( or hash + width )
 // so we can skip some string copies in flex
 type InputState struct {
-	ws    []match.Word
-	index int
+	ws     []match.Word
+	index  int
+	assign rt.Assignment
 }
 
-func MakeInput(ws []match.Word) InputState {
-	return InputState{ws, 0}
+func MakeInput(ws []match.Word, assign rt.Assignment) InputState {
+	return InputState{ws: ws, assign: assign}
 }
 
 func (in InputState) Len() int {
@@ -34,9 +38,21 @@ func (in InputState) Words() []match.Word {
 	return in.ws
 }
 
+func (in *InputState) Deassign() (ret rt.Assignment, okay bool) {
+	if a := in.assign; a != nil {
+		ret, okay = a, true
+		in.assign = nil
+	}
+	return
+}
+
 // return an input state that is the passed number of words after this one.
 func (in InputState) Skip(skip int) InputState {
-	return InputState{in.ws[skip:], in.index + skip}
+	return InputState{
+		ws:     in.ws[skip:],
+		index:  in.index + skip,
+		assign: in.assign,
+	}
 }
 
 // return the specified number of words from the input as a string

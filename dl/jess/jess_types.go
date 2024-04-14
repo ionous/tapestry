@@ -1755,8 +1755,8 @@ func (op *AdditionalText_Slice) Repeats() bool {
 // matches rule prefixes
 // before, instead of, when, after, report
 type RulePrefix struct {
-	Matched string
-	Markup  map[string]any
+	PrefixValue PrefixValue
+	Markup      map[string]any
 }
 
 // rule_prefix, a type of flow.
@@ -1793,8 +1793,8 @@ func (op *RulePrefix_Slice) Repeats() bool {
 // and "begins", "ends" ( for domain rules )
 // with an optional leading comma
 type RuleSuffix struct {
-	Matched string
-	Markup  map[string]any
+	SuffixValue SuffixValue
+	Markup      map[string]any
 }
 
 // rule_suffix, a type of flow.
@@ -1828,77 +1828,40 @@ func (op *RuleSuffix_Slice) Repeats() bool {
 
 // specific names can follow rule declarations
 // "( this is the witness light rule )"
-type ShortRuleName struct {
-	Prefix  string
+type RuleName struct {
+	Prefix  bool
+	Article string
 	Matched string
-	Suffix  string
+	Suffix  bool
 	Markup  map[string]any
 }
 
-// short_rule_name, a type of flow.
-var Zt_ShortRuleName typeinfo.Flow
+// rule_name, a type of flow.
+var Zt_RuleName typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*ShortRuleName) TypeInfo() typeinfo.T {
-	return &Zt_ShortRuleName
+func (*RuleName) TypeInfo() typeinfo.T {
+	return &Zt_RuleName
 }
 
 // implements typeinfo.Markup
-func (op *ShortRuleName) GetMarkup(ensure bool) map[string]any {
+func (op *RuleName) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// holds a slice of type short_rule_name
-type ShortRuleName_Slice []ShortRuleName
+// holds a slice of type rule_name
+type RuleName_Slice []RuleName
 
 // implements typeinfo.Instance
-func (*ShortRuleName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ShortRuleName
+func (*RuleName_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RuleName
 }
 
 // implements typeinfo.Repeats
-func (op *ShortRuleName_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// for people who are lazy typists
-// "( witness light )"
-type LongRuleName struct {
-	Prefix  string
-	Matched string
-	Suffix  string
-	Markup  map[string]any
-}
-
-// long_rule_name, a type of flow.
-var Zt_LongRuleName typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*LongRuleName) TypeInfo() typeinfo.T {
-	return &Zt_LongRuleName
-}
-
-// implements typeinfo.Markup
-func (op *LongRuleName) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// holds a slice of type long_rule_name
-type LongRuleName_Slice []LongRuleName
-
-// implements typeinfo.Instance
-func (*LongRuleName_Slice) TypeInfo() typeinfo.T {
-	return &Zt_LongRuleName
-}
-
-// implements typeinfo.Repeats
-func (op *LongRuleName_Slice) Repeats() bool {
+func (op *RuleName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1946,10 +1909,10 @@ func (op *SubAssignment_Slice) Repeats() bool {
 // matches pattern rule definitions
 type TimedRule struct {
 	RulePrefix    RulePrefix
-	Pattern       string
+	Pattern       Kind
+	Target        *Noun
 	RuleSuffix    *RuleSuffix
-	ShortRuleName *ShortRuleName
-	LongRuleName  *LongRuleName
+	RuleName      string
 	SubAssignment SubAssignment
 	Markup        map[string]any
 }
@@ -2395,8 +2358,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_AdditionalText,
 	&Zt_RulePrefix,
 	&Zt_RuleSuffix,
-	&Zt_ShortRuleName,
-	&Zt_LongRuleName,
+	&Zt_RuleName,
 	&Zt_SubAssignment,
 	&Zt_TimedRule,
 	&Zt_Understand,
@@ -2486,7 +2448,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	5842644028483118736:  (*Linking)(nil),              /* Linking nowhere:name: */
 	6234445843544605613:  (*Linking)(nil),              /* Linking nowhere:noun: */
 	215166621636789820:   (*Linking)(nil),              /* Linking nowhere:noun:name: */
-	996591155184714935:   (*LongRuleName)(nil),         /* LongRuleName prefix:matched:suffix: */
 	14338407882822574093: (*MapConnections)(nil),       /* MapConnections through:doors:additionalLinks:are:room: */
 	13548965473900735969: (*MapConnections)(nil),       /* MapConnections through:doors:are:room: */
 	8340425706814700105:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are: */
@@ -2523,9 +2484,16 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6626169867101049892:  (*QuotedText)(nil),           /* QuotedText matched: */
 	15490383194906526516: (*QuotedTexts)(nil),          /* QuotedTexts quotedText: */
 	18124669431880345752: (*QuotedTexts)(nil),          /* QuotedTexts quotedText:additionalText: */
-	15085878383029215639: (*RulePrefix)(nil),           /* RulePrefix matched: */
-	17835840789489690712: (*RuleSuffix)(nil),           /* RuleSuffix matched: */
-	13463032592273231065: (*ShortRuleName)(nil),        /* ShortRuleName prefix:matched:suffix: */
+	13648613004771847774: (*RuleName)(nil),             /* RuleName article:matched: */
+	9590534200503230547:  (*RuleName)(nil),             /* RuleName article:matched:suffix: */
+	10604149086097886046: (*RuleName)(nil),             /* RuleName matched: */
+	1396372580611190611:  (*RuleName)(nil),             /* RuleName matched:suffix: */
+	10185222741034633300: (*RuleName)(nil),             /* RuleName prefix:article:matched: */
+	3408594760617413485:  (*RuleName)(nil),             /* RuleName prefix:article:matched:suffix: */
+	8153362324797089296:  (*RuleName)(nil),             /* RuleName prefix:matched: */
+	6292556720924657065:  (*RuleName)(nil),             /* RuleName prefix:matched:suffix: */
+	6834190963007140391:  (*RulePrefix)(nil),           /* RulePrefix */
+	9987385698008157446:  (*RuleSuffix)(nil),           /* RuleSuffix */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
 	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
@@ -2543,14 +2511,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7763015042528813017:  (*SingleValue)(nil),          /* SingleValue quotedText:noun: */
 	1174375068044253639:  (*SingleValue)(nil),          /* SingleValue quotedText:noun:kind: */
 	3161285017754785721:  (*SubAssignment)(nil),        /* SubAssignment assignment: */
-	10421343431393308082: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:longRuleName:subAssignment: */
-	7824120079836653331:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:longRuleName:subAssignment: */
-	3793465203502183054:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:shortRuleName:longRuleName:subAssignment: */
-	8814445649389356005:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:shortRuleName:subAssignment: */
+	8641297100372239080:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleName:subAssignment: */
+	1656499122350834261:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
 	11245891509928755726: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */
-	12596626803438167975: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:shortRuleName:longRuleName:subAssignment: */
-	10559399263932399210: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:shortRuleName:subAssignment: */
 	8025626927280177953:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:subAssignment: */
+	4350630926229098963:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleName:subAssignment: */
+	10719807371802907896: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleSuffix:ruleName:subAssignment: */
+	10614078949980130993: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleSuffix:subAssignment: */
+	7967826310862149340:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:subAssignment: */
 	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
@@ -3647,9 +3615,9 @@ func init() {
 		Name: "rule_prefix",
 		Lede: "rule_prefix",
 		Terms: []typeinfo.Term{{
-			Name:  "matched",
-			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Name:    "prefix_value",
+			Label:   "prefix_value",
+			Private: true,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"matches rule prefixes", "before, instead of, when, after, report"},
@@ -3659,64 +3627,45 @@ func init() {
 		Name: "rule_suffix",
 		Lede: "rule_suffix",
 		Terms: []typeinfo.Term{{
-			Name:  "matched",
-			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Name:    "suffix_value",
+			Label:   "suffix_value",
+			Private: true,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"controls what to do after matching a rule", "matches \"then continue\", \"then stop\", \"then jump\",", "and \"begins\", \"ends\" ( for domain rules )", "with an optional leading comma"},
 		},
 	}
-	Zt_ShortRuleName = typeinfo.Flow{
-		Name: "short_rule_name",
-		Lede: "short_rule_name",
+	Zt_RuleName = typeinfo.Flow{
+		Name: "rule_name",
+		Lede: "rule_name",
 		Terms: []typeinfo.Term{{
-			Name:  "prefix",
-			Label: "prefix",
+			Name:     "prefix",
+			Label:    "prefix",
+			Optional: true,
 			Markup: map[string]any{
 				"comment": "\"this is the\"",
 			},
-			Type: &prim.Zt_Text,
+			Type: &prim.Zt_Bool,
+		}, {
+			Name:     "article",
+			Label:    "article",
+			Optional: true,
+			Type:     &prim.Zt_Text,
 		}, {
 			Name:  "matched",
 			Label: "matched",
 			Type:  &prim.Zt_Text,
 		}, {
-			Name:  "suffix",
-			Label: "suffix",
+			Name:     "suffix",
+			Label:    "suffix",
+			Optional: true,
 			Markup: map[string]any{
 				"comment": "the word \"rule\"",
 			},
-			Type: &prim.Zt_Text,
+			Type: &prim.Zt_Bool,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"specific names can follow rule declarations", "\"( this is the witness light rule )\""},
-		},
-	}
-	Zt_LongRuleName = typeinfo.Flow{
-		Name: "long_rule_name",
-		Lede: "long_rule_name",
-		Terms: []typeinfo.Term{{
-			Name:  "prefix",
-			Label: "prefix",
-			Markup: map[string]any{
-				"comment": "\"this is the\"",
-			},
-			Type: &prim.Zt_Text,
-		}, {
-			Name:  "matched",
-			Label: "matched",
-			Type:  &prim.Zt_Text,
-		}, {
-			Name:  "suffix",
-			Label: "suffix",
-			Markup: map[string]any{
-				"comment": "the word \"rule\"",
-			},
-			Type: &prim.Zt_Text,
-		}},
-		Markup: map[string]any{
-			"comment": []interface{}{"for people who are lazy typists", "\"( witness light )\""},
 		},
 	}
 	Zt_SubAssignment = typeinfo.Flow{
@@ -3742,30 +3691,24 @@ func init() {
 			Name:  "pattern",
 			Label: "pattern",
 			Markup: map[string]any{
-				"comment": []interface{}{"the pattern this rule targets.", "the pattern must exist for this phrase to generate successfully."},
+				"comment": []interface{}{"the pattern this rule targets.", "the pattern must exist for this phrase to generate successfully.", "ex. \"instead of traveling\""},
 			},
-			Type: &prim.Zt_Text,
+			Type: &Zt_Kind,
+		}, {
+			Name:     "target",
+			Label:    "target",
+			Optional: true,
+			Type:     &Zt_Noun,
 		}, {
 			Name:     "rule_suffix",
 			Label:    "rule_suffix",
 			Optional: true,
 			Type:     &Zt_RuleSuffix,
 		}, {
-			Name:     "short_rule_name",
-			Label:    "short_rule_name",
+			Name:     "rule_name",
+			Label:    "rule_name",
 			Optional: true,
-			Markup: map[string]any{
-				"comment": []interface{}{"either short or long rule names can match", "or neither."},
-			},
-			Type: &Zt_ShortRuleName,
-		}, {
-			Name:     "long_rule_name",
-			Label:    "long_rule_name",
-			Optional: true,
-			Markup: map[string]any{
-				"comment": "if not a short rule name, maybe the longer form.",
-			},
-			Type: &Zt_LongRuleName,
+			Type:     &prim.Zt_Text,
 		}, {
 			Name:  "sub_assignment",
 			Label: "sub_assignment",

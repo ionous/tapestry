@@ -70,7 +70,7 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 
 			// try the phrase before the word "of"
 			// the whole string must be consumed
-			property := MakeInput(next.CutSpan(index))
+			property := MakeInput(next.CutSpan(index), nil)
 			if op.Property.Match(q, namedKind(op.NamedNoun), &property) && //
 				property.Len() == 0 {
 				*input, okay = rest, true

@@ -629,9 +629,9 @@ Spec:with group:
       Spec:with flow:
       - "rule_prefix"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term:private:
+          - "prefix_value"
+          - true
 
     - # controls what to do after matching a rule
       # matches "then continue", "then stop", "then jump",
@@ -640,43 +640,32 @@ Spec:with group:
       Spec:with flow:
       - "rule_suffix"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term:private:
+          - "suffix_value"
+          - true
 
     - # specific names can follow rule declarations
       # "( this is the witness light rule )"
       Spec:with flow:
-      - "short_rule_name"
+      - "rule_name"
       - Flow uses:
         - # "this is the"
-          Term:type:
+          Term:type:optional:
           - "prefix"
+          - "bool"
+          - true
+        - Term:type:optional:
+          - "article"
           - "text"
+          - true
         - Term:type:
           - "matched"
           - "text"
         - # the word "rule"
-          Term:type:
+          Term:type:optional:
           - "suffix"
-          - "text"
-
-    - # for people who are lazy typists
-      # "( witness light )"
-      Spec:with flow:
-      - "long_rule_name"
-      - Flow uses:
-        - # "this is the"
-          Term:type:
-          - "prefix"
-          - "text"
-        - Term:type:
-          - "matched"
-          - "text"
-        - # the word "rule"
-          Term:type:
-          - "suffix"
-          - "text"
+          - "bool"
+          - true
 
     - # phrases can break out of plain text and into structured tell docs.
       # the documents start with a colon (:) followed by a newline
@@ -697,20 +686,20 @@ Spec:with group:
         - Term: "rule_prefix"
         - # the pattern this rule targets.
           # the pattern must exist for this phrase to generate successfully.
+          # ex. "instead of traveling"
           Term:type:
           - "pattern"
-          - "text"
+          - "kind"
+        - Term:type:optional:
+          - "target"
+          - "noun"
+          - true
         - Term:optional:
           - "rule_suffix"
           - true
-        - # either short or long rule names can match
-          # or neither.
-          Term:optional:
-          - "short_rule_name"
-          - true
-        - # if not a short rule name, maybe the longer form.
-          Term:optional:
-          - "long_rule_name"
+        - Term:type:optional:
+          - "rule_name"
+          - "text"
           - true
         - Term: "sub_assignment"
 

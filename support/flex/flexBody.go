@@ -4,7 +4,9 @@ import (
 	"errors"
 	"io"
 
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/files"
 )
 
@@ -76,6 +78,30 @@ func readTellSection(in io.RuneReader) (ret []any, err error) {
 		default:
 			err = errors.New("expected one or more tell statements")
 		}
+	}
+	return
+}
+
+// decode execute
+func decodeExecute(msgs []any) (ret []rt.Execute, err error) {
+	var slots rtti.Execute_Slots
+	dec := story.NewDecoder() // fix:  reusable?
+	if e := dec.Decode(&slots, msgs); e != nil {
+		err = e
+	} else {
+		ret = slots
+	}
+	return
+}
+
+// decode execute
+func decodeAssignment(msg map[string]any) (ret rt.Assignment, err error) {
+	var out rtti.Assignment_Slot
+	dec := story.NewDecoder() // fix:  reusable?
+	if e := dec.Decode(&out, msg); e != nil {
+		err = e
+	} else {
+		ret = out.Value
 	}
 	return
 }

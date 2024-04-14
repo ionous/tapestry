@@ -17,15 +17,19 @@ func (s Span) Equals(ws Span) (okay bool) {
 	return
 }
 
-func (s Span) String() string {
+func JoinWords(ws []Word) string {
 	var b strings.Builder
-	for i, w := range s {
+	for i, w := range ws {
 		if i > 0 {
 			b.WriteRune(' ')
 		}
 		b.WriteString(w.String())
 	}
 	return b.String()
+}
+
+func (s Span) String() string {
+	return JoinWords(s)
 }
 
 func HasPrefix(s, prefix []Word) (okay bool) {

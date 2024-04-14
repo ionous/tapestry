@@ -62,14 +62,18 @@ func (op *Words) String() string {
 
 // make customizable?
 var keywords = struct {
-	And, Are, As, Called, Comma, Has, Have,
+	And, Are, As, Called,
+	Colon, Comma,
+	Has, Have,
 	Is, Nowhere, Of, Or, Quote,
+	Rule,
 	Through, Understand, Usually, You uint64
 }{
 	And:    match.Hash("and"),
 	Are:    match.Hash("are"),
 	As:     match.Hash("as"),
 	Called: match.Hash("called"),
+	Colon:  match.Hash(`:`),
 	Comma:  match.Hash(","),
 	Has:    match.Hash("has"),
 	Have:   match.Hash("have"),
@@ -79,6 +83,7 @@ var keywords = struct {
 	Of:      match.Hash("of"),
 	Or:      match.Hash("or"),
 	Quote:   match.Hash(`"`),
+	Rule:    match.Hash("rule"),
 	//
 	Through:    match.Hash("through"),
 	Understand: match.Hash("understand"),

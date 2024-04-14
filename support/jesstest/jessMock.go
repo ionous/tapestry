@@ -46,7 +46,7 @@ func (m *Mock) Generate(paragraph string) (ret []string, err error) {
 }
 
 func (m *Mock) generate(paragraph string) (err error) {
-	if p, e := jess.NewParagraph(paragraph); e != nil {
+	if p, e := jess.NewParagraph(paragraph, nil); e != nil {
 		err = e
 	} else {
 		for z := weaver.Phase(0); z < weaver.NumPhases; z++ {

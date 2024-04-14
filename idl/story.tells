@@ -204,6 +204,10 @@ Spec:with group:
                     - "_"
                     - "text"
                     - "text_eval"
+                - Term:type:optional:
+                    - "assign"
+                    - "assignment"
+                    - true
                 - Term:type:private:
                     - "matches"
                     - "jess_matches"

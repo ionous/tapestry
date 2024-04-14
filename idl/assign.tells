@@ -155,10 +155,11 @@ Spec:with group:
           - "assignment"
           - "internal"
           - Flow uses:
-              - Term:name:type:
+              - Term:name:type:repeats:
                   - "_"
                   - "exe"
                   - "execute"
+                  - true
       - # Calculates a boolean value.
         Spec:slots:with flow:
           - "from_bool"

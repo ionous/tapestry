@@ -18,7 +18,7 @@ const (
 	After                 // after
 	Report                // report
 	//
-	numPrefixes = iota
+	NumPrefixes = iota
 )
 
 // with the theory that sqlite sorts asc by default
@@ -58,7 +58,7 @@ func (p Prefix) stopJump() (stop bool, jump rt.Jump) {
 // return name sans any prefix, and any prefix the name had.
 func findPrefix(name string) (short string, prefix Prefix) {
 	short, prefix = name, When // provisional
-	for i := 0; i < numPrefixes; i++ {
+	for i := 0; i < NumPrefixes; i++ {
 		p := Prefix(i).String()
 		if strings.HasPrefix(name, p+" ") {
 			short = name[len(p)+1:]

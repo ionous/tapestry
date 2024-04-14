@@ -110,7 +110,7 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 				}
 			}
 			if err == nil {
-				if e := weaveRule(cat, w, run, rule, nil, op.Exe); e != nil {
+				if e := weaveRule(cat, run, rule, nil, op.Exe); e != nil {
 					err = errutil.Fmt("%w weaving a rule for a pattern", e)
 				}
 			}
@@ -137,7 +137,7 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 				Is: core.C_Comparison_EqualTo,
 				B:  &literal.TextValue{Value: noun.String()},
 			}
-			if e := weaveRule(cat, w, run, rule, filter, op.Exe); e != nil {
+			if e := weaveRule(cat, run, rule, filter, op.Exe); e != nil {
 				err = errutil.Fmt("%w weaving a rule for a noun", e)
 			}
 		}
@@ -173,7 +173,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 					Kind: k,
 				}
 			}
-			if e := weaveRule(cat, w, run, rule, filter, op.Exe); e != nil {
+			if e := weaveRule(cat, run, rule, filter, op.Exe); e != nil {
 				err = errutil.Fmt("%w weaving a rule for a kind", e)
 			}
 		}
@@ -188,7 +188,7 @@ type ruleKind struct {
 	exactly bool
 }
 
-func weaveRule(cat *weave.Catalog, w weaver.Weaves, run rt.Runtime, rule rules.RuleName, filter rt.BoolEval, exe []rt.Execute) (err error) {
+func weaveRule(cat *weave.Catalog, run rt.Runtime, rule rules.RuleName, filter rt.BoolEval, exe []rt.Execute) (err error) {
 	if info, e := rule.GetRuleInfo(run); e != nil {
 		err = e
 	} else if k, e := run.GetKindByName(info.Name); e != nil {
@@ -246,6 +246,8 @@ func weaveRule(cat *weave.Catalog, w weaver.Weaves, run rt.Runtime, rule rules.R
 			Stop:    info.Stop,
 			Jump:    info.Jump,
 		})
+		// tbd: is scheduling needed here?
+		// callers are in the VerbPhrase
 		err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
 			return w.ExtendPattern(pb.Pattern)
 		})

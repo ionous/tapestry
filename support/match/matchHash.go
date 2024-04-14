@@ -11,8 +11,8 @@ import (
 )
 
 var Keywords = struct {
-	Comma, QuotedText uint64
-}{Hash(`,`), Hash(`"`)}
+	Comma, Colon, QuotedText uint64
+}{Hash(`,`), Hash(`:`), Hash(`"`)}
 
 // transform a string into a slice of hashes.
 // . lowercases and trims the string ( using ToLower since matching depends on english span and phrasing anyway )
@@ -131,6 +131,12 @@ Loop:
 		case r == ',':
 			flushWord(wordStart, i, sumReset(w))
 			flushWord(i, i+1, Keywords.Comma)
+			wordStart = -1
+
+		// colons too
+		case r == ':':
+			flushWord(wordStart, i, sumReset(w))
+			flushWord(i, i+1, Keywords.Colon)
 			wordStart = -1
 
 		case r != '-' && unicode.IsPunct(r):

@@ -12,7 +12,7 @@ import (
 
 // count the number of sections in some sample data.
 func TestSectionCount(t *testing.T) {
-	expect := []int{0, 2, 8, 12}
+	expect := []int{0, 2, 8, 13}
 	var got []int
 	// break the text into lines
 	in := strings.NewReader(testOne)
@@ -34,9 +34,19 @@ func TestSectionCount(t *testing.T) {
 	}
 }
 
-// fix? doesnt compare against a particular result
-// because some things have line numbers, and some dont
-// compare against tell maps ( instead of parsed stories? )
+// fix? binding to story directly is... direct.
+// it might be nicer for flex to accumulate alternating sections of
+// tell blocks and flex tokens ( or matches )
+// and use something else to walk those to generate the story.
+// certainly, i think that'd be nicer for writing tests.
+// the first step would be replacing match with flex tokens
+// ( would be nice to fix `tap gen` directory handling
+// | then move all things jess to tapestry/jess/...
+// | and match would be jess/match or jess/tokens )
+// the Assign of DeclareStatement would be part of the cached tokens then
+// and there'd be nicer handling of partial matches in jess
+// all tokens could implement Hash() to make Word->Token easier;
+// would need some sort of filter for comments
 func TestDoc(t *testing.T) {
 	if out, e := flex.ReadStory(strings.NewReader(testTwo)); e != nil {
 		t.Fatal(e)
@@ -61,7 +71,8 @@ Define scene:requires:with:
 ---
 # Second Plain Text:
 The title of the story is "The Cloak of Darkness."
-The story has the headline "An example story."
+The story has the headline:
+  FromText: "An example story."
 ---
 # Second Structured:
 Define rule:noun:do:

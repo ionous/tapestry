@@ -16,24 +16,28 @@ import (
 func TestTokens(t *testing.T) {
 	tests := []any{
 		// token, string to parse, result:
-		/*1*/ flex.Word, `23`, "23",
-		/*2*/ flex.Word, `hello`, "hello",
+		/*1*/ flex.String, `23`, "23",
+		/*2*/ flex.String, `hello`, "hello",
 		/*3*/ flex.Stop, `.`, '.',
 		/*4*/ flex.Stop, `!`, '!',
 		/*5*/ flex.Comma, `,`, ',',
 
+		flex.Parenthetical,
+		`( hello world )`,
+		`hello world`,
+
 		// ----------
-		/*6*/ flex.Quoted,
+		flex.Quoted,
 		`"hello\\world"`,
 		`hello\world`,
 
 		// ----------
-		/*7*/ flex.Quoted,
+		flex.Quoted,
 		"`" + `hello\\world` + "`",
 		`hello\\world`,
 
 		// -----
-		/*8*/ flex.Comment, "# comment", "comment",
+		flex.Comment, "# comment", "comment",
 		// 		/*9*/ flex.Key, "-", "",
 		// 		/*10*/ flex.Key, "hello:world:", "hello:world:",
 		// 		// make sure dash numbers are treated as negative numbers
