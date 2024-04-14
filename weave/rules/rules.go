@@ -25,43 +25,61 @@ type RuleInfo struct {
 	ExcludesPlayer bool // true if the rule should apply to all actors
 }
 
+// results of reading author specified pairs of pattern name and rule name.
+// for example ("before someone jumping", "people jump for joy")
 type RuleName struct {
-	Short, Long, Label string
-	Prefix             Prefix
-	Suffix             Suffix
-	ExcludesPlayer     bool // true if the rule should apply to all actors
+	// the name of the pattern without any prefix or suffix
+	// ex. "jumping"
+	Short string
+	// the name of the pattern
+	// ( with timing prefix, but without actor prefix and any suffix )
+	// ex. "before jumping"
+	Long string
+	// the name of the rule as specified by the author
+	// ex. "the standard jumping action"
+	Label          string
+	Prefix         Prefix
+	Suffix         Suffix
+	ExcludesPlayer bool // true if the rule should apply to all actors
 }
 
-func (n RuleName) IsDomainEvent() bool {
-	return n.Suffix == Begins || n.Suffix == Ends
-}
-
+//	func (n RuleName) IsDomainEvent() bool {
+//		return n.Suffix == Begins || n.Suffix == Ends
+//
+// // }
+//
+//	if rule.IsDomainEvent() {
+//					// are we in the domain?
+//					domainName, eventName := rule.Short, rule.EventName()
+//					if v, e := run.GetField(meta.Domain, domainName); e == nil && v.Bool() {
+//						// cheat by adding the pattern as if it were in the root domain
+//						// regardless of where we are.
+//						pb := mdl.NewPatternBuilder(eventName)
+//						err = w.AddPattern(pb.Pattern)
+//					}
+//				}
+//
 // instead and report are grouped with before and after respectively
 func (n RuleName) EventName() (ret string) {
-	if n.IsDomainEvent() {
-		var s strings.Builder
-		s.WriteString(n.Short)
-		s.WriteRune(' ')
-		s.WriteString(n.Suffix.String())
-		ret = s.String()
-	} else {
-		switch n.Prefix {
-		case When:
-			ret = n.Short
-		case Instead:
-			ret = event.BeforePhase.PatternName(n.Short)
-		case Report:
-			ret = event.AfterPhase.PatternName(n.Short)
-		default:
-			ret = n.Long
-		}
+	switch n.Prefix {
+	case When:
+		ret = n.Short
+	case Instead:
+		ret = event.BeforePhase.PatternName(n.Short)
+	case Report:
+		ret = event.AfterPhase.PatternName(n.Short)
+	default:
+		ret = n.Long
 	}
 	return
 }
 
-func ReadPhrase(phrase, label string) (ret RuleName) {
-	phrase, label = inflect.Normalize(phrase), inflect.Normalize(label)
-	name, suffix := findSuffix(phrase)
+// pattern name as specified
+// optional rule name as specified
+// ex. Define rule:named:do: ["activating", "the standard activating action" ]
+func ReadPhrase(patternSpec, ruleSpec string) (ret RuleName) {
+	patternSpec = inflect.Normalize(patternSpec)
+	name, suffix := findSuffix(patternSpec)
 	// return name sans any prefix, and any prefix the name had.
 	short, prefix := findPrefix(name)
 	// fix: probably want some sort of "try prefix/suffix" that attempts to chop the parts
@@ -80,34 +98,25 @@ func ReadPhrase(phrase, label string) (ret RuleName) {
 	return RuleName{
 		Short:  short,
 		Long:   name,
-		Label:  label,
+		Label:  inflect.Normalize(ruleSpec),
 		Prefix: prefix,
 		Suffix: suffix,
 	}
 }
 
-func (n RuleName) GetRuleInfo(ks g.Kinds) (ret RuleInfo, err error) {
-	if n.IsDomainEvent() {
-		ret, err = n.ruleForDomain()
-	} else {
-		ret, err = n.ruleForPattern(ks)
-	}
-	return
-}
-
-func (n RuleName) ruleForDomain() (ret RuleInfo, err error) {
-	ret = RuleInfo{
-		Name: n.EventName(),
-		Jump: rt.JumpLater,
-	}
-	return
-}
+// func (n RuleName) ruleForDomain() (ret RuleInfo, err error) {
+// 	ret = RuleInfo{
+// 		Name: n.EventName(),
+// 		Jump: rt.JumpLater,
+// 	}
+// 	return
+// }
 
 // match an author specified pattern reference
 // to various naming conventions and pattern definitions
 // to determine the intended pattern name, rank, and termination behavior.
 // for example: "instead of x", "before x", "after x", "report x".
-func (n RuleName) ruleForPattern(ks g.Kinds) (ret RuleInfo, err error) {
+func (n RuleName) GetRuleInfo(ks g.Kinds) (ret RuleInfo, err error) {
 	if k, e := ks.GetKindByName(n.Short); e != nil {
 		err = e // ^ the base pattern
 	} else {

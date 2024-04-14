@@ -15,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
-	"github.com/ionous/errutil"
 )
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
@@ -99,20 +98,11 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			rule := rules.ReadPhrase(phrase.String(), label.String())
-			if rule.IsDomainEvent() {
-				// are we in the domain?
-				domainName, eventName := rule.Short, rule.EventName()
-				if v, e := run.GetField(meta.Domain, domainName); e == nil && v.Bool() {
-					// cheat by adding the pattern as if it were in the root domain
-					// regardless of where we are.
-					pb := mdl.NewPatternBuilder(eventName)
-					err = w.AddPattern(pb.Pattern)
-				}
-			}
-			if err == nil {
-				if e := weaveRule(cat, run, rule, nil, op.Exe); e != nil {
-					err = errutil.Fmt("%w weaving a rule for a pattern", e)
-				}
+
+			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
+				err = e
+			} else {
+				err = cat.WeaveRule(info, nil, op.Exe)
 			}
 		}
 		return
@@ -129,16 +119,17 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
-		} else if rule := rules.ReadPhrase(phrase.String(), label.String()); rule.IsDomainEvent() {
-			err = errutil.New("can't target nouns for domain events")
 		} else {
+			rule := rules.ReadPhrase(phrase.String(), label.String())
 			filter := &core.CompareText{
 				A:  core.Variable(event.Object, event.Target.String()),
 				Is: core.C_Comparison_EqualTo,
 				B:  &literal.TextValue{Value: noun.String()},
 			}
-			if e := weaveRule(cat, run, rule, filter, op.Exe); e != nil {
-				err = errutil.Fmt("%w weaving a rule for a noun", e)
+			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
+				err = e
+			} else {
+				err = cat.WeaveRule(info, filter, op.Exe)
 			}
 		}
 		return
@@ -159,9 +150,8 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
-		} else if rule := rules.ReadPhrase(phrase.String(), label.String()); rule.IsDomainEvent() {
-			err = errutil.New("can't target kinds for domain events")
 		} else {
+			rule := rules.ReadPhrase(phrase.String(), label.String())
 			k := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
 			var filter rt.BoolEval
 			if exact.Bool() {
@@ -173,8 +163,10 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 					Kind: k,
 				}
 			}
-			if e := weaveRule(cat, run, rule, filter, op.Exe); e != nil {
-				err = errutil.Fmt("%w weaving a rule for a kind", e)
+			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
+				err = e
+			} else {
+				err = cat.WeaveRule(info, filter, op.Exe)
 			}
 		}
 		return
@@ -186,71 +178,4 @@ type ruleNoun string
 type ruleKind struct {
 	name    string
 	exactly bool
-}
-
-func weaveRule(cat *weave.Catalog, run rt.Runtime, rule rules.RuleName, filter rt.BoolEval, exe []rt.Execute) (err error) {
-	if info, e := rule.GetRuleInfo(run); e != nil {
-		err = e
-	} else if k, e := run.GetKindByName(info.Name); e != nil {
-		err = errutil.Fmt("finding base pattern %q %q %s", info.Name, info.Label, e)
-	} else if canFilterActor := rules.CanFilterActor(k); info.ExcludesPlayer && !canFilterActor {
-		rules.CanFilterActor(k)
-		err = errutil.Fmt("only actor events can filter by actor for pattern %q rule %q", info.Name, info.Label)
-	} else {
-		updates := rules.DoesUpdate(exe)
-		// term := rules.DoesTerminate(exe)
-
-		label := info.Label
-		if len(label) == 0 {
-			label = rules.FindNamedResponse(exe)
-		}
-
-		// add additional filters:
-		filters := make([]rt.BoolEval, 0, 3)
-		if filter != nil {
-			filters = append(filters, filter)
-		}
-		// by default: all event handlers are filtered to the player and the innermost target.
-		eventLike := k.Implements(kindsOf.Action.String())
-		if eventLike {
-			// if the focus of the event involves an actor;
-			// then we automatically filter for the player
-			if !info.ExcludesPlayer {
-				filters = append(filters,
-					&core.CompareText{
-						A:  core.Variable(event.Actor),
-						Is: core.C_Comparison_EqualTo,
-						B:  T("self"),
-					})
-			}
-			// filter to the innermost target.
-			filters = append(filters,
-				&core.CompareText{
-					A:  core.Variable(event.Object, event.CurrentTarget.String()),
-					Is: core.C_Comparison_EqualTo,
-					B:  core.Variable(event.Object, event.Target.String()),
-				})
-		}
-		if len(filters) > 0 {
-			exe = []rt.Execute{&core.ChooseBranch{
-				If:  &core.AllTrue{Test: filters},
-				Exe: exe,
-			}}
-		}
-		//
-		pb := mdl.NewPatternBuilder(info.Name)
-		pb.AppendRule(info.Rank, rt.Rule{
-			Name:    label,
-			Exe:     exe,
-			Updates: updates,
-			Stop:    info.Stop,
-			Jump:    info.Jump,
-		})
-		// tbd: is scheduling needed here?
-		// callers are in the VerbPhrase
-		err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
-			return w.ExtendPattern(pb.Pattern)
-		})
-	}
-	return
 }
