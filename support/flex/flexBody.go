@@ -47,21 +47,23 @@ func (a *accum) readText(in io.RuneReader) (err error) {
 // could be of any uniform type ( same with plain text )
 // some sort of callback collector instead of specifically story/jess.
 func decodeStorySection(in io.RuneReader) (ret []story.StoryStatement, err error) {
-	var slots story.StoryStatement_Slots
-	dec := story.NewDecoder() // fix:  reusable?
 	if msg, e := readTellSection(in); e != nil {
 		err = e
-	} else if e := dec.Decode(&slots, msg); e != nil {
-		err = e
 	} else {
-		ret = slots
+		var slots story.StoryStatement_Slots
+		dec := story.NewDecoder() // fix:  reusable?
+		if e := dec.Decode(&slots, msg); e != nil {
+			err = e
+		} else {
+			ret = slots
+		}
 	}
 	return
 }
 
 // read one or more values; presumably mappings.
 func readTellSection(in io.RuneReader) (ret []any, err error) {
-	if d, e := files.ReadTellRunes(in); e != nil {
+	if d, e := files.ReadTellRunes(in, true); e != nil {
 		err = e
 	} else {
 		switch content := d.(type) {

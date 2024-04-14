@@ -8,6 +8,8 @@ import (
 	"unicode"
 
 	"github.com/ionous/tell/collect"
+	"github.com/ionous/tell/collect/stdmap"
+	"github.com/ionous/tell/collect/stdseq"
 	"github.com/ionous/tell/decode"
 	"github.com/ionous/tell/note"
 )
@@ -24,22 +26,30 @@ func LoadTell(inPath string) (ret any, err error) {
 }
 
 func ReadTell(in io.Reader) (any, error) {
-	return ReadTellRunes(bufio.NewReader(in))
+	return ReadTellRunes(bufio.NewReader(in), true)
 }
 
-func ReadTellRunes(in io.RuneReader) (ret any, err error) {
-	var docComments note.Book
+// reads until the passed reader is exhausted ( hits eof )
+// returns nil error when finished.
+// includeComments helps with testing
+func ReadTellRunes(in io.RuneReader, includeComments bool) (ret any, err error) {
 	dec := decode.Decoder{UseFloats: true} // sadly, that's all tapestry supports. darn json.
-	dec.SetMapper(func(reserve bool) collect.MapWriter {
-		m := make(tapMap)
-		x, y := dec.Position()
-		m["--pos"] = []int{x, y}
-		return m
-	})
-	dec.SetSequencer(func(reserve bool) collect.SequenceWriter {
-		return make(tapSeq, 0, 0)
-	})
-	dec.UseNotes(&docComments)
+	if !includeComments {
+		dec.SetMapper(stdmap.Make)
+		dec.SetSequencer(stdseq.Make)
+	} else {
+		var docComments note.Book
+		dec.SetMapper(func(reserve bool) collect.MapWriter {
+			m := make(tapMap)
+			x, y := dec.Position()
+			m["--pos"] = []int{x, y}
+			return m
+		})
+		dec.SetSequencer(func(reserve bool) collect.SequenceWriter {
+			return make(tapSeq, 0, 0)
+		})
+		dec.UseNotes(&docComments)
+	}
 	return dec.Decode(in)
 }
 

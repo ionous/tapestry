@@ -36,7 +36,7 @@ func TestSectionCount(t *testing.T) {
 
 // fix? doesnt compare against a particular result
 // because some things have line numbers, and some dont
-// probably they arent event correct yet
+// compare against tell maps ( instead of parsed stories? )
 func TestDoc(t *testing.T) {
 	if out, e := flex.ReadStory(strings.NewReader(testTwo)); e != nil {
 		t.Fatal(e)

@@ -55,21 +55,24 @@ func NewTokenizer(n Notifier) charm.State {
 
 // return a state to parse a stream of runes and notify as they are detected.
 func (n Tokenizer) Decode() charm.State {
-	return charm.Parallel("decode", n.decode(false), charmed.DecodePos(&n.curr.Y, &n.curr.X))
+	return charm.Parallel("decode",
+		n.nextToken(),
+		charmed.DecodePos(&n.curr.Y, &n.curr.X),
+	)
 }
 
-func (n *Tokenizer) decode(afterIndent bool) charm.State {
-	return charm.Step(n.whitespace(afterIndent), n.tokenize())
+func (n *Tokenizer) nextToken() charm.State {
+	return charm.Step(eatWhitespace(), n.tokenize())
 }
 
 // tell Notifier of the new token/value pair
 // and then process the next rune (q)
 // ( combining the two simplifies error handling in some cases )
-func (n *Tokenizer) notifyRune(q rune, t Type, v any) (ret charm.State) {
+func (n *Tokenizer) notifyNext(q rune, t Type, v any) (ret charm.State) {
 	if e := n.Notifier.Decoded(n.start, t, v); e != nil {
 		ret = charm.Error(e)
 	} else {
-		ret = send(n.decode(true), q)
+		ret = send(n.nextToken(), q)
 	}
 	return
 }
@@ -79,30 +82,9 @@ func (n *Tokenizer) notifyLoop(t Type, v any) (ret charm.State) {
 	if e := n.Notifier.Decoded(n.start, t, v); e != nil {
 		ret = charm.Error(e)
 	} else {
-		ret = n.decode(true)
+		ret = n.nextToken()
 	}
 	return
-}
-
-// eat whitespace between tokens;
-// previously, would error if it didnt detect whitespace between tokens
-// however that doesnt work well for arrays. ex: `5,`
-func (n *Tokenizer) whitespace(afterIndent bool) charm.State {
-	var spaces int
-	return charm.Self("whitespace", func(self charm.State, q rune) (ret charm.State) {
-		switch q {
-		case runes.Space:
-			spaces++
-			ret = self
-		case runes.Newline:
-			spaces = 0
-			afterIndent = false
-			ret = self
-		case runes.Eof:
-			ret = charm.Error(nil)
-		}
-		return
-	})
 }
 
 func (n *Tokenizer) tokenize() charm.State {
@@ -124,7 +106,8 @@ func (n *Tokenizer) tokenize() charm.State {
 			ret = n.rawDecoding()
 
 		case runes.Colon:
-			ret = charm.Error(errors.New("FIX: handle tell doc"))
+			includeComments := true
+			ret = DecodeSubDoc(n.notifyTell, includeComments)
 
 		case runeComma:
 			ret = n.notifyLoop(Comma, q)
@@ -155,7 +138,7 @@ func (n *Tokenizer) wordDecoder() charm.State {
 			runes.Eof,
 		}, q) || unicode.In(q, unicode.Space, unicode.Terminal_Punctuation)
 		if fini {
-			ret = n.notifyRune(q, Word, b.String())
+			ret = n.notifyNext(q, Word, b.String())
 		} else if !unicode.IsPrint(q) {
 			ret = charm.Error(fmt.Errorf("unknown rune %c", q))
 		} else {
@@ -183,7 +166,7 @@ func (n *Tokenizer) commentDecoder() charm.State {
 				ret = charm.Error(fmt.Errorf("expected a space after comment hash, not %c", q))
 			}
 		case runes.Newline, runes.Eof:
-			ret = n.notifyRune(q, Comment, b.String())
+			ret = n.notifyNext(q, Comment, b.String())
 		}
 		return
 	})
@@ -195,23 +178,23 @@ func (n *Tokenizer) commentDecoder() charm.State {
 func (n *Tokenizer) interpretDecoding() charm.State {
 	var d charmed.QuoteDecoder
 	return charm.Step(d.Interpret(), charm.Statement("interpreted", func(q rune) charm.State {
-		return n.notifyRune(q, Quoted, d.String())
+		return n.notifyNext(q, Quoted, d.String())
 	}))
 }
 
 func (n *Tokenizer) rawDecoding() charm.State {
 	var d charmed.QuoteDecoder
 	return charm.Step(d.Record(), charm.Statement("recorded", func(q rune) charm.State {
-		return n.notifyRune(q, Quoted, d.String())
+		return n.notifyNext(q, Quoted, d.String())
 	}))
 }
 
-// send one or more runes to the next state
-func send(next charm.State, qs ...rune) charm.State {
-	for _, q := range qs {
-		if next = next.NewRune(q); next == nil {
-			break
-		}
+// received a document or an error from our async helper
+func (n *Tokenizer) notifyTell(q rune, content any) (ret charm.State) {
+	if e := content.(error); e != nil {
+		ret = charm.Error(e)
+	} else {
+		ret = n.notifyNext(q, TellBlock, content)
 	}
-	return next
+	return
 }
