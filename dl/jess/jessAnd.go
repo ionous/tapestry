@@ -22,25 +22,25 @@ func (s Separator) Len() int {
 // and returns the number of words necessary to skip them.
 // errors if it detects an unexpected sequence of commas or ands.
 // note: when words were hashed, commas became their own Word.
-func ReadCommaAnd(ws []match.Word) (ret Separator, err error) {
+func ReadCommaAnd(ws []match.TokenValue) (ret Separator, err error) {
 	return countCommaAnd(ws, false)
 }
 
-func ReadCommaAndOr(ws []match.Word) (ret Separator, err error) {
+func ReadCommaAndOr(ws []match.TokenValue) (ret Separator, err error) {
 	return countCommaAnd(ws, true)
 }
 
-func countCommaAnd(ws []match.Word, alsoOr bool) (retFlag Separator, err error) {
+func countCommaAnd(ws []match.TokenValue, alsoOr bool) (retFlag Separator, err error) {
 	var flag Separator
 	var skip int
 Loop:
 	for _, w := range ws {
-		switch h := w.Hash(); {
+		switch w.Token {
 		default:
 			// anything other than a comma or and?
 			break Loop
 
-		case h == keywords.Comma:
+		case match.Comma:
 			if flag != 0 {
 				err = makeWordError(w, "unexpected comma")
 				break Loop
@@ -48,15 +48,21 @@ Loop:
 			flag |= CommaSep
 			skip = skip + 1
 
-		case h == keywords.And || (alsoOr && h == keywords.Or):
-			if flag == 0 {
-				// start = i
-			} else if flag&AndSep != 0 {
-				err = makeWordError(w, "unexpected and")
+		case match.String:
+			h := w.Hash()
+			m := h == keywords.And || (alsoOr && h == keywords.Or)
+			if !m {
 				break Loop
+			} else {
+				if flag == 0 {
+					// start = i
+				} else if flag&AndSep != 0 {
+					err = makeWordError(w, "unexpected and")
+					break Loop
+				}
+				flag |= AndSep
+				skip++
 			}
-			flag |= AndSep
-			skip++
 		}
 	}
 	// nothingness is okay, but not nothingness after a comma or and.
@@ -71,16 +77,14 @@ Loop:
 }
 
 type wordError struct {
-	word   match.Word
+	word   match.TokenValue
 	reason string
 }
 
-func makeWordError(w match.Word, reason string) error {
+func makeWordError(w match.TokenValue, reason string) error {
 	return &wordError{w, reason}
 }
 
 func (w *wordError) Error() string {
-	// i suppose if you wanted to be evil, you would unsafe pointer this string
-	// back it up by start to get the actual position
-	return fmt.Sprintf("%s in %q", w.reason, w.word)
+	return fmt.Sprintf("%s in %v at %s", w.reason, w.word.Value, w.word.Pos)
 }

@@ -32,7 +32,8 @@ func (op *Understand) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Understand) matchPluralOf(input *InputState) (okay bool) {
 	if m, width := pluralOf.FindPrefix(input.Words()); m != nil {
-		op.PluralOf, *input, okay = input.Cut(width), input.Skip(width), true
+		op.PluralOf = m.String()
+		*input, okay = input.Skip(width), true
 	}
 	return
 }
@@ -121,9 +122,8 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 		} else {
 			// fix? if we're going to check at the end; maybe shift to plain names instead.
 			// fix? pass a filter to FindNoun so you can't understand things that arent objects.
-			span := n.Matched.(match.Span)
-			if noun, width := q.FindNoun(span, nil); width < 0 {
-				err = fmt.Errorf("no noun found called %q", span.String())
+			if noun, width := q.FindNoun(n.Matched, nil); width < 0 {
+				err = fmt.Errorf("no noun found called %q", n.Matched.DebugString())
 				break
 			} else {
 				nouns = append(nouns, noun)

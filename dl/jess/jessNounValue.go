@@ -25,7 +25,7 @@ func (op *Property) Match(q Query, kind string, input *InputState) (okay bool) {
 }
 
 func (op *Property) matchProperty(q Query, kind string, input *InputState) (okay bool) {
-	if m, width := q.FindField(kind, input.Words()); width > 0 {
+	if m, width := q.FindField(kind, *input); width > 0 {
 		op.Matched, *input, okay = m, input.Skip(width), true
 	}
 	return
@@ -60,7 +60,7 @@ func (op *PropertyNounValue) GetValue() (ret rt.Assignment) {
 func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 	next := *input
 	Optional(q, &next, &op.Article)
-	if index := scanUntil(next.Words(), keywords.Of); index > 0 {
+	if index := scanUntil(next, keywords.Of); index > 0 {
 		rest := next.Skip(index + 1) // everything after "of"
 		if op.NamedNoun.Match(q, &rest) &&
 			op.Are.Match(q, &rest) &&
@@ -70,7 +70,7 @@ func (op *PropertyNounValue) Match(q Query, input *InputState) (okay bool) {
 
 			// try the phrase before the word "of"
 			// the whole string must be consumed
-			property := MakeInput(next.CutSpan(index), nil)
+			property := InputState(next.Cut(index))
 			if op.Property.Match(q, namedKind(op.NamedNoun), &property) && //
 				property.Len() == 0 {
 				*input, okay = rest, true

@@ -382,7 +382,8 @@ var Phrases = []Phrase{
 	// weave validates values when attempting to write them to the db.
 	// ------------------------------------------------------------------------
 	{
-		test: `The story has the title "{15|print_num!}"`,
+		// fix? mixed feelings on the trailing full-stop.
+		test: `The story has the title "{15|print_num!}".`,
 		result: []string{
 			// test that it can convert a template
 			"AddNounValue:", "story", "title", `{"FromText:":{"Numeral:":{"Num value:":15}}}`,

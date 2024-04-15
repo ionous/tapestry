@@ -107,7 +107,7 @@ func (op *Article_Slice) Repeats() bool {
 // matches "," or "and" or ", and"
 // relies on the fact package match treats commas and ands each as their own words.
 type CommaAnd struct {
-	Matched string
+	Matched Matched
 	Markup  map[string]any
 }
 
@@ -144,7 +144,7 @@ func (op *CommaAnd_Slice) Repeats() bool {
 // matches commas, ands, and ors.
 // relies on the fact package match treats commas and ands each as their own words.
 type CommaAndOr struct {
-	Matched string
+	Matched Matched
 	Markup  map[string]any
 }
 
@@ -179,7 +179,7 @@ func (op *CommaAndOr_Slice) Repeats() bool {
 
 // matches "is" or "are".
 type Are struct {
-	Matched string
+	Matched Matched
 	Markup  map[string]any
 }
 
@@ -214,7 +214,7 @@ func (op *Are_Slice) Repeats() bool {
 
 // matches the word "called".
 type Called struct {
-	Matched string
+	Matched Matched
 	Markup  map[string]any
 }
 
@@ -295,7 +295,7 @@ func (op *Name_Slice) Repeats() bool {
 // by checking multiple words for the best match.
 type Noun struct {
 	Article    *Article
-	Matched    string
+	Matched    Matched
 	ActualNoun ActualNoun
 	Markup     map[string]any
 }
@@ -501,7 +501,7 @@ type CountedKind struct {
 	Article        *Article
 	MatchingNumber MatchingNumber
 	Kind           Kind
-	Matched        CountedText
+	Matched        Matched
 	Markup         map[string]any
 }
 
@@ -541,7 +541,7 @@ func (op *CountedKind_Slice) Repeats() bool {
 // can generate a single anonymous noun.
 type Kind struct {
 	Article    *Article
-	Matched    string
+	Matched    Matched
 	ActualKind ActualKind
 	Markup     map[string]any
 }
@@ -583,7 +583,7 @@ func (op *Kind_Slice) Repeats() bool {
 type Kinds struct {
 	Traits          *Traits
 	Article         *Article
-	Matched         string
+	Matched         Matched
 	AdditionalKinds *AdditionalKinds
 	Markup          map[string]any
 }
@@ -799,7 +799,7 @@ func (op *AdditionalTraits_Slice) Repeats() bool {
 
 // matches one or more predefined words
 type Words struct {
-	Matched string
+	Matched Matched
 	Markup  map[string]any
 }
 
@@ -1645,7 +1645,7 @@ func (op *KindsAreEither_Slice) Repeats() bool {
 // one or more new trait names,
 // separated by the word "or"
 type NewTrait struct {
-	Matched  string
+	Matched  Matched
 	NewTrait *NewTrait
 	Markup   map[string]any
 }
@@ -2531,8 +2531,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
 	7322259980003111582:  (*VerbPhrase)(nil),           /* VerbPhrase verb:plainNames: */
 	17678340847396548932: (*Words)(nil),                /* Words matched: */
-	17929352418080814012: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind: */
-	11334937790230459436: (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind: */
+	11632287528917650754: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind:matched: */
+	6226299220342727794:  (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind:matched: */
 	643122070839149560:   (*Kind)(nil),                 /* noun_builder=Kind article:matched: */
 	12803964412357300908: (*Kind)(nil),                 /* noun_builder=Kind matched: */
 	16595966641928411799: (*Name)(nil),                 /* noun_builder=Name article:matched: */
@@ -2634,7 +2634,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"conjunction junction.", "matches \",\" or \"and\" or \", and\"", "relies on the fact package match treats commas and ands each as their own words."},
@@ -2646,7 +2646,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"conjunction or junction.", "matches commas, ands, and ors.", "relies on the fact package match treats commas and ands each as their own words."},
@@ -2658,7 +2658,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
 			"comment": "matches \"is\" or \"are\".",
@@ -2670,7 +2670,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
 			"comment": "matches the word \"called\".",
@@ -2710,7 +2710,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "the string that matched ( a noun name or alias )",
 			},
-			Type: &prim.Zt_Text,
+			Type: &Zt_Matched,
 		}, {
 			Name:    "actual_noun",
 			Label:   "actual_noun",
@@ -2858,9 +2858,9 @@ func init() {
 			Label: "kind",
 			Type:  &Zt_Kind,
 		}, {
-			Name:    "matched",
-			Label:   "matched",
-			Private: true,
+			Name:  "matched",
+			Label: "matched",
+			Type:  &Zt_Matched,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_NounBuilder,
@@ -2886,7 +2886,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "the string that matched",
 			},
-			Type: &prim.Zt_Text,
+			Type: &Zt_Matched,
 		}, {
 			Name:    "actual_kind",
 			Label:   "actual_kind",
@@ -2921,7 +2921,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "matches a span ending with \"is/are/comma/and\"",
 			},
-			Type: &prim.Zt_Text,
+			Type: &Zt_Matched,
 		}, {
 			Name:     "additional_kinds",
 			Label:    "additional_kinds",
@@ -3028,7 +3028,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}},
 		Markup: map[string]any{
 			"comment": "matches one or more predefined words",
@@ -3567,7 +3567,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}, {
 			Name:     "new_trait",
 			Label:    "new_trait",

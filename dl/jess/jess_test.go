@@ -63,8 +63,8 @@ func (n *info) GetContext() int {
 	return 0
 }
 
-func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width int) {
-	str := strings.ToLower(ws.String())
+func (n *info) FindKind(ws []match.TokenValue, out *kindsOf.Kinds) (ret string, width int) {
+	str, _ := match.NormalizeAll(ws)
 	for i, k := range n.kinds {
 		if strings.HasPrefix(str, k) {
 			if i&1 == 0 { // singular are the even numbers
@@ -90,18 +90,18 @@ func (n *info) FindKind(ws match.Span, out *kindsOf.Kinds) (ret string, width in
 	return
 }
 
-func (n *info) FindTrait(ws match.Span) (string, int) {
+func (n *info) FindTrait(ws []match.TokenValue) (string, int) {
 	m, cnt := n.traits.FindPrefix(ws)
 	return m.String(), cnt
 }
 
 // for testing, ignores the kind; matches any field
-func (n *info) FindField(_ string, field match.Span) (string, int) {
+func (n *info) FindField(_ string, field []match.TokenValue) (string, int) {
 	m, cnt := n.fields.FindPrefix(field)
 	return m.String(), cnt
 }
 
-func (n *info) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
+func (n *info) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width int) {
 	var m match.Span
 	var kind string
 	if pkind != nil {
@@ -118,7 +118,7 @@ func (n *info) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
 		m, width = n.verbNames.FindPrefix(ws)
 		ret = m.String()
 	case "":
-		str := ws.String()
+		str, _ := match.NormalizeAll(ws)
 		if noun, ok := n.nounPool[str]; ok {
 			ret, width = noun, len(ws)
 			if pkind != nil {

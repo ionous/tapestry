@@ -22,7 +22,7 @@ func (op *KindCalled) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, props
 	return
 }
 
-func (op *KindCalled) GetNormalizedName() string {
+func (op *KindCalled) GetNormalizedName() (string, error) {
 	return op.NamedNoun.GetNormalizedName()
 }
 

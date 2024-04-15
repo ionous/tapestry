@@ -2,14 +2,15 @@ package jess
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func (op *NamedNoun) GetNormalizedName() (ret string) {
+func (op *NamedNoun) GetNormalizedName() (ret string, err error) {
 	if n := op.Noun; n != nil {
 		ret = n.ActualNoun.Name // the actual name is already normalized
 	} else if n := op.Name; n != nil {
-		ret = n.GetNormalizedName()
+		ret, err = match.NormalizeAll(n.Matched)
 	} else {
 		panic("NamedNoun was unmatched")
 	}

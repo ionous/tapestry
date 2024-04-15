@@ -3,10 +3,7 @@ package flex
 import (
 	"fmt"
 	"io"
-	"log"
 	"strings"
-	"unicode"
-	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -20,7 +17,7 @@ import (
 // fix: allow line number offset
 func ReadText(runes io.RuneReader) (ret []story.StoryStatement, err error) {
 	var pt PlainText
-	run := NewTokenizer(&pt)
+	run := match.NewTokenizer(&pt)
 	if e := charm.Read(runes, run); e != nil {
 		err = e
 	} else {
@@ -29,17 +26,17 @@ func ReadText(runes io.RuneReader) (ret []story.StoryStatement, err error) {
 	return
 }
 
-// translate a plain text section to a series of
-// comments and jess declarations
+// translate a plain text section to paragraphs of commands
+// containing comments and jess Declare statements.
 type PlainText struct {
 	// declare statements, or comments
 	out []story.StoryStatement
 	// accumulator for declare, and comments
-	phrases []match.Span
+	phrases [][]match.TokenValue
 	comment []string
 	// accumulator of a phrases
 	str   strings.Builder
-	words match.Span
+	words []match.TokenValue
 }
 
 func (pt *PlainText) Finalize() (ret []story.StoryStatement, err error) {
@@ -51,73 +48,57 @@ func (pt *PlainText) Finalize() (ret []story.StoryStatement, err error) {
 	return
 }
 
-func (pt *PlainText) Decoded(p Pos, t Type, v any) (err error) {
-	switch t {
+// handler for match tokenizer;
+func (pt *PlainText) Decoded(tv match.TokenValue) (err error) {
+	switch tv.Token {
 	default:
-		log.Println("unhandled token", t, "at", p)
-		panic("unhandled token")
+		if str, ok := tv.Value.(string); !ok {
+			panic(tv.Token.String())
+		} else {
+			pt.writeToken(str, tv)
+		}
 
-	case Comma:
-		pt.flushComment()
-		pt.writeHash(",", match.Keywords.Comma)
+	case match.Quoted:
+		// fix: to build the proper declare, we'd need quote type
+		// and/or original string; and would need to handle terminals.
+		// currently we can't distinguish between "word." and "word".
+		if str, ok := tv.Value.(string); !ok {
+			panic(tv.Token.String())
+		} else {
+			pt.writeToken(`"`, tv)
+			pt.str.WriteString(str)
+			pt.str.WriteRune('"')
+		}
 
-	case Comment:
+	case match.Parenthetical:
+		if str, ok := tv.Value.(string); !ok {
+			panic(tv.Token.String())
+		} else {
+			pt.writeToken("( ", tv)
+			pt.str.WriteString(str)
+			pt.str.WriteString(") ")
+		}
+
+	case match.Comment:
 		// fix? the tokenizer eats newlines;
 		// to accurately reconstruct the block we'd want them.
 		// and inline comments would be added to the declare
 		// not jumped into a new comment op.
-		str := v.(string)
 		if e := pt.flushPhrases(nil); e != nil {
 			err = e
 		} else {
+			str := tv.Value.(string)
 			pt.comment = append(pt.comment, str)
 		}
 
-	case Parenthetical:
-		// fix: jess without flex needs to be able to match parens
-		// the "easiest" way would be to merge / move token parsing into match
-		str := v.(string)
-		pt.flushComment()
-		pt.writeHash(str, match.Hash("()"))
-
-	case Quoted: // quoted string
-		// fix: to preserve the phrases we need to know what kind of string it was
-		// so we can reconstruct the quote markers...
-		// maybe the token should be a "string literal" struct containing the original string
-		// so there's no need to reconstruct
-		str := v.(string)
-
-		var terminal bool // fix? it'd make more sense to flag this in the reader
-		if w, at := utf8.DecodeLastRuneInString(str); at > 0 {
-			terminal = unicode.Is(unicode.Sentence_Terminal, w)
-		}
-
-		// fix? match could write/jess could read these as one element
-		pt.flushComment()
-		pt.writeHash("", match.Keywords.QuotedText)
-		pt.writeHash(str, 0)
-		if terminal {
-			pt.endSentence()
-		}
-
-	case Stop:
-		w := v.(rune)
-		pt.flushComment()
-		pt.str.WriteRune(w)
-		pt.endSentence()
-
-	case String:
-		str := v.(string)
-		pt.flushComment()
-		pt.writeStr(str)
-
-	case Tell:
-		switch msg := v.(type) {
+	case match.Tell:
+		// rewrite match.Tell tokens as assignments
+		switch msg := tv.Value.(type) {
 		case []any:
 			if exe, e := decodeExecute(msg); e != nil {
 				err = e
 			} else {
-				err = pt.flushPhrases(&assign.FromExe{
+				err = pt.writeAssignment(tv.Pos, &assign.FromExe{
 					Exe: exe,
 				})
 			}
@@ -126,10 +107,10 @@ func (pt *PlainText) Decoded(p Pos, t Type, v any) (err error) {
 			if a, e := decodeAssignment(msg); e != nil {
 				err = e
 			} else {
-				err = pt.flushPhrases(a)
+				err = pt.writeAssignment(tv.Pos, a)
 			}
 		default:
-			err = fmt.Errorf("can only handle tell sequences and maps, not %T", v)
+			err = fmt.Errorf("can only handle tell sequences and maps, not %T", msg)
 		}
 	}
 	return
@@ -145,20 +126,29 @@ func (pt *PlainText) endSentence() {
 	pt.words = nil
 }
 
-func (pt *PlainText) writeStr(str string) {
-	pt.writeHash(str, match.Hash(str))
+func (pt *PlainText) writeAssignment(pos match.Pos, a rt.Assignment) error {
+	pt.writeToken(":", match.TokenValue{
+		Token: match.Tell,
+		Pos:   pos,
+		Value: a,
+	})
+	return pt.flushPhrases(a)
 }
 
-func (pt *PlainText) writeHash(str string, hash uint64) {
+func (pt *PlainText) writeToken(str string, tv match.TokenValue) {
 	pt.flushComment()
 	// because we write words ( and other such things )
 	// new text should have a space before;
 	// terminals wouldn't but they dont come round here no more.
-	if pt.str.Len() > 0 {
+	if pt.str.Len() > 0 && tv.Token != match.Stop {
 		pt.str.WriteRune(' ')
 	}
 	pt.str.WriteString(str)
-	pt.words = append(pt.words, match.MakeWord(hash, str))
+	if tv.Token == match.Stop {
+		pt.endSentence()
+	} else {
+		pt.words = append(pt.words, tv)
+	}
 }
 
 // if there are pending phrases, flush them

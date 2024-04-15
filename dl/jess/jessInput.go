@@ -1,75 +1,44 @@
 package jess
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/match"
 )
 
 // the input state consists of a series of hashes
 // and chunks of the original string.
-//
-// fix? rather than pre-processing the string
-// a "reader" might make more sense.
-// especially as seeing some pieces of the string
-// ( ex. quoted text ) need to be processed again later on.
-// first pass would be change makeSpan into a reader ( MakeSpans uses that reader )
-// and then expose that reader here.
-// that also might enable Word to become just the hash ( or hash + width )
-// so we can skip some string copies in flex
-type InputState struct {
-	ws     []match.Word
-	index  int
-	assign rt.Assignment
-}
-
-func MakeInput(ws []match.Word, assign rt.Assignment) InputState {
-	return InputState{ws: ws, assign: assign}
-}
+// fix? change to a "reader" ( pull ) rather than pre-process?
+type InputState []match.TokenValue
 
 func (in InputState) Len() int {
-	return len(in.ws)
+	return len(in)
 }
 
-func (in InputState) Offset() int {
-	return in.index
+func (in InputState) Words() []match.TokenValue {
+	return in
 }
 
-func (in InputState) Words() []match.Word {
-	return in.ws
-}
-
-func (in *InputState) Deassign() (ret rt.Assignment, okay bool) {
-	if a := in.assign; a != nil {
-		ret, okay = a, true
-		in.assign = nil
+func (in InputState) GetNext(t match.Token) (ret any, okay bool) {
+	if len(in) > 0 && in[0].Token == t {
+		ret, okay = in[0].Value, true
 	}
 	return
 }
 
 // return an input state that is the passed number of words after this one.
 func (in InputState) Skip(skip int) InputState {
-	return InputState{
-		ws:     in.ws[skip:],
-		index:  in.index + skip,
-		assign: in.assign,
-	}
-}
-
-// return the specified number of words from the input as a string
-func (in InputState) Cut(width int) string {
-	return in.CutSpan(width).String()
+	return in[skip:]
 }
 
 // return the specified number of words from the input as a slice of words
-func (in InputState) CutSpan(width int) match.Span {
-	return match.Span(in.ws[:width])
+func (in InputState) Cut(width int) []match.TokenValue {
+	return in[:width]
 }
 
 // see if the input begins with any of the passed choices
 // always returns 1.
 func (in InputState) MatchWord(choices ...uint64) (width int) {
-	if len(in.ws) > 0 {
-		w := in.ws[0]
+	if len(in) > 0 {
+		w := in[0]
 		for _, opt := range choices {
 			if w.Equals(opt) {
 				width = 1

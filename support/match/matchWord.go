@@ -5,20 +5,8 @@ type Word struct {
 	slice string
 }
 
-func MakeWord(h uint64, slice string) Word {
-	return Word{h, slice}
-}
-
-func (w *Word) isValid() bool {
-	return len(w.slice) > 0
-}
-
-func (w *Word) equals(other uint64) bool {
-	return w.hash == other
-}
-
-func (w *Word) Equals(other uint64) bool {
-	return w.hash == other
+func MakeWord(slice string) Word {
+	return Word{Hash(slice), slice}
 }
 
 func (w *Word) Hash() uint64 {

@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -28,7 +27,8 @@ func (op *KindsAreEither) Match(q Query, input *InputState) (okay bool) {
 // match "can be", "are either", etc.
 func (op *KindsAreEither) matchEither(input *InputState) (okay bool) {
 	if m, width := canBeEither.FindPrefix(input.Words()); m != nil {
-		op.CanBe.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+		op.CanBe.Matched = input.Cut(width)
+		*input, okay = input.Skip(width), true
 	}
 	return
 }
@@ -39,11 +39,14 @@ func (op *KindsAreEither) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 	} else {
 		if op.Traits.NewTrait == nil {
 			// mdl is smart enough to generate "not" aspects from bool fields
-			name := inflect.Normalize(op.Traits.String())
-			err = w.AddKindFields(k, []mdl.FieldInfo{{
-				Name:     name,
-				Affinity: affine.Bool,
-			}})
+			if name, e := match.NormalizeAll(op.Traits.Matched); e != nil {
+				err = e
+			} else {
+				err = w.AddKindFields(k, []mdl.FieldInfo{{
+					Name:     name,
+					Affinity: affine.Bool,
+				}})
+			}
 		} else {
 			if name, e := op.generateAspect(w); e != nil {
 				err = e
@@ -61,29 +64,39 @@ func (op *KindsAreEither) Weave(w weaver.Weaves, run rt.Runtime) (err error) {
 
 func (op *KindsAreEither) generateAspect(w weaver.Weaves) (ret string, err error) {
 	first := op.Traits
-	aspect := inflect.Join([]string{first.String(), "status"})
-	if e := w.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
+	if aspect, e := match.NormalizeAll(append(first.Matched, statusToken)); e != nil {
+		err = e
+	} else if e := w.AddKind(aspect, kindsOf.Aspect.String()); e != nil {
+		err = e
+	} else if traits, e := normalizeTraits(first); e != nil {
+		err = e
+	} else if e := w.AddAspectTraits(aspect, traits); e != nil {
 		err = e
 	} else {
-		var traits []string
-		for it := first.Iterate(); it.HasNext(); {
-			traits = append(traits, it.GetNext())
-		}
-		if e := w.AddAspectTraits(aspect, traits); e != nil {
+		ret = aspect
+	}
+	return
+}
+
+func normalizeTraits(ts NewTrait) (ret []string, err error) {
+	for it := ts.Iterate(); it.HasNext(); {
+		if str, e := match.NormalizeAll(it.GetNext().Matched); e != nil {
 			err = e
+			break
 		} else {
-			ret = aspect
+			ret = append(ret, str)
 		}
 	}
 	return
 }
 
+var statusToken = match.TokenValue{Token: match.String, Value: "status"}
 var canBeEither = match.PanicSpans("can be", "are either", "is either", "can be either")
 
 func (op *NewTrait) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; next.Len() > 0 {
 		// look for 1) the end of the string, or 2) the separator "or"
-		if firstSpan := scanUntil(next.Words(), keywords.Or); firstSpan < 0 {
+		if firstSpan := scanUntil(next, keywords.Or); firstSpan < 0 {
 			width := next.Len()
 			op.Matched = next.Cut(width)          // eat everything
 			*input, okay = next.Skip(width), true // all done.
@@ -105,10 +118,6 @@ func (op *NewTrait) Iterate() NewTraitIterator {
 	return NewTraitIterator{op}
 }
 
-func (op *NewTrait) String() string {
-	return inflect.Normalize(op.Matched)
-}
-
 type NewTraitIterator struct {
 	next *NewTrait
 }
@@ -117,7 +126,7 @@ func (it NewTraitIterator) HasNext() bool {
 	return it.next != nil
 }
 
-func (it *NewTraitIterator) GetNext() (ret string) {
-	ret, it.next = it.next.String(), it.next.NewTrait
+func (it *NewTraitIterator) GetNext() (ret *NewTrait) {
+	ret, it.next = it.next, it.next.NewTrait
 	return
 }

@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -21,7 +20,7 @@ func (op *CalledName) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-func (op *CalledName) GetNormalizedName() string {
+func (op *CalledName) GetNormalizedName() (string, error) {
 	return op.Name.GetNormalizedName()
 }
 
@@ -45,7 +44,7 @@ func (op *KindsHaveProperties) Match(q Query, input *InputState) (okay bool) {
 
 func (op *KindsHaveProperties) matchListOf(input *InputState) (okay bool) {
 	if m, width := listOf.FindPrefix(input.Words()); m != nil {
-		op.ListOf = input.Cut(width)
+		op.ListOf = m.String()
 		*input = input.Skip(width)
 		okay = true
 	}
@@ -61,13 +60,15 @@ func (op *KindsHaveProperties) Weave(w weaver.Weaves, run rt.Runtime) (err error
 	} else {
 		// has the author explicitly overridden the default field name?
 		if op.CalledName != nil {
-			f.Name = op.CalledName.GetNormalizedName()
+			f.Name, err = op.CalledName.GetNormalizedName()
 		}
-		if len(f.Name) == 0 {
-			// erroring feels like more useful than failing to match...
-			err = fmt.Errorf("%s fields require an explicit name", f.Affinity)
-		} else {
-			err = w.AddKindFields(kind, []mdl.FieldInfo{f})
+		if err == nil {
+			if len(f.Name) == 0 {
+				// erroring feels like more useful than failing to match...
+				err = fmt.Errorf("%s fields require an explicit name", f.Affinity)
+			} else {
+				err = w.AddKindFields(kind, []mdl.FieldInfo{f})
+			}
 		}
 	}
 	return
@@ -84,7 +85,7 @@ func (op *PropertyType) Match(q Query, input *InputState) (okay bool) {
 
 func (op *PropertyType) matchPrimitive(input *InputState) (okay bool) {
 	if m, width := primitiveTypes.FindPrefix(input.Words()); m != nil {
-		op.Primitive = input.Cut(width)
+		op.Primitive = m.String()
 		*input = input.Skip(width)
 		okay = true
 	}
@@ -97,9 +98,11 @@ func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
 	var aff affine.Affinity
 	if prim := op.Primitive; len(prim) > 0 {
 		aff, cls = getTypeOfPrim(prim)
+	} else if n, e := match.NormalizeAll(op.Kind.Matched); e != nil {
+		err = e
 	} else {
+		name = n
 		// re: singular or plural; use the author specified field name
-		name = inflect.Normalize(op.Kind.Matched)
 		// even if that differs from the actual name of the kind...
 		aff, cls, err = getTypeOfKind(op.Kind)
 	}

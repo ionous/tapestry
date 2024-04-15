@@ -22,11 +22,12 @@ func (op *TimedRule) Match(q Query, input *InputState) (okay bool) {
 
 // parenthetical name
 func (op *TimedRule) matchName(input *InputState) (okay bool) {
-	if width := input.MatchWord(flexParens); width > 0 {
-		ws := input.Words()
-		op.RuleName = ws[0].String()
-		*input, okay = input.Skip(width), true
-	}
+	// if width := input.MatchWord(flexParens); width > 0 {
+	// 	ws := input
+	// 	op.RuleName = ws[0].String()
+	// 	*input, okay = input.Skip(width), true
+	// }
+	return false
 	return
 }
 
@@ -57,27 +58,27 @@ func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
 }
 
 // assumes we are inside the parens
-func (op *RuleName) MatchWords(next []match.Word) (okay bool) {
-	// "this is"
-	if m, width := ruleNamePrefix.FindPrefix(next); m != nil {
-		op.Prefix = true
-		next = next[width:]
-	}
-	// "the"
-	if m, width := match.FindCommonArticles(next); width > 0 {
-		op.Article = m.String()
-		next = next[width:]
-	}
-	// ... "rule"
-	if cnt := len(next); cnt > 0 && next[cnt-1].Hash() == keywords.Rule {
-		op.Suffix = true
-		next = next[:cnt-1]
-	}
-	// and this is the rule name:
-	if len(next) > 0 {
-		op.Matched = match.JoinWords(next)
-		okay = true
-	}
+func (op *RuleName) MatchWords(next []match.TokenValue) (okay bool) {
+	// // "this is"
+	// if m, width := ruleNamePrefix.FindPrefix(next); m != nil {
+	// 	op.Prefix = true
+	// 	next = next[width:]
+	// }
+	// // "the"
+	// if m, width := match.FindCommonArticles(next); width > 0 {
+	// 	op.Article = m.String()
+	// 	next = next[width:]
+	// }
+	// // ... "rule"
+	// if cnt := len(next); cnt > 0 && next[cnt-1].Hash() == keywords.Rule {
+	// 	op.Suffix = true
+	// 	next = next[:cnt-1]
+	// }
+	// // and this is the rule name:
+	// if len(next) > 0 {
+	// 	op.Matched = match.JoinWords(next)
+	// 	okay = true
+	// }
 	return
 }
 

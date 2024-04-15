@@ -13,7 +13,7 @@ import (
 type AfterDocument func(q rune, content any) charm.State
 
 // public for testing
-func DecodeDoc(notify AfterDocument, includeComments bool) (ret charm.State) {
+func DecodeDoc(includeComments bool, notify AfterDocument) (ret charm.State) {
 	var indent int
 	return charm.Step(
 		// determine the indentation of the first line of the tell document

@@ -8,16 +8,6 @@ import (
 	"github.com/ionous/tell/runes"
 )
 
-// send one or more runes to the next state
-func send(next charm.State, qs ...rune) charm.State {
-	for _, q := range qs {
-		if next = next.NewRune(q); next == nil {
-			break
-		}
-	}
-	return next
-}
-
 // read whitespace until the end of line
 // then find the first non whitespace character
 // eof and other runes are considered an error.

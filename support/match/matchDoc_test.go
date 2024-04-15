@@ -15,10 +15,10 @@ func TestSubDocument(t *testing.T) {
 		var doc any
 		var err charm.EndpointError
 		if e := charm.ParseEof(str,
-			match.DecodeDoc(func(q rune, content any) charm.State {
+			match.DecodeDoc(false, func(q rune, content any) charm.State {
 				doc = content
 				return charm.Finished()
-			}, false)); e != nil && !errors.As(e, &err) {
+			})); e != nil && !errors.As(e, &err) {
 			t.Logf("failed %s with %s", name, e)
 			t.Fail()
 		} else if !reflect.DeepEqual(doc, expect) {

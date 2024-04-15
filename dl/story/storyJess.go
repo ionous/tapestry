@@ -5,13 +5,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/jessdb"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 // private member of DeclareStatement
-type JessMatches []match.Span
+type JessMatches jess.Paragraph
 
 // todo: move into jess/dl
 func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
@@ -36,13 +35,11 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 
 func (op *DeclareStatement) newParagraph(run rt.Runtime) (ret jess.Paragraph, err error) {
 	if m := op.Matches; len(m) > 0 {
-		ret = jess.Paragraph{Spans: m, Assign: op.Assign}
+		ret = jess.Paragraph(m)
+	} else if txt, e := safe.GetText(run, op.Text); e != nil {
+		err = e
 	} else {
-		if txt, e := safe.GetText(run, op.Text); e != nil {
-			err = e
-		} else {
-			ret, err = jess.NewParagraph(txt.String(), op.Assign)
-		}
+		ret, err = jess.NewParagraph(txt.String(), op.Assign)
 	}
 	return
 }

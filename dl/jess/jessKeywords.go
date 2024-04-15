@@ -6,7 +6,7 @@ import (
 
 // only valid after matching
 func (op *Are) IsPlural() bool {
-	return match.Hash(op.Matched) == keywords.Are
+	return len(op.Matched) == 1 && op.Matched[0].Hash() == keywords.Are
 }
 
 func (op *Are) Match(_ Query, input *InputState) (okay bool) {
@@ -54,10 +54,6 @@ func (op *Words) Match(_ Query, input *InputState, hashes ...uint64) (okay bool)
 		okay = true
 	}
 	return
-}
-
-func (op *Words) String() string {
-	return op.Matched
 }
 
 // make customizable?

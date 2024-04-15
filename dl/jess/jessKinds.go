@@ -1,6 +1,8 @@
 package jess
 
-import "git.sr.ht/~ionous/tapestry/support/inflect"
+import (
+	"git.sr.ht/~ionous/tapestry/support/match"
+)
 
 func (op *AdditionalKinds) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
@@ -25,13 +27,14 @@ func (op *Kinds) Match(q Query, input *InputState) (okay bool) {
 
 func (op *Kinds) matchName(input *InputState) (okay bool) {
 	if width := keywordScan(input.Words()); width > 0 {
-		op.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+		op.Matched = input.Cut(width)
+		*input, okay = input.Skip(width), true
 	}
 	return
 }
 
-func (op *Kinds) String() string {
-	return inflect.Normalize(op.Matched)
+func (op *Kinds) GetNormalizedName() (string, error) {
+	return match.NormalizeAll(op.Matched)
 }
 
 // unwind the tree of traits

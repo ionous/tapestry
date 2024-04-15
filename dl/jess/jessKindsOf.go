@@ -30,7 +30,8 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 // match "a kind of" or "kinds of"
 func (op *KindsOf) matchKindsOf(input *InputState) (okay bool) {
 	if m, width := kindsSpan.FindPrefix(input.Words()); m != nil {
-		op.KindsOf.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+		op.KindsOf.Matched = input.Cut(width)
+		*input, okay = input.Skip(width), true
 	}
 	return
 }
@@ -49,9 +50,9 @@ func (op *KindsOf) Generate(ctx Context) error {
 	// manually schedule, so we can query FindKind()
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		var base kindsOf.Kinds
-		span := op.Name.Matched.(match.Span)
+		span := op.Name.Matched
 		if parent, width := ctx.FindKind(span, &base); width != len(span) {
-			err = fmt.Errorf("%w kind %s", weaver.Missing, span)
+			err = fmt.Errorf("%w kind %s", weaver.Missing, span.DebugString())
 		} else {
 			traits := op.GetTraits()
 			isPlural, isAspect := op.Are.IsPlural(), base == kindsOf.Aspect
@@ -110,7 +111,7 @@ func (op *KindsOf) Generate(ctx Context) error {
 	})
 }
 
-func getKindOfName(at *Names) string {
+func getKindOfName(at *Names) (ret string) {
 	var name *Name
 	if n := at.Name; n != nil {
 		name = n
@@ -121,7 +122,11 @@ func getKindOfName(at *Names) string {
 	if name == nil {
 		panic("unexpected match")
 	}
-	return name.GetNormalizedName()
+	if n, e := name.GetNormalizedName(); e != nil {
+		panic(e)
+	} else {
+		return n
+	}
 }
 
 const countedKindMsg = `Defining a new kind using a leading number is prohibited. 

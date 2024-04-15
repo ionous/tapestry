@@ -19,13 +19,6 @@ func (op *CountedKind) Match(q Query, input *InputState) (okay bool) {
 	return
 }
 
-// for CountedNoun's private field
-type CountedText = string
-
-func (op *CountedKind) String() string {
-	return op.Matched
-}
-
 // generates n initial instances (and their aliases, cause why not.)
 // delays the desired traits and additional kinds
 // ( tbd if that makes sense or not )

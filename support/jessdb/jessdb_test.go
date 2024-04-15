@@ -59,11 +59,11 @@ type testAdapter struct {
 	dynamicNouns map[string]string
 }
 
-func (ta testAdapter) FindNoun(ws match.Span, pkind *string) (ret string, width int) {
+func (ta testAdapter) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width int) {
 	if n, w := ta.Query.FindNoun(ws, pkind); w > 0 {
 		ret, width = n, w
 	} else {
-		str := ws.String()
+		str, _ := match.Normalize(ws)
 		if noun, ok := ta.dynamicNouns[str]; ok {
 			ret, width = noun, len(ws)
 			if pkind != nil {

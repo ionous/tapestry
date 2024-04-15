@@ -29,7 +29,8 @@ func (op *DirectionOfLinking) buildLink(q Query, w weaver.Weaves, run rt.Runtime
 
 func (op *DirectionOfLinking) matchFromOf(input *InputState) (okay bool) {
 	if m, width := fromOf.FindPrefix(input.Words()); m != nil {
-		op.FromOf.Matched, *input, okay = input.Cut(width), input.Skip(width), true
+		op.FromOf.Matched = input.Cut(width)
+		*input, okay = input.Skip(width), true
 	}
 	return
 }

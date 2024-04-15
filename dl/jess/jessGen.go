@@ -2,6 +2,7 @@ package jess
 
 import (
 	"errors"
+	"fmt"
 	"unicode"
 	"unicode/utf8"
 
@@ -12,9 +13,13 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
-func startsUpper(str string) bool {
-	first, _ := utf8.DecodeRuneInString(str)
-	return unicode.IsUpper(first) // this works okay even if the string was empty
+func startsUpper(rs []match.TokenValue) (okay bool) {
+	if len(rs) > 0 && rs[0].Token == match.String {
+		str := rs[0].Value.(string)
+		first, _ := utf8.DecodeRuneInString(str)
+		okay = unicode.IsUpper(first) // this works okay even if the string was empty
+	}
+	return
 }
 
 // even one name can generate several nouns ( ex. "two things" )
@@ -62,11 +67,13 @@ func writeNounValues(w weaver.Weaves, ns []DesiredNoun) (err error) {
 // later, a pass ensures that all placeholder nouns have been given kinds;
 // or it upgrades them to things.
 // to simplify the code, this happens even if the kind might possibly be known.
-func ensureNoun(q Query, w weaver.Weaves, name match.Span, props *NounProperties) (ret string, created bool, err error) {
-	if noun, width := q.FindNoun(name, nil); width > 0 {
+func ensureNoun(q Query, w weaver.Weaves, ts []match.TokenValue, props *NounProperties) (ret string, created bool, err error) {
+	if noun, width := q.FindNoun(ts, nil); width > 0 {
 		ret = noun
+	} else if name, count := match.Stringify(ts); count != len(ts) {
+		out := match.DebugStringify(ts)
+		err = fmt.Errorf("not all of name consumed? %q", out)
 	} else {
-		name := name.String()
 		noun := inflect.Normalize(name)
 		defaultKind := Objects
 		if ks := props.Kinds; len(ks) > 0 {
@@ -85,6 +92,7 @@ func ensureNoun(q Query, w weaver.Weaves, name match.Span, props *NounProperties
 	return
 }
 
+// fix: make names could use tokens directly
 func registerNames(w weaver.Weaves, noun, name string) (err error) {
 	names := mdl.MakeNames(name)
 	for i, n := range names {

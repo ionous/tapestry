@@ -24,21 +24,26 @@ func (op *AspectsAreTraits) Match(q Query, input *InputState) (okay bool) {
 	// aspects are stored as *singular*
 	// ideally, fix. but the use of those aspects in kinds as fields is also singular
 	// and matching of the field to the field's type is used as a filter to detect aspects
-	if index := scanUntil(next.Words(), keywords.Are); index > 0 {
-		plural := next.Cut(index)          // cut up to the index of "are"
-		one := inflect.Singularize(plural) // fix! should use the db
-		span, _ := match.MakeSpan(one)     // fix! should find kind without span
-		var ks kindsOf.Kinds
-		if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
-			// fix: clean this up some.
-			op.Aspect.ActualKind = ActualKind{k, ks}
-			op.Aspect.Matched = span.String()
-			//
-			next := next.Skip(w)         // skip the kind
-			op.Are.Matched = next.Cut(1) // cut the word are
-			next = next.Skip(1)          // move past are
-			if op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
-				*input, okay = next, true
+	if index := scanUntil(next, keywords.Are); index > 0 {
+		// cut up to the index of "are"
+		org := next.Cut(index)
+		plural, width := match.Normalize(org)
+		if width == index {
+			one := inflect.Singularize(plural)            // fix! should use the db
+			if span, e := match.Tokenize(one); e == nil { // fix! should find kind without span
+				var ks kindsOf.Kinds
+				if k, w := q.FindKind(span, &ks); w == index && ks == kindsOf.Aspect {
+					// fix: clean this up some.
+					op.Aspect.ActualKind = ActualKind{k, ks}
+					op.Aspect.Matched = org
+					//
+					next := next.Skip(w)         // skip the kind
+					op.Are.Matched = next.Cut(1) // cut the word are
+					next = next.Skip(1)          // move past are
+					if op.PlainNames.Match(AddContext(q, PlainNameMatching), &next) {
+						*input, okay = next, true
+					}
+				}
 			}
 		}
 	}
@@ -52,7 +57,11 @@ func (op *AspectsAreTraits) Weave(w weaver.Weaves, _ rt.Runtime) (err error) {
 		var names []string
 		for it := op.PlainNames.GetNames(); it.HasNext(); {
 			n := it.GetNext()
-			names = append(names, n.Name.GetNormalizedName())
+			if name, e := match.NormalizeAll(n.Name.Matched); e != nil {
+				err = e
+			} else {
+				names = append(names, name)
+			}
 		}
 		err = w.AddAspectTraits(aspect, names)
 	}

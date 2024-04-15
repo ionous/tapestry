@@ -29,9 +29,7 @@ Spec:with group:
       Spec:with flow:
       - "comma_and"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "matched"
 
     - # conjunction or junction.
       # matches commas, ands, and ors.
@@ -39,25 +37,19 @@ Spec:with group:
       Spec:with flow:
       - "comma_and_or"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "matched"
 
     - # matches "is" or "are".
       Spec:with flow:
       - "are"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "matched"
 
     - # matches the word "called".
       Spec:with flow:
       - "called"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "matched"
 
     - Spec:with slot:
       - "noun_builder"
@@ -88,9 +80,7 @@ Spec:with group:
           - "article"
           - true
         - # the string that matched ( a noun name or alias )
-          Term:type:
-          - "matched"
-          - "text"
+          Term: "matched"
         - # the database info that matched
           Term:private:
           - "actual_noun"
@@ -176,10 +166,7 @@ Spec:with group:
           - true
         - Term: "matching_number"
         - Term: "kind"
-        - Term:type:private:
-          - "matched"
-          - "counted_text"
-          - true
+        - Term: "matched"
 
     - # matches the name of an existing kind;
       # can generate a single anonymous noun.
@@ -193,9 +180,7 @@ Spec:with group:
           - "article"
           - true
         - # the string that matched
-          Term:type:
-          - "matched"
-          - "text"
+          Term: "matched"
         - # the database info that matched
           Term:private:
           - "actual_kind"
@@ -215,9 +200,7 @@ Spec:with group:
           - "article"
           - true
         - # matches a span ending with "is/are/comma/and"
-          Term:type:
-          - "matched"
-          - "text"
+          Term: "matched"
         - Term:optional:
           - "additional_kinds"
           - true
@@ -276,9 +259,7 @@ Spec:with group:
       Spec:with flow:
       - "words"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "matched"
 
     - # matches one or more predefined verbs
       # ( verbs are nouns of the verb kind )
@@ -600,9 +581,7 @@ Spec:with group:
       Spec:with flow:
       - "new_trait"
       - Flow uses:
-        - Term:type:
-          - "matched"
-          - "text"
+        - Term: "matched"
         - Term:optional:
           - "new_trait"
           - true
