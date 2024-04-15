@@ -12,9 +12,7 @@ type Suffix int
 const (
 	Continues Suffix = iota // then continue
 	Stops                   // then stop
-	Jumps                   // then jump
-	Begins                  // begins
-	Ends                    // end
+	Jumps                   // then skip
 	//
 	NumSuffixes = iota
 )

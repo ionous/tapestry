@@ -11,13 +11,11 @@ func _() {
 	_ = x[Continues-0]
 	_ = x[Stops-1]
 	_ = x[Jumps-2]
-	_ = x[Begins-3]
-	_ = x[Ends-4]
 }
 
-const _Suffix_name = "then continuethen stopthen jumpbeginsend"
+const _Suffix_name = "then continuethen stopthen jump"
 
-var _Suffix_index = [...]uint8{0, 13, 22, 31, 37, 40}
+var _Suffix_index = [...]uint8{0, 13, 22, 31}
 
 func (i Suffix) String() string {
 	if i < 0 || i >= Suffix(len(_Suffix_index)-1) {

@@ -62,8 +62,7 @@ type testAdapter struct {
 func (ta testAdapter) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width int) {
 	if n, w := ta.Query.FindNoun(ws, pkind); w > 0 {
 		ret, width = n, w
-	} else {
-		str, _ := match.Normalize(ws)
+	} else if str, w := match.Normalize(ws); w > 0 {
 		if noun, ok := ta.dynamicNouns[str]; ok {
 			ret, width = noun, len(ws)
 			if pkind != nil {

@@ -12,12 +12,12 @@ import (
 
 func TestPhrases(t *testing.T) {
 	var skipped int
-	const at = -1
+	const at = 0
 	for i, p := range jesstest.Phrases {
 		if i != at && at >= 0 {
 			continue
 		}
-		if str, ok := p.Test(); !ok {
+		if str, val, ok := p.Test(); !ok {
 			if len(str) > 0 {
 				t.Log("skipped", str)
 				skipped++
@@ -36,7 +36,7 @@ func TestPhrases(t *testing.T) {
 			m := jesstest.MakeMock(q, known.nounPool)
 			// run the test:
 			t.Logf("testing: %d %s", i, str)
-			if !p.Verify(m.Generate(str)) {
+			if !p.Verify(m.Generate(str, val)) {
 				t.Logf("failed %d", i)
 				t.Fail()
 			}
@@ -64,27 +64,28 @@ func (n *info) GetContext() int {
 }
 
 func (n *info) FindKind(ws []match.TokenValue, out *kindsOf.Kinds) (ret string, width int) {
-	str, _ := match.NormalizeAll(ws)
-	for i, k := range n.kinds {
-		if strings.HasPrefix(str, k) {
-			if i&1 == 0 { // singular are the even numbers
-				k = n.kinds[i+1]
-			}
-			ret, width = k, 1 // always in the tests
-			if out != nil {
-				// hacks for testing
-				k := kindsOf.Kind
-				switch ret {
-				case "color":
-					k = kindsOf.Aspect
-				case "groups":
-					k = kindsOf.Record
-				case "storing":
-					k = kindsOf.Action
+	if str, w := match.Normalize(ws); w > 0 {
+		for i, k := range n.kinds {
+			if strings.HasPrefix(str, k) {
+				if i&1 == 0 { // singular are the even numbers
+					k = n.kinds[i+1]
 				}
-				*out = k
+				ret, width = k, 1 // always in the tests
+				if out != nil {
+					// hacks for testing
+					k := kindsOf.Kind
+					switch ret {
+					case "color":
+						k = kindsOf.Aspect
+					case "groups":
+						k = kindsOf.Record
+					case "storing":
+						k = kindsOf.Action
+					}
+					*out = k
+				}
+				break
 			}
-			break
 		}
 	}
 	return
@@ -118,18 +119,19 @@ func (n *info) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width
 		m, width = n.verbNames.FindPrefix(ws)
 		ret = m.String()
 	case "":
-		str, _ := match.NormalizeAll(ws)
-		if noun, ok := n.nounPool[str]; ok {
-			ret, width = noun, len(ws)
-			if pkind != nil {
-				*pkind = n.nounPool["$"+str]
-			}
-		} else {
-			m, width = n.nouns.FindExactMatch(ws)
-			ret = m.String()
-			// sure... why not
-			if pkind != nil {
-				*pkind = jess.Things
+		if str, w := match.Normalize(ws); w > 0 {
+			if noun, ok := n.nounPool[str]; ok {
+				ret, width = noun, len(ws)
+				if pkind != nil {
+					*pkind = n.nounPool["$"+str]
+				}
+			} else {
+				m, width = n.nouns.FindExactMatch(ws)
+				ret = m.String()
+				// sure... why not
+				if pkind != nil {
+					*pkind = jess.Things
+				}
 			}
 		}
 	}

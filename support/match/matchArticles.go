@@ -26,17 +26,11 @@ func StripArticle(str string) (ret string) {
 // turn all of the passed tokens into a helpful string representation
 func DebugStringify(ts []TokenValue) (ret string) {
 	var out strings.Builder
-	for _, n := range ts {
-		if out.Len() > 0 && n.Token != Stop && n.Token != Comma {
+	for _, tv := range ts {
+		if out.Len() > 0 && tv.Token != Stop && tv.Token != Comma {
 			out.WriteRune(' ')
 		}
-		if str, ok := n.Value.(string); ok {
-			out.WriteString(str)
-		} else {
-			out.WriteRune('<')
-			out.WriteString(n.Token.String())
-			out.WriteRune('>')
-		}
+		out.WriteString(tv.String())
 	}
 	return out.String()
 }
@@ -45,11 +39,11 @@ func DebugStringify(ts []TokenValue) (ret string) {
 // returns the number of string tokens consumed.
 func Stringify(ts []TokenValue) (ret string, width int) {
 	var out strings.Builder
-	for _, n := range ts {
-		if n.Token != String {
+	for _, tv := range ts {
+		if tv.Token != String {
 			break
 		} else {
-			str := n.Value.(string)
+			str := tv.String()
 			if out.Len() > 0 {
 				out.WriteRune(' ')
 			}
@@ -65,14 +59,14 @@ func Stringify(ts []TokenValue) (ret string, width int) {
 // somewhat dubious because it skips inflect.Normalize
 func Normalize(ts []TokenValue) (ret string, width int) {
 	var out strings.Builder
-	for _, n := range ts {
-		if n.Token != String {
+	for _, tv := range ts {
+		if tv.Token != String {
 			break
 		} else {
 			if out.Len() > 0 {
 				out.WriteRune(' ')
 			}
-			str := n.Value.(string)
+			str := tv.String()
 			out.WriteString(strings.ToLower(str))
 			width++
 		}

@@ -15,7 +15,7 @@ import (
 
 func startsUpper(rs []match.TokenValue) (okay bool) {
 	if len(rs) > 0 && rs[0].Token == match.String {
-		str := rs[0].Value.(string)
+		str := rs[0].String()
 		first, _ := utf8.DecodeRuneInString(str)
 		okay = unicode.IsUpper(first) // this works okay even if the string was empty
 	}

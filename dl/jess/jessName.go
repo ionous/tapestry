@@ -56,31 +56,30 @@ func (op *Name) matchName(input *InputState) (okay bool) {
 // returns index of an "important" keyword
 // or the end of the string if none found.
 // inform also has troubles with names like "the has been."
-func keywordScan(ws []match.TokenValue) (ret int) {
-	ret = len(ws) // provisionally the whole thing.
-Loop:
-	for i, w := range ws {
-		switch w.Hash() {
-		case //
-			keywords.And,
-			keywords.Are,
-			keywords.Comma,
-			keywords.Has,
-			keywords.Is:
-			ret = i
-			break Loop
-		}
+func keywordScan(ts []match.TokenValue) (ret int) {
+	if i := scanUntil(ts, nameSeparators...); i < 0 {
+		ret = len(ts)
+	} else {
+		ret = i
 	}
 	return
 }
 
+var nameSeparators = []uint64{
+	keywords.And,
+	keywords.Are,
+	keywords.Comma,
+	keywords.Has,
+	keywords.Is,
+}
+
 // returns the index of the matching word in the span
 // -1 if not found
-func scanUntil(span []match.TokenValue, hashes ...uint64) (ret int) {
+func scanUntil(ts []match.TokenValue, hashes ...uint64) (ret int) {
 	ret = -1
 Loop:
-	for i, w := range span {
-		m := w.Hash()
+	for i, tv := range ts {
+		m := tv.Hash()
 		for _, h := range hashes {
 			if h == m {
 				ret = i

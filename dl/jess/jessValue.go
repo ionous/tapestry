@@ -78,7 +78,7 @@ func (op *QuotedText) TextEval() (ret rt.TextEval) {
 // and a single "word" containing the entire quoted text.
 func (op *QuotedText) Match(q Query, input *InputState) (okay bool) {
 	if v, ok := input.GetNext(match.Quoted); ok {
-		op.Matched = v.(string)
+		op.Matched = v.String()
 		*input, okay = input.Skip(1), true
 	}
 	return
@@ -95,7 +95,7 @@ func (op *MatchingNumber) Assignment() rt.Assignment {
 // matches a natural number in words, or a literal natural number.
 func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 	if ws := input.Words(); len(ws) > 0 && ws[0].Token == match.String {
-		word := ws[0].Value.(string)
+		word := ws[0].String()
 		if v, ok := WordsToNum(word); ok && v > 0 {
 			const width = 1
 			op.Number = float64(v)

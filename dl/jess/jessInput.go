@@ -17,9 +17,9 @@ func (in InputState) Words() []match.TokenValue {
 	return in
 }
 
-func (in InputState) GetNext(t match.Token) (ret any, okay bool) {
+func (in InputState) GetNext(t match.Token) (ret match.TokenValue, okay bool) {
 	if len(in) > 0 && in[0].Token == t {
-		ret, okay = in[0].Value, true
+		ret, okay = in[0], true
 	}
 	return
 }

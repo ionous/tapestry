@@ -8,6 +8,7 @@ import (
 
 // words preceding a rule name control the grouping, sorting, and interaction of similar rules.
 // ex. "instead of taking" sorts after "before taking" within the "before" grouping.
+// "when" is the default
 type Prefix int
 
 //go:generate stringer -type=Prefix -linecomment

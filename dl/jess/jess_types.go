@@ -1831,7 +1831,7 @@ func (op *RuleSuffix_Slice) Repeats() bool {
 type RuleName struct {
 	Prefix  bool
 	Article string
-	Matched string
+	Matched Matched
 	Suffix  bool
 	Markup  map[string]any
 }
@@ -1912,7 +1912,7 @@ type TimedRule struct {
 	Pattern       Kind
 	Target        *Noun
 	RuleSuffix    *RuleSuffix
-	RuleName      string
+	RuleName      *RuleName
 	SubAssignment SubAssignment
 	Markup        map[string]any
 }
@@ -3654,7 +3654,7 @@ func init() {
 		}, {
 			Name:  "matched",
 			Label: "matched",
-			Type:  &prim.Zt_Text,
+			Type:  &Zt_Matched,
 		}, {
 			Name:     "suffix",
 			Label:    "suffix",
@@ -3708,7 +3708,10 @@ func init() {
 			Name:     "rule_name",
 			Label:    "rule_name",
 			Optional: true,
-			Type:     &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "parenthetical text",
+			},
+			Type: &Zt_RuleName,
 		}, {
 			Name:  "sub_assignment",
 			Label: "sub_assignment",

@@ -39,24 +39,30 @@ func (w TokenValue) Equals(other uint64) bool {
 	return w.Hash() == other
 }
 
-func (tv TokenValue) Hash() (ret uint64) {
-	switch tv.Token {
-	case Comma:
-		ret = Hash(`,`)
-	case Comment:
-		ret = Hash(`#`)
-	case Parenthetical:
-		ret = Hash(`()`)
-	case Quoted:
-		ret = Hash(`"`)
-	case Stop:
-		ret = Hash(`.`)
-	case String:
-		// fix: this is obviously silly.
-		ret = Hash(tv.Value.(string))
-	case Tell:
-		ret = 0
+// a string *representation* of the value
+func (tv TokenValue) String() (ret string) {
+	switch v := tv.Value.(type) {
+	case rune:
+		ret = string(v)
+	case string:
+		ret = v
 	default:
+		ret = fmt.Sprintf("<%s>", tv.Token)
+	}
+	return
+}
+
+func (tv TokenValue) Hash() (ret uint64) {
+	switch v := tv.Value.(type) {
+	case rune:
+		// fix: this is silly obviously.
+		ret = Hash(string(v))
+	case string:
+		// fix: this is obviously silly.
+		ret = Hash(v)
+	default:
+		// Tell values return 0
+		ret = 0
 	}
 	return
 }

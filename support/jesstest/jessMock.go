@@ -36,8 +36,8 @@ func MakeMock(q jess.Query, nouns map[string]string) Mock {
 	}
 }
 
-func (m *Mock) Generate(paragraph string) (ret []string, err error) {
-	if e := m.generate(paragraph); e != nil {
+func (m *Mock) Generate(str string, val rt.Assignment) (ret []string, err error) {
+	if e := m.generate(str, val); e != nil {
 		err = e
 	} else {
 		ret = m.out
@@ -45,8 +45,8 @@ func (m *Mock) Generate(paragraph string) (ret []string, err error) {
 	return
 }
 
-func (m *Mock) generate(paragraph string) (err error) {
-	if p, e := jess.NewParagraph(paragraph, nil); e != nil {
+func (m *Mock) generate(str string, val rt.Assignment) (err error) {
+	if p, e := jess.NewParagraph(str, val); e != nil {
 		err = e
 	} else {
 		for z := weaver.Phase(0); z < weaver.NumPhases; z++ {

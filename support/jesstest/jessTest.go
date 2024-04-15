@@ -10,13 +10,41 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 var Phrases = []Phrase{
+
+	// ------------------------------------------------------------------------
+	// TimedRule
+	// ------------------------------------------------------------------------
+	{
+		// tbd: would it make more sense to have these end with colon here?
+		// should the tokens maybe include the colon then the tell doc?
+		test:   `Instead of storing`, // storying is one of the predefined patterns.
+		assign: true,
+		result: "bbep",
+
+		// Report an actor taking (this is the standard report taking rule):
+		// and need a noun or kind rule
+
+		// tbd: "when" is the default; should we force it to be specified?
+		// if so, how does that interact with "when <domain> begins|ends"
+
+		// after advancing time, then continue
+		// before someone attacking, then stop
+
+		// todo:
+		// can test the other prefixes and suffixes directly somewhere:
+		// matching one set here is enough.
+	},
+
 	// ------------------------------------------------------------------------
 	// MapDirections
 	// ------------------------------------------------------------------------
@@ -919,12 +947,24 @@ var Phrases = []Phrase{
 
 type Phrase struct {
 	test   string
+	assign MockAssignment
 	result any
 }
 
 // returns empty if no result is expected (ie. a skip)
-func (p *Phrase) Test() (string, bool) {
-	return p.test, p.result != nil
+func (p *Phrase) Test() (string, rt.Assignment, bool) {
+	var a rt.Assignment
+	if p.assign {
+		a = p.assign
+	}
+	return p.test, a, p.result != nil
+}
+
+// we only need to test matching and generation; parsing sub docs is elsewhere
+type MockAssignment bool
+
+func (MockAssignment) GetAssignedValue(rt.Runtime) (g.Value, error) {
+	return nil, errors.New("mock assignment")
 }
 
 // verify a standard set of phrases using some function that takes each of those phrases
