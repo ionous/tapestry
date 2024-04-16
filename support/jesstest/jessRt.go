@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
@@ -31,6 +32,7 @@ func (d *jessRt) ReciprocalsOf(b, relation string) (ret g.Value, err error) {
 	return
 }
 func (d *jessRt) GetField(name, field string) (ret g.Value, err error) {
+	// ex. asking for north.opposite
 	if field == "opposite" {
 		var str string
 		switch name {
@@ -46,6 +48,11 @@ func (d *jessRt) GetField(name, field string) (ret g.Value, err error) {
 			err = fmt.Errorf("jess rt, unexpected opposite for %q", name)
 		}
 		ret = g.StringOf(str)
+	} else if name == meta.KindAncestry {
+		if field == "storing" {
+			// root left, kind right.
+			ret = g.StringsOf([]string{"kinds", "actions", "storing"})
+		}
 	} else {
 		ret, err = d.verbs.GetVerbValue(name, field)
 	}

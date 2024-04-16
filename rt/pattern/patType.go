@@ -1,7 +1,6 @@
 package pattern
 
 import (
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
@@ -16,8 +15,9 @@ const (
 	Listens
 )
 
-func Categorize(k *g.Kind) (ret Category) {
-	switch path := g.Ancestry(k); len(path) {
+// meta.KindAncestry
+func Categorize(path []string) (ret Category) {
+	switch len(path) {
 	case 2: // <record>(0) name; <pattern>(0) name
 		switch base := path[0]; base {
 		case kindsOf.Record.String():

@@ -31,6 +31,10 @@ func (p *Pattern) Parent() string {
 	return p.parent
 }
 
+func (p *Pattern) Rules() []Rule {
+	return p.rules
+}
+
 func NewPatternBuilder(name string) *PatternBuilder {
 	return NewPatternSubtype(name, kindsOf.Pattern.String())
 }

@@ -98,7 +98,6 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else {
 			rule := rules.ReadPhrase(phrase.String(), label.String())
-
 			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
 				err = e
 			} else {

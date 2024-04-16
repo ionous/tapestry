@@ -1,10 +1,14 @@
 package jess
 
 import (
+	"errors"
+
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
+	"git.sr.ht/~ionous/tapestry/weave/weaver"
 )
 
 func (op *TimedRule) Match(q Query, input *InputState) (okay bool) {
@@ -41,12 +45,30 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 
 // goal: schedule the rule
 func (op *TimedRule) Generate(ctx Context) (err error) {
-	if pat, e := op.Pattern.Validate(kindsOf.Pattern); e != nil {
+	// fix: why validate if we have to get again
+	if pat, e := op.Pattern.Validate(kindsOf.Pattern, kindsOf.Action); e != nil {
 		err = e
+	} else if exe, ok := op.SubAssignment.GetExe(); !ok {
+		err = errors.New("rule expected a list of statements to execute")
 	} else {
-		_ = pat
+		n := rules.RuleName{
+			Short:  pat,
+			Label:  GetRuleName(op.RuleName),
+			Prefix: GetRulePrefix(op.RulePrefix),
+			Suffix: GetRuleSuffix(op.RuleSuffix),
+			// ExcludesPlayer -- FIX
+		}
+		// FILTERS for nouns or kinds
+		err = ctx.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+			if rule, e := n.GetRuleInfo(run); e != nil {
+				err = e
+			} else {
+				err = rule.WeaveRule(w, nil, exe)
+			}
+			return
+		})
 	}
-	panic("not implemented")
+	return
 }
 
 // ----
@@ -61,7 +83,18 @@ func (op *SubAssignment) Match(input *InputState) (okay bool) {
 	return
 }
 
+func (op *SubAssignment) GetExe() (ret []rt.Execute, okay bool) {
+	if a, ok := op.Assignment.(*assign.FromExe); ok {
+		ret, okay = a.Exe, true
+	}
+	return
+}
+
 // ----
+
+func GetRulePrefix(op RulePrefix) rules.Prefix {
+	return rules.Prefix(op.PrefixValue)
+}
 
 func (op *RulePrefix) Match(q Query, input *InputState) (okay bool) {
 	if idx, width := prefixes.FindPrefixIndex(input.Words()); width > 0 {
@@ -73,6 +106,13 @@ func (op *RulePrefix) Match(q Query, input *InputState) (okay bool) {
 
 // ----
 
+func GetRuleSuffix(op *RuleSuffix) (ret rules.Suffix) {
+	if op != nil {
+		ret = rules.Suffix(op.SuffixValue)
+	}
+	return
+}
+
 func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
 	if idx, width := suffixes.FindPrefixIndex(input.Words()); width > 0 {
 		op.SuffixValue = SuffixValue(idx)
@@ -82,6 +122,17 @@ func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
 }
 
 // ------
+
+func GetRuleName(op *RuleName) (ret string) {
+	if op != nil {
+		if str, w := match.Normalize(op.Matched); w != len(op.Matched) {
+			panic("unexpected error in match")
+		} else {
+			ret = str
+		}
+	}
+	return
+}
 
 // assumes we are inside the parens
 func (op *RuleName) Match(q Query, input *InputState) (okay bool) {

@@ -205,6 +205,12 @@ func (m *Mock) AddAspectTraits(aspect string, traits []string) (err error) {
 	return
 }
 
+func (m *Mock) ExtendPattern(p mdl.Pattern) (_ error) {
+	m.out = append(m.out, "ExtendPattern:", p.Name(),
+		fmt.Sprintf("rule count: %d", len(p.Rules())))
+	return
+}
+
 // mock assumes all facts valid and new
 func (m *Mock) AddFact(key string, partsAndValue ...string) (_ error) {
 	m.out = append(m.out, "AddFact:", key)

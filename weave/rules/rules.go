@@ -9,56 +9,31 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
 
-type RuleInfo struct {
-	Name           string // name of the pattern / kind
-	Label          string
-	Rank           int // smaller ranked rules run first
-	Stop           bool
-	Jump           rt.Jump
-	ExcludesPlayer bool // true if the rule should apply to all actors
-}
-
 // results of reading author specified pairs of pattern name and rule name.
 // for example ("before someone jumping", "people jump for joy")
 type RuleName struct {
-	// the name of the pattern without any prefix or suffix
-	// ex. "jumping"
-	Short string
-	// the name of the pattern
-	// ( with timing prefix, but without actor prefix and any suffix )
-	// ex. "before jumping"
-	Long string
-	// the name of the rule as specified by the author
-	// ex. "the standard jumping action"
-	Label          string
+	Short          string // base pattern without any prefix or suffix
+	Label          string // friendly name of the rule itself
 	Prefix         Prefix
 	Suffix         Suffix
 	ExcludesPlayer bool // true if the rule should apply to all actors
 }
 
-//	func (n RuleName) IsDomainEvent() bool {
-//		return n.Suffix == Begins || n.Suffix == Ends
-//
-// // }
-//
-//	if rule.IsDomainEvent() {
-//					// are we in the domain?
-//					domainName, eventName := rule.Short, rule.EventName()
-//					if v, e := run.GetField(meta.Domain, domainName); e == nil && v.Bool() {
-//						// cheat by adding the pattern as if it were in the root domain
-//						// regardless of where we are.
-//						pb := mdl.NewPatternBuilder(eventName)
-//						err = w.AddPattern(pb.Pattern)
-//					}
-//				}
-//
+type RuleInfo struct {
+	Name           string // name of the pattern / kind
+	Label          string // friendly name of the rule itself
+	Rank           int    // smaller ranked rules run first
+	Stop           bool
+	Jump           rt.Jump
+	ExcludesPlayer bool // true if the rule should apply to all actors
+}
+
 // instead and report are grouped with before and after respectively
 func (n RuleName) EventName() (ret string) {
 	switch n.Prefix {
@@ -69,7 +44,7 @@ func (n RuleName) EventName() (ret string) {
 	case Report:
 		ret = event.AfterPhase.PatternName(n.Short)
 	default:
-		ret = n.Long
+		ret = n.Prefix.String() + " " + n.Short
 	}
 	return
 }
@@ -89,45 +64,35 @@ func ReadPhrase(patternSpec, ruleSpec string) (ret RuleName) {
 	var excludesPlayer bool
 	const someone = "someone "
 	if excludesPlayer = strings.HasPrefix(short, someone); excludesPlayer {
-		next := short[len(someone):]
-		if name == short {
-			name = next
-		}
-		short = next
+		short = short[len(someone):]
 	}
 	return RuleName{
 		Short:  short,
-		Long:   name,
 		Label:  inflect.Normalize(ruleSpec),
 		Prefix: prefix,
 		Suffix: suffix,
 	}
 }
 
-// func (n RuleName) ruleForDomain() (ret RuleInfo, err error) {
-// 	ret = RuleInfo{
-// 		Name: n.EventName(),
-// 		Jump: rt.JumpLater,
-// 	}
-// 	return
-// }
-
 // match an author specified pattern reference
 // to various naming conventions and pattern definitions
 // to determine the intended pattern name, rank, and termination behavior.
 // for example: "instead of x", "before x", "after x", "report x".
-func (n RuleName) GetRuleInfo(ks g.Kinds) (ret RuleInfo, err error) {
-	if k, e := ks.GetKindByName(n.Short); e != nil {
-		err = e // ^ the base pattern
+func (n RuleName) GetRuleInfo(run rt.Runtime) (ret RuleInfo, err error) {
+	// fix: we can pass in the base type
+	if ks, e := run.GetField(meta.KindAncestry, n.Short); e != nil {
+		err = e
 	} else {
-		switch pattern.Categorize(k) {
+		//
+		switch pattern.Categorize(ks.Strings()) {
 		default:
 			err = errutil.Fmt("can't have a %q event", n.Short)
 
+		// for regular patterns, supports sorting rules before/after
 		case pattern.Calls:
 			switch n.Prefix {
 			case Instead, Report:
-				err = errutil.Fmt("%q isn't a kind of %s and doesn't support %q", n.Short, kindsOf.Action, n.Prefix)
+				err = errutil.Fmt("%q isn't an action and doesn't support %q", n.Short, n.Prefix)
 			default:
 				// ex. "before normal pattern", return "normal pattern"
 				ret = RuleInfo{Name: n.Short, Rank: n.Prefix.rank()}

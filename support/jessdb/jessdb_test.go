@@ -29,7 +29,7 @@ func TestPhrases(t *testing.T) {
 				if i != at && at >= 0 {
 					continue
 				}
-				if str, ok := p.Test(); !ok {
+				if str, val, ok := p.Test(); !ok {
 					continue // skip unused tests
 				} else {
 					// reset the dynamic noun pool every test
@@ -44,7 +44,7 @@ func TestPhrases(t *testing.T) {
 					m := jesstest.MakeMock(q, dynamicNouns)
 					// run the test:
 					t.Logf("testing: %d %s", i, str)
-					if !p.Verify(m.Generate(str)) {
+					if !p.Verify(m.Generate(str, val)) {
 						t.Logf("failed %d", i)
 						t.Fail()
 					}
