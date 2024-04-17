@@ -62,7 +62,7 @@ var keywords = struct {
 	Colon, Comma,
 	Has, Have,
 	Is, Nowhere, Of, Or, Quote,
-	Rule,
+	Rule, Someone,
 	Through, Understand, Usually, You uint64
 }{
 	And:    match.Hash("and"),
@@ -80,6 +80,7 @@ var keywords = struct {
 	Or:      match.Hash("or"),
 	Quote:   match.Hash(`"`),
 	Rule:    match.Hash("rule"),
+	Someone: match.Hash("someone"),
 	//
 	Through:    match.Hash("through"),
 	Understand: match.Hash("understand"),

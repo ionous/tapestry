@@ -25,26 +25,34 @@ var Phrases = []Phrase{
 	// ------------------------------------------------------------------------
 	{
 		// tbd: would it make more sense to have these end with colon here?
-		// should the tokens maybe include the colon then the tell doc?
-		test:   `Instead of storing`, // storying is one of the predefined patterns.
+		// storing is one of the predefined patterns.
+		test:   `Instead of storing`,
 		assign: true,
 		result: []string{
-			"ExtendPattern:", "before storing", "rule count: 1",
+			"ExtendPattern:", "before storing",
+			"Rule:", "{Name: Stop:false Jump:JumpLater Updates:false Exe:[]}",
 		},
-
-		// Report an actor taking (this is the standard report taking rule):
-		// and need a noun or kind rule
-
-		// tbd: "when" is the default; should we force it to be specified?
-		// if so, how does that interact with "when <domain> begins|ends"
-
-		// after advancing time, then continue
-		// before someone attacking, then stop
-
-		// todo:
-		// can test the other prefixes and suffixes directly somewhere:
-		// matching one set here is enough.
 	},
+	{
+		test:   `Report someone storing (this is the noisy storage rule)`,
+		assign: true,
+		result: []string{
+			"ExtendPattern:", "after storing",
+			"Rule:", `{Name:noisy storage Stop:false Jump:JumpLater Updates:false Exe:[]}`,
+		},
+	},
+	// Report someone storing (this is the noisy storage rule):
+	// and need a noun or kind rule
+
+	// tbd: "when" is the default; should we force it to be specified?
+	// if so, how does that interact with "when <domain> begins|ends"
+
+	// after advancing time, then continue
+	// before someone attacking, then stop
+
+	// todo:
+	// can test the other prefixes and suffixes directly somewhere:
+	// matching one set here is enough.
 
 	// ------------------------------------------------------------------------
 	// MapDirections

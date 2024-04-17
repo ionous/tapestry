@@ -1909,6 +1909,7 @@ func (op *SubAssignment_Slice) Repeats() bool {
 // matches pattern rule definitions
 type TimedRule struct {
 	RulePrefix    RulePrefix
+	Someone       bool
 	Pattern       Kind
 	Target        *Noun
 	RuleSuffix    *RuleSuffix
@@ -2519,6 +2520,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10719807371802907896: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleSuffix:ruleName:subAssignment: */
 	10614078949980130993: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleSuffix:subAssignment: */
 	7967826310862149340:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:subAssignment: */
+	11886989456270920378: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleName:subAssignment: */
+	11973597951319921255: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:ruleName:subAssignment: */
+	18120234146621178072: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:subAssignment: */
+	13116956132782342707: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:subAssignment: */
+	14936260571566114493: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:ruleName:subAssignment: */
+	16134756622443501962: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:ruleSuffix:ruleName:subAssignment: */
+	4562209864630899779:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:ruleSuffix:subAssignment: */
+	1168531432420503878:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:subAssignment: */
 	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
@@ -3687,6 +3696,11 @@ func init() {
 			Name:  "rule_prefix",
 			Label: "rule_prefix",
 			Type:  &Zt_RulePrefix,
+		}, {
+			Name:     "someone",
+			Label:    "someone",
+			Optional: true,
+			Type:     &prim.Zt_Bool,
 		}, {
 			Name:  "pattern",
 			Label: "pattern",

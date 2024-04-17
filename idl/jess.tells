@@ -661,6 +661,10 @@ Spec:with group:
       - "timed_rule"
       - Flow uses:
         - Term: "rule_prefix"
+        - Term:type:optional:
+          - "someone"
+          - "bool"
+          - true
         - # the pattern this rule targets.
           # the pattern must exist for this phrase to generate successfully.
           # ex. "instead of traveling"

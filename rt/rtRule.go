@@ -1,6 +1,8 @@
 package rt
 
-import "github.com/ionous/errutil"
+import (
+	"github.com/ionous/errutil"
+)
 
 type Jump int
 

@@ -206,8 +206,12 @@ func (m *Mock) AddAspectTraits(aspect string, traits []string) (err error) {
 }
 
 func (m *Mock) ExtendPattern(p mdl.Pattern) (_ error) {
-	m.out = append(m.out, "ExtendPattern:", p.Name(),
-		fmt.Sprintf("rule count: %d", len(p.Rules())))
+	rules := p.Rules()
+	m.out = append(m.out, "ExtendPattern:", p.Name())
+	for _, n := range rules {
+		rule := n.Rule
+		m.out = append(m.out, "Rule:", fmt.Sprintf("%+v", rule))
+	}
 	return
 }
 

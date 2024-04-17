@@ -2,6 +2,7 @@ package jess
 
 import (
 	"errors"
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -14,12 +15,21 @@ import (
 func (op *TimedRule) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	/**/ op.RulePrefix.Match(q, &next) &&
+		(op.matchSomeone(q, &next) || true) &&
 		op.Pattern.Match(q, &next) &&
 		(Optional(q, &next, &op.Target) || true) &&
 		(Optional(q, &next, &op.RuleSuffix) || true) &&
 		(op.matchName(q, &next) || true) &&
 		op.SubAssignment.Match(&next) {
 		*input, okay = next, true
+	}
+	return
+}
+
+func (op *TimedRule) matchSomeone(_ Query, input *InputState) (okay bool) {
+	if width := input.MatchWord(keywords.Someone); width > 0 {
+		op.Someone = true
+		*input, okay = input.Skip(width), true
 	}
 	return
 }
@@ -32,11 +42,13 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 		// ex. caching until Generate and then validating there are close parens
 		// no terminals, etc. in Generate....
 		if words, e := match.Tokenize(val.String()); e != nil {
-			op.RuleName, okay = new(RuleName), true
+			// on error tokeninzing, set an empty rule name and error in Generate
+			op.RuleName = new(RuleName)
+			*input, okay = input.Skip(1), true
 		} else {
 			words := InputState(words)
-			if next := input.Cut(1); Optional(q, &words, &op.RuleName) {
-				*input, okay = next, true
+			if Optional(q, &words, &op.RuleName) {
+				*input, okay = input.Skip(1), true
 			}
 		}
 	}
@@ -45,15 +57,16 @@ func (op *TimedRule) matchName(q Query, input *InputState) (okay bool) {
 
 // goal: schedule the rule
 func (op *TimedRule) Generate(ctx Context) (err error) {
-	// fix: why validate if we have to get again
-	if pat, e := op.Pattern.Validate(kindsOf.Pattern, kindsOf.Action); e != nil {
+	if label, e := GetRuleName(op.RuleName); e != nil {
+		err = e
+	} else if pat, e := op.Pattern.Validate(kindsOf.Pattern, kindsOf.Action); e != nil {
 		err = e
 	} else if exe, ok := op.SubAssignment.GetExe(); !ok {
 		err = errors.New("rule expected a list of statements to execute")
 	} else {
 		n := rules.RuleName{
 			Short:  pat,
-			Label:  GetRuleName(op.RuleName),
+			Label:  label,
 			Prefix: GetRulePrefix(op.RulePrefix),
 			Suffix: GetRuleSuffix(op.RuleSuffix),
 			// ExcludesPlayer -- FIX
@@ -123,10 +136,10 @@ func (op *RuleSuffix) Match(q Query, input *InputState) (okay bool) {
 
 // ------
 
-func GetRuleName(op *RuleName) (ret string) {
+func GetRuleName(op *RuleName) (ret string, err error) {
 	if op != nil {
-		if str, w := match.Normalize(op.Matched); w != len(op.Matched) {
-			panic("unexpected error in match")
+		if str, w := match.Normalize(op.Matched); w != len(op.Matched) || w == 0 {
+			err = fmt.Errorf("couldn't determine rule name")
 		} else {
 			ret = str
 		}
