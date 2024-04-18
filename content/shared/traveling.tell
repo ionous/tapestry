@@ -1,9 +1,10 @@
 ---
 Tapestry:
   - # Traveling takes the actor moving, and the door for them to travel through.
-    # FIX: optionally pass the direction so that it doesnt have to find it twice when 'going'
+    # TODO: "entering" (ex. a container) is a different action.
+    # TODO: optionally pass the direction so that it doesnt have to find it twice when 'going'
     Define action:requires:
-      - "traveling"
+      - "traveling through"
       - - # the actor traveling somewhere ( ex. the player. )
           Text:kind:
             - "actor"
@@ -13,7 +14,7 @@ Tapestry:
             - "noun"
             - "door"
   - Define rule:provides:
-      - "traveling"
+      - "traveling through"
       - - # Extract the destination from the door.
           Text:kind:initially:
             - "destination"
@@ -30,7 +31,7 @@ Tapestry:
                       FromText: "@actor"
                 - FromText: "@noun"
   - Define rule:named:do:
-      - "instead of traveling"
+      - "instead of traveling through"
       - "standard traveling checks"
       - - If:assuming:do:else:
             - Not:
@@ -40,7 +41,7 @@ Tapestry:
                   - FromText:
                       CanReach actor:action:noun:
                         - FromText: "@actor"
-                        - FromText: "traveling"
+                        - FromText: "traveling through"
                         - FromText: "@noun"
             - - Print: "@resp"
             - If:assuming:do:
@@ -51,12 +52,12 @@ Tapestry:
                       - FromText:
                           CanUse actor:action:noun:otherNoun:
                             - FromText: "@actor"
-                            - FromText: "traveling"
+                            - FromText: "traveling through"
                             - FromText: "@noun"
                             - FromText: "@destination"
                 - - Print: "@resp"
   - Define rule:do:
-      - "instead of traveling"
+      - "instead of traveling through"
       - - If:do:
             - Is empty: "@destination"
             - - Say response:with:
@@ -64,7 +65,7 @@ Tapestry:
                   - "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
   - # 
     Define rule:do:
-      - "traveling"
+      - "traveling through"
       - - If:assuming:do:
             - Not:
                 Is empty: "@response"
@@ -76,12 +77,12 @@ Tapestry:
                         - FromText: "@destination"
             - - Print: "@response"
   - Define rule:do:
-      - "report someone traveling"
+      - "report someone traveling through"
       - - Say response:with:
             - "someone else travels"
             - "{The: .actor|capitalize!} went through {the: .noun}."
   - Define rule:do:
-      - "report traveling"
+      - "report traveling through"
       - - PrintVantage:
   - # 
     Define rule:do:
@@ -91,7 +92,7 @@ Tapestry:
                 - Is:matching:text:
                     - "@action"
                     - "equal_to"
-                    - "traveling"
+                    - "traveling through"
                 - Object:field:
                     - "@noun"
                     - "closed"
@@ -108,7 +109,7 @@ Tapestry:
                 - Is:matching:text:
                     - "@action"
                     - "equal_to"
-                    - "traveling"
+                    - "traveling through"
                 - Object:field:
                     - "@noun"
                     - "closed"

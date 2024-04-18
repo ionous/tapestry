@@ -83,7 +83,7 @@ Tapestry:
       - - One of:
             - Sequence:
                 - One noun: "objects"
-                - Action: "traveling"
+                - Action: "traveling through"
   - # examining
     Interpret:with:
       - - "examine"
@@ -101,7 +101,7 @@ Tapestry:
                 - One word:
                     - "in"
                     - "on"
-                - Action: "traveling"
+                - Action: "traveling through"
             - Sequence:
                 - One word:
                     - "in"
@@ -109,7 +109,7 @@ Tapestry:
                     - "on"
                     - "onto"
                 - One noun: "objects"
-                - Action: "traveling"
+                - Action: "traveling through"
             - Sequence:
                 - Refine sequence:
                     - One noun: "objects"
@@ -134,7 +134,7 @@ Tapestry:
                     - "inside"
                     - "through"
                 - One noun: "objects"
-                - Action: "traveling"
+                - Action: "traveling through"
             - Sequence:
                 - Focus:sequence:
                     - "compass"
@@ -142,7 +142,7 @@ Tapestry:
                       - Action: "going"
             - Sequence:
                 - One noun: "objects"
-                - Action: "traveling"
+                - Action: "traveling through"
   - Interpret name:with:
       - "going a direction"
       - - # even though the directions are in scope by default

@@ -116,7 +116,7 @@ func (n *Tokenizer) tokenize() charm.State {
 			ret = DecodeDoc(includeComments, func(q rune, content any) (ret charm.State) {
 				// after the async document has finished:
 				// notifier the reader using a token
-				if e := content.(error); e != nil {
+				if e, ok := content.(error); ok {
 					ret = charm.Error(e)
 				} else if e := n.notifyToken(Tell, content); e != nil {
 					ret = charm.Error(e)

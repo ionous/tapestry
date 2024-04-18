@@ -168,7 +168,7 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 func raiseRunAction(run rt.Runtime, actor g.Value, act string, nouns []string) (okay bool, err error) {
 	keys := []string{"actor", "action", "first noun", "second noun"}
 	values := []g.Value{actor, g.StringOf(act), nounIndex(nouns, 0), nounIndex(nouns, 1)}
-	if v, e := run.Call("running action", affine.None, keys, values); e != nil {
+	if v, e := run.Call("running an action", affine.None, keys, values); e != nil {
 		err = e
 	} else {
 		okay = v.Bool()

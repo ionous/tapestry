@@ -39,14 +39,14 @@ Tapestry:
         - Expect output:
             - "**Lobby**"
             - "You can see some double doors and a faux door."
-        - Traveling actor:noun:
+        - TravelingThrough actor:noun:
             - FromText:
                 Object:field:
                   - "story"
                   - "actor"
             - FromText: "faux door"
         - Expect output: "It doesn't lead anywhere."
-        - Traveling actor:noun:
+        - TravelingThrough actor:noun:
             - FromText:
                 Object:field:
                   - "story"
@@ -60,7 +60,7 @@ Tapestry:
                   - "pawn"
             - FromText: "double doors"
         - Expect output: "You open the double doors."
-        - Traveling actor:noun:
+        - TravelingThrough actor:noun:
             - FromText:
                 Object:field:
                   - "player"

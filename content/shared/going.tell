@@ -26,7 +26,7 @@ Tapestry:
   - Define rule:named:do:
       - "going"
       - "going becomes traveling"
-      - - Traveling actor:noun:
+      - - TravelingThrough actor:noun:
             - FromText: "@actor"
             - FromText: "@door"
   - # a special rule for going so it can have a custom response.
