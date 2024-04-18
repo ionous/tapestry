@@ -65,6 +65,11 @@ func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err err
 	name, suffix := findSuffix(patternSpec)
 	// return name sans any prefix, and any prefix the name had.
 	short, prefix := findPrefix(name)
+	var excludesPlayer bool
+	const someone = "someone "
+	if excludesPlayer = strings.HasPrefix(short, someone); excludesPlayer {
+		short = short[len(someone):]
+	}
 	// fix: probably want some sort of "try prefix/suffix" that attempts to chop the parts
 	// but restores them if it cant find them --
 	// maybe see jess -- it does that sort of partial matching
@@ -75,11 +80,6 @@ func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err err
 	} else if pat := g.Ancestry(k); len(pat) == 0 {
 		err = fmt.Errorf("couldnt determine ancestry of %q", short)
 	} else {
-		var excludesPlayer bool
-		const someone = "someone "
-		if excludesPlayer = strings.HasPrefix(short, someone); excludesPlayer {
-			short = short[len(someone):]
-		}
 		ret = RuleName{
 			Pattern:        pat,
 			Label:          inflect.Normalize(ruleSpec),
