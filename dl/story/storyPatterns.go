@@ -3,8 +3,6 @@ package story
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -96,13 +94,14 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
+		} else if desc, e := rules.ReadPhrase(run, phrase.String(), label.String()); e != nil {
+			err = e
+		} else if rule, e := desc.GetRuleInfo(); e != nil {
+			err = e
 		} else {
-			rule := rules.ReadPhrase(phrase.String(), label.String())
-			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
-				err = e
-			} else {
-				err = cat.WeaveRule(info, nil, op.Exe)
-			}
+			err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+				return rule.WeaveRule(w, nil, op.Exe)
+			})
 		}
 		return
 	})
@@ -118,18 +117,21 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
+		} else if desc, e := rules.ReadPhrase(run, phrase.String(), label.String()); e != nil {
+			err = e
+		} else if rule, e := desc.GetRuleInfo(); e != nil {
+			err = e
 		} else {
-			rule := rules.ReadPhrase(phrase.String(), label.String())
-			filter := &core.CompareText{
-				A:  core.Variable(event.Object, event.Target.String()),
-				Is: core.C_Comparison_EqualTo,
-				B:  &literal.TextValue{Value: noun.String()},
+			filters := rules.AddNounFilter(noun.String(), nil)
+			if desc.IsEvent() {
+				if !desc.ExcludesPlayer {
+					filters = rules.AddPlayerFilter(filters)
+				}
+				filters = rules.AddEventFilters(filters)
 			}
-			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
-				err = e
-			} else {
-				err = cat.WeaveRule(info, filter, op.Exe)
-			}
+			err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+				return rule.WeaveRule(w, filters, op.Exe)
+			})
 		}
 		return
 	})
@@ -149,32 +151,28 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
+		} else if desc, e := rules.ReadPhrase(run, phrase.String(), label.String()); e != nil {
+			err = e
+		} else if rule, e := desc.GetRuleInfo(); e != nil {
+			err = e
 		} else {
-			rule := rules.ReadPhrase(phrase.String(), label.String())
-			k := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
-			var filter rt.BoolEval
+			var filters []rt.BoolEval
 			if exact.Bool() {
-				filter = &core.IsExactKindOf{Object: core.Variable(event.Object, event.Target.String()),
-					Kind: k,
-				}
+				panic("not implemented")
 			} else {
-				filter = &core.IsKindOf{Object: core.Variable(event.Object, event.Target.String()),
-					Kind: k,
+				k := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
+				filters = rules.AddKindFilter(k, filters)
+				if desc.IsEvent() {
+					if !desc.ExcludesPlayer {
+						filters = rules.AddPlayerFilter(filters)
+					}
+					filters = rules.AddEventFilters(filters)
 				}
-			}
-			if info, e := rule.GetRuleInfo(cat.GetRuntime()); e != nil {
-				err = e
-			} else {
-				err = cat.WeaveRule(info, filter, op.Exe)
+				err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+					return rule.WeaveRule(w, filters, op.Exe)
+				})
 			}
 		}
 		return
 	})
-}
-
-type ruleNoun string
-
-type ruleKind struct {
-	name    string
-	exactly bool
 }

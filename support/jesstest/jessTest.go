@@ -22,27 +22,41 @@ var Phrases = []Phrase{
 
 	// ------------------------------------------------------------------------
 	// TimedRule
+	// ( storing is one of the predefined patterns. )
 	// ------------------------------------------------------------------------
 	{
 		// tbd: would it make more sense to have these end with colon here?
-		// storing is one of the predefined patterns.
+		// currently, its read by the tokenizer it assumes the next bit a a tell document
+		// there's no tell document here; just the partial phrase for testing.
 		test:   `Instead of storing`,
 		assign: true,
 		result: []string{
 			"ExtendPattern:", "before storing",
-			"Rule:", "{Name: Stop:false Jump:JumpLater Updates:false Exe:[]}",
+			"Rule:", "<unnamed>, Stop:false, Jump:JumpLater, Updates:false",
 		},
 	},
 	{
+		// since actions are always actor initiated,
+		// the LHS ( the "someone" between prefix and the verb ) can only really be an actor
+		// when its nothing, it implies the player;
+		// but it could be a specific subclass.
 		test:   `Report someone storing (this is the noisy storage rule)`,
 		assign: true,
 		result: []string{
 			"ExtendPattern:", "after storing",
-			"Rule:", `{Name:noisy storage Stop:false Jump:JumpLater Updates:false Exe:[]}`,
+			"Rule:", "noisy storage, Stop:false, Jump:JumpLater, Updates:false",
 		},
 	},
-	// Report someone storing (this is the noisy storage rule):
-	// and need a noun or kind rule
+	{
+		// matching works ... now need to generate some ... filters....
+		// and log them.... serialize to json maybe? ugh.
+		test:   `Report someone storing the message`,
+		assign: true,
+		result: []string{
+			"ExtendPattern:", "after storing",
+			"Rule:", "<unnamed>, Stop:false, Jump:JumpLater, Updates:false",
+		},
+	},
 
 	// tbd: "when" is the default; should we force it to be specified?
 	// if so, how does that interact with "when <domain> begins|ends"

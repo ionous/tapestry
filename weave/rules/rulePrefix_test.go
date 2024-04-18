@@ -126,18 +126,27 @@ func failDoubles(l logger, ks *testutil.Kinds, phrase string) (err error) {
 }
 
 func fail(l logger, ks *testutil.Kinds, phrase string) (err error) {
-	n := rules.ReadPhrase(phrase, "")
-	if _, e := n.GetRuleInfo(ks); e == nil {
-		err = errutil.New("expected failure for", phrase)
+	if n, e := rules.ReadPhrase(ks, phrase, ""); e != nil {
+		err = e
+	} else if _, e := n.GetRuleInfo(); e != nil {
+		err = e
+	}
+	//
+	if err != nil {
+		l.Logf("ok: %q failed with %s", phrase, err)
+		err = nil
 	} else {
-		l.Logf("ok: %q failed with %s", phrase, e)
+		err = errutil.New("expected failure for get rule info", phrase)
 	}
 	return
 }
 
+// /*else
+
 func match(l logger, ks *testutil.Kinds, phrase, name string, rank int) (err error) {
-	n := rules.ReadPhrase(phrase, "")
-	if p, e := n.GetRuleInfo(ks); e != nil {
+	if n, e := rules.ReadPhrase(ks, phrase, ""); e != nil {
+		err = e
+	} else if p, e := n.GetRuleInfo(); e != nil {
 		err = e
 	} else if p.Name != name {
 		err = errutil.Fmt("test %q: got name %q wanted %q", phrase, p.Name, name)

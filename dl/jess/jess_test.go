@@ -121,7 +121,7 @@ func (n *info) FindNoun(ws []match.TokenValue, pkind *string) (ret string, width
 	case "":
 		if str, w := match.Normalize(ws); w > 0 {
 			if noun, ok := n.nounPool[str]; ok {
-				ret, width = noun, len(ws)
+				ret, width = noun, w
 				if pkind != nil {
 					*pkind = n.nounPool["$"+str]
 				}

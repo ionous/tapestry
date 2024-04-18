@@ -644,6 +644,16 @@ Spec:with group:
           - "bool"
           - true
 
+    - Spec:with flow:
+      - "rule_target"
+      - Flow uses:
+        - Term:optional:
+          - "kind"
+          - true
+        - Term:optional:
+          - "noun"
+          - true
+
     - # phrases can break out of plain text and into structured tell docs.
       # the documents start with a colon (:) followed by a newline
       # the next line is assumed to be an indented tell mapping or sequence
@@ -671,9 +681,8 @@ Spec:with group:
           Term:type:
           - "pattern"
           - "kind"
-        - Term:type:optional:
-          - "target"
-          - "noun"
+        - Term:optional:
+          - "rule_target"
           - true
         - Term:optional:
           - "rule_suffix"

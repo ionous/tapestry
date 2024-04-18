@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -17,7 +18,7 @@ func (op *TimedRule) Match(q Query, input *InputState) (okay bool) {
 	/**/ op.RulePrefix.Match(q, &next) &&
 		(op.matchSomeone(q, &next) || true) &&
 		op.Pattern.Match(q, &next) &&
-		(Optional(q, &next, &op.Target) || true) &&
+		(Optional(q, &next, &op.RuleTarget) || true) &&
 		(Optional(q, &next, &op.RuleSuffix) || true) &&
 		(op.matchName(q, &next) || true) &&
 		op.SubAssignment.Match(&next) {
@@ -61,22 +62,51 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 		err = e
 	} else if pat, e := op.Pattern.Validate(kindsOf.Pattern, kindsOf.Action); e != nil {
 		err = e
+	} else if op.Someone && op.Pattern.ActualKind.BaseKind != kindsOf.Action {
+		// fix: story had an additional test CanFilterActor. hrm.
+		err = errors.New("can only filter actor actions")
 	} else if exe, ok := op.SubAssignment.GetExe(); !ok {
 		err = errors.New("rule expected a list of statements to execute")
 	} else {
-		n := rules.RuleName{
-			Short:  pat,
-			Label:  label,
-			Prefix: GetRulePrefix(op.RulePrefix),
-			Suffix: GetRuleSuffix(op.RuleSuffix),
-			// ExcludesPlayer -- FIX
-		}
-		// FILTERS for nouns or kinds
 		err = ctx.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-			if rule, e := n.GetRuleInfo(run); e != nil {
+			if ks, e := run.GetField(meta.KindAncestry, pat); e != nil {
 				err = e
 			} else {
-				err = rule.WeaveRule(w, nil, exe)
+				n := rules.RuleName{
+					Pattern: ks.Strings(),
+					Label:   label,
+					Prefix:  GetRulePrefix(op.RulePrefix),
+					Suffix:  GetRuleSuffix(op.RuleSuffix),
+				}
+				var filters []rt.BoolEval
+
+				// add custom filters ( if any )
+				if tgt := op.RuleTarget; tgt != nil {
+					if n := tgt.Noun; n != nil {
+						filters = rules.AddNounFilter(n.ActualNoun.Name, filters)
+					} else if k := tgt.Kind; k != nil {
+						filters = rules.AddKindFilter(k.ActualKind.Name, filters)
+					} else {
+						panic("unhandled target match")
+					}
+				}
+
+				// add other action filters
+				if op.Pattern.ActualKind.BaseKind == kindsOf.Action {
+					if !op.Someone {
+						// all actions are triggered by actors;
+						// then we automatically filter for the player
+						filters = rules.AddPlayerFilter(filters)
+					}
+					// by default: all event handlers are filtered to the innermost target.
+					filters = rules.AddEventFilters(filters)
+				}
+
+				if rule, e := n.GetRuleInfo(); e != nil {
+					err = e
+				} else {
+					err = rule.WeaveRule(w, nil, exe)
+				}
 			}
 			return
 		})
@@ -99,6 +129,17 @@ func (op *SubAssignment) Match(input *InputState) (okay bool) {
 func (op *SubAssignment) GetExe() (ret []rt.Execute, okay bool) {
 	if a, ok := op.Assignment.(*assign.FromExe); ok {
 		ret, okay = a.Exe, true
+	}
+	return
+}
+
+// ----
+
+func (op *RuleTarget) Match(q Query, input *InputState) (okay bool) {
+	if next := *input; //
+	Optional(q, &next, &op.Kind) ||
+		Optional(q, &next, &op.Noun) {
+		*input, okay = next, true
 	}
 	return
 }

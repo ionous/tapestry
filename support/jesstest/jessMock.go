@@ -209,8 +209,13 @@ func (m *Mock) ExtendPattern(p mdl.Pattern) (_ error) {
 	rules := p.Rules()
 	m.out = append(m.out, "ExtendPattern:", p.Name())
 	for _, n := range rules {
-		rule := n.Rule
-		m.out = append(m.out, "Rule:", fmt.Sprintf("%+v", rule))
+		name := n.Name
+		if len(name) == 0 {
+			name = "<unnamed>"
+		}
+		rule := fmt.Sprintf("%s, Stop:%v, Jump:%v, Updates:%v",
+			name, n.Stop, n.Jump, n.Updates)
+		m.out = append(m.out, "Rule:", rule)
 	}
 	return
 }

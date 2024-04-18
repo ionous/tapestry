@@ -1865,6 +1865,41 @@ func (op *RuleName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+type RuleTarget struct {
+	Kind   *Kind
+	Noun   *Noun
+	Markup map[string]any
+}
+
+// rule_target, a type of flow.
+var Zt_RuleTarget typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*RuleTarget) TypeInfo() typeinfo.T {
+	return &Zt_RuleTarget
+}
+
+// implements typeinfo.Markup
+func (op *RuleTarget) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// holds a slice of type rule_target
+type RuleTarget_Slice []RuleTarget
+
+// implements typeinfo.Instance
+func (*RuleTarget_Slice) TypeInfo() typeinfo.T {
+	return &Zt_RuleTarget
+}
+
+// implements typeinfo.Repeats
+func (op *RuleTarget_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // phrases can break out of plain text and into structured tell docs.
 // the documents start with a colon (:) followed by a newline
 // the next line is assumed to be an indented tell mapping or sequence
@@ -1911,7 +1946,7 @@ type TimedRule struct {
 	RulePrefix    RulePrefix
 	Someone       bool
 	Pattern       Kind
-	Target        *Noun
+	RuleTarget    *RuleTarget
 	RuleSuffix    *RuleSuffix
 	RuleName      *RuleName
 	SubAssignment SubAssignment
@@ -2360,6 +2395,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RulePrefix,
 	&Zt_RuleSuffix,
 	&Zt_RuleName,
+	&Zt_RuleTarget,
 	&Zt_SubAssignment,
 	&Zt_TimedRule,
 	&Zt_Understand,
@@ -2495,6 +2531,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6292556720924657065:  (*RuleName)(nil),             /* RuleName prefix:matched:suffix: */
 	6834190963007140391:  (*RulePrefix)(nil),           /* RulePrefix */
 	9987385698008157446:  (*RuleSuffix)(nil),           /* RuleSuffix */
+	3168366490539674518:  (*RuleTarget)(nil),           /* RuleTarget */
+	1634876132861208202:  (*RuleTarget)(nil),           /* RuleTarget kind: */
+	14594080518908639404: (*RuleTarget)(nil),           /* RuleTarget kind:noun: */
+	16511386036724990548: (*RuleTarget)(nil),           /* RuleTarget noun: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
 	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
 	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
@@ -2515,19 +2555,19 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8641297100372239080:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleName:subAssignment: */
 	1656499122350834261:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
 	11245891509928755726: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */
+	5942283442270160717:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleName:subAssignment: */
+	1341518374945402682:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleSuffix:ruleName:subAssignment: */
+	11971369972990827443: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleSuffix:subAssignment: */
+	15914112945604367254: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:subAssignment: */
 	8025626927280177953:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:subAssignment: */
-	4350630926229098963:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleName:subAssignment: */
-	10719807371802907896: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleSuffix:ruleName:subAssignment: */
-	10614078949980130993: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:ruleSuffix:subAssignment: */
-	7967826310862149340:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:target:subAssignment: */
 	11886989456270920378: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleName:subAssignment: */
 	11973597951319921255: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:ruleName:subAssignment: */
 	18120234146621178072: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:subAssignment: */
+	7932554349672161467:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleName:subAssignment: */
+	4030485101470664976:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleSuffix:ruleName:subAssignment: */
+	8840422668263390841:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleSuffix:subAssignment: */
+	15591696920291023604: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:subAssignment: */
 	13116956132782342707: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:subAssignment: */
-	14936260571566114493: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:ruleName:subAssignment: */
-	16134756622443501962: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:ruleSuffix:ruleName:subAssignment: */
-	4562209864630899779:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:ruleSuffix:subAssignment: */
-	1168531432420503878:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:target:subAssignment: */
 	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
 	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
 	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
@@ -3677,6 +3717,21 @@ func init() {
 			"comment": []interface{}{"specific names can follow rule declarations", "\"( this is the witness light rule )\""},
 		},
 	}
+	Zt_RuleTarget = typeinfo.Flow{
+		Name: "rule_target",
+		Lede: "rule_target",
+		Terms: []typeinfo.Term{{
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Type:     &Zt_Kind,
+		}, {
+			Name:     "noun",
+			Label:    "noun",
+			Optional: true,
+			Type:     &Zt_Noun,
+		}},
+	}
 	Zt_SubAssignment = typeinfo.Flow{
 		Name: "sub_assignment",
 		Lede: "sub_assignment",
@@ -3709,10 +3764,10 @@ func init() {
 			},
 			Type: &Zt_Kind,
 		}, {
-			Name:     "target",
-			Label:    "target",
+			Name:     "rule_target",
+			Label:    "rule_target",
 			Optional: true,
-			Type:     &Zt_Noun,
+			Type:     &Zt_RuleTarget,
 		}, {
 			Name:     "rule_suffix",
 			Label:    "rule_suffix",

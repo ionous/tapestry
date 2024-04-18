@@ -2,6 +2,7 @@ package rules
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -35,21 +36,9 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 	return w.ExtendPattern(pb.Pattern)
 }
 
+// ensure that the target of an action is the player
+// ( jess apples this filter to actor actions unless specifically asked not to )
 func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
-	/*if k, e := run.GetKindByName(rule.Name); e != nil {
-		err = fmt.Errorf("finding base pattern %q %q %s", rule.Name, rule.Label, e)
-	} else
-		disabled for now: hard test...
-
-		if canFilterActor := CanFilterActor(k); rule.ExcludesPlayer && !canFilterActor {
-			err = fmt.Errorf("only actor events can filter by actor for pattern %q rule %q", rule.Name, rule.Label)
-		} else */
-
-	// if the focus of the event involves an actor;
-	// then we automatically filter for the player
-	// if !rule.ExcludesPlayer {
-	// 	filters =
-	// }
 	return append(filters,
 		&core.CompareText{
 			A:  core.Variable(event.Actor),
@@ -59,13 +48,28 @@ func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 }
 
 // filter to the innermost target.
-// eventLike := k.Implements(kindsOf.Action.String())
-// if eventLike {
 func AddEventFilters(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&core.CompareText{
 			A:  core.Variable(event.Object, event.CurrentTarget.String()),
 			Is: core.C_Comparison_EqualTo,
 			B:  core.Variable(event.Object, event.Target.String()),
+		})
+}
+
+func AddNounFilter(noun string, filters []rt.BoolEval) (ret []rt.BoolEval) {
+	return append(filters,
+		&core.CompareText{
+			A:  core.Variable(event.Object, event.Target.String()),
+			Is: core.C_Comparison_EqualTo,
+			B:  &literal.TextValue{Value: noun},
+		})
+}
+
+func AddKindFilter(kind string, filters []rt.BoolEval) (ret []rt.BoolEval) {
+	return append(filters,
+		&core.IsKindOf{
+			Object: core.Variable(event.Object, event.Target.String()),
+			Kind:   kind,
 		})
 }
