@@ -266,7 +266,11 @@ func (n *Tokenizer) readParens() charm.State {
 // tell Notifier of the new token/value pair
 func (n *Tokenizer) notifyToken(t Token, v any) error {
 	tv := TokenValue{Token: t, Pos: n.start, Value: v, First: !n.follows}
-	n.follows = t != Stop
+	// when t is a Comment, make no decision about the start of a sentence.
+	if t != Comment {
+		// when t is Stop, the next token will be considered the start of a sentence.
+		n.follows = t != Stop
+	}
 	return n.Notifier.Decoded(tv)
 }
 
