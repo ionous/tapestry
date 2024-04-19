@@ -22,12 +22,19 @@ The entrance is a scenery door in the foyer. North from the foyer is the entranc
 # The Cloakroom:
 East from the Foyer is the Cloakroom. The Cloakroom has the description "In the Opera's better days the walls of this small room must have been lined with coat hooks. Now, only one remains. The exit is a door to the west."
 
-In the Cloakroom is a scenery supporter called the small brass hook. 
+In the Cloakroom is a scenery supporter called the small brass hook.
+# The description of the hook depends on the number of things hanging on it.
+# This uses a special template syntax to achieve that.
 The hook has the description """
   A brass hook{if children_of: .hook}
   with {children_of: .hook | print_inline_objects!}
   hanging on it{else} screwed into the wall{end}.
-  """
+  """ # "
+
+# Understandings change the game's input parser,
+# and allow a player to refer to objects in new ways.
+# For instance, these allow the player to type: > hang cloak on peg.
+# Without these, they could only use: > put cloak on hook.
 
 Understand "peg" as the hook.
 Understand "hang [objects] on/onto [objects]" as storing.
@@ -120,13 +127,13 @@ After taking the cloak:
     - "bar"
     - "unlit"
 
-# FIX: generic way to capture is/not in possession
-# FIX: cant you keep taking/storing the cloak and increasing your score?
+# TODO: it'd be nice to have a generic way to capture is/not in possession.
 After dropping the cloak:
   - Set:trait:
     - "bar"
     - "lit"
 
+# FIX: this allows a player to increase their score multiple times by repeatedly taking and dropping the cloak.
 After storing the cloak:
   - Set:trait:
     - "bar"

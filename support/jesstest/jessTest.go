@@ -32,7 +32,7 @@ var Phrases = []Phrase{
 		assign: true,
 		result: []string{
 			"ExtendPattern:", "before storing",
-			"Rule:", "<unnamed>, Stop:false, Jump:JumpLater, Updates:false",
+			"Rule:", "<unnamed>, Stop:true, Jump:JumpNow, Updates:false",
 		},
 	},
 	{
@@ -44,7 +44,7 @@ var Phrases = []Phrase{
 		assign: true,
 		result: []string{
 			"ExtendPattern:", "after storing",
-			"Rule:", "noisy storage, Stop:false, Jump:JumpLater, Updates:false",
+			"Rule:", "noisy storage, Stop:true, Jump:JumpLater, Updates:false",
 		},
 	},
 	{
@@ -54,7 +54,7 @@ var Phrases = []Phrase{
 		assign: true,
 		result: []string{
 			"ExtendPattern:", "after storing",
-			"Rule:", "<unnamed>, Stop:false, Jump:JumpLater, Updates:false",
+			"Rule:", "<unnamed>, Stop:true, Jump:JumpLater, Updates:false",
 		},
 	},
 

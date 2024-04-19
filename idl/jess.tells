@@ -613,7 +613,7 @@ Spec:with group:
           - true
 
     - # controls what to do after matching a rule
-      # matches "then continue", "then stop", "then jump",
+      # matches "then continue", "then stop", "then skip phase",
       # and "begins", "ends" ( for domain rules )
       # with an optional leading comma
       Spec:with flow:

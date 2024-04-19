@@ -105,7 +105,7 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 				if rule, e := n.GetRuleInfo(); e != nil {
 					err = e
 				} else {
-					err = rule.WeaveRule(w, nil, exe)
+					err = rule.WeaveRule(w, filters, exe)
 				}
 			}
 			return
@@ -228,7 +228,8 @@ func init() {
 		n := rules.Prefix(i)
 		prefixes[i] = match.PanicSpan(n.String())
 	}
-	for i := 0; i < rules.NumSuffixes; i++ {
+	// skips the empty suffix
+	for i := 1; i < rules.NumSuffixes; i++ {
 		n := rules.Suffix(i)
 		suffixes[i] = match.PanicSpan(n.String())
 	}

@@ -1789,7 +1789,7 @@ func (op *RulePrefix_Slice) Repeats() bool {
 }
 
 // controls what to do after matching a rule
-// matches "then continue", "then stop", "then jump",
+// matches "then continue", "then stop", "then skip phase",
 // and "begins", "ends" ( for domain rules )
 // with an optional leading comma
 type RuleSuffix struct {
@@ -3681,7 +3681,7 @@ func init() {
 			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"controls what to do after matching a rule", "matches \"then continue\", \"then stop\", \"then jump\",", "and \"begins\", \"ends\" ( for domain rules )", "with an optional leading comma"},
+			"comment": []interface{}{"controls what to do after matching a rule", "matches \"then continue\", \"then stop\", \"then skip phase\",", "and \"begins\", \"ends\" ( for domain rules )", "with an optional leading comma"},
 		},
 	}
 	Zt_RuleName = typeinfo.Flow{

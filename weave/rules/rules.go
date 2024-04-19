@@ -42,6 +42,7 @@ func (n RuleName) IsEvent() bool {
 }
 
 // instead and report are grouped with before and after respectively
+// fix: can this move to rule info?
 func (n RuleName) EventName() (ret string) {
 	kind := n.Pattern[len(n.Pattern)-1]
 	switch n.Prefix {
@@ -51,8 +52,10 @@ func (n RuleName) EventName() (ret string) {
 		ret = event.BeforePhase.PatternName(kind)
 	case Report:
 		ret = event.AfterPhase.PatternName(kind)
-	default:
+	case Before, After:
 		ret = n.Prefix.String() + " " + kind
+	default:
+		panic("unexpected prefix")
 	}
 	return
 }
@@ -122,9 +125,10 @@ func (n RuleName) GetRuleInfo() (ret RuleInfo, err error) {
 		}
 	}
 	// suffix will override any stop/jump settings
+	// ( ex. then, continue )
 	if err == nil {
 		switch n.Suffix {
-		case Jumps:
+		case Skips:
 			ret.Stop = false
 			ret.Jump = rt.JumpNow
 		case Stops:
@@ -133,6 +137,10 @@ func (n RuleName) GetRuleInfo() (ret RuleInfo, err error) {
 		case Continues:
 			ret.Stop = false
 			ret.Jump = rt.JumpLater
+		case UnspecfiedSuffix:
+			// do nothing
+		default:
+			panic("unexpected case for suffix")
 		}
 		ret.Label = n.Label
 	}

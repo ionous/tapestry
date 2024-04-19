@@ -11,9 +11,9 @@ func TestSuffixing(t *testing.T) {
 	} else if s != Continues {
 		t.Fatal(s)
 	}
-	if n, s := findSuffix("something then jump"); n != something {
+	if n, s := findSuffix("something then skip phase"); n != something {
 		t.Fatal(n)
-	} else if s != Jumps {
+	} else if s != Skips {
 		t.Fatal(s)
 	}
 	if n, s := findSuffix("something then stop"); n != something {
