@@ -62,21 +62,13 @@ func (q *Query) ActivateDomains(name string) (retEnds, retBegins []string, err e
 	} else if tx, e := q.db.Begin(); e != nil {
 		err = e
 	} else {
-		// tbd: it might be better to deactivate outside when the end events are called.
-		act := q.activation + 1
-		if ends, e := scanStrings(q.domainDeactivate, name); e != nil {
-			err = e
-		} else if e := q.deactive(ends); e != nil {
-			err = e
-		} else if begins, e := scanStrings(q.domainActivate, name); e != nil {
-			err = e
-		} else if e := q.activate(act, begins); e != nil {
-			err = e
+		d, act := q.createActivator(tx), q.activation+1
+		if ends, begins, e := d.run(name, act); e != nil {
+			err = nil
 		} else {
 			q.domain, q.activation = name, act
 			retEnds, retBegins = ends, begins
 		}
-
 		// rollback on any error.
 		if err == nil {
 			err = tx.Commit()
@@ -87,7 +79,39 @@ func (q *Query) ActivateDomains(name string) (retEnds, retBegins []string, err e
 	return
 }
 
-func (q *Query) deactive(domains []string) (err error) {
+type activator struct {
+	domainChange, domainDelete, newPairsFromDomain *sql.Stmt
+	domainDeactivate, domainActivate               *sql.Stmt
+}
+
+func (q *Query) createActivator(tx *sql.Tx) activator {
+	return activator{
+		domainChange:       tx.Stmt(q.domainChange),
+		domainDelete:       tx.Stmt(q.domainDelete),
+		newPairsFromDomain: tx.Stmt(q.newPairsFromDomain),
+		domainDeactivate:   tx.Stmt(q.domainDeactivate),
+		domainActivate:     tx.Stmt(q.domainActivate),
+	}
+}
+
+// tbd: it might be better to deactivate outside when the end events are called.
+
+func (q *activator) run(name string, act int) (retEnds, retBegins []string, err error) {
+	if ends, e := scanStrings(q.domainDeactivate, name); e != nil {
+		err = e
+	} else if e := q.deactive(ends); e != nil {
+		err = e
+	} else if begins, e := scanStrings(q.domainActivate, name); e != nil {
+		err = e
+	} else if e := q.activate(act, begins); e != nil {
+		err = e
+	} else {
+		retEnds, retBegins = ends, begins
+	}
+	return
+}
+
+func (q *activator) deactive(domains []string) (err error) {
 	for i, cnt := 0, len(domains); i < cnt; i++ {
 		d := domains[cnt-i-1] // work backwards from leaf to root
 		if _, e := q.domainChange.Exec(d, 0); e != nil {
@@ -101,7 +125,7 @@ func (q *Query) deactive(domains []string) (err error) {
 	return
 }
 
-func (q *Query) activate(act int, domains []string) (err error) {
+func (q *activator) activate(act int, domains []string) (err error) {
 	for i, cnt := 0, len(domains); i < cnt; i++ {
 		d := domains[i]
 		if _, e := q.domainChange.Exec(d, act); e != nil {
