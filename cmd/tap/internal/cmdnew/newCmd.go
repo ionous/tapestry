@@ -47,22 +47,19 @@ func newFromTemplate(name, title string, force bool) (err error) {
 	if n := inflect.Normalize(name); n != strings.ToLower(name) {
 		err = fmt.Errorf("%w prefer story names without special characters. For example, maybe %q",
 			base.UsageError, n)
+	} else if dst, out, e := createNamedFile(name, force); e != nil {
+		err = e
 	} else {
-		out := pathFromName(name)
-		if dst, e := createFile(out, force); e != nil {
+		defer dst.Close()
+		t := template.Must(template.New("story").Parse(content.DefaultStory))
+		if e := t.Execute(dst, content.DefaultDesc{
+			Story:  name,
+			Title:  title,
+			Author: authorName(),
+		}); e != nil {
 			err = e
 		} else {
-			defer dst.Close()
-			t := template.Must(template.New("story").Parse(content.DefaultStory))
-			if e := t.Execute(dst, content.DefaultDesc{
-				Story:  name,
-				Title:  title,
-				Author: authorName(),
-			}); e != nil {
-				err = e
-			} else {
-				fmt.Printf("Created a new story file: %s\n", out)
-			}
+			fmt.Printf("Created a new story file: %s\n", out)
 		}
 	}
 	return
@@ -79,8 +76,7 @@ func newFromSample(name string, force bool) (err error) {
 		err = e
 	} else {
 		defer src.Close()
-		out := pathFromName(name)
-		if dst, e := createFile(out, force); e != nil {
+		if dst, out, e := createNamedFile(name, force); e != nil {
 			err = e
 		} else {
 			defer dst.Close()
@@ -114,17 +110,19 @@ func listSamples() (err error) {
 	return
 }
 
-func pathFromName(name string) string {
-	return filepath.Join(storyDir(), name+files.TellStory.String())
-}
-
-func createFile(out string, force bool) (ret *os.File, err error) {
+func createNamedFile(name string, force bool) (retFile *os.File, retName string, err error) {
+	folderPath := storyDir()
+	out := filepath.Join(folderPath, name+files.TellStory.String())
 	if _, e := os.Stat(out); e == nil && !force {
 		err = fmt.Errorf("The file %q already exists. Remove it first, or use -force to overwrite.", out)
 	} else if e != nil && !errors.Is(e, fs.ErrNotExist) {
 		err = e
+	} else if e := os.MkdirAll(folderPath, os.ModePerm); e != nil {
+		err = e
+	} else if fp, e := os.Create(out); e != nil {
+		err = e
 	} else {
-		ret, err = os.Create(out)
+		retFile, retName = fp, out
 	}
 	return
 }
