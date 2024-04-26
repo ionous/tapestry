@@ -293,25 +293,7 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func resetDomains(db *sql.DB, reset bool) (err error) {
-	if reset {
-		_, err = db.Exec(`delete from run_domain; delete from run_pair`)
-	}
-	return
-}
-
-func NewQueries(db *sql.DB, reset bool) (ret *Query, err error) {
-	if e := tables.CreateRun(db); e != nil {
-		err = e
-	} else if e := resetDomains(db, reset); e != nil {
-		err = e
-	} else {
-		ret, err = newQueries(db)
-	}
-	return
-}
-
-func newQueries(db *sql.DB) (ret *Query, err error) {
+func NewQueries(db *sql.DB) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
 		db: db,
@@ -498,7 +480,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// might be better to move that into an explicit sort in script
 		reciprocalOf: ps.Prep(db,
 			`select oneName 
-			from rp_names
+			from active_names
 			where relName=?1
 			and otherName=?2
 			order by oneName`,
@@ -508,7 +490,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// might be better to move that into an explicit sort in script
 		relativesOf: ps.Prep(db,
 			`select otherName 
-			from rp_names
+			from active_names
 			where relName=?1
 			and oneName=?2
 			order by otherName`,

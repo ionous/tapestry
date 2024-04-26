@@ -1,35 +1,22 @@
-/* 
- * for saving, restoring a player's game session. 
- * a global application active count increases monotonically 
- * for every request to activate any domain.
- * a particular domain is in scope when its own active value is non-zero; 
- * its value gets reset to zero when the domain falls out of scope.
- */
-create table if not exists 
-	run_domain( domain text, active int, primary key( domain )); 
-
-/* we dont need an "active" -- we can join against run_domain, or write 0 to domain to disable a pair. */
-create table if not exists 
-	run_pair( domain text, relKind int, oneNoun int, otherNoun int, unique( relKind, oneNoun, otherNoun ) ); 
 
 /**
  * the set of active domain names
  */
-create view if not exists
-active_domains as 
+create view
+temp.active_domains as 
 select * 
 from run_domain rd 
 where rd.active > 0;
 
-create view if not exists
-active_kinds as 
+create view
+temp.active_kinds as 
 select ds.domain, mk.rowid as kind, mk.kind as name, mk.singular, mk.path, mk.at
 from active_domains ds
 join mdl_kind mk 
 	using (domain);
 
-create view if not exists
-active_plurals as 
+create view
+temp.active_plurals as 
 select ds.domain, mp.many, mp.one, mp.at
 from active_domains ds
 join mdl_plural mp 
@@ -37,16 +24,16 @@ join mdl_plural mp
 
 /* domain name, noun id, noun name, and kind id
 * the domain name is a nod towards needing the domain name to fully scope the noun */ 
-create view if not exists
-active_nouns as 
+create view
+temp.active_nouns as 
 select ds.domain, mn.rowid as noun, mn.noun as name, mn.kind, mn.at
 from active_domains ds
 join mdl_noun mn 
 	using (domain);
 
 /* for finding relatives and reciprocals: returns relName, nounName, otherName */
-create view if not exists
-rp_names as
+create view
+temp.active_names as
 select rp.domain, mk.kind as relName, one.noun as oneName, other.noun as otherName
 from run_pair rp
 join mdl_kind mk

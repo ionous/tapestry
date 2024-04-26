@@ -82,3 +82,17 @@ func InsertWith(table string, rest string, keys ...string) string {
 		"(" + strings.Join(keys, ", ") + ")" +
 		" values " + "(" + vals + ")" + rest + ";"
 }
+
+// insert an arbitrary number of rows into the passed db.
+// tablecols holds the names of the table and columns to query,
+// els can hold multiple rows of data, each containing the number of cols specified by tablecols.
+func Ins(db Executer, tablecols []string, els ...interface{}) (err error) {
+	ins, width := Insert(tablecols[0], tablecols[1:]...), len(tablecols)-1
+	for i, cnt := 0, len(els); i < cnt; i += width {
+		if _, e := db.Exec(ins, els[i:i+width]...); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}

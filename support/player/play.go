@@ -2,12 +2,10 @@ package player
 
 import (
 	"bufio"
-	"database/sql"
 	"errors"
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
@@ -21,30 +19,22 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/markup"
-	"github.com/ionous/errutil"
 )
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func PlayGame(inFile, testString, domain string) (err error) {
+func PlayGame(mdlFile, testString, domain string) (err error) {
 	opts := qna.NewOptions()
-	return PlayWithOptions(inFile, testString, domain, opts)
+	return PlayWithOptions(mdlFile, testString, domain, opts)
 }
 
-func PlayWithOptions(inFile, testString, domain string, opts qna.Options) (err error) {
+func PlayWithOptions(mdlFile, testString, domain string, opts qna.Options) (err error) {
 	const prompt = "> "
-	if inFile, e := filepath.Abs(inFile); e != nil {
+	if db, e := tables.CreateRunTime(mdlFile); e != nil {
 		err = e
-	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
-		err = errutil.New("couldn't create output file", inFile, e)
 	} else {
-		defer func() {
-			_ = db.Close() // log?
-		}()
-		// fix: some sort of reset flag; but also: how to rejoin properly?
-		if e := tables.CreateRun(db); e != nil {
-			err = e
-		} else if query, e := qdb.NewQueries(db, true); e != nil {
+		defer db.Close()
+		if query, e := qdb.NewQueries(db); e != nil {
 			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e

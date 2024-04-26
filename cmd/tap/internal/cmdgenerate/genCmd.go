@@ -3,7 +3,6 @@ package cmdgenerate
 import (
 	"bytes"
 	"context"
-	"database/sql"
 	"flag"
 	"go/format"
 	"io/fs"
@@ -158,12 +157,11 @@ func createDB(create bool, outFile string) (ret modelWriter, err error) {
 		} else {
 			log.Println("generating", outFile)
 			os.MkdirAll(path.Dir(outFile), os.ModePerm) // 0777 -> ModePerm ... read/writable by all
-			if db, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
-				err = errutil.New("couldn't open db", outFile, e)
+
+			if db, e := tables.CreateIdl(outFile); e != nil {
+				err = e
 			} else {
-				if e := tables.CreateIdl(db); e != nil {
-					err = e
-				} else if tx, e := db.Begin(); e != nil {
+				if tx, e := db.Begin(); e != nil {
 					err = errutil.New("couldnt create transaction", e)
 				} else {
 					ret = modelWriter{db, tx}

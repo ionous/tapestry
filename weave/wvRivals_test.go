@@ -4,18 +4,16 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"github.com/kr/pretty"
 )
 
 // using the plurals as an example,
 // verify the basic algorithm behind rival testing.
 func TestRivalDB(t *testing.T) {
-	db := testdb.Create(t.Name())
+	db := tables.CreateTest(t.Name(), true)
 	defer db.Close()
-	if e := tables.CreateAll(db); e != nil {
-		t.Fatal(e)
-	} else if _, e := db.Exec(`insert into mdl_domain(domain, requires) values
+
+	if _, e := db.Exec(`insert into mdl_domain(domain, requires) values
 	('p1', ''),
 	('p2', '')`); e != nil {
 		t.Fatal(e)

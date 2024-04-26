@@ -1,7 +1,6 @@
 package shuttle
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"path/filepath"
@@ -22,11 +21,10 @@ import (
 func NewShuttle(inFile string, opts qna.Options) (ret Shuttle, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
-	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
-		err = errutil.New("couldn't create output file", inFile, e)
-	} else if e := tables.CreateRun(db); e != nil {
+	} else if db, e := tables.CreateRunTime(inFile); e != nil {
 		err = e
-	} else if query, e := qdb.NewQueries(db, true); e != nil {
+	} else if query, e := qdb.NewQueries(db); e != nil {
+		db.Close()
 		err = e
 	} else {
 		ret = Shuttle{

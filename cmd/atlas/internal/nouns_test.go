@@ -3,7 +3,7 @@ package internal
 import (
 	"os"
 
-	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 func ExampleNounData() {
@@ -44,7 +44,7 @@ func ExampleNounData() {
 
 // FIX: database format changed
 func xExampleNounDB() {
-	db := testdb.Create("ExampleNounDB")
+	db := tables.CreateTest("ExampleNounDB", true)
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 )
 
 func ExamplePairData() {
@@ -45,7 +44,7 @@ func ExamplePairData() {
 
 // FIX: database format changed
 func xExamplePairDB() {
-	db := testdb.Create("ExampleNounDB")
+	db := tables.CreateTest("ExampleNounDB", true)
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"github.com/ionous/errutil"
 )
 
@@ -26,96 +25,93 @@ func TestValueWriting(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.Catch(t.Fatal)
 	defer unwarn()
-	db := testdb.Create(t.Name())
-	if e := tables.CreateModel(db); e != nil {
+	db := tables.CreateTest(t.Name(), false)
+
+	// two kinds, for a noun and a record:
+	var kind struct {
+		id, one, other, rec int64
+	}
+	var rec struct {
+		id, one, other, rec int64
+	}
+	var nouns struct {
+		a, b int64
+	}
+
+	// write a single helper domain
+	var mdl_domain = insert(t, "mdl_domain")
+	mdl_domain.insert(db)
+
+	// and some kinds:
+	var mdl_kind = insert(t, "mdl_kind", "kind", "path")
+	kind.id = mdl_kind.insert(db, kindName, "")
+	rec.id = mdl_kind.insert(db, recName, "")
+
+	// fields for the kind:
+	var mdl_field = insert(t, "mdl_field", "kind", "field", "affinity", "type")
+	kind.one = mdl_field.insert(db, kind.id, oneField, affine.Text, nil)
+	kind.other = mdl_field.insert(db, kind.id, otherField, affine.Text, nil)
+	kind.rec = mdl_field.insert(db, kind.id, recName, affine.Record, rec.id)
+	// fields for the record
+	rec.one = mdl_field.insert(db, rec.id, oneField, affine.Text, nil)
+	rec.other = mdl_field.insert(db, rec.id, otherField, affine.Text, nil)
+	rec.rec = mdl_field.insert(db, rec.id, recName, affine.Record, rec.id) // recursive!
+
+	// noun of kind
+	var mdl_noun = insert(t, "mdl_noun", "noun", "kind")
+	nouns.a = mdl_noun.insert(db, nounA, kind.id)
+	nouns.b = mdl_noun.insert(db, nounB, kind.id)
+
+	//
+	if m, e := NewModelerWithWarnings(db, func(fmt string, parts ...any) {
+		LogWarning(errutil.Fmt(fmt, parts...))
+	}); e != nil {
 		t.Fatal(e)
 	} else {
-		// two kinds, for a noun and a record:
-		var kind struct {
-			id, one, other, rec int64
-		}
-		var rec struct {
-			id, one, other, rec int64
-		}
-		var nouns struct {
-			a, b int64
-		}
-
-		// write a single helper domain
-		var mdl_domain = insert(t, "mdl_domain")
-		mdl_domain.insert(db)
-
-		// and some kinds:
-		var mdl_kind = insert(t, "mdl_kind", "kind", "path")
-		kind.id = mdl_kind.insert(db, kindName, "")
-		rec.id = mdl_kind.insert(db, recName, "")
-
-		// fields for the kind:
-		var mdl_field = insert(t, "mdl_field", "kind", "field", "affinity", "type")
-		kind.one = mdl_field.insert(db, kind.id, oneField, affine.Text, nil)
-		kind.other = mdl_field.insert(db, kind.id, otherField, affine.Text, nil)
-		kind.rec = mdl_field.insert(db, kind.id, recName, affine.Record, rec.id)
-		// fields for the record
-		rec.one = mdl_field.insert(db, rec.id, oneField, affine.Text, nil)
-		rec.other = mdl_field.insert(db, rec.id, otherField, affine.Text, nil)
-		rec.rec = mdl_field.insert(db, rec.id, recName, affine.Record, rec.id) // recursive!
-
-		// noun of kind
-		var mdl_noun = insert(t, "mdl_noun", "noun", "kind")
-		nouns.a = mdl_noun.insert(db, nounA, kind.id)
-		nouns.b = mdl_noun.insert(db, nounB, kind.id)
-
-		//
-		if m, e := NewModelerWithWarnings(db, func(fmt string, parts ...any) {
-			LogWarning(errutil.Fmt(fmt, parts...))
-		}); e != nil {
+		pen := m.Pin("domain", "at")
+		// some independent fields:
+		if e := pen.AddTestValue(nounA, false, oneField, oneValue); e != nil {
 			t.Fatal(e)
+		} else if e := pen.AddTestValue(nounA, false, otherField, otherValue); e != nil {
+			t.Fatal(e)
+		}
+		// the deepening
+		if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, oneField), oneValue); e != nil {
+			t.Fatal(e)
+		}
+		// writing again should be okay:
+		if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, oneField), oneValue); e != nil {
+			t.Fatal(e)
+		} else if e := warnings.Expect("Duplicate noun value for 'a.record.record.oneField'."); e != nil {
+			t.Fatal(e)
+		}
+		// make sure we can't now write at the record itself
+		if e := pen.AddTestValue(nounA, false, MakePath(recName), oneValue); e == nil {
+			t.Fatal("shouldn't have written a whole record after writing one of its fields")
 		} else {
-			pen := m.Pin("domain", "at")
-			// some independent fields:
-			if e := pen.AddTestValue(nounA, false, oneField, oneValue); e != nil {
-				t.Fatal(e)
-			} else if e := pen.AddTestValue(nounA, false, otherField, otherValue); e != nil {
-				t.Fatal(e)
-			}
-			// the deepening
-			if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, oneField), oneValue); e != nil {
-				t.Fatal(e)
-			}
-			// writing again should be okay:
-			if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, oneField), oneValue); e != nil {
-				t.Fatal(e)
-			} else if e := warnings.Expect("Duplicate noun value for 'a.record.record.oneField'."); e != nil {
-				t.Fatal(e)
-			}
-			// make sure we can't now write at the record itself
-			if e := pen.AddTestValue(nounA, false, MakePath(recName), oneValue); e == nil {
-				t.Fatal("shouldn't have written a whole record after writing one of its fields")
-			} else {
-				t.Log("ok", e)
-			}
-			// make sure we can however write deeper
-			if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, recName, oneField), oneValue); e != nil {
-				t.Fatal(e)
-			}
-			if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, recName, otherField), otherValue); e != nil {
-				t.Fatal(e)
-			}
-			// make sure to detect the conflict deeper
-			if e := pen.AddTestValue(nounA, false, MakePath(recName, recName), otherValue); e == nil {
-				t.Fatal("shouldn't have written a whole record after writing one of its fields")
-			}
-			//
-			// reverse the order of writing ( via the second noun ) and make sure that fails too.
-			//
-			if e := pen.AddTestValue(nounB, false, MakePath(recName), oneValue); e != nil {
-				t.Fatal(e)
-			}
-			if e := pen.AddTestValue(nounB, false, MakePath(recName, recName, oneField), oneValue); e == nil {
-				t.Fatal("shouldn't have written a field after writing the whole record")
-			} else {
-				t.Log("ok", e)
-			}
+			t.Log("ok", e)
+		}
+		// make sure we can however write deeper
+		if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, recName, oneField), oneValue); e != nil {
+			t.Fatal(e)
+		}
+		if e := pen.AddTestValue(nounA, false, MakePath(recName, recName, recName, otherField), otherValue); e != nil {
+			t.Fatal(e)
+		}
+		// make sure to detect the conflict deeper
+		if e := pen.AddTestValue(nounA, false, MakePath(recName, recName), otherValue); e == nil {
+			t.Fatal("shouldn't have written a whole record after writing one of its fields")
+		}
+		//
+		// reverse the order of writing ( via the second noun ) and make sure that fails too.
+		//
+		if e := pen.AddTestValue(nounB, false, MakePath(recName), oneValue); e != nil {
+			t.Fatal(e)
+		}
+		if e := pen.AddTestValue(nounB, false, MakePath(recName, recName, oneField), oneValue); e == nil {
+			t.Fatal("shouldn't have written a field after writing the whole record")
+		} else {
+			t.Log("ok", e)
 		}
 	}
 }

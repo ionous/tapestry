@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/debug"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave"
 )
 
@@ -20,7 +20,7 @@ func TestImportStory(t *testing.T) {
 	} else if e := story.Decode(&curr, msg); e != nil {
 		t.Fatal("couldn't decode story", e)
 	} else {
-		db := testdb.Create(t.Name())
+		db := tables.CreateTest(t.Name(), true)
 		defer db.Close()
 		k := weave.NewCatalog(db)
 		if e := k.DomainStart("tapestry", nil); e != nil {

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -14,7 +14,7 @@ import (
 
 // test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
-	db := testdb.Create(t.Name())
+	db := tables.CreateTest(t.Name(), true)
 	defer db.Close()
 	cat := weave.NewCatalog(db)
 

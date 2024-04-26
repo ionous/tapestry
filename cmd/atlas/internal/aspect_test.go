@@ -3,7 +3,7 @@ package internal
 import (
 	"os"
 
-	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 func ExampleAspectData() {
@@ -59,7 +59,7 @@ func ExampleAspectData() {
 
 // FIX: database format changed
 func xExampleAspectDB() {
-	db := testdb.Create("ExampleAspectDB")
+	db := tables.CreateTest("ExampleAspectDB", true)
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

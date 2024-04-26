@@ -41,9 +41,7 @@ func NewCatalog(db *sql.DB) *Catalog {
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
 	if run == nil {
 		dec := decoder.DecodeNone("unsupported decoder")
-		if e := tables.CreateAll(db); e != nil {
-			panic(e)
-		} else if qx, e := qdb.NewQueries(db, false); e != nil {
+		if qx, e := qdb.NewQueries(db); e != nil {
 			panic(e)
 		} else {
 			run = qna.NewRuntime(

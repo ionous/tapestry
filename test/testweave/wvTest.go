@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/eph"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
@@ -17,7 +17,7 @@ func NewWeaver(name string) *TestWeave {
 }
 
 func NewWeaverOptions(name string, shuffle bool) *TestWeave {
-	db := testdb.Create(name)
+	db := tables.CreateTest(name, true)
 	return &TestWeave{
 		name:      name,
 		db:        db,

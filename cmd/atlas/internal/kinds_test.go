@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"os"
 
-	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 func ExampleKindData() {
@@ -42,7 +42,7 @@ func ExampleKindData() {
 
 // FIX: database format changed
 func xExampleKindDB() {
-	db := testdb.Create("ExampleKindDB")
+	db := tables.CreateTest("ExampleKindDB", true)
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)
