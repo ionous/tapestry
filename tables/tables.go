@@ -37,8 +37,7 @@ func CreateBuildTime(mdlFile string) (ret *sql.DB, err error) {
 }
 
 func CreateRunTime(mdlFile string) (ret *sql.DB, err error) {
-	// FIX: open model as readonly??mode=ro"
-	if db, e := sql.Open(tapestryDriver, mdlFile); e != nil {
+	if db, e := sql.Open(tapestryDriver, mdlFile+"?mode=ro"); e != nil {
 		err = e
 	} else {
 		if e := createTables(db,
