@@ -84,7 +84,7 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 	} else {
 		// fix: shouldnt this be in scope so that it can pull from its sibling variables during initialization?
 		// ex. locals from parameters.
-		if initRecord(run, rec); e != nil {
+		if e := initRecord(run, rec); e != nil {
 			err = e
 		}
 		var canceled bool

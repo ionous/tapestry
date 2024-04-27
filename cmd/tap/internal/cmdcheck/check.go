@@ -51,15 +51,19 @@ func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 				log.Printf("-- Checking: %q\n", check.Name)
 				w := print.NewLineSentences(markup.ToText(os.Stdout))
 				d := decode.NewDecoder(signatures)
-				run := qna.NewRuntimeOptions(w, query, d, qna.Notifier{}, options)
-				survey := play.MakeDefaultSurveyor(run)
-				play := play.NewPlaytime(run, survey, grammar)
-				if e := checkOne(d, play, check, &ret); e != nil {
-					e := errutil.New(e, "during", check.Name)
-					err = errutil.Append(err, e)
-					log.Println(e)
+				if run, e := qna.NewRuntimeOptions(db, d, options); e != nil {
+					err = e
 				} else {
-					log.Printf("ok. test %s", check.Name)
+					run.SetWriter(w)
+					survey := play.MakeDefaultSurveyor(run)
+					play := play.NewPlaytime(run, survey, grammar)
+					if e := checkOne(d, play, check, &ret); e != nil {
+						e := errutil.New(e, "during", check.Name)
+						err = errutil.Append(err, e)
+						log.Println(e)
+					} else {
+						log.Printf("ok. test %s", check.Name)
+					}
 				}
 			}
 		}

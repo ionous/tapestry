@@ -20,6 +20,7 @@ import (
 func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch out := op.(type) {
 	default:
+		// record: marshalFields?
 		err = compact.Unhandled("custom literal")
 	case *BoolValue:
 		ret = out.Value

@@ -10,12 +10,13 @@ func _() {
 	var x [1]struct{}
 	_ = x[PrintResponseNames-0]
 	_ = x[CacheErrors-1]
-	_ = x[NumOptions-2]
+	_ = x[SaveDir-2]
+	_ = x[NumOptions-3]
 }
 
-const _Options_name = "PrintResponseNamesCacheErrorsNumOptions"
+const _Options_name = "PrintResponseNamesCacheErrorsSaveDirNumOptions"
 
-var _Options_index = [...]uint8{0, 18, 29, 39}
+var _Options_index = [...]uint8{0, 18, 29, 36, 46}
 
 func (i Options) String() string {
 	if i < 0 || i >= Options(len(_Options_index)-1) {

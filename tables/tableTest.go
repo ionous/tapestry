@@ -29,7 +29,7 @@ func createTestDB(name string, includeRunTables bool) (ret *sql.DB, err error) {
 	}
 	if fileName, e := resolveTestFile(name); e != nil {
 		err = e
-	} else if db, e := sql.Open(driver, fileName); e != nil {
+	} else if db, e := open(driver, fileName); e != nil {
 		err = e
 	} else {
 		if e := createTables(db, "model", "modelView"); e != nil {
@@ -52,7 +52,7 @@ func createTestDB(name string, includeRunTables bool) (ret *sql.DB, err error) {
 // it'll write the db out in your user (home) directory
 func resolveTestFile(name string) (ret string, err error) {
 	if os.Args[len(os.Args)-1] != "write" {
-		ret = ":memory:"
+		ret = memory
 	} else {
 		// tests can have slash in their name
 		rest := strings.Replace(name, "/", ".", -1) + ".db"

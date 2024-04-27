@@ -37,7 +37,7 @@ func RowsAffected(res sql.Result) (ret int) {
 	return
 }
 
-// QueryAll queries the db ( or statement cache ) for one or more rows.
+// QueryAll queries for one or more rows.
 // For each row, it writes the row to the 'dest' args and calls 'cb' for processing.
 func QueryAll(db Querier, q string, cb func() error, dest ...any) (err error) {
 	if rows, e := db.Query(q); e != nil {
@@ -73,6 +73,7 @@ func Insert(table string, keys ...string) string {
 	return InsertWith(table, "", keys...)
 }
 
+// InsertWith allows the specification of on conflict directives
 func InsertWith(table string, rest string, keys ...string) string {
 	vals := "?"
 	if kcnt := len(keys) - 1; kcnt > 0 {

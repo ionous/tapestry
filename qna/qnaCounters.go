@@ -1,16 +1,18 @@
 package qna
 
 import (
+	"database/sql"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
 
 type counters map[string]int
 
 func (c *counters) getCounter(name string) (ret g.Value, err error) {
-	// fix: i think at some point we should have a global $counters object
-	// with named fields for each counter; that would let save/load work normally.
+	// alt: a global $counters object with fields?
 	i := (*c)[name]
 	ret = g.IntOf(i)
 	return
@@ -23,4 +25,16 @@ func (c *counters) setCounter(name string, val g.Value) (err error) {
 		(*c)[name] = val.Int()
 	}
 	return
+}
+
+func (c counters) writeCounters(db *sql.DB) error {
+	return writeValues(db, func(q *sql.Stmt) (err error) {
+		for k, v := range c {
+			if _, e := q.Exec(meta.Counter, k, v); e != nil {
+				err = e
+				break
+			}
+		}
+		return
+	})
 }

@@ -1,10 +1,17 @@
 ---
 Tapestry:
   - Interpret:with:
-      - - "quit"
-        - "q"
-      - - Action: "request to quit"
+    - - "q"
+      - "quit"
+    - Action: "request quit"
   - Interpret:with:
+    - "save"
+    - Action: "request save"
+  - Interpret:with:
+    - - "load"
+      - "restore"
+    - Action: "request load"
+- Interpret:with:
       - - "carry"
         - "hold"
       - - One of:

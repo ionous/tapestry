@@ -10,7 +10,7 @@ import (
 
 // creates a db for the tables listed in idl.sql
 func CreateIdl(idlFile string) (ret *sql.DB, err error) {
-	if db, e := sql.Open(defaultDriver, idlFile); e != nil {
+	if db, e := open(defaultDriver, idlFile); e != nil {
 		err = fmt.Errorf("couldn't open db %s because %v", idlFile, e)
 	} else {
 		err = createTables(db, "idl")
@@ -19,7 +19,7 @@ func CreateIdl(idlFile string) (ret *sql.DB, err error) {
 }
 
 func CreateBuildTime(mdlFile string) (ret *sql.DB, err error) {
-	if db, e := sql.Open(tapestryDriver, mdlFile); e != nil {
+	if db, e := open(tapestryDriver, mdlFile); e != nil {
 		err = e
 	} else {
 		if e := createTables(db,
@@ -37,7 +37,7 @@ func CreateBuildTime(mdlFile string) (ret *sql.DB, err error) {
 }
 
 func CreateRunTime(mdlFile string) (ret *sql.DB, err error) {
-	if db, e := sql.Open(tapestryDriver, mdlFile+"?mode=ro"); e != nil {
+	if db, e := open(tapestryDriver, mdlFile+"?mode=ro"); e != nil {
 		err = e
 	} else {
 		if e := createTables(db,

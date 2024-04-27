@@ -11,7 +11,7 @@ import (
 )
 
 func LoadFile(dst *sql.DB, fromFile string) (err error) {
-	if src, e := sql.Open(defaultDriver, fromFile); e != nil {
+	if src, e := open(defaultDriver, fromFile); e != nil {
 		err = e
 	} else {
 		err = copyDB(dst, src, rtTables)
@@ -21,7 +21,7 @@ func LoadFile(dst *sql.DB, fromFile string) (err error) {
 }
 
 func SaveFile(toFile string, src *sql.DB) (err error) {
-	if dst, e := sql.Open(defaultDriver, toFile); e != nil {
+	if dst, e := open(defaultDriver, toFile); e != nil {
 		err = e
 	} else {
 		err = copyDB(dst, src, rtTables)

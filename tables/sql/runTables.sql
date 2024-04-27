@@ -12,3 +12,7 @@ create table if not exists
 /* we dont need an "active" -- we can join against run_domain, or write 0 to domain to disable a pair. */
 create table if not exists 
 	rt.run_pair( domain text, relKind int, oneNoun int, otherNoun int, unique( relKind, oneNoun, otherNoun ) ); 
+
+/* fields a s*/
+create table if not exists 
+	rt.run_value( domain text, noun text, field text, value blob );

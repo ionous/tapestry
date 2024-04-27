@@ -1,11 +1,12 @@
 package qna
 
 import (
-	"io"
+	"database/sql"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -25,32 +26,40 @@ type Notifier struct {
 	// ChangedValue()
 }
 
-func NewRuntime(w io.Writer, q query.Query, d decoder.Decoder) *Runner {
-	return NewRuntimeOptions(w, q, d, Notifier{}, NewOptions())
+func NewRuntime(db *sql.DB, d decoder.Decoder) (*Runner, error) {
+	return NewRuntimeOptions(db, d, NewOptions())
 }
-func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, n Notifier, options Options) *Runner {
-	cacheErrors := options.cacheErrors()
-	run := &Runner{
-		query:      q,
-		decode:     d,
-		notify:     n,
-		values:     makeCache(cacheErrors),
-		nounValues: makeCache(cacheErrors),
-		counters:   make(counters),
-		options:    options,
-		scope:      scope.Chain{Scope: scope.Empty{}},
+
+func NewRuntimeOptions(db *sql.DB, d decoder.Decoder, opt Options) (ret *Runner, err error) {
+	cacheErrors := opt.cacheErrors()
+	if q, e := qdb.NewQueries(db); e != nil {
+		err = e
+	} else {
+		if d == nil {
+			d = decoder.DecodeNone("unsupported decoder")
+		}
+		ret = &Runner{
+			db:         db,
+			query:      q,
+			decode:     d,
+			values:     makeCache(cacheErrors),
+			nounValues: makeCache(cacheErrors),
+			counters:   make(counters),
+			options:    opt,
+			scope:      scope.Chain{Scope: scope.Empty{}},
+		}
+		ret.SetWriter(log.Writer())
 	}
-	run.SetWriter(w)
-	return run
+	return
 }
 
 type Runner struct {
-	query  query.Query
-	decode decoder.Decoder
-	notify Notifier
-
-	values     cache // other values are not kept across domains
-	nounValues cache // nounValues are kept across domains
+	db         *sql.DB
+	query      query.Query
+	decode     decoder.Decoder
+	notify     Notifier
+	values     cache
+	nounValues cache // read isn't kept across domains
 	counters
 	options Options
 	//
@@ -58,6 +67,10 @@ type Runner struct {
 	Randomizer
 	writer.Sink
 	currentPatterns
+}
+
+func (run *Runner) SetNotifier(n Notifier) {
+	run.notify = n
 }
 
 func (run *Runner) reportError(e error) error {

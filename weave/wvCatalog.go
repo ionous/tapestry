@@ -6,8 +6,6 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -40,15 +38,10 @@ func NewCatalog(db *sql.DB) *Catalog {
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
 	if run == nil {
-		dec := decoder.DecodeNone("unsupported decoder")
-		if qx, e := qdb.NewQueries(db); e != nil {
+		if r, e := qna.NewRuntime(db, nil); e != nil {
 			panic(e)
 		} else {
-			run = qna.NewRuntime(
-				log.Writer(),
-				qx,
-				dec,
-			)
+			run = r
 		}
 	}
 	var logerr mdl.Log

@@ -5,8 +5,10 @@ type cache struct {
 	cacheErrors bool
 }
 
+type cacheMap map[uint64]cachedValue
+
 func makeCache(cacheErrors bool) cache {
-	return cache{make(map[uint64]cachedValue), cacheErrors}
+	return cache{make(cacheMap), cacheErrors}
 }
 
 type cachedValue struct {
@@ -15,7 +17,7 @@ type cachedValue struct {
 }
 
 func (c *cache) reset() {
-	c.store = make(map[uint64]cachedValue)
+	c.store = make(cacheMap)
 }
 
 func (c *cache) cache(build func() (any, error), args ...string) (ret any, err error) {
