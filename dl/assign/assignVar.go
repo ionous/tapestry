@@ -2,28 +2,28 @@ package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-// always returns meta.Variables as its object
-func (op *VariableRef) GetObjectName(run rt.Runtime) (string, error) {
-	return meta.Variables, nil
-}
-
-func (op *VariableRef) GetFieldName(run rt.Runtime) (ret string, err error) {
+func (op *VariableRef) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
+		err = e
+	} else if path, e := ResolvePath(run, op.Dot); e != nil {
+		err = e
 	} else {
-		ret = name.String()
+		ret, err = resolveVariable(run, name.String(), path)
 	}
 	return
 }
 
-func (op *VariableRef) GetPath() []Dot {
-	return op.Dot
+func resolveVariable(run rt.Runtime, name string, path dot.Path) (ret dot.Endpoint, err error) {
+	field := dot.Field(name)
+	fullPath := append(dot.Path{field}, path...)
+	return dot.FindEndpoint(run, meta.Variables, fullPath)
 }
 
 func (op *VariableRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
@@ -90,10 +90,14 @@ func (op *VariableRef) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *VariableRef) getValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if src, e := GetRootValue(run, op); e != nil {
+	if src, e := op.GetReference(run); e != nil {
+		err = e
+	} else if val, e := src.GetValue(); e != nil {
+		err = e
+	} else if e := safe.Check(val, aff); e != nil {
 		err = e
 	} else {
-		ret, err = src.GetCheckedValue(run, aff)
+		ret = val
 	}
 	return
 }

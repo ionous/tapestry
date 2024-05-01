@@ -75,8 +75,9 @@ func (n variant) String() (ret string) {
 	return
 }
 
-func (n variant) Record() *Record {
-	return n.i.(*Record)
+func (n variant) Record() (*Record, bool) {
+	v := n.i.(*Record)
+	return v, v != nil
 }
 
 func (n variant) Floats() (ret []float64) {
@@ -126,7 +127,7 @@ func (n variant) Index(i int) (ret Value) {
 
 func (n variant) FieldByName(f string) (ret Value, err error) {
 	name := inflect.Normalize(f)
-	if rec := n.Record(); rec == nil {
+	if rec, ok := n.Record(); !ok {
 		err = errutil.Fmt("get field %q of nil record %q", name, n.Type())
 	} else {
 		if v, e := rec.GetNamedField(name); e != nil {
@@ -140,7 +141,7 @@ func (n variant) FieldByName(f string) (ret Value, err error) {
 
 func (n variant) SetFieldByName(f string, v Value) (err error) {
 	name := inflect.Normalize(f)
-	if rec := n.Record(); rec == nil {
+	if rec, ok := n.Record(); !ok {
 		err = errutil.Fmt("set field %q of nil record %q", name, n.Type())
 	} else {
 		newVal := CopyValue(v)
@@ -162,7 +163,7 @@ func (n variant) SetIndex(i int, v Value) (err error) {
 	case *[]*Record:
 		if n.t != v.Type() {
 			err = errutil.New("record types dont match")
-		} else if rec := v.Record(); rec == nil {
+		} else if rec, ok := v.Record(); !ok {
 			err = errutil.New("record lists dont allow null values")
 		} else {
 			n := copyRecordValues(rec)

@@ -47,7 +47,11 @@ func stringifyValue(out *js.Builder, v g.Value) {
 			}
 		})
 	case affine.Record:
-		stringifyRecord(out, v.Record())
+		if rec, ok := v.Record(); !ok {
+			out.Raw("null")
+		} else {
+			stringifyRecord(out, rec)
+		}
 	case affine.RecordList:
 		els := v.Records()
 		out.Brace(js.Array, func(_ *js.Builder) {

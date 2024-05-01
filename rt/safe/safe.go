@@ -1,12 +1,13 @@
 package safe
 
 import (
+	"errors"
+	"fmt"
 	"io"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"github.com/ionous/errutil"
 )
 
 // MissingEval error type for unknown variables while processing loops.
@@ -21,7 +22,7 @@ func RunAll(run rt.Runtime, exes []rt.Execute) (err error) {
 	for i, exe := range exes {
 		if exe != nil {
 			if e := exe.Execute(run); e != nil {
-				err = errutil.Fmt("failed statement %d %T %w", i, exe, e)
+				err = fmt.Errorf("failed statement %d %T %w", i, exe, e)
 				break
 			}
 		}
@@ -45,7 +46,7 @@ func WriteText(run rt.Runtime, eval rt.TextEval) (err error) {
 	if t, e := GetText(run, eval); e != nil {
 		err = e
 	} else if w := run.Writer(); w == nil {
-		err = errutil.New("missing writer")
+		err = errors.New("missing writer")
 	} else {
 		_, e := io.WriteString(w, t.String())
 		err = e

@@ -38,7 +38,8 @@ func TestMatching(t *testing.T) {
 	} else if b, e := lt.FieldByName("b"); e != nil {
 		t.Fatal(e)
 	} else {
-		a, b := a.Record(), b.Record()
+		a, _ := a.Record()
+		b, _ := b.Record()
 
 		runMatching := &assign.CallPattern{
 			PatternName: P(kargs.Name()), Arguments: core.MakeArgs(

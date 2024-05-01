@@ -47,24 +47,26 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // modify a list by adding and removing elements.
-func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+// fix: aff?
+func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal g.Value, retType string, err error) {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetList(run); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.CheckList(vs); e != nil {
 		err = e
 	} else if ins, e := safe.GetAssignment(run, op.Insert); e != nil {
 		err = e
-	} else if !IsAppendable(ins, els) {
-		err = insertError{ins, els}
-	} else if i, j, e := op.getIndices(run, els.Len()); e != nil {
+	} else if !IsAppendable(ins, vs) {
+		err = insertError{ins, vs}
+	} else if i, j, e := op.getIndices(run, vs.Len()); e != nil {
 		err = e
 	} else {
 		if i >= 0 && j >= i {
-			retVal, err = els.Splice(i, j, ins)
+			retVal, err = vs.Splice(i, j, ins)
 		}
 		if err == nil {
-			root.SetDirty(run)
-			retType = els.Type()
+			retType = vs.Type()
 		}
 	}
 	return

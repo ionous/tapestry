@@ -19,16 +19,18 @@ func eraseIndex(run rt.Runtime,
 	target assign.Address,
 	atIndex rt.NumberEval,
 ) (ret g.Value, err error) {
-	if root, e := assign.GetRootValue(run, target); e != nil {
+	if at, e := assign.GetReference(run, target); e != nil {
 		err = e
-	} else if els, e := root.GetList(run); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.CheckList(vs); e != nil {
 		err = e
 	} else if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
 		err = e
 	} else if startOne, e := safe.GetNumber(run, atIndex); e != nil {
 		err = e
 	} else {
-		start, listLen := startOne.Int(), els.Len()
+		start, listLen := startOne.Int(), vs.Len()
 		if start < 0 {
 			start += listLen // wrap negative starts
 		} else {
@@ -50,10 +52,9 @@ func eraseIndex(run rt.Runtime,
 				end = listLen
 			}
 		}
-		if v, e := els.Splice(start, end, nil); e != nil {
+		if v, e := vs.Splice(start, end, nil); e != nil {
 			err = e
 		} else {
-			root.SetDirty(run)
 			ret = v
 		}
 	}

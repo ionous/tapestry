@@ -1,15 +1,23 @@
 package safe
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"github.com/ionous/errutil"
 )
 
 func Check(v g.Value, want affine.Affinity) (err error) {
-	if va := v.Affinity(); len(want) > 0 && want != va {
-		err = errutil.Fmt("wanted %q, have %q", want, va)
+	if have := v.Affinity(); len(want) > 0 && want != have {
+		err = fmt.Errorf("wanted %q, have %q", want, have)
+	}
+	return
+}
+
+func CheckList(v g.Value) (err error) {
+	if have := v.Affinity(); !affine.IsList(have) {
+		err = fmt.Errorf("wanted a list, have %q", have)
 	}
 	return
 }

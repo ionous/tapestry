@@ -21,21 +21,24 @@ func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 
 func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 	pat := inflect.Normalize(op.PatternName)
-	if tgt, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
+		err = e
+	} else if accum, e := at.GetValue(); e != nil {
 		err = e
 	} else if fromList, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(fromList.Affinity()) {
 		err = errutil.New("not a list")
 	} else {
-		outVal := tgt.RootValue
+		changed := false
 		for it := g.ListIt(fromList); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
 			} else {
-				if newVal, e := run.Call(pat, outVal.Affinity(), nil, []g.Value{inVal, outVal}); e == nil {
+				if newVal, e := run.Call(pat, accum.Affinity(), nil, []g.Value{inVal, accum}); e == nil {
 					// update the accumulating value for next time
-					outVal = newVal
+					accum = newVal
+					changed = true
 				} else if !errors.Is(e, rt.NoResult) {
 					// if there was no result, just keep going with what we had
 					// for other errors, break.
@@ -44,8 +47,8 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 			}
 		}
 		// did we have a successful result at some point?
-		if err == nil && outVal != tgt.RootValue {
-			err = tgt.SetValue(run, outVal)
+		if err == nil && changed {
+			err = at.SetValue(accum)
 		}
 	}
 	return

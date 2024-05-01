@@ -217,7 +217,7 @@ func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) 
 					if next, e := rec.GetIndexedField(i); e != nil {
 						err = e
 					} else {
-						rec = next.Record()
+						rec, _ = next.Record()
 					}
 				} else {
 					// fix: is this good? or should we error?

@@ -50,7 +50,7 @@ func copyRecords(src []*Record) []*Record {
 }
 
 func copyRecord(v Value) (ret Value) {
-	if rec := v.Record(); rec == nil {
+	if rec, ok := v.Record(); !ok {
 		ret = v
 	} else {
 		out := copyRecordValues(rec)

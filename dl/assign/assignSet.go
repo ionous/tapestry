@@ -19,7 +19,7 @@ func (op *SetValue) setValue(run rt.Runtime) (err error) {
 		err = e // note: things are easier to debug if this grabs the target frst
 	} else if newValue, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
-	} else if e := ref.SetValue(run, newValue); e != nil {
+	} else if e := ref.SetValue(newValue); e != nil {
 		err = e
 	}
 	return

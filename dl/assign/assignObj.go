@@ -4,36 +4,28 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *ObjectRef) GetObjectName(run rt.Runtime) (ret string, err error) {
-	// note: ObjectText can return a valid empty string; and here i think we want to error
-	// so doing this manually.
+func (op *ObjectRef) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = CmdErrorCtx(op, "get object text", e)
+		err = e
 	} else if id, e := run.GetField(meta.ObjectId, name.String()); e != nil {
-		err = CmdErrorCtx(op, "get object name", e)
+		err = e
+	} else if fieldName, e := safe.GetText(run, op.Field); e != nil {
+		err = e
+	} else if path, e := ResolvePath(run, op.Dot); e != nil {
+		err = e
 	} else {
-		ret = id.String()
+		field := dot.Field(fieldName.String())
+		fullPath := append(dot.Path{field}, path...)
+		ret, err = dot.FindEndpoint(run, id.String(), fullPath)
 	}
 	return
-}
-
-func (op *ObjectRef) GetFieldName(run rt.Runtime) (ret string, err error) {
-	if name, e := safe.GetText(run, op.Field); e != nil {
-		err = CmdErrorCtx(op, "get field text", e)
-	} else {
-		ret = name.String()
-	}
-	return
-}
-
-func (op *ObjectRef) GetPath() []Dot {
-	return op.Dot
 }
 
 func (op *ObjectRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
@@ -78,10 +70,14 @@ func (op *ObjectRef) GetRecordList(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *ObjectRef) getValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if src, e := GetRootValue(run, op); e != nil {
+	if at, e := GetReference(run, op); e != nil {
+		err = e
+	} else if val, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.Check(val, aff); e != nil {
 		err = e
 	} else {
-		ret, err = src.GetCheckedValue(run, aff)
+		ret = val
 	}
 	if err != nil {
 		err = CmdErrorCtx(op, "get value of "+aff.String(), err)

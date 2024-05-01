@@ -2,13 +2,13 @@ package render
 
 import (
 	"errors"
+	"fmt"
 	"io"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
 // prints the response via the runtime's writer.
@@ -33,7 +33,7 @@ func (op *RenderResponse) printResponse(run rt.Runtime) (err error) {
 	if v, e := op.getResponse(run); e != nil {
 		err = e
 	} else if w := run.Writer(); w == nil {
-		err = errutil.New("missing writer")
+		err = errors.New("missing writer")
 	} else {
 		_, e := io.WriteString(w, v.String())
 		err = e
@@ -55,7 +55,7 @@ func (op *RenderResponse) getResponse(run rt.Runtime) (ret g.Value, err error) {
 	} else if op.Text == nil {
 		// todo: once warnings are implemented instead of errors
 		// this could return the response name instead.
-		err = errutil.Fmt("%w and no fallback specified", g.UnknownResponse(name))
+		err = fmt.Errorf("%w and no fallback specified", g.UnknownResponse(name))
 	} else {
 		ret, err = op.getLocalText(run)
 	}

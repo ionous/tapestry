@@ -67,29 +67,39 @@ func compareValues(a, b g.Value, tolerance float64) (ret int, err error) {
 	case affine.Text:
 		ret = compareStrings(a.String(), b.String())
 	case affine.Record:
-		a, b := a.Record(), b.Record()
-		an, bn := safeRecordName(a), safeRecordName(b)
-		if d := compareStrings(an, bn); d != 0 {
-			ret = d
+		a, aok := a.Record()
+		b, bok := b.Record()
+		if !aok || !bok {
+			if aok {
+				ret = 1
+			} else if bok {
+				ret = -1
+			} else {
+				ret = 0
+			}
 		} else {
-			// fix: need to report on the mismatch
-			// an optional log statement?
-			for i, cnt := 0, a.Kind().NumField(); i < cnt; i++ {
-				if d := compareBool(a.HasValue(i), b.HasValue(i)); d != 0 {
-					ret = d
-					break
-				} else if av, e := a.GetIndexedField(i); e != nil {
-					err = e
-					break
-				} else if bv, e := b.GetIndexedField(i); e != nil {
-					err = e
-					break
-				} else if d, e := compareValues(av, bv, tolerance); e != nil {
-					err = e
-					break
-				} else if d != 0 {
-					ret = d
-					break
+			if d := compareStrings(a.Kind().Name(), b.Kind().Name()); d != 0 {
+				ret = d
+			} else {
+				// fix: need to report on the mismatch
+				// an optional log statement?
+				for i, cnt := 0, a.Kind().NumField(); i < cnt; i++ {
+					if d := compareBool(a.HasValue(i), b.HasValue(i)); d != 0 {
+						ret = d
+						break
+					} else if av, e := a.GetIndexedField(i); e != nil {
+						err = e
+						break
+					} else if bv, e := b.GetIndexedField(i); e != nil {
+						err = e
+						break
+					} else if d, e := compareValues(av, bv, tolerance); e != nil {
+						err = e
+						break
+					} else if d != 0 {
+						ret = d
+						break
+					}
 				}
 			}
 		}

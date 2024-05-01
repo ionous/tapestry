@@ -179,15 +179,17 @@ func getPair(run rt.Runtime, a, b rt.NumberEval) (reta, retb float64, err error)
 }
 
 func inc(run rt.Runtime, tgt assign.Address, val rt.NumberEval, dir float64) (ret g.Value, err error) {
-	if root, e := assign.GetRootValue(run, tgt); e != nil {
+	if at, e := assign.GetReference(run, tgt); e != nil {
 		err = e
 	} else if b, e := safe.GetOptionalNumber(run, val, 1); e != nil {
 		err = e
-	} else if a, e := root.GetCheckedValue(run, affine.Number); e != nil {
+	} else if a, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.Check(a, affine.Number); e != nil {
 		err = e
 	} else {
 		v := g.FloatOf(a.Float() + (dir * b.Float()))
-		if e := root.SetValue(run, v); e != nil {
+		if e := at.SetValue(v); e != nil {
 			err = e
 		} else {
 			ret = v

@@ -24,7 +24,7 @@ type Value interface {
 	String() string
 	// return this value as a record, or panic if the value isn't a record.
 	// warning: can return a nil.
-	Record() *Record
+	Record() (*Record, bool)
 	// return this value as a slice of floats, or panic if this isn't a float slice.
 	// note: while primitive values support both ints and floats, slices can only be floats.
 	Floats() []float64
@@ -33,12 +33,6 @@ type Value interface {
 	// return this value as a slice of records, or panic if not a record slice.
 	// note: every value in the returned slice is expected to be record of this value's Type().
 	Records() []*Record
-	// return the nth element of this value, where 0 is the first value.
-	// panics if this isn't a slice.
-	Index(int) Value
-	// the number of elements in the value.
-	// panics if this cant have a length: isnt a slice or a string.
-	Len() int
 	// return a value representing a field inside this record.
 	// if the field holds a record or a slice, the returned value shares its memory with the named field.
 	// errors if the field doesn't exist.
@@ -48,6 +42,12 @@ type Value interface {
 	// errors if the field doesn't exist or if its affinity cant support the passed value.
 	// panics if this isn't a record.
 	SetFieldByName(string, Value) error
+	// the number of elements in the value.
+	// panics if this cant have a length: isnt a slice or a string.
+	Len() int
+	// return the nth element of this value, where 0 is the first value.
+	// panics if this isn't a slice.
+	Index(int) Value
 	// writes a *copy* of the passed value into a slice
 	// panics if this isn't a slice, if the index is out of range, or if the affinities are mismatched.
 	// errors if the types are mismatched

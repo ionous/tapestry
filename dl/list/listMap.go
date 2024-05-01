@@ -19,9 +19,11 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
 	pat := inflect.Normalize(op.PatternName)
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if tgt, e := root.GetList(run); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.CheckList(vs); e != nil {
 		err = e
 	} else if src, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
@@ -29,7 +31,7 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 		err = errutil.New("not a list")
 	} else {
 		var changes int
-		aff := affine.Element(tgt.Affinity())
+		aff := affine.Element(vs.Affinity())
 		for it := g.ListIt(src); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
@@ -37,15 +39,11 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 				// note: this treats "no result" as an error because its
 				// trying to map *all* of the elements from one list into another
 				err = e
-			} else if e := tgt.Appends(newVal); e != nil {
+			} else if e := vs.Appends(newVal); e != nil {
 				err = e
 			} else {
 				changes++
 			}
-		}
-		if err == nil && changes > 0 {
-			// Appends doesn't inform the caller of a result; so we have to.
-			root.SetDirty(run)
 		}
 	}
 	return

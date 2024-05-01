@@ -1,9 +1,11 @@
 package safe
 
 import (
+	"errors"
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"github.com/ionous/errutil"
 )
 
 // FillRecord fill the passed record with the arguments named by keys and values
@@ -14,7 +16,7 @@ import (
 // returns the passed record if there's no error
 func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (ret *g.Record, err error) {
 	if nk, nv := len(keys), len(vals); nv < nk {
-		err = errutil.New("too many keys")
+		err = errors.New("too many keys")
 	} else if nv == 0 {
 		ret = rec
 	} else {
@@ -29,7 +31,7 @@ func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (r
 					key = keys[ofs]
 				}
 				if at, e := lf.FindNext(key); e != nil {
-					err = errutil.Fmt("%w while reading arg %d(%s)", e, i, key)
+					err = fmt.Errorf("%w while reading arg %d(%s)", e, i, key)
 					break
 				} else if at < 0 {
 					break
@@ -39,7 +41,7 @@ func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (r
 				} else if e := rec.SetIndexedField(at, convertedVal); e != nil {
 					// note: set indexed field assigns without copying
 					// but get value copies out, so this should be okay.
-					err = errutil.Fmt("%w while setting arg %d(%s)", e, i, key)
+					err = fmt.Errorf("%w while setting arg %d(%s)", e, i, key)
 					break
 				}
 			} // end for

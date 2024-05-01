@@ -13,7 +13,7 @@ func copyFloats(src []float64) []float64 {
 	return out
 }
 
-//  duplicate the passed slice of strings.
+// duplicate the passed slice of strings.
 func copyStrings(src []string) []string {
 	out := make([]string, len(src))
 	copy(out, src)
@@ -66,7 +66,7 @@ func normalizeRecords(v Value) (ret []*Record, err error) {
 	switch a := safeAffinity(v); a {
 	case "": // nil
 	case affine.Record:
-		if rec := v.Record(); rec != nil {
+		if rec, ok := v.Record(); ok {
 			ret = []*Record{rec}
 		} else {
 			err = errutil.New("can't use nil records in a list")

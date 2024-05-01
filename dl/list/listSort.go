@@ -29,52 +29,44 @@ func (op *ListSortText) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetCheckedValue(run, affine.NumList); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
 		err = e
 	} else {
-		name := inflect.Normalize(op.ByField)
-		switch listAff := els.Affinity(); listAff {
+		byField := inflect.Normalize(op.ByField)
+		switch listAff := vs.Affinity(); listAff {
 		case affine.RecordList:
-			err = sortRecords(run, els.Records(), name, affine.Number, op.numSorter)
+			err = sortRecords(run, vs.Records(), byField, affine.Number, op.numSorter)
 
 		case affine.TextList:
-			err = sortObjects(run, els.Strings(), name, affine.Number, op.numSorter)
+			err = sortObjects(run, vs.Strings(), byField, affine.Number, op.numSorter)
 
 		default:
 			err = errutil.New("number sort not implemented for", listAff)
-
-			if err == nil {
-				root.SetDirty(run)
-			}
 		}
 	}
 	return
 }
 
 func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetCheckedValue(run, affine.TextList); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.Check(vs, affine.TextList); e != nil {
 		err = e
 	} else {
 		name := inflect.Normalize(op.ByField)
-		switch listAff := els.Affinity(); listAff {
-		case affine.RecordList:
-			// fix? would any of this be clearer/smaller if we used els.Index?
-			// ( well sort.Slice couldnt work on it directly, but maybe there's a slice index )
-			err = sortRecords(run, els.Records(), name, affine.Text, op.textSorter)
-
+		switch listAff := vs.Affinity(); listAff {
 		case affine.TextList:
-			err = sortObjects(run, els.Strings(), name, affine.Text, op.textSorter)
+			err = sortObjects(run, vs.Strings(), name, affine.Text, op.textSorter)
+
+		case affine.RecordList:
+			err = sortRecords(run, vs.Records(), name, affine.Text, op.textSorter)
 
 		default:
 			err = errutil.New("text sort not implemented for", listAff)
-		}
-
-		if err == nil {
-			root.SetDirty(run)
 		}
 	}
 	return

@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -13,7 +14,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 func (op *RenderName) GetText(run rt.Runtime) (ret g.Value, err error) {
@@ -43,7 +43,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 			// trying to print a variable? what kind?
 			switch aff := v.Affinity(); aff {
 			default:
-				err = errutil.Fmt("can't render name of variable %q a %s", op.Name, aff)
+				err = fmt.Errorf("can't render name of variable %q a %s", op.Name, aff)
 
 			case affine.Bool:
 				str := strconv.FormatBool(v.Bool())

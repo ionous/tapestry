@@ -3,12 +3,12 @@ package render
 import (
 	"bytes"
 	"errors"
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
 func (op *RenderPattern) Execute(run rt.Runtime) error {
@@ -84,7 +84,7 @@ func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret g.Val
 		vals := make([]g.Value, len(op.Render))
 		for i, el := range op.Render { // use the targeted field to know how to read the value
 			if v, e := el.RenderEval(run, k.Field(i).Affinity); e != nil {
-				err = errutil.New("rendering", name, "arg", i, e)
+				err = fmt.Errorf("%w rendering %s arg %d", e, name, i)
 				break
 			} else {
 				vals[i] = v
@@ -92,7 +92,7 @@ func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret g.Val
 		}
 		if err == nil {
 			if v, e := run.Call(name, hint, nil, vals); e != nil && !errors.Is(e, rt.NoResult) {
-				err = errutil.New("calling", name, e)
+				err = fmt.Errorf("%w calling %s", e, name)
 			} else {
 				ret = v
 			}

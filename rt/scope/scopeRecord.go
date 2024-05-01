@@ -21,30 +21,36 @@ type recordScope struct {
 }
 
 func (rs recordScope) FieldByName(field string) (ret g.Value, err error) {
-	run, rec:= rs.run, rs.rec
+	run, rec := rs.run, rs.rec
+	//
 	if v, e := rec.GetNamedField(field); e != nil {
 		err = e
-	} else if v.Affinity() != affine.Record || v.Record() != nil {
+	} else if v.Affinity() != affine.Record {
 		ret = v
-	} else if k, e := run.GetKindByName(v.Type()); e != nil {
-		err = e
+	} else if _, ok := v.Record(); ok {
+		ret = v
 	} else {
-		newVal := g.RecordOf(k.NewRecord())
-		rec.SetNamedField(field, newVal)
-		ret = newVal
+		// fix:
+		if k, e := run.GetKindByName(v.Type()); e != nil {
+			err = e
+		} else {
+			newVal := g.RecordOf(k.NewRecord())
+			rec.SetNamedField(field, newVal)
+			ret = newVal
+		}
 	}
 	return
 }
 
 func (rs recordScope) SetFieldByName(field string, val g.Value) error {
-	rec:= rs.rec
+	rec := rs.rec
 	return rec.SetNamedField(field, val)
 }
 
 // todo: example, flag object or db for save.
 // for now, simply verify that the field exists.
 func (rs recordScope) SetFieldDirty(field string) (err error) {
-	rec:= rs.rec
+	rec := rs.rec
 	_, err = rec.GetNamedField(field)
 	return
 }

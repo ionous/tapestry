@@ -2,8 +2,6 @@ package core
 
 import (
 	"strings"
-
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // Flags used compare values
@@ -77,13 +75,6 @@ func compareBool(a, b bool) (ret int) {
 		ret = -1
 	default:
 		ret = -1
-	}
-	return
-}
-
-func safeRecordName(rec *g.Record) (ret string) {
-	if rec != nil {
-		ret = rec.Kind().Name()
 	}
 	return
 }

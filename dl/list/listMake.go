@@ -78,7 +78,7 @@ func (op *MakeRecordList) makeList(run rt.Runtime) (ret g.Value, err error) {
 				err = e
 			} else if v.Type() != k.Name() {
 				err = errutil.Fmt("record %d of type %q not %q", i, v.Type(), subtype)
-			} else if rec := v.Record(); rec == nil {
+			} else if rec, ok := v.Record(); !ok {
 				err = errutil.Fmt("record %d of type %q was nil", i, v.Type())
 			} else {
 				vs[i] = rec
