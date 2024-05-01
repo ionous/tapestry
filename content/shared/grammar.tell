@@ -11,7 +11,7 @@ Tapestry:
     - - "load"
       - "restore"
     - Action: "request load"
-- Interpret:with:
+  - Interpret:with:
       - - "carry"
         - "hold"
       - - One of:
