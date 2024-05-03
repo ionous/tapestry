@@ -171,7 +171,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, true); e != nil {
 		t.Fatal(e)
-	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "kinds,k,j" {
+	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "j,k,kinds" {
 		got := strings.Join(path, ",")
 		t.Fatal("KindOfAncestors", got, e)
 	} else if _, e := domainPoke.Exec(subDomain, false); e != nil {

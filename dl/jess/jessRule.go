@@ -73,10 +73,10 @@ func (op *TimedRule) Generate(ctx Context) (err error) {
 				err = e
 			} else {
 				n := rules.RuleName{
-					Pattern: ks.Strings(),
-					Label:   label,
-					Prefix:  GetRulePrefix(op.RulePrefix),
-					Suffix:  GetRuleSuffix(op.RuleSuffix),
+					Path:   ks.Strings(),
+					Label:  label,
+					Prefix: GetRulePrefix(op.RulePrefix),
+					Suffix: GetRuleSuffix(op.RuleSuffix),
 				}
 				var filters []rt.BoolEval
 

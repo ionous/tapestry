@@ -122,37 +122,18 @@ func (run *Runner) readNounValue(obj query.NounInfo, field rt.Field) (ret rt.Val
 	return
 }
 
-// upon returning we will have some valid value or an error
+// upon returning we will have some valid value, assignment, or an error
 func (run *Runner) readKindField(obj query.NounInfo, field rt.Field) (ret any, err error) {
 	if k, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := k.FieldIndex(field.Name); fieldIndex < 0 {
 		err = errutil.New("couldnt find field %q in kind %q", field.Name, k.Name)
+	} else if init := field.Init; init != nil {
+		ret = init
 	} else {
-		var found bool
-	FindField:
-		for next := k; next != nil; next = next.Parent() {
-			if kv, e := run.getKindValues(next); e != nil {
-				err = e
-				break
-			} else {
-				// search through the fields of the kind
-				// they're in-order but possibly sparse.
-				for _, el := range kv {
-					if el.i > fieldIndex {
-						break // okay, not found; advance to the next kind
-					} else if el.i == fieldIndex {
-						ret, found = el.val, true
-						break FindField // don!
-					}
-				}
-			}
-		}
-		if !found {
-			// note: this doesnt properly determine the default trait for an aspect
-			// weave works around this by providing the correct default value in the db
-			ret, err = rt.ZeroValue(field.Affinity, field.Type)
-		}
+		// note: this doesnt properly determine the default trait for an aspect
+		// weave works around this by providing the correct default value in the db
+		ret, err = rt.ZeroValue(field.Affinity, field.Type)
 	}
 	return
 }

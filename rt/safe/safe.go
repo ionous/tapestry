@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"slices"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -203,15 +204,10 @@ func ObjectText(run rt.Runtime, eval rt.TextEval) (ret rt.Value, err error) {
 }
 
 func IsKindOf(run rt.Runtime, obj, kind string) (ret bool, err error) {
-	if objectPath, e := run.GetField(meta.ObjectKinds, obj); e != nil {
+	if path, e := run.GetField(meta.ObjectKinds, obj); e != nil {
 		err = e
 	} else {
-		for _, k := range objectPath.Strings() {
-			if k == kind {
-				ret = true
-				break
-			}
-		}
+		ret = slices.Contains(path.Strings(), kind)
 	}
 	return
 }

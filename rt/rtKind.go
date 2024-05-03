@@ -6,92 +6,60 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 )
 
+// type system for tapestry objects and records.
 type Kind struct {
-	name      string // keeping name *and* path makes debugging easier
-	parent    *Kind
+	path      []string // the name is first
 	fields    []Field
 	aspects   []Aspect
 	lastField int // cache of last accessed field
 }
 
+// kinds are composed of fields.
 type Field struct {
-	Name     string
-	Affinity affine.Affinity
-	Type     string // ex. kind for text types
-	Init     Assignment
+	Name     string          // name of the field, unique within the kind
+	Affinity affine.Affinity // one of the built in data types
+	Type     string          // subtype; ex. kind for text types
+	Init     Assignment      // default initialization
 }
 
+// the traits of any aspects behave like separate boolean fields;
+// ex. if the list of fields contains a "colour" aspect with traits "red", "blue", "green"
+// then the returned kind will respond to "colour", "red", "blue", and "green".
 type Aspect struct {
 	Name   string // matches the field name
 	Traits []string
 }
 
 // NewKind -
-func NewKind(name string, parent *Kind, fields []Field) *Kind {
-	return newKind(name, parent, fields, nil)
+// path indicates ancestry, the name of this kind at the start, parent kinds to the right.
+// fields are expected to be the accumulated fields of all ancestors;
+// parent fields to the *left*, more derived fields to the right. ( the reverse of path. )
+// descendant kinds can have different initial assignments for the same named field.
+func NewKind(path []string, fields []Field, aspects []Aspect) *Kind {
+	return &Kind{path: path, fields: fields, aspects: aspects}
 }
 
-// when kinds are created via this method,
-// the traits of any aspect fields act like separate boolean fields;
-// without it, only the aspect text field itself exists.
-// ex. if the list of fields contains a "colour" aspect with traits "red", "blue", "green"
-// then the returned kind will respond to "colour", "red", "blue", and "green";
-// with NewKind() it would respond only to "colour", the r,b,g fields wouldn't exist.
-// its a bit of leaky abstraction because boolean traits are used only by objects.
-func NewKindWithTraits(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
-	return newKind(name, parent, fields, aspects)
-}
-
-func newKind(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind {
-	if parent != nil { // fix? field lists are stored "flat" to simplify copy, record, etc.
-		// have to copy or they can share memory, and bad things happen with other kinds.
-		if len(parent.fields) > 0 {
-			fields = append(append([]Field(nil), parent.fields...), fields...)
-		}
-		if len(parent.aspects) > 0 {
-			aspects = append(append([]Aspect(nil), parent.aspects...), aspects...)
-		}
-	}
-	return &Kind{name: name, parent: parent, fields: fields, aspects: aspects}
-}
-
-// Ancestor list, root towards the start; the name of this kind at the end.
-func Ancestry(k *Kind) (ret []string) {
-	for ; k != nil; k = k.parent {
-		ret = append(ret, k.name)
-	}
-	slices.Reverse(ret)
-	return
-}
-
-func (k *Kind) Parent() (ret *Kind) {
-	return k.parent
-}
-
-// Does this kind
-func (k *Kind) Implements(name string) (okay bool) {
-	for ; k != nil; k = k.parent {
-		if k.name == name {
-			okay = true
-			break
-		}
-	}
-	return
-}
-
+// semi unique identifier for this kind
 func (k *Kind) Name() (ret string) {
-	return k.name
+	if len(k.path) > 0 {
+		ret = k.path[0]
+	}
+	return
 }
 
-func (k *Kind) NumAspect() int {
-	return len(k.aspects)
+// ancestors of this kind, the name of this kind at the head of the list
+// can be nil if the kind is "anonymous"
+func (k *Kind) Path() []string {
+	return k.path
 }
 
-// panics if out of range
-func (k *Kind) Aspect(i int) (ret Aspect) {
-	return k.aspects[i]
+// does this kind have the named ancestor?
+// ( this is a shortcut
+func (k *Kind) Implements(name string) bool {
+	return slices.Contains(k.path, name)
 }
 
+// number of fields contained by this ( and all parent kinds )
 func (k *Kind) NumField() int {
 	return len(k.fields)
 }

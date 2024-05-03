@@ -382,24 +382,11 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			} else if k, e := run.getKind(kindsOf.Response.String()); e != nil {
 				err = errutil.New("couldnt find response table", e)
 			} else if i := k.FieldIndex(field); i < 0 {
-				// ^ fix: this is an in-order search; have a custom cached lookup for responses?
 				err = rt.UnknownResponse(rawField)
-			} else if vs, e := run.getKindValues(k); e != nil {
-				err = e
+			} else if ft := k.Field(i); ft.Init == nil {
+				ret = rt.Empty
 			} else {
-				ret = rt.Empty // provisionally
-				for _, kv := range vs {
-					if kv.i > i {
-						break
-					} else if kv.i == i {
-						if val, e := kv.val.GetAssignedValue(run); e != nil {
-							err = e
-							break
-						} else {
-							ret = val
-						}
-					}
-				}
+				ret, err = ft.Init.GetAssignedValue(run)
 			}
 		case meta.Variables:
 			ret, err = run.scope.FieldByName(field)

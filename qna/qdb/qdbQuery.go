@@ -24,7 +24,6 @@ type Query struct {
 	checks,
 	fieldsOf,
 	kindOfAncestors,
-	kindValues,
 	nounInfo,
 	nounName,
 	nounValues,
@@ -158,42 +157,36 @@ func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []query.CheckData, e
 }
 
 func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
+	// select  kind, field, value from (
+	// 	select *, max(final) over (PARTITION by kind,field) as best
+	// 	from mdl_value_kind
+	// ) where final = best
 	if rows, e := q.fieldsOf.Query(kind); e != nil {
 		err = e
 	} else {
+		var last string
 		var field query.FieldData
 		err = tables.ScanAll(rows, func() (err error) {
-			ret = append(ret, field)
+			// the same field might be a final value ( listed first )
+			// and a non final value ( listed second )
+			if last != field.Name {
+				ret = append(ret, field)
+				last = field.Name
+			}
 			return
-		}, &field.Name, &field.Affinity, &field.Class)
+		}, &field.Name, &field.Affinity, &field.Class, &field.Init)
 	}
 	return
 }
 
-// returns the ancestor hierarchy, including the kind itself;
+// returns the ancestor hierarchy, starting with the kind itself.
 // empty if the kind doesnt exist, errors on a db error.
 // accepts both the plural and singular kind.
-// in the db, more root is to the right; in the returned list it's reversed.
-// ex. for "door" the list might be: kinds, objects, things, props, openers, doors.
 func (q *Query) KindOfAncestors(kind string) (ret []string, err error) {
 	if ks, e := scanStrings(q.kindOfAncestors, kind); e != nil && !errors.Is(e, sql.ErrNoRows) {
 		err = e
 	} else if e == nil {
 		ret = ks
-	}
-	return
-}
-
-func (q *Query) KindValues(id string) (ret []query.ValueData, err error) {
-	if rows, e := q.kindValues.Query(id); e != nil {
-		err = e
-	} else {
-		var field string
-		var value []byte
-		err = tables.ScanAll(rows, func() (_ error) {
-			ret = append(ret, query.ValueData{Field: field, Value: value})
-			return
-		}, &field, &value)
 	}
 	return
 }
@@ -348,16 +341,38 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			where domain = ?1`,
 		),
 		// every field exclusive to the passed kind
+		// alt: could use a partition to select the final value max(final) over (PARTITION by kind,field)
+		// instead this expects some filtering to ignore repeated values
+		// alternatively, we could maybe use update / conflict resolution to only store the best final during weave.
 		// fix:  store the id of the kind and pass it back in...
 		fieldsOf: ps.Prep(db,
-			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type
-			from active_kinds ks  -- search for the kind in question
-			join mdl_field mf
-				using (kind)
-			left join mdl_kind mk  -- search for the kind of type 
-				on (mk.rowid = mf.type)
-			where ks.name = ?1
-			order by mf.rowid`,
+			`select mf.field, mf.affinity, ifnull(mt.kind, '') as type, mv.value
+from active_kinds ks 
+join mdl_kind ma
+	-- is Y (is their name) a part of X (our path)
+	on instr(',' || ks.path, 
+					 ',' || ma.rowid || ',' )
+	or (ks.kind = ma.rowid) 
+join mdl_field mf
+  on (ma.rowid = mf.kind)
+-- pull in all values of any matching field
+left join mdl_value_kind mv 
+	-- this matches all the kinds from other trees
+	-- ( ex. doors and supporters both have portability. )
+  on (mv.field = mf.rowid)
+	-- so filter initializers by the requested kind's fullpath
+  and instr(
+   ',' || ks.kind || ',' || ks.path, -- full path
+   ',' || mv.kind || ',')
+-- finally determine the name of the field's type
+left join mdl_kind mt 
+	on (mt.rowid = mf.type)
+where (ks.name = ?1)
+-- sort to get fields in definition order
+-- ( that's implicitly also kind order: all fields in earlier kinds are defined first )
+-- then by the initializer nearest to our requested kind 
+-- and, finally, put final values first.
+order by mf.rowid, mv.kind desc, mv.final desc`,
 		),
 		// path is materialized ids so we return multiple values of resolved names
 		kindOfAncestors: ps.Prep(db,
@@ -369,19 +384,7 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 								 ',' || mk.rowid || ',' )
 				or (ks.kind == mk.rowid) -- the kind itself ( to get its real name )
 			where (ks.name = ?1) or (ks.singular = ?1)
-			order by mk.rowid`,
-		),
-		// this *isnt* hierarchical, it's all the inits for the kind
-		// ( which in the table can include base classes )
-		kindValues: ps.Prep(db,
-			`select mf.field, mv.value
-			from active_kinds ks    -- the kinds in scope
-			join mdl_value_kind mv
-				using(kind)
-			join mdl_field mf
-				on (mf.rowid = mv.field)
-			where ks.name = ?1
-			order by mf.rowid, mv.final desc`,
+			order by mk.rowid desc`,
 		),
 		// maybe unneeded now that domains are activated one by one?
 		// newPairsFromChanges: ps.Prep(db,

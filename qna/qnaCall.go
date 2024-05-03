@@ -20,7 +20,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	} else if rec, e := safe.FillRecord(run, rt.NewRecord(pat), keys, vals); e != nil {
 		err = e
 	} else {
-		switch pattern.Categorize(rt.Ancestry(pat)) {
+		switch pattern.Categorize(pat.Path()) {
 		case pattern.Initializes:
 			ret = rt.RecordOf(rec)
 		case pattern.Calls:

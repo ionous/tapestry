@@ -35,9 +35,6 @@ func (q QueryNone) KindOfAncestors(kind string) (_ []string, _ error) {
 	return
 }
 
-func (q QueryNone) KindValues(id string) (_ []ValueData, _ error) {
-	return
-}
 func (q QueryNone) NounInfo(name string) (_ NounInfo, _ error) {
 	return
 }

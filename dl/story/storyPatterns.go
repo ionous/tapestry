@@ -79,8 +79,7 @@ func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
 		} else if ks := ks.Strings(); len(ks) == 0 {
 			err = fmt.Errorf("%w kind %s", weaver.Missing, act)
 		} else {
-			act := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
-			pb := mdl.NewPatternSubtype(act, kindsOf.Action.String())
+			pb := mdl.NewPatternSubtype(ks[0], kindsOf.Action.String())
 			pb.AddLocals(reduceFields(run, op.Provides))
 			err = w.AddPattern(pb.Pattern)
 		}
@@ -160,8 +159,7 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 			if exact.Bool() {
 				panic("not implemented")
 			} else {
-				k := ks[len(ks)-1] // get the kind's real name (ex. plural fixup)
-				filters = rules.AddKindFilter(k, filters)
+				filters = rules.AddKindFilter(ks[0], filters)
 				if desc.IsEvent() {
 					if !desc.ExcludesPlayer {
 						filters = rules.AddPlayerFilter(filters)

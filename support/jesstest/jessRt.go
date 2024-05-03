@@ -50,8 +50,7 @@ func (d *jessRt) GetField(name, field string) (ret rt.Value, err error) {
 		ret = rt.StringOf(str)
 	} else if name == meta.KindAncestry {
 		if field == "storing" {
-			// root left, kind right.
-			ret = rt.StringsOf([]string{"kinds", "actions", "storing"})
+			ret = rt.StringsOf([]string{"storing", "actions", "kinds"})
 		}
 	} else {
 		ret, err = d.verbs.GetVerbValue(name, field)

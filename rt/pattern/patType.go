@@ -18,20 +18,20 @@ const (
 // meta.KindAncestry
 func Categorize(path []string) (ret Category) {
 	switch len(path) {
-	case 2: // <record>(0) name; <pattern>(0) name
-		switch base := path[0]; base {
+	case 2: //  [] name, (record|pattern)
+		switch path[len(path)-1] {
 		case kindsOf.Record.String():
 			ret = Initializes
 		case kindsOf.Pattern.String():
 			ret = Calls
 		}
-	case 3: // <pattern>(1) <action> name
-		switch base := path[1]; base {
+	case 3: // [] name, action, pattern
+		switch path[len(path)-2] {
 		case kindsOf.Action.String():
 			ret = Sends
 		}
-	case 4: // <pattern> <action>(1) action_name event_name
-		switch base := path[1]; base {
+	case 4: // [] name, action, pattern
+		switch path[len(path)-2] {
 		case kindsOf.Action.String():
 			ret = Listens
 		}

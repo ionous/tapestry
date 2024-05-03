@@ -13,21 +13,15 @@ type Record struct {
 	values []Value
 }
 
-// a record without a named kind
-func NewAnonymousRecord(fields []Field) *Record {
-	return NewRecord(NewKind("", nil, fields))
+func NewRecord(k *Kind) *Record {
+	// values are placeholder; zero values generated on demand
+	return &Record{Kind: k, values: make([]Value, k.NumField())}
 }
 
-func NewRecord(k *Kind) *Record {
-	// we make a bunch of nil value placeholders which we fill by caching on demand.
-	rec := &Record{Kind: k, values: make([]Value, k.NumField())}
-	// set the default values for aspects?
-	// alt: determine it on GetIndexedValue as per other defaults
-	// for _, a := range k.aspects {
-	// 	i := k.FieldIndex(a.Name)
-	// 	rec.values[i] = StringFrom(a.Traits[0], a.Name)
-	// }
-	return rec
+// a record without a named kind
+func NewAnonymousRecord(fields []Field) *Record {
+	anon := NewKind(nil, fields, nil)
+	return NewRecord(anon)
 }
 
 // return whether the indexed field has ever been written to.
@@ -65,8 +59,7 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 		// fix? i dont love this, but it does make sense that enumeration have the least value as a default
 		// note: qna objects aren't represented by records, so they dont hit this
 		if ft.Affinity == affine.Text && ft.Name == ft.Type {
-			for a, cnt := 0, d.NumAspect(); a < cnt; a++ {
-				at := d.Aspect(a)
+			for _, at := range d.aspects {
 				if at.Name == ft.Name {
 					// first trait:
 					nv := StringFrom(at.Traits[0], at.Name)

@@ -63,7 +63,7 @@ func (ks *Kinds) GetKindByName(name string) (ret *rt.Kind, err error) {
 	} else {
 		if name == kindsOf.Aspect.String() {
 			// special base for aspects
-			ret = rt.NewKind(name, nil, nil)
+			ret = rt.NewKind([]string{name}, nil, nil)
 		} else {
 			if k, e := ks.makeAspect(name); e != nil {
 				err = e
@@ -91,17 +91,18 @@ func (ks *Kinds) GetKindByName(name string) (ret *rt.Kind, err error) {
 }
 
 func (ks *Kinds) makeKind(name string, pfs *[]rt.Field) (ret *rt.Kind, err error) {
-	var parent *rt.Kind
+	var parents []string
 	if p, ok := ks.Builder.Parents[name]; ok {
 		if k, e := ks.GetKindByName(p); e != nil {
 			err = e
 		} else {
-			parent = k
+			parents = k.Path()
 		}
 	}
 	if err == nil {
 		fields := *pfs
-		ret = rt.NewKindWithTraits(name, parent, fields, aspects.MakeAspects(ks, fields))
+		path := append([]string{name}, parents...)
+		ret = rt.NewKind(path, fields, aspects.MakeAspects(ks, fields))
 	}
 	return
 }
@@ -114,7 +115,8 @@ func (ks *Kinds) makeAspect(name string) (ret *rt.Kind, err error) {
 				break
 			} else {
 				// create the kind from the stored fields
-				ret = rt.NewKind(a.Name, parent, MakeFieldsFromTraits(a.Traits))
+				path := append([]string{name}, parent.Path()...)
+				ret = rt.NewKind(path, MakeFieldsFromTraits(a.Traits), nil)
 				break
 			}
 		}
