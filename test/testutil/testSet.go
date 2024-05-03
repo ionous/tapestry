@@ -1,11 +1,11 @@
 package testutil
 
 import (
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
-func SetRecord(d *g.Record, pairs ...interface{}) (err error) {
+func SetRecord(d *rt.Record, pairs ...interface{}) (err error) {
 	for i, cnt := 0, len(pairs); i < cnt; i = i + 2 {
 		if n, ok := pairs[i].(string); !ok {
 			err = errutil.New("couldnt convert field")
@@ -23,22 +23,22 @@ func SetRecord(d *g.Record, pairs ...interface{}) (err error) {
 }
 
 // ValueOf returns a new generic value wrapper based on analyzing the passed value.
-func ValueOf(i interface{}) (ret g.Value, err error) {
+func ValueOf(i interface{}) (ret rt.Value, err error) {
 	switch i := i.(type) {
 	case bool:
-		ret = g.BoolOf(i)
+		ret = rt.BoolOf(i)
 	case int:
-		ret = g.IntOf(i)
+		ret = rt.IntOf(i)
 	case float64:
-		ret = g.FloatOf(i)
+		ret = rt.FloatOf(i)
 	case string:
-		ret = g.StringOf(i)
+		ret = rt.StringOf(i)
 	case []float64:
-		ret = g.FloatsOf(i)
+		ret = rt.FloatsOf(i)
 	case []string:
-		ret = g.StringsOf(i)
-	case *g.Record:
-		ret = g.RecordOf(i)
+		ret = rt.StringsOf(i)
+	case *rt.Record:
+		ret = rt.RecordOf(i)
 	default:
 		err = errutil.Fmt("unhandled value %v(%T)", i, i)
 	}

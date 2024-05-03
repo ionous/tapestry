@@ -4,14 +4,13 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/aspects"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
 )
 
-func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
+func (run *Runner) GetKindByName(rawName string) (ret *rt.Kind, err error) {
 	if name := inflect.Normalize(rawName); len(name) == 0 {
 		err = errutil.New("no kind of empty name")
 	} else if cached, e := run.getKind(name); e != nil {
@@ -22,7 +21,7 @@ func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
 	return
 }
 
-func (run *Runner) getKindOf(kn, kt string) (ret *g.Kind, err error) {
+func (run *Runner) getKindOf(kn, kt string) (ret *rt.Kind, err error) {
 	if ck, e := run.getKind(kn); e != nil {
 		err = e
 	} else if !ck.Implements(kt) {
@@ -50,7 +49,7 @@ func (run *Runner) getAncestry(k string) (ret []string, err error) {
 	return
 }
 
-func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
+func (run *Runner) getKind(k string) (ret *rt.Kind, err error) {
 	run.ensureBaseKinds()
 	if c, e := run.values.cache(func() (ret any, err error) {
 		ret, err = run.buildKind(k)
@@ -58,7 +57,7 @@ func (run *Runner) getKind(k string) (ret *g.Kind, err error) {
 	}, "kinds", k); e != nil {
 		err = e
 	} else {
-		ret = c.(*g.Kind)
+		ret = c.(*rt.Kind)
 	}
 	return
 }
@@ -70,17 +69,17 @@ func (run *Runner) ensureBaseKinds() {
 	if _, ok := run.values.store[key]; !ok {
 		for _, k := range kindsOf.DefaultKinds {
 			var err error
-			var kind *g.Kind
+			var kind *rt.Kind
 			// note: responses have fields, even though the other base kinds dont
 			if fs, e := run.getExclusiveFields(k.String()); e != nil {
 				err = errutil.Fmt("error while building kind %q, %w", k, e)
 			} else {
-				var parent *g.Kind
+				var parent *rt.Kind
 				if p := k.Parent().String(); len(p) > 0 {
 					parent, err = run.getKind(p)
 				}
 				if err == nil {
-					kind = g.NewKind(k.String(), parent, fs)
+					kind = rt.NewKind(k.String(), parent, fs)
 				}
 			}
 			key := makeKey("kinds", k.String())
@@ -93,7 +92,7 @@ func (run *Runner) ensureBaseKinds() {
 // fix? this is maybe a little odd... because when the domain changes, so will the kinds
 // ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
 // - and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
-func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
+func (run *Runner) buildKind(k string) (ret *rt.Kind, err error) {
 	// fix: use getAncestry?
 	if path, e := run.query.KindOfAncestors(k); e != nil {
 		err = errutil.Fmt("error while getting kind %q, %w", k, e)
@@ -111,9 +110,9 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 			// because of that, weave generates reasonable default values for kinds with traits
 			if objectLike := path[0] == kindsOf.Kind.String(); objectLike {
 				traits := aspects.MakeAspects(run, fields)
-				ret = g.NewKindWithTraits(k, parent, fields, traits)
+				ret = rt.NewKindWithTraits(k, parent, fields, traits)
 			} else {
-				ret = g.NewKind(k, parent, fields)
+				ret = rt.NewKind(k, parent, fields)
 			}
 		}
 	}
@@ -121,7 +120,7 @@ func (run *Runner) buildKind(k string) (ret *g.Kind, err error) {
 }
 
 // cached fields exclusive to a kind
-func (run *Runner) getExclusiveFields(kind string) (ret []g.Field, err error) {
+func (run *Runner) getExclusiveFields(kind string) (ret []rt.Field, err error) {
 	if c, e := run.values.cache(func() (ret any, err error) {
 		return run.query.FieldsOf(kind)
 	}, "fields", kind); e != nil {
@@ -129,14 +128,14 @@ func (run *Runner) getExclusiveFields(kind string) (ret []g.Field, err error) {
 	} else {
 		fs := c.([]query.FieldData)
 		for _, f := range fs {
-			ret = append(ret, g.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class})
+			ret = append(ret, rt.Field{Name: f.Name, Affinity: f.Affinity, Type: f.Class})
 		}
 	}
 	return
 }
 
 // cached initialization exclusive to a kind
-func (run *Runner) getKindValues(kind *g.Kind) (ret []kindValue, err error) {
+func (run *Runner) getKindValues(kind *rt.Kind) (ret []kindValue, err error) {
 	name := kind.Name()
 	if c, e := run.values.cache(func() (ret any, err error) {
 		if kv, e := run.query.KindValues(name); e != nil {
@@ -168,7 +167,7 @@ func (run *Runner) getKindValues(kind *g.Kind) (ret []kindValue, err error) {
 	return
 }
 
-func findNextField(k *g.Kind, name string, prev int) (ret g.Field, next int) {
+func findNextField(k *rt.Kind, name string, prev int) (ret rt.Field, next int) {
 	next = -1 // provisionally
 	for i, cnt := prev+1, k.NumField(); i < cnt; i++ {
 		if f := k.Field(i); f.Name == name {
@@ -185,7 +184,7 @@ type kindValue struct {
 }
 
 // only inits if the field is unset
-func (kv *kindValue) initValue(run rt.Runtime, rec *g.Record) (err error) {
+func (kv *kindValue) initValue(run rt.Runtime, rec *rt.Record) (err error) {
 	if !rec.HasValue(kv.i) {
 		if val, e := kv.val.GetAssignedValue(run); e != nil {
 			err = e
@@ -197,8 +196,8 @@ func (kv *kindValue) initValue(run rt.Runtime, rec *g.Record) (err error) {
 }
 
 // assumes the record in in scope so it can read from its own values when needed
-func initRecord(run *Runner, rec *g.Record) (err error) {
-	if vs, e := run.getKindValues(rec.Kind()); e != nil {
+func initRecord(run *Runner, rec *rt.Record) (err error) {
+	if vs, e := run.getKindValues(rec.Kind); e != nil {
 		err = e
 	} else {
 		for _, kv := range vs {

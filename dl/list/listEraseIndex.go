@@ -3,7 +3,6 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -18,7 +17,7 @@ func eraseIndex(run rt.Runtime,
 	count rt.NumberEval,
 	target assign.Address,
 	atIndex rt.NumberEval,
-) (ret g.Value, err error) {
+) (ret rt.Value, err error) {
 	if at, e := assign.GetReference(run, target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {

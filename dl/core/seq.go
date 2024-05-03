@@ -2,7 +2,6 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -15,7 +14,7 @@ func updateCounter(run rt.Runtime, seq string, parts []rt.TextEval, inc func(int
 			err = e
 		} else {
 			curr := p.Int()
-			next := g.IntOf(inc(curr, max))
+			next := rt.IntOf(inc(curr, max))
 			if e := run.SetField(meta.Counter, seq, next); e != nil {
 				err = e
 			} else {
@@ -26,16 +25,16 @@ func updateCounter(run rt.Runtime, seq string, parts []rt.TextEval, inc func(int
 	return
 }
 
-func getNextText(run rt.Runtime, parts []rt.TextEval, onedex int) (ret g.Value, err error) {
+func getNextText(run rt.Runtime, parts []rt.TextEval, onedex int) (ret rt.Value, err error) {
 	if i, max := onedex-1, len(parts); i >= 0 && i < max {
 		ret, err = safe.GetText(run, parts[i])
 	} else {
-		ret = g.Empty
+		ret = rt.Empty
 	}
 	return
 }
 
-func (op *CallCycle) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *CallCycle) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if onedex, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -44,7 +43,7 @@ func (op *CallCycle) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *CallShuffle) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *CallShuffle) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if curr, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmdError(op, e)
 	} else if curr, max := curr-1, len(op.Parts); curr < max {
@@ -54,7 +53,7 @@ func (op *CallShuffle) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *CallTerminal) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *CallTerminal) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if onedex, e := op.stopping(run); e != nil {
 		err = cmdError(op, e)
 	} else {

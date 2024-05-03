@@ -2,11 +2,10 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *ChooseNum) GetNumber(run rt.Runtime) (ret g.Value, err error) {
+func (op *ChooseNum) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	if b, e := safe.GetBool(run, op.If); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -25,7 +24,7 @@ func (op *ChooseNum) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *ChooseText) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *ChooseText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if b, e := safe.GetBool(run, op.If); e != nil {
 		err = cmdError(op, e)
 	} else {

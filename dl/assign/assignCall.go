@@ -5,11 +5,9 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
-
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *CallPattern) Execute(run rt.Runtime) error {
@@ -17,37 +15,37 @@ func (op *CallPattern) Execute(run rt.Runtime) error {
 	return err
 }
 
-func (op *CallPattern) GetBool(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetBool(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.Bool)
 }
 
-func (op *CallPattern) GetNumber(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetNumber(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.Number)
 }
 
-func (op *CallPattern) GetText(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetText(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.Text)
 }
 
-func (op *CallPattern) GetRecord(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetRecord(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.Record)
 }
 
-func (op *CallPattern) GetNumList(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetNumList(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.NumList)
 }
 
-func (op *CallPattern) GetTextList(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetTextList(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.TextList)
 }
 
-func (op *CallPattern) GetRecordList(run rt.Runtime) (g.Value, error) {
+func (op *CallPattern) GetRecordList(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.RecordList)
 }
 
 // note: at one point this would unwrap errors so that callers couldn't see them
 // i no longer am sure why. doing stops game.Signals(s) ( ex SignalQuit ) from reaching the parser.
-func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	name := inflect.Normalize(op.PatternName)
 	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
 		err = CmdErrorCtx(op, name, e)
@@ -59,9 +57,9 @@ func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Val
 	return
 }
 
-func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []g.Value, err error) {
+func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []rt.Value, err error) {
 	if len(args) > 0 {
-		keys, vals := make([]string, len(args)), make([]g.Value, len(args))
+		keys, vals := make([]string, len(args)), make([]rt.Value, len(args))
 		for i, a := range args {
 			if val, e := safe.GetAssignment(run, a.Value); e != nil {
 				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)

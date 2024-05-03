@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -63,7 +62,7 @@ func (n RuleName) EventName() (ret string) {
 // pattern name as specified
 // optional rule name as specified
 // ex. Define rule:named:do: ["activating", "the standard activating action" ]
-func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err error) {
+func ReadPhrase(ks rt.Kinds, patternSpec, ruleSpec string) (ret RuleName, err error) {
 	patternSpec = inflect.Normalize(patternSpec)
 	name, suffix := findSuffix(patternSpec)
 	// return name sans any prefix, and any prefix the name had.
@@ -80,7 +79,7 @@ func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err err
 	// fix: we can pass in the base type
 	if k, e := ks.GetKindByName(short); e != nil {
 		err = e
-	} else if pat := g.Ancestry(k); len(pat) == 0 {
+	} else if pat := rt.Ancestry(k); len(pat) == 0 {
 		err = fmt.Errorf("couldnt determine ancestry of %q", short)
 	} else {
 		ret = RuleName{

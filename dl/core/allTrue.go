@@ -2,40 +2,39 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *Never) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	ret = g.BoolOf(false)
+func (op *Never) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	ret = rt.BoolOf(false)
 	return
 }
 
-func (op *Always) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	ret = g.BoolOf(true)
+func (op *Always) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	ret = rt.BoolOf(true)
 	return
 }
 
-func (op *AllTrue) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *AllTrue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	// stop on the first statement to return false.
 	if i, cnt, e := resolve(run, op.Test, false); e != nil {
 		err = cmdError(op, e)
 	} else if i < cnt {
-		ret = g.False
+		ret = rt.False
 	} else {
-		ret = g.True // return true, resolve never found a false statement
+		ret = rt.True // return true, resolve never found a false statement
 	}
 	return
 }
 
-func (op *AnyTrue) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *AnyTrue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	// stop on the first statement to return true.
 	if i, cnt, e := resolve(run, op.Test, true); e != nil {
 		err = cmdError(op, e)
 	} else if i < cnt {
-		ret = g.True
+		ret = rt.True
 	} else {
-		ret = g.False // return false, resolve never found a true statement
+		ret = rt.False // return false, resolve never found a true statement
 	}
 	return
 }

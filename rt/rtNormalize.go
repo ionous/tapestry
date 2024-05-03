@@ -1,8 +1,9 @@
-package generic
+package rt
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
-	"github.com/ionous/errutil"
 )
 
 // rare, just for splice for now.
@@ -54,7 +55,7 @@ func normalizeRecords(v Value) (ret []*Record, err error) {
 		if rec, ok := v.Record(); ok {
 			ret = []*Record{rec}
 		} else {
-			err = errutil.New("can't use nil records in a list")
+			err = errors.New("can't use nil records in a list")
 		}
 	case affine.RecordList:
 		ret = v.Records()

@@ -9,14 +9,13 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-func (op *RenderName) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *RenderName) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.getName(run); e != nil {
 		err = CmdError(op, e)
 	} else {
@@ -25,7 +24,7 @@ func (op *RenderName) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
+func (op *RenderName) getName(run rt.Runtime) (ret rt.Value, err error) {
 	// uppercase names are assumed to be requests for object names.
 	if name := op.Name; inflect.IsCapitalized(name) {
 		ret, err = op.getPrintedObjectName(run, name)
@@ -35,7 +34,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 		switch v, e := run.GetField(meta.Variables, op.Name); e.(type) {
 		default:
 			err = e
-		case g.Unknown:
+		case rt.Unknown:
 			// if there was no such variable, then it's probably an object name
 			ret, err = op.getPrintedObjectName(run, name)
 
@@ -47,11 +46,11 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 
 			case affine.Bool:
 				str := strconv.FormatBool(v.Bool())
-				ret = g.StringOf(str)
+				ret = rt.StringOf(str)
 
 			case affine.Number:
 				str := strconv.FormatFloat(v.Float(), 'g', -1, 64)
-				ret = g.StringOf(str)
+				ret = rt.StringOf(str)
 
 			case affine.Text:
 				// if there's no type, just assume the author was asking for the variable's text
@@ -60,7 +59,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 					ret = v
 				} else if k, e := run.GetKindByName(kind); e != nil {
 					err = e
-				} else if b := g.Base(k); b != kindsOf.Kind.String() {
+				} else if !k.Implements(kindsOf.Kind.String()) {
 					ret = v
 				} else {
 					ret, err = op.getPrintedValue(run, str, kind)
@@ -71,7 +70,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret g.Value, err error) {
+func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret rt.Value, err error) {
 	if obj, e := run.GetField(meta.ObjectId, name); e != nil {
 		err = e
 	} else {
@@ -80,7 +79,7 @@ func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret g.V
 	return
 }
 
-func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret g.Value, err error) {
+func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value, err error) {
 	if printedName, e := safe.GetText(run, &core.BufferText{Exe: core.MakeActivity(
 		&assign.CallPattern{
 			PatternName: "print name",

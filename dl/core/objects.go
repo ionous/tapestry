@@ -2,23 +2,22 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-func (op *ObjectExists) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *ObjectExists) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	switch obj, e := safe.ObjectText(run, op.Object); e.(type) {
 	case nil:
 		if len(obj.String()) == 0 {
-			ret = g.False
+			ret = rt.False
 		} else {
-			ret = g.True
+			ret = rt.True
 		}
-	case g.Unknown:
-		ret = g.False // fix: is this branch even possible?
+	case rt.Unknown:
+		ret = rt.False // fix: is this branch even possible?
 	default:
 		err = cmdError(op, e)
 	}
@@ -27,7 +26,7 @@ func (op *ObjectExists) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 // return the unique object name for the indicated object.
 // returns an error if there is no such object; returns the empty string for an empty id.
-func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *IdOf) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -39,7 +38,7 @@ func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 // returns the author specified name for the indicated object.
 // returns an error if there is no such object;
 // returns the empty string for an empty request.
-func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *NameOf) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if id, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
 	} else if obj := id.String(); len(obj) == 0 {
@@ -52,11 +51,11 @@ func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *ObjectTraits) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ObjectTraits) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if ts, e := op.getTraits(run); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ret = g.StringsOf(ts)
+		ret = rt.StringsOf(ts)
 	}
 	return
 }
@@ -86,20 +85,20 @@ func (op *ObjectTraits) getTraits(run rt.Runtime) (ret []string, err error) {
 }
 
 // returns a list of all objects of the specified kind.
-func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
+func (op *KindsOf) GetTextList(run rt.Runtime) (rt.Value, error) {
 	kind := inflect.Normalize(op.Kind) // fix: at assembly time.
 	return run.GetField(meta.ObjectsOfKind, kind)
 }
 
 // returns the kind of the indicated object.
 // returns an error if there is no such object; returns the empty string for an empty request.
-func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *KindOf) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if k, e := objectKind(run, op.Object, op.Nothing); e != nil {
 		err = e
 	} else if k == nil {
-		ret = g.Empty
+		ret = rt.Empty
 	} else {
-		ret = g.StringOf(k.Name()) // tbd: should kind string have a type of meta.ObjectKind?
+		ret = rt.StringOf(k.Name()) // tbd: should kind string have a type of meta.ObjectKind?
 	}
 	return
 }
@@ -107,12 +106,12 @@ func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 // returns true if the indicated object is of the specified kind.
 // returns an error if there is no such object;
 // returns the false for an empty request UNLESS nothing objects were specified as being allowed to match.
-func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *IsKindOf) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if k, e := objectKind(run, op.Object, op.Nothing); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ok := k != nil && k.Implements(inflect.Normalize(op.Kind))
-		ret = g.BoolOf(ok)
+		ret = rt.BoolOf(ok)
 	}
 	return
 }
@@ -120,12 +119,12 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 // returns true if the indicated object is of the specified kind
 // but not a kind that derives from the specified kind.
 // returns an error if there is no such object; returns the false for an empty request.
-func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if k, e := objectKind(run, op.Object, false); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ok := k != nil && k.Name() == inflect.Normalize(op.Kind)
-		ret = g.BoolOf(ok)
+		ret = rt.BoolOf(ok)
 	}
 	return
 }
@@ -134,7 +133,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 // handles null references which in some cases still have a type
 // can return nil for a empty reference
 // ( an invalid reference returns error )
-func objectKind(run rt.Runtime, eval rt.TextEval, allowNothing bool) (ret *g.Kind, err error) {
+func objectKind(run rt.Runtime, eval rt.TextEval, allowNothing bool) (ret *rt.Kind, err error) {
 	if eval == nil {
 		err = safe.MissingEval("object text")
 	} else if text, e := eval.GetText(run); e != nil {

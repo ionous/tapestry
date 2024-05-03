@@ -1,12 +1,12 @@
 package rules
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-func CanFilterActor(k *g.Kind) (ret bool) {
+func CanFilterActor(k *rt.Kind) (ret bool) {
 	// if the focus of an event involves an actor;
 	// then we automatically filter for the player
 	if k.NumField() > 0 && k.Implements(kindsOf.Action.String()) {

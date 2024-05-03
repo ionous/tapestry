@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -91,19 +90,19 @@ func (m *seqTest) Random(inclusiveMin, exclusiveMax int) int {
 	return (exclusiveMax-inclusiveMin)/2 + inclusiveMin
 }
 
-func (m *seqTest) GetField(target, field string) (ret g.Value, err error) {
+func (m *seqTest) GetField(target, field string) (ret rt.Value, err error) {
 	if target != meta.Counter {
-		err = g.UnknownField(target, field)
+		err = rt.UnknownField(target, field)
 	} else {
 		v := m.counters[field]
-		ret = g.IntOf(v)
+		ret = rt.IntOf(v)
 	}
 	return
 }
 
-func (m *seqTest) SetField(target, field string, value g.Value) (err error) {
+func (m *seqTest) SetField(target, field string, value rt.Value) (err error) {
 	if target != meta.Counter {
-		err = g.UnknownField(target, field)
+		err = rt.UnknownField(target, field)
 	} else {
 		m.counters[field] = value.Int()
 	}

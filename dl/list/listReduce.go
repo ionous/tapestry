@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -31,11 +30,11 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 		err = errutil.New("not a list")
 	} else {
 		changed := false
-		for it := g.ListIt(fromList); it.HasNext() && err == nil; {
+		for it := safe.ListIt(fromList); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
 			} else {
-				if newVal, e := run.Call(pat, accum.Affinity(), nil, []g.Value{inVal, accum}); e == nil {
+				if newVal, e := run.Call(pat, accum.Affinity(), nil, []rt.Value{inVal, accum}); e == nil {
 					// update the accumulating value for next time
 					accum = newVal
 					changed = true

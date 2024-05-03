@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // FillRecord fill the passed record with the arguments named by keys and values
@@ -14,14 +13,13 @@ import (
 // if there are more values than keys, this assumes the first few values are indexed
 // ( keys are right justified )
 // returns the passed record if there's no error
-func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (ret *g.Record, err error) {
+func FillRecord(run rt.Runtime, rec *rt.Record, keys []string, vals []rt.Value) (ret *rt.Record, err error) {
 	if nk, nv := len(keys), len(vals); nv < nk {
 		err = errors.New("too many keys")
 	} else if nv == 0 {
 		ret = rec
 	} else {
-		kind := rec.Kind()
-		if lf, e := NewLabelFinder(run, kind); e != nil {
+		if lf, e := NewLabelFinder(run, rec.Kind); e != nil {
 			err = e
 		} else {
 			indexedArgs := nv - nk
@@ -35,7 +33,7 @@ func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (r
 					break
 				} else if at < 0 {
 					break
-				} else if convertedVal, e := RectifyText(run, kind.Field(at), val); e != nil {
+				} else if convertedVal, e := RectifyText(run, rec.Field(at), val); e != nil {
 					err = e
 					break
 				} else if e := rec.SetIndexedField(at, convertedVal); e != nil {

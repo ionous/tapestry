@@ -6,22 +6,21 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // Dotted - path operations to access the contents of certain targets.
 type Dotted interface {
 	Peek(Cursor) (Cursor, error)
-	Poke(Cursor, g.Value) error
+	Poke(Cursor, rt.Value) error
 	writeTo(b *strings.Builder)
 }
 
 // Cursor - generic access to objects, lists, and records.
 type Cursor interface {
-	CurrentValue() g.Value
-	SetAtIndex(int, g.Value) error
+	CurrentValue() rt.Value
+	SetAtIndex(int, rt.Value) error
 	GetAtIndex(int) (Cursor, error)
-	SetAtField(string, g.Value) error
+	SetAtField(string, rt.Value) error
 	GetAtField(string) (Cursor, error)
 }
 
@@ -33,11 +32,11 @@ type Endpoint struct {
 }
 
 // this walks up the tree to write back the final value.
-func (last Endpoint) SetValue(newValue g.Value) (err error) {
+func (last Endpoint) SetValue(newValue rt.Value) (err error) {
 	return last.child.Poke(last.parent, newValue)
 
 }
-func (last Endpoint) GetValue() (ret g.Value, err error) {
+func (last Endpoint) GetValue() (ret rt.Value, err error) {
 	if at, e := last.child.Peek(last.parent); e != nil {
 		err = e
 	} else {

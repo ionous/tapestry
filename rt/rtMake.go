@@ -1,4 +1,4 @@
-package generic
+package rt
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -17,7 +17,7 @@ func IntOf(v int) Value {
 	return IntFrom(v, defaultType)
 }
 func RecordOf(v *Record) Value {
-	return makeValue(affine.Record, v.Type(), v)
+	return makeValue(affine.Record, v.Name(), v)
 }
 func StringsOf(vs []string) Value {
 	return StringsFrom(vs, defaultType)

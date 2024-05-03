@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // zero-based index to pick a value from a list.
@@ -26,6 +26,6 @@ func (dot Index) Peek(c Cursor) (Cursor, error) {
 	return c.GetAtIndex(int(dot))
 }
 
-func (dot Index) Poke(c Cursor, newValue g.Value) error {
+func (dot Index) Poke(c Cursor, newValue rt.Value) error {
 	return c.SetAtIndex(int(dot), newValue)
 }

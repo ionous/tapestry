@@ -2,7 +2,6 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -13,11 +12,11 @@ func (op *TriggerOnce) Trigger() Trigger   { return op }
 func (op *TriggerCycle) Trigger() Trigger  { return op }
 func (op *TriggerSwitch) Trigger() Trigger { return op }
 
-func (op *CallTrigger) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *CallTrigger) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if ok, e := op.update(run); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ret = g.BoolOf(ok)
+		ret = rt.BoolOf(ok)
 	}
 	return
 }
@@ -45,7 +44,7 @@ func (op *CallTrigger) update(run rt.Runtime) (okay bool, err error) {
 				}
 			}
 			// set back the counter
-			if e := run.SetField(meta.Counter, name, g.IntOf(next)); e != nil {
+			if e := run.SetField(meta.Counter, name, rt.IntOf(next)); e != nil {
 				err = e
 			}
 		}

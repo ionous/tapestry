@@ -4,13 +4,13 @@ import (
 	"slices"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // assumes the passed tgt is a text value referring to the object ( actor or other noun ) targeted by an event.
-func (run *Runner) newPathForTarget(tgt g.Value) (ret eventPath, err error) {
-	if els, e := run.Call(event.CapturePattern, affine.TextList, nil, []g.Value{tgt}); e != nil {
+func (run *Runner) newPathForTarget(tgt rt.Value) (ret eventPath, err error) {
+	if els, e := run.Call(event.CapturePattern, affine.TextList, nil, []rt.Value{tgt}); e != nil {
 		err = e
 	} else {
 		ret = eventPath{els.Strings(), event.Bubbles}

@@ -13,7 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/support/play"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -47,7 +47,7 @@ func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err e
 				} else {
 					survey := play.MakeDefaultSurveyor(run)
 					play := play.NewPlaytime(run, survey, grammar)
-					if _, e := play.Call("start game", affine.None, nil, []g.Value{survey.GetFocalObject()}); e != nil {
+					if _, e := play.Call("start game", affine.None, nil, []rt.Value{survey.GetFocalObject()}); e != nil {
 						err = e
 					} else if len(testString) > 0 {
 						for _, cmd := range strings.Split(testString, ";") {

@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/kr/pretty"
 )
@@ -17,7 +17,7 @@ func TestKindsForType(t *testing.T) {
 		t.Fail()
 	} else if diff := pretty.Diff(ks.Builder, testutil.KindBuilder{
 		Parents: nil,
-		Aspects: []g.Aspect{{
+		Aspects: []rt.Aspect{{
 			Name: "group options",
 			Traits: []string{
 				"without objects",

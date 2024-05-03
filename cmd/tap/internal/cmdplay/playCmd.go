@@ -12,7 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/qna"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/player"
 	"github.com/ionous/errutil"
@@ -33,8 +33,8 @@ func playCmd(ctx context.Context, _ *base.Command, args []string) (err error) {
 		scene := args[0]
 		debug.LogLevel = lvl
 		opts := qna.NewOptions()
-		opts.SetOption(meta.PrintResponseNames, g.BoolOf(cfg.responses))
-		opts.SetOption(meta.SaveDir, g.StringOf(saveDir))
+		opts.SetOption(meta.PrintResponseNames, rt.BoolOf(cfg.responses))
+		opts.SetOption(meta.SaveDir, rt.StringOf(saveDir))
 		if e := player.PlayWithOptions(cfg.inFile, cfg.testString, scene, opts); e != nil {
 			// prints a stack of errors one by one.
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })

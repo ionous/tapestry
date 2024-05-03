@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -15,31 +14,31 @@ func (op *ListSplice) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *ListSplice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.NumList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.FloatsOf(nil)
+		ret = rt.FloatsOf(nil)
 	} else {
 		ret = v
 	}
 	return
 }
-func (op *ListSplice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.TextList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.StringsOf(nil)
+		ret = rt.StringsOf(nil)
 	} else {
 		ret = v
 	}
 	return
 }
-func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, t, e := op.spliceList(run, affine.RecordList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.RecordsFrom(nil, t)
+		ret = rt.RecordsFrom(nil, t)
 	} else {
 		ret = v
 	}
@@ -48,7 +47,7 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 
 // modify a list by adding and removing elements.
 // fix: aff?
-func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal g.Value, retType string, err error) {
+func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal rt.Value, retType string, err error) {
 	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {

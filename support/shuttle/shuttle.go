@@ -12,7 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/play"
 )
 
@@ -41,7 +41,7 @@ func (c *Shuttle) Restart(scene string) (ret *play.Playtime, err error) {
 		err = e
 	} else if e := play.ActivateDomain(scene); e != nil {
 		err = e
-	} else if _, e := play.Call("start game", affine.None, nil, []g.Value{play.Survey().GetFocalObject()}); e != nil {
+	} else if _, e := play.Call("start game", affine.None, nil, []rt.Value{play.Survey().GetFocalObject()}); e != nil {
 		err = e
 	} else {
 		ret = play

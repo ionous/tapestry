@@ -54,7 +54,7 @@ import (
 // 				if v := (entry.v).(cachedField); v.stored {
 // 					// all stored values are variant values
 // 					// and, for now at least, rely on driver serialization to nounValues
-// 					raw := (v.value).(g.Value).Any()
+// 					raw := (v.value).(rt.Value).Any()
 // 					if _, e := q.Exec(v.domain, v.noun, v.field, raw); e != nil {
 // 						err = e
 // 						break

@@ -9,12 +9,17 @@ import (
 // Scope - establishes a pool of local variables.
 // Scopes are usually accessed via the runtime Set/GetField.
 type Scope interface {
-	// note: return g.Unknown if the named field/variable isnt found.
+	// note: return rt.Unknown if the named field/variable isnt found.
 	FieldByName(field string) (Value, error)
 	// note: does not usually copy ( since Runtime does )
 	SetFieldByName(field string, val Value) error
 	// errors if the field doesnt exist
 	SetFieldDirty(field string) error
+}
+
+// Type database
+type Kinds interface {
+	GetKindByName(n string) (*Kind, error)
 }
 
 // Runtime environment for an in-progress game.

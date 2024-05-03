@@ -1,12 +1,12 @@
 package qna
 
 import (
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
 type kinds interface {
-	GetKindByName(name string) (*g.Kind, error)
+	GetKindByName(name string) (*rt.Kind, error)
 }
 
 // for a given aspect and one of its traits, find the opposite trait

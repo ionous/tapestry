@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -38,7 +37,7 @@ func TestMapStrings(t *testing.T) {
 		},
 	}
 	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
-	if e := locals.SetNamedField("fruits", g.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
+	if e := locals.SetNamedField("fruits", rt.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
 		t.Fatal(e)
 	} else if e := remapStrings.Execute(&lt); e != nil {
 		t.Fatal(e)
@@ -73,15 +72,15 @@ func TestMapRecords(t *testing.T) {
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {
-		var fruits []*g.Record
+		var fruits []*rt.Record
 		for _, f := range []string{"Orange", "Lemon", "Mango", "Banana", "Lime"} {
-			one := k.NewRecord()
-			if e := one.SetNamedField("name", g.StringOf(f)); e != nil {
+			one := rt.NewRecord(k)
+			if e := one.SetNamedField("name", rt.StringOf(f)); e != nil {
 				t.Fatal(e)
 			}
 			fruits = append(fruits, one)
 		}
-		if e := locals.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
+		if e := locals.SetNamedField("fruits", rt.RecordsFrom(fruits, k.Name())); e != nil {
 			t.Fatal(e)
 		}
 	}

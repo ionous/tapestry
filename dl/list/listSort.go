@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -72,7 +71,7 @@ func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
+func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
 	aa, bb := a.Float(), b.Float()
 	if descending, e := safe.GetOptionalBool(run, op.Descending, false); e != nil {
 		err = e
@@ -84,7 +83,7 @@ func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, er
 	return
 }
 
-func (op *ListSortText) textSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
+func (op *ListSortText) textSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
 	aa, bb := a.String(), b.String()
 	if sensitive, e := safe.GetOptionalBool(run, op.UsingCase, false); e != nil {
 		err = e
@@ -101,9 +100,9 @@ func (op *ListSortText) textSorter(run rt.Runtime, a, b g.Value) (ret bool, err 
 	return
 }
 
-type compareFn func(run rt.Runtime, a, b g.Value) (bool, error)
+type compareFn func(run rt.Runtime, a, b rt.Value) (bool, error)
 
-func sortRecords(run rt.Runtime, src []*g.Record, field string, aff affine.Affinity, cmp compareFn) (err error) {
+func sortRecords(run rt.Runtime, src []*rt.Record, field string, aff affine.Affinity, cmp compareFn) (err error) {
 	sort.Slice(src, func(i, j int) (ret bool) {
 		ret = i < j // provisionally
 		a, b := src[i], src[j]
@@ -144,7 +143,7 @@ func sortObjects(run rt.Runtime, src []string, field string, aff affine.Affinity
 	return
 }
 
-func unpackRecord(src *g.Record, field string, aff affine.Affinity) (ret g.Value, err error) {
+func unpackRecord(src *rt.Record, field string, aff affine.Affinity) (ret rt.Value, err error) {
 	if v, e := src.GetNamedField(field); e != nil {
 		err = e
 	} else if e := safe.Check(v, aff); e != nil {

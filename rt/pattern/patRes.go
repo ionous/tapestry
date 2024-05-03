@@ -3,13 +3,12 @@ package pattern
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
-func GetResultField(run rt.Runtime, k *g.Kind) (ret int, err error) {
+func GetResultField(run rt.Runtime, k *rt.Kind) (ret int, err error) {
 	patternName := k.Name()
 	if labels, e := run.GetField(meta.PatternLabels, patternName); e != nil {
 		err = e
@@ -30,17 +29,17 @@ func GetResultField(run rt.Runtime, k *g.Kind) (ret int, err error) {
 }
 
 type Result struct {
-	rec       *g.Record
+	rec       *rt.Record
 	field     int
 	hasResult bool
 }
 
-func (res *Result) GetResult(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+func (res *Result) GetResult(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	rec, field, okay := res.rec, res.field, res.hasResult
 	if field < 0 {
 		// no result field, but we still might be checking for whether it had any matching rules.
 		if aff == affine.Bool {
-			ret = g.BoolOf(okay)
+			ret = rt.BoolOf(okay)
 		} else if len(aff) != 0 {
 			err = errutil.Fmt("%w; caller expected %s", rt.NoResult, aff)
 		}

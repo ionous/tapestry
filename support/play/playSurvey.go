@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -54,7 +53,7 @@ func (s *Survey) GetFocus() string {
 }
 
 // return the id of the focal object; returns nil on error; ex. self
-func (s *Survey) GetFocalObject() (ret g.Value) {
+func (s *Survey) GetFocalObject() (ret rt.Value) {
 	ret, _ = s.run.GetField(s.focus, "pawn")
 	return
 }
@@ -131,7 +130,7 @@ func (s *Survey) locationBounded(enc string) parser.Bounds {
 			s.bounds,
 			affine.TextList,
 			[]string{"obj"},
-			[]g.Value{g.StringOf(enc)},
+			[]rt.Value{rt.StringOf(enc)},
 		); e != nil && !errors.Is(e, rt.NoResult) {
 			log.Println(e)
 		} else {
@@ -175,7 +174,7 @@ func (s *Survey) selfBounded() (ret parser.Bounds) {
 	}
 }
 
-func (s *Survey) visitStrings(cb parser.NounVisitor, kids g.Value) (ret bool) {
+func (s *Survey) visitStrings(cb parser.NounVisitor, kids rt.Value) (ret bool) {
 	run := s.run
 	for _, k := range kids.Strings() {
 		if ok := cb(MakeNoun(run, k)); ok {

@@ -3,7 +3,7 @@ package dot
 import (
 	"strings"
 
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // field name to pick a value from a record.
@@ -24,6 +24,6 @@ func (dot Field) Peek(c Cursor) (Cursor, error) {
 	return c.GetAtField(string(dot))
 }
 
-func (dot Field) Poke(c Cursor, newValue g.Value) (err error) {
+func (dot Field) Poke(c Cursor, newValue rt.Value) (err error) {
 	return c.SetAtField(string(dot), newValue)
 }

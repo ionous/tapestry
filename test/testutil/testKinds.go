@@ -5,8 +5,8 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/aspects"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -17,12 +17,12 @@ type Kinds struct {
 	Builder KindBuilder
 }
 
-type KindMap map[string]*g.Kind
-type FieldMap map[string]*[]g.Field // kind name to fields; pointers are used to block recursion
+type KindMap map[string]*rt.Kind
+type FieldMap map[string]*[]rt.Field // kind name to fields; pointers are used to block recursion
 type ParentMap map[string]string
 
 type KindBuilder struct {
-	Aspects []g.Aspect
+	Aspects []rt.Aspect
 	Fields  FieldMap
 	Parents ParentMap
 }
@@ -36,8 +36,8 @@ func (ks *Kinds) AddKinds(is ...interface{}) {
 	}
 }
 
-func (ks *Kinds) NewRecord(name string, valuePairs ...interface{}) *g.Record {
-	v := ks.Kind(name).NewRecord()
+func (ks *Kinds) NewRecord(name string, valuePairs ...interface{}) *rt.Record {
+	v := rt.NewRecord(ks.Kind(name))
 	if len(valuePairs) > 0 {
 		if e := SetRecord(v, valuePairs...); e != nil {
 			panic(e)
@@ -47,7 +47,7 @@ func (ks *Kinds) NewRecord(name string, valuePairs ...interface{}) *g.Record {
 }
 
 // return a kind ( declared via AddKinds ) panic if it doesn't exist.
-func (ks *Kinds) Kind(name string) (ret *g.Kind) {
+func (ks *Kinds) Kind(name string) (ret *rt.Kind) {
 	if k, e := ks.GetKindByName(name); e != nil {
 		panic(e)
 	} else {
@@ -57,13 +57,13 @@ func (ks *Kinds) Kind(name string) (ret *g.Kind) {
 }
 
 // return a kind ( declared via AddKinds ) or error if it doesnt exist.
-func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
+func (ks *Kinds) GetKindByName(name string) (ret *rt.Kind, err error) {
 	if k, ok := ks.Kinds[name]; ok {
 		ret = k // we created the kind already
 	} else {
 		if name == kindsOf.Aspect.String() {
 			// special base for aspects
-			ret = g.NewKind(name, nil, nil)
+			ret = rt.NewKind(name, nil, nil)
 		} else {
 			if k, e := ks.makeAspect(name); e != nil {
 				err = e
@@ -90,8 +90,8 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	return
 }
 
-func (ks *Kinds) makeKind(name string, pfs *[]g.Field) (ret *g.Kind, err error) {
-	var parent *g.Kind
+func (ks *Kinds) makeKind(name string, pfs *[]rt.Field) (ret *rt.Kind, err error) {
+	var parent *rt.Kind
 	if p, ok := ks.Builder.Parents[name]; ok {
 		if k, e := ks.GetKindByName(p); e != nil {
 			err = e
@@ -101,12 +101,12 @@ func (ks *Kinds) makeKind(name string, pfs *[]g.Field) (ret *g.Kind, err error) 
 	}
 	if err == nil {
 		fields := *pfs
-		ret = g.NewKindWithTraits(name, parent, fields, aspects.MakeAspects(ks, fields))
+		ret = rt.NewKindWithTraits(name, parent, fields, aspects.MakeAspects(ks, fields))
 	}
 	return
 }
 
-func (ks *Kinds) makeAspect(name string) (ret *g.Kind, err error) {
+func (ks *Kinds) makeAspect(name string) (ret *rt.Kind, err error) {
 	for _, a := range ks.Builder.Aspects {
 		if a.Name == name {
 			if parent, e := ks.GetKindByName(kindsOf.Aspect.String()); e != nil {
@@ -114,7 +114,7 @@ func (ks *Kinds) makeAspect(name string) (ret *g.Kind, err error) {
 				break
 			} else {
 				// create the kind from the stored fields
-				ret = g.NewKind(a.Name, parent, MakeFieldsFromTraits(a.Traits))
+				ret = rt.NewKind(a.Name, parent, MakeFieldsFromTraits(a.Traits))
 				break
 			}
 		}
@@ -122,9 +122,9 @@ func (ks *Kinds) makeAspect(name string) (ret *g.Kind, err error) {
 	return
 }
 
-func MakeFieldsFromTraits(ts []string) (ret []g.Field) {
+func MakeFieldsFromTraits(ts []string) (ret []rt.Field) {
 	for _, t := range ts {
-		f := g.Field{Name: t, Affinity: affine.Text, Type: t}
+		f := rt.Field{Name: t, Affinity: affine.Text, Type: t}
 		ret = append(ret, f)
 	}
 	return
@@ -144,7 +144,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 	if kb.Fields[name] != nil {
 		return
 	}
-	pfields := new([]g.Field) // pointers are used to block recursion
+	pfields := new([]rt.Field) // pointers are used to block recursion
 	kb.Fields[name] = pfields
 
 	for i, cnt := 0, t.NumField(); i < cnt; i++ {
@@ -228,14 +228,14 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 				name := inflect.MixedCaseToSpaces(trait)
 				traits = append(traits, name)
 			}
-			kb.Aspects = append(kb.Aspects, g.Aspect{
+			kb.Aspects = append(kb.Aspects, rt.Aspect{
 				Name:   aspect,
 				Traits: traits,
 			})
 		}
 		if len(b.Aff) > 0 {
 			name := inflect.MixedCaseToSpaces(f.Name)
-			(*pfields) = append((*pfields), g.Field{Name: name, Affinity: b.Aff, Type: b.Type})
+			(*pfields) = append((*pfields), rt.Field{Name: name, Affinity: b.Aff, Type: b.Type})
 		}
 	}
 }

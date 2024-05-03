@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 
@@ -147,10 +146,10 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 				err = e
 			} else {
 				// the actor ( and any nouns ) need to precede the "keyed" fields.
-				els := make([]g.Value, 1, 1+len(nouns)+len(vs))
+				els := make([]rt.Value, 1, 1+len(nouns)+len(vs))
 				els[0] = focus // presumably the player's actor
 				for _, n := range nouns {
-					els = append(els, g.StringOf(n))
+					els = append(els, rt.StringOf(n))
 				}
 				els = append(els, vs...)
 				if _, e := pt.Runtime.Call(act, affine.None, ks, els); e != nil {
@@ -165,9 +164,9 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 }
 
 // generic catch all action
-func raiseRunAction(run rt.Runtime, actor g.Value, act string, nouns []string) (okay bool, err error) {
+func raiseRunAction(run rt.Runtime, actor rt.Value, act string, nouns []string) (okay bool, err error) {
 	keys := []string{"actor", "action", "first noun", "second noun"}
-	values := []g.Value{actor, g.StringOf(act), nounIndex(nouns, 0), nounIndex(nouns, 1)}
+	values := []rt.Value{actor, rt.StringOf(act), nounIndex(nouns, 0), nounIndex(nouns, 1)}
 	if v, e := run.Call("running an action", affine.None, keys, values); e != nil {
 		err = e
 	} else {
@@ -176,11 +175,11 @@ func raiseRunAction(run rt.Runtime, actor g.Value, act string, nouns []string) (
 	return
 }
 
-func nounIndex(nouns []string, i int) (ret g.Value) {
+func nounIndex(nouns []string, i int) (ret rt.Value) {
 	if i < len(nouns) {
-		ret = g.StringOf(nouns[i])
+		ret = rt.StringOf(nouns[i])
 	} else {
-		ret = g.Empty
+		ret = rt.Empty
 	}
 	return
 }

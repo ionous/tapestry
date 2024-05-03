@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func TestSplices(t *testing.T) {
-	zeroSplice := func(src g.Value) {
+	zeroSplice := func(src rt.Value) {
 		if vs, e := src.Splice(0, 0, nil); e != nil {
 			t.Fatal("empty splice should be legal")
 		} else if vs == nil {
@@ -19,7 +19,7 @@ func TestSplices(t *testing.T) {
 			t.Fatal("empty splice should return an empty list", cnt)
 		}
 	}
-	zeroSplice(g.StringsOf(nil))
-	zeroSplice(g.StringsOf([]string{"a"}))
-	zeroSplice(g.StringsOf([]string{"a", "b", "c"}))
+	zeroSplice(rt.StringsOf(nil))
+	zeroSplice(rt.StringsOf([]string{"a"}))
+	zeroSplice(rt.StringsOf([]string{"a", "b", "c"}))
 }

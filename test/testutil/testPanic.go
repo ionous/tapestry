@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // PanicRuntime implements Runtime throwing a panic for every method
@@ -16,13 +15,13 @@ var _ rt.Runtime = (*PanicRuntime)(nil)
 func (PanicRuntime) ActivateDomain(name string) error {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Call(string, affine.Affinity, []string, []g.Value) (g.Value, error) {
+func (PanicRuntime) Call(string, affine.Affinity, []string, []rt.Value) (rt.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetField(target, field string) (g.Value, error) {
+func (PanicRuntime) GetField(target, field string) (rt.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
+func (PanicRuntime) GetKindByName(string) (*rt.Kind, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetRules(pattern, target string) ([]rt.Rule, error) {
@@ -40,13 +39,13 @@ func (PanicRuntime) PushScope(rt.Scope) {
 func (PanicRuntime) RelateTo(a, b, relation string) error {
 	panic("Runtime panic")
 }
-func (PanicRuntime) RelativesOf(a, relation string) (g.Value, error) {
+func (PanicRuntime) RelativesOf(a, relation string) (rt.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) ReciprocalsOf(a, relation string) (g.Value, error) {
+func (PanicRuntime) ReciprocalsOf(a, relation string) (rt.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) SetField(target, field string, v g.Value) error {
+func (PanicRuntime) SetField(target, field string, v rt.Value) error {
 	panic("Runtime panic")
 }
 func (PanicRuntime) SetWriter(io.Writer) io.Writer {

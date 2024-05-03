@@ -3,7 +3,6 @@ package pattern
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 type stopJump struct {
@@ -15,7 +14,7 @@ type stopJump struct {
 // after a rule has matched; combine its desired stop/jump with the current set
 // it can only become more strict, not less.
 // if there's a return value, it must be set for the pattern to be considered done.
-func (n *stopJump) update(status stopJump, evtObj *g.Record, result bool) (done bool, err error) {
+func (n *stopJump) update(status stopJump, evtObj *rt.Record, result bool) (done bool, err error) {
 	if result && status.runCount > 0 {
 		n.mergeStop(status.stop)
 		n.mergeJump(status.jump)
@@ -59,7 +58,7 @@ func (n *stopJump) mergeJump(jump rt.Jump) {
 }
 
 // reads and resets event cancel, event interrupt from the passed event object
-func (n *stopJump) mergeEvent(evtObj *g.Record) (err error) {
+func (n *stopJump) mergeEvent(evtObj *rt.Record) (err error) {
 	if i := event.Cancel.Index(); evtObj != nil && evtObj.HasValue(i) {
 		if cancel, e := evtObj.GetIndexedField(i); e != nil {
 			err = e

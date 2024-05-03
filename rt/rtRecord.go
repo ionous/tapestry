@@ -1,24 +1,24 @@
-package generic
+package rt
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt"
-	"github.com/ionous/errutil"
 )
 
 // Record - provides low level access to named field/values pairs.
 // The fields of a record are defined by its kind.
 type Record struct {
-	*rt.Kind
+	*Kind
 	values []Value
 }
 
 // a record without a named kind
 func NewAnonymousRecord(fields []Field) *Record {
-	return NewRecord(rt.NewKind("", nil, fields))
+	return NewRecord(NewKind("", nil, fields))
 }
 
-func NewRecord(k *rt.Kind) *Record {
+func NewRecord(k *Kind) *Record {
 	// we make a bunch of nil value placeholders which we fill by caching on demand.
 	rec := &Record{Kind: k, values: make([]Value, k.NumField())}
 	// set the default values for aspects?
@@ -77,7 +77,7 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 		}
 		// fallback to other fields:
 		if ret == nil {
-			if nv, e := NewDefaultValue(ft.Affinity, ft.Type); e != nil {
+			if nv, e := ZeroValue(ft.Affinity, ft.Type); e != nil {
 				err = e
 			} else {
 				ret, d.values[i] = nv, nv
@@ -99,7 +99,7 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 		} else {
 			// set the aspect to the value of the requested trait
 			if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
-				err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s", field, val.Affinity())
+				err = fmt.Errorf("error setting trait: couldn't determine the meaning of %q %s", field, val.Affinity())
 			} else {
 				d.values[i] = StringFrom(field, ft.Type)
 			}
@@ -129,7 +129,7 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 
 		}
 		if !okay {
-			err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
+			err = fmt.Errorf("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
 		} else {
 			d.values[i] = val
 		}

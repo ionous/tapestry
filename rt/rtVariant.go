@@ -1,11 +1,11 @@
-package generic
+package rt
 
 import (
+	"errors"
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 // variant implements the Value interface.
@@ -132,7 +132,7 @@ func (n variant) Index(i int) (ret Value) {
 func (n variant) FieldByName(f string) (ret Value, err error) {
 	name := inflect.Normalize(f)
 	if rec, ok := n.Record(); !ok {
-		err = errutil.Fmt("get field %q of nil record %q", name, n.Type())
+		err = fmt.Errorf("get field %q of nil record %q", name, n.Type())
 	} else {
 		if v, e := rec.GetNamedField(name); e != nil {
 			err = e
@@ -146,7 +146,7 @@ func (n variant) FieldByName(f string) (ret Value, err error) {
 func (n variant) SetFieldByName(f string, v Value) (err error) {
 	name := inflect.Normalize(f)
 	if rec, ok := n.Record(); !ok {
-		err = errutil.Fmt("set field %q of nil record %q", name, n.Type())
+		err = fmt.Errorf("set field %q of nil record %q", name, n.Type())
 	} else {
 		newVal := CopyValue(v)
 		err = rec.SetNamedField(name, newVal)
@@ -160,15 +160,15 @@ func (n variant) SetIndex(i int, v Value) (err error) {
 		(*vp)[i] = v.Float()
 	case *[]string:
 		if len(n.t) > 0 && n.t != v.Type() {
-			err = errutil.Fmt("SetIndex(%s) doesnt match value(%s)", n.t, v.Type())
+			err = fmt.Errorf("SetIndex(%s) doesnt match value(%s)", n.t, v.Type())
 		} else {
 			(*vp)[i] = v.String()
 		}
 	case *[]*Record:
 		if n.t != v.Type() {
-			err = errutil.New("record types dont match")
+			err = errors.New("record types dont match")
 		} else if rec, ok := v.Record(); !ok {
-			err = errutil.New("record lists dont allow null values")
+			err = errors.New("record lists dont allow null values")
 		} else {
 			n := copyRecordValues(rec)
 			(*vp)[i] = n
@@ -182,11 +182,11 @@ func (n variant) SetIndex(i int, v Value) (err error) {
 // Slices copies a chunk out of a list
 func (n variant) Slice(i, j int) (ret Value, err error) {
 	if i < 0 {
-		err = Underflow{i, 0}
+		err = fmt.Errorf("slice at %d can't be negative", i)
 	} else if cnt := n.Len(); j > cnt {
-		err = Overflow{j, cnt}
+		err = fmt.Errorf("slice at %d out of range %d", j, cnt)
 	} else if i > j {
-		err = errutil.New("bad range", i, j)
+		err = fmt.Errorf("invalid slice range %d > %d", i, j)
 	} else {
 		switch n.a {
 		case affine.NumList:
@@ -211,11 +211,11 @@ func (n variant) Slice(i, j int) (ret Value, err error) {
 // Splice replaces a range of values
 func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
 	if i < 0 {
-		err = Underflow{i, 0}
+		err = fmt.Errorf("slice at %d can't be negative", i)
 	} else if cnt := n.Len(); j > cnt {
-		err = Overflow{j, cnt}
+		err = fmt.Errorf("splice at %d out of range %d", j, cnt)
 	} else if i > j {
-		err = errutil.New("bad range", i, j)
+		err = fmt.Errorf("invalid splice range %d > %d", i, j)
 	} else {
 		switch n.a {
 		case affine.NumList:
@@ -228,7 +228,7 @@ func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
 
 		case affine.TextList:
 			if len(n.t) > 0 && n.t != add.Type() {
-				err = errutil.Fmt("Splice(%s) doesnt match value(%s)", n.t, add.Type())
+				err = fmt.Errorf("Splice(%s) doesnt match value(%s)", n.t, add.Type())
 			} else {
 				vp := n.i.(*[]string)
 				els := (*vp)
@@ -241,7 +241,7 @@ func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
 		case affine.RecordList:
 			vp := n.i.(*[]*Record)
 			if n.t != add.Type() {
-				err = errutil.New("record types dont match")
+				err = errors.New("record types dont match")
 			} else if src, e := normalizeRecords(add); e != nil {
 				err = e // // make a list out of one or more records from add
 			} else {
@@ -273,7 +273,7 @@ func (n variant) Appends(add Value) (err error) {
 
 	case affine.TextList:
 		if len(n.t) > 0 && n.t != add.Type() {
-			err = errutil.Fmt("Appends(%s) doesnt match value(%s)", n.t, add.Type())
+			err = fmt.Errorf("Appends(%s) doesnt match value(%s)", n.t, add.Type())
 		} else {
 			vp := n.i.(*[]string)
 			ins := normalizeStrings(add)
@@ -283,7 +283,7 @@ func (n variant) Appends(add Value) (err error) {
 	case affine.RecordList:
 		vp := n.i.(*[]*Record)
 		if n.t != add.Type() {
-			err = errutil.New("record types dont match")
+			err = errors.New("record types dont match")
 		} else if els, e := normalizeRecords(add); e != nil {
 			err = e
 		} else {

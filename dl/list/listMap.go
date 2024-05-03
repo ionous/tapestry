@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -32,10 +31,10 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 	} else {
 		var changes int
 		aff := affine.Element(vs.Affinity())
-		for it := g.ListIt(src); it.HasNext() && err == nil; {
+		for it := safe.ListIt(src); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
-			} else if newVal, e := run.Call(pat, aff, nil, []g.Value{inVal}); e != nil {
+			} else if newVal, e := run.Call(pat, aff, nil, []rt.Value{inVal}); e != nil {
 				// note: this treats "no result" as an error because its
 				// trying to map *all* of the elements from one list into another
 				err = e

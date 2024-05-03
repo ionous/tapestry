@@ -3,29 +3,28 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
 // return true if the value exists in the list
-func (op *ListFind) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListFind) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	// fix: with autoconversion of int to bool and one-based indices -
 	// only the GetNumber variant would be needed.
 	if i, e := op.getIndex(run); e != nil {
 		err = CmdError(op, e)
 	} else {
-		ret = g.BoolOf(i >= 0)
+		ret = rt.BoolOf(i >= 0)
 	}
 	return
 }
 
 // returns 1 based index of the value in the list
-func (op *ListFind) GetNumber(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListFind) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	if i, e := op.getIndex(run); e != nil {
 		err = CmdError(op, e)
 	} else {
-		ret = g.IntOf(i + 1)
+		ret = rt.IntOf(i + 1)
 	}
 	return
 }
@@ -51,7 +50,7 @@ func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
 	return
 }
 
-func findFloat(els g.Value, match float64) (ret int) {
+func findFloat(els rt.Value, match float64) (ret int) {
 	ret = -1
 	for i, n := range els.Floats() {
 		if n == match { //epsilon?
@@ -62,7 +61,7 @@ func findFloat(els g.Value, match float64) (ret int) {
 	return
 }
 
-func findString(els g.Value, match string) (ret int) {
+func findString(els rt.Value, match string) (ret int) {
 	ret = -1
 	for i, n := range els.Strings() {
 		if n == match {

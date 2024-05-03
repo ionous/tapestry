@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
@@ -31,10 +30,10 @@ func ResolveName(run rt.Runtime, name string, path dot.Path) (ret dot.Endpoint, 
 				ret, err = resolveVariable(run, name, path)
 			}
 
-		case g.Unknown:
+		case rt.Unknown:
 			// no such variable? try as an object:
-			if v, e := tryAsObject(run, name, path); g.IsUnknown(e) {
-				err = g.UnknownName(name)
+			if v, e := tryAsObject(run, name, path); rt.IsUnknown(e) {
+				err = rt.UnknownName(name)
 			} else if e != nil {
 				err = e
 			} else {

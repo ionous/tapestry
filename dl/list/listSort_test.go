@@ -5,7 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -30,7 +30,7 @@ func TestSort(t *testing.T) {
 
 	// create a new value of type "locals" containing "Objects:objectNames"
 	for key, obj := range objs {
-		if e := obj.SetNamedField("key", g.StringOf(key)); e != nil {
+		if e := obj.SetNamedField("key", rt.StringOf(key)); e != nil {
 			t.Fatal(e)
 		}
 	}

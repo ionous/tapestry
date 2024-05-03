@@ -3,13 +3,12 @@ package core
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 const defaultTolerance = 1e-3
 
-func (op *CompareNum) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *CompareNum) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if a, e := safe.GetNumber(run, op.A); e != nil {
 		err = cmdErrorCtx(op, "A", e)
 	} else if b, e := safe.GetNumber(run, op.B); e != nil {
@@ -22,12 +21,12 @@ func (op *CompareNum) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		}
 		cmp := op.Is.Compare()
 		res := cmp.CompareFloat(a.Float(), b.Float(), tolerance)
-		ret = g.BoolOf(res)
+		ret = rt.BoolOf(res)
 	}
 	return
 }
 
-func (op *CompareText) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *CompareText) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if a, e := safe.GetText(run, op.A); e != nil {
 		err = cmdErrorCtx(op, "A", e)
 	} else if b, e := safe.GetText(run, op.B); e != nil {
@@ -35,12 +34,12 @@ func (op *CompareText) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else {
 		cmp := op.Is.Compare()
 		res := cmp.CompareString(a.String(), b.String())
-		ret = g.BoolOf(res)
+		ret = rt.BoolOf(res)
 	}
 	return
 }
 
-func (op *CompareValue) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *CompareValue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if a, e := safe.GetAssignment(run, op.A); e != nil {
 		err = cmdErrorCtx(op, "A", e)
 	} else if bn, e := safe.GetAssignment(run, op.B); e != nil {
@@ -52,13 +51,13 @@ func (op *CompareValue) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else {
 		cmp := op.Is.Compare()
 		res := cmp.diff(d)
-		ret = g.BoolOf(res)
+		ret = rt.BoolOf(res)
 	}
 	return
 }
 
 // fix: look around at other languages a bit to see what they do....
-func compareValues(a, b g.Value, tolerance float64) (ret int, err error) {
+func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 	switch a.Affinity() {
 	case affine.Bool:
 		ret = compareBool(a.Bool(), b.Bool())
@@ -78,12 +77,12 @@ func compareValues(a, b g.Value, tolerance float64) (ret int, err error) {
 				ret = 0
 			}
 		} else {
-			if d := compareStrings(a.Kind().Name(), b.Kind().Name()); d != 0 {
+			if d := compareStrings(a.Name(), b.Name()); d != 0 {
 				ret = d
 			} else {
 				// fix: need to report on the mismatch
 				// an optional log statement?
-				for i, cnt := 0, a.Kind().NumField(); i < cnt; i++ {
+				for i, cnt := 0, a.NumField(); i < cnt; i++ {
 					if d := compareBool(a.HasValue(i), b.HasValue(i)); d != 0 {
 						ret = d
 						break

@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
@@ -30,7 +29,7 @@ func TestFactorial(t *testing.T) {
 				Name:   "factorial",
 				Labels: []string{"num"},
 				Return: "num",
-				Fields: []g.Field{
+				Fields: []rt.Field{
 					{Name: "num", Affinity: affine.Number},
 				},
 				Rules: []rt.Rule{

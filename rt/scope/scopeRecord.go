@@ -3,12 +3,11 @@ package scope
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // creates a scope from a record
 // requires the runtime in order to create default values for empty fields
-func FromRecord(run rt.Runtime, rec *g.Record) rt.Scope {
+func FromRecord(run rt.Runtime, rec *rt.Record) rt.Scope {
 	if rec == nil {
 		panic("null record")
 	}
@@ -17,10 +16,10 @@ func FromRecord(run rt.Runtime, rec *g.Record) rt.Scope {
 
 type recordScope struct {
 	run rt.Runtime
-	rec *g.Record
+	rec *rt.Record
 }
 
-func (rs recordScope) FieldByName(field string) (ret g.Value, err error) {
+func (rs recordScope) FieldByName(field string) (ret rt.Value, err error) {
 	run, rec := rs.run, rs.rec
 	//
 	if v, e := rec.GetNamedField(field); e != nil {
@@ -34,7 +33,7 @@ func (rs recordScope) FieldByName(field string) (ret g.Value, err error) {
 		if k, e := run.GetKindByName(v.Type()); e != nil {
 			err = e
 		} else {
-			newVal := g.RecordOf(k.NewRecord())
+			newVal := rt.RecordOf(rt.NewRecord(k))
 			rec.SetNamedField(field, newVal)
 			ret = newVal
 		}
@@ -42,7 +41,7 @@ func (rs recordScope) FieldByName(field string) (ret g.Value, err error) {
 	return
 }
 
-func (rs recordScope) SetFieldByName(field string, val g.Value) error {
+func (rs recordScope) SetFieldByName(field string, val rt.Value) error {
 	rec := rs.rec
 	return rec.SetNamedField(field, val)
 }

@@ -3,7 +3,7 @@ package scope
 import (
 	"testing"
 
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func TestStack(t *testing.T) {
@@ -33,7 +33,7 @@ func TestStack(t *testing.T) {
 			switch p, e := stack.FieldByName(name); e.(type) {
 			default:
 				t.Fatal("fatal", e)
-			case g.Unknown:
+			case rt.Unknown:
 				// t.Log(reason, "loop", i, "asking for", name, "... unknown")
 				have = -1
 			case nil:
@@ -45,11 +45,11 @@ func TestStack(t *testing.T) {
 			if want := count[i]; want != have {
 				t.Fatal("fatal", reason, "step", step, name, "have:", have, "want:", want)
 			} else {
-				n := g.IntOf(have + 1)
+				n := rt.IntOf(have + 1)
 				switch e := stack.SetFieldByName(name, n); e.(type) {
 				default:
 					t.Fatal("fatal", reason, "step", step, name, "set failed", e)
-				case g.Unknown:
+				case rt.Unknown:
 					if have != -1 {
 						t.Fatal("fatal", "step", step, name, "set failed", e)
 					}
@@ -94,19 +94,19 @@ type mockScope struct {
 	val        int
 }
 
-func (k *mockScope) FieldByName(field string) (ret g.Value, err error) {
+func (k *mockScope) FieldByName(field string) (ret rt.Value, err error) {
 	if field != k.name {
-		err = g.UnknownVariable(field)
+		err = rt.UnknownVariable(field)
 	} else {
 		k.gets++
-		ret = g.IntOf(k.val)
+		ret = rt.IntOf(k.val)
 	}
 	return
 }
 
-func (k *mockScope) SetFieldByName(field string, v g.Value) (err error) {
+func (k *mockScope) SetFieldByName(field string, v rt.Value) (err error) {
 	if field != k.name {
-		err = g.UnknownVariable(field)
+		err = rt.UnknownVariable(field)
 	} else {
 		k.val = v.Int()
 		k.sets++
@@ -116,7 +116,7 @@ func (k *mockScope) SetFieldByName(field string, v g.Value) (err error) {
 
 func (k *mockScope) SetFieldDirty(field string) (err error) {
 	if field != k.name {
-		err = g.UnknownVariable(field)
+		err = rt.UnknownVariable(field)
 	} else {
 		k.sets++
 	}

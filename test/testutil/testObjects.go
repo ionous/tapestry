@@ -3,17 +3,17 @@ package testutil
 import (
 	"sort"
 
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-type Objects map[string]*g.Record
+type Objects map[string]*rt.Record
 
-func (or *Objects) AddObjects(kind *g.Kind, names ...string) int {
+func (or *Objects) AddObjects(kind *rt.Kind, names ...string) int {
 	if *or == nil {
 		*or = make(Objects)
 	}
 	for _, name := range names {
-		(*or)[name] = kind.NewRecord()
+		(*or)[name] = rt.NewRecord(kind)
 	}
 	return len(names)
 }

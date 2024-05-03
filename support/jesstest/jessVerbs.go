@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/dl/jess"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
 	"github.com/ionous/sliceOf"
 )
@@ -50,21 +50,21 @@ var KnownVerbs = MockVerbs{
 
 type MockVerbs map[string]jess.VerbDesc
 
-func (vs MockVerbs) GetVerbValue(name, field string) (ret g.Value, err error) {
+func (vs MockVerbs) GetVerbValue(name, field string) (ret rt.Value, err error) {
 	if v, ok := vs[name]; !ok {
 		err = fmt.Errorf("%w %q %q", weaver.Missing, name, field)
 	} else {
 		switch field {
 		case jess.VerbSubject:
-			ret = g.StringOf(v.Subject)
+			ret = rt.StringOf(v.Subject)
 		case jess.VerbAlternate:
-			ret = g.StringOf(v.Alternate)
+			ret = rt.StringOf(v.Alternate)
 		case jess.VerbObject:
-			ret = g.StringOf(v.Object)
+			ret = rt.StringOf(v.Object)
 		case jess.VerbRelation:
-			ret = g.StringOf(v.Relation)
+			ret = rt.StringOf(v.Relation)
 		case jess.VerbImplies:
-			ret = g.StringsOf(v.Implies)
+			ret = rt.StringsOf(v.Implies)
 		case jess.VerbReversed:
 			var str string
 			if v.Reversed {
@@ -72,7 +72,7 @@ func (vs MockVerbs) GetVerbValue(name, field string) (ret g.Value, err error) {
 			} else {
 				str = "not reversed"
 			}
-			ret = g.StringOf(str)
+			ret = rt.StringOf(str)
 		default:
 			err = fmt.Errorf("%w %q %q", weaver.Missing, name, field)
 		}

@@ -1,8 +1,9 @@
-package generic
+package rt
 
 import (
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/affine"
-	"github.com/ionous/errutil"
 )
 
 // CopyValue: create a new value from a snapshot of the passed value
@@ -34,7 +35,7 @@ func CopyValue(val Value) (ret Value) {
 		ret = RecordsFrom(vs, val.Type())
 
 	default:
-		panic(errutil.Sprint("failed to dupe value of %s:%v(%T)", a, val, val))
+		log.Panicf("failed to dupe value of %s:%v(%T)", a, val, val)
 	}
 	return
 }
@@ -85,7 +86,7 @@ func copyRecordValues(src *Record) (ret *Record) {
 				values[i] = CopyValue(v)
 			}
 		}
-		ret = &Record{kind: src.kind, values: values}
+		ret = &Record{Kind: src.Kind, values: values}
 	}
 	return
 }

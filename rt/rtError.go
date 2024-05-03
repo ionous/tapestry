@@ -1,27 +1,11 @@
-package generic
+package rt
 
 import (
 	"errors"
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"github.com/ionous/errutil"
 )
-
-type Overflow struct {
-	Index, Bounds int
-}
-
-func (e Overflow) Error() string {
-	return errutil.Sprint(e.Index, "above range", e.Bounds)
-}
-
-type Underflow struct {
-	Index, Bounds int
-}
-
-func (e Underflow) Error() string {
-	return errutil.Sprint(e.Index, "below range", e.Bounds)
-}
 
 // error for GetField, SetField
 type Unknown struct {
@@ -36,15 +20,15 @@ func (e Unknown) IsUnknownField() bool {
 func (e Unknown) Error() (ret string) {
 	switch e.Target {
 	case "":
-		ret = errutil.Sprintf("unknown name %q", e.Field)
+		ret = fmt.Sprintf("unknown name %q", e.Field)
 	case meta.ObjectId:
-		ret = errutil.Sprintf("unknown object %q", e.Field)
+		ret = fmt.Sprintf("unknown object %q", e.Field)
 	case meta.Response:
-		ret = errutil.Sprintf("unknown response %q", e.Field)
+		ret = fmt.Sprintf("unknown response %q", e.Field)
 	case meta.Variables:
-		ret = errutil.Sprintf("unknown variable %q", e.Field)
+		ret = fmt.Sprintf("unknown variable %q", e.Field)
 	default:
-		ret = errutil.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
+		ret = fmt.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
 	}
 	return
 }

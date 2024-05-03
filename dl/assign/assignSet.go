@@ -2,7 +2,6 @@ package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -40,7 +39,7 @@ func (op *SetTrait) setTrait(run rt.Runtime) (err error) {
 	} else if obj, e := run.GetField(meta.ObjectId, tgt.String()); e != nil {
 		err = e
 	} else {
-		err = run.SetField(obj.String(), trait.String(), g.BoolOf(true))
+		err = run.SetField(obj.String(), trait.String(), rt.BoolOf(true))
 	}
 	return
 }

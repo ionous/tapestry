@@ -5,19 +5,18 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 type LabelFinder struct {
-	kind         *g.Kind
+	kind         *rt.Kind
 	labels       []string
 	next         int
 	noMoreBlanks bool // indexed fields are allowed until the first named key
 }
 
-func NewLabelFinder(run rt.Runtime, kind *g.Kind) (ret *LabelFinder, err error) {
+func NewLabelFinder(run rt.Runtime, kind *rt.Kind) (ret *LabelFinder, err error) {
 	// could all this be determined at assembly time?
 	if labels, e := run.GetField(meta.PatternLabels, kind.Name()); e != nil {
 		err = e

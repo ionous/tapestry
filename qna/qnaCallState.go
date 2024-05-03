@@ -1,7 +1,7 @@
 package qna
 
 import (
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 )
 
@@ -12,12 +12,12 @@ type callState struct {
 	prevScope scope.Chain
 }
 
-func (run *Runner) saveCallState(top *g.Record) callState {
+func (run *Runner) saveCallState(top *rt.Record) callState {
 	state := callState{
 		run:       run,
 		prevScope: run.scope.ReplaceScope(scope.FromRecord(run, top)), // scope.Empty{}
 	}
-	state.setPattern(top.Kind().Name())
+	state.setPattern(top.Name())
 	return state
 }
 

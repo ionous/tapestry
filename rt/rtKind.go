@@ -18,6 +18,7 @@ type Field struct {
 	Name     string
 	Affinity affine.Affinity
 	Type     string // ex. kind for text types
+	Init     Assignment
 }
 
 type Aspect struct {
@@ -54,12 +55,6 @@ func newKind(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind 
 	return &Kind{name: name, parent: parent, fields: fields, aspects: aspects}
 }
 
-func Base(k *Kind) string {
-	for ; k.parent != nil; k = k.parent {
-	}
-	return k.name
-}
-
 // Ancestor list, root towards the start; the name of this kind at the end.
 func Ancestry(k *Kind) (ret []string) {
 	for ; k != nil; k = k.parent {
@@ -73,6 +68,7 @@ func (k *Kind) Parent() (ret *Kind) {
 	return k.parent
 }
 
+// Does this kind
 func (k *Kind) Implements(name string) (okay bool) {
 	for ; k != nil; k = k.parent {
 		if k.name == name {

@@ -2,7 +2,7 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/qna/query"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // given an id, return the (a) name defined for it by the author
@@ -37,7 +37,7 @@ func (run *Runner) getObjectInfo(name string) (ret query.NounInfo, err error) {
 		if info, e := run.query.NounInfo(name); e != nil {
 			err = e
 		} else if !info.IsValid() {
-			err = g.UnknownObject(name)
+			err = rt.UnknownObject(name)
 		} else {
 			ret = info
 		}

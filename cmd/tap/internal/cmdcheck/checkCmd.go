@@ -12,7 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -28,7 +28,7 @@ func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error)
 	} else {
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
-		opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
+		opt.SetOption(meta.PrintResponseNames, rt.BoolOf(checkFlags.responses))
 		if cnt, e := CheckFile(srcPath, inflect.Normalize(checkOne), opt); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {

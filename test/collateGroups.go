@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 )
 
@@ -31,7 +30,7 @@ var collateGroups = testpat.Pattern{
 	Name:   "collate groups",
 	Labels: []string{"settings", "collation"},
 	Return: "collation",
-	Fields: []g.Field{
+	Fields: []rt.Field{
 		// arguments:
 		{Name: "settings", Affinity: affine.Record, Type: "group settings"},
 		{Name: "collation", Affinity: affine.Record, Type: "group collation"},

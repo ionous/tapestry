@@ -2,18 +2,18 @@ package generic_test
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
 )
 
-func (n *recordTest) addKind(k *g.Kind) (ret *g.Kind) {
+func (n *recordTest) addKind(k *rt.Kind) (ret *rt.Kind) {
 	n.ks = append(n.ks, k)
 	return k
 }
 
-func (n *recordTest) GetKindByName(name string) (ret *g.Kind, err error) {
+func (n *recordTest) GetKindByName(name string) (ret *rt.Kind, err error) {
 	var ok bool
 	for _, k := range n.ks {
 		if k.Name() == name {
@@ -27,13 +27,13 @@ func (n *recordTest) GetKindByName(name string) (ret *g.Kind, err error) {
 	return
 }
 
-func (n *recordTest) GetField(target, field string) (ret g.Value, err error) {
+func (n *recordTest) GetField(target, field string) (ret rt.Value, err error) {
 	switch target {
 	case meta.Variables:
 		if v, ok := n.vars[field]; !ok {
-			err = g.UnknownField(target, field)
+			err = rt.UnknownField(target, field)
 		} else {
-			ret = g.RecordOf(v)
+			ret = rt.RecordOf(v)
 		}
 	default:
 		err = errutil.New("unknown field", target, field)
@@ -43,23 +43,23 @@ func (n *recordTest) GetField(target, field string) (ret g.Value, err error) {
 
 type recordTest struct {
 	testutil.PanicRuntime
-	ks   []*g.Kind
-	vars map[string]*g.Record
+	ks   []*rt.Kind
+	vars map[string]*rt.Record
 }
 
 func newRecordAccessTest() *recordTest {
 	n := new(recordTest)
-	ks := n.addKind(g.NewKindWithTraits("Ks", nil, []g.Field{
-		{"d", affine.Number, "" /*"float64"*/},
-		{"t", affine.Text, "" /*"string"*/},
-		{"a", affine.Text, "a"},
-	}, []g.Aspect{{
+	ks := n.addKind(rt.NewKindWithTraits("Ks", nil, []rt.Field{
+		{Name: "d", Affinity: affine.Number},
+		{Name: "t", Affinity: affine.Text},
+		{Name: "a", Affinity: affine.Text, Type: "a"},
+	}, []rt.Aspect{{
 		Name:   "a",
 		Traits: []string{"x", "w", "y"},
 	}}))
-	n.vars = map[string]*g.Record{
-		"boop": ks.NewRecord(),
-		"beep": ks.NewRecord(),
+	n.vars = map[string]*rt.Record{
+		"boop": rt.NewRecord(ks),
+		"beep": rt.NewRecord(ks),
 	}
 	return n
 }

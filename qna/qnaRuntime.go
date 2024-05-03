@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -112,7 +112,7 @@ func (run *Runner) domainChanged(ds []string, evt string) (err error) {
 	for _, d := range ds {
 		name := d + " " + evt
 		if pat, e := run.getKind(name); e == nil {
-			if _, e := run.call(pat, pat.NewRecord(), affine.None); e != nil {
+			if _, e := run.call(pat, rt.NewRecord(pat), affine.None); e != nil {
 				err = errutil.Append(err, run.reportError(e))
 				break
 			}
@@ -173,7 +173,7 @@ func (run *Runner) RelateTo(a, b, rel string) (err error) {
 	return
 }
 
-func (run *Runner) RelativesOf(a, rel string) (ret g.Value, err error) {
+func (run *Runner) RelativesOf(a, rel string) (ret rt.Value, err error) {
 	// note: we dont have to validate the type of the noun....
 	// if its not valid, it wont appear in the relation.
 	if n, e := run.getObjectInfo(a); e != nil {
@@ -184,12 +184,12 @@ func (run *Runner) RelativesOf(a, rel string) (ret g.Value, err error) {
 		err = e // doesnt cache because relateTo would have to clear the cache.
 	} else {
 		fb := k.Field(1)
-		ret = g.StringsFrom(vs, fb.Type)
+		ret = rt.StringsFrom(vs, fb.Type)
 	}
 	return
 }
 
-func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
+func (run *Runner) ReciprocalsOf(b, rel string) (ret rt.Value, err error) {
 	// note: we dont have to validate the type of the noun....
 	// if its not valid, it wont appear in the relation.
 	if n, e := run.getObjectInfo(b); e != nil {
@@ -200,12 +200,12 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
 		err = e
 	} else {
 		fa := k.Field(0)
-		ret = g.StringsFrom(vs, fa.Type)
+		ret = rt.StringsFrom(vs, fa.Type)
 	}
 	return
 }
 
-func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
+func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 	// fix: pre-transform field name
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
@@ -221,11 +221,11 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		// one of the predefined faux objects:
 		switch target {
 		case meta.Variables:
-			cpy := g.CopyValue(val)
+			cpy := rt.CopyValue(val)
 			err = run.scope.SetFieldByName(field, cpy)
 
 		case meta.Option:
-			cpy := g.CopyValue(val)
+			cpy := rt.CopyValue(val)
 			err = run.options.SetOptionByName(field, cpy)
 
 		case meta.Counter:
@@ -255,7 +255,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 	return
 }
 
-func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
+func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 	// fix: pre-transform field
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("GetField given an empty field for target %q", target)
@@ -280,7 +280,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if b, e := run.query.IsDomainActive(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.BoolOf(b)
+				ret = rt.BoolOf(b)
 			}
 
 		case meta.FieldsOfKind:
@@ -292,28 +292,28 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 					f := k.Field(i)
 					fs = append(fs, f.Name)
 				}
-				ret = g.StringsOf(fs)
+				ret = rt.StringsOf(fs)
 			}
 
 		case meta.KindAncestry:
 			if ks, e := run.getAncestry(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ks)
+				ret = rt.StringsOf(ks)
 			}
 
 		case meta.ObjectAliases:
 			if ns, e := run.getObjectNames(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ns)
+				ret = rt.StringsOf(ns)
 			}
 
 		case meta.ObjectId:
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
-				ret = g.StringFrom(ok.Id, ok.Kind)
+				ret = rt.StringFrom(ok.Id, ok.Kind)
 			}
 
 		// type of a game object
@@ -321,7 +321,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
-				ret = g.StringOf(ok.Kind)
+				ret = rt.StringOf(ok.Kind)
 			}
 
 		case meta.ObjectKinds:
@@ -330,7 +330,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if ks, e := run.getAncestry(ok.Kind); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ks)
+				ret = rt.StringsOf(ks)
 			}
 
 		// given a noun, return the name declared by the author
@@ -338,7 +338,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if n, e := run.getObjectName(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringOf(n) // tbd: should these have a type?
+				ret = rt.StringOf(n) // tbd: should these have a type?
 			}
 
 		// all objects of the named kind
@@ -348,7 +348,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if ns, e := run.query.NounsByKind(k.Name()); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ns)
+				ret = rt.StringsOf(ns)
 			}
 
 		// custom options
@@ -365,12 +365,12 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if vs, e := run.query.PatternLabels(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(vs)
+				ret = rt.StringsOf(vs)
 			}
 
 		case meta.PatternRunning:
 			b := run.currentPatterns.runningPattern(field)
-			ret = g.IntOf(b)
+			ret = rt.IntOf(b)
 
 		case meta.Response:
 			if flag, e := run.options.Option(meta.PrintResponseNames); e != nil {
@@ -378,16 +378,16 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if flag.Affinity() == affine.Bool && flag.Bool() {
 				// fix? hen response are printed inline, they get munged together
 				// manually add some spacing.
-				ret = g.StringOf(field + ". ")
+				ret = rt.StringOf(field + ". ")
 			} else if k, e := run.getKind(kindsOf.Response.String()); e != nil {
 				err = errutil.New("couldnt find response table", e)
 			} else if i := k.FieldIndex(field); i < 0 {
 				// ^ fix: this is an in-order search; have a custom cached lookup for responses?
-				err = g.UnknownResponse(rawField)
+				err = rt.UnknownResponse(rawField)
 			} else if vs, e := run.getKindValues(k); e != nil {
 				err = e
 			} else {
-				ret = g.Empty // provisionally
+				ret = rt.Empty // provisionally
 				for _, kv := range vs {
 					if kv.i > i {
 						break

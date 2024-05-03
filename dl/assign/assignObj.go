@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -28,8 +27,8 @@ func (op *ObjectRef) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) 
 	return
 }
 
-func (op *ObjectRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	var u g.Unknown
+func (op *ObjectRef) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	var u rt.Unknown
 	if v, e := op.getValue(run, affine.Bool); e == nil {
 		ret = v
 	} else if errors.As(e, &u) && u.IsUnknownField() {
@@ -38,38 +37,38 @@ func (op *ObjectRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		// fix: this should somehow validate that there is such a trait however
 		// [ ex. return "inapplicable trait" instead of "unknown field" ]
 		// bonus points for determining this during weave when using literals
-		ret = g.False
+		ret = rt.False
 	} else {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *ObjectRef) GetNumber(run rt.Runtime) (g.Value, error) {
+func (op *ObjectRef) GetNumber(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Number)
 }
 
-func (op *ObjectRef) GetText(run rt.Runtime) (g.Value, error) {
+func (op *ObjectRef) GetText(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Text)
 }
 
-func (op *ObjectRef) GetRecord(run rt.Runtime) (g.Value, error) {
+func (op *ObjectRef) GetRecord(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Record)
 }
 
-func (op *ObjectRef) GetNumList(run rt.Runtime) (g.Value, error) {
+func (op *ObjectRef) GetNumList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.NumList)
 }
 
-func (op *ObjectRef) GetTextList(run rt.Runtime) (g.Value, error) {
+func (op *ObjectRef) GetTextList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.TextList)
 }
 
-func (op *ObjectRef) GetRecordList(run rt.Runtime) (g.Value, error) {
+func (op *ObjectRef) GetRecordList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.RecordList)
 }
 
-func (op *ObjectRef) getValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+func (op *ObjectRef) getValue(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	if at, e := GetReference(run, op); e != nil {
 		err = e
 	} else if val, e := at.GetValue(); e != nil {

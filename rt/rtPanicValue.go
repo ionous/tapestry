@@ -1,4 +1,4 @@
-package generic
+package rt
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"

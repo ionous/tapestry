@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -20,11 +19,11 @@ func NewTarget(run rt.Runtime, name string) Cursor {
 	return ObjValue{run, name}
 }
 
-func (c ObjValue) CurrentValue() g.Value {
-	return g.StringOf(c.name)
+func (c ObjValue) CurrentValue() rt.Value {
+	return rt.StringOf(c.name)
 }
 
-func (c ObjValue) SetAtIndex(int, g.Value) (err error) {
+func (c ObjValue) SetAtIndex(int, rt.Value) (err error) {
 	return fmt.Errorf("%s can't be indexed", c.name)
 }
 
@@ -42,20 +41,20 @@ func (c ObjValue) GetAtField(field string) (ret Cursor, err error) {
 	return
 }
 
-func (c ObjValue) SetAtField(field string, val g.Value) error {
+func (c ObjValue) SetAtField(field string, val rt.Value) error {
 	return c.run.SetField(c.name, field, val)
 }
 
 type SubValue struct {
 	run rt.Runtime
-	val g.Value
+	val rt.Value
 }
 
-func (c SubValue) CurrentValue() g.Value {
+func (c SubValue) CurrentValue() rt.Value {
 	return c.val
 }
 
-func (c SubValue) SetAtIndex(i int, newValue g.Value) (err error) {
+func (c SubValue) SetAtIndex(i int, newValue rt.Value) (err error) {
 	if aff := c.val.Affinity(); !affine.IsList(aff) {
 		err = fmt.Errorf("%s isn't a list", aff)
 	} else if at, e := safe.Range(i, 0, c.val.Len()); e != nil {
@@ -78,7 +77,7 @@ func (c SubValue) GetAtIndex(i int) (ret Cursor, err error) {
 	return
 }
 
-func (c SubValue) SetAtField(field string, newValue g.Value) (err error) {
+func (c SubValue) SetAtField(field string, newValue rt.Value) (err error) {
 	if aff := c.val.Affinity(); aff != affine.Record {
 		err = fmt.Errorf("%s doesn't have fields", aff)
 	} else if rec, ok := c.val.Record(); !ok {

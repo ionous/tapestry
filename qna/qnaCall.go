@@ -2,8 +2,8 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -13,16 +13,16 @@ import (
 // note: this is mirrored/mimicked in package testpat
 // note: in order to generate appropriate defaults ( ex. a record of the right type )
 // can return both a both meaningful value *and* an error
-func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []g.Value) (ret g.Value, err error) {
+func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []rt.Value) (ret rt.Value, err error) {
 	// create a container to hold results of args, locals, and the pending return value
 	if pat, e := run.getKind(name); e != nil {
 		err = e
-	} else if rec, e := safe.FillRecord(run, pat.NewRecord(), keys, vals); e != nil {
+	} else if rec, e := safe.FillRecord(run, rt.NewRecord(pat), keys, vals); e != nil {
 		err = e
 	} else {
-		switch pattern.Categorize(g.Ancestry(pat)) {
+		switch pattern.Categorize(rt.Ancestry(pat)) {
 		case pattern.Initializes:
-			ret = g.RecordOf(rec)
+			ret = rt.RecordOf(rec)
 		case pattern.Calls:
 			ret, err = run.call(pat, rec, aff)
 		case pattern.Sends:
@@ -48,7 +48,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, keys []string, vals []
 	return
 }
 
-func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g.Value, err error) {
+func (run *Runner) call(kind *rt.Kind, rec *rt.Record, aff affine.Affinity) (ret rt.Value, err error) {
 	if field, e := pattern.GetResultField(run, kind); e != nil {
 		err = e
 	} else {
@@ -70,7 +70,7 @@ func (run *Runner) call(kind *g.Kind, rec *g.Record, aff affine.Affinity) (ret g
 	return
 }
 
-func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, err error) {
+func (run *Runner) send(name string, rec *rt.Record, tgt rt.Value) (ret rt.Value, err error) {
 	// fix? setup the base state first since that's where most initialization lives
 	// however, it's not satisfying to move from "action", to "before action", back to "action" again
 	// tbd: add an explicit middle pattern ( "is action" )
@@ -107,7 +107,7 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 				} else {
 					// push the event scope. we dont pop later; we replace.
 					// ( the event gets pushed last so it cant be hidden by pattern locals )
-					run.PushScope(scope.NewReadOnlyValue(event.Object, g.RecordOf(evtObj)))
+					run.PushScope(scope.NewReadOnlyValue(event.Object, rt.RecordOf(evtObj)))
 					if ok, e := rules.Send(run, evtObj, path.slice(phase)); e != nil {
 						err = errutil.Fmt("%w calling %q", e, kindForPhase.Name())
 						break
@@ -121,7 +121,7 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 				}
 			}
 		}
-		ret = g.BoolOf(!canceled)
+		ret = rt.BoolOf(!canceled)
 	}
 	callState.restore()
 	return
@@ -133,8 +133,8 @@ func (run *Runner) send(name string, rec *g.Record, tgt g.Value) (ret g.Value, e
 // the action pattern declaration implies that the initial set of field sare the same
 // ( even though the author can extend those patterns with non-overlapping locals )
 // fix: backdoor record creation to slice the values across?
-func (run *Runner) newPhase(k *g.Kind, src *g.Record) (ret *g.Record, err error) {
-	dst := k.NewRecord()
+func (run *Runner) newPhase(k *rt.Kind, src *rt.Record) (ret *rt.Record, err error) {
+	dst := rt.NewRecord(k)
 	_ = run.scope.ReplaceScope(scope.FromRecord(run, dst))
 	if e := copyPhase(src, dst); e != nil {
 		err = e
@@ -146,11 +146,10 @@ func (run *Runner) newPhase(k *g.Kind, src *g.Record) (ret *g.Record, err error)
 	return
 }
 
-func copyPhase(src *g.Record, dst *g.Record) (err error) {
-	srcKind, dstKind := src.Kind(), dst.Kind()
-	for i, srcCnt, dstCnt := 0, srcKind.NumField(), dstKind.NumField(); i < srcCnt && i < dstCnt; i++ {
+func copyPhase(src *rt.Record, dst *rt.Record) (err error) {
+	for i, srcCnt, dstCnt := 0, src.NumField(), dst.NumField(); i < srcCnt && i < dstCnt; i++ {
 		// copy until the fields are mismatched
-		if srcKind.Field(i) != dstKind.Field(i) {
+		if src.Field(i) != dst.Field(i) {
 			break
 		} else if src.HasValue(i) {
 			// only copy fields that were set
@@ -158,7 +157,7 @@ func copyPhase(src *g.Record, dst *g.Record) (err error) {
 			if v, e := src.GetIndexedField(i); e != nil {
 				err = e
 				break
-			} else if e := dst.SetIndexedField(i, g.CopyValue(v)); e != nil {
+			} else if e := dst.SetIndexedField(i, rt.CopyValue(v)); e != nil {
 				err = e
 				break
 			}

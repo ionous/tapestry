@@ -6,19 +6,18 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
 // expects field to be a normalized name already.
-func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.Value) (err error) {
+func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue rt.Value) (err error) {
 	// tbd: cache the kind in the object info?
 	// or even... cache the ( last n ) field info into "obj.field"?
 	if kind, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
-		err = g.UnknownField(obj.String(), field)
+		err = rt.UnknownField(obj.String(), field)
 	} else {
 		fieldData := kind.Field(fieldIndex)
 		if fieldData.Name == field {
@@ -32,7 +31,7 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 				err = e
 			} else {
 				// set the aspect to the value of the requested trait
-				traitValue := g.StringFrom(trait, fieldData.Type)
+				traitValue := rt.StringFrom(trait, fieldData.Type)
 				if was, e := run.readNounValue(obj, fieldData); e != nil {
 					err = e
 				} else if was := was.String(); was != trait {
@@ -49,13 +48,13 @@ func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.V
 }
 
 // expects field to be a normalized name already.
-func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret g.Value, err error) {
+func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret rt.Value, err error) {
 	// tbd: cache the kind in the object info?
 	// or even... cache the ( last n ) field info into "obj.field"?
 	if kind, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
-		err = g.UnknownField(obj.String(), field)
+		err = rt.UnknownField(obj.String(), field)
 	} else {
 		fieldData := kind.Field(fieldIndex)
 		if v, e := run.readNounValue(obj, fieldData); e != nil {
@@ -69,26 +68,26 @@ func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret g.Value
 			// note: kind also does this -- but since the data here isnt stored in a record
 			// ( it's stored in the noun value cache ) we have to duplicate the aspect/field check.
 			// return true if the aspect field holds the particular requested field
-			ret = g.BoolOf(field == v.String())
+			ret = rt.BoolOf(field == v.String())
 		}
 	}
 	return
 }
 
-func (run *Runner) writeNounValue(obj query.NounInfo, field g.Field, val g.Value) (err error) {
+func (run *Runner) writeNounValue(obj query.NounInfo, field rt.Field, val rt.Value) (err error) {
 	// fix: convert when appropriate.
 	if aff := val.Affinity(); aff != field.Affinity {
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
 	} else {
 		key := makeKey(obj.Domain, obj.Id, field.Name)
-		run.nounValues.store[key] = cachedValue{v: g.CopyValue(val)}
+		run.nounValues.store[key] = cachedValue{v: rt.CopyValue(val)}
 	}
 	return
 }
 
 // return the (cached) value of a noun's field
 // if the noun's field contains an assignment it's evaluated each time.
-func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
+func (run *Runner) readNounValue(obj query.NounInfo, field rt.Field) (ret rt.Value, err error) {
 	// first, build a cache value:
 	if c, e := run.nounValues.cache(func() (ret any, err error) {
 		// a record can have multiple path/values
@@ -106,7 +105,7 @@ func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value
 	} else {
 		// then, unpack the cached value:
 		switch c := c.(type) {
-		case g.Value:
+		case rt.Value:
 			ret = c
 		case rt.Assignment:
 			// evaluate the assignment to get the current value
@@ -124,7 +123,7 @@ func (run *Runner) readNounValue(obj query.NounInfo, field g.Field) (ret g.Value
 }
 
 // upon returning we will have some valid value or an error
-func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, err error) {
+func (run *Runner) readKindField(obj query.NounInfo, field rt.Field) (ret any, err error) {
 	if k, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := k.FieldIndex(field.Name); fieldIndex < 0 {
@@ -152,7 +151,7 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 		if !found {
 			// note: this doesnt properly determine the default trait for an aspect
 			// weave works around this by providing the correct default value in the db
-			ret, err = g.NewDefaultValue(field.Affinity, field.Type)
+			ret, err = rt.ZeroValue(field.Affinity, field.Type)
 		}
 	}
 	return
@@ -160,7 +159,7 @@ func (run *Runner) readKindField(obj query.NounInfo, field g.Field) (ret any, er
 
 // return can be an assignment ( which gets evaluated )
 // or a literal value ( a fixed value )
-func (run *Runner) readFields(field g.Field, vals []query.ValueData) (ret any, err error) {
+func (run *Runner) readFields(field rt.Field, vals []query.ValueData) (ret any, err error) {
 	if !dotted(vals) { // a single top level value? then its an assignment
 		ret, err = run.decode.DecodeAssignment(field.Affinity, vals[0].Value)
 	} else {
@@ -168,11 +167,11 @@ func (run *Runner) readFields(field g.Field, vals []query.ValueData) (ret any, e
 		if k, e := run.GetKindByName(field.Type); e != nil {
 			err = e
 		} else {
-			rec := k.NewRecord()
+			rec := rt.NewRecord(k)
 			if e := readRecord(run, rec, vals); e != nil {
 				err = e
 			} else {
-				ret = g.RecordOf(rec)
+				ret = rt.RecordOf(rec)
 			}
 		}
 	}
@@ -180,7 +179,7 @@ func (run *Runner) readFields(field g.Field, vals []query.ValueData) (ret any, e
 }
 
 // autocreates default sub records if need be.
-func readRecord(run *Runner, rec *g.Record, vs []query.ValueData) (err error) {
+func readRecord(run *Runner, rec *rt.Record, vs []query.ValueData) (err error) {
 	for _, vd := range vs {
 		if e := readRecordPart(run, rec, vd); e != nil {
 			err = errutil.Append(err, e)
@@ -189,16 +188,15 @@ func readRecord(run *Runner, rec *g.Record, vs []query.ValueData) (err error) {
 	return
 }
 
-func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) {
+func readRecordPart(run *Runner, rec *rt.Record, vd query.ValueData) (err error) {
 	// scan through path for each part of the name
 	for path := vd.Path; len(path) > 0 && err == nil; {
 		// get the next part ( and the rest of the string )
 		part, rest := dotscan(path)
-		k := rec.Kind() // has aff if needed
-		if i := k.FieldIndex(part); i < 0 {
-			err = errutil.New("unexpected error reading record %q part %q", k.Name(), part)
+		if i := rec.FieldIndex(part); i < 0 {
+			err = errutil.New("unexpected error reading record %q part %q", rec.Name(), part)
 		} else {
-			field := k.Field(i)
+			field := rec.Field(i)
 			if len(rest) == 0 {
 				// fix: how does fieldType actually get recorded!?!
 				if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
@@ -224,7 +222,7 @@ func readRecordPart(run *Runner, rec *g.Record, vd query.ValueData) (err error) 
 					if k, e := run.GetKindByName(field.Type); e != nil {
 						err = e
 					} else {
-						rec = k.NewRecord()
+						rec = rt.NewRecord(k)
 					}
 				}
 			}

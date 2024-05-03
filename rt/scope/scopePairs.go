@@ -1,17 +1,16 @@
 package scope
 
 import (
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // a scope which provides a single named field.
 type Pairs struct {
 	ks []string
-	vs []g.Value
+	vs []rt.Value
 }
 
-//
-func NewPairs(ks []string, vs []g.Value) *Pairs {
+func NewPairs(ks []string, vs []rt.Value) *Pairs {
 	return &Pairs{ks: ks, vs: vs}
 }
 
@@ -24,12 +23,12 @@ func (w *Pairs) find(field string) (ret int, err error) {
 		}
 	}
 	if !found {
-		err = g.UnknownVariable(field)
+		err = rt.UnknownVariable(field)
 	}
 	return
 }
 
-func (w *Pairs) FieldByName(field string) (ret g.Value, err error) {
+func (w *Pairs) FieldByName(field string) (ret rt.Value, err error) {
 	if i, e := w.find(field); e != nil {
 		err = e
 	} else {
@@ -38,7 +37,7 @@ func (w *Pairs) FieldByName(field string) (ret g.Value, err error) {
 	return
 }
 
-func (w *Pairs) SetFieldByName(field string, val g.Value) (err error) {
+func (w *Pairs) SetFieldByName(field string, val rt.Value) (err error) {
 	if i, e := w.find(field); e != nil {
 		err = e
 	} else {
