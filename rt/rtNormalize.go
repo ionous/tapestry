@@ -5,21 +5,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// duplicate the passed slice of floats
-// ( b/c golang's built in copy doesnt allocate )
-func copyFloats(src []float64) []float64 {
-	out := make([]float64, len(src))
-	copy(out, src)
-	return out
-}
-
-// duplicate the passed slice of strings.
-func copyStrings(src []string) []string {
-	out := make([]string, len(src))
-	copy(out, src)
-	return out
-}
-
 // rare, just for splice for now.
 func safeAffinity(v Value) (ret affine.Affinity) {
 	if v != nil {

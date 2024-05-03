@@ -1,16 +1,10 @@
-package generic
+package rt
 
 import (
 	"slices"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 )
-
-// Kinds database
-// this isnt used by package generic, but its a common enough interface for tests and the runtime
-type Kinds interface {
-	GetKindByName(n string) (*Kind, error)
-}
 
 type Kind struct {
 	name      string // keeping name *and* path makes debugging easier
@@ -29,11 +23,6 @@ type Field struct {
 type Aspect struct {
 	Name   string // matches the field name
 	Traits []string
-}
-
-// a record without a named kind
-func NewAnonymousRecord(fields []Field) *Record {
-	return newKind("", nil, fields, nil).NewRecord()
 }
 
 // NewKind -
@@ -63,18 +52,6 @@ func newKind(name string, parent *Kind, fields []Field, aspects []Aspect) *Kind 
 		}
 	}
 	return &Kind{name: name, parent: parent, fields: fields, aspects: aspects}
-}
-
-func (k *Kind) NewRecord() *Record {
-	// we make a bunch of nil value placeholders which we fill by caching on demand.
-	rec := &Record{kind: k, values: make([]Value, len(k.fields))}
-	// set the default values for aspects?
-	// alt: determine it on GetIndexedValue as per other defaults
-	// for _, a := range k.aspects {
-	// 	i := k.FieldIndex(a.Name)
-	// 	rec.values[i] = StringFrom(a.Traits[0], a.Name)
-	// }
-	return rec
 }
 
 func Base(k *Kind) string {
@@ -108,6 +85,15 @@ func (k *Kind) Implements(name string) (okay bool) {
 
 func (k *Kind) Name() (ret string) {
 	return k.name
+}
+
+func (k *Kind) NumAspect() int {
+	return len(k.aspects)
+}
+
+// panics if out of range
+func (k *Kind) Aspect(i int) (ret Aspect) {
+	return k.aspects[i]
 }
 
 func (k *Kind) NumField() int {

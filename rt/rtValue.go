@@ -1,4 +1,4 @@
-package generic
+package rt
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -6,13 +6,15 @@ import (
 
 // Value represents any one of Tapestry's built in types.
 type Value interface {
-	// identifies the general category of the value.
-	Affinity() affine.Affinity
 	// identifies how the passed value is represented internally.
 	// ex. a number can be represented as float or as an int,
 	// a record might be one of several different kinds,
 	// text might represent an object id of a specific kind, an aspect, trait, or other value.
 	Type() string
+	// identifies the general category of the value.
+	Affinity() affine.Affinity
+	// return the underlying go-lang representation
+	Any() any
 	// return this value as a bool, or panic if the value isn't a bool.
 	Bool() bool
 	// return this value as a float, or panic if the value isn't a number.
@@ -22,17 +24,11 @@ type Value interface {
 	// return this value as a string; it doesn't panic.
 	// for non-string values, similar to package reflect, it returns a string of the form "<type value>".
 	String() string
-	// return this value as a record, or panic if the value isn't a record.
-	// warning: can return a nil.
-	Record() (*Record, bool)
 	// return this value as a slice of floats, or panic if this isn't a float slice.
 	// note: while primitive values support both ints and floats, slices can only be floats.
 	Floats() []float64
 	// return this value as a slice of strings, or panic if this isn't a string slice.
 	Strings() []string
-	// return this value as a slice of records, or panic if not a record slice.
-	// note: every value in the returned slice is expected to be record of this value's Type().
-	Records() []*Record
 	// return a value representing a field inside this record.
 	// if the field holds a record or a slice, the returned value shares its memory with the named field.
 	// errors if the field doesn't exist.

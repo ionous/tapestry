@@ -1,9 +1,5 @@
 package rt
 
-import (
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-)
-
 // Execute runs a bit of code that has no return value.
 type Execute interface {
 	Execute(Runtime) error
@@ -11,40 +7,40 @@ type Execute interface {
 
 // Assignment accesses values in a generic way.
 type Assignment interface {
-	GetAssignedValue(Runtime) (g.Value, error)
+	GetAssignedValue(Runtime) (Value, error)
 }
 
 // BoolEval represents the result of some true or false expression.
 type BoolEval interface {
-	GetBool(Runtime) (g.Value, error)
+	GetBool(Runtime) (Value, error)
 }
 
 // NumberEval represents the result of some numeric expression.
 type NumberEval interface {
-	GetNumber(Runtime) (g.Value, error)
+	GetNumber(Runtime) (Value, error)
 }
 
 // TextEval represents the result of some expression which creates a string.
 type TextEval interface {
-	GetText(Runtime) (g.Value, error)
+	GetText(Runtime) (Value, error)
 }
 
 // RecordEval yields access to a set of fields and their values.
 type RecordEval interface {
-	GetRecord(Runtime) (g.Value, error)
+	GetRecord(Runtime) (Value, error)
 }
 
 // NumListEval represents the computation of a series of numeric values.
 type NumListEval interface {
-	GetNumList(Runtime) (g.Value, error)
+	GetNumList(Runtime) (Value, error)
 }
 
 // TextListEval represents the computation of a series of strings.
 type TextListEval interface {
-	GetTextList(Runtime) (g.Value, error)
+	GetTextList(Runtime) (Value, error)
 }
 
 // RecordListEval represents the computation of a series of a set of fields.
 type RecordListEval interface {
-	GetRecordList(Runtime) (g.Value, error)
+	GetRecordList(Runtime) (Value, error)
 }

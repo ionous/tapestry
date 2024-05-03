@@ -29,6 +29,10 @@ func (n variant) Type() string {
 	return n.t
 }
 
+func (n variant) Any() any {
+	return n.i
+}
+
 func (n variant) Bool() bool {
 	return n.i.(bool)
 }

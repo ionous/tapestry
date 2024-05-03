@@ -19,6 +19,10 @@ func (n PanicValue) Type() string {
 	return ""
 }
 
+func (n PanicValue) Any() any {
+	panic("value is invalid")
+}
+
 // Bool panics
 func (n PanicValue) Bool() bool {
 	panic("value is not a bool")

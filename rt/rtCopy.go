@@ -39,6 +39,21 @@ func CopyValue(val Value) (ret Value) {
 	return
 }
 
+// duplicate the passed slice of floats
+// ( b/c golang's built in copy doesnt allocate )
+func copyFloats(src []float64) []float64 {
+	out := make([]float64, len(src))
+	copy(out, src)
+	return out
+}
+
+// duplicate the passed slice of strings.
+func copyStrings(src []string) []string {
+	out := make([]string, len(src))
+	copy(out, src)
+	return out
+}
+
 // duplicates all of the passed records
 // panics on error because it assumes all records are copyable.
 func copyRecords(src []*Record) []*Record {
