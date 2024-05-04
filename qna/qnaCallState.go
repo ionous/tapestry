@@ -15,7 +15,7 @@ type callState struct {
 func (run *Runner) saveCallState(top *rt.Record) callState {
 	state := callState{
 		run:       run,
-		prevScope: run.scope.ReplaceScope(scope.FromRecord(run, top)), // scope.Empty{}
+		prevScope: run.scope.ReplaceScope(scope.FromRecord(top)), // scope.Empty{}
 	}
 	state.setPattern(top.Name())
 	return state

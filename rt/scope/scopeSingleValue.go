@@ -10,6 +10,7 @@ type SingleValue struct {
 	name     string
 	val      rt.Value
 	readOnly bool
+	changed  bool
 }
 
 func NewSingleValue(name string, val rt.Value) *SingleValue {
@@ -33,6 +34,10 @@ func (k *SingleValue) SetValue(val rt.Value) {
 	k.val = val
 }
 
+func (k *SingleValue) FieldChanged(field string) bool {
+	return k.changed
+}
+
 func (k *SingleValue) FieldByName(field string) (ret rt.Value, err error) {
 	if found := len(field) > 0 && field == k.name; !found {
 		err = rt.UnknownVariable(field)
@@ -49,16 +54,7 @@ func (k *SingleValue) SetFieldByName(field string, val rt.Value) (err error) {
 		err = errutil.New("the", k.name, "is read-only")
 	} else {
 		k.val = val
-	}
-	return
-}
-
-// placeholder method: for now, determines whether the field exists
-func (k *SingleValue) SetFieldDirty(field string) (err error) {
-	if found := len(field) > 0 && field == k.name; !found {
-		err = rt.UnknownVariable(field)
-	} else if k.readOnly {
-		err = errutil.New("the", k.name, "is read-only")
+		k.changed = true
 	}
 	return
 }

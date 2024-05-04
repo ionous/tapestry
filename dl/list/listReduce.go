@@ -1,8 +1,6 @@
 package list
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -29,24 +27,18 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 	} else if !affine.IsList(fromList.Affinity()) {
 		err = errutil.New("not a list")
 	} else {
-		changed := false
-		for it := safe.ListIt(fromList); it.HasNext() && err == nil; {
+		for it := safe.ListIt(fromList); it.HasNext(); {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
+				break
+			} else if newVal, e := run.Call(pat, accum.Affinity(), nil, []rt.Value{inVal, accum}); e != nil {
+				err = e
+				break
 			} else {
-				if newVal, e := run.Call(pat, accum.Affinity(), nil, []rt.Value{inVal, accum}); e == nil {
-					// update the accumulating value for next time
-					accum = newVal
-					changed = true
-				} else if !errors.Is(e, rt.NoResult) {
-					// if there was no result, just keep going with what we had
-					// for other errors, break.
-					err = e
-				}
+				accum = newVal // update the value for next loop
 			}
 		}
-		// did we have a successful result at some point?
-		if err == nil && changed {
+		if err == nil {
 			err = at.SetValue(accum)
 		}
 	}

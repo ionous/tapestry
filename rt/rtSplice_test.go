@@ -1,4 +1,4 @@
-package generic_test
+package rt_test
 
 import (
 	"testing"

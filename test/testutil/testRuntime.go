@@ -29,17 +29,6 @@ func (x *Runtime) SetField(target, field string, value rt.Value) (err error) {
 	switch target {
 	case meta.Variables:
 		err = x.Chain.SetFieldByName(field, rt.CopyValue(value))
-	case meta.ValueChanged:
-		// unpack the real target and field
-		switch target, field := field, value.String(); target {
-		case meta.Variables:
-			err = x.Chain.SetFieldDirty(field)
-		default:
-			// verify that the field exists...
-			if _, ok := x.ObjectMap[field]; !ok {
-				err = rt.UnknownObject(field)
-			}
-		}
 	default:
 		if a, ok := x.ObjectMap[target]; !ok {
 			err = rt.UnknownField(target, field)

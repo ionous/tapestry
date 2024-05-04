@@ -192,19 +192,16 @@ func readRecordPart(run *Runner, rec *rt.Record, vd query.ValueData) (err error)
 				err = errutil.New("error")
 			} else {
 				path = rest // provisionally
-				if rec.HasValue(i) {
-					if next, e := rec.GetIndexedField(i); e != nil {
-						err = e
-					} else {
-						rec, _ = next.Record()
-					}
+				if v, e := rec.GetIndexedField(i); e != nil {
+					err = e
+				} else if next, ok := v.Record(); ok {
+					rec = next
+				} else if k, e := run.GetKindByName(field.Type); e != nil {
+					err = e
 				} else {
-					// fix: is this good? or should we error?
-					if k, e := run.GetKindByName(field.Type); e != nil {
-						err = e
-					} else {
-						rec = rt.NewRecord(k)
-					}
+					next := rt.NewRecord(k)
+					rec.SetIndexedField(i, rt.RecordOf(next))
+					rec = next
 				}
 			}
 		}

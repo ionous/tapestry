@@ -233,21 +233,7 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 			// ( and numbers dont need to be copied ).
 			err = run.setCounter(field, val)
 
-		case meta.ValueChanged:
-			if val.Affinity() != affine.Text {
-				err = errutil.New("the value of value changed should be the name of the field that changed")
-			} else {
-				// unpack the real target and field
-				switch target, field := field, val.String(); target {
-				case meta.Variables:
-					err = run.scope.SetFieldDirty(field)
-				default:
-					// todo: example, flag object or db for save.
-					// for now, simply verify that the field exists.
-					_, err = run.GetField(target, field)
-				}
-			}
-
+		
 		default:
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)
 		}

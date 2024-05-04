@@ -1,7 +1,6 @@
 package play
 
 import (
-	"errors"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -131,7 +130,7 @@ func (s *Survey) locationBounded(enc string) parser.Bounds {
 			affine.TextList,
 			[]string{"obj"},
 			[]rt.Value{rt.StringOf(enc)},
-		); e != nil && !errors.Is(e, rt.NoResult) {
+		); e != nil {
 			log.Println(e)
 		} else {
 			ret = s.visitStrings(cb, kids)

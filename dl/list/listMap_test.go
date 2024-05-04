@@ -3,8 +3,6 @@ package list_test
 import (
 	"testing"
 
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
@@ -36,7 +34,7 @@ func TestMapStrings(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
 	if e := locals.SetNamedField("fruits", rt.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
 		t.Fatal(e)
 	} else if e := remapStrings.Execute(&lt); e != nil {
@@ -93,8 +91,8 @@ func TestMapRecords(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
-	if e := remapRecords.Execute(&lt); e != nil && !errors.Is(e, rt.NoResult) {
+	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
+	if e := remapRecords.Execute(&lt); e != nil {
 		t.Fatal(e)
 	} else if val, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)

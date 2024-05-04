@@ -136,19 +136,3 @@ func decodeInit(d decoder.Decoder, aff affine.Affinity, b []byte) (ret rt.Assign
 	}
 	return
 }
-
-// assumes the record in in scope so it can read from its own values when needed
-func initRecord(run *Runner, rec *rt.Record) (err error) {
-	for i, cnt := 0, rec.NumField(); i < cnt && err == nil; i++ {
-		if !rec.HasValue(i) {
-			if ft := rec.Field(i); ft.Init != nil {
-				if v, e := ft.Init.GetAssignedValue(run); e != nil {
-					err = e
-				} else if e := rec.SetIndexedField(i, v); e != nil {
-					err = e
-				}
-			}
-		}
-	}
-	return
-}

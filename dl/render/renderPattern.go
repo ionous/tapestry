@@ -2,7 +2,6 @@ package render
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -90,7 +89,7 @@ func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret rt.Va
 			}
 		}
 		if err == nil {
-			if v, e := run.Call(name, hint, nil, vals); e != nil && !errors.Is(e, rt.NoResult) {
+			if v, e := run.Call(name, hint, nil, vals); e != nil {
 				err = fmt.Errorf("%w calling %s", e, name)
 			} else {
 				ret = v

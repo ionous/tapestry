@@ -71,16 +71,14 @@ func stringifyRecord(out *js.Builder, rec *rt.Record) {
 	out.Brace(js.Obj, func(_ *js.Builder) {
 		if rec != nil {
 			for i, cnt := 0, rec.NumField(); i < cnt; i++ {
-				if rec.HasValue(i) {
-					if v, e := rec.GetIndexedField(i); e != nil {
-						panic(e)
-					} else {
-						if i > 0 {
-							out.R(js.Comma)
-						}
-						f := rec.Field(i)
-						stringifyValue(out.Q(f.Name).R(js.Colon), v)
+				if v, e := rec.GetIndexedField(i); e != nil {
+					panic(e)
+				} else {
+					if i > 0 {
+						out.R(js.Comma)
 					}
+					f := rec.Field(i)
+					stringifyValue(out.Q(f.Name).R(js.Colon), v)
 				}
 			}
 		}

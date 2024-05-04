@@ -14,7 +14,7 @@ type stopJump struct {
 // after a rule has matched; combine its desired stop/jump with the current set
 // it can only become more strict, not less.
 // if there's a return value, it must be set for the pattern to be considered done.
-func (n *stopJump) update(status stopJump, evtObj *rt.Record, result bool) (done bool, err error) {
+func (n *stopJump) update(status stopJump, evtObj rt.Scope, result bool) (done bool, err error) {
 	if result && status.runCount > 0 {
 		n.mergeStop(status.stop)
 		n.mergeJump(status.jump)
@@ -58,23 +58,26 @@ func (n *stopJump) mergeJump(jump rt.Jump) {
 }
 
 // reads and resets event cancel, event interrupt from the passed event object
-func (n *stopJump) mergeEvent(evtObj *rt.Record) (err error) {
-	if i := event.Cancel.Index(); evtObj != nil && evtObj.HasValue(i) {
-		if cancel, e := evtObj.GetIndexedField(i); e != nil {
+func (n *stopJump) mergeEvent(evtObj rt.Scope) (err error) {
+	if evt := event.Cancel.String(); hasChanged(evtObj, evt) {
+		if cancel, e := evtObj.FieldByName(evt); e != nil {
 			err = e
 		} else {
 			n.cancel(cancel.Bool())
-			_ = evtObj.SetIndexedField(i, nil)
+			_ = evtObj.SetFieldByName(evt, nil)
 		}
 	}
-
-	if i := event.Interupt.Index(); evtObj != nil && evtObj.HasValue(i) {
-		if interrupt, e := evtObj.GetIndexedField(i); e != nil {
+	if evt := event.Interupt.String(); hasChanged(evtObj, evt) {
+		if interrupt, e := evtObj.FieldByName(evt); e != nil {
 			err = e
 		} else {
 			n.interrupt(interrupt.Bool())
-			_ = evtObj.SetIndexedField(i, nil)
+			_ = evtObj.SetFieldByName(evt, nil)
 		}
 	}
 	return
+}
+
+func hasChanged(evtObj rt.Scope, field string) bool {
+	return evtObj != nil && evtObj.FieldChanged(field)
 }

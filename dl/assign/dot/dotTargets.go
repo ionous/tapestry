@@ -81,7 +81,7 @@ func (c SubValue) SetAtField(field string, newValue rt.Value) (err error) {
 	if aff := c.val.Affinity(); aff != affine.Record {
 		err = fmt.Errorf("%s doesn't have fields", aff)
 	} else if rec, ok := c.val.Record(); !ok {
-		err = fmt.Errorf("missing field at %s", field)
+		err = fmt.Errorf("cant set field %q into nil record", field)
 	} else {
 		err = rec.SetNamedField(field, newValue)
 	}
@@ -92,7 +92,7 @@ func (c SubValue) GetAtField(field string) (ret Cursor, err error) {
 	if aff := c.val.Affinity(); aff != affine.Record {
 		err = fmt.Errorf("%s doesn't have fields", aff)
 	} else if rec, ok := c.val.Record(); !ok {
-		err = fmt.Errorf("missing field at %s", field)
+		err = fmt.Errorf("cant get field %q from nil record", field)
 	} else if next, e := rec.GetNamedField(field); e != nil {
 		err = e
 	} else {

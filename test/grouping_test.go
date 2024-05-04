@@ -8,11 +8,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
+	"github.com/ionous/errutil"
 )
 
 // fix? i wonder if now "collation" can be the list of groups.
 func TestGrouping(t *testing.T) {
-	//errutil.Panic = true
+	errutil.Panic = true
 	var kinds testutil.Kinds
 	var objs testutil.Objects
 	kinds.AddKinds((*Things)(nil), (*Locals)(nil), (*AssignGrouping)(nil), (*CollateGroups)(nil), (*MatchGroups)(nil))
@@ -34,7 +35,7 @@ func TestGrouping(t *testing.T) {
 			"match groups":    &matchGroups,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
 
 	// generate one GroupSettings record for each object
 	if e := runGroupTogther.Execute(&lt); e != nil {

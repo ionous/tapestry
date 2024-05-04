@@ -6,12 +6,13 @@ import (
 
 // a scope which provides a single named field.
 type Pairs struct {
-	ks []string
-	vs []rt.Value
+	ks      []string
+	vs      []rt.Value
+	changed map[string]bool
 }
 
 func NewPairs(ks []string, vs []rt.Value) *Pairs {
-	return &Pairs{ks: ks, vs: vs}
+	return &Pairs{ks: ks, vs: vs, changed: make(map[string]bool)}
 }
 
 func (w *Pairs) find(field string) (ret int, err error) {
@@ -28,6 +29,10 @@ func (w *Pairs) find(field string) (ret int, err error) {
 	return
 }
 
+func (w *Pairs) FieldChanged(field string) bool {
+	return w.changed[field]
+}
+
 func (w *Pairs) FieldByName(field string) (ret rt.Value, err error) {
 	if i, e := w.find(field); e != nil {
 		err = e
@@ -42,12 +47,7 @@ func (w *Pairs) SetFieldByName(field string, val rt.Value) (err error) {
 		err = e
 	} else {
 		w.vs[i] = val
+		w.changed[field] = true
 	}
-	return
-}
-
-// placeholder method: for now, determines whether the field exists
-func (w *Pairs) SetFieldDirty(field string) (err error) {
-	_, err = w.find(field)
 	return
 }

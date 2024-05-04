@@ -19,7 +19,7 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, err error) {
 		Runtime: testutil.Runtime{
 			Kinds: &kinds,
 		}}
-	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, kinds.NewRecord("locals")))
+	lt.Chain = scope.MakeChain(scope.FromRecord(kinds.NewRecord("locals")))
 	if e := lt.SetFieldByName("source", rt.StringsOf(src)); e != nil {
 		err = e
 	} else {

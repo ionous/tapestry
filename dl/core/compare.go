@@ -83,10 +83,7 @@ func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 				// fix: need to report on the mismatch
 				// an optional log statement?
 				for i, cnt := 0, a.NumField(); i < cnt; i++ {
-					if d := compareBool(a.HasValue(i), b.HasValue(i)); d != 0 {
-						ret = d
-						break
-					} else if av, e := a.GetIndexedField(i); e != nil {
+					if av, e := a.GetIndexedField(i); e != nil {
 						err = e
 						break
 					} else if bv, e := b.GetIndexedField(i); e != nil {

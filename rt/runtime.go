@@ -9,12 +9,13 @@ import (
 // Scope - establishes a pool of local variables.
 // Scopes are usually accessed via the runtime Set/GetField.
 type Scope interface {
-	// note: return rt.Unknown if the named field/variable isnt found.
+	// a shallow check to determine if the named field has been set;
+	// doesn't report the status of sub-records or lists.
+	FieldChanged(field string) bool
+	// return g.Unknown if the named field/variable doesn't exist.
 	FieldByName(field string) (Value, error)
-	// note: does not usually copy ( since Runtime does )
+	// set without copying; FieldChanged should return true after this.
 	SetFieldByName(field string, val Value) error
-	// errors if the field doesnt exist
-	SetFieldDirty(field string) error
 }
 
 // Type database

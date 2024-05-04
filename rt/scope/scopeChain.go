@@ -76,17 +76,13 @@ func (s *Chain) SetFieldByName(field string, v rt.Value) (err error) {
 	return
 }
 
-// SetFieldDirty - tell the current scope the named value has changed.
-func (s *Chain) SetFieldDirty(field string) (err error) {
-	var found bool
+// FieldChanged - check scope to see if the named field has been set.
+func (s *Chain) FieldChanged(field string) (okay bool) {
 	for top := s; top != nil; top = top.next {
-		if e := top.Scope.SetFieldDirty(field); !rt.IsUnknown(e) {
-			err, found = e, true
+		if top.FieldChanged(field) {
+			okay = true
 			break
 		}
-	}
-	if !found {
-		err = rt.UnknownVariable(field)
 	}
 	return
 }

@@ -31,15 +31,18 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 	} else {
 		var changes int
 		aff := affine.Element(vs.Affinity())
-		for it := safe.ListIt(src); it.HasNext() && err == nil; {
+		for it := safe.ListIt(src); it.HasNext(); {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
+				break
 			} else if newVal, e := run.Call(pat, aff, nil, []rt.Value{inVal}); e != nil {
 				// note: this treats "no result" as an error because its
 				// trying to map *all* of the elements from one list into another
 				err = e
+				break
 			} else if e := vs.Appends(newVal); e != nil {
 				err = e
+				break
 			} else {
 				changes++
 			}

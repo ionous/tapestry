@@ -1,8 +1,6 @@
 package assign
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -49,7 +47,7 @@ func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret rt.Va
 	name := inflect.Normalize(op.PatternName)
 	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
 		err = CmdErrorCtx(op, name, e)
-	} else if v, e := run.Call(name, aff, k, v); e != nil && !errors.Is(e, rt.NoResult) {
+	} else if v, e := run.Call(name, aff, k, v); e != nil {
 		err = CmdErrorCtx(op, name, e)
 	} else {
 		ret = v
@@ -59,13 +57,18 @@ func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret rt.Va
 
 func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []rt.Value, err error) {
 	if len(args) > 0 {
-		keys, vals := make([]string, len(args)), make([]rt.Value, len(args))
+		keys, vals := make([]string, 0, len(args)), make([]rt.Value, len(args))
 		for i, a := range args {
 			if val, e := safe.GetAssignment(run, a.Value); e != nil {
 				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
 				break
+			} else if n := inflect.Normalize(a.Name); len(n) > 0 {
+				keys = append(keys, n)
+				vals[i] = val
+			} else if len(keys) > 0 {
+				err = errutil.Fmt("only named arguments can follow named arguments %d)", i)
 			} else {
-				keys[i], vals[i] = inflect.Normalize(a.Name), val
+				vals[i] = val
 			}
 		}
 		if err == nil {
