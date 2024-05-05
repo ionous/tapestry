@@ -6,8 +6,7 @@ import (
 	_ "embed"
 	"errors"
 
-	"github.com/mattn/go-sqlite3"
-	_ "github.com/mattn/go-sqlite3" // queries are specific to sqlite, so force the sqlite driver.
+	"github.com/mattn/go-sqlite3" // queries are specific to sqlite, so force the sqlite driver.
 )
 
 func LoadFile(dst *sql.DB, fromFile string) (err error) {

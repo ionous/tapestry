@@ -15,13 +15,6 @@ func appendString(out *js.Builder, s string) {
 }
 
 // "append" b/c preceeded by a comma if needed
-func appendKv(out *js.Builder, k, v string) {
-	if len(v) > 0 {
-		out.R(js.Comma).Kv(k, v)
-	}
-}
-
-// "append" b/c preceeded by a comma if needed
 func appendChecks(out *js.Builder, label string, checks []string) {
 	if len(checks) > 0 {
 		out.R(js.Comma).
@@ -42,15 +35,6 @@ func slotTypes(rules []bconst.SlotRule) []string {
 		str[i] = s.SlotType()
 	}
 	return str
-}
-
-func writeShapeDef(out *js.Builder, cb func(*js.Builder)) {
-	out.WriteString(`,"extensions":["tapestry_generic_mixin","tapestry_generic_extension"]`)
-	out.R(js.Comma).Q("customData").R(js.Colon).
-		Brace(js.Obj, func(custom *js.Builder) {
-			out.Q("shapeDef").R(js.Colon).
-				Brace(js.Array, cb)
-		})
 }
 
 // write a number of fields followed by their dummy input owner

@@ -113,7 +113,6 @@ func (pen *Pen) GetPartialKind(str string) (ret MatchedKind, err error) {
 }
 
 const blank = " "
-const space = ' '
 
 // match the passed words with the known fields of all in-scope kinds.
 // return the full name of the field that matched.
@@ -194,7 +193,7 @@ func (pen *Pen) GetPartialNoun(name, kind string) (ret MatchedNoun, err error) {
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
 func (pen *Pen) GetPartialTrait(str string) (ret MatchedTrait, err error) {
-	if ap, e := pen.getAspectPath(); e != nil {
+	if ap, e := pen.paths.cachePath(pen.db, kindsOf.Aspect); e != nil {
 		err = e
 	} else if len(str) > 0 {
 		words := str + blank

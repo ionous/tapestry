@@ -17,9 +17,9 @@ func (op *DefinePlural) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if singular, e := safe.GetText(run, op.Singular); e != nil {
 			err = e
-		} else if plural := inflect.Normalize(plural.String()); len(plural) < 0 {
+		} else if plural := inflect.Normalize(plural.String()); len(plural) == 0 {
 			err = errutil.New("no plural specified")
-		} else if singular := inflect.Normalize(singular.String()); len(singular) < 0 {
+		} else if singular := inflect.Normalize(singular.String()); len(singular) == 0 {
 			err = errutil.New("no singular specified")
 		} else {
 			err = w.AddPlural(plural, singular)

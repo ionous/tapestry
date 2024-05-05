@@ -87,18 +87,15 @@ func (cat *Catalog) CurrentDomain() (ret string) {
 
 // walk the domains and run the commands remaining in their queues
 func (cat *Catalog) AssembleCatalog() (err error) {
-	var ds []*Domain
 	for {
 		if len(cat.processing) > 0 {
 			err = errutil.New("mismatched begin/end domain")
 			break
 		} else if len(cat.pendingDomains) == 0 {
 			break
-		} else if was, e := cat.assembleNext(); e != nil {
+		} else if _, e := cat.assembleNext(); e != nil {
 			err = e
 			break
-		} else {
-			ds = append(ds, was)
 		}
 	}
 	return

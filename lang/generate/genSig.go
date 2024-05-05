@@ -40,8 +40,6 @@ func (a *Signature) parts() []string {
 	return strings.Split(a.Sig, "=")
 }
 
-var _empty []string = []string{""}
-
 func makeSig(t specData, sig string, slots []string) (ret []Signature) {
 	name := t.Name
 	if strings.Contains(sig, "::") ||

@@ -47,11 +47,6 @@ func TestPhrases(t *testing.T) {
 	}
 }
 
-type w struct {
-	jesstest.Mock
-	info
-}
-
 type info struct {
 	kinds []string
 	traits, fields,

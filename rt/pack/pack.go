@@ -102,5 +102,4 @@ func packValue(out *js.Builder, v rt.Value) {
 			}
 		})
 	}
-	return
 }

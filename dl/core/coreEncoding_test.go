@@ -91,10 +91,3 @@ func unmarshal(out typeinfo.Instance, plainData any) (err error) {
 		Customize(core.CustomDecoder).
 		Decode(out, plainData)
 }
-
-func readPlainData(str string) (ret any) {
-	if e := json.Unmarshal([]byte(str), &ret); e != nil {
-		panic(e)
-	}
-	return
-}

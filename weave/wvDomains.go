@@ -22,11 +22,6 @@ type Domain struct {
 	initialValues initialValues               // all of type assign.SetValue
 }
 
-type initialValue struct {
-	noun, field string
-	val         rt.Assignment
-}
-
 type initialValues []rt.Execute
 
 func (in initialValues) add(noun, field string, val rt.Assignment) initialValues {

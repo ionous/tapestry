@@ -21,15 +21,6 @@ func (op *MakeNumList) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *MakeNumList) makeList(run rt.Runtime) (ret rt.Value, err error) {
-	if v, e := op.makeList(run); e != nil {
-		err = CmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
-}
-
 func (op *MakeTextList) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.makeList(run); e != nil {
 		err = CmdError(op, e)

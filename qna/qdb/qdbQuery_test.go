@@ -235,8 +235,6 @@ func TestQueries(t *testing.T) {
 	}
 }
 
-var run_domain = tables.Insert("run_domain", "domain", "active")
-
 func defaultKinds(domain, at string) (out []any) {
 	for _, k := range kindsOf.DefaultKinds {
 		pk := k.Parent()

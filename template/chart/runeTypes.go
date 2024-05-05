@@ -23,9 +23,9 @@ func isQualifier(r rune) bool {
 }
 
 // https://golang.org/ref/spec#hex_digit
-func isHex(r rune) bool {
-	return (r >= 'a' && r <= 'f') || (r >= 'A' && r <= 'F') || isNumber(r)
-}
+// func isHex(r rune) bool {
+// 	return (r >= 'a' && r <= 'f') || (r >= 'A' && r <= 'F') || isNumber(r)
+// }
 
 // isSpace reports whether r is ascii whitespace other than newlines.
 func isSpace(r rune) bool {

@@ -1,28 +1,22 @@
 package qdb
 
-import (
-	"database/sql"
+// type PairData struct {
+// 	// relation kind id, noun id, other noun id
+// 	rel, noun, other string
+// }
 
-	"git.sr.ht/~ionous/tapestry/tables"
-)
-
-type PairData struct {
-	// relation kind id, noun id, other noun id
-	rel, noun, other string
-}
-
-func scanPairs(q *sql.Stmt, args ...interface{}) (ret []PairData, err error) {
-	if rows, e := q.Query(args...); e != nil {
-		err = e
-	} else {
-		var one PairData
-		err = tables.ScanAll(rows, func() (err error) {
-			ret = append(ret, one)
-			return
-		}, &one.rel, &one.noun, &one.other)
-	}
-	return
-}
+// func scanPairs(q *sql.Stmt, args ...interface{}) (ret []PairData, err error) {
+// 	if rows, e := q.Query(args...); e != nil {
+// 		err = e
+// 	} else {
+// 		var one PairData
+// 		err = tables.ScanAll(rows, func() (err error) {
+// 			ret = append(ret, one)
+// 			return
+// 		}, &one.rel, &one.noun, &one.other)
+// 	}
+// 	return
+// }
 
 // var newPairsFromChanges = `
 // with newPairs as (

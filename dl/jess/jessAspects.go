@@ -59,11 +59,14 @@ func (op *AspectsAreTraits) Weave(w weaver.Weaves, _ rt.Runtime) (err error) {
 			n := it.GetNext()
 			if name, e := match.NormalizeAll(n.Name.Matched); e != nil {
 				err = e
+				break
 			} else {
 				names = append(names, name)
 			}
 		}
-		err = w.AddAspectTraits(aspect, names)
+		if err == nil {
+			err = w.AddAspectTraits(aspect, names)
+		}
 	}
 	return
 }

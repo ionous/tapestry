@@ -13,14 +13,6 @@ type StoryStatement interface {
 	Weave(*weave.Catalog) error
 }
 
-// hacky: go interfaces arent vtables;
-// so when a runtime helper implements the rt interface:
-// it has no access to the full implementation of the interface.
-// meaning inside rule application the importer isnt accessible via casting.
-// we'd need a context maybe ( ex. pass an interface{} through Options );
-// a global is fine for now.
-var currentCatalog *weave.Catalog
-
 // backcompat
 func (op *StoryFile) Weave(cat *weave.Catalog) error {
 	return Weave(cat, op.Statements)
@@ -66,7 +58,6 @@ func Weave(cat *weave.Catalog, all []StoryStatement) (err error) {
 		},
 	}
 	//
-	currentCatalog = cat
 	for _, el := range all {
 		slot := StoryStatement_Slot{Value: el}
 		if e := inspect.Visit(&slot, &evts); e != nil {

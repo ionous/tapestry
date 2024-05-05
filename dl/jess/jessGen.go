@@ -41,7 +41,6 @@ func genNounValues(u Scheduler, ns []DesiredNoun, after postGenOne) (err error) 
 }
 
 type postGenOne func(a string) error
-type postGenMany func(a, b []DesiredNoun) error
 
 func writeKinds(w weaver.Weaves, noun string, kinds []string) (err error) {
 	for _, k := range kinds {

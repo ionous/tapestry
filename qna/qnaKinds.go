@@ -82,7 +82,6 @@ func (run *Runner) ensureBaseKinds() {
 			run.values.store[key] = cachedValue{kind, err}
 		}
 	}
-	return
 }
 
 // fix? this is maybe a little odd... because when the domain changes, so will the kinds

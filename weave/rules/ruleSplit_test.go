@@ -31,14 +31,6 @@ var tree = &core.ChooseBranch{
 	},
 }
 
-var terminalTree = &core.ChooseBranch{
-	If: filter,
-	Else: &core.ChooseBranch{
-		If:   filter,
-		Else: &core.ChooseNothingElse{},
-	},
-}
-
 // a block that consists only of branching statements
 var branchingBlock = []rt.Execute{
 	tree,

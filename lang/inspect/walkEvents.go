@@ -26,7 +26,7 @@ type Events interface {
 
 // can be used to early exit from visiting
 // caller still has to check for this to disambiguate the returned error
-var DoneVisiting = errors.New("done visiting")
+var ErrDone = errors.New("done visiting")
 
 // turn the iterator into an event style callbacks
 func Visit(i typeinfo.Instance, evt Events) (err error) {
