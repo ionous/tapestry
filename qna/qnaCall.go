@@ -130,7 +130,6 @@ func (run *Runner) send(name string, rec *rt.Record, tgt rt.Value) (ret rt.Value
 	return
 }
 
-// fix: serialize and deserialize might be better
 func copyPhase(dst *rt.Record, src *rt.Record) (err error) {
 	for i, srcCnt, dstCnt := 0, src.NumField(), dst.NumField(); i < srcCnt && i < dstCnt; i++ {
 		// copy until the fields are mismatched

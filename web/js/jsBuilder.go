@@ -111,7 +111,9 @@ func (out *Builder) If(b bool, cb func(*Builder)) *Builder {
 
 func (out *Builder) Brace(style [2]rune, cb func(*Builder)) *Builder {
 	out.WriteRune(style[0])
-	cb(out)
+	if cb != nil {
+		cb(out)
+	}
 	out.WriteRune(style[1])
 	return out
 }

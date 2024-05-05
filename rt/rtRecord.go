@@ -27,16 +27,6 @@ func NewAnonymousRecord(fields []Field) *Record {
 	return NewRecord(anon)
 }
 
-// helper for trying to create a record using a name from the passed typeset.
-func NewRecordByName(ks Kinds, cls string) (ret *Record, err error) {
-	if k, e := ks.GetKindByName(cls); e != nil {
-		err = e
-	} else {
-		ret = NewRecord(k)
-	}
-	return
-}
-
 // GetNamedField picks a value or trait from this record.
 // Can return a NilRecord error for uninitialized record fields.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
