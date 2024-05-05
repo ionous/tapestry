@@ -25,19 +25,6 @@ func NewReadOnlyValue(name string, val rt.Value) rt.Scope {
 	return &SingleValue{name: name, val: val, readOnly: true}
 }
 
-// backdoor for updating the value of held by this scope.
-// panics if the value was created read-only
-func (k *SingleValue) SetValue(val rt.Value) {
-	if k.readOnly {
-		panic("setting a readOnly value")
-	}
-	k.val = val
-}
-
-func (k *SingleValue) FieldChanged(field string) bool {
-	return k.changed
-}
-
 func (k *SingleValue) FieldByName(field string) (ret rt.Value, err error) {
 	if found := len(field) > 0 && field == k.name; !found {
 		err = rt.UnknownVariable(field)

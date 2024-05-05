@@ -9,14 +9,17 @@ import (
 
 // access a record via the value interface
 func TestRecordValue(t *testing.T) {
-	k := rt.NewKind([]string{"Ks"}, []rt.Field{
-		{Name: "d", Affinity: affine.Number},
-		{Name: "t", Affinity: affine.Text},
-		{Name: "a", Affinity: affine.Text, Type: "a"},
-	}, []rt.Aspect{{
-		Name:   "a",
-		Traits: []string{"x", "w", "y"},
-	}})
+	k := &rt.Kind{
+		Path: []string{"Ks"},
+		Fields: []rt.Field{
+			{Name: "d", Affinity: affine.Number},
+			{Name: "t", Affinity: affine.Text},
+			{Name: "a", Affinity: affine.Text, Type: "a"},
+		},
+		Aspects: []rt.Aspect{{
+			Name:   "a",
+			Traits: []string{"x", "w", "y"},
+		}}}
 
 	t.Run("numbers", func(t *testing.T) {
 		rv := rt.RecordOf(rt.NewRecord(k))

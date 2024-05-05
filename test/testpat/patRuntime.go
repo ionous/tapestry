@@ -40,7 +40,7 @@ func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals [
 		oldScope := run.Chain.ReplaceScope(newScope)
 		if rules, e := run.GetRules(name); e != nil {
 			err = e
-		} else if res, e := rules.Calls(run, newScope, field); e != nil {
+		} else if res, e := rules.Calls(run, rec, field); e != nil {
 			err = e
 		} else {
 			ret, err = res.GetResult(run, aff)

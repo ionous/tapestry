@@ -21,10 +21,10 @@ func NewRecord(k *Kind) *Record {
 	return &Record{Kind: k, values: make([]Value, k.NumField())}
 }
 
-// a record without a named kind
-func NewAnonymousRecord(fields []Field) *Record {
-	anon := NewKind(nil, fields, nil)
-	return NewRecord(anon)
+// limited change detection
+// ( a hack, basically, for determining whether patterns have written results )
+func (d *Record) HasValue(i int) (okay bool) {
+	return d.values[i] != nil
 }
 
 // GetNamedField picks a value or trait from this record.
@@ -58,13 +58,10 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 		// fix? i dont love this, but it does make sense that enumeration have the least value as a default
 		// note: qna objects aren't represented by records, so they dont hit this
 		if ft.Affinity == affine.Text && ft.Name == ft.Type {
-			for _, at := range d.aspects {
-				if at.Name == ft.Name {
-					// first trait:
-					nv := StringFrom(at.Traits[0], at.Name)
-					ret, d.values[i] = nv, nv
-					break
-				}
+			if at := d.AspectIndex(ft.Name); at >= 0 {
+				a := d.Aspect(at) // first trait of the aspect
+				nv := StringFrom(a.Traits[0], a.Name)
+				ret, d.values[i] = nv, nv
 			}
 		}
 		// fallback to other fields:

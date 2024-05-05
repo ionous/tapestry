@@ -62,7 +62,7 @@ func (x *Runtime) GetField(target, field string) (ret rt.Value, err error) {
 		if a, ok := x.ObjectMap[field]; !ok {
 			err = rt.UnknownObject(field)
 		} else {
-			ret = rt.StringsOf(a.Path())
+			ret = rt.StringsOf(a.Ancestors())
 		}
 
 	case meta.Variables:

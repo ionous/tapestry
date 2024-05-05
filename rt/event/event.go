@@ -43,15 +43,36 @@ const (
 	// the object currently handling the event
 	CurrentTarget // current target
 
-	// setting this stops the rest of the current flow ( ex. bubbling )
-	// clearing this stops lets other handlers on this target finish first.
-	Interupt // interrupt
+	// a string containing the current cancellation status
+	Status // status
 
-	// setting this interrupts all further processing;
-	// clearing this allows the currently flow to finish first.
-	Cancel // cancel
 	//
 	NumFields = iota
+)
+
+// traits controlling event processing
+// higher numbers indicate a higher severity.
+type CancellationStatus int
+
+//go:generate stringer -type=CancellationStatus -linecomment
+const (
+	// keep processing other handlers and other flows.
+	ContinueNormally CancellationStatus = iota // continue normally
+
+	// stops the current flow after other handlers finish.
+	InterruptLater // interrupt later
+
+	// stops the current flow without letting other handlers run.
+	InterruptNow // interrupt now
+
+	// stops all flows after the current flow.
+	CancelLater // cancel later
+
+	// stops all further processing.
+	CancelNow // cancel now
+
+	//
+	NumStatus = iota
 )
 
 func (f Field) Index() int {
@@ -59,10 +80,12 @@ func (f Field) Index() int {
 }
 
 func (f Field) Affine() (ret affine.Affinity) {
-	if f == Interupt || f == Cancel {
-		ret = affine.Bool
-	} else {
-		ret = affine.Text
+	return affine.Text
+}
+
+func (f Field) Type() (ret string) {
+	if f == Status {
+		ret = f.String()
 	}
 	return
 }

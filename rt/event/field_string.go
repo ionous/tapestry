@@ -11,13 +11,12 @@ func _() {
 	_ = x[Name-0]
 	_ = x[Target-1]
 	_ = x[CurrentTarget-2]
-	_ = x[Interupt-3]
-	_ = x[Cancel-4]
+	_ = x[Status-3]
 }
 
-const _Field_name = "nametargetcurrent targetinterruptcancel"
+const _Field_name = "nametargetcurrent targetstatus"
 
-var _Field_index = [...]uint8{0, 4, 10, 24, 33, 39}
+var _Field_index = [...]uint8{0, 4, 10, 24, 30}
 
 func (i Field) String() string {
 	if i < 0 || i >= Field(len(_Field_index)-1) {

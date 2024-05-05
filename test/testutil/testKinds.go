@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -63,7 +62,7 @@ func (ks *Kinds) GetKindByName(name string) (ret *rt.Kind, err error) {
 	} else {
 		if name == kindsOf.Aspect.String() {
 			// special base for aspects
-			ret = rt.NewKind([]string{name}, nil, nil)
+			ret = &rt.Kind{Path: []string{name}}
 		} else {
 			if k, e := ks.makeAspect(name); e != nil {
 				err = e
@@ -96,13 +95,13 @@ func (ks *Kinds) makeKind(name string, pfs *[]rt.Field) (ret *rt.Kind, err error
 		if k, e := ks.GetKindByName(p); e != nil {
 			err = e
 		} else {
-			parents = k.Path()
+			parents = k.Ancestors()
 		}
 	}
 	if err == nil {
 		fields := *pfs
 		path := append([]string{name}, parents...)
-		ret = rt.NewKind(path, fields, aspects.MakeAspects(ks, fields))
+		ret = &rt.Kind{Path: path, Fields: fields, Aspects: rt.MakeAspects(ks, fields)}
 	}
 	return
 }
@@ -115,8 +114,8 @@ func (ks *Kinds) makeAspect(name string) (ret *rt.Kind, err error) {
 				break
 			} else {
 				// create the kind from the stored fields
-				path := append([]string{name}, parent.Path()...)
-				ret = rt.NewKind(path, MakeFieldsFromTraits(a.Traits), nil)
+				path := append([]string{name}, parent.Ancestors()...)
+				ret = &rt.Kind{Path: path, Fields: MakeFieldsFromTraits(a.Traits)}
 				break
 			}
 		}

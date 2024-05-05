@@ -11,7 +11,3 @@ func (Empty) FieldByName(field string) (rt.Value, error) {
 func (Empty) SetFieldByName(field string, val rt.Value) error {
 	return rt.UnknownVariable(field)
 }
-
-func (Empty) FieldChanged(field string) bool {
-	return false
-}

@@ -1,12 +1,14 @@
-package aspects
+package rt
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-func MakeAspects(kinds rt.Kinds, fields []rt.Field) (ret []rt.Aspect) {
+// given a set of fields which may contain aspects generate a list of traits.
+// relies on the passed kinds database having types which inherit from kindOf.Aspect
+// the fields of those types are the traits.
+func MakeAspects(ks Kinds, fields []Field) (ret []Aspect) {
 	for _, ft := range fields {
 		// tbd? currently a field with the same name and type is an aspect;
 		// using string "aspects" might be better...
@@ -15,7 +17,7 @@ func MakeAspects(kinds rt.Kinds, fields []rt.Field) (ret []rt.Aspect) {
 		// ( ie. "illumination" is more specific than "aspects" )
 		// and some of the db queries would have to change too
 		if ft.Affinity == affine.Text && ft.Name == ft.Type {
-			if a, e := kinds.GetKindByName(ft.Type); e == nil {
+			if a, e := ks.GetKindByName(ft.Type); e == nil {
 				if a.Implements(kindsOf.Aspect.String()) {
 					cnt := a.NumField()
 					ts := make([]string, cnt)
@@ -23,7 +25,7 @@ func MakeAspects(kinds rt.Kinds, fields []rt.Field) (ret []rt.Aspect) {
 						t := a.Field(i)
 						ts[i] = t.Name
 					}
-					ret = append(ret, rt.Aspect{Name: a.Name(), Traits: ts})
+					ret = append(ret, Aspect{Name: a.Name(), Traits: ts})
 				}
 			}
 		}

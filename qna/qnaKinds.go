@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/aspects"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -77,7 +76,7 @@ func (run *Runner) ensureBaseKinds() {
 				err = errutil.Fmt("error while building kind %q, %w", k, e)
 			} else {
 				path := []string{k.String(), k.Parent().String()}
-				kind = rt.NewKind(path, fs, nil)
+				kind = &rt.Kind{Path: path, Fields: fs}
 			}
 			key := makeKey("kinds", k.String())
 			run.values.store[key] = cachedValue{kind, err}
@@ -100,11 +99,11 @@ func (run *Runner) buildKind(k string) (ret *rt.Kind, err error) {
 		if fields, e := run.getAllFields(k); e != nil {
 			err = errutil.Fmt("error while building kind %q, %w", k, e)
 		} else {
-			var traits []rt.Aspect // fix? currently only allow traits for objects. hrm.
+			var aspects []rt.Aspect // fix? currently only allow traits for objects. hrm.
 			if objectLike := path[len(path)-1] == kindsOf.Kind.String(); objectLike {
-				traits = aspects.MakeAspects(run, fields)
+				aspects = rt.MakeAspects(run, fields)
 			}
-			ret = rt.NewKind(path, fields, traits)
+			ret = &rt.Kind{Path: path, Fields: fields, Aspects: aspects}
 		}
 	}
 	return

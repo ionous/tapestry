@@ -14,10 +14,6 @@ func (w *windowingScope) UpdateWindow(i int) {
 	w.window[ft.Name] = true
 }
 
-func (w windowingScope) FieldChanged(field string) bool {
-	return w.window[field]
-}
-
 func (w windowingScope) FieldByName(field string) (ret rt.Value, err error) {
 	if !w.window[field] {
 		err = rt.UnknownVariable(field)

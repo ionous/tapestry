@@ -6,15 +6,25 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 )
 
-// type system for tapestry objects and records.
+// used for tapestry objects and records
+// a kind is a collection of fields
+// with optional inheritance.
 type Kind struct {
-	path      []string // the name is first
-	fields    []Field
-	aspects   []Aspect
-	lastField int // cache of last accessed field
+	// indicates ancestry, the name of this kind at the start, parent kinds to the right.
+	// can be nil if anonymous
+	Path []string
+	// holds the accumulated fields of all ancestors.
+	// parent fields to the *left*, more derived fields to the right. ( the reverse of path. )
+	// descendant kinds can have different initial assignments for the same named field.
+	Fields []Field
+	// a subset of fields for those containing traits
+	// see MakeAspects.
+	Aspects []Aspect
+	// a cache of last accessed field
+	lastField int
 }
 
-// kinds are composed of fields.
+// member of a kind.
 type Field struct {
 	Name     string          // name of the field, unique within the kind
 	Affinity affine.Affinity // one of the built in data types
@@ -30,60 +40,81 @@ type Aspect struct {
 	Traits []string
 }
 
-// NewKind -
-// path indicates ancestry, the name of this kind at the start, parent kinds to the right.
-// fields are expected to be the accumulated fields of all ancestors;
-// parent fields to the *left*, more derived fields to the right. ( the reverse of path. )
-// descendant kinds can have different initial assignments for the same named field.
-func NewKind(path []string, fields []Field, aspects []Aspect) *Kind {
-	return &Kind{path: path, fields: fields, aspects: aspects}
-}
-
 // semi unique identifier for this kind
+// returns the empty string for anonymous kinds
 func (k *Kind) Name() (ret string) {
-	if len(k.path) > 0 {
-		ret = k.path[0]
+	if len(k.Path) > 0 {
+		ret = k.Path[0]
 	}
 	return
 }
 
-// ancestors of this kind, the name of this kind at the head of the list
-// can be nil if the kind is "anonymous"
-func (k *Kind) Path() []string {
-	return k.path
+// ancestors of this kind, the name of this kind at the head of the list.
+// the slice isn't a copy; it should be treated as read-only.
+// nil for anonymous kinds.
+func (k *Kind) Ancestors() []string {
+	return k.Path
 }
 
-// does this kind have the named ancestor?
-// ( this is a shortcut
+// true if the kind has the named ancestor.
+// ( this is a shortcut for testing the passed name in Path() )
 func (k *Kind) Implements(name string) bool {
-	return slices.Contains(k.path, name)
+	return slices.Contains(k.Path, name)
 }
 
 // number of fields contained by this ( and all parent kinds )
 func (k *Kind) NumField() int {
-	return len(k.fields)
+	return len(k.Fields)
 }
 
+// return a description of an indexed field.
 // panics if out of range
 func (k *Kind) Field(i int) (ret Field) {
-	return k.fields[i]
+	return k.Fields[i]
 }
 
-// searches for the field which handles the passed field;
-// for traits, it returns the index of its associated aspect.
-// returns -1 if no matching field was found
+// returns the index of the matching field;
+// for traits, that's the index of its aspect.
+// returns -1 if no matching field was found.
 func (k *Kind) FieldIndex(n string) (ret int) {
-	if prev := k.lastField; prev >= 0 && prev < len(k.fields) && k.fields[prev].Name == n {
+	if prev := k.lastField; prev >= 0 && prev < len(k.Fields) && k.Fields[prev].Name == n {
 		ret = prev
 	} else {
 		ret = -1 // provisionally
-		if i := findTrait(n, k.aspects); i >= 0 {
-			n = k.aspects[i].Name
+		if i := k.FindAspectByTrait(n); i >= 0 {
+			n = k.Aspects[i].Name
 		}
-		if i := findField(n, k.fields); i >= 0 {
+		if i := findField(n, k.Fields); i >= 0 {
 			ret = i
 		}
 		k.lastField = ret
+	}
+	return
+}
+
+func (k *Kind) Aspect(i int) (ret Aspect) {
+	return k.Aspects[i]
+}
+
+func (k *Kind) AspectIndex(aspect string) (ret int) {
+	ret = -1 // provisionally
+	for i, at := range k.Aspects {
+		if at.Name == aspect {
+			ret = i
+			break
+		}
+	}
+	return
+}
+
+// return the index of the aspect containing the passed trait
+func (k *Kind) FindAspectByTrait(trait string) (ret int) {
+	ret = -1 // provisionally
+	for i, a := range k.Aspects {
+		if slices.Contains(a.Traits, trait) {
+			ret = i
+			break
+		}
 	}
 	return
 }
@@ -94,20 +125,6 @@ func findField(field string, fields []Field) (ret int) {
 		if f.Name == field {
 			ret = i
 			break
-		}
-	}
-	return
-}
-
-// find aspect from trait name in a sorted list of traits
-func findTrait(trait string, aspects []Aspect) (ret int) {
-	ret = -1 // provisionally
-	for i, a := range aspects {
-		for _, t := range a.Traits {
-			if trait == t {
-				ret = i
-				break
-			}
 		}
 	}
 	return

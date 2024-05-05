@@ -10,7 +10,7 @@ func TestStack(t *testing.T) {
 	names := []string{"inner", "outer", "top"}
 	mocks := make(map[string]*mockScope)
 	for _, n := range names {
-		mocks[n] = &mockScope{name: n, changed: make(map[string]bool)}
+		mocks[n] = &mockScope{name: n}
 	}
 	stack := MakeChain(Empty{})
 
@@ -92,11 +92,6 @@ type mockScope struct {
 	name       string
 	gets, sets int
 	val        int
-	changed    map[string]bool
-}
-
-func (k mockScope) FieldChanged(field string) bool {
-	return k.changed[field]
 }
 
 func (k *mockScope) FieldByName(field string) (ret rt.Value, err error) {
@@ -113,7 +108,6 @@ func (k *mockScope) SetFieldByName(field string, v rt.Value) (err error) {
 	if field != k.name {
 		err = rt.UnknownVariable(field)
 	} else {
-		k.changed[field] = true
 		k.val = v.Int()
 		k.sets++
 	}

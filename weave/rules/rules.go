@@ -80,7 +80,7 @@ func ReadPhrase(ks rt.Kinds, patternSpec, ruleSpec string) (ret RuleName, err er
 		err = e
 	} else {
 		ret = RuleName{
-			Path:           k.Path(),
+			Path:           k.Ancestors(),
 			Label:          inflect.Normalize(ruleSpec),
 			Prefix:         prefix,
 			Suffix:         suffix,

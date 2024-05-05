@@ -75,14 +75,3 @@ func (s *Chain) SetFieldByName(field string, v rt.Value) (err error) {
 	}
 	return
 }
-
-// FieldChanged - check scope to see if the named field has been set.
-func (s *Chain) FieldChanged(field string) (okay bool) {
-	for top := s; top != nil; top = top.next {
-		if top.FieldChanged(field) {
-			okay = true
-			break
-		}
-	}
-	return
-}

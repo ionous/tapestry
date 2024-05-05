@@ -8,7 +8,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func GetResultField(run rt.Runtime, k *rt.Kind) (ret string, err error) {
+func GetResultField(run rt.Runtime, k *rt.Kind) (ret int, err error) {
+	ret = -1 // provisionally
 	patternName := k.Name()
 	if labels, e := run.GetField(meta.PatternLabels, patternName); e != nil {
 		err = e
@@ -19,7 +20,7 @@ func GetResultField(run rt.Runtime, k *rt.Kind) (ret string, err error) {
 			if i := k.FieldIndex(fieldName); i < 0 {
 				err = errutil.New("couldn't find return field %q in kind %q", fieldName, patternName)
 			} else {
-				ret = fieldName
+				ret = i
 			}
 		}
 	}
@@ -27,14 +28,14 @@ func GetResultField(run rt.Runtime, k *rt.Kind) (ret string, err error) {
 }
 
 type Result struct {
-	scope     rt.Scope
-	field     string
-	hasResult bool
+	rec         *rt.Record
+	resultField int
+	hasResult   bool
 }
 
 func (res *Result) GetResult(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
-	scope, field, hasResult := res.scope, res.field, res.hasResult
-	if len(field) == 0 {
+	rec, resultField, hasResult := res.rec, res.resultField, res.hasResult
+	if resultField < 0 {
 		// no result field, but we still might be checking for whether it had any matching rules.
 		if aff == affine.Bool {
 			ret = rt.BoolOf(hasResult)
@@ -43,7 +44,7 @@ func (res *Result) GetResult(run rt.Runtime, aff affine.Affinity) (ret rt.Value,
 		}
 	} else {
 		// get the value *or* a default.
-		if v, e := scope.FieldByName(field); e != nil {
+		if v, e := rec.GetIndexedField(resultField); e != nil {
 			err = errutil.New("error getting result", e)
 		} else if v, e := safe.ConvertValue(run, v, aff); e != nil {
 			err = errutil.New("error checking result", e)
@@ -58,10 +59,6 @@ func (res *Result) GetResult(run rt.Runtime, aff affine.Affinity) (ret rt.Value,
 			} else {
 				safe.HackTillTemplatesCanEvaluatePatternTypes = nil
 			}
-			// we can return both an error *and* a (default) value.
-			// if !hasResult {
-			// 	err = NoResult
-			// }
 			ret = v
 		}
 	}

@@ -8,17 +8,12 @@ import (
 // creates a scope from a record
 // requires kinds so that unit tests can create sub-records safely
 func FromRecord(ks rt.Kinds, rec *rt.Record) rt.Scope {
-	return recordScope{ks, rec, make(map[string]bool)}
+	return recordScope{ks, rec}
 }
 
 type recordScope struct {
-	ks      rt.Kinds
-	rec     *rt.Record
-	changed map[string]bool
-}
-
-func (rs recordScope) FieldChanged(field string) bool {
-	return rs.changed[field]
+	ks  rt.Kinds
+	rec *rt.Record
 }
 
 func (rs recordScope) FieldByName(field string) (rt.Value, error) {
@@ -26,6 +21,5 @@ func (rs recordScope) FieldByName(field string) (rt.Value, error) {
 }
 
 func (rs recordScope) SetFieldByName(field string, val rt.Value) error {
-	rs.changed[field] = true
 	return rs.rec.SetNamedField(field, val)
 }
