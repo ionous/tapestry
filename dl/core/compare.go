@@ -71,7 +71,7 @@ func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 		if d := compareStrings(a.Name(), b.Name()); d != 0 {
 			ret = d
 		} else {
-			for i, cnt := 0, a.NumField(); i < cnt; i++ {
+			for i, cnt := 0, a.NumField(); i < cnt && ret != 0; i++ {
 				// eat errors ( esp. NilRecord )
 				av, _ := a.GetIndexedField(i)
 				bv, _ := b.GetIndexedField(i)
@@ -85,9 +85,8 @@ func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 					if d, e := compareValues(av, bv, tolerance); e != nil {
 						err = e
 						break
-					} else if d != 0 {
+					} else {
 						ret = d
-						break
 					}
 				}
 			}
