@@ -26,6 +26,9 @@ func stringifyValue(out *js.Builder, v rt.Value) {
 	case affine.Text:
 		el := v.String()
 		out.Q(el)
+	case affine.Record:
+		rec := v.Record()
+		stringifyRecord(out, rec)
 	case affine.NumList:
 		els := v.Floats()
 		out.Brace(js.Array, func(_ *js.Builder) {
@@ -46,12 +49,6 @@ func stringifyValue(out *js.Builder, v rt.Value) {
 				out.Q(el)
 			}
 		})
-	case affine.Record:
-		if rec, ok := v.Record(); !ok {
-			out.Raw("null")
-		} else {
-			stringifyRecord(out, rec)
-		}
 	case affine.RecordList:
 		els := v.Records()
 		out.Brace(js.Array, func(_ *js.Builder) {
@@ -71,14 +68,19 @@ func stringifyRecord(out *js.Builder, rec *rt.Record) {
 	out.Brace(js.Obj, func(_ *js.Builder) {
 		if rec != nil {
 			for i, cnt := 0, rec.NumField(); i < cnt; i++ {
+				if i > 0 {
+					out.R(js.Comma)
+				}
+				field := rec.Field(i).Name
 				if v, e := rec.GetIndexedField(i); e != nil {
-					panic(e)
-				} else {
-					if i > 0 {
-						out.R(js.Comma)
+					if !rt.IsNilRecord(e) {
+						// or panic, i suppose.
+						out.Kv(field, "ERROR: "+e.Error())
+					} else {
+						out.Q(field).R(js.Colon).Raw("null")
 					}
-					f := rec.Field(i)
-					stringifyValue(out.Q(f.Name).R(js.Colon), v)
+				} else {
+					stringifyValue(out.Q(field).R(js.Colon), v)
 				}
 			}
 		}

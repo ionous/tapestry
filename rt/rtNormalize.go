@@ -1,8 +1,6 @@
 package rt
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 )
 
@@ -52,11 +50,8 @@ func normalizeRecords(v Value) (ret []*Record, err error) {
 	switch a := safeAffinity(v); a {
 	case "": // nil
 	case affine.Record:
-		if rec, ok := v.Record(); ok {
-			ret = []*Record{rec}
-		} else {
-			err = errors.New("can't use nil records in a list")
-		}
+		rec := v.Record()
+		ret = []*Record{rec}
 	case affine.RecordList:
 		ret = v.Records()
 	default:

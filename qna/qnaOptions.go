@@ -21,7 +21,7 @@ func NewOptions() Options {
 	//
 	out := make(map[string]rt.Value)
 	for opt := meta.Options(0); opt < meta.NumOptions; opt++ {
-		if v, e := rt.ZeroValue(optionTypes[int(opt)], ""); e == nil {
+		if v, e := rt.ZeroValue(optionTypes[int(opt)]); e == nil {
 			n := opt.String()
 			out[n] = v
 		}

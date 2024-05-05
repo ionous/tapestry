@@ -36,7 +36,7 @@ func (run *Runtime) Call(name string, aff affine.Affinity, keys []string, vals [
 	} else if field, e := pattern.GetResultField(run, kind); e != nil {
 		err = e
 	} else {
-		newScope := scope.FromRecord(rec)
+		newScope := scope.FromRecord(run, rec)
 		oldScope := run.Chain.ReplaceScope(newScope)
 		if rules, e := run.GetRules(name); e != nil {
 			err = e

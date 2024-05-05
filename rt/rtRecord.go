@@ -24,6 +24,16 @@ func NewAnonymousRecord(fields []Field) *Record {
 	return NewRecord(anon)
 }
 
+// helper for trying to create a record using a name from the passed typeset.
+func NewRecordByName(ks Kinds, cls string) (ret *Record, err error) {
+	if k, e := ks.GetKindByName(cls); e != nil {
+		err = e
+	} else {
+		ret = NewRecord(k)
+	}
+	return
+}
+
 // GetNamedField picks a value or trait from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	// note: the field is a trait when the field that was found doesnt match the field requested
@@ -65,7 +75,7 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 		}
 		// fallback to other fields:
 		if ret == nil {
-			if nv, e := ZeroValue(ft.Affinity, ft.Type); e != nil {
+			if nv, e := ZeroField(ft.Affinity, ft.Type, i); e != nil {
 				err = e
 			} else {
 				ret, d.values[i] = nv, nv

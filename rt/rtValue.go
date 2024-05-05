@@ -23,8 +23,7 @@ type Value interface {
 	// for non-string values, similar to package reflect, it returns a string of the form "<type value>".
 	String() string
 	// return this value as a record, or panic if the value isn't a record.
-	// warning: can return a nil.
-	Record() (*Record, bool)
+	Record() *Record
 	// return this value as a slice of floats, or panic if this isn't a float slice.
 	// note: while primitive values support both ints and floats, slices can only be floats.
 	Floats() []float64
@@ -35,12 +34,10 @@ type Value interface {
 	Records() []*Record
 	// return a value representing a field inside this record.
 	// if the field holds a record or a slice, the returned value shares its memory with the named field.
-	// errors if the field doesn't exist.
-	// panics if this isn't a record.
+	// errors if note a record, or the field doesn't exist.
 	FieldByName(string) (Value, error)
 	// writes a *copy* of the passed value into a record.
-	// errors if the field doesn't exist or if its affinity cant support the passed value.
-	// panics if this isn't a record.
+	// errors if not a record, the field doesn't exist, or if its affinity cant support the passed value.
 	SetFieldByName(string, Value) error
 	// the number of elements in the value.
 	// panics if this cant have a length: isnt a slice or a string.

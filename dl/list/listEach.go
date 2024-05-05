@@ -41,7 +41,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 				{Name: "first", Affinity: affine.Bool},
 				{Name: "last", Affinity: affine.Bool},
 			})
-			run.PushScope(scope.FromRecord(ls))
+			run.PushScope(scope.FromRecord(run, ls))
 			for i := 0; i < cnt; i++ {
 				at := vs.Index(i)
 				if e := ls.SetIndexedField(el, at); e != nil {

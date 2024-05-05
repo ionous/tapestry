@@ -44,7 +44,7 @@ func (n PanicValue) String() string {
 }
 
 // Record panics
-func (n PanicValue) Record() (*Record, bool) {
+func (n PanicValue) Record() *Record {
 	panic("value is not a record")
 }
 

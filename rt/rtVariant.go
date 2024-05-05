@@ -3,9 +3,9 @@ package rt
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 // variant implements the Value interface.
@@ -29,10 +29,6 @@ func (n variant) Type() string {
 	return n.t
 }
 
-func (n variant) Any() any {
-	return n.i
-}
-
 func (n variant) Bool() bool {
 	return n.i.(bool)
 }
@@ -49,7 +45,7 @@ func (n variant) Float() (ret float64) {
 	case int64:
 		ret = float64(v)
 	default:
-		panic(n.a.String() + " is not a number")
+		log.Panicf("%s is not a number", n.a)
 	}
 	return
 }
@@ -65,7 +61,7 @@ func (n variant) Int() (ret int) {
 	case float64:
 		ret = int(v)
 	default:
-		panic(n.a.String() + " is not a number")
+		log.Panicf("%s is not a number", n.a)
 	}
 	return
 }
@@ -79,9 +75,9 @@ func (n variant) String() (ret string) {
 	return
 }
 
-func (n variant) Record() (*Record, bool) {
-	v := n.i.(*Record)
-	return v, v != nil
+func (n variant) Record() *Record {
+	rec := n.i.(*Record)
+	return rec
 }
 
 func (n variant) Floats() (ret []float64) {
@@ -110,7 +106,7 @@ func (n variant) Len() (ret int) {
 	case *[]*Record:
 		ret = len(*vp)
 	default:
-		panic(n.a.String() + " is not measurable")
+		log.Panicf("%s is not measurable", n.a)
 	}
 	return
 }
@@ -124,32 +120,29 @@ func (n variant) Index(i int) (ret Value) {
 	case *[]*Record:
 		ret = RecordOf((*vp)[i])
 	default:
-		panic(n.a.String() + " is not indexable")
+		log.Panicf("%s is not indexable", n.a)
 	}
 	return
 }
 
-func (n variant) FieldByName(f string) (ret Value, err error) {
-	name := inflect.Normalize(f)
-	if rec, ok := n.Record(); !ok {
-		err = fmt.Errorf("get field %q of nil record %q", name, n.Type())
-	} else {
-		if v, e := rec.GetNamedField(name); e != nil {
-			err = e
-		} else {
-			ret = v
-		}
+func (n variant) FieldByName(name string) (ret Value, err error) {
+	switch rec := n.i.(type) {
+	case *Record:
+		ret, err = rec.GetNamedField(name)
+	default:
+		log.Panicf("%s doesn't have fields", n.a)
 	}
 	return
 }
 
-func (n variant) SetFieldByName(f string, v Value) (err error) {
-	name := inflect.Normalize(f)
-	if rec, ok := n.Record(); !ok {
-		err = fmt.Errorf("set field %q of nil record %q", name, n.Type())
-	} else {
+// copies the incoming value
+func (n variant) SetFieldByName(name string, v Value) (err error) {
+	switch rec := n.i.(type) {
+	case *Record:
 		newVal := CopyValue(v)
-		err = rec.SetNamedField(name, newVal)
+		return rec.SetNamedField(name, newVal)
+	default:
+		log.Panicf("%s doesn't have fields", n.a)
 	}
 	return
 }
@@ -167,14 +160,13 @@ func (n variant) SetIndex(i int, v Value) (err error) {
 	case *[]*Record:
 		if n.t != v.Type() {
 			err = errors.New("record types dont match")
-		} else if rec, ok := v.Record(); !ok {
-			err = errors.New("record lists dont allow null values")
 		} else {
+			rec := v.Record()
 			n := copyRecordValues(rec)
 			(*vp)[i] = n
 		}
 	default:
-		panic(n.a.String() + " is not index writable")
+		log.Panicf("%s is not index writable", n.a)
 	}
 	return
 }
@@ -202,7 +194,7 @@ func (n variant) Slice(i, j int) (ret Value, err error) {
 			ret = RecordsFrom(copyRecords((*vp)[i:j]), n.Type())
 
 		default:
-			panic(n.a.String() + " is not sliceable")
+			log.Panicf("%s is not sliceable", n.a)
 		}
 	}
 	return
@@ -258,7 +250,7 @@ func (n variant) Splice(i, j int, add Value) (ret Value, err error) {
 				ret = RecordsFrom(cut, n.t)
 			}
 		default:
-			panic(n.a.String() + " is not spliceable")
+			log.Panicf("%s is not spliceable", n.a)
 		}
 	}
 	return
@@ -292,7 +284,7 @@ func (n variant) Appends(add Value) (err error) {
 		}
 
 	default:
-		panic(n.a.String() + " is not appendable")
+		log.Panicf("%s is not appendable", n.a)
 	}
 	return
 }

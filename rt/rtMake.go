@@ -39,12 +39,6 @@ func IntFrom(v int, subtype string) Value {
 	return makeVariant(affine.Number, subtype, v)
 }
 
-// returns a nil record of the specified type
-func RecordFrom(subtype string) Value {
-	var n *Record
-	return makeVariant(affine.Record, subtype, n)
-}
-
 func StringsFrom(vs []string, subtype string) (ret Value) {
 	if a := affine.TextList; vs != nil {
 		ret = makeVariant(a, subtype, &vs)

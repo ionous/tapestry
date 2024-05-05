@@ -47,7 +47,7 @@ func (last Endpoint) GetValue() (ret rt.Value, err error) {
 
 // expects there's at least one path element
 func FindEndpoint(run rt.Runtime, name string, path Path) (ret Endpoint, err error) {
-	c := NewTarget(run, name)
+	c := MakeObjectCursor(run, name)
 	return findEndpoint(c, path)
 }
 

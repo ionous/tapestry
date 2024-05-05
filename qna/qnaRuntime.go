@@ -233,7 +233,6 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 			// ( and numbers dont need to be copied ).
 			err = run.setCounter(field, val)
 
-		
 		default:
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)
 		}

@@ -34,7 +34,7 @@ func TestMapStrings(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(&kinds, locals))
 	if e := locals.SetNamedField("fruits", rt.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
 		t.Fatal(e)
 	} else if e := remapStrings.Execute(&lt); e != nil {
@@ -91,7 +91,7 @@ func TestMapRecords(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(&kinds, locals))
 	if e := remapRecords.Execute(&lt); e != nil {
 		t.Fatal(e)
 	} else if val, e := locals.GetNamedField("results"); e != nil {

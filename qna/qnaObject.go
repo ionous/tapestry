@@ -1,9 +1,10 @@
 package qna
 
 import (
-	"unicode/utf8"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -133,7 +134,7 @@ func (run *Runner) readKindField(obj query.NounInfo, field rt.Field) (ret any, e
 	} else {
 		// note: this doesnt properly determine the default trait for an aspect
 		// weave works around this by providing the correct default value in the db
-		ret, err = rt.ZeroValue(field.Affinity, field.Type)
+		ret, err = rt.ZeroField(field.Affinity, field.Type, fieldIndex)
 	}
 	return
 }
@@ -170,40 +171,29 @@ func readRecord(run *Runner, rec *rt.Record, vs []query.ValueData) (err error) {
 }
 
 func readRecordPart(run *Runner, rec *rt.Record, vd query.ValueData) (err error) {
-	// scan through path for each part of the name
-	for path := vd.Path; len(path) > 0 && err == nil; {
-		// get the next part ( and the rest of the string )
-		part, rest := dotscan(path)
-		if i := rec.FieldIndex(part); i < 0 {
-			err = errutil.New("unexpected error reading record %q part %q", rec.Name(), part)
+	pos := dot.MakeValueCursor(run, rt.RecordOf(rec))
+	// follow the dots
+	path := strings.Split(vd.Path, ".")
+	for len(path) > 1 {
+		part, rest := path[0], path[1:]
+		if next, e := pos.GetAtField(part); e != nil {
+			err = e
+			break
 		} else {
-			field := rec.Field(i)
-			if len(rest) == 0 {
-				// fix: how does fieldType actually get recorded!?!
-				if l, e := run.decode.DecodeField(field.Affinity, vd.Value, field.Type); e != nil {
-					err = e
-				} else if v, e := l.GetLiteralValue(run); e != nil {
-					err = e
-				} else {
-					err = rec.SetIndexedField(i, v)
-				}
-				break // all done regardless
-			} else if field.Affinity != affine.Record {
-				err = errutil.New("error")
-			} else {
-				path = rest // provisionally
-				if v, e := rec.GetIndexedField(i); e != nil {
-					err = e
-				} else if next, ok := v.Record(); ok {
-					rec = next
-				} else if k, e := run.GetKindByName(field.Type); e != nil {
-					err = e
-				} else {
-					next := rt.NewRecord(k)
-					rec.SetIndexedField(i, rt.RecordOf(next))
-					rec = next
-				}
-			}
+			pos, path = next, rest
+		}
+	}
+	if err == nil {
+		// access the container of the last value manually
+		rec := pos.CurrentValue().Record()
+		i := rec.FieldIndex(path[0])
+		ft := rec.Field(i)
+		if l, e := run.decode.DecodeField(ft.Affinity, vd.Value, ft.Type); e != nil {
+			err = e // fix: record field type?!
+		} else if v, e := l.GetLiteralValue(run); e != nil {
+			err = e
+		} else {
+			err = rec.SetIndexedField(i, v)
 		}
 	}
 	return
@@ -216,20 +206,4 @@ func readRecordPart(run *Runner, rec *rt.Record, vd query.ValueData) (err error)
 // (dotted paths live in core, not in the runtime interface )
 func dotted(vals []query.ValueData) bool {
 	return len(vals) > 2 || len(vals[0].Path) > 0
-}
-
-// return the string up to the next dot, and everything after.
-func dotscan(str string) (lhs, rhs string) {
-	lhs = str // provisionally
-	for accum := 0; accum < len(str); {
-		if r, n := utf8.DecodeRuneInString(str[accum:]); r == utf8.RuneError {
-			break // all done or error
-		} else if r == '.' {
-			lhs, rhs = str[:accum], str[:accum+n]
-			break
-		} else {
-			accum += n
-		}
-	}
-	return
 }

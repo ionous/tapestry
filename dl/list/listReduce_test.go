@@ -52,7 +52,7 @@ func TestReduce(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(&kinds, locals))
 	if e := reduce.Execute(&lt); e != nil {
 		t.Fatal(e)
 	} else if res, e := locals.GetNamedField("results"); e != nil {

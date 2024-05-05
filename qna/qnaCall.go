@@ -57,7 +57,7 @@ func (run *Runner) call(kind *rt.Kind, rec *rt.Record, aff affine.Affinity) (ret
 		err = e
 	} else {
 		name := kind.Name()
-		newScope := scope.FromRecord(rec)
+		newScope := scope.FromRecord(run, rec)
 		oldScope := run.scope.ReplaceScope(newScope)
 		run.currentPatterns.startedPattern(name)
 		if rules, e := run.getRules(name); e != nil {
@@ -106,7 +106,7 @@ func (run *Runner) send(name string, rec *rt.Record, tgt rt.Value) (ret rt.Value
 					break
 				} else {
 					// replace the previous phase data
-					run.scope.ReplaceScope(scope.FromRecord(phaseRec))
+					run.scope.ReplaceScope(scope.FromRecord(run, phaseRec))
 					// push the event scope. we dont pop later; we replace.
 					// ( the event gets pushed last so it cant be hidden by pattern locals )
 					scoped := scope.NewReadOnlyValue(event.Object, rt.RecordOf(evtObj))
@@ -136,14 +136,14 @@ func copyPhase(dst *rt.Record, src *rt.Record) (err error) {
 		// copy until the fields are mismatched
 		if src.Field(i).Name != dst.Field(i).Name {
 			break
-		} else {
-			if v, e := src.GetIndexedField(i); e != nil {
-				err = e
-				break
-			} else if e := dst.SetIndexedField(i, rt.CopyValue(v)); e != nil {
+		} else if v, e := src.GetIndexedField(i); e != nil {
+			if !rt.IsNilRecord(e) {
 				err = e
 				break
 			}
+		} else if e := dst.SetIndexedField(i, rt.CopyValue(v)); e != nil {
+			err = e
+			break
 		}
 	}
 	return

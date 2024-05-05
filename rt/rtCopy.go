@@ -20,7 +20,7 @@ func CopyValue(val Value) (ret Value) {
 		ret = val
 
 	case affine.Record:
-		ret = copyRecord(val)
+		ret = copyRecord(val.Record())
 
 	case affine.NumList:
 		vs := copyFloats(val.Floats())
@@ -65,14 +65,9 @@ func copyRecords(src []*Record) []*Record {
 	return out
 }
 
-func copyRecord(v Value) (ret Value) {
-	if rec, ok := v.Record(); !ok {
-		ret = v
-	} else {
-		out := copyRecordValues(rec)
-		ret = RecordOf(out)
-	}
-	return
+func copyRecord(rec *Record) Value {
+	out := copyRecordValues(rec)
+	return RecordOf(out)
 }
 
 // panics on error because it assumes all records are copyable.

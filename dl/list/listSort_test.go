@@ -26,7 +26,7 @@ func TestSort(t *testing.T) {
 		Kinds:     &kinds,
 		ObjectMap: objs,
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(&kinds, locals))
 
 	// create a new value of type "locals" containing "Objects:objectNames"
 	for key, obj := range objs {

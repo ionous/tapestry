@@ -12,7 +12,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func xxxxxTestMatching(t *testing.T) {
+func TestMatching(t *testing.T) {
 	errutil.Panic = true
 	var kinds testutil.Kinds
 	type Things struct{}
@@ -31,16 +31,14 @@ func xxxxxTestMatching(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(&kinds, locals))
 
 	if a, e := lt.FieldByName("a"); e != nil {
 		t.Fatal(e)
 	} else if b, e := lt.FieldByName("b"); e != nil {
 		t.Fatal(e)
 	} else {
-		a, _ := a.Record()
-		b, _ := b.Record()
-
+		a, b := a.Record(), b.Record()
 		runMatching := &assign.CallPattern{
 			PatternName: P(kargs.Name()), Arguments: core.MakeArgs(
 				&assign.FromRecord{Value: core.Variable("a")},

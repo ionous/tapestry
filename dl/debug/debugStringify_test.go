@@ -53,6 +53,7 @@ func TestStringify(t *testing.T) {
 	if rec, e := l1.GetRecord(run); e != nil {
 		t.Fatal(e)
 	} else if x := debug.Stringify(rec); x != fruityJson {
+		t.Log("x", x)
 		t.Fatal(files.Indent(x))
 	}
 	// other

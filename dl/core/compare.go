@@ -66,30 +66,23 @@ func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 	case affine.Text:
 		ret = compareStrings(a.String(), b.String())
 	case affine.Record:
-		a, aok := a.Record()
-		b, bok := b.Record()
-		if !aok || !bok {
-			if aok {
-				ret = 1
-			} else if bok {
-				ret = -1
-			} else {
-				ret = 0
-			}
+		// fix: maybe compare serialized versions ( raw bytes ) instead
+		a, b := a.Record(), b.Record()
+		if d := compareStrings(a.Name(), b.Name()); d != 0 {
+			ret = d
 		} else {
-			if d := compareStrings(a.Name(), b.Name()); d != 0 {
-				ret = d
-			} else {
-				// fix: need to report on the mismatch
-				// an optional log statement?
-				for i, cnt := 0, a.NumField(); i < cnt; i++ {
-					if av, e := a.GetIndexedField(i); e != nil {
-						err = e
-						break
-					} else if bv, e := b.GetIndexedField(i); e != nil {
-						err = e
-						break
-					} else if d, e := compareValues(av, bv, tolerance); e != nil {
+			for i, cnt := 0, a.NumField(); i < cnt; i++ {
+				// eat errors ( esp. NilRecord )
+				av, _ := a.GetIndexedField(i)
+				bv, _ := b.GetIndexedField(i)
+				if av == nil || bv == nil {
+					if av == nil {
+						ret = -1
+					} else if bv == nil {
+						ret = 1
+					}
+				} else {
+					if d, e := compareValues(av, bv, tolerance); e != nil {
 						err = e
 						break
 					} else if d != 0 {
