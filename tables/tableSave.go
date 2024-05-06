@@ -9,6 +9,9 @@ import (
 	"github.com/mattn/go-sqlite3" // queries are specific to sqlite, so force the sqlite driver.
 )
 
+// reads from the passed file path,
+// overwriting the dynamic parts of the dst database.
+// ( the dynamic portions are all in the rt schema )
 func LoadFile(dst *sql.DB, fromFile string) (err error) {
 	if src, e := open(defaultDriver, fromFile); e != nil {
 		err = e
@@ -19,6 +22,7 @@ func LoadFile(dst *sql.DB, fromFile string) (err error) {
 	return
 }
 
+// writes the dynamic portions of the src database to the passed file path.
 func SaveFile(toFile string, src *sql.DB) (err error) {
 	if dst, e := open(defaultDriver, toFile); e != nil {
 		err = e
@@ -53,6 +57,7 @@ func copyDB(dst *sql.DB, src *sql.DB, dbName string) error {
 	})
 }
 
+// open a connection to the db and calls the passed cb.
 // automatically closes the connection after the callback is done.
 func SqliteConn(db *sql.DB, cb func(conn *sqlite3.SQLiteConn) error) (err error) {
 	if conn, e := db.Conn(context.Background()); e != nil {

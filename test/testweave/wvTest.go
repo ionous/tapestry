@@ -2,7 +2,7 @@ package testweave
 
 import (
 	"database/sql"
-	"math/rand"
+	"math/rand/v2"
 	"strings"
 	"testing"
 

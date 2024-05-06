@@ -1,11 +1,19 @@
 package qna
 
+type qkey struct {
+	group, target, field string
+}
+
+func makeKey(group, target, field string) qkey {
+	return qkey{group, target, field}
+}
+
 type cache struct {
-	store       map[uint64]cachedValue
+	store       map[qkey]cachedValue
 	cacheErrors bool
 }
 
-type cacheMap map[uint64]cachedValue
+type cacheMap map[qkey]cachedValue
 
 func makeCache(cacheErrors bool) cache {
 	return cache{make(cacheMap), cacheErrors}
@@ -20,11 +28,8 @@ func (c *cache) reset() {
 	c.store = make(cacheMap)
 }
 
-func (c *cache) cache(build func() (any, error), args ...string) (ret any, err error) {
-	if len(args) == 0 {
-		panic("key for cache unspecified")
-	}
-	key := makeKey(args...)
+func (c *cache) cache(build func() (any, error), group, target, field string) (ret any, err error) {
+	key := makeKey(group, target, field)
 	if n, ok := c.store[key]; ok {
 		ret, err = n.v, n.e
 	} else {

@@ -8,9 +8,9 @@ import (
 
 // get the rules from the cache, or build them and add them to the cache
 func (run *Runner) getRules(pat string) (ret pattern.RuleSet, err error) {
-	if c, e := run.values.cache(func() (any, error) {
+	if c, e := run.constVals.cache(func() (any, error) {
 		return run.buildRules(pat)
-	}, "rules", pat); e != nil {
+	}, "rules", pat, ""); e != nil {
 		err = e
 	} else {
 		ret = c.(pattern.RuleSet)

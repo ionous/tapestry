@@ -1,8 +1,7 @@
 module git.sr.ht/~ionous/tapestry/cmd/tap
 
-go 1.21
+go 1.22
 
-toolchain go1.21.4
 
 require (
 	git.sr.ht/~ionous/tapestry v0.23.3

@@ -1,6 +1,6 @@
 package block
 
-import "math/rand"
+import "math/rand/v2"
 
 // from google-blockly/core/utils/idgenerator.js
 /**
@@ -21,7 +21,7 @@ const soup string = "!#$%()*+,-./:;=?@[]^_`{|}~" +
 func newId() string {
 	var id [20]byte
 	for i := 0; i < len(id); i++ {
-		at := rand.Intn(len(soup))
+		at := rand.IntN(len(soup))
 		id[i] = soup[at]
 	}
 	return string(id[:])

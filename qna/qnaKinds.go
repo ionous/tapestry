@@ -35,14 +35,14 @@ func (run *Runner) getKindOf(kn, kt string) (ret *rt.Kind, err error) {
 
 func (run *Runner) getAncestry(k string) (ret []string, err error) {
 	run.ensureBaseKinds()
-	if c, e := run.values.cache(func() (ret any, err error) {
+	if c, e := run.constVals.cache(func() (ret any, err error) {
 		if path, e := run.query.KindOfAncestors(k); e != nil {
 			err = errutil.Fmt("error while getting kind %q, %w", k, e)
 		} else {
 			ret = path
 		}
 		return
-	}, meta.KindAncestry, k); e != nil {
+	}, meta.KindAncestry, k, ""); e != nil {
 		err = e
 	} else {
 		ret = c.([]string)
@@ -52,10 +52,10 @@ func (run *Runner) getAncestry(k string) (ret []string, err error) {
 
 func (run *Runner) getKind(k string) (ret *rt.Kind, err error) {
 	run.ensureBaseKinds()
-	if c, e := run.values.cache(func() (ret any, err error) {
+	if c, e := run.constVals.cache(func() (ret any, err error) {
 		ret, err = run.buildKind(k)
 		return
-	}, "kinds", k); e != nil {
+	}, "kinds", k, ""); e != nil {
 		err = e
 	} else {
 		ret = c.(*rt.Kind)
@@ -66,8 +66,8 @@ func (run *Runner) getKind(k string) (ret *rt.Kind, err error) {
 // tbd: maybe macros and actions shouldnt have the parent  "pattern";
 // it would simplify this, and re: Categorize the base shouldnt be needed anymore.
 func (run *Runner) ensureBaseKinds() {
-	key := makeKey("kinds", kindsOf.Kind.String())
-	if _, ok := run.values.store[key]; !ok {
+	key := makeKey("kinds", kindsOf.Kind.String(), "")
+	if _, ok := run.constVals.store[key]; !ok {
 		for _, k := range kindsOf.DefaultKinds {
 			var err error
 			var kind *rt.Kind
@@ -78,8 +78,8 @@ func (run *Runner) ensureBaseKinds() {
 				path := []string{k.String(), k.Parent().String()}
 				kind = &rt.Kind{Path: path, Fields: fs}
 			}
-			key := makeKey("kinds", k.String())
-			run.values.store[key] = cachedValue{kind, err}
+			key := makeKey("kinds", k.String(), "")
+			run.constVals.store[key] = cachedValue{kind, err}
 		}
 	}
 }
@@ -110,9 +110,9 @@ func (run *Runner) buildKind(k string) (ret *rt.Kind, err error) {
 
 // cached fields exclusive to a kind
 func (run *Runner) getAllFields(kind string) (ret []rt.Field, err error) {
-	if c, e := run.values.cache(func() (ret any, err error) {
+	if c, e := run.constVals.cache(func() (ret any, err error) {
 		return run.query.FieldsOf(kind)
-	}, "fields", kind); e != nil {
+	}, "fields", kind, ""); e != nil {
 		err = e
 	} else {
 		fs := c.([]query.FieldData)

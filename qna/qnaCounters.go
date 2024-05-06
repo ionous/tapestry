@@ -1,8 +1,6 @@
 package qna
 
 import (
-	"database/sql"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -27,14 +25,13 @@ func (c *counters) setCounter(name string, val rt.Value) (err error) {
 	return
 }
 
-func (c counters) writeCounters(db *sql.DB) error {
-	return writeValues(db, func(q *sql.Stmt) (err error) {
-		for k, v := range c {
-			if _, e := q.Exec(meta.Counter, k, v); e != nil {
-				err = e
-				break
-			}
+// q is expected to be a prepared runValue statement
+func (c counters) writeCounters(write writeCb) (err error) {
+	for k, v := range c {
+		if e := write(nil, meta.Counter, k, v); e != nil {
+			err = e
+			break
 		}
-		return
-	})
+	}
+	return
 }

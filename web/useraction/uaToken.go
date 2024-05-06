@@ -1,7 +1,7 @@
 package useraction
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"strconv"
 	"strings"
 	"time"

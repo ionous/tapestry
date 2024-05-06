@@ -17,13 +17,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Callbacks for important system level changes
+// Callbacks to listen for system level changes
 type Notifier struct {
 	StartedScene    func(domains []string)
 	EndedScene      func(domains []string)
 	ChangedState    func(noun, aspect, oldState, newState string)
 	ChangedRelative func(a, b, rel string)
-	// ChangedValue()
 }
 
 func NewRuntime(db *sql.DB, d decoder.Decoder) (*Runner, error) {
@@ -39,38 +38,42 @@ func NewRuntimeOptions(db *sql.DB, d decoder.Decoder, opt Options) (ret *Runner,
 			d = decoder.DecodeNone("unsupported decoder")
 		}
 		ret = &Runner{
-			db:         db,
-			query:      q,
-			decode:     d,
-			values:     makeCache(cacheErrors),
-			nounValues: makeCache(cacheErrors),
-			counters:   make(counters),
-			options:    opt,
-			scope:      scope.Chain{Scope: scope.Empty{}},
+			db:          db,
+			query:       q,
+			decode:      d,
+			constVals:   makeCache(cacheErrors),
+			dynamicVals: makeCache(cacheErrors),
+			count:       make(counters),
+			options:     opt,
+			scope:       scope.Chain{Scope: scope.Empty{}},
 		}
 		ret.SetWriter(log.Writer())
 	}
 	return
 }
 
+// an implementation of rt.Runtime
 type Runner struct {
-	db         *sql.DB
-	query      query.Query
-	decode     decoder.Decoder
-	notify     Notifier
-	values     cache
-	nounValues cache // read isn't kept across domains
-	counters
-	options Options
-	//
-	scope scope.Chain
-	Randomizer
-	writer.Sink
-	currentPatterns
+	db              *sql.DB         // mdl and rt databases
+	query           query.Query     // various helpful db queries
+	decode          decoder.Decoder // helper to interpret db binary data
+	notify          Notifier        // callbacks to listen for changes
+	constVals       cache           // readonly info cached from the db
+	dynamicVals     cache           // noun values
+	count           counters        // various global counters
+	options         Options         // runtime customization
+	scope           scope.Chain     // meta.Variable lookup
+	rand            Randomizer      // random number generator
+	writer.Sink                     // target for game output
+	currentPatterns                 // stack of patterns currently in progress
 }
 
 func (run *Runner) SetNotifier(n Notifier) {
 	run.notify = n
+}
+
+func (run *Runner) Random(inclusiveMin, exclusiveMax int) int {
+	return run.rand.Random(inclusiveMin, exclusiveMax)
 }
 
 func (run *Runner) reportError(e error) error {
@@ -92,9 +95,9 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 				notify(ends)
 			}
 		}
-		run.values.reset() // fix? focus cache clear to just the domains that became inactive?
+		run.constVals.reset() // fix? focus cache clear to just the domains that became inactive?
 		if len(domain) == 0 {
-			run.nounValues.reset()
+			run.dynamicVals.reset()
 		}
 		if len(begins) > 0 {
 			if e := run.domainChanged(begins, "begins"); e != nil {
@@ -231,7 +234,7 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 		case meta.Counter:
 			// doesnt copy because it errors if the value isn't a number
 			// ( and numbers dont need to be copied ).
-			err = run.setCounter(field, val)
+			err = run.count.setCounter(field, val)
 
 		default:
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)
@@ -259,7 +262,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			// not one of the predefined options?
 
 		case meta.Counter:
-			ret, err = run.getCounter(field)
+			ret, err = run.count.getCounter(field)
 
 		case meta.Domain:
 			if b, e := run.query.IsDomainActive(field); e != nil {

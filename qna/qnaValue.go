@@ -36,44 +36,30 @@ import (
 // 				out.counter[field] = value.(int)
 // 			} else {
 
-// 				m[field] = value
-// 			}
-// 			return
-// 		}, &domain, &noun, &field, &value)
-// 	}
-// 	if err == nil {
-// 		ret = out
-// 	}
-// 	return
-// }
+//					m[field] = value
+//				}
+//				return
+//			}, &domain, &noun, &field, &value)
+//		}
+//		if err == nil {
+//			ret = out
+//		}
+//		return
+//	}
+type writeCb func(domain, noun, field, value any) error
 
-// func writeCachedValues(db *sql.DB, c cacheMap) (err error) {
-// 	return writeValues(db, func(q *sql.Stmt) (err error) {
-// 		for _, entry := range c {
-// 			if entry.e == nil {
-// 				if v := (entry.v).(cachedField); v.stored {
-// 					// all stored values are variant values
-// 					// and, for now at least, rely on driver serialization to nounValues
-// 					raw := (v.value).(rt.Value).Any()
-// 					if _, e := q.Exec(v.domain, v.noun, v.field, raw); e != nil {
-// 						err = e
-// 						break
-// 					}
-// 				}
-// 			}
-// 		}
-// 		return
-// 	})
-// }
-
-func writeValues(db *sql.DB, cb func(*sql.Stmt) error) (err error) {
+func writeValues(db *sql.DB, call func(writeCb) error) (err error) {
 	if tx, e := db.Begin(); e != nil {
 		err = e
 	} else {
 		if q, e := tx.Prepare(runValue); e != nil {
 			err = e
 		} else {
-			err = cb(q)
+			cb := func(domain, noun, field, value any) error {
+				_, e := q.Exec(domain, noun, field, value)
+				return e
+			}
+			err = call(cb)
 			q.Close()
 		}
 		tx.Commit()

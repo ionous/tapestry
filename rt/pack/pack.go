@@ -9,13 +9,15 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-// PackRecord and panic if it returns nil.
-func PanicPack(rec *rt.Record) string {
-	a, e := PackRecord(rec)
-	if e != nil {
-		panic(e)
+// serialize the passed record in tapestry command format
+func PackValue(v rt.Value) (ret string, err error) {
+	var out js.Builder
+	if e := packValue(&out, v); e != nil {
+		err = e
+	} else {
+		ret = out.String()
 	}
-	return a
+	return
 }
 
 // serialize the passed record in tapestry command format
@@ -55,8 +57,7 @@ func packRecord(out *js.Builder, rec *rt.Record) (err error) {
 	return
 }
 
-// this panics on error because every valid value should be packable
-func packValue(out *js.Builder, v rt.Value) {
+func packValue(out *js.Builder, v rt.Value) (err error) {
 	switch a := v.Affinity(); a {
 	default:
 		log.Panicf("unexpected affinity %s", a)
@@ -70,7 +71,7 @@ func packValue(out *js.Builder, v rt.Value) {
 		el := v.String()
 		out.Q(el)
 	case affine.Record:
-		packRecord(out, v.Record())
+		err = packRecord(out, v.Record())
 	case affine.NumList:
 		els := v.Floats()
 		out.Brace(js.Array, func(_ *js.Builder) {
@@ -98,8 +99,12 @@ func packValue(out *js.Builder, v rt.Value) {
 					out.R(js.Comma)
 				}
 				el := v.Index(i)
-				packRecord(out, el.Record())
+				if e := packRecord(out, el.Record()); e != nil {
+					err = e
+					break
+				}
 			}
 		})
 	}
+	return
 }
