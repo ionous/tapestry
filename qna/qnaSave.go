@@ -5,49 +5,62 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/rt/pack"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 // produces undefined results if called in the middle of a turn
-func (run *Runner) SaveGame(scene string) (err error) {
+// returns the saved file name
+func (run *Runner) SaveGame(scene string) (ret string, err error) {
 	if saveDir, e := getSaveDir(run); e != nil {
 		err = e
+	} else if e := writeValues(run.db, func(w writeCb) (err error) {
+		if e := run.rand.writeRandomizeer(w); e != nil {
+			err = e
+		} else if e := run.dynamicVals.writeValues(w); e != nil {
+			err = e
+		}
+		return
+	}); e != nil {
+		err = e
 	} else {
-		// to do: save randomizer
-		err = writeValues(run.db, func(write writeCb) (err error) {
-			if e := run.rand.writeRandomizeer(write); e != nil {
-				err = e
-			} else if e := run.count.writeCounters(write); e != nil {
-				err = e
-			} else if e := run.writeNouns(write); e != nil {
-				err = e
-			} else {
-				name := files.NameWithTime(scene, files.SaveFileExtension)
-				//
-				outPath := filepath.Join(saveDir, name)
-				err = tables.SaveFile(outPath, run.db)
-			}
-			return
-		})
-
+		name := files.NameWithTime(scene, files.SaveFileExtension)
+		outPath := filepath.Join(saveDir, name)
+		if e := tables.SaveFile(outPath, false, run.db); e != nil {
+			err = e
+		} else {
+			ret = outPath
+		}
 	}
 	return
 }
 
 // produces undefined results if called in the middle of a turn
-func (run *Runner) LoadGame(scene string) (err error) {
+// returns the file that was loaded
+func (run *Runner) LoadGame(scene string) (ret string, err error) {
 	if saveDir, e := getSaveDir(run); e != nil {
 		err = e
-	} else if name, e := files.FindLatest(saveDir, scene, files.SaveFileExtension); e != nil {
+	} else if name, e := files.FindLatestNameWithTime(saveDir, scene, files.SaveFileExtension); e != nil {
 		err = e
+	} else if len(name) == 0 {
+		err = fmt.Errorf("no save files found in %s", saveDir)
 	} else {
 		outPath := filepath.Join(saveDir, name)
-		err = tables.LoadFile(run.db, outPath)
-
+		defer func() {
+			if err != nil {
+				err = fmt.Errorf("%w for %s", err, outPath)
+			}
+		}()
+		if e := tables.LoadFile(run.db, outPath); e != nil {
+			err = e
+		} else if e := run.dynamicVals.readValues(run.db); e != nil {
+			err = e
+		} else if e := run.rand.readRandomizer(run.db); e != nil {
+			err = e
+		} else {
+			ret = outPath
+		}
 	}
 	return
 }
@@ -59,22 +72,6 @@ func getSaveDir(run *Runner) (ret string, err error) {
 		err = errors.New("no save directory configured")
 	} else {
 		ret = str
-	}
-	return
-}
-
-// write all dynamic values to the database using the prepared 'runValue' statement.
-func (run *Runner) writeNouns(w writeCb) (err error) {
-	for key, cached := range run.dynamicVals.store {
-		// all stored values are variant values ( unless they are errors )
-		if val, ok := cached.v.(rt.Value); ok {
-			if str, e := pack.PackValue(val); e != nil {
-				err = e
-			} else if e := w(key.group, key.target, key.field, str); e != nil {
-				err = e
-				break
-			}
-		}
 	}
 	return
 }

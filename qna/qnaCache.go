@@ -1,45 +1,43 @@
 package qna
 
 type qkey struct {
-	group, target, field string
+	domain, target, field string
 }
 
-func makeKey(group, target, field string) qkey {
-	return qkey{group, target, field}
+func makeKey(domain, target, field string) qkey {
+	return qkey{domain, target, field}
 }
 
 type cache struct {
-	store       map[qkey]cachedValue
+	store       map[qkey]any
 	cacheErrors bool
 }
 
-type cacheMap map[qkey]cachedValue
+type cacheMap map[qkey]any
 
 func makeCache(cacheErrors bool) cache {
 	return cache{make(cacheMap), cacheErrors}
-}
-
-type cachedValue struct {
-	v any
-	e error
 }
 
 func (c *cache) reset() {
 	c.store = make(cacheMap)
 }
 
-func (c *cache) cache(build func() (any, error), group, target, field string) (ret any, err error) {
-	key := makeKey(group, target, field)
-	if n, ok := c.store[key]; ok {
-		ret, err = n.v, n.e
+func (c *cache) ensure(key qkey, build func() (any, error)) (ret any, err error) {
+	if v, ok := c.store[key]; ok {
+		if e, ok := v.(error); ok {
+			err = e
+		} else {
+			ret = v
+		}
 	} else {
 		if v, e := build(); e == nil {
-			c.store[key] = cachedValue{v: v}
+			c.store[key] = v
 			ret = v
 		} else {
 			err = e
 			if c.cacheErrors {
-				c.store[key] = cachedValue{e: e}
+				c.store[key] = e
 			}
 		}
 	}

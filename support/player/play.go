@@ -83,18 +83,32 @@ func PlayWithOptions(mdlFile, testString, scene string, opts qna.Options) (err e
 	return
 }
 
+type SaveTime interface {
+	LoadGame(string) (string, error)
+	SaveGame(string) (string, error)
+}
+
 func step(p *play.Playtime, scene string, s string) (done bool) {
 	var sig game.Signal
 	if res, e := p.Step(s); errors.As(e, &sig) {
 		switch sig {
-		// case game.SignalLoad:
-		// 	if e := p.LoadGame(scene); e != nil {
-		// 		log.Print("couldn't load game because", e)
-		// 	}
-		// case game.SignalSave:
-		// 	if e := p.SaveGame(scene); e != nil {
-		// 		log.Print("couldn't load game because", e)
-		// 	}
+		case game.SignalLoad:
+			if saver, ok := p.Runtime.(SaveTime); !ok {
+				log.Println("this runtime doesn't support save/load")
+			} else if res, e := saver.LoadGame(scene); e != nil {
+				log.Printf("couldn't load game because %v\n", e)
+			} else {
+				log.Printf("loaded %s from %s\n", scene, res)
+			}
+
+		case game.SignalSave:
+			if saver, ok := p.Runtime.(SaveTime); !ok {
+				log.Print("this runtime doesn't support save/load")
+			} else if res, e := saver.SaveGame(scene); e != nil {
+				log.Printf("couldn't save game because %v\n", e)
+			} else {
+				log.Printf("saved %s to %s\n", scene, res)
+			}
 		case game.SignalQuit:
 			done = true
 		default:

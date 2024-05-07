@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -81,49 +80,41 @@ func (run *Runner) writeNounValue(obj query.NounInfo, field rt.Field, val rt.Val
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
 	} else {
 		key := makeKey(obj.Domain, obj.Id, field.Name)
-		run.dynamicVals.store[key] = cachedValue{v: rt.CopyValue(val)}
+		userVal := UserValue{rt.CopyValue(val)}
+		run.dynamicVals.store[key] = userVal
 	}
 	return
 }
 
 // return the (cached) value of a noun's field
 // if the noun's field contains an assignment it's evaluated each time.
-func (run *Runner) readNounValue(obj query.NounInfo, field rt.Field) (ret rt.Value, err error) {
-	// first, build a cache value:
-	if c, e := run.dynamicVals.cache(func() (ret any, err error) {
+func (run *Runner) readNounValue(obj query.NounInfo, ft rt.Field) (ret rt.Value, err error) {
+	key := makeKey(obj.Domain, obj.Id, ft.Name)
+
+	// kind of ugly: first ensure its in the cache
+	// by generating a Value or Assignment
+	if _, e := run.dynamicVals.ensure(key, func() (ret any, err error) {
 		// a record can have multiple path/values
-		if vs, e := run.query.NounValues(obj.Id, field.Name); e != nil {
+		if vs, e := run.query.NounValues(obj.Id, ft.Name); e != nil {
 			err = e
 		} else if len(vs) > 0 {
-			ret, err = run.readFields(field, vs)
+			ret, err = run.readFields(ft, vs)
 		} else {
 			// if the noun had no values; the kind might have default values.
-			ret, err = run.readKindField(obj, field)
+			ret, err = run.readKindField(obj, ft)
 		}
 		return
-	}, obj.Domain, obj.Id, field.Name); e != nil {
+	}); e != nil {
 		err = e
 	} else {
-		// then, unpack the cached value:
-		switch c := c.(type) {
-		case rt.Value:
-			ret = c
-		case rt.Assignment:
-			// evaluate the assignment to get the current value
-			// tbd: should there be a "this" pushed into scope?
-			if v, e := safe.GetAssignment(run, c); e != nil {
-				err = e
-			} else {
-				ret, err = safe.RectifyText(run, field, v)
-			}
-		default:
-			err = errutil.Fmt("unexpected type in object cache %T for noun %q field %q", c, obj.Id, field.Name)
-		}
+		// then ask for the value again to unpack it.
+		ret, err = run.unpackDynamicValue(key, ft.Affinity, ft.Type)
 	}
+
 	return
 }
 
-// upon returning we will have some valid value, assignment, or an error
+// returns an rt.Assignment, rt.Value, or error
 func (run *Runner) readKindField(obj query.NounInfo, field rt.Field) (ret any, err error) {
 	if k, e := run.getKind(obj.Kind); e != nil {
 		err = e

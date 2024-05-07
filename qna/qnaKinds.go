@@ -34,15 +34,17 @@ func (run *Runner) getKindOf(kn, kt string) (ret *rt.Kind, err error) {
 }
 
 func (run *Runner) getAncestry(k string) (ret []string, err error) {
-	run.ensureBaseKinds()
-	if c, e := run.constVals.cache(func() (ret any, err error) {
+	key := makeKey(meta.KindAncestry, k, "")
+	if e := run.ensureBaseKinds(); e != nil {
+		err = e
+	} else if c, e := run.constVals.ensure(key, func() (ret any, err error) {
 		if path, e := run.query.KindOfAncestors(k); e != nil {
 			err = errutil.Fmt("error while getting kind %q, %w", k, e)
 		} else {
 			ret = path
 		}
 		return
-	}, meta.KindAncestry, k, ""); e != nil {
+	}); e != nil {
 		err = e
 	} else {
 		ret = c.([]string)
@@ -51,11 +53,13 @@ func (run *Runner) getAncestry(k string) (ret []string, err error) {
 }
 
 func (run *Runner) getKind(k string) (ret *rt.Kind, err error) {
-	run.ensureBaseKinds()
-	if c, e := run.constVals.cache(func() (ret any, err error) {
+	key := makeKey("kinds", k, "")
+	if e := run.ensureBaseKinds(); e != nil {
+		err = e
+	} else if c, e := run.constVals.ensure(key, func() (ret any, err error) {
 		ret, err = run.buildKind(k)
 		return
-	}, "kinds", k, ""); e != nil {
+	}); e != nil {
 		err = e
 	} else {
 		ret = c.(*rt.Kind)
@@ -65,23 +69,24 @@ func (run *Runner) getKind(k string) (ret *rt.Kind, err error) {
 
 // tbd: maybe macros and actions shouldnt have the parent  "pattern";
 // it would simplify this, and re: Categorize the base shouldnt be needed anymore.
-func (run *Runner) ensureBaseKinds() {
+func (run *Runner) ensureBaseKinds() (err error) {
 	key := makeKey("kinds", kindsOf.Kind.String(), "")
 	if _, ok := run.constVals.store[key]; !ok {
 		for _, k := range kindsOf.DefaultKinds {
-			var err error
-			var kind *rt.Kind
+			name := k.String()
 			// note: responses have fields, even though the other base kinds dont
-			if fs, e := run.getAllFields(k.String()); e != nil {
-				err = errutil.Fmt("error while building kind %q, %w", k, e)
+			if fs, e := run.getAllFields(name); e != nil {
+				err = errutil.Fmt("error while building kind %q, %w", name, e)
+				break
 			} else {
-				path := []string{k.String(), k.Parent().String()}
-				kind = &rt.Kind{Path: path, Fields: fs}
+				// base kinds are never more than one layer deep.
+				path := []string{name, k.Parent().String()}
+				key := makeKey("kinds", name, "")
+				run.constVals.store[key] = &rt.Kind{Path: path, Fields: fs}
 			}
-			key := makeKey("kinds", k.String(), "")
-			run.constVals.store[key] = cachedValue{kind, err}
 		}
 	}
+	return
 }
 
 // fix? this is maybe a little odd... because when the domain changes, so will the kinds
@@ -110,9 +115,10 @@ func (run *Runner) buildKind(k string) (ret *rt.Kind, err error) {
 
 // cached fields exclusive to a kind
 func (run *Runner) getAllFields(kind string) (ret []rt.Field, err error) {
-	if c, e := run.constVals.cache(func() (ret any, err error) {
+	key := makeKey("fields", kind, "")
+	if c, e := run.constVals.ensure(key, func() (ret any, err error) {
 		return run.query.FieldsOf(kind)
-	}, "fields", kind, ""); e != nil {
+	}); e != nil {
 		err = e
 	} else {
 		fs := c.([]query.FieldData)

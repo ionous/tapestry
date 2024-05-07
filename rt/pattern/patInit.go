@@ -33,7 +33,7 @@ func InitRecord(run rt.Runtime, k *rt.Kind, keys []string, vals []rt.Value) (ret
 			err = e
 			break
 		} else if v != nil {
-			if convertedVal, e := safe.RectifyText(run, ft, v); e != nil {
+			if convertedVal, e := safe.RectifyText(run, v, ft.Affinity, ft.Type); e != nil {
 				err = fmt.Errorf("%w while initializing arg %d(%s)", e, i, ft.Name)
 				break
 			} else if e := rec.SetIndexedField(i, convertedVal); e != nil {

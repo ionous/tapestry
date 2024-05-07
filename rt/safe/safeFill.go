@@ -33,14 +33,17 @@ func FillRecord(run rt.Runtime, rec *rt.Record, keys []string, vals []rt.Value) 
 					break
 				} else if at < 0 {
 					break
-				} else if convertedVal, e := RectifyText(run, rec.Field(at), val); e != nil {
-					err = e
-					break
-				} else if e := rec.SetIndexedField(at, convertedVal); e != nil {
-					// note: set indexed field assigns without copying
-					// but get value copies out, so this should be okay.
-					err = fmt.Errorf("%w while setting arg %d(%s)", e, i, key)
-					break
+				} else {
+					ft := rec.Field(at)
+					if convertedVal, e := RectifyText(run, val, ft.Affinity, ft.Type); e != nil {
+						err = e
+						break
+					} else if e := rec.SetIndexedField(at, convertedVal); e != nil {
+						// note: set indexed field assigns without copying
+						// but get value copies out, so this should be okay.
+						err = fmt.Errorf("%w while setting arg %d(%s)", e, i, key)
+						break
+					}
 				}
 			} // end for
 			if err == nil {

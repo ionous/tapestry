@@ -12,15 +12,15 @@ import (
 // used when converting values to fields that might require objects.
 // if the target field (ex. a pattern local) requires text of a certain type
 // and the incoming value is untyped, try to convert it.
-func RectifyText(run rt.Runtime, ft rt.Field, val rt.Value) (ret rt.Value, err error) {
+func RectifyText(run rt.Runtime, val rt.Value, aff affine.Affinity, cls string) (ret rt.Value, err error) {
 	ret = val // provisionally.
 	// assigning to a field of typed text (which refers to an object?)
-	if ft.Affinity == affine.Text && len(ft.Type) > 0 {
+	if aff == affine.Text && len(cls) > 0 {
 		// and the input is untyped?
 		// (tbd: reject objects of incompatible type?)
 		if val.Affinity() == affine.Text && val.Len() > 0 && len(val.Type()) == 0 {
 			// is the target field of object type?
-			if k, e := run.GetKindByName(ft.Type); e != nil {
+			if k, e := run.GetKindByName(cls); e != nil {
 				err = e
 			} else if k.Implements(kindsOf.Kind.String()) {
 				ret, err = run.GetField(meta.ObjectId, val.String())

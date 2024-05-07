@@ -7,31 +7,30 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type counters map[string]int
-
-func (c *counters) getCounter(name string) (ret rt.Value, err error) {
-	// alt: a global $counters object with fields?
-	i := (*c)[name]
-	ret = rt.IntOf(i)
-	return
+func counterKey(name string) qkey {
+	return makeKey("", meta.Counter, name)
 }
 
-func (c *counters) setCounter(name string, val rt.Value) (err error) {
-	if aff := val.Affinity(); aff != affine.Number {
-		err = errutil.Fmt("counter %q expected a number got %s", name, aff)
+// returns 0 if the counter doesnt exist
+// only updates the cache on setCounter.
+func (run *Runner) getCounter(name string) (ret rt.Value, err error) {
+	key := counterKey(name)
+	if v, e := run.unpackDynamicValue(key, affine.Number, ""); e == nil {
+		ret = v
+	} else if e != errMissing {
+		err = e
 	} else {
-		(*c)[name] = val.Int()
+		ret = rt.Zero
 	}
 	return
 }
 
-// q is expected to be a prepared runValue statement
-func (c counters) writeCounters(write writeCb) (err error) {
-	for k, v := range c {
-		if e := write(nil, meta.Counter, k, v); e != nil {
-			err = e
-			break
-		}
+func (run *Runner) setCounter(name string, val rt.Value) (err error) {
+	if aff := val.Affinity(); aff != affine.Number {
+		err = errutil.Fmt("counter %q expected a number got %s", name, aff)
+	} else {
+		key := counterKey(name) // no need to copy: numbers are primitives
+		run.dynamicVals.store[key] = UserValue{val}
 	}
 	return
 }

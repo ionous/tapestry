@@ -42,10 +42,10 @@ func NewRuntimeOptions(db *sql.DB, d decoder.Decoder, opt Options) (ret *Runner,
 			query:       q,
 			decode:      d,
 			constVals:   makeCache(cacheErrors),
-			dynamicVals: makeCache(cacheErrors),
-			count:       make(counters),
+			dynamicVals: dynamicVals{makeCache(cacheErrors)},
 			options:     opt,
 			scope:       scope.Chain{Scope: scope.Empty{}},
+			rand:        RandomizedTime(),
 		}
 		ret.SetWriter(log.Writer())
 	}
@@ -59,8 +59,7 @@ type Runner struct {
 	decode          decoder.Decoder // helper to interpret db binary data
 	notify          Notifier        // callbacks to listen for changes
 	constVals       cache           // readonly info cached from the db
-	dynamicVals     cache           // noun values
-	count           counters        // various global counters
+	dynamicVals     dynamicVals     // noun values and counters
 	options         Options         // runtime customization
 	scope           scope.Chain     // meta.Variable lookup
 	rand            Randomizer      // random number generator
@@ -224,7 +223,7 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 		// one of the predefined faux objects:
 		switch target {
 		case meta.Variables:
-			cpy := rt.CopyValue(val)
+			cpy := rt.CopyValue(val) // copy: scope is often implemented by record, which doesnt copy.
 			err = run.scope.SetFieldByName(field, cpy)
 
 		case meta.Option:
@@ -234,7 +233,7 @@ func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 		case meta.Counter:
 			// doesnt copy because it errors if the value isn't a number
 			// ( and numbers dont need to be copied ).
-			err = run.count.setCounter(field, val)
+			err = run.setCounter(field, val)
 
 		default:
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)
@@ -262,7 +261,8 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 			// not one of the predefined options?
 
 		case meta.Counter:
-			ret, err = run.count.getCounter(field)
+			// zero if missing, err if failed to read a deserialized value
+			ret, err = run.getCounter(field)
 
 		case meta.Domain:
 			if b, e := run.query.IsDomainActive(field); e != nil {
