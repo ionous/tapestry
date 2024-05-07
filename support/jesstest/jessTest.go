@@ -586,11 +586,11 @@ var Phrases = []Phrase{
 	},
 	{
 		test:   "Things have some text.",
-		result: errors.New("unnamed text fields are prohibited."),
+		result: errors.New("unnamed text fields are prohibited"),
 	},
 	{
 		test:   "Things have a number.",
-		result: errors.New("unnamed number fields are prohibited."),
+		result: errors.New("unnamed number fields are prohibited"),
 	},
 	{
 		test:   "A supporter has a number called carrying capacity.",

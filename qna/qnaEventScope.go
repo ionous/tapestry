@@ -6,7 +6,7 @@ import (
 )
 
 // create the "event object" containing the event name, target, interrupt and cancel status
-func newEventRecord(run rt.Runtime, name string, tgt rt.Value) (ret *rt.Record, err error) {
+func newEventRecord(name string, tgt rt.Value) (ret *rt.Record, err error) {
 	out := rt.NewRecord(&eventKind)
 	if e := out.SetIndexedField(event.Name.Index(), rt.StringOf(name)); e != nil {
 		err = e

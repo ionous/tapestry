@@ -74,7 +74,7 @@ func (run *Runner) send(name string, rec *rt.Record, tgt rt.Value) (ret rt.Value
 	callState := run.saveCallState(rec)
 	if path, e := run.newPathForTarget(tgt); e != nil {
 		err = e // ^ the bubble capture chain
-	} else if evtObj, e := newEventRecord(run, name, tgt); e != nil {
+	} else if evtObj, e := newEventRecord(name, tgt); e != nil {
 		err = e // ^ create the "event object" sent to each event phase pattern.
 	} else {
 		var canceled bool
