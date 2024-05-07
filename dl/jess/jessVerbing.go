@@ -93,7 +93,7 @@ func (op *NamesVerbNames) GetVerb() string {
 }
 func (op *NamesVerbNames) Generate(ctx Context) (err error) {
 	if op.Names.HasAnonymousKind() {
-		err = errors.New("can't start phrase with an anonymous leading kind.")
+		err = errors.New("can't start phrase with an anonymous leading kind")
 	} else {
 		err = generateVerbPhrase(ctx, op)
 	}
@@ -141,7 +141,7 @@ func (op *NamesAreLikeVerbs) GetVerb() (ret string) {
 }
 func (op *NamesAreLikeVerbs) Generate(ctx Context) (err error) {
 	if op.Names.HasAnonymousKind() {
-		err = errors.New("can't start phrase with an anonymous leading kind.")
+		err = errors.New("can't start phrase with an anonymous leading kind")
 	} else {
 		err = generateVerbPhrase(ctx, op)
 	}

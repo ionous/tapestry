@@ -129,5 +129,5 @@ func getKindOfName(at *Names) (ret string) {
 	}
 }
 
-const countedKindMsg = `Defining a new kind using a leading number is prohibited. 
-If you're sure you'd like a number to be part of the name, use "called the" instead.`
+const countedKindMsg = `defining a new kind using a leading number is prohibited. 
+If you're sure you'd like a number to be part of the name, use "called the" instead`
