@@ -1,37 +1,11 @@
 package generate
 
 import (
-	"strings"
-	"unicode"
-	"unicode/utf8"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-// underscore_name to UnderscoreName
-func Pascal(s string) string {
-	var out strings.Builder
-	for _, p := range strings.Split(strings.ToLower(s), "_") {
-		if q, w := utf8.DecodeRuneInString(p); w > 0 {
-			out.WriteRune(unicode.ToUpper(q))
-			out.WriteString(p[w:])
-		}
-	}
-	return out.String()
-}
-
-// underscore_name to underscoreName
-func Camelize(s string) string {
-	var out strings.Builder
-	for _, p := range strings.Split(strings.ToLower(s), "_") {
-		if q, w := utf8.DecodeRuneInString(p); w > 0 {
-			if out.Len() > 0 {
-				q = unicode.ToUpper(q)
-			}
-			out.WriteRune(q)
-			out.WriteString(p[w:])
-		}
-	}
-	return out.String()
-}
+var Pascal = inflect.Pascal
+var Camelize = inflect.Camelize
 
 // does the passed string list include the passed string?
 func Includes(strs []string, str string) (ret bool) {

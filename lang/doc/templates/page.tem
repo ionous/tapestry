@@ -1,0 +1,45 @@
+{{/* sub templates */}}
+{{ define "header-link" }}
+<li>
+	<a href="#pkg-{{.}}">{{Capitalize .}}<a/>
+</li>
+{{ end }}
+{{ define "header-section" }}
+<h3 tabindex="-1" id="pkg-{{.}}" class="Doc-{{.}}Header">
+{{Capitalize .}}</h3>
+<section class="Doc-{{.}}">
+{{ end }}
+
+
+{{/*------------------ html header */}}
+<!-- {{ .Name }} -->
+
+{{/*------------------ overview */}}
+{{ template "header-section" "overview"}}
+	{{/* TODO: package description */}}
+	<ul class="Doc-index"> 
+	{{ if or .Str .Num }}
+	{{ template "header-link" "types"}}
+	{{ end }}
+	{{ if .Slot }}
+	{{ template "header-link" "slots"}}
+	{{ end }}
+	{{ if .Flow }}
+	{{ template "header-link" "commands"}}
+	{{ end }}
+	</ul>
+</section>
+
+{{/*------------------ body */}}
+{{ if or .Str .Num }}
+{{ template "header-section" "types"}}
+</section>
+{{ end }}
+{{ if .Slot }}
+{{ template "header-section" "slots"}}
+</section>
+{{ end }}
+{{ if .Flow }}
+{{ template "header-section" "commands"}}
+</section>
+{{ end }}

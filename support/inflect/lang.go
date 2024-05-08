@@ -3,6 +3,7 @@ package inflect
 import (
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/ionous/inflect"
 )
@@ -21,6 +22,33 @@ func Pluralize(s string) (ret string) {
 		ret = inflect.Pluralize(s)
 	}
 	return
+}
+
+// underscore_name to UnderscoreName
+func Pascal(s string) string {
+	var out strings.Builder
+	for _, p := range strings.Split(strings.ToLower(s), "_") {
+		if q, w := utf8.DecodeRuneInString(p); w > 0 {
+			out.WriteRune(unicode.ToUpper(q))
+			out.WriteString(p[w:])
+		}
+	}
+	return out.String()
+}
+
+// underscore_name to underscoreName
+func Camelize(s string) string {
+	var out strings.Builder
+	for _, p := range strings.Split(strings.ToLower(s), "_") {
+		if q, w := utf8.DecodeRuneInString(p); w > 0 {
+			if out.Len() > 0 {
+				q = unicode.ToUpper(q)
+			}
+			out.WriteRune(q)
+			out.WriteString(p[w:])
+		}
+	}
+	return out.String()
 }
 
 // Capitalize returns a new string, starting the first word with a capital.

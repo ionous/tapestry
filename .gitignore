@@ -20,6 +20,5 @@ cmd/tap/tap.db
 www/dist
 *.zip
 _docs/themes
-content/stories/coins.tell
-content/stories/space.tell
 _docs
+cmd/doc/doc
