@@ -4,16 +4,11 @@ import (
 	"embed"
 	"html/template"
 
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 //go:embed templates/*
 var tempFS embed.FS
-
-type PageInfo struct {
-	typeinfo.TypeSet
-}
 
 func docTemplates() (*template.Template, error) {
 	funcMap := template.FuncMap{

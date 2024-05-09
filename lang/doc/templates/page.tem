@@ -4,42 +4,52 @@
 	<a href="#pkg-{{.}}">{{Capitalize .}}<a/>
 </li>
 {{ end }}
+
 {{ define "header-section" }}
 <h3 tabindex="-1" id="pkg-{{.}}" class="Doc-{{.}}Header">
 {{Capitalize .}}</h3>
 <section class="Doc-{{.}}">
 {{ end }}
 
+{{ define "source-link" }}
+{{/* could maybe record the source line when generating the types;
+search the generated go ( with go ast, or something );
+or maybe generate a website search query? */}}
+https://git.sr.ht/~ionous/tapestry/tree/main/item/dl/story/story_types.go#L14
+{{end}}
 
 {{/*------------------ html header */}}
-<!-- {{ .Name }} -->
+<h1>{{ .Slot.Name }}</h1>
 
-{{/*------------------ overview */}}
-{{ template "header-section" "overview"}}
-	{{/* TODO: package description */}}
-	<ul class="Doc-index"> 
-	{{ if or .Str .Num }}
-	{{ template "header-link" "types"}}
-	{{ end }}
-	{{ if .Slot }}
-	{{ template "header-link" "slots"}}
-	{{ end }}
-	{{ if .Flow }}
-	{{ template "header-link" "commands"}}
-	{{ end }}
-	</ul>
-</section>
-
-{{/*------------------ body */}}
-{{ if or .Str .Num }}
-{{ template "header-section" "types"}}
-</section>
-{{ end }}
-{{ if .Slot }}
-{{ template "header-section" "slots"}}
-</section>
-{{ end }}
-{{ if .Flow }}
 {{ template "header-section" "commands"}}
+{{ range $k, $v := .Part }}
+<div class="Doc-partition">
+<h4 tabindex="-1" id="Fmt" data-kind="partition" class="Doc-partitionHeader">
+    <span>{{Pascal $k}}</span>
+</h4>
+	{{ range $i, $cmd := $v.Types }}
+	{{/* Signature */}}
+	<span>
+	- {{ Pascal $cmd.Lede }}
+	{{- range $cmd.Terms }}{{ if not .Private }}
+	{{- if .Optional }}[{{end}}
+	{{- if .Label}} {{ .Label }}{{end}}: <{{.Type.TypeName}}>
+	{{- if .Optional }}] {{end}}
+	{{- end }}{{ end }}{{/* public terms  */}}
+	</span>
+	{{/* Slot UL */}}
+	{{ if $cmd.Slots }}<ul>
+		{{ range $cmd.Slots }}
+		<li>{{.Name}}
+		</li>
+		{{ end }}{{/* range slots */}}
+	</ul>{{ end }}{{/* if slots */}}
+	{{/* Comment */}}
+	{{/*  */}}
+	<div>
+
+	</div>
+	{{end }}{{ end }}{{/* $i, $cmd */}}
+</div>
+{{/* .Part */}}
 </section>
-{{ end }}
