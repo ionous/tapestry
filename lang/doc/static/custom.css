@@ -14,3 +14,7 @@
 .Doc-commandSlots  li:last-child::after {
   content: "";
 }
+
+.Doc-commandArgs {
+  list-style-type: '- ';
+}

@@ -1,98 +1,89 @@
-{{/*-------------------------------------------------
-sub templates 
--------------------------------------------------*/}}
-{{/* note can reference globals with $.Name */}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#375EAB">
+	<title>{{ Titlecase .Slot.Name }} - Tapestry Documentation </title>
+	<link type="text/css" rel="stylesheet" href="style.css">
+	<link type="text/css" rel="stylesheet" href="custom.css">
+</head>
+<body>
+	{{/* -------------------------------------------------
+	navigation 
+	-------------------------------------------------	*/}}
+	<div id="topbar" class="wide"><div class="container">
+		<div class="top-heading" > Tapestry Documentation </div>
+	</div></div>
 
-{{ define "header-link" }}
-<li>
-<a href="#pkg-{{.}}">{{Capitalize .}}<a/>
-</li>
-{{ end }}
+	{{/* -------------------------------------------------
+	page container
+	-------------------------------------------------	*/}}
+	<div id="page" class="wide" style="outline: 0px;">
+		<div class="container">
 
-{{ define "header-section" }}
+			<h1>{{ Titlecase .Slot.Name }}</h1>
 
-{{ end }}
-
-{{ define "source-link" }}{{/* expects a flow pointer */}}
-<a class="Doc-source" href="{{ .SourceLink }}">
-{{end}}
-
-{{ define "type-link" }}{{/* expects a typeinfo.T */}}
-<a class="Doc-type" href="{{ TypeLink . }}">
-{{end}}
-
-	{{/*-------------------------------------------------
-	html header 
-	------------------------------------------------- */}}
-	<!DOCTYPE html>
-	<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="theme-color" content="#375EAB">
-		<title>{{ Titlecase .Slot.Name }} - Tapestry Documentation </title>
-		<link type="text/css" rel="stylesheet" href="style.css">
-		<link type="text/css" rel="stylesheet" href="custom.css">
-	</head>
-	<body>
-		{{/* -------------------------------------------------
-		navigation 
-		-------------------------------------------------	*/}}
-		<div id="topbar" class="wide"><div class="container">
-			<div class="top-heading" > Tapestry Documentation </div>
-		</div></div>
-
-		{{/* -------------------------------------------------
-		page container
-		-------------------------------------------------	*/}}
-		<div id="page" class="wide" tabindex="-1" style="outline: 0px;">
-			<div class="container">
-
-				<h1>{{ Titlecase .Slot.Name }}</h1>
-
-				<h3 tabindex="-1" id="pkg-commands" class="Doc-commandsHeader">
-					Commands
-				</h3>
-				<section class="Doc-commnds">
+			<h3 id="pkg-commands" class="Doc-commandsHeader">
+				Commands:
+			</h3>
+			<section class="Doc-commnds">
 				{{ range $k, $v := .Part }}
 				<div class="Doc-partition">
-					<h4 tabindex="-1" id="Fmt" data-kind="partition" class="Doc-partitionHeader">
-						<span>{{Pascal $k}}</span>
-					</h4>
+					<h2 id="Fmt" data-kind="partition" class="Doc-partitionHeader">
+						{{Pascal $k}}
+					</h2>
 					{{ range $i, $cmd := $v.Types }}
+					{{ if $i }}<hr>{{end }}
 					{{/* Signature */}}
-					<span class="Doc-commandSignature">
-						{{ template "source-link" $cmd }}{{ Pascal $cmd.Lede }}
+					<span class="Doc-commandComment">
+						{{ Lines $cmd.Markup.comment }}
+					</span>
+					<div class="Doc-commandSignature">
+						<pre><a class="Doc-source" href="{{ .SourceLink }}">
+						{{- Pascal $cmd.Lede }}
 						{{- range $i, $t := $cmd.Terms }}
 						{{- if $t.Optional }}[{{end}}
-						{{- if $t.Label}} {{ $t.Label }}{{end}}:
-					{{- if  not $i}}</a>{{end}} {{ template "type-link" $t.Type }}<{{ Pascal $t.Type.TypeName}}></a>
-						{{- if $t.Optional }}] {{end}}
-						{{- end }}{{/* public terms  */}}
-					</span>
-					<span class="Doc-commandComment">
-							{{ Lines $cmd.Markup.comment }}
-					</span>
+						{{- if $t.Label}}
+						{{- if not $i}} {{end}} 
+						{{- $t.Label }}
+						{{- end }}:
+						{{- if $t.Optional }}]{{end}}
+						{{- end }}{{/* public terms  */ -}}
+						</a></pre>
+					</div>
+
 					<div class="Doc-commandBody">
-						Returns:
+						Terms:
+						<ul class="Doc-commandArgs">
+						{{- range $i, $t := $cmd.Terms }}
+							<li>
+								<span class="Doc-argLabel">
+								{{- if $t.Label}}{{ $t.Label }}{{ else }}
+								{{ Pascal $cmd.Lede }}
+								{{- end -}}
+								</span><span class="Doc-argSep">:</span>
+								<span class="Doc-argType">
+								<a class="Doc-type" href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
+								</span>
+							</li>
+						{{- end }}{{/* public terms  */}}
+						</ul>
 						{{/* Slot UL */}}
 						{{ if $cmd.Slots }}
+						Slots:
 						<ul class="Doc-commandSlots">
 							{{ range $cmd.Slots }}
-							<li>{{.Name}}</li>
+							<li><a class="Doc-type" href="{{ TypeLink  . }}">{{ Pascal .Name}}</a>
+								</span></li>
 							{{ end }}{{/* range slots */}}
 						</ul>{{ end }}{{/* if slots */}}
-						{{/* Comment */}}
-						{{ if $cmd.Markup.comment }}
-
-						{{ end }}
-						{{/*  */}}
 					</div>
 
 					{{end }}{{ end }}{{/* $i, $cmd */}}
 				</div>
 				{{/* .Part */}}
-				</section>
+			</section>
 
 			{{/*-------------------------------------------------
 			footer
