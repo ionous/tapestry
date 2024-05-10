@@ -3,17 +3,35 @@ package doc
 import (
 	"embed"
 	"html/template"
+	"log"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 //go:embed templates/*
-var tempFS embed.FS
+var temFS embed.FS
 
 func docTemplates() (*template.Template, error) {
 	funcMap := template.FuncMap{
 		"Pascal":     inflect.Pascal,
 		"Capitalize": inflect.Capitalize,
+		"Titlecase":  inflect.Titlecase,
+		"Lines": func(str any) (ret string) {
+			switch str := str.(type) {
+			case string:
+				ret = str
+			case []any:
+				ret, _ = compact.JoinLines(str)
+			case nil:
+				// ?
+			default:
+				log.Panicf("unknown string type %T", str)
+			}
+			return
+		},
+
+		"TypeLink": TypeLink,
 		// "Encode": func(v any) (ret string) {
 		// 	return fmt.Sprintf("%#v", v)
 		// },
@@ -63,5 +81,5 @@ func docTemplates() (*template.Template, error) {
 		// 	return
 		// },
 	}
-	return template.New("").Funcs(funcMap).ParseFS(tempFS, "templates/*.tem")
+	return template.New("").Funcs(funcMap).ParseFS(temFS, "templates/*.tem")
 }

@@ -1,55 +1,113 @@
-{{/* sub templates */}}
+{{/*-------------------------------------------------
+sub templates 
+-------------------------------------------------*/}}
+{{/* note can reference globals with $.Name */}}
+
 {{ define "header-link" }}
 <li>
-	<a href="#pkg-{{.}}">{{Capitalize .}}<a/>
+<a href="#pkg-{{.}}">{{Capitalize .}}<a/>
 </li>
 {{ end }}
 
 {{ define "header-section" }}
-<h3 tabindex="-1" id="pkg-{{.}}" class="Doc-{{.}}Header">
-{{Capitalize .}}</h3>
-<section class="Doc-{{.}}">
+
 {{ end }}
 
-{{ define "source-link" }}
-{{/* could maybe record the source line when generating the types;
-search the generated go ( with go ast, or something );
-or maybe generate a website search query? */}}
-https://git.sr.ht/~ionous/tapestry/tree/main/item/dl/story/story_types.go#L14
+{{ define "source-link" }}{{/* expects a flow pointer */}}
+<a class="Doc-source" href="{{ .SourceLink }}">
 {{end}}
 
-{{/*------------------ html header */}}
-<h1>{{ .Slot.Name }}</h1>
+{{ define "type-link" }}{{/* expects a typeinfo.T */}}
+<a class="Doc-type" href="{{ TypeLink . }}">
+{{end}}
 
-{{ template "header-section" "commands"}}
-{{ range $k, $v := .Part }}
-<div class="Doc-partition">
-<h4 tabindex="-1" id="Fmt" data-kind="partition" class="Doc-partitionHeader">
-    <span>{{Pascal $k}}</span>
-</h4>
-	{{ range $i, $cmd := $v.Types }}
-	{{/* Signature */}}
-	<span>
-	- {{ Pascal $cmd.Lede }}
-	{{- range $cmd.Terms }}{{ if not .Private }}
-	{{- if .Optional }}[{{end}}
-	{{- if .Label}} {{ .Label }}{{end}}: <{{.Type.TypeName}}>
-	{{- if .Optional }}] {{end}}
-	{{- end }}{{ end }}{{/* public terms  */}}
-	</span>
-	{{/* Slot UL */}}
-	{{ if $cmd.Slots }}<ul>
-		{{ range $cmd.Slots }}
-		<li>{{.Name}}
-		</li>
-		{{ end }}{{/* range slots */}}
-	</ul>{{ end }}{{/* if slots */}}
-	{{/* Comment */}}
-	{{/*  */}}
-	<div>
+	{{/*-------------------------------------------------
+	html header 
+	------------------------------------------------- */}}
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#375EAB">
+		<title>{{ Titlecase .Slot.Name }} - Tapestry Documentation </title>
+		<link type="text/css" rel="stylesheet" href="style.css">
+		<link type="text/css" rel="stylesheet" href="custom.css">
+	</head>
+	<body>
+		{{/* -------------------------------------------------
+		navigation 
+		-------------------------------------------------	*/}}
+		<div id="topbar" class="wide"><div class="container">
+			<div class="top-heading" > Tapestry Documentation </div>
+		</div></div>
 
-	</div>
-	{{end }}{{ end }}{{/* $i, $cmd */}}
-</div>
-{{/* .Part */}}
-</section>
+		{{/* -------------------------------------------------
+		page container
+		-------------------------------------------------	*/}}
+		<div id="page" class="wide" tabindex="-1" style="outline: 0px;">
+			<div class="container">
+
+				<h1>{{ Titlecase .Slot.Name }}</h1>
+
+				<h3 tabindex="-1" id="pkg-commands" class="Doc-commandsHeader">
+					Commands
+				</h3>
+				<section class="Doc-commnds">
+				{{ range $k, $v := .Part }}
+				<div class="Doc-partition">
+					<h4 tabindex="-1" id="Fmt" data-kind="partition" class="Doc-partitionHeader">
+						<span>{{Pascal $k}}</span>
+					</h4>
+					{{ range $i, $cmd := $v.Types }}
+					{{/* Signature */}}
+					<span class="Doc-commandSignature">
+						{{ template "source-link" $cmd }}{{ Pascal $cmd.Lede }}
+						{{- range $i, $t := $cmd.Terms }}
+						{{- if $t.Optional }}[{{end}}
+						{{- if $t.Label}} {{ $t.Label }}{{end}}:
+					{{- if  not $i}}</a>{{end}} {{ template "type-link" $t.Type }}<{{ Pascal $t.Type.TypeName}}></a>
+						{{- if $t.Optional }}] {{end}}
+						{{- end }}{{/* public terms  */}}
+					</span>
+					<span class="Doc-commandComment">
+							{{ Lines $cmd.Markup.comment }}
+					</span>
+					<div class="Doc-commandBody">
+						Returns:
+						{{/* Slot UL */}}
+						{{ if $cmd.Slots }}
+						<ul class="Doc-commandSlots">
+							{{ range $cmd.Slots }}
+							<li>{{.Name}}</li>
+							{{ end }}{{/* range slots */}}
+						</ul>{{ end }}{{/* if slots */}}
+						{{/* Comment */}}
+						{{ if $cmd.Markup.comment }}
+
+						{{ end }}
+						{{/*  */}}
+					</div>
+
+					{{end }}{{ end }}{{/* $i, $cmd */}}
+				</div>
+				{{/* .Part */}}
+				</section>
+
+			{{/*-------------------------------------------------
+			footer
+			------------------------------------------------- */}}
+			<div id="footer">
+				<b>Tapestry - a story engine for games.</b><br>
+				The content of this page is licensed under the Creative Commons Attribution 3.0 License, and code is licensed under a BSD license.<br>
+				Portions of this page are modifications based on work created and <a href="/readme/policies">shared by Google</a> and used according to terms described in the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons 4.0 Attribution License</a>.<br>
+
+			</div>
+
+			{{/*-------------------------------------------------
+			end
+			------------------------------------------------- */}}
+		</div>{{/*container*/}}
+	</div>{{/*page*/}}
+</body>
+</html>

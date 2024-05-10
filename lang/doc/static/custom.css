@@ -1,0 +1,16 @@
+
+.Doc-commandSlots  {
+  display: inline;
+  list-style: none;
+  padding: 0px;
+}
+.Doc-commandSlots  li {
+  display: inline;
+}
+
+.Doc-commandSlots  li::after {
+  content: ", ";
+}
+.Doc-commandSlots  li:last-child::after {
+  content: "";
+}

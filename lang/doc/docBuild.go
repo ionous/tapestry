@@ -2,21 +2,33 @@
 package doc
 
 import (
+	"embed"
 	"html/template"
 	"io"
+	"io/fs"
+	"log"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 const ext = ".html"
+const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry@v0.24.4-1"
+
+//go:embed static/*
+var staticFS embed.FS
 
 // outDir can point to a temp directory if need be
 func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
-	if e := os.MkdirAll(outDir, os.ModePerm); e != nil {
+	if tem, e := docTemplates(); e != nil {
 		err = e
-	} else if tem, e := docTemplates(); e != nil {
+	} else if e := os.MkdirAll(outDir, os.ModePerm); e != nil {
+		err = e
+	} else if e := CopyStaticFiles(outDir); e != nil {
 		err = e
 	} else {
 		slots := make(SlotMap)
@@ -25,7 +37,9 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 		}
 		//
 		for slot, part := range slots {
-			outFile := filepath.Join(outDir, slot.Name+ext)
+			// fix: maybe some directories instead leading underscore?
+			// ( something is needed to avoid collision with str/num types )
+			outFile := filepath.Join(outDir, "slot_"+slot.Name+ext)
 			if fp, e := os.Create(outFile); e != nil {
 				err = e
 				break
@@ -39,6 +53,19 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 	return
 }
 
+func CopyStaticFiles(outDir string) (err error) {
+	for _, fileName := range []string{"style.css", "custom.css"} {
+		if b, e := fs.ReadFile(staticFS, "static/"+fileName); e != nil {
+			err = e
+		} else if fp, e := os.Create(filepath.Join(outDir, fileName)); e != nil {
+			err = e
+		} else {
+			_, err = fp.Write(b)
+		}
+	}
+	return
+}
+
 func SlotPage(w io.Writer, tem *template.Template, slot *typeinfo.Slot, part PartitionMap) error {
 	return tem.ExecuteTemplate(w, "page.tem", struct {
 		Slot *typeinfo.Slot
@@ -46,14 +73,6 @@ func SlotPage(w io.Writer, tem *template.Template, slot *typeinfo.Slot, part Par
 	}{
 		slot, part,
 	})
-}
-
-func groupByLede(types typeinfo.TypeSet) PartitionMap {
-	out := make(PartitionMap)
-	for _, t := range types.Flow {
-		out.addFlow(t)
-	}
-	return out
 }
 
 // - split everything into slots
@@ -65,7 +84,9 @@ func splitBySlot(out SlotMap, types typeinfo.TypeSet) {
 				m = make(PartitionMap)
 				out[slot] = m
 			}
-			m.addFlow(t)
+			// fix:
+			pkgName, pkgPath := types.Name, "dl/"+types.Name
+			m.addFlow(t, pkgName, pkgPath)
 		}
 	}
 }
@@ -74,10 +95,10 @@ type SlotMap map[*typeinfo.Slot]PartitionMap
 
 type PartitionMap map[string]Partition
 
-func (m *PartitionMap) addFlow(t *typeinfo.Flow) {
+func (m *PartitionMap) addFlow(t *typeinfo.Flow, pkgName, pkgPath string) {
 	if t.Lede != "--" {
 		cat := (*m)[t.Lede]
-		cat.addFlow(t)
+		cat.addFlow(t, pkgName, pkgPath)
 		(*m)[t.Lede] = cat
 	}
 }
@@ -88,10 +109,60 @@ type Partition struct {
 	// alt: sort by label
 }
 
-func (cat *Partition) addFlow(t *typeinfo.Flow) {
-	cat.Types = append(cat.Types, Command{t})
+func (cat *Partition) addFlow(t *typeinfo.Flow, pkgName, pkgPath string) {
+	cat.Types = append(cat.Types, Command{t, pkgName, pkgPath})
 }
 
 type Command struct {
 	*typeinfo.Flow
+	pkgName, pkgPath string
+}
+
+func (c Command) SourceLink() string {
+	// fix: need the package name
+	name := inflect.Pascal(c.Name)
+	return path.Join(SourceUrl, c.pkgPath+"#"+name)
+}
+
+func (c Command) Terms() (ret []typeinfo.Term) {
+	// filter out private terms;
+	for i, t := range c.Flow.Terms {
+		if t.Private && ret == nil {
+			ret = c.Flow.Terms[:i]
+		}
+		if !t.Private && ret != nil {
+			ret = append(ret, t)
+		}
+	}
+	if ret == nil {
+		ret = c.Flow.Terms
+	}
+	return
+}
+
+func TypeLink(t typeinfo.T) (ret string) {
+	name := t.TypeName()
+	pascal := inflect.Pascal(name)
+	switch t.(type) {
+	case *typeinfo.Flow:
+		// FIX!
+		// and are there types that dont implement a slot?
+		// probably
+
+	case *typeinfo.Slot:
+		ret = join("slot_", name, ext)
+
+	case *typeinfo.Str:
+		ret = join("type_str", ext, "#", pascal)
+	case *typeinfo.Num:
+		// hrm: extension links
+		ret = join("type_num", ext, "#", pascal)
+	default:
+		log.Panicf("unknown type %T", t)
+	}
+	return
+}
+
+func join(str ...string) string {
+	return strings.Join(str, "")
 }
