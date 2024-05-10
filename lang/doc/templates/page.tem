@@ -65,8 +65,7 @@
 						Slots:
 						<ul class="Doc-commandSlots">
 							{{ range $cmd.Slots }}
-							<li><a class="Doc-type" href="{{ TypeLink  . }}">{{ Pascal .Name}}</a>
-							</span></li>
+							<li><a class="Doc-type" href="{{ TypeLink . }}">{{ Pascal .Name}}</a></li>
 							{{ end }}{{/* range slots */}}
 						</ul>{{ end }}{{/* if slots */}}
 						<div>
