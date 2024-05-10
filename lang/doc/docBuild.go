@@ -3,8 +3,8 @@ package doc
 
 import (
 	"embed"
+	"fmt"
 	"html/template"
-	"io"
 	"io/fs"
 	"log"
 	"os"
@@ -22,8 +22,12 @@ const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry@v0.24.4-1"
 //go:embed static/*
 var staticFS embed.FS
 
+// hack
+var allTypes []typeinfo.TypeSet
+
 // outDir can point to a temp directory if need be
 func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
+	allTypes = idl
 	if tem, e := docTemplates(); e != nil {
 		err = e
 	} else if e := os.MkdirAll(outDir, os.ModePerm); e != nil {
@@ -34,21 +38,29 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 		slots := make(SlotMap)
 		for _, types := range idl {
 			splitBySlot(slots, types)
-		}
-		//
-		for slot, part := range slots {
-			// fix: maybe some directories instead leading underscore?
-			// ( something is needed to avoid collision with str/num types )
-			outFile := filepath.Join(outDir, "slot_"+slot.Name+ext)
-			if fp, e := os.Create(outFile); e != nil {
+			os.Mkdir(filepath.Join(outDir, "package"), os.ModePerm)
+			outFile := filepath.Join(outDir, "package", types.Name+ext)
+			if e := Create(outFile, tem, map[string]any{
+				"Name":  types.Name,
+				"Types": types,
+			}); e != nil {
 				err = e
-				break
-			} else if e := SlotPage(fp, tem, slot, part); e != nil {
-				err = e
-				break
+				return // early out
 			}
 		}
-
+		//
+		os.Mkdir(filepath.Join(outDir, "slot"), os.ModePerm)
+		for slot, part := range slots {
+			outFile := filepath.Join(outDir, "slot", slot.Name+ext)
+			if e := Create(outFile, tem, map[string]any{
+				"Name": slot.Name,
+				"Slot": slot,
+				"Part": part,
+			}); e != nil {
+				err = e
+				return // early out
+			}
+		}
 	}
 	return
 }
@@ -66,13 +78,13 @@ func CopyStaticFiles(outDir string) (err error) {
 	return
 }
 
-func SlotPage(w io.Writer, tem *template.Template, slot *typeinfo.Slot, part PartitionMap) error {
-	return tem.ExecuteTemplate(w, "page.tem", struct {
-		Slot *typeinfo.Slot
-		Part PartitionMap
-	}{
-		slot, part,
-	})
+func Create(outFile string, tem *template.Template, data any) (err error) {
+	if fp, e := os.Create(outFile); e != nil {
+		err = e
+	} else if e := tem.ExecuteTemplate(fp, "page.tem", data); e != nil {
+		err = fmt.Errorf("%w writing %s", e, outFile)
+	}
+	return
 }
 
 // - split everything into slots
@@ -144,21 +156,59 @@ func TypeLink(t typeinfo.T) (ret string) {
 	name := t.TypeName()
 	pascal := inflect.Pascal(name)
 	switch t.(type) {
-	case *typeinfo.Flow:
-		// FIX!
-		// and are there types that dont implement a slot?
-		// probably
-
-	case *typeinfo.Slot:
-		ret = join("slot_", name, ext)
-
-	case *typeinfo.Str:
-		ret = join("type_str", ext, "#", pascal)
-	case *typeinfo.Num:
-		// hrm: extension links
-		ret = join("type_num", ext, "#", pascal)
 	default:
 		log.Panicf("unknown type %T", t)
+	case *typeinfo.Slot:
+		ret = join("../slot/", name, ext)
+
+	case *typeinfo.Flow:
+		var idl string
+	Flow:
+		for _, t := range allTypes {
+			for _, el := range t.Flow {
+				if el.Name == name {
+					idl = t.Name
+					break Flow
+				}
+			}
+		}
+		if len(idl) == 0 {
+			log.Panicf("couldnt find flow for %s", name)
+		}
+		ret = join("../package/", idl, ext, "#", pascal)
+
+	case *typeinfo.Str:
+		var idl string
+	Str:
+		for _, t := range allTypes {
+			for _, el := range t.Str {
+				if el.Name == name {
+					idl = t.Name
+					break Str
+				}
+			}
+		}
+		if len(idl) == 0 {
+			log.Panicf("couldnt find str for %s", name)
+		}
+		ret = join("../package/", idl, ext, "#", pascal)
+
+	case *typeinfo.Num:
+		var idl string
+	Num:
+		for _, t := range allTypes {
+			for _, el := range t.Num {
+				if el.Name == name {
+					idl = t.Name
+					break Num
+				}
+			}
+		}
+		if len(idl) == 0 {
+			log.Panicf("couldnt find num for %q", name)
+		}
+		ret = join("../package/", idl, ext, "#", pascal)
+
 	}
 	return
 }

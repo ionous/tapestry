@@ -52,29 +52,12 @@ pre .ln {
   width: 8ch;
 }
 
-a,
-.exampleHeading .text,
-.expandAll {
+a {
   color: #375EAB;
   text-decoration: none;
 }
-a:hover,
-.exampleHeading .text:hover,
-.expandAll:hover {
+a:hover {
   text-decoration: underline;
-}
-.article a {
-  text-decoration: underline;
-}
-.article .title a {
-  text-decoration: none;
-}
-
-.permalink {
-  display: none;
-}
-:hover > .permalink {
-  display: inline;
 }
 
 p, li {
@@ -162,23 +145,6 @@ div#nav table td {
   vertical-align: top;
 }
 
-#pkg-index h3 {
-  font-size: 1rem;
-}
-.pkg-dir {
-  padding: 0 0.625rem;
-}
-.pkg-dir table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-.pkg-name {
-  padding-right: 0.625rem;
-}
-.alert {
-  color: #AA0000;
-}
-
 .top-heading {
   float: left;
   padding: 1.313rem 0;
@@ -190,19 +156,6 @@ div#nav table td {
   text-decoration: none;
 }
 
-#pkg-examples h3 {
-  float: left;
-}
-
-#pkg-examples dl {
-  clear: both;
-}
-
-.expandAll {
-  cursor: pointer;
-  float: left;
-  margin: 1.25rem 0;
-}
 
 div#topbar {
   background: #E0EBF5;
@@ -228,11 +181,6 @@ div#page.wide > .container,
 div#topbar.wide > .container {
   max-width: none;
 }
-div#plusone {
-  float: right;
-  clear: right;
-  margin-top: 0.3125rem;
-}
 
 div#footer {
   text-align: center;
@@ -241,45 +189,6 @@ div#footer {
   margin: 2.5rem 0;
 }
 
-div#menu > a,
-input#search,
-div#learn .buttons a,
-div.play .buttons a,
-div#blog .read a,
-#menu-button {
-  padding: 0.625rem;
-
-  text-decoration: none;
-  font-size: 1rem;
-  border-radius: 0.3125rem;
-}
-div#playground .buttons a,
-div#menu > a,
-input#search,
-#menu-button {
-  border: 0.0625rem solid #375EAB;
-}
-div#playground .buttons a,
-div#menu > a,
-#menu-button {
-  color: white;
-  background: #375EAB;
-}
-#playgroundButton.active {
-  background: white;
-  color: #375EAB;
-}
-a#start,
-div#learn .buttons a,
-div.play .buttons a,
-div#blog .read a {
-  color: #222;
-  border: 0.0625rem solid #375EAB;
-  background: #E0EBF5;
-}
-.download {
-  width: 9.375rem;
-}
 
 div#menu {
   text-align: right;

@@ -1,0 +1,53 @@
+<h1>Slot {{ Title .Slot.Name }}</h1>
+
+<h3 id="pkg-commands" class="Doc-commandsHeader">
+	Commands:
+</h3>
+<section class="Doc-commands">
+	{{ range $k, $v := .Part }}
+	<div class="Doc-partition">
+		{{ range $i, $cmd := $v.Types }}
+		<h2 id="{{$cmd.Name}}">
+			{{- template "command-title" $cmd -}}
+		</h2>
+		{{/* Signature */}}
+		<span class="Doc-commandComment">
+			{{ Lines $cmd.Markup.comment }}
+		</span>
+		<div class="Doc-commandSignature">
+			<pre><a class="Doc-source" href="{{ .SourceLink }}">
+			{{- template "command-spec" $cmd -}}
+			</a></pre>
+		</div>
+
+		<div class="Doc-commandBody">
+			{{/* Slot UL */}}
+			{{ if $cmd.Slots }}
+			Slots:
+			<ul class="Doc-commandSlots">
+				{{ range $cmd.Slots }}
+				<li><a class="Doc-type" href="{{ TypeLink . }}">{{ Pascal .Name}}</a></li>
+				{{ end }}{{/* range slots */}}
+			</ul>{{ end }}{{/* if slots */}}
+			<div>
+				Terms:
+				<ul class="Doc-commandArgs">
+					{{- range $i, $t := $cmd.Terms }}
+					<li>
+						<span class="Doc-argLabel">
+							{{- if $t.Label}}{{ Camel $t.Label }}{{ else }}
+							{{ Pascal $cmd.Lede }}
+							{{- end -}}:
+						</span>
+						<span class="Doc-argType">
+							<a class="Doc-type" href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
+						</span>
+					</li>
+					{{- end }}{{/* public terms  */}}
+				</ul>
+			</div>
+		</div>
+		{{end }}{{ end }}{{/* $i, $cmd */}}
+	</div>
+	{{/* .Part */}}
+</section>

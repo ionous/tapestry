@@ -1,0 +1,80 @@
+<h1>Package {{ Title .Name }}</h1>
+{{/* -------------------------------------------------
+types 
+-------------------------------------------------	*/}}
+{{ if .Types.Num  }}
+<h3>
+	Number Types:
+</h3>
+<section>
+	{{ range .Types.Num }}
+	<h2 id="{{ .Name }}">
+		{{ Title .Name }}</a>
+	</h2>
+	{{ Lines .Markup.comment }}
+	{{ end }}
+</section>
+{{ end }}
+
+{{/* -------------------------------------------------
+types 
+-------------------------------------------------	*/}}
+{{ if .Types.Str  }}
+<h3>
+	String Types:
+</h3>
+<section>
+	{{ range .Types.Str }}
+	<h2 id="{{ .Name }}">
+		{{ Title .Name }}</a>
+	</h2>
+	{{ Lines .Markup.comment }}
+	{{ if .Options }}
+	Options:
+		<ul>
+			{{ range .Options }}
+			<li>
+				"{{ . }}"
+			</li>
+			{{ end }}
+		</ul>
+	{{ end }}{{/* options */}}
+	{{ end }}
+</section>
+{{ end }}
+{{/* -------------------------------------------------
+slots 
+-------------------------------------------------	*/}}
+{{ if .Types.Slot }}
+<h3>
+	Slots:
+</h3>
+<section>
+	<ul>
+		{{ range .Types.Slot }}
+		<li>
+			<a href="../slot/{{.Name}}.html">{{ Title .Name }}</a>
+		</li>
+		{{ end }}
+	</ul>
+</section>
+{{ end }}
+{{/* -------------------------------------------------
+commands 
+-------------------------------------------------	*/}}
+{{ if .Types.Flow }}
+<h3>
+	Commands:
+</h3>
+<section>
+	<ul>
+		{{ range .Types.Flow }}
+		{{if .Slots }}
+		<li>
+			<a href="../slot/{{ (index .Slots 0).Name}}.html#{{.Name}}">{{ template "command-title" . }}</a>
+		</li>
+		{{ end }}
+		{{ end }}
+	</ul>
+</section>
+{{ end }}
