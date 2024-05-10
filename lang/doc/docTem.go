@@ -16,7 +16,8 @@ func docTemplates() (*template.Template, error) {
 	funcMap := template.FuncMap{
 		"Pascal":     inflect.Pascal,
 		"Capitalize": inflect.Capitalize,
-		"Titlecase":  inflect.Titlecase,
+		"Title":      inflect.Titlecase,
+		"Camel":      inflect.Camelize,
 		"Lines": func(str any) (ret string) {
 			switch str := str.(type) {
 			case string:

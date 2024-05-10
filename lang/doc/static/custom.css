@@ -3,6 +3,7 @@
   display: inline;
   list-style: none;
   padding: 0px;
+  margin: 0px;
 }
 .Doc-commandSlots  li {
   display: inline;
@@ -15,6 +16,29 @@
   content: "";
 }
 
+
 .Doc-commandArgs {
-  list-style-type: '- ';
+  display: flex;
+  flex-direction:column; 
+  margin: 0px;
+}
+
+.Doc-commandArgs li {
+  display: flex;
+  flex-direction: row; 
+}
+
+
+.Doc-commandArgs li  span {
+  padding-left:0.5em;
+}
+
+.Doc-commandArgs  li::before {
+  content: "-";
+}
+
+.Doc-argLabel {
+  min-width: 8em;
+  font-family: Menlo, monospace;
+  font-size: 0.875rem;
 }

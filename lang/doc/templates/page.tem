@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#375EAB">
-	<title>{{ Titlecase .Slot.Name }} - Tapestry Documentation </title>
+	<title>{{ Title .Slot.Name }} - Tapestry Documentation </title>
 	<link type="text/css" rel="stylesheet" href="style.css">
 	<link type="text/css" rel="stylesheet" href="custom.css">
 </head>
@@ -22,7 +22,7 @@
 	<div id="page" class="wide" style="outline: 0px;">
 		<div class="container">
 
-			<h1>{{ Titlecase .Slot.Name }}</h1>
+			<h1>{{ Title .Slot.Name }}</h1>
 
 			<h3 id="pkg-commands" class="Doc-commandsHeader">
 				Commands:
@@ -30,56 +30,63 @@
 			<section class="Doc-commnds">
 				{{ range $k, $v := .Part }}
 				<div class="Doc-partition">
-					<h2 id="Fmt" data-kind="partition" class="Doc-partitionHeader">
-						{{Pascal $k}}
-					</h2>
 					{{ range $i, $cmd := $v.Types }}
-					{{ if $i }}<hr>{{end }}
+					<h2 id="Fmt" data-kind="partition" class="Doc-partitionHeader">
+						{{- Pascal $cmd.Lede }}
+						{{- range $i, $t := $cmd.Terms }}
+						{{- if not $i }}
+						{{- if $t.Label }} 
+						{{ $t.Label }}
+						{{- end }} 
+						{{- end }}
+						{{- end }}
+					</h2>
 					{{/* Signature */}}
 					<span class="Doc-commandComment">
 						{{ Lines $cmd.Markup.comment }}
 					</span>
 					<div class="Doc-commandSignature">
 						<pre><a class="Doc-source" href="{{ .SourceLink }}">
-						{{- Pascal $cmd.Lede }}
-						{{- range $i, $t := $cmd.Terms }}
-						{{- if $t.Optional }}[{{end}}
-						{{- if $t.Label}}
-						{{- if not $i}} {{end}} 
-						{{- $t.Label }}
-						{{- end }}:
-						{{- if $t.Optional }}]{{end}}
-						{{- end }}{{/* public terms  */ -}}
+							{{- Pascal $cmd.Lede }}
+							{{- range $i, $t := $cmd.Terms }}
+							{{- if $t.Optional }}[{{end}}
+							{{- if $t.Label}}
+							{{- if not $i}} {{end}} 
+							{{- Camel $t.Label }}
+							{{- end }}:
+							{{- if $t.Optional }}]{{end}}
+							{{- end }}{{/* public terms  */ -}}
 						</a></pre>
 					</div>
 
 					<div class="Doc-commandBody">
-						Terms:
-						<ul class="Doc-commandArgs">
-						{{- range $i, $t := $cmd.Terms }}
-							<li>
-								<span class="Doc-argLabel">
-								{{- if $t.Label}}{{ $t.Label }}{{ else }}
-								{{ Pascal $cmd.Lede }}
-								{{- end -}}
-								</span><span class="Doc-argSep">:</span>
-								<span class="Doc-argType">
-								<a class="Doc-type" href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
-								</span>
-							</li>
-						{{- end }}{{/* public terms  */}}
-						</ul>
 						{{/* Slot UL */}}
 						{{ if $cmd.Slots }}
 						Slots:
 						<ul class="Doc-commandSlots">
 							{{ range $cmd.Slots }}
 							<li><a class="Doc-type" href="{{ TypeLink  . }}">{{ Pascal .Name}}</a>
-								</span></li>
+							</span></li>
 							{{ end }}{{/* range slots */}}
 						</ul>{{ end }}{{/* if slots */}}
+						<div>
+							Terms:
+							<ul class="Doc-commandArgs">
+								{{- range $i, $t := $cmd.Terms }}
+								<li>
+									<span class="Doc-argLabel">
+										{{- if $t.Label}}{{ Camel $t.Label }}{{ else }}
+										{{ Pascal $cmd.Lede }}
+										{{- end -}}:
+									</span>
+									<span class="Doc-argType">
+										<a class="Doc-type" href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
+									</span>
+								</li>
+								{{- end }}{{/* public terms  */}}
+							</ul>
+						</div>
 					</div>
-
 					{{end }}{{ end }}{{/* $i, $cmd */}}
 				</div>
 				{{/* .Part */}}
