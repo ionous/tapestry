@@ -18,6 +18,8 @@ import (
 
 const ext = ".html"
 const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry@v0.24.4-1"
+const typesFolder = "types"
+const slotsFolder = "slot"
 
 //go:embed static/*
 var staticFS embed.FS
@@ -38,8 +40,8 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 		slots := make(SlotMap)
 		for _, types := range idl {
 			splitBySlot(slots, types)
-			os.Mkdir(filepath.Join(outDir, "package"), os.ModePerm)
-			outFile := filepath.Join(outDir, "package", types.Name+ext)
+			os.Mkdir(filepath.Join(outDir, typesFolder), os.ModePerm)
+			outFile := filepath.Join(outDir, typesFolder, types.Name+ext)
 			if e := Create(outFile, tem, map[string]any{
 				"Name":  types.Name,
 				"Types": types,
@@ -49,9 +51,9 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 			}
 		}
 		//
-		os.Mkdir(filepath.Join(outDir, "slot"), os.ModePerm)
+		os.Mkdir(filepath.Join(outDir, slotsFolder), os.ModePerm)
 		for slot, part := range slots {
-			outFile := filepath.Join(outDir, "slot", slot.Name+ext)
+			outFile := filepath.Join(outDir, slotsFolder, slot.Name+ext)
 			if e := Create(outFile, tem, map[string]any{
 				"Name": slot.Name,
 				"Slot": slot,
@@ -159,7 +161,7 @@ func TypeLink(t typeinfo.T) (ret string) {
 	default:
 		log.Panicf("unknown type %T", t)
 	case *typeinfo.Slot:
-		ret = join("../slot/", name, ext)
+		ret = join("../"+slotsFolder+"/", name, ext)
 
 	case *typeinfo.Flow:
 		var idl string
@@ -175,7 +177,7 @@ func TypeLink(t typeinfo.T) (ret string) {
 		if len(idl) == 0 {
 			log.Panicf("couldnt find flow for %s", name)
 		}
-		ret = join("../package/", idl, ext, "#", pascal)
+		ret = join("../"+typesFolder+"/", idl, ext, "#", pascal)
 
 	case *typeinfo.Str:
 		var idl string
@@ -191,7 +193,7 @@ func TypeLink(t typeinfo.T) (ret string) {
 		if len(idl) == 0 {
 			log.Panicf("couldnt find str for %s", name)
 		}
-		ret = join("../package/", idl, ext, "#", pascal)
+		ret = join("../"+typesFolder+"/", idl, ext, "#", pascal)
 
 	case *typeinfo.Num:
 		var idl string
@@ -207,7 +209,7 @@ func TypeLink(t typeinfo.T) (ret string) {
 		if len(idl) == 0 {
 			log.Panicf("couldnt find num for %q", name)
 		}
-		ret = join("../package/", idl, ext, "#", pascal)
+		ret = join("../"+typesFolder+"/", idl, ext, "#", pascal)
 
 	}
 	return
