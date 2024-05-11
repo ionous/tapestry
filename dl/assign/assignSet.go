@@ -24,14 +24,14 @@ func (op *SetValue) setValue(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *SetTrait) Execute(run rt.Runtime) (err error) {
+func (op *SetState) Execute(run rt.Runtime) (err error) {
 	if e := op.setTrait(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *SetTrait) setTrait(run rt.Runtime) (err error) {
+func (op *SetState) setTrait(run rt.Runtime) (err error) {
 	if tgt, e := safe.GetText(run, op.Target); e != nil {
 		err = e
 	} else if trait, e := safe.GetText(run, op.Trait); e != nil {

@@ -16,7 +16,7 @@ import (
 )
 
 // (the) colors are red, blue, or green.
-func (op *DefineAspect) Weave(cat *weave.Catalog) error {
+func (op *DefineState) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if aspect, e := safe.GetText(run, op.Aspect); e != nil {
 			err = e

@@ -9,20 +9,20 @@ Tapestry:
         - Aspect: "name status"
         - Aspect: "tangibility"
         - Text: "printed name"
-  - Define aspect:traits:
+  - Define state:names:
       - "noun type"
       - - "common named"
         - "proper named"
         - "counted"
   - # when objects are publicly named, their name can appear in the output text.
     # by default, the names of privately named objects will never be displayed to the player.
-    Define aspect:traits:
+    Define state:names:
       - "name status"
       - - "publicly named"
         - "privately named"
   - # An object must be tangible in order to touch or interact with it.
     # A 'thing' is, by definition, a tangible object.
-    Define aspect:traits:
+    Define state:names:
       - "tangibility"
       - - "intangible"
         - "tangible"
@@ -41,7 +41,7 @@ Tapestry:
         - Bool: "mentioned"
         - Bool: "handled"
   - Declare: "Wearability is a kind of aspect."
-  - Define aspect:traits:
+  - Define state:names:
       - "wearability"
       - - "not wearable"
         - "wearable"
@@ -52,22 +52,22 @@ Tapestry:
       Openers are a kind of prop.
       """
   - Declare: "Open status is a kind of aspect."
-  - Define aspect:traits:
+  - Define state:names:
       - "open status"
       - - "open"
         - "closed"
   - Declare: "Openability is a kind of aspect."
-  - Define aspect:traits:
+  - Define state:names:
       - "openability"
       - - "unopenable"
         - "openable"
   - Declare: "Locked status are kinds of aspect."
-  - Define aspect:traits:
+  - Define state:names:
       - "locked status"
       - - "unlocked"
         - "locked"
   - Declare: "Lockable status are kinds of aspect."
-  - Define aspect:traits:
+  - Define state:names:
       - "lockable status"
       - - "lockable"
         - "unlockable"
@@ -80,7 +80,7 @@ Tapestry:
   - # 
     Declare: "Containers are kinds of opener."
   - Declare: "Opacity is a kind of aspect."
-  - Define aspect:traits:
+  - Define state:names:
       - "opacity"
       - - "opaque"
         - "transparent"

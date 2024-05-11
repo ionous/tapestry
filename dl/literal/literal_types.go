@@ -394,65 +394,6 @@ func (op *TextValues_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "literal",
-	Slot:       z_slot_list,
-	Flow:       z_flow_list,
-	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_LiteralValue,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_BoolValue,
-	&Zt_FieldValue,
-	&Zt_FieldList,
-	&Zt_NumValue,
-	&Zt_NumValues,
-	&Zt_RecordValue,
-	&Zt_RecordList,
-	&Zt_TextValue,
-	&Zt_TextValues,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
-	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
-	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
-	10808478223495627740: (*BoolValue)(nil),   /* bool_eval=Bool value:kind: */
-	3205100557739257174:  (*BoolValue)(nil),   /* literal_value=Bool value:kind: */
-	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
-	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
-	1356784465987892467:  (*NumValue)(nil),    /* number_eval=Num value: */
-	607468628506983640:   (*NumValue)(nil),    /* literal_value=Num value:kind: */
-	9731162713682842745:  (*NumValue)(nil),    /* number_eval=Num value:kind: */
-	12282038377752822419: (*NumValues)(nil),   /* literal_value=Num values: */
-	8089072108541894314:  (*NumValues)(nil),   /* num_list_eval=Num values: */
-	16844579494806292121: (*NumValues)(nil),   /* literal_value=Num values:kind: */
-	18166562587031464546: (*NumValues)(nil),   /* num_list_eval=Num values:kind: */
-	5942123174065535899:  (*RecordValue)(nil), /* literal_value=Record:fields: */
-	5794725022419893180:  (*RecordValue)(nil), /* record_eval=Record:fields: */
-	8711768526197034738:  (*RecordList)(nil),  /* literal_value=Record:values: */
-	14652198550804167624: (*RecordList)(nil),  /* record_list_eval=Record:values: */
-	13114183353368545439: (*TextValue)(nil),   /* literal_value=Text value: */
-	4705033170011872932:  (*TextValue)(nil),   /* text_eval=Text value: */
-	6339203747835692413:  (*TextValue)(nil),   /* literal_value=Text value:kind: */
-	18213962910681037476: (*TextValue)(nil),   /* text_eval=Text value:kind: */
-	2231933745037898906:  (*TextValues)(nil),  /* literal_value=Text values: */
-	5151885117815687006:  (*TextValues)(nil),  /* text_list_eval=Text values: */
-	4866602258857929938:  (*TextValues)(nil),  /* literal_value=Text values:kind: */
-	10847058762172166526: (*TextValues)(nil),  /* text_list_eval=Text values:kind: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -641,4 +582,63 @@ func init() {
 			"comment": "Text List: Specifies a set of text values.",
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "literal",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_LiteralValue,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_BoolValue,
+	&Zt_FieldValue,
+	&Zt_FieldList,
+	&Zt_NumValue,
+	&Zt_NumValues,
+	&Zt_RecordValue,
+	&Zt_RecordList,
+	&Zt_TextValue,
+	&Zt_TextValues,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
+	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
+	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
+	10808478223495627740: (*BoolValue)(nil),   /* bool_eval=Bool value:kind: */
+	3205100557739257174:  (*BoolValue)(nil),   /* literal_value=Bool value:kind: */
+	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
+	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
+	1356784465987892467:  (*NumValue)(nil),    /* number_eval=Num value: */
+	607468628506983640:   (*NumValue)(nil),    /* literal_value=Num value:kind: */
+	9731162713682842745:  (*NumValue)(nil),    /* number_eval=Num value:kind: */
+	12282038377752822419: (*NumValues)(nil),   /* literal_value=Num values: */
+	8089072108541894314:  (*NumValues)(nil),   /* num_list_eval=Num values: */
+	16844579494806292121: (*NumValues)(nil),   /* literal_value=Num values:kind: */
+	18166562587031464546: (*NumValues)(nil),   /* num_list_eval=Num values:kind: */
+	5942123174065535899:  (*RecordValue)(nil), /* literal_value=Record:fields: */
+	5794725022419893180:  (*RecordValue)(nil), /* record_eval=Record:fields: */
+	8711768526197034738:  (*RecordList)(nil),  /* literal_value=Record:values: */
+	14652198550804167624: (*RecordList)(nil),  /* record_list_eval=Record:values: */
+	13114183353368545439: (*TextValue)(nil),   /* literal_value=Text value: */
+	4705033170011872932:  (*TextValue)(nil),   /* text_eval=Text value: */
+	6339203747835692413:  (*TextValue)(nil),   /* literal_value=Text value:kind: */
+	18213962910681037476: (*TextValue)(nil),   /* text_eval=Text value:kind: */
+	2231933745037898906:  (*TextValues)(nil),  /* literal_value=Text values: */
+	5151885117815687006:  (*TextValues)(nil),  /* text_list_eval=Text values: */
+	4866602258857929938:  (*TextValues)(nil),  /* literal_value=Text values:kind: */
+	10847058762172166526: (*TextValues)(nil),  /* text_list_eval=Text values:kind: */
 }

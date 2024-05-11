@@ -4,7 +4,7 @@ Tapestry:
       - "reach test"
       - "Kitchenette"
       - - Declare: "An other worldly cloak is a thing."
-        - Comment: "it is nowhere."
+        - Note: "it is nowhere."
         - Declare: "You are in the cabinet."
       - - If:assuming:do:else:
             - Not:
@@ -32,7 +32,7 @@ Tapestry:
             - Finally do:
                 - Print: "okay: reached outside the open cabinet."
         - Expect output: "okay: reached outside the open cabinet."
-        - Set:trait:
+        - Set:state:
             - "espresso machine"
             - "open"
         - If:assuming:do:else:
@@ -48,7 +48,7 @@ Tapestry:
             - Finally do:
                 - Print: "okay: reached inside the open espresso machine."
         - Expect output: "okay: reached inside the open espresso machine."
-        - Set:trait:
+        - Set:state:
             - "cabinet"
             - "closed"
         - If:assuming:do:else:

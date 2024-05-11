@@ -79,7 +79,7 @@ Tapestry:
                 - Finally do:
                     - Print: "is"
   - #
-    Comment: "say the phrase of are not or is not ( depending on the plural of the noun )"
+    Note: "say the phrase of are not or is not ( depending on the plural of the noun )"
   - Define pattern:requires:provides:do:
       - "Are not"
       - - Text:kind:

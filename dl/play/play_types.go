@@ -191,42 +191,6 @@ var Zt_PlayModes = typeinfo.Str{
 	},
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "play",
-	Slot:       z_slot_list,
-	Flow:       z_flow_list,
-	Str:        z_str_list,
-	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_PlayMessage,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_PlayLog,
-	&Zt_PlayMode,
-	&Zt_PlayOut,
-}
-
-// a list of all strs in this this package
-var z_str_list = []*typeinfo.Str{
-	&Zt_PlayModes,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	17624726337788752012: (*PlayLog)(nil),  /* play_message=Play log: */
-	4988029522939467359:  (*PlayMode)(nil), /* play_message=Play mode: */
-	14741822345399231886: (*PlayOut)(nil),  /* play_message=Play out: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -275,4 +239,40 @@ func init() {
 			"comment": "output from the game itself.",
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "play",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Str:        z_str_list,
+	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_PlayMessage,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_PlayLog,
+	&Zt_PlayMode,
+	&Zt_PlayOut,
+}
+
+// a list of all strs in this this package
+var z_str_list = []*typeinfo.Str{
+	&Zt_PlayModes,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	17624726337788752012: (*PlayLog)(nil),  /* play_message=Play log: */
+	4988029522939467359:  (*PlayMode)(nil), /* play_message=Play mode: */
+	14741822345399231886: (*PlayOut)(nil),  /* play_message=Play out: */
 }

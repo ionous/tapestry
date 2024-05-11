@@ -276,41 +276,6 @@ var Zt_LoggingLevel = typeinfo.Str{
 	},
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "debug",
-	Flow:       z_flow_list,
-	Str:        z_str_list,
-	Signatures: z_signatures,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_DoNothing,
-	&Zt_Expect,
-	&Zt_ExpectOutput,
-	&Zt_ExpectText,
-	&Zt_Fabricate,
-	&Zt_DebugLog,
-}
-
-// a list of all strs in this this package
-var z_str_list = []*typeinfo.Str{
-	&Zt_LoggingLevel,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	15882152812809098721: (*DoNothing)(nil),    /* execute=-- */
-	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
-	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
-	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
-	12332403919453206336: (*Fabricate)(nil),    /* execute=Fabricate input: */
-	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -393,4 +358,39 @@ func init() {
 			"comment": "Debug log.",
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "debug",
+	Flow:       z_flow_list,
+	Str:        z_str_list,
+	Signatures: z_signatures,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_DoNothing,
+	&Zt_Expect,
+	&Zt_ExpectOutput,
+	&Zt_ExpectText,
+	&Zt_Fabricate,
+	&Zt_DebugLog,
+}
+
+// a list of all strs in this this package
+var z_str_list = []*typeinfo.Str{
+	&Zt_LoggingLevel,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	15882152812809098721: (*DoNothing)(nil),    /* execute=-- */
+	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
+	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
+	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
+	12332403919453206336: (*Fabricate)(nil),    /* execute=Fabricate input: */
+	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
 }

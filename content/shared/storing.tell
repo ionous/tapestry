@@ -95,7 +95,7 @@ Tapestry:
                       Say response:with:
                         - "can't insert something into itself"
                         - "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
-              - Comment: "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
+              - Note: "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
   - Define rule:do:
       - "can handle"
       - - If:do:
@@ -153,7 +153,7 @@ Tapestry:
                 - Not:
                     ProvidesStorage obj:
                       FromText: "@into_obj"
-            - - Comment: "Assuming we are able to reach the noun, check whether it actually provides storage."
+            - - Note: "Assuming we are able to reach the noun, check whether it actually provides storage."
               - Set:value:
                   - "@response"
                   - FromText:
@@ -171,7 +171,7 @@ Tapestry:
                 - KindOf:is:
                     - "@into_obj"
                     - "actors"
-            - - Comment:
+            - - Note:
                   - "If the target noun were owned by reaching actor then the actor would be the lca."
                   - "By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
               - Set:value:

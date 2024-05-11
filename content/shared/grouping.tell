@@ -171,7 +171,7 @@ Tapestry:
             - "group"
             - "object group"
         - TextList: "names"
-      - - Comment: "find the index of the matching group"
+      - - Note: "find the index of the matching group"
         - Repeating across:as:do:
             - FromRecordList: "@groups"
             - "el"
@@ -185,7 +185,7 @@ Tapestry:
                   - - Set:value:
                         - "@idx"
                         - FromNumber: "@index"
-        - Comment:
+        - Note:
             - "if there wasn't an existing group matching the object's settings:"
             - "create a new group."
         - If:do:else:
@@ -213,7 +213,7 @@ Tapestry:
                   - FromRecord: "@group"
                   - "@groups"
             - Finally do:
-                - Comment:
+                - Note:
                     - "found a matching group?"
                     - "unpack it, add the object name to it, then pack it up again."
                 - Set:value:

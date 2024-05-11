@@ -48,7 +48,7 @@ Tapestry:
             - "block depth"
             - During: "print block list"
       - - Say: "{.obj}"
-  - Comment: "Say the object's name ( and some object details. )"
+  - Note: "Say the object's name ( and some object details. )"
   - Define rule:do:
       - "print object"
       - - If:do:
@@ -145,7 +145,7 @@ Tapestry:
             - "kids"
             - VisibleStorage obj:
                 FromText: "@obj"
-  - Comment: "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
+  - Note: "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
   - Define rule:do:
       - "print details"
       - - If:do:

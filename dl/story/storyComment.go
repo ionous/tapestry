@@ -12,17 +12,17 @@ import (
 const activityDepth = "activityDepth"
 
 // Schedule - comment does nothing when imported.
-func (*Comment) Weave(*weave.Catalog) (_ error) {
+func (*Note) Weave(*weave.Catalog) (_ error) {
 	return
 }
 
 // Execute - panics. PreImport should turn it into a DebugLog.
-func (*Comment) Execute(rt.Runtime) (_ error) {
+func (*Note) Execute(rt.Runtime) (_ error) {
 	panic("story comment should have been replaced during weave")
 }
 
 // PreImport turns a comment statement into a debug log.
-func (op *Comment) PreImport(cat *weave.Catalog) (ret typeinfo.Instance, err error) {
+func (op *Note) PreImport(cat *weave.Catalog) (ret typeinfo.Instance, err error) {
 	if cat.Env.Inc(activityDepth, 0) == 0 {
 		ret = op
 	} else {

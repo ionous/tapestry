@@ -12,7 +12,7 @@ Tapestry:
             Two triangles are in the lab.
             An X, a W, an F, a Y, and a Z are scrabble tiles in the lab.
             """
-        - Comment:
+        - Note:
             - "fix? the rules for deciding whether something starts with a vowel ( and therefore should use indefinite article 'an' )"
             - "are defined by the \"starts with vowel\" pattern. so, even though, we've explicitly said \"an x\" in the declaration: that doesn't matter."
             - "ImportNouns() doesn't see the \"an\" as being special, and so doesn't get assign the noun a customized indefinite article."

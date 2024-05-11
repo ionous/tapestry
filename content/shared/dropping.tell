@@ -86,7 +86,7 @@ Tapestry:
                     - "equal_to"
                     - LocationOf obj:
                         FromText: "@noun"
-            - - Comment: "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
+            - - Note: "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
               - Set:value:
                   - "@response"
                   - FromText:

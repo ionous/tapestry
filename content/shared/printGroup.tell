@@ -29,7 +29,7 @@ Tapestry:
                 Variable:dot:
                   - "grouping"
                   - - AtField: "hide objects"
-            - - Comment: "print a bracketed list of objects"
+            - - Note: "print a bracketed list of objects"
               - If:do:else:
                   - Not:
                       Variable:dot:

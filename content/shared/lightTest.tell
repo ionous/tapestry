@@ -3,22 +3,22 @@ Tapestry:
   - Define test:requires:do:
       - "vision test"
       - "Kitchenette"
-      - - Set:trait:
+      - - Set:state:
             - "Kitchen"
             - "unlit"
         - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
         - Expect output: "ok: The cabinet is dark."
-        - Set:trait:
+        - Set:state:
             - "Kitchen"
             - "lit"
         - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
         - Expect output: "ok: The cabinet has light."
-        - Set:trait:
+        - Set:state:
             - "cabinet"
             - "closed"
         - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
         - Expect output: "ok: The cabinet is dark."
-        - Set:trait:
+        - Set:state:
             - "matches"
             - "lit"
         - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
@@ -30,13 +30,13 @@ Tapestry:
         - Define rule:noun:do:
             - "after activating"
             - "flashlight"
-            - - Set:trait:
+            - - Set:state:
                   - "flashlight"
                   - "lit"
         - Define rule:noun:do:
             - "after deactivating"
             - "flashlight"
-            - - Set:trait:
+            - - Set:state:
                   - "flashlight"
                   - "unlit"
       - - StartGame actor:quietly:

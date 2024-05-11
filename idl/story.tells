@@ -1,154 +1,161 @@
-# story
+# Story contains modeling commands used to define a game world. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.
+# Most authors will probably prefer the jess plain english style of modeling over these, more explicit, commands. However, there are some commands -- like defining scenes -- which don't currently have a corollary within jess.
 Spec:with group:
   - "story"
   - Group contains:
-      - # Add a note.
-        # Information about the story for you and other authors.
+      - # Phrase
+        Spec:with slot:
+          - "story_statement"
+          - Slot: true
+        blockly-stack: true
+        blockly-color: "VARIABLES_HUE"
+
+      - # top level node for story files.
         Spec:slots:groups:with flow:
-          - "comment"
+          - "story_file"
+          - # implements story_statement so flex can parse this element successfully.
+            "story_statement"
+          - "internal"
+          - Flow:phrase:uses:
+              - "tapestry"
+              - "{_$story_lines}"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "statements"
+                    - "story_statement"
+                    - true
+        blockly-color: "TAP_HUE_ROOT"
+        mosaic-root: true
+
+      - # a command with a signature of the comment marker metadata.
+        # a cheat to allows nodes that have only a comment marker and no actual command.
+        # see also: debug.do_nothing
+        Spec:slots:with flow:
+          - "story_break"
+          - "story_statement"
+          - Flow:uses:
+              - "--"
+              - []
+
+      - # Adds documentation about the story for you and other authors.
+        # Notes can used as a modeling commands, or as part of an execute block.
+        # And, they are created automatically from hash-style comments (#) encountered within the plain text sections of tell files.
+        # When used in an execute block, notes become {"Log:value:"} commands.
+        Spec:slots:groups:with flow:
+          - "note"
           - - "story_statement"
             - "execute"
           - "language"
-          - Flow phrase:uses:
-              - "Note: {comment$lines}"
-              - - Term:name:repeats:
-                    - "_"
-                    - "lines"
-                    - true
-      - # Create a scene
+          - Flow uses:
+              - Term:name:repeats:
+                - "_"
+                - "lines"
+                - true
+
+      - # Defines a scene used for testing a story.
+        # Tests can be executed using the `tap check` command.
+        # TODO: see https://todo.sr.ht/~ionous/tapestry/42
         Spec:slots:with flow:
           - "define_test"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # A unique name for the test.
+                  Term:name:type:
                     - "test"
                     - "test_name"
                     - "text"
-                - Term:name:type:optional:
+                - # One or more scenes that this test depends on.
+                  # Tests implicitly depend upon the scene within which they are defined.
+                  # In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here.
+                  Term:name:type:optional:
                     - "requires"
                     - "require_scenes"
                     - "text_list_eval"
                     - true
-                - Term:name:type:optional:repeats:
+                - # Modeling commands for defining nouns, kinds, game rules, etc. used by this test. Those definitions will not be visible outside of the test ( unless this test is "required" by another. )
+                  Term:name:type:optional:repeats:
                     - "scene"
                     - "statements"
                     - "story_statement"
                     - true
                     - true
-                - Term:name:type:repeats:
+                - # One or more commands to run when checking the test.
+                  # The {"Expect:"} command will trigger a test failure when an author specified condition is not met.
+                  Term:name:type:repeats:
                     - "do"
                     - "exe"
                     - "execute"
                     - true
-      - # Define a sub world.
+      - # Defines a collection of nouns, kinds, game rules, etc. used the game.
+        # Every .tell story has its own unique scene.
         Spec:slots:with flow:
           - "define_scene"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:type:
+              - - # A unique name for the scene.
+                  Term:type:
                     - "scene"
                     - "text_eval"
-                - Term:name:type:optional:
+                - # One or more scenes that this scene depends on.
+                  # This is a one-way dependency. This scene can reference anything defined within the required scenes; the required scenes cannot reference anything declared within this scene. Circular dependencies are prevented by weave.
+                  Term:name:type:optional:
                     - "requires"
                     - "require_scenes"
                     - "text_list_eval"
                     - true
-                - Term:name:type:optional:repeats:
+                - # Modeling commands for the defining nouns, kinds, game rules, etc. used by this scene.
+                  Term:name:type:optional:repeats:
                     - "with"
                     - "statements"
                     - "story_statement"
                     - true
                     - true
-      - # Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
+      - # Defines an in-game behavior that can be triggered by an actor.
+        # Actions are a special kind of pattern, and like patterns use "rules" to define and customize their behavior. The shared library includes many common actions including things like moving from room to room, examining something, taking or dropping items, and so on.
+        # See the Tapestry guide for more information.
         Spec:slots:groups:with flow:
           - "define_action"
           - "story_statement"
           - "events"
           - Flow:uses:
               - "define"
-              - - Term:type:
+              - - # A unique name for the action.
+                  Term:type:
                     - "action"
                     - "text_eval"
-                - Term:type:repeats:
+                - # Parameters to customize the behavior of an action.
+                  # Most actions require an actor, and possibly one or two other objects.
+                  # For instance: the standard "storing" action -- used for inserting something into a container -- requires an actor to perform the action, an object to store, and a container to receive that object.
+                  Term:type:repeats:
                     - "requires"
                     - "field_definition"
                     - true
-                - Term:type:optional:repeats:
+                - # A list of any local variables needed by the action carry out its behavior.
+                   Term:type:optional:repeats:
                     - "provides"
                     - "field_definition"
                     - true
                     - true
-      - # Declare an aspect and its traits.
-        # Aspects here are assumed to be singularly named.
+      - # Defines a set of mutually exclusive states that can be assigned to any kind of noun. By default, every noun with this set of states starts the game with the first state listed by this command. At runtime, a script can change to other states, ask whether a noun is in a particular state, or ask for the name of the current state from the set.
+        # Internally, these are also known as "aspects" and "traits."
+        # Many programming languages refer to these as "enumerations."
+        # See also: {"Set:state:"} and {"Object:field:"}
         Spec:slots:with flow:
-          - "define_aspect"
+          - "define_state"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:type:
+              - - Term:name:type:
+                  - "state"
                   - "aspect"
                   - "text_eval"
-                - Term:type:
+                - Term:name:type:
+                  - "names"
                   - "traits"
                   - "text_list_eval"
-      - # tbd: is a separate interface required for object kinds separate from everything else?
-        # in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that.
-        Spec:slots:with flow:
-          - "aspect_field"
-          - "field_definition"
-          - Flow:uses:
-              - "aspect"
-              - - Term:name:type:
-                    - "_"
-                    - "aspect"
-                    - "text_eval"
-      - Spec:slots:with flow:
-          - "bool_field"
-          - "field_definition"
-          - Flow:phrase:uses:
-              - "bool"
-              - "a true/false value named {name$name} ( {$type} ) {$initially}"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text_eval"
-                - Term:name:type:optional:
-                    - "kind"
-                    - "type"
-                    - "text_eval"
-                    - true
-                - Term:type:optional:
-                    - "initially"
-                    - "bool_eval"
-                    - true
-      - # A guard which returns true based on a counter.
-        # Counters start at zero and are incremented every time the guard gets checked.
-        Spec:slots:groups:with flow:
-          - "count_of"
-          - "bool_eval"
-          - "logic"
-          - Flow phrase:uses:
-              - "trigger {_$trigger} {$num}"
-              - - Term:name:
-                    - "_"
-                    - "trigger"
-                - Term:type:
-                    - "num"
-                    - "number_eval"
-      - # When called multiple times, returns each of its inputs in turn.
-        Spec:slots:groups:with flow:
-          - "cycle_text"
-          - "text_eval"
-          - "output"
-          - Flow phrase:uses:
-              - "cycle {_$parts}"
-              - - Term:name:type:repeats:
-                    - "_"
-                    - "parts"
-                    - "text_eval"
-                    - true
+
       - # allows the player to refer to a noun by one or more other terms.
         Spec:slots:with flow:
           - "define_alias"
@@ -314,44 +321,7 @@ Spec:with group:
                 - Term:type:
                     - "traits"
                     - "text_list_eval"
-      - Spec:slots:with flow:
-          - "num_list_field"
-          - "field_definition"
-          - Flow:phrase:uses:
-              - "num_list"
-              - "a list of nums named {name$name} ( {$type} ) {$initially}"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text_eval"
-                - Term:name:type:optional:
-                    - "kind"
-                    - "type"
-                    - "text_eval"
-                    - true
-                - Term:type:optional:
-                    - "initially"
-                    - "num_list_eval"
-                    - true
-      - Spec:slots:with flow:
-          - "number_field"
-          - "field_definition"
-          - Flow:phrase:uses:
-              - "number"
-              - "a number named {name$name} ( {$type} ) {$initially}"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text_eval"
-                - Term:name:type:optional:
-                    - "kind"
-                    - "type"
-                    - "text_eval"
-                    - true
-                - Term:type:optional:
-                    - "initially"
-                    - "number_eval"
-                    - true
+
       - Spec:slots:groups:with flow:
           - "rule_provides"
           - "story_statement"
@@ -473,48 +443,8 @@ Spec:with group:
                     - "execute"
                     - true
                     - true
-      - # Fields are used to define the members of kinds, records, patterns, and so on.
-        Spec:with slot:
-          - "field_definition"
-          - Slot:
-      - Spec:slots:with flow:
-          - "record_list_field"
-          - "field_definition"
-          - Flow:phrase:uses:
-              - "record_list"
-              - "a list of records named {name$name} ( {$type} ) {$initially}"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text_eval"
-                - Term:name:type:optional:
-                    - "kind"
-                    - "type"
-                    - "text_eval"
-                    - true
-                - Term:type:optional:
-                    - "initially"
-                    - "record_list_eval"
-                    - true
-      - Spec:slots:with flow:
-          - "record_field"
-          - "field_definition"
-          - Flow:phrase:uses:
-              - "record"
-              - "a record named {name$name} ( {$type} ) {$initially}"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text_eval"
-                - Term:name:type:optional:
-                    - "kind"
-                    - "type"
-                    - "text_eval"
-                    - true
-                - Term:type:optional:
-                    - "initially"
-                    - "record_eval"
-                    - true
+
+
       - Spec:groups:with str:
           - "relation_cardinality"
           - "relations"
@@ -589,7 +519,34 @@ Spec:with group:
                     - "with"
                     - "text"
                     - "text_eval"
-      - # When called multiple times returns its inputs at random.
+
+      - # A guard which returns true based on a counter.
+        # Counters start at zero and are incremented every time the guard gets checked.
+        Spec:slots:groups:with flow:
+          - "count_of"
+          - "bool_eval"
+          - "logic"
+          - Flow phrase:uses:
+              - "trigger {_$trigger} {$num}"
+              - - Term:name:
+                    - "_"
+                    - "trigger"
+                - Term:type:
+                    - "num"
+                    - "number_eval"
+      - # A text string that, when called multiple times, returns each of its inputs in turn.
+        Spec:slots:groups:with flow:
+          - "cycle_text"
+          - "text_eval"
+          - "output"
+          - Flow phrase:uses:
+              - "cycle {_$parts}"
+              - - Term:name:type:repeats:
+                    - "_"
+                    - "parts"
+                    - "text_eval"
+                    - true
+      - # A text string that, when called multiple times, returns each of its parts in a randomized order.
         Spec:slots:groups:with flow:
           - "shuffle_text"
           - "text_eval"
@@ -613,37 +570,119 @@ Spec:with group:
                     - "parts"
                     - "text_eval"
                     - true
-      - # a command with a signature of the comment marker metadata.
-        # a cheat to allows nodes that have only a comment marker and no actual command.
-        # see also: debug.do_nothing
-        Spec:slots:with flow:
-          - "story_break"
-          - "story_statement"
-          - Flow:uses:
-              - "--"
-              - []
-      - # top level node for story files.
-        Spec:slots:groups:with flow:
-          - "story_file"
-          - # implements story_statement so flex can parse this element successfully.
-            "story_statement"
-          - "internal"
-          - Flow:phrase:uses:
-              - "tapestry"
-              - "{_$story_lines}"
-              - - Term:name:type:repeats:
-                    - "_"
-                    - "statements"
-                    - "story_statement"
-                    - true
-        blockly-color: "TAP_HUE_ROOT"
-        mosaic-root: true
-      - # Phrase
+      - # Fields are used to define the members of kinds, records, patterns, and so on.
         Spec:with slot:
-          - "story_statement"
+          - "field_definition"
           - Slot:
-        blockly-stack: true
-        blockly-color: "VARIABLES_HUE"
+
+      - # A field containing an aspect ( aka. a set of states. )
+        # Aspects are defined using the {"Define state:names:"} command.
+        Spec:slots:with flow:
+          - "aspect_field"
+          - "field_definition"
+          - Flow:uses:
+              - "aspect"
+              - - # The name of an aspect.
+                  # The field will have this same name.
+                  Term:name:type:
+                    - "_"
+                    - "aspect"
+                    - "text_eval"
+      - # A field containing a boolean ( true/false ) value.
+        Spec:slots:with flow:
+          - "bool_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "bool"
+              - "a true/false value named {name$name} ( {$type} ) {$initially}"
+              - - # The name of the field.
+                  Term:name:type:
+                  - "_"
+                  - "name"
+                  - "text_eval"
+                - # An initial value for the field, true if not otherwise specified.
+                  Term:type:optional:
+                  - "initially"
+                  - "bool_eval"
+                  - true
+
+      - Spec:slots:with flow:
+          - "num_list_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "num_list"
+              - "a list of nums named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "num_list_eval"
+                    - true
+      - Spec:slots:with flow:
+          - "number_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "number"
+              - "a number named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "number_eval"
+                    - true
+      - Spec:slots:with flow:
+          - "record_list_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "record_list"
+              - "a list of records named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "record_list_eval"
+                    - true
+      - Spec:slots:with flow:
+          - "record_field"
+          - "field_definition"
+          - Flow:phrase:uses:
+              - "record"
+              - "a record named {name$name} ( {$type} ) {$initially}"
+              - - Term:name:type:
+                    - "_"
+                    - "name"
+                    - "text_eval"
+                - Term:name:type:optional:
+                    - "kind"
+                    - "type"
+                    - "text_eval"
+                    - true
+                - Term:type:optional:
+                    - "initially"
+                    - "record_eval"
+                    - true
+
       - Spec:slots:with flow:
           - "text_list_field"
           - "field_definition"

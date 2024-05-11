@@ -206,39 +206,6 @@ var Zt_RelationName = typeinfo.Str{
 	Name: "relation_name",
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "rel",
-	Flow:       z_flow_list,
-	Str:        z_str_list,
-	Signatures: z_signatures,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_ReciprocalOf,
-	&Zt_ReciprocalsOf,
-	&Zt_Relate,
-	&Zt_RelativeOf,
-	&Zt_RelativesOf,
-}
-
-// a list of all strs in this this package
-var z_str_list = []*typeinfo.Str{
-	&Zt_RelationName,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	6987621383789599381:  (*ReciprocalOf)(nil),  /* text_eval=Reciprocal:object: */
-	16170704865359856399: (*ReciprocalsOf)(nil), /* text_list_eval=Reciprocals:object: */
-	15160920709871392391: (*Relate)(nil),        /* execute=Relate:to:via: */
-	14535552277213572673: (*RelativeOf)(nil),    /* text_eval=Relative:object: */
-	13180339401044333799: (*RelativesOf)(nil),   /* text_list_eval=Relatives:object: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -336,4 +303,37 @@ func init() {
 			"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "rel",
+	Flow:       z_flow_list,
+	Str:        z_str_list,
+	Signatures: z_signatures,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_ReciprocalOf,
+	&Zt_ReciprocalsOf,
+	&Zt_Relate,
+	&Zt_RelativeOf,
+	&Zt_RelativesOf,
+}
+
+// a list of all strs in this this package
+var z_str_list = []*typeinfo.Str{
+	&Zt_RelationName,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	6987621383789599381:  (*ReciprocalOf)(nil),  /* text_eval=Reciprocal:object: */
+	16170704865359856399: (*ReciprocalsOf)(nil), /* text_list_eval=Reciprocals:object: */
+	15160920709871392391: (*Relate)(nil),        /* execute=Relate:to:via: */
+	14535552277213572673: (*RelativeOf)(nil),    /* text_eval=Relative:object: */
+	13180339401044333799: (*RelativesOf)(nil),   /* text_list_eval=Relatives:object: */
 }

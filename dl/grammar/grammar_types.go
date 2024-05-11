@@ -410,50 +410,6 @@ func (op *Words_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "grammar",
-	Slot:       z_slot_list,
-	Flow:       z_flow_list,
-	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_GrammarMaker,
-	&Zt_ScannerMaker,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_Action,
-	&Zt_Sequence,
-	&Zt_ChooseOne,
-	&Zt_Directive,
-	&Zt_Noun,
-	&Zt_Refine,
-	&Zt_Reverse,
-	&Zt_Focus,
-	&Zt_Words,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
-	967998274944030280:   (*Action)(nil),    /* scanner_maker=Action:args: */
-	1756442538083378424:  (*Focus)(nil),     /* scanner_maker=Focus:sequence: */
-	6454124700650096920:  (*Directive)(nil), /* grammar_maker=Interpret name:with: */
-	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */
-	16418039705711067622: (*ChooseOne)(nil), /* scanner_maker=One of: */
-	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */
-	11402479949132197621: (*Refine)(nil),    /* scanner_maker=Refine sequence: */
-	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
-	10728359537834940094: (*Sequence)(nil),  /* scanner_maker=Sequence: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -609,4 +565,48 @@ func init() {
 			"comment": "makes a parser scanner.",
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "grammar",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_GrammarMaker,
+	&Zt_ScannerMaker,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_Action,
+	&Zt_Sequence,
+	&Zt_ChooseOne,
+	&Zt_Directive,
+	&Zt_Noun,
+	&Zt_Refine,
+	&Zt_Reverse,
+	&Zt_Focus,
+	&Zt_Words,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	12048905879374467271: (*Action)(nil),    /* scanner_maker=Action: */
+	967998274944030280:   (*Action)(nil),    /* scanner_maker=Action:args: */
+	1756442538083378424:  (*Focus)(nil),     /* scanner_maker=Focus:sequence: */
+	6454124700650096920:  (*Directive)(nil), /* grammar_maker=Interpret name:with: */
+	10964817074887037945: (*Noun)(nil),      /* scanner_maker=One noun: */
+	16418039705711067622: (*ChooseOne)(nil), /* scanner_maker=One of: */
+	16180319172078511701: (*Words)(nil),     /* scanner_maker=One word: */
+	11402479949132197621: (*Refine)(nil),    /* scanner_maker=Refine sequence: */
+	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
+	10728359537834940094: (*Sequence)(nil),  /* scanner_maker=Sequence: */
 }

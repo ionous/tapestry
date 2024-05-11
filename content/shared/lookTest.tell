@@ -3,7 +3,7 @@ Tapestry:
   - Define test:requires:do:
       - "base vis"
       - "Kitchenette"
-      - - Comment: "Say the list of visible objects from one of several vantage points."
+      - - Note: "Say the list of visible objects from one of several vantage points."
         - Repeating across:as:do:
             - FromTextList:
                 - "cabinet"
@@ -23,7 +23,7 @@ Tapestry:
             - "cabinet and Kitchen."
             - "Kitchen."
             - "shelf and Kitchen."
-        - Comment: "Close the cabinet door, and its list of visible objects should change."
+        - Note: "Close the cabinet door, and its list of visible objects should change."
         - Set:value:
             - Object:field:
                 - "cabinet"
@@ -36,7 +36,7 @@ Tapestry:
             - "it"
             - - Say: "{.it}."
         - Expect output: "cabinet."
-        - Comment: "( Validate the number of items in the list directly. )"
+        - Note: "( Validate the number of items in the list directly. )"
         - Expect:
             Is:matching:num:
               - Len:
@@ -45,7 +45,7 @@ Tapestry:
                       FromText: "cabinet"
               - "equal_to"
               - 1
-        - Comment: "Open the cabinet again, and validate the number of visible objects again."
+        - Note: "Open the cabinet again, and validate the number of visible objects again."
         - Set:value:
             - Object:field:
                 - "cabinet"
@@ -111,7 +111,7 @@ Tapestry:
             - "**The cabinet**"
             - "Beneath your feet is a bright and shiny hook."
             - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
-        - Comment: "remove the hook from the cabinet"
+        - Note: "remove the hook from the cabinet"
         - Relate:to:via:
             - "kitchen"
             - "hook"

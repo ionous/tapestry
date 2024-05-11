@@ -62,6 +62,7 @@ func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) 
 	} else if eval, ok := got.(rt.TextEval); !ok {
 		err = errutil.Fmt("render template has unknown expression %T", got)
 	} else {
+		// fix: should this be given name? why not?
 		ret = &render.RenderResponse{Text: eval}
 	}
 	return

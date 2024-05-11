@@ -7,7 +7,7 @@ Tapestry:
         - Declare: "The purse is in the kitchen."
       - - Say: "The flower's parent: {the: {parent_of: .flower}}, {.flower.possessiveness}."
         - Expect output: "The flower's parent: you, worn."
-        - Comment: "Fail to re-wear the flower:"
+        - Note: "Fail to re-wear the flower:"
         - Wearing actor:noun:
             - FromText:
                 Object:field:
@@ -16,7 +16,7 @@ Tapestry:
             - FromText: "flower"
         - # The 'can't change what is' response.
           Expect output: "It is already worn."
-        - Comment: "Take off the flower:"
+        - Note: "Take off the flower:"
         - Removing actor:noun:
             - FromText:
                 Object:field:
@@ -26,7 +26,7 @@ Tapestry:
         - Expect output: "You take off the flower."
         - Say: "The flower's new parent: {the: {parent_of: .flower}}, {.flower.possessiveness}."
         - Expect output: "The flower's new parent: you, not worn."
-        - Comment: "Fail to re-remove the flower:"
+        - Note: "Fail to re-remove the flower:"
         - Removing actor:noun:
             - FromText:
                 Object:field:
@@ -34,7 +34,7 @@ Tapestry:
                   - "pawn"
             - FromText: "flower"
         - Expect output: "You aren't wearing that!"
-        - Comment: "Wear the flower again:"
+        - Note: "Wear the flower again:"
         - Wearing actor:noun:
             - FromText:
                 Object:field:
@@ -46,7 +46,7 @@ Tapestry:
         - Expect output: "The flower's new parent: you, worn."
         - Say: "The knife's parent: {the: {parent_of: .knife}}, {.knife.possessiveness}."
         - Expect output: "The knife's parent: you, not worn."
-        - Comment: "Fail to wear an unwearable:"
+        - Note: "Fail to wear an unwearable:"
         - Wearing actor:noun:
             - FromText:
                 Object:field:
@@ -58,7 +58,7 @@ Tapestry:
         - Expect output: "The knife's parent: you, not worn."
         - Say: "The purse's parent: {the: {parent_of: .purse}}, {.purse.possessiveness}."
         - Expect output: "The purse's parent: the Kitchen, not worn."
-        - Comment: "Fail to wear something not held:"
+        - Note: "Fail to wear something not held:"
         - Wearing actor:noun:
             - FromText:
                 Object:field:
@@ -66,7 +66,7 @@ Tapestry:
                   - "pawn"
             - FromText: "purse"
         - Expect output: "You haven't got that!"
-        - Comment: "Fail to remove something not held:"
+        - Note: "Fail to remove something not held:"
         - Removing actor:noun:
             - FromText:
                 Object:field:
@@ -74,7 +74,7 @@ Tapestry:
                   - "pawn"
             - FromText: "purse"
         - Expect output: "You haven't got that!"
-        - Comment: "Fail to put on something not reachable:"
+        - Note: "Fail to put on something not reachable:"
         - Wearing actor:noun:
             - FromText:
                 Object:field:

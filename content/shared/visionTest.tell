@@ -7,7 +7,7 @@ Tapestry:
           Define rule:do:
             - "Print news of light"
             - - Print: "The light, it burns."
-      - - Comment: "Initialize the story as if we had started a game."
+      - - Note: "Initialize the story as if we had started a game."
         - # expect that the kitchen is lit.
           Expect:
             Object:field:
@@ -46,8 +46,8 @@ Tapestry:
           Expect:
             Illuminates actor:
               FromText: "self"
-        - Comment: "Change the kitchen lighting, update time, and verify the game prints the arrival of darkness."
-        - Set:trait:
+        - Note: "Change the kitchen lighting, update time, and verify the game prints the arrival of darkness."
+        - Set:state:
             - "kitchen"
             - "unlit"
         - PassTime:
@@ -69,8 +69,8 @@ Tapestry:
               Illuminates actor:
                 FromText: "self"
         - Expect output: "It is now pitch dark in here!"
-        - Comment: "Verify that light breaks forth in a glorious wonder."
-        - Set:trait:
+        - Note: "Verify that light breaks forth in a glorious wonder."
+        - Set:state:
             - "kitchen"
             - "lit"
         - PassTime:

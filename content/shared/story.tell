@@ -44,7 +44,7 @@ Tapestry:
           Number: "mentions"
   - # inform has 'finished' and 'finished finally' (possibly from historical if)
     # tapestry uses 'concluded' and 'completed' as rough respective equivalents.
-    Define aspect:traits:
+    Define state:names:
       - "play state"
       - - "starting"
         - "playing"

@@ -9,7 +9,7 @@ Tapestry:
       - "name of a kind"
       - - Declare: "The named object and the unnamed object are things."
         - Declare: "The unnamed object is privately named."
-      - - Comment:
+      - - Note:
             - "The story engine automagically calls \"print name\" when the name of an object is used in a template. "
             - "ex. { .someObject }"
         - Say: "{.named}, {.unnamed}."

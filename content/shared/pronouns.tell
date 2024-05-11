@@ -8,7 +8,7 @@ Tapestry:
       - - Nothing:
       - - Print: "you"
   - # 
-    Comment: "they, [we], [ey], it."
+    Note: "they, [we], [ey], it."
   - Define pattern:requires:provides:do:
       - "They"
       - - Text:kind:

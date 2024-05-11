@@ -53,7 +53,7 @@ func readIndexFile(fsys fs.FS, dir, name string) (ret *story.DefineScene, err er
 	Loop:
 		for _, op := range els {
 			switch op := op.(type) {
-			case *story.Comment:
+			case *story.Note:
 				// continue looking
 			case *story.DefineScene:
 				if ret != nil {

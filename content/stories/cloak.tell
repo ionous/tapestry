@@ -1,8 +1,7 @@
 ---
 # 'Cloak of Darkness', originally told by Roger Firth,
 # is a story which has been implemented in many if systems over the years.
-# It contains some essential features used by interactive fiction including: descriptions of rooms,
-# their contents, and connections, darkness and the control of light, scoring, and more.
+# It contains some essential features used by interactive fiction including: descriptions of rooms, their contents, and connections, darkness and the control of light, scoring, and more.
 Define scene:requires:
   - "cloak"
   - - "tapestry"
@@ -88,7 +87,7 @@ Instead of going:
         - "@direction"
         - "other_than"
         - "north"
-    - - Set:trait:
+    - - Set:state:
         - "message"
         - "trampled"
       - Say: "Blundering around in the dark isn't a good idea!"
@@ -123,19 +122,19 @@ Instead of running an action:
 You are wearing a velvet cloak. The description of the cloak is "A handsome cloak made of velvet trimmed with satin. Its blackness is so deep that it seems to suck light from the room." Understand "dark", "black", or "satin" as the cloak.
 
 After taking the cloak:
-  - Set:trait:
+  - Set:state:
     - "bar"
     - "unlit"
 
 # TODO: it'd be nice to have a generic way to capture is/not in possession.
 After dropping the cloak:
-  - Set:trait:
+  - Set:state:
     - "bar"
     - "lit"
 
 # FIX: this allows a player to increase their score multiple times by repeatedly taking and dropping the cloak.
 After storing the cloak:
-  - Set:trait:
+  - Set:state:
     - "bar"
     - "lit"
   - Increase:

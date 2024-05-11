@@ -106,22 +106,22 @@ func (op *SetValue_Slice) Repeats() bool {
 }
 
 // Set the state of an object.
-type SetTrait struct {
+type SetState struct {
 	Target rtti.TextEval
 	Trait  rtti.TextEval
 	Markup map[string]any
 }
 
-// set_trait, a type of flow.
-var Zt_SetTrait typeinfo.Flow
+// set_state, a type of flow.
+var Zt_SetState typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*SetTrait) TypeInfo() typeinfo.T {
-	return &Zt_SetTrait
+func (*SetState) TypeInfo() typeinfo.T {
+	return &Zt_SetState
 }
 
 // implements typeinfo.Markup
-func (op *SetTrait) GetMarkup(ensure bool) map[string]any {
+func (op *SetState) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -129,18 +129,18 @@ func (op *SetTrait) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ rtti.Execute = (*SetTrait)(nil)
+var _ rtti.Execute = (*SetState)(nil)
 
-// holds a slice of type set_trait
-type SetTrait_Slice []SetTrait
+// holds a slice of type set_state
+type SetState_Slice []SetState
 
 // implements typeinfo.Instance
-func (*SetTrait_Slice) TypeInfo() typeinfo.T {
-	return &Zt_SetTrait
+func (*SetState_Slice) TypeInfo() typeinfo.T {
+	return &Zt_SetState
 }
 
 // implements typeinfo.Repeats
-func (op *SetTrait_Slice) Repeats() bool {
+func (op *SetState_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -736,102 +736,6 @@ func (op *FromRecordList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "assign",
-	Slot:       z_slot_list,
-	Flow:       z_flow_list,
-	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_Address,
-	&Zt_Dot,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_SetValue,
-	&Zt_SetTrait,
-	&Zt_CopyValue,
-	&Zt_ObjectRef,
-	&Zt_VariableRef,
-	&Zt_AtField,
-	&Zt_AtIndex,
-	&Zt_CallPattern,
-	&Zt_Arg,
-	&Zt_FromExe,
-	&Zt_FromBool,
-	&Zt_FromNumber,
-	&Zt_FromText,
-	&Zt_FromRecord,
-	&Zt_FromNumList,
-	&Zt_FromTextList,
-	&Zt_FromRecordList,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
-	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
-	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
-	12187184211547847098: (*CopyValue)(nil),      /* execute=Copy:from: */
-	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
-	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
-	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
-	15584772020364696136: (*CallPattern)(nil),    /* number_eval=Determine:args: */
-	13992013847750998452: (*CallPattern)(nil),    /* record_eval=Determine:args: */
-	352268441608212603:   (*CallPattern)(nil),    /* record_list_eval=Determine:args: */
-	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
-	13938609641525654217: (*CallPattern)(nil),    /* text_list_eval=Determine:args: */
-	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
-	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
-	15276643347016776669: (*FromNumList)(nil),    /* assignment=FromNumList: */
-	10386192108847008240: (*FromNumber)(nil),     /* assignment=FromNumber: */
-	8445595699766392240:  (*FromRecord)(nil),     /* assignment=FromRecord: */
-	17510952281883199828: (*FromRecordList)(nil), /* assignment=FromRecordList: */
-	9783457335751138546:  (*FromText)(nil),       /* assignment=FromText: */
-	3267530751198060154:  (*FromTextList)(nil),   /* assignment=FromTextList: */
-	683773550166455203:   (*ObjectRef)(nil),      /* address=Object:field: */
-	1942271780557121620:  (*ObjectRef)(nil),      /* bool_eval=Object:field: */
-	8839776639979820731:  (*ObjectRef)(nil),      /* num_list_eval=Object:field: */
-	10918337914011251575: (*ObjectRef)(nil),      /* number_eval=Object:field: */
-	2347663618411162107:  (*ObjectRef)(nil),      /* record_eval=Object:field: */
-	11613264323388154988: (*ObjectRef)(nil),      /* record_list_eval=Object:field: */
-	16935348020531425213: (*ObjectRef)(nil),      /* text_eval=Object:field: */
-	7207525564346341058:  (*ObjectRef)(nil),      /* text_list_eval=Object:field: */
-	2801199650842020300:  (*ObjectRef)(nil),      /* address=Object:field:dot: */
-	5711121365333637715:  (*ObjectRef)(nil),      /* bool_eval=Object:field:dot: */
-	1214997628858983108:  (*ObjectRef)(nil),      /* num_list_eval=Object:field:dot: */
-	11071357156742037304: (*ObjectRef)(nil),      /* number_eval=Object:field:dot: */
-	1517965638051539844:  (*ObjectRef)(nil),      /* record_eval=Object:field:dot: */
-	13722223890291796107: (*ObjectRef)(nil),      /* record_list_eval=Object:field:dot: */
-	15784348372409109382: (*ObjectRef)(nil),      /* text_eval=Object:field:dot: */
-	11516059561048599401: (*ObjectRef)(nil),      /* text_list_eval=Object:field:dot: */
-	3109912816783629323:  (*SetTrait)(nil),       /* execute=Set:trait: */
-	3912570011939708664:  (*SetValue)(nil),       /* execute=Set:value: */
-	13692207992970428220: (*VariableRef)(nil),    /* address=Variable: */
-	17908519799628660539: (*VariableRef)(nil),    /* bool_eval=Variable: */
-	11022385456290008164: (*VariableRef)(nil),    /* num_list_eval=Variable: */
-	14722688844418158720: (*VariableRef)(nil),    /* number_eval=Variable: */
-	15906653930217516836: (*VariableRef)(nil),    /* record_eval=Variable: */
-	16032903663975260899: (*VariableRef)(nil),    /* record_list_eval=Variable: */
-	11181798416019134386: (*VariableRef)(nil),    /* text_eval=Variable: */
-	14769776891888769773: (*VariableRef)(nil),    /* text_list_eval=Variable: */
-	15966558056732701531: (*VariableRef)(nil),    /* address=Variable:dot: */
-	7739360284898038596:  (*VariableRef)(nil),    /* bool_eval=Variable:dot: */
-	14012826006150347811: (*VariableRef)(nil),    /* num_list_eval=Variable:dot: */
-	2218494529839714071:  (*VariableRef)(nil),    /* number_eval=Variable:dot: */
-	3479001804857346403:  (*VariableRef)(nil),    /* record_eval=Variable:dot: */
-	11938488787528882828: (*VariableRef)(nil),    /* record_list_eval=Variable:dot: */
-	4798713833623285465:  (*VariableRef)(nil),    /* text_eval=Variable:dot: */
-	12039638244497140214: (*VariableRef)(nil),    /* text_list_eval=Variable:dot: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -853,15 +757,15 @@ func init() {
 			"comment": "Store a value into a variable or object.",
 		},
 	}
-	Zt_SetTrait = typeinfo.Flow{
-		Name: "set_trait",
+	Zt_SetState = typeinfo.Flow{
+		Name: "set_state",
 		Lede: "set",
 		Terms: []typeinfo.Term{{
 			Name: "target",
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "trait",
-			Label: "trait",
+			Label: "state",
 			Type:  &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -1117,4 +1021,100 @@ func init() {
 			"comment": "Calculates a list of records.",
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "assign",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_Address,
+	&Zt_Dot,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_SetValue,
+	&Zt_SetState,
+	&Zt_CopyValue,
+	&Zt_ObjectRef,
+	&Zt_VariableRef,
+	&Zt_AtField,
+	&Zt_AtIndex,
+	&Zt_CallPattern,
+	&Zt_Arg,
+	&Zt_FromExe,
+	&Zt_FromBool,
+	&Zt_FromNumber,
+	&Zt_FromText,
+	&Zt_FromRecord,
+	&Zt_FromNumList,
+	&Zt_FromTextList,
+	&Zt_FromRecordList,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
+	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
+	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
+	12187184211547847098: (*CopyValue)(nil),      /* execute=Copy:from: */
+	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
+	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
+	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
+	15584772020364696136: (*CallPattern)(nil),    /* number_eval=Determine:args: */
+	13992013847750998452: (*CallPattern)(nil),    /* record_eval=Determine:args: */
+	352268441608212603:   (*CallPattern)(nil),    /* record_list_eval=Determine:args: */
+	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
+	13938609641525654217: (*CallPattern)(nil),    /* text_list_eval=Determine:args: */
+	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
+	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
+	15276643347016776669: (*FromNumList)(nil),    /* assignment=FromNumList: */
+	10386192108847008240: (*FromNumber)(nil),     /* assignment=FromNumber: */
+	8445595699766392240:  (*FromRecord)(nil),     /* assignment=FromRecord: */
+	17510952281883199828: (*FromRecordList)(nil), /* assignment=FromRecordList: */
+	9783457335751138546:  (*FromText)(nil),       /* assignment=FromText: */
+	3267530751198060154:  (*FromTextList)(nil),   /* assignment=FromTextList: */
+	683773550166455203:   (*ObjectRef)(nil),      /* address=Object:field: */
+	1942271780557121620:  (*ObjectRef)(nil),      /* bool_eval=Object:field: */
+	8839776639979820731:  (*ObjectRef)(nil),      /* num_list_eval=Object:field: */
+	10918337914011251575: (*ObjectRef)(nil),      /* number_eval=Object:field: */
+	2347663618411162107:  (*ObjectRef)(nil),      /* record_eval=Object:field: */
+	11613264323388154988: (*ObjectRef)(nil),      /* record_list_eval=Object:field: */
+	16935348020531425213: (*ObjectRef)(nil),      /* text_eval=Object:field: */
+	7207525564346341058:  (*ObjectRef)(nil),      /* text_list_eval=Object:field: */
+	2801199650842020300:  (*ObjectRef)(nil),      /* address=Object:field:dot: */
+	5711121365333637715:  (*ObjectRef)(nil),      /* bool_eval=Object:field:dot: */
+	1214997628858983108:  (*ObjectRef)(nil),      /* num_list_eval=Object:field:dot: */
+	11071357156742037304: (*ObjectRef)(nil),      /* number_eval=Object:field:dot: */
+	1517965638051539844:  (*ObjectRef)(nil),      /* record_eval=Object:field:dot: */
+	13722223890291796107: (*ObjectRef)(nil),      /* record_list_eval=Object:field:dot: */
+	15784348372409109382: (*ObjectRef)(nil),      /* text_eval=Object:field:dot: */
+	11516059561048599401: (*ObjectRef)(nil),      /* text_list_eval=Object:field:dot: */
+	9616350989753725148:  (*SetState)(nil),       /* execute=Set:state: */
+	3912570011939708664:  (*SetValue)(nil),       /* execute=Set:value: */
+	13692207992970428220: (*VariableRef)(nil),    /* address=Variable: */
+	17908519799628660539: (*VariableRef)(nil),    /* bool_eval=Variable: */
+	11022385456290008164: (*VariableRef)(nil),    /* num_list_eval=Variable: */
+	14722688844418158720: (*VariableRef)(nil),    /* number_eval=Variable: */
+	15906653930217516836: (*VariableRef)(nil),    /* record_eval=Variable: */
+	16032903663975260899: (*VariableRef)(nil),    /* record_list_eval=Variable: */
+	11181798416019134386: (*VariableRef)(nil),    /* text_eval=Variable: */
+	14769776891888769773: (*VariableRef)(nil),    /* text_list_eval=Variable: */
+	15966558056732701531: (*VariableRef)(nil),    /* address=Variable:dot: */
+	7739360284898038596:  (*VariableRef)(nil),    /* bool_eval=Variable:dot: */
+	14012826006150347811: (*VariableRef)(nil),    /* num_list_eval=Variable:dot: */
+	2218494529839714071:  (*VariableRef)(nil),    /* number_eval=Variable:dot: */
+	3479001804857346403:  (*VariableRef)(nil),    /* record_eval=Variable:dot: */
+	11938488787528882828: (*VariableRef)(nil),    /* record_list_eval=Variable:dot: */
+	4798713833623285465:  (*VariableRef)(nil),    /* text_eval=Variable:dot: */
+	12039638244497140214: (*VariableRef)(nil),    /* text_list_eval=Variable:dot: */
 }

@@ -89,7 +89,7 @@ Tapestry:
                 - Object:field:
                     - "@obj"
                     - "proper named"
-                - - Comment: "by definition proper named objects have no article."
+                - - Note: "by definition proper named objects have no article."
                   - Say: "{.name}"
                 - If:do:else:
                     - Is:matching:text:

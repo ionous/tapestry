@@ -30,7 +30,7 @@ Tapestry:
         - Repeating:do:
             - Not:
                 Is empty: "@i"
-            - - Comment: "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
+            - - Note: "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
               - Push:into:
                   - FromText: "@i"
                   - "@path"
@@ -41,7 +41,7 @@ Tapestry:
                         FromText: "@i"
               - If:do:
                   - Is empty: "@reach_response"
-                  - - Comment: "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized."
+                  - - Note: "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized."
                     - If:assuming:do:
                         - Not:
                             Is empty: "@response"
@@ -62,13 +62,13 @@ Tapestry:
                           - Set:value:
                               - "@reach_response"
                               - FromText: "@response"
-                          - Comment:
+                          - Note:
                               - "This doesn't exit the loop."
                               - "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
               - Set:value:
                   - "@i"
                   - FromText: "@next"
-        - Comment: "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
+        - Note: "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
         - Log:value:
             - "note"
             - FromTextList: "@path"
@@ -89,7 +89,7 @@ Tapestry:
                       - "@lca"
                       - "greater_than"
                       - 0
-                  - - Comment: "Exit once we've found the lca."
+                  - - Note: "Exit once we've found the lca."
                     - Break:
               - Set:value:
                   - "@next"
@@ -111,19 +111,19 @@ Tapestry:
                   - - Set:value:
                         - "@dig_error"
                         - FromText: "@response"
-                    - Comment:
+                    - Note:
                         - "To find the outermost dig error keep going,"
                         - "updating the error each time."
               - Set:value:
                   - "@i"
                   - FromText: "@next"
-        - Comment: "Return the best response."
+        - Note: "Return the best response."
         - If:do:else:
             - Is:matching:num:
                 - "@lca"
                 - "equal_to"
                 - 0
-            - - Comment: "No lca ever found? That's the most important error."
+            - - Note: "No lca ever found? That's the most important error."
               - Set:value:
                   - "@response"
                   - FromText:
@@ -135,14 +135,14 @@ Tapestry:
                     - "@reach_error"
                     - "less_than"
                     - "@lca"
-                - - Comment: "There is an error reaching up from the actor towards the lca."
+                - - Note: "There is an error reaching up from the actor towards the lca."
                   - Set:value:
                       - "@response"
                       - FromText: "@reach_response"
                 - If:do:
                     - Not:
                         Is empty: "@dig_error"
-                    - - Comment: "There was no error reaching up to the lca, so return any errors digging down to the noun."
+                    - - Note: "There was no error reaching up to the lca, so return any errors digging down to the noun."
                       - Set:value:
                           - "@response"
                           - FromText: "@dig_error"
@@ -167,7 +167,7 @@ Tapestry:
                   Object:field:
                     - "@actor"
                     - "not illuminated"
-            - - Comment:
+            - - Note:
                   - "Used to determine whether an action needing light can proceed."
                   - "Returns some response text if the action is blocked."
                   - "Relies on has light."

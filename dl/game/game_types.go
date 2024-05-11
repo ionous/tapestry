@@ -186,33 +186,6 @@ func (op *PrintVersion_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "game",
-	Flow:       z_flow_list,
-	Signatures: z_signatures,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_QuitGame,
-	&Zt_SaveGame,
-	&Zt_LoadGame,
-	&Zt_UndoTurn,
-	&Zt_PrintVersion,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	7048942477941640285:  (*LoadGame)(nil),     /* execute=LoadGame */
-	16069653899165369674: (*PrintVersion)(nil), /* execute=PrintVersion */
-	13962506025236193050: (*QuitGame)(nil),     /* execute=QuitGame */
-	12343662000108026632: (*SaveGame)(nil),     /* execute=SaveGame */
-	6128819475946940678:  (*UndoTurn)(nil),     /* execute=UndoTurn */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -256,4 +229,31 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "game",
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_QuitGame,
+	&Zt_SaveGame,
+	&Zt_LoadGame,
+	&Zt_UndoTurn,
+	&Zt_PrintVersion,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	7048942477941640285:  (*LoadGame)(nil),     /* execute=LoadGame */
+	16069653899165369674: (*PrintVersion)(nil), /* execute=PrintVersion */
+	13962506025236193050: (*QuitGame)(nil),     /* execute=QuitGame */
+	12343662000108026632: (*SaveGame)(nil),     /* execute=SaveGame */
+	6128819475946940678:  (*UndoTurn)(nil),     /* execute=UndoTurn */
 }

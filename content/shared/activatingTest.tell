@@ -5,7 +5,7 @@ Tapestry:
       - "Kitchenette"
       - - Declare: "You are carrying the knife."
         - Declare: "The espresso controls are a device in the kitchen."
-      - - Comment:
+      - - Note:
             - "Ensures the standard library has properly described activation and deactivation states."
             - "The state changing algorithm used by all states happens at the engine level and gets tested there."
         - Say: "The controls are {.controls.activation}."
@@ -28,7 +28,7 @@ Tapestry:
         - Expect output: "You switch off the espresso controls."
         - Say: "The controls are {.controls.activation}."
         - Expect output: "The controls are deactivated."
-        - Comment: "Try to activate a regular object."
+        - Note: "Try to activate a regular object."
         - Activating actor:noun:
             - FromText:
                 Object:field:

@@ -24,7 +24,7 @@ Spec:with group:
                     - "assignment"
       - # Set the state of an object.
         Spec:slots:with flow:
-          - "set_trait"
+          - "set_state"
           - "execute"
           - Flow:uses:
               - "set"
@@ -32,7 +32,8 @@ Spec:with group:
                     - "_"
                     - "target"
                     - "text_eval"
-                - Term:type:
+                - Term:name:type:
+                    - "state"
                     - "trait"
                     - "text_eval"
       - # Copy from one stored value to another.

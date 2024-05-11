@@ -76,7 +76,7 @@ Tapestry:
                         FromText: "@room"
             - # when illuminate
               Finally do:
-                - Comment: "list is inner to outer. the term \"locale\" here means some enclosure we are in."
+                - Note: "list is inner to outer. the term \"locale\" here means some enclosure we are in."
                 - PrintLocaleTitle locale:enclosures:
                     - FromText: "@room"
                     - FromTextList: "@enclosures"
@@ -98,7 +98,7 @@ Tapestry:
                             - Object:field:
                                 - "@room"
                                 - "not visited"
-                    - - Comment: "Reorder from outer to inner"
+                    - - Note: "Reorder from outer to inner"
                       - Reverse list: "@enclosures"
                       - Repeating across:as:do:
                           - FromTextList: "@enclosures"
@@ -235,7 +235,7 @@ Tapestry:
         - Repeating across:as:do:
             - FromTextList: "@kids"
             - "it"
-            - - Comment: "exclude objects that enclose the viewpoint, those get their own locale descriptions"
+            - - Note: "exclude objects that enclose the viewpoint, those get their own locale descriptions"
               - If:do:
                   - Not:
                       AnyTrue:
@@ -277,7 +277,7 @@ Tapestry:
                       - "story"
                       - "mentions"
   - # 
-    Comment: "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
+    Note: "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
   - Define pattern:requires:provides:do:
       - "print object description"
       - - Text:kind:
@@ -326,7 +326,7 @@ Tapestry:
             - Object:field:
                 - "@obj"
                 - "not mentioned"
-            - - Comment:
+            - - Note:
                   - "print impression prints objects that have an initial appearance,"
                   - "and flags them as mentioned."
               - PrintImpressionOf obj:locale:
@@ -338,7 +338,7 @@ Tapestry:
             - KindOf:is:
                 - "@obj"
                 - "actors"
-            - - Comment:
+            - - Note:
                   - "This doesn't have to say anything special for actors."
                   - "Stories can change that with their own rules when needed."
               - Set:value:
@@ -382,7 +382,7 @@ Tapestry:
                         FromText: "@obj"
                     - "equal_to"
                     - "@locale"
-            - - Comment: "we check where to stop recursion of supporters in supporters"
+            - - Note: "we check where to stop recursion of supporters in supporters"
               - Repeating across:as:do:
                   - FromTextList:
                       ChildrenOf obj:

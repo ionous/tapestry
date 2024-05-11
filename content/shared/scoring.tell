@@ -13,7 +13,7 @@ Tapestry:
         - Define kind:fields:
             - "settings"
             - - Aspect: "score notification"
-        - Define aspect:traits:
+        - Define state:names:
             - "score notification"
             - - "score notification on"
               - "score notification off"
@@ -57,11 +57,11 @@ Tapestry:
             - - Nothing:
             - - If:do:else:
                   - "@notify"
-                  - - Set:trait:
+                  - - Set:state:
                         - "settings"
                         - "score notification on"
                   - Finally do:
-                      - Set:trait:
+                      - Set:state:
                           - "settings"
                           - "score notification off"
               - Say response:with:
@@ -125,7 +125,7 @@ Tapestry:
       - "post game score"
       - "scoring"
       - - # simulate the end of game state.
-          Set:trait:
+          Set:state:
             - "story"
             - "completed"
         - Set:value:

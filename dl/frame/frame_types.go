@@ -258,43 +258,6 @@ func (op *PairChanged_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "frame",
-	Slot:       z_slot_list,
-	Flow:       z_flow_list,
-	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_Event,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_Frame,
-	&Zt_FrameOutput,
-	&Zt_SceneStarted,
-	&Zt_SceneEnded,
-	&Zt_StateChanged,
-	&Zt_PairChanged,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	14657663848717440116: (*Frame)(nil),        /* Frame result:events: */
-	2438049115146588168:  (*Frame)(nil),        /* Frame result:events:error: */
-	4385780296792938688:  (*FrameOutput)(nil),  /* event=FrameOutput: */
-	17021232753503984522: (*PairChanged)(nil),  /* event=PairChanged a:b:rel: */
-	14005264853352099464: (*SceneEnded)(nil),   /* event=SceneEnded: */
-	12902248384806780167: (*SceneStarted)(nil), /* event=SceneStarted: */
-	7027046405509259850:  (*StateChanged)(nil), /* event=StateChanged noun:aspect:prev:trait: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -396,4 +359,41 @@ func init() {
 			&Zt_Event,
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "frame",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_Event,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_Frame,
+	&Zt_FrameOutput,
+	&Zt_SceneStarted,
+	&Zt_SceneEnded,
+	&Zt_StateChanged,
+	&Zt_PairChanged,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	14657663848717440116: (*Frame)(nil),        /* Frame result:events: */
+	2438049115146588168:  (*Frame)(nil),        /* Frame result:events:error: */
+	4385780296792938688:  (*FrameOutput)(nil),  /* event=FrameOutput: */
+	17021232753503984522: (*PairChanged)(nil),  /* event=PairChanged a:b:rel: */
+	14005264853352099464: (*SceneEnded)(nil),   /* event=SceneEnded: */
+	12902248384806780167: (*SceneStarted)(nil), /* event=SceneStarted: */
+	7027046405509259850:  (*StateChanged)(nil), /* event=StateChanged noun:aspect:prev:trait: */
 }

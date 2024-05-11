@@ -2331,333 +2331,6 @@ func (op *AdditionalLinks_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:       "jess",
-	Slot:       z_slot_list,
-	Flow:       z_flow_list,
-	Signatures: z_signatures,
-}
-
-// a list of all slots in this this package
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_Matched,
-	&Zt_NounBuilder,
-}
-
-// a list of all flows in this this package
-// ( ex. for reading blockly blocks )
-var z_flow_list = []*typeinfo.Flow{
-	&Zt_Article,
-	&Zt_CommaAnd,
-	&Zt_CommaAndOr,
-	&Zt_Are,
-	&Zt_Called,
-	&Zt_Name,
-	&Zt_Noun,
-	&Zt_NamedNoun,
-	&Zt_KindCalled,
-	&Zt_Names,
-	&Zt_AdditionalNames,
-	&Zt_CountedKind,
-	&Zt_Kind,
-	&Zt_Kinds,
-	&Zt_AdditionalKinds,
-	&Zt_Property,
-	&Zt_Trait,
-	&Zt_Traits,
-	&Zt_AdditionalTraits,
-	&Zt_Words,
-	&Zt_Verb,
-	&Zt_MatchingPhrases,
-	&Zt_KindsOf,
-	&Zt_KindsAreTraits,
-	&Zt_AspectsAreTraits,
-	&Zt_VerbNamesAreNames,
-	&Zt_NamesVerbNames,
-	&Zt_NamesAreLikeVerbs,
-	&Zt_VerbPhrase,
-	&Zt_Adjectives,
-	&Zt_AdditionalAdjectives,
-	&Zt_PropertyNounValue,
-	&Zt_NounPropertyValue,
-	&Zt_SingleValue,
-	&Zt_QuotedText,
-	&Zt_MatchingNumber,
-	&Zt_KindsHaveProperties,
-	&Zt_CalledName,
-	&Zt_PropertyType,
-	&Zt_KindsAreEither,
-	&Zt_NewTrait,
-	&Zt_QuotedTexts,
-	&Zt_AdditionalText,
-	&Zt_RulePrefix,
-	&Zt_RuleSuffix,
-	&Zt_RuleName,
-	&Zt_RuleTarget,
-	&Zt_SubAssignment,
-	&Zt_TimedRule,
-	&Zt_Understand,
-	&Zt_MapLocations,
-	&Zt_AdditionalDirections,
-	&Zt_MapDirections,
-	&Zt_MapConnections,
-	&Zt_DirectionOfLinking,
-	&Zt_Direction,
-	&Zt_Linking,
-	&Zt_AdditionalLinks,
-}
-
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-	12489206644669467772: (*AdditionalAdjectives)(nil), /* AdditionalAdjectives commaAnd:adjectives: */
-	13976572281991597662: (*AdditionalDirections)(nil), /* AdditionalDirections commaAnd:directionOfLinking: */
-	3987359216723603269:  (*AdditionalDirections)(nil), /* AdditionalDirections commaAnd:directionOfLinking:additionalDirections: */
-	12174030489678544826: (*AdditionalKinds)(nil),      /* AdditionalKinds commaAnd:kinds: */
-	3282054325918314061:  (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:linking: */
-	5988669985902941853:  (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:linking:additionalLinks: */
-	16975120945491427296: (*AdditionalNames)(nil),      /* AdditionalNames commaAnd:names: */
-	12949801356443185096: (*AdditionalText)(nil),       /* AdditionalText commaAndOr:quotedTexts: */
-	508023169458945308:   (*AdditionalTraits)(nil),     /* AdditionalTraits commaAnd:traits: */
-	1887918947148326916:  (*AdditionalTraits)(nil),     /* AdditionalTraits traits: */
-	10618851046870477413: (*Adjectives)(nil),           /* Adjectives */
-	12215120732458766748: (*Adjectives)(nil),           /* Adjectives additionalAdjectives: */
-	724420376605497959:   (*Adjectives)(nil),           /* Adjectives commaAnd: */
-	17477522713582243508: (*Adjectives)(nil),           /* Adjectives commaAnd:additionalAdjectives: */
-	1568830118683768373:  (*Adjectives)(nil),           /* Adjectives commaAnd:kind: */
-	7021517372525507842:  (*Adjectives)(nil),           /* Adjectives commaAnd:kind:additionalAdjectives: */
-	7663368451290651677:  (*Adjectives)(nil),           /* Adjectives kind: */
-	16725271580009929658: (*Adjectives)(nil),           /* Adjectives kind:additionalAdjectives: */
-	13544991759812118088: (*Adjectives)(nil),           /* Adjectives traits: */
-	13327572087367323885: (*Adjectives)(nil),           /* Adjectives traits:additionalAdjectives: */
-	2209109858568160146:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd: */
-	11777076077986952519: (*Adjectives)(nil),           /* Adjectives traits:commaAnd:additionalAdjectives: */
-	5997117370605758938:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd:kind: */
-	5841657992957591039:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd:kind:additionalAdjectives: */
-	11552995266309396480: (*Adjectives)(nil),           /* Adjectives traits:kind: */
-	8078288476520567765:  (*Adjectives)(nil),           /* Adjectives traits:kind:additionalAdjectives: */
-	14557216947727331217: (*Are)(nil),                  /* Are matched: */
-	10435354424123783362: (*Article)(nil),              /* Article text: */
-	3333774278464825615:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:plainNames: */
-	1429396826658837670:  (*Called)(nil),               /* Called matched: */
-	1453048882349619361:  (*CalledName)(nil),           /* CalledName called:name: */
-	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
-	4143979682086652670:  (*CommaAndOr)(nil),           /* CommaAndOr matched: */
-	11748118905044300293: (*Direction)(nil),            /* Direction text: */
-	15872175738337217373: (*DirectionOfLinking)(nil),   /* DirectionOfLinking direction:fromOf:linking: */
-	381833413316053162:   (*KindCalled)(nil),           /* KindCalled kind:called:namedNoun: */
-	15647995089065713351: (*KindCalled)(nil),           /* KindCalled traits:kind:called:namedNoun: */
-	16939996019861136326: (*Kinds)(nil),                /* Kinds article:matched: */
-	16946855517465005572: (*Kinds)(nil),                /* Kinds article:matched:additionalKinds: */
-	17808071339216334934: (*Kinds)(nil),                /* Kinds matched: */
-	17872094200105304436: (*Kinds)(nil),                /* Kinds matched:additionalKinds: */
-	4933212495013814755:  (*Kinds)(nil),                /* Kinds traits:article:matched: */
-	1182820540821259821:  (*Kinds)(nil),                /* Kinds traits:article:matched:additionalKinds: */
-	831875526186841727:   (*Kinds)(nil),                /* Kinds traits:matched: */
-	3736619607479472409:  (*Kinds)(nil),                /* Kinds traits:matched:additionalKinds: */
-	2480868085776671009:  (*KindsAreEither)(nil),       /* KindsAreEither kind:canBe:traits: */
-	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
-	17116270036433389047: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType: */
-	17156006172306843757: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType:calledName: */
-	8108884175448666030:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:propertyType: */
-	5228896930769074198:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:propertyType:calledName: */
-	2093759548632112131:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType: */
-	11010766076935860857: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType:calledName: */
-	13822756587399879234: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType: */
-	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
-	11715331887122574628: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:name: */
-	17568620593785114477: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:name: */
-	1268488188857917463:  (*Linking)(nil),              /* Linking */
-	5424212330747857864:  (*Linking)(nil),              /* Linking kindCalled: */
-	6446505275065105379:  (*Linking)(nil),              /* Linking kindCalled:name: */
-	2710323341843582806:  (*Linking)(nil),              /* Linking kindCalled:noun: */
-	3374566505223385661:  (*Linking)(nil),              /* Linking kindCalled:noun:name: */
-	6388981702446933508:  (*Linking)(nil),              /* Linking name: */
-	699798969473871641:   (*Linking)(nil),              /* Linking noun: */
-	7057336974261527000:  (*Linking)(nil),              /* Linking noun:name: */
-	12985609098990274833: (*Linking)(nil),              /* Linking nowhere: */
-	14771750539341337516: (*Linking)(nil),              /* Linking nowhere:kindCalled: */
-	5903702872919052743:  (*Linking)(nil),              /* Linking nowhere:kindCalled:name: */
-	5217319623359730706:  (*Linking)(nil),              /* Linking nowhere:kindCalled:noun: */
-	3495762696381881337:  (*Linking)(nil),              /* Linking nowhere:kindCalled:noun:name: */
-	5842644028483118736:  (*Linking)(nil),              /* Linking nowhere:name: */
-	6234445843544605613:  (*Linking)(nil),              /* Linking nowhere:noun: */
-	215166621636789820:   (*Linking)(nil),              /* Linking nowhere:noun:name: */
-	14338407882822574093: (*MapConnections)(nil),       /* MapConnections through:doors:additionalLinks:are:room: */
-	13548965473900735969: (*MapConnections)(nil),       /* MapConnections through:doors:are:room: */
-	8340425706814700105:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are: */
-	11792054126316928315: (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:linking: */
-	17410395297541184115: (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:linking:redirect: */
-	7836789797345891325:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:redirect: */
-	10172864188299309151: (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking: */
-	4228974132366036894:  (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking:additionalDirections: */
-	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
-	12459504191875059457: (*MatchingPhrases)(nil),      /* MatchingPhrases understand:timedRule:kindsOf:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
-	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
-	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
-	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
-	8736862563783456239:  (*NewTrait)(nil),             /* NewTrait matched: */
-	8812100125409583293:  (*NewTrait)(nil),             /* NewTrait matched:newTrait: */
-	2974378055008641127:  (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:article:property:of:singleValue: */
-	15033098472290183804: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:article:property:singleValue: */
-	12848318806630146367: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:of:singleValue: */
-	10878709482269586052: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:singleValue: */
-	11106580022094386190: (*Property)(nil),             /* Property article:matched: */
-	7038723543321541230:  (*Property)(nil),             /* Property matched: */
-	12495940289451013068: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are: */
-	3073222598673922702:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:quotedTexts: */
-	3232071257951321417:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue: */
-	12779492266059217511: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue:quotedTexts: */
-	9991119609101366868:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are: */
-	13706825447213238054: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:quotedTexts: */
-	9176481845249379681:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue: */
-	15509934208360069807: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue:quotedTexts: */
-	3271806062429822368:  (*PropertyType)(nil),         /* PropertyType */
-	11567946081716077320: (*PropertyType)(nil),         /* PropertyType kind: */
-	8224056348026199873:  (*PropertyType)(nil),         /* PropertyType primitive: */
-	8660980422311242175:  (*PropertyType)(nil),         /* PropertyType primitive:kind: */
-	6626169867101049892:  (*QuotedText)(nil),           /* QuotedText matched: */
-	15490383194906526516: (*QuotedTexts)(nil),          /* QuotedTexts quotedText: */
-	18124669431880345752: (*QuotedTexts)(nil),          /* QuotedTexts quotedText:additionalText: */
-	13648613004771847774: (*RuleName)(nil),             /* RuleName article:matched: */
-	9590534200503230547:  (*RuleName)(nil),             /* RuleName article:matched:suffix: */
-	10604149086097886046: (*RuleName)(nil),             /* RuleName matched: */
-	1396372580611190611:  (*RuleName)(nil),             /* RuleName matched:suffix: */
-	10185222741034633300: (*RuleName)(nil),             /* RuleName prefix:article:matched: */
-	3408594760617413485:  (*RuleName)(nil),             /* RuleName prefix:article:matched:suffix: */
-	8153362324797089296:  (*RuleName)(nil),             /* RuleName prefix:matched: */
-	6292556720924657065:  (*RuleName)(nil),             /* RuleName prefix:matched:suffix: */
-	6834190963007140391:  (*RulePrefix)(nil),           /* RulePrefix */
-	9987385698008157446:  (*RuleSuffix)(nil),           /* RuleSuffix */
-	3168366490539674518:  (*RuleTarget)(nil),           /* RuleTarget */
-	1634876132861208202:  (*RuleTarget)(nil),           /* RuleTarget kind: */
-	14594080518908639404: (*RuleTarget)(nil),           /* RuleTarget kind:noun: */
-	16511386036724990548: (*RuleTarget)(nil),           /* RuleTarget noun: */
-	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
-	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
-	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
-	3199991737231408734:  (*SingleValue)(nil),          /* SingleValue matchingNumber:kind: */
-	17789670957933718200: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun: */
-	12644158024662816112: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun:kind: */
-	11550266937804910612: (*SingleValue)(nil),          /* SingleValue noun: */
-	15983631673684921876: (*SingleValue)(nil),          /* SingleValue noun:kind: */
-	3958109237643295925:  (*SingleValue)(nil),          /* SingleValue quotedText: */
-	5530597249301129963:  (*SingleValue)(nil),          /* SingleValue quotedText:kind: */
-	17617190106567464055: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber: */
-	13435854409171053573: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:kind: */
-	16335742359860243615: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun: */
-	8688649593759560061:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun:kind: */
-	7763015042528813017:  (*SingleValue)(nil),          /* SingleValue quotedText:noun: */
-	1174375068044253639:  (*SingleValue)(nil),          /* SingleValue quotedText:noun:kind: */
-	3161285017754785721:  (*SubAssignment)(nil),        /* SubAssignment assignment: */
-	8641297100372239080:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleName:subAssignment: */
-	1656499122350834261:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
-	11245891509928755726: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */
-	5942283442270160717:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleName:subAssignment: */
-	1341518374945402682:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleSuffix:ruleName:subAssignment: */
-	11971369972990827443: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleSuffix:subAssignment: */
-	15914112945604367254: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:subAssignment: */
-	8025626927280177953:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:subAssignment: */
-	11886989456270920378: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleName:subAssignment: */
-	11973597951319921255: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:ruleName:subAssignment: */
-	18120234146621178072: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:subAssignment: */
-	7932554349672161467:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleName:subAssignment: */
-	4030485101470664976:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleSuffix:ruleName:subAssignment: */
-	8840422668263390841:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleSuffix:subAssignment: */
-	15591696920291023604: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:subAssignment: */
-	13116956132782342707: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:subAssignment: */
-	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
-	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
-	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
-	2878025327467574768:  (*Traits)(nil),               /* Traits trait:additionalTraits: */
-	15200598710934343751: (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:names: */
-	8602404775723907374:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:pluralOf:names: */
-	4257336208718925827:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:names: */
-	1299769703937557498:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:pluralOf:names: */
-	5125756836274165399:  (*Verb)(nil),                 /* Verb text: */
-	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
-	7322259980003111582:  (*VerbPhrase)(nil),           /* VerbPhrase verb:plainNames: */
-	17678340847396548932: (*Words)(nil),                /* Words matched: */
-	11632287528917650754: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind:matched: */
-	6226299220342727794:  (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind:matched: */
-	643122070839149560:   (*Kind)(nil),                 /* noun_builder=Kind article:matched: */
-	12803964412357300908: (*Kind)(nil),                 /* noun_builder=Kind matched: */
-	16595966641928411799: (*Name)(nil),                 /* noun_builder=Name article:matched: */
-	4672836465996832923:  (*Name)(nil),                 /* noun_builder=Name matched: */
-	18272900946848200057: (*NamedNoun)(nil),            /* noun_builder=NamedNoun */
-	15792878411416494446: (*NamedNoun)(nil),            /* noun_builder=NamedNoun name: */
-	4609637404391733803:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun: */
-	12436910703333794014: (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun:name: */
-	2640583889409900672:  (*Names)(nil),                /* noun_builder=Names */
-	12738701442995129767: (*Names)(nil),                /* noun_builder=Names additionalNames: */
-	18240362602181459374: (*Names)(nil),                /* noun_builder=Names countedKind: */
-	12037276021421474977: (*Names)(nil),                /* noun_builder=Names countedKind:additionalNames: */
-	11318456940554365262: (*Names)(nil),                /* noun_builder=Names countedKind:kind: */
-	2921561536254769409:  (*Names)(nil),                /* noun_builder=Names countedKind:kind:additionalNames: */
-	13682022206539604949: (*Names)(nil),                /* noun_builder=Names countedKind:kind:name: */
-	11386403162429699442: (*Names)(nil),                /* noun_builder=Names countedKind:kind:name:additionalNames: */
-	4820492468237421857:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled: */
-	4857057301878550486:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:additionalNames: */
-	4610133023990007327:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind: */
-	306331290473716240:   (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:additionalNames: */
-	12828387939941830738: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:name: */
-	13812482964698333117: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:name:additionalNames: */
-	3933914708907484064:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:name: */
-	5386185730384130791:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:name:additionalNames: */
-	2738021730814332381:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun: */
-	3703234872673498778:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:additionalNames: */
-	12823222385333700579: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind: */
-	10265094182115599260: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:additionalNames: */
-	10650274376302874710: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:name: */
-	14970606785357505161: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:name:additionalNames: */
-	7240077436469524524:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:name: */
-	16627837112229598459: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:name:additionalNames: */
-	15188605287333602229: (*Names)(nil),                /* noun_builder=Names countedKind:name: */
-	10005531180398488466: (*Names)(nil),                /* noun_builder=Names countedKind:name:additionalNames: */
-	2732786101127601032:  (*Names)(nil),                /* noun_builder=Names countedKind:noun: */
-	11074441579857580655: (*Names)(nil),                /* noun_builder=Names countedKind:noun:additionalNames: */
-	5699674351646236608:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind: */
-	11208875936483827527: (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:additionalNames: */
-	4114723026604174811:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:name: */
-	17665316277083130708: (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:name:additionalNames: */
-	7558135697584793123:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:name: */
-	4307309335598848092:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:name:additionalNames: */
-	8731626769408708840:  (*Names)(nil),                /* noun_builder=Names kind: */
-	5229708717675470479:  (*Names)(nil),                /* noun_builder=Names kind:additionalNames: */
-	10589513982817099011: (*Names)(nil),                /* noun_builder=Names kind:name: */
-	12371250482715634300: (*Names)(nil),                /* noun_builder=Names kind:name:additionalNames: */
-	1696243941719473959:  (*Names)(nil),                /* noun_builder=Names kindCalled: */
-	16924085558067939192: (*Names)(nil),                /* noun_builder=Names kindCalled:additionalNames: */
-	17975453262944337013: (*Names)(nil),                /* noun_builder=Names kindCalled:kind: */
-	1690461824825161682:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:additionalNames: */
-	8025575955095143172:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:name: */
-	4411930061699572051:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:name:additionalNames: */
-	8470829746237860794:  (*Names)(nil),                /* noun_builder=Names kindCalled:name: */
-	2285294953849975365:  (*Names)(nil),                /* noun_builder=Names kindCalled:name:additionalNames: */
-	456838907409351087:   (*Names)(nil),                /* noun_builder=Names kindCalled:noun: */
-	3607075457371268800:  (*Names)(nil),                /* noun_builder=Names kindCalled:noun:additionalNames: */
-	10428480112727021197: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind: */
-	14860782265429290474: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:additionalNames: */
-	14089547370513396124: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:name: */
-	18215615836863081227: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:name:additionalNames: */
-	15212080762452775330: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:name: */
-	15368829543700440685: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:name:additionalNames: */
-	5911903052848076411:  (*Names)(nil),                /* noun_builder=Names name: */
-	12319710271794432948: (*Names)(nil),                /* noun_builder=Names name:additionalNames: */
-	2828161936031789150:  (*Names)(nil),                /* noun_builder=Names noun: */
-	6435800613231659505:  (*Names)(nil),                /* noun_builder=Names noun:additionalNames: */
-	1013731956332121214:  (*Names)(nil),                /* noun_builder=Names noun:kind: */
-	2837764967510892753:  (*Names)(nil),                /* noun_builder=Names noun:kind:additionalNames: */
-	1168764988217479109:  (*Names)(nil),                /* noun_builder=Names noun:kind:name: */
-	14830046638313199170: (*Names)(nil),                /* noun_builder=Names noun:kind:name:additionalNames: */
-	7779767529101118373:  (*Names)(nil),                /* noun_builder=Names noun:name: */
-	8867758540341244642:  (*Names)(nil),                /* noun_builder=Names noun:name:additionalNames: */
-	4465529434619879510:  (*Noun)(nil),                 /* noun_builder=Noun article:matched: */
-	2598335774687055558:  (*Noun)(nil),                 /* noun_builder=Noun matched: */
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -4027,4 +3700,331 @@ func init() {
 			"comment": []interface{}{"partial phrase used for map connections", "allows multiple doors, etc. on the lhs."},
 		},
 	}
+}
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:       "jess",
+	Slot:       z_slot_list,
+	Flow:       z_flow_list,
+	Signatures: z_signatures,
+}
+
+// a list of all slots in this this package
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_Matched,
+	&Zt_NounBuilder,
+}
+
+// a list of all flows in this this package
+// ( ex. for reading blockly blocks )
+var z_flow_list = []*typeinfo.Flow{
+	&Zt_Article,
+	&Zt_CommaAnd,
+	&Zt_CommaAndOr,
+	&Zt_Are,
+	&Zt_Called,
+	&Zt_Name,
+	&Zt_Noun,
+	&Zt_NamedNoun,
+	&Zt_KindCalled,
+	&Zt_Names,
+	&Zt_AdditionalNames,
+	&Zt_CountedKind,
+	&Zt_Kind,
+	&Zt_Kinds,
+	&Zt_AdditionalKinds,
+	&Zt_Property,
+	&Zt_Trait,
+	&Zt_Traits,
+	&Zt_AdditionalTraits,
+	&Zt_Words,
+	&Zt_Verb,
+	&Zt_MatchingPhrases,
+	&Zt_KindsOf,
+	&Zt_KindsAreTraits,
+	&Zt_AspectsAreTraits,
+	&Zt_VerbNamesAreNames,
+	&Zt_NamesVerbNames,
+	&Zt_NamesAreLikeVerbs,
+	&Zt_VerbPhrase,
+	&Zt_Adjectives,
+	&Zt_AdditionalAdjectives,
+	&Zt_PropertyNounValue,
+	&Zt_NounPropertyValue,
+	&Zt_SingleValue,
+	&Zt_QuotedText,
+	&Zt_MatchingNumber,
+	&Zt_KindsHaveProperties,
+	&Zt_CalledName,
+	&Zt_PropertyType,
+	&Zt_KindsAreEither,
+	&Zt_NewTrait,
+	&Zt_QuotedTexts,
+	&Zt_AdditionalText,
+	&Zt_RulePrefix,
+	&Zt_RuleSuffix,
+	&Zt_RuleName,
+	&Zt_RuleTarget,
+	&Zt_SubAssignment,
+	&Zt_TimedRule,
+	&Zt_Understand,
+	&Zt_MapLocations,
+	&Zt_AdditionalDirections,
+	&Zt_MapDirections,
+	&Zt_MapConnections,
+	&Zt_DirectionOfLinking,
+	&Zt_Direction,
+	&Zt_Linking,
+	&Zt_AdditionalLinks,
+}
+
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+	12489206644669467772: (*AdditionalAdjectives)(nil), /* AdditionalAdjectives commaAnd:adjectives: */
+	13976572281991597662: (*AdditionalDirections)(nil), /* AdditionalDirections commaAnd:directionOfLinking: */
+	3987359216723603269:  (*AdditionalDirections)(nil), /* AdditionalDirections commaAnd:directionOfLinking:additionalDirections: */
+	12174030489678544826: (*AdditionalKinds)(nil),      /* AdditionalKinds commaAnd:kinds: */
+	3282054325918314061:  (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:linking: */
+	5988669985902941853:  (*AdditionalLinks)(nil),      /* AdditionalLinks commaAnd:linking:additionalLinks: */
+	16975120945491427296: (*AdditionalNames)(nil),      /* AdditionalNames commaAnd:names: */
+	12949801356443185096: (*AdditionalText)(nil),       /* AdditionalText commaAndOr:quotedTexts: */
+	508023169458945308:   (*AdditionalTraits)(nil),     /* AdditionalTraits commaAnd:traits: */
+	1887918947148326916:  (*AdditionalTraits)(nil),     /* AdditionalTraits traits: */
+	10618851046870477413: (*Adjectives)(nil),           /* Adjectives */
+	12215120732458766748: (*Adjectives)(nil),           /* Adjectives additionalAdjectives: */
+	724420376605497959:   (*Adjectives)(nil),           /* Adjectives commaAnd: */
+	17477522713582243508: (*Adjectives)(nil),           /* Adjectives commaAnd:additionalAdjectives: */
+	1568830118683768373:  (*Adjectives)(nil),           /* Adjectives commaAnd:kind: */
+	7021517372525507842:  (*Adjectives)(nil),           /* Adjectives commaAnd:kind:additionalAdjectives: */
+	7663368451290651677:  (*Adjectives)(nil),           /* Adjectives kind: */
+	16725271580009929658: (*Adjectives)(nil),           /* Adjectives kind:additionalAdjectives: */
+	13544991759812118088: (*Adjectives)(nil),           /* Adjectives traits: */
+	13327572087367323885: (*Adjectives)(nil),           /* Adjectives traits:additionalAdjectives: */
+	2209109858568160146:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd: */
+	11777076077986952519: (*Adjectives)(nil),           /* Adjectives traits:commaAnd:additionalAdjectives: */
+	5997117370605758938:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd:kind: */
+	5841657992957591039:  (*Adjectives)(nil),           /* Adjectives traits:commaAnd:kind:additionalAdjectives: */
+	11552995266309396480: (*Adjectives)(nil),           /* Adjectives traits:kind: */
+	8078288476520567765:  (*Adjectives)(nil),           /* Adjectives traits:kind:additionalAdjectives: */
+	14557216947727331217: (*Are)(nil),                  /* Are matched: */
+	10435354424123783362: (*Article)(nil),              /* Article text: */
+	3333774278464825615:  (*AspectsAreTraits)(nil),     /* AspectsAreTraits aspect:are:plainNames: */
+	1429396826658837670:  (*Called)(nil),               /* Called matched: */
+	1453048882349619361:  (*CalledName)(nil),           /* CalledName called:name: */
+	5180090635119408685:  (*CommaAnd)(nil),             /* CommaAnd matched: */
+	4143979682086652670:  (*CommaAndOr)(nil),           /* CommaAndOr matched: */
+	11748118905044300293: (*Direction)(nil),            /* Direction text: */
+	15872175738337217373: (*DirectionOfLinking)(nil),   /* DirectionOfLinking direction:fromOf:linking: */
+	381833413316053162:   (*KindCalled)(nil),           /* KindCalled kind:called:namedNoun: */
+	15647995089065713351: (*KindCalled)(nil),           /* KindCalled traits:kind:called:namedNoun: */
+	16939996019861136326: (*Kinds)(nil),                /* Kinds article:matched: */
+	16946855517465005572: (*Kinds)(nil),                /* Kinds article:matched:additionalKinds: */
+	17808071339216334934: (*Kinds)(nil),                /* Kinds matched: */
+	17872094200105304436: (*Kinds)(nil),                /* Kinds matched:additionalKinds: */
+	4933212495013814755:  (*Kinds)(nil),                /* Kinds traits:article:matched: */
+	1182820540821259821:  (*Kinds)(nil),                /* Kinds traits:article:matched:additionalKinds: */
+	831875526186841727:   (*Kinds)(nil),                /* Kinds traits:matched: */
+	3736619607479472409:  (*Kinds)(nil),                /* Kinds traits:matched:additionalKinds: */
+	2480868085776671009:  (*KindsAreEither)(nil),       /* KindsAreEither kind:canBe:traits: */
+	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
+	17116270036433389047: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType: */
+	17156006172306843757: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType:calledName: */
+	8108884175448666030:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:propertyType: */
+	5228896930769074198:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:propertyType:calledName: */
+	2093759548632112131:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType: */
+	11010766076935860857: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType:calledName: */
+	13822756587399879234: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType: */
+	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
+	11715331887122574628: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:name: */
+	17568620593785114477: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:name: */
+	1268488188857917463:  (*Linking)(nil),              /* Linking */
+	5424212330747857864:  (*Linking)(nil),              /* Linking kindCalled: */
+	6446505275065105379:  (*Linking)(nil),              /* Linking kindCalled:name: */
+	2710323341843582806:  (*Linking)(nil),              /* Linking kindCalled:noun: */
+	3374566505223385661:  (*Linking)(nil),              /* Linking kindCalled:noun:name: */
+	6388981702446933508:  (*Linking)(nil),              /* Linking name: */
+	699798969473871641:   (*Linking)(nil),              /* Linking noun: */
+	7057336974261527000:  (*Linking)(nil),              /* Linking noun:name: */
+	12985609098990274833: (*Linking)(nil),              /* Linking nowhere: */
+	14771750539341337516: (*Linking)(nil),              /* Linking nowhere:kindCalled: */
+	5903702872919052743:  (*Linking)(nil),              /* Linking nowhere:kindCalled:name: */
+	5217319623359730706:  (*Linking)(nil),              /* Linking nowhere:kindCalled:noun: */
+	3495762696381881337:  (*Linking)(nil),              /* Linking nowhere:kindCalled:noun:name: */
+	5842644028483118736:  (*Linking)(nil),              /* Linking nowhere:name: */
+	6234445843544605613:  (*Linking)(nil),              /* Linking nowhere:noun: */
+	215166621636789820:   (*Linking)(nil),              /* Linking nowhere:noun:name: */
+	14338407882822574093: (*MapConnections)(nil),       /* MapConnections through:doors:additionalLinks:are:room: */
+	13548965473900735969: (*MapConnections)(nil),       /* MapConnections through:doors:are:room: */
+	8340425706814700105:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are: */
+	11792054126316928315: (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:linking: */
+	17410395297541184115: (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:linking:redirect: */
+	7836789797345891325:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:redirect: */
+	10172864188299309151: (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking: */
+	4228974132366036894:  (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking:additionalDirections: */
+	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
+	12459504191875059457: (*MatchingPhrases)(nil),      /* MatchingPhrases understand:timedRule:kindsOf:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
+	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
+	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
+	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
+	8736862563783456239:  (*NewTrait)(nil),             /* NewTrait matched: */
+	8812100125409583293:  (*NewTrait)(nil),             /* NewTrait matched:newTrait: */
+	2974378055008641127:  (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:article:property:of:singleValue: */
+	15033098472290183804: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:article:property:singleValue: */
+	12848318806630146367: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:of:singleValue: */
+	10878709482269586052: (*NounPropertyValue)(nil),    /* NounPropertyValue namedNoun:has:property:singleValue: */
+	11106580022094386190: (*Property)(nil),             /* Property article:matched: */
+	7038723543321541230:  (*Property)(nil),             /* Property matched: */
+	12495940289451013068: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are: */
+	3073222598673922702:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:quotedTexts: */
+	3232071257951321417:  (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue: */
+	12779492266059217511: (*PropertyNounValue)(nil),    /* PropertyNounValue article:property:of:namedNoun:are:singleValue:quotedTexts: */
+	9991119609101366868:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are: */
+	13706825447213238054: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:quotedTexts: */
+	9176481845249379681:  (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue: */
+	15509934208360069807: (*PropertyNounValue)(nil),    /* PropertyNounValue property:of:namedNoun:are:singleValue:quotedTexts: */
+	3271806062429822368:  (*PropertyType)(nil),         /* PropertyType */
+	11567946081716077320: (*PropertyType)(nil),         /* PropertyType kind: */
+	8224056348026199873:  (*PropertyType)(nil),         /* PropertyType primitive: */
+	8660980422311242175:  (*PropertyType)(nil),         /* PropertyType primitive:kind: */
+	6626169867101049892:  (*QuotedText)(nil),           /* QuotedText matched: */
+	15490383194906526516: (*QuotedTexts)(nil),          /* QuotedTexts quotedText: */
+	18124669431880345752: (*QuotedTexts)(nil),          /* QuotedTexts quotedText:additionalText: */
+	13648613004771847774: (*RuleName)(nil),             /* RuleName article:matched: */
+	9590534200503230547:  (*RuleName)(nil),             /* RuleName article:matched:suffix: */
+	10604149086097886046: (*RuleName)(nil),             /* RuleName matched: */
+	1396372580611190611:  (*RuleName)(nil),             /* RuleName matched:suffix: */
+	10185222741034633300: (*RuleName)(nil),             /* RuleName prefix:article:matched: */
+	3408594760617413485:  (*RuleName)(nil),             /* RuleName prefix:article:matched:suffix: */
+	8153362324797089296:  (*RuleName)(nil),             /* RuleName prefix:matched: */
+	6292556720924657065:  (*RuleName)(nil),             /* RuleName prefix:matched:suffix: */
+	6834190963007140391:  (*RulePrefix)(nil),           /* RulePrefix */
+	9987385698008157446:  (*RuleSuffix)(nil),           /* RuleSuffix */
+	3168366490539674518:  (*RuleTarget)(nil),           /* RuleTarget */
+	1634876132861208202:  (*RuleTarget)(nil),           /* RuleTarget kind: */
+	14594080518908639404: (*RuleTarget)(nil),           /* RuleTarget kind:noun: */
+	16511386036724990548: (*RuleTarget)(nil),           /* RuleTarget noun: */
+	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
+	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
+	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
+	3199991737231408734:  (*SingleValue)(nil),          /* SingleValue matchingNumber:kind: */
+	17789670957933718200: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun: */
+	12644158024662816112: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun:kind: */
+	11550266937804910612: (*SingleValue)(nil),          /* SingleValue noun: */
+	15983631673684921876: (*SingleValue)(nil),          /* SingleValue noun:kind: */
+	3958109237643295925:  (*SingleValue)(nil),          /* SingleValue quotedText: */
+	5530597249301129963:  (*SingleValue)(nil),          /* SingleValue quotedText:kind: */
+	17617190106567464055: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber: */
+	13435854409171053573: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:kind: */
+	16335742359860243615: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun: */
+	8688649593759560061:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun:kind: */
+	7763015042528813017:  (*SingleValue)(nil),          /* SingleValue quotedText:noun: */
+	1174375068044253639:  (*SingleValue)(nil),          /* SingleValue quotedText:noun:kind: */
+	3161285017754785721:  (*SubAssignment)(nil),        /* SubAssignment assignment: */
+	8641297100372239080:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleName:subAssignment: */
+	1656499122350834261:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:ruleName:subAssignment: */
+	11245891509928755726: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleSuffix:subAssignment: */
+	5942283442270160717:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleName:subAssignment: */
+	1341518374945402682:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleSuffix:ruleName:subAssignment: */
+	11971369972990827443: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:ruleSuffix:subAssignment: */
+	15914112945604367254: (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:ruleTarget:subAssignment: */
+	8025626927280177953:  (*TimedRule)(nil),            /* TimedRule rulePrefix:pattern:subAssignment: */
+	11886989456270920378: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleName:subAssignment: */
+	11973597951319921255: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:ruleName:subAssignment: */
+	18120234146621178072: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleSuffix:subAssignment: */
+	7932554349672161467:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleName:subAssignment: */
+	4030485101470664976:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleSuffix:ruleName:subAssignment: */
+	8840422668263390841:  (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:ruleSuffix:subAssignment: */
+	15591696920291023604: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:ruleTarget:subAssignment: */
+	13116956132782342707: (*TimedRule)(nil),            /* TimedRule rulePrefix:someone:pattern:subAssignment: */
+	14664763846497769151: (*Trait)(nil),                /* Trait article:matched: */
+	12725361887885713715: (*Trait)(nil),                /* Trait matched: */
+	2416383336069566114:  (*Traits)(nil),               /* Traits trait: */
+	2878025327467574768:  (*Traits)(nil),               /* Traits trait:additionalTraits: */
+	15200598710934343751: (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:names: */
+	8602404775723907374:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:article:pluralOf:names: */
+	4257336208718925827:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:names: */
+	1299769703937557498:  (*Understand)(nil),           /* Understand understand:quotedTexts:as:pluralOf:names: */
+	5125756836274165399:  (*Verb)(nil),                 /* Verb text: */
+	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
+	7322259980003111582:  (*VerbPhrase)(nil),           /* VerbPhrase verb:plainNames: */
+	17678340847396548932: (*Words)(nil),                /* Words matched: */
+	11632287528917650754: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind:matched: */
+	6226299220342727794:  (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind:matched: */
+	643122070839149560:   (*Kind)(nil),                 /* noun_builder=Kind article:matched: */
+	12803964412357300908: (*Kind)(nil),                 /* noun_builder=Kind matched: */
+	16595966641928411799: (*Name)(nil),                 /* noun_builder=Name article:matched: */
+	4672836465996832923:  (*Name)(nil),                 /* noun_builder=Name matched: */
+	18272900946848200057: (*NamedNoun)(nil),            /* noun_builder=NamedNoun */
+	15792878411416494446: (*NamedNoun)(nil),            /* noun_builder=NamedNoun name: */
+	4609637404391733803:  (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun: */
+	12436910703333794014: (*NamedNoun)(nil),            /* noun_builder=NamedNoun noun:name: */
+	2640583889409900672:  (*Names)(nil),                /* noun_builder=Names */
+	12738701442995129767: (*Names)(nil),                /* noun_builder=Names additionalNames: */
+	18240362602181459374: (*Names)(nil),                /* noun_builder=Names countedKind: */
+	12037276021421474977: (*Names)(nil),                /* noun_builder=Names countedKind:additionalNames: */
+	11318456940554365262: (*Names)(nil),                /* noun_builder=Names countedKind:kind: */
+	2921561536254769409:  (*Names)(nil),                /* noun_builder=Names countedKind:kind:additionalNames: */
+	13682022206539604949: (*Names)(nil),                /* noun_builder=Names countedKind:kind:name: */
+	11386403162429699442: (*Names)(nil),                /* noun_builder=Names countedKind:kind:name:additionalNames: */
+	4820492468237421857:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled: */
+	4857057301878550486:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:additionalNames: */
+	4610133023990007327:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind: */
+	306331290473716240:   (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:additionalNames: */
+	12828387939941830738: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:name: */
+	13812482964698333117: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:kind:name:additionalNames: */
+	3933914708907484064:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:name: */
+	5386185730384130791:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:name:additionalNames: */
+	2738021730814332381:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun: */
+	3703234872673498778:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:additionalNames: */
+	12823222385333700579: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind: */
+	10265094182115599260: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:additionalNames: */
+	10650274376302874710: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:name: */
+	14970606785357505161: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:kind:name:additionalNames: */
+	7240077436469524524:  (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:name: */
+	16627837112229598459: (*Names)(nil),                /* noun_builder=Names countedKind:kindCalled:noun:name:additionalNames: */
+	15188605287333602229: (*Names)(nil),                /* noun_builder=Names countedKind:name: */
+	10005531180398488466: (*Names)(nil),                /* noun_builder=Names countedKind:name:additionalNames: */
+	2732786101127601032:  (*Names)(nil),                /* noun_builder=Names countedKind:noun: */
+	11074441579857580655: (*Names)(nil),                /* noun_builder=Names countedKind:noun:additionalNames: */
+	5699674351646236608:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind: */
+	11208875936483827527: (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:additionalNames: */
+	4114723026604174811:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:name: */
+	17665316277083130708: (*Names)(nil),                /* noun_builder=Names countedKind:noun:kind:name:additionalNames: */
+	7558135697584793123:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:name: */
+	4307309335598848092:  (*Names)(nil),                /* noun_builder=Names countedKind:noun:name:additionalNames: */
+	8731626769408708840:  (*Names)(nil),                /* noun_builder=Names kind: */
+	5229708717675470479:  (*Names)(nil),                /* noun_builder=Names kind:additionalNames: */
+	10589513982817099011: (*Names)(nil),                /* noun_builder=Names kind:name: */
+	12371250482715634300: (*Names)(nil),                /* noun_builder=Names kind:name:additionalNames: */
+	1696243941719473959:  (*Names)(nil),                /* noun_builder=Names kindCalled: */
+	16924085558067939192: (*Names)(nil),                /* noun_builder=Names kindCalled:additionalNames: */
+	17975453262944337013: (*Names)(nil),                /* noun_builder=Names kindCalled:kind: */
+	1690461824825161682:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:additionalNames: */
+	8025575955095143172:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:name: */
+	4411930061699572051:  (*Names)(nil),                /* noun_builder=Names kindCalled:kind:name:additionalNames: */
+	8470829746237860794:  (*Names)(nil),                /* noun_builder=Names kindCalled:name: */
+	2285294953849975365:  (*Names)(nil),                /* noun_builder=Names kindCalled:name:additionalNames: */
+	456838907409351087:   (*Names)(nil),                /* noun_builder=Names kindCalled:noun: */
+	3607075457371268800:  (*Names)(nil),                /* noun_builder=Names kindCalled:noun:additionalNames: */
+	10428480112727021197: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind: */
+	14860782265429290474: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:additionalNames: */
+	14089547370513396124: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:name: */
+	18215615836863081227: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:kind:name:additionalNames: */
+	15212080762452775330: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:name: */
+	15368829543700440685: (*Names)(nil),                /* noun_builder=Names kindCalled:noun:name:additionalNames: */
+	5911903052848076411:  (*Names)(nil),                /* noun_builder=Names name: */
+	12319710271794432948: (*Names)(nil),                /* noun_builder=Names name:additionalNames: */
+	2828161936031789150:  (*Names)(nil),                /* noun_builder=Names noun: */
+	6435800613231659505:  (*Names)(nil),                /* noun_builder=Names noun:additionalNames: */
+	1013731956332121214:  (*Names)(nil),                /* noun_builder=Names noun:kind: */
+	2837764967510892753:  (*Names)(nil),                /* noun_builder=Names noun:kind:additionalNames: */
+	1168764988217479109:  (*Names)(nil),                /* noun_builder=Names noun:kind:name: */
+	14830046638313199170: (*Names)(nil),                /* noun_builder=Names noun:kind:name:additionalNames: */
+	7779767529101118373:  (*Names)(nil),                /* noun_builder=Names noun:name: */
+	8867758540341244642:  (*Names)(nil),                /* noun_builder=Names noun:name:additionalNames: */
+	4465529434619879510:  (*Noun)(nil),                 /* noun_builder=Noun article:matched: */
+	2598335774687055558:  (*Noun)(nil),                 /* noun_builder=Noun matched: */
 }

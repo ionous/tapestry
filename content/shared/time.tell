@@ -46,7 +46,7 @@ Tapestry:
             Object:field:
               - "story"
               - "turn count"
-        - Set:trait:
+        - Set:state:
             - "story"
             - "playing"
   - Define rule:named:do:
@@ -94,7 +94,7 @@ Tapestry:
                 - "story"
                 - "ending message"
       - - Nothing:
-      - - Set:trait:
+      - - Set:state:
             - "story"
             - Txt if:then:else:
                 - Not: "@finally"

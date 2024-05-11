@@ -38,7 +38,7 @@ func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromBool{Value: i}
 	}
-	return defineField(run, op.Name, op.Type, affine.Bool, init)
+	return defineField(run, op.Name, nil, affine.Bool, init)
 }
 
 func (op *NumberField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
