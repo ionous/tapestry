@@ -12,13 +12,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
 const ext = ".html"
 const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry@v0.24.4-1"
-const typesFolder = "types"
+const typesFolder = "type"
 const slotsFolder = "slot"
 
 //go:embed static/*
@@ -54,13 +55,17 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 		os.Mkdir(filepath.Join(outDir, slotsFolder), os.ModePerm)
 		for slot, part := range slots {
 			outFile := filepath.Join(outDir, slotsFolder, slot.Name+ext)
-			if e := Create(outFile, tem, map[string]any{
-				"Name": slot.Name,
-				"Slot": slot,
-				"Part": part,
+			if cmt, e := compact.ExtractComment(slot.Markup); e != nil {
+				err = e
+				break
+			} else if e := Create(outFile, tem, map[string]any{
+				"Name":    slot.Name,
+				"Slot":    slot,
+				"Part":    part,
+				"Comment": cmt,
 			}); e != nil {
 				err = e
-				return // early out
+				break
 			}
 		}
 	}

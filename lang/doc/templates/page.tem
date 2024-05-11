@@ -49,7 +49,7 @@
 	<div id="page" class="wide" style="outline: 0px;">
 		<div class="container">
 			{{- if .Slot }}{{ template "slot.tem" . }}
-			{{- else if .Types }}{{ template "package.tem" . }}
+			{{- else if .Types }}{{ template "idl.tem" . }}
 			{{- end -}}
 			{{/*-------------------------------------------------
 			page footer ( inside the container )

@@ -2,8 +2,10 @@ package doc
 
 import (
 	"embed"
+	"go/doc/comment"
 	"html/template"
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -18,69 +20,49 @@ func docTemplates() (*template.Template, error) {
 		"Capitalize": inflect.Capitalize,
 		"Title":      inflect.Titlecase,
 		"Camel":      inflect.Camelize,
-		"Lines": func(str any) (ret string) {
-			switch str := str.(type) {
-			case string:
-				ret = str
-			case []any:
-				ret, _ = compact.JoinLines(str)
-			case nil:
-				// ?
-			default:
-				log.Panicf("unknown string type %T", str)
-			}
-			return
+		"Lines":      extractLines,
+		"GoComment": func(str []string) template.HTML {
+			// use go's document parser to parse the document header
+			// ( since its also used for the package comment, might as well.
+			text := strings.Join(str, "\n")
+			var p comment.Parser
+			doc := p.Parse(text)
+			var pr comment.Printer
+			return template.HTML(pr.HTML(doc))
 		},
-
 		"TypeLink": TypeLink,
-		// "Encode": func(v any) (ret string) {
-		// 	return fmt.Sprintf("%#v", v)
-		// },
-		// // return the package scope; doesnt care if the tapestry type is exported
-		// // ( useful for typeinfo references where the go type becomes a primitive value )
-		// // ( ex. to reference the bool info for a bool type )
-		// "PackageDot": func(typeName string) (ret string, err error) {
-		// 	if t, ok := p.findType(typeName); !ok {
-		// 		err = fmt.Errorf("unknown type %q", typeName)
-		// 	} else if t.group != p.currentGroup {
-		// 		ret = t.group + "."
-		// 	}
-		// 	return
-		// },
-		// // return a scoped go type scoped for the named tapestry type.
-		// "ScopedType": func(typeName string) (ret string, err error) {
-		// 	if t, ok := p.findType(typeName); !ok {
-		// 		err = fmt.Errorf("unknown type %q", typeName)
-		// 	} else if goName := t.goType(); t.group != p.currentGroup && exported(goName) {
-		// 		ret = t.group + "." + goName
-		// 	} else {
-		// 		ret = goName
-		// 	}
-		// 	return
-		// },
-		// // return a scoped go type for the term, scoped by the package.
-		// // requires overrides for bool, num, str.
-		// "TermType": func(term termData) (ret string, err error) {
-		// 	if termType := term.Type; term.Private {
-		// 		ret = Pascal(termType)
-		// 	} else if t, ok := p.findType(termType); !ok {
-		// 		err = fmt.Errorf("unknown type %q", termType)
-		// 	} else {
-		// 		if goName := t.goType(); t.group != p.currentGroup && exported(goName) {
-		// 			ret = t.group + "." + goName
-		// 		} else {
-		// 			ret = goName
-		// 		}
-		// 		_, isFlow := t.typeData.(flowData)
-		// 		if term.Optional && !term.Repeats && isFlow {
-		// 			ret = "*" + ret
-		// 		}
-		// 	}
-		// 	if term.Repeats {
-		// 		ret = "[]" + ret
-		// 	}
-		// 	return
-		// },
 	}
 	return template.New("").Funcs(funcMap).ParseFS(temFS, "templates/*.tem")
+}
+
+func normalizeLines(str any) (ret []string) {
+	switch str := str.(type) {
+	case string:
+		ret = []string{str}
+	case []any:
+		if a, ok := compact.SliceStrings(str); !ok {
+			log.Panicf("could parse string slice  %#v", str)
+		} else {
+			ret = a
+		}
+	case nil:
+		// ?
+	default:
+		log.Panicf("unknown string type %T", str)
+	}
+	return
+}
+
+func extractLines(str any) (ret string) {
+	switch str := str.(type) {
+	case string:
+		ret = str
+	case []any:
+		ret, _ = compact.JoinLines(str)
+	case nil:
+		// ?
+	default:
+		log.Panicf("unknown string type %T", str)
+	}
+	return
 }
