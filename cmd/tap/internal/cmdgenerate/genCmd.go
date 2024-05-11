@@ -91,9 +91,13 @@ func writeGroups(g generate.Generator, db modelWriter, outPath string) (err erro
 					break
 				}
 			}
-
+			// write to buffers first so that if there's an error we don't disrupt the existing source.
+			var doc bytes.Buffer
 			var u bytes.Buffer
-			if e := g.WriteSource(&u); e != nil {
+			if e := g.WriteDoc(&doc); e != nil {
+				err = e
+				break
+			} else if e := g.WriteSource(&u); e != nil {
 				err = e
 				break
 			} else if f, e := format.Source(u.Bytes()); e != nil {
@@ -103,9 +107,11 @@ func writeGroups(g generate.Generator, db modelWriter, outPath string) (err erro
 			} else {
 				path := filepath.Join(outPath, group)
 				os.MkdirAll(path, os.ModePerm)
-				path = filepath.Join(path, group+"_types.go")
-				log.Println("writing", path)
-				if e := os.WriteFile(path, f, 0666); e != nil {
+
+				if e := writeFile(path, "doc.go", doc.Bytes()); e != nil {
+					err = e
+					break
+				} else if e := writeFile(path, group+"_types.go", f); e != nil {
 					err = e
 					break
 				}
@@ -113,6 +119,12 @@ func writeGroups(g generate.Generator, db modelWriter, outPath string) (err erro
 		}
 	}
 	return
+}
+
+func writeFile(dir, file string, b []byte) (err error) {
+	path := filepath.Join(dir, file)
+	log.Println("writing", path)
+	return os.WriteFile(path, b, 0666)
 }
 
 func readGroups(path string) (groups []generate.Group, err error) {

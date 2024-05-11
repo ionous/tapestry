@@ -65,18 +65,23 @@ func (q *Generator) Name() string {
 	return q.group().Name
 }
 
+// write a package header comment for the current group
+func (q *Generator) WriteDoc(w io.Writer) error {
+	return q.writeDoc(w, q.group())
+}
+
 // write a go file containing typeinfo for the current group
 func (q *Generator) WriteSource(w io.Writer) error {
 	return q.writeSource(w, q.group())
 }
 
-// record the primary type data for the passed group
+// record the primary type data for the current group
 // using sqlite friendly data to the passed database
 func (q *Generator) WriteTable(w DB) error {
 	return writeTable(w, q.group())
 }
 
-// record the derived type data for the passed group
+// record the derived type data for the current group
 // using sqlite friendly data to the passed database
 func (q *Generator) WriteReferences(w DB) error {
 	return writeReferences(w, q.group())
