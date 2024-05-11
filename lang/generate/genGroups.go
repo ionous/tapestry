@@ -5,6 +5,7 @@ import "sort"
 type Group struct {
 	Name string
 	groupContent
+	Comment []string
 }
 
 type groupContent struct {

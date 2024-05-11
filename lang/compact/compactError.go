@@ -2,14 +2,13 @@ package compact
 
 import (
 	"errors"
-
-	"github.com/ionous/errutil"
+	"fmt"
 )
 
 type Unhandled string
 
 func (u Unhandled) Error() string {
-	return errutil.Sprint("unhandled", string(u))
+	return fmt.Sprintf("unhandled %s", string(u))
 }
 
 func IsUnhandled(e error) bool {

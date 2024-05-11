@@ -10,6 +10,11 @@ import (
 // unpack a map of plain values into a description of a tapestry command.
 // doesn't operate recursively, and doesn't check to see if the command is one that exists.
 func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
+	defer func() {
+		if err != nil {
+			err = fmt.Errorf("%w decoding %#v", err, msg)
+		}
+	}()
 	var out compact.Message
 	for k, v := range msg {
 		if strings.HasPrefix(k, compact.Markup) {

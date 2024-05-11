@@ -75,7 +75,7 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 	return
 }
 
-func readGroup(out *groupContent, spec specData, msg compact.Message) (err error) {
+func readGroup(out *groupContent, groupSpec specData, msg compact.Message) (err error) {
 	if msg.Key != "Group contains:" {
 		err = fmt.Errorf("expected group definition, have %s", msg.Key)
 	} else if msgs, e := parseMessages(msg.Args[0]); e != nil {

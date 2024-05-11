@@ -1,6 +1,9 @@
 package compact
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // type conversion: convert a slice containing float values into a float slice.
 // returns false if any member of the slice isnt a float64
@@ -18,6 +21,29 @@ func SliceStrings(slice []any) ([]string, bool) {
 // returns false if any member of the slice isnt a bool
 func SliceBools(slice []any) ([]bool, bool) {
 	return condition[bool](slice)
+}
+
+// extract a comment string or strings from the passed msg markup.
+// returns nil if no comment existed.
+// errors if some data existed that couldn't be interpreted.
+func ExtractComment(markup map[string]any) (ret []string, err error) {
+	if c, ok := markup[Comment]; ok {
+		switch c := c.(type) {
+		case []any:
+			if els, ok := SliceStrings(c); !ok {
+				err = fmt.Errorf("unexpected comment format %T", c)
+			} else {
+				ret = els
+			}
+		case string:
+			ret = []string{c}
+		case []string:
+			ret = c
+		default:
+			err = fmt.Errorf("unexpected comment format %T", c)
+		}
+	}
+	return
 }
 
 // type conversion: convert a slice of interfaces

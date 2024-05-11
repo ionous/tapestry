@@ -16,8 +16,10 @@ func ReadSpec(msg compact.Message) (ret Group, err error) {
 		err = e
 	} else if e := readSpec(&gc, msg); e != nil {
 		err = e
+	} else if cmt, e := compact.ExtractComment(msg.Markup); e != nil {
+		err = e
 	} else {
-		ret = Group{n, gc}
+		ret = Group{n, gc, cmt}
 	}
 	return
 }

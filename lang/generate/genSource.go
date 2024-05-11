@@ -28,12 +28,12 @@ func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 		if e := q.write(w, "header", struct {
 			Name    string
 			Imports []string
-		}{g.Name, imports}); e != nil {
+			Comment []string
+		}{g.Name, imports, g.Comment}); e != nil {
 			err = e
 		} else {
 			w.Write(body.Bytes())
-			err = q.writeFooter(w,
-				g.Name, g.Reg,
+			err = q.writeFooter(w, g,
 				typeList{
 					Type:    "slot",
 					Comment: "( ex. for generating blockly shapes )",
@@ -59,13 +59,15 @@ func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
 }
 
 // writes a list of typeinfo references
-func (q *Generator) writeFooter(w io.Writer, name string, reg Registry, types ...typeList) error {
+func (q *Generator) writeFooter(w io.Writer, g Group, types ...typeList) error {
+	reg := g.Reg
 	reg.Sort()
 	return q.write(w, "footer", struct {
 		Name       string
+		Comment    []string
 		Types      []typeList
 		Signatures []Signature
-	}{name, types, reg})
+	}{g.Name, g.Comment, types, reg})
 }
 
 type typeList struct {

@@ -13,21 +13,10 @@ type specData struct {
 }
 
 func (d specData) Comments() (ret []string) {
-	if c, ok := d.Markup["comment"]; ok {
-		switch c := c.(type) {
-		case []any:
-			if els, ok := compact.SliceStrings(c); !ok {
-				log.Panicf("unexpected comment format %T", c)
-			} else {
-				ret = els
-			}
-		case string:
-			ret = []string{c}
-		case []string:
-			ret = c
-		default:
-			log.Panicf("unexpected comment format %T", c)
-		}
+	if vs, e := compact.ExtractComment(d.Markup); e != nil {
+		log.Panic(e)
+	} else {
+		ret = vs
 	}
 	return
 }

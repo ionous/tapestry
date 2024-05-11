@@ -1,27 +1,3 @@
-// package listing of type data
-var Z_Types = typeinfo.TypeSet{
-	Name:  "{{.Name}}",
-{{- range .Types }}{{ if .List }}
-	{{Pascal .Type}}:  z_{{.Type}}_list,
-{{- end }}{{ end }}
-{{- if .Signatures }}
-	Signatures: z_signatures,
-{{- end }}
-}
-{{- range .Types }}{{ if .List }}
-{{ template "types.tmpl" . }}
-{{- end }}{{ end }}
-{{- if .Signatures }}
-// a list of all command signatures
-// ( for processing and verifying story files )
-var z_signatures = map[uint64]typeinfo.Instance{
-{{- range .Signatures }}
-  {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */
-{{- end }}
-}
-{{- end }}
-
-
 {{- range .Types }}{{ if and (eq .Type "flow") .List }}
 // init the terms of all flows in init 
 // so that they can refer to each other when needed.
@@ -54,3 +30,34 @@ func init() {
 {{- end }}
 }
 {{- end }}{{- end }}
+
+
+// package listing of type data
+var Z_Types = typeinfo.TypeSet{
+	Name:  "{{.Name}}",
+{{- if .Comment }}
+	Comment: []string{ 
+	{{- range .Comment }}
+ 		"{{.}}",
+	{{- end }}
+	},
+{{ end }}
+{{- range .Types }}{{ if .List }}
+	{{Pascal .Type}}:  z_{{.Type}}_list,
+{{- end }}{{ end }}
+{{- if .Signatures }}
+	Signatures: z_signatures,
+{{- end }}
+}
+{{- range .Types }}{{ if .List }}
+{{ template "types.tmpl" . }}
+{{- end }}{{ end }}
+{{- if .Signatures }}
+// a list of all command signatures
+// ( for processing and verifying story files )
+var z_signatures = map[uint64]typeinfo.Instance{
+{{- range .Signatures }}
+  {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */
+{{- end }}
+}
+{{- end }}
