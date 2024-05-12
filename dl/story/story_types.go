@@ -26,23 +26,23 @@ var Zt_StoryStatement = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type StoryStatement_Slot struct{ Value StoryStatement }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*StoryStatement_Slot) TypeInfo() typeinfo.T {
 	return &Zt_StoryStatement
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type StoryStatement_Slots []StoryStatement
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*StoryStatement_Slots) TypeInfo() typeinfo.T {
 	return &Zt_StoryStatement
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *StoryStatement_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -55,23 +55,23 @@ var Zt_FieldDefinition = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type FieldDefinition_Slot struct{ Value FieldDefinition }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*FieldDefinition_Slot) TypeInfo() typeinfo.T {
 	return &Zt_FieldDefinition
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type FieldDefinition_Slots []FieldDefinition
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*FieldDefinition_Slots) TypeInfo() typeinfo.T {
 	return &Zt_FieldDefinition
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *FieldDefinition_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -86,12 +86,12 @@ type StoryFile struct {
 // story_file, a type of flow.
 var Zt_StoryFile typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*StoryFile) TypeInfo() typeinfo.T {
 	return &Zt_StoryFile
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *StoryFile) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -99,18 +99,18 @@ func (op *StoryFile) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*StoryFile)(nil)
 
-// holds a slice of type story_file
+// Holds a slice of type StoryFile.
 type StoryFile_Slice []StoryFile
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of StoryFile.
 func (*StoryFile_Slice) TypeInfo() typeinfo.T {
 	return &Zt_StoryFile
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of StoryFile.
 func (op *StoryFile_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -123,12 +123,12 @@ type StoryBreak struct {
 // story_break, a type of flow.
 var Zt_StoryBreak typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*StoryBreak) TypeInfo() typeinfo.T {
 	return &Zt_StoryBreak
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -136,18 +136,18 @@ func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*StoryBreak)(nil)
 
-// holds a slice of type story_break
+// Holds a slice of type StoryBreak.
 type StoryBreak_Slice []StoryBreak
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of StoryBreak.
 func (*StoryBreak_Slice) TypeInfo() typeinfo.T {
 	return &Zt_StoryBreak
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of StoryBreak.
 func (op *StoryBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -164,12 +164,12 @@ type Note struct {
 // note, a type of flow.
 var Zt_Note typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Note) TypeInfo() typeinfo.T {
 	return &Zt_Note
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Note) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -177,19 +177,19 @@ func (op *Note) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*Note)(nil)
 var _ rtti.Execute = (*Note)(nil)
 
-// holds a slice of type note
+// Holds a slice of type Note.
 type Note_Slice []Note
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Note.
 func (*Note_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Note
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Note.
 func (op *Note_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -208,12 +208,12 @@ type DefineTest struct {
 // define_test, a type of flow.
 var Zt_DefineTest typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineTest) TypeInfo() typeinfo.T {
 	return &Zt_DefineTest
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineTest) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -221,18 +221,18 @@ func (op *DefineTest) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineTest)(nil)
 
-// holds a slice of type define_test
+// Holds a slice of type DefineTest.
 type DefineTest_Slice []DefineTest
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineTest.
 func (*DefineTest_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineTest
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineTest.
 func (op *DefineTest_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -249,12 +249,12 @@ type DefineScene struct {
 // define_scene, a type of flow.
 var Zt_DefineScene typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineScene) TypeInfo() typeinfo.T {
 	return &Zt_DefineScene
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineScene) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -262,18 +262,18 @@ func (op *DefineScene) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineScene)(nil)
 
-// holds a slice of type define_scene
+// Holds a slice of type DefineScene.
 type DefineScene_Slice []DefineScene
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineScene.
 func (*DefineScene_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineScene
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineScene.
 func (op *DefineScene_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -291,12 +291,12 @@ type DefineAction struct {
 // define_action, a type of flow.
 var Zt_DefineAction typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineAction) TypeInfo() typeinfo.T {
 	return &Zt_DefineAction
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineAction) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -304,18 +304,18 @@ func (op *DefineAction) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineAction)(nil)
 
-// holds a slice of type define_action
+// Holds a slice of type DefineAction.
 type DefineAction_Slice []DefineAction
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineAction.
 func (*DefineAction_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineAction
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineAction.
 func (op *DefineAction_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -333,12 +333,12 @@ type DefineState struct {
 // define_state, a type of flow.
 var Zt_DefineState typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineState) TypeInfo() typeinfo.T {
 	return &Zt_DefineState
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineState) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -346,18 +346,18 @@ func (op *DefineState) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineState)(nil)
 
-// holds a slice of type define_state
+// Holds a slice of type DefineState.
 type DefineState_Slice []DefineState
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineState.
 func (*DefineState_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineState
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineState.
 func (op *DefineState_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -374,12 +374,12 @@ type DefineAlias struct {
 // define_alias, a type of flow.
 var Zt_DefineAlias typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineAlias) TypeInfo() typeinfo.T {
 	return &Zt_DefineAlias
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineAlias) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -387,18 +387,18 @@ func (op *DefineAlias) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineAlias)(nil)
 
-// holds a slice of type define_alias
+// Holds a slice of type DefineAlias.
 type DefineAlias_Slice []DefineAlias
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineAlias.
 func (*DefineAlias_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineAlias
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineAlias.
 func (op *DefineAlias_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -414,12 +414,12 @@ type DefineLeadingGrammar struct {
 // define_leading_grammar, a type of flow.
 var Zt_DefineLeadingGrammar typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineLeadingGrammar) TypeInfo() typeinfo.T {
 	return &Zt_DefineLeadingGrammar
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineLeadingGrammar) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -427,18 +427,18 @@ func (op *DefineLeadingGrammar) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineLeadingGrammar)(nil)
 
-// holds a slice of type define_leading_grammar
+// Holds a slice of type DefineLeadingGrammar.
 type DefineLeadingGrammar_Slice []DefineLeadingGrammar
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineLeadingGrammar.
 func (*DefineLeadingGrammar_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineLeadingGrammar
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineLeadingGrammar.
 func (op *DefineLeadingGrammar_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -454,12 +454,12 @@ type DefineNamedGrammar struct {
 // define_named_grammar, a type of flow.
 var Zt_DefineNamedGrammar typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineNamedGrammar) TypeInfo() typeinfo.T {
 	return &Zt_DefineNamedGrammar
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineNamedGrammar) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -467,18 +467,18 @@ func (op *DefineNamedGrammar) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineNamedGrammar)(nil)
 
-// holds a slice of type define_named_grammar
+// Holds a slice of type DefineNamedGrammar.
 type DefineNamedGrammar_Slice []DefineNamedGrammar
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineNamedGrammar.
 func (*DefineNamedGrammar_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineNamedGrammar
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineNamedGrammar.
 func (op *DefineNamedGrammar_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -495,12 +495,12 @@ type DeclareStatement struct {
 // declare_statement, a type of flow.
 var Zt_DeclareStatement typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DeclareStatement) TypeInfo() typeinfo.T {
 	return &Zt_DeclareStatement
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DeclareStatement) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -508,18 +508,18 @@ func (op *DeclareStatement) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DeclareStatement)(nil)
 
-// holds a slice of type declare_statement
+// Holds a slice of type DeclareStatement.
 type DeclareStatement_Slice []DeclareStatement
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DeclareStatement.
 func (*DeclareStatement_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DeclareStatement
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DeclareStatement.
 func (op *DeclareStatement_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -538,12 +538,12 @@ type DefineRelation struct {
 // define_relation, a type of flow.
 var Zt_DefineRelation typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineRelation) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelation
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineRelation) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -551,18 +551,18 @@ func (op *DefineRelation) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineRelation)(nil)
 
-// holds a slice of type define_relation
+// Holds a slice of type DefineRelation.
 type DefineRelation_Slice []DefineRelation
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineRelation.
 func (*DefineRelation_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelation
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineRelation.
 func (op *DefineRelation_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -579,12 +579,12 @@ type DefineKind struct {
 // define_kind, a type of flow.
 var Zt_DefineKind typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineKind) TypeInfo() typeinfo.T {
 	return &Zt_DefineKind
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -592,18 +592,18 @@ func (op *DefineKind) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineKind)(nil)
 
-// holds a slice of type define_kind
+// Holds a slice of type DefineKind.
 type DefineKind_Slice []DefineKind
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineKind.
 func (*DefineKind_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineKind
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineKind.
 func (op *DefineKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -620,12 +620,12 @@ type DefineFields struct {
 // define_fields, a type of flow.
 var Zt_DefineFields typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineFields) TypeInfo() typeinfo.T {
 	return &Zt_DefineFields
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -633,18 +633,18 @@ func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineFields)(nil)
 
-// holds a slice of type define_fields
+// Holds a slice of type DefineFields.
 type DefineFields_Slice []DefineFields
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineFields.
 func (*DefineFields_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineFields
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineFields.
 func (op *DefineFields_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -665,12 +665,12 @@ type DefinePlural struct {
 // define_plural, a type of flow.
 var Zt_DefinePlural typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefinePlural) TypeInfo() typeinfo.T {
 	return &Zt_DefinePlural
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefinePlural) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -678,18 +678,18 @@ func (op *DefinePlural) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefinePlural)(nil)
 
-// holds a slice of type define_plural
+// Holds a slice of type DefinePlural.
 type DefinePlural_Slice []DefinePlural
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefinePlural.
 func (*DefinePlural_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefinePlural
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefinePlural.
 func (op *DefinePlural_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -705,12 +705,12 @@ type DefineNounValue struct {
 // define_noun_value, a type of flow.
 var Zt_DefineNounValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineNounValue) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineNounValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -718,18 +718,18 @@ func (op *DefineNounValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineNounValue)(nil)
 
-// holds a slice of type define_noun_value
+// Holds a slice of type DefineNounValue.
 type DefineNounValue_Slice []DefineNounValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineNounValue.
 func (*DefineNounValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineNounValue.
 func (op *DefineNounValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -743,12 +743,12 @@ type DefineNounKind struct {
 // define_noun_kind, a type of flow.
 var Zt_DefineNounKind typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineNounKind) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounKind
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineNounKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -756,18 +756,18 @@ func (op *DefineNounKind) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineNounKind)(nil)
 
-// holds a slice of type define_noun_kind
+// Holds a slice of type DefineNounKind.
 type DefineNounKind_Slice []DefineNounKind
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineNounKind.
 func (*DefineNounKind_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounKind
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineNounKind.
 func (op *DefineNounKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -781,12 +781,12 @@ type DefineNounStates struct {
 // define_noun_states, a type of flow.
 var Zt_DefineNounStates typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineNounStates) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounStates
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineNounStates) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -794,18 +794,18 @@ func (op *DefineNounStates) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineNounStates)(nil)
 
-// holds a slice of type define_noun_states
+// Holds a slice of type DefineNounStates.
 type DefineNounStates_Slice []DefineNounStates
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineNounStates.
 func (*DefineNounStates_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineNounStates
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineNounStates.
 func (op *DefineNounStates_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -819,12 +819,12 @@ type RuleProvides struct {
 // rule_provides, a type of flow.
 var Zt_RuleProvides typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleProvides) TypeInfo() typeinfo.T {
 	return &Zt_RuleProvides
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -832,18 +832,18 @@ func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*RuleProvides)(nil)
 
-// holds a slice of type rule_provides
+// Holds a slice of type RuleProvides.
 type RuleProvides_Slice []RuleProvides
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleProvides.
 func (*RuleProvides_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleProvides
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleProvides.
 func (op *RuleProvides_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -862,12 +862,12 @@ type RuleForPattern struct {
 // rule_for_pattern, a type of flow.
 var Zt_RuleForPattern typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleForPattern) TypeInfo() typeinfo.T {
 	return &Zt_RuleForPattern
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -875,18 +875,18 @@ func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*RuleForPattern)(nil)
 
-// holds a slice of type rule_for_pattern
+// Holds a slice of type RuleForPattern.
 type RuleForPattern_Slice []RuleForPattern
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleForPattern.
 func (*RuleForPattern_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleForPattern
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleForPattern.
 func (op *RuleForPattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -904,12 +904,12 @@ type RuleForNoun struct {
 // rule_for_noun, a type of flow.
 var Zt_RuleForNoun typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleForNoun) TypeInfo() typeinfo.T {
 	return &Zt_RuleForNoun
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -917,18 +917,18 @@ func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*RuleForNoun)(nil)
 
-// holds a slice of type rule_for_noun
+// Holds a slice of type RuleForNoun.
 type RuleForNoun_Slice []RuleForNoun
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleForNoun.
 func (*RuleForNoun_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleForNoun
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleForNoun.
 func (op *RuleForNoun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -947,12 +947,12 @@ type RuleForKind struct {
 // rule_for_kind, a type of flow.
 var Zt_RuleForKind typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleForKind) TypeInfo() typeinfo.T {
 	return &Zt_RuleForKind
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -960,18 +960,18 @@ func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*RuleForKind)(nil)
 
-// holds a slice of type rule_for_kind
+// Holds a slice of type RuleForKind.
 type RuleForKind_Slice []RuleForKind
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleForKind.
 func (*RuleForKind_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleForKind
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleForKind.
 func (op *RuleForKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -990,12 +990,12 @@ type DefinePattern struct {
 // define_pattern, a type of flow.
 var Zt_DefinePattern typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefinePattern) TypeInfo() typeinfo.T {
 	return &Zt_DefinePattern
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1003,18 +1003,18 @@ func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefinePattern)(nil)
 
-// holds a slice of type define_pattern
+// Holds a slice of type DefinePattern.
 type DefinePattern_Slice []DefinePattern
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefinePattern.
 func (*DefinePattern_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefinePattern
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefinePattern.
 func (op *DefinePattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1033,12 +1033,12 @@ type DefineRelatives struct {
 // define_relatives, a type of flow.
 var Zt_DefineRelatives typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DefineRelatives) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelatives
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DefineRelatives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1046,18 +1046,18 @@ func (op *DefineRelatives) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ StoryStatement = (*DefineRelatives)(nil)
 
-// holds a slice of type define_relatives
+// Holds a slice of type DefineRelatives.
 type DefineRelatives_Slice []DefineRelatives
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DefineRelatives.
 func (*DefineRelatives_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DefineRelatives
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DefineRelatives.
 func (op *DefineRelatives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1072,12 +1072,12 @@ type SayTemplate struct {
 // say_template, a type of flow.
 var Zt_SayTemplate typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SayTemplate) TypeInfo() typeinfo.T {
 	return &Zt_SayTemplate
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SayTemplate) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1085,19 +1085,19 @@ func (op *SayTemplate) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*SayTemplate)(nil)
 var _ rtti.TextEval = (*SayTemplate)(nil)
 
-// holds a slice of type say_template
+// Holds a slice of type SayTemplate.
 type SayTemplate_Slice []SayTemplate
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SayTemplate.
 func (*SayTemplate_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SayTemplate
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SayTemplate.
 func (op *SayTemplate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1118,12 +1118,12 @@ type SayResponse struct {
 // say_response, a type of flow.
 var Zt_SayResponse typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SayResponse) TypeInfo() typeinfo.T {
 	return &Zt_SayResponse
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SayResponse) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1131,19 +1131,19 @@ func (op *SayResponse) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*SayResponse)(nil)
 var _ rtti.TextEval = (*SayResponse)(nil)
 
-// holds a slice of type say_response
+// Holds a slice of type SayResponse.
 type SayResponse_Slice []SayResponse
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SayResponse.
 func (*SayResponse_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SayResponse
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SayResponse.
 func (op *SayResponse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1159,12 +1159,12 @@ type CountOf struct {
 // count_of, a type of flow.
 var Zt_CountOf typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*CountOf) TypeInfo() typeinfo.T {
 	return &Zt_CountOf
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *CountOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1172,18 +1172,18 @@ func (op *CountOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*CountOf)(nil)
 
-// holds a slice of type count_of
+// Holds a slice of type CountOf.
 type CountOf_Slice []CountOf
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of CountOf.
 func (*CountOf_Slice) TypeInfo() typeinfo.T {
 	return &Zt_CountOf
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of CountOf.
 func (op *CountOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1197,12 +1197,12 @@ type CycleText struct {
 // cycle_text, a type of flow.
 var Zt_CycleText typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*CycleText) TypeInfo() typeinfo.T {
 	return &Zt_CycleText
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *CycleText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1210,18 +1210,18 @@ func (op *CycleText) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*CycleText)(nil)
 
-// holds a slice of type cycle_text
+// Holds a slice of type CycleText.
 type CycleText_Slice []CycleText
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of CycleText.
 func (*CycleText_Slice) TypeInfo() typeinfo.T {
 	return &Zt_CycleText
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of CycleText.
 func (op *CycleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1235,12 +1235,12 @@ type ShuffleText struct {
 // shuffle_text, a type of flow.
 var Zt_ShuffleText typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*ShuffleText) TypeInfo() typeinfo.T {
 	return &Zt_ShuffleText
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1248,18 +1248,18 @@ func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*ShuffleText)(nil)
 
-// holds a slice of type shuffle_text
+// Holds a slice of type ShuffleText.
 type ShuffleText_Slice []ShuffleText
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of ShuffleText.
 func (*ShuffleText_Slice) TypeInfo() typeinfo.T {
 	return &Zt_ShuffleText
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of ShuffleText.
 func (op *ShuffleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1274,12 +1274,12 @@ type StoppingText struct {
 // stopping_text, a type of flow.
 var Zt_StoppingText typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*StoppingText) TypeInfo() typeinfo.T {
 	return &Zt_StoppingText
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1287,18 +1287,18 @@ func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*StoppingText)(nil)
 
-// holds a slice of type stopping_text
+// Holds a slice of type StoppingText.
 type StoppingText_Slice []StoppingText
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of StoppingText.
 func (*StoppingText_Slice) TypeInfo() typeinfo.T {
 	return &Zt_StoppingText
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of StoppingText.
 func (op *StoppingText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1312,12 +1312,12 @@ type NothingField struct {
 // nothing_field, a type of flow.
 var Zt_NothingField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NothingField) TypeInfo() typeinfo.T {
 	return &Zt_NothingField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NothingField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1325,18 +1325,18 @@ func (op *NothingField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*NothingField)(nil)
 
-// holds a slice of type nothing_field
+// Holds a slice of type NothingField.
 type NothingField_Slice []NothingField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NothingField.
 func (*NothingField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NothingField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NothingField.
 func (op *NothingField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1351,12 +1351,12 @@ type AspectField struct {
 // aspect_field, a type of flow.
 var Zt_AspectField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AspectField) TypeInfo() typeinfo.T {
 	return &Zt_AspectField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AspectField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1364,18 +1364,18 @@ func (op *AspectField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*AspectField)(nil)
 
-// holds a slice of type aspect_field
+// Holds a slice of type AspectField.
 type AspectField_Slice []AspectField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AspectField.
 func (*AspectField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AspectField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AspectField.
 func (op *AspectField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1393,12 +1393,12 @@ type BoolField struct {
 // bool_field, a type of flow.
 var Zt_BoolField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*BoolField) TypeInfo() typeinfo.T {
 	return &Zt_BoolField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *BoolField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1406,18 +1406,18 @@ func (op *BoolField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*BoolField)(nil)
 
-// holds a slice of type bool_field
+// Holds a slice of type BoolField.
 type BoolField_Slice []BoolField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of BoolField.
 func (*BoolField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_BoolField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of BoolField.
 func (op *BoolField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1432,12 +1432,12 @@ type NumberField struct {
 // number_field, a type of flow.
 var Zt_NumberField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NumberField) TypeInfo() typeinfo.T {
 	return &Zt_NumberField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NumberField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1445,18 +1445,18 @@ func (op *NumberField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*NumberField)(nil)
 
-// holds a slice of type number_field
+// Holds a slice of type NumberField.
 type NumberField_Slice []NumberField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NumberField.
 func (*NumberField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NumberField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NumberField.
 func (op *NumberField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1472,12 +1472,12 @@ type RecordField struct {
 // record_field, a type of flow.
 var Zt_RecordField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RecordField) TypeInfo() typeinfo.T {
 	return &Zt_RecordField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RecordField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1485,18 +1485,18 @@ func (op *RecordField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*RecordField)(nil)
 
-// holds a slice of type record_field
+// Holds a slice of type RecordField.
 type RecordField_Slice []RecordField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RecordField.
 func (*RecordField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RecordField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RecordField.
 func (op *RecordField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1513,12 +1513,12 @@ type TextField struct {
 // text_field, a type of flow.
 var Zt_TextField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TextField) TypeInfo() typeinfo.T {
 	return &Zt_TextField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TextField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1526,18 +1526,18 @@ func (op *TextField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*TextField)(nil)
 
-// holds a slice of type text_field
+// Holds a slice of type TextField.
 type TextField_Slice []TextField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TextField.
 func (*TextField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TextField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TextField.
 func (op *TextField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1553,12 +1553,12 @@ type TextListField struct {
 // text_list_field, a type of flow.
 var Zt_TextListField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TextListField) TypeInfo() typeinfo.T {
 	return &Zt_TextListField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TextListField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1566,18 +1566,18 @@ func (op *TextListField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*TextListField)(nil)
 
-// holds a slice of type text_list_field
+// Holds a slice of type TextListField.
 type TextListField_Slice []TextListField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TextListField.
 func (*TextListField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TextListField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TextListField.
 func (op *TextListField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1593,12 +1593,12 @@ type NumListField struct {
 // num_list_field, a type of flow.
 var Zt_NumListField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NumListField) TypeInfo() typeinfo.T {
 	return &Zt_NumListField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NumListField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1606,18 +1606,18 @@ func (op *NumListField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*NumListField)(nil)
 
-// holds a slice of type num_list_field
+// Holds a slice of type NumListField.
 type NumListField_Slice []NumListField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NumListField.
 func (*NumListField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NumListField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NumListField.
 func (op *NumListField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1634,12 +1634,12 @@ type RecordListField struct {
 // record_list_field, a type of flow.
 var Zt_RecordListField typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RecordListField) TypeInfo() typeinfo.T {
 	return &Zt_RecordListField
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RecordListField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1647,26 +1647,26 @@ func (op *RecordListField) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ FieldDefinition = (*RecordListField)(nil)
 
-// holds a slice of type record_list_field
+// Holds a slice of type RecordListField.
 type RecordListField_Slice []RecordListField
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RecordListField.
 func (*RecordListField_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RecordListField
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RecordListField.
 func (op *RecordListField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// RelationCardinality, a type of str enum.
+// Used as part of [DefineRelation] to declare a new kind of relationship between nouns.
 type RelationCardinality int
 
-// enumerated values of RelationCardinality
+// The enumerated values of RelationCardinality.
 const (
 	C_RelationCardinality_OneToOne RelationCardinality = iota
 	C_RelationCardinality_OneToMany
@@ -2704,14 +2704,14 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_StoryStatement,
 	&Zt_FieldDefinition,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_StoryFile,
@@ -2755,7 +2755,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RecordListField,
 }
 
-// a list of all strs in this this package
+// A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_RelationCardinality,
 }

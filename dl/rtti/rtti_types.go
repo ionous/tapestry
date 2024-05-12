@@ -17,23 +17,23 @@ var Zt_Assignment = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type Assignment_Slot struct{ Value Assignment }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*Assignment_Slot) TypeInfo() typeinfo.T {
 	return &Zt_Assignment
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type Assignment_Slots []Assignment
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*Assignment_Slots) TypeInfo() typeinfo.T {
 	return &Zt_Assignment
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *Assignment_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -47,23 +47,23 @@ var Zt_BoolEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type BoolEval_Slot struct{ Value BoolEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*BoolEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_BoolEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type BoolEval_Slots []BoolEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*BoolEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_BoolEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *BoolEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -78,23 +78,23 @@ var Zt_Execute = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type Execute_Slot struct{ Value Execute }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*Execute_Slot) TypeInfo() typeinfo.T {
 	return &Zt_Execute
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type Execute_Slots []Execute
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*Execute_Slots) TypeInfo() typeinfo.T {
 	return &Zt_Execute
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *Execute_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -108,23 +108,23 @@ var Zt_NumListEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type NumListEval_Slot struct{ Value NumListEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*NumListEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_NumListEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type NumListEval_Slots []NumListEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*NumListEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_NumListEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *NumListEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -138,23 +138,23 @@ var Zt_NumberEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type NumberEval_Slot struct{ Value NumberEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*NumberEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_NumberEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type NumberEval_Slots []NumberEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*NumberEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_NumberEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *NumberEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -168,23 +168,23 @@ var Zt_TextEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type TextEval_Slot struct{ Value TextEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*TextEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_TextEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type TextEval_Slots []TextEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*TextEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_TextEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *TextEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -198,23 +198,23 @@ var Zt_TextListEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type TextListEval_Slot struct{ Value TextListEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*TextListEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_TextListEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type TextListEval_Slots []TextListEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*TextListEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_TextListEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *TextListEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -228,23 +228,23 @@ var Zt_RecordEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type RecordEval_Slot struct{ Value RecordEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*RecordEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_RecordEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type RecordEval_Slots []RecordEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*RecordEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_RecordEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *RecordEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -258,23 +258,23 @@ var Zt_RecordListEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type RecordListEval_Slot struct{ Value RecordListEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*RecordListEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_RecordListEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type RecordListEval_Slots []RecordListEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*RecordListEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_RecordListEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *RecordListEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -289,7 +289,7 @@ var Z_Types = typeinfo.TypeSet{
 	Slot: z_slot_list,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_Assignment,

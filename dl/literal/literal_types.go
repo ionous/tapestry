@@ -20,23 +20,23 @@ var Zt_LiteralValue = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type LiteralValue_Slot struct{ Value LiteralValue }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*LiteralValue_Slot) TypeInfo() typeinfo.T {
 	return &Zt_LiteralValue
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type LiteralValue_Slots []LiteralValue
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*LiteralValue_Slots) TypeInfo() typeinfo.T {
 	return &Zt_LiteralValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *LiteralValue_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -51,12 +51,12 @@ type BoolValue struct {
 // bool_value, a type of flow.
 var Zt_BoolValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*BoolValue) TypeInfo() typeinfo.T {
 	return &Zt_BoolValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *BoolValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -64,19 +64,19 @@ func (op *BoolValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*BoolValue)(nil)
 var _ LiteralValue = (*BoolValue)(nil)
 
-// holds a slice of type bool_value
+// Holds a slice of type BoolValue.
 type BoolValue_Slice []BoolValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of BoolValue.
 func (*BoolValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_BoolValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of BoolValue.
 func (op *BoolValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -91,12 +91,12 @@ type FieldValue struct {
 // field_value, a type of flow.
 var Zt_FieldValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*FieldValue) TypeInfo() typeinfo.T {
 	return &Zt_FieldValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *FieldValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -104,15 +104,15 @@ func (op *FieldValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type field_value
+// Holds a slice of type FieldValue.
 type FieldValue_Slice []FieldValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of FieldValue.
 func (*FieldValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_FieldValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of FieldValue.
 func (op *FieldValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -127,12 +127,12 @@ type FieldList struct {
 // field_list, a type of flow.
 var Zt_FieldList typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*FieldList) TypeInfo() typeinfo.T {
 	return &Zt_FieldList
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *FieldList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -140,18 +140,18 @@ func (op *FieldList) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ LiteralValue = (*FieldList)(nil)
 
-// holds a slice of type field_list
+// Holds a slice of type FieldList.
 type FieldList_Slice []FieldList
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of FieldList.
 func (*FieldList_Slice) TypeInfo() typeinfo.T {
 	return &Zt_FieldList
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of FieldList.
 func (op *FieldList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -166,12 +166,12 @@ type NumValue struct {
 // num_value, a type of flow.
 var Zt_NumValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NumValue) TypeInfo() typeinfo.T {
 	return &Zt_NumValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NumValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -179,19 +179,19 @@ func (op *NumValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.NumberEval = (*NumValue)(nil)
 var _ LiteralValue = (*NumValue)(nil)
 
-// holds a slice of type num_value
+// Holds a slice of type NumValue.
 type NumValue_Slice []NumValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NumValue.
 func (*NumValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NumValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NumValue.
 func (op *NumValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -206,12 +206,12 @@ type NumValues struct {
 // num_values, a type of flow.
 var Zt_NumValues typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NumValues) TypeInfo() typeinfo.T {
 	return &Zt_NumValues
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NumValues) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -219,19 +219,19 @@ func (op *NumValues) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.NumListEval = (*NumValues)(nil)
 var _ LiteralValue = (*NumValues)(nil)
 
-// holds a slice of type num_values
+// Holds a slice of type NumValues.
 type NumValues_Slice []NumValues
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NumValues.
 func (*NumValues_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NumValues
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NumValues.
 func (op *NumValues_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -247,12 +247,12 @@ type RecordValue struct {
 // record_value, a type of flow.
 var Zt_RecordValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RecordValue) TypeInfo() typeinfo.T {
 	return &Zt_RecordValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RecordValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -260,19 +260,19 @@ func (op *RecordValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.RecordEval = (*RecordValue)(nil)
 var _ LiteralValue = (*RecordValue)(nil)
 
-// holds a slice of type record_value
+// Holds a slice of type RecordValue.
 type RecordValue_Slice []RecordValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RecordValue.
 func (*RecordValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RecordValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RecordValue.
 func (op *RecordValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -288,12 +288,12 @@ type RecordList struct {
 // record_list, a type of flow.
 var Zt_RecordList typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RecordList) TypeInfo() typeinfo.T {
 	return &Zt_RecordList
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RecordList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -301,19 +301,19 @@ func (op *RecordList) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.RecordListEval = (*RecordList)(nil)
 var _ LiteralValue = (*RecordList)(nil)
 
-// holds a slice of type record_list
+// Holds a slice of type RecordList.
 type RecordList_Slice []RecordList
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RecordList.
 func (*RecordList_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RecordList
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RecordList.
 func (op *RecordList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -328,12 +328,12 @@ type TextValue struct {
 // text_value, a type of flow.
 var Zt_TextValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TextValue) TypeInfo() typeinfo.T {
 	return &Zt_TextValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TextValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -341,19 +341,19 @@ func (op *TextValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*TextValue)(nil)
 var _ LiteralValue = (*TextValue)(nil)
 
-// holds a slice of type text_value
+// Holds a slice of type TextValue.
 type TextValue_Slice []TextValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TextValue.
 func (*TextValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TextValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TextValue.
 func (op *TextValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -368,12 +368,12 @@ type TextValues struct {
 // text_values, a type of flow.
 var Zt_TextValues typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TextValues) TypeInfo() typeinfo.T {
 	return &Zt_TextValues
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TextValues) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -381,19 +381,19 @@ func (op *TextValues) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextListEval = (*TextValues)(nil)
 var _ LiteralValue = (*TextValues)(nil)
 
-// holds a slice of type text_values
+// Holds a slice of type TextValues.
 type TextValues_Slice []TextValues
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TextValues.
 func (*TextValues_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TextValues
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TextValues.
 func (op *TextValues_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -600,13 +600,13 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_LiteralValue,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_BoolValue,

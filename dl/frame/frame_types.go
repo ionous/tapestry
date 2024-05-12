@@ -15,23 +15,23 @@ var Zt_Event = typeinfo.Slot{
 	Name: "event",
 }
 
-// holds a single slot.
+// Holds a single slot.
 type Event_Slot struct{ Value Event }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*Event_Slot) TypeInfo() typeinfo.T {
 	return &Zt_Event
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type Event_Slots []Event
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*Event_Slots) TypeInfo() typeinfo.T {
 	return &Zt_Event
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *Event_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -46,12 +46,12 @@ type Frame struct {
 // frame, a type of flow.
 var Zt_Frame typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Frame) TypeInfo() typeinfo.T {
 	return &Zt_Frame
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Frame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -59,15 +59,15 @@ func (op *Frame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type frame
+// Holds a slice of type Frame.
 type Frame_Slice []Frame
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Frame.
 func (*Frame_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Frame
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Frame.
 func (op *Frame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -80,12 +80,12 @@ type FrameOutput struct {
 // frame_output, a type of flow.
 var Zt_FrameOutput typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*FrameOutput) TypeInfo() typeinfo.T {
 	return &Zt_FrameOutput
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *FrameOutput) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -93,18 +93,18 @@ func (op *FrameOutput) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ Event = (*FrameOutput)(nil)
 
-// holds a slice of type frame_output
+// Holds a slice of type FrameOutput.
 type FrameOutput_Slice []FrameOutput
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of FrameOutput.
 func (*FrameOutput_Slice) TypeInfo() typeinfo.T {
 	return &Zt_FrameOutput
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of FrameOutput.
 func (op *FrameOutput_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -117,12 +117,12 @@ type SceneStarted struct {
 // scene_started, a type of flow.
 var Zt_SceneStarted typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SceneStarted) TypeInfo() typeinfo.T {
 	return &Zt_SceneStarted
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SceneStarted) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -130,18 +130,18 @@ func (op *SceneStarted) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ Event = (*SceneStarted)(nil)
 
-// holds a slice of type scene_started
+// Holds a slice of type SceneStarted.
 type SceneStarted_Slice []SceneStarted
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SceneStarted.
 func (*SceneStarted_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SceneStarted
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SceneStarted.
 func (op *SceneStarted_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -154,12 +154,12 @@ type SceneEnded struct {
 // scene_ended, a type of flow.
 var Zt_SceneEnded typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SceneEnded) TypeInfo() typeinfo.T {
 	return &Zt_SceneEnded
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SceneEnded) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -167,18 +167,18 @@ func (op *SceneEnded) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ Event = (*SceneEnded)(nil)
 
-// holds a slice of type scene_ended
+// Holds a slice of type SceneEnded.
 type SceneEnded_Slice []SceneEnded
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SceneEnded.
 func (*SceneEnded_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SceneEnded
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SceneEnded.
 func (op *SceneEnded_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -194,12 +194,12 @@ type StateChanged struct {
 // state_changed, a type of flow.
 var Zt_StateChanged typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*StateChanged) TypeInfo() typeinfo.T {
 	return &Zt_StateChanged
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *StateChanged) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -207,18 +207,18 @@ func (op *StateChanged) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ Event = (*StateChanged)(nil)
 
-// holds a slice of type state_changed
+// Holds a slice of type StateChanged.
 type StateChanged_Slice []StateChanged
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of StateChanged.
 func (*StateChanged_Slice) TypeInfo() typeinfo.T {
 	return &Zt_StateChanged
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of StateChanged.
 func (op *StateChanged_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -233,12 +233,12 @@ type PairChanged struct {
 // pair_changed, a type of flow.
 var Zt_PairChanged typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PairChanged) TypeInfo() typeinfo.T {
 	return &Zt_PairChanged
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PairChanged) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -246,18 +246,18 @@ func (op *PairChanged) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ Event = (*PairChanged)(nil)
 
-// holds a slice of type pair_changed
+// Holds a slice of type PairChanged.
 type PairChanged_Slice []PairChanged
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PairChanged.
 func (*PairChanged_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PairChanged
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PairChanged.
 func (op *PairChanged_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -377,13 +377,13 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_Event,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_Frame,

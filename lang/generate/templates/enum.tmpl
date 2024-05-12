@@ -1,7 +1,13 @@
+{{- if .Markup.comment }}
+{{- range CommentLines .Markup }}
+// {{ . }}
+{{- end }}
+{{- else }}
 // {{Pascal .Name}}, a type of str enum.
+{{- end }}
 type {{Pascal .Name}} int
 
-// enumerated values of {{Pascal .Name}}
+// The enumerated values of {{Pascal .Name}}.
 const (
 {{- range $i, $opt := .Options }}
   C_{{Pascal $.Name}}_{{Pascal $opt}} {{if not $i}}{{Pascal $.Name}} = iota{{end}}

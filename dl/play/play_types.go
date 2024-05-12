@@ -19,23 +19,23 @@ var Zt_PlayMessage = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type PlayMessage_Slot struct{ Value PlayMessage }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*PlayMessage_Slot) TypeInfo() typeinfo.T {
 	return &Zt_PlayMessage
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type PlayMessage_Slots []PlayMessage
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*PlayMessage_Slots) TypeInfo() typeinfo.T {
 	return &Zt_PlayMessage
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *PlayMessage_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -49,12 +49,12 @@ type PlayLog struct {
 // play_log, a type of flow.
 var Zt_PlayLog typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PlayLog) TypeInfo() typeinfo.T {
 	return &Zt_PlayLog
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PlayLog) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -62,18 +62,18 @@ func (op *PlayLog) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ PlayMessage = (*PlayLog)(nil)
 
-// holds a slice of type play_log
+// Holds a slice of type PlayLog.
 type PlayLog_Slice []PlayLog
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PlayLog.
 func (*PlayLog_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PlayLog
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PlayLog.
 func (op *PlayLog_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -87,12 +87,12 @@ type PlayMode struct {
 // play_mode, a type of flow.
 var Zt_PlayMode typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PlayMode) TypeInfo() typeinfo.T {
 	return &Zt_PlayMode
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PlayMode) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -100,18 +100,18 @@ func (op *PlayMode) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ PlayMessage = (*PlayMode)(nil)
 
-// holds a slice of type play_mode
+// Holds a slice of type PlayMode.
 type PlayMode_Slice []PlayMode
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PlayMode.
 func (*PlayMode_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PlayMode
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PlayMode.
 func (op *PlayMode_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -125,12 +125,12 @@ type PlayOut struct {
 // play_out, a type of flow.
 var Zt_PlayOut typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PlayOut) TypeInfo() typeinfo.T {
 	return &Zt_PlayOut
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PlayOut) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -138,26 +138,26 @@ func (op *PlayOut) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ PlayMessage = (*PlayOut)(nil)
 
-// holds a slice of type play_out
+// Holds a slice of type PlayOut.
 type PlayOut_Slice []PlayOut
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PlayOut.
 func (*PlayOut_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PlayOut
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PlayOut.
 func (op *PlayOut_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// PlayModes, a type of str enum.
+// enum for play play_mode
 type PlayModes int
 
-// enumerated values of PlayModes
+// The enumerated values of PlayModes.
 const (
 	C_PlayModes_Asm PlayModes = iota
 	C_PlayModes_Play
@@ -258,13 +258,13 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_PlayMessage,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_PlayLog,
@@ -272,7 +272,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PlayOut,
 }
 
-// a list of all strs in this this package
+// A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_PlayModes,
 }

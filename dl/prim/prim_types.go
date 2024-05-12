@@ -10,10 +10,12 @@ import (
 	"strconv"
 )
 
-// Bool, a type of str enum.
+// Booleans values are described using strings:
+// the tell and json parsers recognize that and allows literal true/false values
+// go's generated code also recognizes that and generates bool fields.
 type Bool int
 
-// enumerated values of Bool
+// The enumerated values of Bool.
 const (
 	C_Bool_False Bool = iota
 	C_Bool_True
@@ -46,12 +48,16 @@ var Zt_Bool = typeinfo.Str{
 		"comment": []interface{}{"Booleans values are described using strings:", "the tell and json parsers recognize that and allows literal true/false values", "go's generated code also recognizes that and generates bool fields."},
 	},
 }
+
+// A sequence of characters of any length spanning multiple lines. See also: text.
 var Zt_Lines = typeinfo.Str{
 	Name: "lines",
 	Markup: map[string]any{
 		"comment": "A sequence of characters of any length spanning multiple lines. See also: text.",
 	},
 }
+
+// A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.
 var Zt_Text = typeinfo.Str{
 	Name: "text",
 	Markup: map[string]any{
@@ -59,7 +65,7 @@ var Zt_Text = typeinfo.Str{
 	},
 }
 
-// number, a type of num.
+// Number, a type of num.
 var Zt_Number = typeinfo.Num{
 	Name: "number",
 }
@@ -75,14 +81,14 @@ var Z_Types = typeinfo.TypeSet{
 	Num: z_num_list,
 }
 
-// a list of all strs in this this package
+// A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_Bool,
 	&Zt_Lines,
 	&Zt_Text,
 }
 
-// a list of all nums in this this package
+// A list of all nums in this this package.
 var z_num_list = []*typeinfo.Num{
 	&Zt_Number,
 }

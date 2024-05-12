@@ -22,12 +22,12 @@ type DoNothing struct {
 // do_nothing, a type of flow.
 var Zt_DoNothing typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DoNothing) TypeInfo() typeinfo.T {
 	return &Zt_DoNothing
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DoNothing) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -35,18 +35,18 @@ func (op *DoNothing) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*DoNothing)(nil)
 
-// holds a slice of type do_nothing
+// Holds a slice of type DoNothing.
 type DoNothing_Slice []DoNothing
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DoNothing.
 func (*DoNothing_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DoNothing
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DoNothing.
 func (op *DoNothing_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -59,12 +59,12 @@ type Expect struct {
 // expect, a type of flow.
 var Zt_Expect typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Expect) TypeInfo() typeinfo.T {
 	return &Zt_Expect
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Expect) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -72,18 +72,18 @@ func (op *Expect) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*Expect)(nil)
 
-// holds a slice of type expect
+// Holds a slice of type Expect.
 type Expect_Slice []Expect
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Expect.
 func (*Expect_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Expect
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Expect.
 func (op *Expect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -96,12 +96,12 @@ type ExpectOutput struct {
 // expect_output, a type of flow.
 var Zt_ExpectOutput typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*ExpectOutput) TypeInfo() typeinfo.T {
 	return &Zt_ExpectOutput
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -109,18 +109,18 @@ func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*ExpectOutput)(nil)
 
-// holds a slice of type expect_output
+// Holds a slice of type ExpectOutput.
 type ExpectOutput_Slice []ExpectOutput
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of ExpectOutput.
 func (*ExpectOutput_Slice) TypeInfo() typeinfo.T {
 	return &Zt_ExpectOutput
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of ExpectOutput.
 func (op *ExpectOutput_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -133,12 +133,12 @@ type ExpectText struct {
 // expect_text, a type of flow.
 var Zt_ExpectText typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*ExpectText) TypeInfo() typeinfo.T {
 	return &Zt_ExpectText
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *ExpectText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -146,18 +146,18 @@ func (op *ExpectText) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*ExpectText)(nil)
 
-// holds a slice of type expect_text
+// Holds a slice of type ExpectText.
 type ExpectText_Slice []ExpectText
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of ExpectText.
 func (*ExpectText_Slice) TypeInfo() typeinfo.T {
 	return &Zt_ExpectText
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of ExpectText.
 func (op *ExpectText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -172,12 +172,12 @@ type Fabricate struct {
 // fabricate, a type of flow.
 var Zt_Fabricate typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Fabricate) TypeInfo() typeinfo.T {
 	return &Zt_Fabricate
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Fabricate) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -185,18 +185,18 @@ func (op *Fabricate) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*Fabricate)(nil)
 
-// holds a slice of type fabricate
+// Holds a slice of type Fabricate.
 type Fabricate_Slice []Fabricate
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Fabricate.
 func (*Fabricate_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Fabricate
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Fabricate.
 func (op *Fabricate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -211,12 +211,12 @@ type DebugLog struct {
 // debug_log, a type of flow.
 var Zt_DebugLog typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DebugLog) TypeInfo() typeinfo.T {
 	return &Zt_DebugLog
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -224,18 +224,18 @@ func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*DebugLog)(nil)
 
-// holds a slice of type debug_log
+// Holds a slice of type DebugLog.
 type DebugLog_Slice []DebugLog
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DebugLog.
 func (*DebugLog_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DebugLog
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DebugLog.
 func (op *DebugLog_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -243,7 +243,7 @@ func (op *DebugLog_Slice) Repeats() bool {
 // LoggingLevel, a type of str enum.
 type LoggingLevel int
 
-// enumerated values of LoggingLevel
+// The enumerated values of LoggingLevel.
 const (
 	C_LoggingLevel_Note LoggingLevel = iota
 	C_LoggingLevel_Debug
@@ -376,7 +376,7 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_DoNothing,
@@ -387,7 +387,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DebugLog,
 }
 
-// a list of all strs in this this package
+// A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_LoggingLevel,
 }

@@ -30,23 +30,23 @@ var Zt_Matched = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type Matched_Slot struct{ Value Matched }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*Matched_Slot) TypeInfo() typeinfo.T {
 	return &Zt_Matched
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type Matched_Slots []Matched
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*Matched_Slots) TypeInfo() typeinfo.T {
 	return &Zt_Matched
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *Matched_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -56,23 +56,23 @@ var Zt_NounBuilder = typeinfo.Slot{
 	Name: "noun_builder",
 }
 
-// holds a single slot.
+// Holds a single slot.
 type NounBuilder_Slot struct{ Value NounBuilder }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*NounBuilder_Slot) TypeInfo() typeinfo.T {
 	return &Zt_NounBuilder
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type NounBuilder_Slots []NounBuilder
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*NounBuilder_Slots) TypeInfo() typeinfo.T {
 	return &Zt_NounBuilder
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *NounBuilder_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -92,12 +92,12 @@ type Article struct {
 // article, a type of flow.
 var Zt_Article typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Article) TypeInfo() typeinfo.T {
 	return &Zt_Article
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Article) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -105,15 +105,15 @@ func (op *Article) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type article
+// Holds a slice of type Article.
 type Article_Slice []Article
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Article.
 func (*Article_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Article
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Article.
 func (op *Article_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -129,12 +129,12 @@ type CommaAnd struct {
 // comma_and, a type of flow.
 var Zt_CommaAnd typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*CommaAnd) TypeInfo() typeinfo.T {
 	return &Zt_CommaAnd
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *CommaAnd) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -142,15 +142,15 @@ func (op *CommaAnd) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type comma_and
+// Holds a slice of type CommaAnd.
 type CommaAnd_Slice []CommaAnd
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of CommaAnd.
 func (*CommaAnd_Slice) TypeInfo() typeinfo.T {
 	return &Zt_CommaAnd
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of CommaAnd.
 func (op *CommaAnd_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -166,12 +166,12 @@ type CommaAndOr struct {
 // comma_and_or, a type of flow.
 var Zt_CommaAndOr typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*CommaAndOr) TypeInfo() typeinfo.T {
 	return &Zt_CommaAndOr
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *CommaAndOr) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -179,15 +179,15 @@ func (op *CommaAndOr) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type comma_and_or
+// Holds a slice of type CommaAndOr.
 type CommaAndOr_Slice []CommaAndOr
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of CommaAndOr.
 func (*CommaAndOr_Slice) TypeInfo() typeinfo.T {
 	return &Zt_CommaAndOr
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of CommaAndOr.
 func (op *CommaAndOr_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -201,12 +201,12 @@ type Are struct {
 // are, a type of flow.
 var Zt_Are typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Are) TypeInfo() typeinfo.T {
 	return &Zt_Are
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Are) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -214,15 +214,15 @@ func (op *Are) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type are
+// Holds a slice of type Are.
 type Are_Slice []Are
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Are.
 func (*Are_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Are
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Are.
 func (op *Are_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -236,12 +236,12 @@ type Called struct {
 // called, a type of flow.
 var Zt_Called typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Called) TypeInfo() typeinfo.T {
 	return &Zt_Called
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Called) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -249,15 +249,15 @@ func (op *Called) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type called
+// Holds a slice of type Called.
 type Called_Slice []Called
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Called.
 func (*Called_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Called
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Called.
 func (op *Called_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -277,12 +277,12 @@ type Name struct {
 // name, a type of flow.
 var Zt_Name typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Name) TypeInfo() typeinfo.T {
 	return &Zt_Name
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Name) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -290,18 +290,18 @@ func (op *Name) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ NounBuilder = (*Name)(nil)
 
-// holds a slice of type name
+// Holds a slice of type Name.
 type Name_Slice []Name
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Name.
 func (*Name_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Name
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Name.
 func (op *Name_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -318,12 +318,12 @@ type Noun struct {
 // noun, a type of flow.
 var Zt_Noun typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Noun) TypeInfo() typeinfo.T {
 	return &Zt_Noun
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Noun) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -331,18 +331,18 @@ func (op *Noun) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ NounBuilder = (*Noun)(nil)
 
-// holds a slice of type noun
+// Holds a slice of type Noun.
 type Noun_Slice []Noun
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Noun.
 func (*Noun_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Noun
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Noun.
 func (op *Noun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -357,12 +357,12 @@ type NamedNoun struct {
 // named_noun, a type of flow.
 var Zt_NamedNoun typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NamedNoun) TypeInfo() typeinfo.T {
 	return &Zt_NamedNoun
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NamedNoun) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -370,18 +370,18 @@ func (op *NamedNoun) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ NounBuilder = (*NamedNoun)(nil)
 
-// holds a slice of type named_noun
+// Holds a slice of type NamedNoun.
 type NamedNoun_Slice []NamedNoun
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NamedNoun.
 func (*NamedNoun_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NamedNoun
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NamedNoun.
 func (op *NamedNoun_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -403,12 +403,12 @@ type KindCalled struct {
 // kind_called, a type of flow.
 var Zt_KindCalled typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*KindCalled) TypeInfo() typeinfo.T {
 	return &Zt_KindCalled
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *KindCalled) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -416,15 +416,15 @@ func (op *KindCalled) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type kind_called
+// Holds a slice of type KindCalled.
 type KindCalled_Slice []KindCalled
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of KindCalled.
 func (*KindCalled_Slice) TypeInfo() typeinfo.T {
 	return &Zt_KindCalled
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of KindCalled.
 func (op *KindCalled_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -445,12 +445,12 @@ type Names struct {
 // names, a type of flow.
 var Zt_Names typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Names) TypeInfo() typeinfo.T {
 	return &Zt_Names
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Names) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -458,18 +458,18 @@ func (op *Names) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ NounBuilder = (*Names)(nil)
 
-// holds a slice of type names
+// Holds a slice of type Names.
 type Names_Slice []Names
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Names.
 func (*Names_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Names
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Names.
 func (op *Names_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -484,12 +484,12 @@ type AdditionalNames struct {
 // additional_names, a type of flow.
 var Zt_AdditionalNames typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalNames) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalNames
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalNames) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -497,15 +497,15 @@ func (op *AdditionalNames) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_names
+// Holds a slice of type AdditionalNames.
 type AdditionalNames_Slice []AdditionalNames
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalNames.
 func (*AdditionalNames_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalNames
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalNames.
 func (op *AdditionalNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -523,12 +523,12 @@ type CountedKind struct {
 // counted_kind, a type of flow.
 var Zt_CountedKind typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*CountedKind) TypeInfo() typeinfo.T {
 	return &Zt_CountedKind
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *CountedKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -536,18 +536,18 @@ func (op *CountedKind) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ NounBuilder = (*CountedKind)(nil)
 
-// holds a slice of type counted_kind
+// Holds a slice of type CountedKind.
 type CountedKind_Slice []CountedKind
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of CountedKind.
 func (*CountedKind_Slice) TypeInfo() typeinfo.T {
 	return &Zt_CountedKind
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of CountedKind.
 func (op *CountedKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -564,12 +564,12 @@ type Kind struct {
 // kind, a type of flow.
 var Zt_Kind typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Kind) TypeInfo() typeinfo.T {
 	return &Zt_Kind
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Kind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -577,18 +577,18 @@ func (op *Kind) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ NounBuilder = (*Kind)(nil)
 
-// holds a slice of type kind
+// Holds a slice of type Kind.
 type Kind_Slice []Kind
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Kind.
 func (*Kind_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Kind
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Kind.
 func (op *Kind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -606,12 +606,12 @@ type Kinds struct {
 // kinds, a type of flow.
 var Zt_Kinds typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Kinds) TypeInfo() typeinfo.T {
 	return &Zt_Kinds
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Kinds) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -619,15 +619,15 @@ func (op *Kinds) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type kinds
+// Holds a slice of type Kinds.
 type Kinds_Slice []Kinds
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Kinds.
 func (*Kinds_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Kinds
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Kinds.
 func (op *Kinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -642,12 +642,12 @@ type AdditionalKinds struct {
 // additional_kinds, a type of flow.
 var Zt_AdditionalKinds typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalKinds) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalKinds
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalKinds) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -655,15 +655,15 @@ func (op *AdditionalKinds) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_kinds
+// Holds a slice of type AdditionalKinds.
 type AdditionalKinds_Slice []AdditionalKinds
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalKinds.
 func (*AdditionalKinds_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalKinds
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalKinds.
 func (op *AdditionalKinds_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -678,12 +678,12 @@ type Property struct {
 // property, a type of flow.
 var Zt_Property typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Property) TypeInfo() typeinfo.T {
 	return &Zt_Property
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Property) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -691,15 +691,15 @@ func (op *Property) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type property
+// Holds a slice of type Property.
 type Property_Slice []Property
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Property.
 func (*Property_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Property
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Property.
 func (op *Property_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -714,12 +714,12 @@ type Trait struct {
 // trait, a type of flow.
 var Zt_Trait typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Trait) TypeInfo() typeinfo.T {
 	return &Zt_Trait
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Trait) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -727,15 +727,15 @@ func (op *Trait) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type trait
+// Holds a slice of type Trait.
 type Trait_Slice []Trait
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Trait.
 func (*Trait_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Trait
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Trait.
 func (op *Trait_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -750,12 +750,12 @@ type Traits struct {
 // traits, a type of flow.
 var Zt_Traits typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Traits) TypeInfo() typeinfo.T {
 	return &Zt_Traits
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Traits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -763,15 +763,15 @@ func (op *Traits) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type traits
+// Holds a slice of type Traits.
 type Traits_Slice []Traits
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Traits.
 func (*Traits_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Traits
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Traits.
 func (op *Traits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -786,12 +786,12 @@ type AdditionalTraits struct {
 // additional_traits, a type of flow.
 var Zt_AdditionalTraits typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalTraits) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalTraits
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalTraits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -799,15 +799,15 @@ func (op *AdditionalTraits) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_traits
+// Holds a slice of type AdditionalTraits.
 type AdditionalTraits_Slice []AdditionalTraits
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalTraits.
 func (*AdditionalTraits_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalTraits
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalTraits.
 func (op *AdditionalTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -821,12 +821,12 @@ type Words struct {
 // words, a type of flow.
 var Zt_Words typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Words) TypeInfo() typeinfo.T {
 	return &Zt_Words
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Words) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -834,15 +834,15 @@ func (op *Words) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type words
+// Holds a slice of type Words.
 type Words_Slice []Words
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Words.
 func (*Words_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Words
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Words.
 func (op *Words_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -857,12 +857,12 @@ type Verb struct {
 // verb, a type of flow.
 var Zt_Verb typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Verb) TypeInfo() typeinfo.T {
 	return &Zt_Verb
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Verb) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -870,15 +870,15 @@ func (op *Verb) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type verb
+// Holds a slice of type Verb.
 type Verb_Slice []Verb
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Verb.
 func (*Verb_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Verb
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Verb.
 func (op *Verb_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -912,12 +912,12 @@ type MatchingPhrases struct {
 // matching_phrases, a type of flow.
 var Zt_MatchingPhrases typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*MatchingPhrases) TypeInfo() typeinfo.T {
 	return &Zt_MatchingPhrases
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *MatchingPhrases) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -925,15 +925,15 @@ func (op *MatchingPhrases) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type matching_phrases
+// Holds a slice of type MatchingPhrases.
 type MatchingPhrases_Slice []MatchingPhrases
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of MatchingPhrases.
 func (*MatchingPhrases_Slice) TypeInfo() typeinfo.T {
 	return &Zt_MatchingPhrases
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of MatchingPhrases.
 func (op *MatchingPhrases_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -954,12 +954,12 @@ type KindsOf struct {
 // kinds_of, a type of flow.
 var Zt_KindsOf typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*KindsOf) TypeInfo() typeinfo.T {
 	return &Zt_KindsOf
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -967,15 +967,15 @@ func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type kinds_of
+// Holds a slice of type KindsOf.
 type KindsOf_Slice []KindsOf
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of KindsOf.
 func (*KindsOf_Slice) TypeInfo() typeinfo.T {
 	return &Zt_KindsOf
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of KindsOf.
 func (op *KindsOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1000,12 +1000,12 @@ type KindsAreTraits struct {
 // kinds_are_traits, a type of flow.
 var Zt_KindsAreTraits typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*KindsAreTraits) TypeInfo() typeinfo.T {
 	return &Zt_KindsAreTraits
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *KindsAreTraits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1013,15 +1013,15 @@ func (op *KindsAreTraits) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type kinds_are_traits
+// Holds a slice of type KindsAreTraits.
 type KindsAreTraits_Slice []KindsAreTraits
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of KindsAreTraits.
 func (*KindsAreTraits_Slice) TypeInfo() typeinfo.T {
 	return &Zt_KindsAreTraits
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of KindsAreTraits.
 func (op *KindsAreTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1039,12 +1039,12 @@ type AspectsAreTraits struct {
 // aspects_are_traits, a type of flow.
 var Zt_AspectsAreTraits typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AspectsAreTraits) TypeInfo() typeinfo.T {
 	return &Zt_AspectsAreTraits
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AspectsAreTraits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1052,15 +1052,15 @@ func (op *AspectsAreTraits) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type aspects_are_traits
+// Holds a slice of type AspectsAreTraits.
 type AspectsAreTraits_Slice []AspectsAreTraits
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AspectsAreTraits.
 func (*AspectsAreTraits_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AspectsAreTraits
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AspectsAreTraits.
 func (op *AspectsAreTraits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1081,12 +1081,12 @@ type VerbNamesAreNames struct {
 // verb_names_are_names, a type of flow.
 var Zt_VerbNamesAreNames typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*VerbNamesAreNames) TypeInfo() typeinfo.T {
 	return &Zt_VerbNamesAreNames
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *VerbNamesAreNames) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1094,15 +1094,15 @@ func (op *VerbNamesAreNames) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type verb_names_are_names
+// Holds a slice of type VerbNamesAreNames.
 type VerbNamesAreNames_Slice []VerbNamesAreNames
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of VerbNamesAreNames.
 func (*VerbNamesAreNames_Slice) TypeInfo() typeinfo.T {
 	return &Zt_VerbNamesAreNames
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of VerbNamesAreNames.
 func (op *VerbNamesAreNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1120,12 +1120,12 @@ type NamesVerbNames struct {
 // names_verb_names, a type of flow.
 var Zt_NamesVerbNames typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NamesVerbNames) TypeInfo() typeinfo.T {
 	return &Zt_NamesVerbNames
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NamesVerbNames) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1133,15 +1133,15 @@ func (op *NamesVerbNames) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type names_verb_names
+// Holds a slice of type NamesVerbNames.
 type NamesVerbNames_Slice []NamesVerbNames
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NamesVerbNames.
 func (*NamesVerbNames_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NamesVerbNames
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NamesVerbNames.
 func (op *NamesVerbNames_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1162,12 +1162,12 @@ type NamesAreLikeVerbs struct {
 // names_are_like_verbs, a type of flow.
 var Zt_NamesAreLikeVerbs typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NamesAreLikeVerbs) TypeInfo() typeinfo.T {
 	return &Zt_NamesAreLikeVerbs
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NamesAreLikeVerbs) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1175,15 +1175,15 @@ func (op *NamesAreLikeVerbs) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type names_are_like_verbs
+// Holds a slice of type NamesAreLikeVerbs.
 type NamesAreLikeVerbs_Slice []NamesAreLikeVerbs
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NamesAreLikeVerbs.
 func (*NamesAreLikeVerbs_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NamesAreLikeVerbs
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NamesAreLikeVerbs.
 func (op *NamesAreLikeVerbs_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1198,12 +1198,12 @@ type VerbPhrase struct {
 // verb_phrase, a type of flow.
 var Zt_VerbPhrase typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*VerbPhrase) TypeInfo() typeinfo.T {
 	return &Zt_VerbPhrase
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *VerbPhrase) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1211,15 +1211,15 @@ func (op *VerbPhrase) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type verb_phrase
+// Holds a slice of type VerbPhrase.
 type VerbPhrase_Slice []VerbPhrase
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of VerbPhrase.
 func (*VerbPhrase_Slice) TypeInfo() typeinfo.T {
 	return &Zt_VerbPhrase
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of VerbPhrase.
 func (op *VerbPhrase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1244,12 +1244,12 @@ type Adjectives struct {
 // adjectives, a type of flow.
 var Zt_Adjectives typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Adjectives) TypeInfo() typeinfo.T {
 	return &Zt_Adjectives
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Adjectives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1257,15 +1257,15 @@ func (op *Adjectives) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type adjectives
+// Holds a slice of type Adjectives.
 type Adjectives_Slice []Adjectives
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Adjectives.
 func (*Adjectives_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Adjectives
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Adjectives.
 func (op *Adjectives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1280,12 +1280,12 @@ type AdditionalAdjectives struct {
 // additional_adjectives, a type of flow.
 var Zt_AdditionalAdjectives typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalAdjectives) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalAdjectives
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalAdjectives) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1293,15 +1293,15 @@ func (op *AdditionalAdjectives) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_adjectives
+// Holds a slice of type AdditionalAdjectives.
 type AdditionalAdjectives_Slice []AdditionalAdjectives
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalAdjectives.
 func (*AdditionalAdjectives_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalAdjectives
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalAdjectives.
 func (op *AdditionalAdjectives_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1324,12 +1324,12 @@ type PropertyNounValue struct {
 // property_noun_value, a type of flow.
 var Zt_PropertyNounValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PropertyNounValue) TypeInfo() typeinfo.T {
 	return &Zt_PropertyNounValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PropertyNounValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1337,15 +1337,15 @@ func (op *PropertyNounValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type property_noun_value
+// Holds a slice of type PropertyNounValue.
 type PropertyNounValue_Slice []PropertyNounValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PropertyNounValue.
 func (*PropertyNounValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PropertyNounValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PropertyNounValue.
 func (op *PropertyNounValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1366,12 +1366,12 @@ type NounPropertyValue struct {
 // noun_property_value, a type of flow.
 var Zt_NounPropertyValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NounPropertyValue) TypeInfo() typeinfo.T {
 	return &Zt_NounPropertyValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NounPropertyValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1379,15 +1379,15 @@ func (op *NounPropertyValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type noun_property_value
+// Holds a slice of type NounPropertyValue.
 type NounPropertyValue_Slice []NounPropertyValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NounPropertyValue.
 func (*NounPropertyValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NounPropertyValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NounPropertyValue.
 func (op *NounPropertyValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1405,12 +1405,12 @@ type SingleValue struct {
 // single_value, a type of flow.
 var Zt_SingleValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SingleValue) TypeInfo() typeinfo.T {
 	return &Zt_SingleValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SingleValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1418,15 +1418,15 @@ func (op *SingleValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type single_value
+// Holds a slice of type SingleValue.
 type SingleValue_Slice []SingleValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SingleValue.
 func (*SingleValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SingleValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SingleValue.
 func (op *SingleValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1441,12 +1441,12 @@ type QuotedText struct {
 // quoted_text, a type of flow.
 var Zt_QuotedText typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*QuotedText) TypeInfo() typeinfo.T {
 	return &Zt_QuotedText
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *QuotedText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1454,15 +1454,15 @@ func (op *QuotedText) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type quoted_text
+// Holds a slice of type QuotedText.
 type QuotedText_Slice []QuotedText
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of QuotedText.
 func (*QuotedText_Slice) TypeInfo() typeinfo.T {
 	return &Zt_QuotedText
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of QuotedText.
 func (op *QuotedText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1477,12 +1477,12 @@ type MatchingNumber struct {
 // matching_number, a type of flow.
 var Zt_MatchingNumber typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*MatchingNumber) TypeInfo() typeinfo.T {
 	return &Zt_MatchingNumber
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *MatchingNumber) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1490,15 +1490,15 @@ func (op *MatchingNumber) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type matching_number
+// Holds a slice of type MatchingNumber.
 type MatchingNumber_Slice []MatchingNumber
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of MatchingNumber.
 func (*MatchingNumber_Slice) TypeInfo() typeinfo.T {
 	return &Zt_MatchingNumber
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of MatchingNumber.
 func (op *MatchingNumber_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1518,12 +1518,12 @@ type KindsHaveProperties struct {
 // kinds_have_properties, a type of flow.
 var Zt_KindsHaveProperties typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*KindsHaveProperties) TypeInfo() typeinfo.T {
 	return &Zt_KindsHaveProperties
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *KindsHaveProperties) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1531,15 +1531,15 @@ func (op *KindsHaveProperties) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type kinds_have_properties
+// Holds a slice of type KindsHaveProperties.
 type KindsHaveProperties_Slice []KindsHaveProperties
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of KindsHaveProperties.
 func (*KindsHaveProperties_Slice) TypeInfo() typeinfo.T {
 	return &Zt_KindsHaveProperties
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of KindsHaveProperties.
 func (op *KindsHaveProperties_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1555,12 +1555,12 @@ type CalledName struct {
 // called_name, a type of flow.
 var Zt_CalledName typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*CalledName) TypeInfo() typeinfo.T {
 	return &Zt_CalledName
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *CalledName) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1568,15 +1568,15 @@ func (op *CalledName) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type called_name
+// Holds a slice of type CalledName.
 type CalledName_Slice []CalledName
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of CalledName.
 func (*CalledName_Slice) TypeInfo() typeinfo.T {
 	return &Zt_CalledName
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of CalledName.
 func (op *CalledName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1593,12 +1593,12 @@ type PropertyType struct {
 // property_type, a type of flow.
 var Zt_PropertyType typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PropertyType) TypeInfo() typeinfo.T {
 	return &Zt_PropertyType
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PropertyType) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1606,15 +1606,15 @@ func (op *PropertyType) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type property_type
+// Holds a slice of type PropertyType.
 type PropertyType_Slice []PropertyType
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PropertyType.
 func (*PropertyType_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PropertyType
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PropertyType.
 func (op *PropertyType_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1631,12 +1631,12 @@ type KindsAreEither struct {
 // kinds_are_either, a type of flow.
 var Zt_KindsAreEither typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*KindsAreEither) TypeInfo() typeinfo.T {
 	return &Zt_KindsAreEither
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *KindsAreEither) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1644,15 +1644,15 @@ func (op *KindsAreEither) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type kinds_are_either
+// Holds a slice of type KindsAreEither.
 type KindsAreEither_Slice []KindsAreEither
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of KindsAreEither.
 func (*KindsAreEither_Slice) TypeInfo() typeinfo.T {
 	return &Zt_KindsAreEither
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of KindsAreEither.
 func (op *KindsAreEither_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1668,12 +1668,12 @@ type NewTrait struct {
 // new_trait, a type of flow.
 var Zt_NewTrait typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*NewTrait) TypeInfo() typeinfo.T {
 	return &Zt_NewTrait
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *NewTrait) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1681,15 +1681,15 @@ func (op *NewTrait) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type new_trait
+// Holds a slice of type NewTrait.
 type NewTrait_Slice []NewTrait
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of NewTrait.
 func (*NewTrait_Slice) TypeInfo() typeinfo.T {
 	return &Zt_NewTrait
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of NewTrait.
 func (op *NewTrait_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1705,12 +1705,12 @@ type QuotedTexts struct {
 // quoted_texts, a type of flow.
 var Zt_QuotedTexts typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*QuotedTexts) TypeInfo() typeinfo.T {
 	return &Zt_QuotedTexts
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *QuotedTexts) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1718,15 +1718,15 @@ func (op *QuotedTexts) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type quoted_texts
+// Holds a slice of type QuotedTexts.
 type QuotedTexts_Slice []QuotedTexts
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of QuotedTexts.
 func (*QuotedTexts_Slice) TypeInfo() typeinfo.T {
 	return &Zt_QuotedTexts
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of QuotedTexts.
 func (op *QuotedTexts_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1741,12 +1741,12 @@ type AdditionalText struct {
 // additional_text, a type of flow.
 var Zt_AdditionalText typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalText) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalText
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1754,15 +1754,15 @@ func (op *AdditionalText) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_text
+// Holds a slice of type AdditionalText.
 type AdditionalText_Slice []AdditionalText
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalText.
 func (*AdditionalText_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalText
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalText.
 func (op *AdditionalText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1777,12 +1777,12 @@ type RulePrefix struct {
 // rule_prefix, a type of flow.
 var Zt_RulePrefix typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RulePrefix) TypeInfo() typeinfo.T {
 	return &Zt_RulePrefix
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RulePrefix) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1790,15 +1790,15 @@ func (op *RulePrefix) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type rule_prefix
+// Holds a slice of type RulePrefix.
 type RulePrefix_Slice []RulePrefix
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RulePrefix.
 func (*RulePrefix_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RulePrefix
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RulePrefix.
 func (op *RulePrefix_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1815,12 +1815,12 @@ type RuleSuffix struct {
 // rule_suffix, a type of flow.
 var Zt_RuleSuffix typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleSuffix) TypeInfo() typeinfo.T {
 	return &Zt_RuleSuffix
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleSuffix) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1828,15 +1828,15 @@ func (op *RuleSuffix) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type rule_suffix
+// Holds a slice of type RuleSuffix.
 type RuleSuffix_Slice []RuleSuffix
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleSuffix.
 func (*RuleSuffix_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleSuffix
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleSuffix.
 func (op *RuleSuffix_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1854,12 +1854,12 @@ type RuleName struct {
 // rule_name, a type of flow.
 var Zt_RuleName typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleName) TypeInfo() typeinfo.T {
 	return &Zt_RuleName
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleName) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1867,15 +1867,15 @@ func (op *RuleName) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type rule_name
+// Holds a slice of type RuleName.
 type RuleName_Slice []RuleName
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleName.
 func (*RuleName_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleName
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleName.
 func (op *RuleName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1889,12 +1889,12 @@ type RuleTarget struct {
 // rule_target, a type of flow.
 var Zt_RuleTarget typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RuleTarget) TypeInfo() typeinfo.T {
 	return &Zt_RuleTarget
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RuleTarget) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1902,15 +1902,15 @@ func (op *RuleTarget) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type rule_target
+// Holds a slice of type RuleTarget.
 type RuleTarget_Slice []RuleTarget
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RuleTarget.
 func (*RuleTarget_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RuleTarget
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RuleTarget.
 func (op *RuleTarget_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1930,12 +1930,12 @@ type SubAssignment struct {
 // sub_assignment, a type of flow.
 var Zt_SubAssignment typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SubAssignment) TypeInfo() typeinfo.T {
 	return &Zt_SubAssignment
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SubAssignment) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1943,15 +1943,15 @@ func (op *SubAssignment) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type sub_assignment
+// Holds a slice of type SubAssignment.
 type SubAssignment_Slice []SubAssignment
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SubAssignment.
 func (*SubAssignment_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SubAssignment
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SubAssignment.
 func (op *SubAssignment_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -1971,12 +1971,12 @@ type TimedRule struct {
 // timed_rule, a type of flow.
 var Zt_TimedRule typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TimedRule) TypeInfo() typeinfo.T {
 	return &Zt_TimedRule
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TimedRule) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -1984,15 +1984,15 @@ func (op *TimedRule) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type timed_rule
+// Holds a slice of type TimedRule.
 type TimedRule_Slice []TimedRule
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TimedRule.
 func (*TimedRule_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TimedRule
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TimedRule.
 func (op *TimedRule_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2011,12 +2011,12 @@ type Understand struct {
 // understand, a type of flow.
 var Zt_Understand typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Understand) TypeInfo() typeinfo.T {
 	return &Zt_Understand
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Understand) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2024,15 +2024,15 @@ func (op *Understand) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type understand
+// Holds a slice of type Understand.
 type Understand_Slice []Understand
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Understand.
 func (*Understand_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Understand
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Understand.
 func (op *Understand_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2050,12 +2050,12 @@ type MapLocations struct {
 // map_locations, a type of flow.
 var Zt_MapLocations typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*MapLocations) TypeInfo() typeinfo.T {
 	return &Zt_MapLocations
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *MapLocations) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2063,15 +2063,15 @@ func (op *MapLocations) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type map_locations
+// Holds a slice of type MapLocations.
 type MapLocations_Slice []MapLocations
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of MapLocations.
 func (*MapLocations_Slice) TypeInfo() typeinfo.T {
 	return &Zt_MapLocations
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of MapLocations.
 func (op *MapLocations_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2088,12 +2088,12 @@ type AdditionalDirections struct {
 // additional_directions, a type of flow.
 var Zt_AdditionalDirections typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalDirections) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalDirections
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalDirections) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2101,15 +2101,15 @@ func (op *AdditionalDirections) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_directions
+// Holds a slice of type AdditionalDirections.
 type AdditionalDirections_Slice []AdditionalDirections
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalDirections.
 func (*AdditionalDirections_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalDirections
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalDirections.
 func (op *AdditionalDirections_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2126,12 +2126,12 @@ type MapDirections struct {
 // map_directions, a type of flow.
 var Zt_MapDirections typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*MapDirections) TypeInfo() typeinfo.T {
 	return &Zt_MapDirections
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *MapDirections) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2139,15 +2139,15 @@ func (op *MapDirections) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type map_directions
+// Holds a slice of type MapDirections.
 type MapDirections_Slice []MapDirections
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of MapDirections.
 func (*MapDirections_Slice) TypeInfo() typeinfo.T {
 	return &Zt_MapDirections
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of MapDirections.
 func (op *MapDirections_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2171,12 +2171,12 @@ type MapConnections struct {
 // map_connections, a type of flow.
 var Zt_MapConnections typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*MapConnections) TypeInfo() typeinfo.T {
 	return &Zt_MapConnections
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *MapConnections) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2184,15 +2184,15 @@ func (op *MapConnections) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type map_connections
+// Holds a slice of type MapConnections.
 type MapConnections_Slice []MapConnections
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of MapConnections.
 func (*MapConnections_Slice) TypeInfo() typeinfo.T {
 	return &Zt_MapConnections
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of MapConnections.
 func (op *MapConnections_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2208,12 +2208,12 @@ type DirectionOfLinking struct {
 // direction_of_linking, a type of flow.
 var Zt_DirectionOfLinking typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*DirectionOfLinking) TypeInfo() typeinfo.T {
 	return &Zt_DirectionOfLinking
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *DirectionOfLinking) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2221,15 +2221,15 @@ func (op *DirectionOfLinking) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type direction_of_linking
+// Holds a slice of type DirectionOfLinking.
 type DirectionOfLinking_Slice []DirectionOfLinking
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of DirectionOfLinking.
 func (*DirectionOfLinking_Slice) TypeInfo() typeinfo.T {
 	return &Zt_DirectionOfLinking
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of DirectionOfLinking.
 func (op *DirectionOfLinking_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2243,12 +2243,12 @@ type Direction struct {
 // direction, a type of flow.
 var Zt_Direction typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Direction) TypeInfo() typeinfo.T {
 	return &Zt_Direction
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Direction) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2256,15 +2256,15 @@ func (op *Direction) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type direction
+// Holds a slice of type Direction.
 type Direction_Slice []Direction
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Direction.
 func (*Direction_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Direction
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Direction.
 func (op *Direction_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2282,12 +2282,12 @@ type Linking struct {
 // linking, a type of flow.
 var Zt_Linking typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Linking) TypeInfo() typeinfo.T {
 	return &Zt_Linking
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Linking) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2295,15 +2295,15 @@ func (op *Linking) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type linking
+// Holds a slice of type Linking.
 type Linking_Slice []Linking
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Linking.
 func (*Linking_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Linking
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Linking.
 func (op *Linking_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -2320,12 +2320,12 @@ type AdditionalLinks struct {
 // additional_links, a type of flow.
 var Zt_AdditionalLinks typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*AdditionalLinks) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalLinks
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *AdditionalLinks) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -2333,15 +2333,15 @@ func (op *AdditionalLinks) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// holds a slice of type additional_links
+// Holds a slice of type AdditionalLinks.
 type AdditionalLinks_Slice []AdditionalLinks
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of AdditionalLinks.
 func (*AdditionalLinks_Slice) TypeInfo() typeinfo.T {
 	return &Zt_AdditionalLinks
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of AdditionalLinks.
 func (op *AdditionalLinks_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -3740,14 +3740,14 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_Matched,
 	&Zt_NounBuilder,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_Article,

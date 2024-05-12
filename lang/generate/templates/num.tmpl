@@ -1,4 +1,10 @@
-// {{.Name}}, a type of num.
+{{- if .Markup.comment }}
+{{- range CommentLines .Markup }}
+// {{ . }}
+{{- end }}
+{{- else }}
+// {{Pascal .Name}}, a type of num.
+{{- end }}
 var Zt_{{Pascal .Name}} = typeinfo.Num{
 	Name: "{{.Name}}",
 	{{- template "markup.tmpl" .}}

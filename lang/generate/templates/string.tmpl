@@ -1,3 +1,10 @@
+{{- if .Markup.comment }}
+{{- range CommentLines .Markup }}
+// {{ . }}
+{{- end }}
+{{- else }}
+// {{Pascal .Name}}, a type of str.
+{{- end }}
 var Zt_{{Pascal .Name}} = typeinfo.Str{
 	Name: "{{.Name}}",
 	{{- template "markup.tmpl" .}}

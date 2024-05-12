@@ -17,12 +17,12 @@ type QuitGame struct {
 // quit_game, a type of flow.
 var Zt_QuitGame typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*QuitGame) TypeInfo() typeinfo.T {
 	return &Zt_QuitGame
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *QuitGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -30,18 +30,18 @@ func (op *QuitGame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*QuitGame)(nil)
 
-// holds a slice of type quit_game
+// Holds a slice of type QuitGame.
 type QuitGame_Slice []QuitGame
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of QuitGame.
 func (*QuitGame_Slice) TypeInfo() typeinfo.T {
 	return &Zt_QuitGame
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of QuitGame.
 func (op *QuitGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -53,12 +53,12 @@ type SaveGame struct {
 // save_game, a type of flow.
 var Zt_SaveGame typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*SaveGame) TypeInfo() typeinfo.T {
 	return &Zt_SaveGame
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *SaveGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -66,18 +66,18 @@ func (op *SaveGame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*SaveGame)(nil)
 
-// holds a slice of type save_game
+// Holds a slice of type SaveGame.
 type SaveGame_Slice []SaveGame
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of SaveGame.
 func (*SaveGame_Slice) TypeInfo() typeinfo.T {
 	return &Zt_SaveGame
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of SaveGame.
 func (op *SaveGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -89,12 +89,12 @@ type LoadGame struct {
 // load_game, a type of flow.
 var Zt_LoadGame typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*LoadGame) TypeInfo() typeinfo.T {
 	return &Zt_LoadGame
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *LoadGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -102,18 +102,18 @@ func (op *LoadGame) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*LoadGame)(nil)
 
-// holds a slice of type load_game
+// Holds a slice of type LoadGame.
 type LoadGame_Slice []LoadGame
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of LoadGame.
 func (*LoadGame_Slice) TypeInfo() typeinfo.T {
 	return &Zt_LoadGame
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of LoadGame.
 func (op *LoadGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -125,12 +125,12 @@ type UndoTurn struct {
 // undo_turn, a type of flow.
 var Zt_UndoTurn typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*UndoTurn) TypeInfo() typeinfo.T {
 	return &Zt_UndoTurn
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *UndoTurn) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -138,18 +138,18 @@ func (op *UndoTurn) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*UndoTurn)(nil)
 
-// holds a slice of type undo_turn
+// Holds a slice of type UndoTurn.
 type UndoTurn_Slice []UndoTurn
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of UndoTurn.
 func (*UndoTurn_Slice) TypeInfo() typeinfo.T {
 	return &Zt_UndoTurn
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of UndoTurn.
 func (op *UndoTurn_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -161,12 +161,12 @@ type PrintVersion struct {
 // print_version, a type of flow.
 var Zt_PrintVersion typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*PrintVersion) TypeInfo() typeinfo.T {
 	return &Zt_PrintVersion
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *PrintVersion) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -174,18 +174,18 @@ func (op *PrintVersion) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*PrintVersion)(nil)
 
-// holds a slice of type print_version
+// Holds a slice of type PrintVersion.
 type PrintVersion_Slice []PrintVersion
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of PrintVersion.
 func (*PrintVersion_Slice) TypeInfo() typeinfo.T {
 	return &Zt_PrintVersion
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of PrintVersion.
 func (op *PrintVersion_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -246,7 +246,7 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_QuitGame,

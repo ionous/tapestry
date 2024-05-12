@@ -21,23 +21,23 @@ var Zt_RenderEval = typeinfo.Slot{
 	},
 }
 
-// holds a single slot.
+// Holds a single slot.
 type RenderEval_Slot struct{ Value RenderEval }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*RenderEval_Slot) TypeInfo() typeinfo.T {
 	return &Zt_RenderEval
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type RenderEval_Slots []RenderEval
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*RenderEval_Slots) TypeInfo() typeinfo.T {
 	return &Zt_RenderEval
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *RenderEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -55,12 +55,12 @@ type RenderName struct {
 // render_name, a type of flow.
 var Zt_RenderName typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RenderName) TypeInfo() typeinfo.T {
 	return &Zt_RenderName
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RenderName) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -68,18 +68,18 @@ func (op *RenderName) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*RenderName)(nil)
 
-// holds a slice of type render_name
+// Holds a slice of type RenderName.
 type RenderName_Slice []RenderName
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RenderName.
 func (*RenderName_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RenderName
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RenderName.
 func (op *RenderName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -95,12 +95,12 @@ type RenderRef struct {
 // render_ref, a type of flow.
 var Zt_RenderRef typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RenderRef) TypeInfo() typeinfo.T {
 	return &Zt_RenderRef
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -108,7 +108,7 @@ func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*RenderRef)(nil)
 var _ rtti.NumberEval = (*RenderRef)(nil)
 var _ rtti.TextEval = (*RenderRef)(nil)
@@ -118,15 +118,15 @@ var _ rtti.TextListEval = (*RenderRef)(nil)
 var _ rtti.RecordListEval = (*RenderRef)(nil)
 var _ RenderEval = (*RenderRef)(nil)
 
-// holds a slice of type render_ref
+// Holds a slice of type RenderRef.
 type RenderRef_Slice []RenderRef
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RenderRef.
 func (*RenderRef_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RenderRef
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RenderRef.
 func (op *RenderRef_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -140,12 +140,12 @@ type RenderValue struct {
 // render_value, a type of flow.
 var Zt_RenderValue typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RenderValue) TypeInfo() typeinfo.T {
 	return &Zt_RenderValue
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RenderValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -153,18 +153,18 @@ func (op *RenderValue) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ RenderEval = (*RenderValue)(nil)
 
-// holds a slice of type render_value
+// Holds a slice of type RenderValue.
 type RenderValue_Slice []RenderValue
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RenderValue.
 func (*RenderValue_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RenderValue
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RenderValue.
 func (op *RenderValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -180,12 +180,12 @@ type RenderPattern struct {
 // render_pattern, a type of flow.
 var Zt_RenderPattern typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RenderPattern) TypeInfo() typeinfo.T {
 	return &Zt_RenderPattern
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RenderPattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -193,20 +193,20 @@ func (op *RenderPattern) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*RenderPattern)(nil)
 var _ rtti.TextEval = (*RenderPattern)(nil)
 var _ RenderEval = (*RenderPattern)(nil)
 
-// holds a slice of type render_pattern
+// Holds a slice of type RenderPattern.
 type RenderPattern_Slice []RenderPattern
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RenderPattern.
 func (*RenderPattern_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RenderPattern
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RenderPattern.
 func (op *RenderPattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -221,12 +221,12 @@ type RenderResponse struct {
 // render_response, a type of flow.
 var Zt_RenderResponse typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RenderResponse) TypeInfo() typeinfo.T {
 	return &Zt_RenderResponse
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RenderResponse) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -234,19 +234,19 @@ func (op *RenderResponse) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*RenderResponse)(nil)
 var _ rtti.TextEval = (*RenderResponse)(nil)
 
-// holds a slice of type render_response
+// Holds a slice of type RenderResponse.
 type RenderResponse_Slice []RenderResponse
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RenderResponse.
 func (*RenderResponse_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RenderResponse
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RenderResponse.
 func (op *RenderResponse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -365,13 +365,13 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_RenderEval,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_RenderName,

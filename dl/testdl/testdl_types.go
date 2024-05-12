@@ -15,23 +15,23 @@ var Zt_TestSlot = typeinfo.Slot{
 	Name: "test_slot",
 }
 
-// holds a single slot.
+// Holds a single slot.
 type TestSlot_Slot struct{ Value TestSlot }
 
-// implements typeinfo.Instance for a single slot.
+// Implements [typeinfo.Instance] for a single slot.
 func (*TestSlot_Slot) TypeInfo() typeinfo.T {
 	return &Zt_TestSlot
 }
 
-// holds a slice of slots.
+// Holds a slice of slots.
 type TestSlot_Slots []TestSlot
 
-// implements typeinfo.Instance for a series of slots.
+// Implements [typeinfo.Instance] for a slice of slots.
 func (*TestSlot_Slots) TypeInfo() typeinfo.T {
 	return &Zt_TestSlot
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of slots.
 func (op *TestSlot_Slots) Repeats() bool {
 	return len(*op) > 0
 }
@@ -44,12 +44,12 @@ type TestEmbed struct {
 // test_embed, a type of flow.
 var Zt_TestEmbed typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TestEmbed) TypeInfo() typeinfo.T {
 	return &Zt_TestEmbed
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TestEmbed) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -57,18 +57,18 @@ func (op *TestEmbed) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ TestSlot = (*TestEmbed)(nil)
 
-// holds a slice of type test_embed
+// Holds a slice of type TestEmbed.
 type TestEmbed_Slice []TestEmbed
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TestEmbed.
 func (*TestEmbed_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TestEmbed
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TestEmbed.
 func (op *TestEmbed_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -85,12 +85,12 @@ type TestFlow struct {
 // test_flow, a type of flow.
 var Zt_TestFlow typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*TestFlow) TypeInfo() typeinfo.T {
 	return &Zt_TestFlow
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *TestFlow) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -98,18 +98,18 @@ func (op *TestFlow) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ TestSlot = (*TestFlow)(nil)
 
-// holds a slice of type test_flow
+// Holds a slice of type TestFlow.
 type TestFlow_Slice []TestFlow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of TestFlow.
 func (*TestFlow_Slice) TypeInfo() typeinfo.T {
 	return &Zt_TestFlow
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of TestFlow.
 func (op *TestFlow_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -117,7 +117,7 @@ func (op *TestFlow_Slice) Repeats() bool {
 // TestBool, a type of str enum.
 type TestBool int
 
-// enumerated values of TestBool
+// The enumerated values of TestBool.
 const (
 	C_TestBool_True TestBool = iota
 	C_TestBool_False
@@ -151,7 +151,7 @@ var Zt_TestBool = typeinfo.Str{
 // TestStr, a type of str enum.
 type TestStr int
 
-// enumerated values of TestStr
+// The enumerated values of TestStr.
 const (
 	C_TestStr_One TestStr = iota
 	C_TestStr_Other
@@ -183,11 +183,13 @@ var Zt_TestStr = typeinfo.Str{
 		"option",
 	},
 }
+
+// TestTxt, a type of str.
 var Zt_TestTxt = typeinfo.Str{
 	Name: "test_txt",
 }
 
-// test_num, a type of num.
+// TestNum, a type of num.
 var Zt_TestNum = typeinfo.Num{
 	Name: "test_num",
 }
@@ -257,27 +259,27 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all slots in this this package
+// A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
 	&Zt_TestSlot,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_TestEmbed,
 	&Zt_TestFlow,
 }
 
-// a list of all strs in this this package
+// A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_TestBool,
 	&Zt_TestStr,
 	&Zt_TestTxt,
 }
 
-// a list of all nums in this this package
+// A list of all nums in this this package.
 var z_num_list = []*typeinfo.Num{
 	&Zt_TestNum,
 }

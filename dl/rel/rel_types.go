@@ -20,12 +20,12 @@ type ReciprocalOf struct {
 // reciprocal_of, a type of flow.
 var Zt_ReciprocalOf typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*ReciprocalOf) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalOf
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *ReciprocalOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -33,18 +33,18 @@ func (op *ReciprocalOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*ReciprocalOf)(nil)
 
-// holds a slice of type reciprocal_of
+// Holds a slice of type ReciprocalOf.
 type ReciprocalOf_Slice []ReciprocalOf
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of ReciprocalOf.
 func (*ReciprocalOf_Slice) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalOf
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of ReciprocalOf.
 func (op *ReciprocalOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -59,12 +59,12 @@ type ReciprocalsOf struct {
 // reciprocals_of, a type of flow.
 var Zt_ReciprocalsOf typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*ReciprocalsOf) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalsOf
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *ReciprocalsOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -72,18 +72,18 @@ func (op *ReciprocalsOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextListEval = (*ReciprocalsOf)(nil)
 
-// holds a slice of type reciprocals_of
+// Holds a slice of type ReciprocalsOf.
 type ReciprocalsOf_Slice []ReciprocalsOf
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of ReciprocalsOf.
 func (*ReciprocalsOf_Slice) TypeInfo() typeinfo.T {
 	return &Zt_ReciprocalsOf
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of ReciprocalsOf.
 func (op *ReciprocalsOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -99,12 +99,12 @@ type Relate struct {
 // relate, a type of flow.
 var Zt_Relate typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*Relate) TypeInfo() typeinfo.T {
 	return &Zt_Relate
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *Relate) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -112,18 +112,18 @@ func (op *Relate) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.Execute = (*Relate)(nil)
 
-// holds a slice of type relate
+// Holds a slice of type Relate.
 type Relate_Slice []Relate
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of Relate.
 func (*Relate_Slice) TypeInfo() typeinfo.T {
 	return &Zt_Relate
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of Relate.
 func (op *Relate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -138,12 +138,12 @@ type RelativeOf struct {
 // relative_of, a type of flow.
 var Zt_RelativeOf typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RelativeOf) TypeInfo() typeinfo.T {
 	return &Zt_RelativeOf
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RelativeOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -151,18 +151,18 @@ func (op *RelativeOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextEval = (*RelativeOf)(nil)
 
-// holds a slice of type relative_of
+// Holds a slice of type RelativeOf.
 type RelativeOf_Slice []RelativeOf
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RelativeOf.
 func (*RelativeOf_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RelativeOf
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RelativeOf.
 func (op *RelativeOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
@@ -177,12 +177,12 @@ type RelativesOf struct {
 // relatives_of, a type of flow.
 var Zt_RelativesOf typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*RelativesOf) TypeInfo() typeinfo.T {
 	return &Zt_RelativesOf
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *RelativesOf) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -190,22 +190,23 @@ func (op *RelativesOf) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 var _ rtti.TextListEval = (*RelativesOf)(nil)
 
-// holds a slice of type relatives_of
+// Holds a slice of type RelativesOf.
 type RelativesOf_Slice []RelativesOf
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of RelativesOf.
 func (*RelativesOf_Slice) TypeInfo() typeinfo.T {
 	return &Zt_RelativesOf
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of RelativesOf.
 func (op *RelativesOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// RelationName, a type of str.
 var Zt_RelationName = typeinfo.Str{
 	Name: "relation_name",
 }
@@ -321,7 +322,7 @@ var Z_Types = typeinfo.TypeSet{
 	Signatures: z_signatures,
 }
 
-// a list of all flows in this this package
+// A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_ReciprocalOf,
@@ -331,7 +332,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_RelativesOf,
 }
 
-// a list of all strs in this this package
+// A list of all strs in this this package.
 var z_str_list = []*typeinfo.Str{
 	&Zt_RelationName,
 }

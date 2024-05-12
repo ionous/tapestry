@@ -11,12 +11,12 @@ type {{Pascal .Name}} struct {
 // {{.Name}}, a type of flow.
 var Zt_{{Pascal .Name}} typeinfo.Flow
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance]
 func (*{{Pascal .Name}}) TypeInfo() typeinfo.T {
 	return &Zt_{{Pascal .Name}}
 }
 
-// implements typeinfo.Markup
+// Implements [typeinfo.Markup]
 func (op *{{Pascal .Name}}) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
@@ -25,21 +25,21 @@ func (op *{{Pascal .Name}}) GetMarkup(ensure bool) map[string]any {
 }
 
 {{ if .Slots }}
-// ensure the command implements its specified slots:
+// Ensures the command implements its specified slots.
 {{- range $i, $s := .Slots }}
 var _ {{ScopedType $s}} = (*{{Pascal $.Name}})(nil)
 {{- end }}
 {{- end}}
 
-// holds a slice of type {{.Name}}
+// Holds a slice of type {{Pascal .Name}}.
 type {{Pascal .Name}}_Slice []{{Pascal .Name}}
 
-// implements typeinfo.Instance
+// Implements [typeinfo.Instance] for a slice of {{Pascal .Name}}.
 func (*{{Pascal .Name}}_Slice) TypeInfo() typeinfo.T {
 	return &Zt_{{Pascal .Name}}
 }
 
-// implements typeinfo.Repeats
+// Implements [typeinfo.Repeats] for a slice of {{Pascal .Name}}.
 func (op* {{Pascal .Name}}_Slice) Repeats() bool {
 	return len(*op) > 0 
 }

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
+
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
 //go:embed templates/*
@@ -12,7 +14,8 @@ var tempFS embed.FS
 
 func genTemplates(p *groupSearch) (*template.Template, error) {
 	funcMap := template.FuncMap{
-		"Pascal": Pascal,
+		"Pascal":       Pascal,
+		"CommentLines": compact.ExtractComment,
 		"Encode": func(v any) (ret string) {
 			return fmt.Sprintf("%#v", v)
 		},
