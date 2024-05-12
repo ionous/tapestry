@@ -25,9 +25,9 @@ Tapestry:
     Define test:scene:do:
       - "plural name printing"
       - - Declare: "The flowerpot, the dishes, and the spoon are things."
-        - Define value:of:as:
-            - "printed plural name"
-            - "the flowerpot"
-            - FromText: "broken flower pots"
+        - Define noun:value:initially:
+          - "flowerpot"
+          - "printed plural name"
+          - FromText: "broken flower pots"
       - - Say: "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}."
         - Expect output: "broken flower pots, dishes, spoons."

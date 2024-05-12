@@ -2,23 +2,23 @@
 Tapestry:
   - Declare: "Agents are kinds of object."
   - Declare: "Players are kinds of agent."
-  - Define nouns:as:
-      - "the player"
+  - Define noun:kind:
+      - "player"
       - "players"
   - Define kind:fields:
       - "Agents"
       - - Text: "pawn"
   - # 
-    Define nouns:as:
+    Define noun:kind:
       - "self"
-      - "actor"
-  - Define value:of:as:
+      - "actors"
+  - Define noun:value:initially:
+      - "player"
       - "pawn"
-      - "the player"
       - FromText: "self"
-  - Define value:of:as:
-      - "printed name"
+  - Define noun:value:initially:
       - "self"
+      - "printed name"
       - FromText: "you"
   - Declare: "You are proper named and privately named."
   - # 

@@ -20,10 +20,13 @@ Tapestry:
             - "Potentially, the importer could call the \"starts with vowel\" pattern, and when true store the article."
             - "Or, maybe we could store the (various) articles used when defining the noun, sort through them, and pick the most reasonable one -- always storing that regardless."
             - "saying only ever \"the X\" , for example, would be remembered, but wouldn't alter the set of indefinite articles."
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "x"
             - "indefinite article"
-            - - "the x"
-              - "the f"
+            - FromText: "an"
+        - Define noun:value:initially:
+            - "f"
+            - "indefinite article"
             - FromText: "an"
         - Define test:scene:do:
             - "no grouping"

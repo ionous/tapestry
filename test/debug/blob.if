@@ -1,9 +1,9 @@
 {
   "Tapestry:": [
     {
-      "Define nouns:as:": [
-        "the cabin",
-        "a room"
+      "Define noun:kind:": [
+        "cabin",
+        "rooms"
       ]
     },
     {
@@ -12,18 +12,18 @@
     {
       "Define relative:nouns:otherNouns:": [
         "contains",
-        "the cabin",
-        "a glass case"
+        "cabin",
+        "glass case"
       ]
     },
     {
       "Define relative:nouns:otherNouns:": [
-        "In", "the glass case", "a collection of fishing rods"
+        "In", "glass case", "collection of fishing rods"
       ]
     },
     {
-      "Define nouns:traits:": [
-        "the case",
+      "Define noun:states:": [
+        "case",
         [
           "closed",
           "transparent",
@@ -33,33 +33,33 @@
       ]
     },
     {
-      "Define nouns:traits:": [
-        "the case",
+      "Define noun:states:": [
+        "case",
         "scenery"
       ]
     },
     {
       "Define relative:nouns:otherNouns:": [
         "unlocks",
-        "the small silver key",
-        "the case"
+        "small silver key",
+        "case"
       ]
     },
     {
       "Define relative:nouns:otherNouns:": [
         "is in",
-   	    "the bench",
-        "the cabin"
+   	    "bench",
+        "cabin"
       ]
     },
     {
       "Define relative:nouns:otherNouns:": [
-        "On", "the beach", "some blue vinyl cushions"
+        "On", "beach", "blue vinyl cushions"
       ]
     },
     {
-      "Define nouns:traits:": [
-        "the bench",
+      "Define noun:states:": [
+        "bench",
         [
           "enterable",
           "scenery"
@@ -67,8 +67,8 @@
       ]
     },
     {
-      "Define nouns:traits:": [
-        "the cushions",
+      "Define noun:states:": [
+        "cushions",
         "scenery"
       ]
     }

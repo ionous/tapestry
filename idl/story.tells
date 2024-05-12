@@ -46,7 +46,8 @@ Spec:with group:
             - "execute"
           - "language"
           - Flow uses:
-              - Term:name:repeats:
+              - # One or more lines of text documentation.
+                Term:name:repeats:
                 - "_"
                 - "lines"
                 - true
@@ -149,11 +150,14 @@ Spec:with group:
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # A unique name for the set of states.
+                  Term:name:type:
                   - "state"
                   - "aspect"
                   - "text_eval"
-                - Term:name:type:
+                - # The names of the states in the set.
+                  # TODO: a list of containing only one state should probably automatically generate its opposite the way that [BoolField] does.
+                  Term:name:type:
                   - "names"
                   - "traits"
                   - "text_list_eval"
@@ -281,22 +285,6 @@ Spec:with group:
                 - Option: "many_to_one"
                 - Option: "many_to_many"
 
-      - # Adds properties to an existing kind.
-        # This command is similar to a sentence like:
-        # "Things have some text called a description."
-        Spec:slots:with flow:
-          - "define_fields"
-          - "story_statement"
-          - Flow:uses:
-              - "define"
-              - - Term:type:
-                    - "kind"
-                    - "text_eval"
-                - Term:type:repeats:
-                    - "fields"
-                    - "field_definition"
-                    - true
-
       - # Defines a new kind: a set of properties used by game objects.
         # This command is similar to a sentence like:
         # "Doors are a kind of opener."
@@ -305,12 +293,34 @@ Spec:with group:
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:type:
+              - - # A unique name for this kind.
+                  Term:type:
                     - "kind"
                     - "text_eval"
-                - Term:type:
+                - # The parent of this kind.
+                  # ( In point of fact, this can be any ancestor of the kind
+                  # so long as it doesn't conflict with other [DefineKind] statements. )
+                  Term:type:
                     - "ancestor"
                     - "text_eval"
+
+      - # Adds properties to an existing kind.
+        # This command is similar to a sentence like:
+        # "Things have some text called a description."
+        Spec:slots:with flow:
+          - "define_fields"
+          - "story_statement"
+          - Flow:uses:
+              - "define"
+              - - # The name of the kind to which the fields will be assigned.
+                  Term:type:
+                    - "kind"
+                    - "text_eval"
+                - # One or more fields to add to the kind.
+                  Term:type:repeats:
+                    - "fields"
+                    - "field_definition"
+                    - true
 
       - # Plurals are used both at runtime and during weave to
         # guide the interpretation of nouns and kinds.
@@ -334,44 +344,49 @@ Spec:with group:
 
       - # Assign a starting value to the field of one or nouns.
         Spec:slots:with flow:
-          - "define_value"
+          - "define_noun_value"
           - "story_statement"
           - Flow:uses:
               - "define"
               - - Term:name:type:
-                    - "value"
-                    - "field_name"
-                    - "text_eval"
+                  - "noun"
+                  - "noun_name"
+                  - "text_eval"
                 - Term:name:type:
-                    - "of"
-                    - "nouns"
-                    - "text_list_eval"
+                  - "value"
+                  - "field_name"
+                  - "text_eval"
                 - Term:name:type:
-                    - "as"
-                    - "value"
-                    - "assignment"
+                  - "initially"
+                  - "value"
+                  - "assignment"
+
       - Spec:slots:with flow:
-          - "define_nouns"
+          - "define_noun_kind"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:type:
-                    - "nouns"
-                    - "text_list_eval"
+              - - Term:name:type:
+                  - "noun"
+                  - "noun_name"
+                  - "text_eval"
                 - Term:name:type:
-                    - "as"
-                    - "kind"
-                    - "text_eval"
+                  - "kind"
+                  - "kind_name"
+                  - "text_eval"
+
       - Spec:slots:with flow:
-          - "define_noun_traits"
+          - "define_noun_states"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:type:
-                    - "nouns"
-                    - "text_list_eval"
-                - Term:type:
-                    - "traits"
+              - - Term:name:type:
+                    - "noun"
+                    - "noun_name"
+                    - "text_eval"
+                - Term:name:type:
+                    - "states"
+                    - "state_names"
                     - "text_list_eval"
 
       - Spec:slots:groups:with flow:
@@ -388,6 +403,7 @@ Spec:with group:
                     - "provides"
                     - "field_definition"
                     - true
+
       - # Change the behavior of an existing pattern.
         # For events, this adds a listener that responds to the targeted object only when triggered by the player.
         # By default, rules with filters continue on to the next rule automatically.
@@ -412,6 +428,7 @@ Spec:with group:
                     - "exe"
                     - "execute"
                     - true
+
       - # Change the behavior of an existing pattern.
         # The default behavior for events is to fall through to the next handler unless canceled or stopped.
         Spec:slots:groups:with flow:
@@ -438,6 +455,7 @@ Spec:with group:
                     - "exe"
                     - "execute"
                     - true
+
       - # Change the behavior of an existing pattern.
         # The default behavior for events is to fall through to the next handler unless canceled or stopped.
         Spec:slots:groups:with flow:
@@ -468,6 +486,7 @@ Spec:with group:
                     - "exe"
                     - "execute"
                     - true
+
       - # Declare a new pattern.
         # A pattern is a bundle of functions which can either change the game world or provide information about it.
         # Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
@@ -496,9 +515,6 @@ Spec:with group:
                     - true
                     - true
 
-
-
-
       - # Relate nouns to each other.
         # Most users will probably prefer defining verbs and using jess to relate nouns.
         # For instance: "Carrying is a verb. The relation of carrying is whereabouts. Bob is carrying the pen."
@@ -508,17 +524,19 @@ Spec:with group:
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # The name of an existing relationship.
+                  Term:name:type:
                     - "relative"
                     - "relation"
                     - "text_eval"
-                - Term:type:
+                - # The names of one or more nouns for the "left side" of this pairing.
+                  Term:type:
                     - "nouns"
                     - "text_list_eval"
-                - Term:type:
+                - # The names of one or more nouns for the "right side" of this pairing.
+                  Term:type:
                     - "other_nouns"
                     - "text_list_eval"
-
 
       - # Print templated text. Templates contain commands executed at runtime.
         # See the Tapestry guide for more information.
@@ -567,10 +585,12 @@ Spec:with group:
           - "logic"
           - Flow phrase:uses:
               - "trigger {_$trigger} {$num}"
-              - - Term:name:
+              - - # A unique name for this counter.
+                  Term:name:
                     - "_"
                     - "trigger"
-                - Term:type:
+                - # The value at which this counter will start to return true.
+                  Term:type:
                     - "num"
                     - "number_eval"
 
@@ -581,7 +601,8 @@ Spec:with group:
           - "output"
           - Flow phrase:uses:
               - "cycle {_$parts}"
-              - - Term:name:type:repeats:
+              - - # One or more pieces of text to cycle through.
+                  Term:name:type:repeats:
                     - "_"
                     - "parts"
                     - "text_eval"
@@ -594,7 +615,8 @@ Spec:with group:
           - "output"
           - Flow phrase:uses:
               - "shuffle {_$parts}"
-              - - Term:name:type:repeats:
+              - - # One or more pieces of text to shuffle through.
+                  Term:name:type:repeats:
                     - "_"
                     - "parts"
                     - "text_eval"
@@ -608,7 +630,8 @@ Spec:with group:
           - "output"
           - Flow phrase:uses:
               - "stopping {_$parts}"
-              - - Term:name:type:repeats:
+              - - # One or more pieces of text to shift through.
+                  Term:name:type:repeats:
                     - "_"
                     - "parts"
                     - "text_eval"
@@ -643,6 +666,9 @@ Spec:with group:
                     - "text_eval"
 
       - # A field containing a boolean ( true/false ) value.
+        # As a special case, when used to define a boolean field in a kind,
+        # the boolean becomes a state set consisting of the state and its opposite.
+        # For instance, a boolean field called "reasonable" generates a set called "reasonable status" and the states "reasonable" and "not reasonable."
         Spec:slots:with flow:
           - "bool_field"
           - "field_definition"

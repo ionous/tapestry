@@ -4,13 +4,13 @@ Tapestry:
       - "Kitchenette"
       - "Thingaverse"
       - - Declare: "The kitchen is a room. You are in the kitchen."
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "kitchen"
             - "description"
-            - "the kitchen"
             - FromText: "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "kitchen"
             - "printed name"
-            - "the kitchen"
             - FromText: "Kitchen"
         - # 
           Declare: """
@@ -18,13 +18,13 @@ Tapestry:
             The broom, a hat, and two cats are in the kitchen.
             The broom and the hat are things.
             """
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "hat"
             - "initial appearance"
-            - "the hat"
             - FromText: "A pointed black hat lies discarded on the floor under a dusty shelf."
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "hat"
             - "description"
-            - "the hat"
             - FromText: "Your aunt's very own witches hat, a Halloween favorite."
         - # 
           Declare: """
@@ -32,13 +32,13 @@ Tapestry:
             The cabinet is openable, enterable, scenery.
             The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet.
             """
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "hook"
             - "initial appearance"
-            - "the hook"
             - FromText: "Beneath your feet is a bright and shiny hook."
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "cabinet"
             - "description"
-            - "the cabinet"
             - FromText: "An ancient teak wardrobe repurposed as a kitchen cupboard."
         - Interpret alias:as:
             - "blade"
@@ -54,9 +54,9 @@ Tapestry:
             A blender and a mortar are containers on the counter.
             A pestle is in the mortar.
             """
-        - Define value:of:as:
+        - Define noun:value:initially:
+            - "espresso machine"
             - "initial appearance"
-            - "the espresso machine"
             - FromText: "Steam leaks from the top of a recently used espresso machine."
       - - # do nothing
           Continue:

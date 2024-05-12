@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/weaver"
@@ -38,43 +37,35 @@ func (op *DefineState) Weave(cat *weave.Catalog) error {
 	})
 }
 
-func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if nouns, e := safe.GetTextList(run, op.Nouns); e != nil {
+func (op *DefineNounKind) Weave(cat *weave.Catalog) error {
+	return cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if noun, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
-		} else if traits, e := safe.GetTextList(run, op.Traits); e != nil {
+		} else if kind, e := safe.GetText(run, op.KindName); e != nil {
 			err = e
-		} else if traits := traits.Strings(); len(traits) > 0 {
-			names := nouns.Strings()
-			for _, t := range traits {
-				t := inflect.Normalize(t)
-				for _, n := range names {
-					if e := w.AddNounValue(n, t, truly()); e != nil {
-						err = errutil.Append(err, e)
-						break // out of the traits to the next noun
-					}
-				}
-			}
+		} else {
+			n := inflect.Normalize(noun.String())
+			k := inflect.Normalize(kind.String())
+			_, err = mdl.AddNamedNoun(w, n, k)
 		}
 		return
 	})
 }
 
-func (op *DefineNouns) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.NounPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if nouns, e := safe.GetTextList(run, op.Nouns); e != nil {
+func (op *DefineNounStates) Weave(cat *weave.Catalog) error {
+	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
+		if name, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
-		} else if kind, e := safe.GetText(run, op.Kind); e != nil {
+		} else if traits, e := safe.GetTextList(run, op.StateNames); e != nil {
+			err = e
+		} else if noun, e := run.GetField(meta.ObjectId, name.String()); e != nil {
 			err = e
 		} else {
-			names := nouns.Strings()
-			if kind := kind.String(); len(kind) > 0 {
-				kind := match.StripArticle(kind)
-				for _, noun := range names {
-					noun := match.StripArticle(noun)
-					if _, e := mdl.AddNamedNoun(w, noun, kind); e != nil {
-						err = errutil.Append(err, e)
-					}
+			for _, t := range traits.Strings() {
+				t := inflect.Normalize(t)
+				if e := w.AddNounValue(noun.String(), t, truly()); e != nil {
+					err = e
+					break
 				}
 			}
 		}
@@ -83,9 +74,9 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 }
 
 // ex. The description of the nets is xxx
-func (op *DefineValue) Weave(cat *weave.Catalog) error {
+func (op *DefineNounValue) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if nouns, e := safe.GetTextList(run, op.Nouns); e != nil {
+		if name, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
 		} else if field, e := safe.GetText(run, op.FieldName); e != nil {
 			err = e
@@ -100,15 +91,11 @@ func (op *DefineValue) Weave(cat *weave.Catalog) error {
 				}
 			}
 			if err == nil {
-				subjects := nouns.Strings()
-				field := field.String()
-				for _, noun := range subjects {
-					name := match.StripArticle(noun)
-					if noun, e := run.GetField(meta.ObjectId, name); e != nil {
-						err = errutil.Append(err, e)
-					} else if e := w.AddNounValue(noun.String(), field, value); e != nil {
-						err = errutil.Append(err, e)
-					}
+				field := inflect.Normalize(field.String())
+				if noun, e := run.GetField(meta.ObjectId, name.String()); e != nil {
+					err = e
+				} else if e := w.AddNounValue(noun.String(), field, value); e != nil {
+					err = e
 				}
 			}
 		}

@@ -567,47 +567,6 @@ func (op *DefineRelation_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Adds properties to an existing kind.
-// This command is similar to a sentence like:
-// "Things have some text called a description."
-type DefineFields struct {
-	Kind   rtti.TextEval
-	Fields []FieldDefinition
-	Markup map[string]any
-}
-
-// define_fields, a type of flow.
-var Zt_DefineFields typeinfo.Flow
-
-// implements typeinfo.Instance
-func (*DefineFields) TypeInfo() typeinfo.T {
-	return &Zt_DefineFields
-}
-
-// implements typeinfo.Markup
-func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineFields)(nil)
-
-// holds a slice of type define_fields
-type DefineFields_Slice []DefineFields
-
-// implements typeinfo.Instance
-func (*DefineFields_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineFields
-}
-
-// implements typeinfo.Repeats
-func (op *DefineFields_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Defines a new kind: a set of properties used by game objects.
 // This command is similar to a sentence like:
 // "Doors are a kind of opener."
@@ -646,6 +605,47 @@ func (*DefineKind_Slice) TypeInfo() typeinfo.T {
 
 // implements typeinfo.Repeats
 func (op *DefineKind_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Adds properties to an existing kind.
+// This command is similar to a sentence like:
+// "Things have some text called a description."
+type DefineFields struct {
+	Kind   rtti.TextEval
+	Fields []FieldDefinition
+	Markup map[string]any
+}
+
+// define_fields, a type of flow.
+var Zt_DefineFields typeinfo.Flow
+
+// implements typeinfo.Instance
+func (*DefineFields) TypeInfo() typeinfo.T {
+	return &Zt_DefineFields
+}
+
+// implements typeinfo.Markup
+func (op *DefineFields) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// ensure the command implements its specified slots:
+var _ StoryStatement = (*DefineFields)(nil)
+
+// holds a slice of type define_fields
+type DefineFields_Slice []DefineFields
+
+// implements typeinfo.Instance
+func (*DefineFields_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineFields
+}
+
+// implements typeinfo.Repeats
+func (op *DefineFields_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -695,23 +695,23 @@ func (op *DefinePlural_Slice) Repeats() bool {
 }
 
 // Assign a starting value to the field of one or nouns.
-type DefineValue struct {
+type DefineNounValue struct {
+	NounName  rtti.TextEval
 	FieldName rtti.TextEval
-	Nouns     rtti.TextListEval
 	Value     rtti.Assignment
 	Markup    map[string]any
 }
 
-// define_value, a type of flow.
-var Zt_DefineValue typeinfo.Flow
+// define_noun_value, a type of flow.
+var Zt_DefineNounValue typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*DefineValue) TypeInfo() typeinfo.T {
-	return &Zt_DefineValue
+func (*DefineNounValue) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounValue
 }
 
 // implements typeinfo.Markup
-func (op *DefineValue) GetMarkup(ensure bool) map[string]any {
+func (op *DefineNounValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -719,37 +719,37 @@ func (op *DefineValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineValue)(nil)
+var _ StoryStatement = (*DefineNounValue)(nil)
 
-// holds a slice of type define_value
-type DefineValue_Slice []DefineValue
+// holds a slice of type define_noun_value
+type DefineNounValue_Slice []DefineNounValue
 
 // implements typeinfo.Instance
-func (*DefineValue_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineValue
+func (*DefineNounValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounValue
 }
 
 // implements typeinfo.Repeats
-func (op *DefineValue_Slice) Repeats() bool {
+func (op *DefineNounValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type DefineNouns struct {
-	Nouns  rtti.TextListEval
-	Kind   rtti.TextEval
-	Markup map[string]any
+type DefineNounKind struct {
+	NounName rtti.TextEval
+	KindName rtti.TextEval
+	Markup   map[string]any
 }
 
-// define_nouns, a type of flow.
-var Zt_DefineNouns typeinfo.Flow
+// define_noun_kind, a type of flow.
+var Zt_DefineNounKind typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*DefineNouns) TypeInfo() typeinfo.T {
-	return &Zt_DefineNouns
+func (*DefineNounKind) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounKind
 }
 
 // implements typeinfo.Markup
-func (op *DefineNouns) GetMarkup(ensure bool) map[string]any {
+func (op *DefineNounKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -757,37 +757,37 @@ func (op *DefineNouns) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineNouns)(nil)
+var _ StoryStatement = (*DefineNounKind)(nil)
 
-// holds a slice of type define_nouns
-type DefineNouns_Slice []DefineNouns
+// holds a slice of type define_noun_kind
+type DefineNounKind_Slice []DefineNounKind
 
 // implements typeinfo.Instance
-func (*DefineNouns_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineNouns
+func (*DefineNounKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounKind
 }
 
 // implements typeinfo.Repeats
-func (op *DefineNouns_Slice) Repeats() bool {
+func (op *DefineNounKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type DefineNounTraits struct {
-	Nouns  rtti.TextListEval
-	Traits rtti.TextListEval
-	Markup map[string]any
+type DefineNounStates struct {
+	NounName   rtti.TextEval
+	StateNames rtti.TextListEval
+	Markup     map[string]any
 }
 
-// define_noun_traits, a type of flow.
-var Zt_DefineNounTraits typeinfo.Flow
+// define_noun_states, a type of flow.
+var Zt_DefineNounStates typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*DefineNounTraits) TypeInfo() typeinfo.T {
-	return &Zt_DefineNounTraits
+func (*DefineNounStates) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounStates
 }
 
 // implements typeinfo.Markup
-func (op *DefineNounTraits) GetMarkup(ensure bool) map[string]any {
+func (op *DefineNounStates) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -795,18 +795,18 @@ func (op *DefineNounTraits) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ StoryStatement = (*DefineNounTraits)(nil)
+var _ StoryStatement = (*DefineNounStates)(nil)
 
-// holds a slice of type define_noun_traits
-type DefineNounTraits_Slice []DefineNounTraits
+// holds a slice of type define_noun_states
+type DefineNounStates_Slice []DefineNounStates
 
 // implements typeinfo.Instance
-func (*DefineNounTraits_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineNounTraits
+func (*DefineNounStates_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounStates
 }
 
 // implements typeinfo.Repeats
-func (op *DefineNounTraits_Slice) Repeats() bool {
+func (op *DefineNounStates_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1020,6 +1020,9 @@ func (op *DefinePattern_Slice) Repeats() bool {
 }
 
 // Relate nouns to each other.
+// Most users will probably prefer defining verbs and using jess to relate nouns.
+// For instance: "Carrying is a verb. The relation of carrying is whereabouts. Bob is carrying the pen."
+// See the Tapestry guide for details.
 type DefineRelatives struct {
 	Relation   rtti.TextEval
 	Nouns      rtti.TextListEval
@@ -1378,6 +1381,9 @@ func (op *AspectField_Slice) Repeats() bool {
 }
 
 // A field containing a boolean ( true/false ) value.
+// As a special case, when used to define a boolean field in a kind,
+// the boolean becomes a state set consisting of the state and its opposite.
+// For instance, a boolean field called "reasonable" generates a set called "reasonable status" and the states "reasonable" and "not reasonable."
 type BoolField struct {
 	Name      rtti.TextEval
 	Initially rtti.BoolEval
@@ -1693,6 +1699,9 @@ var Zt_RelationCardinality = typeinfo.Str{
 		"many_to_one",
 		"many_to_many",
 	},
+	Markup: map[string]any{
+		"comment": "Used as part of [DefineRelation] to declare a new kind of relationship between nouns.",
+	},
 }
 
 // init the terms of all flows in init
@@ -1732,7 +1741,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "lines",
 			Repeats: true,
-			Type:    &prim.Zt_Lines,
+			Markup: map[string]any{
+				"comment": "One or more lines of text documentation.",
+			},
+			Type: &prim.Zt_Lines,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
@@ -1861,11 +1873,17 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "aspect",
 			Label: "state",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "A unique name for the set of states.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "traits",
 			Label: "names",
-			Type:  &rtti.Zt_TextListEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"The names of the states in the set.", "TODO: a list of containing only one state should probably automatically generate its opposite the way that [BoolField] does."},
+			},
+			Type: &rtti.Zt_TextListEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
@@ -2019,43 +2037,55 @@ func init() {
 			"comment": []interface{}{"Defines a connection between different kinds of nouns.", "The shared library, for instance, defines a spatial relation between objects;", "allowing one object to be placed inside another."},
 		},
 	}
-	Zt_DefineFields = typeinfo.Flow{
-		Name: "define_fields",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "kind",
-			Label: "kind",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:    "fields",
-			Label:   "fields",
-			Repeats: true,
-			Type:    &Zt_FieldDefinition,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Adds properties to an existing kind.", "This command is similar to a sentence like:", "\"Things have some text called a description.\""},
-		},
-	}
 	Zt_DefineKind = typeinfo.Flow{
 		Name: "define_kind",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
 			Name:  "kind",
 			Label: "kind",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "A unique name for this kind.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "ancestor",
 			Label: "ancestor",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"The parent of this kind.", "( In point of fact, this can be any ancestor of the kind", "so long as it doesn't conflict with other [DefineKind] statements. )"},
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"Defines a new kind: a set of properties used by game objects.", "This command is similar to a sentence like:", "\"Doors are a kind of opener.\""},
+		},
+	}
+	Zt_DefineFields = typeinfo.Flow{
+		Name: "define_fields",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "kind",
+			Label: "kind",
+			Markup: map[string]any{
+				"comment": "The name of the kind to which the fields will be assigned.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:    "fields",
+			Label:   "fields",
+			Repeats: true,
+			Markup: map[string]any{
+				"comment": "One or more fields to add to the kind.",
+			},
+			Type: &Zt_FieldDefinition,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Adds properties to an existing kind.", "This command is similar to a sentence like:", "\"Things have some text called a description.\""},
 		},
 	}
 	Zt_DefinePlural = typeinfo.Flow{
@@ -2077,20 +2107,20 @@ func init() {
 			"comment": []interface{}{"Plurals are used both at runtime and during weave to", "guide the interpretation of nouns and kinds.", "A singular word can have multiple plurals;", "a plural word only has one singular form.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
 		},
 	}
-	Zt_DefineValue = typeinfo.Flow{
-		Name: "define_value",
+	Zt_DefineNounValue = typeinfo.Flow{
+		Name: "define_noun_value",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
+			Name:  "noun_name",
+			Label: "noun",
+			Type:  &rtti.Zt_TextEval,
+		}, {
 			Name:  "field_name",
 			Label: "value",
 			Type:  &rtti.Zt_TextEval,
 		}, {
-			Name:  "nouns",
-			Label: "of",
-			Type:  &rtti.Zt_TextListEval,
-		}, {
 			Name:  "value",
-			Label: "as",
+			Label: "initially",
 			Type:  &rtti.Zt_Assignment,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -2100,32 +2130,32 @@ func init() {
 			"comment": "Assign a starting value to the field of one or nouns.",
 		},
 	}
-	Zt_DefineNouns = typeinfo.Flow{
-		Name: "define_nouns",
+	Zt_DefineNounKind = typeinfo.Flow{
+		Name: "define_noun_kind",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "nouns",
-			Label: "nouns",
-			Type:  &rtti.Zt_TextListEval,
+			Name:  "noun_name",
+			Label: "noun",
+			Type:  &rtti.Zt_TextEval,
 		}, {
-			Name:  "kind",
-			Label: "as",
+			Name:  "kind_name",
+			Label: "kind",
 			Type:  &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 	}
-	Zt_DefineNounTraits = typeinfo.Flow{
-		Name: "define_noun_traits",
+	Zt_DefineNounStates = typeinfo.Flow{
+		Name: "define_noun_states",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "nouns",
-			Label: "nouns",
-			Type:  &rtti.Zt_TextListEval,
+			Name:  "noun_name",
+			Label: "noun",
+			Type:  &rtti.Zt_TextEval,
 		}, {
-			Name:  "traits",
-			Label: "traits",
+			Name:  "state_names",
+			Label: "states",
 			Type:  &rtti.Zt_TextListEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -2274,21 +2304,30 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "relation",
 			Label: "relative",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The name of an existing relationship.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "nouns",
 			Label: "nouns",
-			Type:  &rtti.Zt_TextListEval,
+			Markup: map[string]any{
+				"comment": "The names of one or more nouns for the \"left side\" of this pairing.",
+			},
+			Type: &rtti.Zt_TextListEval,
 		}, {
 			Name:  "other_nouns",
 			Label: "other_nouns",
-			Type:  &rtti.Zt_TextListEval,
+			Markup: map[string]any{
+				"comment": "The names of one or more nouns for the \"right side\" of this pairing.",
+			},
+			Type: &rtti.Zt_TextListEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": "Relate nouns to each other.",
+			"comment": []interface{}{"Relate nouns to each other.", "Most users will probably prefer defining verbs and using jess to relate nouns.", "For instance: \"Carrying is a verb. The relation of carrying is whereabouts. Bob is carrying the pen.\"", "See the Tapestry guide for details."},
 		},
 	}
 	Zt_SayTemplate = typeinfo.Flow{
@@ -2337,11 +2376,17 @@ func init() {
 		Lede: "count_of",
 		Terms: []typeinfo.Term{{
 			Name: "trigger",
+			Markup: map[string]any{
+				"comment": "A unique name for this counter.",
+			},
 			Type: &core.Zt_Trigger,
 		}, {
 			Name:  "num",
 			Label: "num",
-			Type:  &rtti.Zt_NumberEval,
+			Markup: map[string]any{
+				"comment": "The value at which this counter will start to return true.",
+			},
+			Type: &rtti.Zt_NumberEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -2356,7 +2401,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "parts",
 			Repeats: true,
-			Type:    &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more pieces of text to cycle through.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -2371,7 +2419,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "parts",
 			Repeats: true,
-			Type:    &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more pieces of text to shuffle through.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -2386,7 +2437,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "parts",
 			Repeats: true,
-			Type:    &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more pieces of text to shift through.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -2445,7 +2499,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": "A field containing a boolean ( true/false ) value.",
+			"comment": []interface{}{"A field containing a boolean ( true/false ) value.", "As a special case, when used to define a boolean field in a kind,", "the boolean becomes a state set consisting of the state and its opposite.", "For instance, a boolean field called \"reasonable\" generates a set called \"reasonable status\" and the states \"reasonable\" and \"not reasonable.\""},
 		},
 	}
 	Zt_NumberField = typeinfo.Flow{
@@ -2672,12 +2726,12 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineNamedGrammar,
 	&Zt_DeclareStatement,
 	&Zt_DefineRelation,
-	&Zt_DefineFields,
 	&Zt_DefineKind,
+	&Zt_DefineFields,
 	&Zt_DefinePlural,
-	&Zt_DefineValue,
-	&Zt_DefineNouns,
-	&Zt_DefineNounTraits,
+	&Zt_DefineNounValue,
+	&Zt_DefineNounKind,
+	&Zt_DefineNounStates,
 	&Zt_RuleProvides,
 	&Zt_RuleForPattern,
 	&Zt_RuleForNoun,
@@ -2721,8 +2775,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	5312053119535959994:  (*DefineAction)(nil),         /* story_statement=Define action:requires:provides: */
 	12790170204334923961: (*DefineKind)(nil),           /* story_statement=Define kind:ancestor: */
 	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
-	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
-	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
+	16821098817155896534: (*DefineNounKind)(nil),       /* story_statement=Define noun:kind: */
+	3688969656849355942:  (*DefineNounStates)(nil),     /* story_statement=Define noun:states: */
+	9478300892459390916:  (*DefineNounValue)(nil),      /* story_statement=Define noun:value:initially: */
 	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
 	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
 	15951965898335032430: (*DefineRelation)(nil),       /* story_statement=Define relation:kind:otherKind:cardinality: */
@@ -2746,7 +2801,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3712030102885900665:  (*DefineTest)(nil),           /* story_statement=Define test:requires:do: */
 	16978239348269462739: (*DefineTest)(nil),           /* story_statement=Define test:requires:scene:do: */
 	13333326165932249009: (*DefineTest)(nil),           /* story_statement=Define test:scene:do: */
-	17805855959213202620: (*DefineValue)(nil),          /* story_statement=Define value:of:as: */
 	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
 	8001652437005351387:  (*DefineNamedGrammar)(nil),   /* story_statement=Interpret name:with: */
 	6001249499689096432:  (*DefineLeadingGrammar)(nil), /* story_statement=Interpret:with: */

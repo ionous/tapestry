@@ -2,11 +2,11 @@
 Tapestry:
   - # Story data includes per turn global information about the story, and, questionably, some constant data about the story including title, author, etc.
     Declare: "Story data are kinds of kinds."
-  - Define nouns:as:
+  - Define noun:kind:
       - "story"
       - "story data"
   - # a copy of the story story data from the previous turn.
-    Define nouns:as:
+    Define noun:kind:
       - "last known"
       - "story data"
   - Define kind:fields:
