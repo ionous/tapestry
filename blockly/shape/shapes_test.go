@@ -3,6 +3,7 @@ package shape_test
 import (
 	_ "embed"
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/blockly/shape"
@@ -19,6 +20,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web/js"
@@ -107,10 +109,13 @@ func findRepeatingContainers(ts shape.TypeMap) (ret []repeatingContainer, err er
 
 // make sure that story file has no output and one stacked input.
 func TestStoryFileShape(t *testing.T) {
+	x := &story.Zt_StoryFile
+	comment, _ := compact.ExtractComment(x.Markup)
+	tooltip := strings.Join(comment, "\\n")
 	expect := `{
   "type": "story_file",
   "colour": "%{BKY_TAP_HUE_ROOT}",
-  "tooltip": "top level node for story files.",
+  "tooltip": "` + tooltip + `",
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
@@ -131,7 +136,6 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	x := &story.Zt_StoryFile
 	ts := shape.TypeMap{x.Name: x}
 
 	var out js.Builder
@@ -152,6 +156,9 @@ func TestStoryFileShape(t *testing.T) {
 
 // make sure that story file has no output and one stacked input.
 func TestStoryTextShape(t *testing.T) {
+	x := &story.Zt_TextField
+	comment, _ := compact.ExtractComment(x.Markup)
+	tooltip := strings.Join(comment, "\\n")
 	expect := `{
   "type": "text_field",
   "output": [
@@ -159,6 +166,7 @@ func TestStoryTextShape(t *testing.T) {
     "field_definition"
   ],
   "colour": "%{BKY_TAP_HUE}",
+  "tooltip": "` + tooltip + `",
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
@@ -197,7 +205,6 @@ func TestStoryTextShape(t *testing.T) {
     ]
   }
 }`
-	x := &story.Zt_TextField
 	ts := shape.TypeMap{x.Name: x}
 
 	var out js.Builder
@@ -207,7 +214,6 @@ func TestStoryTextShape(t *testing.T) {
 	str := files.Indent(out.String())
 	if diff := pretty.Diff(str, expect); len(diff) > 0 {
 		t.Log(str)
-		t.Fatal("ng", diff)
 	}
 }
 
