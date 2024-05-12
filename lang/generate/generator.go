@@ -65,11 +65,6 @@ func (q *Generator) Name() string {
 	return q.group().Name
 }
 
-// write a package header comment for the current group
-func (q *Generator) WriteDoc(w io.Writer) error {
-	return q.writeDoc(w, q.group())
-}
-
 // write a go file containing typeinfo for the current group
 func (q *Generator) WriteSource(w io.Writer) error {
 	return q.writeSource(w, q.group())

@@ -5,13 +5,6 @@ import (
 	"io"
 )
 
-func (q *Generator) writeDoc(w io.Writer, g Group) (err error) {
-	return q.write(w, "docfile", struct {
-		Name    string
-		Comment []string
-	}{g.Name, g.Comment})
-}
-
 // after collecting groups, write them to targeted location
 // ( in tell format, with the tells extension )
 func (q *Generator) writeSource(w io.Writer, g Group) (err error) {
