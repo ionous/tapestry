@@ -31,6 +31,7 @@ func IsNilRecord(e error) bool {
 }
 
 func (e NilRecord) NoPanic() {}
+
 func (e NilRecord) Error() string {
 	return fmt.Sprintf("%q contained a nil record (at %d)", e.Class, e.Field)
 }

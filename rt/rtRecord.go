@@ -115,7 +115,7 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 			okay = aff == ft.Affinity && cls == ft.Type
 		}
 		if !okay {
-			err = fmt.Errorf("couldnt set field %q ( %s of %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
+			err = fmt.Errorf("couldn't set field %q ( %s of %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
 		} else {
 			d.values[i] = val
 		}

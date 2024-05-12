@@ -81,16 +81,16 @@ func TestSkippedSlot(t *testing.T) {
 // }
 
 // story lines should be a block with no output, and one stacking input
-// the stacks should all use the "stacked_kinds_of_kind" type
+// the stacks should all use the "_define_kind_stack" type
 func TestStoryLines(t *testing.T) {
 	if e := testBlocks(&story.StoryFile{
 		Statements: []story.StoryStatement{
-			&story.DefineKinds{
-				Kinds:    literal.Ts("cats"),
+			&story.DefineKind{
+				Kind:     literal.T("cats"),
 				Ancestor: literal.T("animal"),
 			},
-			&story.DefineKinds{
-				Kinds:    literal.Ts("cats"),
+			&story.DefineKind{
+				Kind:     literal.T("cats"),
 				Ancestor: literal.T("animal"),
 			},
 		},
@@ -103,22 +103,22 @@ func TestStoryLines(t *testing.T) {
   "inputs": {
     "STATEMENTS": {
       "block": {
-        "type": "_define_kinds_stack",
+        "type": "_define_kind_stack",
         "id": "test-2",
         "extraState": {
-          "KINDS": 1,
+          "KIND": 1,
           "ANCESTOR": 1
         },
         "inputs": {
-          "KINDS": {
+          "KIND": {
             "block": {
-              "type": "text_values",
+              "type": "text_value",
               "id": "test-3",
               "extraState": {
-                "VALUES": 1
+                "VALUE": 1
               },
               "fields": {
-                "VALUES0": "cats"
+                "VALUE": "cats"
               }
             }
           },
@@ -137,22 +137,22 @@ func TestStoryLines(t *testing.T) {
         },
         "next": {
           "block": {
-            "type": "_define_kinds_stack",
+            "type": "_define_kind_stack",
             "id": "test-5",
             "extraState": {
-              "KINDS": 1,
+              "KIND": 1,
               "ANCESTOR": 1
             },
             "inputs": {
-              "KINDS": {
+              "KIND": {
                 "block": {
-                  "type": "text_values",
+                  "type": "text_value",
                   "id": "test-6",
                   "extraState": {
-                    "VALUES": 1
+                    "VALUE": 1
                   },
                   "fields": {
-                    "VALUES0": "cats"
+                    "VALUE": "cats"
                   }
                 }
               },

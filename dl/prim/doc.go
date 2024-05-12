@@ -1,2 +1,0 @@
-// prim
-package prim

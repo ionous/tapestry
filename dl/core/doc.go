@@ -1,2 +1,0 @@
-// core
-package core

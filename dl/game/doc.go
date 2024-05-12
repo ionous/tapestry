@@ -1,2 +1,0 @@
-// system commands
-package game

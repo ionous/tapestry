@@ -1,2 +1,0 @@
-// literal
-package literal

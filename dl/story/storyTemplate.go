@@ -19,8 +19,17 @@ import (
 )
 
 // transform SayTemplate into a RenderResponse
-func (op *SayTemplate) PreImport(cat *weave.Catalog) (typeinfo.Instance, error) {
-	return convertTemplate("", op.Template)
+func (op *SayTemplate) PreImport(cat *weave.Catalog) (ret typeinfo.Instance, err error) {
+	if xs, e := template.Parse(op.Template); e != nil {
+		err = e
+	} else if got, e := express.Convert(xs); e != nil {
+		err = errutil.New(e, xs)
+	} else if eval, ok := got.(rt.TextEval); !ok {
+		err = errutil.Fmt("render template has unknown expression %T", got)
+	} else {
+		ret = &render.RenderResponse{Text: eval}
+	}
+	return
 }
 
 // transform SayResponse into a RenderResponse
@@ -50,20 +59,6 @@ func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, er
 				ret = &render.RenderResponse{Name: name}
 			}
 		}
-	}
-	return
-}
-
-func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) {
-	if xs, e := template.Parse(tmpl); e != nil {
-		err = e
-	} else if got, e := express.Convert(xs); e != nil {
-		err = errutil.New(e, xs)
-	} else if eval, ok := got.(rt.TextEval); !ok {
-		err = errutil.Fmt("render template has unknown expression %T", got)
-	} else {
-		// fix: should this be given name? why not?
-		ret = &render.RenderResponse{Text: eval}
 	}
 	return
 }

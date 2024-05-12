@@ -131,29 +131,6 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 	})
 }
 
-func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if rel, e := safe.GetText(run, op.Relation); e != nil {
-			err = e
-		} else if nouns, e := safe.GetTextList(run, op.Nouns); e != nil {
-			err = e
-		} else if otherNouns, e := safe.GetTextList(run, op.OtherNouns); e != nil {
-			err = e
-		} else {
-			// fix: for nearly every statement; after we resolve the names -- we'd want to re-schedule
-			// because if there's anything mssing; we will lose the context ( ex. pattern call stack )
-			// needed to re-resolve the names. capturing the context might work, but re-issuing the schedule might make sense too
-			// ( ex. could make it RequireNames instead of requirePlurals, etc. )
-			// even more interesting are "partial resolutions" --
-			// this is where the promise api (weave.res) would come in handy --
-			// resolve the rel, resolve the nouns promise all
-			// then define the relation.
-			err = defineRelatives(w, run, rel.String(), otherNouns.Strings(), nouns.Strings())
-		}
-		return
-	})
-}
-
 func defineRelatives(w weaver.Weaves, run rt.Runtime, relation string, nouns, otherNouns []string) (err error) {
 	rel := inflect.Normalize(relation)
 	for _, one := range nouns {

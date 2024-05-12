@@ -19,6 +19,6 @@ cmd/tap/tap
 cmd/tap/tap.db
 www/dist
 *.zip
-_docs/themes
-_docs
+_doc/themes
+_doc
 cmd/doc/doc
