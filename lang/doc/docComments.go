@@ -20,10 +20,12 @@ func (d *docComments) formatComment(lines []string) template.HTML {
 	p := comment.Parser{
 		LookupPackage: d.LookupPackage,
 		LookupSym:     d.LookupSym,
-		// 	Words: map[string]string{
-		// 	"italicword": "",
-		// 	"linkedword": "https://example.com/linkedword",
-		// },
+		Words: map[string]string{
+			"true":  "",
+			"false": "",
+			// 	"italicword": "",
+			// 	"linkedword": "https://example.com/linkedword",
+		},
 	}
 	doc := p.Parse(text)
 	var pr comment.Printer
