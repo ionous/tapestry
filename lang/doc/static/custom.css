@@ -1,43 +1,26 @@
 
-.Doc-commandSlots  {
+.commandSlots  {
   display: inline;
   list-style: none;
   padding: 0px;
   margin: 0px;
 }
-.Doc-commandSlots  li {
+.commandSlots  li {
   display: inline;
 }
 
-.Doc-commandSlots  li::after {
+.commandSlots  li::after {
   content: ", ";
 }
-.Doc-commandSlots  li:last-child::after {
+.commandSlots  li:last-child::after {
   content: "";
 }
 
-
-.Doc-commandArgs {
-  display: flex;
-  flex-direction:column; 
-  margin: 0px;
+.commandArgs {
+  list-style: "- ";
 }
 
-.Doc-commandArgs li {
-  display: flex;
-  flex-direction: row; 
-}
-
-
-.Doc-commandArgs li  span {
-  padding-left:0.5em;
-}
-
-.Doc-commandArgs  li::before {
-  content: "-";
-}
-
-.Doc-argLabel {
+.argLabel {
   min-width: 8em;
   font-family: Menlo, monospace;
   font-size: 0.875rem;

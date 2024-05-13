@@ -31,7 +31,8 @@ var allTypes []typeinfo.TypeSet
 // outDir can point to a temp directory if need be
 func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 	allTypes = idl
-	if tem, e := docTemplates(); e != nil {
+	dc := docComments{allTypes}
+	if tem, e := docTemplates(&dc); e != nil {
 		err = e
 	} else if e := os.MkdirAll(outDir, os.ModePerm); e != nil {
 		err = e

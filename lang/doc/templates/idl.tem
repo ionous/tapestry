@@ -12,7 +12,7 @@ types
 	<h2 id="{{ .Name }}">
 		{{ Title .Name }}</a>
 	</h2>
-	{{ Lines .Markup.comment }}
+	{{ MarkupComment .Markup }}
 	{{ end }}
 </section>
 {{ end }}
@@ -29,7 +29,7 @@ types
 	<h2 id="{{ .Name }}">
 		{{ Title .Name }}</a>
 	</h2>
-	{{ Lines .Markup.comment }}
+	{{ MarkupComment .Markup }}
 	{{ if .Options }}
 	Options:
 		<ul>
@@ -43,6 +43,7 @@ types
 	{{ end }}
 </section>
 {{ end }}
+
 {{/* -------------------------------------------------
 slots 
 -------------------------------------------------	*/}}
