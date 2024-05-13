@@ -198,11 +198,11 @@ func (op *Note_Slice) Repeats() bool {
 // Tests can be executed using the `tap check` command.
 // TODO: see https://todo.sr.ht/~ionous/tapestry/42
 type DefineTest struct {
-	TestName      string
-	RequireScenes rtti.TextListEval
-	Statements    []StoryStatement
-	Exe           []rtti.Execute
-	Markup        map[string]any
+	TestName           string
+	RequiredSceneNames rtti.TextListEval
+	Statements         []StoryStatement
+	Exe                []rtti.Execute
+	Markup             map[string]any
 }
 
 // define_test, a type of flow.
@@ -240,10 +240,10 @@ func (op *DefineTest_Slice) Repeats() bool {
 // Defines a collection of nouns, kinds, game rules, etc. used the game.
 // Every .tell story has its own unique scene.
 type DefineScene struct {
-	Scene         rtti.TextEval
-	RequireScenes rtti.TextListEval
-	Statements    []StoryStatement
-	Markup        map[string]any
+	SceneName          rtti.TextEval
+	RequiredSceneNames rtti.TextListEval
+	Statements         []StoryStatement
+	Markup             map[string]any
 }
 
 // define_scene, a type of flow.
@@ -282,10 +282,10 @@ func (op *DefineScene_Slice) Repeats() bool {
 // Actions are a special kind of pattern, and like patterns use "rules" to define and customize their behavior. The shared library includes many common actions including things like moving from room to room, examining something, taking or dropping items, and so on.
 // See the Tapestry guide for more information.
 type DefineAction struct {
-	Action   rtti.TextEval
-	Requires []FieldDefinition
-	Provides []FieldDefinition
-	Markup   map[string]any
+	PatternName rtti.TextEval
+	Requires    []FieldDefinition
+	Provides    []FieldDefinition
+	Markup      map[string]any
 }
 
 // define_action, a type of flow.
@@ -325,9 +325,9 @@ func (op *DefineAction_Slice) Repeats() bool {
 // Many programming languages refer to these as "enumerations."
 // See also: {"Set:state:"} and {"Object:field:"}
 type DefineState struct {
-	Aspect rtti.TextEval
-	Traits rtti.TextListEval
-	Markup map[string]any
+	AspectName rtti.TextEval
+	StateNames rtti.TextListEval
+	Markup     map[string]any
 }
 
 // define_state, a type of flow.
@@ -528,11 +528,11 @@ func (op *DeclareStatement_Slice) Repeats() bool {
 // The shared library, for instance, defines a spatial relation between objects;
 // allowing one object to be placed inside another.
 type DefineRelation struct {
-	Relation    rtti.TextEval
-	Kind        rtti.TextEval
-	OtherKind   rtti.TextEval
-	Cardinality RelationCardinality
-	Markup      map[string]any
+	RelationName  rtti.TextEval
+	KindName      rtti.TextEval
+	OtherKindName rtti.TextEval
+	Cardinality   RelationCardinality
+	Markup        map[string]any
 }
 
 // define_relation, a type of flow.
@@ -571,9 +571,9 @@ func (op *DefineRelation_Slice) Repeats() bool {
 // This command is similar to a sentence like:
 // "Doors are a kind of opener."
 type DefineKind struct {
-	Kind     rtti.TextEval
-	Ancestor rtti.TextEval
-	Markup   map[string]any
+	KindName         rtti.TextEval
+	AncestorKindName rtti.TextEval
+	Markup           map[string]any
 }
 
 // define_kind, a type of flow.
@@ -612,9 +612,9 @@ func (op *DefineKind_Slice) Repeats() bool {
 // This command is similar to a sentence like:
 // "Things have some text called a description."
 type DefineFields struct {
-	Kind   rtti.TextEval
-	Fields []FieldDefinition
-	Markup map[string]any
+	KindName   rtti.TextEval
+	FieldNames []FieldDefinition
+	Markup     map[string]any
 }
 
 // define_fields, a type of flow.
@@ -649,6 +649,7 @@ func (op *DefineFields_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Controls how Tapestry pluralize words.
 // Plurals are used both at runtime and during weave to
 // guide the interpretation of nouns and kinds.
 // A singular word can have multiple plurals;
@@ -694,7 +695,46 @@ func (op *DefinePlural_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Assign a starting value to the field of one or nouns.
+// Ensures that a noun of the specified name and kind exists in the world.
+type DefineNounKind struct {
+	NounName rtti.TextEval
+	KindName rtti.TextEval
+	Markup   map[string]any
+}
+
+// define_noun_kind, a type of flow.
+var Zt_DefineNounKind typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*DefineNounKind) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounKind
+}
+
+// Implements [typeinfo.Markup]
+func (op *DefineNounKind) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ StoryStatement = (*DefineNounKind)(nil)
+
+// Holds a slice of type DefineNounKind.
+type DefineNounKind_Slice []DefineNounKind
+
+// Implements [typeinfo.Instance] for a slice of DefineNounKind.
+func (*DefineNounKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounKind
+}
+
+// Implements [typeinfo.Repeats] for a slice of DefineNounKind.
+func (op *DefineNounKind_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Assigns an initial value to a existing noun.
 type DefineNounValue struct {
 	NounName  rtti.TextEval
 	FieldName rtti.TextEval
@@ -734,44 +774,7 @@ func (op *DefineNounValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type DefineNounKind struct {
-	NounName rtti.TextEval
-	KindName rtti.TextEval
-	Markup   map[string]any
-}
-
-// define_noun_kind, a type of flow.
-var Zt_DefineNounKind typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*DefineNounKind) TypeInfo() typeinfo.T {
-	return &Zt_DefineNounKind
-}
-
-// Implements [typeinfo.Markup]
-func (op *DefineNounKind) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ StoryStatement = (*DefineNounKind)(nil)
-
-// Holds a slice of type DefineNounKind.
-type DefineNounKind_Slice []DefineNounKind
-
-// Implements [typeinfo.Instance] for a slice of DefineNounKind.
-func (*DefineNounKind_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefineNounKind
-}
-
-// Implements [typeinfo.Repeats] for a slice of DefineNounKind.
-func (op *DefineNounKind_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
+// Assigns one or more initial states to a existing noun.
 type DefineNounStates struct {
 	NounName   rtti.TextEval
 	StateNames rtti.TextListEval
@@ -810,22 +813,26 @@ func (op *DefineNounStates_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type RuleProvides struct {
+// Declares a new pattern.
+// A pattern is a set of rules used at runtime to change the game world or to provide information about it. They are Tapestry equivalent of a function.
+type DefinePattern struct {
 	PatternName rtti.TextEval
+	Requires    []FieldDefinition
 	Provides    []FieldDefinition
+	Exe         []rtti.Execute
 	Markup      map[string]any
 }
 
-// rule_provides, a type of flow.
-var Zt_RuleProvides typeinfo.Flow
+// define_pattern, a type of flow.
+var Zt_DefinePattern typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*RuleProvides) TypeInfo() typeinfo.T {
-	return &Zt_RuleProvides
+func (*DefinePattern) TypeInfo() typeinfo.T {
+	return &Zt_DefinePattern
 }
 
 // Implements [typeinfo.Markup]
-func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
+func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -833,18 +840,57 @@ func (op *RuleProvides) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ StoryStatement = (*RuleProvides)(nil)
+var _ StoryStatement = (*DefinePattern)(nil)
 
-// Holds a slice of type RuleProvides.
-type RuleProvides_Slice []RuleProvides
+// Holds a slice of type DefinePattern.
+type DefinePattern_Slice []DefinePattern
 
-// Implements [typeinfo.Instance] for a slice of RuleProvides.
-func (*RuleProvides_Slice) TypeInfo() typeinfo.T {
-	return &Zt_RuleProvides
+// Implements [typeinfo.Instance] for a slice of DefinePattern.
+func (*DefinePattern_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefinePattern
 }
 
-// Implements [typeinfo.Repeats] for a slice of RuleProvides.
-func (op *RuleProvides_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of DefinePattern.
+func (op *DefinePattern_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Add one or more local variable to an existing pattern.
+type DefinePatternProvides struct {
+	PatternName rtti.TextEval
+	Provides    []FieldDefinition
+	Markup      map[string]any
+}
+
+// define_pattern_provides, a type of flow.
+var Zt_DefinePatternProvides typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*DefinePatternProvides) TypeInfo() typeinfo.T {
+	return &Zt_DefinePatternProvides
+}
+
+// Implements [typeinfo.Markup]
+func (op *DefinePatternProvides) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ StoryStatement = (*DefinePatternProvides)(nil)
+
+// Holds a slice of type DefinePatternProvides.
+type DefinePatternProvides_Slice []DefinePatternProvides
+
+// Implements [typeinfo.Instance] for a slice of DefinePatternProvides.
+func (*DefinePatternProvides_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefinePatternProvides
+}
+
+// Implements [typeinfo.Repeats] for a slice of DefinePatternProvides.
+func (op *DefinePatternProvides_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -894,8 +940,8 @@ func (op *RuleForPattern_Slice) Repeats() bool {
 // Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForNoun struct {
-	PatternName rtti.TextEval
 	NounName    rtti.TextEval
+	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
 	Exe         []rtti.Execute
 	Markup      map[string]any
@@ -936,9 +982,8 @@ func (op *RuleForNoun_Slice) Repeats() bool {
 // Change the behavior of an existing pattern.
 // The default behavior for events is to fall through to the next handler unless canceled or stopped.
 type RuleForKind struct {
-	PatternName rtti.TextEval
 	KindName    rtti.TextEval
-	Exactly     rtti.BoolEval
+	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
 	Exe         []rtti.Execute
 	Markup      map[string]any
@@ -976,58 +1021,15 @@ func (op *RuleForKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Declare a new pattern.
-// A pattern is a bundle of functions which can either change the game world or provide information about it.
-// Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
-type DefinePattern struct {
-	PatternName rtti.TextEval
-	Requires    []FieldDefinition
-	Provides    []FieldDefinition
-	Exe         []rtti.Execute
-	Markup      map[string]any
-}
-
-// define_pattern, a type of flow.
-var Zt_DefinePattern typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*DefinePattern) TypeInfo() typeinfo.T {
-	return &Zt_DefinePattern
-}
-
-// Implements [typeinfo.Markup]
-func (op *DefinePattern) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ StoryStatement = (*DefinePattern)(nil)
-
-// Holds a slice of type DefinePattern.
-type DefinePattern_Slice []DefinePattern
-
-// Implements [typeinfo.Instance] for a slice of DefinePattern.
-func (*DefinePattern_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DefinePattern
-}
-
-// Implements [typeinfo.Repeats] for a slice of DefinePattern.
-func (op *DefinePattern_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Relate nouns to each other.
 // Most users will probably prefer defining verbs and using jess to relate nouns.
 // For instance: "Carrying is a verb. The relation of carrying is whereabouts. Bob is carrying the pen."
 // See the Tapestry guide for details.
 type DefineRelatives struct {
-	Relation   rtti.TextEval
-	Nouns      rtti.TextListEval
-	OtherNouns rtti.TextListEval
-	Markup     map[string]any
+	RelationName   rtti.TextEval
+	NounNames      rtti.TextListEval
+	OtherNounNames rtti.TextListEval
+	Markup         map[string]any
 }
 
 // define_relatives, a type of flow.
@@ -1110,9 +1112,9 @@ func (op *SayTemplate_Slice) Repeats() bool {
 // The shared library uses responses for much of what it prints to the player
 // so that stories can change the stock phrases.
 type SayResponse struct {
-	Name   string
-	Text   rtti.TextEval
-	Markup map[string]any
+	ResponseName string
+	Text         rtti.TextEval
+	Markup       map[string]any
 }
 
 // say_response, a type of flow.
@@ -1344,8 +1346,8 @@ func (op *NothingField_Slice) Repeats() bool {
 // A field containing an aspect ( aka. a set of states. )
 // Aspects are defined using the {"Define state:names:"} command.
 type AspectField struct {
-	Aspect rtti.TextEval
-	Markup map[string]any
+	AspectName rtti.TextEval
+	Markup     map[string]any
 }
 
 // aspect_field, a type of flow.
@@ -1385,7 +1387,7 @@ func (op *AspectField_Slice) Repeats() bool {
 // the boolean becomes a state set consisting of the state and its opposite.
 // For instance, a boolean field called "reasonable" generates a set called "reasonable status" and the states "reasonable" and "not reasonable."
 type BoolField struct {
-	Name      rtti.TextEval
+	FieldName rtti.TextEval
 	Initially rtti.BoolEval
 	Markup    map[string]any
 }
@@ -1424,7 +1426,7 @@ func (op *BoolField_Slice) Repeats() bool {
 
 // A field containing a single number.
 type NumberField struct {
-	Name      rtti.TextEval
+	FieldName rtti.TextEval
 	Initially rtti.NumberEval
 	Markup    map[string]any
 }
@@ -1463,10 +1465,10 @@ func (op *NumberField_Slice) Repeats() bool {
 
 // A field containing a single record.
 type RecordField struct {
-	Name      rtti.TextEval
-	Type      rtti.TextEval
-	Initially rtti.RecordEval
-	Markup    map[string]any
+	FieldName  rtti.TextEval
+	RecordName rtti.TextEval
+	Initially  rtti.RecordEval
+	Markup     map[string]any
 }
 
 // record_field, a type of flow.
@@ -1504,8 +1506,8 @@ func (op *RecordField_Slice) Repeats() bool {
 // A field containing a single piece of text.
 // Text fields can be used to store anything from the name of a noun, the name of a state or set of states, or something to display to the player.
 type TextField struct {
-	Name      rtti.TextEval
-	Type      rtti.TextEval
+	FieldName rtti.TextEval
+	KindName  rtti.TextEval
 	Initially rtti.TextEval
 	Markup    map[string]any
 }
@@ -1544,8 +1546,8 @@ func (op *TextField_Slice) Repeats() bool {
 
 // A field containing a list of text.
 type TextListField struct {
-	Name      rtti.TextEval
-	Type      rtti.TextEval
+	FieldName rtti.TextEval
+	KindName  rtti.TextEval
 	Initially rtti.TextListEval
 	Markup    map[string]any
 }
@@ -1584,8 +1586,7 @@ func (op *TextListField_Slice) Repeats() bool {
 
 // A field containing a list of numbers.
 type NumListField struct {
-	Name      rtti.TextEval
-	Type      rtti.TextEval
+	FieldName rtti.TextEval
 	Initially rtti.NumListEval
 	Markup    map[string]any
 }
@@ -1625,10 +1626,10 @@ func (op *NumListField_Slice) Repeats() bool {
 // A field containing a list of records.
 // All of the records in the list must be of the same type.
 type RecordListField struct {
-	Name      rtti.TextEval
-	Type      rtti.TextEval
-	Initially rtti.RecordListEval
-	Markup    map[string]any
+	FieldName  rtti.TextEval
+	RecordName rtti.TextEval
+	Initially  rtti.RecordListEval
+	Markup     map[string]any
 }
 
 // record_list_field, a type of flow.
@@ -1765,7 +1766,7 @@ func init() {
 			},
 			Type: &prim.Zt_Text,
 		}, {
-			Name:     "require_scenes",
+			Name:     "required_scene_names",
 			Label:    "requires",
 			Optional: true,
 			Markup: map[string]any{
@@ -1801,14 +1802,14 @@ func init() {
 		Name: "define_scene",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "scene",
+			Name:  "scene_name",
 			Label: "scene",
 			Markup: map[string]any{
 				"comment": "A unique name for the scene.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:     "require_scenes",
+			Name:     "required_scene_names",
 			Label:    "requires",
 			Optional: true,
 			Markup: map[string]any{
@@ -1836,7 +1837,7 @@ func init() {
 		Name: "define_action",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "action",
+			Name:  "pattern_name",
 			Label: "action",
 			Markup: map[string]any{
 				"comment": "A unique name for the action.",
@@ -1871,14 +1872,14 @@ func init() {
 		Name: "define_state",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "aspect",
+			Name:  "aspect_name",
 			Label: "state",
 			Markup: map[string]any{
 				"comment": "A unique name for the set of states.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "traits",
+			Name:  "state_names",
 			Label: "names",
 			Markup: map[string]any{
 				"comment": []interface{}{"The names of the states in the set.", "TODO: a list of containing only one state should probably automatically generate its opposite the way that [BoolField] does."},
@@ -2002,21 +2003,21 @@ func init() {
 		Name: "define_relation",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "relation",
+			Name:  "relation_name",
 			Label: "relation",
 			Markup: map[string]any{
 				"comment": "Unique name for the relation.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "kind",
+			Name:  "kind_name",
 			Label: "kind",
 			Markup: map[string]any{
 				"comment": "The kind of nouns allowed on the \"left side\" of a relation.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "other_kind",
+			Name:  "other_kind_name",
 			Label: "other_kind",
 			Markup: map[string]any{
 				"comment": "The kind of nouns allowed on the \"right side\" of a relation.",
@@ -2041,14 +2042,14 @@ func init() {
 		Name: "define_kind",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "kind",
+			Name:  "kind_name",
 			Label: "kind",
 			Markup: map[string]any{
 				"comment": "A unique name for this kind.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "ancestor",
+			Name:  "ancestor_kind_name",
 			Label: "ancestor",
 			Markup: map[string]any{
 				"comment": []interface{}{"The parent of this kind.", "( In point of fact, this can be any ancestor of the kind", "so long as it doesn't conflict with other [DefineKind] statements. )"},
@@ -2066,14 +2067,14 @@ func init() {
 		Name: "define_fields",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "kind",
+			Name:  "kind_name",
 			Label: "kind",
 			Markup: map[string]any{
 				"comment": "The name of the kind to which the fields will be assigned.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:    "fields",
+			Name:    "field_names",
 			Label:   "fields",
 			Repeats: true,
 			Markup: map[string]any{
@@ -2104,30 +2105,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Plurals are used both at runtime and during weave to", "guide the interpretation of nouns and kinds.", "A singular word can have multiple plurals;", "a plural word only has one singular form.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
-		},
-	}
-	Zt_DefineNounValue = typeinfo.Flow{
-		Name: "define_noun_value",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "noun_name",
-			Label: "noun",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "field_name",
-			Label: "value",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "value",
-			Label: "initially",
-			Type:  &rtti.Zt_Assignment,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment": "Assign a starting value to the field of one or nouns.",
+			"comment": []interface{}{"Controls how Tapestry pluralize words.", "Plurals are used both at runtime and during weave to", "guide the interpretation of nouns and kinds.", "A singular word can have multiple plurals;", "a plural word only has one singular form.", "For example:", "\"The plural of person is people.\"", "\"The plural of person is persons.\""},
 		},
 	}
 	Zt_DefineNounKind = typeinfo.Flow{
@@ -2136,14 +2114,55 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "noun_name",
 			Label: "noun",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The name of a new, or existing noun.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "kind_name",
 			Label: "kind",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The name of an existing kind that describes the type of the noun.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Ensures that a noun of the specified name and kind exists in the world.",
+		},
+	}
+	Zt_DefineNounValue = typeinfo.Flow{
+		Name: "define_noun_value",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "noun_name",
+			Label: "noun",
+			Markup: map[string]any{
+				"comment": "The name of an existing noun.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:  "field_name",
+			Label: "value",
+			Markup: map[string]any{
+				"comment": []interface{}{"The name of the property to set.", "( The property must have been defined by the noun's kind or one of its ancestor kinds. )"},
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:  "value",
+			Label: "initially",
+			Markup: map[string]any{
+				"comment": []interface{}{"The value to assign the noun.", "The type of the value must match the type of the property.", "( ie. Text values can't be assigned to number properties, etc. )"},
+			},
+			Type: &rtti.Zt_Assignment,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Assigns an initial value to a existing noun.",
 		},
 	}
 	Zt_DefineNounStates = typeinfo.Flow{
@@ -2152,23 +2171,66 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "noun_name",
 			Label: "noun",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The name of an existing noun.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "state_names",
 			Label: "states",
-			Type:  &rtti.Zt_TextListEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"The state names to assign to the noun.", "The states must be part of a state set used by the noun's kind or one of its ancestor kinds."},
+			},
+			Type: &rtti.Zt_TextListEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
+		Markup: map[string]any{
+			"comment": "Assigns one or more initial states to a existing noun.",
+		},
 	}
-	Zt_RuleProvides = typeinfo.Flow{
-		Name: "rule_provides",
+	Zt_DefinePattern = typeinfo.Flow{
+		Name: "define_pattern",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
 			Name:  "pattern_name",
-			Label: "rule",
+			Label: "pattern",
 			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:    "requires",
+			Label:   "requires",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:    "provides",
+			Label:   "provides",
+			Repeats: true,
+			Type:    &Zt_FieldDefinition,
+		}, {
+			Name:     "exe",
+			Label:    "do",
+			Optional: true,
+			Repeats:  true,
+			Type:     &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Declares a new pattern.", "A pattern is a set of rules used at runtime to change the game world or to provide information about it. They are Tapestry equivalent of a function."},
+		},
+	}
+	Zt_DefinePatternProvides = typeinfo.Flow{
+		Name: "define_pattern_provides",
+		Lede: "define",
+		Terms: []typeinfo.Term{{
+			Name:  "pattern_name",
+			Label: "pattern",
+			Markup: map[string]any{
+				"comment": "The name of an existing pattern.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:    "provides",
 			Label:   "provides",
@@ -2177,6 +2239,9 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
+		},
+		Markup: map[string]any{
+			"comment": "Add one or more local variable to an existing pattern.",
 		},
 	}
 	Zt_RuleForPattern = typeinfo.Flow{
@@ -2208,12 +2273,12 @@ func init() {
 		Name: "rule_for_noun",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "pattern_name",
-			Label: "rule",
-			Type:  &rtti.Zt_TextEval,
-		}, {
 			Name:  "noun_name",
 			Label: "noun",
+			Type:  &rtti.Zt_TextEval,
+		}, {
+			Name:  "pattern_name",
+			Label: "rule",
 			Type:  &rtti.Zt_TextEval,
 		}, {
 			Name:     "rule_name",
@@ -2237,18 +2302,13 @@ func init() {
 		Name: "rule_for_kind",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "pattern_name",
-			Label: "rule",
-			Type:  &rtti.Zt_TextEval,
-		}, {
 			Name:  "kind_name",
 			Label: "kind",
 			Type:  &rtti.Zt_TextEval,
 		}, {
-			Name:     "exactly",
-			Label:    "exactly",
-			Optional: true,
-			Type:     &rtti.Zt_BoolEval,
+			Name:  "pattern_name",
+			Label: "rule",
+			Type:  &rtti.Zt_TextEval,
 		}, {
 			Name:     "rule_name",
 			Label:    "named",
@@ -2267,56 +2327,25 @@ func init() {
 			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
 		},
 	}
-	Zt_DefinePattern = typeinfo.Flow{
-		Name: "define_pattern",
-		Lede: "define",
-		Terms: []typeinfo.Term{{
-			Name:  "pattern_name",
-			Label: "pattern",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:    "requires",
-			Label:   "requires",
-			Repeats: true,
-			Type:    &Zt_FieldDefinition,
-		}, {
-			Name:    "provides",
-			Label:   "provides",
-			Repeats: true,
-			Type:    &Zt_FieldDefinition,
-		}, {
-			Name:     "exe",
-			Label:    "do",
-			Optional: true,
-			Repeats:  true,
-			Type:     &rtti.Zt_Execute,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Declare a new pattern.", "A pattern is a bundle of functions which can either change the game world or provide information about it.", "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."},
-		},
-	}
 	Zt_DefineRelatives = typeinfo.Flow{
 		Name: "define_relatives",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "relation",
+			Name:  "relation_name",
 			Label: "relative",
 			Markup: map[string]any{
 				"comment": "The name of an existing relationship.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "nouns",
+			Name:  "noun_names",
 			Label: "nouns",
 			Markup: map[string]any{
 				"comment": "The names of one or more nouns for the \"left side\" of this pairing.",
 			},
 			Type: &rtti.Zt_TextListEval,
 		}, {
-			Name:  "other_nouns",
+			Name:  "other_noun_names",
 			Label: "other_nouns",
 			Markup: map[string]any{
 				"comment": "The names of one or more nouns for the \"right side\" of this pairing.",
@@ -2349,7 +2378,7 @@ func init() {
 		Name: "say_response",
 		Lede: "say",
 		Terms: []typeinfo.Term{{
-			Name:  "name",
+			Name:  "response_name",
 			Label: "response",
 			Markup: map[string]any{
 				"comment": "A globally unique name for the response.",
@@ -2464,7 +2493,7 @@ func init() {
 		Name: "aspect_field",
 		Lede: "aspect",
 		Terms: []typeinfo.Term{{
-			Name: "aspect",
+			Name: "aspect_name",
 			Markup: map[string]any{
 				"comment": []interface{}{"Name for the aspect. Must be unique within the set of fields (eg. within the kind.)", "The field will have this same name."},
 			},
@@ -2481,7 +2510,7 @@ func init() {
 		Name: "bool_field",
 		Lede: "bool",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
@@ -2506,7 +2535,7 @@ func init() {
 		Name: "number_field",
 		Lede: "number",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
@@ -2531,13 +2560,13 @@ func init() {
 		Name: "record_field",
 		Lede: "record",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "type",
+			Name:  "record_name",
 			Label: "kind",
 			Markup: map[string]any{
 				"comment": "The name of a valid record type.",
@@ -2563,13 +2592,13 @@ func init() {
 		Name: "text_field",
 		Lede: "text",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:     "type",
+			Name:     "kind_name",
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
@@ -2596,13 +2625,13 @@ func init() {
 		Name: "text_list_field",
 		Lede: "text_list",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:     "type",
+			Name:     "kind_name",
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
@@ -2629,16 +2658,11 @@ func init() {
 		Name: "num_list_field",
 		Lede: "num_list",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
 			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:     "type",
-			Label:    "kind",
-			Optional: true,
-			Type:     &rtti.Zt_TextEval,
 		}, {
 			Name:     "initially",
 			Label:    "initially",
@@ -2659,13 +2683,13 @@ func init() {
 		Name: "record_list_field",
 		Lede: "record_list",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": "Name for the field. Must be unique within the set of fields (eg. within the kind.)",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "type",
+			Name:  "record_name",
 			Label: "kind",
 			Markup: map[string]any{
 				"comment": []interface{}{"The name of a valid record type.", "All records in the list must be of this type."},
@@ -2729,14 +2753,14 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineKind,
 	&Zt_DefineFields,
 	&Zt_DefinePlural,
-	&Zt_DefineNounValue,
 	&Zt_DefineNounKind,
+	&Zt_DefineNounValue,
 	&Zt_DefineNounStates,
-	&Zt_RuleProvides,
+	&Zt_DefinePattern,
+	&Zt_DefinePatternProvides,
 	&Zt_RuleForPattern,
 	&Zt_RuleForNoun,
 	&Zt_RuleForKind,
-	&Zt_DefinePattern,
 	&Zt_DefineRelatives,
 	&Zt_SayTemplate,
 	&Zt_SayResponse,
@@ -2763,73 +2787,69 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
-	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
-	12738236274201716794: (*BoolField)(nil),            /* field_definition=Bool: */
-	18077675806901364237: (*BoolField)(nil),            /* field_definition=Bool:initially: */
-	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
-	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
-	9796202271034753943:  (*DeclareStatement)(nil),     /* story_statement=Declare: */
-	11228697653156044284: (*DeclareStatement)(nil),     /* story_statement=Declare:assign: */
-	14790755516297707674: (*DefineAction)(nil),         /* story_statement=Define action:requires: */
-	5312053119535959994:  (*DefineAction)(nil),         /* story_statement=Define action:requires:provides: */
-	12790170204334923961: (*DefineKind)(nil),           /* story_statement=Define kind:ancestor: */
-	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
-	16821098817155896534: (*DefineNounKind)(nil),       /* story_statement=Define noun:kind: */
-	3688969656849355942:  (*DefineNounStates)(nil),     /* story_statement=Define noun:states: */
-	9478300892459390916:  (*DefineNounValue)(nil),      /* story_statement=Define noun:value:initially: */
-	14040325709851010602: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides: */
-	729326910659609567:   (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:provides:do: */
-	15951965898335032430: (*DefineRelation)(nil),       /* story_statement=Define relation:kind:otherKind:cardinality: */
-	7218292999752256394:  (*DefineRelatives)(nil),      /* story_statement=Define relative:nouns:otherNouns: */
-	18093984368234904277: (*RuleForPattern)(nil),       /* story_statement=Define rule:do: */
-	12136992210577308757: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:do: */
-	10538385905361340595: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:do: */
-	11666026550766211860: (*RuleForKind)(nil),          /* story_statement=Define rule:kind:exactly:named:do: */
-	2951940010570883790:  (*RuleForKind)(nil),          /* story_statement=Define rule:kind:named:do: */
-	2007307886252117326:  (*RuleForPattern)(nil),       /* story_statement=Define rule:named:do: */
-	4344965134492972319:  (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:do: */
-	16133739979148445504: (*RuleForNoun)(nil),          /* story_statement=Define rule:noun:named:do: */
-	8031356368944964156:  (*RuleProvides)(nil),         /* story_statement=Define rule:provides: */
-	16728157364207612750: (*DefineScene)(nil),          /* story_statement=Define scene: */
-	10681959011863226668: (*DefineScene)(nil),          /* story_statement=Define scene:requires: */
-	10209709135447127962: (*DefineScene)(nil),          /* story_statement=Define scene:requires:with: */
-	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
-	1798652288281835623:  (*DefinePlural)(nil),         /* story_statement=Define singular:plural: */
-	17999974279653753583: (*DefineState)(nil),          /* story_statement=Define state:names: */
-	12489141410311466071: (*DefineTest)(nil),           /* story_statement=Define test:do: */
-	3712030102885900665:  (*DefineTest)(nil),           /* story_statement=Define test:requires:do: */
-	16978239348269462739: (*DefineTest)(nil),           /* story_statement=Define test:requires:scene:do: */
-	13333326165932249009: (*DefineTest)(nil),           /* story_statement=Define test:scene:do: */
-	12975771225654832812: (*DefineAlias)(nil),          /* story_statement=Interpret alias:as: */
-	8001652437005351387:  (*DefineNamedGrammar)(nil),   /* story_statement=Interpret name:with: */
-	6001249499689096432:  (*DefineLeadingGrammar)(nil), /* story_statement=Interpret:with: */
-	16242102660676547183: (*Note)(nil),                 /* execute=Note: */
-	17718266473581357115: (*Note)(nil),                 /* story_statement=Note: */
-	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
-	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
-	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */
-	2289982379805608146:  (*NumListField)(nil),         /* field_definition=NumList:kind: */
-	223049567122462661:   (*NumListField)(nil),         /* field_definition=NumList:kind:initially: */
-	16579038690333872565: (*NumberField)(nil),          /* field_definition=Number: */
-	7599754526096278866:  (*NumberField)(nil),          /* field_definition=Number:initially: */
-	7215961239288768263:  (*RecordField)(nil),          /* field_definition=Record:kind: */
-	8334583613109868292:  (*RecordField)(nil),          /* field_definition=Record:kind:initially: */
-	15479801779125468947: (*RecordListField)(nil),      /* field_definition=RecordList:kind: */
-	17384295137903978384: (*RecordListField)(nil),      /* field_definition=RecordList:kind:initially: */
-	12945074305202371477: (*SayResponse)(nil),          /* execute=Say response:with: */
-	7921553818502082370:  (*SayResponse)(nil),          /* text_eval=Say response:with: */
-	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */
-	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
-	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */
-	13921723804355948971: (*StoppingText)(nil),         /* text_eval=StoppingText: */
-	12956316934318450345: (*StoryFile)(nil),            /* story_statement=Tapestry: */
-	9387832592330456403:  (*TextField)(nil),            /* field_definition=Text: */
-	16637694412733787472: (*TextField)(nil),            /* field_definition=Text:initially: */
-	15791809714384972761: (*TextField)(nil),            /* field_definition=Text:kind: */
-	16917317465644840422: (*TextField)(nil),            /* field_definition=Text:kind:initially: */
-	3830912410254339707:  (*TextListField)(nil),        /* field_definition=TextList: */
-	15743255383721832504: (*TextListField)(nil),        /* field_definition=TextList:initially: */
-	2011197685129757745:  (*TextListField)(nil),        /* field_definition=TextList:kind: */
-	3232692879001227038:  (*TextListField)(nil),        /* field_definition=TextList:kind:initially: */
+	4360765066804052293:  (*StoryBreak)(nil),            /* story_statement=-- */
+	13010292396640781698: (*AspectField)(nil),           /* field_definition=Aspect: */
+	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
+	18077675806901364237: (*BoolField)(nil),             /* field_definition=Bool:initially: */
+	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
+	231398832069830353:   (*CycleText)(nil),             /* text_eval=CycleText: */
+	9796202271034753943:  (*DeclareStatement)(nil),      /* story_statement=Declare: */
+	11228697653156044284: (*DeclareStatement)(nil),      /* story_statement=Declare:assign: */
+	14790755516297707674: (*DefineAction)(nil),          /* story_statement=Define action:requires: */
+	5312053119535959994:  (*DefineAction)(nil),          /* story_statement=Define action:requires:provides: */
+	12790170204334923961: (*DefineKind)(nil),            /* story_statement=Define kind:ancestor: */
+	15268150405724581221: (*DefineFields)(nil),          /* story_statement=Define kind:fields: */
+	2634771595010145133:  (*RuleForKind)(nil),           /* story_statement=Define kind:rule:do: */
+	3253027546625561654:  (*RuleForKind)(nil),           /* story_statement=Define kind:rule:named:do: */
+	16821098817155896534: (*DefineNounKind)(nil),        /* story_statement=Define noun:kind: */
+	9340117308812628027:  (*RuleForNoun)(nil),           /* story_statement=Define noun:rule:do: */
+	10622511977506449612: (*RuleForNoun)(nil),           /* story_statement=Define noun:rule:named:do: */
+	3688969656849355942:  (*DefineNounStates)(nil),      /* story_statement=Define noun:states: */
+	9478300892459390916:  (*DefineNounValue)(nil),       /* story_statement=Define noun:value:initially: */
+	2173982977263897352:  (*DefinePatternProvides)(nil), /* story_statement=Define pattern:provides: */
+	14040325709851010602: (*DefinePattern)(nil),         /* story_statement=Define pattern:requires:provides: */
+	729326910659609567:   (*DefinePattern)(nil),         /* story_statement=Define pattern:requires:provides:do: */
+	15951965898335032430: (*DefineRelation)(nil),        /* story_statement=Define relation:kind:otherKind:cardinality: */
+	7218292999752256394:  (*DefineRelatives)(nil),       /* story_statement=Define relative:nouns:otherNouns: */
+	18093984368234904277: (*RuleForPattern)(nil),        /* story_statement=Define rule:do: */
+	2007307886252117326:  (*RuleForPattern)(nil),        /* story_statement=Define rule:named:do: */
+	16728157364207612750: (*DefineScene)(nil),           /* story_statement=Define scene: */
+	10681959011863226668: (*DefineScene)(nil),           /* story_statement=Define scene:requires: */
+	10209709135447127962: (*DefineScene)(nil),           /* story_statement=Define scene:requires:with: */
+	13479298094295759568: (*DefineScene)(nil),           /* story_statement=Define scene:with: */
+	1798652288281835623:  (*DefinePlural)(nil),          /* story_statement=Define singular:plural: */
+	17999974279653753583: (*DefineState)(nil),           /* story_statement=Define state:names: */
+	12489141410311466071: (*DefineTest)(nil),            /* story_statement=Define test:do: */
+	3712030102885900665:  (*DefineTest)(nil),            /* story_statement=Define test:requires:do: */
+	16978239348269462739: (*DefineTest)(nil),            /* story_statement=Define test:requires:scene:do: */
+	13333326165932249009: (*DefineTest)(nil),            /* story_statement=Define test:scene:do: */
+	12975771225654832812: (*DefineAlias)(nil),           /* story_statement=Interpret alias:as: */
+	8001652437005351387:  (*DefineNamedGrammar)(nil),    /* story_statement=Interpret name:with: */
+	6001249499689096432:  (*DefineLeadingGrammar)(nil),  /* story_statement=Interpret:with: */
+	16242102660676547183: (*Note)(nil),                  /* execute=Note: */
+	17718266473581357115: (*Note)(nil),                  /* story_statement=Note: */
+	14427731589588473385: (*NothingField)(nil),          /* field_definition=Nothing */
+	10299801658819864730: (*NumListField)(nil),          /* field_definition=NumList: */
+	12762197545337845485: (*NumListField)(nil),          /* field_definition=NumList:initially: */
+	16579038690333872565: (*NumberField)(nil),           /* field_definition=Number: */
+	7599754526096278866:  (*NumberField)(nil),           /* field_definition=Number:initially: */
+	7215961239288768263:  (*RecordField)(nil),           /* field_definition=Record:kind: */
+	8334583613109868292:  (*RecordField)(nil),           /* field_definition=Record:kind:initially: */
+	15479801779125468947: (*RecordListField)(nil),       /* field_definition=RecordList:kind: */
+	17384295137903978384: (*RecordListField)(nil),       /* field_definition=RecordList:kind:initially: */
+	12945074305202371477: (*SayResponse)(nil),           /* execute=Say response:with: */
+	7921553818502082370:  (*SayResponse)(nil),           /* text_eval=Say response:with: */
+	9556993961571292952:  (*SayTemplate)(nil),           /* execute=Say: */
+	15989777734244204735: (*SayTemplate)(nil),           /* text_eval=Say: */
+	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
+	13921723804355948971: (*StoppingText)(nil),          /* text_eval=StoppingText: */
+	12956316934318450345: (*StoryFile)(nil),             /* story_statement=Tapestry: */
+	9387832592330456403:  (*TextField)(nil),             /* field_definition=Text: */
+	16637694412733787472: (*TextField)(nil),             /* field_definition=Text:initially: */
+	15791809714384972761: (*TextField)(nil),             /* field_definition=Text:kind: */
+	16917317465644840422: (*TextField)(nil),             /* field_definition=Text:kind:initially: */
+	3830912410254339707:  (*TextListField)(nil),         /* field_definition=TextList: */
+	15743255383721832504: (*TextListField)(nil),         /* field_definition=TextList:initially: */
+	2011197685129757745:  (*TextListField)(nil),         /* field_definition=TextList:kind: */
+	3232692879001227038:  (*TextListField)(nil),         /* field_definition=TextList:kind:initially: */
 }

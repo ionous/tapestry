@@ -150,18 +150,18 @@ Tapestry:
       - - "scoring"
         - "kitchenette"
       - - Declare: "You are carrying the flashlight. The flashlight is unlit."
-        - Define rule:noun:do:
-            - "after activating"
+        - Define noun:rule:do:
             - "flashlight"
+            - "after activating"
             - - # set the score directly.
                 Set:value:
                   - Object:field:
                       - "story"
                       - "score"
                   - FromNumber: 50
-        - Define rule:noun:do:
-            - "after deactivating"
+        - Define noun:rule:do:
             - "flashlight"
+            - "after deactivating"
             - - # or, change it by a relative number.
                 Decrease:
                   Object:field:

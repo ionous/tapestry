@@ -15,7 +15,7 @@ func wrapScene(name string, els []story.StoryStatement) []story.StoryStatement {
 			// create a root scene, the body in it.
 			// ( lhs and body share the same backing, so we have to copy one or the other )
 			els = append(lhs, &story.DefineScene{
-				Scene:      &literal.TextValue{Value: name},
+				SceneName:  &literal.TextValue{Value: name},
 				Statements: append([]story.StoryStatement{}, body...),
 			})
 		} else {

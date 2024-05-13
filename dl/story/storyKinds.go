@@ -11,9 +11,9 @@ import (
 // ex. "cats are a kind of animal"
 func (op *DefineKind) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if kind, e := safe.GetText(run, op.Kind); e != nil {
+		if kind, e := safe.GetText(run, op.KindName); e != nil {
 			err = e
-		} else if ancestor, e := safe.GetText(run, op.Ancestor); e != nil {
+		} else if ancestor, e := safe.GetText(run, op.AncestorKindName); e != nil {
 			err = e
 		} else {
 			kind := inflect.Normalize(kind.String())
@@ -28,11 +28,11 @@ func (op *DefineKind) Weave(cat *weave.Catalog) error {
 // ex. horses have an aspect called speed.
 func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.PropertyPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if kind, e := safe.GetText(run, op.Kind); e != nil {
+		if kind, e := safe.GetText(run, op.KindName); e != nil {
 			err = e
 		} else {
 			k := inflect.Normalize(kind.String())
-			err = w.AddKindFields(k, reduceFields(run, op.Fields))
+			err = w.AddKindFields(k, reduceFields(run, op.FieldNames))
 		}
 		return
 	})

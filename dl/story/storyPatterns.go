@@ -46,7 +46,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 
 func (op *DefineAction) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if act, e := safe.GetText(run, op.Action); e != nil {
+		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else {
 			act := mdl.NewPatternSubtype(inflect.Normalize(act.String()), kindsOf.Action.String())
@@ -70,7 +70,7 @@ func (op *DefineAction) Weave(cat *weave.Catalog) error {
 	})
 }
 
-func (op *RuleProvides) Weave(cat *weave.Catalog) (err error) {
+func (op *DefinePatternProvides) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if act, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
@@ -144,8 +144,6 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 			err = e // ^ verify the kind exists
 		} else if ks := ks.Strings(); len(ks) == 0 {
 			err = fmt.Errorf("%w kind %s", weaver.Missing, kind)
-		} else if exact, e := safe.GetOptionalBool(run, op.Exactly, false); e != nil {
-			err = e
 		} else if phrase, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
@@ -155,21 +153,16 @@ func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
 		} else if rule, e := desc.GetRuleInfo(); e != nil {
 			err = e
 		} else {
-			var filters []rt.BoolEval
-			if exact.Bool() {
-				panic("not implemented")
-			} else {
-				filters = rules.AddKindFilter(ks[0], filters)
-				if desc.IsEvent() {
-					if !desc.ExcludesPlayer {
-						filters = rules.AddPlayerFilter(filters)
-					}
-					filters = rules.AddEventFilters(filters)
+			filters := rules.AddKindFilter(ks[0], nil)
+			if desc.IsEvent() {
+				if !desc.ExcludesPlayer {
+					filters = rules.AddPlayerFilter(filters)
 				}
-				err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
-					return rule.WeaveRule(w, filters, op.Exe)
-				})
+				filters = rules.AddEventFilters(filters)
 			}
+			err = cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) error {
+				return rule.WeaveRule(w, filters, op.Exe)
+			})
 		}
 		return
 	})

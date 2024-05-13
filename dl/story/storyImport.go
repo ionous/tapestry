@@ -17,9 +17,9 @@ import (
 // (the) colors are red, blue, or green.
 func (op *DefineState) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.AncestryPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if aspect, e := safe.GetText(run, op.Aspect); e != nil {
+		if aspect, e := safe.GetText(run, op.AspectName); e != nil {
 			err = e
-		} else if traits, e := safe.GetTextList(run, op.Traits); e != nil {
+		} else if traits, e := safe.GetTextList(run, op.StateNames); e != nil {
 			err = e
 		} else {
 			aspect, traits := inflect.Normalize(aspect.String()), traits.Strings()
@@ -105,11 +105,11 @@ func (op *DefineNounValue) Weave(cat *weave.Catalog) error {
 
 func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.ConnectionPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if rel, e := safe.GetText(run, op.Relation); e != nil {
+		if rel, e := safe.GetText(run, op.RelationName); e != nil {
 			err = e
-		} else if nouns, e := safe.GetTextList(run, op.Nouns); e != nil {
+		} else if nouns, e := safe.GetTextList(run, op.NounNames); e != nil {
 			err = e
-		} else if otherNouns, e := safe.GetTextList(run, op.OtherNouns); e != nil {
+		} else if otherNouns, e := safe.GetTextList(run, op.OtherNounNames); e != nil {
 			err = e
 		} else {
 			err = defineRelatives(w, run, rel.String(), nouns.Strings(), otherNouns.Strings())

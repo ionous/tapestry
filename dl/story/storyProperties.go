@@ -30,7 +30,7 @@ func (op *NothingField) GetFieldInfo(run rt.Runtime) (_ mdl.FieldInfo) {
 }
 
 func (op *AspectField) GetFieldInfo(run rt.Runtime) (ret mdl.FieldInfo) {
-	return defineField(run, op.Aspect, op.Aspect, affine.Text, nil)
+	return defineField(run, op.AspectName, op.AspectName, affine.Text, nil)
 }
 
 func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -38,7 +38,7 @@ func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromBool{Value: i}
 	}
-	return defineField(run, op.Name, nil, affine.Bool, init)
+	return defineField(run, op.FieldName, nil, affine.Bool, init)
 }
 
 func (op *NumberField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -46,7 +46,7 @@ func (op *NumberField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumber{Value: i}
 	}
-	return defineField(run, op.Name, nil, affine.Number, init)
+	return defineField(run, op.FieldName, nil, affine.Number, init)
 }
 
 func (op *TextField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -54,7 +54,7 @@ func (op *TextField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromText{Value: i}
 	}
-	return defineField(run, op.Name, op.Type, affine.Text, init)
+	return defineField(run, op.FieldName, op.KindName, affine.Text, init)
 }
 
 func (op *RecordField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -62,7 +62,7 @@ func (op *RecordField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecord{Value: i}
 	}
-	return defineField(run, op.Name, op.Type, affine.Record, init)
+	return defineField(run, op.FieldName, op.RecordName, affine.Record, init)
 }
 
 func (op *NumListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -70,7 +70,7 @@ func (op *NumListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumList{Value: i}
 	}
-	return defineField(run, op.Name, op.Type, affine.NumList, init)
+	return defineField(run, op.FieldName, nil, affine.NumList, init)
 }
 
 func (op *TextListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -78,7 +78,7 @@ func (op *TextListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromTextList{Value: i}
 	}
-	return defineField(run, op.Name, op.Type, affine.TextList, init)
+	return defineField(run, op.FieldName, op.KindName, affine.TextList, init)
 }
 
 func (op *RecordListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
@@ -86,7 +86,7 @@ func (op *RecordListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecordList{Value: i}
 	}
-	return defineField(run, op.Name, op.Type, affine.RecordList, init)
+	return defineField(run, op.FieldName, op.RecordName, affine.RecordList, init)
 }
 
 func defineField(run rt.Runtime, name, cls rt.TextEval, aff affine.Affinity, init rt.Assignment) (ret mdl.FieldInfo) {

@@ -13,7 +13,7 @@ Tapestry:
           Text:kind:
             - "noun"
             - "door"
-  - Define rule:provides:
+  - Define pattern:provides:
       - "traveling through"
       - - # Extract the destination from the door.
           Text:kind:initially:

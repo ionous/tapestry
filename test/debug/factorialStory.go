@@ -29,12 +29,12 @@ var FactorialStory = story.StoryFile{
 			PatternName: T("factorial"),
 			Requires: []story.FieldDefinition{
 				&story.NumberField{
-					Markup: UserComment("just one argument, a number called 'num'"),
-					Name:   T("num"),
+					Markup:    UserComment("just one argument, a number called 'num'"),
+					FieldName: T("num"),
 				}},
 			Provides: []story.FieldDefinition{&story.NumberField{
-				Markup: UserComment("the result uses the same variable as the pattern input does"),
-				Name:   T("num"),
+				Markup:    UserComment("the result uses the same variable as the pattern input does"),
+				FieldName: T("num"),
 			}},
 			Exe: FactorialDefaultRule,
 		},

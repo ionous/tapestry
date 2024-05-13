@@ -1,0 +1,19 @@
+# First Plain Text:
+---
+# First Structured:
+Define scene:requires:with:
+- "cloak"
+- "tapestry"
+- Declare: ""
+---
+# Second Plain Text:
+The title of the story is "The Cloak of Darkness."
+The story has the headline:
+  FromText: "An example story."
+---
+# Second Structured:
+Define noun:rule:do:
+- "entrance"
+- "instead of traveling"
+- Say: "You've only just arrived and besides the weather outside is terrible."
+---

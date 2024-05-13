@@ -13,7 +13,7 @@ Tapestry:
             - "direction"
             - "direction"
   - # movement from room to room is always via a connecting door
-    Define rule:provides:
+    Define pattern:provides:
       - "going"
       - - Text:kind:initially:
             - "door"

@@ -1,6 +1,7 @@
 package flex_test
 
 import (
+	_ "embed"
 	"io"
 	r "reflect"
 	"strings"
@@ -12,7 +13,7 @@ import (
 
 // count the number of sections in some sample data.
 func TestSectionCount(t *testing.T) {
-	expect := []int{0, 2, 8, 13}
+	expect := []int{0, 1, 7, 12}
 	var got []int
 	// break the text into lines
 	in := strings.NewReader(testOne)
@@ -60,28 +61,8 @@ func TestDoc(t *testing.T) {
 	}
 }
 
-var testOne = `
-# First Plain Text:
----
-# First Structured:
-Define scene:requires:with:
-- "cloak"
-- "tapestry"
-- Declare: ""
----
-# Second Plain Text:
-The title of the story is "The Cloak of Darkness."
-The story has the headline:
-  FromText: "An example story."
----
-# Second Structured:
-Define rule:noun:do:
-- "instead of traveling"
-- "entrance"
-- Say: "You've only just arrived and besides the weather outside is terrible."
----
-`
+//go:embed testOne.tell
+var testOne string
 
-var testTwo = `---
-# Everything in the Tapestry directory
-Define scene: "tapestry"`
+//go:embed testTwo.tell
+var testTwo string

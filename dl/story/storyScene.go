@@ -24,9 +24,9 @@ func (op *DefineScene) Weave(cat *weave.Catalog) error {
 
 // errs if there's no scene name
 func (op *DefineScene) GetSceneReqs(run rt.Runtime) (retScene string, retReqs []string, err error) {
-	if name, e := safe.GetText(run, op.Scene); e != nil {
+	if name, e := safe.GetText(run, op.SceneName); e != nil {
 		err = e
-	} else if dependsOn, e := safe.GetOptionalTexts(run, op.RequireScenes, nil); e != nil {
+	} else if dependsOn, e := safe.GetOptionalTexts(run, op.RequiredSceneNames, nil); e != nil {
 		err = e
 	} else {
 		retScene = name.String()

@@ -114,9 +114,9 @@ Tapestry:
             - - # Continue on to the next event phase
                 Continue:
   - # 
-    Define rule:kind:do:
-      - "instead of state changing"
+    Define kind:rule:do:
       - "openers"
+      - "instead of state changing"
       - - If:do:
             - AllTrue:
                 - Is:matching:text:
@@ -135,9 +135,9 @@ Tapestry:
   - # FIX -- should probably be on opening
     # to do so reporting state change would have to be launched by the actions
     # so state changing ( events in general ) need to return true / false.
-    Define rule:kind:do:
-      - "report state changing"
+    Define kind:rule:do:
       - "containers"
+      - "report state changing"
       - - If:do:
             - AllTrue:
                 - Is:matching:text:

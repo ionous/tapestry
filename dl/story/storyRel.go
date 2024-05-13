@@ -10,7 +10,7 @@ import (
 
 func (op *DefineRelation) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.LanguagePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if rel, e := safe.GetText(run, op.Relation); e != nil {
+		if rel, e := safe.GetText(run, op.RelationName); e != nil {
 			err = e
 		} else {
 			rel := rel.String()
@@ -30,9 +30,9 @@ func (op *DefineRelation) Weave(cat *weave.Catalog) error {
 }
 
 func (op *DefineRelation) addOneToOne(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
-	if a, e := safe.GetText(run, op.Kind); e != nil {
+	if a, e := safe.GetText(run, op.KindName); e != nil {
 		err = e
-	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKindName); e != nil {
 		err = e
 	} else {
 		err = addRelation(cat, rel, a.String(), b.String(), false, false)
@@ -41,9 +41,9 @@ func (op *DefineRelation) addOneToOne(cat *weave.Catalog, run rt.Runtime, rel st
 }
 
 func (op *DefineRelation) addOneToMany(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
-	if a, e := safe.GetText(run, op.Kind); e != nil {
+	if a, e := safe.GetText(run, op.KindName); e != nil {
 		err = e
-	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKindName); e != nil {
 		err = e
 	} else {
 		err = addRelation(cat, rel, a.String(), b.String(), false, true)
@@ -52,9 +52,9 @@ func (op *DefineRelation) addOneToMany(cat *weave.Catalog, run rt.Runtime, rel s
 }
 
 func (op *DefineRelation) addManyToOne(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
-	if a, e := safe.GetText(run, op.Kind); e != nil {
+	if a, e := safe.GetText(run, op.KindName); e != nil {
 		err = e
-	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKindName); e != nil {
 		err = e
 	} else {
 		err = addRelation(cat, rel, a.String(), b.String(), true, false)
@@ -63,9 +63,9 @@ func (op *DefineRelation) addManyToOne(cat *weave.Catalog, run rt.Runtime, rel s
 }
 
 func (op *DefineRelation) addManyToMany(cat *weave.Catalog, run rt.Runtime, rel string) (err error) {
-	if a, e := safe.GetText(run, op.Kind); e != nil {
+	if a, e := safe.GetText(run, op.KindName); e != nil {
 		err = e
-	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
+	} else if b, e := safe.GetText(run, op.OtherKindName); e != nil {
 		err = e
 	} else {
 		err = addRelation(cat, rel, a.String(), b.String(), true, true)

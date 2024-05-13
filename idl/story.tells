@@ -70,7 +70,7 @@ Spec:with group:
                   # In order to reference the nouns, kinds, etc. of any other scenes in a test, that scene must be listed here.
                   Term:name:type:optional:
                     - "requires"
-                    - "require_scenes"
+                    - "required_scene_names"
                     - "text_list_eval"
                     - true
                 - # Modeling commands for defining nouns, kinds, game rules, etc. used by this test. Those definitions will not be visible outside of the test ( unless this test is "required" by another. )
@@ -96,14 +96,15 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - # A unique name for the scene.
-                  Term:type:
+                  Term:name:type:
                     - "scene"
+                    - "scene_name"
                     - "text_eval"
                 - # One or more scenes that this scene depends on.
                   # This is a one-way dependency. This scene can reference anything defined within the required scenes; the required scenes cannot reference anything declared within this scene. Circular dependencies are prevented by weave.
                   Term:name:type:optional:
                     - "requires"
-                    - "require_scenes"
+                    - "required_scene_names"
                     - "text_list_eval"
                     - true
                 - # Modeling commands for the defining nouns, kinds, game rules, etc. used by this scene.
@@ -124,8 +125,9 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - # A unique name for the action.
-                  Term:type:
+                  Term:name:type:
                     - "action"
+                    - "pattern_name"
                     - "text_eval"
                 - # Parameters to customize the behavior of an action.
                   # Most actions require an actor, and possibly one or two other objects.
@@ -153,13 +155,13 @@ Spec:with group:
               - - # A unique name for the set of states.
                   Term:name:type:
                   - "state"
-                  - "aspect"
+                  - "aspect_name"
                   - "text_eval"
                 - # The names of the states in the set.
                   # TODO: a list of containing only one state should probably automatically generate its opposite the way that [BoolField] does.
                   Term:name:type:
                   - "names"
-                  - "traits"
+                  - "state_names"
                   - "text_list_eval"
 
       - # Interpret a name typed by the player as some existing noun.
@@ -257,16 +259,19 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - # Unique name for the relation.
-                  Term:type:
+                  Term:name:type:
                     - "relation"
+                    - "relation_name"
                     - "text_eval"
                 - # The kind of nouns allowed on the "left side" of a relation.
-                  Term:type:
+                  Term:name:type:
                     - "kind"
+                    - "kind_name"
                     - "text_eval"
                 - # The kind of nouns allowed on the "right side" of a relation.
-                  Term:type:
+                  Term:name:type:
                     - "other_kind"
+                    - "other_kind_name"
                     - "text_eval"
                 - # Determines the number of times a noun can appear on the left
                   # or the right side of a given relation.
@@ -294,14 +299,16 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - # A unique name for this kind.
-                  Term:type:
+                  Term:name:type:
                     - "kind"
+                    - "kind_name"
                     - "text_eval"
                 - # The parent of this kind.
                   # ( In point of fact, this can be any ancestor of the kind
                   # so long as it doesn't conflict with other [DefineKind] statements. )
-                  Term:type:
+                  Term:name:type:
                     - "ancestor"
+                    - "ancestor_kind_name"
                     - "text_eval"
 
       - # Adds properties to an existing kind.
@@ -313,16 +320,19 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - # The name of the kind to which the fields will be assigned.
-                  Term:type:
+                  Term:name:type:
                     - "kind"
+                    - "kind_name"
                     - "text_eval"
                 - # One or more fields to add to the kind.
-                  Term:type:repeats:
+                  Term:name:type:repeats:
                     - "fields"
+                    - "field_names"
                     - "field_definition"
                     - true
 
-      - # Plurals are used both at runtime and during weave to
+      - # Controls how Tapestry pluralize words.
+        # Plurals are used both at runtime and during weave to
         # guide the interpretation of nouns and kinds.
         # A singular word can have multiple plurals;
         # a plural word only has one singular form.
@@ -342,61 +352,104 @@ Spec:with group:
                     - "plural"
                     - "text_eval"
 
-      - # Assign a starting value to the field of one or nouns.
+      - # Ensures that a noun of the specified name and kind exists in the world.
+        Spec:slots:with flow:
+          - "define_noun_kind"
+          - "story_statement"
+          - Flow:uses:
+              - "define"
+              - - # The name of a new, or existing noun.
+                  Term:name:type:
+                  - "noun"
+                  - "noun_name"
+                  - "text_eval"
+                - # The name of an existing kind that describes the type of the noun.
+                  Term:name:type:
+                  - "kind"
+                  - "kind_name"
+                  - "text_eval"
+
+      - # Assigns an initial value to a existing noun.
         Spec:slots:with flow:
           - "define_noun_value"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # The name of an existing noun.
+                  Term:name:type:
                   - "noun"
                   - "noun_name"
                   - "text_eval"
-                - Term:name:type:
+                - # The name of the property to set.
+                  # ( The property must have been defined by the noun's kind or one of its ancestor kinds. )
+                  Term:name:type:
                   - "value"
                   - "field_name"
                   - "text_eval"
-                - Term:name:type:
+                - # The value to assign the noun.
+                  # The type of the value must match the type of the property.
+                  # ( ie. Text values can't be assigned to number properties, etc. )
+                  Term:name:type:
                   - "initially"
                   - "value"
                   - "assignment"
 
-      - Spec:slots:with flow:
-          - "define_noun_kind"
-          - "story_statement"
-          - Flow:uses:
-              - "define"
-              - - Term:name:type:
-                  - "noun"
-                  - "noun_name"
-                  - "text_eval"
-                - Term:name:type:
-                  - "kind"
-                  - "kind_name"
-                  - "text_eval"
 
-      - Spec:slots:with flow:
+      - # Assigns one or more initial states to a existing noun.
+        Spec:slots:with flow:
           - "define_noun_states"
           - "story_statement"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # The name of an existing noun.
+                  Term:name:type:
                     - "noun"
                     - "noun_name"
                     - "text_eval"
-                - Term:name:type:
+                - # The state names to assign to the noun.
+                  # The states must be part of a state set used by the noun's kind or one of its ancestor kinds.
+                  Term:name:type:
                     - "states"
                     - "state_names"
                     - "text_list_eval"
 
-      - Spec:slots:groups:with flow:
-          - "rule_provides"
+      - # Declares a new pattern.
+        # A pattern is a set of rules used at runtime to change the game world or to provide information about it. They are Tapestry equivalent of a function.
+        Spec:slots:groups:with flow:
+          - "define_pattern"
           - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
               - - Term:name:type:
-                    - "rule"
+                    - "pattern"
+                    - "pattern_name"
+                    - "text_eval"
+                - Term:type:repeats:
+                    - "requires"
+                    - "field_definition"
+                    - true
+                - Term:type:repeats:
+                    - "provides"
+                    - "field_definition"
+                    - true
+                - Term:name:type:optional:repeats:
+                    - "do"
+                    - "exe"
+                    - "execute"
+                    - true
+                    - true
+
+      - # Add one or more local variable to an existing pattern.
+        Spec:slots:groups:with flow:
+          - "define_pattern_provides"
+          - "story_statement"
+          - "patterns"
+          - Flow:uses:
+              - "define"
+              - - # The name of an existing pattern.
+                  Term:name:type:
+                    - "pattern"
                     - "pattern_name"
                     - "text_eval"
                 - Term:type:repeats:
@@ -438,12 +491,12 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - Term:name:type:
-                    - "rule"
-                    - "pattern_name"
-                    - "text_eval"
-                - Term:name:type:
                     - "noun"
                     - "noun_name"
+                    - "text_eval"
+                - Term:name:type:
+                    - "rule"
+                    - "pattern_name"
                     - "text_eval"
                 - Term:name:type:optional:
                     - "named"
@@ -465,17 +518,13 @@ Spec:with group:
           - Flow:uses:
               - "define"
               - - Term:name:type:
-                    - "rule"
-                    - "pattern_name"
-                    - "text_eval"
-                - Term:name:type:
                     - "kind"
                     - "kind_name"
                     - "text_eval"
-                - Term:type:optional:
-                    - "exactly"
-                    - "bool_eval"
-                    - true
+                - Term:name:type:
+                    - "rule"
+                    - "pattern_name"
+                    - "text_eval"
                 - Term:name:type:optional:
                     - "named"
                     - "rule_name"
@@ -485,34 +534,6 @@ Spec:with group:
                     - "do"
                     - "exe"
                     - "execute"
-                    - true
-
-      - # Declare a new pattern.
-        # A pattern is a bundle of functions which can either change the game world or provide information about it.
-        # Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
-        Spec:slots:groups:with flow:
-          - "define_pattern"
-          - "story_statement"
-          - "patterns"
-          - Flow:uses:
-              - "define"
-              - - Term:name:type:
-                    - "pattern"
-                    - "pattern_name"
-                    - "text_eval"
-                - Term:type:repeats:
-                    - "requires"
-                    - "field_definition"
-                    - true
-                - Term:type:repeats:
-                    - "provides"
-                    - "field_definition"
-                    - true
-                - Term:name:type:optional:repeats:
-                    - "do"
-                    - "exe"
-                    - "execute"
-                    - true
                     - true
 
       - # Relate nouns to each other.
@@ -527,15 +548,17 @@ Spec:with group:
               - - # The name of an existing relationship.
                   Term:name:type:
                     - "relative"
-                    - "relation"
+                    - "relation_name"
                     - "text_eval"
                 - # The names of one or more nouns for the "left side" of this pairing.
-                  Term:type:
+                  Term:name:type:
                     - "nouns"
+                    - "noun_names"
                     - "text_list_eval"
                 - # The names of one or more nouns for the "right side" of this pairing.
-                  Term:type:
+                  Term:name:type:
                     - "other_nouns"
+                    - "other_noun_names"
                     - "text_list_eval"
 
       - # Print templated text. Templates contain commands executed at runtime.
@@ -569,7 +592,7 @@ Spec:with group:
               - - # A globally unique name for the response.
                   Term:name:type:
                     - "response"
-                    - "name"
+                    - "response_name"
                     - "text"
                 - # The default text used for this response.
                   Term:name:type:
@@ -662,7 +685,7 @@ Spec:with group:
                   # The field will have this same name.
                   Term:name:type:
                     - "_"
-                    - "aspect"
+                    - "aspect_name"
                     - "text_eval"
 
       - # A field containing a boolean ( true/false ) value.
@@ -678,7 +701,7 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                   - "_"
-                  - "name"
+                  - "field_name"
                   - "text_eval"
                 - # An initial value for the field, true if not otherwise specified.
                   Term:type:optional:
@@ -696,7 +719,7 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                     - "_"
-                    - "name"
+                    - "field_name"
                     - "text_eval"
                 - # Provides a default value; zero if not specified.
                   Term:type:optional:
@@ -714,12 +737,12 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                     - "_"
-                    - "name"
+                    - "field_name"
                     - "text_eval"
                 - # The name of a valid record type.
                   Term:name:type:
                     - "kind"
-                    - "type"
+                    - "record_name"
                     - "text_eval"
                 - # Provides a default value.
                   # If not specified, accessing the field in go returns nil;
@@ -740,12 +763,12 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                     - "_"
-                    - "name"
+                    - "field_name"
                     - "text_eval"
                 - # A hint that this text refers to an object or some other predefined concept in the game world.
                   Term:name:type:optional:
                     - "kind"
-                    - "type"
+                    - "kind_name"
                     - "text_eval"
                     - true
                 - # Provides a default value; the empty string if not specified.
@@ -764,12 +787,12 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                     - "_"
-                    - "name"
+                    - "field_name"
                     - "text_eval"
                 - # A hint that the specified text might refer to an object or some other predefined concept in the game world.
                   Term:name:type:optional:
                     - "kind"
-                    - "type"
+                    - "kind_name"
                     - "text_eval"
                     - true
                 - # Provides a default value; an empty list if not specified.
@@ -788,13 +811,8 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                     - "_"
-                    - "name"
+                    - "field_name"
                     - "text_eval"
-                - Term:name:type:optional:
-                    - "kind"
-                    - "type"
-                    - "text_eval"
-                    - true
                 - # Provides a default value; an empty list if not specified.
                   Term:type:optional:
                     - "initially"
@@ -812,13 +830,13 @@ Spec:with group:
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
                     - "_"
-                    - "name"
+                    - "field_name"
                     - "text_eval"
                 - # The name of a valid record type.
                   # All records in the list must be of this type.
                   Term:name:type:
                     - "kind"
-                    - "type"
+                    - "record_name"
                     - "text_eval"
                 - # Provides a default value; an empty list if not specified.
                   Term:type:optional:

@@ -27,15 +27,15 @@ Tapestry:
       - "the gloom"
       - "kitchenette"
       - - Declare: "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."
-        - Define rule:noun:do:
-            - "after activating"
+        - Define noun:rule:do:
             - "flashlight"
+            - "after activating"
             - - Set:state:
                   - "flashlight"
                   - "lit"
-        - Define rule:noun:do:
-            - "after deactivating"
+        - Define noun:rule:do:
             - "flashlight"
+            - "after deactivating"
             - - Set:state:
                   - "flashlight"
                   - "unlit"

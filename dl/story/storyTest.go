@@ -12,7 +12,7 @@ import (
 func (op *DefineTest) Weave(cat *weave.Catalog) (err error) {
 	if name := inflect.Normalize(op.TestName); len(name) == 0 {
 		errutil.New("test has empty name")
-	} else if dependsOn, e := safe.GetOptionalTexts(cat.GetRuntime(), op.RequireScenes, nil); e != nil {
+	} else if dependsOn, e := safe.GetOptionalTexts(cat.GetRuntime(), op.RequiredSceneNames, nil); e != nil {
 		err = e
 	} else {
 		if e := cat.DomainStart(name, dependsOn.Strings()); e != nil {

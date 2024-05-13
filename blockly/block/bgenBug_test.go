@@ -86,12 +86,12 @@ func TestStoryLines(t *testing.T) {
 	if e := testBlocks(&story.StoryFile{
 		Statements: []story.StoryStatement{
 			&story.DefineKind{
-				Kind:     literal.T("cats"),
-				Ancestor: literal.T("animal"),
+				KindName:         literal.T("cats"),
+				AncestorKindName: literal.T("animal"),
 			},
 			&story.DefineKind{
-				Kind:     literal.T("cats"),
-				Ancestor: literal.T("animal"),
+				KindName:         literal.T("cats"),
+				AncestorKindName: literal.T("animal"),
 			},
 		},
 	}, `{
@@ -106,11 +106,11 @@ func TestStoryLines(t *testing.T) {
         "type": "_define_kind_stack",
         "id": "test-2",
         "extraState": {
-          "KIND": 1,
-          "ANCESTOR": 1
+          "KIND_NAME": 1,
+          "ANCESTOR_KIND_NAME": 1
         },
         "inputs": {
-          "KIND": {
+          "KIND_NAME": {
             "block": {
               "type": "text_value",
               "id": "test-3",
@@ -122,7 +122,7 @@ func TestStoryLines(t *testing.T) {
               }
             }
           },
-          "ANCESTOR": {
+          "ANCESTOR_KIND_NAME": {
             "block": {
               "type": "text_value",
               "id": "test-4",
@@ -140,11 +140,11 @@ func TestStoryLines(t *testing.T) {
             "type": "_define_kind_stack",
             "id": "test-5",
             "extraState": {
-              "KIND": 1,
-              "ANCESTOR": 1
+              "KIND_NAME": 1,
+              "ANCESTOR_KIND_NAME": 1
             },
             "inputs": {
-              "KIND": {
+              "KIND_NAME": {
                 "block": {
                   "type": "text_value",
                   "id": "test-6",
@@ -156,7 +156,7 @@ func TestStoryLines(t *testing.T) {
                   }
                 }
               },
-              "ANCESTOR": {
+              "ANCESTOR_KIND_NAME": {
                 "block": {
                   "type": "text_value",
                   "id": "test-7",
