@@ -414,33 +414,39 @@ Spec:with group:
                     - "text_list_eval"
 
       - # Declares a new pattern.
-        # A pattern is a set of rules used at runtime to change the game world or to provide information about it. They are Tapestry equivalent of a function.
+        # A pattern is a set of author defined rules used at runtime to either change the game world, or to provide information about it. Patterns are the Tapestry equivalent of functions.
         Spec:slots:groups:with flow:
           - "define_pattern"
           - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # A unique name for the pattern.
+                  Term:name:type:
                     - "pattern"
                     - "pattern_name"
                     - "text_eval"
-                - Term:type:repeats:
+                - # Parameters a caller can specify when triggering the pattern.
+                  # Despite the name, whether the parameters are actually required depends on the pattern's specific implementation.
+                  Term:type:repeats:
                     - "requires"
                     - "field_definition"
                     - true
-                - Term:type:repeats:
+                - # Local variables used by the pattern to carry out its goals.
+                  # As a special case, the first provided variable also acts as a return value for the pattern.
+                  Term:type:repeats:
                     - "provides"
                     - "field_definition"
                     - true
-                - Term:name:type:optional:repeats:
+                - # The default behavior of the pattern if no other rule applies.
+                  Term:name:type:optional:repeats:
                     - "do"
                     - "exe"
                     - "execute"
                     - true
                     - true
 
-      - # Add one or more local variable to an existing pattern.
+      - # Adds one or more local variable to an existing pattern.
         Spec:slots:groups:with flow:
           - "define_pattern_provides"
           - "story_statement"
@@ -452,85 +458,102 @@ Spec:with group:
                     - "pattern"
                     - "pattern_name"
                     - "text_eval"
-                - Term:type:repeats:
+                - # One or more variables that the pattern can use to carry out its goals.
+                  Term:type:repeats:
                     - "provides"
                     - "field_definition"
                     - true
 
       - # Change the behavior of an existing pattern.
-        # For events, this adds a listener that responds to the targeted object only when triggered by the player.
-        # By default, rules with filters continue on to the next rule automatically.
-        # Because event listeners have filters they continue to the next listener unless specifically stopped.
+        #
+        # For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.
+        #
+        # For patterns defined using [DefineAction], rules behave as "event listeners". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.
+        #
+        # See the Tapestry guide for more in-depth information.
         Spec:slots:groups:with flow:
-          - "rule_for_pattern"
+          - "define_rule"
           - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # The pattern to which this rule applies.
+                  # For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:
+                  # "before", "instead of", "when", "after", and "report".
+                  # The modifier can be followed by the word "someone" so that it applies to all actors and not just the player.
+                  Term:name:type:
                     - "rule"
                     - "pattern_name"
                     - "text_eval"
-                - Term:name:type:optional:
+                - # Optionally, specify a unique name for the rule.
+                  # Giving a rule a name allows it to be replaced by later rules.
+                  Term:name:type:optional:
                     - "named"
                     - "rule_name"
                     - "text_eval"
                     - true
-                - Term:name:type:repeats:
+                - # The behavior of the rule.
+                  Term:name:type:repeats:
                     - "do"
                     - "exe"
                     - "execute"
                     - true
 
-      - # Change the behavior of an existing pattern.
-        # The default behavior for events is to fall through to the next handler unless canceled or stopped.
+      - # Adds an "event listener" which only runs if the target of the triggered action is the specified noun. See [DefineRule] for more information.
         Spec:slots:groups:with flow:
-          - "rule_for_noun"
+          - "define_noun_rule"
           - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # The name of the noun to which this rule applies.
+                  Term:name:type:
                     - "noun"
                     - "noun_name"
                     - "text_eval"
-                - Term:name:type:
+                - # The pattern to which this rule applies.
+                  Term:name:type:
                     - "rule"
                     - "pattern_name"
                     - "text_eval"
-                - Term:name:type:optional:
+                - # Optionally, specify a unique name for the rule.
+                  Term:name:type:optional:
                     - "named"
                     - "rule_name"
                     - "text_eval"
                     - true
-                - Term:name:type:repeats:
+                - # The behavior of the rule.
+                  Term:name:type:repeats:
                     - "do"
                     - "exe"
                     - "execute"
                     - true
 
-      - # Change the behavior of an existing pattern.
-        # The default behavior for events is to fall through to the next handler unless canceled or stopped.
+      - # Adds an "event listener" which only runs if the target of the triggered action a noun of the specified kind. See [DefineRule] for more information.
         Spec:slots:groups:with flow:
-          - "rule_for_kind"
+          - "define_kind_rule"
           - "story_statement"
           - "patterns"
           - Flow:uses:
               - "define"
-              - - Term:name:type:
+              - - # The name of the kind to which this rule applies.
+                  Term:name:type:
                     - "kind"
                     - "kind_name"
                     - "text_eval"
-                - Term:name:type:
+                - # The pattern to which this rule applies.
+                  Term:name:type:
                     - "rule"
                     - "pattern_name"
                     - "text_eval"
-                - Term:name:type:optional:
+                - # Optionally, specify a unique name for the rule.
+                  Term:name:type:optional:
                     - "named"
                     - "rule_name"
                     - "text_eval"
                     - true
-                - Term:name:type:repeats:
+                - # The behavior of the rule.
+                  Term:name:type:repeats:
                     - "do"
                     - "exe"
                     - "execute"

@@ -814,7 +814,7 @@ func (op *DefineNounStates_Slice) Repeats() bool {
 }
 
 // Declares a new pattern.
-// A pattern is a set of rules used at runtime to change the game world or to provide information about it. They are Tapestry equivalent of a function.
+// A pattern is a set of author defined rules used at runtime to either change the game world, or to provide information about it. Patterns are the Tapestry equivalent of functions.
 type DefinePattern struct {
 	PatternName rtti.TextEval
 	Requires    []FieldDefinition
@@ -855,7 +855,7 @@ func (op *DefinePattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Add one or more local variable to an existing pattern.
+// Adds one or more local variable to an existing pattern.
 type DefinePatternProvides struct {
 	PatternName rtti.TextEval
 	Provides    []FieldDefinition
@@ -895,26 +895,29 @@ func (op *DefinePatternProvides_Slice) Repeats() bool {
 }
 
 // Change the behavior of an existing pattern.
-// For events, this adds a listener that responds to the targeted object only when triggered by the player.
-// By default, rules with filters continue on to the next rule automatically.
-// Because event listeners have filters they continue to the next listener unless specifically stopped.
-type RuleForPattern struct {
+//
+// For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.
+//
+// For patterns defined using [DefineAction], rules behave as "event listeners". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.
+//
+// See the Tapestry guide for more in-depth information.
+type DefineRule struct {
 	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
 	Exe         []rtti.Execute
 	Markup      map[string]any
 }
 
-// rule_for_pattern, a type of flow.
-var Zt_RuleForPattern typeinfo.Flow
+// define_rule, a type of flow.
+var Zt_DefineRule typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*RuleForPattern) TypeInfo() typeinfo.T {
-	return &Zt_RuleForPattern
+func (*DefineRule) TypeInfo() typeinfo.T {
+	return &Zt_DefineRule
 }
 
 // Implements [typeinfo.Markup]
-func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
+func (op *DefineRule) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -922,24 +925,23 @@ func (op *RuleForPattern) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ StoryStatement = (*RuleForPattern)(nil)
+var _ StoryStatement = (*DefineRule)(nil)
 
-// Holds a slice of type RuleForPattern.
-type RuleForPattern_Slice []RuleForPattern
+// Holds a slice of type DefineRule.
+type DefineRule_Slice []DefineRule
 
-// Implements [typeinfo.Instance] for a slice of RuleForPattern.
-func (*RuleForPattern_Slice) TypeInfo() typeinfo.T {
-	return &Zt_RuleForPattern
+// Implements [typeinfo.Instance] for a slice of DefineRule.
+func (*DefineRule_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineRule
 }
 
-// Implements [typeinfo.Repeats] for a slice of RuleForPattern.
-func (op *RuleForPattern_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of DefineRule.
+func (op *DefineRule_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Change the behavior of an existing pattern.
-// The default behavior for events is to fall through to the next handler unless canceled or stopped.
-type RuleForNoun struct {
+// Adds an "event listener" which only runs if the target of the triggered action is the specified noun. See [DefineRule] for more information.
+type DefineNounRule struct {
 	NounName    rtti.TextEval
 	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
@@ -947,16 +949,16 @@ type RuleForNoun struct {
 	Markup      map[string]any
 }
 
-// rule_for_noun, a type of flow.
-var Zt_RuleForNoun typeinfo.Flow
+// define_noun_rule, a type of flow.
+var Zt_DefineNounRule typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*RuleForNoun) TypeInfo() typeinfo.T {
-	return &Zt_RuleForNoun
+func (*DefineNounRule) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounRule
 }
 
 // Implements [typeinfo.Markup]
-func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
+func (op *DefineNounRule) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -964,24 +966,23 @@ func (op *RuleForNoun) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ StoryStatement = (*RuleForNoun)(nil)
+var _ StoryStatement = (*DefineNounRule)(nil)
 
-// Holds a slice of type RuleForNoun.
-type RuleForNoun_Slice []RuleForNoun
+// Holds a slice of type DefineNounRule.
+type DefineNounRule_Slice []DefineNounRule
 
-// Implements [typeinfo.Instance] for a slice of RuleForNoun.
-func (*RuleForNoun_Slice) TypeInfo() typeinfo.T {
-	return &Zt_RuleForNoun
+// Implements [typeinfo.Instance] for a slice of DefineNounRule.
+func (*DefineNounRule_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineNounRule
 }
 
-// Implements [typeinfo.Repeats] for a slice of RuleForNoun.
-func (op *RuleForNoun_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of DefineNounRule.
+func (op *DefineNounRule_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Change the behavior of an existing pattern.
-// The default behavior for events is to fall through to the next handler unless canceled or stopped.
-type RuleForKind struct {
+// Adds an "event listener" which only runs if the target of the triggered action a noun of the specified kind. See [DefineRule] for more information.
+type DefineKindRule struct {
 	KindName    rtti.TextEval
 	PatternName rtti.TextEval
 	RuleName    rtti.TextEval
@@ -989,16 +990,16 @@ type RuleForKind struct {
 	Markup      map[string]any
 }
 
-// rule_for_kind, a type of flow.
-var Zt_RuleForKind typeinfo.Flow
+// define_kind_rule, a type of flow.
+var Zt_DefineKindRule typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*RuleForKind) TypeInfo() typeinfo.T {
-	return &Zt_RuleForKind
+func (*DefineKindRule) TypeInfo() typeinfo.T {
+	return &Zt_DefineKindRule
 }
 
 // Implements [typeinfo.Markup]
-func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
+func (op *DefineKindRule) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -1006,18 +1007,18 @@ func (op *RuleForKind) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ StoryStatement = (*RuleForKind)(nil)
+var _ StoryStatement = (*DefineKindRule)(nil)
 
-// Holds a slice of type RuleForKind.
-type RuleForKind_Slice []RuleForKind
+// Holds a slice of type DefineKindRule.
+type DefineKindRule_Slice []DefineKindRule
 
-// Implements [typeinfo.Instance] for a slice of RuleForKind.
-func (*RuleForKind_Slice) TypeInfo() typeinfo.T {
-	return &Zt_RuleForKind
+// Implements [typeinfo.Instance] for a slice of DefineKindRule.
+func (*DefineKindRule_Slice) TypeInfo() typeinfo.T {
+	return &Zt_DefineKindRule
 }
 
-// Implements [typeinfo.Repeats] for a slice of RuleForKind.
-func (op *RuleForKind_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of DefineKindRule.
+func (op *DefineKindRule_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2196,29 +2197,41 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "pattern_name",
 			Label: "pattern",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "A unique name for the pattern.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:    "requires",
 			Label:   "requires",
 			Repeats: true,
-			Type:    &Zt_FieldDefinition,
+			Markup: map[string]any{
+				"comment": []interface{}{"Parameters a caller can specify when triggering the pattern.", "Despite the name, whether the parameters are actually required depends on the pattern's specific implementation."},
+			},
+			Type: &Zt_FieldDefinition,
 		}, {
 			Name:    "provides",
 			Label:   "provides",
 			Repeats: true,
-			Type:    &Zt_FieldDefinition,
+			Markup: map[string]any{
+				"comment": []interface{}{"Local variables used by the pattern to carry out its goals.", "As a special case, the first provided variable also acts as a return value for the pattern."},
+			},
+			Type: &Zt_FieldDefinition,
 		}, {
 			Name:     "exe",
 			Label:    "do",
 			Optional: true,
 			Repeats:  true,
-			Type:     &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "The default behavior of the pattern if no other rule applies.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Declares a new pattern.", "A pattern is a set of rules used at runtime to change the game world or to provide information about it. They are Tapestry equivalent of a function."},
+			"comment": []interface{}{"Declares a new pattern.", "A pattern is a set of author defined rules used at runtime to either change the game world, or to provide information about it. Patterns are the Tapestry equivalent of functions."},
 		},
 	}
 	Zt_DefinePatternProvides = typeinfo.Flow{
@@ -2235,96 +2248,132 @@ func init() {
 			Name:    "provides",
 			Label:   "provides",
 			Repeats: true,
-			Type:    &Zt_FieldDefinition,
+			Markup: map[string]any{
+				"comment": "One or more variables that the pattern can use to carry out its goals.",
+			},
+			Type: &Zt_FieldDefinition,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": "Add one or more local variable to an existing pattern.",
+			"comment": "Adds one or more local variable to an existing pattern.",
 		},
 	}
-	Zt_RuleForPattern = typeinfo.Flow{
-		Name: "rule_for_pattern",
+	Zt_DefineRule = typeinfo.Flow{
+		Name: "define_rule",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
 			Name:  "pattern_name",
 			Label: "rule",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"The pattern to which this rule applies.", "For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:", "\"before\", \"instead of\", \"when\", \"after\", and \"report\".", "The modifier can be followed by the word \"someone\" so that it applies to all actors and not just the player."},
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "rule_name",
 			Label:    "named",
 			Optional: true,
-			Type:     &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"Optionally, specify a unique name for the rule.", "Giving a rule a name allows it to be replaced by later rules."},
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "The behavior of the rule.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change the behavior of an existing pattern.", "For events, this adds a listener that responds to the targeted object only when triggered by the player.", "By default, rules with filters continue on to the next rule automatically.", "Because event listeners have filters they continue to the next listener unless specifically stopped."},
+			"comment": []interface{}{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
 		},
 	}
-	Zt_RuleForNoun = typeinfo.Flow{
-		Name: "rule_for_noun",
+	Zt_DefineNounRule = typeinfo.Flow{
+		Name: "define_noun_rule",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
 			Name:  "noun_name",
 			Label: "noun",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The name of the noun to which this rule applies.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "pattern_name",
 			Label: "rule",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The pattern to which this rule applies.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "rule_name",
 			Label:    "named",
 			Optional: true,
-			Type:     &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "Optionally, specify a unique name for the rule.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "The behavior of the rule.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
+			"comment": "Adds an \"event listener\" which only runs if the target of the triggered action is the specified noun. See [DefineRule] for more information.",
 		},
 	}
-	Zt_RuleForKind = typeinfo.Flow{
-		Name: "rule_for_kind",
+	Zt_DefineKindRule = typeinfo.Flow{
+		Name: "define_kind_rule",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
 			Name:  "kind_name",
 			Label: "kind",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The name of the kind to which this rule applies.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "pattern_name",
 			Label: "rule",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The pattern to which this rule applies.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "rule_name",
 			Label:    "named",
 			Optional: true,
-			Type:     &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "Optionally, specify a unique name for the rule.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "The behavior of the rule.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change the behavior of an existing pattern.", "The default behavior for events is to fall through to the next handler unless canceled or stopped."},
+			"comment": "Adds an \"event listener\" which only runs if the target of the triggered action a noun of the specified kind. See [DefineRule] for more information.",
 		},
 	}
 	Zt_DefineRelatives = typeinfo.Flow{
@@ -2758,9 +2807,9 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_DefineNounStates,
 	&Zt_DefinePattern,
 	&Zt_DefinePatternProvides,
-	&Zt_RuleForPattern,
-	&Zt_RuleForNoun,
-	&Zt_RuleForKind,
+	&Zt_DefineRule,
+	&Zt_DefineNounRule,
+	&Zt_DefineKindRule,
 	&Zt_DefineRelatives,
 	&Zt_SayTemplate,
 	&Zt_SayResponse,
@@ -2799,11 +2848,11 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	5312053119535959994:  (*DefineAction)(nil),          /* story_statement=Define action:requires:provides: */
 	12790170204334923961: (*DefineKind)(nil),            /* story_statement=Define kind:ancestor: */
 	15268150405724581221: (*DefineFields)(nil),          /* story_statement=Define kind:fields: */
-	2634771595010145133:  (*RuleForKind)(nil),           /* story_statement=Define kind:rule:do: */
-	3253027546625561654:  (*RuleForKind)(nil),           /* story_statement=Define kind:rule:named:do: */
+	2634771595010145133:  (*DefineKindRule)(nil),        /* story_statement=Define kind:rule:do: */
+	3253027546625561654:  (*DefineKindRule)(nil),        /* story_statement=Define kind:rule:named:do: */
 	16821098817155896534: (*DefineNounKind)(nil),        /* story_statement=Define noun:kind: */
-	9340117308812628027:  (*RuleForNoun)(nil),           /* story_statement=Define noun:rule:do: */
-	10622511977506449612: (*RuleForNoun)(nil),           /* story_statement=Define noun:rule:named:do: */
+	9340117308812628027:  (*DefineNounRule)(nil),        /* story_statement=Define noun:rule:do: */
+	10622511977506449612: (*DefineNounRule)(nil),        /* story_statement=Define noun:rule:named:do: */
 	3688969656849355942:  (*DefineNounStates)(nil),      /* story_statement=Define noun:states: */
 	9478300892459390916:  (*DefineNounValue)(nil),       /* story_statement=Define noun:value:initially: */
 	2173982977263897352:  (*DefinePatternProvides)(nil), /* story_statement=Define pattern:provides: */
@@ -2811,8 +2860,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	729326910659609567:   (*DefinePattern)(nil),         /* story_statement=Define pattern:requires:provides:do: */
 	15951965898335032430: (*DefineRelation)(nil),        /* story_statement=Define relation:kind:otherKind:cardinality: */
 	7218292999752256394:  (*DefineRelatives)(nil),       /* story_statement=Define relative:nouns:otherNouns: */
-	18093984368234904277: (*RuleForPattern)(nil),        /* story_statement=Define rule:do: */
-	2007307886252117326:  (*RuleForPattern)(nil),        /* story_statement=Define rule:named:do: */
+	18093984368234904277: (*DefineRule)(nil),            /* story_statement=Define rule:do: */
+	2007307886252117326:  (*DefineRule)(nil),            /* story_statement=Define rule:named:do: */
 	16728157364207612750: (*DefineScene)(nil),           /* story_statement=Define scene: */
 	10681959011863226668: (*DefineScene)(nil),           /* story_statement=Define scene:requires: */
 	10209709135447127962: (*DefineScene)(nil),           /* story_statement=Define scene:requires:with: */

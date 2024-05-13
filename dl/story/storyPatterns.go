@@ -87,7 +87,7 @@ func (op *DefinePatternProvides) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
+func (op *DefineRule) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if phrase, e := safe.GetText(run, op.PatternName); e != nil {
 			err = e
@@ -106,7 +106,7 @@ func (op *RuleForPattern) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
+func (op *DefineNounRule) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if noun, e := safe.GetText(run, op.NounName); e != nil {
 			err = e
@@ -136,7 +136,7 @@ func (op *RuleForNoun) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-func (op *RuleForKind) Weave(cat *weave.Catalog) (err error) {
+func (op *DefineKindRule) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
 		if kind, e := safe.GetText(run, op.KindName); e != nil {
 			err = e
