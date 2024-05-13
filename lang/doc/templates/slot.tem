@@ -33,18 +33,21 @@
 			None.
 			{{- else }}
 			<ul class="commandArgs">
-				{{- range $i, $t := $cmd.Terms }}
+				{{- range $cmd.Terms }}
 				<li>
 					<span class="argLabel">
-						{{- if $t.Label}}{{ Camel $t.Label }}{{ else }}
+						{{- if .Label}}{{ Camel .Label }}{{ else }}
 						{{ Pascal $cmd.Lede }}
 						{{- end -}}:
 					</span>
 					<span class="argType">
-						<a href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
+						<a href="{{ TypeLink .Type }}">
+						{{- Pascal .Type.TypeName -}}
+						{{- if .Repeats -}}, ...{{- end -}}
+						</a>
 					</span>
 					<span class="argComment">
-						{{- MarkupComment $t.Markup }}
+						{{- MarkupComment .Markup }}
 					</span>
 				</li>
 				{{- end }}{{/* public terms  */}}
