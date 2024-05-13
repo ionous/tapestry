@@ -89,7 +89,7 @@ func (op *DefinePatternProvides) Weave(cat *weave.Catalog) (err error) {
 
 func (op *DefineRule) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(weaver.VerbPhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
-		if phrase, e := safe.GetText(run, op.PatternName); e != nil {
+		if phrase, e := safe.GetText(run, op.RuleTiming); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
@@ -112,7 +112,7 @@ func (op *DefineNounRule) Weave(cat *weave.Catalog) (err error) {
 			err = e
 		} else if noun, e := run.GetField(meta.ObjectId, noun.String()); e != nil {
 			err = e
-		} else if phrase, e := safe.GetText(run, op.PatternName); e != nil {
+		} else if phrase, e := safe.GetText(run, op.RuleTiming); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e
@@ -144,7 +144,7 @@ func (op *DefineKindRule) Weave(cat *weave.Catalog) (err error) {
 			err = e // ^ verify the kind exists
 		} else if ks := ks.Strings(); len(ks) == 0 {
 			err = fmt.Errorf("%w kind %s", weaver.Missing, kind)
-		} else if phrase, e := safe.GetText(run, op.PatternName); e != nil {
+		} else if phrase, e := safe.GetText(run, op.RuleTiming); e != nil {
 			err = e
 		} else if label, e := safe.GetOptionalText(run, op.RuleName, ""); e != nil {
 			err = e

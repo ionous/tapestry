@@ -39,8 +39,8 @@ var FactorialStory = story.StoryFile{
 			Exe: FactorialDefaultRule,
 		},
 		&story.DefineRule{
-			PatternName: T("factorial"),
-			Exe:         FactorialDecreaseRule,
+			RuleTiming: T("factorial"),
+			Exe:        FactorialDecreaseRule,
 		}},
 }
 

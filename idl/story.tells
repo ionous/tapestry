@@ -477,13 +477,13 @@ Spec:with group:
           - "patterns"
           - Flow:uses:
               - "define"
-              - - # The pattern to which this rule applies.
+              - - # The pattern and phase to which this rule applies.
                   # For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:
                   # "before", "instead of", "when", "after", and "report".
                   # The modifier can be followed by the word "someone" so that it applies to all actors and not just the player.
                   Term:name:type:
                     - "rule"
-                    - "pattern_name"
+                    - "rule_timing"
                     - "text_eval"
                 - # Optionally, specify a unique name for the rule.
                   # Giving a rule a name allows it to be replaced by later rules.
@@ -511,10 +511,10 @@ Spec:with group:
                     - "noun"
                     - "noun_name"
                     - "text_eval"
-                - # The pattern to which this rule applies.
+                - # The pattern and phase to which this rule applies.
                   Term:name:type:
                     - "rule"
-                    - "pattern_name"
+                    - "rule_timing"
                     - "text_eval"
                 - # Optionally, specify a unique name for the rule.
                   Term:name:type:optional:
@@ -541,10 +541,10 @@ Spec:with group:
                     - "kind"
                     - "kind_name"
                     - "text_eval"
-                - # The pattern to which this rule applies.
+                - # The pattern and phase to which this rule applies.
                   Term:name:type:
                     - "rule"
-                    - "pattern_name"
+                    - "rule_timing"
                     - "text_eval"
                 - # Optionally, specify a unique name for the rule.
                   Term:name:type:optional:

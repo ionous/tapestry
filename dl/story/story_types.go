@@ -902,10 +902,10 @@ func (op *DefinePatternProvides_Slice) Repeats() bool {
 //
 // See the Tapestry guide for more in-depth information.
 type DefineRule struct {
-	PatternName rtti.TextEval
-	RuleName    rtti.TextEval
-	Exe         []rtti.Execute
-	Markup      map[string]any
+	RuleTiming rtti.TextEval
+	RuleName   rtti.TextEval
+	Exe        []rtti.Execute
+	Markup     map[string]any
 }
 
 // define_rule, a type of flow.
@@ -942,11 +942,11 @@ func (op *DefineRule_Slice) Repeats() bool {
 
 // Adds an "event listener" which only runs if the target of the triggered action is the specified noun. See [DefineRule] for more information.
 type DefineNounRule struct {
-	NounName    rtti.TextEval
-	PatternName rtti.TextEval
-	RuleName    rtti.TextEval
-	Exe         []rtti.Execute
-	Markup      map[string]any
+	NounName   rtti.TextEval
+	RuleTiming rtti.TextEval
+	RuleName   rtti.TextEval
+	Exe        []rtti.Execute
+	Markup     map[string]any
 }
 
 // define_noun_rule, a type of flow.
@@ -983,11 +983,11 @@ func (op *DefineNounRule_Slice) Repeats() bool {
 
 // Adds an "event listener" which only runs if the target of the triggered action a noun of the specified kind. See [DefineRule] for more information.
 type DefineKindRule struct {
-	KindName    rtti.TextEval
-	PatternName rtti.TextEval
-	RuleName    rtti.TextEval
-	Exe         []rtti.Execute
-	Markup      map[string]any
+	KindName   rtti.TextEval
+	RuleTiming rtti.TextEval
+	RuleName   rtti.TextEval
+	Exe        []rtti.Execute
+	Markup     map[string]any
 }
 
 // define_kind_rule, a type of flow.
@@ -2264,10 +2264,10 @@ func init() {
 		Name: "define_rule",
 		Lede: "define",
 		Terms: []typeinfo.Term{{
-			Name:  "pattern_name",
+			Name:  "rule_timing",
 			Label: "rule",
 			Markup: map[string]any{
-				"comment": []interface{}{"The pattern to which this rule applies.", "For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:", "\"before\", \"instead of\", \"when\", \"after\", and \"report\".", "The modifier can be followed by the word \"someone\" so that it applies to all actors and not just the player."},
+				"comment": []interface{}{"The pattern and phase to which this rule applies.", "For event listeners, the name can start with a modifier which changes the event phase in which the rule applies:", "\"before\", \"instead of\", \"when\", \"after\", and \"report\".", "The modifier can be followed by the word \"someone\" so that it applies to all actors and not just the player."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -2305,10 +2305,10 @@ func init() {
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "pattern_name",
+			Name:  "rule_timing",
 			Label: "rule",
 			Markup: map[string]any{
-				"comment": "The pattern to which this rule applies.",
+				"comment": "The pattern and phase to which this rule applies.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -2346,10 +2346,10 @@ func init() {
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "pattern_name",
+			Name:  "rule_timing",
 			Label: "rule",
 			Markup: map[string]any{
-				"comment": "The pattern to which this rule applies.",
+				"comment": "The pattern and phase to which this rule applies.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
