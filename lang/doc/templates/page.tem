@@ -10,17 +10,6 @@
 	<link type="text/css" rel="stylesheet" href="../custom.css">
 </head>
 <body>
-	{{ define "command-spec" }}
-		{{- Pascal .Lede }}
-		{{- range $i, $t := .Terms }}
-		{{- if $t.Optional }}[{{end}}
-		{{- if $t.Label}}
-		{{- if not $i}} {{end}} 
-		{{- Camel $t.Label }}
-		{{- end }}:
-		{{- if $t.Optional }}]{{end}}
-		{{- end }}
-	{{- end }}
 	{{ define "command-title" }}
 		{{- Title .Name }}
 	{{- end }}

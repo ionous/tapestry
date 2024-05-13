@@ -151,10 +151,10 @@ Spec:with group:
                   - "assignment"
       - # Adapts an execute statement to an assignment.
         # Used internally for package shuttle.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "from_exe"
           - "assignment"
-          - "internal"
           - Flow uses:
               - Term:name:type:repeats:
                   - "_"

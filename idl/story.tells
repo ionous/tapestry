@@ -13,10 +13,10 @@ Spec:with group:
 
       - # Used internally as the container for every .tell file.
         # Implements Story Statement to simplify how flex parsing works.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "story_file"
           - "story_statement"
-          - "internal"
           - Flow:uses:
               - "tapestry"
               - - Term:name:type:repeats:
@@ -28,10 +28,10 @@ Spec:with group:
         mosaic-root: true
 
       - # A legacy command, used in .if files as a visual divider ( because reading and writing json doesn't otherwise have a way to preserve whitespace. )
-       Spec:slots:groups:with flow:
+       internal: true
+       Spec:slots:with flow:
           - "story_break"
           - "story_statement"
-          - "internal"
           - Flow:uses:
               - "--"
               - []
@@ -226,10 +226,10 @@ Spec:with group:
 
       - # Used internally to contain the plain-text sections of .tell documents.
         # Contains English-like definitions of nouns, kinds, and their relatives.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "declare_statement"
           - "story_statement"
-          - "internal"
           - Flow:uses:
               - "declare"
               - - # A single text string containing one or more plain English sentences used to model the game world.

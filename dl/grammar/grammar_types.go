@@ -485,7 +485,8 @@ func init() {
 			&Zt_GrammarMaker,
 		},
 		Markup: map[string]any{
-			"comment": "starts a parser scanner.",
+			"comment":  "starts a parser scanner.",
+			"internal": true,
 		},
 	}
 	Zt_Noun = typeinfo.Flow{

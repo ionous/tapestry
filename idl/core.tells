@@ -73,10 +73,10 @@ Spec:with group:
                     - "execute"
                     - true
       - # Runtime version of cycle_text.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "call_cycle"
           - "text_eval"
-          - "internal"
           - Flow:uses:
               - "cycle"
               - - Term:name:type:
@@ -89,10 +89,10 @@ Spec:with group:
                     - "text_eval"
                     - true
       - # Runtime version of shuffle_text.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "call_shuffle"
           - "text_eval"
-          - "internal"
           - Flow:uses:
               - "shuffle"
               - - Term:name:type:
@@ -109,10 +109,10 @@ Spec:with group:
                     - "shuffler"
                     - true
       - # Runtime version of stopping_text.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "call_terminal"
           - "text_eval"
-          - "internal"
           - Flow:uses:
               - "stopping"
               - - Term:name:type:
@@ -125,10 +125,10 @@ Spec:with group:
                     - "text_eval"
                     - true
       - # Runtime version of count_of.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "call_trigger"
           - "bool_eval"
-          - "internal"
           - Flow:uses:
               - "trigger"
               - - Term:name:type:

@@ -64,16 +64,16 @@ slots
 {{/* -------------------------------------------------
 commands 
 -------------------------------------------------	*/}}
-{{ if .Types.Flow }}
+{{ if .Commands }}
 <h3>
 	Commands:
 </h3>
 <section>
 	<ul>
-		{{ range .Types.Flow }}
+		{{ range  .Commands }}
 		{{if .Slots }}
 		<li>
-			<a href="../slot/{{ (index .Slots 0).Name}}.html#{{.Name}}">{{ template "command-title" . }}</a>
+			<a href="../slot/{{ (index .Slots 0).Name}}.html#{{.Name}}">{{ .Spec }}</a>
 		</li>
 		{{ end }}
 		{{ end }}

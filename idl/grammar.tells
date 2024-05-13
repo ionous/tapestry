@@ -40,10 +40,10 @@ Spec:with group:
                     - "scanner_maker"
                     - true
       - # starts a parser scanner.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "directive"
           - "grammar_maker"
-          - "internal"
           - Flow:uses:
               - "interpret"
               - - Term:type:

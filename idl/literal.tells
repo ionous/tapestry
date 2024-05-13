@@ -30,10 +30,10 @@ Spec:with group:
                     - "literal_value"
       - # A series of values all for the same record.
         # While it can be specified wherever a literal value can, it only has meaning when the record type is known.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "field_list"
           - "literal_value"
-          - "internal"
           - Flow:uses:
               - "field_list"
               - - Term:name:type:repeats:

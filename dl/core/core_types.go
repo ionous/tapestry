@@ -2847,7 +2847,8 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Runtime version of cycle_text.",
+			"comment":  "Runtime version of cycle_text.",
+			"internal": true,
 		},
 	}
 	Zt_CallShuffle = typeinfo.Flow{
@@ -2870,7 +2871,8 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Runtime version of shuffle_text.",
+			"comment":  "Runtime version of shuffle_text.",
+			"internal": true,
 		},
 	}
 	Zt_CallTerminal = typeinfo.Flow{
@@ -2889,7 +2891,8 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Runtime version of stopping_text.",
+			"comment":  "Runtime version of stopping_text.",
+			"internal": true,
 		},
 	}
 	Zt_CallTrigger = typeinfo.Flow{
@@ -2911,7 +2914,8 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Runtime version of count_of.",
+			"comment":  "Runtime version of count_of.",
+			"internal": true,
 		},
 	}
 	Zt_Capitalize = typeinfo.Flow{

@@ -4,53 +4,53 @@
 	Commands:
 </h3>
 <section>
-	{{ range $k, $v := .Part }}
+	{{- range $i, $cmd := .Commands }}
+	<h2 id="{{$cmd.Name}}">
+		{{- template "command-title" $cmd -}}
+	</h2>
+	{{/* Signature */}}
+	<span>
+		{{ MarkupComment $cmd.Markup }}
+	</span>
 	<div>
-		{{ range $i, $cmd := $v.Types }}
-		<h2 id="{{$cmd.Name}}">
-			{{- template "command-title" $cmd -}}
-		</h2>
-		{{/* Signature */}}
-		<span>
-			{{ MarkupComment $cmd.Markup }}
-		</span>
-		<div>
-			<pre><a href="{{ .SourceLink }}">
-			{{- template "command-spec" $cmd -}}
-			</a></pre>
-		</div>
-
-		<div>
-			{{/* Slot UL */}}
-			{{ if $cmd.Slots }}
-			Slots:
-			<ul class="commandSlots">
-				{{ range $cmd.Slots }}
-				<li><a href="{{ TypeLink . }}">{{ Pascal .Name}}</a></li>
-				{{ end }}{{/* range slots */}}
-			</ul>{{ end }}{{/* if slots */}}
-			<div>
-				Terms:
-				<ul class="commandArgs">
-					{{- range $i, $t := $cmd.Terms }}
-					<li>
-						<span class="argLabel">
-							{{- if $t.Label}}{{ Camel $t.Label }}{{ else }}
-							{{ Pascal $cmd.Lede }}
-							{{- end -}}:
-						</span>
-						<span class="argType">
-							<a href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
-						</span>
-						<span class="argComment">
-							{{- MarkupComment $t.Markup }}
-						</span>
-					</li>
-					{{- end }}{{/* public terms  */}}
-				</ul>
-			</div>
-		</div>
-		{{end }}{{ end }}{{/* $i, $cmd */}}
+		<pre><a href="{{ .SourceLink }}">
+		{{- $cmd.Spec -}}
+		</a></pre>
 	</div>
-	{{/* .Part */}}
+
+	<div>
+		{{/* Slot UL */}}
+		{{ if $cmd.Slots }}
+		Slots:
+		<ul class="commandSlots">
+			{{ range $cmd.Slots }}
+			<li><a href="{{ TypeLink . }}">{{ Pascal .Name}}</a></li>
+			{{ end }}{{/* range slots */}}
+		</ul>{{ end }}{{/* if slots */}}
+		<div>
+			Terms:
+			{{- if not $cmd.Terms }}
+			None.
+			{{- else }}
+			<ul class="commandArgs">
+				{{- range $i, $t := $cmd.Terms }}
+				<li>
+					<span class="argLabel">
+						{{- if $t.Label}}{{ Camel $t.Label }}{{ else }}
+						{{ Pascal $cmd.Lede }}
+						{{- end -}}:
+					</span>
+					<span class="argType">
+						<a href="{{ TypeLink  $t.Type }}">{{ Pascal $t.Type.TypeName}}</a>
+					</span>
+					<span class="argComment">
+						{{- MarkupComment $t.Markup }}
+					</span>
+				</li>
+				{{- end }}{{/* public terms  */}}
+			</ul>
+			{{- end }}
+		</div>
+	</div>
+	{{- end }}{{/* range over types */}}
 </section>

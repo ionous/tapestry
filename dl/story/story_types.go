@@ -1723,6 +1723,7 @@ func init() {
 		Markup: map[string]any{
 			"blockly-color": "TAP_HUE_ROOT",
 			"comment":       []interface{}{"Used internally as the container for every .tell file.", "Implements Story Statement to simplify how flex parsing works."},
+			"internal":      true,
 			"mosaic-root":   true,
 		},
 	}
@@ -1734,7 +1735,8 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": "A legacy command, used in .if files as a visual divider ( because reading and writing json doesn't otherwise have a way to preserve whitespace. )",
+			"comment":  "A legacy command, used in .if files as a visual divider ( because reading and writing json doesn't otherwise have a way to preserve whitespace. )",
+			"internal": true,
 		},
 	}
 	Zt_Note = typeinfo.Flow{
@@ -1997,7 +1999,8 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Used internally to contain the plain-text sections of .tell documents.", "Contains English-like definitions of nouns, kinds, and their relatives."},
+			"comment":  []interface{}{"Used internally to contain the plain-text sections of .tell documents.", "Contains English-like definitions of nouns, kinds, and their relatives."},
+			"internal": true,
 		},
 	}
 	Zt_DefineRelation = typeinfo.Flow{

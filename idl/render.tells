@@ -8,23 +8,24 @@ Spec:with group:
         # if the name is a variable with some other text: return that text;
         # if the name isn't a variable but refers to some object: return that object's printed object name;
         # otherwise, its an error.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "render_name"
           - "text_eval"
-          - "internal"
           - Flow uses:
               - Term:name:type:
                   - "_"
                   - "name"
                   - "text"
       - # Used with render pattern for arguments of unknown type.
-        Spec:groups:with slot:
+        internal: true
+        Spec:with slot:
           - "render_eval"
-          - "internal"
           - Slot:
       - # Pull a value from name that might refer either to a variable, or to an object.
         # If the name is an object, returns the object id.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "render_ref"
           - - "bool_eval"
             - "number_eval"
@@ -34,7 +35,6 @@ Spec:with group:
             - "text_list_eval"
             - "record_list_eval"
             - "render_eval"
-          - "internal"
           - Flow uses:
               - Term:name:type:
                   - "_"
@@ -45,10 +45,10 @@ Spec:with group:
                   - true
                   - true
       - # Pull a value from an assignment of unknown affinity.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "render_value"
           - "render_eval"
-          - "internal"
           - Flow uses:
               - Term:name:type:
                   - "_"
@@ -56,12 +56,12 @@ Spec:with group:
                   - "assignment"
       - # A version of core's call pattern
         # that figures out how to evaluate its arguments at runtime.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "render_pattern"
           - - "bool_eval"
             - "text_eval"
             - "render_eval"
-          - "internal"
           - Flow:uses:
               - "render"
               - - Term:name:type:
@@ -73,11 +73,11 @@ Spec:with group:
                     - "render_eval"
                     - true
       - # Generate text in a replaceable manner.
-        Spec:slots:groups:with flow:
+        internal: true
+        Spec:slots:with flow:
           - "render_response"
           - - "execute"
             - "text_eval"
-          - "internal"
           - Flow uses:
               - Term:name:type:
                   - "_"

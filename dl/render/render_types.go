@@ -17,7 +17,8 @@ import (
 var Zt_RenderEval = typeinfo.Slot{
 	Name: "render_eval",
 	Markup: map[string]any{
-		"comment": "Used with render pattern for arguments of unknown type.",
+		"comment":  "Used with render pattern for arguments of unknown type.",
+		"internal": true,
 	},
 }
 
@@ -265,7 +266,8 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
+			"comment":  []interface{}{"Handles changing a template like {.boombip} into text.", "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );", "if the name is a variable with some other text: return that text;", "if the name isn't a variable but refers to some object: return that object's printed object name;", "otherwise, its an error."},
+			"internal": true,
 		},
 	}
 	Zt_RenderRef = typeinfo.Flow{
@@ -292,7 +294,8 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
+			"comment":  []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
+			"internal": true,
 		},
 	}
 	Zt_RenderValue = typeinfo.Flow{
@@ -306,7 +309,8 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment": "Pull a value from an assignment of unknown affinity.",
+			"comment":  "Pull a value from an assignment of unknown affinity.",
+			"internal": true,
 		},
 	}
 	Zt_RenderPattern = typeinfo.Flow{
@@ -327,7 +331,8 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+			"comment":  []interface{}{"A version of core's call pattern", "that figures out how to evaluate its arguments at runtime."},
+			"internal": true,
 		},
 	}
 	Zt_RenderResponse = typeinfo.Flow{
@@ -347,7 +352,8 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Generate text in a replaceable manner.",
+			"comment":  "Generate text in a replaceable manner.",
+			"internal": true,
 		},
 	}
 }

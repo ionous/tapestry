@@ -2,6 +2,7 @@
 package doc
 
 import (
+	"cmp"
 	"embed"
 	"fmt"
 	"html/template"
@@ -10,6 +11,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -41,32 +43,46 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 	} else {
 		slots := make(SlotMap)
 		for _, types := range idl {
+			var m []Command
+			for _, t := range types.Flow {
+				if _, hidden := t.Markup["internal"]; !hidden {
+					spec := BuildSpec(t)
+					m = append(m, Command{Spec: spec, Flow: t})
+				}
+			}
+			sortCommands(m)
 			splitBySlot(slots, types)
+
+			// generate idl files:
 			os.Mkdir(filepath.Join(outDir, typesFolder), os.ModePerm)
 			outFile := filepath.Join(outDir, typesFolder, types.Name+ext)
 			if e := Create(outFile, tem, map[string]any{
-				"Name":  types.Name,
-				"Types": types,
+				"Name":     types.Name,
+				"Types":    types,
+				"Commands": m,
 			}); e != nil {
 				err = e
 				return // early out
 			}
 		}
-		//
+		// generate slot docs:
 		os.Mkdir(filepath.Join(outDir, slotsFolder), os.ModePerm)
 		for slot, part := range slots {
 			outFile := filepath.Join(outDir, slotsFolder, slot.Name+ext)
 			if cmt, e := compact.ExtractComment(slot.Markup); e != nil {
 				err = e
 				break
-			} else if e := Create(outFile, tem, map[string]any{
-				"Name":    slot.Name,
-				"Slot":    slot,
-				"Part":    part,
-				"Comment": cmt,
-			}); e != nil {
-				err = e
-				break
+			} else {
+				sortCommands(part.Commands)
+				if e := Create(outFile, tem, map[string]any{
+					"Name":     slot.Name,
+					"Slot":     slot,
+					"Commands": part.Commands,
+					"Comment":  cmt,
+				}); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 	}
@@ -98,44 +114,47 @@ func Create(outFile string, tem *template.Template, data any) (err error) {
 // - split everything into slots
 func splitBySlot(out SlotMap, types typeinfo.TypeSet) {
 	for _, t := range types.Flow {
-		for _, slot := range t.Slots {
-			m, ok := out[slot]
-			if !ok {
-				m = make(PartitionMap)
-				out[slot] = m
+		if _, hidden := t.Markup["internal"]; !hidden {
+			for _, slot := range t.Slots {
+				// create the command map
+				m, ok := out[slot]
+				if !ok {
+					m = new(Commands)
+					out[slot] = m
+				}
+				// fix:
+				pkgName, pkgPath := types.Name, "dl/"+types.Name
+				m.addFlow(t, pkgName, pkgPath)
 			}
-			// fix:
-			pkgName, pkgPath := types.Name, "dl/"+types.Name
-			m.addFlow(t, pkgName, pkgPath)
 		}
 	}
 }
 
-type SlotMap map[*typeinfo.Slot]PartitionMap
+type SlotMap map[*typeinfo.Slot]*Commands
 
-type PartitionMap map[string]Partition
-
-func (m *PartitionMap) addFlow(t *typeinfo.Flow, pkgName, pkgPath string) {
-	if t.Lede != "--" {
-		cat := (*m)[t.Lede]
-		cat.addFlow(t, pkgName, pkgPath)
-		(*m)[t.Lede] = cat
-	}
+type Commands struct {
+	Commands []Command
 }
 
-type Partition struct {
-	Types []Command
-	// 1. keep these sorted  by command name  ( the default )
-	// alt: sort by label
+func sortCommands(cs []Command) {
+	slices.SortFunc(cs, func(a, b Command) int {
+		// we want specs ending in colons to be listed before ones with a new word.
+		// ex. Numeral: before Numeral words:
+		// colon is less than underscore ( but greater than space )
+		x, y := strings.Replace(a.Spec, " ", "_", -1), strings.Replace(b.Spec, " ", "_", -1)
+		return cmp.Compare(x, y)
+	})
 }
-
-func (cat *Partition) addFlow(t *typeinfo.Flow, pkgName, pkgPath string) {
-	cat.Types = append(cat.Types, Command{t, pkgName, pkgPath})
+func (cat *Commands) addFlow(t *typeinfo.Flow, pkgName, pkgPath string) {
+	spec := BuildSpec(t)
+	c := Command{t, pkgName, pkgPath, spec}
+	cat.Commands = append(cat.Commands, c)
 }
 
 type Command struct {
 	*typeinfo.Flow
 	pkgName, pkgPath string
+	Spec             string
 }
 
 func (c Command) SourceLink() string {
@@ -145,7 +164,7 @@ func (c Command) SourceLink() string {
 }
 
 func (c Command) Terms() (ret []typeinfo.Term) {
-	// filter out private terms;
+	// filter out hidden terms;
 	for i, t := range c.Flow.Terms {
 		if t.Private && ret == nil {
 			ret = c.Flow.Terms[:i]
@@ -160,6 +179,33 @@ func (c Command) Terms() (ret []typeinfo.Term) {
 	return
 }
 
+// Build the document style signature for this flow
+// it's different than the actual signature because,
+// among other things, it includes markers for optional elements.
+func BuildSpec(t *typeinfo.Flow) string {
+	var str strings.Builder
+	str.WriteString(inflect.Pascal(t.Lede))
+	if len(t.Terms) == 0 {
+		str.WriteString(":")
+	} else {
+		for i, t := range t.Terms {
+			if t.Optional {
+				str.WriteRune('[')
+			}
+			if len(t.Label) > 0 {
+				if i == 0 {
+					str.WriteRune(' ')
+				}
+				str.WriteString(inflect.Camelize(t.Label))
+			}
+			str.WriteRune(':')
+			if t.Optional {
+				str.WriteRune(']')
+			}
+		}
+	}
+	return str.String()
+}
 func TypeLink(t typeinfo.T) (ret string) {
 	name := t.TypeName()
 	pascal := inflect.Pascal(name)

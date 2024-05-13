@@ -924,7 +924,8 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Adapts an execute statement to an assignment.", "Used internally for package shuttle."},
+			"comment":  []interface{}{"Adapts an execute statement to an assignment.", "Used internally for package shuttle."},
+			"internal": true,
 		},
 	}
 	Zt_FromBool = typeinfo.Flow{
