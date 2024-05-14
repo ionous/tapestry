@@ -4,7 +4,8 @@ _
 .godot
 .sconsign.dblite
 .hugo_build.lock
-bin
+bin/*
+!bin/go.mod
 __debug_bin
 node_modules
 cmd/atlas/atlas
@@ -19,6 +20,5 @@ cmd/tap/tap
 cmd/tap/tap.db
 www/dist
 *.zip
-_doc/themes
-_doc
+doc/themes
 cmd/doc/doc

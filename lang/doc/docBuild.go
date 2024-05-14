@@ -19,10 +19,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-const ext = ".html"
 const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry@v0.24.4-1"
-const typesFolder = "type"
-const slotsFolder = "slot"
+const typesFolder = "idl"
+const slotFolder = "slot"
+const baseUrl = "/api"
 
 //go:embed static/*
 var staticFS embed.FS
@@ -47,15 +47,14 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 			for _, t := range types.Flow {
 				if _, hidden := t.Markup["internal"]; !hidden {
 					spec := BuildSpec(t)
-					m = append(m, Command{Spec: spec, Flow: t})
+					m = append(m, Command{types.Name, t, spec})
 				}
 			}
 			sortCommands(m)
 			splitBySlot(slots, types)
 
 			// generate idl files:
-			os.Mkdir(filepath.Join(outDir, typesFolder), os.ModePerm)
-			outFile := filepath.Join(outDir, typesFolder, types.Name+ext)
+			outFile := filepath.Join(outDir, typesFolder, types.Name)
 			if e := Create(outFile, tem, map[string]any{
 				"Name":     types.Name,
 				"Types":    types,
@@ -66,9 +65,8 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 			}
 		}
 		// generate slot docs:
-		os.Mkdir(filepath.Join(outDir, slotsFolder), os.ModePerm)
 		for slot, part := range slots {
-			outFile := filepath.Join(outDir, slotsFolder, slot.Name+ext)
+			outFile := filepath.Join(outDir, slotFolder, slot.Name)
 			if cmt, e := compact.ExtractComment(slot.Markup); e != nil {
 				err = e
 				break
@@ -102,7 +100,9 @@ func CopyStaticFiles(outDir string) (err error) {
 	return
 }
 
-func Create(outFile string, tem *template.Template, data any) (err error) {
+func Create(outPath string, tem *template.Template, data any) (err error) {
+	os.MkdirAll(outPath, os.ModePerm)
+	outFile := filepath.Join(outPath, "index.html")
 	if fp, e := os.Create(outFile); e != nil {
 		err = e
 	} else if e := tem.ExecuteTemplate(fp, "page.tem", data); e != nil {
@@ -122,9 +122,7 @@ func splitBySlot(out SlotMap, types typeinfo.TypeSet) {
 					m = new(Commands)
 					out[slot] = m
 				}
-				// fix:
-				pkgName, pkgPath := types.Name, "dl/"+types.Name
-				m.addFlow(t, pkgName, pkgPath)
+				m.addFlow(types.Name, t)
 			}
 		}
 	}
@@ -145,22 +143,23 @@ func sortCommands(cs []Command) {
 		return cmp.Compare(x, y)
 	})
 }
-func (cat *Commands) addFlow(t *typeinfo.Flow, pkgName, pkgPath string) {
+func (cat *Commands) addFlow(idlName string, t *typeinfo.Flow) {
 	spec := BuildSpec(t)
-	c := Command{t, pkgName, pkgPath, spec}
+	c := Command{idlName, t, spec}
 	cat.Commands = append(cat.Commands, c)
 }
 
 type Command struct {
+	idlName string // ex. "story"
 	*typeinfo.Flow
-	pkgName, pkgPath string
-	Spec             string
+	Spec string
 }
 
+// link to go package documentation
 func (c Command) SourceLink() string {
-	// fix: need the package name
 	name := inflect.Pascal(c.Name)
-	return path.Join(SourceUrl, c.pkgPath+"#"+name)
+	pkgPath := "dl/" + c.idlName
+	return path.Join(SourceUrl, pkgPath+"#"+name)
 }
 
 func (c Command) Terms() (ret []typeinfo.Term) {
@@ -206,67 +205,61 @@ func BuildSpec(t *typeinfo.Flow) string {
 	}
 	return str.String()
 }
+
 func TypeLink(t typeinfo.T) (ret string) {
 	name := t.TypeName()
-	pascal := inflect.Pascal(name)
 	switch t.(type) {
-	default:
-		log.Panicf("unknown type %T", t)
 	case *typeinfo.Slot:
-		ret = join("../"+slotsFolder+"/", name, ext)
-
-	case *typeinfo.Flow:
-		var idl string
-	Flow:
-		for _, t := range allTypes {
-			for _, el := range t.Flow {
-				if el.Name == name {
-					idl = t.Name
-					break Flow
-				}
-			}
-		}
-		if len(idl) == 0 {
+		ret = linkToSlot(name)
+	default:
+		if a, ok := findTypeSet(t); !ok {
 			log.Panicf("couldnt find flow for %s", name)
+		} else {
+			ret = linkToType(a.Name, name)
 		}
-		ret = join("../"+typesFolder+"/", idl, ext, "#", pascal)
-
-	case *typeinfo.Str:
-		var idl string
-	Str:
-		for _, t := range allTypes {
-			for _, el := range t.Str {
-				if el.Name == name {
-					idl = t.Name
-					break Str
-				}
-			}
-		}
-		if len(idl) == 0 {
-			log.Panicf("couldnt find str for %s", name)
-		}
-		ret = join("../"+typesFolder+"/", idl, ext, "#", pascal)
-
-	case *typeinfo.Num:
-		var idl string
-	Num:
-		for _, t := range allTypes {
-			for _, el := range t.Num {
-				if el.Name == name {
-					idl = t.Name
-					break Num
-				}
-			}
-		}
-		if len(idl) == 0 {
-			log.Panicf("couldnt find num for %q", name)
-		}
-		ret = join("../"+typesFolder+"/", idl, ext, "#", pascal)
-
 	}
 	return
 }
 
-func join(str ...string) string {
-	return strings.Join(str, "")
+func findTypeSet(t typeinfo.T) (ret typeinfo.TypeSet, okay bool) {
+Out:
+	for _, types := range allTypes {
+		switch t := t.(type) {
+		case *typeinfo.Flow:
+			if slices.Contains(types.Flow, t) {
+				ret, okay = types, true
+				break Out
+			}
+		case *typeinfo.Str:
+			if slices.Contains(types.Str, t) {
+				ret, okay = types, true
+				break Out
+			}
+		case *typeinfo.Num:
+			if slices.Contains(types.Num, t) {
+				ret, okay = types, true
+				break Out
+			}
+		case *typeinfo.Slot:
+			if slices.Contains(types.Slot, t) {
+				ret, okay = types, true
+				break Out
+			}
+		}
+	}
+	return
+}
+
+// idl name is a .tells file without the extension.
+func linkToType(idlName, typeName string) string {
+	out := path.Join(baseUrl, typesFolder, idlName)
+	if len(typeName) > 0 {
+		out += "#" + inflect.Pascal(typeName)
+	}
+	return out
+}
+
+// slot name is something like "story_statement"
+func linkToSlot(slotName string) string {
+	return path.Join(baseUrl, slotFolder, slotName)
 }

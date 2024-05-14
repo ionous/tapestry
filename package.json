@@ -1,0 +1,32 @@
+{
+  "author": "ionous",
+  "bugs": {
+    "url": "https://todo.sr.ht/~ionous/tapestry"
+  },
+  "dependencies": {
+    "exec-bin": "^1.0.0",
+    "concurrently": "^8.2.2",
+    "hugo-installer": "^4.0.1"
+  },
+  "description": "A story engine for games.",
+  "homepage": "https://git.sr.ht/~ionous/tapestry#readme",
+  "license": "BSD-3-Clause",
+  "name": "tapestry",
+  "repository": {
+    "type": "git",
+    "url": "https://git.sr.ht/~ionous/tapestry.git"
+  },
+  "scripts": {
+    "doc": "concurrently -m 1 -k \"npm:doc-*\"",
+    "doc-hugo": "exec-bin bin/hugo/hugo -s doc -d ../bin/doc",
+    "doc-tar": "tar -C bin/doc -cvz . > bin/site.tar.gz",
+    "xdoc-publish": "hut pages publish -d tapestry.ionous.net bin/site.tar.gz",
+    "mosaic": "npm run -w www dev",
+    "hugo": "exec-bin bin/hugo/hugo server --disableFastRender --logLevel info -s doc -d ../bin/doc",
+    "postinstall": "hugo-installer --version 0.125.7"
+  },
+  "version": "1.0.0",
+  "workspaces": [
+    "www"
+  ]
+}

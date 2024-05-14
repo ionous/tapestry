@@ -68,7 +68,7 @@ var genFlags = struct {
 func buildFlags() (fs flag.FlagSet) {
 	var outPath string
 	if home, e := os.UserHomeDir(); e == nil {
-		outPath = filepath.Join(home, "Documents", "Tapestry", "doc")
+		outPath = filepath.Join(home, "Documents", "Tapestry", "api")
 	}
 	fs.StringVar(&genFlags.out, "out", outPath, "output directory")
 	return
