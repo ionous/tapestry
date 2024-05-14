@@ -4,7 +4,7 @@
 Spec:with group:
   - "story"
   - Group contains:
-      - # A slot for modeling commands, used define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.
+      - # A slot for the modeling commands used to define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.
         Spec:with slot:
           - "story_statement"
           - Slot: true

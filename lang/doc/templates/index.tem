@@ -1,0 +1,39 @@
+<h1>API Reference</h1>
+{{ call (Testing "xxx" 2) }}
+
+<p>
+You've found the documentation for the commands used in <i>.tell</i> story files. For the Go language reference, <a href="{{ .SourceUrl }}">look here</a>.
+
+
+<h2>Slots</h2>
+
+<h3>Overview</h3>
+
+Tapestry stories are built with commands. Commands fit into "slots", and <i>.tell</i> files are ( essentially ) a list of <a href="{{ LinkByName "story_statement"}}">Story Statement</a> slots. Commands take parameters, and some of those parameters specify other types of slots, branching out into new types of commands. For instance, the command <a href="{{ LinkByName "define_leading_grammar"}}"><i>Interpret:with:</i></a> fits the Story Statement slot, and its second parameter accepts a <a href="{{ LinkByName "scanner_maker"}}">Scanner Maker</a> slot, allowing an author to specify a custom parser grammar for their game.
+
+<h3>Index</h3>
+
+This is the list of all known slots:
+
+<ul class="commandArgs">
+{{- range .AllSlots }}
+<li><a href="{{ LinkByType . }}">{{ Pascal .Name}}</a> - TODO: make a snippet</li>
+{{- end }}
+</ul>
+
+<h2>Definition Files</h2>
+
+
+<h3>Overview</h3>
+
+Words Roxanne. Woeds.
+
+<h3>Index</h3>
+
+This is the list of all known idl files:
+
+<ul class="commandArgs">
+{{- range .AllTypes }}
+<li><a href="{{ LinkByIdl .Name }}">{{ Pascal .Name}}</a>- TODO: make a snippet</li>
+{{- end }}
+</ul>

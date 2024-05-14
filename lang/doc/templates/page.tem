@@ -39,6 +39,7 @@
 		<div class="container">
 			{{- if .Slot }}{{ template "slot.tem" . }}
 			{{- else if .Types }}{{ template "idl.tem" . }}
+			{{- else }}{{ template "index.tem" . }}
 			{{- end -}}
 			{{/*-------------------------------------------------
 			page footer ( inside the container )

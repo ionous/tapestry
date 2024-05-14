@@ -2,6 +2,7 @@ package doc
 
 import (
 	"embed"
+	"fmt"
 	"html/template"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -11,7 +12,8 @@ import (
 //go:embed templates/*
 var temFS embed.FS
 
-func docTemplates(d *docComments) (*template.Template, error) {
+func docTemplates(g GlobalData) (*template.Template, error) {
+	dc := docComments{g}
 	funcMap := template.FuncMap{
 		"Pascal":     inflect.Pascal,
 		"Capitalize": inflect.Capitalize,
@@ -22,12 +24,18 @@ func docTemplates(d *docComments) (*template.Template, error) {
 			if lines, e := compact.ExtractComment(m); e != nil {
 				err = e
 			} else if len(lines) > 0 {
-				ret = d.formatComment(lines)
+				ret = dc.formatComment(lines)
 			}
 			return
 		},
-		"GoComment": d.formatComment,
-		"TypeLink":  TypeLink,
+		"GoComment":  dc.formatComment,
+		"LinkByType": g.linkByType,
+		"LinkByName": g.linkByName,
+		"LinkByIdl":  g.linkByIdl,
+		"Testing": func(a, b any) (ret string, err error) {
+			err = fmt.Errorf("it worked %v %v", a, b)
+			return
+		},
 	}
 	return template.New("").Funcs(funcMap).ParseFS(temFS, "templates/*.tem")
 }

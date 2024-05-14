@@ -24,7 +24,7 @@
 		Slots:
 		<ul class="commandSlots">
 			{{ range $cmd.Slots }}
-			<li><a href="{{ TypeLink . }}">{{ Pascal .Name}}</a></li>
+			<li><a href="{{ LinkByType . }}">{{ Pascal .Name}}</a></li>
 			{{ end }}{{/* range slots */}}
 		</ul>{{ end }}{{/* if slots */}}
 		<div>
@@ -41,7 +41,7 @@
 						{{- end -}}:
 					</span>
 					<span class="argType">
-						<a href="{{ TypeLink .Type }}">
+						<a href="{{ LinkByType .Type }}">
 						{{- Pascal .Type.TypeName -}}
 						{{- if .Repeats -}}, ...{{- end -}}
 						</a>

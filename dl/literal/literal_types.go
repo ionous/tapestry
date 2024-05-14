@@ -449,8 +449,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"A series of values all for the same record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
-			"internal": true,
+			"comment": []interface{}{"A series of values all for the same record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
 		},
 	}
 	Zt_NumValue = typeinfo.Flow{

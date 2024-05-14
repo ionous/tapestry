@@ -4,12 +4,10 @@ import (
 	"go/doc/comment"
 	"html/template"
 	"strings"
-
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 type docComments struct {
-	types []typeinfo.TypeSet
+	g GlobalData
 	// current *typeinfo.TypeSet
 }
 

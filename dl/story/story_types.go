@@ -22,7 +22,7 @@ var Zt_StoryStatement = typeinfo.Slot{
 	Markup: map[string]any{
 		"blockly-color": "VARIABLES_HUE",
 		"blockly-stack": true,
-		"comment":       "A slot for modeling commands, used define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.",
+		"comment":       "A slot for the modeling commands used to define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.",
 	},
 }
 

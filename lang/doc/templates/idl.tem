@@ -55,7 +55,7 @@ slots
 	<ul>
 		{{ range .Types.Slot }}
 		<li>
-			<a href="../slot/{{.Name}}.html">{{ Title .Name }}</a>
+			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>
 		</li>
 		{{ end }}
 	</ul>
@@ -73,7 +73,7 @@ commands
 		{{ range  .Commands }}
 		{{if .Slots }}
 		<li>
-			<a href="../slot/{{ (index .Slots 0).Name}}.html#{{.Name}}">{{ .Spec }}</a>
+			<a href="{{ LinkByType . }}">{{ .Spec }}</a>
 		</li>
 		{{ end }}
 		{{ end }}
