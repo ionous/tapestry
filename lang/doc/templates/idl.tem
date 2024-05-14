@@ -1,5 +1,5 @@
-<h1>{{ Title .Name }}</h1>
-{{ GoComment .Types.Comment }} 
+<h1>{{ Title .Name }} Definitions</h1>
+{{ Comment .Types.Comment }} 
 {{/* -------------------------------------------------
 types 
 -------------------------------------------------	*/}}
@@ -12,7 +12,7 @@ types
 	<h2 id="{{ .Name }}">
 		{{ Title .Name }}</a>
 	</h2>
-	{{ MarkupComment .Markup }}
+	{{ Comment .Markup }}
 	{{ end }}
 </section>
 {{ end }}
@@ -29,9 +29,9 @@ types
 	<h2 id="{{ .Name }}">
 		{{ Title .Name }}</a>
 	</h2>
-	{{ MarkupComment .Markup }}
+	{{ Comment .Markup }}
 	{{ if .Options }}
-	Options:
+	The options are:
 		<ul>
 			{{ range .Options }}
 			<li>
@@ -52,10 +52,10 @@ slots
 	Slots:
 </h3>
 <section>
-	<ul>
+	<ul class="indexList">
 		{{ range .Types.Slot }}
 		<li>
-			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>
+			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
 		</li>
 		{{ end }}
 	</ul>
@@ -69,11 +69,11 @@ commands
 	Commands:
 </h3>
 <section>
-	<ul>
+	<ul class="indexList">
 		{{ range  .Commands }}
 		{{if .Slots }}
 		<li>
-			<a href="{{ LinkByType . }}">{{ .Spec }}</a>
+			<a class="code" href="{{ LinkByType . }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
 		{{ end }}
 		{{ end }}

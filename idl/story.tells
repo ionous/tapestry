@@ -683,7 +683,7 @@ Spec:with group:
                     - "text_eval"
                     - true
 
-      - # Fields are used to define the members of kinds, records, patterns, and so on.
+      - # Fields describe the members of kinds, records, patterns, and so on.
         Spec:with slot:
           - "field_definition"
           - Slot: true
@@ -697,7 +697,7 @@ Spec:with group:
               - "nothing"
               - []
 
-      - # A field containing an aspect ( aka. a set of states. )
+      - # A field containing a set of states.
         # Aspects are defined using the {"Define state:names:"} command.
         Spec:slots:with flow:
           - "aspect_field"

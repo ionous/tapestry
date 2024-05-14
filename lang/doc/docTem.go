@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"html/template"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -19,23 +20,53 @@ func docTemplates(g GlobalData) (*template.Template, error) {
 		"Capitalize": inflect.Capitalize,
 		"Title":      inflect.Titlecase,
 		"Camel":      inflect.Camelize,
-		// "Lines":      extractLines,
-		"MarkupComment": func(m map[string]any) (ret template.HTML, err error) {
-			if lines, e := compact.ExtractComment(m); e != nil {
-				err = e
-			} else if len(lines) > 0 {
-				ret = dc.formatComment(lines)
-			}
-			return
-		},
-		"GoComment":  dc.formatComment,
 		"LinkByType": g.linkByType,
 		"LinkByName": g.linkByName,
 		"LinkByIdl":  g.linkByIdl,
-		"Testing": func(a, b any) (ret string, err error) {
-			err = fmt.Errorf("it worked %v %v", a, b)
+		"Comment": func(src any) (ret template.HTML, err error) {
+			switch src := src.(type) {
+			case map[string]any:
+				if lines, e := compact.ExtractComment(src); e != nil {
+					err = e
+				} else if len(lines) > 0 {
+					ret = dc.formatComment(lines)
+				}
+			case []string:
+				if len(src) > 0 {
+					ret = dc.formatComment(src)
+				}
+			default:
+				err = fmt.Errorf("cant handle comments of %T", src)
+			}
+			return
+		},
+		"Snippet": func(src any) (ret string, err error) {
+			switch src := src.(type) {
+			case map[string]any:
+				if lines, e := compact.ExtractComment(src); e != nil {
+					err = e
+				} else if len(lines) > 0 {
+					ret = makeSnippet(lines)
+				}
+			case []string:
+				if len(src) > 0 {
+					ret = makeSnippet(src)
+				}
+			default:
+				err = fmt.Errorf("cant handle snippets of %T", src)
+			}
 			return
 		},
 	}
 	return template.New("").Funcs(funcMap).ParseFS(temFS, "templates/*.tem")
+}
+
+func makeSnippet(lines []string) (ret string) {
+	str := strings.Join(lines, " ")
+	if i := strings.IndexRune(str, '.'); i <= 0 {
+		ret = str
+	} else {
+		ret = str[:i+1]
+	}
+	return
 }

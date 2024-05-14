@@ -1,39 +1,41 @@
 <h1>API Reference</h1>
-{{ call (Testing "xxx" 2) }}
 
 <p>
-You've found the documentation for the commands used in <i>.tell</i> story files. For the Go language reference, <a href="{{ .SourceUrl }}">look here</a>.
+You've found the documentation for the commands used in <i>.tell</i> story files. For the Go language reference, see <a href="{{ .SourceUrl }}">pkg.go.dev</a>.
 
 
 <h2>Slots</h2>
 
 <h3>Overview</h3>
-
-Tapestry stories are built with commands. Commands fit into "slots", and <i>.tell</i> files are ( essentially ) a list of <a href="{{ LinkByName "story_statement"}}">Story Statement</a> slots. Commands take parameters, and some of those parameters specify other types of slots, branching out into new types of commands. For instance, the command <a href="{{ LinkByName "define_leading_grammar"}}"><i>Interpret:with:</i></a> fits the Story Statement slot, and its second parameter accepts a <a href="{{ LinkByName "scanner_maker"}}">Scanner Maker</a> slot, allowing an author to specify a custom parser grammar for their game.
+<p>
+Tapestry story files contain a list of Story Statement slots. Various commands can fit into those slots, the complete list of which can be found on the <a href="{{ LinkByName "story_statement"}}">Story Statement</a> page. Taken together, those commands allow an author to model a complete game world.
+</p>
+<p>
+In order to branch out from world modeling into changing how a game behaves at runtime, some commands have parameters which specify other type of slots. Those slots allow other types of commands. For instance, to change how a player's input is processed, the story command <a href="{{ LinkByName "define_leading_grammar"}}"><i>Interpret:with:</i></a> accepts a <a href="{{ LinkByName "scanner_maker"}}">Scanner Maker</a>, and the Scanner Maker commands customize the parser.
+</p>
 
 <h3>Index</h3>
 
-This is the list of all known slots:
+<p>This is the list of all known slots:
 
-<ul class="commandArgs">
+<ul class="indexList">
 {{- range .AllSlots }}
-<li><a href="{{ LinkByType . }}">{{ Pascal .Name}}</a> - TODO: make a snippet</li>
+<li><a href="{{ LinkByType . }}">{{ Title .Name}}</a>: {{ Snippet .Markup }}</li>
 {{- end }}
 </ul>
 
 <h2>Definition Files</h2>
 
-
 <h3>Overview</h3>
 
-Words Roxanne. Woeds.
+Commands are defined using a custom interface description language. They separated by functionality into different idl files.
 
 <h3>Index</h3>
 
-This is the list of all known idl files:
+<p>This is the list of all known idl files:
 
-<ul class="commandArgs">
+<ul class="indexList">
 {{- range .AllTypes }}
-<li><a href="{{ LinkByIdl .Name }}">{{ Pascal .Name}}</a>- TODO: make a snippet</li>
+<li><a href="{{ LinkByIdl .Name }}">{{ Title .Name}}</a>: {{ Snippet .Comment }}</li>
 {{- end }}
 </ul>

@@ -1,3 +1,8 @@
+.code {
+  min-width: 8em;
+  font-family: Menlo, monospace;
+  font-size: 0.875rem;
+}
 
 .commandSlots  {
   display: inline;
@@ -20,8 +25,7 @@
   list-style: "- ";
 }
 
-.argLabel {
-  min-width: 8em;
-  font-family: Menlo, monospace;
-  font-size: 0.875rem;
+
+.indexList {
+  list-style: none;
 }

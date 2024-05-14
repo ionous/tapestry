@@ -51,7 +51,7 @@ func (op *StoryStatement_Slots) Repeats() bool {
 var Zt_FieldDefinition = typeinfo.Slot{
 	Name: "field_definition",
 	Markup: map[string]any{
-		"comment": "Fields are used to define the members of kinds, records, patterns, and so on.",
+		"comment": "Fields describe the members of kinds, records, patterns, and so on.",
 	},
 }
 
@@ -1344,7 +1344,7 @@ func (op *NothingField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A field containing an aspect ( aka. a set of states. )
+// A field containing a set of states.
 // Aspects are defined using the {"Define state:names:"} command.
 type AspectField struct {
 	AspectName rtti.TextEval
@@ -2555,7 +2555,7 @@ func init() {
 			&Zt_FieldDefinition,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A field containing an aspect ( aka. a set of states. )", "Aspects are defined using the {\"Define state:names:\"} command."},
+			"comment": []interface{}{"A field containing a set of states.", "Aspects are defined using the {\"Define state:names:\"} command."},
 		},
 	}
 	Zt_BoolField = typeinfo.Flow{

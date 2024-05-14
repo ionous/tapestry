@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"slices"
 
-	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
@@ -71,19 +70,13 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 				}
 			}
 			outFile := filepath.Join(outDir, slotFolder, slot.Name)
-			if cmt, e := compact.ExtractComment(slot.Markup); e != nil {
+			if e := Create(outFile, tem, map[string]any{
+				"Name":     slot.Name,
+				"Slot":     slot,
+				"Commands": cmds,
+			}); e != nil {
 				err = e
 				break
-			} else {
-				if e := Create(outFile, tem, map[string]any{
-					"Name":     slot.Name,
-					"Slot":     slot,
-					"Commands": cmds,
-					"Comment":  cmt,
-				}); e != nil {
-					err = e
-					break
-				}
 			}
 		}
 	}

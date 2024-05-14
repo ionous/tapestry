@@ -1,5 +1,5 @@
 <h1>Slot {{ Title .Slot.Name }}</h1>
-{{ GoComment .Comment }} 
+{{ Comment .Slot.Markup }} 
 <h3 id="pkg-commands">
 	Commands:
 </h3>
@@ -10,7 +10,7 @@
 	</h2>
 	{{/* Signature */}}
 	<span>
-		{{ MarkupComment $cmd.Markup }}
+		{{ Comment $cmd.Markup }}
 	</span>
 	<div>
 		<pre><a href="{{ .SourceLink }}">
@@ -35,7 +35,7 @@
 			<ul class="commandArgs">
 				{{- range $cmd.Terms }}
 				<li>
-					<span class="argLabel">
+					<span class="code">
 						{{- if .Label}}{{ Camel .Label }}{{ else }}
 						{{ Pascal $cmd.Lede }}
 						{{- end -}}:
@@ -47,7 +47,7 @@
 						</a>
 					</span>
 					<span class="argComment">
-						{{- MarkupComment .Markup }}
+						{{- Comment .Markup }}
 					</span>
 				</li>
 				{{- end }}{{/* public terms  */}}
