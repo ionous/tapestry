@@ -3,7 +3,6 @@ _
 .idea
 .godot
 .sconsign.dblite
-.hugo_build.lock
 bin/*
 !bin/go.mod
 __debug_bin
@@ -12,6 +11,7 @@ cmd/atlas/atlas
 cmd/chart/chart
 cmd/chart/chart.dot
 cmd/chart/chart.png
+cmd/doc/doc
 cmd/play/play
 cmd/serve/serve
 cmd/spec/spec
@@ -21,4 +21,4 @@ cmd/tap/tap.db
 www/dist
 *.zip
 doc/themes
-cmd/doc/doc
+
