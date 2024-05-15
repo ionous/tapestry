@@ -20,6 +20,9 @@ func docTemplates(g GlobalData) (*template.Template, error) {
 		"Capitalize": inflect.Capitalize,
 		"Title":      inflect.Titlecase,
 		"Camel":      inflect.Camelize,
+		"ApiHome": func() string {
+			return baseUrl
+		},
 		"LinkByType": g.linkByType,
 		"LinkByName": g.linkByName,
 		"LinkByIdl":  g.linkByIdl,

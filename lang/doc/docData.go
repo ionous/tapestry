@@ -25,25 +25,25 @@ type GlobalData struct {
 }
 
 type SlotInfo struct {
-	idlName string
+	Idl string
 	*typeinfo.Slot
 }
 
 type FlowInfo struct {
-	idlName string // ex. "story"
+	Idl string // ex. "story"
 	*typeinfo.Flow
 	Spec string // Define something:
 }
 
 type PrimInfo struct {
-	idlName string
+	Idl string
 	typeinfo.T
 }
 
 // link to go package documentation
 func (c FlowInfo) SourceLink() string {
 	name := inflect.Pascal(c.Name)
-	pkgPath := "dl/" + c.idlName
+	pkgPath := "dl/" + c.Idl
 	return path.Join(SourceUrl, pkgPath+"#"+name)
 }
 
@@ -125,10 +125,10 @@ func (g *GlobalData) linkByName(name string) (ret string, err error) {
 		if len(flow.Slots) > 0 {
 			ret = linkToSlot(flow.Slots[0].Name, name)
 		} else {
-			ret = linkToType(flow.idlName, name)
+			ret = linkToType(flow.Idl, name)
 		}
 	} else if prim, ok := g.prims[name]; ok {
-		ret = linkToType(prim.idlName, name)
+		ret = linkToType(prim.Idl, name)
 	} else {
 		err = fmt.Errorf("couldnt find type %q", name)
 	}
@@ -167,7 +167,7 @@ func BuildSpec(t *typeinfo.Flow) string {
 func linkToType(idlName, typeName string) string {
 	out := path.Join(baseUrl, typesFolder, idlName)
 	if len(typeName) > 0 {
-		out += "#" + inflect.Pascal(typeName)
+		out += "#" + typeName
 	}
 	return out
 }
@@ -176,7 +176,7 @@ func linkToType(idlName, typeName string) string {
 func linkToSlot(slotName, typeName string) string {
 	out := path.Join(baseUrl, slotFolder, slotName)
 	if len(typeName) > 0 {
-		out += "#" + inflect.Pascal(typeName)
+		out += "#" + typeName
 	}
 	return out
 }

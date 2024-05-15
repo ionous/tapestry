@@ -46,7 +46,7 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 		for _, types := range idl {
 			var cmds []FlowInfo
 			for _, t := range g.allCommands {
-				if t.idlName == types.Name {
+				if t.Idl == types.Name {
 					cmds = append(cmds, t)
 				}
 			}

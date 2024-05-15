@@ -1,59 +1,61 @@
-<h1>Slot {{ Title .Slot.Name }}</h1>
+<h1>{{ Title .Slot.Name }} Slot</h1>
 {{ Comment .Slot.Markup }} 
+<div>
+	Defined in: <a href="{{ LinkByIdl .Slot.Idl }}">{{ Pascal .Slot.Idl }}</a>
+</div>
+<section>
+
 <h3 id="pkg-commands">
 	Commands:
 </h3>
-<section>
 	{{- range $i, $cmd := .Commands }}
 	<h2 id="{{$cmd.Name}}">
 		{{- template "command-title" $cmd -}}
 	</h2>
 	{{/* Signature */}}
-	<span>
+	<div class="cmdComment">
 		{{ Comment $cmd.Markup }}
-	</span>
+	</div>
 	<div>
-		<pre><a href="{{ .SourceLink }}">
-		{{- $cmd.Spec -}}
+		<pre class="cmdSpec"><a href="{{ .SourceLink }}">
+			{{- $cmd.Spec -}}
 		</a></pre>
 	</div>
 
-	<div>
-		{{/* Slot UL */}}
+	<section>
+		<h4>Slots:</h4>
 		{{ if $cmd.Slots }}
-		Slots:
 		<ul class="commandSlots">
 			{{ range $cmd.Slots }}
-			<li><a href="{{ LinkByType . }}">{{ Pascal .Name}}</a></li>
+			<li><a href="{{ LinkByType . }}">{{ Pascal .Name }}</a></li>
 			{{ end }}{{/* range slots */}}
 		</ul>{{ end }}{{/* if slots */}}
-		<div>
-			Terms:
-			{{- if not $cmd.Terms }}
-			None.
-			{{- else }}
-			<ul class="commandArgs">
-				{{- range $cmd.Terms }}
-				<li>
-					<span class="code">
-						{{- if .Label}}{{ Camel .Label }}{{ else }}
-						{{ Pascal $cmd.Lede }}
-						{{- end -}}:
-					</span>
-					<span class="argType">
-						<a href="{{ LinkByType .Type }}">
+	</section>
+	<section>
+		<h4>Terms:</h4>
+		{{ if not $cmd.Terms -}}None.
+		{{- else }}
+		<ul class="commandTerms">
+			{{- range $cmd.Terms }}
+			<li>
+				<span class="code">
+					{{- if .Label}}{{ Camel .Label }}{{ else }}
+					{{ Pascal $cmd.Lede }}
+					{{- end -}}:
+				</span>
+				<span class="argType">
+					<a href="{{ LinkByType .Type }}">
 						{{- Pascal .Type.TypeName -}}
 						{{- if .Repeats -}}, ...{{- end -}}
-						</a>
-					</span>
-					<span class="argComment">
-						{{- Comment .Markup }}
-					</span>
-				</li>
-				{{- end }}{{/* public terms  */}}
-			</ul>
-			{{- end }}
-		</div>
-	</div>
+					</a>
+				</span>
+				<span class="argComment">
+					{{- Comment .Markup }}
+				</span>
+			</li>
+			{{- end }}{{/* public terms  */}}
+		</ul>
+		{{- end }}
+	</section>
 	{{- end }}{{/* range over types */}}
 </section>
