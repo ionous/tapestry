@@ -13,9 +13,9 @@ Tapestry:
       - - # It says the plural of the target's name.
           If:do:else:
             - Is:matching:text:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "printed plural name"
+                    - AtField: "printed plural name"
                 - "other_than"
                 - ""
             - - Say: "{.obj.printed_plural_name}"

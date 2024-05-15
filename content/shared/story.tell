@@ -56,27 +56,27 @@ Tapestry:
           Text:kind:initially:
             - "actor"
             - "actor"
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "actor"
+                - AtField: "actor"
         - Bool: "refresh"
       - - Nothing:
       - - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "actor"
+                - AtField: "actor"
             - FromText: "@actor"
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "location"
+                - AtField: "location"
             - FromText:
                 LocationOf obj:
                   FromText: "@actor"
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "illuminated"
+                - AtField: "illuminated"
             - FromBool:
                 Illuminates actor:refresh:
                   - FromText: "@actor"
@@ -91,12 +91,12 @@ Tapestry:
                 Fields of: "story data"
             - "field"
             - - Copy:from:
-                  - Object:field:
+                  - Object:dot:
                       - "last known"
-                      - "@field"
-                  - Object:field:
+                      - AtField:  "@field"
+                  - Object:dot:
                       - "story"
-                      - "@field"
+                      - AtField: "@field"
   - # updates 'last known' story state. anything comparing
     # 'story' and 'last known' has to happen in an earlier phase.
     Define rule:named:do:
@@ -104,9 +104,9 @@ Tapestry:
       - "the update turn rule"
       - - UpdateLastKnownStatus:
         - Increase:
-            Object:field:
+            Object:dot:
               - "story"
-              - "turn count"
+              - AtField: "turn count"
   - Interpret:with:
       - "score"
       - - Action: "request the score"

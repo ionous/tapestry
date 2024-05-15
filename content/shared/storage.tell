@@ -68,12 +68,12 @@ Tapestry:
                               - Is:matching:text:
                                   - "@it"
                                   - "equal_to"
-                                  - Object:field:
+                                  - Object:dot:
                                       - "player"
-                                      - "pawn"
-                              - Object:field:
+                                      - AtField: "pawn"
+                              - Object:dot:
                                   - "@it"
-                                  - "scenery"
+                                  - AtField: "scenery"
                         - - Push:into:
                               - FromText: "@it"
                               - "@out"
@@ -99,9 +99,9 @@ Tapestry:
                 - KindOf:is:
                     - "@obj"
                     - "containers"
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "closed"
+                    - AtField: "closed"
             - - Set:value:
                   - "@success"
                   - FromBool: false

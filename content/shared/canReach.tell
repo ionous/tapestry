@@ -149,9 +149,9 @@ Tapestry:
   - Define rule:do:
       - "before can reach"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "intangible"
+                - AtField: "intangible"
             - - Set:value:
                   - "@response"
                   - FromText:
@@ -164,9 +164,9 @@ Tapestry:
             - AllTrue:
                 - "@requires_light"
                 - # we know this rule is for the player, so we can rely the illumination cache.
-                  Object:field:
+                  Object:dot:
                     - "@actor"
-                    - "not illuminated"
+                    - AtField: "not illuminated"
             - - Note:
                   - "Used to determine whether an action needing light can proceed."
                   - "Returns some response text if the action is blocked."
@@ -203,9 +203,9 @@ Tapestry:
                 - KindOf:is:
                     - "@from_obj"
                     - "containers"
-                - Object:field:
+                - Object:dot:
                     - "@from_obj"
-                    - "closed"
+                    - AtField: "closed"
             - - Set:value:
                   - "@response"
                   - FromText:
@@ -254,9 +254,9 @@ Tapestry:
                 - KindOf:is:
                     - "@into_obj"
                     - "containers"
-                - Object:field:
+                - Object:dot:
                     - "@into_obj"
-                    - "closed"
+                    - AtField: "closed"
                 - Not:
                     Is:matching:text:
                       - "@into_obj"

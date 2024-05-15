@@ -44,20 +44,20 @@ Tapestry:
             - Is:matching:text:
                 - "@obj"
                 - "equal_to"
-                - Object:field:
+                - Object:dot:
                     - "story"
-                    - "actor"
+                    - AtField: "actor"
             - - UpdateStory:
   - Define rule:do:
       - "move object"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "worn"
+                - AtField: "worn"
             - - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "@obj"
-                      - "not worn"
+                      - AtField: "not worn"
                   - FromBool: true
         - If:do:
             - Is:matching:text:
@@ -82,9 +82,9 @@ Tapestry:
                   - "debug"
                   - FromText: "You can't remove nothing from play."
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "not worn"
+                - AtField: "not worn"
             - FromBool: true
         - Relate:to:via:
             - ""
@@ -118,7 +118,7 @@ Tapestry:
                 - "equal_to"
                 - "@actor"
             - - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "@obj"
-                      - "not worn"
+                      - AtField: "not worn"
                   - FromBool: true

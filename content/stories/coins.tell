@@ -17,9 +17,9 @@ The table is in the lobby.
   - "coins test"
   - - StartGame actor:quietly:
       - FromText:
-          Object:field:
+          Object:dot:
           - "player"
-          - "pawn"
+          - AtField: "pawn"
       - FromBool: true
     - Fabricate input: "open chest; take coins"
     - Expect:

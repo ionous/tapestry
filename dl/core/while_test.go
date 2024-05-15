@@ -16,17 +16,17 @@ func TestLoopBreak(t *testing.T) {
 		&While{
 			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
-					Target: Variable("i"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: Variable("i"), B: I(1)}}},
+					Target: assign.Variable("i"),
+					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseBranch{
-					If: &CompareNum{A: Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
+					If: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
 					Exe: MakeActivity(
 						&Break{},
 					),
 				},
 				&assign.SetValue{
-					Target: Variable("j"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: Variable("j"), B: I(1)}}},
+					Target: assign.Variable("j"),
+					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal("failed to run:", e)
@@ -41,18 +41,18 @@ func TestLoopNext(t *testing.T) {
 		&While{
 			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
-					Target: Variable("i"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: Variable("i"), B: I(1)}}},
+					Target: assign.Variable("i"),
+					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseBranch{
-					If: &CompareNum{A: Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
+					If: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
 					Exe: MakeActivity(
 						&Break{},
 					),
 				},
 				&Continue{},
 				&assign.SetValue{
-					Target: Variable("j"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: Variable("j"), B: I(1)}}},
+					Target: assign.Variable("j"),
+					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -68,8 +68,8 @@ func TestLoopInfinite(t *testing.T) {
 		&While{
 			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
-					Target: Variable("i"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: Variable("i"), B: I(1)}}},
+					Target: assign.Variable("i"),
+					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

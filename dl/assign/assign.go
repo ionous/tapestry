@@ -1,11 +1,12 @@
 package assign
 
 import (
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
 func (op *FromExe) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
@@ -54,7 +55,7 @@ func GetAffinity(a rt.Assignment) (ret affine.Affinity) {
 		case *FromRecordList:
 			ret = affine.RecordList
 		default:
-			panic(errutil.Fmt("unknown Assignment %T", a))
+			log.Panicf("unknown Assignment %T", a)
 		}
 	}
 	return
@@ -79,7 +80,43 @@ func Literal(v literal.LiteralValue) (ret rt.Assignment) {
 	case *literal.RecordList:
 		ret = &FromRecordList{Value: v}
 	default:
-		panic(errutil.Fmt("unknown literal %T", v))
+		log.Panicf("unknown literal %T", v)
+	}
+	return
+}
+
+func Object(name string, path ...any) *ObjectDot {
+	return &ObjectDot{
+		Name: literal.T(name),
+		Dot:  MakeDot(path...),
+	}
+}
+
+// generate a statement which extracts a variable's value.
+// path can include strings ( for reading from records ) or integers ( for reading from lists )
+func Variable(name string, path ...any) *VariableDot {
+	return &VariableDot{
+		Name: literal.T(name),
+		Dot:  MakeDot(path...),
+	}
+}
+
+func MakeDot(path ...any) (ret []Dot) {
+	if cnt := len(path); cnt > 0 {
+		out := make([]Dot, len(path))
+		for i, p := range path {
+			switch el := p.(type) {
+			case string:
+				out[i] = &AtField{Field: literal.T(el)}
+			case int:
+				out[i] = &AtIndex{Index: literal.I(el)}
+			case Dot:
+				out[i] = el
+			default:
+				log.Panicf("expected an int or string element; got %T", el)
+			}
+		}
+		ret = out
 	}
 	return
 }

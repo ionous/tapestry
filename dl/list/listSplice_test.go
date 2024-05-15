@@ -3,10 +3,9 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
-
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
 
 func TestSplices(t *testing.T) {
@@ -72,7 +71,7 @@ func splice(src []string, start, cnt int, ins ...string) (ret string, err error)
 		err = e
 	} else {
 		rub := joinText(run, &list.ListSplice{
-			Target: core.Variable("source"),
+			Target: assign.Variable("source"),
 			Start:  I(start),
 			Remove: I(cnt),
 			Insert: FromTs(ins)},

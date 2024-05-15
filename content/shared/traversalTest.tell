@@ -17,9 +17,9 @@ Tapestry:
             """ # "
       - - StartGame actor:quietly:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromBool: true
         - Print:
             DoorVia room:direction:
@@ -33,38 +33,38 @@ Tapestry:
         - Expect output: "south"
         - Looking actor:
             FromText:
-              Object:field:
+              Object:dot:
                 - "story"
-                - "actor"
+                - AtField: "actor"
         - Expect output:
             - "**Lobby**"
             - "You can see some double doors and a faux door."
         - TravelingThrough actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "story"
-                  - "actor"
+                  - AtField: "actor"
             - FromText: "faux door"
         - Expect output: "It doesn't lead anywhere."
         - TravelingThrough actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "story"
-                  - "actor"
+                  - AtField: "actor"
             - FromText: "double doors"
         - Expect output: "They seem to be closed."
         - Opening actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "double doors"
         - Expect output: "You open the double doors."
         - TravelingThrough actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "double doors"
         - Expect output:
             - "**Foyer**"

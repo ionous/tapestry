@@ -41,8 +41,8 @@ func TestMatching(t *testing.T) {
 		a, b := a.Record(), b.Record()
 		runMatching := &assign.CallPattern{
 			PatternName: P(kargs.Name()), Arguments: core.MakeArgs(
-				&assign.FromRecord{Value: core.Variable("a")},
-				&assign.FromRecord{Value: core.Variable("b")},
+				&assign.FromRecord{Value: assign.Variable("a")},
+				&assign.FromRecord{Value: assign.Variable("b")},
 			)}
 		// default should match
 		{

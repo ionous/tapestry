@@ -6,7 +6,7 @@ import (
 
 func (op *CopyValue) Execute(run rt.Runtime) (err error) {
 	if e := op.copyValue(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }

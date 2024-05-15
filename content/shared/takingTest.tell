@@ -17,9 +17,9 @@ Tapestry:
                     - Print: "Fail to take from something closed:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "coffee"
               - Print:
                   Row do:
@@ -27,27 +27,27 @@ Tapestry:
                     - Print: "Fail to steal:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "apple"
               - Print:
                   Row do:
                     - Print: "Fail to take possessions:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "coin"
               - Print:
                   Row do:
                     - Print: "Fail to take your container:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "purse"
               - Print:
                   Row do:
@@ -55,9 +55,9 @@ Tapestry:
                     - Print: "Okay, take something:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "knife"
                     - Say: "The knife's parent is: {the: {parent_of: .knife}}."
               - Print:
@@ -65,36 +65,36 @@ Tapestry:
                     - Print: "Fail to take your self:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "self"
               - Print:
                   Row do:
                     - Print: "Fail to take someone else:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "mildred"
               - Print:
                   Row do:
                     - Print: "Fail to take scenery:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "cabinet"
               - Print:
                   Row do:
                     - Print: "Fail to take something fixed in place:<br>"
                     - Taking actor:noun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "machine"
         - Expect output:
             - "  - Fail to take from something closed:"

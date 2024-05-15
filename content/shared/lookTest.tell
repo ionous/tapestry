@@ -25,9 +25,9 @@ Tapestry:
             - "shelf and Kitchen."
         - Note: "Close the cabinet door, and its list of visible objects should change."
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "cabinet"
-                - "closed"
+                - AtField: "closed"
             - FromBool: true
         - Repeating across:as:do:
             - FromTextList:
@@ -47,9 +47,9 @@ Tapestry:
               - 1
         - Note: "Open the cabinet again, and validate the number of visible objects again."
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "cabinet"
-                - "open"
+                - AtField: "open"
             - FromBool: true
         - Expect:
             Is:matching:num:
@@ -99,9 +99,9 @@ Tapestry:
             - "Beneath your feet is a bright and shiny hook."
             - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "cabinet"
-                - "closed"
+                - AtField: "closed"
             - FromBool: true
         - PrintVantage location:illuminated:verbosity:
             - FromText: "cabinet"

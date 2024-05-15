@@ -16,9 +16,9 @@ Tapestry:
             - "object"
       - - Nothing:
       - - If:do:else:
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "plural named"
+                - AtField: "plural named"
             - - Print: "they"
             - Finally do:
                 - Print: "it"
@@ -30,9 +30,9 @@ Tapestry:
             - "object"
       - - Nothing:
       - - If:do:else:
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "plural named"
+                - AtField: "plural named"
             - - Print: "these"
             - Finally do:
                 - Print: "that"

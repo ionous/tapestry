@@ -34,12 +34,12 @@ Tapestry:
                     - KindOf:is:
                         - "@obj"
                         - "containers"
-                    - Object:field:
+                    - Object:dot:
                         - "@obj"
-                        - "opaque"
-                    - Object:field:
+                        - AtField: "opaque"
+                    - Object:dot:
                         - "@obj"
-                        - "closed"
+                        - AtField: "closed"
                 - - Set:value:
                       - "@result"
                       - FromBool: true
@@ -107,10 +107,10 @@ Tapestry:
         - Set:value:
             - "@result"
             - FromBool:
-                Object:field:dot:
+                Object:dot:
                   - "@actor"
-                  - "lighting"
-                  - - AtField: "illuminated"
+                  - - AtField: "lighting"
+                    - AtField: "illuminated"
   - Declare: "A lighting status is a kind of record."
   - Define kind:fields:
       - "actors"
@@ -140,24 +140,24 @@ Tapestry:
             - AnyTrue:
                 - "@refresh"
                 - Is:matching:num:
-                    - Object:field:
+                    - Object:dot:
                         - "story"
-                        - "turn count"
+                        - AtField: "turn count"
                     - "greater_than"
-                    - Object:field:dot:
+                    - Object:dot:
                         - "@actor"
-                        - "lighting"
-                        - - AtField: "last turn"
+                        - - AtField: "lighting"
+                          - AtField: "last turn"
             - - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "@actor"
-                      - "lighting"
+                      - AtField: "lighting"
                   - FromRecord:
                       LightingStatus lastTurn:illuminated:
                         - FromNumber:
-                            Object:field:
+                            Object:dot:
                               - "story"
-                              - "turn count"
+                              - AtField: "turn count"
                         - FromBool:
                             ContainsLight object:
                               FromText: "@actor"
@@ -198,9 +198,9 @@ Tapestry:
                   - "it"
                   - - Note: "objects which generate light are considered to be bright both inside and out; all of their surfaces aglow."
                     - If:do:else:
-                        - Object:field:
+                        - Object:dot:
                             - "@it"
-                            - "lit"
+                            - AtField: "lit"
                         - - Set:value:
                               - "@result"
                               - FromBool: true

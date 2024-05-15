@@ -291,7 +291,8 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
+			"comment":  []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
+			"internal": true,
 		},
 	}
 	Zt_Expect = typeinfo.Flow{

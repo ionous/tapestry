@@ -15,9 +15,9 @@ Tapestry:
                     - Print: "Fail to store something into an actor:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "clutch"
                         - FromText: "mildred"
                     - Say: "clutch parent: {parent_of:.purse}."
@@ -26,9 +26,9 @@ Tapestry:
                     - Print: "Fail to store something into a closed container:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "coffee"
                         - FromText: "machine"
                     - Say: "coffee parent: {parent_of:.coffee}."
@@ -37,9 +37,9 @@ Tapestry:
                     - Print: "Fail to store something into something nested:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "clutch"
                         - FromText: "purse"
                     - Say: "clutch parent: {parent_of:.clutch}."
@@ -48,9 +48,9 @@ Tapestry:
                     - Print: "Okay, store something into an open container:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "coffee"
                         - FromText: "purse"
                     - Say: "coffee parent: {parent_of:.coffee}."
@@ -59,9 +59,9 @@ Tapestry:
                     - Print: "Okay, store something onto a supporter:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "coin"
                         - FromText: "shelf"
                     - Say: "coin parent: {parent_of:.coin}."
@@ -70,9 +70,9 @@ Tapestry:
                     - Print: "Fail to store something worn:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "flower"
                         - FromText: "shelf"
                     - Say: "flower parent: {parent_of:.flower}."
@@ -81,9 +81,9 @@ Tapestry:
                     - Print: "Fail to store something not held:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "broom"
                         - FromText: "cabinet"
                     - Say: "broom parent: {parent_of:.broom}."
@@ -92,9 +92,9 @@ Tapestry:
                     - Print: "Okay, store something into something held:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "knife"
                         - FromText: "purse"
                     - Say: "knife parent: {parent_of:.knife}."
@@ -103,9 +103,9 @@ Tapestry:
                     - Print: "Fail to store something to somewhere unreachable:<br>"
                     - Storing actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "purse"
                         - FromText: "wisdom"
                     - Say: "purse parent: {parent_of:.purse}."

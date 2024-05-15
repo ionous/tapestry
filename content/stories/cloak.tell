@@ -48,9 +48,9 @@ Understand "floor" or "sawdust" as the message.
 
 Instead of examining the message:
   - Increase:
-      Object:field:
+      Object:dot:
       - "story"
-      - "score"
+      - AtField: "score"
   - Say: "The message, {if .message.neat}neatly {end}marked in the sawdust, reads..."
   - EndGame finally:
       FromBool: true
@@ -61,9 +61,9 @@ Instead of examining the message:
 # a sort of, i may have said that before but actually...
 Instead of examining the message:
   - If:do:
-    - Object:field:
+    - Object:dot:
       - "message"
-      - "trampled"
+      - AtField: "trampled"
     - - Say: "The message has been carelessly trampled, making it difficult to read. You can just distinguish the words..."
       - EndGame saying:
           FromText: "You have lost"
@@ -72,14 +72,14 @@ Instead of going:
   - If:do:
     - AllTrue:
       - Is:matching:text:
-        - Object:field:
+        - Object:dot:
           - "story"
-          - "location"
+          - AtField: "location"
         - "equal_to"
         - IdOf: "bar"
-      - Object:field:
+      - Object:dot:
         - "bar"
-        - "unlit"
+        - AtField: "unlit"
       - # this is unsatisfying
         # would love to say 'destination' other than 'foyer'
         # but destination comes from door, and if there is no door there's no destination.
@@ -97,18 +97,18 @@ Instead of running an action:
   - If:do:
     - AllTrue:
       - Is:matching:text:
-          - Object:field:
+          - Object:dot:
             - "story"
-            - "location"
+            - AtField: "location"
           - "equal_to"
           - IdOf: "bar"
       - Is:matching:text:
         - "@action"
         - "other_than"
         - "going"
-      - Object:field:
+      - Object:dot:
         - "bar"
-        - "unlit"
+        - AtField: "unlit"
     - - # increase neatness, clamp so that it doesn't go past 'trampled'
         Increase:aspect:clamp:
           - "message"
@@ -138,16 +138,16 @@ After storing the cloak:
     - "bar"
     - "lit"
   - Increase:
-      Object:field:
+      Object:dot:
       - "story"
-      - "score"
+      - AtField: "score"
 
 Instead of dropping the cloak:
   - If:do:
     - Is:matching:text:
-      - Object:field:
+      - Object:dot:
         - "story"
-        - "location"
+        - AtField: "location"
       - "other_than"
       - "cloakroom"
     - - Say: "This isn't the best place to leave such a nice piece of clothing."
@@ -155,9 +155,9 @@ Instead of dropping the cloak:
 Instead of storing the cloak:
   - If:do:
     - Is:matching:text:
-      - Object:field:
+      - Object:dot:
         - "story"
-        - "location"
+        - AtField: "location"
       - "other_than"
       - "cloakroom"
     - - Say: "This isn't the best place to leave such a nice piece of clothing."
@@ -172,20 +172,20 @@ Instead of storing the cloak:
   - "cloak of dropping"
   - - StartGame actor:quietly:
       - FromText:
-          Object:field:
+          Object:dot:
           - "player"
-          - "pawn"
+          - AtField: "pawn"
       - FromBool: true
     - Fabricate input: "e; take off cloak; drop cloak; w; s; x message"
     - Expect:
-        Object:field:
+        Object:dot:
         - "story"
-        - "completed"
+        - AtField: "completed"
     - Expect:
         Is:matching:num:
-        - Object:field:
+        - Object:dot:
           - "story"
-          - "score"
+          -  AtField: "score"
         - "equal_to"
         - 1
 
@@ -195,20 +195,20 @@ Instead of storing the cloak:
   - "cloak of perfection"
   - - StartGame actor:quietly:
       - FromText:
-          Object:field:
+          Object:dot:
           - "player"
-          - "pawn"
+          - AtField: "pawn"
       - FromBool: true
     - Fabricate input: "e; take off cloak; put cloak on peg; w; s; x message"
     - Expect:
-        Object:field:
+        Object:dot:
         - "story"
-        - "completed"
+        - AtField: "completed"
     - Expect:
         Is:matching:num:
-        - Object:field:
+        - Object:dot:
           - "story"
-          - "score"
+          - AtField: "score"
         - "equal_to"
         - 2
 
@@ -217,21 +217,21 @@ Instead of storing the cloak:
   - "cloak of failure"
   - - StartGame actor:quietly:
       - FromText:
-          Object:field:
+          Object:dot:
           - "player"
-          - "pawn"
+          - AtField: "pawn"
       - FromBool: true
     - Fabricate input: "s; jump; jump; n; e; take off cloak; drop cloak; w; s; x message"
     - # game should be finished, but not completed.
       Expect:
-        Object:field:
+        Object:dot:
           - "story"
-          - "concluded"
+          - AtField: "concluded"
     - # dropping the cloak shouldn't have earned you any points.
       Expect:
         Is:matching:num:
-        - Object:field:
+        - Object:dot:
           - "story"
-          - "score"
+          - AtField: "score"
         - "equal_to"
         - 0

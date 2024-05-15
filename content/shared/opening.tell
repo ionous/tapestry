@@ -123,12 +123,12 @@ Tapestry:
                     - "@trait"
                     - "equal_to"
                     - "open"
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "lockable"
-                - Object:field:
+                    - AtField: "lockable"
+                - Object:dot:
                     - "@noun"
-                    - "locked"
+                    - AtField: "locked"
             - - Say response:with:
                   - "can't open when locked"
                   - "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
@@ -144,9 +144,9 @@ Tapestry:
                     - "@trait"
                     - "equal_to"
                     - "open"
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "opaque"
+                    - AtField: "opaque"
                 - Not:
                     AncestorOf obj:root:
                       - FromText: "@noun"

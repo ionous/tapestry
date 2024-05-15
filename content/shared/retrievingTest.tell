@@ -15,9 +15,9 @@ Tapestry:
                     - Print: "Fail to retrieve from something closed:<br>"
                     - Retrieving actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "coffee"
                         - FromText: "machine"
               - Print:
@@ -26,9 +26,9 @@ Tapestry:
                     - Print: "Okay, retrieve from supporter:<br>"
                     - Retrieving actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "soup"
                         - FromText: "shelf"
                     - Say: "The soup's parent is: {the: {parent_of: .soup}}."
@@ -38,9 +38,9 @@ Tapestry:
                     - Print: "Okay, retrieve from container:<br>"
                     - Retrieving actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "hook"
                         - FromText: "cabinet"
                     - Say: "The hook's parent is: {the: {parent_of: .hook}}."
@@ -49,9 +49,9 @@ Tapestry:
                     - Print: "Fail to retrieve incorrectly:<br>"
                     - Retrieving actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "hat"
                         - FromText: "cabinet"
               - Print:
@@ -59,9 +59,9 @@ Tapestry:
                     - Print: "Fail to steal:<br>"
                     - Retrieving actor:noun:otherNoun:
                         - FromText:
-                            Object:field:
+                            Object:dot:
                               - "player"
-                              - "pawn"
+                              - AtField: "pawn"
                         - FromText: "apple"
                         - FromText: "Mildred"
         - Expect output:

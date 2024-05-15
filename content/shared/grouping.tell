@@ -37,9 +37,9 @@ Tapestry:
       - "assign grouping"
       - - If:do:else:
             - AllTrue:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "counted"
+                    - AtField: "counted"
                 - Is empty:
                     Variable:dot:
                       - "grouping"

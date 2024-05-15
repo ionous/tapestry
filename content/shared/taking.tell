@@ -91,9 +91,9 @@ Tapestry:
                     - "@action"
                     - "equal_to"
                     - "taking"
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "scenery"
+                    - AtField: "scenery"
             - - Set:value:
                   - "@response"
                   - FromText:
@@ -108,9 +108,9 @@ Tapestry:
                     - "@action"
                     - "equal_to"
                     - "taking"
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "fixed in place"
+                    - AtField: "fixed in place"
             - - Set:value:
                   - "@response"
                   - FromText:

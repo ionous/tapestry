@@ -1,4 +1,4 @@
-# assign
+# Read and write from objects and local variables.
 Spec:with group:
   - "assign"
   - Group contains:
@@ -10,16 +10,26 @@ Spec:with group:
           - "address"
           - Slot:
       - # Store a value into a variable or object.
+        # Values are specified as a generic [Assignment].
+        # The various "From" commands exist to cast specific value types into an assignment.
+        # However, the specified destination must still be capable of storing specific type.
+        # For example:
+        #   Set:value:
+        #   - "@some_local_variable"
+        #   - FromText: "a piece of text to store."
+        # will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error.
         Spec:slots:with flow:
           - "set_value"
           - "execute"
           - Flow:uses:
               - "set"
-              - - Term:name:type:
+              - - # Object property or variable into which to write the value.
+                  Term:name:type:
                     - "_"
                     - "target"
                     - "address"
-                - Term:type:
+                - # The value to copy into the destination.
+                  Term:type:
                     - "value"
                     - "assignment"
       - # Set the state of an object.
@@ -52,7 +62,7 @@ Spec:with group:
                     - "source"
                     - "address"
       - Spec:slots:with flow:
-          - "object_ref"
+          - "object_dot"
           - - "address"
             - "bool_eval"
             - "number_eval"
@@ -67,15 +77,12 @@ Spec:with group:
                     - "_"
                     - "name"
                     - "text_eval"
-                - Term:type:
-                    - "field"
-                    - "text_eval"
                 - Term:optional:repeats:
                     - "dot"
                     - true
                     - true
       - Spec:slots:with flow:
-          - "variable_ref"
+          - "variable_dot"
           - - "address"
             - "bool_eval"
             - "number_eval"
@@ -94,24 +101,29 @@ Spec:with group:
                     - "dot"
                     - true
                     - true
-      - # Picks values from types containing other values.
+      - # Access values inside other values.
         Spec:with slot:
           - "dot"
           - Slot:
         blockly-color: "MATH_HUE"
-      - Spec:slots:with flow:
+      - # Selects a named field from a record, or a named property from an object.
+        Spec:slots:with flow:
           - "at_field"
           - "dot"
           - Flow uses:
-              - Term:name:type:
+              - # The name of a field to write a value into, or to read a value out of.
+                # ( The field must exist in the object or record being accessed. )
+                Term:name:type:
                   - "_"
                   - "field"
                   - "text_eval"
-      - Spec:slots:with flow:
+      - # Selects a value from a list of values.
+        Spec:slots:with flow:
           - "at_index"
           - "dot"
           - Flow uses:
-              - Term:name:type:
+              - # Zero-based index within the list being accessed.
+                Term:name:type:
                   - "_"
                   - "index"
                   - "number_eval"

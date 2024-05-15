@@ -58,10 +58,10 @@ Tapestry:
                   - Is:matching:text:
                       - "@door"
                       - "equal_to"
-                      - Object:field:dot:
+                      - Object:dot:
                           - "@room"
-                          - "compass"
-                          - - AtField: "@dir"
+                          - - AtField: "compass"
+                            - AtField: "@dir"
                   - - Set:value:
                         - "@direction"
                         - FromText: "@dir"
@@ -83,7 +83,7 @@ Tapestry:
       - - Set:value:
             - "@door"
             - FromText:
-                Object:field:dot:
+                Object:dot:
                   - "@room"
-                  - "compass"
-                  - - AtField: "@direction"
+                  - - AtField: "compass"
+                    - AtField: "@direction"

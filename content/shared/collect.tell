@@ -78,9 +78,9 @@ Tapestry:
                 - KindOf:is:
                     - "@obj"
                     - "containers"
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "closed"
+                    - AtField: "closed"
             - - Set:value:
                   - "@accessible"
                   - FromBool: false

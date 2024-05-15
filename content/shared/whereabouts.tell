@@ -26,9 +26,9 @@ Tapestry:
                   - FromText:
                       Reciprocal:object:
                         - "whereabouts"
-                        - Object:field:
+                        - Object:dot:
                             - "@obj"
-                            - "pawn"
+                            - AtField: "pawn"
             - Finally do:
                 - Set:value:
                     - "@parent"
@@ -350,9 +350,9 @@ Tapestry:
                 - KindOf:is:
                     - "@parent"
                     - "actors"
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "not worn"
+                    - AtField: "not worn"
             - - Set:value:
                   - "@carrier"
                   - FromText: "@parent"
@@ -376,9 +376,9 @@ Tapestry:
                 - KindOf:is:
                     - "@parent"
                     - "actors"
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "worn"
+                    - AtField: "worn"
             - - Set:value:
                   - "@wearer"
                   - FromText: "@parent"

@@ -27,7 +27,7 @@ func GetReference(run rt.Runtime, op Address) (ret dot.Endpoint, err error) {
 // return a dot.Index
 func (op *AtIndex) Resolve(run rt.Runtime) (ret dot.Dotted, err error) {
 	if idx, e := safe.GetNumber(run, op.Index); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else {
 		ret = dot.Index(idx.Int() - 1)
 	}
@@ -37,7 +37,7 @@ func (op *AtIndex) Resolve(run rt.Runtime) (ret dot.Dotted, err error) {
 // return a dot.Field
 func (op *AtField) Resolve(run rt.Runtime) (ret dot.Dotted, err error) {
 	if field, e := safe.GetText(run, op.Field); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else {
 		ret = dot.Field(field.String())
 	}

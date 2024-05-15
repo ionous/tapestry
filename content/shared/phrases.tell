@@ -72,9 +72,9 @@ Tapestry:
                             FromTextList: "@names"
                         - "greater_than"
                         - 1
-                    - Object:field:
+                    - Object:dot:
                         - "@noun"
-                        - "plural named"
+                        - AtField: "plural named"
                 - - Print: "are"
                 - Finally do:
                     - Print: "is"
@@ -91,9 +91,9 @@ Tapestry:
                 FromText: "@noun"
             - - Print: "are not"
             - If:do:else:
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "plural named"
+                    - AtField: "plural named"
                 - - Print: "are not"
                 - Finally do:
                     - Print: "is not"
@@ -109,9 +109,9 @@ Tapestry:
                 FromText: "@noun"
             - - Print: "aren't"
             - If:do:else:
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "plural named"
+                    - AtField: "plural named"
                 - - Print: "aren't"
                 - Finally do:
                     - Print: "isn't"
@@ -123,9 +123,9 @@ Tapestry:
             - "object"
       - - Nothing:
       - - If:do:else:
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "plural named"
+                - AtField: "plural named"
             - - Print: "don't"
             - Finally do:
                 - Print: "doesn't"

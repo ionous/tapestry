@@ -7,29 +7,29 @@ Tapestry:
         - Declare: "The purse is in the kitchen."
       - - Searching actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField:  "pawn"
             - FromText: "knife"
         - Expect output: "You find nothing of interest."
         - Searching actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "machine"
         - Expect output: "You can't see inside, it is closed."
         - Searching actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "counter"
         - Expect output: "On the counter are the blender, the espresso machine, and the mortar."
         - Searching actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "purse"
         - Expect output: "In the purse is the coin."

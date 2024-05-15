@@ -252,7 +252,7 @@ func TestTemplates(t *testing.T) {
 }
 
 func renderRef(v string, path ...any) *render.RenderRef {
-	return &render.RenderRef{Name: T(v), Dot: core.MakeDot(path...)}
+	return &render.RenderRef{Name: T(v), Dot: assign.MakeDot(path...)}
 }
 
 func testTemplate(str string, want interface{}) (err error) {

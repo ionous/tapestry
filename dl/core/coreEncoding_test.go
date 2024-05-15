@@ -17,19 +17,19 @@ import (
 // verify that core variables are written and read as @ strings
 func TestCoreEncoding(t *testing.T) {
 	testPairs(t, []testPair{{
-		&assign.ObjectRef{
-			Name:  core.Variable("noun"),
-			Field: core.Variable("trait"),
+		&assign.ObjectDot{
+			Name: assign.Variable("noun"),
+			Dot:  []assign.Dot{&assign.AtField{Field: assign.Variable("trait")}},
 		},
-		`{"Object:field:":["@noun","@trait"]}`,
+		`{"Object:dot:":["@noun",[{"AtField:":"@trait"}]]}`,
 	}, {
 		// fix:  should have path syntax ( re: expressions )  ex. @pawn.trait
-		core.Variable("pawn", "trait"),
+		assign.Variable("pawn", "trait"),
 		`{"Variable:dot:":["pawn",[{"AtField:":"trait"}]]}`,
 	}, {
 		&core.AddValue{
-			A: core.Variable("a"),
-			B: core.Variable("b"),
+			A: assign.Variable("a"),
+			B: assign.Variable("b"),
 		},
 		`{"Add:value:":["@a","@b"]}`,
 	}, {
@@ -57,23 +57,19 @@ func testPairs(t *testing.T, pairs []testPair) {
 		if e := json.Unmarshal([]byte(p.expect), &expect); e != nil {
 			t.Fatal(e)
 		} else if have, e := marshal(p.v); e != nil {
-			t.Logf("%d couldn't encode because %v", i, e)
-			t.Fail()
+			t.Errorf("%d couldn't encode because %v", i, e)
 		} else if !r.DeepEqual(have, expect) {
-			t.Logf("%d mismatched encode %#v", i, have)
-			t.Fail()
+			t.Errorf("%d mismatched encode %#v", i, have)
 		} else {
 			rtype := r.ValueOf(p.v).Elem().Type()
 			// println("testing", rtype.String())
 			reversed := r.New(rtype).Interface().(typeinfo.Instance)
 			if e := unmarshal(reversed, expect); e != nil {
-				t.Logf("%d couldn't decode because %v", i, e)
-				t.Fail()
+				t.Errorf("%d couldn't decode because %v", i, e)
 			} else if !r.DeepEqual(reversed, p.v) {
-				t.Logf("%d mismatched decode", i)
+				t.Errorf("%d mismatched decode", i)
 				t.Log("want: ", pretty.Sprint(p.v))
 				t.Log("have: ", pretty.Sprint(reversed))
-				t.Fail()
 			}
 		}
 	}

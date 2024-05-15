@@ -9,33 +9,33 @@ Tapestry:
       - - Bool:initially:
             - "same actor"
             - Is:matching:text:
-                - Object:field:
+                - Object:dot:
                     - "story"
-                    - "actor"
+                    - AtField: "actor"
                 - "equal_to"
-                - Object:field:
+                - Object:dot:
                     - "last known"
-                    - "actor"
+                    - AtField: "actor"
         - Bool:initially:
             - "same location"
             - Is:matching:text:
-                - Object:field:
+                - Object:dot:
                     - "story"
-                    - "location"
+                    - AtField: "location"
                 - "equal_to"
-                - Object:field:
+                - Object:dot:
                     - "last known"
-                    - "location"
+                    - AtField: "location"
         - Bool:initially:
             - "was illuminated"
-            - Object:field:
+            - Object:dot:
                 - "last known"
-                - "illuminated"
+                - AtField: "illuminated"
         - Bool:initially:
             - "now illuminated"
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "illuminated"
+                - AtField: "illuminated"
       - - # allow after actions
           Continue:
   - Define rule:named:do:

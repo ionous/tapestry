@@ -1,5 +1,5 @@
-// Exposes commands used by package express to render templates.
-// Keeping these functions separated allows us to exclude express from the runtime.
+// Text template rendering.
+// Keeping these functions separated allows weave to exclude package express from the runtime.
 package render
 
 //
@@ -362,8 +362,8 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "render",
 	Comment: []string{
-		"Exposes commands used by package express to render templates.",
-		"Keeping these functions separated allows us to exclude express from the runtime.",
+		"Text template rendering.",
+		"Keeping these functions separated allows weave to exclude package express from the runtime.",
 	},
 
 	Slot:       z_slot_list,

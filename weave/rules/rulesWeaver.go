@@ -1,6 +1,7 @@
 package rules
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -41,7 +42,7 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&core.CompareText{
-			A:  core.Variable(event.Actor),
+			A:  assign.Variable(event.Actor),
 			Is: core.C_Comparison_EqualTo,
 			B:  core.T("self"),
 		})
@@ -51,16 +52,16 @@ func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 func AddEventFilters(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&core.CompareText{
-			A:  core.Variable(event.Object, event.CurrentTarget.String()),
+			A:  assign.Variable(event.Object, event.CurrentTarget.String()),
 			Is: core.C_Comparison_EqualTo,
-			B:  core.Variable(event.Object, event.Target.String()),
+			B:  assign.Variable(event.Object, event.Target.String()),
 		})
 }
 
 func AddNounFilter(noun string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&core.CompareText{
-			A:  core.Variable(event.Object, event.Target.String()),
+			A:  assign.Variable(event.Object, event.Target.String()),
 			Is: core.C_Comparison_EqualTo,
 			B:  &literal.TextValue{Value: noun},
 		})
@@ -69,7 +70,7 @@ func AddNounFilter(noun string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 func AddKindFilter(kind string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&core.IsKindOf{
-			Object: core.Variable(event.Object, event.Target.String()),
+			Object: assign.Variable(event.Object, event.Target.String()),
 			Kind:   kind,
 		})
 }

@@ -31,23 +31,23 @@ Tapestry:
             - # if the object was given an explicit 'printed name', print that.
               If:do:else:
                 - Is:matching:text:
-                    - Object:field:
+                    - Object:dot:
                         - "@obj"
-                        - "printed name"
+                        - AtField: "printed name"
                     - "other_than"
                     - ""
                 - - Print:
-                      Object:field:
+                      Object:dot:
                         - "@obj"
-                        - "printed name"
+                        - AtField: "printed name"
                   - Mention obj:
                       FromText: "@obj"
                 - # if the object is publicly named, print the original name of the object;
                   # privately named objects skip this rule.
                   If:do:else:
-                    - Object:field:
+                    - Object:dot:
                         - "@obj"
-                        - "publicly named"
+                        - AtField: "publicly named"
                     - - Print:
                           NameOf: "@obj"
                       - Mention obj:
@@ -100,17 +100,17 @@ Tapestry:
                 - "@obj"
                 - "things"
             - - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "@obj"
-                      - "mentioned"
+                      - AtField: "mentioned"
                   - FromBool: true
               - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "story"
-                      - "mentions"
+                      - AtField: "mentions"
                   - FromNumber:
                       Add:value:
                         - 1
-                        - Object:field:
+                        - Object:dot:
                             - "story"
-                            - "mentions"
+                            - AtField: "mentions"

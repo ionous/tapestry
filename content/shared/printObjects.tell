@@ -163,9 +163,9 @@ Tapestry:
                 - KindOf:is:
                     - "@obj"
                     - "containers"
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "closed"
+                    - AtField: "closed"
             - - Say response:with:
                   - "closed container"
                   - "closed"
@@ -207,9 +207,9 @@ Tapestry:
   - Define rule:do:
       - "print inner status"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "locked"
+                - AtField: "locked"
             - - Say response:with:
                   - "locked status"
                   - "{if .obj.closed and .obj.locked}locked{end}"
@@ -217,39 +217,39 @@ Tapestry:
       - "print inner status"
       - - If:do:
             - AllTrue:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "transparent"
-                - Object:field:
+                    - AtField: "transparent"
+                - Object:dot:
                     - "@obj"
-                    - "unopenable"
+                    - AtField: "unopenable"
             - - Say response:with:
                   - "transparent status"
                   - "{if .is_empty}empty{end}"
   - Define rule:do:
       - "print inner status"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "openable"
+                - AtField: "openable"
             - - Say response:with:
                   - "openable status"
                   - "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
   - Define rule:do:
       - "print inner status"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "worn"
+                - AtField: "worn"
             - - Say response:with:
                   - "inner worn status"
                   - "being worn"
   - Define rule:do:
       - "print inner status"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "lit"
+                - AtField: "lit"
             - - Say response:with:
                   - "lit status"
                   - "providing light"

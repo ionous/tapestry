@@ -47,7 +47,7 @@ Tapestry:
       - "attacking"
       - "standard attacking rule"
       - - # Continue on to the next event phase
-          Continue: true
+          Continue:
   - Define rule:do:
       - "report someone attacking"
       - - Say response:with:

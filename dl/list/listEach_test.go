@@ -53,7 +53,7 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var out []string
 	var visits []accum
 	each := &list.ListEach{
-		List: &assign.FromTextList{Value: core.Variable("source")},
+		List: &assign.FromTextList{Value: assign.Variable("source")},
 		As:   W("text"),
 		Exe:  core.MakeActivity(&visitEach{&visits}),
 		Else: &core.ChooseNothingElse{

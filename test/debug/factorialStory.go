@@ -63,11 +63,11 @@ var FactorialCheck = []rt.Execute{
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
 	&assign.SetValue{
-		Target: core.Variable("num"),
+		Target: assign.Variable("num"),
 		Value: &assign.FromNumber{Value: &core.MultiplyValue{
-			A: core.Variable("num"),
+			A: assign.Variable("num"),
 			B: &core.SubtractValue{
-				A: core.Variable("num"),
+				A: assign.Variable("num"),
 				B: I(1),
 			},
 		}}},
@@ -78,7 +78,7 @@ var FactorialDecreaseRule = []rt.Execute{
 	&core.ChooseBranch{
 		If: &core.CompareNum{
 			Markup: UserComment("above zero, subtract one"),
-			A:      core.Variable("num"),
+			A:      assign.Variable("num"),
 			Is:     core.C_Comparison_GreaterThan,
 			B:      F(0)},
 		Exe: FactorialMulMinusOne,
@@ -89,7 +89,7 @@ var FactorialDecreaseRule = []rt.Execute{
 var FactorialDefaultRule = []rt.Execute{
 	&assign.SetValue{
 		Markup: UserComment("by default, return one"),
-		Target: core.Variable("num"),
+		Target: assign.Variable("num"),
 		Value:  &assign.FromNumber{Value: I(1)},
 	},
 }

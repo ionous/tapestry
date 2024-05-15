@@ -1,4 +1,4 @@
-// assign
+// Read and write from objects and local variables.
 package assign
 
 //
@@ -45,7 +45,7 @@ var Zt_Dot = typeinfo.Slot{
 	Name: "dot",
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
-		"comment":       "Picks values from types containing other values.",
+		"comment":       "Access values inside other values.",
 	},
 }
 
@@ -71,6 +71,16 @@ func (op *Dot_Slots) Repeats() bool {
 }
 
 // Store a value into a variable or object.
+// Values are specified as a generic [Assignment].
+// The various "From" commands exist to cast specific value types into an assignment.
+// However, the specified destination must still be capable of storing specific type.
+// For example:
+//
+//	Set:value:
+//	- "@some_local_variable"
+//	- FromText: "a piece of text to store."
+//
+// will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error.
 type SetValue struct {
 	Target Address
 	Value  rtti.Assignment
@@ -188,23 +198,22 @@ func (op *CopyValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type ObjectRef struct {
+type ObjectDot struct {
 	Name   rtti.TextEval
-	Field  rtti.TextEval
 	Dot    []Dot
 	Markup map[string]any
 }
 
-// object_ref, a type of flow.
-var Zt_ObjectRef typeinfo.Flow
+// object_dot, a type of flow.
+var Zt_ObjectDot typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*ObjectRef) TypeInfo() typeinfo.T {
-	return &Zt_ObjectRef
+func (*ObjectDot) TypeInfo() typeinfo.T {
+	return &Zt_ObjectDot
 }
 
 // Implements [typeinfo.Markup]
-func (op *ObjectRef) GetMarkup(ensure bool) map[string]any {
+func (op *ObjectDot) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -212,44 +221,44 @@ func (op *ObjectRef) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Address = (*ObjectRef)(nil)
-var _ rtti.BoolEval = (*ObjectRef)(nil)
-var _ rtti.NumberEval = (*ObjectRef)(nil)
-var _ rtti.TextEval = (*ObjectRef)(nil)
-var _ rtti.RecordEval = (*ObjectRef)(nil)
-var _ rtti.NumListEval = (*ObjectRef)(nil)
-var _ rtti.TextListEval = (*ObjectRef)(nil)
-var _ rtti.RecordListEval = (*ObjectRef)(nil)
+var _ Address = (*ObjectDot)(nil)
+var _ rtti.BoolEval = (*ObjectDot)(nil)
+var _ rtti.NumberEval = (*ObjectDot)(nil)
+var _ rtti.TextEval = (*ObjectDot)(nil)
+var _ rtti.RecordEval = (*ObjectDot)(nil)
+var _ rtti.NumListEval = (*ObjectDot)(nil)
+var _ rtti.TextListEval = (*ObjectDot)(nil)
+var _ rtti.RecordListEval = (*ObjectDot)(nil)
 
-// Holds a slice of type ObjectRef.
-type ObjectRef_Slice []ObjectRef
+// Holds a slice of type ObjectDot.
+type ObjectDot_Slice []ObjectDot
 
-// Implements [typeinfo.Instance] for a slice of ObjectRef.
-func (*ObjectRef_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ObjectRef
+// Implements [typeinfo.Instance] for a slice of ObjectDot.
+func (*ObjectDot_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ObjectDot
 }
 
-// Implements [typeinfo.Repeats] for a slice of ObjectRef.
-func (op *ObjectRef_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ObjectDot.
+func (op *ObjectDot_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type VariableRef struct {
+type VariableDot struct {
 	Name   rtti.TextEval
 	Dot    []Dot
 	Markup map[string]any
 }
 
-// variable_ref, a type of flow.
-var Zt_VariableRef typeinfo.Flow
+// variable_dot, a type of flow.
+var Zt_VariableDot typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*VariableRef) TypeInfo() typeinfo.T {
-	return &Zt_VariableRef
+func (*VariableDot) TypeInfo() typeinfo.T {
+	return &Zt_VariableDot
 }
 
 // Implements [typeinfo.Markup]
-func (op *VariableRef) GetMarkup(ensure bool) map[string]any {
+func (op *VariableDot) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -257,28 +266,29 @@ func (op *VariableRef) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Address = (*VariableRef)(nil)
-var _ rtti.BoolEval = (*VariableRef)(nil)
-var _ rtti.NumberEval = (*VariableRef)(nil)
-var _ rtti.TextEval = (*VariableRef)(nil)
-var _ rtti.RecordEval = (*VariableRef)(nil)
-var _ rtti.NumListEval = (*VariableRef)(nil)
-var _ rtti.TextListEval = (*VariableRef)(nil)
-var _ rtti.RecordListEval = (*VariableRef)(nil)
+var _ Address = (*VariableDot)(nil)
+var _ rtti.BoolEval = (*VariableDot)(nil)
+var _ rtti.NumberEval = (*VariableDot)(nil)
+var _ rtti.TextEval = (*VariableDot)(nil)
+var _ rtti.RecordEval = (*VariableDot)(nil)
+var _ rtti.NumListEval = (*VariableDot)(nil)
+var _ rtti.TextListEval = (*VariableDot)(nil)
+var _ rtti.RecordListEval = (*VariableDot)(nil)
 
-// Holds a slice of type VariableRef.
-type VariableRef_Slice []VariableRef
+// Holds a slice of type VariableDot.
+type VariableDot_Slice []VariableDot
 
-// Implements [typeinfo.Instance] for a slice of VariableRef.
-func (*VariableRef_Slice) TypeInfo() typeinfo.T {
-	return &Zt_VariableRef
+// Implements [typeinfo.Instance] for a slice of VariableDot.
+func (*VariableDot_Slice) TypeInfo() typeinfo.T {
+	return &Zt_VariableDot
 }
 
-// Implements [typeinfo.Repeats] for a slice of VariableRef.
-func (op *VariableRef_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of VariableDot.
+func (op *VariableDot_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Selects a named field from a record, or a named property from an object.
 type AtField struct {
 	Field  rtti.TextEval
 	Markup map[string]any
@@ -316,6 +326,7 @@ func (op *AtField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Selects a value from a list of values.
 type AtIndex struct {
 	Index  rtti.NumberEval
 	Markup map[string]any
@@ -748,17 +759,23 @@ func init() {
 		Lede: "set",
 		Terms: []typeinfo.Term{{
 			Name: "target",
+			Markup: map[string]any{
+				"comment": "Object property or variable into which to write the value.",
+			},
 			Type: &Zt_Address,
 		}, {
 			Name:  "value",
 			Label: "value",
-			Type:  &rtti.Zt_Assignment,
+			Markup: map[string]any{
+				"comment": "The value to copy into the destination.",
+			},
+			Type: &rtti.Zt_Assignment,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Store a value into a variable or object.",
+			"comment": []interface{}{"Store a value into a variable or object.", "Values are specified as a generic [Assignment].", "The various \"From\" commands exist to cast specific value types into an assignment.", "However, the specified destination must still be capable of storing specific type.", "For example:", "  Set:value:", "  - \"@some_local_variable\"", "  - FromText: \"a piece of text to store.\"", "will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error."},
 		},
 	}
 	Zt_SetState = typeinfo.Flow{
@@ -797,16 +814,12 @@ func init() {
 			"comment": []interface{}{"Copy from one stored value to another.", "Requires that the type of the two values match exactly"},
 		},
 	}
-	Zt_ObjectRef = typeinfo.Flow{
-		Name: "object_ref",
+	Zt_ObjectDot = typeinfo.Flow{
+		Name: "object_dot",
 		Lede: "object",
 		Terms: []typeinfo.Term{{
 			Name: "name",
 			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:  "field",
-			Label: "field",
-			Type:  &rtti.Zt_TextEval,
 		}, {
 			Name:     "dot",
 			Label:    "dot",
@@ -825,8 +838,8 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 	}
-	Zt_VariableRef = typeinfo.Flow{
-		Name: "variable_ref",
+	Zt_VariableDot = typeinfo.Flow{
+		Name: "variable_dot",
 		Lede: "variable",
 		Terms: []typeinfo.Term{{
 			Name: "name",
@@ -854,10 +867,16 @@ func init() {
 		Lede: "at_field",
 		Terms: []typeinfo.Term{{
 			Name: "field",
+			Markup: map[string]any{
+				"comment": []interface{}{"The name of a field to write a value into, or to read a value out of.", "( The field must exist in the object or record being accessed. )"},
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_Dot,
+		},
+		Markup: map[string]any{
+			"comment": "Selects a named field from a record, or a named property from an object.",
 		},
 	}
 	Zt_AtIndex = typeinfo.Flow{
@@ -865,10 +884,16 @@ func init() {
 		Lede: "at_index",
 		Terms: []typeinfo.Term{{
 			Name: "index",
+			Markup: map[string]any{
+				"comment": "Zero-based index within the list being accessed.",
+			},
 			Type: &rtti.Zt_NumberEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_Dot,
+		},
+		Markup: map[string]any{
+			"comment": "Selects a value from a list of values.",
 		},
 	}
 	Zt_CallPattern = typeinfo.Flow{
@@ -1032,7 +1057,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "assign",
 	Comment: []string{
-		"assign",
+		"Read and write from objects and local variables.",
 	},
 
 	Slot:       z_slot_list,
@@ -1053,8 +1078,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_SetValue,
 	&Zt_SetState,
 	&Zt_CopyValue,
-	&Zt_ObjectRef,
-	&Zt_VariableRef,
+	&Zt_ObjectDot,
+	&Zt_VariableDot,
 	&Zt_AtField,
 	&Zt_AtIndex,
 	&Zt_CallPattern,
@@ -1092,38 +1117,38 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17510952281883199828: (*FromRecordList)(nil), /* assignment=FromRecordList: */
 	9783457335751138546:  (*FromText)(nil),       /* assignment=FromText: */
 	3267530751198060154:  (*FromTextList)(nil),   /* assignment=FromTextList: */
-	683773550166455203:   (*ObjectRef)(nil),      /* address=Object:field: */
-	1942271780557121620:  (*ObjectRef)(nil),      /* bool_eval=Object:field: */
-	8839776639979820731:  (*ObjectRef)(nil),      /* num_list_eval=Object:field: */
-	10918337914011251575: (*ObjectRef)(nil),      /* number_eval=Object:field: */
-	2347663618411162107:  (*ObjectRef)(nil),      /* record_eval=Object:field: */
-	11613264323388154988: (*ObjectRef)(nil),      /* record_list_eval=Object:field: */
-	16935348020531425213: (*ObjectRef)(nil),      /* text_eval=Object:field: */
-	7207525564346341058:  (*ObjectRef)(nil),      /* text_list_eval=Object:field: */
-	2801199650842020300:  (*ObjectRef)(nil),      /* address=Object:field:dot: */
-	5711121365333637715:  (*ObjectRef)(nil),      /* bool_eval=Object:field:dot: */
-	1214997628858983108:  (*ObjectRef)(nil),      /* num_list_eval=Object:field:dot: */
-	11071357156742037304: (*ObjectRef)(nil),      /* number_eval=Object:field:dot: */
-	1517965638051539844:  (*ObjectRef)(nil),      /* record_eval=Object:field:dot: */
-	13722223890291796107: (*ObjectRef)(nil),      /* record_list_eval=Object:field:dot: */
-	15784348372409109382: (*ObjectRef)(nil),      /* text_eval=Object:field:dot: */
-	11516059561048599401: (*ObjectRef)(nil),      /* text_list_eval=Object:field:dot: */
+	8656684385605626625:  (*ObjectDot)(nil),      /* address=Object: */
+	6106842879255343810:  (*ObjectDot)(nil),      /* bool_eval=Object: */
+	3322847371150895433:  (*ObjectDot)(nil),      /* num_list_eval=Object: */
+	11863103806351582869: (*ObjectDot)(nil),      /* number_eval=Object: */
+	1988642049281593865:  (*ObjectDot)(nil),      /* record_eval=Object: */
+	9599721143262547914:  (*ObjectDot)(nil),      /* record_list_eval=Object: */
+	16083123907778192555: (*ObjectDot)(nil),      /* text_eval=Object: */
+	15780956574897965792: (*ObjectDot)(nil),      /* text_list_eval=Object: */
+	8121157847033684962:  (*ObjectDot)(nil),      /* address=Object:dot: */
+	5205171710741514089:  (*ObjectDot)(nil),      /* bool_eval=Object:dot: */
+	3914994200631113354:  (*ObjectDot)(nil),      /* num_list_eval=Object:dot: */
+	16900085971697467422: (*ObjectDot)(nil),      /* number_eval=Object:dot: */
+	1364775634664390090:  (*ObjectDot)(nil),      /* record_eval=Object:dot: */
+	16877508779303594737: (*ObjectDot)(nil),      /* record_list_eval=Object:dot: */
+	17663678026468030644: (*ObjectDot)(nil),      /* text_eval=Object:dot: */
+	725008522959645559:   (*ObjectDot)(nil),      /* text_list_eval=Object:dot: */
 	9616350989753725148:  (*SetState)(nil),       /* execute=Set:state: */
 	3912570011939708664:  (*SetValue)(nil),       /* execute=Set:value: */
-	13692207992970428220: (*VariableRef)(nil),    /* address=Variable: */
-	17908519799628660539: (*VariableRef)(nil),    /* bool_eval=Variable: */
-	11022385456290008164: (*VariableRef)(nil),    /* num_list_eval=Variable: */
-	14722688844418158720: (*VariableRef)(nil),    /* number_eval=Variable: */
-	15906653930217516836: (*VariableRef)(nil),    /* record_eval=Variable: */
-	16032903663975260899: (*VariableRef)(nil),    /* record_list_eval=Variable: */
-	11181798416019134386: (*VariableRef)(nil),    /* text_eval=Variable: */
-	14769776891888769773: (*VariableRef)(nil),    /* text_list_eval=Variable: */
-	15966558056732701531: (*VariableRef)(nil),    /* address=Variable:dot: */
-	7739360284898038596:  (*VariableRef)(nil),    /* bool_eval=Variable:dot: */
-	14012826006150347811: (*VariableRef)(nil),    /* num_list_eval=Variable:dot: */
-	2218494529839714071:  (*VariableRef)(nil),    /* number_eval=Variable:dot: */
-	3479001804857346403:  (*VariableRef)(nil),    /* record_eval=Variable:dot: */
-	11938488787528882828: (*VariableRef)(nil),    /* record_list_eval=Variable:dot: */
-	4798713833623285465:  (*VariableRef)(nil),    /* text_eval=Variable:dot: */
-	12039638244497140214: (*VariableRef)(nil),    /* text_list_eval=Variable:dot: */
+	13692207992970428220: (*VariableDot)(nil),    /* address=Variable: */
+	17908519799628660539: (*VariableDot)(nil),    /* bool_eval=Variable: */
+	11022385456290008164: (*VariableDot)(nil),    /* num_list_eval=Variable: */
+	14722688844418158720: (*VariableDot)(nil),    /* number_eval=Variable: */
+	15906653930217516836: (*VariableDot)(nil),    /* record_eval=Variable: */
+	16032903663975260899: (*VariableDot)(nil),    /* record_list_eval=Variable: */
+	11181798416019134386: (*VariableDot)(nil),    /* text_eval=Variable: */
+	14769776891888769773: (*VariableDot)(nil),    /* text_list_eval=Variable: */
+	15966558056732701531: (*VariableDot)(nil),    /* address=Variable:dot: */
+	7739360284898038596:  (*VariableDot)(nil),    /* bool_eval=Variable:dot: */
+	14012826006150347811: (*VariableDot)(nil),    /* num_list_eval=Variable:dot: */
+	2218494529839714071:  (*VariableDot)(nil),    /* number_eval=Variable:dot: */
+	3479001804857346403:  (*VariableDot)(nil),    /* record_eval=Variable:dot: */
+	11938488787528882828: (*VariableDot)(nil),    /* record_list_eval=Variable:dot: */
+	4798713833623285465:  (*VariableDot)(nil),    /* text_eval=Variable:dot: */
+	12039638244497140214: (*VariableDot)(nil),    /* text_list_eval=Variable:dot: */
 }

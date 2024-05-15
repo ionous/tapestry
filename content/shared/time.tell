@@ -43,9 +43,9 @@ Tapestry:
       - "after start game, then continue"
       - "the go start playing rule"
       - - Increase:
-            Object:field:
+            Object:dot:
               - "story"
-              - "turn count"
+              - AtField: "turn count"
         - Set:state:
             - "story"
             - "playing"
@@ -90,9 +90,9 @@ Tapestry:
         - # can be assigned 'Say' to use a template
           Text:initially:
             - "saying"
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "ending message"
+                - AtField: "ending message"
       - - Nothing:
       - - Set:state:
             - "story"

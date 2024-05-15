@@ -19,9 +19,9 @@ Tapestry:
           Text:kind:initially:
             - "destination"
             - "room"
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "destination"
+                - AtField: "destination"
         - # Determine the direction, if any, traveling through the door.
           Text:initially:
             - "direction"
@@ -93,9 +93,9 @@ Tapestry:
                     - "@action"
                     - "equal_to"
                     - "traveling through"
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "closed"
+                    - AtField: "closed"
             - - Set:value:
                   - "@response"
                   - FromText:
@@ -110,12 +110,12 @@ Tapestry:
                     - "@action"
                     - "equal_to"
                     - "traveling through"
-                - Object:field:
+                - Object:dot:
                     - "@noun"
-                    - "closed"
-                - Object:field:
+                    - AtField: "closed"
+                - Object:dot:
                     - "@noun"
-                    - "locked"
+                    - AtField: "locked"
             - - Set:value:
                   - "@response"
                   - FromText:

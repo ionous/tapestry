@@ -12,18 +12,18 @@ Tapestry:
         - Expect output: "The controls are deactivated."
         - Activating actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "controls"
         - Expect output: "You switch on the espresso controls."
         - Say: "The controls are {.controls.activation}."
         - Expect output: "The controls are activated."
         - Deactivating actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "controls"
         - Expect output: "You switch off the espresso controls."
         - Say: "The controls are {.controls.activation}."
@@ -31,8 +31,8 @@ Tapestry:
         - Note: "Try to activate a regular object."
         - Activating actor:noun:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromText: "knife"
         - Expect output: "It isn't something you can switch on."

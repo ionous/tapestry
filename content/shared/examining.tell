@@ -88,9 +88,9 @@ Tapestry:
             - - Arg:from:
                   - "description"
                   - FromText:
-                      Object:field:
+                      Object:dot:
                         - "@obj"
-                        - "description"
+                        - AtField: "description"
             - - Print: "@description"
               - PrintParticulars obj:
                   FromText: "@obj"

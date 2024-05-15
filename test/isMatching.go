@@ -31,22 +31,22 @@ var matchGroups = testpat.Pattern{
 			nil, matches(true)),
 		core.MakeRule(
 			&core.CompareText{
-				A:  core.Variable("a", "label"),
+				A:  assign.Variable("a", "label"),
 				Is: core.C_Comparison_OtherThan,
-				B:  core.Variable("b", "label"),
+				B:  assign.Variable("b", "label"),
 			}, matches(false)),
 		core.MakeRule(
 			&core.CompareText{
-				A:  core.Variable("a", "group options"),
+				A:  assign.Variable("a", "group options"),
 				Is: core.C_Comparison_OtherThan,
-				B:  core.Variable("b", "group options"),
+				B:  assign.Variable("b", "group options"),
 			}, matches(false)),
 	},
 }
 
 func matches(b bool) rt.Execute {
 	return &assign.SetValue{
-		Target: core.Variable("matches"),
+		Target: assign.Variable("matches"),
 		Value:  &assign.FromBool{Value: B(b)},
 	}
 }

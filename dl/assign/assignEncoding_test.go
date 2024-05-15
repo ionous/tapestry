@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
-	"github.com/ionous/errutil"
 )
 
 // test that if the user passes various common pattern names through the encoder
@@ -41,7 +40,7 @@ func testString(n, a string) (err error) {
 	if got, e := enc.Customize(assign.CustomEncoder).Encode(out); e != nil {
 		err = e
 	} else if !reflect.DeepEqual(got, wantPattern) {
-		err = errutil.New("mismatch", fmt.Sprintf("%#v", got))
+		err = fmt.Errorf("mismatch %#v", got)
 	}
 	return
 }

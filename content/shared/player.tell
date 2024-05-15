@@ -55,9 +55,9 @@ Tapestry:
                       Is:matching:text:
                         - "@obj"
                         - "equal_to"
-                        - Object:field:
+                        - Object:dot:
                             - "player"
-                            - "pawn"
+                            - AtField: "pawn"
   - # 
     Define test:do:
       - "player tests"

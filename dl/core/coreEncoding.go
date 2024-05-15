@@ -17,7 +17,7 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err erro
 	case *assign.CallPattern:
 		ret, err = assign.CustomEncoder(enc, op)
 
-	case *assign.VariableRef:
+	case *assign.VariableDot:
 		// write variables as a string prepended by @
 		// fix: it'd be nice if all parts were literals to write dot/bracket syntax a.b[5]
 		// fix: it'd be nicest if this could use package express to handle the parsing.
@@ -59,7 +59,7 @@ func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret type
 		// writing to a variable:
 		&assign.Zt_Address:
 		if str := getVariableString(body); len(str) > 0 {
-			ret = Variable(str)
+			ret = assign.Variable(str)
 		} else {
 			ret, err = literal.DecodeLiteral(slot, body)
 		}

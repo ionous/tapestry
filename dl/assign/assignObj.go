@@ -10,24 +10,20 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *ObjectRef) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) {
+func (op *ObjectDot) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
 		err = e
 	} else if id, e := run.GetField(meta.ObjectId, name.String()); e != nil {
 		err = e
-	} else if fieldName, e := safe.GetText(run, op.Field); e != nil {
-		err = e
 	} else if path, e := ResolvePath(run, op.Dot); e != nil {
 		err = e
 	} else {
-		field := dot.Field(fieldName.String())
-		fullPath := append(dot.Path{field}, path...)
-		ret, err = dot.FindEndpoint(run, id.String(), fullPath)
+		ret, err = dot.FindEndpoint(run, id.String(), path)
 	}
 	return
 }
 
-func (op *ObjectRef) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+func (op *ObjectDot) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	var u rt.Unknown
 	if v, e := op.getValue(run, affine.Bool); e == nil {
 		ret = v
@@ -39,36 +35,36 @@ func (op *ObjectRef) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 		// bonus points for determining this during weave when using literals
 		ret = rt.False
 	} else {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
 
-func (op *ObjectRef) GetNumber(run rt.Runtime) (rt.Value, error) {
+func (op *ObjectDot) GetNumber(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Number)
 }
 
-func (op *ObjectRef) GetText(run rt.Runtime) (rt.Value, error) {
+func (op *ObjectDot) GetText(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Text)
 }
 
-func (op *ObjectRef) GetRecord(run rt.Runtime) (rt.Value, error) {
+func (op *ObjectDot) GetRecord(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Record)
 }
 
-func (op *ObjectRef) GetNumList(run rt.Runtime) (rt.Value, error) {
+func (op *ObjectDot) GetNumList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.NumList)
 }
 
-func (op *ObjectRef) GetTextList(run rt.Runtime) (rt.Value, error) {
+func (op *ObjectDot) GetTextList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.TextList)
 }
 
-func (op *ObjectRef) GetRecordList(run rt.Runtime) (rt.Value, error) {
+func (op *ObjectDot) GetRecordList(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.RecordList)
 }
 
-func (op *ObjectRef) getValue(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
+func (op *ObjectDot) getValue(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	if at, e := GetReference(run, op); e != nil {
 		err = e
 	} else if val, e := at.GetValue(); e != nil {

@@ -41,9 +41,9 @@ Tapestry:
                   - "unlit"
       - - StartGame actor:quietly:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromBool: true
         - Fabricate input: "look"
         - Expect output:

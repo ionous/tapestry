@@ -10,9 +10,9 @@ Tapestry:
       - - Note: "Initialize the story as if we had started a game."
         - # expect that the kitchen is lit.
           Expect:
-            Object:field:
+            Object:dot:
               - "kitchen"
-              - "lit"
+              - AtField: "lit"
         - # check that the outermost light source is the kitchen.
           Expect:
             Is:matching:value:
@@ -27,21 +27,21 @@ Tapestry:
               FromText: "self"
         - StartGame actor:quietly:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField:  "pawn"
             - FromBool: true
         - # start game should set the actor to is illuminated.
           Expect:
-            Object:field:dot:
+            Object:dot:
               - "self"
-              - "lighting"
-              - - AtField: "illuminated"
+              - - AtField: "lighting"
+                - AtField: "illuminated"
         - # start game should set the story's cache.
           Expect:
-            Object:field:
+            Object:dot:
               - "story"
-              - "illuminated"
+              - AtField: "illuminated"
         - # and asking through the illuminates pattern should be fine.
           Expect:
             Illuminates actor:
@@ -54,15 +54,15 @@ Tapestry:
         - # update should clear actor illuminated
           Expect:
             Not:
-              Object:field:dot:
+              Object:dot:
                 - "self"
-                - "lighting"
-                - - AtField: "illuminated"
+                - - AtField: "lighting"
+                  - AtField: "illuminated"
         - # update should set the story to not is illuminated
           Expect:
-            Object:field:
+            Object:dot:
               - "story"
-              - "not illuminated"
+              - AtField: "not illuminated"
         - # asking through the pattern should also be fine.
           Expect:
             Not:

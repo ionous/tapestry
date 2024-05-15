@@ -35,9 +35,9 @@ Tapestry:
     Define rule:do:
       - "state changing"
       - - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "@trait"
+                - AtField: "@trait"
             - FromBool: true
   - # Print the results of the change.
     Define rule:do:
@@ -62,9 +62,9 @@ Tapestry:
                 - Not:
                     Is empty: "@guard"
                 - Not:
-                    Object:field:
+                    Object:dot:
                       - "@noun"
-                      - "@guard"
+                      - AtField: "@guard"
             - - Say response:with:
                   - "can't change the unchangeable"
                   - "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
@@ -72,9 +72,9 @@ Tapestry:
     Define rule:do:
       - "instead of state changing"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@noun"
-                - "@trait"
+                - AtField: "@trait"
             - - Say response:with:
                   - "can't change what is"
                   - "{They: .noun|capitalize!} {are:.noun} already {.trait}."

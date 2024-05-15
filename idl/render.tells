@@ -1,5 +1,5 @@
-# Exposes commands used by package express to render templates.
-# Keeping these functions separated allows us to exclude express from the runtime.
+# Text template rendering.
+# Keeping these functions separated allows weave to exclude package express from the runtime.
 Spec:with group:
   - "render"
   - Group contains:

@@ -8,7 +8,7 @@ import (
 
 func (op *SetValue) Execute(run rt.Runtime) (err error) {
 	if e := op.setValue(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
@@ -26,7 +26,7 @@ func (op *SetValue) setValue(run rt.Runtime) (err error) {
 
 func (op *SetState) Execute(run rt.Runtime) (err error) {
 	if e := op.setTrait(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }

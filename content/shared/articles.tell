@@ -86,9 +86,9 @@ Tapestry:
             - - PrintNothing:
                   FromText: "@obj"
             - If:do:else:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "proper named"
+                    - AtField: "proper named"
                 - - Note: "by definition proper named objects have no article."
                   - Say: "{.name}"
                 - If:do:else:
@@ -99,16 +99,16 @@ Tapestry:
                     - - Say: "{.article} {.name}"
                     - If:do:else:
                         - Is:matching:text:
-                            - Object:field:
+                            - Object:dot:
                                 - "@obj"
-                                - "indefinite article"
+                                - AtField: "indefinite article"
                             - "other_than"
                             - ""
                         - - Say: "{.obj.indefinite_article} {.name}"
                         - If:do:else:
-                            - Object:field:
+                            - Object:dot:
                                 - "@obj"
-                                - "plural named"
+                                - AtField: "plural named"
                             - - Say: "some {.name}"
                             - If:do:else:
                                 - StartsWithVowel text:

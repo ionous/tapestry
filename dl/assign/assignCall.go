@@ -1,11 +1,12 @@
 package assign
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 func (op *CallPattern) Execute(run rt.Runtime) error {
@@ -60,13 +61,13 @@ func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []rt.Valu
 		keys, vals := make([]string, 0, len(args)), make([]rt.Value, len(args))
 		for i, a := range args {
 			if val, e := safe.GetAssignment(run, a.Value); e != nil {
-				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
+				err = fmt.Errorf("%w while reading arg %d(%s)", e, i, a.Name)
 				break
 			} else if n := inflect.Normalize(a.Name); len(n) > 0 {
 				keys = append(keys, n)
 				vals[i] = val
 			} else if len(keys) > 0 {
-				err = errutil.Fmt("only named arguments can follow named arguments %d)", i)
+				err = fmt.Errorf("only named arguments can follow named arguments %d", i)
 			} else {
 				vals[i] = val
 			}

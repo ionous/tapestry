@@ -23,9 +23,9 @@ Tapestry:
             - "pass time, then continue"
             - - If:assuming:do:
                   - AllTrue:
-                      - Object:field:
+                      - Object:dot:
                           - "settings"
-                          - "score notification on"
+                          - AtField: "score notification on"
                       - Is:matching:num:
                           - "@change"
                           - "other_than"
@@ -34,12 +34,12 @@ Tapestry:
                         - "change"
                         - FromNumber:
                             Subtract:value:
-                              - Object:field:
+                              - Object:dot:
                                   - "story"
-                                  - "score"
-                              - Object:field:
+                                  - AtField: "score"
+                              - Object:dot:
                                   - "last known"
-                                  - "score"
+                                  - AtField: "score"
                   - - Say response:with:
                         - "notify score changed"
                         - "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} {if .change > 1}points{else}point{end}."
@@ -94,9 +94,9 @@ Tapestry:
       - "tapestry"
       - - StartGame actor:quietly:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromBool: true
         - Fabricate input: "score"
         - Expect output: "This isn't a competition."
@@ -105,19 +105,19 @@ Tapestry:
       - "scoring"
       - - StartGame actor:quietly:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField:  "pawn"
             - FromBool: true
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "max score"
+                -  AtField: "max score"
             - FromNumber: 50
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "score"
+                - AtField: "score"
             - FromNumber: 23
         - Fabricate input: "score"
         - Expect output: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
@@ -129,19 +129,19 @@ Tapestry:
             - "story"
             - "completed"
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "max score"
+                - AtField: "max score"
             - FromNumber: 100
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "score"
+                - AtField: "score"
             - FromNumber: 100
         - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "turn count"
+                - AtField: "turn count"
             - FromNumber: 7
         - Fabricate input: "score"
         - Expect output: "In 7 turns, you scored 100 out of a possible 100 points."
@@ -155,23 +155,23 @@ Tapestry:
             - "after activating"
             - - # set the score directly.
                 Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "story"
-                      - "score"
+                      - AtField:  "score"
                   - FromNumber: 50
         - Define noun:rule:do:
             - "flashlight"
             - "after deactivating"
             - - # or, change it by a relative number.
                 Decrease:
-                  Object:field:
+                  Object:dot:
                     - "story"
-                    - "score"
+                    - AtField: "score"
       - - StartGame actor:quietly:
             - FromText:
-                Object:field:
+                Object:dot:
                   - "player"
-                  - "pawn"
+                  - AtField: "pawn"
             - FromBool: true
         - Fabricate input: "switch on flashlight"
         - Expect output:

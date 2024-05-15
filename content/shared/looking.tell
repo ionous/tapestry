@@ -25,24 +25,24 @@ Tapestry:
           Text:kind:initially:
             - "location"
             - "object"
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "location"
+                - AtField: "location"
         - # Whether the location is illuminated or not.
           # If not specified, uses the current story illumination.
           Bool:initially:
             - "illuminated"
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "illuminated"
+                - AtField: "illuminated"
         - # One of the verbosity traits.
           # If not specified, uses the setting's verbosity.
           Text:kind:initially:
             - "verbosity"
             - "verbosity"
-            - Object:field:
+            - Object:dot:
                 - "settings"
-                - "verbosity"
+                - AtField: "verbosity"
       - - Nothing:
         - TextList:initially:
             - "enclosures"
@@ -69,9 +69,9 @@ Tapestry:
                               - "@verbosity"
                               - "equal_to"
                               - "brief"
-                          - Object:field:
+                          - Object:dot:
                               - "story"
-                              - "not darkness witnessed"
+                              - AtField: "not darkness witnessed"
                   - - PrintDarkDescription room:
                         FromText: "@room"
             - # when illuminate
@@ -95,9 +95,9 @@ Tapestry:
                                 - "@verbosity"
                                 - "equal_to"
                                 - "brief"
-                            - Object:field:
+                            - Object:dot:
                                 - "@room"
-                                - "not visited"
+                                - AtField: "not visited"
                     - - Note: "Reorder from outer to inner"
                       - Reverse list: "@enclosures"
                       - Repeating across:as:do:
@@ -110,15 +110,15 @@ Tapestry:
         - If:do:else:
             - Not: "@illuminated"
             - - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "story"
-                      - "darkness witnessed"
+                      - AtField: "darkness witnessed"
                   - FromBool: true
             - Finally do:
                 - Set:value:
-                    - Object:field:
+                    - Object:dot:
                         - "@room"
-                        - "visited"
+                        - AtField: "visited"
                     - FromBool: true
   - # 
     Define pattern:requires:provides:do:
@@ -216,9 +216,9 @@ Tapestry:
                 FromText: "@locale"
         - Number:initially:
             - "previous mentions"
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "mentions"
+                - AtField: "mentions"
         - TextList: "remaining kids"
       - - If:do:
             - Is:matching:text:
@@ -226,9 +226,9 @@ Tapestry:
                 - "equal_to"
                 - "@room"
             - - Print:
-                  Object:field:
+                  Object:dot:
                     - "@room"
-                    - "description"
+                    - AtField: "description"
         - SortTexts:byField:
             - "@kids"
             - "grouping label"
@@ -252,12 +252,12 @@ Tapestry:
                         FromText: "@it"
                     - If:do:
                         - AllTrue:
-                            - Object:field:
+                            - Object:dot:
                                 - "@it"
-                                - "not mentioned"
-                            - Object:field:
+                                - AtField: "not mentioned"
+                            - Object:dot:
                                 - "@it"
-                                - "not scenery"
+                                - AtField: "not scenery"
                         - - Push:into:
                               - FromText: "@it"
                               - "@remaining_kids"
@@ -273,9 +273,9 @@ Tapestry:
                 Is:matching:num:
                   - "@previous_mentions"
                   - "equal_to"
-                  - Object:field:
+                  - Object:dot:
                       - "story"
-                      - "mentions"
+                      - AtField: "mentions"
   - # 
     Note: "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
   - Define pattern:requires:provides:do:
@@ -296,9 +296,9 @@ Tapestry:
       - "print mentioned supporters"
       - - If:do:
             - AllTrue:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "mentioned"
+                    - AtField: "mentioned"
                 - KindOf:is:
                     - "@obj"
                     - "supporters"
@@ -311,9 +311,9 @@ Tapestry:
       - "print scenery supporters"
       - - If:do:
             - AllTrue:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "scenery"
+                    - AtField: "scenery"
                 - KindOf:is:
                     - "@obj"
                     - "supporters"
@@ -323,9 +323,9 @@ Tapestry:
       - "print object description"
       - "print initial impression"
       - - If:do:
-            - Object:field:
+            - Object:dot:
                 - "@obj"
-                - "not mentioned"
+                - AtField: "not mentioned"
             - - Note:
                   - "print impression prints objects that have an initial appearance,"
                   - "and flags them as mentioned."
@@ -357,17 +357,17 @@ Tapestry:
         - Bool:initially:
             - "first look"
             - AllTrue:
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "not mentioned"
-                - Object:field:
+                    - AtField: "not mentioned"
+                - Object:dot:
                     - "@obj"
-                    - "not scenery"
+                    - AtField: "not scenery"
                 - Not:
                     Is empty:
-                      Object:field:
+                      Object:dot:
                         - "@obj"
-                        - "initial appearance"
+                        - AtField: "initial appearance"
       - - # no default rules
           Continue:
   - Define rule:do:
@@ -395,9 +395,9 @@ Tapestry:
       - - If:do:
             - AllTrue:
                 - "@first_look"
-                - Object:field:
+                - Object:dot:
                     - "@obj"
-                    - "not mentioned"
+                    - AtField: "not mentioned"
             - - Say: "{.obj.initial_appearance}"
               - Mention obj:
                   FromText: "@obj"
@@ -429,16 +429,16 @@ Tapestry:
       - - Nothing:
       - - Nothing:
       - - Set:value:
-            - Object:field:
+            - Object:dot:
                 - "story"
-                - "mentions"
+                - AtField: "mentions"
             - FromNumber: 0
         - Repeating across:as:do:
             - FromTextList:
                 KindsOf: "things"
             - "it"
             - - Set:value:
-                  - Object:field:
+                  - Object:dot:
                       - "@it"
-                      - "not mentioned"
+                      - AtField: "not mentioned"
                   - FromBool: true
