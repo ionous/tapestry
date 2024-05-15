@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -12,20 +12,20 @@ import (
 
 // test hierarchical selection of domains and detection of changes
 func TestActivate(t *testing.T) {
-	db := testdb.Create(t.Name())
+	db := tables.CreateTest(t.Name(), true)
 	defer db.Close()
 	const at = ""
-	if e := createTable(db,
-		func(w *mdl.Modeler) (err error) {
-			return mdlDomain(w,
-				// name, dependency, at
-				// -------------------------
-				"main", "", at,
-				"sub", "main", at,
-				"beep", "", at,
-				"boop", "sub", at,
-			)
-		}); e != nil {
+
+	if m, e := mdl.NewModeler(db); e != nil {
+		t.Fatal(e)
+	} else if e := mdlDomain(m,
+		// name, dependency, at
+		// -------------------------
+		"main", "", at,
+		"sub", "main", at,
+		"beep", "", at,
+		"boop", "sub", at,
+	); e != nil {
 		t.Fatal("failed to create table", e)
 	} else if q, e := qdb.NewQueryTest(db); e != nil {
 		t.Fatal(e)

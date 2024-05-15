@@ -3,57 +3,52 @@ package tables
 import (
 	"database/sql"
 	_ "embed"
+	"fmt"
 
-	"github.com/ionous/errutil"
 	_ "github.com/mattn/go-sqlite3" // queries are specific to sqlite, so force the sqlite driver.
 )
 
-const DefaultDriver = "sqlite3"
-
-// CreateModel creates the tables listed in model.sql
-func CreateModel(db *sql.DB) (err error) {
-	if _, e := db.Exec(modelSql); e != nil {
-		err = errutil.New("Couldn't create model tables", e)
-	} else if _, e := db.Exec(modelViewSql); e != nil {
-		err = errutil.New("Couldn't create model views", e)
+// creates a db for the tables listed in idl.sql
+func CreateIdl(idlFile string) (ret *sql.DB, err error) {
+	if db, e := open(defaultDriver, idlFile); e != nil {
+		err = fmt.Errorf("couldn't open db %s because %v", idlFile, e)
+	} else {
+		err = createTables(db, "idl")
 	}
 	return
 }
 
-//go:embed model.sql
-var modelSql string
-
-//go:embed modelView.sql
-var modelViewSql string
-
-// CreateRun creates the tables listed in run.sql
-func CreateRun(db *sql.DB) (err error) {
-	if _, e := db.Exec(runSql); e != nil {
-		err = errutil.New("Couldn't create run tables", e)
-	}
-	return
-}
-
-//go:embed run.sql
-var runSql string
-
-// CreateRun creates the tables listed in idl.sql
-func CreateIdl(db *sql.DB) (err error) {
-	if _, e := db.Exec(idlSql); e != nil {
-		err = errutil.New("Couldn't create idl tables", e)
-	}
-	return
-}
-
-//go:embed idl.sql
-var idlSql string
-
-// CreateAll tables listed in the various .sql files.
-func CreateAll(db *sql.DB) (err error) {
-	if e := CreateModel(db); e != nil {
+func CreateBuildTime(mdlFile string) (ret *sql.DB, err error) {
+	if db, e := open(tapestryDriver, mdlFile); e != nil {
 		err = e
-	} else if e := CreateRun(db); e != nil {
+	} else {
+		if e := createTables(db,
+			"model", "modelView",
+			"runTables", "runViews"); e != nil {
+			err = e
+		} else {
+			ret = db
+		}
+		if err != nil {
+			db.Close()
+		}
+	}
+	return
+}
+
+func CreateRunTime(mdlFile string) (ret *sql.DB, err error) {
+	if db, e := open(tapestryDriver, mdlFile+"?mode=ro"); e != nil {
 		err = e
+	} else {
+		if e := createTables(db,
+			"runTables", "runViews"); e != nil {
+			err = e
+		} else {
+			ret = db
+		}
+		if err != nil {
+			db.Close()
+		}
 	}
 	return
 }

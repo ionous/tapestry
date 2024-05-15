@@ -3,21 +3,18 @@ package cmdcheck
 
 import (
 	"context"
-	"database/sql"
 	"flag"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
@@ -26,35 +23,19 @@ func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error)
 	log.Println("Checking", checkFlags.srcPath, checkOne)
 	if lvl, ok := debug.MakeLoggingLevel(checkFlags.logLevel); !ok {
 		err = errutil.New("Unknown log level", checkFlags.logLevel)
+	} else if srcPath, e := filepath.Abs(checkFlags.srcPath); e != nil {
+		err = e
 	} else {
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
-		opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
-		if cnt, e := checkFile(checkFlags.srcPath, inflect.Normalize(checkOne), opt); e != nil {
+		opt.SetOption(meta.PrintResponseNames, rt.BoolOf(checkFlags.responses))
+		if cnt, e := CheckFile(srcPath, inflect.Normalize(checkOne), opt); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {
 				log.Panic("mismatched")
 			}
 		} else {
 			log.Println("Checked", cnt, checkFlags.srcPath)
-		}
-	}
-	return
-}
-
-// open db, select tests, de-gob and run them each in turn.
-// print the results, only error on critical errors
-func checkFile(inFile, testName string, opt qna.Options) (ret int, err error) {
-	if inFile, e := filepath.Abs(inFile); e != nil {
-		err = e
-	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
-		err = errutil.New("couldn't open db", inFile, e)
-	} else {
-		defer db.Close()
-		if e := tables.CreateRun(db); e != nil {
-			err = e
-		} else {
-			ret, err = CheckAll(db, testName, opt, tapestry.AllSignatures)
 		}
 	}
 	return

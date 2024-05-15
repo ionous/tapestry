@@ -1,7 +1,10 @@
 package game
 
 import (
+	"io"
+
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 
@@ -13,14 +16,20 @@ type Signal int
 const (
 	SignalUnknown Signal = iota
 	SignalQuit
+	SignalSave
+	SignalLoad
 )
 
 func (s Signal) Error() string {
 	return s.String()
 }
 
-func (*PrintVersion) Execute(run rt.Runtime) error {
-	return errutil.New("version not implemented")
+// alt: hoist a global object with predefined fields
+func (*PrintVersion) Execute(run rt.Runtime) (_ error) {
+	details := false
+	version := files.GetVersion(details)
+	io.WriteString(run.Writer(), version)
+	return
 }
 
 // returns SignalQuit
@@ -29,12 +38,18 @@ func (*QuitGame) Execute(run rt.Runtime) error {
 	return SignalQuit
 }
 
-func (*RestoreGame) Execute(run rt.Runtime) error {
-	return errutil.New("restore not implemented")
+// todo: it'd be nice for the user to be able to type a name for the file as part of the thing
+// including a "request list of save files" type of command
+// would either need a parser action that can transparently eat words "load name of my save"
+// ( and change Signal into a struct with data )
+// -- could also have the play engine handle the player interaction
+// -- but that seems less flexible.
+func (*LoadGame) Execute(run rt.Runtime) error {
+	return SignalLoad
 }
 
 func (*SaveGame) Execute(run rt.Runtime) error {
-	return errutil.New("save not implemented")
+	return SignalSave
 }
 
 func (*UndoTurn) Execute(run rt.Runtime) error {

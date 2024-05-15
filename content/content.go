@@ -4,10 +4,10 @@ package content
 import "embed"
 
 //go:embed shared/*.tell
-var Shared embed.FS
+var Shared embed.FS // we want the _index file; so this uses *.tell
 
-//go:embed stories/*.tell
-var Sample embed.FS
+//go:embed stories
+var Sample embed.FS // not using *.tell excludes files starting with _
 
 // a template for a default story
 var DefaultStory = //

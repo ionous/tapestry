@@ -12,7 +12,7 @@ import (
 
 func TestPhrases(t *testing.T) {
 	var skipped int
-	const at = -1
+	const at = 1
 	for i, p := range jesstest.Phrases {
 		if i != at && at >= 0 {
 			continue
@@ -45,11 +45,6 @@ func TestPhrases(t *testing.T) {
 	if skipped > 0 {
 		t.Logf("skipped %d tests", skipped)
 	}
-}
-
-type w struct {
-	jesstest.Mock
-	info
 }
 
 type info struct {

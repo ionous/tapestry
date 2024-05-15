@@ -14,25 +14,24 @@ func (op *ListPush) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListPush) push(run rt.Runtime) (err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetList(run); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.CheckList(vs); e != nil {
 		err = e
 	} else if ins, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
-	} else if !IsAppendable(ins, els) {
-		err = insertError{ins, els}
+	} else if !IsAppendable(ins, vs) {
+		err = insertError{ins, vs}
 	} else {
 		if atFront, e := safe.GetOptionalBool(run, op.AtEdge, false); e != nil {
 			err = e
 		} else {
 			if !atFront.Bool() {
-				err = els.Appends(ins)
+				err = vs.Appends(ins)
 			} else {
-				_, err = els.Splice(0, 0, ins)
-			}
-			if err == nil {
-				root.SetDirty(run)
+				_, err = vs.Splice(0, 0, ins)
 			}
 		}
 	}

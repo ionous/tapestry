@@ -35,12 +35,12 @@ func searchForFlow(src typeinfo.Instance, find typeinfo.T) (ret typeinfo.Instanc
 			if find == w.TypeInfo() {
 				// ahg!
 				ret = w.RawValue().Addr().Interface().(typeinfo.Instance)
-				err = inspect.DoneVisiting
+				err = inspect.ErrDone
 			}
 			return
 		},
 	}
-	if e := inspect.Visit(src, evts); e != inspect.DoneVisiting {
+	if e := inspect.Visit(src, evts); e != inspect.ErrDone {
 		err = e
 	}
 	return

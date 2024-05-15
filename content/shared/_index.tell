@@ -1,3 +1,4 @@
 ---
-# Everything in the Tapestry directory
+# Everything in the shared folder
+# is considered part of the tapestry scene.
 Define scene: "tapestry"

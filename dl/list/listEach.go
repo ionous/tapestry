@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -36,25 +35,25 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 			// maybe this type could live in the db.
 			const el, index, first, last = 0, 1, 2, 3
 			itAff, itType := affine.Element(vs.Affinity()), vs.Type()
-			ls := g.NewAnonymousRecord([]g.Field{
+			ls := rt.NewRecord(&rt.Kind{Fields: []rt.Field{
 				{Name: it, Affinity: itAff, Type: itType},
 				{Name: "index", Affinity: affine.Number},
 				{Name: "first", Affinity: affine.Bool},
 				{Name: "last", Affinity: affine.Bool},
-			})
+			}})
 			run.PushScope(scope.FromRecord(run, ls))
 			for i := 0; i < cnt; i++ {
 				at := vs.Index(i)
 				if e := ls.SetIndexedField(el, at); e != nil {
 					err = e
 					break
-				} else if e := ls.SetIndexedField(index, g.IntOf(i+1)); e != nil {
+				} else if e := ls.SetIndexedField(index, rt.IntOf(i+1)); e != nil {
 					err = e
 					break
-				} else if e := ls.SetIndexedField(first, g.BoolOf(i == 0)); e != nil {
+				} else if e := ls.SetIndexedField(first, rt.BoolOf(i == 0)); e != nil {
 					err = e
 					break
-				} else if e := ls.SetIndexedField(last, g.BoolOf((i+1) == cnt)); e != nil {
+				} else if e := ls.SetIndexedField(last, rt.BoolOf((i+1) == cnt)); e != nil {
 					err = e
 					break
 				} else if e := safe.RunAll(run, op.Exe); e != nil {

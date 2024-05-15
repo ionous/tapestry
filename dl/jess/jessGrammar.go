@@ -58,7 +58,7 @@ Loop:
 				str.WriteRune(n)
 				escape = false
 			default:
-				err = errors.New("only the equal sign, forward slash, or dash can follow an equal sign.")
+				err = errors.New("only the equal sign, forward slash, or dash can follow an equal sign")
 				break Loop
 			}
 		} else {
@@ -70,14 +70,14 @@ Loop:
 					break Loop
 				}
 			} else if dashCount > 0 {
-				err = errors.New("to avoid ambiguity, double dashes can only appear as the last option.")
+				err = errors.New("to avoid ambiguity, double dashes can only appear as the last option")
 			} else {
 				switch n {
 				default:
 					str.WriteRune(n)
 				case openBracket:
 					// fix: we should allow substitutions as choices.
-					err = errors.New("bracketed text indicates substitutions; substitutions can only be used as standalone words.")
+					err = errors.New("bracketed text indicates substitutions; substitutions can only be used as standalone words")
 					break Loop
 				case escapeRune:
 					escape = true
@@ -85,7 +85,7 @@ Loop:
 					if str.Len() == 0 {
 						err = errors.New(`word seems to be empty. 
 to match a forward slash, precede it with an equal sign.
-to match no word at all, use the trailing double dash syntax.`)
+to match no word at all, use the trailing double dash syntax`)
 						break Loop
 					}
 					ret = append(ret, str.String())
@@ -104,4 +104,4 @@ to match no word at all, use the trailing double dash syntax.`)
 	return
 }
 
-const doubleDashMsg = "to avoid ambiguity with the trailing double dash syntax, precede actual dashes by an equal sign."
+const doubleDashMsg = "to avoid ambiguity with the trailing double dash syntax, precede actual dashes by an equal sign"

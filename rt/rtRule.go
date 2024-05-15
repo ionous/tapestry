@@ -1,9 +1,5 @@
 package rt
 
-import (
-	"github.com/ionous/errutil"
-)
-
 type Jump int
 
 //go:generate stringer -type=Jump
@@ -15,8 +11,6 @@ const (
 	// transition only after processing the entire phase.
 	JumpLater
 )
-
-const NoResult errutil.NoPanicError = "no result"
 
 // Rule triggers a named series of statements when its filters and phase are satisfied.
 // stopping before the action happens is considered a cancel.

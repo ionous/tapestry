@@ -3,12 +3,11 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
-func (op *Range) GetNumList(run rt.Runtime) (ret g.Value, err error) {
+func (op *Range) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if vs, e := op.getNumList(run); e != nil {
 		err = CmdError(op, e)
 	} else {
@@ -17,7 +16,7 @@ func (op *Range) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *Range) getNumList(run rt.Runtime) (ret g.Value, err error) {
+func (op *Range) getNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if start, e := safe.GetOptionalNumber(run, op.From, 1); e != nil {
 		err = e
 	} else if stop, e := safe.GetOptionalNumber(run, op.To, start.Float()); e != nil {
@@ -34,7 +33,7 @@ func (op *Range) getNumList(run rt.Runtime) (ret g.Value, err error) {
 
 // ranger is a PanicValue where every method panics except type and affinity.
 type ranger struct {
-	g.PanicValue
+	rt.PanicValue
 	start, stop, step int
 }
 
@@ -49,9 +48,9 @@ func (n ranger) Type() string {
 }
 
 // Index computes the i(th) step of the range.
-func (n ranger) Index(i int) g.Value {
+func (n ranger) Index(i int) rt.Value {
 	v := n.start + i*n.step
-	return g.IntOf(v)
+	return rt.IntOf(v)
 }
 
 // Len returns the total number of steps.

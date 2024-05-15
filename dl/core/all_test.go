@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
@@ -73,13 +72,13 @@ type boolList struct {
 	asks int
 }
 
-func (b *boolList) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (b *boolList) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if a := b.asks; a >= len(b.vals) {
 		err = errutil.New("out of range")
 	} else {
 		ok := b.vals[a]
 		b.asks = a + 1
-		ret = g.BoolOf(ok)
+		ret = rt.BoolOf(ok)
 	}
 	return
 }

@@ -37,7 +37,7 @@ func RowsAffected(res sql.Result) (ret int) {
 	return
 }
 
-// QueryAll queries the db ( or statement cache ) for one or more rows.
+// QueryAll queries for one or more rows.
 // For each row, it writes the row to the 'dest' args and calls 'cb' for processing.
 func QueryAll(db Querier, q string, cb func() error, dest ...any) (err error) {
 	if rows, e := db.Query(q); e != nil {
@@ -73,6 +73,7 @@ func Insert(table string, keys ...string) string {
 	return InsertWith(table, "", keys...)
 }
 
+// InsertWith allows the specification of on conflict directives
 func InsertWith(table string, rest string, keys ...string) string {
 	vals := "?"
 	if kcnt := len(keys) - 1; kcnt > 0 {
@@ -81,4 +82,18 @@ func InsertWith(table string, rest string, keys ...string) string {
 	return "INSERT into " + table +
 		"(" + strings.Join(keys, ", ") + ")" +
 		" values " + "(" + vals + ")" + rest + ";"
+}
+
+// insert an arbitrary number of rows into the passed db.
+// tablecols holds the names of the table and columns to query,
+// els can hold multiple rows of data, each containing the number of cols specified by tablecols.
+func Ins(db Executer, tablecols []string, els ...interface{}) (err error) {
+	ins, width := Insert(tablecols[0], tablecols[1:]...), len(tablecols)-1
+	for i, cnt := 0, len(els); i < cnt; i += width {
+		if _, e := db.Exec(ins, els[i:i+width]...); e != nil {
+			err = e
+			break
+		}
+	}
+	return
 }

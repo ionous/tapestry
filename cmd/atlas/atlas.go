@@ -20,25 +20,35 @@ func main() {
 	var fileName string
 	flag.StringVar(&fileName, "in", "", "input file name (sqlite3)")
 	flag.Parse()
-	if len(fileName) == 0 || fileName == "memory" {
-		fileName = "file:test.db?cache=shared&mode=memory"
-	}
-	if db, e := sql.Open(tables.DefaultDriver, fileName); e != nil {
-		log.Fatalln("db open", e)
-	} else if _ /*fix temp view*/ = CreateAtlas(db); e != nil {
-		log.Fatalln("db view", e)
+	if db, e := openDB(fileName); e != nil {
+		panic(e)
 	} else {
-		if fileName == "memory" {
-			if e := CreateTestData(db); e != nil {
-				log.Fatal(e)
-			}
+		defer db.Close()
+		if _ /*fix temp view*/ = CreateAtlas(db); e != nil {
+			log.Fatalln("db view", e)
+		} else {
+			m := http.NewServeMux()
+			m.HandleFunc("/atlas/", web.HandleResource(Atlas(db)))
+			go support.OpenBrowser("http://localhost:8080/atlas/")
+			log.Fatal(http.ListenAndServe(":8080", m))
 		}
-
-		m := http.NewServeMux()
-		m.HandleFunc("/atlas/", web.HandleResource(Atlas(db)))
-		go support.OpenBrowser("http://localhost:8080/atlas/")
-		log.Fatal(http.ListenAndServe(":8080", m))
 	}
+}
+
+func openDB(name string) (ret *sql.DB, err error) {
+	useTestData := len(name) == 0 || name == "memory"
+	if !useTestData {
+		ret, err = tables.CreateRunTime(name)
+	} else {
+		db := tables.CreateTest("testdata", true)
+		if e := CreateTestData(db); e != nil {
+			db.Close()
+			err = e
+		} else {
+			ret = db
+		}
+	}
+	return
 }
 
 func Atlas(db *sql.DB) web.Resource {

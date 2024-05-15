@@ -46,7 +46,7 @@ func ReadTellRunes(in io.RuneReader, includeComments bool) (ret any, err error) 
 			return m
 		})
 		dec.SetSequencer(func(reserve bool) collect.SequenceWriter {
-			return make(tapSeq, 0, 0)
+			return make(tapSeq, 0)
 		})
 		dec.UseNotes(&docComments)
 	}

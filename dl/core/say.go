@@ -4,7 +4,6 @@ import (
 	"bytes"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
@@ -19,7 +18,7 @@ func (op *PrintText) Execute(run rt.Runtime) (err error) {
 }
 
 // collect all text written during this function and return it as a value
-func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *BufferText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	var buf bytes.Buffer
 	if v, e := writeSpan(run, &buf, op.Exe, &writer.ChunkWriter{Writer: &buf}); e != nil {
 		err = cmdError(op, e)
@@ -29,7 +28,7 @@ func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *SpanText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	var span print.Spanner
 	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
@@ -39,7 +38,7 @@ func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *BracketText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	span := print.Parens()
 	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
@@ -49,7 +48,7 @@ func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *SlashText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	var span print.Spanner // separate punctuation with spaces
 	if v, e := writeSpan(run, &span, op.Exe, print.Slash(span.ChunkOutput())); e != nil {
 		err = cmdError(op, e)
@@ -59,7 +58,7 @@ func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *CommaText) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *CommaText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	var span print.Spanner // separate punctuation with spaces
 	if v, e := writeSpan(run, &span, op.Exe, print.AndSeparator(span.ChunkOutput())); e != nil {
 		err = cmdError(op, e)
@@ -71,9 +70,9 @@ func (op *CommaText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 type stringer interface{ String() string }
 
-func writeSpan(run rt.Runtime, buf stringer, act []rt.Execute, out writer.OutputCloser) (ret g.Value, err error) {
+func writeSpan(run rt.Runtime, buf stringer, act []rt.Execute, out writer.OutputCloser) (ret rt.Value, err error) {
 	if len(act) == 0 {
-		ret = g.Empty
+		ret = rt.Empty
 	} else {
 		prev := run.SetWriter(out)
 		if e := safe.RunAll(run, act); e != nil {
@@ -81,7 +80,7 @@ func writeSpan(run rt.Runtime, buf stringer, act []rt.Execute, out writer.Output
 		} else if e := out.Close(); e != nil {
 			err = e
 		} else if str := buf.String(); len(str) > 0 {
-			ret = g.StringOf(str)
+			ret = rt.StringOf(str)
 		} else {
 			ret = safe.GetTemplateText()
 		}

@@ -31,7 +31,7 @@ func TestMatching(t *testing.T) {
 			Kinds: &kinds,
 		},
 	}
-	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, locals))
+	lt.Chain = scope.MakeChain(scope.FromRecord(&kinds, locals))
 
 	if a, e := lt.FieldByName("a"); e != nil {
 		t.Fatal(e)
@@ -39,7 +39,6 @@ func TestMatching(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		a, b := a.Record(), b.Record()
-
 		runMatching := &assign.CallPattern{
 			PatternName: P(kargs.Name()), Arguments: core.MakeArgs(
 				&assign.FromRecord{Value: core.Variable("a")},

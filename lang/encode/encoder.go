@@ -2,7 +2,6 @@ package encode
 
 import (
 	"fmt"
-	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
@@ -125,10 +124,6 @@ func (enc *Encoder) customEncode(cmd typeinfo.Instance) (ret any, err error) {
 		ret, err = c(enc, cmd)
 	}
 	return
-}
-
-func unknownType(t r.Type) error {
-	return fmt.Errorf("unknown type %s(%s)", t.Kind(), t.String())
 }
 
 func unpack(src inspect.It) (ret typeinfo.Instance, err error) {

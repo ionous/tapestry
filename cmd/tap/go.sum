@@ -1,5 +1,3 @@
-git.sr.ht/~ionous/tapestry v0.23.3 h1:4Yz3b1pK7p6lUPd+X/1YiRfhUi+3u7jYdlxvuqvb+T8=
-git.sr.ht/~ionous/tapestry v0.23.3/go.mod h1:tt0RmK8zyf2P00Q8Acv5TfH/khSikN8rd6uQN5egFto=
 github.com/bep/debounce v1.2.1 h1:v67fRdBA9UQu2NhLFXrSg0Brw7CexQekrBwDMM8bzeY=
 github.com/bep/debounce v1.2.1/go.mod h1:H8yggRPQKLUhUoqrJC1bO2xNya7vanpDl7xR3ISbCJ0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -17,8 +15,8 @@ github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842 h1:K/aFsqWoWaqdjo
 github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842/go.mod h1:wHkp9uwaQwPnxNpUblAkQsJz2q0Rdvuxk1WTN5zO1p8=
 github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77 h1:ESMGebexC3FTSESyloX5i9uO0gYKDvxYSZ4WCASWzFw=
 github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77/go.mod h1:l0XYSHRaNw8qImDaNqe4cd4kAG9HHj6799UaA7NvRjE=
-github.com/ionous/tell v0.8.0 h1:/4GSDK7uShdhkh90jYSKRexz28SDp7ipP7pNWncO1O0=
-github.com/ionous/tell v0.8.0/go.mod h1:IGoC9bvoZYSyBkdsKi3AQTItW7OF4iNEoZwk1EGRiLw=
+github.com/ionous/tell v0.8.1 h1:yLQ1oNXemj2a3DXknv4QSFRYchHALjvQip504vjHydM=
+github.com/ionous/tell v0.8.1/go.mod h1:IGoC9bvoZYSyBkdsKi3AQTItW7OF4iNEoZwk1EGRiLw=
 github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e h1:Q3+PugElBCf4PFpxhErSzU3/PY5sFL5Z6rfv4AbGAck=
 github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e/go.mod h1:alcuEEnZsY1WQsagKhZDsoPCRoOijYqhZvPwLG0kzVs=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=

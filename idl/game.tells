@@ -11,7 +11,7 @@ Spec:with group:
           - "execute"
           - Flow uses: []
       - Spec:slots:with flow:
-          - "restore_game"
+          - "load_game"
           - "execute"
           - Flow uses: []
       - Spec:slots:with flow:

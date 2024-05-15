@@ -12,8 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/play"
 )
 
@@ -21,7 +20,6 @@ import (
 type Shuttle struct {
 	inFile  string
 	db      *sql.DB
-	query   *qdb.Query
 	opts    qna.Options
 	decoder *decode.Decoder
 	play    *play.Playtime
@@ -43,7 +41,7 @@ func (c *Shuttle) Restart(scene string) (ret *play.Playtime, err error) {
 		err = e
 	} else if e := play.ActivateDomain(scene); e != nil {
 		err = e
-	} else if _, e := play.Call("start game", affine.None, nil, []g.Value{play.Survey().GetFocalObject()}); e != nil {
+	} else if _, e := play.Call("start game", affine.None, nil, []rt.Value{play.Survey().GetFocalObject()}); e != nil {
 		err = e
 	} else {
 		ret = play
@@ -64,23 +62,28 @@ func (c *Shuttle) EnsurePlay() (ret *play.Playtime, err error) {
 			ChangedState:    c.out.onChangeState,
 			ChangedRelative: c.out.onChangeRel,
 		}
-		run := qna.NewRuntimeOptions(&c.out.buf, c.query, c.decoder, note, c.opts)
-		survey := play.MakeDefaultSurveyor(run)
-		play := play.NewPlaytime(run, survey, grammar)
-		c.play = play
-		ret = play
-		var done bool
-		// fix? used for fabricate; maybe use options instead so that we can have multiple instances?
-		debug.Stepper = func(words string) (err error) {
-			// FIX: errors for step are getting fmt.Println in playTime.go
-			// so expect output can't test for errors ( and on error looks a bit borken )
-			var sig game.Signal
-			if _, e := play.Step(words); !done && errors.As(e, &sig) && sig == game.SignalQuit {
-				done = true // eat the quit signal on first return; fix? maybe do this on client?
-			} else if e != nil {
-				err = e
+		if run, e := qna.NewRuntimeOptions(c.db, c.decoder, c.opts); e != nil {
+			err = e
+		} else {
+			run.SetNotifier(note)
+			run.SetWriter(&c.out.buf)
+			survey := play.MakeDefaultSurveyor(run)
+			play := play.NewPlaytime(run, survey, grammar)
+			c.play = play
+			ret = play
+			var done bool
+			// fix? used for fabricate; maybe use options instead so that we can have multiple instances?
+			debug.Stepper = func(words string) (err error) {
+				// FIX: errors for step are getting fmt.Println in playTime.go
+				// so expect output can't test for errors ( and on error looks a bit borken )
+				var sig game.Signal
+				if _, e := play.Step(words); !done && errors.As(e, &sig) && sig == game.SignalQuit {
+					done = true // eat the quit signal on first return; fix? maybe do this on client?
+				} else if e != nil {
+					err = e
+				}
+				return
 			}
-			return
 		}
 	}
 	return

@@ -55,12 +55,34 @@ Tapestry:
       - - If:do:
             - Not: "@quietly"
             - - PrintTheBanner:
-  - # a parser action, which calls the low level request to quit.
+  - # a parser action which calls the low level quit.
     Define pattern:requires:provides:do:
-      - "request to quit"
+      - "request quit"
       - - Nothing:
       - - Nothing:
       - - QuitGame:
+  - # a parser action which calls the low level save.
+    Define pattern:requires:provides:do:
+      - "request save"
+      - - Nothing:
+      - - Nothing:
+      - - SaveGame:
+  - # a parser action which calls the low level load.
+    Define pattern:requires:provides:do:
+      - "request load"
+      - - Nothing:
+      - - Nothing:
+      - - LoadGame:
+  - # a parser action which calls the low level load.
+    Define pattern:requires:provides:do:
+      - "request version"
+      - - Nothing:
+      - - Nothing:
+      - - Print: "<p><b>"
+        - Say: "Story Version: {.story.version}"
+        - Say: "Tapestry Version: {print_version!}"
+        - Print: "</b><p>"
+
   - Define pattern:requires:provides:do:
       - "end game"
       - - # A placeholder. Eventually, when finally is true, the game is completely over. Otherwise, the game can be (eventually) restarted.

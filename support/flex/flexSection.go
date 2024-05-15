@@ -27,17 +27,17 @@ type Unreader interface {
 // on every dashed divider in a flex document.
 // must call "NextSection" to start reading.
 func MakeSection(r Unreader) Section {
-	return Section{runes: r, lastError: nextSection}
+	return Section{runes: r, lastError: errNextSection}
 }
 
-var nextSection = errors.New("a call to NextSection was expected")
+var errNextSection = errors.New("a call to NextSection was expected")
 
 // valid at the start of a document or the
 // after ReadRune() has returned eof; otherwise, panics.
 // returns false at the end of a document.
 func (k *Section) NextSection() bool {
 	var done bool
-	if k.lastError != nextSection {
+	if k.lastError != errNextSection {
 		panic("unexpected call to NextSection")
 	} else {
 		// waiting for start?
@@ -74,7 +74,7 @@ func (k *Section) ReadRune() (r rune, n int, err error) {
 		switch err {
 		case io.EOF:
 			// ugly: if its a real eof; we need to allow calls to NextSection
-			k.lastError = nextSection
+			k.lastError = errNextSection
 		case nil:
 			switch {
 			// always check for newlines
@@ -114,7 +114,7 @@ func (k *Section) ReadRune() (r rune, n int, err error) {
 						if w == newline {
 							k.line++
 						}
-						k.lastError = nextSection
+						k.lastError = errNextSection
 						err = io.EOF
 					}
 				}

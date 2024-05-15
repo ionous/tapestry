@@ -117,7 +117,7 @@ func (op *Understand) readRhs(q Query) (actions, nouns []string, err error) {
 		} else if k := next.Kind; k != nil && k.ActualKind.BaseKind == kindsOf.Action {
 			actions = append(actions, k.ActualKind.Name)
 		} else if n := next.Name; n == nil {
-			err = errors.New("Understandings can only match existing nouns or existing actions")
+			err = errors.New("understandings can only match existing nouns or existing actions")
 			break
 		} else {
 			// fix? if we're going to check at the end; maybe shift to plain names instead.
@@ -138,7 +138,7 @@ Loop:
 	for as := op.Names.GetNames(); as.HasNext(); {
 		// determine the "single" side of the plural request
 		if n := as.GetNext(); n.Noun == nil {
-			err = errors.New("unknown name, expected the name of an existing noun.")
+			err = errors.New("unknown name, expected the name of an existing noun")
 		} else {
 			name := n.Noun.ActualNoun.Name
 			for it := op.QuotedTexts.Iterate(); it.HasNext(); {

@@ -1,24 +1,31 @@
 package safe
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"github.com/ionous/errutil"
 )
 
-func Check(v g.Value, want affine.Affinity) (err error) {
-	if va := v.Affinity(); len(want) > 0 && want != va {
-		err = errutil.Fmt("wanted %q, have %q", want, va)
+func Check(v rt.Value, want affine.Affinity) (err error) {
+	if have := v.Affinity(); len(want) > 0 && want != have {
+		err = fmt.Errorf("wanted %q, have %q", want, have)
+	}
+	return
+}
+
+func CheckList(v rt.Value) (err error) {
+	if have := v.Affinity(); !affine.IsList(have) {
+		err = fmt.Errorf("wanted a list, have %q", have)
 	}
 	return
 }
 
 // fix! ( at the very least should live in pattern
 // but we need to remove its few -- tests and Determine -- dependencies on core
-var HackTillTemplatesCanEvaluatePatternTypes g.Value
+var HackTillTemplatesCanEvaluatePatternTypes rt.Value
 
-func GetTemplateText() (ret g.Value) {
+func GetTemplateText() (ret rt.Value) {
 	if hack := HackTillTemplatesCanEvaluatePatternTypes; hack != nil {
 		// we didn't accumulate any text during execution
 		// but perhaps we ran a pattern that returned text.
@@ -29,7 +36,7 @@ func GetTemplateText() (ret g.Value) {
 		ret = hack
 		HackTillTemplatesCanEvaluatePatternTypes = nil
 	} else {
-		ret = g.Empty // if the res was empty, it might have intentionally been empty
+		ret = rt.Empty // if the res was empty, it might have intentionally been empty
 	}
 	return
 }

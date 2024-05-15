@@ -3,7 +3,6 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/weave"
 )
 
@@ -23,32 +22,32 @@ type PostImport interface {
 
 var _ PreImport = (*CountOf)(nil)
 
-func (*CountOf) GetBool(rt.Runtime) (g.Value, error) {
+func (*CountOf) GetBool(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 
 var _ PreImport = (*CycleText)(nil)
 
-func (*CycleText) GetText(rt.Runtime) (g.Value, error) {
+func (*CycleText) GetText(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 
 var _ PreImport = (*ShuffleText)(nil)
 
-func (*ShuffleText) GetText(rt.Runtime) (g.Value, error) {
+func (*ShuffleText) GetText(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 
 var _ PreImport = (*StoppingText)(nil)
 
-func (*StoppingText) GetText(rt.Runtime) (g.Value, error) {
+func (*StoppingText) GetText(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 
 // the import step transforms say template into a render.RenderResponse
 var _ PreImport = (*SayTemplate)(nil)
 
-func (*SayTemplate) GetText(rt.Runtime) (g.Value, error) {
+func (*SayTemplate) GetText(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 
@@ -59,7 +58,7 @@ func (*SayTemplate) Execute(rt.Runtime) error {
 // the import step transforms say response into a render.RenderResponse
 var _ PostImport = (*SayResponse)(nil)
 
-func (*SayResponse) GetText(rt.Runtime) (g.Value, error) {
+func (*SayResponse) GetText(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 

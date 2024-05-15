@@ -2,25 +2,35 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
 
-type counters map[string]int
+func counterKey(name string) qkey {
+	return makeKey("", meta.Counter, name)
+}
 
-func (c *counters) getCounter(name string) (ret g.Value, err error) {
-	// fix: i think at some point we should have a global $counters object
-	// with named fields for each counter; that would let save/load work normally.
-	i := (*c)[name]
-	ret = g.IntOf(i)
+// returns 0 if the counter doesnt exist
+// only updates the cache on setCounter.
+func (run *Runner) getCounter(name string) (ret rt.Value, err error) {
+	key := counterKey(name)
+	if v, e := run.unpackDynamicValue(key, affine.Number, ""); e == nil {
+		ret = v
+	} else if e != errMissing {
+		err = e
+	} else {
+		ret = rt.Zero
+	}
 	return
 }
 
-func (c *counters) setCounter(name string, val g.Value) (err error) {
+func (run *Runner) setCounter(name string, val rt.Value) (err error) {
 	if aff := val.Affinity(); aff != affine.Number {
 		err = errutil.Fmt("counter %q expected a number got %s", name, aff)
 	} else {
-		(*c)[name] = val.Int()
+		key := counterKey(name) // no need to copy: numbers are primitives
+		run.dynamicVals.store[key] = UserValue{val}
 	}
 	return
 }

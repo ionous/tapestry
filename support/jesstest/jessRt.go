@@ -3,7 +3,7 @@ package jesstest
 import (
 	"fmt"
 
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -18,20 +18,20 @@ type jessRt struct {
 }
 
 type VerbLookup interface {
-	GetVerbValue(name, field string) (g.Value, error)
+	GetVerbValue(name, field string) (rt.Value, error)
 }
 
-func (d *jessRt) ReciprocalsOf(b, relation string) (ret g.Value, err error) {
+func (d *jessRt) ReciprocalsOf(b, relation string) (ret rt.Value, err error) {
 	if relation != "whereabouts" {
 		err = fmt.Errorf("jess ret, unexpected relation %q", relation)
 	} else if a, ok := d.nounPairs[b]; !ok {
-		ret = g.StringsOf(nil)
+		ret = rt.StringsOf(nil)
 	} else {
-		ret = g.StringsOf([]string{a})
+		ret = rt.StringsOf([]string{a})
 	}
 	return
 }
-func (d *jessRt) GetField(name, field string) (ret g.Value, err error) {
+func (d *jessRt) GetField(name, field string) (ret rt.Value, err error) {
 	// ex. asking for north.opposite
 	if field == "opposite" {
 		var str string
@@ -47,11 +47,10 @@ func (d *jessRt) GetField(name, field string) (ret g.Value, err error) {
 		default:
 			err = fmt.Errorf("jess rt, unexpected opposite for %q", name)
 		}
-		ret = g.StringOf(str)
+		ret = rt.StringOf(str)
 	} else if name == meta.KindAncestry {
 		if field == "storing" {
-			// root left, kind right.
-			ret = g.StringsOf([]string{"kinds", "actions", "storing"})
+			ret = rt.StringsOf([]string{"storing", "actions", "kinds"})
 		}
 	} else {
 		ret, err = d.verbs.GetVerbValue(name, field)

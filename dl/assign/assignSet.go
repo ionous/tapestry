@@ -2,7 +2,6 @@ package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -19,7 +18,7 @@ func (op *SetValue) setValue(run rt.Runtime) (err error) {
 		err = e // note: things are easier to debug if this grabs the target frst
 	} else if newValue, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
-	} else if e := ref.SetValue(run, newValue); e != nil {
+	} else if e := ref.SetValue(newValue); e != nil {
 		err = e
 	}
 	return
@@ -40,7 +39,7 @@ func (op *SetTrait) setTrait(run rt.Runtime) (err error) {
 	} else if obj, e := run.GetField(meta.ObjectId, tgt.String()); e != nil {
 		err = e
 	} else {
-		err = run.SetField(obj.String(), trait.String(), g.BoolOf(true))
+		err = run.SetField(obj.String(), trait.String(), rt.BoolOf(true))
 	}
 	return
 }

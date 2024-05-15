@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
@@ -13,15 +12,15 @@ import (
 // used when converting values to fields that might require objects.
 // if the target field (ex. a pattern local) requires text of a certain type
 // and the incoming value is untyped, try to convert it.
-func RectifyText(run rt.Runtime, ft g.Field, val g.Value) (ret g.Value, err error) {
+func RectifyText(run rt.Runtime, val rt.Value, aff affine.Affinity, cls string) (ret rt.Value, err error) {
 	ret = val // provisionally.
 	// assigning to a field of typed text (which refers to an object?)
-	if ft.Affinity == affine.Text && len(ft.Type) > 0 {
+	if aff == affine.Text && len(cls) > 0 {
 		// and the input is untyped?
 		// (tbd: reject objects of incompatible type?)
 		if val.Affinity() == affine.Text && val.Len() > 0 && len(val.Type()) == 0 {
 			// is the target field of object type?
-			if k, e := run.GetKindByName(ft.Type); e != nil {
+			if k, e := run.GetKindByName(cls); e != nil {
 				err = e
 			} else if k.Implements(kindsOf.Kind.String()) {
 				ret, err = run.GetField(meta.ObjectId, val.String())
@@ -31,7 +30,7 @@ func RectifyText(run rt.Runtime, ft g.Field, val g.Value) (ret g.Value, err erro
 	return
 }
 
-func Truthy(v g.Value) (ret bool) {
+func Truthy(v rt.Value) (ret bool) {
 	switch aff := v.Affinity(); aff {
 	case affine.Bool:
 		ret = v.Bool()
@@ -51,19 +50,19 @@ func Truthy(v g.Value) (ret bool) {
 	return
 }
 
-func ConvertValue(run rt.Runtime, val g.Value, out affine.Affinity) (ret g.Value, err error) {
+func ConvertValue(run rt.Runtime, val rt.Value, out affine.Affinity) (ret rt.Value, err error) {
 	switch aff := val.Affinity(); {
 	case aff == out:
 		ret = val
 
 	case out == affine.Text && aff == affine.Bool:
-		ret = g.StringOf(strconv.FormatBool(val.Bool()))
+		ret = rt.StringOf(strconv.FormatBool(val.Bool()))
 
 	case out == affine.Text && aff == affine.Number:
-		ret = g.StringOf(strconv.FormatFloat(val.Float(), 'g', -1, 64))
+		ret = rt.StringOf(strconv.FormatFloat(val.Float(), 'g', -1, 64))
 
 	case out == affine.Bool:
-		ret = g.BoolOf(Truthy(val))
+		ret = rt.BoolOf(Truthy(val))
 
 	default:
 		if e := Check(val, aff); e != nil {

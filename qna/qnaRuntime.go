@@ -1,13 +1,14 @@
 package qna
 
 import (
-	"io"
+	"database/sql"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/qna/decoder"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -16,48 +17,62 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Callbacks for important system level changes
+// Callbacks to listen for system level changes
 type Notifier struct {
 	StartedScene    func(domains []string)
 	EndedScene      func(domains []string)
 	ChangedState    func(noun, aspect, oldState, newState string)
 	ChangedRelative func(a, b, rel string)
-	// ChangedValue()
 }
 
-func NewRuntime(w io.Writer, q query.Query, d decoder.Decoder) *Runner {
-	return NewRuntimeOptions(w, q, d, Notifier{}, NewOptions())
+func NewRuntime(db *sql.DB, d decoder.Decoder) (*Runner, error) {
+	return NewRuntimeOptions(db, d, NewOptions())
 }
-func NewRuntimeOptions(w io.Writer, q query.Query, d decoder.Decoder, n Notifier, options Options) *Runner {
-	cacheErrors := options.cacheErrors()
-	run := &Runner{
-		query:      q,
-		decode:     d,
-		notify:     n,
-		values:     makeCache(cacheErrors),
-		nounValues: makeCache(cacheErrors),
-		counters:   make(counters),
-		options:    options,
-		scope:      scope.Chain{Scope: scope.Empty{}},
+
+func NewRuntimeOptions(db *sql.DB, d decoder.Decoder, opt Options) (ret *Runner, err error) {
+	cacheErrors := opt.cacheErrors()
+	if q, e := qdb.NewQueries(db); e != nil {
+		err = e
+	} else {
+		if d == nil {
+			d = decoder.DecodeNone("unsupported decoder")
+		}
+		ret = &Runner{
+			db:          db,
+			query:       q,
+			decode:      d,
+			constVals:   makeCache(cacheErrors),
+			dynamicVals: dynamicVals{makeCache(cacheErrors)},
+			options:     opt,
+			scope:       scope.Chain{Scope: scope.Empty{}},
+			rand:        RandomizedTime(),
+		}
+		ret.SetWriter(log.Writer())
 	}
-	run.SetWriter(w)
-	return run
+	return
 }
 
+// an implementation of rt.Runtime
 type Runner struct {
-	query  query.Query
-	decode decoder.Decoder
-	notify Notifier
+	db              *sql.DB         // mdl and rt databases
+	query           query.Query     // various helpful db queries
+	decode          decoder.Decoder // helper to interpret db binary data
+	notify          Notifier        // callbacks to listen for changes
+	constVals       cache           // readonly info cached from the db
+	dynamicVals     dynamicVals     // noun values and counters
+	options         Options         // runtime customization
+	scope           scope.Chain     // meta.Variable lookup
+	rand            Randomizer      // random number generator
+	writer.Sink                     // target for game output
+	currentPatterns                 // stack of patterns currently in progress
+}
 
-	values     cache // other values are not kept across domains
-	nounValues cache // nounValues are kept across domains
-	counters
-	options Options
-	//
-	scope scope.Chain
-	Randomizer
-	writer.Sink
-	currentPatterns
+func (run *Runner) SetNotifier(n Notifier) {
+	run.notify = n
+}
+
+func (run *Runner) Random(inclusiveMin, exclusiveMax int) int {
+	return run.rand.Random(inclusiveMin, exclusiveMax)
 }
 
 func (run *Runner) reportError(e error) error {
@@ -79,9 +94,9 @@ func (run *Runner) ActivateDomain(domain string) (err error) {
 				notify(ends)
 			}
 		}
-		run.values.reset() // fix? focus cache clear to just the domains that became inactive?
+		run.constVals.reset() // fix? focus cache clear to just the domains that became inactive?
 		if len(domain) == 0 {
-			run.nounValues.reset()
+			run.dynamicVals.reset()
 		}
 		if len(begins) > 0 {
 			if e := run.domainChanged(begins, "begins"); e != nil {
@@ -99,7 +114,7 @@ func (run *Runner) domainChanged(ds []string, evt string) (err error) {
 	for _, d := range ds {
 		name := d + " " + evt
 		if pat, e := run.getKind(name); e == nil {
-			if _, e := run.call(pat, pat.NewRecord(), affine.None); e != nil {
+			if _, e := run.call(pat, rt.NewRecord(pat), affine.None); e != nil {
 				err = errutil.Append(err, run.reportError(e))
 				break
 			}
@@ -160,7 +175,7 @@ func (run *Runner) RelateTo(a, b, rel string) (err error) {
 	return
 }
 
-func (run *Runner) RelativesOf(a, rel string) (ret g.Value, err error) {
+func (run *Runner) RelativesOf(a, rel string) (ret rt.Value, err error) {
 	// note: we dont have to validate the type of the noun....
 	// if its not valid, it wont appear in the relation.
 	if n, e := run.getObjectInfo(a); e != nil {
@@ -171,12 +186,12 @@ func (run *Runner) RelativesOf(a, rel string) (ret g.Value, err error) {
 		err = e // doesnt cache because relateTo would have to clear the cache.
 	} else {
 		fb := k.Field(1)
-		ret = g.StringsFrom(vs, fb.Type)
+		ret = rt.StringsFrom(vs, fb.Type)
 	}
 	return
 }
 
-func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
+func (run *Runner) ReciprocalsOf(b, rel string) (ret rt.Value, err error) {
 	// note: we dont have to validate the type of the noun....
 	// if its not valid, it wont appear in the relation.
 	if n, e := run.getObjectInfo(b); e != nil {
@@ -187,12 +202,12 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
 		err = e
 	} else {
 		fa := k.Field(0)
-		ret = g.StringsFrom(vs, fa.Type)
+		ret = rt.StringsFrom(vs, fa.Type)
 	}
 	return
 }
 
-func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
+func (run *Runner) SetField(target, rawField string, val rt.Value) (err error) {
 	// fix: pre-transform field name
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
@@ -208,32 +223,17 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		// one of the predefined faux objects:
 		switch target {
 		case meta.Variables:
-			cpy := g.CopyValue(val)
+			cpy := rt.CopyValue(val) // copy: scope is often implemented by record, which doesnt copy.
 			err = run.scope.SetFieldByName(field, cpy)
 
 		case meta.Option:
-			cpy := g.CopyValue(val)
+			cpy := rt.CopyValue(val)
 			err = run.options.SetOptionByName(field, cpy)
 
 		case meta.Counter:
 			// doesnt copy because it errors if the value isn't a number
 			// ( and numbers dont need to be copied ).
 			err = run.setCounter(field, val)
-
-		case meta.ValueChanged:
-			if val.Affinity() != affine.Text {
-				err = errutil.New("the value of value changed should be the name of the field that changed")
-			} else {
-				// unpack the real target and field
-				switch target, field := field, val.String(); target {
-				case meta.Variables:
-					err = run.scope.SetFieldDirty(field)
-				default:
-					// todo: example, flag object or db for save.
-					// for now, simply verify that the field exists.
-					_, err = run.GetField(target, field)
-				}
-			}
 
 		default:
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)
@@ -242,7 +242,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 	return
 }
 
-func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
+func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 	// fix: pre-transform field
 	if field := inflect.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("GetField given an empty field for target %q", target)
@@ -261,13 +261,14 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			// not one of the predefined options?
 
 		case meta.Counter:
+			// zero if missing, err if failed to read a deserialized value
 			ret, err = run.getCounter(field)
 
 		case meta.Domain:
 			if b, e := run.query.IsDomainActive(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.BoolOf(b)
+				ret = rt.BoolOf(b)
 			}
 
 		case meta.FieldsOfKind:
@@ -279,28 +280,28 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 					f := k.Field(i)
 					fs = append(fs, f.Name)
 				}
-				ret = g.StringsOf(fs)
+				ret = rt.StringsOf(fs)
 			}
 
 		case meta.KindAncestry:
 			if ks, e := run.getAncestry(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ks)
+				ret = rt.StringsOf(ks)
 			}
 
 		case meta.ObjectAliases:
 			if ns, e := run.getObjectNames(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ns)
+				ret = rt.StringsOf(ns)
 			}
 
 		case meta.ObjectId:
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
-				ret = g.StringFrom(ok.Id, ok.Kind)
+				ret = rt.StringFrom(ok.Id, ok.Kind)
 			}
 
 		// type of a game object
@@ -308,7 +309,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
-				ret = g.StringOf(ok.Kind)
+				ret = rt.StringOf(ok.Kind)
 			}
 
 		case meta.ObjectKinds:
@@ -317,7 +318,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if ks, e := run.getAncestry(ok.Kind); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ks)
+				ret = rt.StringsOf(ks)
 			}
 
 		// given a noun, return the name declared by the author
@@ -325,7 +326,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if n, e := run.getObjectName(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringOf(n) // tbd: should these have a type?
+				ret = rt.StringOf(n) // tbd: should these have a type?
 			}
 
 		// all objects of the named kind
@@ -335,7 +336,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if ns, e := run.query.NounsByKind(k.Name()); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(ns)
+				ret = rt.StringsOf(ns)
 			}
 
 		// custom options
@@ -352,12 +353,12 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if vs, e := run.query.PatternLabels(field); e != nil {
 				err = run.reportError(e)
 			} else {
-				ret = g.StringsOf(vs)
+				ret = rt.StringsOf(vs)
 			}
 
 		case meta.PatternRunning:
 			b := run.currentPatterns.runningPattern(field)
-			ret = g.IntOf(b)
+			ret = rt.IntOf(b)
 
 		case meta.Response:
 			if flag, e := run.options.Option(meta.PrintResponseNames); e != nil {
@@ -365,28 +366,15 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			} else if flag.Affinity() == affine.Bool && flag.Bool() {
 				// fix? hen response are printed inline, they get munged together
 				// manually add some spacing.
-				ret = g.StringOf(field + ". ")
+				ret = rt.StringOf(field + ". ")
 			} else if k, e := run.getKind(kindsOf.Response.String()); e != nil {
 				err = errutil.New("couldnt find response table", e)
 			} else if i := k.FieldIndex(field); i < 0 {
-				// ^ fix: this is an in-order search; have a custom cached lookup for responses?
-				err = g.UnknownResponse(rawField)
-			} else if vs, e := run.getKindValues(k); e != nil {
-				err = e
+				err = rt.UnknownResponse(rawField)
+			} else if ft := k.Field(i); ft.Init == nil {
+				ret = rt.Empty
 			} else {
-				ret = g.Empty // provisionally
-				for _, kv := range vs {
-					if kv.i > i {
-						break
-					} else if kv.i == i {
-						if val, e := kv.val.GetAssignedValue(run); e != nil {
-							err = e
-							break
-						} else {
-							ret = val
-						}
-					}
-				}
+				ret, err = ft.Init.GetAssignedValue(run)
 			}
 		case meta.Variables:
 			ret, err = run.scope.FieldByName(field)

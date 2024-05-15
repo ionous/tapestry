@@ -4,18 +4,20 @@ import (
 	"io"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // Scope - establishes a pool of local variables.
 // Scopes are usually accessed via the runtime Set/GetField.
 type Scope interface {
-	// note: return g.Unknown if the named field/variable isnt found.
-	FieldByName(field string) (g.Value, error)
-	// note: does not usually copy ( since Runtime does )
-	SetFieldByName(field string, val g.Value) error
-	// errors if the field doesnt exist
-	SetFieldDirty(field string) error
+	// return g.Unknown if the named field/variable doesn't exist.
+	FieldByName(field string) (Value, error)
+	// set without copying
+	SetFieldByName(field string, val Value) error
+}
+
+// Type database
+type Kinds interface {
+	GetKindByName(n string) (*Kind, error)
 }
 
 // Runtime environment for an in-progress game.
@@ -24,15 +26,15 @@ type Runtime interface {
 	// de/activating makes those groups hidden/visible to the runtime.
 	// Domain hierarchy is defined at assembly time.
 	ActivateDomain(name string) error
-	// GetKindByName  -record manipulation.
-	GetKindByName(name string) (*g.Kind, error)
+	// GetKindByName - type description
+	GetKindByName(name string) (*Kind, error)
 	// Call - run the pattern defined by the passed record.
 	// passes the expected return because patterns can be called in ambiguous context ( ex. template expressions )
-	Call(name string, expectedReturn affine.Affinity, keys []string, vals []g.Value) (g.Value, error)
+	Call(name string, expectedReturn affine.Affinity, keys []string, vals []Value) (Value, error)
 	// RelativesOf - returns a list, even for one-to-one relationships.
-	RelativesOf(a, relation string) (g.Value, error)
+	RelativesOf(a, relation string) (Value, error)
 	// ReciprocalsOf - returns a list, even for one-to-one relationships.
-	ReciprocalsOf(b, relation string) (g.Value, error)
+	ReciprocalsOf(b, relation string) (Value, error)
 	// RelateTo - establish a new relation between nouns and and b.
 	RelateTo(a, b, relation string) error
 	// PushScope - modifies the behavior of Get/SetField meta.Variable
@@ -44,13 +46,13 @@ type Runtime interface {
 	// GetField - various runtime objects (ex. nouns, kinds, etc.) store data addressed by name.
 	// the objects and their fields depend on implementation and context.
 	// see package meta for a variety of common objects.
-	GetField(object, field string) (g.Value, error)
+	GetField(object, field string) (Value, error)
 	// SetField - store, or at least attempt to store, a *copy* of the value into the field of the named object.
 	// it can return an error:
 	// if the value is not of a compatible type,
 	// if the field is considered to read-only,
 	// or if there is no object or field of the indicated names.
-	SetField(object, field string, value g.Value) error
+	SetField(object, field string, value Value) error
 	// PluralOf - turn single words into their plural variants, and vice-versa.
 	// each plural word maps to a unique singular.
 	// for example, if the singular of "people" is "person", it cant also be "personage".

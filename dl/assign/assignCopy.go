@@ -16,12 +16,10 @@ func (op *CopyValue) copyValue(run rt.Runtime) (err error) {
 		err = e
 	} else if src, e := GetReference(run, op.Source); e != nil {
 		err = e
-	} else if root, e := src.GetRootValue(run); e != nil {
-		err = e
-	} else if v, e := root.getValue(run); e != nil {
+	} else if v, e := src.GetValue(); e != nil {
 		err = e
 	} else {
-		err = tgt.SetValue(run, v)
+		err = tgt.SetValue(v)
 	}
 	return
 }

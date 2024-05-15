@@ -3,37 +3,36 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *ListSlice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSlice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.sliceList(run, affine.NumList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.FloatsOf(nil)
+		ret = rt.FloatsOf(nil)
 	} else {
 		ret = v
 	}
 	return
 }
 
-func (op *ListSlice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSlice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.sliceList(run, affine.TextList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.StringsOf(nil)
+		ret = rt.StringsOf(nil)
 	} else {
 		ret = v
 	}
 	return
 }
 
-func (op *ListSlice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSlice) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, t, e := op.sliceList(run, affine.RecordList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.RecordsFrom(nil, t)
+		ret = rt.RecordsFrom(nil, t)
 	} else {
 		ret = v
 	}
@@ -41,7 +40,7 @@ func (op *ListSlice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // Create a new list from a section of another list.
-func (op *ListSlice) sliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
+func (op *ListSlice) sliceList(run rt.Runtime, aff affine.Affinity) (retVal rt.Value, retType string, err error) {
 	if els, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {

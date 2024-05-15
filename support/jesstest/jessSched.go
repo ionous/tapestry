@@ -22,10 +22,6 @@ func (m *ProcessingList) Schedule(z weaver.Phase, p func(weaver.Weaves, rt.Runti
 		err = fmt.Errorf("scheduled %s(%d) while next phase is %s(%d)", z, z, next, next)
 		panic(err)
 	} else {
-		// fix: here out of curiosity; remove.
-		if z == next {
-			// log.Printf("scheduled for current phase %s", z)
-		}
 		m.pending[z] = append(m.pending[z], p)
 	}
 	return

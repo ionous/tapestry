@@ -2,7 +2,6 @@ package scope
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // a linked list of scopes:
@@ -48,46 +47,31 @@ func (s *Chain) PopScope() {
 }
 
 // FieldByName returns the value at 'field'
-func (s *Chain) FieldByName(field string) (ret g.Value, err error) {
+func (s *Chain) FieldByName(field string) (ret rt.Value, err error) {
 	var found bool
 	for top := s; top != nil; top = top.next {
-		if v, e := top.Scope.FieldByName(field); !g.IsUnknown(e) {
+		if v, e := top.Scope.FieldByName(field); !rt.IsUnknown(e) {
 			ret, err, found = v, e, true
 			break
 		}
 	}
 	if !found {
-		err = g.UnknownVariable(field)
+		err = rt.UnknownVariable(field)
 	}
 	return
 }
 
 // SetFieldByName writes the value of 'v' into the value at 'field'.
-func (s *Chain) SetFieldByName(field string, v g.Value) (err error) {
+func (s *Chain) SetFieldByName(field string, v rt.Value) (err error) {
 	var found bool
 	for top := s; top != nil; top = top.next {
-		if e := top.Scope.SetFieldByName(field, v); !g.IsUnknown(e) {
+		if e := top.Scope.SetFieldByName(field, v); !rt.IsUnknown(e) {
 			err, found = e, true
 			break
 		}
 	}
 	if !found {
-		err = g.UnknownVariable(field)
-	}
-	return
-}
-
-// SetFieldDirty - tell the current scope the named value has changed.
-func (s *Chain) SetFieldDirty(field string) (err error) {
-	var found bool
-	for top := s; top != nil; top = top.next {
-		if e := top.Scope.SetFieldDirty(field); !g.IsUnknown(e) {
-			err, found = e, true
-			break
-		}
-	}
-	if !found {
-		err = g.UnknownVariable(field)
+		err = rt.UnknownVariable(field)
 	}
 	return
 }

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -85,12 +85,12 @@ type loopRuntime struct {
 	i, j int
 }
 
-func (k *loopRuntime) GetField(target, field string) (ret g.Value, err error) {
+func (k *loopRuntime) GetField(target, field string) (ret rt.Value, err error) {
 	switch {
 	case field == "i" && target == meta.Variables:
-		ret = g.IntOf(k.i)
+		ret = rt.IntOf(k.i)
 	case field == "j" && target == meta.Variables:
-		ret = g.IntOf(k.j)
+		ret = rt.IntOf(k.j)
 	default:
 		panic("unexpected get")
 	}
@@ -98,7 +98,7 @@ func (k *loopRuntime) GetField(target, field string) (ret g.Value, err error) {
 }
 
 // SetField writes the value of 'v' into the value at 'name'.
-func (k *loopRuntime) SetField(target, field string, v g.Value) (err error) {
+func (k *loopRuntime) SetField(target, field string, v rt.Value) (err error) {
 	switch {
 	case field == "i" && target == meta.Variables:
 		k.i = v.Int()

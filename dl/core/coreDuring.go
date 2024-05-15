@@ -4,28 +4,26 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // GetBool returns the first matching bool evaluation.
-func (op *During) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *During) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if depth, e := op.GetNumber(run); e != nil {
 		err = e
 	} else {
 		depth := depth.Int()
-		ret = g.BoolOf(depth > 0)
+		ret = rt.BoolOf(depth > 0)
 	}
 	return
 }
 
-func (op *During) GetNumber(run rt.Runtime) (ret g.Value, err error) {
+func (op *During) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	name := inflect.Normalize(op.PatternName)
 	if depth, e := run.GetField(meta.PatternRunning, name); e != nil {
 		err = cmdError(op, e)
 	} else {
 		depth := depth.Int()
-		ret = g.IntOf(depth)
+		ret = rt.IntOf(depth)
 	}
 	return
 }

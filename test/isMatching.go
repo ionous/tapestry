@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 )
 
@@ -20,7 +19,7 @@ type MatchGroups struct {
 var matchGroups = testpat.Pattern{
 	Name:   "match groups",
 	Labels: []string{"a", "b"},
-	Fields: []g.Field{
+	Fields: []rt.Field{
 		{Name: "a", Affinity: affine.Record, Type: "group settings"},
 		{Name: "b", Affinity: affine.Record, Type: "group settings"},
 		{Name: "matches", Affinity: affine.Bool},

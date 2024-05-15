@@ -1,7 +1,6 @@
 package rules
 
 import (
-	"fmt"
 	"slices"
 	"strings"
 
@@ -11,7 +10,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -21,7 +19,7 @@ import (
 // results of reading author specified pairs of pattern name and rule name.
 // for example ("before someone jumping", "people jump for joy")
 type RuleName struct {
-	Pattern        []string // base pattern without any prefix or suffix
+	Path           []string // path of the pattern targeted by this rule
 	Label          string   // friendly name of the rule itself
 	Prefix         Prefix
 	Suffix         Suffix
@@ -38,13 +36,13 @@ type RuleInfo struct {
 }
 
 func (n RuleName) IsEvent() bool {
-	return slices.Contains(n.Pattern, kindsOf.Action.String())
+	return slices.Contains(n.Path, kindsOf.Action.String())
 }
 
 // instead and report are grouped with before and after respectively
 // fix: can this move to rule info?
 func (n RuleName) EventName() (ret string) {
-	kind := n.Pattern[len(n.Pattern)-1]
+	kind := n.Path[0]
 	switch n.Prefix {
 	case When:
 		ret = kind
@@ -63,7 +61,7 @@ func (n RuleName) EventName() (ret string) {
 // pattern name as specified
 // optional rule name as specified
 // ex. Define rule:named:do: ["activating", "the standard activating action" ]
-func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err error) {
+func ReadPhrase(ks rt.Kinds, patternSpec, ruleSpec string) (ret RuleName, err error) {
 	patternSpec = inflect.Normalize(patternSpec)
 	name, suffix := findSuffix(patternSpec)
 	// return name sans any prefix, and any prefix the name had.
@@ -80,11 +78,9 @@ func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err err
 	// fix: we can pass in the base type
 	if k, e := ks.GetKindByName(short); e != nil {
 		err = e
-	} else if pat := g.Ancestry(k); len(pat) == 0 {
-		err = fmt.Errorf("couldnt determine ancestry of %q", short)
 	} else {
 		ret = RuleName{
-			Pattern:        pat,
+			Path:           k.Ancestors(),
 			Label:          inflect.Normalize(ruleSpec),
 			Prefix:         prefix,
 			Suffix:         suffix,
@@ -99,8 +95,8 @@ func ReadPhrase(ks g.Kinds, patternSpec, ruleSpec string) (ret RuleName, err err
 // to determine the intended pattern name, rank, and termination behavior.
 // for example: "instead of x", "before x", "after x", "report x".
 func (n RuleName) GetRuleInfo() (ret RuleInfo, err error) {
-	kind := n.Pattern[len(n.Pattern)-1]
-	switch pattern.Categorize(n.Pattern) {
+	kind := n.Path[0]
+	switch pattern.Categorize(n.Path) {
 	default:
 		err = errutil.Fmt("can't have a %q event", kind)
 

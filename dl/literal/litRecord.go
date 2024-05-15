@@ -5,34 +5,34 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func marshalFields(out map[string]interface{}, vs []FieldValue) (err error) {
-Loop:
-	for _, fv := range vs {
-		var i interface{}
-		field, value := fv.Field, fv.Value
-		switch v := value.(type) {
-		case *BoolValue:
-			i = v.Value
-		case *NumValue:
-			i = v.Value
-		case *TextValue:
-			i = v.Value
-		case *NumValues:
-			i = v.Values
-		case *TextValues:
-			i = v.Values
-		case *FieldList:
-			next := make(map[string]interface{})
-			marshalFields(next, v.Fields)
-			i = next
-		default:
-			err = errutil.Fmt("marshalFields unhandled literal %T", value)
-			break Loop
-		}
-		out[field] = i
-	}
-	return
-}
+// func marshalFields(out map[string]interface{}, vs []FieldValue) (err error) {
+// Loop:
+// 	for _, fv := range vs {
+// 		var i interface{}
+// 		field, value := fv.Field, fv.Value
+// 		switch v := value.(type) {
+// 		case *BoolValue:
+// 			i = v.Value
+// 		case *NumValue:
+// 			i = v.Value
+// 		case *TextValue:
+// 			i = v.Value
+// 		case *NumValues:
+// 			i = v.Values
+// 		case *TextValues:
+// 			i = v.Values
+// 		case *FieldList:
+// 			next := make(map[string]interface{})
+// 			marshalFields(next, v.Fields)
+// 			i = next
+// 		default:
+// 			err = errutil.Fmt("marshalFields unhandled literal %T", value)
+// 			break Loop
+// 		}
+// 		out[field] = i
+// 	}
+// 	return
+// }
 
 // reads a literal record
 // fix: when is this used? shouldn't this be a pattern call?

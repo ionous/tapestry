@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -21,12 +22,20 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// CheckAll tests stored in the passed db.
-// It logs the results of running the checks, and only returns error on critical errors.
-func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]typeinfo.Instance) (ret int, err error) {
-	if e := tables.CreateRun(db); e != nil {
+// open db, select tests, de-gob and run them each in turn.
+// print the results, only error on critical errors
+func CheckFile(inFile, testName string, opt qna.Options) (ret int, err error) {
+	if db, e := tables.CreateRunTime(inFile); e != nil {
 		err = e
-	} else if query, e := qdb.NewQueries(db, true); e != nil {
+	} else {
+		defer db.Close()
+		ret, err = checkAll(db, testName, opt, tapestry.AllSignatures)
+	}
+	return
+}
+
+func checkAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]typeinfo.Instance) (ret int, err error) {
+	if query, e := qdb.NewQueries(db); e != nil {
 		err = e
 	} else if grammar, e := play.MakeGrammar(db); e != nil {
 		err = e
@@ -42,15 +51,19 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 				log.Printf("-- Checking: %q\n", check.Name)
 				w := print.NewLineSentences(markup.ToText(os.Stdout))
 				d := decode.NewDecoder(signatures)
-				run := qna.NewRuntimeOptions(w, query, d, qna.Notifier{}, options)
-				survey := play.MakeDefaultSurveyor(run)
-				play := play.NewPlaytime(run, survey, grammar)
-				if e := checkOne(d, play, check, &ret); e != nil {
-					e := errutil.New(e, "during", check.Name)
-					err = errutil.Append(err, e)
-					log.Println(e)
+				if run, e := qna.NewRuntimeOptions(db, d, options); e != nil {
+					err = e
 				} else {
-					log.Printf("ok. test %s", check.Name)
+					run.SetWriter(w)
+					survey := play.MakeDefaultSurveyor(run)
+					play := play.NewPlaytime(run, survey, grammar)
+					if e := checkOne(d, play, check, &ret); e != nil {
+						e := errutil.New(e, "during", check.Name)
+						err = errutil.Append(err, e)
+						log.Println(e)
+					} else {
+						log.Printf("ok. test %s", check.Name)
+					}
 				}
 			}
 		}

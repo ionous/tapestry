@@ -6,8 +6,6 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/qna/decoder"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -40,17 +38,10 @@ func NewCatalog(db *sql.DB) *Catalog {
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
 	if run == nil {
-		dec := decoder.DecodeNone("unsupported decoder")
-		if e := tables.CreateAll(db); e != nil {
-			panic(e)
-		} else if qx, e := qdb.NewQueries(db, false); e != nil {
+		if r, e := qna.NewRuntime(db, nil); e != nil {
 			panic(e)
 		} else {
-			run = qna.NewRuntime(
-				log.Writer(),
-				qx,
-				dec,
-			)
+			run = r
 		}
 	}
 	var logerr mdl.Log
@@ -96,18 +87,15 @@ func (cat *Catalog) CurrentDomain() (ret string) {
 
 // walk the domains and run the commands remaining in their queues
 func (cat *Catalog) AssembleCatalog() (err error) {
-	var ds []*Domain
 	for {
 		if len(cat.processing) > 0 {
 			err = errutil.New("mismatched begin/end domain")
 			break
 		} else if len(cat.pendingDomains) == 0 {
 			break
-		} else if was, e := cat.assembleNext(); e != nil {
+		} else if _, e := cat.assembleNext(); e != nil {
 			err = e
 			break
-		} else {
-			ds = append(ds, was)
 		}
 	}
 	return

@@ -12,7 +12,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/play"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
-	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web"
 )
@@ -34,21 +33,6 @@ func Decode(r io.Reader) (ret string, err error) {
 }
 
 func Marshal(m play.PlayMessage) (ret string, err error) {
-	var enc encode.Encoder
-	if d, e := enc.Encode(m); e != nil {
-		err = e
-	} else {
-		var str strings.Builder
-		if e := files.JsonEncoder(&str, files.EscapeHtml).Encode(d); e != nil {
-			err = e
-		} else {
-			ret = str.String()
-		}
-	}
-	return
-}
-
-func marshal(m typeinfo.Instance) (ret string, err error) {
 	var enc encode.Encoder
 	if d, e := enc.Encode(m); e != nil {
 		err = e

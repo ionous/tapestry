@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
@@ -21,7 +20,7 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, err error) {
 			Kinds: &kinds,
 		}}
 	lt.Chain = scope.MakeChain(scope.FromRecord(&lt, kinds.NewRecord("locals")))
-	if e := lt.SetFieldByName("source", g.StringsOf(src)); e != nil {
+	if e := lt.SetFieldByName("source", rt.StringsOf(src)); e != nil {
 		err = e
 	} else {
 		ret = &lt

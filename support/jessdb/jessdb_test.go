@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/jesstest"
 	"git.sr.ht/~ionous/tapestry/support/match"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
@@ -137,15 +136,11 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		fieldTitle
 		fieldAge
 	)
-	db := testdb.Create(name)
-	if e := tables.CreateModel(db); e != nil {
-		err = e
-	} else if e := tables.CreateRun(db); e != nil {
-		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_domain", "domain"},
+	db := tables.CreateTest(name, true)
+	if e := tables.Ins(db, []string{"mdl_domain", "domain"},
 		domain); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_kind",
+	} else if e := tables.Ins(db, []string{"mdl_kind",
 		"ROWID", "domain", "kind", "singular", "path"},
 		//
 		verbs, domain, "verbs", "verb", idPath(),
@@ -175,7 +170,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		//,
 	); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_field",
+	} else if e := tables.Ins(db, []string{"mdl_field",
 		"domain", "kind", "ROWID", "field", "affinity"},
 		// traits: for matching traits to set
 		domain, traits, fieldClosed, "closed", "bool",
@@ -190,7 +185,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, things, fieldAge, "age", "text",
 	); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_noun",
+	} else if e := tables.Ins(db, []string{"mdl_noun",
 		"domain", "ROWID", "noun", "kind"},
 		// things
 		domain, story, "story", things,
@@ -212,7 +207,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, verbSuspiciousOf, "suspicious of", verbs,
 	); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_name",
+	} else if e := tables.Ins(db, []string{"mdl_name",
 		"domain", "noun", "name", "rank"},
 		//
 		domain, story, "story", 0,

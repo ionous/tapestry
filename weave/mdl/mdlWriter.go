@@ -773,7 +773,7 @@ func (pen *Pen) AddDefaultValue(kind, field string, value rt.Assignment) (err er
 // that can be overridden by explicit statements.
 // note: assumes noun is an exact name
 func (pen *Pen) AddNounValue(noun, field string, value rt.Assignment) (err error) {
-	if strings.IndexRune(field, '.') >= 0 {
+	if strings.ContainsRune(field, '.') {
 		err = errutil.Fmt("unexpected dot in assigned value for noun %q field %q", noun, field)
 	} else {
 		err = pen.addFieldValue(noun, field, value)

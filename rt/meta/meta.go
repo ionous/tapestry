@@ -20,7 +20,6 @@ const (
 	PatternRunning = "$pattern"   // returns true if the named pattern is running
 	Response       = "$response"  // returns replacements for named templates
 	Variables      = "$variable"  // named values, controlled by scope, not associated with any particular object
-	ValueChanged   = "$dirty"     // indicates the contents inside a value changed
 )
 
 // fields for runtime meta.Option(s)
@@ -32,7 +31,7 @@ type Options int
 const (
 	// flag to print response names ( instead of values )
 	PrintResponseNames Options = iota
-	// by default we dont
-	CacheErrors
+	CacheErrors                // by default we dont
+	SaveDir                    // location for save files.
 	NumOptions
 )

@@ -1,12 +1,9 @@
 package list
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 	"github.com/ionous/errutil"
@@ -21,31 +18,28 @@ func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 
 func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 	pat := inflect.Normalize(op.PatternName)
-	if tgt, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
+		err = e
+	} else if accum, e := at.GetValue(); e != nil {
 		err = e
 	} else if fromList, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(fromList.Affinity()) {
 		err = errutil.New("not a list")
 	} else {
-		outVal := tgt.RootValue
-		for it := g.ListIt(fromList); it.HasNext() && err == nil; {
+		for it := safe.ListIt(fromList); it.HasNext(); {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
+				break
+			} else if newVal, e := run.Call(pat, accum.Affinity(), nil, []rt.Value{inVal, accum}); e != nil {
+				err = e
+				break
 			} else {
-				if newVal, e := run.Call(pat, outVal.Affinity(), nil, []g.Value{inVal, outVal}); e == nil {
-					// update the accumulating value for next time
-					outVal = newVal
-				} else if !errors.Is(e, rt.NoResult) {
-					// if there was no result, just keep going with what we had
-					// for other errors, break.
-					err = e
-				}
+				accum = newVal // update the value for next loop
 			}
 		}
-		// did we have a successful result at some point?
-		if err == nil && outVal != tgt.RootValue {
-			err = tgt.SetValue(run, outVal)
+		if err == nil {
+			err = at.SetValue(accum)
 		}
 	}
 	return

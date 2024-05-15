@@ -2,7 +2,6 @@ package cmdweave
 
 import (
 	"bufio"
-	"database/sql"
 	"fmt"
 	"io/fs"
 	"log"
@@ -13,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/support/flex"
@@ -36,21 +34,13 @@ func WeavePaths(outFile string, stories ...fs.FS) (err error) {
 		// 0700 -> read/writable by user
 		// 0777 -> ModePerm ... read/writable by all
 		os.MkdirAll(path.Dir(outFile), os.ModePerm)
-		if db, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
+		if db, e := tables.CreateBuildTime(outFile); e != nil {
 			err = fmt.Errorf("couldn't create output file %q because %s", outFile, e)
 		} else {
 			defer db.Close()
-			// fix: why do we have to create qdb?
-			if e := tables.CreateAll(db); e != nil {
-				err = e
-			} else if qx, e := qdb.NewQueries(db, false); e != nil {
+			if run, e := qna.NewRuntime(db, decode.NewDecoder(story.AllSignatures)); e != nil {
 				err = e
 			} else {
-				run := qna.NewRuntime(
-					log.Writer(),
-					qx,
-					decode.NewDecoder(story.AllSignatures),
-				)
 				cat := weave.NewCatalogWithWarnings(db, run, nil)
 				if e := cat.DomainStart("tapestry", nil); e != nil {
 					err = e
@@ -116,6 +106,7 @@ func importDir(cat *weave.Catalog, fsys fs.FS, dirs []string) (err error) {
 		// loop over the folders and files in the the directory:
 		for i, cnt := 0, len(ents); i < cnt && err == nil; i++ {
 			ent := ents[i]
+			// filenames starting with a dot ( `.` ) or underscore ( `_` ) are ignored.
 			if name := ent.Name(); name[0] == '_' || name[0] == '.' {
 				continue
 			} else if ent.IsDir() {

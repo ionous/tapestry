@@ -105,7 +105,7 @@ func connectRoomToPlaces(w weaver.Weaves, run rt.Runtime, room *jessLink, places
 // this is limited to the door being in the room
 // ( i dont think there's any other interpretations
 // - because directions always lead to doors, and doors are always exists. )
-func connectDoorToRoom(w weaver.Weaves, run rt.Runtime, door, room *jessLink, direction string) (err error) {
+func connectDoorToRoom(w weaver.Weaves, _ rt.Runtime, door, room *jessLink, direction string) (err error) {
 	if e := room.writeDoor(w, door.Noun); e != nil {
 		err = e
 	} else {

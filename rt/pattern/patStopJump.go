@@ -1,9 +1,10 @@
 package pattern
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 type stopJump struct {
@@ -15,7 +16,7 @@ type stopJump struct {
 // after a rule has matched; combine its desired stop/jump with the current set
 // it can only become more strict, not less.
 // if there's a return value, it must be set for the pattern to be considered done.
-func (n *stopJump) update(status stopJump, evtObj *g.Record, result bool) (done bool, err error) {
+func (n *stopJump) update(status stopJump, evtObj *rt.Record, result bool) (done bool, err error) {
 	if result && status.runCount > 0 {
 		n.mergeStop(status.stop)
 		n.mergeJump(status.jump)
@@ -59,22 +60,33 @@ func (n *stopJump) mergeJump(jump rt.Jump) {
 }
 
 // reads and resets event cancel, event interrupt from the passed event object
-func (n *stopJump) mergeEvent(evtObj *g.Record) (err error) {
-	if i := event.Cancel.Index(); evtObj != nil && evtObj.HasValue(i) {
-		if cancel, e := evtObj.GetIndexedField(i); e != nil {
-			err = e
-		} else {
-			n.cancel(cancel.Bool())
-			_ = evtObj.SetIndexedField(i, nil)
+func (n *stopJump) mergeEvent(evt *rt.Record) (err error) {
+	if status, e := evt.GetIndexedField(event.Status.Index()); e != nil {
+		err = e
+	} else {
+		// turn the aspect into a trait index
+		curr, state := status.String(), event.CancellationStatus(-1)
+		for i := 0; i < event.NumStatus; i++ {
+			check := event.CancellationStatus(i)
+			if curr == check.String() {
+				state = check
+				break
+			}
 		}
-	}
-
-	if i := event.Interupt.Index(); evtObj != nil && evtObj.HasValue(i) {
-		if interrupt, e := evtObj.GetIndexedField(i); e != nil {
-			err = e
-		} else {
-			n.interrupt(interrupt.Bool())
-			_ = evtObj.SetIndexedField(i, nil)
+		//
+		switch state {
+		case event.ContinueNormally:
+			// do nothing
+		case event.InterruptLater:
+			n.interrupt(false)
+		case event.InterruptNow:
+			n.interrupt(true)
+		case event.CancelLater:
+			n.cancel(false)
+		case event.CancelNow:
+			n.cancel(true)
+		default:
+			err = fmt.Errorf("unknown event status %s", curr)
 		}
 	}
 	return

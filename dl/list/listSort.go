@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -29,58 +28,50 @@ func (op *ListSortText) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetCheckedValue(run, affine.NumList); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
 		err = e
 	} else {
-		name := inflect.Normalize(op.ByField)
-		switch listAff := els.Affinity(); listAff {
+		byField := inflect.Normalize(op.ByField)
+		switch listAff := vs.Affinity(); listAff {
 		case affine.RecordList:
-			err = sortRecords(run, els.Records(), name, affine.Number, op.numSorter)
+			err = sortRecords(run, vs.Records(), byField, affine.Number, op.numSorter)
 
 		case affine.TextList:
-			err = sortObjects(run, els.Strings(), name, affine.Number, op.numSorter)
+			err = sortObjects(run, vs.Strings(), byField, affine.Number, op.numSorter)
 
 		default:
 			err = errutil.New("number sort not implemented for", listAff)
-
-			if err == nil {
-				root.SetDirty(run)
-			}
 		}
 	}
 	return
 }
 
 func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetCheckedValue(run, affine.TextList); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.Check(vs, affine.TextList); e != nil {
 		err = e
 	} else {
 		name := inflect.Normalize(op.ByField)
-		switch listAff := els.Affinity(); listAff {
-		case affine.RecordList:
-			// fix? would any of this be clearer/smaller if we used els.Index?
-			// ( well sort.Slice couldnt work on it directly, but maybe there's a slice index )
-			err = sortRecords(run, els.Records(), name, affine.Text, op.textSorter)
-
+		switch listAff := vs.Affinity(); listAff {
 		case affine.TextList:
-			err = sortObjects(run, els.Strings(), name, affine.Text, op.textSorter)
+			err = sortObjects(run, vs.Strings(), name, affine.Text, op.textSorter)
+
+		case affine.RecordList:
+			err = sortRecords(run, vs.Records(), name, affine.Text, op.textSorter)
 
 		default:
 			err = errutil.New("text sort not implemented for", listAff)
-		}
-
-		if err == nil {
-			root.SetDirty(run)
 		}
 	}
 	return
 }
 
-func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
+func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
 	aa, bb := a.Float(), b.Float()
 	if descending, e := safe.GetOptionalBool(run, op.Descending, false); e != nil {
 		err = e
@@ -92,7 +83,7 @@ func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, er
 	return
 }
 
-func (op *ListSortText) textSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
+func (op *ListSortText) textSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
 	aa, bb := a.String(), b.String()
 	if sensitive, e := safe.GetOptionalBool(run, op.UsingCase, false); e != nil {
 		err = e
@@ -109,9 +100,9 @@ func (op *ListSortText) textSorter(run rt.Runtime, a, b g.Value) (ret bool, err 
 	return
 }
 
-type compareFn func(run rt.Runtime, a, b g.Value) (bool, error)
+type compareFn func(run rt.Runtime, a, b rt.Value) (bool, error)
 
-func sortRecords(run rt.Runtime, src []*g.Record, field string, aff affine.Affinity, cmp compareFn) (err error) {
+func sortRecords(run rt.Runtime, src []*rt.Record, field string, aff affine.Affinity, cmp compareFn) (err error) {
 	sort.Slice(src, func(i, j int) (ret bool) {
 		ret = i < j // provisionally
 		a, b := src[i], src[j]
@@ -152,7 +143,7 @@ func sortObjects(run rt.Runtime, src []string, field string, aff affine.Affinity
 	return
 }
 
-func unpackRecord(src *g.Record, field string, aff affine.Affinity) (ret g.Value, err error) {
+func unpackRecord(src *rt.Record, field string, aff affine.Affinity) (ret rt.Value, err error) {
 	if v, e := src.GetNamedField(field); e != nil {
 		err = e
 	} else if e := safe.Check(v, aff); e != nil {

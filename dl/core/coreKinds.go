@@ -2,7 +2,6 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -11,7 +10,7 @@ import (
 // if the Field structure was a record.
 // ( maybe some core classes could be exposed using the test reflection?
 // might make porting harder )
-func (op *FieldsOfKind) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+func (op *FieldsOfKind) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if name, e := safe.GetText(run, op.KindName); e != nil {
 		err = e
 	} else {

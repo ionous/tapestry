@@ -5,33 +5,32 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *IsEmpty) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *IsEmpty) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
 	} else {
 		b := len(t.String()) == 0
-		ret = g.BoolOf(b)
+		ret = rt.BoolOf(b)
 	}
 	return
 }
 
-func (op *Includes) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *Includes) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if text, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdErrorCtx(op, "Text", e)
 	} else if part, e := safe.GetText(run, op.Part); e != nil {
 		err = cmdErrorCtx(op, "Part", e)
 	} else {
 		contains := strings.Contains(text.String(), part.String())
-		ret = g.BoolOf(contains)
+		ret = rt.BoolOf(contains)
 	}
 	return
 }
 
-func (op *Join) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *Join) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if sep, e := safe.GetOptionalText(run, op.Sep, ""); e != nil {
 		err = cmdErrorCtx(op, "Sep", e)
 	} else {
@@ -51,7 +50,7 @@ func (op *Join) GetText(run rt.Runtime) (ret g.Value, err error) {
 		}
 		if err == nil {
 			str := buf.String()
-			ret = g.StringOf(str)
+			ret = rt.StringOf(str)
 		}
 	}
 	return

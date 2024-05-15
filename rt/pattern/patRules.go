@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -20,8 +19,8 @@ func (rs *RuleSet) AddRule(rule rt.Rule) {
 	rs.updateAll = rule.Updates
 }
 
-// assumes rec is already in scope and initialized
-func (rs *RuleSet) Call(run rt.Runtime, rec *g.Record, resultField int) (res Result, err error) {
+// assumes scope is initialized
+func (rs *RuleSet) Calls(run rt.Runtime, rec *rt.Record, resultField int) (res Result, err error) {
 	stopJump := stopJump{jump: rt.JumpLater}
 	for i := range rs.rules {
 		if res, e := rs.tryRule(run, i); e != nil {
@@ -35,18 +34,18 @@ func (rs *RuleSet) Call(run rt.Runtime, rec *g.Record, resultField int) (res Res
 		}
 	}
 	if err == nil {
-		res = Result{rec: rec, field: resultField, hasResult: stopJump.runCount > 0}
+		res = Result{rec: rec, resultField: resultField, hasResult: stopJump.runCount > 0}
 	}
 	return
 }
 
 // trigger a pattern for each of the targets in the passed chain.
 // return false if stopped
-func (rs *RuleSet) Send(run rt.Runtime, evtObj *g.Record, chain []string) (okay bool, err error) {
+func (rs *RuleSet) Sends(run rt.Runtime, evtObj *rt.Record, chain []string) (okay bool, err error) {
 	stopJump := stopJump{jump: rt.JumpLater}
 	for tgtIdx, cnt := 0, len(chain); tgtIdx < cnt && stopJump.jump == rt.JumpLater; tgtIdx++ {
 		tgt := chain[tgtIdx]
-		if e := evtObj.SetIndexedField(event.CurrentTarget.Index(), g.StringOf(tgt)); e != nil {
+		if e := evtObj.SetNamedField(event.CurrentTarget.String(), rt.StringOf(tgt)); e != nil {
 			err = e
 			break
 		} else if e := rs.send(run, evtObj, &stopJump); e != nil {
@@ -62,7 +61,7 @@ func (rs *RuleSet) Send(run rt.Runtime, evtObj *g.Record, chain []string) (okay 
 
 // event handlers dont have return values, so whenever they match it may be the end
 // ( depending on values in the db determined during weave based on phase )
-func (rs *RuleSet) send(run rt.Runtime, evtObj *g.Record, stopJump *stopJump) (err error) {
+func (rs *RuleSet) send(run rt.Runtime, evtObj *rt.Record, stopJump *stopJump) (err error) {
 	for i := range rs.rules {
 		if res, e := rs.tryRule(run, i); e != nil {
 			err = e
@@ -89,7 +88,7 @@ func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 	}
 	if err == nil && prog != nil {
 		// println("- ", rule.Name)
-		var ri core.DoInterrupt
+		var i core.DoInterrupt
 		switch e := safe.RunAll(run, prog); {
 		case e == nil:
 			ret = stopJump{
@@ -97,8 +96,8 @@ func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 				jump:     rule.Jump,
 				stop:     rule.Stop,
 			}
-		case errors.As(e, &ri):
-			if ri.KeepGoing {
+		case errors.As(e, &i):
+			if i.KeepGoing {
 				ret = stopJump{
 					runCount: 1,
 					jump:     rt.JumpLater,

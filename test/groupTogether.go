@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 )
 
@@ -26,7 +25,7 @@ var assignGrouping = testpat.Pattern{
 	Name:   "assign grouping",
 	Return: "out",
 	Labels: []string{"in"},
-	Fields: []g.Field{
+	Fields: []rt.Field{
 		{Name: "in", Affinity: affine.Text},
 		{Name: "out", Affinity: affine.Record, Type: "group settings"},
 	},

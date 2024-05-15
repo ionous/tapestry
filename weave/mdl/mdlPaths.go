@@ -19,14 +19,6 @@ type pathEntry struct {
 // set to something that wont match until its set properly.
 const uncached = "$uncached"
 
-func (pen *Pen) getPatternPath() (ret string, err error) {
-	return pen.paths.cachePath(pen.db, kindsOf.Pattern)
-}
-
-func (pen *Pen) getAspectPath() (ret string, err error) {
-	return pen.paths.cachePath(pen.db, kindsOf.Aspect)
-}
-
 // doesnt cache, doesnt check for errors
 func (pen *Pen) getPath(k kindsOf.Kinds) (ret string) {
 	if at := pen.paths[k]; len(at.path) > 0 {

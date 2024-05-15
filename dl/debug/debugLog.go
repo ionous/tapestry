@@ -9,9 +9,8 @@ import (
 )
 
 // LogLevel controls how much debugging to print
-// The default level ( empty string ) means log everything but notes,
-// otherwise it logs only at the named level and higher.
-var LogLevel LoggingLevel
+// logs only at the named level and higher.
+var LogLevel LoggingLevel = C_LoggingLevel_Debug
 
 func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	// fix? currently, weave can't guarantee a lack of side-effects;

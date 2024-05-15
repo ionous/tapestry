@@ -6,13 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables"
 )
 
-func scanOne(q *sql.Stmt, args ...interface{}) (ret bool, err error) {
-	if e := q.QueryRow(args...).Scan(&ret); e != nil && e != sql.ErrNoRows {
-		err = e
-	}
-	return
-}
-
 func scanString(q *sql.Stmt, args ...interface{}) (ret string, err error) {
 	if e := q.QueryRow(args...).Scan(&ret); e != nil && e != sql.ErrNoRows {
 		err = e

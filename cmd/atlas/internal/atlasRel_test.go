@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 )
 
 func ExampleRelData() {
@@ -27,7 +26,7 @@ func ExampleRelData() {
 
 // FIX: database format changed
 func xExampleRelDB() {
-	db := testdb.Create("ExampleRelDB")
+	db := tables.CreateTest("ExampleRelDB", true)
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

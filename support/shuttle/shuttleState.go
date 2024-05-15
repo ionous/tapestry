@@ -1,7 +1,6 @@
 package shuttle
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"path/filepath"
@@ -13,7 +12,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
@@ -22,17 +20,12 @@ import (
 func NewShuttle(inFile string, opts qna.Options) (ret Shuttle, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
-	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
-		err = errutil.New("couldn't create output file", inFile, e)
-	} else if e := tables.CreateRun(db); e != nil {
-		err = e
-	} else if query, e := qdb.NewQueries(db, true); e != nil {
+	} else if db, e := tables.CreateRunTime(inFile); e != nil {
 		err = e
 	} else {
 		ret = Shuttle{
 			inFile:  inFile,
 			db:      db,
-			query:   query,
 			opts:    opts,
 			decoder: decode.NewDecoder(tapestry.AllSignatures),
 			play:    nil,

@@ -7,7 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
@@ -53,6 +53,7 @@ func TestStringify(t *testing.T) {
 	if rec, e := l1.GetRecord(run); e != nil {
 		t.Fatal(e)
 	} else if x := debug.Stringify(rec); x != fruityJson {
+		t.Log("x", x)
 		t.Fatal(files.Indent(x))
 	}
 	// other
@@ -62,7 +63,7 @@ func TestStringify(t *testing.T) {
 		"float", 23.2,
 		"bool", true,
 	)
-	if x := debug.Stringify(g.RecordOf(rec)); x != recordyJson {
+	if x := debug.Stringify(rt.RecordOf(rec)); x != recordyJson {
 		t.Fatal(files.Indent(x))
 	}
 }

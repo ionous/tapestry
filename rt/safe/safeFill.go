@@ -1,9 +1,10 @@
 package safe
 
 import (
+	"errors"
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"github.com/ionous/errutil"
 )
 
 // FillRecord fill the passed record with the arguments named by keys and values
@@ -12,14 +13,13 @@ import (
 // if there are more values than keys, this assumes the first few values are indexed
 // ( keys are right justified )
 // returns the passed record if there's no error
-func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (ret *g.Record, err error) {
+func FillRecord(run rt.Runtime, rec *rt.Record, keys []string, vals []rt.Value) (ret *rt.Record, err error) {
 	if nk, nv := len(keys), len(vals); nv < nk {
-		err = errutil.New("too many keys")
+		err = errors.New("too many keys")
 	} else if nv == 0 {
 		ret = rec
 	} else {
-		kind := rec.Kind()
-		if lf, e := NewLabelFinder(run, kind); e != nil {
+		if lf, e := NewLabelFinder(run, rec.Kind); e != nil {
 			err = e
 		} else {
 			indexedArgs := nv - nk
@@ -29,18 +29,21 @@ func FillRecord(run rt.Runtime, rec *g.Record, keys []string, vals []g.Value) (r
 					key = keys[ofs]
 				}
 				if at, e := lf.FindNext(key); e != nil {
-					err = errutil.Fmt("%w while reading arg %d(%s)", e, i, key)
+					err = fmt.Errorf("%w while reading arg %d(%s)", e, i, key)
 					break
 				} else if at < 0 {
 					break
-				} else if convertedVal, e := RectifyText(run, kind.Field(at), val); e != nil {
-					err = e
-					break
-				} else if e := rec.SetIndexedField(at, convertedVal); e != nil {
-					// note: set indexed field assigns without copying
-					// but get value copies out, so this should be okay.
-					err = errutil.Fmt("%w while setting arg %d(%s)", e, i, key)
-					break
+				} else {
+					ft := rec.Field(at)
+					if convertedVal, e := RectifyText(run, val, ft.Affinity, ft.Type); e != nil {
+						err = e
+						break
+					} else if e := rec.SetIndexedField(at, convertedVal); e != nil {
+						// note: set indexed field assigns without copying
+						// but get value copies out, so this should be okay.
+						err = fmt.Errorf("%w while setting arg %d(%s)", e, i, key)
+						break
+					}
 				}
 			} // end for
 			if err == nil {

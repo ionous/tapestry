@@ -3,11 +3,10 @@ package render
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *RenderValue) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
+func (op *RenderValue) RenderEval(run rt.Runtime, hint affine.Affinity) (ret rt.Value, err error) {
 	if v, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = CmdError(op, e)
 	} else if safe.Check(v, hint); e != nil {

@@ -1,8 +1,6 @@
 module git.sr.ht/~ionous/tapestry
 
-go 1.21
-
-toolchain go1.21.4
+go 1.22
 
 require (
 	github.com/ionous/errutil v0.0.0-20231013205411-87ce252b8e2a

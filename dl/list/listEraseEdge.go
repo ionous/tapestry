@@ -3,7 +3,6 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -14,23 +13,24 @@ func (op *EraseEdge) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func eraseEdge(run rt.Runtime, target assign.Address, atFront rt.BoolEval) (ret g.Value, err error) {
-	if root, e := assign.GetRootValue(run, target); e != nil {
+func eraseEdge(run rt.Runtime, tgt assign.Address, atFront rt.BoolEval) (ret rt.Value, err error) {
+	if at, e := assign.GetReference(run, tgt); e != nil {
 		err = e
-	} else if els, e := root.GetList(run); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
 		err = e
-	} else if cnt := els.Len(); cnt > 0 {
-		var at int
+	} else if e := safe.CheckList(vs); e != nil {
+		err = e
+	} else if cnt := vs.Len(); cnt > 0 {
+		var idx int
 		if atFront, e := safe.GetOptionalBool(run, atFront, false); e != nil {
 			err = e
 		} else {
 			if !atFront.Bool() {
-				at = cnt - 1
+				idx = cnt - 1
 			}
-			if v, e := els.Splice(at, at+1, nil); e != nil {
+			if v, e := vs.Splice(idx, idx+1, nil); e != nil {
 				err = e
 			} else {
-				root.SetDirty(run)
 				ret = v
 			}
 		}

@@ -1,7 +1,6 @@
 package chart
 
 import (
-	"database/sql"
 	_ "embed"
 	"encoding/json"
 	"os"
@@ -19,7 +18,7 @@ func Chart(inFile, outFile, scope string) (ret int, err error) {
 		err = e
 	} else {
 		defer outf.Close()
-		if db, e := sql.Open(tables.DefaultDriver, inFile+"?mode=ro"); e != nil {
+		if db, e := tables.CreateRunTime(inFile); e != nil {
 			err = errutil.New("couldn't create output file", inFile, e)
 		} else {
 			defer db.Close()
@@ -78,6 +77,7 @@ type Room struct {
 
 // give a domain, kind, field:
 // return all nouns of that kind, and the value for each noun of that field.
+//
 //go:embed nounValue.sql
 var nounValueSql string
 

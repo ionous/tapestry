@@ -18,6 +18,7 @@ type FieldData struct {
 	Name     string
 	Affinity affine.Affinity
 	Class    string
+	Init     []byte
 }
 
 type NounInfo struct {
@@ -42,12 +43,11 @@ type Query interface {
 	IsDomainActive(name string) (bool, error)
 	ActivateDomains(name string) (prev, next []string, err error)
 	ReadChecks(actuallyJustThisOne string) ([]CheckData, error)
-	// every field exclusive to the passed kind
+	// every field used by the passed kind
 	FieldsOf(kind string) ([]FieldData, error)
 	// given a plural or singular kind
-	// return the names of the ancestors, ending with the kind itself
+	// return all ancestors starting with the kind itself
 	KindOfAncestors(kind string) ([]string, error)
-	KindValues(id string) ([]ValueData, error)
 	NounInfo(name string) (NounInfo, error)
 	NounName(id string) (string, error)
 	NounNames(id string) ([]string, error)

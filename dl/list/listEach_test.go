@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/kr/pretty"
@@ -94,7 +93,7 @@ type accum struct {
 	text  string
 }
 
-func checkVariable(run rt.Runtime, name string, aff affine.Affinity) (ret g.Value, err error) {
+func checkVariable(run rt.Runtime, name string, aff affine.Affinity) (ret rt.Value, err error) {
 	if v, e := run.GetField(meta.Variables, name); e != nil {
 		err = e
 	} else if e := safe.Check(v, aff); e != nil {

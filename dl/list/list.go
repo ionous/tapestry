@@ -2,18 +2,18 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
 // can v be inserted into els?
-func IsInsertable(v, els g.Value) (okay bool) {
+func IsInsertable(v, els rt.Value) (okay bool) {
 	return isInsertable(els, v.Affinity(), v.Type())
 }
 
 // can v be appended to els?
 // this is similar to IsInsertable, except that v can itself be a list.
-func IsAppendable(v, els g.Value) (okay bool) {
+func IsAppendable(v, els rt.Value) (okay bool) {
 	inAff := v.Affinity()
 	if unlist := affine.Element(inAff); len(unlist) > 0 {
 		inAff = unlist
@@ -21,7 +21,7 @@ func IsAppendable(v, els g.Value) (okay bool) {
 	return isInsertable(els, inAff, v.Type())
 }
 
-func isInsertable(els g.Value, haveAff affine.Affinity, haveType string) (okay bool) {
+func isInsertable(els rt.Value, haveAff affine.Affinity, haveType string) (okay bool) {
 	okay = true // provisionally
 	listAff := els.Affinity()
 	if needAff := affine.Element(listAff); len(needAff) == 0 {
@@ -35,7 +35,7 @@ func isInsertable(els g.Value, haveAff affine.Affinity, haveType string) (okay b
 }
 
 type insertError struct {
-	v, els g.Value
+	v, els rt.Value
 }
 
 func (e insertError) Error() string {

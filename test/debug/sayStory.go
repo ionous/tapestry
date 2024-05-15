@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
@@ -32,13 +31,13 @@ type MatchNumber struct {
 // 	},
 // }
 
-func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *MatchNumber) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := run.GetField(meta.Variables, "num"); e != nil {
 		err = nil
 	} else if safe.Check(v, affine.Number); e != nil {
 		err = e
 	} else {
-		ret = g.BoolOf(v.Int() == op.Val)
+		ret = rt.BoolOf(v.Int() == op.Val)
 	}
 	return
 }
@@ -75,7 +74,7 @@ type SayMe struct {
 var SayPattern = testpat.Pattern{
 	Name:   "say me",
 	Labels: []string{"num"},
-	Fields: []g.Field{
+	Fields: []rt.Field{
 		{Name: "num", Affinity: "number", Type: ""},
 	},
 	Rules: []rt.Rule{{

@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -15,31 +14,31 @@ func (op *ListSplice) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *ListSplice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.NumList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.FloatsOf(nil)
+		ret = rt.FloatsOf(nil)
 	} else {
 		ret = v
 	}
 	return
 }
-func (op *ListSplice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.TextList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.StringsOf(nil)
+		ret = rt.StringsOf(nil)
 	} else {
 		ret = v
 	}
 	return
 }
-func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, t, e := op.spliceList(run, affine.RecordList); e != nil {
 		err = CmdError(op, e)
 	} else if v == nil {
-		ret = g.RecordsFrom(nil, t)
+		ret = rt.RecordsFrom(nil, t)
 	} else {
 		ret = v
 	}
@@ -47,24 +46,26 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // modify a list by adding and removing elements.
-func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+// fix: aff?
+func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal rt.Value, retType string, err error) {
+	if at, e := assign.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if els, e := root.GetList(run); e != nil {
+	} else if vs, e := at.GetValue(); e != nil {
+		err = e
+	} else if e := safe.CheckList(vs); e != nil {
 		err = e
 	} else if ins, e := safe.GetAssignment(run, op.Insert); e != nil {
 		err = e
-	} else if !IsAppendable(ins, els) {
-		err = insertError{ins, els}
-	} else if i, j, e := op.getIndices(run, els.Len()); e != nil {
+	} else if !IsAppendable(ins, vs) {
+		err = insertError{ins, vs}
+	} else if i, j, e := op.getIndices(run, vs.Len()); e != nil {
 		err = e
 	} else {
 		if i >= 0 && j >= i {
-			retVal, err = els.Splice(i, j, ins)
+			retVal, err = vs.Splice(i, j, ins)
 		}
 		if err == nil {
-			root.SetDirty(run)
-			retType = els.Type()
+			retType = vs.Type()
 		}
 	}
 	return

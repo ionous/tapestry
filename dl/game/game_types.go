@@ -78,20 +78,20 @@ func (op *SaveGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type RestoreGame struct {
+type LoadGame struct {
 	Markup map[string]any
 }
 
-// restore_game, a type of flow.
-var Zt_RestoreGame typeinfo.Flow
+// load_game, a type of flow.
+var Zt_LoadGame typeinfo.Flow
 
 // implements typeinfo.Instance
-func (*RestoreGame) TypeInfo() typeinfo.T {
-	return &Zt_RestoreGame
+func (*LoadGame) TypeInfo() typeinfo.T {
+	return &Zt_LoadGame
 }
 
 // implements typeinfo.Markup
-func (op *RestoreGame) GetMarkup(ensure bool) map[string]any {
+func (op *LoadGame) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -99,18 +99,18 @@ func (op *RestoreGame) GetMarkup(ensure bool) map[string]any {
 }
 
 // ensure the command implements its specified slots:
-var _ rtti.Execute = (*RestoreGame)(nil)
+var _ rtti.Execute = (*LoadGame)(nil)
 
-// holds a slice of type restore_game
-type RestoreGame_Slice []RestoreGame
+// holds a slice of type load_game
+type LoadGame_Slice []LoadGame
 
 // implements typeinfo.Instance
-func (*RestoreGame_Slice) TypeInfo() typeinfo.T {
-	return &Zt_RestoreGame
+func (*LoadGame_Slice) TypeInfo() typeinfo.T {
+	return &Zt_LoadGame
 }
 
 // implements typeinfo.Repeats
-func (op *RestoreGame_Slice) Repeats() bool {
+func (op *LoadGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -198,7 +198,7 @@ var Z_Types = typeinfo.TypeSet{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_QuitGame,
 	&Zt_SaveGame,
-	&Zt_RestoreGame,
+	&Zt_LoadGame,
 	&Zt_UndoTurn,
 	&Zt_PrintVersion,
 }
@@ -206,9 +206,9 @@ var z_flow_list = []*typeinfo.Flow{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
+	7048942477941640285:  (*LoadGame)(nil),     /* execute=LoadGame */
 	16069653899165369674: (*PrintVersion)(nil), /* execute=PrintVersion */
 	13962506025236193050: (*QuitGame)(nil),     /* execute=QuitGame */
-	8293164373151279469:  (*RestoreGame)(nil),  /* execute=RestoreGame */
 	12343662000108026632: (*SaveGame)(nil),     /* execute=SaveGame */
 	6128819475946940678:  (*UndoTurn)(nil),     /* execute=UndoTurn */
 }
@@ -232,9 +232,9 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 	}
-	Zt_RestoreGame = typeinfo.Flow{
-		Name:  "restore_game",
-		Lede:  "restore_game",
+	Zt_LoadGame = typeinfo.Flow{
+		Name:  "load_game",
+		Lede:  "load_game",
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,

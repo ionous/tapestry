@@ -62,5 +62,4 @@ func testText(t *testing.T, in string, expect ...story.StoryStatement) {
 		t.Log(pretty.Sprint(out))
 		t.Fatal("mismatch")
 	}
-	return
 }

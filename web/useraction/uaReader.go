@@ -68,9 +68,9 @@ func (r *Reader) pull(token Token) (ret string, okay bool) {
 				out[at] = el // keep this entry; might copy over itself; that's fine.
 				at++
 			}
-		}
-		if at < len(out) {
-			out = out[:at] // slice down if need be.
+			// if at < len(out) {
+			// 	out = out[:at] // slice down if need be.
+			// }
 		}
 	}
 	return
@@ -81,7 +81,7 @@ func (r *Reader) pull(token Token) (ret string, okay bool) {
 func (r *Reader) poll(start time.Time, wait time.Duration, token Token) (ret string, err error) {
 Loop:
 	for err == nil {
-		elapsed := time.Now().Sub(start)
+		elapsed := time.Since(start)
 
 		select {
 		case <-time.After(wait - elapsed):

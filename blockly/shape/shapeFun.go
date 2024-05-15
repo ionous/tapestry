@@ -71,7 +71,6 @@ func writeStrField(w *ShapeWriter, out *js.Builder, term typeinfo.Term) {
 					}
 				})
 	}
-	return
 }
 
 func writeFlowField(w *ShapeWriter, out *js.Builder, term typeinfo.Term) {
@@ -93,12 +92,4 @@ func writeInput(out *js.Builder, inputType, shadow string, checks []string) {
 	if len(shadow) > 0 {
 		out.R(js.Comma).Kv("shadow", shadow)
 	}
-}
-
-func getShadow(t typeinfo.T) (ret string) {
-	switch t.(type) {
-	case *typeinfo.Num, *typeinfo.Flow:
-		ret = t.TypeName()
-	}
-	return
 }
