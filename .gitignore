@@ -18,7 +18,6 @@ cmd/spec/spec
 cmd/stem/stem
 cmd/tap/tap
 cmd/tap/tap.db
+doc/themes
 www/dist
 *.zip
-doc/themes
-
