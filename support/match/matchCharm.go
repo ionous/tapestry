@@ -49,7 +49,7 @@ func eatWhitespace() charm.State {
 		case runes.Space, runes.Newline:
 			ret = self
 		case runes.Eof:
-			ret = charm.Error(nil)
+			ret = charm.Finished()
 		default:
 			// otherwise, not whitespace so return unhandled
 		}
