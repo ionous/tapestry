@@ -23,15 +23,11 @@ func TestCoreEncoding(t *testing.T) {
 		},
 		`{"Object:dot:":["@noun",[{"AtField:":"@trait"}]]}`,
 	}, {
-		// fix:  should have path syntax ( re: expressions )  ex. @pawn.trait
-		assign.Variable("pawn", "trait"),
-		`{"Variable:dot:":["pawn",[{"AtField:":"trait"}]]}`,
-	}, {
 		&core.AddValue{
 			A: assign.Variable("a"),
-			B: assign.Variable("b"),
+			B: assign.Object("b", "field"),
 		},
-		`{"Add:value:":["@a","@b"]}`,
+		`{"Add:value:":["@a","#b.field"]}`,
 	}, {
 		// unary
 		&core.Softline{},
@@ -47,7 +43,13 @@ func TestCoreEncoding(t *testing.T) {
 }
 
 type testPair struct {
-	v      typeinfo.Instance
+	// the test serializes this to json
+	// to compare against expect
+	v typeinfo.Instance
+	// the test changes this into json
+	// to match against v's json.
+	// then unmarshals the json into structs
+	// to compares against the original v
 	expect string
 }
 
@@ -68,7 +70,6 @@ func testPairs(t *testing.T, pairs []testPair) {
 				t.Errorf("%d couldn't decode because %v", i, e)
 			} else if !r.DeepEqual(reversed, p.v) {
 				t.Errorf("%d mismatched decode", i)
-				t.Log("want: ", pretty.Sprint(p.v))
 				t.Log("have: ", pretty.Sprint(reversed))
 			}
 		}

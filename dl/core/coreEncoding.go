@@ -1,7 +1,10 @@
 package core
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/assign/shortcut"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -17,14 +20,11 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err erro
 	case *assign.CallPattern:
 		ret, err = assign.CustomEncoder(enc, op)
 
-	case *assign.VariableDot:
-		// write variables as a string prepended by @
-		// fix: it'd be nice if all parts were literals to write dot/bracket syntax a.b[5]
-		// fix: it'd be nicest if this could use package express to handle the parsing.
-		if name, ok := op.Name.(*literal.TextValue); len(op.Dot) == 0 && ok {
-			ret = "@" + name.Value
+	case assign.Address:
+		if str, ok := shortcut.WriteDots(op); !ok {
+			err = compact.Unhandled("address")
 		} else {
-			err = compact.Unhandled("variable ref")
+			ret = str
 		}
 
 	case *literal.TextValue:
@@ -58,18 +58,20 @@ func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret type
 		&rtti.Zt_RecordListEval,
 		// writing to a variable:
 		&assign.Zt_Address:
-		if str := getVariableString(body); len(str) > 0 {
-			ret = assign.Variable(str)
-		} else {
+		//
+		if str, ok := body.(string); !ok || len(str) == 0 {
 			ret, err = literal.DecodeLiteral(slot, body)
+		} else {
+			var clip shortcut.NotShort
+			if a, e := shortcut.ReadDots(str); e == nil {
+				ret = a.(typeinfo.Instance)
+			} else if !errors.As(e, &clip) {
+				err = e
+			} else {
+				// use decode literal, could be string in a list.
+				ret, err = literal.DecodeLiteral(slot, str[clip:])
+			}
 		}
-	}
-	return
-}
-
-func getVariableString(val any) (ret string) {
-	if str, ok := val.(string); ok && len(str) > 0 && str[0] == '@' {
-		ret = str[1:]
 	}
 	return
 }

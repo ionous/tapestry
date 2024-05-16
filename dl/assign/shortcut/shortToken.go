@@ -53,7 +53,7 @@ const (
 type NotShort int
 
 func (e NotShort) Error() string {
-	return "not an shortcut string"
+	return "not a shortcut string"
 }
 
 func invalidRune(q rune, at int) charm.State {

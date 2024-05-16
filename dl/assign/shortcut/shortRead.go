@@ -8,6 +8,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
+// should ReadDots try to keep the shortcut string
+// ( ex. for debugging )
+var KeepShortcuts bool
+
 func ReadDots(str string) (ret assign.Address, err error) {
 	var a Shortcut
 	if e := Tokenize(str, &a); e != nil {
@@ -26,22 +30,24 @@ type Shortcut struct {
 
 func (a *Shortcut) Finish(str string) (ret assign.Address) {
 	name := literal.T(a.name)
+	var m map[string]any
+	if KeepShortcuts {
+		m = map[string]any{
+			"shortcut": str,
+		}
+	}
 	switch a.marker {
 	case VarMarker:
 		ret = &assign.VariableDot{
-			Name: name,
-			Dot:  a.dot,
-			Markup: map[string]any{
-				"shortcut": str,
-			},
+			Name:   name,
+			Dot:    a.dot,
+			Markup: m,
 		}
 	case ObjMarker:
-		ret = &assign.VariableDot{
-			Name: name,
-			Dot:  a.dot,
-			Markup: map[string]any{
-				"shortcut": str,
-			},
+		ret = &assign.ObjectDot{
+			Name:   name,
+			Dot:    a.dot,
+			Markup: m,
 		}
 	default:
 		panic("unexpected error")
@@ -72,9 +78,11 @@ func (a *Shortcut) Decoded(t Type, v any) (err error) {
 	case t.IsNumber():
 		if idx := v.(int); len(a.name) == 0 {
 			err = errors.New("expected an object or variable name")
+		} else if idx == 0 {
+			err = errors.New("zero is an invalid element")
 		} else {
 			a.dot = append(a.dot, &assign.AtIndex{
-				Index: literal.I(idx),
+				Index: literal.I(idx - 1),
 			})
 		}
 

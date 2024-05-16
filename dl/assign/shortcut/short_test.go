@@ -6,7 +6,33 @@ import (
 	"log"
 	"reflect"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 )
+
+func TestWrite(t *testing.T) {
+	if a, ok := WriteDots(assign.Object("obj", "field", 0, "el")); !ok {
+		t.Fatal("couldnt write")
+	} else if a != "#obj.field.1.el" {
+		t.Fatal("mismatch", a)
+	}
+
+	if a, ok := WriteDots(assign.Variable("var")); !ok {
+		t.Fatal("couldnt write")
+	} else if a != "@var" {
+		t.Fatal("mismatch", a)
+	}
+	if a, ok := WriteDots(assign.Object("the obj")); !ok {
+		t.Fatal("couldnt write")
+	} else if a != "#the_obj" {
+		t.Fatal("mismatch", a)
+	}
+	if a, ok := WriteDots(assign.Variable("bob's nephew", "headgear")); !ok {
+		t.Fatal("couldnt write")
+	} else if a != "@`bob's nephew`.headgear" {
+		t.Fatal("mismatch", a)
+	}
+}
 
 func TestTokens(t *testing.T) {
 	if e := match("@var.5", AtSign, "var", 5); e != nil {
@@ -30,6 +56,7 @@ func TestTokens(t *testing.T) {
 		}
 	}
 }
+
 func match(str string, want ...any) (err error) {
 	if e := Tokenize(str, &matcher{want: want}); e != nil {
 		err = fmt.Errorf("%q failed %w", str, e)
