@@ -13,7 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry@v0.24.4-1"
+const SourceUrl = "https://pkg.go.dev/git.sr.ht/~ionous/tapestry"
 const typesFolder = "idl"
 const slotFolder = "slot"
 const baseUrl = "/api"

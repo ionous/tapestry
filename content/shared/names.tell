@@ -25,7 +25,7 @@ Tapestry:
           # ( by default, that will try to write: 'nowhere', 'nobody', or 'nothing'. )
           If:do:else:
             - Not:
-                Is valid: "@obj"
+                Object: "@obj"
             - - PrintNothing:
                   FromText: "@obj"
             - # if the object was given an explicit 'printed name', print that.

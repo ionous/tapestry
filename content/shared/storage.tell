@@ -68,9 +68,7 @@ Tapestry:
                               - Is:matching:text:
                                   - "@it"
                                   - "equal_to"
-                                  - Object:dot:
-                                      - "player"
-                                      - AtField: "pawn"
+                                  - "#player.pawn"
                               - Object:dot:
                                   - "@it"
                                   - AtField: "scenery"

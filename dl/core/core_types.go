@@ -1002,44 +1002,6 @@ func (op *HasDominion_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A unique object identifier.
-type IdOf struct {
-	Object rtti.TextEval
-	Markup map[string]any
-}
-
-// id_of, a type of flow.
-var Zt_IdOf typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*IdOf) TypeInfo() typeinfo.T {
-	return &Zt_IdOf
-}
-
-// Implements [typeinfo.Markup]
-func (op *IdOf) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*IdOf)(nil)
-
-// Holds a slice of type IdOf.
-type IdOf_Slice []IdOf
-
-// Implements [typeinfo.Instance] for a slice of IdOf.
-func (*IdOf_Slice) TypeInfo() typeinfo.T {
-	return &Zt_IdOf
-}
-
-// Implements [typeinfo.Repeats] for a slice of IdOf.
-func (op *IdOf_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // True if text contains text.
 type Includes struct {
 	Text   rtti.TextEval
@@ -1727,44 +1689,6 @@ func (*Not_Slice) TypeInfo() typeinfo.T {
 
 // Implements [typeinfo.Repeats] for a slice of Not.
 func (op *Not_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Returns whether there is a object of the specified name.
-type ObjectExists struct {
-	Object rtti.TextEval
-	Markup map[string]any
-}
-
-// object_exists, a type of flow.
-var Zt_ObjectExists typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*ObjectExists) TypeInfo() typeinfo.T {
-	return &Zt_ObjectExists
-}
-
-// Implements [typeinfo.Markup]
-func (op *ObjectExists) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.BoolEval = (*ObjectExists)(nil)
-
-// Holds a slice of type ObjectExists.
-type ObjectExists_Slice []ObjectExists
-
-// Implements [typeinfo.Instance] for a slice of ObjectExists.
-func (*ObjectExists_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ObjectExists
-}
-
-// Implements [typeinfo.Repeats] for a slice of ObjectExists.
-func (op *ObjectExists_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -3174,20 +3098,6 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 	}
-	Zt_IdOf = typeinfo.Flow{
-		Name: "id_of",
-		Lede: "id_of",
-		Terms: []typeinfo.Term{{
-			Name: "object",
-			Type: &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-		},
-		Markup: map[string]any{
-			"comment": "A unique object identifier.",
-		},
-	}
 	Zt_Includes = typeinfo.Flow{
 		Name: "includes",
 		Lede: "contains",
@@ -3473,21 +3383,6 @@ func init() {
 		},
 		Markup: map[string]any{
 			"comment": "Returns the opposite value.",
-		},
-	}
-	Zt_ObjectExists = typeinfo.Flow{
-		Name: "object_exists",
-		Lede: "is",
-		Terms: []typeinfo.Term{{
-			Name:  "object",
-			Label: "valid",
-			Type:  &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_BoolEval,
-		},
-		Markup: map[string]any{
-			"comment": "Returns whether there is a object of the specified name.",
 		},
 	}
 	Zt_ObjectTraits = typeinfo.Flow{
@@ -3945,7 +3840,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_During,
 	&Zt_FieldsOfKind,
 	&Zt_HasDominion,
-	&Zt_IdOf,
 	&Zt_Includes,
 	&Zt_IsEmpty,
 	&Zt_IsExactKindOf,
@@ -3964,7 +3858,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Newline,
 	&Zt_Continue,
 	&Zt_Not,
-	&Zt_ObjectExists,
 	&Zt_ObjectTraits,
 	&Zt_Pluralize,
 	&Zt_PrintNum,
@@ -4033,7 +3926,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
 	2224842870997259213:  (*FieldsOfKind)(nil),      /* text_list_eval=Fields of: */
 	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
-	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
 	6524366950360243674:  (*ChooseBranch)(nil),      /* brancher=If:assuming:do: */
 	12195526980856142720: (*ChooseBranch)(nil),      /* execute=If:assuming:do: */
 	16752471159562852415: (*ChooseBranch)(nil),      /* brancher=If:assuming:do:else: */
@@ -4056,7 +3948,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
 	16720860407833961741: (*HasDominion)(nil),       /* bool_eval=Is domain: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
-	17183768313478169229: (*ObjectExists)(nil),      /* bool_eval=Is valid: */
 	4986574662941955696:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num: */
 	6471221873898876231:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num:within: */
 	2616749751052919401:  (*CompareText)(nil),       /* bool_eval=Is:matching:text: */

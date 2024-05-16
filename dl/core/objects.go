@@ -8,33 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-func (op *ObjectExists) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	switch obj, e := safe.ObjectText(run, op.Object); e.(type) {
-	case nil:
-		if len(obj.String()) == 0 {
-			ret = rt.False
-		} else {
-			ret = rt.True
-		}
-	case rt.Unknown:
-		ret = rt.False // fix: is this branch even possible?
-	default:
-		err = cmdError(op, e)
-	}
-	return
-}
-
-// return the unique object name for the indicated object.
-// returns an error if there is no such object; returns the empty string for an empty id.
-func (op *IdOf) GetText(run rt.Runtime) (ret rt.Value, err error) {
-	if obj, e := safe.ObjectText(run, op.Object); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = obj
-	}
-	return
-}
-
 // returns the author specified name for the indicated object.
 // returns an error if there is no such object;
 // returns the empty string for an empty request.

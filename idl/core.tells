@@ -360,16 +360,7 @@ Spec:with group:
                     - "domain"
                     - "name"
                     - "text"
-      - # A unique object identifier.
-        Spec:slots:groups:with flow:
-          - "id_of"
-          - "text_eval"
-          - "objects"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "object"
-                  - "text_eval"
+
       - # True if text contains text.
         Spec:slots:groups:with flow:
           - "includes"
@@ -585,17 +576,7 @@ Spec:with group:
                   - "_"
                   - "test"
                   - "bool_eval"
-      - # Returns whether there is a object of the specified name.
-        Spec:slots:groups:with flow:
-          - "object_exists"
-          - "bool_eval"
-          - "objects"
-          - Flow:uses:
-              - "is"
-              - - Term:name:type:
-                    - "valid"
-                    - "object"
-                    - "text_eval"
+
       - # Returns all of the object's current traits as a list of text.
         Spec:slots:groups:with flow:
           - "object_traits"

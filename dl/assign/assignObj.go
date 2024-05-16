@@ -6,36 +6,48 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *ObjectDot) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = e
-	} else if id, e := run.GetField(meta.ObjectId, name.String()); e != nil {
+	if name, e := safe.ObjectText(run, op.Name); e != nil {
 		err = e
 	} else if path, e := ResolvePath(run, op.Dot); e != nil {
 		err = e
 	} else {
-		ret, err = dot.FindEndpoint(run, id.String(), path)
+		ret, err = dot.FindEndpoint(run, name.String(), path)
 	}
 	return
 }
 
 func (op *ObjectDot) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	var u rt.Unknown
-	if v, e := op.getValue(run, affine.Bool); e == nil {
-		ret = v
-	} else if errors.As(e, &u) && u.IsUnknownField() {
-		// asking for a boolean field that doesn't exist?
-		// we allow this so that any object can support trait requests
-		// fix: this should somehow validate that there is such a trait however
-		// [ ex. return "inapplicable trait" instead of "unknown field" ]
-		// bonus points for determining this during weave when using literals
-		ret = rt.False
+	if len(op.Dot) > 0 {
+		var u rt.Unknown
+		if v, e := op.getValue(run, affine.Bool); e == nil {
+			ret = v
+		} else if errors.As(e, &u) && u.IsUnknownField() {
+			// asking for a boolean field that doesn't exist?
+			// we allow this so that any object can support trait requests
+			// fix: this should somehow validate that there is such a trait however
+			// [ ex. return "inapplicable trait" instead of "unknown field" ]
+			// bonus points for determining this during weave when using literals
+			ret = rt.False
+		} else {
+			err = CmdError(op, e)
+		}
 	} else {
-		err = CmdError(op, e)
+		switch obj, e := safe.ObjectText(run, op.Name); e.(type) {
+		case rt.Unknown:
+			ret = rt.False // no such object
+		case nil:
+			if len(obj.String()) == 0 {
+				ret = rt.False // the eval returned the empty string
+			} else {
+				ret = rt.True
+			}
+		default:
+			err = CmdError(op, e)
+		}
 	}
 	return
 }
@@ -44,8 +56,14 @@ func (op *ObjectDot) GetNumber(run rt.Runtime) (rt.Value, error) {
 	return op.getValue(run, affine.Number)
 }
 
-func (op *ObjectDot) GetText(run rt.Runtime) (rt.Value, error) {
-	return op.getValue(run, affine.Text)
+// as a special case, if there are no dot parts, return the id of the object
+func (op *ObjectDot) GetText(run rt.Runtime) (ret rt.Value, err error) {
+	if len(op.Dot) > 0 {
+		ret, err = op.getValue(run, affine.Text)
+	} else {
+		ret, err = safe.ObjectText(run, op.Name)
+	}
+	return
 }
 
 func (op *ObjectDot) GetRecord(run rt.Runtime) (rt.Value, error) {

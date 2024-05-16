@@ -3,6 +3,7 @@ package core_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -32,10 +33,10 @@ func TestObjects(t *testing.T) {
 	nothing := core.T("nothing")
 
 	t.Run("exists", func(t *testing.T) {
-		if e := testTrue(t, &run, &core.ObjectExists{Object: this}); e != nil {
+		if e := testTrue(t, &run, &assign.ObjectDot{Name: this}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.Not{Test: &core.ObjectExists{Object: nothing}}); e != nil {
+		if e := testTrue(t, &run, &core.Not{Test: &assign.ObjectDot{Name: nothing}}); e != nil {
 			t.Fatal(e)
 		}
 	})

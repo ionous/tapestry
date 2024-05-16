@@ -41,7 +41,7 @@ Tapestry:
                       Is:matching:text:
                         - "@obj"
                         - "equal_to"
-                        - IdOf: "player"
+                        - "#player"
   - Define rule:named:do:
       - "is player"
       - "player from actor"
@@ -55,9 +55,7 @@ Tapestry:
                       Is:matching:text:
                         - "@obj"
                         - "equal_to"
-                        - Object:dot:
-                            - "player"
-                            - AtField: "pawn"
+                        - "#player.pawn"
   - # 
     Define test:do:
       - "player tests"

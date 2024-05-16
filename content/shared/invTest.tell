@@ -25,8 +25,7 @@ Tapestry:
       - "default inventory"
       - "Kitchenette"
       - - PrintInventory actor:
-            FromText:
-              IdOf: "Mildred"
+            FromText: "#Mildred"
         - # FIX: there are suddenly spaces after open
           # i suspect it might be from the ul indentation somehow....
           Expect output:

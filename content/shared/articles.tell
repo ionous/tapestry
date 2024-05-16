@@ -82,7 +82,7 @@ Tapestry:
       - - Nothing:
       - - If:do:else:
             - Not:
-                Is valid: "@obj"
+                Object: "@obj"
             - - PrintNothing:
                   FromText: "@obj"
             - If:do:else:
