@@ -43,6 +43,7 @@ func MakeGenerator(groups []Group) (ret Generator, err error) {
 	return
 }
 
+// currents the current group
 func (q *Generator) group() Group {
 	return q.groups.list[q.i-1]
 }
@@ -80,4 +81,72 @@ func (q *Generator) WriteTable(w DB) error {
 // using sqlite friendly data to the passed database
 func (q *Generator) WriteReferences(w DB) error {
 	return writeReferences(w, q.group())
+}
+
+// for schemas
+type slotList struct {
+	slotData
+	Signatures []slotSig
+}
+
+// ducktype wrapper to match the format of SigTerm
+type slotSig struct {
+	Signature string
+}
+
+// 1.every flow signature
+func (q Generator) WriteSchema(w io.Writer) (err error) {
+	// tbd, maybe one schema can include others
+	var flow []flowData
+	var str []strData
+	var num []numData
+	slot := make(map[string]slotList)
+
+	for q.Next() {
+		curr := q.group()
+		for _, op := range curr.Str {
+			str = append(str, op.(strData))
+		}
+		for _, op := range curr.Num {
+			num = append(num, op.(numData))
+		}
+		for _, op := range curr.Slot {
+			op := op.(slotData)
+			if a, ok := slot[op.Name]; !ok {
+				slot[op.Name] = slotList{slotData: op}
+			} else {
+				a.slotData = op
+				slot[op.Name] = a
+			}
+		}
+		for _, f := range curr.Flow {
+			op := f.(flowData)
+			if _, private := op.Markup["internal"]; !private {
+				flow = append(flow, op)
+				var sig []slotSig
+				for _, set := range op.Signatures() {
+					sig = append(sig, slotSig{set.Signature()})
+				}
+				for _, s := range op.Slots {
+					if a, ok := slot[s]; !ok {
+						slot[s] = slotList{Signatures: sig}
+					} else {
+						a.Signatures = append(a.Signatures, sig...)
+						slot[s] = a
+					}
+				}
+			}
+		}
+	}
+	return q.tmp.ExecuteTemplate(w, "schema.tmpl", struct {
+		Name          string
+		SchemaComment string
+		Flow          []flowData
+		Str           []strData
+		Num           []numData
+		Slot          map[string]slotList
+	}{
+		"Tell", "A Tapestry story file",
+		flow, str, num, slot,
+	})
 }

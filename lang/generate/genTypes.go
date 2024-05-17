@@ -1,12 +1,15 @@
 package generate
 
 import (
+	"encoding/json"
 	"log"
 	"sort"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
+// common data for all types
 type specData struct {
 	Name   string
 	Markup markup
@@ -21,6 +24,17 @@ func (d specData) Comments() (ret []string) {
 	return
 }
 
+// comment as a single json friendly
+func (d specData) SchemaComment() (ret string, err error) {
+	str := strings.Join(d.Comments(), " ")
+	if b, e := json.Marshal(str); e != nil || len(b) == 0 {
+		err = e
+	} else {
+		ret = string(b[1 : len(b)-1])
+	}
+	return
+}
+
 // because references to types arent scoped but the generated code needs to be:
 // the generator has to load all possible types before writing them out.
 type flowData struct {
@@ -28,6 +42,10 @@ type flowData struct {
 	Lede  string
 	Slots []string
 	Terms []termData
+}
+
+func (d flowData) Signatures() []sigTerm {
+	return sigTerms(d)
 }
 
 type markup map[string]any

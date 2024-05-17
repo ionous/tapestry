@@ -1,0 +1,100 @@
+{{- define "ref" }}{{/*
+names are prefixed with bang so that they don't match in autocomplete;
+we only want the property names matched
+*/}}
+{ "$ref": "#/$defs/~{{ . }}" }
+{{- end }}
+{{- define "titledesc" -}}
+{{- /* 
+	the sublime and vscode hovers look better without title.
+	we already know what we're hovering.
+	golsp seems not to use the title either.
+	"title": "{{ Title .Name }}", */ -}}
+"description": "{{ .SchemaComment }}",
+"markdownDescription": "{{ .SchemaComment }}"
+{{- end }}
+{{- define "name:typelist" -}}
+"~{{.Name}}": {
+	{{ template "titledesc" . }},
+	"oneOf": [
+	{{/* these are a list of raw strings here */}}
+	{{- range $i, $t := .Signatures -}}
+		{{- if $i }},{{ end }}
+		{{ template "ref" ( LowerSignature $t.Signature ) -}}
+	{{ end }}
+	]
+}
+{{- end }}
+{
+	{{/* redhat yaml-language-server and vscode itself use draft 7 */}}
+  "$schema": "http://json-schema.org/draft-07/schema",
+  {{ template "titledesc" . }}, 
+  {{- /* the top level is an array of story statements*/}}
+  "type": [
+    "array",
+    "null"
+  ],
+  "items": {
+    "$ref": "#/$defs/~story_statement"
+  },
+  "$defs": {
+  	{{ range .Slot }} {{/*a map of SlotList */}}
+  	{{ template "name:typelist" . }},
+  	{{- end }}{{/* slot */}}
+  	{{ range  .Str }}
+  		"~{{.Name}}": {
+  			{{ template "titledesc" . }},
+  			"type": "string"
+  		},
+  	{{ end }}{{/* str */}}
+  	{{ range .Num }}
+  		"~{{.Name}}": {
+  			{{ template "titledesc" . }},
+  			"type": "number"
+  		},
+  	{{ end }}{{/* num */}}
+  	{{ range $op := .Flow }}
+  		{{- /* a type entry for when the flow is used directly */}}
+  		{{ template "name:typelist" . }},
+  		{{- /* entries for each of the terms */}}
+  		{{- range $set := $op.Signatures -}}
+  			"~{{ LowerSignature $set.Signature }}": {
+				  "type": "object",
+				{{- /*required ensures that the property is in the object
+				  by default its optional*/}}
+				   "required": [
+            "{{ TrimmedSignature $set.Signature }}"
+          ],
+				  "properties": {
+				  	"{{ TrimmedSignature $set.Signature }}": {
+						  {{ template "titledesc" $op }},
+						  "type": {{ if not $set.Terms -}}
+							  "null"
+							  {{- else -}}
+							  "array",
+						  "items": [
+					  	{{- range $it, $t:= $set.Terms -}}{{/* TermData */ -}}
+					  		{{- if $it }},{{ end }}
+					  		{{- if not $t.Repeats }}
+					  			{{ template "ref" $t.Type -}}
+					  		{{- else }}
+					  		{
+	                "type": "array",
+	                "items": [
+	               	 {{ template "ref" $t.Type }}
+	                ],
+	                "additionalItems": false
+            		}
+					  		{{- end }}
+					  	{{ end }}
+					 	  ],
+					 	  "additionalItems": false
+					 	  {{- end }}{{/*"type"*/}}
+					 	}
+					}
+				},
+  		{{ end }}
+  	{{- end }}{{/* flow */}}
+  	"xxx_eat_the_trailing_comma": {}
+  }
+}

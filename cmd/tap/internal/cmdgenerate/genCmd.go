@@ -3,6 +3,7 @@ package cmdgenerate
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"flag"
 	"go/format"
 	"io/fs"
@@ -24,20 +25,45 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 	if outPath, e := filepath.Abs(genFlags.out); e != nil {
 		flag.Usage()
 		log.Fatal(e)
-	} else if db, e := createDB(genFlags.useDB, genFlags.dbPath); e != nil {
-		err = e
 	} else {
-		defer db.Close()
 		if groups, e := readGroups(genFlags.in); e != nil {
 			err = e
 		} else if g, e := generate.MakeGenerator(groups); e != nil {
 			err = e
-		} else if e := writeGroups(g, db, outPath); e != nil {
-			err = e
-		} else if genFlags.useDB {
-			for g.Next() {
-				g.WriteReferences(db)
+		} else {
+			// probably shouldnt be exclusive....
+			if genFlags.jsonSchema {
+				log.Println("writing", genFlags.schemaPath)
+				var b, out bytes.Buffer
+				if e := g.WriteSchema(&b); e != nil {
+					err = e
+				} else if e := json.Indent(&out, b.Bytes(), "", "  "); e != nil {
+					err = e
+				} else {
+					err = os.WriteFile(genFlags.schemaPath, out.Bytes(), 0666)
+				}
+			} else if db, e := createDB(genFlags.useDB, genFlags.dbPath); e != nil {
+				err = e
+			} else {
+				defer db.Close()
+				if e := writeGroups(g, db, outPath); e != nil {
+					err = e
+				} else {
+					if genFlags.useDB {
+						err = writeTables(g, db)
+					}
+				}
 			}
+		}
+	}
+	return
+}
+
+func writeTables(g generate.Generator, db generate.DB) (err error) {
+	for g.Next() {
+		if e := g.WriteReferences(db); e != nil {
+			err = e
+			break
 		}
 	}
 	return
@@ -54,11 +80,13 @@ Generates .go source code for reading and writing story files from .tells files.
 
 // collection of local flags
 var genFlags = struct {
-	dl     string // filter by group
-	in     string // input path
-	out    string // output directory
-	useDB  bool
-	dbPath string // output file or path
+	dl         string // filter by group
+	in         string // input path
+	out        string // output directory
+	useDB      bool
+	jsonSchema bool
+	schemaPath string
+	dbPath     string // output file or path
 }{}
 
 // fix: maybe this should match go generate style (ish)
@@ -69,15 +97,17 @@ var genFlags = struct {
 // ( either see if that directory code is portable
 // | or handle the more frequent patterns: ".", "...", and a directory )
 func buildFlags() (fs flag.FlagSet) {
-	var dbPath string
+	var outBase string
 	if home, e := os.UserHomeDir(); e == nil {
-		dbPath = filepath.Join(home, "Documents", "Tapestry", "build", "idl.db")
+		outBase = filepath.Join(home, "Documents", "Tapestry", "build")
 	}
 	fs.StringVar(&genFlags.dl, "dl", "", "limit to which groups")
 	fs.StringVar(&genFlags.in, "in", "../../idl", "input directory containing one or more spec files")
 	fs.StringVar(&genFlags.out, "out", "../../dl", "output directory")
 	fs.BoolVar(&genFlags.useDB, "db", false, "generate a sqlite representation")
-	fs.StringVar(&genFlags.dbPath, "dbFile", dbPath, "sqlite output file")
+	fs.BoolVar(&genFlags.jsonSchema, "schema", false, "generate a json schema")
+	fs.StringVar(&genFlags.dbPath, "dbFile", filepath.Join(outBase, "idl.db"), "sqlite output file")
+	fs.StringVar(&genFlags.schemaPath, "schemaFile", filepath.Join(outBase, "idl.json"), "schema output file")
 	return
 }
 

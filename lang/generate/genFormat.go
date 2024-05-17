@@ -6,6 +6,7 @@ import (
 
 var Pascal = inflect.Pascal
 var Camelize = inflect.Camelize
+var Titlecase = inflect.Titlecase
 
 // does the passed string list include the passed string?
 func Includes(strs []string, str string) (ret bool) {
