@@ -83,6 +83,15 @@ func (set sigTerm) Terms() []termData {
 	return set.terms
 }
 
+func (set sigTerm) TrimmedSignature() string {
+	sig := set.Signature()
+	end := len(sig) - 1
+	if end > 0 && sig[end] == ':' {
+		sig = sig[:end]
+	}
+	return sig
+}
+
 func (set sigTerm) Signature() string {
 	sig, params := set.parts[0], set.parts[1:] // index 0 is the command name itself
 	if len(params) > 0 {

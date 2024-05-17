@@ -37,10 +37,13 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 				var b, out bytes.Buffer
 				if e := g.WriteSchema(&b); e != nil {
 					err = e
-				} else if e := json.Indent(&out, b.Bytes(), "", "  "); e != nil {
-					err = e
 				} else {
+					if e := json.Indent(&out, b.Bytes(), "", "  "); e != nil {
+						log.Println("poorly generated json", e)
+						out = b
+					}
 					err = os.WriteFile(genFlags.schemaPath, out.Bytes(), 0666)
+
 				}
 			} else if db, e := createDB(genFlags.useDB, genFlags.dbPath); e != nil {
 				err = e

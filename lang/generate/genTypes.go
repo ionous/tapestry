@@ -44,6 +44,7 @@ type flowData struct {
 	Terms []termData
 }
 
+// signatures along with the terms those signatures use.
 func (d flowData) Signatures() []sigTerm {
 	return sigTerms(d)
 }

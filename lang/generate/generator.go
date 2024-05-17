@@ -86,7 +86,7 @@ func (q *Generator) WriteReferences(w DB) error {
 // for schemas
 type slotList struct {
 	slotData
-	Signatures []slotSig
+	Types []string
 }
 
 // ducktype wrapper to match the format of SigTerm
@@ -123,15 +123,11 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 			op := f.(flowData)
 			if _, private := op.Markup["internal"]; !private {
 				flow = append(flow, op)
-				var sig []slotSig
-				for _, set := range op.Signatures() {
-					sig = append(sig, slotSig{set.Signature()})
-				}
 				for _, s := range op.Slots {
 					if a, ok := slot[s]; !ok {
-						slot[s] = slotList{Signatures: sig}
+						slot[s] = slotList{Types: []string{op.Name}}
 					} else {
-						a.Signatures = append(a.Signatures, sig...)
+						a.Types = append(a.Types, op.Name)
 						slot[s] = a
 					}
 				}

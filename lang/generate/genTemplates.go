@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
-	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
@@ -13,46 +12,13 @@ import (
 //go:embed templates/*
 var tempFS embed.FS
 
-// fix: the template functions for schema probably deserve to be split off
 func genTemplates(p *groupSearch) (*template.Template, error) {
 	funcMap := template.FuncMap{
 		//
-		// shared functions:
+		// common functions:
 		//
 		"Pascal": Pascal,
 		"Title":  Titlecase,
-		//
-		// schema functions:
-		//
-		"TrimmedSignature": func(str string) string {
-			end := len(str) - 1
-			if end > 0 && str[end] == ':' {
-				str = str[:end]
-			}
-			return str
-		},
-		// a special signature to make refs vs properties in schema clearer.
-		// replaces colons and spaces with underscores
-		// starts with an underscore to force a separate "namespace"
-		// from the plain type names ( which are also lower case )
-		"LowerSignature": func(str string) string {
-			var out strings.Builder
-			prefix := true // start prefixed
-			for _, r := range str {
-				if prefix {
-					out.WriteRune('_')
-				}
-				if prefix = r == ':'; !prefix {
-					if r == ' ' {
-						r = '_'
-					} else {
-						r = unicode.ToLower(r)
-					}
-					out.WriteRune(r)
-				}
-			}
-			return out.String()
-		},
 		//
 		// go generation functions:
 		//
