@@ -1,7 +1,9 @@
 package generate
 
 import (
+	"fmt"
 	"log"
+	"slices"
 	"strings"
 )
 
@@ -81,6 +83,31 @@ type sigTerm struct {
 
 func (set sigTerm) Terms() []termData {
 	return set.terms
+}
+
+type TypeLink string
+
+func (t TypeLink) Type() string {
+	return string(t)
+}
+
+func (t TypeLink) Link() (ret string, err error) {
+	if a, ok := hackForLinks.linkByName(t.Type()); !ok {
+		err = fmt.Errorf("unknown type %q creating link", t)
+	} else {
+		ret = a
+	}
+	return
+}
+
+// unique types used by the terms
+func (set sigTerm) TypeLinks() (ret []TypeLink) {
+	for _, a := range set.terms {
+		if typeName := a.Type; !slices.Contains(ret, TypeLink(typeName)) {
+			ret = append(ret, TypeLink(typeName))
+		}
+	}
+	return
 }
 
 func (set sigTerm) TrimmedSignature() string {

@@ -1,26 +1,52 @@
-{{/* ------------------------------------------ */}}
+
+{{/* ------------------------------------------ 
+  expects text.
+  names are prefixed with tilde so that they don't match in autocomplete.
+   ------------------------------------------ */}}
 {{- define "ref" }}
-{{/*
-  names are prefixed with bang so that they don't match in autocomplete;
-  we only want the property names matched
-*/}}
 { "$ref": "#/$defs/~{{ . }}" }
 {{- end }}
-{{/* ------------------------------------------ */}}
-{{- define "titledesc" -}}
-{{/* 
-  the sublime and vscode hovers look better without title.
+
+{{/* ------------------------------------------ 
+  expects sigTerm,
+  sublime and vscode hovers look better without title.
   we already know what we're hovering.
   golsp seems not to use the title either.
-  "title": "{{ Title .Name }}", 
-*/}}
+   ------------------------------------------ */}}
+{{- define "titledesc" -}}
   "description": "{{ .SchemaComment }}",
   "markdownDescription": "{{ .SchemaComment }}"
 {{- end }}
+
+{{/* ------------------------------------------ 
+  expects sigTerm
+   ------------------------------------------ */}}
+{{- define "typedesc" -}}
+\n\n---\n{{/* */ -}}
+{{ .Signature }}\n{{/* */ -}}
+```yaml\n{{/* */ -}}
+{{ range .Terms -}}
+- {{ .SimpleLabel }}: {{ Pascal .Type -}}
+{{ if .Repeats }}...{{ end }}\n{{/* */ -}}
+{{ end -}}
+```\n{{/* */ -}}
+{{- end }}
+
+{{/* ------------------------------------------ 
+  expects slice of TypeLink
+   ------------------------------------------ */}}
+{{- define "typelinks" -}}
+Types: {{ range $idx, $t := . -}}
+{{- if $idx }}, {{ end -}}
+[{{ Pascal .Type }}]({{ .Link }})
+{{- end -}}
+{{- end -}}
+
 {{/* ------------------------------------------ */}}
 {
   {{/* redhat yaml-language-server and vscode idxelf use draft 7 */}}
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://tapestry.ionous.net/schema/tell/v1",
   {{ template "titledesc" . }}, 
   {{- /* the top level is an array of story statements*/}}
   "type": [
@@ -72,7 +98,7 @@
       "~{{.Name}}": {
         "type": "object",
         "oneOf": [
-        {{- range $idx, $ts := .Signatures -}}
+        {{- range $idx, $sigTerm := .Signatures -}}
           {{- if $idx }},{{ end }}
             {
             "required": [
@@ -80,7 +106,11 @@
             ],
             "properties": {
               "{{ .TrimmedSignature }}": {
-                {{ template "titledesc" $op }},
+                "description": "{{ $op.SchemaComment }}",
+                "markdownDescription": 
+                "{{ $op.SchemaComment }}{{ 
+                  template "typedesc" . }}{{
+                  template "typelinks" .TypeLinks }}",
                 "type": 
                 {{- if not .Terms }}
                   "null"
@@ -104,18 +134,25 @@
         per flow terms
         */}}
       {{- range .Terms -}}
+      {{ if not .Private }}
         "~{{ $op.Name }}.{{ .Name }}":
-        {{- if not .Repeats }}
-          {{ template "ref" .Type -}},
-        {{- else }}
         {
+        {{- if not .Repeats }}
+          "$ref": "#/$defs/~{{ .Type }}",
+        {{- else }}
          "type": "array",
          "additionalItems": false,
+         {{ template "titledesc" . }}, 
          "items": [
            {{ template "ref" .Type }}
-          ]
-        },
+          ],
         {{- end }}{{/* term repeats */}}
+         "description": "{{ .SchemaComment }}",
+         "markdownDescription": 
+          "{{ .SchemaComment 
+          }}\n\nType: [{{ Pascal .Type }}]({{ .Link }})"
+        },
+      {{ end }}
       {{ end }}{{/* range terms */}}
     {{ end }}{{/* flow */}}
     "xxx_eat_the_trailing_comma": {}

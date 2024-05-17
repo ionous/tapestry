@@ -94,13 +94,13 @@ type slotSig struct {
 	Signature string
 }
 
-// 1.every flow signature
 func (q Generator) WriteSchema(w io.Writer) (err error) {
 	// tbd, maybe one schema can include others
 	var flow []flowData
 	var str []strData
 	var num []numData
 	slot := make(map[string]slotList)
+	hackForLinks = q.groups
 
 	for q.Next() {
 		curr := q.group()

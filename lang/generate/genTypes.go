@@ -2,11 +2,13 @@ package generate
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"sort"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
+	"github.com/mitchellh/go-wordwrap"
 )
 
 // common data for all types
@@ -15,24 +17,13 @@ type specData struct {
 	Markup markup
 }
 
-func (d specData) Comments() (ret []string) {
-	if vs, e := compact.ExtractComment(d.Markup); e != nil {
-		log.Panic(e)
-	} else {
-		ret = vs
-	}
-	return
+func (d specData) Comments() []string {
+	return d.Markup.Comments()
 }
 
 // comment as a single json friendly
-func (d specData) SchemaComment() (ret string, err error) {
-	str := strings.Join(d.Comments(), " ")
-	if b, e := json.Marshal(str); e != nil || len(b) == 0 {
-		err = e
-	} else {
-		ret = string(b[1 : len(b)-1])
-	}
-	return
+func (d specData) SchemaComment() (string, error) {
+	return d.Markup.SchemaComment()
 }
 
 // because references to types arent scoped but the generated code needs to be:
@@ -63,6 +54,28 @@ func (m markup) Keys() []string {
 	return keys
 }
 
+func (m markup) Comments() (ret []string) {
+	if vs, e := compact.ExtractComment(m); e != nil {
+		log.Panic(e)
+	} else {
+		ret = vs
+	}
+	return
+}
+
+// comment as a single json friendly
+func (m markup) SchemaComment() (ret string, err error) {
+	str := strings.Join(m.Comments(), " ")
+	if b, e := json.Marshal(str); e != nil || len(b) == 0 {
+		err = e
+	} else {
+		ret = string(b[1 : len(b)-1])
+		ret = wordwrap.WrapString(ret, 35)
+		ret = strings.ReplaceAll(ret, "\n", ` <br>`)
+	}
+	return
+}
+
 type slotData struct {
 	specData
 }
@@ -82,8 +95,22 @@ type termData struct {
 	Markup                     markup
 }
 
+func (t termData) Link() (ret string, err error) {
+	if a, ok := hackForLinks.linkByName(t.Type); !ok {
+		err = fmt.Errorf("unknown type %q creating link", t.Type)
+	} else {
+		ret = a
+	}
+	return
+}
+
+// comment as a single json friendly
+func (t termData) SchemaComment() (string, error) {
+	return t.Markup.SchemaComment()
+}
+
 // handle transforming _ into a blank string
-func (t *termData) SimpleLabel() (ret string) {
+func (t termData) SimpleLabel() (ret string) {
 	if t.Label != "_" {
 		ret = t.Label
 	}
