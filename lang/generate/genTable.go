@@ -56,11 +56,28 @@ Break:
 	return
 }
 
+// write str types to the db
 func writeStr(w DB, group string, types []typeData) (err error) {
 	for _, str := range types {
 		str := str.(strData)
-		for _, opt := range str.Options {
-			if e := w.Write(idl.Enum, str.Name, opt); e != nil {
+		var hasComments bool
+		comments := str.OptionComments
+		for _, c := range comments {
+			if len(c) > 0 {
+				hasComments = true
+				break
+			}
+		}
+		for i, opt := range str.Options {
+			var comment any // let comments be nil if they are all empty
+			if hasComments {
+				var str string // or string if any of them exist
+				if i < len(comments) {
+					str = comments[i]
+				}
+				comment = str
+			}
+			if e := w.Write(idl.Enum, str.Name, opt, comment); e != nil {
 				err = e
 				break
 			}

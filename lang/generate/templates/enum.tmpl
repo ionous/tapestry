@@ -38,5 +38,12 @@ var Zt_{{Pascal .Name}} = typeinfo.Str{
 		"{{$opt}}",
 	{{- end }}
 	},
+	{{- if .OptionComments }}
+	OptionComments: []string{
+	{{- range $i, $opt := .OptionComments }}
+		"{{$opt}}",
+	{{- end }}
+	},
+	{{- end }}
 	{{- template "markup.tmpl" .}}
 }

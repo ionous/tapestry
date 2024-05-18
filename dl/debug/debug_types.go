@@ -278,6 +278,13 @@ var Zt_LoggingLevel = typeinfo.Str{
 		"warn",
 		"error",
 	},
+	OptionComments: []string{
+		"the lowest logging level. not displayed unless specifically requested.",
+		"",
+		"",
+		"",
+		"",
+	},
 }
 
 // init the terms of all flows in init

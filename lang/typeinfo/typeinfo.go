@@ -105,9 +105,10 @@ func (t *Slot) TypeMarkup() map[string]any {
 }
 
 type Str struct {
-	Name    string         // unique name for this type
-	Options []string       // for enumerations; for plain strings, this is nil.
-	Markup  map[string]any // metadata shared by all instances of this type
+	Name           string         // unique name for this type
+	Options        []string       // for enumerations; for plain strings, this is nil.
+	OptionComments []string       // matches options if there are comments; nil otherwise.
+	Markup         map[string]any // metadata shared by all instances of this type
 }
 
 func (t *Str) TypeName() string {

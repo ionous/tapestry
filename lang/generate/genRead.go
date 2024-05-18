@@ -3,6 +3,7 @@ package generate
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
@@ -177,7 +178,11 @@ func readSimpleStr(spec specData, uses []compact.Message) (ret strData, err erro
 	if cnt := len(uses); cnt > 0 {
 		err = errors.New("expected no constraints for simple string")
 	} else {
-		ret = strData{spec, nil}
+		ret = strData{
+			specData:       spec,
+			Options:        nil,
+			OptionComments: nil,
+		}
 	}
 	return
 }
@@ -187,19 +192,36 @@ func readEnum(spec specData, uses []compact.Message) (ret strData, err error) {
 		err = errors.New("expected string choices")
 	} else {
 		options := make([]string, cnt)
-		for i, ex := range uses {
-			if ex.Key != "Option:" || len(ex.Args) != 1 {
-				err = fmt.Errorf("unexpected option %q", ex.Key)
+		var comments []string
+		for i, msg := range uses {
+			if msg.Key != "Option:" || len(msg.Args) != 1 {
+				err = fmt.Errorf("option %d has unexpected option %q", i, msg.Key)
 				break
-			} else if str, ok := ex.Args[0].(string); !ok {
-				err = fmt.Errorf("unexpected value%q", ex.Key)
+			} else if str, ok := msg.Args[0].(string); !ok {
+				err = fmt.Errorf("option %d has unexpected value %q", i, msg.Key)
 				break
 			} else {
 				options[i] = str
+				if lines, e := compact.ExtractComment(msg.Markup); e != nil {
+					err = fmt.Errorf("option %d has %w", i, e)
+					break
+				} else if len(lines) > 0 {
+					if comments == nil {
+						comments = make([]string, cnt)
+					}
+					// fix: newlines in comments; i'd like if comments were normalized to a single line
+					// with newlines as literal \n(s) and appropriate escaping
+					// maybe lift comments out of markup for types, since we handle them explicitly.
+					comments[i] = strings.Join(lines, " ")
+				}
 			}
 		}
 		if err == nil {
-			ret = strData{spec, options}
+			ret = strData{
+				specData:       spec,
+				Options:        options,
+				OptionComments: comments,
+			}
 		}
 	}
 	return

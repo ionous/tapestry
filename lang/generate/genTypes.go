@@ -70,7 +70,7 @@ func (m markup) SchemaComment() (ret string, err error) {
 		err = e
 	} else {
 		ret = string(b[1 : len(b)-1])
-		ret = wordwrap.WrapString(ret, 35)
+		ret = wordwrap.WrapString(ret, 50)
 		ret = strings.ReplaceAll(ret, "\n", ` <br>`)
 	}
 	return
@@ -82,7 +82,8 @@ type slotData struct {
 
 type strData struct {
 	specData
-	Options []string
+	Options        []string
+	OptionComments []string
 }
 
 type numData struct {

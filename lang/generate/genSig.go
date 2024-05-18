@@ -119,6 +119,10 @@ func (set sigTerm) TrimmedSignature() string {
 	return sig
 }
 
+func (set sigTerm) Lede() string {
+	return set.parts[0]
+}
+
 func (set sigTerm) Signature() string {
 	sig, params := set.parts[0], set.parts[1:] // index 0 is the command name itself
 	if len(params) > 0 {

@@ -22,15 +22,21 @@
   expects sigTerm
    ------------------------------------------ */}}
 {{- define "typedesc" -}}
-\n\n---\n{{/* */ -}}
-{{ .Signature }}\n{{/* */ -}}
-```yaml\n{{/* */ -}}
-{{ range .Terms -}}
-- {{ .SimpleLabel }}: {{ Pascal .Type -}}
-{{ if .Repeats }}...{{ end }}\n{{/* */ -}}
-{{ end -}}
+{{- with $sigTerm := . -}}
+\n\n---\n{{ 
+  .Signature }}\n{{/* */ -}}
+```yaml\n{{
+  range .Terms 
+  }}- {{ if .SimpleLabel }}{{ 
+      .SimpleLabel }}{{ else 
+  }}{{ $sigTerm.Lede }}{{ end
+  }}: {{ Pascal .Type }}{{ 
+    if .Repeats 
+  }}...{{ end }}\n{{ 
+end -}}
 ```\n{{/* */ -}}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{/* ------------------------------------------ 
   expects slice of TypeLink
@@ -60,19 +66,34 @@ Types: {{ range $idx, $t := . -}}
     {{ range .Slot }} {{/*a map of SlotList */}}      
     "~{{.Name}}": {
         {{ template "titledesc" . }},
-        "oneOf": [
-        {{/* manually add shortcuts */}}
-          {{ if eq .Name "text_eval" }}
+        "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
+          {{/* handle shortcut.ReadDots */}}
+          {{ if ( Contains .Name "bool_eval" "number_eval" "text_eval"
+            "num_list_eval" "text_list_eval" "record_eval" "record_list_eval"
+            "address" ) }}
           {
             "type": "string"
+          },
+          {{ end }}
+          {{/* handle literal.DecodeLiteral */}}
+          {{ if eq .Name "bool_eval" }}
+           {
+            "type": "boolean"
           },
           {{ else if eq .Name "number_eval" }}
            {
             "type": "number"
           },
-          {{ else if eq .Name "bool_eval" }}
+          {{/* text already supported by readdots */}}
+          {{ else if eq .Name "num_list_eval" }}
            {
-            "type": "boolean"
+            "type": "array",
+            "items": { "type": "number" }
+          },
+          {{ else if eq .Name "text_list_eval" }}
+           {
+            "type": "array",
+            "items": { "type": "string" }
           },
           {{ end }}
           {{- range $idx, $t := .Types -}}
@@ -86,6 +107,18 @@ Types: {{ range $idx, $t := . -}}
     "~{{.Name}}": {
         {{ template "titledesc" . }},
         "type": "string"
+        {{- if .Options }},
+        "enum": [
+        {{- range $idx, $opt := .Options -}}
+          {{- if $idx }},{{ end }} "{{ . }}"
+        {{- end }} ]
+        {{ end }}
+        {{- if .OptionComments }},
+        "enumDescriptions": [
+        {{- range $idx, $opt := .OptionComments -}}
+          {{- if $idx }},{{ end }} "{{ . }}"
+        {{- end }} ]
+        {{ end }}
       },
     {{ end }}{{/* str */}}
     {{ range .Num }}
@@ -97,7 +130,7 @@ Types: {{ range $idx, $t := . -}}
     {{ range $op := .Flow }}
       "~{{.Name}}": {
         "type": "object",
-        "oneOf": [
+        "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
         {{- range $idx, $sigTerm := .Signatures -}}
           {{- if $idx }},{{ end }}
             {
@@ -141,11 +174,11 @@ Types: {{ range $idx, $t := . -}}
           "$ref": "#/$defs/~{{ .Type }}",
         {{- else }}
          "type": "array",
-         "additionalItems": false,
-         {{ template "titledesc" . }}, 
-         "items": [
-           {{ template "ref" .Type }}
-          ],
+         {{/* the docs are confusing, but: in draft 7
+         	   the value of "items" indicates the array type.
+         	   a json object means repeating items;
+         	   a json array, a tuple. */}}
+         "items":  {{ template "ref" .Type }},
         {{- end }}{{/* term repeats */}}
          "description": "{{ .SchemaComment }}",
          "markdownDescription": 

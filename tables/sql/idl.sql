@@ -22,7 +22,7 @@ create table idl_sig( op int not null, slot int, hash text, body text,
 /**
  * the predefined values for str types.
  */
-create table idl_enum( op int not null, value text );
+create table idl_enum( op int not null, value text, comment text );
 
 /** the members of a flow type; 'type' is an op reference */
 create table idl_term( op int not null, name text, label text, type int,

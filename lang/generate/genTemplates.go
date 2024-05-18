@@ -3,6 +3,7 @@ package generate
 import (
 	"embed"
 	"fmt"
+	"slices"
 	"strings"
 	"text/template"
 
@@ -19,6 +20,12 @@ func genTemplates(p *groupSearch) (*template.Template, error) {
 		//
 		"Pascal": Pascal,
 		"Title":  Titlecase,
+		//
+		// for schema
+		//
+		"Contains": func(str string, in ...string) bool {
+			return slices.Contains(in, str)
+		},
 		//
 		// go generation functions:
 		//
