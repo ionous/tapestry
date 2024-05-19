@@ -10,13 +10,13 @@ import (
 )
 
 // ex. "Spec:groups:with flow"
-func readSpec(out *groupContent, msg compact.Message) (err error) {
+func readSpec(groupName string, out *groupContent, msg compact.Message) (err error) {
 	if msg.Name != "spec" {
 		err = fmt.Errorf("expected a spec, got %s", msg.Name)
 	} else if name, e := parseString("spec name", msg.Args[0], ""); e != nil {
 		err = e
 	} else {
-		spec := specData{name, msg.Markup}
+		spec := specData{name, groupName, msg.Markup}
 		var slots []string
 		for i, cnt := 1, len(msg.Labels); i < cnt && err == nil; i++ {
 			str := msg.Labels[i]
@@ -43,7 +43,7 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 							out.Reg = out.Reg.addFlow(d)
 						}
 					case "with group":
-						err = readGroup(out, spec, inner)
+						err = readGroupContent(groupName, out, inner)
 
 					case "with slot":
 						if d, e := readSlot(spec, inner); e != nil {
@@ -76,15 +76,15 @@ func readSpec(out *groupContent, msg compact.Message) (err error) {
 	return
 }
 
-func readGroup(out *groupContent, groupSpec specData, msg compact.Message) (err error) {
+// fix? this doesnt handle subgroups in any good way.
+func readGroupContent(groupName string, out *groupContent, msg compact.Message) (err error) {
 	if msg.Key != "Group contains:" {
 		err = fmt.Errorf("expected group definition, have %s", msg.Key)
 	} else if msgs, e := parseMessages(msg.Args[0]); e != nil {
 		err = e
 	} else {
-		// groupNames.AddName(n)
 		for _, inner := range msgs {
-			if e := readSpec(out, inner); e != nil {
+			if e := readSpec(groupName, out, inner); e != nil {
 				err = e
 				break
 			}

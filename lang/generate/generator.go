@@ -2,19 +2,21 @@ package generate
 
 import (
 	"errors"
-	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"io"
+	"strings"
 	"text/template"
+
+	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
 // read a "Spec:with group:" message
-func ReadSpec(msg compact.Message) (ret Group, err error) {
+func ReadGroup(msg compact.Message) (ret Group, err error) {
 	var gc groupContent
 	if msg.Key != "Spec:with group:" {
 		err = errors.New("expected a top level group spec") // ugh.
 	} else if n, e := parseString("spec", msg.Args[0], ""); e != nil {
 		err = e
-	} else if e := readSpec(&gc, msg); e != nil {
+	} else if e := readSpec(n, &gc, msg); e != nil {
 		err = e
 	} else if cmt, e := compact.ExtractComment(msg.Markup); e != nil {
 		err = e
@@ -86,12 +88,25 @@ func (q *Generator) WriteReferences(w DB) error {
 // for schemas
 type slotList struct {
 	slotData
-	Types []string
+	Types []slotEntry
 }
 
-// ducktype wrapper to match the format of SigTerm
-type slotSig struct {
-	Signature string
+// for non evals it returns the empty string
+// ex. address
+func (n slotList) ChopEval() (ret string) {
+	const eval = "_eval"
+	if str := n.Name; strings.HasSuffix(str, eval) {
+		ret = str[:len(str)-len(eval)]
+	}
+	return
+}
+
+type slotEntry struct {
+	Idl, Type string
+}
+
+func (n slotEntry) TypeScope() string {
+	return n.Idl + "." + n.Type
 }
 
 func (q Generator) WriteSchema(w io.Writer) (err error) {
@@ -123,11 +138,12 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 			op := f.(flowData)
 			if _, private := op.Markup["internal"]; !private {
 				flow = append(flow, op)
+				entry := slotEntry{Idl: op.Idl, Type: op.Name}
 				for _, s := range op.Slots {
 					if a, ok := slot[s]; !ok {
-						slot[s] = slotList{Types: []string{op.Name}}
+						slot[s] = slotList{Types: []slotEntry{entry}}
 					} else {
-						a.Types = append(a.Types, op.Name)
+						a.Types = append(a.Types, entry)
 						slot[s] = a
 					}
 				}
@@ -137,12 +153,14 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 	return q.tmp.ExecuteTemplate(w, "schema.tmpl", struct {
 		Name          string
 		SchemaComment string
+		SchemaId      string
 		Flow          []flowData
 		Str           []strData
 		Num           []numData
 		Slot          map[string]slotList
 	}{
 		"Tell", "A Tapestry story file",
+		"https://tapestry.ionous.net/schema/tell/v0",
 		flow, str, num, slot,
 	})
 }

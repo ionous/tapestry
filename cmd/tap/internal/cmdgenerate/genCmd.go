@@ -170,7 +170,7 @@ func readGroups(path string) (groups []generate.Group, err error) {
 						err = e
 					} else if msg, e := decode.DecodeMessage(m); e != nil {
 						err = e
-					} else if g, e := generate.ReadSpec(msg); e != nil {
+					} else if g, e := generate.ReadGroup(msg); e != nil {
 						err = e
 					} else {
 						groups = append(groups, g)

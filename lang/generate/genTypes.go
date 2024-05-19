@@ -13,8 +13,17 @@ import (
 
 // common data for all types
 type specData struct {
-	Name   string
-	Markup markup
+	Name, Idl string
+	Markup    markup
+}
+
+func (t specData) Link() (ret string, err error) {
+	if a, ok := hackForLinks.linkByName(t.Name); !ok {
+		err = fmt.Errorf("unknown type %q creating link", t.Name)
+	} else {
+		ret = a
+	}
+	return
 }
 
 func (d specData) Comments() []string {
@@ -94,6 +103,15 @@ type termData struct {
 	Name, Label, Type          string
 	Private, Optional, Repeats bool
 	Markup                     markup
+}
+
+func (t termData) TypeScope() (ret string, err error) {
+	if group, ok := hackForLinks.findGroup(t.Type); !ok {
+		err = fmt.Errorf("unknown type %q creating link", t.Type)
+	} else {
+		ret = group + "." + t.Type
+	}
+	return
 }
 
 func (t termData) Link() (ret string, err error) {

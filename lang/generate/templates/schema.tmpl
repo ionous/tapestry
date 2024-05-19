@@ -4,7 +4,7 @@
   names are prefixed with tilde so that they don't match in autocomplete.
    ------------------------------------------ */}}
 {{- define "ref" }}
-{ "$ref": "#/$defs/~{{ . }}" }
+"$ref": "#/$defs/~{{ . }}"
 {{- end }}
 
 {{/* ------------------------------------------ 
@@ -52,7 +52,7 @@ Types: {{ range $idx, $t := . -}}
 {
   {{/* redhat yaml-language-server and vscode idxelf use draft 7 */}}
   "$schema": "https://json-schema.org/draft-07/schema",
-  "$id": "https://tapestry.ionous.net/schema/tell/v1",
+  "$id": "{{ .SchemaId }}",
   {{ template "titledesc" . }}, 
   {{- /* the top level is an array of story statements*/}}
   "type": [
@@ -60,11 +60,11 @@ Types: {{ range $idx, $t := . -}}
   "null"
   ],
   "items": {
-    "$ref": "#/$defs/~story_statement"
+    {{ template "ref" "story.story_statement" }}
   },
   "$defs": {
-    {{ range .Slot }} {{/*a map of SlotList */}}      
-    "~{{.Name}}": {
+    {{ range $op := .Slot }} {{/* a map containing slotList(s) */}}      
+    "~{{ .Idl }}.{{ .Name }}": {
         {{ template "titledesc" . }},
         "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
           {{/* handle shortcut.ReadDots */}}
@@ -72,39 +72,74 @@ Types: {{ range $idx, $t := . -}}
             "num_list_eval" "text_list_eval" "record_eval" "record_list_eval"
             "address" ) }}
           {
-            "type": "string"
+          	"type": "string",
+          	{{- /* start with an at sign */}}
+            "pattern": "^@",
+            "description": "A {{ if .ChopEval 
+            	}}{{ Title .ChopEval }} {{end -}} variable.",
+            "markdownDescription": "A {{ if .ChopEval 
+            	}}[{{ Title .ChopEval }}]({{ .Link }}) {{end -}} variable."
+          },
+          {
+          	"type": "string",
+          	{{- /* start with hash and has a dot somewhere */}}
+            "pattern": "^#\\w+\\.", 
+            "description": "An object {{ if .ChopEval 
+            	}}{{ Title .ChopEval }} {{end -}} field.",
+            "markdownDescription": "An object {{ if .ChopEval 
+            	}}[{{ Title .ChopEval }}]({{ .Link }}) {{end -}} field."
           },
           {{ end }}
           {{/* handle literal.DecodeLiteral */}}
           {{ if eq .Name "bool_eval" }}
-           {
-            "type": "boolean"
-          },
+	          {
+	            "type": "boolean",
+	            "description": "The specified true/false value."
+	          },
+	          {
+	          	{{- /* string with hash and has no dots */}}
+	            "type": "string",
+	          	"pattern": "^#[^\\.]+$", 
+	            "description": "True if the object exists."
+	          },
           {{ else if eq .Name "number_eval" }}
-           {
-            "type": "number"
-          },
-          {{/* text already supported by readdots */}}
+	          {
+	            "type": "number",
+	            "description": "The specified number."
+	          },
+          {{ else if eq .Name "text_eval" }}
+	          {
+	            "type": "string",
+	            "description": "The specified text."
+	          },
+	          {
+	          	{{- /* string with hash and has no dots */}}
+	            "type": "string",
+	            "pattern": "^#[^\\.]+$",
+	            "description": "The object's full name."
+	          },
           {{ else if eq .Name "num_list_eval" }}
-           {
-            "type": "array",
-            "items": { "type": "number" }
-          },
-          {{ else if eq .Name "text_list_eval" }}
-           {
-            "type": "array",
-            "items": { "type": "string" }
-          },
+	          {
+	            "type": "array",
+	            "items": { "type": "number" },
+	            "description": "A list of numbers."
+	          },
+	          {{ else if eq .Name "text_list_eval" }}
+	          {
+	            "type": "array",
+	            "items": { "type": "string" },
+	            "description": "A list of text."
+	          },
           {{ end }}
           {{- range $idx, $t := .Types -}}
             {{- if $idx }},{{ end }}
-            {{ template "ref" $t -}}
+            { {{ template "ref" .TypeScope -}} }
           {{ end }}
         ]
       },
     {{- end }}{{/* slot */}}
     {{ range  .Str }}
-    "~{{.Name}}": {
+    "~{{ .Idl }}.{{ .Name }}": {
         {{ template "titledesc" . }},
         "type": "string"
         {{- if .Options }},
@@ -122,13 +157,13 @@ Types: {{ range $idx, $t := . -}}
       },
     {{ end }}{{/* str */}}
     {{ range .Num }}
-    "~{{.Name}}": {
+    "~{{ .Idl }}.{{ .Name }}":{
         {{ template "titledesc" . }},
         "type": "number"
       },
     {{ end }}{{/* num */}}
     {{ range $op := .Flow }}
-      "~{{.Name}}": {
+    "~{{ .Idl }}.{{ .Name }}": {
         "type": "object",
         "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
         {{- range $idx, $sigTerm := .Signatures -}}
@@ -144,21 +179,34 @@ Types: {{ range $idx, $t := . -}}
                 "{{ $op.SchemaComment }}{{ 
                   template "typedesc" . }}{{
                   template "typelinks" .TypeLinks }}",
-                "type": 
-                {{- if not .Terms }}
-                  "null"
-                {{- else }}
-                  "array",
-                  "additionalItems": false,
-                  "items": [
-                  {{- range $it, $term:= .Terms -}}
-                    {{- if $it }},{{ end }}
-                    {{ template "ref" (print $op.Name "." .Name) }}
-                  {{ end }}
-                  ]
-                {{- end }}{{/* if not terms */}}
-              } 
-            }
+              {{- if not .Terms }}
+                 "type": "null"
+              {{- else if (not (eq 1 (len .Terms))) }}
+								"type": "array",
+								"additionalItems": false,
+								"items": [
+								{{- range $it, $term:= .Terms -}}
+								  {{- if $it }},{{ end }}
+								  { {{ template "ref" (print $op.Idl "." $op.Name "." .Name) }} }
+								{{ end }}
+								]
+							{{ else }}
+								{{- with index .Terms 0 -}}
+				        	"oneOf": [{
+				        		{{/* allow a single object */}}
+				        		{{ template "ref" (print $op.Idl "." $op.Name "." .Name) }}
+				        	},{ 
+				        		{{/* or an array containing this one term */}}
+				        		"type": "array",
+										"additionalItems": false,
+										"items": [
+										  { {{ template "ref" (print $op.Idl "." $op.Name "." .Name) }} }
+										]
+				        	}]
+				        {{- end }}{{/* range of one */}}
+              {{- end }}{{/* if not/len terms */}}
+              } {{/* signature */}}
+            }{{/* properties */}}
           }
         {{ end }}{{/* range Signatures */}}
         ]
@@ -168,22 +216,27 @@ Types: {{ range $idx, $t := . -}}
         */}}
       {{- range .Terms -}}
       {{ if not .Private }}
-        "~{{ $op.Name }}.{{ .Name }}":
+      "~{{ $op.Idl }}.{{ $op.Name }}.{{ .Name }}":
         {
-        {{- if not .Repeats }}
-          "$ref": "#/$defs/~{{ .Type }}",
-        {{- else }}
-         "type": "array",
-         {{/* the docs are confusing, but: in draft 7
+        	{{- if not .Repeats }}
+        		{{ template "ref" .TypeScope }}
+        	{{ else }}
+        	"oneOf": [{
+        		{{/* also allow a single object */}}
+        		{{ template "ref" .TypeScope }}
+        	},{
+        		"type": "array",
+        		{{- /* the docs are confusing, but: in draft 7
          	   the value of "items" indicates the array type.
          	   a json object means repeating items;
          	   a json array, a tuple. */}}
-         "items":  {{ template "ref" .Type }},
-        {{- end }}{{/* term repeats */}}
-         "description": "{{ .SchemaComment }}",
-         "markdownDescription": 
-          "{{ .SchemaComment 
-          }}\n\nType: [{{ Pascal .Type }}]({{ .Link }})"
+        		"items": { 	{{ template "ref" .TypeScope }} },
+	         	"description": "{{ .SchemaComment }}",
+	         	"markdownDescription": "{{ 
+	         		.SchemaComment 
+	          }}\n\nType: [{{ Pascal .Type }}]({{ .Link }})"
+        	}]
+      		{{- end }}{{/* if  repeats */}}
         },
       {{ end }}
       {{ end }}{{/* range terms */}}

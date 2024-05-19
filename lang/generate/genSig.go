@@ -75,16 +75,6 @@ func makeSig(t flowData, set sigTerm) (ret []Signature) {
 	return
 }
 
-// a signature and the the terms it uses
-type sigTerm struct {
-	parts []string // to be separated by colons
-	terms []termData
-}
-
-func (set sigTerm) Terms() []termData {
-	return set.terms
-}
-
 type TypeLink string
 
 func (t TypeLink) Type() string {
@@ -98,6 +88,16 @@ func (t TypeLink) Link() (ret string, err error) {
 		ret = a
 	}
 	return
+}
+
+// a signature and the the terms it uses
+type sigTerm struct {
+	parts []string // to be separated by colons
+	terms []termData
+}
+
+func (set sigTerm) Terms() []termData {
+	return set.terms
 }
 
 // unique types used by the terms

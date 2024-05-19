@@ -10,7 +10,17 @@ var apiDocs = struct {
 	"slot",
 }
 
+// vaguely like GlobalData for documentation generation
+// fix: maybe documentation generation should have used this package
+// instead of the go type data. leave go data uses for runtime info
 var hackForLinks *groupSearch
+
+func (p *groupSearch) findGroup(name string) (ret string, okay bool) {
+	if n, ok := p.findType(name); ok { // typeEntry
+		ret, okay = n.group, true
+	}
+	return
+}
 
 func (p *groupSearch) linkByName(name string) (ret string, okay bool) {
 	if n, ok := p.findType(name); ok { // typeEntry
