@@ -1,131 +1,130 @@
 ---
-Tapestry:
-  - # adapts a verb from its specified (usually present) tense, to the story's tense.
-    # fix: this is just a placeholder for future work.
-    Define pattern:requires:provides:do:
-      - "verbing"
-      - - Text: "verb"
-      - - Text: "result"
-      - - Set:value:
-            - "@result"
-            - FromText: "@verb"
-  - # Print the word "contain" or "support" depending on the kind of container.
-    Define pattern:requires:provides:do:
-      - "Contain"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - KindOf:is:
-                - "@noun"
-                - "containers"
-            - - Print: "contain"
-            - Finally do:
-                - Print: "support"
-  - # Print the word "in" or "on" depending on whether the passed noun is a container or not.
-    # For example: "In/on the couch is yesterday's stale popcorn."
-    Define pattern:requires:provides:do:
-      - "On"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - KindOf:is:
-                - "@noun"
-                - "containers"
-            - - Print: "in"
-            - Finally do:
-                - Print: "on"
-  - # Print the word "out" or "off" depending on whether the passed noun is a container or not.
-    # For example: "You would have to take that off/out first."
-    Define pattern:requires:provides:do:
-      - "Off"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - KindOf:is:
-                - "@noun"
-                - "containers"
-            - - Print: "out"
-            - Finally do:
-                - Print: "off"
-  - # Print "is" or "are" depending on the plurality of the noun, and (optionally) the length of the passed list of names.
-    Define pattern:requires:provides:do:
-      - "Are"
-      - - Text:kind:
-            - "noun"
-            - "object"
-        - TextList: "names"
-      - - Nothing:
-      - - If:do:else:
-            - IsPlayer obj:
-                FromText: "@noun"
-            - - Print: "are"
-            - If:do:else:
-                - AnyTrue:
-                    - Is:matching:num:
-                        - Len:
-                            FromTextList: "@names"
-                        - "greater_than"
-                        - 1
-                    - Object:dot:
-                        - "@noun"
-                        - AtField: "plural named"
-                - - Print: "are"
-                - Finally do:
-                    - Print: "is"
-  - #
-    Note: "say the phrase of are not or is not ( depending on the plural of the noun )"
-  - Define pattern:requires:provides:do:
-      - "Are not"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - IsPlayer obj:
-                FromText: "@noun"
-            - - Print: "are not"
-            - If:do:else:
-                - Object:dot:
-                    - "@noun"
-                    - AtField: "plural named"
-                - - Print: "are not"
-                - Finally do:
-                    - Print: "is not"
-  - # Say the contraction aren't or isn't ( depending on the plural of the noun ).
-    Define pattern:requires:provides:do:
-      - "Arent"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - IsPlayer obj:
-                FromText: "@noun"
-            - - Print: "aren't"
-            - If:do:else:
-                - Object:dot:
-                    - "@noun"
-                    - AtField: "plural named"
-                - - Print: "aren't"
-                - Finally do:
-                    - Print: "isn't"
-  - # Say the contraction don't or doesn't ( depending on the plural of the noun ).
-    Define pattern:requires:provides:do:
-      - "Dont"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - Object:dot:
-                - "@noun"
-                - AtField: "plural named"
-            - - Print: "don't"
-            - Finally do:
-                - Print: "doesn't"
+- # adapts a verb from its specified (usually present) tense, to the story's tense.
+  # fix: this is just a placeholder for future work.
+  Define pattern:requires:provides:do:
+    - "verbing"
+    - - Text: "verb"
+    - - Text: "result"
+    - - Set:value:
+          - "@result"
+          - FromText: "@verb"
+- # Print the word "contain" or "support" depending on the kind of container.
+  Define pattern:requires:provides:do:
+    - "Contain"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - KindOf:is:
+              - "@noun"
+              - "containers"
+          - - Print: "contain"
+          - Finally do:
+              - Print: "support"
+- # Print the word "in" or "on" depending on whether the passed noun is a container or not.
+  # For example: "In/on the couch is yesterday's stale popcorn."
+  Define pattern:requires:provides:do:
+    - "On"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - KindOf:is:
+              - "@noun"
+              - "containers"
+          - - Print: "in"
+          - Finally do:
+              - Print: "on"
+- # Print the word "out" or "off" depending on whether the passed noun is a container or not.
+  # For example: "You would have to take that off/out first."
+  Define pattern:requires:provides:do:
+    - "Off"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - KindOf:is:
+              - "@noun"
+              - "containers"
+          - - Print: "out"
+          - Finally do:
+              - Print: "off"
+- # Print "is" or "are" depending on the plurality of the noun, and (optionally) the length of the passed list of names.
+  Define pattern:requires:provides:do:
+    - "Are"
+    - - Text:kind:
+          - "noun"
+          - "object"
+      - TextList: "names"
+    - - Nothing:
+    - - If:do:else:
+          - IsPlayer obj:
+              FromText: "@noun"
+          - - Print: "are"
+          - If:do:else:
+              - AnyTrue:
+                  - Is:matching:num:
+                      - Len:
+                          FromTextList: "@names"
+                      - "greater_than"
+                      - 1
+                  - Object:dot:
+                      - "@noun"
+                      - AtField: "plural named"
+              - - Print: "are"
+              - Finally do:
+                  - Print: "is"
+- #
+  Note: "say the phrase of are not or is not ( depending on the plural of the noun )"
+- Define pattern:requires:provides:do:
+    - "Are not"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - IsPlayer obj:
+              FromText: "@noun"
+          - - Print: "are not"
+          - If:do:else:
+              - Object:dot:
+                  - "@noun"
+                  - AtField: "plural named"
+              - - Print: "are not"
+              - Finally do:
+                  - Print: "is not"
+- # Say the contraction aren't or isn't ( depending on the plural of the noun ).
+  Define pattern:requires:provides:do:
+    - "Arent"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - IsPlayer obj:
+              FromText: "@noun"
+          - - Print: "aren't"
+          - If:do:else:
+              - Object:dot:
+                  - "@noun"
+                  - AtField: "plural named"
+              - - Print: "aren't"
+              - Finally do:
+                  - Print: "isn't"
+- # Say the contraction don't or doesn't ( depending on the plural of the noun ).
+  Define pattern:requires:provides:do:
+    - "Dont"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - Object:dot:
+              - "@noun"
+              - AtField: "plural named"
+          - - Print: "don't"
+          - Finally do:
+              - Print: "doesn't"

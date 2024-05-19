@@ -1,36 +1,35 @@
 ---
-Tapestry:
-  - Define action:requires:
-      - "peeking"
-      - - # the actor peeking under ( ex. the player. ) something
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the thing being peeked under
-          Text:kind:
-            - "noun"
-            - "thing"
-  - Define rule:do:
-      - "instead of peeking"
-      - - If:assuming:do:
-            - Not:
-                Is empty: "@result"
-            - - Arg:from:
-                  - "result"
-                  - FromText:
-                      CanReach actor:action:noun:requiresLight:
-                        - FromText: "@actor"
-                        - FromText: "peeking"
-                        - FromText: "@noun"
-                        - FromBool: true
-            - - Print: "@result"
-  - Define rule:do:
-      - "report someone peeking"
-      - - Say response:with:
-            - "someone else peeks"
-            - "{The: .actor|capitalize!} looks under {the: .noun}."
-  - Define rule:do:
-      - "report peeking"
-      - - Say response:with:
-            - "player peeks"
-            - "{we!|capitalize!} find nothing of interest."
+- Define action:requires:
+    - "peeking"
+    - - # the actor peeking under ( ex. the player. ) something
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the thing being peeked under
+        Text:kind:
+          - "noun"
+          - "thing"
+- Define rule:do:
+    - "instead of peeking"
+    - - If:assuming:do:
+          - Not:
+              Is empty: "@result"
+          - - Arg:from:
+                - "result"
+                - FromText:
+                    CanReach actor:action:noun:requiresLight:
+                      - FromText: "@actor"
+                      - FromText: "peeking"
+                      - FromText: "@noun"
+                      - FromBool: true
+          - - Print: "@result"
+- Define rule:do:
+    - "report someone peeking"
+    - - Say response:with:
+          - "someone else peeks"
+          - "{The: .actor|capitalize!} looks under {the: .noun}."
+- Define rule:do:
+    - "report peeking"
+    - - Say response:with:
+          - "player peeks"
+          - "{we!|capitalize!} find nothing of interest."

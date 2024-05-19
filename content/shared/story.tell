@@ -1,121 +1,120 @@
 ---
-Tapestry:
-  - # Story data includes per turn global information about the story, and, questionably, some constant data about the story including title, author, etc.
-    Declare: "Story data are kinds of kinds."
-  - Define noun:kind:
-      - "story"
-      - "story data"
-  - # a copy of the story story data from the previous turn.
-    Define noun:kind:
-      - "last known"
-      - "story data"
-  - Define kind:fields:
-      - "story data"
-      - - Text:initially:
-            - "title"
-            - "Untitled story"
-        - Text: "author"
-        - Text:initially:
-            - "headline"
-            - "An interactive fiction"
-        - Text: "version"
-        - Text:initially:
-            - "ending message"
-            - "The End"
-        - # the turn count is zero until the game startup sequence has completed, and then its set to one for the player's first input.
-          Number: "turn count"
-        - Aspect: "play state"
-        - # the actor controlled by the player.
-          # needs to be updated whenever the pawn is changed.
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the room or container of the player's actor.
-          # updated by 'move object' when the player is moved.
-          Text:kind:
-            - "location"
-            - "object"
-        - # is the story location illuminated?
-          # determined by 'update story'.
-          Bool: "illuminated"
-        - # has the player ever seen a dark room description.
-          Bool: "darkness witnessed"
-        - # incremented whenever an object name gets printed. see "mention object" and "print name".
-          Number: "mentions"
-  - # inform has 'finished' and 'finished finally' (possibly from historical if)
-    # tapestry uses 'concluded' and 'completed' as rough respective equivalents.
-    Define state:names:
-      - "play state"
-      - - "starting"
-        - "playing"
-        - "concluded"
-        - "completed"
-  - Define pattern:requires:provides:do:
-      - "update story"
-      - - # reuse the current story actor if a specific actor isnt provided.
-          Text:kind:initially:
-            - "actor"
-            - "actor"
-            - Object:dot:
-                - "story"
-                - AtField: "actor"
-        - Bool: "refresh"
-      - - Nothing:
-      - - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "actor"
-            - FromText: "@actor"
-        - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "location"
-            - FromText:
-                LocationOf obj:
-                  FromText: "@actor"
-        - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "illuminated"
-            - FromBool:
-                Illuminates actor:refresh:
-                  - FromText: "@actor"
-                  - FromBool: true
-  - # copy everything from the current story variables to the last known variables.
-    Define pattern:requires:provides:do:
-      - "update last known status"
-      - - Nothing:
-      - - Nothing:
-      - - Repeating across:as:do:
-            - FromTextList:
-                Fields of: "story data"
-            - "field"
-            - - Copy:from:
-                  - Object:dot:
-                      - "last known"
-                      - AtField:  "@field"
-                  - Object:dot:
-                      - "story"
-                      - AtField: "@field"
-  - # updates 'last known' story state. anything comparing
-    # 'story' and 'last known' has to happen in an earlier phase.
-    Define rule:named:do:
-      - "after pass time, then continue"
-      - "the update turn rule"
-      - - UpdateLastKnownStatus:
-        - Increase:
-            Object:dot:
+- # Story data includes per turn global information about the story, and, questionably, some constant data about the story including title, author, etc.
+  Declare: "Story data are kinds of kinds."
+- Define noun:kind:
+    - "story"
+    - "story data"
+- # a copy of the story story data from the previous turn.
+  Define noun:kind:
+    - "last known"
+    - "story data"
+- Define kind:fields:
+    - "story data"
+    - - Text:initially:
+          - "title"
+          - "Untitled story"
+      - Text: "author"
+      - Text:initially:
+          - "headline"
+          - "An interactive fiction"
+      - Text: "version"
+      - Text:initially:
+          - "ending message"
+          - "The End"
+      - # the turn count is zero until the game startup sequence has completed, and then its set to one for the player's first input.
+        Number: "turn count"
+      - Aspect: "play state"
+      - # the actor controlled by the player.
+        # needs to be updated whenever the pawn is changed.
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the room or container of the player's actor.
+        # updated by 'move object' when the player is moved.
+        Text:kind:
+          - "location"
+          - "object"
+      - # is the story location illuminated?
+        # determined by 'update story'.
+        Bool: "illuminated"
+      - # has the player ever seen a dark room description.
+        Bool: "darkness witnessed"
+      - # incremented whenever an object name gets printed. see "mention object" and "print name".
+        Number: "mentions"
+- # inform has 'finished' and 'finished finally' (possibly from historical if)
+  # tapestry uses 'concluded' and 'completed' as rough respective equivalents.
+  Define state:names:
+    - "play state"
+    - - "starting"
+      - "playing"
+      - "concluded"
+      - "completed"
+- Define pattern:requires:provides:do:
+    - "update story"
+    - - # reuse the current story actor if a specific actor isnt provided.
+        Text:kind:initially:
+          - "actor"
+          - "actor"
+          - Object:dot:
               - "story"
-              - AtField: "turn count"
-  - Interpret:with:
-      - "score"
-      - - Action: "request the score"
-  - # Even unscored games support printing the score.
-    # By default it says the story doesn't have a score.
-    Define pattern:requires:provides:do:
-      - "request the score"
-      - - Nothing:
-      - - Nothing:
-      - - Say response:with:
-            - "The no score rule"
-            - "This isn't a competition."
+              - AtField: "actor"
+      - Bool: "refresh"
+    - - Nothing:
+    - - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "actor"
+          - FromText: "@actor"
+      - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "location"
+          - FromText:
+              LocationOf obj:
+                FromText: "@actor"
+      - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "illuminated"
+          - FromBool:
+              Illuminates actor:refresh:
+                - FromText: "@actor"
+                - FromBool: true
+- # copy everything from the current story variables to the last known variables.
+  Define pattern:requires:provides:do:
+    - "update last known status"
+    - - Nothing:
+    - - Nothing:
+    - - Repeating across:as:do:
+          - FromTextList:
+              Fields of: "story data"
+          - "field"
+          - - Copy:from:
+                - Object:dot:
+                    - "last known"
+                    - AtField:  "@field"
+                - Object:dot:
+                    - "story"
+                    - AtField: "@field"
+- # updates 'last known' story state. anything comparing
+  # 'story' and 'last known' has to happen in an earlier phase.
+  Define rule:named:do:
+    - "after pass time, then continue"
+    - "the update turn rule"
+    - - UpdateLastKnownStatus:
+      - Increase:
+          Object:dot:
+            - "story"
+            - AtField: "turn count"
+- Interpret:with:
+    - "score"
+    - - Action: "request the score"
+- # Even unscored games support printing the score.
+  # By default it says the story doesn't have a score.
+  Define pattern:requires:provides:do:
+    - "request the score"
+    - - Nothing:
+    - - Nothing:
+    - - Say response:with:
+          - "The no score rule"
+          - "This isn't a competition."

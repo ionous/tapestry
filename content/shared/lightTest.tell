@@ -1,56 +1,55 @@
 ---
-Tapestry:
-  - Define test:requires:do:
-      - "vision test"
-      - "Kitchenette"
-      - - Set:state:
-            - "Kitchen"
-            - "unlit"
-        - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-        - Expect output: "ok: The cabinet is dark."
-        - Set:state:
-            - "Kitchen"
-            - "lit"
-        - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-        - Expect output: "ok: The cabinet has light."
-        - Set:state:
-            - "cabinet"
-            - "closed"
-        - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-        - Expect output: "ok: The cabinet is dark."
-        - Set:state:
-            - "matches"
-            - "lit"
-        - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-        - Expect output: "ok: The cabinet has light."
-  - Define test:requires:scene:do:
-      - "the gloom"
-      - "kitchenette"
-      - - Declare: "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."
-        - Define noun:rule:do:
-            - "flashlight"
-            - "after activating"
-            - - Set:state:
-                  - "flashlight"
-                  - "lit"
-        - Define noun:rule:do:
-            - "flashlight"
-            - "after deactivating"
-            - - Set:state:
-                  - "flashlight"
-                  - "unlit"
-      - - StartGame actor:quietly:
-            - FromText:
-                Object:dot:
-                  - "player"
-                  - AtField: "pawn"
-            - FromBool: true
-        - Fabricate input: "look"
-        - Expect output:
-            - "**Darkness**"
-            - "It is pitch dark, and you can't see a thing."
-        - Fabricate input: "switch on flashlight"
-        - Expect output:
-            - "You switch on the flashlight."
-            - "**Kitchen**"
-            - "Your Aunt Fiona's kitchen..."
+- Define test:requires:do:
+    - "vision test"
+    - "Kitchenette"
+    - - Set:state:
+          - "Kitchen"
+          - "unlit"
+      - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+      - Expect output: "ok: The cabinet is dark."
+      - Set:state:
+          - "Kitchen"
+          - "lit"
+      - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+      - Expect output: "ok: The cabinet has light."
+      - Set:state:
+          - "cabinet"
+          - "closed"
+      - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+      - Expect output: "ok: The cabinet is dark."
+      - Set:state:
+          - "matches"
+          - "lit"
+      - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+      - Expect output: "ok: The cabinet has light."
+- Define test:requires:scene:do:
+    - "the gloom"
+    - "kitchenette"
+    - - Declare: "The kitchen is unlit. You are carrying the flashlight. The flashlight is unlit."
+      - Define noun:rule:do:
+          - "flashlight"
+          - "after activating"
+          - - Set:state:
+                - "flashlight"
+                - "lit"
+      - Define noun:rule:do:
+          - "flashlight"
+          - "after deactivating"
+          - - Set:state:
+                - "flashlight"
+                - "unlit"
+    - - StartGame actor:quietly:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField: "pawn"
+          - FromBool: true
+      - Fabricate input: "look"
+      - Expect output:
+          - "**Darkness**"
+          - "It is pitch dark, and you can't see a thing."
+      - Fabricate input: "switch on flashlight"
+      - Expect output:
+          - "You switch on the flashlight."
+          - "**Kitchen**"
+          - "Your Aunt Fiona's kitchen..."

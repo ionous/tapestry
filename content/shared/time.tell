@@ -1,109 +1,108 @@
 ---
-Tapestry:
-  - # run after every action to complete the turn.
-    Define pattern:requires:provides:do:
-      - "pass time"
-      - - Nothing:
-      - - Nothing:
-      - - UpdateStory:
-        - # allow after rules to run, if any.
-          Continue:
-  - Define rule:named:do:
-      - "after pass time, then continue"
-      - "witness light"
-      - - WitnessLight:
-  - # run when a player first starts a new story.
-    Define pattern:requires:provides:do:
-      - "start game"
-      - - # the player
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # when true, suppress the banner text.
-          # (useful for tests).
-          Bool: "quietly"
-      - - Nothing:
-      - - UpdateStory actor:
-            FromText: "@actor"
-        - UpdateLastKnownStatus:
-        - # allow 'after start game' rules.
-          Continue:
-  - Define rule:named:do:
-      - "after start game, then continue"
-      - "the print first room rule"
-      - - If:do:
-            - Not: "@quietly"
-            - - # separate the banner from the vantage (if any)
-                P:
-              - PrintVantage:
-              - # separate the look from the command line
-                P:
-  - # fix: ordering of after rules
-    Define rule:named:do:
-      - "after start game, then continue"
-      - "the go start playing rule"
-      - - Increase:
-            Object:dot:
-              - "story"
-              - AtField: "turn count"
-        - Set:state:
+- # run after every action to complete the turn.
+  Define pattern:requires:provides:do:
+    - "pass time"
+    - - Nothing:
+    - - Nothing:
+    - - UpdateStory:
+      - # allow after rules to run, if any.
+        Continue:
+- Define rule:named:do:
+    - "after pass time, then continue"
+    - "witness light"
+    - - WitnessLight:
+- # run when a player first starts a new story.
+  Define pattern:requires:provides:do:
+    - "start game"
+    - - # the player
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # when true, suppress the banner text.
+        # (useful for tests).
+        Bool: "quietly"
+    - - Nothing:
+    - - UpdateStory actor:
+          FromText: "@actor"
+      - UpdateLastKnownStatus:
+      - # allow 'after start game' rules.
+        Continue:
+- Define rule:named:do:
+    - "after start game, then continue"
+    - "the print first room rule"
+    - - If:do:
+          - Not: "@quietly"
+          - - # separate the banner from the vantage (if any)
+              P:
+            - PrintVantage:
+            - # separate the look from the command line
+              P:
+- # fix: ordering of after rules
+  Define rule:named:do:
+    - "after start game, then continue"
+    - "the go start playing rule"
+    - - Increase:
+          Object:dot:
             - "story"
-            - "playing"
-  - Define rule:named:do:
-      - "before start game, then continue"
-      - "the print banner rule"
-      - - If:do:
-            - Not: "@quietly"
-            - - PrintTheBanner:
-  - # a parser action which calls the low level quit.
-    Define pattern:requires:provides:do:
-      - "request quit"
-      - - Nothing:
-      - - Nothing:
-      - - QuitGame:
-  - # a parser action which calls the low level save.
-    Define pattern:requires:provides:do:
-      - "request save"
-      - - Nothing:
-      - - Nothing:
-      - - SaveGame:
-  - # a parser action which calls the low level load.
-    Define pattern:requires:provides:do:
-      - "request load"
-      - - Nothing:
-      - - Nothing:
-      - - LoadGame:
-  - # a parser action which calls the low level load.
-    Define pattern:requires:provides:do:
-      - "request version"
-      - - Nothing:
-      - - Nothing:
-      - - Print: "<p><b>"
-        - Say: "Story Version: {.story.version}"
-        - Say: "Tapestry Version: {print_version!}"
-        - Print: "</b><p>"
+            - AtField: "turn count"
+      - Set:state:
+          - "story"
+          - "playing"
+- Define rule:named:do:
+    - "before start game, then continue"
+    - "the print banner rule"
+    - - If:do:
+          - Not: "@quietly"
+          - - PrintTheBanner:
+- # a parser action which calls the low level quit.
+  Define pattern:requires:provides:do:
+    - "request quit"
+    - - Nothing:
+    - - Nothing:
+    - - QuitGame:
+- # a parser action which calls the low level save.
+  Define pattern:requires:provides:do:
+    - "request save"
+    - - Nothing:
+    - - Nothing:
+    - - SaveGame:
+- # a parser action which calls the low level load.
+  Define pattern:requires:provides:do:
+    - "request load"
+    - - Nothing:
+    - - Nothing:
+    - - LoadGame:
+- # a parser action which calls the low level load.
+  Define pattern:requires:provides:do:
+    - "request version"
+    - - Nothing:
+    - - Nothing:
+    - - Print: "<p><b>"
+      - Say: "Story Version: {.story.version}"
+      - Say: "Tapestry Version: {print_version!}"
+      - Print: "</b><p>"
 
-  - Define pattern:requires:provides:do:
-      - "end game"
-      - - # A placeholder. Eventually, when finally is true, the game is completely over. Otherwise, the game can be (eventually) restarted.
-          Bool: "finally"
-        - # can be assigned 'Say' to use a template
-          Text:initially:
-            - "saying"
-            - Object:dot:
-                - "story"
-                - AtField: "ending message"
-      - - Nothing:
-      - - Set:state:
-            - "story"
-            - Txt if:then:else:
-                - Not: "@finally"
-                - "concluded"
-                - "completed"
-        - # fix: some sort of indention block. ul/ol use bullets, numbers.
-          Print: "<p><b>"
-        - Print: "@saying"
-        - Print: "</b><p>"
-        - RequestTheScore:
-        - # maybe send 'finally' to quit game?
-          QuitGame:
+- Define pattern:requires:provides:do:
+    - "end game"
+    - - # A placeholder. Eventually, when finally is true, the game is completely over. Otherwise, the game can be (eventually) restarted.
+        Bool: "finally"
+      - # can be assigned 'Say' to use a template
+        Text:initially:
+          - "saying"
+          - Object:dot:
+              - "story"
+              - AtField: "ending message"
+    - - Nothing:
+    - - Set:state:
+          - "story"
+          - Txt if:then:else:
+              - Not: "@finally"
+              - "concluded"
+              - "completed"
+      - # fix: some sort of indention block. ul/ol use bullets, numbers.
+        Print: "<p><b>"
+      - Print: "@saying"
+      - Print: "</b><p>"
+      - RequestTheScore:
+      - # maybe send 'finally' to quit game?
+        QuitGame:

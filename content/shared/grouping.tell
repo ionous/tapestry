@@ -1,199 +1,233 @@
 ---
-Tapestry:
-  - # Returns a list of the objects partitioned into groups.
-    Define pattern:requires:provides:do:
-      - "make groups"
-      - - TextList: "objs"
-      - - RecordList:kind:
-            - "groups"
-            - "object group"
-        - RecordList:kind:
-            - "groupings"
-            - "grouping"
-      - - # for each object, create an object group
-          Map:fromList:using:
-            - "@groupings"
-            - FromTextList: "@objs"
-            - "assign grouping"
-        - # remove any duplicate groups
-          Reduce into:fromList:using:
-            - "@groups"
-            - FromRecordList: "@groupings"
-            - "collate groups"
-  - # 
-    Define pattern:requires:provides:do:
-      - "assign grouping"
-      - - Text:kind:
-            - "obj"
-            - "object"
-      - - Record:kind:initially:
-            - "grouping"
-            - "grouping"
-            - Groupings name:
-                FromText: "@obj"
-      - - # no default rules
-          Continue:
-  - Define rule:do:
-      - "assign grouping"
-      - - If:do:else:
-            - AllTrue:
-                - Object:dot:
-                    - "@obj"
-                    - AtField: "counted"
-                - Is empty:
-                    Variable:dot:
-                      - "grouping"
-                      - - AtField: "label"
-            - - # unless already grouped, use print several for unnamed counted nouns.
-                Set:value:
-                  - Variable:dot:
-                      - "grouping"
-                      - - AtField: "label"
-                  - FromText:
-                      KindOf: "@obj"
+- # Returns a list of the objects partitioned into groups.
+  Define pattern:requires:provides:do:
+    - "make groups"
+    - - TextList: "objs"
+    - - RecordList:kind:
+          - "groups"
+          - "object group"
+      - RecordList:kind:
+          - "groupings"
+          - "grouping"
+    - - # for each object, create an object group
+        Map:fromList:using:
+          - "@groupings"
+          - FromTextList: "@objs"
+          - "assign grouping"
+      - # remove any duplicate groups
+        Reduce into:fromList:using:
+          - "@groups"
+          - FromRecordList: "@groupings"
+          - "collate groups"
+- #
+  Define pattern:requires:provides:do:
+    - "assign grouping"
+    - - Text:kind:
+          - "obj"
+          - "object"
+    - - Record:kind:initially:
+          - "grouping"
+          - "grouping"
+          - Groupings name:
+              FromText: "@obj"
+    - - # no default rules
+        Continue:
+- Define rule:do:
+    - "assign grouping"
+    - - If:do:else:
+          - AllTrue:
+              - Object:dot:
+                  - "@obj"
+                  - AtField: "counted"
+              - Is empty:
+                  Variable:dot:
+                    - "grouping"
+                    - - AtField: "label"
+          - - # unless already grouped, use print several for unnamed counted nouns.
+              Set:value:
+                - Variable:dot:
+                    - "grouping"
+                    - - AtField: "label"
+                - FromText:
+                    KindOf: "@obj"
+            - Set:value:
+                - Variable:dot:
+                    - "grouping"
+                    - - AtField: "hide label"
+                - FromBool: true
+            - Set:value:
+                - Variable:dot:
+                    - "grouping"
+                    - - AtField: "hide objects"
+                - FromBool: true
+          - Finally do:
               - Set:value:
-                  - Variable:dot:
-                      - "grouping"
-                      - - AtField: "hide label"
-                  - FromBool: true
-              - Set:value:
-                  - Variable:dot:
-                      - "grouping"
-                      - - AtField: "hide objects"
-                  - FromBool: true
-            - Finally do:
-                - Set:value:
-                    - "@grouping"
-                    - FromRecord: "@grouping"
-  - # 
-    Declare: "Groupings are kinds of record."
-  - Define kind:fields:
-      - "Groupings"
-      - - # the name of an object the grouping describes
-          Text: "name"
-        - Text: "label"
-        - Bool: "hide label"
-        - Bool: "hide size"
-        - Bool: "hide objects"
-  - # 
-    Declare: "Object groups are kinds of records."
-  - Define kind:fields:
-      - "Object groups"
-      - - Record:kind:
-            - "grouping"
-            - "groupings"
-        - TextList: "objects"
-  - # 
-    Define pattern:requires:provides:do:
-      - "match groups"
-      - - Record:kind:
-            - "first"
-            - "grouping"
-        - Record:kind:
-            - "second"
-            - "grouping"
-      - - Bool: "matching"
-      - - # no default rules
-          Continue:
-  - Define rule:do:
-      - "match groups"
-      - - If:do:else:
-            - AnyTrue:
-                - Is empty:
-                    Variable:dot:
-                      - "first"
-                      - - AtField: "label"
-                - Is empty:
-                    Variable:dot:
-                      - "second"
-                      - - AtField: "label"
-            - - Set:value:
-                  - "@matching"
-                  - FromBool: false
-            - If:do:
-                - AllTrue:
-                    - Is:matching:text:
-                        - Variable:dot:
-                            - "first"
-                            - - AtField: "label"
-                        - "equal_to"
-                        - Variable:dot:
-                            - "second"
-                            - - AtField: "label"
-                    - Is:matching:value:
-                        - FromBool:
-                            Variable:dot:
-                              - "first"
-                              - - AtField: "hide label"
-                        - "equal_to"
-                        - FromBool:
-                            Variable:dot:
-                              - "second"
-                              - - AtField: "hide label"
-                    - Is:matching:value:
-                        - FromBool:
-                            Variable:dot:
-                              - "first"
-                              - - AtField: "hide size"
-                        - "equal_to"
-                        - FromBool:
-                            Variable:dot:
-                              - "second"
-                              - - AtField: "hide size"
-                    - Is:matching:value:
-                        - FromBool:
-                            Variable:dot:
-                              - "first"
-                              - - AtField: "hide objects"
-                        - "equal_to"
-                        - FromBool:
-                            Variable:dot:
-                              - "second"
-                              - - AtField: "hide objects"
-                - - Set:value:
-                      - "@matching"
-                      - FromBool: true
-  - # Adds a grouping to a collated list of groupings, and returns the new list.
-    Define pattern:requires:provides:do:
-      - "collate groups"
-      - - Record:kind:
-            - "grouping"
-            - "grouping"
-        - RecordList:kind:
-            - "groups"
-            - "object group"
-      - - # the returned value is the same variable as the second parameter
-          RecordList:kind:
-            - "groups"
-            - "object group"
-        - Number: "idx"
-        - Record:kind:
-            - "group"
-            - "object group"
-        - TextList: "names"
-      - - Note: "find the index of the matching group"
-        - Repeating across:as:do:
-            - FromRecordList: "@groups"
-            - "el"
-            - - If:do:
-                  - MatchGroups first:second:
-                      - FromRecord: "@grouping"
-                      - FromRecord:
+                  - "@grouping"
+                  - FromRecord: "@grouping"
+- #
+  Declare: "Groupings are kinds of record."
+- Define kind:fields:
+    - "Groupings"
+    - - # the name of an object the grouping describes
+        Text: "name"
+      - Text: "label"
+      - Bool: "hide label"
+      - Bool: "hide size"
+      - Bool: "hide objects"
+- #
+  Declare: "Object groups are kinds of records."
+- Define kind:fields:
+    - "Object groups"
+    - - Record:kind:
+          - "grouping"
+          - "groupings"
+      - TextList: "objects"
+- #
+  Define pattern:requires:provides:do:
+    - "match groups"
+    - - Record:kind:
+          - "first"
+          - "grouping"
+      - Record:kind:
+          - "second"
+          - "grouping"
+    - - Bool: "matching"
+    - - # no default rules
+        Continue:
+- Define rule:do:
+    - "match groups"
+    - - If:do:else:
+          - AnyTrue:
+              - Is empty:
+                  Variable:dot:
+                    - "first"
+                    - - AtField: "label"
+              - Is empty:
+                  Variable:dot:
+                    - "second"
+                    - - AtField: "label"
+          - - Set:value:
+                - "@matching"
+                - FromBool: false
+          - If:do:
+              - AllTrue:
+                  - Is:matching:text:
+                      - Variable:dot:
+                          - "first"
+                          - - AtField: "label"
+                      - "equal_to"
+                      - Variable:dot:
+                          - "second"
+                          - - AtField: "label"
+                  - Is:matching:value:
+                      - FromBool:
                           Variable:dot:
-                            - "el"
-                            - - AtField: "grouping"
-                  - - Set:value:
-                        - "@idx"
-                        - FromNumber: "@index"
-        - Note:
-            - "if there wasn't an existing group matching the object's settings:"
-            - "create a new group."
-        - If:do:else:
-            - Is:matching:num:
-                - "@idx"
-                - "equal_to"
-                - 0
-            - - Push:into:
+                            - "first"
+                            - - AtField: "hide label"
+                      - "equal_to"
+                      - FromBool:
+                          Variable:dot:
+                            - "second"
+                            - - AtField: "hide label"
+                  - Is:matching:value:
+                      - FromBool:
+                          Variable:dot:
+                            - "first"
+                            - - AtField: "hide size"
+                      - "equal_to"
+                      - FromBool:
+                          Variable:dot:
+                            - "second"
+                            - - AtField: "hide size"
+                  - Is:matching:value:
+                      - FromBool:
+                          Variable:dot:
+                            - "first"
+                            - - AtField: "hide objects"
+                      - "equal_to"
+                      - FromBool:
+                          Variable:dot:
+                            - "second"
+                            - - AtField: "hide objects"
+              - - Set:value:
+                    - "@matching"
+                    - FromBool: true
+- # Adds a grouping to a collated list of groupings, and returns the new list.
+  Define pattern:requires:provides:do:
+    - "collate groups"
+    - - Record:kind:
+          - "grouping"
+          - "grouping"
+      - RecordList:kind:
+          - "groups"
+          - "object group"
+    - - # the returned value is the same variable as the second parameter
+        RecordList:kind:
+          - "groups"
+          - "object group"
+      - Number: "idx"
+      - Record:kind:
+          - "group"
+          - "object group"
+      - TextList: "names"
+    - - Note: "find the index of the matching group"
+      - Repeating across:as:do:
+          - FromRecordList: "@groups"
+          - "el"
+          - - If:do:
+                - MatchGroups first:second:
+                    - FromRecord: "@grouping"
+                    - FromRecord:
+                        Variable:dot:
+                          - "el"
+                          - - AtField: "grouping"
+                - - Set:value:
+                      - "@idx"
+                      - FromNumber: "@index"
+      - Note:
+          - "if there wasn't an existing group matching the object's settings:"
+          - "create a new group."
+      - If:do:else:
+          - Is:matching:num:
+              - "@idx"
+              - "equal_to"
+              - 0
+          - - Push:into:
+                - FromText:
+                    Variable:dot:
+                      - "grouping"
+                      - - AtField: "name"
+                - "@names"
+            - Set:value:
+                - Variable:dot:
+                    - "group"
+                    - - AtField: "objects"
+                - FromTextList: "@names"
+            - Set:value:
+                - Variable:dot:
+                    - "group"
+                    - - AtField: "grouping"
+                - FromRecord: "@grouping"
+            - Push:into:
+                - FromRecord: "@group"
+                - "@groups"
+          - Finally do:
+              - Note:
+                  - "found a matching group?"
+                  - "unpack it, add the object name to it, then pack it up again."
+              - Set:value:
+                  - "@group"
+                  - FromRecord:
+                      Variable:dot:
+                        - "groups"
+                        - - AtIndex: "@idx"
+              - Set:value:
+                  - "@names"
+                  - FromTextList:
+                      Variable:dot:
+                        - "group"
+                        - - AtField: "objects"
+              - Push:into:
                   - FromText:
                       Variable:dot:
                         - "grouping"
@@ -206,41 +240,6 @@ Tapestry:
                   - FromTextList: "@names"
               - Set:value:
                   - Variable:dot:
-                      - "group"
-                      - - AtField: "grouping"
-                  - FromRecord: "@grouping"
-              - Push:into:
+                      - "groups"
+                      - - AtIndex: "@idx"
                   - FromRecord: "@group"
-                  - "@groups"
-            - Finally do:
-                - Note:
-                    - "found a matching group?"
-                    - "unpack it, add the object name to it, then pack it up again."
-                - Set:value:
-                    - "@group"
-                    - FromRecord:
-                        Variable:dot:
-                          - "groups"
-                          - - AtIndex: "@idx"
-                - Set:value:
-                    - "@names"
-                    - FromTextList:
-                        Variable:dot:
-                          - "group"
-                          - - AtField: "objects"
-                - Push:into:
-                    - FromText:
-                        Variable:dot:
-                          - "grouping"
-                          - - AtField: "name"
-                    - "@names"
-                - Set:value:
-                    - Variable:dot:
-                        - "group"
-                        - - AtField: "objects"
-                    - FromTextList: "@names"
-                - Set:value:
-                    - Variable:dot:
-                        - "groups"
-                        - - AtIndex: "@idx"
-                    - FromRecord: "@group"

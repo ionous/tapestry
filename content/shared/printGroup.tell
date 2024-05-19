@@ -1,133 +1,132 @@
 ---
-Tapestry:
-  - # Prints the objects in a pre-determined group.
-    # Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules.
-    Define pattern:requires:provides:do:
-      - "print group"
-      - - Record:kind:
-            - "group"
-            - "object groups"
-      - - # fix: this uses a return value so that *all* of the pattern rules run
-          # ( because none of them set the return value until the very end. )
-          # might be better to use an explicit call to continue for each rule that wants to fallthrough.
-          Bool: "success"
-        - # extract the grouping to make the pattern simpler
-          # fix? make callers pass this in separately
-          Record:kind:initially:
-            - "grouping"
-            - "grouping"
-            - Variable:dot:
-                - "group"
-                - - AtField: "grouping"
-        - TextList:initially:
-            - "objs"
-            - Variable:dot:
-                - "group"
-                - - AtField: "objects"
-      - - If:do:
-            - Not:
-                Variable:dot:
-                  - "grouping"
-                  - - AtField: "hide objects"
-            - - Note: "print a bracketed list of objects"
-              - If:do:else:
-                  - Not:
-                      Variable:dot:
-                        - "grouping"
-                        - - AtField: "hide size"
-                  - - Print:
-                        Brackets do:
-                          - Print:
-                              Commas do:
-                                - Repeating across:as:do:
-                                    - FromTextList: "@objs"
-                                    - "obj"
-                                    - - PrintGroupedObject obj:grouping:
-                                          - FromText: "@obj"
-                                          - FromRecord: "@grouping"
-                  - Finally do:
-                      - Print:
-                          Commas do:
-                            - Repeating across:as:do:
-                                - FromTextList: "@objs"
-                                - "obj"
-                                - - PrintGroupedObject obj:grouping:
-                                      - FromText: "@obj"
-                                      - FromRecord: "@grouping"
-  - Define rule:named:do:
-      - "print group"
-      - "label without size"
-      - - If:do:
-            - AllTrue:
-                - Variable:dot:
-                    - "grouping"
-                    - - AtField: "hide size"
+- # Prints the objects in a pre-determined group.
+  # Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules.
+  Define pattern:requires:provides:do:
+    - "print group"
+    - - Record:kind:
+          - "group"
+          - "object groups"
+    - - # fix: this uses a return value so that *all* of the pattern rules run
+        # ( because none of them set the return value until the very end. )
+        # might be better to use an explicit call to continue for each rule that wants to fallthrough.
+        Bool: "success"
+      - # extract the grouping to make the pattern simpler
+        # fix? make callers pass this in separately
+        Record:kind:initially:
+          - "grouping"
+          - "grouping"
+          - Variable:dot:
+              - "group"
+              - - AtField: "grouping"
+      - TextList:initially:
+          - "objs"
+          - Variable:dot:
+              - "group"
+              - - AtField: "objects"
+    - - If:do:
+          - Not:
+              Variable:dot:
+                - "grouping"
+                - - AtField: "hide objects"
+          - - Note: "print a bracketed list of objects"
+            - If:do:else:
                 - Not:
                     Variable:dot:
                       - "grouping"
-                      - - AtField: "hide label"
-            - - Print:
-                  Variable:dot:
-                    - "grouping"
-                    - - AtField: "label"
-  - Define rule:named:do:
-      - "print group"
-      - "size of group"
-      - - If:do:
-            - Not:
-                Variable:dot:
+                      - - AtField: "hide size"
+                - - Print:
+                      Brackets do:
+                        - Print:
+                            Commas do:
+                              - Repeating across:as:do:
+                                  - FromTextList: "@objs"
+                                  - "obj"
+                                  - - PrintGroupedObject obj:grouping:
+                                        - FromText: "@obj"
+                                        - FromRecord: "@grouping"
+                - Finally do:
+                    - Print:
+                        Commas do:
+                          - Repeating across:as:do:
+                              - FromTextList: "@objs"
+                              - "obj"
+                              - - PrintGroupedObject obj:grouping:
+                                    - FromText: "@obj"
+                                    - FromRecord: "@grouping"
+- Define rule:named:do:
+    - "print group"
+    - "label without size"
+    - - If:do:
+          - AllTrue:
+              - Variable:dot:
                   - "grouping"
                   - - AtField: "hide size"
-            - - PrintSeveral obj:groupSize:label:
-                  - FromText:
-                      Variable:dot:
-                        - "objs"
-                        - - AtIndex: 1
-                  - FromNumber:
-                      Len:
-                        FromTextList: "@objs"
-                  - FromText:
-                      Txt if:then:else:
-                        - Variable:dot:
-                            - "grouping"
-                            - - AtField: "hide label"
-                        - ""
-                        - Variable:dot:
-                            - "grouping"
-                            - - AtField: "label"
-  - Define rule:named:do:
-      - "print group"
-      - "ungrouped objects"
-      - - If:do:
-            - AllTrue:
-                - Is empty:
-                    Variable:dot:
-                      - "grouping"
-                      - - AtField: "label"
-            - - PrintGroupedObject obj:
-                  FromText:
+              - Not:
+                  Variable:dot:
+                    - "grouping"
+                    - - AtField: "hide label"
+          - - Print:
+                Variable:dot:
+                  - "grouping"
+                  - - AtField: "label"
+- Define rule:named:do:
+    - "print group"
+    - "size of group"
+    - - If:do:
+          - Not:
+              Variable:dot:
+                - "grouping"
+                - - AtField: "hide size"
+          - - PrintSeveral obj:groupSize:label:
+                - FromText:
                     Variable:dot:
                       - "objs"
                       - - AtIndex: 1
-              - # this is the only rule that sets success
-                # doing so blocks the other rules from running.
-                Set:value:
-                  - "@success"
-                  - FromBool: true
-  - Define rule:do:
-      - "print group"
-      - - Log:value:
-            - "debug"
-            - FromRecord: "@group"
-  - # By default, just calls "print object" but can be overridden based on the grouping.
-    Define pattern:requires:provides:do:
-      - "print grouped object"
-      - - Text:kind:
-            - "obj"
-            - "object"
-        - Record:kind:
-            - "grouping"
-            - "grouping"
-      - - Nothing:
-      - - PrintObject obj:
-            FromText: "@obj"
+                - FromNumber:
+                    Len:
+                      FromTextList: "@objs"
+                - FromText:
+                    Txt if:then:else:
+                      - Variable:dot:
+                          - "grouping"
+                          - - AtField: "hide label"
+                      - ""
+                      - Variable:dot:
+                          - "grouping"
+                          - - AtField: "label"
+- Define rule:named:do:
+    - "print group"
+    - "ungrouped objects"
+    - - If:do:
+          - AllTrue:
+              - Is empty:
+                  Variable:dot:
+                    - "grouping"
+                    - - AtField: "label"
+          - - PrintGroupedObject obj:
+                FromText:
+                  Variable:dot:
+                    - "objs"
+                    - - AtIndex: 1
+            - # this is the only rule that sets success
+              # doing so blocks the other rules from running.
+              Set:value:
+                - "@success"
+                - FromBool: true
+- Define rule:do:
+    - "print group"
+    - - Log:value:
+          - "debug"
+          - FromRecord: "@group"
+- # By default, just calls "print object" but can be overridden based on the grouping.
+  Define pattern:requires:provides:do:
+    - "print grouped object"
+    - - Text:kind:
+          - "obj"
+          - "object"
+      - Record:kind:
+          - "grouping"
+          - "grouping"
+    - - Nothing:
+    - - PrintObject obj:
+          FromText: "@obj"

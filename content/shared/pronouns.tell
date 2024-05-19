@@ -1,38 +1,37 @@
 ---
-Tapestry:
-  - # We refers to the player.
-    # As with all the customizable grammar, we use the plural for the name of pattern.
-    Define pattern:requires:provides:do:
-      - "We"
-      - - TextList: "names"
-      - - Nothing:
-      - - Print: "you"
-  - # 
-    Note: "they, [we], [ey], it."
-  - Define pattern:requires:provides:do:
-      - "They"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - Object:dot:
-                - "@noun"
-                - AtField: "plural named"
-            - - Print: "they"
-            - Finally do:
-                - Print: "it"
-  - # 
-    Define pattern:requires:provides:do:
-      - "Those"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - If:do:else:
-            - Object:dot:
-                - "@noun"
-                - AtField: "plural named"
-            - - Print: "these"
-            - Finally do:
-                - Print: "that"
+- # We refers to the player.
+  # As with all the customizable grammar, we use the plural for the name of pattern.
+  Define pattern:requires:provides:do:
+    - "We"
+    - - TextList: "names"
+    - - Nothing:
+    - - Print: "you"
+- #
+  Note: "they, [we], [ey], it."
+- Define pattern:requires:provides:do:
+    - "They"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - Object:dot:
+              - "@noun"
+              - AtField: "plural named"
+          - - Print: "they"
+          - Finally do:
+              - Print: "it"
+- #
+  Define pattern:requires:provides:do:
+    - "Those"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - If:do:else:
+          - Object:dot:
+              - "@noun"
+              - AtField: "plural named"
+          - - Print: "these"
+          - Finally do:
+              - Print: "that"

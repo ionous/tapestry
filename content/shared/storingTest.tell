@@ -1,131 +1,130 @@
 ---
-Tapestry:
-  - Define test:requires:scene:do:
-      - "storing test"
-      - "Kitchenette"
-      - - Declare: """
-            Mildred is in the kitchen.
-            You are carrying the coffee, the coin, the clutch, and the knife.
-            You are wearing the flower.
-            """
-      - - Print:
-            Rows do:
-              - Print:
-                  Row do:
-                    - Print: "Fail to store something into an actor:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "clutch"
-                        - FromText: "mildred"
-                    - Say: "clutch parent: {parent_of:.purse}."
-              - Print:
-                  Row do:
-                    - Print: "Fail to store something into a closed container:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "coffee"
-                        - FromText: "machine"
-                    - Say: "coffee parent: {parent_of:.coffee}."
-              - Print:
-                  Row do:
-                    - Print: "Fail to store something into something nested:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "clutch"
-                        - FromText: "purse"
-                    - Say: "clutch parent: {parent_of:.clutch}."
-              - Print:
-                  Row do:
-                    - Print: "Okay, store something into an open container:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "coffee"
-                        - FromText: "purse"
-                    - Say: "coffee parent: {parent_of:.coffee}."
-              - Print:
-                  Row do:
-                    - Print: "Okay, store something onto a supporter:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "coin"
-                        - FromText: "shelf"
-                    - Say: "coin parent: {parent_of:.coin}."
-              - Print:
-                  Row do:
-                    - Print: "Fail to store something worn:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "flower"
-                        - FromText: "shelf"
-                    - Say: "flower parent: {parent_of:.flower}."
-              - Print:
-                  Row do:
-                    - Print: "Fail to store something not held:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "broom"
-                        - FromText: "cabinet"
-                    - Say: "broom parent: {parent_of:.broom}."
-              - Print:
-                  Row do:
-                    - Print: "Okay, store something into something held:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "knife"
-                        - FromText: "purse"
-                    - Say: "knife parent: {parent_of:.knife}."
-              - Print:
-                  Row do:
-                    - Print: "Fail to store something to somewhere unreachable:<br>"
-                    - Storing actor:noun:otherNoun:
-                        - FromText:
-                            Object:dot:
-                              - "player"
-                              - AtField: "pawn"
-                        - FromText: "purse"
-                        - FromText: "wisdom"
-                    - Say: "purse parent: {parent_of:.purse}."
-        - Expect output:
-            - "  - Fail to store something into an actor:"
-            - "  That seems to belong to Mildred.clutch parent: clutch."
-            - "  - Fail to store something into a closed container:"
-            - "  The espresso machine is closed.coffee parent: self."
-            - "  - Fail to store something into something nested:"
-            - "  You can't put  that in itself.clutch parent: self."
-            - "  - Okay, store something into an open container:"
-            - "  You put the coffee beans in the purse.coffee parent: purse."
-            - "  - Okay, store something onto a supporter:"
-            - "  You put the coin on the shelf.coin parent: shelf."
-            - "  - Fail to store something worn:"
-            - "  You would have to take that off first.flower parent: self."
-            - "  - Fail to store something not held:"
-            - "  You haven't got that!broom parent: kitchen."
-            - "  - Okay, store something into something held:"
-            - "  You put the rusty knife in the purse.knife parent: purse."
-            - "  - Fail to store something to somewhere unreachable:"
-            - "  You haven't got that!purse parent: clutch."
-            - ""
+- Define test:requires:scene:do:
+    - "storing test"
+    - "Kitchenette"
+    - - Declare: """
+          Mildred is in the kitchen.
+          You are carrying the coffee, the coin, the clutch, and the knife.
+          You are wearing the flower.
+          """
+    - - Print:
+          Rows do:
+            - Print:
+                Row do:
+                  - Print: "Fail to store something into an actor:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "clutch"
+                      - FromText: "mildred"
+                  - Say: "clutch parent: {parent_of:.purse}."
+            - Print:
+                Row do:
+                  - Print: "Fail to store something into a closed container:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "coffee"
+                      - FromText: "machine"
+                  - Say: "coffee parent: {parent_of:.coffee}."
+            - Print:
+                Row do:
+                  - Print: "Fail to store something into something nested:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "clutch"
+                      - FromText: "purse"
+                  - Say: "clutch parent: {parent_of:.clutch}."
+            - Print:
+                Row do:
+                  - Print: "Okay, store something into an open container:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "coffee"
+                      - FromText: "purse"
+                  - Say: "coffee parent: {parent_of:.coffee}."
+            - Print:
+                Row do:
+                  - Print: "Okay, store something onto a supporter:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "coin"
+                      - FromText: "shelf"
+                  - Say: "coin parent: {parent_of:.coin}."
+            - Print:
+                Row do:
+                  - Print: "Fail to store something worn:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "flower"
+                      - FromText: "shelf"
+                  - Say: "flower parent: {parent_of:.flower}."
+            - Print:
+                Row do:
+                  - Print: "Fail to store something not held:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "broom"
+                      - FromText: "cabinet"
+                  - Say: "broom parent: {parent_of:.broom}."
+            - Print:
+                Row do:
+                  - Print: "Okay, store something into something held:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "knife"
+                      - FromText: "purse"
+                  - Say: "knife parent: {parent_of:.knife}."
+            - Print:
+                Row do:
+                  - Print: "Fail to store something to somewhere unreachable:<br>"
+                  - Storing actor:noun:otherNoun:
+                      - FromText:
+                          Object:dot:
+                            - "player"
+                            - AtField: "pawn"
+                      - FromText: "purse"
+                      - FromText: "wisdom"
+                  - Say: "purse parent: {parent_of:.purse}."
+      - Expect output:
+          - "  - Fail to store something into an actor:"
+          - "  That seems to belong to Mildred.clutch parent: clutch."
+          - "  - Fail to store something into a closed container:"
+          - "  The espresso machine is closed.coffee parent: self."
+          - "  - Fail to store something into something nested:"
+          - "  You can't put  that in itself.clutch parent: self."
+          - "  - Okay, store something into an open container:"
+          - "  You put the coffee beans in the purse.coffee parent: purse."
+          - "  - Okay, store something onto a supporter:"
+          - "  You put the coin on the shelf.coin parent: shelf."
+          - "  - Fail to store something worn:"
+          - "  You would have to take that off first.flower parent: self."
+          - "  - Fail to store something not held:"
+          - "  You haven't got that!broom parent: kitchen."
+          - "  - Okay, store something into something held:"
+          - "  You put the rusty knife in the purse.knife parent: purse."
+          - "  - Fail to store something to somewhere unreachable:"
+          - "  You haven't got that!purse parent: clutch."
+          - ""

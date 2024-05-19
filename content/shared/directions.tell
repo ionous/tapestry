@@ -1,89 +1,88 @@
 ---
-Tapestry:
-  - # Doors exist in rooms and connect to other rooms.
-    # Every room has a compass which lists doors within the room.
-    # Every direction is a both a noun, and the name of a field within the compass.
-    Declare: """
-    A room is a kind of object.
-    A compass is a kind of record. A room has a compass.
-    Directions are a kind of object.
+- # Doors exist in rooms and connect to other rooms.
+  # Every room has a compass which lists doors within the room.
+  # Every direction is a both a noun, and the name of a field within the compass.
+  Declare: """
+  A room is a kind of object.
+  A compass is a kind of record. A room has a compass.
+  Directions are a kind of object.
 
-    The north is a direction. A compass has a door called north.
-    The northeast is a direction. A compass has a door called northeast.
-    The northwest is a direction. A compass has a door called northwest.
-    The south is a direction. A compass has a door called south.
-    The southeast is a direction. A compass has a door called southeast.
-    The southwest is a direction. A compass has a door called southwest.
-    The east is a direction. A compass has a door called east.
-    The west is a direction. A compass has a door called west.
-    The up is a direction. A compass has a door called up.
-    The down is a direction. A compass has a door called down.
-    The inside is a direction. A compass has a door called inside.
-    The outside is a direction. A compass has a door called outside.
+  The north is a direction. A compass has a door called north.
+  The northeast is a direction. A compass has a door called northeast.
+  The northwest is a direction. A compass has a door called northwest.
+  The south is a direction. A compass has a door called south.
+  The southeast is a direction. A compass has a door called southeast.
+  The southwest is a direction. A compass has a door called southwest.
+  The east is a direction. A compass has a door called east.
+  The west is a direction. A compass has a door called west.
+  The up is a direction. A compass has a door called up.
+  The down is a direction. A compass has a door called down.
+  The inside is a direction. A compass has a door called inside.
+  The outside is a direction. A compass has a door called outside.
 
-    A direction has a direction called an opposite.
-    The north has opposite south. Understand "n" as north.
-    The northeast has opposite southwest. Understand "ne" as northeast.
-    The northwest has opposite southeast. Understand "nw" as northwest.
-    The south has opposite north. Understand "s" as south.
-    The southeast has opposite northwest. Understand "se" as southeast.
-    The southwest has opposite northeast. Understand "sw" as southwest.
-    The east has opposite west. Understand "e" as east.
-    The west has opposite east. Understand "w" as west.
-    Up has opposite down. Understand "u" as up.
-    Down has opposite up. Understand "d" as down.
-    Inside has opposite outside. Understand "in" as inside.
-    Outside has opposite inside. Understand "out" as outside.
+  A direction has a direction called an opposite.
+  The north has opposite south. Understand "n" as north.
+  The northeast has opposite southwest. Understand "ne" as northeast.
+  The northwest has opposite southeast. Understand "nw" as northwest.
+  The south has opposite north. Understand "s" as south.
+  The southeast has opposite northwest. Understand "se" as southeast.
+  The southwest has opposite northeast. Understand "sw" as southwest.
+  The east has opposite west. Understand "e" as east.
+  The west has opposite east. Understand "w" as west.
+  Up has opposite down. Understand "u" as up.
+  Down has opposite up. Understand "d" as down.
+  Inside has opposite outside. Understand "in" as inside.
+  Outside has opposite inside. Understand "out" as outside.
 
-    Doors are kinds of opener. Doors are usually fixed in place.
-    Doors have a room called the destination.
-    """ # "
+  Doors are kinds of opener. Doors are usually fixed in place.
+  Doors have a room called the destination.
+  """ # "
 
-  - # given a room and its door, find the named direction it represents, if any.
-    Define pattern:requires:provides:do:
-      - "direction through"
-      - - Text:kind:
-            - "room"
-            - "room"
-        - Text:kind:
-            - "door"
-            - "door"
-      - - # names one of the fields of compass
-          Text: "direction"
-      - - Repeating across:as:do:
-            - FromTextList:
-                Fields of: "compasses"
-            - "dir"
-            - - If:do:
-                  - Is:matching:text:
-                      - "@door"
-                      - "equal_to"
-                      - Object:dot:
-                          - "@room"
-                          - - AtField: "compass"
-                            - AtField: "@dir"
-                  - - Set:value:
-                        - "@direction"
-                        - FromText: "@dir"
-                    - # since we've found a match; we're done.
-                      Break:
+- # given a room and its door, find the named direction it represents, if any.
+  Define pattern:requires:provides:do:
+    - "direction through"
+    - - Text:kind:
+          - "room"
+          - "room"
+      - Text:kind:
+          - "door"
+          - "door"
+    - - # names one of the fields of compass
+        Text: "direction"
+    - - Repeating across:as:do:
+          - FromTextList:
+              Fields of: "compasses"
+          - "dir"
+          - - If:do:
+                - Is:matching:text:
+                    - "@door"
+                    - "equal_to"
+                    - Object:dot:
+                        - "@room"
+                        - - AtField: "compass"
+                          - AtField: "@dir"
+                - - Set:value:
+                      - "@direction"
+                      - FromText: "@dir"
+                  - # since we've found a match; we're done.
+                    Break:
 
-  - # given a room and direction, find the matching door ( if any. )
-    Define pattern:requires:provides:do:
-      - "door via"
-      - - Text:kind:
-            - "room"
-            - "room"
-        - Text:kind:
-            - "direction"
-            - "direction"
-      - - Text:kind:
-            - "door"
-            - "door"
-      - - Set:value:
-            - "@door"
-            - FromText:
-                Object:dot:
-                  - "@room"
-                  - - AtField: "compass"
-                    - AtField: "@direction"
+- # given a room and direction, find the matching door ( if any. )
+  Define pattern:requires:provides:do:
+    - "door via"
+    - - Text:kind:
+          - "room"
+          - "room"
+      - Text:kind:
+          - "direction"
+          - "direction"
+    - - Text:kind:
+          - "door"
+          - "door"
+    - - Set:value:
+          - "@door"
+          - FromText:
+              Object:dot:
+                - "@room"
+                - - AtField: "compass"
+                  - AtField: "@direction"

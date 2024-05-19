@@ -1,118 +1,117 @@
 ---
-Tapestry:
-  - Declare: "Pluralization is a kind of aspect. The pluralizations are singular named, and plural named."
-  - Define kind:fields:
-      - "Objects"
-      - - # when not set it will use the article from the declaration of the noun; example: "some" soldiers.
-          Text: "indefinite article"
-        - Aspect: "pluralization"
-  - # 
-    Define test:scene:do:
-      - "articles"
-      - - Declare: "The lamp-post, some soldiers, and Trevor are things."
-      - - Say:
-            - "You can only just make out {a: .lamp-post}."
-            - "You can only just make out {a: .Trevor}."
-            - "You can only just make out {a: .soldiers}."
-            - "{a: .lamp-post|capitalize!} can be made out in the mist."
-            - "{a: .Trevor|capitalize!} can be made out in the mist."
-            - "{a: .soldiers|capitalize!} can be made out in the mist."
-            - "You can only just make out {the: .lamp-post}."
-            - "You can only just make out {the: .trevor}."
-            - "You can only just make out {the: .soldiers}."
-            - "{the: .lamp-post|capitalize!} may be a trick of the mist."
-            - "{the: .trevor|capitalize!} may be a trick of the mist."
-            - "{the: .soldiers|capitalize!} may be a trick of the mist."
-            - "You can only just make out {a: .Trevor}."
-            - "You can see {a:}, {the:}."
-        - Expect output:
-            - "You can only just make out a lamp-post."
-            - "You can only just make out Trevor."
-            - "You can only just make out some soldiers."
-            - "A lamp-post can be made out in the mist."
-            - "Trevor can be made out in the mist."
-            - "Some soldiers can be made out in the mist."
-            - "You can only just make out the lamp-post."
-            - "You can only just make out Trevor."
-            - "You can only just make out the soldiers."
-            - "The lamp-post may be a trick of the mist."
-            - "Trevor may be a trick of the mist."
-            - "The soldiers may be a trick of the mist."
-            - "You can only just make out Trevor."
-            - "You can see nothing, nothing."
-  - # 
-    Define pattern:requires:provides:do:
-      - "A"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - PrintArticle obj:name:
-            - # pass the noun
-              FromText: "@noun"
-            - FromText:
-                # and the name of the noun ( implicitly calls 'print name' ).
-                Say: "{.noun}"
-  - # 
-    Define pattern:requires:provides:do:
-      - "The"
-      - - Text:kind:
-            - "noun"
-            - "object"
-      - - Nothing:
-      - - PrintArticle article:obj:name:
-            - FromText: "the"
-            - FromText: "@noun"
-            - FromText:
-                Say: "{.noun}"
-  - # Helper to say the name of a noun and its article.
-    # For example: 'an apple', 'a bear', 'some honey.'
-    # Uses properties about the noun, indefinite articles, vowels, etc. to determine what to say.
-    Define pattern:requires:provides:do:
-      - "Print article"
-      - - # optional definite article text, for example 'the'.
-          # if not specified, print article will use the indefinite article.
-          Text: "article"
-        - # a reference to the object.
-          Text:kind:
-            - "obj"
-            - "object"
-        - # the object's printed name.
-          Text: "name"
-      - - Nothing:
-      - - If:do:else:
-            - Not:
-                Object: "@obj"
-            - - PrintNothing:
-                  FromText: "@obj"
-            - If:do:else:
-                - Object:dot:
-                    - "@obj"
-                    - AtField: "proper named"
-                - - Note: "by definition proper named objects have no article."
-                  - Say: "{.name}"
-                - If:do:else:
-                    - Is:matching:text:
-                        - "@article"
-                        - "other_than"
-                        - ""
-                    - - Say: "{.article} {.name}"
-                    - If:do:else:
-                        - Is:matching:text:
-                            - Object:dot:
-                                - "@obj"
-                                - AtField: "indefinite article"
-                            - "other_than"
-                            - ""
-                        - - Say: "{.obj.indefinite_article} {.name}"
-                        - If:do:else:
-                            - Object:dot:
-                                - "@obj"
-                                - AtField: "plural named"
-                            - - Say: "some {.name}"
-                            - If:do:else:
-                                - StartsWithVowel text:
-                                    FromText: "@name"
-                                - - Say: "an {.name}"
-                                - Finally do:
-                                    - Say: "a {.name}"
+- Declare: "Pluralization is a kind of aspect. The pluralizations are singular named, and plural named."
+- Define kind:fields:
+    - "Objects"
+    - - # when not set it will use the article from the declaration of the noun; example: "some" soldiers.
+        Text: "indefinite article"
+      - Aspect: "pluralization"
+- #
+  Define test:scene:do:
+    - "articles"
+    - - Declare: "The lamp-post, some soldiers, and Trevor are things."
+    - - Say:
+          - "You can only just make out {a: .lamp-post}."
+          - "You can only just make out {a: .Trevor}."
+          - "You can only just make out {a: .soldiers}."
+          - "{a: .lamp-post|capitalize!} can be made out in the mist."
+          - "{a: .Trevor|capitalize!} can be made out in the mist."
+          - "{a: .soldiers|capitalize!} can be made out in the mist."
+          - "You can only just make out {the: .lamp-post}."
+          - "You can only just make out {the: .trevor}."
+          - "You can only just make out {the: .soldiers}."
+          - "{the: .lamp-post|capitalize!} may be a trick of the mist."
+          - "{the: .trevor|capitalize!} may be a trick of the mist."
+          - "{the: .soldiers|capitalize!} may be a trick of the mist."
+          - "You can only just make out {a: .Trevor}."
+          - "You can see {a:}, {the:}."
+      - Expect output:
+          - "You can only just make out a lamp-post."
+          - "You can only just make out Trevor."
+          - "You can only just make out some soldiers."
+          - "A lamp-post can be made out in the mist."
+          - "Trevor can be made out in the mist."
+          - "Some soldiers can be made out in the mist."
+          - "You can only just make out the lamp-post."
+          - "You can only just make out Trevor."
+          - "You can only just make out the soldiers."
+          - "The lamp-post may be a trick of the mist."
+          - "Trevor may be a trick of the mist."
+          - "The soldiers may be a trick of the mist."
+          - "You can only just make out Trevor."
+          - "You can see nothing, nothing."
+- #
+  Define pattern:requires:provides:do:
+    - "A"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - PrintArticle obj:name:
+          - # pass the noun
+            FromText: "@noun"
+          - FromText:
+              # and the name of the noun ( implicitly calls 'print name' ).
+              Say: "{.noun}"
+- #
+  Define pattern:requires:provides:do:
+    - "The"
+    - - Text:kind:
+          - "noun"
+          - "object"
+    - - Nothing:
+    - - PrintArticle article:obj:name:
+          - FromText: "the"
+          - FromText: "@noun"
+          - FromText:
+              Say: "{.noun}"
+- # Helper to say the name of a noun and its article.
+  # For example: 'an apple', 'a bear', 'some honey.'
+  # Uses properties about the noun, indefinite articles, vowels, etc. to determine what to say.
+  Define pattern:requires:provides:do:
+    - "Print article"
+    - - # optional definite article text, for example 'the'.
+        # if not specified, print article will use the indefinite article.
+        Text: "article"
+      - # a reference to the object.
+        Text:kind:
+          - "obj"
+          - "object"
+      - # the object's printed name.
+        Text: "name"
+    - - Nothing:
+    - - If:do:else:
+          - Not:
+              Object: "@obj"
+          - - PrintNothing:
+                FromText: "@obj"
+          - If:do:else:
+              - Object:dot:
+                  - "@obj"
+                  - AtField: "proper named"
+              - - Note: "by definition proper named objects have no article."
+                - Say: "{.name}"
+              - If:do:else:
+                  - Is:matching:text:
+                      - "@article"
+                      - "other_than"
+                      - ""
+                  - - Say: "{.article} {.name}"
+                  - If:do:else:
+                      - Is:matching:text:
+                          - Object:dot:
+                              - "@obj"
+                              - AtField: "indefinite article"
+                          - "other_than"
+                          - ""
+                      - - Say: "{.obj.indefinite_article} {.name}"
+                      - If:do:else:
+                          - Object:dot:
+                              - "@obj"
+                              - AtField: "plural named"
+                          - - Say: "some {.name}"
+                          - If:do:else:
+                              - StartsWithVowel text:
+                                  FromText: "@name"
+                              - - Say: "an {.name}"
+                              - Finally do:
+                                  - Say: "a {.name}"

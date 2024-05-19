@@ -1,182 +1,181 @@
 ---
-Tapestry:
-  - # storing is used for both inserting something into a container and for placing something onto a supporter.
-    Define action:requires:
-      - "storing"
-      - - # the actor storing something ( ex. the player. )
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the thing being stored
-          Text:kind:
-            - "noun"
-            - "thing"
-        - # the thing where the noun is being stored
-          Text:kind:
-            - "other noun"
-            - "thing"
-  - Define rule:named:do:
-      - "instead of storing"
-      - "the standard storing checks"
-      - - If:assuming:do:else:
-            - Not:
-                Is empty: "@response"
-            - - Arg:from:
-                  - "response"
-                  - FromText:
-                      CanHandle actor:action:noun:otherNoun:
-                        - FromText: "@actor"
-                        - FromText: "storing"
-                        - FromText: "@noun"
-                        - FromText: "@other_noun"
-            - - Print: "@response"
-            - If:assuming:do:else:
-                - Not:
-                    Is empty: "@response"
-                - - Arg:from:
-                      - "response"
-                      - FromText:
-                          CanReach actor:action:noun:
-                            - FromText: "@actor"
-                            - FromText: "storing"
-                            - FromText: "@other_noun"
-                - - Print: "@response"
-                - If:assuming:do:
-                    - Not:
-                        Is empty: "@response"
-                    - - Arg:from:
-                          - "response"
-                          - FromText:
-                              CanUse actor:action:noun:otherNoun:
-                                - FromText: "@actor"
-                                - FromText: "storing"
-                                - FromText: "@noun"
-                                - FromText: "@other_noun"
-                    - - Print: "@response"
-  - Define rule:named:do:
-      - "storing"
-      - "the standard storing action"
-      - - If:assuming:do:
-            - Not:
-                Is empty: "@response"
-            - - Arg:from:
-                  - "response"
-                  - FromText:
-                      MoveObject obj:dest:
-                        - FromText: "@noun"
-                        - FromText: "@other_noun"
-            - - Print: "@response"
-  - # 
-    Define rule:do:
-      - "report someone storing"
-      - - Say response:with:
-            - "someone stores"
-            - "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-  - Define rule:do:
-      - "report storing"
-      - - Say response:with:
-            - "player stores"
-            - "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-  - # 
-    Define rule:do:
-      - "can handle"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "storing"
-                - AncestorOf obj:root:
-                    - FromText: "@other_noun"
-                    - FromText: "@noun"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't insert something into itself"
-                        - "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
-              - Note: "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
-  - Define rule:do:
-      - "can handle"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "storing"
-                - Is:matching:text:
-                    - WearerOf obj:
-                        FromText: "@noun"
-                    - "equal_to"
-                    - "@actor"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't insert clothing"
-                        - "{We:|capitalize!} would have to take {those:.noun} off first."
-  - # 
-    Define rule:do:
-      - "reach down"
-      - - # Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )
-          If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "storing"
-                - Is:matching:text:
-                    - "@into_obj"
-                    - "equal_to"
-                    - "@noun"
-                - Not:
-                    AllowsStorage obj:
-                      FromText: "@into_obj"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can only store when allowed"
-                        - "{the: .into_obj|capitalize!} is closed."
-  - Define rule:do:
-      - "reach down"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "storing"
-                - Is:matching:text:
-                    - "@into_obj"
-                    - "equal_to"
-                    - "@noun"
-                - Not:
-                    ProvidesStorage obj:
-                      FromText: "@into_obj"
-            - - Note: "Assuming we are able to reach the noun, check whether it actually provides storage."
-              - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can only store to storage"
-                        - "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
-  - Define rule:do:
-      - "reach down"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "storing"
-                - KindOf:is:
-                    - "@into_obj"
-                    - "actors"
-            - - Note:
-                  - "If the target noun were owned by reaching actor then the actor would be the lca."
-                  - "By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
-              - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't store people's possessions"
-                        - "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."
+- # storing is used for both inserting something into a container and for placing something onto a supporter.
+  Define action:requires:
+    - "storing"
+    - - # the actor storing something ( ex. the player. )
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the thing being stored
+        Text:kind:
+          - "noun"
+          - "thing"
+      - # the thing where the noun is being stored
+        Text:kind:
+          - "other noun"
+          - "thing"
+- Define rule:named:do:
+    - "instead of storing"
+    - "the standard storing checks"
+    - - If:assuming:do:else:
+          - Not:
+              Is empty: "@response"
+          - - Arg:from:
+                - "response"
+                - FromText:
+                    CanHandle actor:action:noun:otherNoun:
+                      - FromText: "@actor"
+                      - FromText: "storing"
+                      - FromText: "@noun"
+                      - FromText: "@other_noun"
+          - - Print: "@response"
+          - If:assuming:do:else:
+              - Not:
+                  Is empty: "@response"
+              - - Arg:from:
+                    - "response"
+                    - FromText:
+                        CanReach actor:action:noun:
+                          - FromText: "@actor"
+                          - FromText: "storing"
+                          - FromText: "@other_noun"
+              - - Print: "@response"
+              - If:assuming:do:
+                  - Not:
+                      Is empty: "@response"
+                  - - Arg:from:
+                        - "response"
+                        - FromText:
+                            CanUse actor:action:noun:otherNoun:
+                              - FromText: "@actor"
+                              - FromText: "storing"
+                              - FromText: "@noun"
+                              - FromText: "@other_noun"
+                  - - Print: "@response"
+- Define rule:named:do:
+    - "storing"
+    - "the standard storing action"
+    - - If:assuming:do:
+          - Not:
+              Is empty: "@response"
+          - - Arg:from:
+                - "response"
+                - FromText:
+                    MoveObject obj:dest:
+                      - FromText: "@noun"
+                      - FromText: "@other_noun"
+          - - Print: "@response"
+- #
+  Define rule:do:
+    - "report someone storing"
+    - - Say response:with:
+          - "someone stores"
+          - "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+- Define rule:do:
+    - "report storing"
+    - - Say response:with:
+          - "player stores"
+          - "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+- #
+  Define rule:do:
+    - "can handle"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "storing"
+              - AncestorOf obj:root:
+                  - FromText: "@other_noun"
+                  - FromText: "@noun"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't insert something into itself"
+                      - "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
+            - Note: "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
+- Define rule:do:
+    - "can handle"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "storing"
+              - Is:matching:text:
+                  - WearerOf obj:
+                      FromText: "@noun"
+                  - "equal_to"
+                  - "@actor"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't insert clothing"
+                      - "{We:|capitalize!} would have to take {those:.noun} off first."
+- #
+  Define rule:do:
+    - "reach down"
+    - - # Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )
+        If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "storing"
+              - Is:matching:text:
+                  - "@into_obj"
+                  - "equal_to"
+                  - "@noun"
+              - Not:
+                  AllowsStorage obj:
+                    FromText: "@into_obj"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can only store when allowed"
+                      - "{the: .into_obj|capitalize!} is closed."
+- Define rule:do:
+    - "reach down"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "storing"
+              - Is:matching:text:
+                  - "@into_obj"
+                  - "equal_to"
+                  - "@noun"
+              - Not:
+                  ProvidesStorage obj:
+                    FromText: "@into_obj"
+          - - Note: "Assuming we are able to reach the noun, check whether it actually provides storage."
+            - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can only store to storage"
+                      - "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
+- Define rule:do:
+    - "reach down"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "storing"
+              - KindOf:is:
+                  - "@into_obj"
+                  - "actors"
+          - - Note:
+                - "If the target noun were owned by reaching actor then the actor would be the lca."
+                - "By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+            - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't store people's possessions"
+                      - "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."

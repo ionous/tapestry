@@ -1,185 +1,184 @@
 ---
-Tapestry:
-  - Define scene:requires:with:
-      - "scoring"
-      - "tapestry"
-      - - Define kind:fields:
-            - "story data"
-            - - Number: "score"
-              - # The max score acts like a hint to the player.
-                # The standard rules don't stop the score from growing larger than the max score
-                # and nothing happens when the score reaches the max score.
-                Number: "max score"
-        - Define kind:fields:
-            - "settings"
-            - - Aspect: "score notification"
-        - Define state:names:
-            - "score notification"
-            - - "score notification on"
-              - "score notification off"
-        - # inform puts this last of all things using:
-          # The notify score changes rule is listed last in the turn sequence rulebook.
-          Define rule:do:
-            - "pass time, then continue"
-            - - If:assuming:do:
-                  - AllTrue:
-                      - Object:dot:
-                          - "settings"
-                          - AtField: "score notification on"
-                      - Is:matching:num:
-                          - "@change"
-                          - "other_than"
-                          - 0
-                  - - Arg:from:
-                        - "change"
-                        - FromNumber:
-                            Subtract:value:
-                              - Object:dot:
-                                  - "story"
-                                  - AtField: "score"
-                              - Object:dot:
-                                  - "last known"
-                                  - AtField: "score"
-                  - - Say response:with:
-                        - "notify score changed"
-                        - "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} {if .change > 1}points{else}point{end}."
-        - # blocks the default no score rule from happening.
-          # alt: could replace the default rule or response.
-          Define rule:do:
-            - "request the score"
-            - - Say response:with:
-                  - "announce the score"
-                  - "{if .Story.playing}So far, in{else}In{end} {.Story.turn_count} {if .Story.turn_count > 1}turns{else}turn{end}, {we!}{if .Story.playing} have{end} scored {.Story.score} {if .Story.max_score}out of a possible {.Story.max_score} {end}points."
-        - # An action to enable or disable printing changes to a player's score before the start of each new turn.
-          Define pattern:requires:provides:do:
-            - "request score notifications"
-            - - Bool: "notify"
-            - - Nothing:
-            - - If:do:else:
-                  - "@notify"
-                  - - Set:state:
+- Define scene:requires:with:
+    - "scoring"
+    - "tapestry"
+    - - Define kind:fields:
+          - "story data"
+          - - Number: "score"
+            - # The max score acts like a hint to the player.
+              # The standard rules don't stop the score from growing larger than the max score
+              # and nothing happens when the score reaches the max score.
+              Number: "max score"
+      - Define kind:fields:
+          - "settings"
+          - - Aspect: "score notification"
+      - Define state:names:
+          - "score notification"
+          - - "score notification on"
+            - "score notification off"
+      - # inform puts this last of all things using:
+        # The notify score changes rule is listed last in the turn sequence rulebook.
+        Define rule:do:
+          - "pass time, then continue"
+          - - If:assuming:do:
+                - AllTrue:
+                    - Object:dot:
                         - "settings"
-                        - "score notification on"
-                  - Finally do:
-                      - Set:state:
-                          - "settings"
-                          - "score notification off"
-              - Say response:with:
-                  - "report score notification mode"
-                  - "Score notification {if .settings.score_notification_on}on{else}off{end}."
-        - Interpret:with:
-            - "notify"
-            - - One of:
-                  - Sequence:
-                      - One word: "off"
-                      - Action:args:
-                          - "request score notifications"
-                          - - Arg:from:
-                                - "notify"
-                                - FromBool: false
-                  - Sequence:
-                      - One word: "on"
-                      - Action:args:
-                          - "request score notifications"
-                          - - Arg:from:
-                                - "notify"
-                                - FromBool: true
-                  - Action:args:
-                      - "request score notifications"
-                      - - Arg:from:
-                            - "notify"
-                            - FromBool: true
-  - Define test:requires:do:
-      - "no score"
-      - "tapestry"
-      - - StartGame actor:quietly:
-            - FromText:
-                Object:dot:
-                  - "player"
-                  - AtField: "pawn"
-            - FromBool: true
-        - Fabricate input: "score"
-        - Expect output: "This isn't a competition."
-  - Define test:requires:do:
-      - "mid game score"
-      - "scoring"
-      - - StartGame actor:quietly:
-            - FromText:
-                Object:dot:
-                  - "player"
-                  - AtField:  "pawn"
-            - FromBool: true
-        - Set:value:
-            - Object:dot:
-                - "story"
-                -  AtField: "max score"
-            - FromNumber: 50
-        - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "score"
-            - FromNumber: 23
-        - Fabricate input: "score"
-        - Expect output: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
-  - Define test:requires:do:
-      - "post game score"
-      - "scoring"
-      - - # simulate the end of game state.
-          Set:state:
-            - "story"
-            - "completed"
-        - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "max score"
-            - FromNumber: 100
-        - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "score"
-            - FromNumber: 100
-        - Set:value:
-            - Object:dot:
-                - "story"
-                - AtField: "turn count"
-            - FromNumber: 7
-        - Fabricate input: "score"
-        - Expect output: "In 7 turns, you scored 100 out of a possible 100 points."
-  - Define test:requires:scene:do:
-      - "score notification"
-      - - "scoring"
-        - "kitchenette"
-      - - Declare: "You are carrying the flashlight. The flashlight is unlit."
-        - Define noun:rule:do:
-            - "flashlight"
-            - "after activating"
-            - - # set the score directly.
-                Set:value:
-                  - Object:dot:
-                      - "story"
-                      - AtField:  "score"
-                  - FromNumber: 50
-        - Define noun:rule:do:
-            - "flashlight"
-            - "after deactivating"
-            - - # or, change it by a relative number.
-                Decrease:
-                  Object:dot:
+                        - AtField: "score notification on"
+                    - Is:matching:num:
+                        - "@change"
+                        - "other_than"
+                        - 0
+                - - Arg:from:
+                      - "change"
+                      - FromNumber:
+                          Subtract:value:
+                            - Object:dot:
+                                - "story"
+                                - AtField: "score"
+                            - Object:dot:
+                                - "last known"
+                                - AtField: "score"
+                - - Say response:with:
+                      - "notify score changed"
+                      - "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} {if .change > 1}points{else}point{end}."
+      - # blocks the default no score rule from happening.
+        # alt: could replace the default rule or response.
+        Define rule:do:
+          - "request the score"
+          - - Say response:with:
+                - "announce the score"
+                - "{if .Story.playing}So far, in{else}In{end} {.Story.turn_count} {if .Story.turn_count > 1}turns{else}turn{end}, {we!}{if .Story.playing} have{end} scored {.Story.score} {if .Story.max_score}out of a possible {.Story.max_score} {end}points."
+      - # An action to enable or disable printing changes to a player's score before the start of each new turn.
+        Define pattern:requires:provides:do:
+          - "request score notifications"
+          - - Bool: "notify"
+          - - Nothing:
+          - - If:do:else:
+                - "@notify"
+                - - Set:state:
+                      - "settings"
+                      - "score notification on"
+                - Finally do:
+                    - Set:state:
+                        - "settings"
+                        - "score notification off"
+            - Say response:with:
+                - "report score notification mode"
+                - "Score notification {if .settings.score_notification_on}on{else}off{end}."
+      - Interpret:with:
+          - "notify"
+          - - One of:
+                - Sequence:
+                    - One word: "off"
+                    - Action:args:
+                        - "request score notifications"
+                        - - Arg:from:
+                              - "notify"
+                              - FromBool: false
+                - Sequence:
+                    - One word: "on"
+                    - Action:args:
+                        - "request score notifications"
+                        - - Arg:from:
+                              - "notify"
+                              - FromBool: true
+                - Action:args:
+                    - "request score notifications"
+                    - - Arg:from:
+                          - "notify"
+                          - FromBool: true
+- Define test:requires:do:
+    - "no score"
+    - "tapestry"
+    - - StartGame actor:quietly:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField: "pawn"
+          - FromBool: true
+      - Fabricate input: "score"
+      - Expect output: "This isn't a competition."
+- Define test:requires:do:
+    - "mid game score"
+    - "scoring"
+    - - StartGame actor:quietly:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField:  "pawn"
+          - FromBool: true
+      - Set:value:
+          - Object:dot:
+              - "story"
+              -  AtField: "max score"
+          - FromNumber: 50
+      - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "score"
+          - FromNumber: 23
+      - Fabricate input: "score"
+      - Expect output: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
+- Define test:requires:do:
+    - "post game score"
+    - "scoring"
+    - - # simulate the end of game state.
+        Set:state:
+          - "story"
+          - "completed"
+      - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "max score"
+          - FromNumber: 100
+      - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "score"
+          - FromNumber: 100
+      - Set:value:
+          - Object:dot:
+              - "story"
+              - AtField: "turn count"
+          - FromNumber: 7
+      - Fabricate input: "score"
+      - Expect output: "In 7 turns, you scored 100 out of a possible 100 points."
+- Define test:requires:scene:do:
+    - "score notification"
+    - - "scoring"
+      - "kitchenette"
+    - - Declare: "You are carrying the flashlight. The flashlight is unlit."
+      - Define noun:rule:do:
+          - "flashlight"
+          - "after activating"
+          - - # set the score directly.
+              Set:value:
+                - Object:dot:
                     - "story"
-                    - AtField: "score"
-      - - StartGame actor:quietly:
-            - FromText:
+                    - AtField:  "score"
+                - FromNumber: 50
+      - Define noun:rule:do:
+          - "flashlight"
+          - "after deactivating"
+          - - # or, change it by a relative number.
+              Decrease:
                 Object:dot:
-                  - "player"
-                  - AtField: "pawn"
-            - FromBool: true
-        - Fabricate input: "switch on flashlight"
-        - Expect output:
-            - "You switch on the flashlight."
-            - "Your score has just gone up by fifty points."
-        - Fabricate input: "switch off flashlight"
-        - Expect output:
-            - "You switch off the flashlight."
-            - "Your score has just gone down by one point."
-        - Fabricate input: "score"
-        - Expect output: "So far, in 3 turns, you have scored 49 points."
+                  - "story"
+                  - AtField: "score"
+    - - StartGame actor:quietly:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField: "pawn"
+          - FromBool: true
+      - Fabricate input: "switch on flashlight"
+      - Expect output:
+          - "You switch on the flashlight."
+          - "Your score has just gone up by fifty points."
+      - Fabricate input: "switch off flashlight"
+      - Expect output:
+          - "You switch off the flashlight."
+          - "Your score has just gone down by one point."
+      - Fabricate input: "score"
+      - Expect output: "So far, in 3 turns, you have scored 49 points."

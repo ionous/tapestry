@@ -1,200 +1,199 @@
 ---
-Tapestry:
-  - Define action:requires:
-      - "taking"
-      - - # the actor taking ( ex. the player. )
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the thing being taken
-          Text:kind:
-            - "noun"
-            - "thing"
-  - Define rule:do:
-      - "instead of taking"
-      - - If:assuming:do:
-            - Not:
-                Is empty: "@result"
-            - - Arg:from:
-                  - "result"
-                  - FromText:
-                      CanReach actor:action:noun:requiresLight:
-                        - FromText: "@actor"
-                        - FromText: "taking"
-                        - FromText: "@noun"
-                        - FromBool: false
-            - - Print: "@result"
-  - Define rule:do:
-      - "taking"
-      - - If:assuming:do:
-            - Not:
-                Is empty: "@response"
-            - - Arg:from:
-                  - "response"
-                  - FromText:
-                      MoveObject obj:dest:
-                        - FromText: "@noun"
-                        - FromText: "@actor"
-            - - Print: "@response"
-  - # 
-    Define rule:do:
-      - "report someone taking"
-      - - Say response:with:
-            - "someone else takes"
-            - "{The: .actor|capitalize!} picks up {the: .noun}."
-  - Define rule:do:
-      - "report taking"
-      - - Say response:with:
-            - "player takes"
-            - "Taken."
-  - # 
-    Define rule:do:
-      - "can reach"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - KindOf:is:
+- Define action:requires:
+    - "taking"
+    - - # the actor taking ( ex. the player. )
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the thing being taken
+        Text:kind:
+          - "noun"
+          - "thing"
+- Define rule:do:
+    - "instead of taking"
+    - - If:assuming:do:
+          - Not:
+              Is empty: "@result"
+          - - Arg:from:
+                - "result"
+                - FromText:
+                    CanReach actor:action:noun:requiresLight:
+                      - FromText: "@actor"
+                      - FromText: "taking"
+                      - FromText: "@noun"
+                      - FromBool: false
+          - - Print: "@result"
+- Define rule:do:
+    - "taking"
+    - - If:assuming:do:
+          - Not:
+              Is empty: "@response"
+          - - Arg:from:
+                - "response"
+                - FromText:
+                    MoveObject obj:dest:
+                      - FromText: "@noun"
+                      - FromText: "@actor"
+          - - Print: "@response"
+- #
+  Define rule:do:
+    - "report someone taking"
+    - - Say response:with:
+          - "someone else takes"
+          - "{The: .actor|capitalize!} picks up {the: .noun}."
+- Define rule:do:
+    - "report taking"
+    - - Say response:with:
+          - "player takes"
+          - "Taken."
+- #
+  Define rule:do:
+    - "can reach"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - KindOf:is:
+                  - "@noun"
+                  - "actors"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take other people"
+                      - "I don't suppose {the: .noun} would care for that."
+- Define rule:do:
+    - "can reach"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - Is:matching:text:
+                  - "@actor"
+                  - "equal_to"
+                  - "@noun"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take yourself"
+                      - "{we!|capitalize!} {are:.self} always self-possessed."
+- Define rule:do:
+    - "can reach"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - Object:dot:
+                  - "@noun"
+                  - AtField: "scenery"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take scenery"
+                      - "{they:.noun|capitalize!} {are:.noun} hardly portable."
+- Define rule:do:
+    - "can reach"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - Object:dot:
+                  - "@noun"
+                  - AtField: "fixed in place"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take what's fixed in place"
+                      - "{they:.noun|capitalize!} {are:.noun} fixed in place."
+- Define rule:do:
+    - "can reach"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - Not:
+                  KindOf:is:
                     - "@noun"
-                    - "actors"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take other people"
-                        - "I don't suppose {the: .noun} would care for that."
-  - Define rule:do:
-      - "can reach"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - Is:matching:text:
-                    - "@actor"
-                    - "equal_to"
-                    - "@noun"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take yourself"
-                        - "{we!|capitalize!} {are:.self} always self-possessed."
-  - Define rule:do:
-      - "can reach"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - Object:dot:
-                    - "@noun"
-                    - AtField: "scenery"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take scenery"
-                        - "{they:.noun|capitalize!} {are:.noun} hardly portable."
-  - Define rule:do:
-      - "can reach"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - Object:dot:
-                    - "@noun"
-                    - AtField: "fixed in place"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take what's fixed in place"
-                        - "{they:.noun|capitalize!} {are:.noun} fixed in place."
-  - Define rule:do:
-      - "can reach"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - Not:
-                    KindOf:is:
-                      - "@noun"
-                      - "things"
-            - - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take nothing"
-                        - "{we:|capitalize!} can't carry {the: .noun}."
-  - # 
-    Define rule:do:
-      - "reach up"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - Is:matching:text:
-                    - "@into_obj"
-                    - "equal_to"
-                    - "@noun"
-            - - Note: "Reaching up to take the noun, means the noun contains the actor."
-              - Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take what you're inside"
-                        - "{We:|capitalize!} would have to get {off:.noun} first."
-  - # 
-    Define rule:do:
-      - "reach down"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - KindOf:is:
-                    - "@from_obj"
-                    - "actors"
-            - - # If the target noun were owned by the reaching actor then the actor would be the lca.
-                # By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach.
-                Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take people's possessions"
-                        - "{those: .noun|capitalize!} seems to belong to {the: .from_obj}."
-  - Define rule:do:
-      - "reach down"
-      - - If:do:
-            - AllTrue:
-                - Is:matching:text:
-                    - "@action"
-                    - "equal_to"
-                    - "taking"
-                - Is:matching:text:
-                    - "@from_obj"
-                    - "equal_to"
-                    - "@actor"
-                - Is:matching:text:
-                    - "@into_obj"
-                    - "equal_to"
-                    - "@noun"
-            - - # Reaching down to take the noun, means the noun contains the actor.
-                Set:value:
-                  - "@response"
-                  - FromText:
-                      Say response:with:
-                        - "can't take what you're holding"
-                        - "{we:|capitalize!} already have {those:.noun}."
+                    - "things"
+          - - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take nothing"
+                      - "{we:|capitalize!} can't carry {the: .noun}."
+- #
+  Define rule:do:
+    - "reach up"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - Is:matching:text:
+                  - "@into_obj"
+                  - "equal_to"
+                  - "@noun"
+          - - Note: "Reaching up to take the noun, means the noun contains the actor."
+            - Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take what you're inside"
+                      - "{We:|capitalize!} would have to get {off:.noun} first."
+- #
+  Define rule:do:
+    - "reach down"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - KindOf:is:
+                  - "@from_obj"
+                  - "actors"
+          - - # If the target noun were owned by the reaching actor then the actor would be the lca.
+              # By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach.
+              Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take people's possessions"
+                      - "{those: .noun|capitalize!} seems to belong to {the: .from_obj}."
+- Define rule:do:
+    - "reach down"
+    - - If:do:
+          - AllTrue:
+              - Is:matching:text:
+                  - "@action"
+                  - "equal_to"
+                  - "taking"
+              - Is:matching:text:
+                  - "@from_obj"
+                  - "equal_to"
+                  - "@actor"
+              - Is:matching:text:
+                  - "@into_obj"
+                  - "equal_to"
+                  - "@noun"
+          - - # Reaching down to take the noun, means the noun contains the actor.
+              Set:value:
+                - "@response"
+                - FromText:
+                    Say response:with:
+                      - "can't take what you're holding"
+                      - "{we:|capitalize!} already have {those:.noun}."

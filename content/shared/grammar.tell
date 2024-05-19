@@ -1,352 +1,351 @@
 ---
-Tapestry:
-  - Interpret:with:
-    - - "q"
-      - "quit"
-    - Action: "request quit"
-  - Interpret:with:
-    - "save"
-    - Action: "request save"
-  - Interpret:with:
-    - - "load"
-      - "restore"
-    - Action: "request load"
-  - Interpret:with:
-      - - "carry"
-        - "hold"
-      - - One of:
-            - Sequence:
-                - One word: "inventory"
-                - Action: "inventorying"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "taking"
-  - # 
-    Interpret:with:
-      - "close"
-      - - One of:
-            - Sequence:
-                - One word: "off"
-                - One noun: "objects"
-                - Action: "deactivating"
-            - Sequence:
-                - One word: "off"
-                - One noun: "objects"
-                - Action: "closing"
-            - Sequence:
-                - One noun: "objects"
-                - One of:
-                    - Sequence:
-                        - One word: "off"
-                        - Action: "deactivating"
-                    - Sequence:
-                        - One word: "up"
-                        - Action: "closing"
-                    - Action: "closing"
-  - # 
-    Interpret:with:
-      - "cover"
-      - - One of:
-            - Sequence:
-                - One word: "up"
-                - One noun: "objects"
-                - Action: "closing"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "closing"
-  - # 
-    Interpret:with:
-      - - "doff"
-        - "disrobe"
-        - "shed"
-      - - One of:
-            - Sequence:
-                - One noun: "objects"
-                - Action: "removing"
-  - # 
-    Interpret:with:
-      - "drop"
-      - - One noun: "objects"
-        - One of:
-            - Sequence:
-                - One word:
-                    - "in"
-                    - "into"
-                    - "down"
-                    - "on"
-                    - "onto"
-                - One noun: "objects"
-                - Action: "storing"
-            - Action: "dropping"
-  - # traveling
-    Interpret:with:
-      - - "enter"
-        - "cross"
-        - "sit on"
-        - "sit on top of"
-        - "sit in"
-        - "sit inside"
-        - "stand on"
-      - - One of:
-            - Sequence:
-                - One noun: "objects"
-                - Action: "traveling through"
-  - # examining
-    Interpret:with:
-      - - "examine"
-        - "x"
-        - "watch"
-        - "describe"
-        - "check"
-      - - One noun: "objects"
-        - Action: "examining"
-  - # getting in/from; taking
-    Interpret:with:
-      - "get"
-      - - One of:
-            - Sequence:
-                - One word:
-                    - "in"
-                    - "on"
-                - Action: "traveling through"
-            - Sequence:
-                - One word:
-                    - "in"
-                    - "into"
-                    - "on"
-                    - "onto"
-                - One noun: "objects"
-                - Action: "traveling through"
-            - Sequence:
-                - Refine sequence:
-                    - One noun: "objects"
-                    - One word:
-                        - "from"
-                        - "off"
-                    - One noun: "objects"
-                - Action: "retrieving"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "taking"
-  - # go (travel, enter)
-    Interpret:with:
-      - - "go"
-        - "run"
-        - "walk"
-      - - One of:
-            - Sequence:
-                - One word:
-                    - "in"
-                    - "into"
-                    - "inside"
-                    - "through"
-                - One noun: "objects"
-                - Action: "traveling through"
-            - Sequence:
-                - Focus:sequence:
-                    - "compass"
-                    - - One noun: "directions"
-                      - Action: "going"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "traveling through"
-  - Interpret name:with:
-      - "going a direction"
-      - - # even though the directions are in scope by default
-          # since we cant go directly to any other kind of object
-          # focusing on the compass speeds the parser.
-          Focus:sequence:
-            - "compass"
-            - - One noun: "directions"
-              - Action: "going"
-  - # 
-    Interpret:with:
-      - - "i"
-        - "inv"
-        - "inventorying"
-      - - Action: "inventorying"
-  - # 
-    Interpret:with:
-      - "insert"
-      - - One noun: "objects"
-        - One word:
-            - "in"
-            - "into"
-        - One noun: "objects"
-        - Action: "storing"
-  - # 
-    Interpret:with:
-      - - "look"
-        - "l"
-      - - One of:
-            - Sequence:
-                - One word: "at"
-                - One noun: "objects"
-                - Action: "examining"
-            - Sequence:
-                - One word:
-                    - "in"
-                    - "inside"
-                    - "into"
-                    - "through"
-                    - "on"
-                - One noun: "objects"
-                - Action: "searching"
-            - Sequence:
-                - One word: "under"
-                - One noun: "objects"
-                - Action: "peeking"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "examining"
-            - Action: "looking"
-  - # 
-    Interpret:with:
-      - - "open"
-        - "unwrap"
-        - "uncover"
-      - - One of:
-            - Sequence:
-                - One noun: "objects"
-                - Action: "opening"
-  - # 
-    Interpret:with:
-      - "pick"
-      - - One of:
-            - Sequence:
-                - One word: "up"
-                - One noun: "objects"
-                - Action: "taking"
-            - Sequence:
-                - One noun: "objects"
-                - One word: "up"
-                - Action: "taking"
-  - # 
-    Interpret:with:
-      - "put"
-      - - One of:
-            - Sequence:
-                - One word: "on"
-                - One noun: "objects"
-                - Action: "wearing"
-            - Sequence:
-                - One noun: "objects"
-                - One of:
-                    - Sequence:
-                        - One word:
-                            - "in"
-                            - "inside"
-                            - "into"
-                            - "onto"
-                        - One noun: "objects"
-                        - Action: "storing"
-                    - Sequence:
-                        - One word: "on"
-                        - One of:
-                            - Sequence:
-                                - One noun: "objects"
-                                - Action: "storing"
-                            - Action: "wearing"
-  - # 
-    Interpret:with:
-      - "read"
-      - - One noun: "objects"
-        - Action: "examining"
-  - # 
-    Interpret:with:
-      - "remove"
-      - - One of:
-            - Sequence:
-                - Refine sequence:
-                    - One noun: "objects"
-                    - One word: "from"
-                    - One noun: "objects"
-                - Action: "retrieving"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "removing"
-  - # 
-    Interpret:with:
-      - "search"
-      - - One noun: "objects"
-        - Action: "searching"
-  - # 
-    Interpret:with:
-      - - "switch"
-        - "rotate"
-        - "twist"
-        - "unscrew"
-        - "screw"
-      - - One of:
-            - Sequence:
-                - One word: "on"
-                - One noun: "objects"
-                - Action: "activating"
-            - Sequence:
-                - One word: "off"
-                - One noun: "objects"
-                - Action: "deactivating"
-            - Sequence:
-                - One noun: "objects"
-                - One of:
-                    - Sequence:
-                        - One word: "on"
-                        - Action: "activating"
-                    - Sequence:
-                        - One word: "off"
-                        - Action: "deactivating"
-  - # 
-    Interpret:with:
-      - "shut"
-      - - One of:
-            - Sequence:
-                - One word: "off"
-                - One noun: "objects"
-                - Action: "deactivating"
-            - Sequence:
-                - One word: "up"
-                - One noun: "objects"
-                - Action: "closing"
-            - Sequence:
-                - One noun: "objects"
-                - One of:
-                    - Sequence:
-                        - One word: "off"
-                        - Action: "deactivating"
-                    - Sequence:
-                        - One word: "up"
-                        - Action: "closing"
-                    - Action: "closing"
-  - # 
-    Interpret:with:
-      - "take"
-      - - One of:
-            - Sequence:
-                - One word: "inventory"
-                - Action: "inventorying"
-            - Sequence:
-                - One word: "off"
-                - One noun: "objects"
-                - Action: "removing"
-            - Sequence:
-                - Refine sequence:
-                    - One noun: "objects"
-                    - One word:
-                        - "off"
-                        - "from"
-                    - One noun: "objects"
-                - Action: "removing"
-            - Sequence:
-                - One noun: "objects"
-                - Action: "taking"
-  - # 
-    Interpret:with:
-      - - "wait"
-        - "z"
-      - - Action: "waiting"
-  - # 
-    Interpret:with:
-      - - "wear"
-        - "don"
-      - - One noun: "objects"
-        - Action: "wearing"
+- Interpret:with:
+  - - "q"
+    - "quit"
+  - Action: "request quit"
+- Interpret:with:
+  - "save"
+  - Action: "request save"
+- Interpret:with:
+  - - "load"
+    - "restore"
+  - Action: "request load"
+- Interpret:with:
+    - - "carry"
+      - "hold"
+    - - One of:
+          - Sequence:
+              - One word: "inventory"
+              - Action: "inventorying"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "taking"
+- #
+  Interpret:with:
+    - "close"
+    - - One of:
+          - Sequence:
+              - One word: "off"
+              - One noun: "objects"
+              - Action: "deactivating"
+          - Sequence:
+              - One word: "off"
+              - One noun: "objects"
+              - Action: "closing"
+          - Sequence:
+              - One noun: "objects"
+              - One of:
+                  - Sequence:
+                      - One word: "off"
+                      - Action: "deactivating"
+                  - Sequence:
+                      - One word: "up"
+                      - Action: "closing"
+                  - Action: "closing"
+- #
+  Interpret:with:
+    - "cover"
+    - - One of:
+          - Sequence:
+              - One word: "up"
+              - One noun: "objects"
+              - Action: "closing"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "closing"
+- #
+  Interpret:with:
+    - - "doff"
+      - "disrobe"
+      - "shed"
+    - - One of:
+          - Sequence:
+              - One noun: "objects"
+              - Action: "removing"
+- #
+  Interpret:with:
+    - "drop"
+    - - One noun: "objects"
+      - One of:
+          - Sequence:
+              - One word:
+                  - "in"
+                  - "into"
+                  - "down"
+                  - "on"
+                  - "onto"
+              - One noun: "objects"
+              - Action: "storing"
+          - Action: "dropping"
+- # traveling
+  Interpret:with:
+    - - "enter"
+      - "cross"
+      - "sit on"
+      - "sit on top of"
+      - "sit in"
+      - "sit inside"
+      - "stand on"
+    - - One of:
+          - Sequence:
+              - One noun: "objects"
+              - Action: "traveling through"
+- # examining
+  Interpret:with:
+    - - "examine"
+      - "x"
+      - "watch"
+      - "describe"
+      - "check"
+    - - One noun: "objects"
+      - Action: "examining"
+- # getting in/from; taking
+  Interpret:with:
+    - "get"
+    - - One of:
+          - Sequence:
+              - One word:
+                  - "in"
+                  - "on"
+              - Action: "traveling through"
+          - Sequence:
+              - One word:
+                  - "in"
+                  - "into"
+                  - "on"
+                  - "onto"
+              - One noun: "objects"
+              - Action: "traveling through"
+          - Sequence:
+              - Refine sequence:
+                  - One noun: "objects"
+                  - One word:
+                      - "from"
+                      - "off"
+                  - One noun: "objects"
+              - Action: "retrieving"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "taking"
+- # go (travel, enter)
+  Interpret:with:
+    - - "go"
+      - "run"
+      - "walk"
+    - - One of:
+          - Sequence:
+              - One word:
+                  - "in"
+                  - "into"
+                  - "inside"
+                  - "through"
+              - One noun: "objects"
+              - Action: "traveling through"
+          - Sequence:
+              - Focus:sequence:
+                  - "compass"
+                  - - One noun: "directions"
+                    - Action: "going"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "traveling through"
+- Interpret name:with:
+    - "going a direction"
+    - - # even though the directions are in scope by default
+        # since we cant go directly to any other kind of object
+        # focusing on the compass speeds the parser.
+        Focus:sequence:
+          - "compass"
+          - - One noun: "directions"
+            - Action: "going"
+- #
+  Interpret:with:
+    - - "i"
+      - "inv"
+      - "inventorying"
+    - - Action: "inventorying"
+- #
+  Interpret:with:
+    - "insert"
+    - - One noun: "objects"
+      - One word:
+          - "in"
+          - "into"
+      - One noun: "objects"
+      - Action: "storing"
+- #
+  Interpret:with:
+    - - "look"
+      - "l"
+    - - One of:
+          - Sequence:
+              - One word: "at"
+              - One noun: "objects"
+              - Action: "examining"
+          - Sequence:
+              - One word:
+                  - "in"
+                  - "inside"
+                  - "into"
+                  - "through"
+                  - "on"
+              - One noun: "objects"
+              - Action: "searching"
+          - Sequence:
+              - One word: "under"
+              - One noun: "objects"
+              - Action: "peeking"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "examining"
+          - Action: "looking"
+- #
+  Interpret:with:
+    - - "open"
+      - "unwrap"
+      - "uncover"
+    - - One of:
+          - Sequence:
+              - One noun: "objects"
+              - Action: "opening"
+- #
+  Interpret:with:
+    - "pick"
+    - - One of:
+          - Sequence:
+              - One word: "up"
+              - One noun: "objects"
+              - Action: "taking"
+          - Sequence:
+              - One noun: "objects"
+              - One word: "up"
+              - Action: "taking"
+- #
+  Interpret:with:
+    - "put"
+    - - One of:
+          - Sequence:
+              - One word: "on"
+              - One noun: "objects"
+              - Action: "wearing"
+          - Sequence:
+              - One noun: "objects"
+              - One of:
+                  - Sequence:
+                      - One word:
+                          - "in"
+                          - "inside"
+                          - "into"
+                          - "onto"
+                      - One noun: "objects"
+                      - Action: "storing"
+                  - Sequence:
+                      - One word: "on"
+                      - One of:
+                          - Sequence:
+                              - One noun: "objects"
+                              - Action: "storing"
+                          - Action: "wearing"
+- #
+  Interpret:with:
+    - "read"
+    - - One noun: "objects"
+      - Action: "examining"
+- #
+  Interpret:with:
+    - "remove"
+    - - One of:
+          - Sequence:
+              - Refine sequence:
+                  - One noun: "objects"
+                  - One word: "from"
+                  - One noun: "objects"
+              - Action: "retrieving"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "removing"
+- #
+  Interpret:with:
+    - "search"
+    - - One noun: "objects"
+      - Action: "searching"
+- #
+  Interpret:with:
+    - - "switch"
+      - "rotate"
+      - "twist"
+      - "unscrew"
+      - "screw"
+    - - One of:
+          - Sequence:
+              - One word: "on"
+              - One noun: "objects"
+              - Action: "activating"
+          - Sequence:
+              - One word: "off"
+              - One noun: "objects"
+              - Action: "deactivating"
+          - Sequence:
+              - One noun: "objects"
+              - One of:
+                  - Sequence:
+                      - One word: "on"
+                      - Action: "activating"
+                  - Sequence:
+                      - One word: "off"
+                      - Action: "deactivating"
+- #
+  Interpret:with:
+    - "shut"
+    - - One of:
+          - Sequence:
+              - One word: "off"
+              - One noun: "objects"
+              - Action: "deactivating"
+          - Sequence:
+              - One word: "up"
+              - One noun: "objects"
+              - Action: "closing"
+          - Sequence:
+              - One noun: "objects"
+              - One of:
+                  - Sequence:
+                      - One word: "off"
+                      - Action: "deactivating"
+                  - Sequence:
+                      - One word: "up"
+                      - Action: "closing"
+                  - Action: "closing"
+- #
+  Interpret:with:
+    - "take"
+    - - One of:
+          - Sequence:
+              - One word: "inventory"
+              - Action: "inventorying"
+          - Sequence:
+              - One word: "off"
+              - One noun: "objects"
+              - Action: "removing"
+          - Sequence:
+              - Refine sequence:
+                  - One noun: "objects"
+                  - One word:
+                      - "off"
+                      - "from"
+                  - One noun: "objects"
+              - Action: "removing"
+          - Sequence:
+              - One noun: "objects"
+              - Action: "taking"
+- #
+  Interpret:with:
+    - - "wait"
+      - "z"
+    - - Action: "waiting"
+- #
+  Interpret:with:
+    - - "wear"
+      - "don"
+    - - One noun: "objects"
+      - Action: "wearing"

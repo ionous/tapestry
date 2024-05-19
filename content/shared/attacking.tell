@@ -1,60 +1,59 @@
 ---
-Tapestry:
-  - Interpret:with:
-      - - "attack"
-        - "break"
-        - "crack"
-        - "destroy"
-        - "fight"
-        - "hit"
-        - "kill"
-        - "murder"
-        - "punch"
-        - "smash"
-        - "thump"
-        - "torture"
-        - "wreck"
-      - - One of:
-            - Sequence:
-                - One noun: "things"
-                - Action: "attacking"
-  - # 
-    Define action:requires:
-      - "attacking"
-      - - # the actor attacking something ( ex. the player. )
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the thing being attacked
-          Text:kind:
-            - "noun"
-            - "thing"
-  - Define rule:named:do:
-      - "instead of attacking"
-      - "standard attacking checks"
-      - - If:assuming:do:
-            - Not:
-                Is empty: "@response"
-            - - Arg:from:
-                  - "response"
-                  - FromText:
-                      CanReach actor:action:noun:
-                        - FromText: "@actor"
-                        - FromText: "attacking"
-                        - FromText: "@noun"
-            - - Print: "@response"
-  - Define rule:named:do:
-      - "attacking"
-      - "standard attacking rule"
-      - - # Continue on to the next event phase
-          Continue:
-  - Define rule:do:
-      - "report someone attacking"
-      - - Say response:with:
-            - "someone attacks"
-            - "{the:.actor|capitalize!} attacks {the: .noun}."
-  - Define rule:do:
-      - "report attacking"
-      - - Say response:with:
-            - "player attacks"
-            - "Violence isn't the answer."
+- Interpret:with:
+    - - "attack"
+      - "break"
+      - "crack"
+      - "destroy"
+      - "fight"
+      - "hit"
+      - "kill"
+      - "murder"
+      - "punch"
+      - "smash"
+      - "thump"
+      - "torture"
+      - "wreck"
+    - - One of:
+          - Sequence:
+              - One noun: "things"
+              - Action: "attacking"
+- #
+  Define action:requires:
+    - "attacking"
+    - - # the actor attacking something ( ex. the player. )
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the thing being attacked
+        Text:kind:
+          - "noun"
+          - "thing"
+- Define rule:named:do:
+    - "instead of attacking"
+    - "standard attacking checks"
+    - - If:assuming:do:
+          - Not:
+              Is empty: "@response"
+          - - Arg:from:
+                - "response"
+                - FromText:
+                    CanReach actor:action:noun:
+                      - FromText: "@actor"
+                      - FromText: "attacking"
+                      - FromText: "@noun"
+          - - Print: "@response"
+- Define rule:named:do:
+    - "attacking"
+    - "standard attacking rule"
+    - - # Continue on to the next event phase
+        Continue:
+- Define rule:do:
+    - "report someone attacking"
+    - - Say response:with:
+          - "someone attacks"
+          - "{the:.actor|capitalize!} attacks {the: .noun}."
+- Define rule:do:
+    - "report attacking"
+    - - Say response:with:
+          - "player attacks"
+          - "Violence isn't the answer."

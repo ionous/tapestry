@@ -1,39 +1,38 @@
 ---
-Tapestry:
-  - # Going takes the actor who is moving, and a direction for them to move.
-    # The standard behavior finds a door in the specified direction and uses 'traveling' to move through it.
-    Define action:requires:
-      - "going"
-      - - # the actor moving somewhere ( ex. the player. )
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the direction being moved ( ex. north. )
-          Text:kind:
-            - "direction"
-            - "direction"
-  - # movement from room to room is always via a connecting door
-    Define pattern:provides:
-      - "going"
-      - - Text:kind:initially:
-            - "door"
-            - "doors"
-            - DoorVia room:direction:
-                - FromText:
-                    ParentOf:
-                      FromText: "@actor"
-                - FromText: "@direction"
-  - Define rule:named:do:
-      - "going"
-      - "going becomes traveling"
-      - - TravelingThrough actor:noun:
-            - FromText: "@actor"
-            - FromText: "@door"
-  - # a special rule for going so it can have a custom response.
-    Define rule:do:
-      - "instead of going"
-      - - If:do:
-            - Is empty: "@door"
-            - - Say response:with:
-                  - "going nowhere"
-                  - "{We:|capitalize!} can't go that way."
+- # Going takes the actor who is moving, and a direction for them to move.
+  # The standard behavior finds a door in the specified direction and uses 'traveling' to move through it.
+  Define action:requires:
+    - "going"
+    - - # the actor moving somewhere ( ex. the player. )
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the direction being moved ( ex. north. )
+        Text:kind:
+          - "direction"
+          - "direction"
+- # movement from room to room is always via a connecting door
+  Define pattern:provides:
+    - "going"
+    - - Text:kind:initially:
+          - "door"
+          - "doors"
+          - DoorVia room:direction:
+              - FromText:
+                  ParentOf:
+                    FromText: "@actor"
+              - FromText: "@direction"
+- Define rule:named:do:
+    - "going"
+    - "going becomes traveling"
+    - - TravelingThrough actor:noun:
+          - FromText: "@actor"
+          - FromText: "@door"
+- # a special rule for going so it can have a custom response.
+  Define rule:do:
+    - "instead of going"
+    - - If:do:
+          - Is empty: "@door"
+          - - Say response:with:
+                - "going nowhere"
+                - "{We:|capitalize!} can't go that way."

@@ -1,21 +1,20 @@
 ---
-Tapestry:
-  - # By default, can use allows most actions.
-    # It exists as a hook for author customization.
-    # Authors should return some 'response' text if they want to block the action.
-    Define pattern:requires:provides:do:
-      - "can use"
-      - - Text:kind:
-            - "actor"
-            - "actor"
-        - Text: "action"
-        - Text:kind:
-            - "noun"
-            - "thing"
-        - # note: not all actions have a second noun and that's okay
-          Text:kind:
-            - "other noun"
-            - "thing"
-      - - Text: "response"
-      - - # no default rules
-          Continue:
+- # By default, can use allows most actions.
+  # It exists as a hook for author customization.
+  # Authors should return some 'response' text if they want to block the action.
+  Define pattern:requires:provides:do:
+    - "can use"
+    - - Text:kind:
+          - "actor"
+          - "actor"
+      - Text: "action"
+      - Text:kind:
+          - "noun"
+          - "thing"
+      - # note: not all actions have a second noun and that's okay
+        Text:kind:
+          - "other noun"
+          - "thing"
+    - - Text: "response"
+    - - # no default rules
+        Continue:

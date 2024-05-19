@@ -1,80 +1,79 @@
 ---
-Tapestry:
-  - # Generic action run by the parser before the specific one selected by the player.
-    # Exists to support filtering for multiple actions simultaneously.
-    Define action:requires:
-      - "running an action"
-      - - Text:kind:
-            - "actor"
-            - "actor"
-        - Text: "action"
-        - Text:kind:
-            - "first noun"
-            - "thing"
-        - Text:kind:
-            - "second noun"
-            - "thing"
-  - # State changing alters the state of a noun by changing a trait.
-    Define action:requires:
-      - "state changing"
-      - - # the noun that wants to change state.
-          Text:kind:
-            - "noun"
-            - "thing"
-        - # the actor who is causing the state to change.
-          Text:kind:
-            - "actor"
-            - "actor"
-        - # the state the noun wants to change to.
-          Text: "trait"
-        - # a trait which, if true, can block the noun from changing.
-          Text: "guard"
-        - # some text which describes what's changing.
-          Text: "change"
-  - # Assuming all the rules before now passed, give the noun the desired trait.
-    Define rule:do:
-      - "state changing"
-      - - Set:value:
-            - Object:dot:
-                - "@noun"
-                - AtField: "@trait"
-            - FromBool: true
-  - # Print the results of the change.
-    Define rule:do:
-      - "report state changing"
-      - - Say response:with:
-            - "something changed itself"
-            - "{The: .noun|capitalize!} {are:.noun} {.trait}."
-  - # Print the results of the change.
-    Define rule:do:
-      - "report state changing"
-      - - If:do:
-            - IsPlayer obj:
-                FromText: "@actor"
-            - - Say response:with:
-                  - "the player changed something"
-                  - "{We!|capitalize!} {.change} {the: .noun}."
-  - # The noun won't change if the 'guard' value is set and the noun has that trait.
-    Define rule:do:
-      - "instead of state changing"
-      - - If:do:
-            - AllTrue:
-                - Not:
-                    Is empty: "@guard"
-                - Not:
-                    Object:dot:
-                      - "@noun"
-                      - AtField: "@guard"
-            - - Say response:with:
-                  - "can't change the unchangeable"
-                  - "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
-  - # The noun won't change if it already has the desired trait.
-    Define rule:do:
-      - "instead of state changing"
-      - - If:do:
-            - Object:dot:
-                - "@noun"
-                - AtField: "@trait"
-            - - Say response:with:
-                  - "can't change what is"
-                  - "{They: .noun|capitalize!} {are:.noun} already {.trait}."
+- # Generic action run by the parser before the specific one selected by the player.
+  # Exists to support filtering for multiple actions simultaneously.
+  Define action:requires:
+    - "running an action"
+    - - Text:kind:
+          - "actor"
+          - "actor"
+      - Text: "action"
+      - Text:kind:
+          - "first noun"
+          - "thing"
+      - Text:kind:
+          - "second noun"
+          - "thing"
+- # State changing alters the state of a noun by changing a trait.
+  Define action:requires:
+    - "state changing"
+    - - # the noun that wants to change state.
+        Text:kind:
+          - "noun"
+          - "thing"
+      - # the actor who is causing the state to change.
+        Text:kind:
+          - "actor"
+          - "actor"
+      - # the state the noun wants to change to.
+        Text: "trait"
+      - # a trait which, if true, can block the noun from changing.
+        Text: "guard"
+      - # some text which describes what's changing.
+        Text: "change"
+- # Assuming all the rules before now passed, give the noun the desired trait.
+  Define rule:do:
+    - "state changing"
+    - - Set:value:
+          - Object:dot:
+              - "@noun"
+              - AtField: "@trait"
+          - FromBool: true
+- # Print the results of the change.
+  Define rule:do:
+    - "report state changing"
+    - - Say response:with:
+          - "something changed itself"
+          - "{The: .noun|capitalize!} {are:.noun} {.trait}."
+- # Print the results of the change.
+  Define rule:do:
+    - "report state changing"
+    - - If:do:
+          - IsPlayer obj:
+              FromText: "@actor"
+          - - Say response:with:
+                - "the player changed something"
+                - "{We!|capitalize!} {.change} {the: .noun}."
+- # The noun won't change if the 'guard' value is set and the noun has that trait.
+  Define rule:do:
+    - "instead of state changing"
+    - - If:do:
+          - AllTrue:
+              - Not:
+                  Is empty: "@guard"
+              - Not:
+                  Object:dot:
+                    - "@noun"
+                    - AtField: "@guard"
+          - - Say response:with:
+                - "can't change the unchangeable"
+                - "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
+- # The noun won't change if it already has the desired trait.
+  Define rule:do:
+    - "instead of state changing"
+    - - If:do:
+          - Object:dot:
+              - "@noun"
+              - AtField: "@trait"
+          - - Say response:with:
+                - "can't change what is"
+                - "{They: .noun|capitalize!} {are:.noun} already {.trait}."

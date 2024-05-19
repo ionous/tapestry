@@ -1,103 +1,102 @@
 ---
-Tapestry:
-  - Declare: "Objects are kinds of kinds."
-  - Define kind:fields:
-      - "Objects"
-      - - Text: "description"
-        - Text: "indefinite article"
-        - Aspect: "noun type"
-        - Aspect: "name status"
-        - Aspect: "tangibility"
-        - Text: "printed name"
-  - Define state:names:
-      - "noun type"
-      - - "common named"
-        - "proper named"
-        - "counted"
-  - # when objects are publicly named, their name can appear in the output text.
-    # by default, the names of privately named objects will never be displayed to the player.
-    Define state:names:
-      - "name status"
-      - - "publicly named"
-        - "privately named"
-  - # An object must be tangible in order to touch or interact with it.
-    # A 'thing' is, by definition, a tangible object.
-    Define state:names:
-      - "tangibility"
-      - - "intangible"
-        - "tangible"
-  - Declare: "Things are kinds of object. Things are usually tangible."
-  - Declare: "Possessiveness is a kind of aspect. The possessivenesses are not worn and worn."
-  - Declare: "Portability is a kind of aspect. The portabilities are portable and fixed in place."
-  - Define kind:fields:
-      - "Things"
-      - - Aspect: "portability"
-        - Aspect: "possessiveness"
-        - Aspect: "wearability"
-        - # for printing locale description.
-          Text: "grouping label"
-        - Text: "initial appearance"
-        - Bool: "scenery"
-        - Bool: "mentioned"
-        - Bool: "handled"
-  - Declare: "Wearability is a kind of aspect."
-  - Define state:names:
-      - "wearability"
-      - - "not wearable"
-        - "wearable"
-  - # 
-    Declare: """
-      Actors and props are a kind of thing.
-      Animals are a kind of actor.
-      Openers are a kind of prop.
-      """
-  - Declare: "Open status is a kind of aspect."
-  - Define state:names:
-      - "open status"
-      - - "open"
-        - "closed"
-  - Declare: "Openability is a kind of aspect."
-  - Define state:names:
-      - "openability"
-      - - "unopenable"
-        - "openable"
-  - Declare: "Locked status are kinds of aspect."
-  - Define state:names:
-      - "locked status"
-      - - "unlocked"
-        - "locked"
-  - Declare: "Lockable status are kinds of aspect."
-  - Define state:names:
-      - "lockable status"
-      - - "lockable"
-        - "unlockable"
-  - Define kind:fields:
-      - "Openers"
-      - - Aspect: "open status"
-        - Aspect: "openability"
-        - Aspect: "locked status"
-        - Aspect: "lockable status"
-  - # 
-    Declare: "Containers are kinds of opener."
-  - Declare: "Opacity is a kind of aspect."
-  - Define state:names:
-      - "opacity"
-      - - "opaque"
-        - "transparent"
-  - Define kind:fields:
-      - "Containers"
-      - - Aspect: "opacity"
-        - Bool: "enterable"
-  - # 
-    Define kind:fields:
-      - "Rooms"
-      - - Aspect: "radiance"
-  - # 
-    Declare: "Supporters are kinds of prop."
-  - Declare: "Rooms are kinds of object. Rooms are usually lit."
-  - # generates 'is visited' and 'not visited'
-    Define kind:fields:
-      - "Rooms"
-      - - Bool: "visited"
-  - # 
-    Declare: "Regions are a kind of object."
+- Declare: "Objects are kinds of kinds."
+- Define kind:fields:
+    - "Objects"
+    - - Text: "description"
+      - Text: "indefinite article"
+      - Aspect: "noun type"
+      - Aspect: "name status"
+      - Aspect: "tangibility"
+      - Text: "printed name"
+- Define state:names:
+    - "noun type"
+    - - "common named"
+      - "proper named"
+      - "counted"
+- # when objects are publicly named, their name can appear in the output text.
+  # by default, the names of privately named objects will never be displayed to the player.
+  Define state:names:
+    - "name status"
+    - - "publicly named"
+      - "privately named"
+- # An object must be tangible in order to touch or interact with it.
+  # A 'thing' is, by definition, a tangible object.
+  Define state:names:
+    - "tangibility"
+    - - "intangible"
+      - "tangible"
+- Declare: "Things are kinds of object. Things are usually tangible."
+- Declare: "Possessiveness is a kind of aspect. The possessivenesses are not worn and worn."
+- Declare: "Portability is a kind of aspect. The portabilities are portable and fixed in place."
+- Define kind:fields:
+    - "Things"
+    - - Aspect: "portability"
+      - Aspect: "possessiveness"
+      - Aspect: "wearability"
+      - # for printing locale description.
+        Text: "grouping label"
+      - Text: "initial appearance"
+      - Bool: "scenery"
+      - Bool: "mentioned"
+      - Bool: "handled"
+- Declare: "Wearability is a kind of aspect."
+- Define state:names:
+    - "wearability"
+    - - "not wearable"
+      - "wearable"
+- #
+  Declare: """
+    Actors and props are a kind of thing.
+    Animals are a kind of actor.
+    Openers are a kind of prop.
+    """
+- Declare: "Open status is a kind of aspect."
+- Define state:names:
+    - "open status"
+    - - "open"
+      - "closed"
+- Declare: "Openability is a kind of aspect."
+- Define state:names:
+    - "openability"
+    - - "unopenable"
+      - "openable"
+- Declare: "Locked status are kinds of aspect."
+- Define state:names:
+    - "locked status"
+    - - "unlocked"
+      - "locked"
+- Declare: "Lockable status are kinds of aspect."
+- Define state:names:
+    - "lockable status"
+    - - "lockable"
+      - "unlockable"
+- Define kind:fields:
+    - "Openers"
+    - - Aspect: "open status"
+      - Aspect: "openability"
+      - Aspect: "locked status"
+      - Aspect: "lockable status"
+- #
+  Declare: "Containers are kinds of opener."
+- Declare: "Opacity is a kind of aspect."
+- Define state:names:
+    - "opacity"
+    - - "opaque"
+      - "transparent"
+- Define kind:fields:
+    - "Containers"
+    - - Aspect: "opacity"
+      - Bool: "enterable"
+- #
+  Define kind:fields:
+    - "Rooms"
+    - - Aspect: "radiance"
+- #
+  Declare: "Supporters are kinds of prop."
+- Declare: "Rooms are kinds of object. Rooms are usually lit."
+- # generates 'is visited' and 'not visited'
+  Define kind:fields:
+    - "Rooms"
+    - - Bool: "visited"
+- #
+  Declare: "Regions are a kind of object."

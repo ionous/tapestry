@@ -1,83 +1,82 @@
 ---
-Tapestry:
-  - Define test:scene:do:
-      - "traversal"
-      - - Declare: """
-            The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.
-            You are in the Lobby.
-            The faux door is a door in the Lobby.
-            """ # "
-        - # fix: this should have made the doors 'plural named' automatically.
-          Declare: """
-            North of the lobby are the double doors. The double doors are plural named, closed, and openable doors. Through the double doors is the foyer.
-            Down from the lobby is the basement.
-            North from the foyer is the street.
-            West from the foyer is the lobby.
-            South from the foyer is the curtain. Through the curtain is the cloak room. North from the cloak room is the foyer. South from the basement is the street.
-            """ # "
-      - - StartGame actor:quietly:
-            - FromText:
-                Object:dot:
-                  - "player"
-                  - AtField: "pawn"
-            - FromBool: true
-        - Print:
-            DoorVia room:direction:
-              - FromText: "foyer"
-              - FromText: "south"
-        - Expect output: "curtain"
-        - Print:
-            DirectionThrough room:door:
-              - FromText: "foyer"
-              - FromText: "curtain"
-        - Expect output: "south"
-        - Looking actor:
-            FromText:
+- Define test:scene:do:
+    - "traversal"
+    - - Declare: """
+          The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.
+          You are in the Lobby.
+          The faux door is a door in the Lobby.
+          """ # "
+      - # fix: this should have made the doors 'plural named' automatically.
+        Declare: """
+          North of the lobby are the double doors. The double doors are plural named, closed, and openable doors. Through the double doors is the foyer.
+          Down from the lobby is the basement.
+          North from the foyer is the street.
+          West from the foyer is the lobby.
+          South from the foyer is the curtain. Through the curtain is the cloak room. North from the cloak room is the foyer. South from the basement is the street.
+          """ # "
+    - - StartGame actor:quietly:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField: "pawn"
+          - FromBool: true
+      - Print:
+          DoorVia room:direction:
+            - FromText: "foyer"
+            - FromText: "south"
+      - Expect output: "curtain"
+      - Print:
+          DirectionThrough room:door:
+            - FromText: "foyer"
+            - FromText: "curtain"
+      - Expect output: "south"
+      - Looking actor:
+          FromText:
+            Object:dot:
+              - "story"
+              - AtField: "actor"
+      - Expect output:
+          - "**Lobby**"
+          - "You can see some double doors and a faux door."
+      - TravelingThrough actor:noun:
+          - FromText:
               Object:dot:
                 - "story"
                 - AtField: "actor"
-        - Expect output:
-            - "**Lobby**"
-            - "You can see some double doors and a faux door."
-        - TravelingThrough actor:noun:
-            - FromText:
-                Object:dot:
-                  - "story"
-                  - AtField: "actor"
-            - FromText: "faux door"
-        - Expect output: "It doesn't lead anywhere."
-        - TravelingThrough actor:noun:
-            - FromText:
-                Object:dot:
-                  - "story"
-                  - AtField: "actor"
-            - FromText: "double doors"
-        - Expect output: "They seem to be closed."
-        - Opening actor:noun:
-            - FromText:
-                Object:dot:
-                  - "player"
-                  - AtField: "pawn"
-            - FromText: "double doors"
-        - Expect output: "You open the double doors."
-        - TravelingThrough actor:noun:
-            - FromText:
-                Object:dot:
-                  - "player"
-                  - AtField: "pawn"
-            - FromText: "double doors"
-        - Expect output:
-            - "**Foyer**"
-            - "You can see a curtain."
-        - # test moving south as if the player typed the input
-          Fabricate input: "take curtain"
-        - Expect output: "It is fixed in place."
-        - # test moving south as if the player typed the input
-          Fabricate input: "south"
-        - Expect output: "**Cloak Room**"
-        - # test taking a direction
-          Fabricate input: "take north"
-        - Expect output: "You should name something more substantial."
-        - # test looking north
-          Fabricate input: "x n"
-        - Expect output: "You see nothing unexpected in that direction."
+          - FromText: "faux door"
+      - Expect output: "It doesn't lead anywhere."
+      - TravelingThrough actor:noun:
+          - FromText:
+              Object:dot:
+                - "story"
+                - AtField: "actor"
+          - FromText: "double doors"
+      - Expect output: "They seem to be closed."
+      - Opening actor:noun:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField: "pawn"
+          - FromText: "double doors"
+      - Expect output: "You open the double doors."
+      - TravelingThrough actor:noun:
+          - FromText:
+              Object:dot:
+                - "player"
+                - AtField: "pawn"
+          - FromText: "double doors"
+      - Expect output:
+          - "**Foyer**"
+          - "You can see a curtain."
+      - # test moving south as if the player typed the input
+        Fabricate input: "take curtain"
+      - Expect output: "It is fixed in place."
+      - # test moving south as if the player typed the input
+        Fabricate input: "south"
+      - Expect output: "**Cloak Room**"
+      - # test taking a direction
+        Fabricate input: "take north"
+      - Expect output: "You should name something more substantial."
+      - # test looking north
+        Fabricate input: "x n"
+      - Expect output: "You see nothing unexpected in that direction."

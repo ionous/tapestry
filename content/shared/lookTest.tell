@@ -1,135 +1,134 @@
 ---
-Tapestry:
-  - Define test:requires:do:
-      - "base vis"
-      - "Kitchenette"
-      - - Note: "Say the list of visible objects from one of several vantage points."
-        - Repeating across:as:do:
-            - FromTextList:
-                - "cabinet"
-                - "kitchen"
-                - "shelf"
-            - "src"
-            - - Print:
-                  Commas do:
-                    - Repeating across:as:do:
-                        - FromTextList:
-                            TransparentList obj:
-                              FromText: "@src"
-                        - "it"
-                        - - Say: "{print_name: .it}"
-              - Print: "."
-        - Expect output:
-            - "cabinet and Kitchen."
-            - "Kitchen."
-            - "shelf and Kitchen."
-        - Note: "Close the cabinet door, and its list of visible objects should change."
-        - Set:value:
-            - Object:dot:
-                - "cabinet"
-                - AtField: "closed"
-            - FromBool: true
-        - Repeating across:as:do:
-            - FromTextList:
-                TransparentList obj:
-                  FromText: "cabinet"
-            - "it"
-            - - Say: "{.it}."
-        - Expect output: "cabinet."
-        - Note: "( Validate the number of items in the list directly. )"
-        - Expect:
-            Is:matching:num:
-              - Len:
-                  FromTextList:
-                    TransparentList obj:
-                      FromText: "cabinet"
-              - "equal_to"
-              - 1
-        - Note: "Open the cabinet again, and validate the number of visible objects again."
-        - Set:value:
-            - Object:dot:
-                - "cabinet"
-                - AtField: "open"
-            - FromBool: true
-        - Expect:
-            Is:matching:num:
-              - Len:
-                  FromTextList:
-                    TransparentList obj:
-                      FromText: "cabinet"
-              - "greater_than"
-              - 1
-  - # 
-    Define test:requires:do:
-      - "look object description"
-      - "kitchenette"
-      - - PrintObjectDescription obj:locale:
-            - FromText: "shelf"
-            - FromText: "kitchen"
-        - Expect output: "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
-        - PrintObjectDescription obj:locale:
-            - FromText: "hat"
-            - FromText: "kitchen"
-        - Expect output: "A pointed black hat lies discarded on the floor under a dusty shelf."
-        - PrintObjectDescription obj:locale:
-            - FromText: "machine"
-            - FromText: "kitchen"
-        - Expect output: "Steam leaks from the top of a recently used espresso machine."
-  - # 
-    Define test:requires:do:
-      - "printing vantages"
-      - "Kitchenette"
-      - - PrintVantage location:illuminated:verbosity:
-            - FromText: "cabinet"
-            - FromBool: false
-            - FromText: "verbose"
-        - Expect output:
-            - "**Darkness**"
-            - "It is pitch dark, and you can't see a thing."
-        - PrintVantage location:illuminated:verbosity:
-            - FromText: "cabinet"
-            - FromBool: true
-            - FromText: "verbose"
-        - Expect output:
-            - "**Kitchen** (in the cabinet)"
-            - "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
-            - "A pointed black hat lies discarded on the floor under a dusty shelf."
-            - "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
-            - "You can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))."
-            - "Beneath your feet is a bright and shiny hook."
-            - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
-        - Set:value:
-            - Object:dot:
-                - "cabinet"
-                - AtField: "closed"
-            - FromBool: true
-        - PrintVantage location:illuminated:verbosity:
-            - FromText: "cabinet"
-            - FromBool: true
-            - FromText: "verbose"
-        - Expect output:
-            - "**The cabinet**"
-            - "Beneath your feet is a bright and shiny hook."
-            - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
-        - Note: "remove the hook from the cabinet"
-        - Relate:to:via:
-            - "kitchen"
-            - "hook"
-            - "whereabouts"
-        - PrintVantage location:illuminated:verbosity:
-            - FromText: "cabinet"
-            - FromBool: true
-            - FromText: "verbose"
-        - Expect output:
-            - "**The cabinet**"
-            - "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
-  - # 
-    Define test:requires:do:
-      - "printing inline objects"
-      - "Kitchenette"
-      - - PrintInlineObjects objs:
-            FromTextList:
-              - "mortar"
-              - "blender"
-              - "counter"
-        - Expect output: "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
+- Define test:requires:do:
+    - "base vis"
+    - "Kitchenette"
+    - - Note: "Say the list of visible objects from one of several vantage points."
+      - Repeating across:as:do:
+          - FromTextList:
+              - "cabinet"
+              - "kitchen"
+              - "shelf"
+          - "src"
+          - - Print:
+                Commas do:
+                  - Repeating across:as:do:
+                      - FromTextList:
+                          TransparentList obj:
+                            FromText: "@src"
+                      - "it"
+                      - - Say: "{print_name: .it}"
+            - Print: "."
+      - Expect output:
+          - "cabinet and Kitchen."
+          - "Kitchen."
+          - "shelf and Kitchen."
+      - Note: "Close the cabinet door, and its list of visible objects should change."
+      - Set:value:
+          - Object:dot:
+              - "cabinet"
+              - AtField: "closed"
+          - FromBool: true
+      - Repeating across:as:do:
+          - FromTextList:
+              TransparentList obj:
+                FromText: "cabinet"
+          - "it"
+          - - Say: "{.it}."
+      - Expect output: "cabinet."
+      - Note: "( Validate the number of items in the list directly. )"
+      - Expect:
+          Is:matching:num:
+            - Len:
+                FromTextList:
+                  TransparentList obj:
+                    FromText: "cabinet"
+            - "equal_to"
+            - 1
+      - Note: "Open the cabinet again, and validate the number of visible objects again."
+      - Set:value:
+          - Object:dot:
+              - "cabinet"
+              - AtField: "open"
+          - FromBool: true
+      - Expect:
+          Is:matching:num:
+            - Len:
+                FromTextList:
+                  TransparentList obj:
+                    FromText: "cabinet"
+            - "greater_than"
+            - 1
+- #
+  Define test:requires:do:
+    - "look object description"
+    - "kitchenette"
+    - - PrintObjectDescription obj:locale:
+          - FromText: "shelf"
+          - FromText: "kitchen"
+      - Expect output: "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+      - PrintObjectDescription obj:locale:
+          - FromText: "hat"
+          - FromText: "kitchen"
+      - Expect output: "A pointed black hat lies discarded on the floor under a dusty shelf."
+      - PrintObjectDescription obj:locale:
+          - FromText: "machine"
+          - FromText: "kitchen"
+      - Expect output: "Steam leaks from the top of a recently used espresso machine."
+- #
+  Define test:requires:do:
+    - "printing vantages"
+    - "Kitchenette"
+    - - PrintVantage location:illuminated:verbosity:
+          - FromText: "cabinet"
+          - FromBool: false
+          - FromText: "verbose"
+      - Expect output:
+          - "**Darkness**"
+          - "It is pitch dark, and you can't see a thing."
+      - PrintVantage location:illuminated:verbosity:
+          - FromText: "cabinet"
+          - FromBool: true
+          - FromText: "verbose"
+      - Expect output:
+          - "**Kitchen** (in the cabinet)"
+          - "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
+          - "A pointed black hat lies discarded on the floor under a dusty shelf."
+          - "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+          - "You can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))."
+          - "Beneath your feet is a bright and shiny hook."
+          - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
+      - Set:value:
+          - Object:dot:
+              - "cabinet"
+              - AtField: "closed"
+          - FromBool: true
+      - PrintVantage location:illuminated:verbosity:
+          - FromText: "cabinet"
+          - FromBool: true
+          - FromText: "verbose"
+      - Expect output:
+          - "**The cabinet**"
+          - "Beneath your feet is a bright and shiny hook."
+          - "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
+      - Note: "remove the hook from the cabinet"
+      - Relate:to:via:
+          - "kitchen"
+          - "hook"
+          - "whereabouts"
+      - PrintVantage location:illuminated:verbosity:
+          - FromText: "cabinet"
+          - FromBool: true
+          - FromText: "verbose"
+      - Expect output:
+          - "**The cabinet**"
+          - "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
+- #
+  Define test:requires:do:
+    - "printing inline objects"
+    - "Kitchenette"
+    - - PrintInlineObjects objs:
+          FromTextList:
+            - "mortar"
+            - "blender"
+            - "counter"
+      - Expect output: "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"

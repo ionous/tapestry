@@ -1,24 +1,23 @@
 ---
-Tapestry:
-  - Interpret:with:
-      - - "jump"
-        - "skip"
-        - "hop"
-      - - Action: "jumping"
-  - # 
-    Define action:requires:
-      - "jumping"
-      - - # the actor jumping up and down ( ex. the player. )
-          Text:kind:
-            - "actor"
-            - "actor"
-  - Define rule:do:
-      - "report someone jumping"
-      - - Say response:with:
-            - "actor jumping"
-            - "{the:.actor|capitalize!} jumps on the spot."
-  - Define rule:do:
-      - "report jumping"
-      - - Say response:with:
-            - "player jumping"
-            - "{we:|capitalize!} jump on the spot."
+- Interpret:with:
+    - - "jump"
+      - "skip"
+      - "hop"
+    - - Action: "jumping"
+- #
+  Define action:requires:
+    - "jumping"
+    - - # the actor jumping up and down ( ex. the player. )
+        Text:kind:
+          - "actor"
+          - "actor"
+- Define rule:do:
+    - "report someone jumping"
+    - - Say response:with:
+          - "actor jumping"
+          - "{the:.actor|capitalize!} jumps on the spot."
+- Define rule:do:
+    - "report jumping"
+    - - Say response:with:
+          - "player jumping"
+          - "{we:|capitalize!} jump on the spot."
