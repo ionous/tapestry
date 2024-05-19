@@ -92,6 +92,7 @@ func (t TypeLink) Link() (ret string, err error) {
 
 // a signature and the the terms it uses
 type sigTerm struct {
+	Flow  flowData // ugh. but useful for templates
 	parts []string // to be separated by colons
 	terms []termData
 }
@@ -159,6 +160,7 @@ func sigTerms(flow flowData) []sigTerm {
 			newParts := append([]string{}, append(a.parts, sel)...)
 			newTerms := append([]termData{}, append(a.terms, term)...)
 			rest = append(rest, sigTerm{
+				Flow:  flow,
 				parts: newParts,
 				terms: newTerms,
 			})

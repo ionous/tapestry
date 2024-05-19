@@ -1,52 +1,95 @@
-{{/* ------------------------------------------ 
-  expects text.
-  names are prefixed with tilde so that they don't match in autocomplete.
-   ------------------------------------------ */}}
-{{- define "ref" }}
-"$ref": "#/$defs/~{{ . }}"
-{{- end }}
+{{/* ------------------------------------------ */}}
+{{/* helper templates                           */}}
+{{/* ------------------------------------------ */}}
 
 {{/* ------------------------------------------ 
-  expects sigTerm,
+  ref: expects text.
+  names are prefixed with tilde so that they don't match in autocomplete.
+   ------------------------------------------ */}}
+{{ define "ref" }}
+	"$ref": "#/$defs/~{{ . }}"
+{{ end }}
+
+
+{{/* ------------------------------------------ 
+  titledesc: expects sigTerm,
   sublime and vscode hovers look better without title.
   we already know what we're hovering.
   golsp seems not to use the title either.
    ------------------------------------------ */}}
-{{- define "titledesc" -}}
+{{ define "titledesc" -}}
   "description": "{{ .SchemaComment }}",
   "markdownDescription": "{{ .SchemaComment }}"
-{{- end }}
+{{ end }}
+
 
 {{/* ------------------------------------------ 
-  expects sigTerm
+  xxxDesc: 
+  bug? giving a primitive value a description 
+  overrides the description of the property when used in a map.
    ------------------------------------------ */}}
-{{- define "typedesc" -}}
-{{- with $sigTerm := . -}}
-\n\n---\n{{ 
-  .Signature }}\n{{/* */ -}}
-```yaml\n{{
-  range .Terms 
-  }}- {{ if .SimpleLabel }}{{ 
-      .SimpleLabel }}{{ else 
-  }}{{ $sigTerm.Lede }}{{ end
-  }}: {{ Pascal .Type }}{{ 
-    if .Repeats 
-  }}...{{ end }}\n{{ 
-end -}}
-```\n{{/* */ -}}
-{{- end -}}
-{{- end -}}
+{{ define "xxxDesc" -}}
+ "$comment": "{{.}}"
+{{/*
+  "description": "{{ . }}",
+  "markdownDescription": "{{ . }}"
+ */}}
+{{ end }}
+
 
 {{/* ------------------------------------------ 
-  expects slice of TypeLink
+  titledesc: expects sigTerm
    ------------------------------------------ */}}
-{{- define "typelinks" -}}
+{{ define "sigDesc" -}}
+"description": "{{ .Flow.SchemaComment }}",
+"markdownDescription": 
+"{{ .Flow.SchemaComment }}{{ 
+  template "typedesc" . }}{{
+  template "typelinks" .TypeLinks }}"
+{{ end }}
+
+{{/* ------------------------------------------ 
+  typedesc: expects sigTerm
+   ------------------------------------------ */}}
+{{ define "typedesc" -}}
+	{{- with $sigTerm := . -}}
+	\n\n---\n{{ 
+	  .Signature }}\n{{/* */ -}}
+	```yaml\n{{
+	  range .Terms 
+	  }}- {{ if .SimpleLabel }}{{ 
+	      .SimpleLabel }}{{ else 
+	  }}{{ $sigTerm.Lede }}{{ end
+	  }}: {{ Pascal .Type }}{{ 
+	    if .Repeats 
+	  }}...{{ end }}\n{{ 
+	end -}}
+	```\n{{/* */ -}}
+	{{- end -}}
+{{ end -}}
+
+{{/* ------------------------------------------ 
+  typelinks: expects slice of TypeLink
+   ------------------------------------------ */}}
+{{ define "typelinks" -}}
 Types: {{ range $idx, $t := . -}}
 {{- if $idx }}, {{ end -}}
 [{{ Pascal .Type }}]({{ .Link }})
 {{- end -}}
-{{- end -}}
+{{ end -}}
 
+{{/* ------------------------------------------ 
+  slotDesc
+   ------------------------------------------ */}}
+{{ define "slotDesc" -}}
+ 	"description": "{{ .SchemaComment }}",
+ 	"markdownDescription": "{{ 
+ 		.SchemaComment 
+  }}\n\nType: [{{ Pascal .Type }}]({{ .Link }})"
+{{ end }}
+
+{{/* ------------------------------------------ */}}
+{{/* the schema                                 */}}
 {{/* ------------------------------------------ */}}
 {
   {{/* redhat yaml-language-server and vscode idxelf use draft 7 */}}
@@ -71,59 +114,65 @@ Types: {{ range $idx, $t := . -}}
         {{ template "titledesc" . }},
         "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
           {{/* 
-          		handle shortcuts for dot variables and objects
+          		eval shortcuts
           */}}
           {{ if ( Contains .Name "bool_eval" "number_eval" "text_eval"
             "num_list_eval" "text_list_eval" "record_eval" "record_list_eval"
             "address" ) }}
+          {{/* variables ( start with @ ) */}}
           {
           	"type": "string",
-          	{{- /* start with an at sign */}}
-            "pattern": "^@",
+          	"pattern": "^@"
+          	{{/* 
+          		xxxDesc
             "description": "A {{ if .ChopEval 
             	}}{{ Title .ChopEval }} {{end -}} variable.",
             "markdownDescription": "A {{ if .ChopEval 
             	}}[{{ Title .ChopEval }}]({{ .Link }}) {{end -}} variable."
+            	*/}}
           },
+          {{/* object field ( start with # and contain a dot ) */}}
           {
           	"type": "string",
-          	{{- /* start with hash and has a dot somewhere */}}
-            "pattern": "^#\\w+\\.", 
+          	"pattern": "^#\\w+\\."
+          		{{/*
+          			xxxDesc
             "description": "An object {{ if .ChopEval 
             	}}{{ Title .ChopEval }} {{end -}} field.",
             "markdownDescription": "An object {{ if .ChopEval 
             	}}[{{ Title .ChopEval }}]({{ .Link }}) {{end -}} field."
+            	*/}}
           },
           {{ end }}
           {{/* 
-          		handle literal.DecodeLiteral 
+          		handle literals
           */}}
           {{ if eq .Name "bool_eval" }}
 	          {
 	            "type": "boolean",
-	            "description": "The specified true/false value."
+	            {{ template "xxxDesc" "The specified true/false value." }}
 	          },
 	          {
 	          	{{- /* an object name without a dot */}}
 	            "type": "string",
 	          	"pattern": "^#[^\\.]+$", 
-	            "description": "True if the object exists."
+	            {{ template "xxxDesc" "True if the object exists." }}
 	          },
           {{ else if eq .Name "number_eval" }}
 	          {
 	            "type": "number",
-	            "description": "The specified number."
+	           {{ template "xxxDesc" "The specified number." }}
 	          },
           {{ else if eq .Name "text_eval" }}
 	          {
 	            "type": "string",
-	            "description": "The specified text."
+	            {{ template "xxxDesc" "The specified text." }}
 	          },
 	          {
 	          	{{- /* an object name without a dot */}}
 	            "type": "string",
 	            "pattern": "^#[^\\.]+$",
-	            "description": "The object's full name."
+	            {{ template "xxxDesc" "The object's full name." }}
 	          },
           {{ else if eq .Name "num_list_eval" }}
 	          {
@@ -145,6 +194,33 @@ Types: {{ range $idx, $t := . -}}
             {{- if $idx }},{{ end }}
             { {{ template "ref" .TypeScope -}} }
           {{ end }}
+          {{/* 
+          	user pattern calls ( start with # and contain a dot ) 
+          */}}
+          {{ if ( Contains .Name "bool_eval" "number_eval" "text_eval"
+            "num_list_eval" "text_list_eval" "record_eval" "record_list_eval"
+            "execute" ) }}
+          ,{
+	      		"type": "object",
+	      		"patternProperties": {
+
+					    "^[A-Z]": { 
+					    	{{/* allows a single assignment or multiple */}}	
+				    		"oneOf": [{
+									"description": "Unknown command. Possibly a user pattern.",
+									"$ref": "#/$defs/~rtti.assignment"
+								},{ 
+									{{/* or multiple */}}
+									"type": "array",
+				    			"description": "Unknown command. Possibly a user pattern.",
+									"items": { 
+										"$ref": "#/$defs/~rtti.assignment" 
+									}
+								}]
+					    }
+				 		}
+      		}
+          {{ end }}
         ]
       },
     {{- end }}{{/* slot */}}
@@ -154,9 +230,11 @@ Types: {{ range $idx, $t := . -}}
     {{ range  .Str }}
     "~{{ .Idl }}.{{ .Name }}": {
       {{ template "titledesc" . }},
-      {{ if eq .Name "lines" }}
-	   	 	"type": ["string", "array"],
-        "description": "One or more lines of text.",
+      {{ if eq .Name "bool" }}
+	   	 	 {{/* tell shortcuts this and never expects the literal true/false strings */}}
+	   	 	"type": "boolean"
+        {{ else if eq .Name "lines"}}
+        "type": ["string", "array"],
         "items": { 
         	"type": "string", 
           "description": "One or more lines of text."
@@ -193,44 +271,63 @@ Types: {{ range $idx, $t := . -}}
     {{ range $op := .Flow }}
     "~{{ .Idl }}.{{ .Name }}": {
         "type": "object",
-        "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
+        {{/*
+	        for every signature in the flow
+	        list an anyOf option ( alt: could be oneOf maybe )
+					with a property for that signature.
+					within each such block... list the terms required for that signature.
+
+					ideally, we'd be able to list the comment at the object level
+					but the hover is on the property name ( the "My:Function:Name" )
+					so it needs to be listed there for the lsp server to see it.
+
+					only, it can't be there either... for reason. ( xxxDesc )
+        */}}
+        "anyOf": [
         {{- range $idx, $sigTerm := .Signatures -}}
           {{- if $idx }},{{ end }}
-            {
+          {
             "required": [
               "{{ .TrimmedSignature }}"
             ],
             "properties": {
               "{{ .TrimmedSignature }}": {
-                "description": "{{ $op.SchemaComment }}",
-                "markdownDescription": 
-                "{{ $op.SchemaComment }}{{ 
-                  template "typedesc" . }}{{
-                  template "typelinks" .TypeLinks }}",
+              
+              {{/* no terms */}}
               {{- if not .Terms }}
-                 "type": "null"
+                 "type": "null",
+                 {{ template "sigDesc" . }}
+
+              {{/* multiple terms */}}
               {{- else if (not (eq 1 (len .Terms))) }}
 								"type": "array",
-								"additionalItems": false,
 								"items": [
 								{{- range $it, $term:= .Terms -}}
 								  {{- if $it }},{{ end }}
 								  { {{ template "ref" (print $op.Idl "." $op.Name "." .Name) }} }
 								{{ end }}
-								]
+								],
+								"additionalItems": false,
+								{{ template "sigDesc" $sigTerm }}
+
 							{{ else }}
+							{{/* exactly one term:
+								 allow a single object,
+								 or an array containing one term 
+							*/}}
 								{{- with index .Terms 0 -}}
-				        	"oneOf": [{
-				        		{{/* allow a single object */}}
-				        		{{ template "ref" (print $op.Idl "." $op.Name "." .Name) }}
-				        	},{ 
-				        		{{/* or an array containing this one term */}}
-				        		"type": "array",
-										"additionalItems": false,
+									"oneOf": [{
+										{{ template "ref" (print $op.Idl "." $op.Name "." .Name) }},
+										{{ template "sigDesc" $sigTerm }}
+									},{ 
+										"type": "array",
 										"items": [
-										  { {{ template "ref" (print $op.Idl "." $op.Name "." .Name) }} }
-										]
-				        	}]
+										  { {{ template "ref" (print $op.Idl "." $op.Name "." .Name)}} }
+										],
+										"additionalItems": false,
+										{{ template "sigDesc" $sigTerm }}
+									}]
+
 				        {{- end }}{{/* range of one */}}
               {{- end }}{{/* if not/len terms */}}
               } {{/* signature */}}
@@ -259,10 +356,7 @@ Types: {{ range $idx, $t := . -}}
          	   a json object means repeating items;
          	   a json array, a tuple. */}}
         		"items": { 	{{ template "ref" .TypeScope }} },
-	         	"description": "{{ .SchemaComment }}",
-	         	"markdownDescription": "{{ 
-	         		.SchemaComment 
-	          }}\n\nType: [{{ Pascal .Type }}]({{ .Link }})"
+        		{{ template "slotDesc" . }}
         	}]
       		{{- end }}{{/* if  repeats */}}
         },
