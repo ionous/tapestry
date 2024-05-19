@@ -55,14 +55,18 @@ Types: {{ range $idx, $t := . -}}
   "$id": "{{ .SchemaId }}",
   {{ template "titledesc" . }}, 
   {{- /* the top level is an array of story statements*/}}
-  "type": [
-  "array",
-  "null"
-  ],
-  "items": {
-    {{ template "ref" "story.story_statement" }}
-  },
-  "$defs": {
+  "oneOf": [{
+  		{{ template "ref" "story.story_statement" }}
+  	},{
+  	"type": "array",
+  	"items": {
+		    {{ template "ref" "story.story_statement" }}
+		  }
+  	}],
+   "$defs": {
+   	{{/* ------------------------------------------ 
+      slots.
+     ------------------------------------------  */}}
     {{ range $op := .Slot }} {{/* a map containing slotList(s) */}}      
     "~{{ .Idl }}.{{ .Name }}": {
         {{ template "titledesc" . }},
@@ -121,13 +125,13 @@ Types: {{ range $idx, $t := . -}}
           {{ else if eq .Name "num_list_eval" }}
 	          {
 	            "type": "array",
-	            "items": { "type": "number" },
+	            "items": { "type": "number", "description": "The specified number." },
 	            "description": "A list of numbers."
 	          },
 	          {{ else if eq .Name "text_list_eval" }}
 	          {
 	            "type": "array",
-	            "items": { "type": "string" },
+	            "items": { "type": "string", "description": "The specified text." },
 	            "description": "A list of text."
 	          },
           {{ end }}
@@ -138,6 +142,9 @@ Types: {{ range $idx, $t := . -}}
         ]
       },
     {{- end }}{{/* slot */}}
+    {{/* ------------------------------------------ 
+      strings and enums
+     ------------------------------------------  */}}
     {{ range  .Str }}
     "~{{ .Idl }}.{{ .Name }}": {
         {{ template "titledesc" . }},
@@ -156,12 +163,18 @@ Types: {{ range $idx, $t := . -}}
         {{ end }}
       },
     {{ end }}{{/* str */}}
+    {{/* ------------------------------------------ 
+      numbers
+     ------------------------------------------  */}}
     {{ range .Num }}
     "~{{ .Idl }}.{{ .Name }}":{
         {{ template "titledesc" . }},
         "type": "number"
       },
     {{ end }}{{/* num */}}
+   {{/* ------------------------------------------ 
+      individual commands
+     ------------------------------------------  */}}
     {{ range $op := .Flow }}
     "~{{ .Idl }}.{{ .Name }}": {
         "type": "object",
@@ -211,9 +224,9 @@ Types: {{ range $idx, $t := . -}}
         {{ end }}{{/* range Signatures */}}
         ]
       },
-      {{/* 
-        per flow terms
-        */}}
+      {{/*  ------------------------------------------ 
+         terms ( per command )
+        ------------------------------------------  */}}
       {{- range .Terms -}}
       {{ if not .Private }}
       "~{{ $op.Idl }}.{{ $op.Name }}.{{ .Name }}":

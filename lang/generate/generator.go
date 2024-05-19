@@ -1,8 +1,10 @@
 package generate
 
 import (
+	"cmp"
 	"errors"
 	"io"
+	"slices"
 	"strings"
 	"text/template"
 
@@ -85,15 +87,23 @@ func (q *Generator) WriteReferences(w DB) error {
 	return writeReferences(w, q.group())
 }
 
-// for schemas
-type slotList struct {
+// for schemas: the slot and the types in that slot.
+type slotCommands struct {
 	slotData
-	Types []slotEntry
+	cmds []slotEntry
+}
+
+// used by the template to walk the slice
+func (n slotCommands) Types() []slotEntry {
+	slices.SortFunc(n.cmds, func(a, b slotEntry) int {
+		return cmp.Compare(a.TypeScope(), b.TypeScope())
+	})
+	return n.cmds
 }
 
 // for non evals it returns the empty string
 // ex. address
-func (n slotList) ChopEval() (ret string) {
+func (n slotCommands) ChopEval() (ret string) {
 	const eval = "_eval"
 	if str := n.Name; strings.HasSuffix(str, eval) {
 		ret = str[:len(str)-len(eval)]
@@ -114,7 +124,7 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 	var flow []flowData
 	var str []strData
 	var num []numData
-	slot := make(map[string]slotList)
+	slot := make(map[string]slotCommands)
 	hackForLinks = q.groups
 
 	for q.Next() {
@@ -128,7 +138,7 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 		for _, op := range curr.Slot {
 			op := op.(slotData)
 			if a, ok := slot[op.Name]; !ok {
-				slot[op.Name] = slotList{slotData: op}
+				slot[op.Name] = slotCommands{slotData: op}
 			} else {
 				a.slotData = op
 				slot[op.Name] = a
@@ -141,9 +151,9 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 				entry := slotEntry{Idl: op.Idl, Type: op.Name}
 				for _, s := range op.Slots {
 					if a, ok := slot[s]; !ok {
-						slot[s] = slotList{Types: []slotEntry{entry}}
+						slot[s] = slotCommands{cmds: []slotEntry{entry}}
 					} else {
-						a.Types = append(a.Types, entry)
+						a.cmds = append(a.cmds, entry)
 						slot[s] = a
 					}
 				}
@@ -157,7 +167,7 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 		Flow          []flowData
 		Str           []strData
 		Num           []numData
-		Slot          map[string]slotList
+		Slot          map[string]slotCommands
 	}{
 		"Tell", "A Tapestry story file",
 		"https://tapestry.ionous.net/schema/tell/v0",
