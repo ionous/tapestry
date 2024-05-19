@@ -101,5 +101,5 @@ func (q *Generator) writeContent(w io.Writer, gc groupContent) (err error) {
 }
 
 func (q *Generator) write(w io.Writer, name string, data any) error {
-	return q.tmp.ExecuteTemplate(w, name+".tmpl", data)
+	return q.tmp.ExecuteTemplate(w, name+".tem", data)
 }

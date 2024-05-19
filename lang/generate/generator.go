@@ -160,7 +160,7 @@ func (q Generator) WriteSchema(w io.Writer) (err error) {
 			}
 		}
 	}
-	return q.tmp.ExecuteTemplate(w, "schema.tmpl", struct {
+	return q.tmp.ExecuteTemplate(w, "schema.tem", struct {
 		Name          string
 		SchemaComment string
 		SchemaId      string

@@ -79,7 +79,7 @@ func genTemplates(p *groupSearch) (*template.Template, error) {
 			return
 		},
 	}
-	return template.New("").Funcs(funcMap).ParseFS(tempFS, "templates/*.tmpl")
+	return template.New("").Funcs(funcMap).ParseFS(tempFS, "templates/*.tem")
 }
 
 // looks at whether the first letter is capitalized
