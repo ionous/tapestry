@@ -99,9 +99,6 @@ func (op *StoryFile) GetMarkup(ensure bool) map[string]any {
 	return op.Markup
 }
 
-// Ensures the command implements its specified slots.
-var _ StoryStatement = (*StoryFile)(nil)
-
 // Holds a slice of type StoryFile.
 type StoryFile_Slice []StoryFile
 
@@ -1717,9 +1714,6 @@ func init() {
 			Repeats: true,
 			Type:    &Zt_StoryStatement,
 		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
 		Markup: map[string]any{
 			"blockly-color": "TAP_HUE_ROOT",
 			"comment":       []interface{}{"Used internally as the container for every .tell file.", "Implements Story Statement to simplify how flex parsing works."},
@@ -2839,6 +2833,7 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
+	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	4360765066804052293:  (*StoryBreak)(nil),            /* story_statement=-- */
 	13010292396640781698: (*AspectField)(nil),           /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
@@ -2895,7 +2890,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15989777734244204735: (*SayTemplate)(nil),           /* text_eval=Say: */
 	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
 	13921723804355948971: (*StoppingText)(nil),          /* text_eval=StoppingText: */
-	12956316934318450345: (*StoryFile)(nil),             /* story_statement=Tapestry: */
 	9387832592330456403:  (*TextField)(nil),             /* field_definition=Text: */
 	16637694412733787472: (*TextField)(nil),             /* field_definition=Text:initially: */
 	15791809714384972761: (*TextField)(nil),             /* field_definition=Text:kind: */

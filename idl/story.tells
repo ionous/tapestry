@@ -12,11 +12,9 @@ Spec:with group:
         blockly-color: "VARIABLES_HUE"
 
       - # Used internally as the container for every .tell file.
-        # Implements Story Statement to simplify how flex parsing works.
         internal: true
-        Spec:slots:with flow:
+        Spec:with flow:
           - "story_file"
-          - "story_statement"
           - Flow:uses:
               - "tapestry"
               - - Term:name:type:repeats:
