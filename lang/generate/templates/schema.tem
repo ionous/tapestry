@@ -1,4 +1,3 @@
-
 {{/* ------------------------------------------ 
   expects text.
   names are prefixed with tilde so that they don't match in autocomplete.
@@ -67,11 +66,13 @@ Types: {{ range $idx, $t := . -}}
    	{{/* ------------------------------------------ 
       slots.
      ------------------------------------------  */}}
-    {{ range $op := .Slot }} {{/* a map containing slotList(s) */}}      
+    {{ range $op := .Slot }} {{/* a map containing slotCommand(s) */}}      
     "~{{ .Idl }}.{{ .Name }}": {
         {{ template "titledesc" . }},
         "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
-          {{/* handle shortcut.ReadDots */}}
+          {{/* 
+          		handle shortcuts for dot variables and objects
+          */}}
           {{ if ( Contains .Name "bool_eval" "number_eval" "text_eval"
             "num_list_eval" "text_list_eval" "record_eval" "record_list_eval"
             "address" ) }}
@@ -94,14 +95,16 @@ Types: {{ range $idx, $t := . -}}
             	}}[{{ Title .ChopEval }}]({{ .Link }}) {{end -}} field."
           },
           {{ end }}
-          {{/* handle literal.DecodeLiteral */}}
+          {{/* 
+          		handle literal.DecodeLiteral 
+          */}}
           {{ if eq .Name "bool_eval" }}
 	          {
 	            "type": "boolean",
 	            "description": "The specified true/false value."
 	          },
 	          {
-	          	{{- /* string with hash and has no dots */}}
+	          	{{- /* an object name without a dot */}}
 	            "type": "string",
 	          	"pattern": "^#[^\\.]+$", 
 	            "description": "True if the object exists."
@@ -117,7 +120,7 @@ Types: {{ range $idx, $t := . -}}
 	            "description": "The specified text."
 	          },
 	          {
-	          	{{- /* string with hash and has no dots */}}
+	          	{{- /* an object name without a dot */}}
 	            "type": "string",
 	            "pattern": "^#[^\\.]+$",
 	            "description": "The object's full name."
@@ -135,6 +138,9 @@ Types: {{ range $idx, $t := . -}}
 	            "description": "A list of text."
 	          },
           {{ end }}
+          {{/* 
+          		all of the commands used by this slot
+          */}}
           {{- range $idx, $t := .Types -}}
             {{- if $idx }},{{ end }}
             { {{ template "ref" .TypeScope -}} }
@@ -147,20 +153,29 @@ Types: {{ range $idx, $t := . -}}
      ------------------------------------------  */}}
     {{ range  .Str }}
     "~{{ .Idl }}.{{ .Name }}": {
-        {{ template "titledesc" . }},
-        "type": "string"
-        {{- if .Options }},
-        "enum": [
-        {{- range $idx, $opt := .Options -}}
-          {{- if $idx }},{{ end }} "{{ . }}"
-        {{- end }} ]
-        {{ end }}
-        {{- if .OptionComments }},
-        "enumDescriptions": [
-        {{- range $idx, $opt := .OptionComments -}}
-          {{- if $idx }},{{ end }} "{{ . }}"
-        {{- end }} ]
-        {{ end }}
+      {{ template "titledesc" . }},
+      {{ if eq .Name "lines" }}
+	   	 	"type": ["string", "array"],
+        "description": "One or more lines of text.",
+        "items": { 
+        	"type": "string", 
+          "description": "One or more lines of text."
+        }
+        {{ else }}
+        	"type": "string"
+	        {{- if .Options }},
+		        "enum": [
+		        {{- range $idx, $opt := .Options -}}
+		          {{- if $idx }},{{ end }} "{{ . }}"
+		        {{- end }} ]
+		        {{ end }}
+		        {{- if .OptionComments }},
+		        "enumDescriptions": [
+		        {{- range $idx, $opt := .OptionComments -}}
+		          {{- if $idx }},{{ end }} "{{ . }}"
+		        {{- end }} ]
+	        {{ end }}{{/* options */}}
+        {{ end }}{{/* lines */}}
       },
     {{ end }}{{/* str */}}
     {{/* ------------------------------------------ 
