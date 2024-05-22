@@ -24,11 +24,7 @@ East from the Foyer is the Cloakroom. The Cloakroom has the description "In the 
 In the Cloakroom is a scenery supporter called the small brass hook.
 # The description of the hook depends on the number of things hanging on it.
 # This uses a special template syntax to achieve that.
-The hook has the description """
-  A brass hook{if children_of: .hook}
-  with {children_of: .hook | print_inline_objects!}
-  hanging on it{else} screwed into the wall{end}.
-  """ # "
+The hook has the description "A brass hook{if children_of: .hook} with {children_of: .hook | print_inline_objects!} hanging on it{else} screwed into the wall{end}."
 
 # Understandings change the game's input parser,
 # and allow a player to refer to objects in new ways.
@@ -40,7 +36,7 @@ Understand "hang [objects] on/onto [objects]" as storing.
 
 # The Foyer Bar
 South from the Foyer is the Foyer Bar. The bar is unlit. The scrawled message is scenery in the bar.
-The description of the bar is  "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
+The description of the bar is "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor."
 
 Neatness is a kind of aspect. The neatnesses are neat, scuffed, and trampled.
 Messages are a kind of thing. Messages have a neatness. The scrawled message is a message.

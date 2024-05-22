@@ -105,11 +105,12 @@ func (n *Tokenizer) tokenize() charm.State {
 		case runes.Hash:
 			ret = n.readComments() // unlike .tell; eats the hash
 
-		case runes.InterpretQuote: // doublequote
-			ret = n.readQuotes(false)
-
-		case runes.RawQuote: // backtick
-			ret = n.readQuotes(true)
+		case runes.QuoteDouble:
+			ret = n.readQuotes(charmed.DecodeDouble)
+		case runes.QuoteSingle:
+			ret = n.readQuotes(charmed.DecodeSingle)
+		case runes.QuoteRaw:
+			ret = n.readQuotes(charmed.DecodeRaw)
 
 		case runes.Colon:
 			includeComments := true
@@ -209,17 +210,15 @@ func (n *Tokenizer) readComments() charm.State {
 	})
 }
 
+type quoteParser func(*strings.Builder) charm.State
+
 // quoted string and heredoc decoder
 // fix: remember the quoted string types ( for more/accurate reconstruction );
 // flag terminal in the process ( ex. return a quoted struct with the relevant info )
-func (n *Tokenizer) readQuotes(raw bool) charm.State {
-	var d charmed.QuoteDecoder
-	start := d.Interpret
-	if raw {
-		start = d.Record
-	}
-	return charm.Step(start(), charm.Statement("readQuotes", func(q rune) (ret charm.State) {
-		if next, e := n.notifyQuotes(q, d.String()); e != nil {
+func (n *Tokenizer) readQuotes(start quoteParser) charm.State {
+	var b strings.Builder
+	return charm.Step(start(&b), charm.Statement("readQuotes", func(q rune) (ret charm.State) {
+		if next, e := n.notifyQuotes(q, b.String()); e != nil {
 			ret = charm.Error(e)
 		} else {
 			ret = next

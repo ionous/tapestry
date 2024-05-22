@@ -1,8 +1,7 @@
 ---
 - Define test:scene:do:
     - "thingaverse"
-    - - Declare: """
-          Mildred is an actor.
+    - - Declare: "Mildred is an actor.
           An empire apple, and a pen are props.
           The flower is a wearable thing.
           The headlamp is a lit, wearable thing.
@@ -14,7 +13,6 @@
           The coin is a thing.
           Mildred is wearing the headlamp and the flower. Mildred is carrying secrets and wisdom, and the clutch.
           The coin is in the purse.
-          The purse is in the clutch.
-          """
+          The purse is in the clutch."
     - - # do nothing
         Continue:

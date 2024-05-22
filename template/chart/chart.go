@@ -1,6 +1,8 @@
 package chart
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/template/postfix"
 	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
@@ -67,13 +69,15 @@ type QuoteParser struct {
 	res string
 }
 
-// NewRune starts with the leading quote mark; it finishes just after the matching quote mark.
+// NewRune starts with the leading quote mark;
+// it finishes just after the matching quote mark.
 func (p *QuoteParser) NewRune(r rune) (ret State) {
-	if isQuote(r) {
-		p.err = errutil.New("unclosed quote")
-		ret = charmed.ScanQuote(r, true, func(res string) {
-			p.res, p.err = res, nil
-		})
+	var str strings.Builder
+	if decoder, ok := charmed.DecodeQuote(r, &str); ok {
+		p.err = errutil.New("unclosed quote") // provisionally
+		ret = charm.Step(decoder, charm.OnExit("post quote", func() {
+			p.res, p.err = str.String(), nil
+		}))
 	}
 	return
 }

@@ -11,12 +11,9 @@
           - "kitchen"
           - "printed name"
           - FromText: "Kitchen"
-      - #
-        Declare: """
-          Cats are kinds of animal.
+      - Declare: "Cats are kinds of animal.
           The broom, a hat, and two cats are in the kitchen.
-          The broom and the hat are things.
-          """
+          The broom and the hat are things."
       - Define noun:value:initially:
           - "hat"
           - "initial appearance"
@@ -25,12 +22,9 @@
           - "hat"
           - "description"
           - FromText: "Your aunt's very own witches hat, a Halloween favorite."
-      - #
-        Declare: """
-          The container called the cabinet is in the kitchen.
+      - Declare: "The container called the cabinet is in the kitchen.
           The cabinet is openable, enterable, scenery.
-          The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet.
-          """
+          The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet."
       - Define noun:value:initially:
           - "hook"
           - "initial appearance"
@@ -42,17 +36,14 @@
       - Interpret alias:as:
           - "blade"
           - "rusty knife"
-      - #
-        Declare: """
-          The shelf is a supporter in the kitchen. The shelf is scenery.
+      - Declare: "The shelf is a supporter in the kitchen. The shelf is scenery.
           A can of tomatoes, a can of potato leek soup, and a tin of deflating powder are things on the shelf.
           The counter is a supporter in the kitchen.
           The espresso machine is a fixed in place, closed container on the counter.
           Some coffee beans are in the espresso machine.
           The beans are plural named.
           A blender and a mortar are containers on the counter.
-          A pestle is in the mortar.
-          """
+          A pestle is in the mortar."
       - Define noun:value:initially:
           - "espresso machine"
           - "initial appearance"

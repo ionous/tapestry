@@ -9,6 +9,8 @@ github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77 h1:ESMGebexC3FTSESy
 github.com/ionous/sliceOf v0.0.0-20170627065049-c4e57a86cb77/go.mod h1:l0XYSHRaNw8qImDaNqe4cd4kAG9HHj6799UaA7NvRjE=
 github.com/ionous/tell v0.8.2-0.20240516012732-2bfc06471d6d h1:CxJFMUIuGGMY37bttGkYJk+4qCy0GlJf2YROzaRkf5Y=
 github.com/ionous/tell v0.8.2-0.20240516012732-2bfc06471d6d/go.mod h1:IGoC9bvoZYSyBkdsKi3AQTItW7OF4iNEoZwk1EGRiLw=
+github.com/ionous/tell v0.9.0 h1:J3R4B00tDiAzSM8IQ7zokgaClA612rA5mznCnR05pAU=
+github.com/ionous/tell v0.9.0/go.mod h1:UWqqRyE4v3lqFSA4LsgnEBXPTAaHjjSBBr+8bZbOFGY=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
 github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3xk=
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=

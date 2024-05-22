@@ -45,11 +45,9 @@
     - - "not wearable"
       - "wearable"
 - #
-  Declare: """
-    Actors and props are a kind of thing.
+  Declare: "Actors and props are a kind of thing.
     Animals are a kind of actor.
-    Openers are a kind of prop.
-    """
+    Openers are a kind of prop."
 - Declare: "Open status is a kind of aspect."
 - Define state:names:
     - "open status"

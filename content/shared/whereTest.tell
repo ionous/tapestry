@@ -2,8 +2,7 @@
 - Define test:requires:scene:do:
     - "whereabouts"
     - "thingaverse"
-    - - Declare: """
-          Mildred is an actor.
+    - - Declare: "Mildred is an actor.
           The table is a supporter.
           The lab is a room.
           The basket is a container.
@@ -12,8 +11,7 @@
           The basket is on the table.
           Mildred is carrying the pen and the scalpel.
           The pen is worn.
-          The apple is in the basket.
-          """
+          The apple is in the basket."
     - - Say:
           - "{The: {carrier_of: .basket}|capitalize!} carries the basket."
           - "Mildred's parent is {the: {parent_of: .Mildred}}."

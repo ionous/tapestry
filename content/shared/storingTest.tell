@@ -2,11 +2,9 @@
 - Define test:requires:scene:do:
     - "storing test"
     - "Kitchenette"
-    - - Declare: """
-          Mildred is in the kitchen.
+    - - Declare: "Mildred is in the kitchen.
           You are carrying the coffee, the coin, the clutch, and the knife.
-          You are wearing the flower.
-          """
+          You are wearing the flower."
     - - Print:
           Rows do:
             - Print:

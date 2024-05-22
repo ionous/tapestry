@@ -2,13 +2,11 @@
 - Define test:requires:scene:do:
     - "taking test"
     - "Kitchenette"
-    - - Declare: """
-          You are carrying the coin.
+    - - Declare: "You are carrying the coin.
           Mildred is carrying the empire apple.
           Mildred and the purse are in the kitchen.
           You are in the purse.
-          The coffee is in the machine.
-          """
+          The coffee is in the machine."
     - - Print:
           Rows do:
             - Print:

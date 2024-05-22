@@ -55,18 +55,16 @@ func TestTokens(t *testing.T) {
 		// 		/*11*/ match.Number, `-5`, -5,
 		// ----------
 		match.Quoted,
-		`"""
-hello
-doc
-"""`,
+		`"hello
+doc"`,
 		`hello doc`,
 		// -------------
 		match.Quoted,
 		strings.Join([]string{
-			"```",
+			"'''",
 			"hello",
 			"line",
-			"```"}, "\n"),
+			"'''"}, "\n"),
 		`hello
 line`,
 	}

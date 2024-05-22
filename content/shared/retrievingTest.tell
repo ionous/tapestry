@@ -2,11 +2,9 @@
 - Define test:requires:scene:do:
     - "retrieving test"
     - "Kitchenette"
-    - - Declare: """
-          You and Mildred are in the kitchen.
+    - - Declare: "You and Mildred are in the kitchen.
           The coffee is in the machine.
-          Mildred is carrying the empire apple.
-          """
+          Mildred is carrying the empire apple."
     - - Print:
           Rows do:
             - Print:
