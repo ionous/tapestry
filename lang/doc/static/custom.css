@@ -60,6 +60,8 @@ ul.commandTerms {
 
 .cmdSpec { 
   margin-left:0px;
+  padding: 0.8rem;
+  background: #E0EBF5;
 }
 
 div.cmdComment pre {

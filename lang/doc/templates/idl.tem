@@ -1,13 +1,14 @@
 <h1>{{ Title .Name }} Definitions</h1>
 {{ Comment .Types.Comment }} 
+<h2>Index</h2>
 {{/* -------------------------------------------------
-types 
+num types 
 -------------------------------------------------	*/}}
 {{ if .Types.Num  }}
+<section>
 <h3>
 	Number Types:
 </h3>
-<section>
 	{{ range .Types.Num }}
 	<h2 id="{{ .Name }}">
 		{{ Title .Name }}</a>
@@ -18,13 +19,13 @@ types
 {{ end }}
 
 {{/* -------------------------------------------------
-types 
+str types 
 -------------------------------------------------	*/}}
 {{ if .Types.Str  }}
+<section>
 <h3>
 	String Types:
 </h3>
-<section>
 	{{ range .Types.Str }}
 	<h2 id="{{ .Name }}">
 		{{ Title .Name }}</a>
@@ -48,10 +49,10 @@ types
 slots 
 -------------------------------------------------	*/}}
 {{ if .Types.Slot }}
+<section>
 <h3>
 	Slots:
 </h3>
-<section>
 	<ul class="indexList">
 		{{ range .Types.Slot }}
 		<li>
@@ -65,18 +66,67 @@ slots
 commands 
 -------------------------------------------------	*/}}
 {{ if .Commands }}
+<section>
 <h3>
 	Commands:
 </h3>
-<section>
-	<ul class="indexList">
-		{{ range  .Commands }}
+<ul class="indexList">
+	{{ range  .Commands }}
 		{{if .Slots }}
 		<li>
 			<a class="code" href="{{ LinkByType . }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
 		{{ end }}
-		{{ end }}
+	{{ end }}
 	</ul>
+</section>
+<section>
+<h1>Commands</h1>
+{{- range $i, $cmd := .Commands }}
+	<div id="{{$cmd.Name}}">
+		<pre class="cmdSpec"><a href="{{ .SourceLink }}">
+			{{- $cmd.Spec -}}
+		</a></pre>
+	</div>
+	<div class="cmdComment">
+		{{ Comment $cmd.Markup }}
+	</div>
+
+	<section>
+	<h4>Slots:</h4>
+		{{ if $cmd.Slots }}
+		<ul class="commandSlots">
+			{{ range $cmd.Slots }}
+			<li><a href="{{ LinkByType . }}">{{ Pascal .Name }}</a></li>
+			{{ end }}{{/* range slots */}}
+		</ul>{{ end }}{{/* if slots */}}
+	</section>
+	<section>
+	<h4>Terms:</h4>
+		{{ if not $cmd.Terms -}}None.
+		{{- else }}
+		<ul class="commandTerms">
+			{{- range $cmd.Terms }}
+			<li>
+				<span class="code">
+					{{- if .Label}}{{ Camel .Label }}{{ else }}
+					{{ Pascal $cmd.Lede }}
+					{{- end -}}:
+				</span>
+				<span class="argType">
+					<a href="{{ LinkByType .Type }}">
+						{{- Pascal .Type.TypeName -}}
+						{{- if .Repeats -}}, ...{{- end -}}
+					</a>
+				</span>
+				<span class="argComment">
+					{{- Comment .Markup }}
+				</span>
+			</li>
+			{{- end }}{{/* public terms  */}}
+		</ul>
+		{{- end }}
+	</section>
+{{- end }}{{/* range over types */}}
 </section>
 {{ end }}

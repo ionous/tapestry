@@ -11,7 +11,7 @@
 </head>
 <body>
 	{{ define "command-title" }}
-		{{ Title .Name }}
+		{{- Title .Name }}
 	{{- end }}
 	{{ define "command-title-alt" }}
 		{{- Pascal .Lede }}

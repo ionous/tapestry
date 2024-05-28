@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -26,18 +27,18 @@ import (
 )
 
 func main() {
-	flags := buildFlags()
-	flags.Parse(os.Args)
 	if e := runDoc(); e != nil {
 		log.Fatal(e)
 	}
 }
 
 func runDoc() (err error) {
-	if outPath, e := filepath.Abs(genFlags.out); e != nil {
+	path := os.Args[1]
+	if outPath, e := filepath.Abs(path); e != nil {
 		flag.Usage()
 		err = e
 	} else {
+		fmt.Println("generating to", outPath)
 		err = doc.Build(outPath, []typeinfo.TypeSet{
 			assign.Z_Types,
 			core.Z_Types,
@@ -57,19 +58,5 @@ func runDoc() (err error) {
 			// testdl.Z_Types,
 		})
 	}
-	return
-}
-
-// collection of local flags
-var genFlags = struct {
-	out string // output directory
-}{}
-
-func buildFlags() (fs flag.FlagSet) {
-	var outPath string
-	if home, e := os.UserHomeDir(); e == nil {
-		outPath = filepath.Join(home, "Documents", "Tapestry", "api")
-	}
-	fs.StringVar(&genFlags.out, "out", outPath, "output directory")
 	return
 }

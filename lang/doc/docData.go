@@ -122,11 +122,7 @@ func (g *GlobalData) linkByName(name string) (ret string, err error) {
 	if _, ok := g.slots[name]; ok {
 		ret = linkToSlot(name, "")
 	} else if flow, ok := g.cmds[name]; ok {
-		if len(flow.Slots) > 0 {
-			ret = linkToSlot(flow.Slots[0].Name, name)
-		} else {
-			ret = linkToType(flow.Idl, name)
-		}
+		ret = linkToType(flow.Idl, name)
 	} else if prim, ok := g.prims[name]; ok {
 		ret = linkToType(prim.Idl, name)
 	} else {
