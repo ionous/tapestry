@@ -2,7 +2,7 @@ title = "Tapestry"
 baseURL = "https://tapestry.ionous.net/"
 languageCode = 'en-us'
 # the api tool outputs to bin/static/api
-staticDir = ["../bin/static"]
+staticDir = ["../bin/static", "../bin/tap.schema.json"]
 # to install the install theme: 
 # 1, mkdir -p themes/hugo-geekdoc/
 # 2. curl -L https://github.com/thegeeklab/hugo-geekdoc/releases/download/v0.45.0/hugo-geekdoc.tar.gz | tar -xz -C themes/hugo-geekdoc/ --strip-components=1

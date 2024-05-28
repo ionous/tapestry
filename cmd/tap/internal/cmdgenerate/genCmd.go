@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"go/format"
 	"io/fs"
 	"log"
@@ -22,30 +23,37 @@ import (
 )
 
 func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if outPath, e := filepath.Abs(genFlags.out); e != nil {
+	if inPath, e := filepath.Abs(genFlags.in); e != nil {
 		flag.Usage()
 		log.Fatal(e)
+	} else if outPath, e := filepath.Abs(genFlags.out); e != nil {
+		flag.Usage()
+		log.Fatal(e)
+	} else if groups, e := readGroups(inPath); e != nil {
+		err = fmt.Errorf("%w trying to read groups from %s", e, inPath)
+	} else if g, e := generate.MakeGenerator(groups); e != nil {
+		err = fmt.Errorf("%w trying to generate groups", e)
 	} else {
-		if groups, e := readGroups(genFlags.in); e != nil {
-			err = e
-		} else if g, e := generate.MakeGenerator(groups); e != nil {
-			err = e
-		} else {
-			// probably shouldnt be exclusive....
-			if genFlags.jsonSchema {
-				log.Println("writing", genFlags.schemaPath)
-				var b, out bytes.Buffer
-				if e := g.WriteSchema(&b); e != nil {
+		// probably shouldnt be exclusive....
+		if schema := genFlags.schemaPath; len(schema) > 0 {
+			log.Println("writing", schema)
+			var b, out bytes.Buffer
+			if e := g.WriteSchema(&b); e != nil {
+				err = e
+			} else {
+				if e := json.Indent(&out, b.Bytes(), "", "  "); e != nil {
+					log.Println("poorly generated json", e)
+					out = b
+				}
+				dir, _ := filepath.Split(schema)
+				if e := os.MkdirAll(dir, os.ModePerm); e != nil {
 					err = e
 				} else {
-					if e := json.Indent(&out, b.Bytes(), "", "  "); e != nil {
-						log.Println("poorly generated json", e)
-						out = b
-					}
-					err = os.WriteFile(genFlags.schemaPath, out.Bytes(), 0666)
-
+					err = os.WriteFile(schema, out.Bytes(), 0666)
 				}
-			} else if db, e := createDB(genFlags.useDB, genFlags.dbPath); e != nil {
+			}
+		} else {
+			if db, e := createDB(genFlags.useDB, genFlags.dbPath); e != nil {
 				err = e
 			} else {
 				defer db.Close()
@@ -87,7 +95,6 @@ var genFlags = struct {
 	in         string // input path
 	out        string // output directory
 	useDB      bool
-	jsonSchema bool
 	schemaPath string
 	dbPath     string // output file or path
 }{}
@@ -108,9 +115,8 @@ func buildFlags() (fs flag.FlagSet) {
 	fs.StringVar(&genFlags.in, "in", "../../idl", "input directory containing one or more spec files")
 	fs.StringVar(&genFlags.out, "out", "../../dl", "output directory")
 	fs.BoolVar(&genFlags.useDB, "db", false, "generate a sqlite representation")
-	fs.BoolVar(&genFlags.jsonSchema, "schema", false, "generate a json schema")
+	fs.StringVar(&genFlags.schemaPath, "schema", "", "generate a json schema")
 	fs.StringVar(&genFlags.dbPath, "dbFile", filepath.Join(outBase, "idl.db"), "sqlite output file")
-	fs.StringVar(&genFlags.schemaPath, "schemaFile", filepath.Join(outBase, "idl.json"), "schema output file")
 	return
 }
 

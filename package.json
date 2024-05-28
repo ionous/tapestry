@@ -19,6 +19,7 @@
   "scripts": {
     "doc": "concurrently -m 1 -k \"npm:doc-*\"",
     "doc-api": "go run ./cmd/tap doc -out bin/static/api",
+    "doc-schema": "go run ./cmd/tap gen -in idl -schema bin/static/schema/tap.schema.json",
     "doc-hugo": "exec-bin bin/hugo/hugo -s doc -d ../bin/doc",
     "doc-tar": "tar -C bin/doc -cvz . > bin/site.tar.gz",
     "xdoc-publish": "hut pages publish -d tapestry.ionous.net bin/site.tar.gz",
