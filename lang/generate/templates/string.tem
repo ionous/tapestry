@@ -7,5 +7,5 @@
 {{- end }}
 var Zt_{{Pascal .Name}} = typeinfo.Str{
 	Name: "{{.Name}}",
-	{{- template "markup.tmpl" .}}
+	{{- template "markup.tem" .}}
 }

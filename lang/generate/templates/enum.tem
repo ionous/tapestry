@@ -45,5 +45,5 @@ var Zt_{{Pascal .Name}} = typeinfo.Str{
 	{{- end }}
 	},
 	{{- end }}
-	{{- template "markup.tmpl" .}}
+	{{- template "markup.tem" .}}
 }

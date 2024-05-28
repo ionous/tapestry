@@ -13,7 +13,7 @@ func init() {
 			Private: true,{{end}}{{if $t.Optional}}
 			Optional: true,{{end}}{{if $t.Repeats}}
 			Repeats: true,{{end}}{{if not $t.Private}}
-			{{- template "markup.tmpl" .}}
+			{{- template "markup.tem" .}}
 			Type: &{{PackageDot $t.Type}}Zt_{{Pascal $t.Type}},{{end}}
 		}
 	{{- end -}}
@@ -25,7 +25,7 @@ func init() {
 		{{- end }}
 		},
 		{{- end }}
-		{{- template "markup.tmpl" .}}
+		{{- template "markup.tem" .}}
 	}
 {{- end }}
 }
@@ -50,7 +50,7 @@ var Z_Types = typeinfo.TypeSet{
 {{- end }}
 }
 {{- range .Types }}{{ if .List }}
-{{ template "types.tmpl" . }}
+{{ template "types.tem" . }}
 {{- end }}{{ end }}
 {{- if .Signatures }}
 // a list of all command signatures

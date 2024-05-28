@@ -1,7 +1,7 @@
 // {{.Name}}, a type of slot.
 var Zt_{{Pascal .Name}} = typeinfo.Slot{
 	Name: "{{.Name}}",
-	{{- template "markup.tmpl" .}}
+	{{- template "markup.tem" .}}
 }
 
 // Holds a single slot.
