@@ -102,6 +102,16 @@ func (set sigTerm) Terms() []termData {
 }
 
 // unique types used by the terms
+func (set sigTerm) CommandLink() (ret []TypeLink) {
+	for _, a := range set.terms {
+		if typeName := a.Type; !slices.Contains(ret, TypeLink(typeName)) {
+			ret = append(ret, TypeLink(typeName))
+		}
+	}
+	return
+}
+
+// unique types used by the terms
 func (set sigTerm) TypeLinks() (ret []TypeLink) {
 	for _, a := range set.terms {
 		if typeName := a.Type; !slices.Contains(ret, TypeLink(typeName)) {
@@ -144,7 +154,7 @@ func (set sigTerm) Signature() string {
 // where each signature an array of parts.
 func sigTerms(flow flowData) []sigTerm {
 	commandName := Pascal(flow.Lede)
-	var sets = []sigTerm{{parts: []string{commandName}}}
+	var sets = []sigTerm{{Flow: flow, parts: []string{commandName}}}
 	for _, term := range flow.Terms {
 		if term.Private {
 			continue

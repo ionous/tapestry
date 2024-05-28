@@ -19,7 +19,7 @@ type specData struct {
 
 func (t specData) Link() (ret string, err error) {
 	if a, ok := hackForLinks.linkByName(t.Name); !ok {
-		err = fmt.Errorf("unknown type %q creating link", t.Name)
+		err = fmt.Errorf("unknown type %q creating spec link", t.Name)
 	} else {
 		ret = a
 	}
@@ -30,9 +30,9 @@ func (d specData) Comments() []string {
 	return d.Markup.Comments()
 }
 
-// comment as a single json friendly
+// comment as a single json friendly string
 func (d specData) SchemaComment() (string, error) {
-	return d.Markup.SchemaComment()
+	return d.Markup.GetFormattedComment(lineBreak)
 }
 
 // because references to types arent scoped but the generated code needs to be:
@@ -72,15 +72,16 @@ func (m markup) Comments() (ret []string) {
 	return
 }
 
-// comment as a single json friendly
-func (m markup) SchemaComment() (ret string, err error) {
+const lineBreak = ` <br>`
+
+func (m markup) GetFormattedComment(replaceLineBreaks string) (ret string, err error) {
 	str := strings.Join(m.Comments(), " ")
 	if b, e := json.Marshal(str); e != nil || len(b) == 0 {
 		err = e
 	} else {
 		ret = string(b[1 : len(b)-1])
 		ret = wordwrap.WrapString(ret, 50)
-		ret = strings.ReplaceAll(ret, "\n", ` <br>`)
+		ret = strings.ReplaceAll(ret, "\n", replaceLineBreaks)
 	}
 	return
 }
@@ -107,7 +108,7 @@ type termData struct {
 
 func (t termData) TypeScope() (ret string, err error) {
 	if group, ok := hackForLinks.findGroup(t.Type); !ok {
-		err = fmt.Errorf("unknown type %q creating link", t.Type)
+		err = fmt.Errorf("unknown type %q creating scoped link", t.Type)
 	} else {
 		ret = group + "." + t.Type
 	}
@@ -116,16 +117,27 @@ func (t termData) TypeScope() (ret string, err error) {
 
 func (t termData) Link() (ret string, err error) {
 	if a, ok := hackForLinks.linkByName(t.Type); !ok {
-		err = fmt.Errorf("unknown type %q creating link", t.Type)
+		err = fmt.Errorf("unknown type %q creating term link", t.Type)
 	} else {
 		ret = a
 	}
 	return
 }
 
-// comment as a single json friendly
+// comment as a single json friendly string
 func (t termData) SchemaComment() (string, error) {
-	return t.Markup.SchemaComment()
+	return t.Markup.GetFormattedComment(lineBreak)
+}
+
+// comment as a single json friendly string
+func (t termData) LineComment() (ret string, err error) {
+	const indent = `\n    `
+	if str, e := t.Markup.GetFormattedComment(indent); e != nil {
+		err = e
+	} else {
+		ret = indent + str
+	}
+	return
 }
 
 // handle transforming _ into a blank string

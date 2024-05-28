@@ -52,9 +52,9 @@
   typedesc: expects sigTerm
    ------------------------------------------ */}}
 {{ define "typedesc" -}}
-	{{- with $sigTerm := . -}}
-	\n\n---\n{{ 
-	  .Signature }}\n{{/* */ -}}
+ 	{{- with $sigTerm := . -}}
+	\n\n---\n[{{ 
+	  .Signature }}]({{ .Flow.Link }})\n{{/* */ -}}
 	```yaml\n{{
 	  range .Terms 
 	  }}- {{ if .SimpleLabel }}{{ 
@@ -62,7 +62,9 @@
 	  }}{{ $sigTerm.Lede }}{{ end
 	  }}: {{ Pascal .Type }}{{ 
 	    if .Repeats 
-	  }}...{{ end }}\n{{ 
+	  }}...{{ end }}{{ 
+	  	.LineComment
+	  }}\n{{ 
 	end -}}
 	```\n{{/* */ -}}
 	{{- end -}}
@@ -112,7 +114,11 @@ Types: {{ range $idx, $t := . -}}
     {{ range $op := .Slot }} {{/* a map containing slotCommand(s) */}}      
     "~{{ .Idl }}.{{ .Name }}": {
         {{ template "titledesc" . }},
-        "anyOf": [ {{/* technically should be oneOf, but this behaves better */}}
+        "anyOf": [ {{/* 
+          oneOf ensures only one schema matches; anyOf that there is simply one match.
+        	oneOf is overkill here -- since there are many objects types it would have to check all of them.
+        	anyOf is fine.
+         	*/}}
           {{/* 
           		eval shortcuts
           */}}
@@ -203,10 +209,11 @@ Types: {{ range $idx, $t := . -}}
           ,{
 	      		"type": "object",
 	      		"patternProperties": {
-
 					    "^[A-Z]": { 
-					    	{{/* allows a single assignment or multiple */}}	
-				    		"oneOf": [{
+					    	{{/* 
+					    		allows a single assignment or multiple.
+					    	*/}}	
+				    		"anyOf": [{
 									"description": "Unknown command. Possibly a user pattern.",
 									"$ref": "#/$defs/~rtti.assignment"
 								},{ 
@@ -272,16 +279,13 @@ Types: {{ range $idx, $t := . -}}
     "~{{ .Idl }}.{{ .Name }}": {
         "type": "object",
         {{/*
-	        for every signature in the flow
-	        list an anyOf option ( alt: could be oneOf maybe )
-					with a property for that signature.
-					within each such block... list the terms required for that signature.
+	        for every signature in the flow provide a schema containing that signature.
+	        for each signature, list the terms required for that signature.
 
 					ideally, we'd be able to list the comment at the object level
 					but the hover is on the property name ( the "My:Function:Name" )
 					so it needs to be listed there for the lsp server to see it.
-
-					only, it can't be there either... for reason. ( xxxDesc )
+					only, it can't be there... for reasons. ( xxxDesc )
         */}}
         "anyOf": [
         {{- range $idx, $sigTerm := .Signatures -}}
@@ -298,8 +302,13 @@ Types: {{ range $idx, $t := . -}}
                  "type": "null",
                  {{ template "sigDesc" . }}
 
+              {{/* one term */}}
+              {{- else if (eq 1 (len .Terms)) }}
+             	 	{{ with index .Terms 0 -}}
+              		{{ template "ref" (print $op.Idl "." $op.Name "." .Name) }}
+              	{{ end }}  
               {{/* multiple terms */}}
-              {{- else if (not (eq 1 (len .Terms))) }}
+              {{ else }}
 								"type": "array",
 								"items": [
 								{{- range $it, $term:= .Terms -}}
@@ -309,26 +318,6 @@ Types: {{ range $idx, $t := . -}}
 								],
 								"additionalItems": false,
 								{{ template "sigDesc" $sigTerm }}
-
-							{{ else }}
-							{{/* exactly one term:
-								 allow a single object,
-								 or an array containing one term 
-							*/}}
-								{{- with index .Terms 0 -}}
-									"oneOf": [{
-										{{ template "ref" (print $op.Idl "." $op.Name "." .Name) }},
-										{{ template "sigDesc" $sigTerm }}
-									},{ 
-										"type": "array",
-										"items": [
-										  { {{ template "ref" (print $op.Idl "." $op.Name "." .Name)}} }
-										],
-										"additionalItems": false,
-										{{ template "sigDesc" $sigTerm }}
-									}]
-
-				        {{- end }}{{/* range of one */}}
               {{- end }}{{/* if not/len terms */}}
               } {{/* signature */}}
             }{{/* properties */}}
@@ -363,6 +352,6 @@ Types: {{ range $idx, $t := . -}}
       {{ end }}
       {{ end }}{{/* range terms */}}
     {{ end }}{{/* flow */}}
-    "xxx_eat_the_trailing_comma": {}
+    "$comment": "this eats any trailing commas. chomp. chomp."
   }{{/* defs */}}
 }

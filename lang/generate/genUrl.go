@@ -25,15 +25,9 @@ func (p *groupSearch) findGroup(name string) (ret string, okay bool) {
 func (p *groupSearch) linkByName(name string) (ret string, okay bool) {
 	if n, ok := p.findType(name); ok { // typeEntry
 		okay = true
-		switch t := n.typeData.(type) {
+		switch n.typeData.(type) {
 		case slotData:
 			ret = linkToSlot(name, "")
-		case flowData:
-			if len(t.Slots) > 0 {
-				ret = linkToSlot(t.Slots[0], name)
-			} else {
-				ret = linkToType(n.group, name)
-			}
 		default:
 			ret = linkToType(n.group, name)
 		}
