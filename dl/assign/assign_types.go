@@ -15,7 +15,7 @@ import (
 var Zt_Address = typeinfo.Slot{
 	Name: "address",
 	Markup: map[string]any{
-		"comment": []interface{}{"Identifies some particular object field, local variable, or pattern argument.", "Addresses can be read from or written to."},
+		"comment": "Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.",
 	},
 }
 
@@ -73,7 +73,8 @@ func (op *Dot_Slots) Repeats() bool {
 // Store a value into a variable or object.
 // Values are specified as a generic [Assignment].
 // The various "From" commands exist to cast specific value types into an assignment.
-// However, the specified destination must still be capable of storing specific type.
+//
+// WARNING: This doesn't convert values from one type to another.
 // For example:
 //
 //	Set:value:
@@ -159,7 +160,18 @@ func (op *SetState_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Read a value from an object.
+// Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.
+// In .tell files, this command is often specified with a shortcut. For example:
+//
+//	"#my_object.some_field"
+//
+// is a shorter way to say:
+//
+//	Object:dot:
+//	- "my object"
+//	- "some field"
+//
+// WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
 type ObjectDot struct {
 	Name   rtti.TextEval
 	Dot    []Dot
@@ -206,6 +218,15 @@ func (op *ObjectDot_Slice) Repeats() bool {
 }
 
 // Read a value from a variable.
+// In .tell files, this command is often specified with a shortcut. For example:
+//
+//	"@some_local_variable"
+//
+// is a shorter way to say:
+//
+//	Variable:dot: "some local variable"
+//
+// WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
 type VariableDot struct {
 	Name   rtti.TextEval
 	Dot    []Dot
@@ -327,7 +348,7 @@ func (op *AtIndex_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Execute a pattern.
+// Run a pattern, returning its result (if any).
 // Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
 // Because some patterns can return a value,this implements all of the possible rtti evaluations.
 type CallPattern struct {
@@ -375,7 +396,7 @@ func (op *CallPattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Runtime version of argument.
+// Pass a value to a pattern or other similar call.
 type Arg struct {
 	Name   string
 	Value  rtti.Assignment
@@ -778,7 +799,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Store a value into a variable or object.", "Values are specified as a generic [Assignment].", "The various \"From\" commands exist to cast specific value types into an assignment.", "However, the specified destination must still be capable of storing specific type.", "For example:", "  Set:value:", "  - \"@some_local_variable\"", "  - FromText: \"a piece of text to store.\"", "will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error."},
+			"comment": []interface{}{"Store a value into a variable or object.", "Values are specified as a generic [Assignment].", "The various \"From\" commands exist to cast specific value types into an assignment.", "", "WARNING: This doesn't convert values from one type to another.", "For example:", "  Set:value:", "  - \"@some_local_variable\"", "  - FromText: \"a piece of text to store.\"", "will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error."},
 		},
 	}
 	Zt_SetState = typeinfo.Flow{
@@ -786,11 +807,17 @@ func init() {
 		Lede: "set",
 		Terms: []typeinfo.Term{{
 			Name: "target",
+			Markup: map[string]any{
+				"comment": "Object or record to change.",
+			},
 			Type: &Zt_Address,
 		}, {
 			Name:  "trait",
 			Label: "state",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"Name of the state to set.", "Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.", "Errors if the state wasn't declared as part of the object's kind."},
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -804,13 +831,19 @@ func init() {
 		Lede: "object",
 		Terms: []typeinfo.Term{{
 			Name: "name",
+			Markup: map[string]any{
+				"comment": "Id or friendly name of the object.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "dot",
 			Label:    "dot",
 			Optional: true,
 			Repeats:  true,
-			Type:     &Zt_Dot,
+			Markup: map[string]any{
+				"comment": "A field or path within the object to read from.",
+			},
+			Type: &Zt_Dot,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_Address,
@@ -823,7 +856,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": "Read a value from an object.",
+			"comment": []interface{}{"Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"#my_object.some_field\"", "is a shorter way to say:", "  Object:dot:", "  - \"my object\"", "  - \"some field\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
 		},
 	}
 	Zt_VariableDot = typeinfo.Flow{
@@ -850,7 +883,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": "Read a value from a variable.",
+			"comment": []interface{}{"Read a value from a variable.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"@some_local_variable\"", "is a shorter way to say:", "  Variable:dot: \"some local variable\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
 		},
 	}
 	Zt_AtField = typeinfo.Flow{
@@ -859,7 +892,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "field",
 			Markup: map[string]any{
-				"comment": []interface{}{"The name of a field to write a value into, or to read a value out of.", "( The field must exist in the object or record being accessed. )"},
+				"comment": []interface{}{"The name of the field to read or write.", "The field must exist in the object or record being accessed."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -876,7 +909,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "index",
 			Markup: map[string]any{
-				"comment": "Zero-based index within the list being accessed.",
+				"comment": []interface{}{"The zero-based index to read or write.", "The index must exist within the list being targeted."},
 			},
 			Type: &rtti.Zt_NumberEval,
 		}},
@@ -892,12 +925,18 @@ func init() {
 		Lede: "determine",
 		Terms: []typeinfo.Term{{
 			Name: "pattern_name",
+			Markup: map[string]any{
+				"comment": "The name of the pattern to run.",
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "arguments",
 			Label:   "args",
 			Repeats: true,
-			Type:    &Zt_Arg,
+			Markup: map[string]any{
+				"comment": []interface{}{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
+			},
+			Type: &Zt_Arg,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -910,7 +949,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Execute a pattern.", "Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.", "Because some patterns can return a value,this implements all of the possible rtti evaluations."},
+			"comment": []interface{}{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.", "Because some patterns can return a value,this implements all of the possible rtti evaluations."},
 		},
 	}
 	Zt_Arg = typeinfo.Flow{
@@ -918,14 +957,20 @@ func init() {
 		Lede: "arg",
 		Terms: []typeinfo.Term{{
 			Name: "name",
+			Markup: map[string]any{
+				"comment": "Name of the parameter. An empty string is treated as an unnamed parameter.",
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:  "value",
 			Label: "from",
-			Type:  &rtti.Zt_Assignment,
+			Markup: map[string]any{
+				"comment": "Value to assign to the parameter.",
+			},
+			Type: &rtti.Zt_Assignment,
 		}},
 		Markup: map[string]any{
-			"comment": "Runtime version of argument.",
+			"comment": "Pass a value to a pattern or other similar call.",
 		},
 	}
 	Zt_FromExe = typeinfo.Flow{
@@ -949,6 +994,9 @@ func init() {
 		Lede: "from_address",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Address to read from.",
+			},
 			Type: &Zt_Address,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -964,6 +1012,9 @@ func init() {
 		Lede: "from_bool",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Boolean value for the assignment.",
+			},
 			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -978,6 +1029,9 @@ func init() {
 		Lede: "from_number",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Number for the assignment.",
+			},
 			Type: &rtti.Zt_NumberEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -992,6 +1046,9 @@ func init() {
 		Lede: "from_text",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Text value for the assignment.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -1006,6 +1063,9 @@ func init() {
 		Lede: "from_record",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Record for the assignment.",
+			},
 			Type: &rtti.Zt_RecordEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -1020,6 +1080,9 @@ func init() {
 		Lede: "from_num_list",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Numbers for the assignment.",
+			},
 			Type: &rtti.Zt_NumListEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -1034,6 +1097,9 @@ func init() {
 		Lede: "from_text_list",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Text values for the assignment.",
+			},
 			Type: &rtti.Zt_TextListEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -1048,6 +1114,9 @@ func init() {
 		Lede: "from_record_list",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "Record values for the assignment.",
+			},
 			Type: &rtti.Zt_RecordListEval,
 		}},
 		Slots: []*typeinfo.Slot{

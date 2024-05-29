@@ -5,7 +5,7 @@
 </div>
 <section>
 	<h3 id="pkg-commands">
-		Commands:
+		Implemented by:
 	</h3>
 	<ul class="indexList">
 	{{ range  .Commands }}

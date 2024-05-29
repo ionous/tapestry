@@ -2,15 +2,16 @@
 Spec:with group:
   - "assign"
   - Group contains:
-      - # Identifies some particular object field, local variable, or pattern argument.
-        # Addresses can be read from or written to.
+      - # Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.
         Spec:with slot:
           - "address"
           - Slot:
+
       - # Store a value into a variable or object.
         # Values are specified as a generic [Assignment].
         # The various "From" commands exist to cast specific value types into an assignment.
-        # However, the specified destination must still be capable of storing specific type.
+        #
+        # WARNING: This doesn't convert values from one type to another.
         # For example:
         #   Set:value:
         #   - "@some_local_variable"
@@ -37,16 +38,27 @@ Spec:with group:
           - "execute"
           - Flow:uses:
               - "set"
-              - - Term:name:type:
+              - - # Object or record to change.
+                  Term:name:type:
                     - "_"
                     - "target"
                     - "address"
-                - Term:name:type:
+                - # Name of the state to set.
+                  # Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.
+                  # Errors if the state wasn't declared as part of the object's kind.
+                  Term:name:type:
                     - "state"
                     - "trait"
                     - "text_eval"
 
-      - # Read a value from an object.
+      - # Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.
+        # In .tell files, this command is often specified with a shortcut. For example:
+        #   "#my_object.some_field"
+        # is a shorter way to say:
+        #   Object:dot:
+        #   - "my object"
+        #   - "some field"
+        # WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
         Spec:slots:with flow:
           - "object_dot"
           - - "address"
@@ -59,15 +71,22 @@ Spec:with group:
             - "record_list_eval"
           - Flow:uses:
               - "object"
-              - - Term:name:type:
+              - - # Id or friendly name of the object.
+                  Term:name:type:
                     - "_"
                     - "name"
                     - "text_eval"
-                - Term:optional:repeats:
+                - # A field or path within the object to read from.
+                  Term:optional:repeats:
                     - "dot"
                     - true
                     - true
       - # Read a value from a variable.
+        # In .tell files, this command is often specified with a shortcut. For example:
+        #   "@some_local_variable"
+        # is a shorter way to say:
+        #   Variable:dot: "some local variable"
+        # WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
         Spec:slots:with flow:
           - "variable_dot"
           - - "address"
@@ -98,8 +117,8 @@ Spec:with group:
           - "at_field"
           - "dot"
           - Flow uses:
-              - # The name of a field to write a value into, or to read a value out of.
-                # ( The field must exist in the object or record being accessed. )
+              - # The name of the field to read or write.
+                # The field must exist in the object or record being accessed.
                 Term:name:type:
                   - "_"
                   - "field"
@@ -109,12 +128,13 @@ Spec:with group:
           - "at_index"
           - "dot"
           - Flow uses:
-              - # Zero-based index within the list being accessed.
+              - # The zero-based index to read or write.
+                # The index must exist within the list being targeted.
                 Term:name:type:
                   - "_"
                   - "index"
                   - "number_eval"
-      - # Execute a pattern.
+      - # Run a pattern, returning its result (if any).
         # Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
         # Because some patterns can return a value,this implements all of the possible rtti evaluations.
         Spec:slots:with flow:
@@ -129,24 +149,29 @@ Spec:with group:
             - "record_list_eval"
           - Flow:uses:
               - "determine"
-              - - Term:name:type:
+              - - # The name of the pattern to run.
+                  Term:name:type:
                     - "_"
                     - "pattern_name"
                     - "text"
-                - Term:name:type:repeats:
+                - # Arguments to pass to the pattern.
+                  # Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times.
+                  Term:name:type:repeats:
                     - "args"
                     - "arguments"
                     - "arg"
                     - true
-      - # Runtime version of argument.
+      - # Pass a value to a pattern or other similar call.
         Spec:with flow:
           - "arg"
           - Flow uses:
-              - Term:name:type:
+              - # Name of the parameter. An empty string is treated as an unnamed parameter.
+                Term:name:type:
                   - "_"
                   - "name"
                   - "text"
-              - Term:name:type:
+              - # Value to assign to the parameter.
+                Term:name:type:
                   - "from"
                   - "value"
                   - "assignment"
@@ -168,7 +193,8 @@ Spec:with group:
           - "from_address"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Address to read from.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "address"
@@ -178,7 +204,8 @@ Spec:with group:
           - "from_bool"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Boolean value for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "bool_eval"
@@ -187,7 +214,8 @@ Spec:with group:
           - "from_number"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Number for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "number_eval"
@@ -196,7 +224,8 @@ Spec:with group:
           - "from_text"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Text value for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "text_eval"
@@ -205,7 +234,8 @@ Spec:with group:
           - "from_record"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Record for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "record_eval"
@@ -214,7 +244,8 @@ Spec:with group:
           - "from_num_list"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Numbers for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "num_list_eval"
@@ -223,7 +254,8 @@ Spec:with group:
           - "from_text_list"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Text values for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "text_list_eval"
@@ -232,7 +264,8 @@ Spec:with group:
           - "from_record_list"
           - "assignment"
           - Flow uses:
-              - Term:name:type:
+              - # Record values for the assignment.
+                Term:name:type:
                   - "_"
                   - "value"
                   - "record_list_eval"

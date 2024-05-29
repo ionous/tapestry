@@ -67,7 +67,7 @@ func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []rt.Valu
 				keys = append(keys, n)
 				vals[i] = val
 			} else if len(keys) > 0 {
-				err = fmt.Errorf("only named arguments can follow named arguments %d", i)
+				err = fmt.Errorf("unnamed arguments must precede all named arguments %d", i)
 			} else {
 				vals[i] = val
 			}

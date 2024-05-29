@@ -72,11 +72,9 @@ commands
 </h3>
 <ul class="indexList">
 	{{ range  .Commands }}
-		{{if .Slots }}
 		<li>
 			<a class="code" href="{{ LinkByType . }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
-		{{ end }}
 	{{ end }}
 	</ul>
 </section>
@@ -91,16 +89,16 @@ commands
 	<div class="cmdComment">
 		{{ Comment $cmd.Markup }}
 	</div>
-
+	{{ if $cmd.Slots }}
 	<section>
 	<h4>Slots:</h4>
-		{{ if $cmd.Slots }}
 		<ul class="commandSlots">
 			{{ range $cmd.Slots }}
 			<li><a href="{{ LinkByType . }}">{{ Pascal .Name }}</a></li>
 			{{ end }}{{/* range slots */}}
-		</ul>{{ end }}{{/* if slots */}}
+		</ul>
 	</section>
+	{{ end }}{{/* if slots */}}
 	<section>
 	<h4>Terms:</h4>
 		{{ if not $cmd.Terms -}}None.
