@@ -1,48 +1,50 @@
-# rt
+# Slots used by the runtime to produce and consume values.
 Spec:with group:
   - "rtti"
   - Group contains:
-      - # Reads from evals in a uniform manner for common functions.
+      - # Provides access to values in a generic way.
+        # For example, when the type of a value isn't known in advance.
+        # See also package assign. ( ex. [assign.FromBool] )
         Spec:with slot:
           - "assignment"
           - Slot:
-      - # Statements which return true/false values.
+      - # Commands which return true/false values.
         Spec:with slot:
           - "bool_eval"
           - Slot:
         blockly-color: "LOGIC_HUE"
-      - # Run a series of statements.
+      - # Run a series of other commands.
         Spec:with slot:
           - "execute"
           - Slot:
         blockly-color: "PROCEDURES_HUE"
         blockly-stack: true
-      - # Statements which return a list of numbers.
+      - # Commands which return a list of numbers.
         Spec:with slot:
           - "num_list_eval"
           - Slot:
         blockly-color: "MATH_HUE"
-      - # Statements which return a number.
+      - # Commands which return a number.
         Spec:with slot:
           - "number_eval"
           - Slot:
         blockly-color: "MATH_HUE"
-      - # Statements which return text.
+      - # Commands which return text.
         Spec:with slot:
           - "text_eval"
           - Slot:
         blockly-color: "TEXTS_HUE"
-      - # Statements which return a list of text.
+      - # Commands which return a list of text.
         Spec:with slot:
           - "text_list_eval"
           - Slot:
         blockly-color: "TEXTS_HUE"
-      - # Statements which return a record.
+      - # Commands which return a record.
         Spec:with slot:
           - "record_eval"
           - Slot:
         blockly-color: "LISTS_HUE"
-      - # Statements which return a list of records.
+      - # Commands which return a list of records.
         Spec:with slot:
           - "record_list_eval"
           - Slot:
