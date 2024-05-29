@@ -18,6 +18,7 @@ cmd/spec/spec
 cmd/stem/stem
 cmd/tap/tap
 cmd/tap/tap.db
+doc/.hugo_build.lock
 doc/themes
 www/dist
 *.zip

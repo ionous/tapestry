@@ -8,31 +8,31 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-type objCursor struct {
+type rootCursor struct {
 	run  rt.Runtime
 	name string
 }
 
 // supports requesting fields from the runtime
-// where the top level is the id of the object or meta.Variables
-func MakeObjectCursor(run rt.Runtime, name string) Cursor {
-	return objCursor{run, name}
+// where the name is either the id of an object or meta.Variables
+func MakeCursor(run rt.Runtime, name string) Cursor {
+	return rootCursor{run, name}
 }
 
-func (c objCursor) CurrentValue() rt.Value {
+func (c rootCursor) CurrentValue() rt.Value {
 	return rt.StringOf(c.name)
 }
 
-func (c objCursor) SetAtIndex(int, rt.Value) (err error) {
+func (c rootCursor) SetAtIndex(int, rt.Value) error {
 	return fmt.Errorf("%s can't be indexed", c.name)
 }
 
-func (c objCursor) GetAtIndex(int) (_ Cursor, err error) {
+func (c rootCursor) GetAtIndex(int) (_ Cursor, err error) {
 	err = fmt.Errorf("%s can't be indexed", c.name)
 	return
 }
 
-func (c objCursor) GetAtField(field string) (ret Cursor, err error) {
+func (c rootCursor) GetAtField(field string) (ret Cursor, err error) {
 	if v, e := c.run.GetField(c.name, field); e != nil {
 		err = e
 	} else {
@@ -41,7 +41,7 @@ func (c objCursor) GetAtField(field string) (ret Cursor, err error) {
 	return
 }
 
-func (c objCursor) SetAtField(field string, val rt.Value) error {
+func (c rootCursor) SetAtField(field string, val rt.Value) error {
 	return c.run.SetField(c.name, field, val)
 }
 

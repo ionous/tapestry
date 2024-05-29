@@ -9,13 +9,13 @@ import (
 )
 
 // uniform access to objects and variables
-// implemented by various Tapestry commands.
+// implemented by object dot and variable dot.
 type Address interface {
-	GetReference(rt.Runtime) (dot.Endpoint, error)
+	GetReference(rt.Runtime) (dot.Reference, error)
 }
 
-// check that op exists and then call GetReference on it.
-func GetReference(run rt.Runtime, op Address) (ret dot.Endpoint, err error) {
+// check that op exists and then call GetPath on it.
+func GetReference(run rt.Runtime, op Address) (ret dot.Reference, err error) {
 	if op == nil {
 		err = errors.New("missing address")
 	} else {

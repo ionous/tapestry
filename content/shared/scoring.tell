@@ -57,11 +57,11 @@
           - - If:do:else:
                 - "@notify"
                 - - Set:state:
-                      - "settings"
+                      - "#settings"
                       - "score notification on"
                 - Finally do:
                     - Set:state:
-                        - "settings"
+                        - "#settings"
                         - "score notification off"
             - Say response:with:
                 - "report score notification mode"
@@ -125,7 +125,7 @@
     - "scoring"
     - - # simulate the end of game state.
         Set:state:
-          - "story"
+          - "#story"
           - "completed"
       - Set:value:
           - Object:dot:

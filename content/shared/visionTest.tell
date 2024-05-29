@@ -47,7 +47,7 @@
             FromText: "self"
       - Note: "Change the kitchen lighting, update time, and verify the game prints the arrival of darkness."
       - Set:state:
-          - "kitchen"
+          - "#kitchen"
           - "unlit"
       - PassTime:
       - # update should clear actor illuminated
@@ -70,7 +70,7 @@
       - Expect output: "It is now pitch dark in here!"
       - Note: "Verify that light breaks forth in a glorious wonder."
       - Set:state:
-          - "kitchen"
+          - "#kitchen"
           - "lit"
       - PassTime:
       - Expect output: "The light, it burns."

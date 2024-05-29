@@ -89,13 +89,14 @@
           - FromTextList:
               Fields of: "story data"
           - "field"
-          - - Copy:from:
+          - - Set:value:
                 - Object:dot:
                     - "last known"
                     - AtField:  "@field"
-                - Object:dot:
-                    - "story"
-                    - AtField: "@field"
+                - FromAddress:
+                    Object:dot:
+                      - "story"
+                      - AtField: "@field"
 - # updates 'last known' story state. anything comparing
   # 'story' and 'last known' has to happen in an earlier phase.
   Define rule:named:do:

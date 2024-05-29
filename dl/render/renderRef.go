@@ -91,11 +91,7 @@ func (op *RenderRef) RenderEval(run rt.Runtime, hint affine.Affinity) (ret rt.Va
 func (op *RenderRef) renderRef(run rt.Runtime, hint affine.Affinity) (ret rt.Value, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
 		err = fmt.Errorf("%w getting text", e)
-	} else if path, e := assign.ResolvePath(run, op.Dot); e != nil {
-		err = fmt.Errorf("%w resolving path for %s", e, name)
-	} else if tv, e := assign.ResolveName(run, name.String(), path); e != nil {
-		err = fmt.Errorf("%w resolving %s with path %s", e, name, path)
-	} else if val, e := tv.GetValue(); e != nil {
+	} else if val, e := assign.GetNamedValue(run, name.String(), op.Dot); e != nil {
 		err = e
 	} else {
 		ret, err = safe.ConvertValue(run, val, hint)

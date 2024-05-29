@@ -1,4 +1,4 @@
-// rt
+// Slots used by the runtime to produce and consume values.
 package rtti
 
 //
@@ -13,7 +13,7 @@ import (
 var Zt_Assignment = typeinfo.Slot{
 	Name: "assignment",
 	Markup: map[string]any{
-		"comment": "Reads from evals in a uniform manner for common functions.",
+		"comment": []interface{}{"Provides access to values in a generic way.", "For example, when the type of a value isn't known in advance.", "See also package assign. ( ex. [assign.FromBool] )"},
 	},
 }
 
@@ -43,7 +43,7 @@ var Zt_BoolEval = typeinfo.Slot{
 	Name: "bool_eval",
 	Markup: map[string]any{
 		"blockly-color": "LOGIC_HUE",
-		"comment":       "Statements which return true/false values.",
+		"comment":       "Commands which return true/false values.",
 	},
 }
 
@@ -74,7 +74,7 @@ var Zt_Execute = typeinfo.Slot{
 	Markup: map[string]any{
 		"blockly-color": "PROCEDURES_HUE",
 		"blockly-stack": true,
-		"comment":       "Run a series of statements.",
+		"comment":       "Run a series of other commands.",
 	},
 }
 
@@ -104,7 +104,7 @@ var Zt_NumListEval = typeinfo.Slot{
 	Name: "num_list_eval",
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
-		"comment":       "Statements which return a list of numbers.",
+		"comment":       "Commands which return a list of numbers.",
 	},
 }
 
@@ -134,7 +134,7 @@ var Zt_NumberEval = typeinfo.Slot{
 	Name: "number_eval",
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
-		"comment":       "Statements which return a number.",
+		"comment":       "Commands which return a number.",
 	},
 }
 
@@ -164,7 +164,7 @@ var Zt_TextEval = typeinfo.Slot{
 	Name: "text_eval",
 	Markup: map[string]any{
 		"blockly-color": "TEXTS_HUE",
-		"comment":       "Statements which return text.",
+		"comment":       "Commands which return text.",
 	},
 }
 
@@ -194,7 +194,7 @@ var Zt_TextListEval = typeinfo.Slot{
 	Name: "text_list_eval",
 	Markup: map[string]any{
 		"blockly-color": "TEXTS_HUE",
-		"comment":       "Statements which return a list of text.",
+		"comment":       "Commands which return a list of text.",
 	},
 }
 
@@ -224,7 +224,7 @@ var Zt_RecordEval = typeinfo.Slot{
 	Name: "record_eval",
 	Markup: map[string]any{
 		"blockly-color": "LISTS_HUE",
-		"comment":       "Statements which return a record.",
+		"comment":       "Commands which return a record.",
 	},
 }
 
@@ -254,7 +254,7 @@ var Zt_RecordListEval = typeinfo.Slot{
 	Name: "record_list_eval",
 	Markup: map[string]any{
 		"blockly-color": "LISTS_HUE",
-		"comment":       "Statements which return a list of records.",
+		"comment":       "Commands which return a list of records.",
 	},
 }
 
@@ -283,7 +283,7 @@ func (op *RecordListEval_Slots) Repeats() bool {
 var Z_Types = typeinfo.TypeSet{
 	Name: "rtti",
 	Comment: []string{
-		"rt",
+		"Slots used by the runtime to produce and consume values.",
 	},
 
 	Slot: z_slot_list,

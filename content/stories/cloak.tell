@@ -75,7 +75,7 @@ Instead of going:
         - "other_than"
         - "#north"
     - - Set:state:
-        - "message"
+        - "#message"
         - "trampled"
       - Say: "Blundering around in the dark isn't a good idea!"
 
@@ -106,19 +106,19 @@ You are wearing a velvet cloak. The description of the cloak is "A handsome cloa
 
 After taking the cloak:
   - Set:state:
-    - "bar"
+    - "#bar"
     - "unlit"
 
 # TODO: it'd be nice to have a generic way to capture is/not in possession.
 After dropping the cloak:
   - Set:state:
-    - "bar"
+    - "#bar"
     - "lit"
 
 # FIX: this allows a player to increase their score multiple times by repeatedly taking and dropping the cloak.
 After storing the cloak:
   - Set:state:
-    - "bar"
+    - "#bar"
     - "lit"
   - Increase: "#story.score"
 

@@ -1,4 +1,4 @@
-# Describes itself using its own types.
+# Types which describe the format of spec (.tells) files.
 Spec:with group:
   - "spec"
   - Group contains:

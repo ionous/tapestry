@@ -3,22 +3,22 @@
     - "vision test"
     - "Kitchenette"
     - - Set:state:
-          - "Kitchen"
+          - "#kitchen"
           - "unlit"
       - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
       - Expect output: "ok: The cabinet is dark."
       - Set:state:
-          - "Kitchen"
+          - "#kitchen"
           - "lit"
       - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
       - Expect output: "ok: The cabinet has light."
       - Set:state:
-          - "cabinet"
+          - "#cabinet"
           - "closed"
       - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
       - Expect output: "ok: The cabinet is dark."
       - Set:state:
-          - "matches"
+          - "#matches"
           - "lit"
       - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
       - Expect output: "ok: The cabinet has light."
@@ -30,13 +30,13 @@
           - "flashlight"
           - "after activating"
           - - Set:state:
-                - "flashlight"
+                - "#flashlight"
                 - "lit"
       - Define noun:rule:do:
           - "flashlight"
           - "after deactivating"
           - - Set:state:
-                - "flashlight"
+                - "#flashlight"
                 - "unlit"
     - - StartGame actor:quietly:
           - FromText:

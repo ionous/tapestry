@@ -9,13 +9,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *ObjectDot) GetReference(run rt.Runtime) (ret dot.Endpoint, err error) {
+func (op *ObjectDot) GetReference(run rt.Runtime) (ret dot.Reference, err error) {
 	if name, e := safe.ObjectText(run, op.Name); e != nil {
 		err = e
-	} else if path, e := ResolvePath(run, op.Dot); e != nil {
+	} else if path, e := resolveDots(run, op.Dot); e != nil {
 		err = e
 	} else {
-		ret, err = dot.FindEndpoint(run, name.String(), path)
+		pos := dot.MakeReference(run, name.String())
+		ret, err = pos.DotPath(path)
 	}
 	return
 }
@@ -83,9 +84,9 @@ func (op *ObjectDot) GetRecordList(run rt.Runtime) (rt.Value, error) {
 }
 
 func (op *ObjectDot) getValue(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
-	if at, e := GetReference(run, op); e != nil {
+	if pos, e := GetReference(run, op); e != nil {
 		err = e
-	} else if val, e := at.GetValue(); e != nil {
+	} else if val, e := pos.GetValue(); e != nil {
 		err = e
 	} else if e := safe.Check(val, aff); e != nil {
 		err = e

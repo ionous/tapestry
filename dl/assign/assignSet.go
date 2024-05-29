@@ -1,8 +1,8 @@
 package assign
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -14,32 +14,32 @@ func (op *SetValue) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *SetValue) setValue(run rt.Runtime) (err error) {
-	if ref, e := GetReference(run, op.Target); e != nil {
-		err = e // note: things are easier to debug if this grabs the target frst
+	if at, e := GetReference(run, op.Target); e != nil {
+		err = e // note: things are easier to debug if this grabs the target first
 	} else if newValue, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
-	} else if e := ref.SetValue(newValue); e != nil {
+	} else if e := at.SetValue(newValue); e != nil {
 		err = e
 	}
 	return
 }
 
 func (op *SetState) Execute(run rt.Runtime) (err error) {
-	if e := op.setTrait(run); e != nil {
+	if e := op.setState(run); e != nil {
 		err = CmdError(op, e)
 	}
 	return
 }
 
-func (op *SetState) setTrait(run rt.Runtime) (err error) {
-	if tgt, e := safe.GetText(run, op.Target); e != nil {
+func (op *SetState) setState(run rt.Runtime) (err error) {
+	if at, e := GetReference(run, op.Target); e != nil {
 		err = e
 	} else if trait, e := safe.GetText(run, op.Trait); e != nil {
 		err = e
-	} else if obj, e := run.GetField(meta.ObjectId, tgt.String()); e != nil {
+	} else if at, e := at.Dot(dot.Field(trait.String())); e != nil {
 		err = e
 	} else {
-		err = run.SetField(obj.String(), trait.String(), rt.BoolOf(true))
+		err = at.SetValue(rt.BoolOf(true))
 	}
 	return
 }

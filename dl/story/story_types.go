@@ -77,7 +77,6 @@ func (op *FieldDefinition_Slots) Repeats() bool {
 }
 
 // Used internally as the container for every .tell file.
-// Implements Story Statement to simplify how flex parsing works.
 type StoryFile struct {
 	Statements []StoryStatement
 	Markup     map[string]any
@@ -1716,7 +1715,7 @@ func init() {
 		}},
 		Markup: map[string]any{
 			"blockly-color": "TAP_HUE_ROOT",
-			"comment":       []interface{}{"Used internally as the container for every .tell file.", "Implements Story Statement to simplify how flex parsing works."},
+			"comment":       "Used internally as the container for every .tell file.",
 			"internal":      true,
 			"mosaic-root":   true,
 		},

@@ -32,7 +32,7 @@
               - Print: "okay: reached outside the open cabinet."
       - Expect output: "okay: reached outside the open cabinet."
       - Set:state:
-          - "espresso machine"
+          - "#machine"
           - "open"
       - If:assuming:do:else:
           - Not:
@@ -48,7 +48,7 @@
               - Print: "okay: reached inside the open espresso machine."
       - Expect output: "okay: reached inside the open espresso machine."
       - Set:state:
-          - "cabinet"
+          - "#cabinet"
           - "closed"
       - If:assuming:do:else:
           - Not:

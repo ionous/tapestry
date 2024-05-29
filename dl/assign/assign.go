@@ -13,6 +13,16 @@ func (op *FromExe) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
 	err = safe.RunAll(run, op.Exe)
 	return // what should we return...?
 }
+
+func (op *FromAddress) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
+	if pos, e := GetReference(run, op.Value); e != nil {
+		err = e
+	} else {
+		ret, err = pos.GetValue()
+	}
+	return
+}
+
 func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
 	return safe.GetBool(run, op.Value)
 }

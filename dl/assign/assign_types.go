@@ -1,4 +1,4 @@
-// Read and write from objects and local variables.
+// Read values from, and write values to, objects and local variables.
 package assign
 
 //
@@ -15,7 +15,7 @@ import (
 var Zt_Address = typeinfo.Slot{
 	Name: "address",
 	Markup: map[string]any{
-		"comment": []interface{}{"Identifies some particular object field, local variable, or pattern argument.", "Addresses can be read from or written to.", "That is to say, addresses implement all of the rt evals,", "and all commands which read from objects or variables should use the methods the address interface provides."},
+		"comment": []interface{}{"Identifies some particular object field, local variable, or pattern argument.", "Addresses can be read from or written to."},
 	},
 }
 
@@ -119,9 +119,10 @@ func (op *SetValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Set the state of an object.
+// Set the state of an object or record.
+// See also: story `Define state:names:`.
 type SetState struct {
-	Target rtti.TextEval
+	Target Address
 	Trait  rtti.TextEval
 	Markup map[string]any
 }
@@ -158,46 +159,7 @@ func (op *SetState_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Copy from one stored value to another.
-// Requires that the type of the two values match exactly
-type CopyValue struct {
-	Target Address
-	Source Address
-	Markup map[string]any
-}
-
-// copy_value, a type of flow.
-var Zt_CopyValue typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*CopyValue) TypeInfo() typeinfo.T {
-	return &Zt_CopyValue
-}
-
-// Implements [typeinfo.Markup]
-func (op *CopyValue) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.Execute = (*CopyValue)(nil)
-
-// Holds a slice of type CopyValue.
-type CopyValue_Slice []CopyValue
-
-// Implements [typeinfo.Instance] for a slice of CopyValue.
-func (*CopyValue_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CopyValue
-}
-
-// Implements [typeinfo.Repeats] for a slice of CopyValue.
-func (op *CopyValue_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
+// Read a value from an object.
 type ObjectDot struct {
 	Name   rtti.TextEval
 	Dot    []Dot
@@ -243,6 +205,7 @@ func (op *ObjectDot_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Read a value from a variable.
 type VariableDot struct {
 	Name   rtti.TextEval
 	Dot    []Dot
@@ -288,7 +251,7 @@ func (op *VariableDot_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Selects a named field from a record, or a named property from an object.
+// Select a named field from a record, or a named property from an object.
 type AtField struct {
 	Field  rtti.TextEval
 	Markup map[string]any
@@ -326,7 +289,7 @@ func (op *AtField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Selects a value from a list of values.
+// Select a value from a list of values.
 type AtIndex struct {
 	Index  rtti.NumberEval
 	Markup map[string]any
@@ -364,7 +327,9 @@ func (op *AtIndex_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Executes a pattern, and potentially returns a value.
+// Execute a pattern.
+// Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
+// Because some patterns can return a value,this implements all of the possible rtti evaluations.
 type CallPattern struct {
 	PatternName string
 	Arguments   []Arg
@@ -446,8 +411,8 @@ func (op *Arg_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Adapts an execute statement to an assignment.
-// Used internally for package shuttle.
+// Provide one or more execute commands for an assignment.
+// Used internally for jess rules.
 type FromExe struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -485,7 +450,45 @@ func (op *FromExe_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a boolean value.
+// Provide a stored value for an assignment.
+type FromAddress struct {
+	Value  Address
+	Markup map[string]any
+}
+
+// from_address, a type of flow.
+var Zt_FromAddress typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromAddress) TypeInfo() typeinfo.T {
+	return &Zt_FromAddress
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromAddress) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromAddress)(nil)
+
+// Holds a slice of type FromAddress.
+type FromAddress_Slice []FromAddress
+
+// Implements [typeinfo.Instance] for a slice of FromAddress.
+func (*FromAddress_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromAddress
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromAddress.
+func (op *FromAddress_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a boolean value for an assignment.
 type FromBool struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
@@ -523,7 +526,7 @@ func (op *FromBool_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a number.
+// Provide a number for an assignment.
 type FromNumber struct {
 	Value  rtti.NumberEval
 	Markup map[string]any
@@ -561,7 +564,7 @@ func (op *FromNumber_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a text string.
+// Provide a text value for an assignment.
 type FromText struct {
 	Value  rtti.TextEval
 	Markup map[string]any
@@ -599,7 +602,7 @@ func (op *FromText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a record.
+// Provide a record for an assignment.
 type FromRecord struct {
 	Value  rtti.RecordEval
 	Markup map[string]any
@@ -637,7 +640,7 @@ func (op *FromRecord_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a list of numbers.
+// Provide a list of numbers for an assignment.
 type FromNumList struct {
 	Value  rtti.NumListEval
 	Markup map[string]any
@@ -675,7 +678,7 @@ func (op *FromNumList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a list of text strings.
+// Provide a list of text values for an assignment.
 type FromTextList struct {
 	Value  rtti.TextListEval
 	Markup map[string]any
@@ -713,7 +716,7 @@ func (op *FromTextList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Calculates a list of records.
+// Provide a list of records for an assignment.
 type FromRecordList struct {
 	Value  rtti.RecordListEval
 	Markup map[string]any
@@ -783,7 +786,7 @@ func init() {
 		Lede: "set",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &rtti.Zt_TextEval,
+			Type: &Zt_Address,
 		}, {
 			Name:  "trait",
 			Label: "state",
@@ -793,25 +796,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Set the state of an object.",
-		},
-	}
-	Zt_CopyValue = typeinfo.Flow{
-		Name: "copy_value",
-		Lede: "copy",
-		Terms: []typeinfo.Term{{
-			Name: "target",
-			Type: &Zt_Address,
-		}, {
-			Name:  "source",
-			Label: "from",
-			Type:  &Zt_Address,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Copy from one stored value to another.", "Requires that the type of the two values match exactly"},
+			"comment": []interface{}{"Set the state of an object or record.", "See also: story `Define state:names:`."},
 		},
 	}
 	Zt_ObjectDot = typeinfo.Flow{
@@ -837,6 +822,9 @@ func init() {
 			&rtti.Zt_TextListEval,
 			&rtti.Zt_RecordListEval,
 		},
+		Markup: map[string]any{
+			"comment": "Read a value from an object.",
+		},
 	}
 	Zt_VariableDot = typeinfo.Flow{
 		Name: "variable_dot",
@@ -861,6 +849,9 @@ func init() {
 			&rtti.Zt_TextListEval,
 			&rtti.Zt_RecordListEval,
 		},
+		Markup: map[string]any{
+			"comment": "Read a value from a variable.",
+		},
 	}
 	Zt_AtField = typeinfo.Flow{
 		Name: "at_field",
@@ -876,7 +867,7 @@ func init() {
 			&Zt_Dot,
 		},
 		Markup: map[string]any{
-			"comment": "Selects a named field from a record, or a named property from an object.",
+			"comment": "Select a named field from a record, or a named property from an object.",
 		},
 	}
 	Zt_AtIndex = typeinfo.Flow{
@@ -893,7 +884,7 @@ func init() {
 			&Zt_Dot,
 		},
 		Markup: map[string]any{
-			"comment": "Selects a value from a list of values.",
+			"comment": "Select a value from a list of values.",
 		},
 	}
 	Zt_CallPattern = typeinfo.Flow{
@@ -919,7 +910,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": "Executes a pattern, and potentially returns a value.",
+			"comment": []interface{}{"Execute a pattern.", "Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.", "Because some patterns can return a value,this implements all of the possible rtti evaluations."},
 		},
 	}
 	Zt_Arg = typeinfo.Flow{
@@ -949,7 +940,22 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Adapts an execute statement to an assignment.", "Used internally for package shuttle."},
+			"comment":  []interface{}{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
+			"internal": true,
+		},
+	}
+	Zt_FromAddress = typeinfo.Flow{
+		Name: "from_address",
+		Lede: "from_address",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Type: &Zt_Address,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment":  "Provide a stored value for an assignment.",
 			"internal": true,
 		},
 	}
@@ -964,7 +970,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a boolean value.",
+			"comment": "Provide a boolean value for an assignment.",
 		},
 	}
 	Zt_FromNumber = typeinfo.Flow{
@@ -978,7 +984,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a number.",
+			"comment": "Provide a number for an assignment.",
 		},
 	}
 	Zt_FromText = typeinfo.Flow{
@@ -992,7 +998,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a text string.",
+			"comment": "Provide a text value for an assignment.",
 		},
 	}
 	Zt_FromRecord = typeinfo.Flow{
@@ -1006,7 +1012,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a record.",
+			"comment": "Provide a record for an assignment.",
 		},
 	}
 	Zt_FromNumList = typeinfo.Flow{
@@ -1020,7 +1026,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a list of numbers.",
+			"comment": "Provide a list of numbers for an assignment.",
 		},
 	}
 	Zt_FromTextList = typeinfo.Flow{
@@ -1034,7 +1040,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a list of text strings.",
+			"comment": "Provide a list of text values for an assignment.",
 		},
 	}
 	Zt_FromRecordList = typeinfo.Flow{
@@ -1048,7 +1054,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Calculates a list of records.",
+			"comment": "Provide a list of records for an assignment.",
 		},
 	}
 }
@@ -1057,7 +1063,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "assign",
 	Comment: []string{
-		"Read and write from objects and local variables.",
+		"Read values from, and write values to, objects and local variables.",
 	},
 
 	Slot:       z_slot_list,
@@ -1077,7 +1083,6 @@ var z_slot_list = []*typeinfo.Slot{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_SetValue,
 	&Zt_SetState,
-	&Zt_CopyValue,
 	&Zt_ObjectDot,
 	&Zt_VariableDot,
 	&Zt_AtField,
@@ -1085,6 +1090,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_CallPattern,
 	&Zt_Arg,
 	&Zt_FromExe,
+	&Zt_FromAddress,
 	&Zt_FromBool,
 	&Zt_FromNumber,
 	&Zt_FromText,
@@ -1100,7 +1106,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
 	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
 	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
-	12187184211547847098: (*CopyValue)(nil),      /* execute=Copy:from: */
 	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
 	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
 	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
@@ -1109,6 +1114,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	352268441608212603:   (*CallPattern)(nil),    /* record_list_eval=Determine:args: */
 	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
 	13938609641525654217: (*CallPattern)(nil),    /* text_list_eval=Determine:args: */
+	9651737781749814793:  (*FromAddress)(nil),    /* assignment=FromAddress: */
 	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
 	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
 	15276643347016776669: (*FromNumList)(nil),    /* assignment=FromNumList: */

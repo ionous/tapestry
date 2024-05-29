@@ -46,7 +46,7 @@
             - "story"
             - AtField: "turn count"
       - Set:state:
-          - "story"
+          - "#story"
           - "playing"
 - Define rule:named:do:
     - "before start game, then continue"
@@ -94,7 +94,7 @@
               - AtField: "ending message"
     - - Nothing:
     - - Set:state:
-          - "story"
+          - "#story"
           - Txt if:then:else:
               - Not: "@finally"
               - "concluded"

@@ -1,11 +1,9 @@
-# Read and write from objects and local variables.
+# Read values from, and write values to, objects and local variables.
 Spec:with group:
   - "assign"
   - Group contains:
       - # Identifies some particular object field, local variable, or pattern argument.
         # Addresses can be read from or written to.
-        # That is to say, addresses implement all of the rt evals,
-        # and all commands which read from objects or variables should use the methods the address interface provides.
         Spec:with slot:
           - "address"
           - Slot:
@@ -32,7 +30,8 @@ Spec:with group:
                   Term:type:
                     - "value"
                     - "assignment"
-      - # Set the state of an object.
+      - # Set the state of an object or record.
+        # See also: story `Define state:names:`.
         Spec:slots:with flow:
           - "set_state"
           - "execute"
@@ -41,27 +40,14 @@ Spec:with group:
               - - Term:name:type:
                     - "_"
                     - "target"
-                    - "text_eval"
+                    - "address"
                 - Term:name:type:
                     - "state"
                     - "trait"
                     - "text_eval"
-      - # Copy from one stored value to another.
-        # Requires that the type of the two values match exactly
+
+      - # Read a value from an object.
         Spec:slots:with flow:
-          - "copy_value"
-          - "execute"
-          - Flow:uses:
-              - "copy"
-              - - Term:name:type:
-                    - "_"
-                    - "target"
-                    - "address"
-                - Term:name:type:
-                    - "from"
-                    - "source"
-                    - "address"
-      - Spec:slots:with flow:
           - "object_dot"
           - - "address"
             - "bool_eval"
@@ -81,7 +67,8 @@ Spec:with group:
                     - "dot"
                     - true
                     - true
-      - Spec:slots:with flow:
+      - # Read a value from a variable.
+        Spec:slots:with flow:
           - "variable_dot"
           - - "address"
             - "bool_eval"
@@ -106,7 +93,7 @@ Spec:with group:
           - "dot"
           - Slot:
         blockly-color: "MATH_HUE"
-      - # Selects a named field from a record, or a named property from an object.
+      - # Select a named field from a record, or a named property from an object.
         Spec:slots:with flow:
           - "at_field"
           - "dot"
@@ -117,7 +104,7 @@ Spec:with group:
                   - "_"
                   - "field"
                   - "text_eval"
-      - # Selects a value from a list of values.
+      - # Select a value from a list of values.
         Spec:slots:with flow:
           - "at_index"
           - "dot"
@@ -127,7 +114,9 @@ Spec:with group:
                   - "_"
                   - "index"
                   - "number_eval"
-      - # Executes a pattern, and potentially returns a value.
+      - # Execute a pattern.
+        # Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
+        # Because some patterns can return a value,this implements all of the possible rtti evaluations.
         Spec:slots:with flow:
           - "call_pattern"
           - - "execute"
@@ -161,8 +150,8 @@ Spec:with group:
                   - "from"
                   - "value"
                   - "assignment"
-      - # Adapts an execute statement to an assignment.
-        # Used internally for package shuttle.
+      - # Provide one or more execute commands for an assignment.
+        # Used internally for jess rules.
         internal: true
         Spec:slots:with flow:
           - "from_exe"
@@ -173,7 +162,18 @@ Spec:with group:
                   - "exe"
                   - "execute"
                   - true
-      - # Calculates a boolean value.
+      - # Provide a stored value for an assignment.
+        internal: true
+        Spec:slots:with flow:
+          - "from_address"
+          - "assignment"
+          - Flow uses:
+              - Term:name:type:
+                  - "_"
+                  - "value"
+                  - "address"
+
+      - # Provide a boolean value for an assignment.
         Spec:slots:with flow:
           - "from_bool"
           - "assignment"
@@ -182,7 +182,7 @@ Spec:with group:
                   - "_"
                   - "value"
                   - "bool_eval"
-      - # Calculates a number.
+      - # Provide a number for an assignment.
         Spec:slots:with flow:
           - "from_number"
           - "assignment"
@@ -191,7 +191,7 @@ Spec:with group:
                   - "_"
                   - "value"
                   - "number_eval"
-      - # Calculates a text string.
+      - # Provide a text value for an assignment.
         Spec:slots:with flow:
           - "from_text"
           - "assignment"
@@ -200,7 +200,7 @@ Spec:with group:
                   - "_"
                   - "value"
                   - "text_eval"
-      - # Calculates a record.
+      - # Provide a record for an assignment.
         Spec:slots:with flow:
           - "from_record"
           - "assignment"
@@ -209,7 +209,7 @@ Spec:with group:
                   - "_"
                   - "value"
                   - "record_eval"
-      - # Calculates a list of numbers.
+      - # Provide a list of numbers for an assignment.
         Spec:slots:with flow:
           - "from_num_list"
           - "assignment"
@@ -218,7 +218,7 @@ Spec:with group:
                   - "_"
                   - "value"
                   - "num_list_eval"
-      - # Calculates a list of text strings.
+      - # Provide a list of text values for an assignment.
         Spec:slots:with flow:
           - "from_text_list"
           - "assignment"
@@ -227,7 +227,7 @@ Spec:with group:
                   - "_"
                   - "value"
                   - "text_list_eval"
-      - # Calculates a list of records.
+      - # Provide a list of records for an assignment.
         Spec:slots:with flow:
           - "from_record_list"
           - "assignment"

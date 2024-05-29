@@ -49,7 +49,7 @@
         Text: "mode"
     - - Nothing:
     - - Set:state:
-          - "settings"
+          - "#settings"
           - "@mode"
       - Say response:with:
           - "room description response"

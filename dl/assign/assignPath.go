@@ -13,9 +13,13 @@ type Dot interface {
 	Resolve(rt.Runtime) (dot.Dotted, error)
 }
 
+func makeVarPath(name string, path dot.Path) dot.Path {
+	return append(dot.Path{dot.Field(name)}, path...)
+}
+
 // change num and text evals into concrete index and member names
 // ( determining the values of the path elements in advance aids debugging. )
-func ResolvePath(run rt.Runtime, dots []Dot) (ret dot.Path, err error) {
+func resolveDots(run rt.Runtime, dots []Dot) (ret dot.Path, err error) {
 	if cnt := len(dots); cnt > 0 {
 		path := make(dot.Path, 0, cnt)
 		for _, el := range dots {
