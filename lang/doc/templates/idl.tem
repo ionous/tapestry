@@ -1,53 +1,46 @@
 <h1>{{ Title .Name }} Definitions</h1>
 {{ Comment .Types.Comment }} 
-<h2>Index</h2>
+
 {{/* -------------------------------------------------
-num types 
+									index 
 -------------------------------------------------	*/}}
+<h2>Index</h2>
+
+{{/* ---------- num -----------------------	*/}}
 {{ if .Types.Num  }}
 <section>
 <h3>
 	Number Types:
 </h3>
+</section>
+	<ul class="indexList">
 	{{ range .Types.Num }}
-	<h2 id="{{ .Name }}">
-		{{ Title .Name }}</a>
-	</h2>
-	{{ Comment .Markup }}
+		<li>
+			<a class="code" href="#{{ .Name }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
+		</li>
 	{{ end }}
+	</ul>
 </section>
 {{ end }}
 
-{{/* -------------------------------------------------
-str types 
--------------------------------------------------	*/}}
+{{/* ---------- str -----------------------	*/}}
 {{ if .Types.Str  }}
 <section>
 <h3>
 	String Types:
 </h3>
+</section>
+	<ul class="indexList">
 	{{ range .Types.Str }}
-	<h2 id="{{ .Name }}">
-		{{ Title .Name }}</a>
-	</h2>
-	{{ Comment .Markup }}
-	{{ if .Options }}
-	The options are:
-		<ul>
-			{{ range .Options }}
-			<li>
-				"{{ . }}"
-			</li>
-			{{ end }}
-		</ul>
-	{{ end }}{{/* options */}}
+		<li>
+			<a class="code" href="#{{ .Name }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
+		</li>
 	{{ end }}
+	</ul>
 </section>
 {{ end }}
 
-{{/* -------------------------------------------------
-slots 
--------------------------------------------------	*/}}
+{{/* ---------- slots -----------------------	*/}}
 {{ if .Types.Slot }}
 <section>
 <h3>
@@ -62,22 +55,64 @@ slots
 	</ul>
 </section>
 {{ end }}
-{{/* -------------------------------------------------
-commands 
--------------------------------------------------	*/}}
+
+{{/* ---------- commands -----------------------	*/}}
 {{ if .Commands }}
 <section>
 <h3>
 	Commands:
 </h3>
-<ul class="indexList">
+	<ul class="indexList">
 	{{ range  .Commands }}
 		<li>
-			<a class="code" href="{{ LinkByType . }}">{{ .Spec }}</a> {{ Snippet .Markup }}
+			<a class="code" href="#{{ .Name }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
 	{{ end }}
 	</ul>
 </section>
+{{ end }}
+
+{{/* -------------------------------------------------
+									body 
+-------------------------------------------------	*/}}
+{{/* ---------- num -----------------------	*/}}
+{{ if .Types.Num  }}
+<section>
+<h1>Number Types</h1>
+	{{ range .Types.Num }}
+	<h2 id="{{ .Name }}">
+		{{ Title .Name }}</a>
+	</h2>
+	{{ Comment .Markup }}
+	{{ end }}
+</section>
+{{ end }}
+
+{{/* ---------- str -----------------------	*/}}
+{{ if .Types.Str  }}
+<section><h1>String Types</h1>
+	{{ range .Types.Str }}
+	<h2 id="{{ .Name }}">
+		{{ Title .Name }}</a>
+	</h2>
+	{{ Comment .Markup }}
+	{{ if .Options }}
+	The options are:
+		<ul class="optionsList">
+			{{ range .Options }}
+			<li>
+				"{{ . }}"
+			</li>
+			{{ end }}
+		</ul>
+	{{ end }}{{/* options */}}
+	{{ end }}
+</section>
+{{ end }}
+
+
+{{/* ---------- commands -----------------------	*/}}
+{{ if .Commands }}
 <section>
 <h1>Commands</h1>
 {{- range $i, $cmd := .Commands }}
