@@ -46,9 +46,8 @@
 			------------------------------------------------- */}}
 			<div id="footer">
 				<b>Tapestry - a story engine for games.</b><br>
-				The content of this page is licensed under the Creative Commons Attribution 3.0 License, and code is licensed under a BSD license.<br>
-				Portions of this page are modifications based on work created and <a href="/readme/policies">shared by Google</a> and used according to terms described in the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons 4.0 Attribution License</a>.<br>
-
+				The content of this page is licensed under the Creative Commons Attribution 4.0 License, and code is licensed under a BSD license.<br>
+        Portions of this page are modifications based on work created and <a href="https://developers.google.com/terms/site-policies">shared by Google</a> and used according to terms described in the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons 4.0 Attribution License</a>.<br>
 			</div>
 		</div>{{/*container*/}}
 	</div>{{/*page*/}}
