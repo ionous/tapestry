@@ -209,7 +209,7 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 			}
 
 		case r.Float64:
-			b.Aff, b.Type = affine.Number, k.String()
+			b.Aff, b.Type = affine.Num, k.String()
 
 		case r.Int: // enumeration
 			aspect := nameOfType(fieldType)

@@ -64,12 +64,12 @@ func (d *Decoder) DecodeAssignment(a affine.Affinity, b []byte) (ret rt.Assignme
 		} else {
 			ret = &assign.FromBool{Value: v.Value}
 		}
-	case affine.Number:
-		var v rtti.NumberEval_Slot
+	case affine.Num:
+		var v rtti.NumEval_Slot
 		if e := d.decodeValue(&v, b); e != nil {
 			err = e
 		} else {
-			ret = &assign.FromNumber{Value: v.Value}
+			ret = &assign.FromNum{Value: v.Value}
 		}
 	case affine.Text:
 		var v rtti.TextEval_Slot

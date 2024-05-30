@@ -12,7 +12,7 @@
           - "The story engine automagically calls \"print name\" when the name of an object is used in a template. "
           - "ex. { .someObject }"
       - Say: "{.named}, {.unnamed}."
-      - Expect output: "named object, thing."
+      - Expect text: "named object, thing."
 - #
   Define pattern:requires:provides:do:
     - "print name"
@@ -107,7 +107,7 @@
                 - Object:dot:
                     - "story"
                     - AtField: "mentions"
-                - FromNumber:
+                - FromNum:
                     Add:value:
                       - 1
                       - Object:dot:

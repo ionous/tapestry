@@ -32,4 +32,4 @@
               Range: 7
           - "i"
           - - MagicSymbols:
-      - Expect output: "o*-*x*x"
+      - Expect text: "o*-*x*x"

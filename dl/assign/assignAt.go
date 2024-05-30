@@ -26,7 +26,7 @@ func GetReference(run rt.Runtime, op Address) (ret dot.Reference, err error) {
 
 // return a dot.Index
 func (op *AtIndex) Resolve(run rt.Runtime) (ret dot.Dotted, err error) {
-	if idx, e := safe.GetNumber(run, op.Index); e != nil {
+	if idx, e := safe.GetNum(run, op.Index); e != nil {
 		err = CmdError(op, e)
 	} else {
 		ret = dot.Index(idx.Int() - 1)

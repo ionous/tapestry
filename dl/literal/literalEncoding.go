@@ -101,7 +101,7 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 			ret = &BoolValue{Value: v, Kind: kind}
 		}
 
-	case rtti.Zt_NumberEval.Name:
+	case rtti.Zt_NumEval.Name:
 		if v, ok := val.(float64); !ok {
 			err = compact.Unhandled("float")
 		} else {

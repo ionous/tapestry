@@ -111,7 +111,7 @@ func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 
 // Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*RenderRef)(nil)
-var _ rtti.NumberEval = (*RenderRef)(nil)
+var _ rtti.NumEval = (*RenderRef)(nil)
 var _ rtti.TextEval = (*RenderRef)(nil)
 var _ rtti.RecordEval = (*RenderRef)(nil)
 var _ rtti.NumListEval = (*RenderRef)(nil)
@@ -285,7 +285,7 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&rtti.Zt_TextEval,
 			&rtti.Zt_RecordEval,
 			&rtti.Zt_NumListEval,
@@ -395,16 +395,16 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3385363614654173788:  (*RenderPattern)(nil),  /* text_eval=Render:render: */
 	4328811686385928991:  (*RenderName)(nil),     /* text_eval=RenderName: */
 	12372540113328333010: (*RenderRef)(nil),      /* bool_eval=RenderRef: */
+	15295137765008583080: (*RenderRef)(nil),      /* num_eval=RenderRef: */
 	17707941731931999319: (*RenderRef)(nil),      /* num_list_eval=RenderRef: */
-	586781755231363619:   (*RenderRef)(nil),      /* number_eval=RenderRef: */
 	11952381947639314199: (*RenderRef)(nil),      /* record_eval=RenderRef: */
 	5794615276964665178:  (*RenderRef)(nil),      /* record_list_eval=RenderRef: */
 	15289959684061875714: (*RenderRef)(nil),      /* render_eval=RenderRef: */
 	10542331033523904889: (*RenderRef)(nil),      /* text_eval=RenderRef: */
 	4171261980310148416:  (*RenderRef)(nil),      /* text_list_eval=RenderRef: */
 	18249933776929959289: (*RenderRef)(nil),      /* bool_eval=RenderRef:dot: */
+	7340889015221784767:  (*RenderRef)(nil),      /* num_eval=RenderRef:dot: */
 	9735547470721472920:  (*RenderRef)(nil),      /* num_list_eval=RenderRef:dot: */
-	13239953219501121612: (*RenderRef)(nil),      /* number_eval=RenderRef:dot: */
 	8324158095841155032:  (*RenderRef)(nil),      /* record_eval=RenderRef:dot: */
 	17618593433797581633: (*RenderRef)(nil),      /* record_list_eval=RenderRef:dot: */
 	7883271647282708009:  (*RenderRef)(nil),      /* render_eval=RenderRef:dot: */

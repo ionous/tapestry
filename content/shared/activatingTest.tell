@@ -8,25 +8,25 @@
           - "Ensures the standard library has properly described activation and deactivation states."
           - "The state changing algorithm used by all states happens at the engine level and gets tested there."
       - Say: "The controls are {.controls.activation}."
-      - Expect output: "The controls are deactivated."
+      - Expect text: "The controls are deactivated."
       - Activating actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "controls"
-      - Expect output: "You switch on the espresso controls."
+      - Expect text: "You switch on the espresso controls."
       - Say: "The controls are {.controls.activation}."
-      - Expect output: "The controls are activated."
+      - Expect text: "The controls are activated."
       - Deactivating actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "controls"
-      - Expect output: "You switch off the espresso controls."
+      - Expect text: "You switch off the espresso controls."
       - Say: "The controls are {.controls.activation}."
-      - Expect output: "The controls are deactivated."
+      - Expect text: "The controls are deactivated."
       - Note: "Try to activate a regular object."
       - Activating actor:noun:
           - FromText:
@@ -34,4 +34,4 @@
                 - "player"
                 - AtField: "pawn"
           - FromText: "knife"
-      - Expect output: "It isn't something you can switch on."
+      - Expect text: "It isn't something you can switch on."

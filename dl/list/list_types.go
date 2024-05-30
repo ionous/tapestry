@@ -54,9 +54,9 @@ func (op *EraseEdge_Slice) Repeats() bool {
 
 // Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
-	Count   rtti.NumberEval
+	Count   rtti.NumEval
 	Target  assign.Address
-	AtIndex rtti.NumberEval
+	AtIndex rtti.NumEval
 	Markup  map[string]any
 }
 
@@ -96,9 +96,9 @@ func (op *EraseIndex_Slice) Repeats() bool {
 // Runs a pattern with a list containing the erased values.
 // If nothing was erased, the pattern will be called with an empty list.
 type Erasing struct {
-	Count   rtti.NumberEval
+	Count   rtti.NumEval
 	Target  assign.Address
-	AtIndex rtti.NumberEval
+	AtIndex rtti.NumEval
 	As      string
 	Exe     []rtti.Execute
 	Markup  map[string]any
@@ -246,7 +246,7 @@ func (op *ListFind) GetMarkup(ensure bool) map[string]any {
 
 // Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*ListFind)(nil)
-var _ rtti.NumberEval = (*ListFind)(nil)
+var _ rtti.NumEval = (*ListFind)(nil)
 
 // Holds a slice of type ListFind.
 type ListFind_Slice []ListFind
@@ -323,7 +323,7 @@ func (op *ListLen) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*ListLen)(nil)
+var _ rtti.NumEval = (*ListLen)(nil)
 
 // Holds a slice of type ListLen.
 type ListLen_Slice []ListLen
@@ -376,7 +376,7 @@ func (op *MakeTextList_Slice) Repeats() bool {
 }
 
 type MakeNumList struct {
-	Values []rtti.NumberEval
+	Values []rtti.NumEval
 	Markup map[string]any
 }
 
@@ -583,8 +583,8 @@ func (op *ListReverse_Slice) Repeats() bool {
 // and do the same if the end is greater than the length
 type ListSlice struct {
 	List   rtti.Assignment
-	Start  rtti.NumberEval
-	End    rtti.NumberEval
+	Start  rtti.NumEval
+	End    rtti.NumEval
 	Markup map[string]any
 }
 
@@ -711,8 +711,8 @@ func (op *ListSortText_Slice) Repeats() bool {
 // if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
 	Target assign.Address
-	Start  rtti.NumberEval
-	Remove rtti.NumberEval
+	Start  rtti.NumEval
+	Remove rtti.NumEval
 	Insert rtti.Assignment
 	Markup map[string]any
 }
@@ -799,9 +799,9 @@ func (op *ListPush_Slice) Repeats() bool {
 // A positive step ends the series when the returned value would exceed stop
 // while a negative step ends before generating a value less than stop.
 type Range struct {
-	To     rtti.NumberEval
-	From   rtti.NumberEval
-	ByStep rtti.NumberEval
+	To     rtti.NumEval
+	From   rtti.NumEval
+	ByStep rtti.NumEval
 	Markup map[string]any
 }
 
@@ -864,7 +864,7 @@ func init() {
 		Lede: "erase",
 		Terms: []typeinfo.Term{{
 			Name: "count",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "target",
 			Label: "from",
@@ -872,7 +872,7 @@ func init() {
 		}, {
 			Name:  "at_index",
 			Label: "at_index",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -886,7 +886,7 @@ func init() {
 		Lede: "erasing",
 		Terms: []typeinfo.Term{{
 			Name: "count",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "target",
 			Label: "from",
@@ -894,7 +894,7 @@ func init() {
 		}, {
 			Name:  "at_index",
 			Label: "at_index",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}, {
 			Name:  "as",
 			Label: "as",
@@ -987,7 +987,7 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Search a list for a specific value.",
@@ -1020,7 +1020,7 @@ func init() {
 			Type: &rtti.Zt_Assignment,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Determines the number of values in a list.",
@@ -1046,7 +1046,7 @@ func init() {
 			Name:    "values",
 			Label:   "of_numbers",
 			Repeats: true,
-			Type:    &rtti.Zt_NumberEval,
+			Type:    &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumListEval,
@@ -1139,12 +1139,12 @@ func init() {
 			Name:     "start",
 			Label:    "start",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Type:     &rtti.Zt_NumEval,
 		}, {
 			Name:     "end",
 			Label:    "end",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Type:     &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumListEval,
@@ -1212,11 +1212,11 @@ func init() {
 		}, {
 			Name:  "start",
 			Label: "start",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}, {
 			Name:  "remove",
 			Label: "remove",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}, {
 			Name:  "insert",
 			Label: "insert",
@@ -1260,17 +1260,17 @@ func init() {
 		Lede: "range",
 		Terms: []typeinfo.Term{{
 			Name: "to",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:     "from",
 			Label:    "from",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Type:     &rtti.Zt_NumEval,
 		}, {
 			Name:     "by_step",
 			Label:    "by_step",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Type:     &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumListEval,
@@ -1330,8 +1330,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12034742036302137452: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do:else: */
 	1044384912965145788:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:do: */
 	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
-	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
-	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
+	601643447576840751:   (*ListFind)(nil),        /* num_eval=Find:inList: */
+	16505935681170918234: (*ListLen)(nil),         /* num_eval=Len: */
 	11141869806069158915: (*MakeNumList)(nil),     /* num_list_eval=List ofNumbers: */
 	10609280349940760977: (*MakeRecordList)(nil),  /* record_list_eval=List ofRecords:ofType: */
 	15650595833095485421: (*MakeTextList)(nil),    /* text_list_eval=List ofText: */

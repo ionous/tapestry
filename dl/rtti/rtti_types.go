@@ -129,9 +129,9 @@ func (op *NumListEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// number_eval, a type of slot.
-var Zt_NumberEval = typeinfo.Slot{
-	Name: "number_eval",
+// num_eval, a type of slot.
+var Zt_NumEval = typeinfo.Slot{
+	Name: "num_eval",
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
 		"comment":       "Commands which return a number.",
@@ -139,23 +139,23 @@ var Zt_NumberEval = typeinfo.Slot{
 }
 
 // Holds a single slot.
-type NumberEval_Slot struct{ Value NumberEval }
+type NumEval_Slot struct{ Value NumEval }
 
 // Implements [typeinfo.Instance] for a single slot.
-func (*NumberEval_Slot) TypeInfo() typeinfo.T {
-	return &Zt_NumberEval
+func (*NumEval_Slot) TypeInfo() typeinfo.T {
+	return &Zt_NumEval
 }
 
 // Holds a slice of slots.
-type NumberEval_Slots []NumberEval
+type NumEval_Slots []NumEval
 
 // Implements [typeinfo.Instance] for a slice of slots.
-func (*NumberEval_Slots) TypeInfo() typeinfo.T {
-	return &Zt_NumberEval
+func (*NumEval_Slots) TypeInfo() typeinfo.T {
+	return &Zt_NumEval
 }
 
 // Implements [typeinfo.Repeats] for a slice of slots.
-func (op *NumberEval_Slots) Repeats() bool {
+func (op *NumEval_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -296,7 +296,7 @@ var z_slot_list = []*typeinfo.Slot{
 	&Zt_BoolEval,
 	&Zt_Execute,
 	&Zt_NumListEval,
-	&Zt_NumberEval,
+	&Zt_NumEval,
 	&Zt_TextEval,
 	&Zt_TextListEval,
 	&Zt_RecordEval,

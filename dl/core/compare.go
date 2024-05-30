@@ -9,9 +9,9 @@ import (
 const defaultTolerance = 1e-3
 
 func (op *CompareNum) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	if a, e := safe.GetNumber(run, op.A); e != nil {
+	if a, e := safe.GetNum(run, op.A); e != nil {
 		err = cmdErrorCtx(op, "A", e)
-	} else if b, e := safe.GetNumber(run, op.B); e != nil {
+	} else if b, e := safe.GetNum(run, op.B); e != nil {
 		err = cmdErrorCtx(op, "B", e)
 	} else {
 		// fix: should tolerance be a literal? should optional literals be pointers?
@@ -61,7 +61,7 @@ func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 	switch a.Affinity() {
 	case affine.Bool:
 		ret = compareBool(a.Bool(), b.Bool())
-	case affine.Number:
+	case affine.Num:
 		ret = compareFloats(a.Float(), b.Float(), tolerance)
 	case affine.Text:
 		ret = compareStrings(a.String(), b.String())
@@ -71,7 +71,7 @@ func compareValues(a, b rt.Value, tolerance float64) (ret int, err error) {
 		if d := compareStrings(a.Name(), b.Name()); d != 0 {
 			ret = d
 		} else {
-			for i, cnt := 0, a.NumField(); i < cnt && ret != 0; i++ {
+			for i, cnt := 0, a.FieldCount(); i < cnt && ret != 0; i++ {
 				// eat errors ( esp. NilRecord )
 				av, _ := a.GetIndexedField(i)
 				bv, _ := b.GetIndexedField(i)

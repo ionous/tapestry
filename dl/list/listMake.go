@@ -9,7 +9,7 @@ import (
 func (op *MakeNumList) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	vs := make([]float64, len(op.Values))
 	for i, a := range op.Values {
-		if v, e := safe.GetNumber(run, a); e != nil {
+		if v, e := safe.GetNum(run, a); e != nil {
 			err = e
 		} else {
 			vs[i] = v.Float()

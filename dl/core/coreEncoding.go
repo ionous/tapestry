@@ -50,7 +50,7 @@ func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret type
 	case
 		// reading from a variable:
 		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
+		&rtti.Zt_NumEval,
 		&rtti.Zt_TextEval,
 		&rtti.Zt_NumListEval,
 		&rtti.Zt_TextListEval,

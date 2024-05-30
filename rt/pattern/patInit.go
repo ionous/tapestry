@@ -27,7 +27,7 @@ func InitRecord(run rt.Runtime, k *rt.Kind, keys []string, vals []rt.Value) (ret
 	scope := windowingScope{rec, make(map[string]bool)}
 	run.PushScope(scope)
 	vars := initHelper{keys, vals}
-	for i, cnt := 0, k.NumField(); i < cnt; i++ {
+	for i, cnt := 0, k.FieldCount(); i < cnt; i++ {
 		ft := k.Field(i)
 		if v, e := vars.nextValue(run, ft); e != nil {
 			err = e

@@ -14,9 +14,9 @@ func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
 }
 
 func eraseIndex(run rt.Runtime,
-	count rt.NumberEval,
+	count rt.NumEval,
 	target assign.Address,
-	atIndex rt.NumberEval,
+	atIndex rt.NumEval,
 ) (ret rt.Value, err error) {
 	if at, e := assign.GetReference(run, target); e != nil {
 		err = e
@@ -26,7 +26,7 @@ func eraseIndex(run rt.Runtime,
 		err = e
 	} else if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
 		err = e
-	} else if startOne, e := safe.GetNumber(run, atIndex); e != nil {
+	} else if startOne, e := safe.GetNum(run, atIndex); e != nil {
 		err = e
 	} else {
 		start, listLen := startOne.Int(), vs.Len()

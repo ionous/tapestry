@@ -48,8 +48,8 @@ func (op *NumValue) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
 	return
 }
 
-// GetNumber implements rt.NumberEval providing the dl with a number literal.
-func (op *NumValue) GetNumber(run rt.Runtime) (rt.Value, error) {
+// GetNum implements rt.NumEval providing the dl with a number literal.
+func (op *NumValue) GetNum(run rt.Runtime) (rt.Value, error) {
 	return op.GetLiteralValue(run)
 }
 
@@ -124,7 +124,7 @@ func GetAffinity(a LiteralValue) (ret affine.Affinity) {
 		case *BoolValue:
 			ret = affine.Bool
 		case *NumValue:
-			ret = affine.Number
+			ret = affine.Num
 		case *TextValue:
 			ret = affine.Text
 		case *RecordValue:

@@ -12,7 +12,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *AbsValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *AbsValue) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.abs(run); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -22,7 +22,7 @@ func (op *AbsValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 }
 
 func (op *AbsValue) abs(run rt.Runtime) (ret rt.Value, err error) {
-	if v, e := safe.GetNumber(run, op.Value); e != nil {
+	if v, e := safe.GetNum(run, op.Value); e != nil {
 		err = errutil.New("couldnt get value, because", e)
 	} else {
 		abs := math.Abs(v.Float())
@@ -31,7 +31,7 @@ func (op *AbsValue) abs(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *AddValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *AddValue) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if a, b, e := getPair(run, op.A, op.B); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -40,7 +40,7 @@ func (op *AddValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *SubtractValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *SubtractValue) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if a, b, e := getPair(run, op.A, op.B); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -49,7 +49,7 @@ func (op *SubtractValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *MultiplyValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *MultiplyValue) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if a, b, e := getPair(run, op.A, op.B); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -58,7 +58,7 @@ func (op *MultiplyValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *DivideValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *DivideValue) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if a, b, e := getPair(run, op.A, op.B); e != nil {
 		err = cmdError(op, e)
 	} else if math.Abs(b) <= 1e-5 {
@@ -70,7 +70,7 @@ func (op *DivideValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *ModValue) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *ModValue) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if a, b, e := getPair(run, op.A, op.B); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -87,7 +87,7 @@ func (op *Increment) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *Increment) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *Increment) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := inc(run, op.Target, op.Step, 1.0); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -103,7 +103,7 @@ func (op *Decrement) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *Decrement) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *Decrement) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := inc(run, op.Target, op.Step, -1.0); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -166,10 +166,10 @@ func decTrait(curr, step, max int, clamp bool) (ret int) {
 	return
 }
 
-func getPair(run rt.Runtime, a, b rt.NumberEval) (reta, retb float64, err error) {
-	if a, e := safe.GetNumber(run, a); e != nil {
+func getPair(run rt.Runtime, a, b rt.NumEval) (reta, retb float64, err error) {
+	if a, e := safe.GetNum(run, a); e != nil {
 		err = errutil.New("couldnt get first operand, because", e)
-	} else if b, e := safe.GetNumber(run, b); e != nil {
+	} else if b, e := safe.GetNum(run, b); e != nil {
 		err = errutil.New("couldnt get second operand, because", e)
 	} else {
 		reta, retb = a.Float(), b.Float()
@@ -177,14 +177,14 @@ func getPair(run rt.Runtime, a, b rt.NumberEval) (reta, retb float64, err error)
 	return
 }
 
-func inc(run rt.Runtime, tgt assign.Address, val rt.NumberEval, dir float64) (ret rt.Value, err error) {
+func inc(run rt.Runtime, tgt assign.Address, val rt.NumEval, dir float64) (ret rt.Value, err error) {
 	if at, e := assign.GetReference(run, tgt); e != nil {
 		err = e
 	} else if b, e := safe.GetOptionalNumber(run, val, 1); e != nil {
 		err = e
 	} else if a, e := at.GetValue(); e != nil {
 		err = e
-	} else if e := safe.Check(a, affine.Number); e != nil {
+	} else if e := safe.Check(a, affine.Num); e != nil {
 		err = e
 	} else {
 		v := rt.FloatOf(a.Float() + (dir * b.Float()))
@@ -198,7 +198,7 @@ func inc(run rt.Runtime, tgt assign.Address, val rt.NumberEval, dir float64) (re
 }
 
 // where aspect is the name of the aspect.
-func adjustAspect(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEval, clamps rt.BoolEval,
+func adjustAspect(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumEval, clamps rt.BoolEval,
 	update func(curr, step, max int, wrap bool) int) (ret rt.Value, err error) {
 	if tgt, e := safe.GetText(run, target); e != nil {
 		err = e
@@ -218,7 +218,7 @@ func adjustAspect(run rt.Runtime, target, aspect rt.TextEval, steps rt.NumberEva
 		err = errutil.Fmt("field %q is not an aspect", field.String())
 	} else {
 		prev := aspect.FieldIndex(currTrait.String())
-		index := update(prev, step.Int(), aspect.NumField(), clamp.Bool())
+		index := update(prev, step.Int(), aspect.FieldCount(), clamp.Bool())
 		newTrait := rt.StringOf(aspect.Field(index).Name)
 		if e := run.SetField(obj.String(), field.String(), newTrait); e != nil {
 			err = e

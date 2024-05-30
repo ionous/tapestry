@@ -42,7 +42,7 @@ func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message
 	case
 		&rtti.Zt_Execute,
 		&rtti.Zt_BoolEval,
-		&rtti.Zt_NumberEval,
+		&rtti.Zt_NumEval,
 		&rtti.Zt_TextEval,
 		&rtti.Zt_RecordEval,
 		&rtti.Zt_NumListEval,

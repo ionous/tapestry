@@ -75,12 +75,12 @@ func GetBool(run rt.Runtime, eval rt.BoolEval) (ret rt.Value, err error) {
 	return
 }
 
-// GetNumber runs the specified eval, returning an error if the eval is nil.
-func GetNumber(run rt.Runtime, eval rt.NumberEval) (ret rt.Value, err error) {
+// GetNum runs the specified eval, returning an error if the eval is nil.
+func GetNum(run rt.Runtime, eval rt.NumEval) (ret rt.Value, err error) {
 	if eval == nil {
-		err = MissingEval("number")
+		err = MissingEval("num")
 	} else {
-		ret, err = eval.GetNumber(run)
+		ret, err = eval.GetNum(run)
 	}
 	return
 }
@@ -116,11 +116,11 @@ func GetOptionalBool(run rt.Runtime, eval rt.BoolEval, fallback bool) (ret rt.Va
 }
 
 // GetOptionalNumber runs the optionally specified eval.
-func GetOptionalNumber(run rt.Runtime, eval rt.NumberEval, fallback float64) (ret rt.Value, err error) {
+func GetOptionalNumber(run rt.Runtime, eval rt.NumEval, fallback float64) (ret rt.Value, err error) {
 	if eval == nil {
 		ret = rt.FloatOf(fallback)
 	} else {
-		ret, err = eval.GetNumber(run)
+		ret, err = eval.GetNum(run)
 	}
 	return
 }

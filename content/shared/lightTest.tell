@@ -6,22 +6,22 @@
           - "#kitchen"
           - "unlit"
       - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-      - Expect output: "ok: The cabinet is dark."
+      - Expect text: "ok: The cabinet is dark."
       - Set:state:
           - "#kitchen"
           - "lit"
       - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-      - Expect output: "ok: The cabinet has light."
+      - Expect text: "ok: The cabinet has light."
       - Set:state:
           - "#cabinet"
           - "closed"
       - Say: "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-      - Expect output: "ok: The cabinet is dark."
+      - Expect text: "ok: The cabinet is dark."
       - Set:state:
           - "#matches"
           - "lit"
       - Say: "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-      - Expect output: "ok: The cabinet has light."
+      - Expect text: "ok: The cabinet has light."
 - Define test:requires:scene:do:
     - "the gloom"
     - "kitchenette"
@@ -45,11 +45,11 @@
                 - AtField: "pawn"
           - FromBool: true
       - Fabricate input: "look"
-      - Expect output:
+      - Expect text:
           - "**Darkness**"
           - "It is pitch dark, and you can't see a thing."
       - Fabricate input: "switch on flashlight"
-      - Expect output:
+      - Expect text:
           - "You switch on the flashlight."
           - "**Kitchen**"
           - "Your Aunt Fiona's kitchen..."

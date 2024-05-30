@@ -181,8 +181,8 @@ func unpackPatternArg(arg r.Value) render.RenderEval {
 		return arg
 	case rt.BoolEval:
 		out = &assign.FromBool{Value: arg}
-	case rt.NumberEval:
-		out = &assign.FromNumber{Value: arg}
+	case rt.NumEval:
+		out = &assign.FromNum{Value: arg}
 	case rt.TextEval:
 		out = &assign.FromText{Value: arg}
 	case rt.RecordEval:

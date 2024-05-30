@@ -37,7 +37,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 			itAff, itType := affine.Element(vs.Affinity()), vs.Type()
 			ls := rt.NewRecord(&rt.Kind{Fields: []rt.Field{
 				{Name: it, Affinity: itAff, Type: itType},
-				{Name: "index", Affinity: affine.Number},
+				{Name: "index", Affinity: affine.Num},
 				{Name: "first", Affinity: affine.Bool},
 				{Name: "last", Affinity: affine.Bool},
 			}})

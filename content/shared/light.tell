@@ -118,7 +118,7 @@
           - "lighting status"
 - Define kind:fields:
     - "lighting status"
-    - - Number: "last turn"
+    - - Num: "last turn"
       - Bool: "illuminated"
 - # ensure an actor's lighting status is up to date.
   Define pattern:requires:provides:do:
@@ -153,7 +153,7 @@
                     - AtField: "lighting"
                 - FromRecord:
                     LightingStatus lastTurn:illuminated:
-                      - FromNumber:
+                      - FromNum:
                           Object:dot:
                             - "story"
                             - AtField: "turn count"

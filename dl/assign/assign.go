@@ -26,8 +26,8 @@ func (op *FromAddress) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error
 func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
 	return safe.GetBool(run, op.Value)
 }
-func (op *FromNumber) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
-	return safe.GetNumber(run, op.Value)
+func (op *FromNum) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
+	return safe.GetNum(run, op.Value)
 }
 func (op *FromText) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
 	return safe.GetText(run, op.Value)
@@ -52,8 +52,8 @@ func GetAffinity(a rt.Assignment) (ret affine.Affinity) {
 			ret = affine.None
 		case *FromBool:
 			ret = affine.Bool
-		case *FromNumber:
-			ret = affine.Number
+		case *FromNum:
+			ret = affine.Num
 		case *FromText:
 			ret = affine.Text
 		case *FromRecord:
@@ -78,7 +78,7 @@ func Literal(v literal.LiteralValue) (ret rt.Assignment) {
 	case *literal.BoolValue:
 		ret = &FromBool{Value: v}
 	case *literal.NumValue:
-		ret = &FromNumber{Value: v}
+		ret = &FromNum{Value: v}
 	case *literal.TextValue:
 		ret = &FromText{Value: v}
 	case *literal.RecordValue:

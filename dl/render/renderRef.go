@@ -22,8 +22,8 @@ func (op *RenderRef) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *RenderRef) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
-	if v, e := op.renderRef(run, affine.Number); e != nil {
+func (op *RenderRef) GetNum(run rt.Runtime) (ret rt.Value, err error) {
+	if v, e := op.renderRef(run, affine.Num); e != nil {
 		err = CmdError(op, e)
 	} else {
 		ret = v

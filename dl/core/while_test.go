@@ -17,7 +17,7 @@ func TestLoopBreak(t *testing.T) {
 			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
 					Target: assign.Variable("i"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
+					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseBranch{
 					If: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
 					Exe: MakeActivity(
@@ -26,7 +26,7 @@ func TestLoopBreak(t *testing.T) {
 				},
 				&assign.SetValue{
 					Target: assign.Variable("j"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("j"), B: I(1)}}},
+					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal("failed to run:", e)
@@ -42,7 +42,7 @@ func TestLoopNext(t *testing.T) {
 			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
 					Target: assign.Variable("i"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
+					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseBranch{
 					If: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
 					Exe: MakeActivity(
@@ -52,7 +52,7 @@ func TestLoopNext(t *testing.T) {
 				&Continue{},
 				&assign.SetValue{
 					Target: assign.Variable("j"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("j"), B: I(1)}}},
+					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -69,7 +69,7 @@ func TestLoopInfinite(t *testing.T) {
 			True: B(true), Exe: MakeActivity(
 				&assign.SetValue{
 					Target: assign.Variable("i"),
-					Value:  &assign.FromNumber{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
+					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

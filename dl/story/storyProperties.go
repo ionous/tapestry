@@ -41,12 +41,12 @@ func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	return defineField(run, op.FieldName, nil, affine.Bool, init)
 }
 
-func (op *NumberField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
+func (op *NumField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromNumber{Value: i}
+		init = &assign.FromNum{Value: i}
 	}
-	return defineField(run, op.FieldName, nil, affine.Number, init)
+	return defineField(run, op.FieldName, nil, affine.Num, init)
 }
 
 func (op *TextField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {

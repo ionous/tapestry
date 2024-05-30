@@ -276,7 +276,7 @@ func (run *Runner) GetField(target, rawField string) (ret rt.Value, err error) {
 				err = run.reportError(e)
 			} else {
 				var fs []string
-				for i, cnt := 0, k.NumField(); i < cnt; i++ {
+				for i, cnt := 0, k.FieldCount(); i < cnt; i++ {
 					f := k.Field(i)
 					fs = append(fs, f.Name)
 				}

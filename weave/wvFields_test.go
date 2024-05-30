@@ -16,7 +16,7 @@ func TestFieldAssembly(t *testing.T) {
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Num}}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text, Class: "k"}}},
 	)
 	if _, e := dt.Assemble(); e != nil {
@@ -24,7 +24,7 @@ func TestFieldAssembly(t *testing.T) {
 	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		"a:k:n:number:", // field output gets sorted by name
+		"a:k:n:num:", // field output gets sorted by name
 		"a:k:t:text:k",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
@@ -38,7 +38,7 @@ func TestFieldsCrossDomain(t *testing.T) {
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Num}}},
 	)
 	dt.MakeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "b", Affinity: affine.Bool}}},
@@ -49,7 +49,7 @@ func TestFieldsCrossDomain(t *testing.T) {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:b:bool:", // field output gets sorted by name
-		"a:k:n:number:",
+		"a:k:n:num:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -65,12 +65,12 @@ func TestFieldsRedefine(t *testing.T) {
 	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Num}}},
 		&eph.Kinds{Kind: "k"},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Num}}},
 	)
 	dt.MakeDomain(dd("b", "a"),
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Num}}},
 	)
 
 	if _, e := dt.Assemble(); e != nil {
@@ -82,7 +82,7 @@ func TestFieldsRedefine(t *testing.T) {
 	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		"a:k:n:number:",
+		"a:k:n:num:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -96,7 +96,7 @@ func TestFieldsConflict(t *testing.T) {
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Num}}},
 	)
 	dt.MakeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Text}}},

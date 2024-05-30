@@ -213,7 +213,7 @@
           - "kids"
           - ChildrenOf obj:
               FromText: "@locale"
-      - Number:initially:
+      - Num:initially:
           - "previous mentions"
           - Object:dot:
               - "story"
@@ -431,7 +431,7 @@
           - Object:dot:
               - "story"
               - AtField: "mentions"
-          - FromNumber: 0
+          - FromNum: 0
       - Repeating across:as:do:
           - FromTextList:
               KindsOf: "things"

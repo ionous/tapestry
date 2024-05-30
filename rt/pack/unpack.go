@@ -60,7 +60,7 @@ func UnpackRecord(ks rt.Kinds, b []byte, expectedType string) (ret *rt.Record, e
 
 func findField(k *rt.Kind, name string, startingAt int) (retField rt.Field, retIndex int) {
 	retIndex = -1 // provisionally
-	for i, cnt := startingAt, k.NumField(); i < cnt; i++ {
+	for i, cnt := startingAt, k.FieldCount(); i < cnt; i++ {
 		if ft := k.Field(i); ft.Name == name {
 			retField, retIndex = ft, i
 			break
@@ -78,7 +78,7 @@ func UnpackValue(ks rt.Kinds, b []byte, a affine.Affinity, t string) (ret rt.Val
 		} else {
 			ret = rt.BoolFrom(v, t)
 		}
-	case affine.Number:
+	case affine.Num:
 		var v float64
 		if e := json.Unmarshal(b, &v); e != nil {
 			err = e

@@ -166,7 +166,7 @@ func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 		if _, ok := t.Value.(*literal.TextValue); ok {
 			el = t.Value
 		}
-	} else if n, ok := v.(*assign.FromNumber); ok {
+	} else if n, ok := v.(*assign.FromNum); ok {
 		if _, ok := n.Value.(literal.LiteralValue); ok {
 			el = n.Value
 		}

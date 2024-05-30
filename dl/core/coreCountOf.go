@@ -27,7 +27,7 @@ func (op *CallTrigger) update(run rt.Runtime) (okay bool, err error) {
 		err = e
 	} else if count := p.Int(); count >= 0 {
 		//
-		if target, e := safe.GetNumber(run, op.Num); e != nil {
+		if target, e := safe.GetNum(run, op.Num); e != nil {
 			err = e
 		} else {
 			// determine the next value

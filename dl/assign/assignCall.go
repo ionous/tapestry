@@ -18,8 +18,8 @@ func (op *CallPattern) GetBool(run rt.Runtime) (rt.Value, error) {
 	return op.determine(run, affine.Bool)
 }
 
-func (op *CallPattern) GetNumber(run rt.Runtime) (rt.Value, error) {
-	return op.determine(run, affine.Number)
+func (op *CallPattern) GetNum(run rt.Runtime) (rt.Value, error) {
+	return op.determine(run, affine.Num)
 }
 
 func (op *CallPattern) GetText(run rt.Runtime) (rt.Value, error) {

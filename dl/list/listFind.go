@@ -10,7 +10,7 @@ import (
 // return true if the value exists in the list
 func (op *ListFind) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	// fix: with autoconversion of int to bool and one-based indices -
-	// only the GetNumber variant would be needed.
+	// only the GetNum variant would be needed.
 	if i, e := op.getIndex(run); e != nil {
 		err = CmdError(op, e)
 	} else {
@@ -20,7 +20,7 @@ func (op *ListFind) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 }
 
 // returns 1 based index of the value in the list
-func (op *ListFind) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *ListFind) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if i, e := op.getIndex(run); e != nil {
 		err = CmdError(op, e)
 	} else {
@@ -39,7 +39,7 @@ func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
 		err = errutil.New(listAff, "can't contain", aff)
 	} else {
 		switch aff {
-		case affine.Number:
+		case affine.Num:
 			ret = findFloat(els, val.Float())
 		case affine.Text:
 			ret = findString(els, val.String())

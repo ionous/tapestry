@@ -26,14 +26,14 @@ Spec:with group:
               - - Term:name:type:
                     - "_"
                     - "count"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "from"
                     - "target"
                     - "address"
                 - Term:type:
                     - "at_index"
-                    - "number_eval"
+                    - "num_eval"
       - # Erase elements from the front or back of a list.
         # Runs a pattern with a list containing the erased values.
         # If nothing was erased, the pattern will be called with an empty list.
@@ -44,14 +44,14 @@ Spec:with group:
               - Term:name:type:
                   - "_"
                   - "count"
-                  - "number_eval"
+                  - "num_eval"
               - Term:name:type:
                   - "from"
                   - "target"
                   - "address"
               - Term:type:
                   - "at_index"
-                  - "number_eval"
+                  - "num_eval"
               - Term:type:
                   - "as"
                   - "text"
@@ -115,7 +115,7 @@ Spec:with group:
         Spec:slots:with flow:
           - "list_find"
           - - "bool_eval"
-            - "number_eval"
+            - "num_eval"
           - Flow:uses:
               - "find"
               - - Term:name:type:
@@ -146,7 +146,7 @@ Spec:with group:
       - # Determines the number of values in a list.
         Spec:slots:with flow:
           - "list_len"
-          - "number_eval"
+          - "num_eval"
           - Flow:uses:
               - "len"
               - - Term:name:type:
@@ -171,7 +171,7 @@ Spec:with group:
               - - Term:name:type:repeats:
                     - "of_numbers"
                     - "values"
-                    - "number_eval"
+                    - "num_eval"
                     - true
       - Spec:slots:with flow:
           - "make_record_list"
@@ -258,11 +258,11 @@ Spec:with group:
                     - "assignment"
                 - Term:type:optional:
                     - "start"
-                    - "number_eval"
+                    - "num_eval"
                     - true
                 - Term:type:optional:
                     - "end"
-                    - "number_eval"
+                    - "num_eval"
                     - true
       - Spec:slots:with flow:
           - "list_sort_numbers"
@@ -322,10 +322,10 @@ Spec:with group:
                     - "address"
                 - Term:type:
                     - "start"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:type:
                     - "remove"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:type:
                     - "insert"
                     - "assignment"
@@ -361,12 +361,12 @@ Spec:with group:
               - Term:name:type:
                   - "_"
                   - "to"
-                  - "number_eval"
+                  - "num_eval"
               - Term:type:optional:
                   - "from"
-                  - "number_eval"
+                  - "num_eval"
                   - true
               - Term:type:optional:
                   - "by_step"
-                  - "number_eval"
+                  - "num_eval"
                   - true

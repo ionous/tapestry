@@ -42,7 +42,7 @@
                   - "triangle-2"
                   - "cat-1"
                   - "cat-2"
-            - Expect output: "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
+            - Expect text: "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
       - #
         Define test:do:
           - "default grouping"
@@ -55,7 +55,7 @@
                   - "triangle-2"
                   - "cat-1"
                   - "cat-2"
-            - Expect output: "Clarence, an empire apple, a pen, two triangles, and two cats"
+            - Expect text: "Clarence, an empire apple, a pen, two triangles, and two cats"
       - #
         Define test:scene:do:
           - "custom few"
@@ -109,7 +109,7 @@
                         - "apple"
                         - "pen"
                         - "triangle-1"
-            - Expect output: "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
+            - Expect text: "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
       - #
         Define test:scene:do:
           - "x custom replacement"
@@ -148,7 +148,7 @@
                       FromTextList:
                         - "Clarence"
                         - "apple"
-            - Expect output: "Clarence and some things; Clarence and an empire apple"
+            - Expect text: "Clarence and some things; Clarence and an empire apple"
       - #
         Define test:scene:do:
           - "custom fancy phrase"
@@ -206,7 +206,7 @@
                         - "f"
                         - "y"
                         - "z"
-            - Expect output: "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
+            - Expect text: "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
       - #
         Define test:scene:do:
           - "custom parenthetical"
@@ -237,7 +237,7 @@
                   - "f"
                   - "y"
                   - "z"
-            - Expect output: "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
+            - Expect text: "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
       - #
         Define test:scene:do:
           - "custom parenthetical articles"
@@ -260,7 +260,7 @@
                   - "f"
                   - "y"
                   - "z"
-            - Expect output: "Clarence and five scrabble tiles (an X, a W, an F, a Y, and a Z)"
+            - Expect text: "Clarence and five scrabble tiles (an X, a W, an F, a Y, and a Z)"
       - # this has been disabled for quite a while.
         # even though the triangles are counted nouns
         # for some reason they get pulled into the 'things' group
@@ -294,6 +294,6 @@
                         - "pen"
                         - "triangle-1"
                         - "triangle-2"
-            - Expect output: "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
+            - Expect text: "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
     - - # do nothing
         Continue:

@@ -33,8 +33,8 @@ func (op *VariableDot) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *VariableDot) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
-	if v, e := op.getValue(run, affine.Number); e != nil {
+func (op *VariableDot) GetNum(run rt.Runtime) (ret rt.Value, err error) {
+	if v, e := op.getValue(run, affine.Num); e != nil {
 		err = CmdError(op, e)
 	} else {
 		ret = v

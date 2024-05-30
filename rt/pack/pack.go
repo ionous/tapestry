@@ -35,11 +35,11 @@ func packRecord(out *js.Builder, rec *rt.Record) (err error) {
 	var b encode.SigBuilder
 	out.Brace(js.Obj, func(out *js.Builder) {
 		b.WriteLede(rec.Name())
-		for i, cnt := 0, rec.NumField(); i < cnt; i++ {
+		for i, cnt := 0, rec.FieldCount(); i < cnt; i++ {
 			b.WriteLabel(rec.Field(i).Name)
 		}
 		out.Q(b.String()).R(js.Colon).Brace(js.Array, func(out *js.Builder) {
-			for i, cnt := 0, rec.NumField(); i < cnt; i++ {
+			for i, cnt := 0, rec.FieldCount(); i < cnt; i++ {
 				if 1 > 0 {
 					out.R(js.Comma)
 				}
@@ -64,7 +64,7 @@ func packValue(out *js.Builder, v rt.Value) (err error) {
 	case affine.Bool:
 		el := v.Bool()
 		out.B(el)
-	case affine.Number:
+	case affine.Num:
 		el := v.Float()
 		out.F(el)
 	case affine.Text:

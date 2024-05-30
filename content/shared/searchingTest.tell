@@ -10,25 +10,25 @@
                 - "player"
                 - AtField:  "pawn"
           - FromText: "knife"
-      - Expect output: "You find nothing of interest."
+      - Expect text: "You find nothing of interest."
       - Searching actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "machine"
-      - Expect output: "You can't see inside, it is closed."
+      - Expect text: "You can't see inside, it is closed."
       - Searching actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "counter"
-      - Expect output: "On the counter are the blender, the espresso machine, and the mortar."
+      - Expect text: "On the counter are the blender, the espresso machine, and the mortar."
       - Searching actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "purse"
-      - Expect output: "In the purse is the coin."
+      - Expect text: "In the purse is the coin."

@@ -28,11 +28,11 @@ var FactorialStory = story.StoryFile{
 		&story.DefinePattern{
 			PatternName: T("factorial"),
 			Requires: []story.FieldDefinition{
-				&story.NumberField{
+				&story.NumField{
 					Markup:    UserComment("just one argument, a number called 'num'"),
 					FieldName: T("num"),
 				}},
-			Provides: []story.FieldDefinition{&story.NumberField{
+			Provides: []story.FieldDefinition{&story.NumField{
 				Markup:    UserComment("the result uses the same variable as the pattern input does"),
 				FieldName: T("num"),
 			}},
@@ -52,7 +52,7 @@ var FactorialCheck = []rt.Execute{
 				PatternName: "factorial",
 				Arguments: []assign.Arg{{
 					Name:  "num",
-					Value: &assign.FromNumber{Value: F(3)},
+					Value: &assign.FromNum{Value: F(3)},
 					// fix: for some reason, the comment isn't appearing in the output.
 					// Markup: UserComment("start the factorial with '3'"),
 				}}},
@@ -64,7 +64,7 @@ var FactorialCheck = []rt.Execute{
 var FactorialMulMinusOne = []rt.Execute{
 	&assign.SetValue{
 		Target: assign.Variable("num"),
-		Value: &assign.FromNumber{Value: &core.MultiplyValue{
+		Value: &assign.FromNum{Value: &core.MultiplyValue{
 			A: assign.Variable("num"),
 			B: &core.SubtractValue{
 				A: assign.Variable("num"),
@@ -90,6 +90,6 @@ var FactorialDefaultRule = []rt.Execute{
 	&assign.SetValue{
 		Markup: UserComment("by default, return one"),
 		Target: assign.Variable("num"),
-		Value:  &assign.FromNumber{Value: I(1)},
+		Value:  &assign.FromNum{Value: I(1)},
 	},
 }

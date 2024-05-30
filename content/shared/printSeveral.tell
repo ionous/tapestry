@@ -7,7 +7,7 @@
     - - Text:kind:
           - "obj"
           - "thing"
-      - Number: "group size"
+      - Num: "group size"
       - Text: "label"
     - - Nothing:
     - - Print:
@@ -25,6 +25,6 @@
     - - Say:
           - "{print_several: .books}"
           - "{print_several: .books 5}"
-      - Expect output:
+      - Expect text:
           - "zero books"
           - "five books"

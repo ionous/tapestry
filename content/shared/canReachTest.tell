@@ -17,7 +17,7 @@
           - - Say: "okay: {.response}"
           - Finally do:
               - Print: "failed: shouldnt have reached into the espresso machine."
-      - Expect output: "okay: The espresso machine isn't open."
+      - Expect text: "okay: The espresso machine isn't open."
       - If:assuming:do:else:
           - Not:
               Is empty: "@response"
@@ -30,7 +30,7 @@
           - - Say: "failed: {.response}"
           - Finally do:
               - Print: "okay: reached outside the open cabinet."
-      - Expect output: "okay: reached outside the open cabinet."
+      - Expect text: "okay: reached outside the open cabinet."
       - Set:state:
           - "#machine"
           - "open"
@@ -46,7 +46,7 @@
           - - Say: "failed: {.response}"
           - Finally do:
               - Print: "okay: reached inside the open espresso machine."
-      - Expect output: "okay: reached inside the open espresso machine."
+      - Expect text: "okay: reached inside the open espresso machine."
       - Set:state:
           - "#cabinet"
           - "closed"
@@ -62,7 +62,7 @@
           - - Say: "okay: {.response}"
           - Finally do:
               - Print: "failed: shouldnt have reached from the closed cabinet."
-      - Expect output: "okay: The cabinet isn't open."
+      - Expect text: "okay: The cabinet isn't open."
       - If:assuming:do:else:
           - Not:
               Is empty: "@response"
@@ -75,4 +75,4 @@
           - - Say: "okay: {.response}"
           - Finally do:
               - Print: "failed: shouldnt have reached out of world."
-      - Expect output: "okay: It isn't available."
+      - Expect text: "okay: It isn't available."

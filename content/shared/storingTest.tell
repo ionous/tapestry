@@ -106,7 +106,7 @@
                       - FromText: "purse"
                       - FromText: "wisdom"
                   - Say: "purse parent: {parent_of:.purse}."
-      - Expect output:
+      - Expect text:
           - "  - Fail to store something into an actor:"
           - "  That seems to belong to Mildred.clutch parent: clutch."
           - "  - Fail to store something into a closed container:"

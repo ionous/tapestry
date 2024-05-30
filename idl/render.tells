@@ -28,7 +28,7 @@ Spec:with group:
         Spec:slots:with flow:
           - "render_ref"
           - - "bool_eval"
-            - "number_eval"
+            - "num_eval"
             - "text_eval"
             - "record_eval"
             - "num_list_eval"

@@ -32,7 +32,7 @@ func (lf *LabelFinder) FindNext(k string) (ret int, err error) {
 	if key := inflect.Normalize(k); len(key) == 0 {
 		if lf.noMoreBlanks {
 			err = fmt.Errorf("unexpected blank label %q", lf.next)
-		} else if now := lf.next; now >= lf.kind.NumField() {
+		} else if now := lf.next; now >= lf.kind.FieldCount() {
 			err = fmt.Errorf("too many args %d making record %s", now, lf.kind.Name())
 		} else {
 			ret, lf.next = now, lf.next+1
@@ -41,7 +41,7 @@ func (lf *LabelFinder) FindNext(k string) (ret int, err error) {
 		err = fmt.Errorf("no matching arg for %q in labels %q", lf.kind.Name(), strings.Join(lf.labels, ","))
 	} else {
 		var fn string
-		if at < lf.kind.NumField() {
+		if at < lf.kind.FieldCount() {
 			fn = lf.kind.Field(at).Name
 		}
 		if fn == key {

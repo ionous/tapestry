@@ -219,8 +219,8 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 		case *assign.FromBool:
 			slot := rtti.BoolEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromNumber:
-			slot := rtti.NumberEval_Slot{Value: v.Value}
+		case *assign.FromNum:
+			slot := rtti.NumEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
 		case *assign.FromText:
 			slot := rtti.TextEval_Slot{Value: v.Value}

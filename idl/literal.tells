@@ -48,13 +48,13 @@ Spec:with group:
       - # Specify a particular number.
         Spec:slots:with flow:
           - "num_value"
-          - - "number_eval"
+          - - "num_eval"
             - "literal_value"
           - Flow:uses:
               - "num"
               - - Term:type:
                     - "value"
-                    - "number"
+                    - "num"
                 - Term:type:optional:
                     - "kind"
                     - "text"
@@ -68,7 +68,7 @@ Spec:with group:
               - "num"
               - - Term:type:repeats:
                     - "values"
-                    - "number"
+                    - "num"
                     - true
                 - Term:type:optional:
                     - "kind"

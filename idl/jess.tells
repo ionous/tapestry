@@ -175,7 +175,7 @@ Spec:with group:
         - Term:optional:
           - "article"
           - true
-        - Term: "matching_number"
+        - Term: "matching_num"
         - Term: "kind"
         - Term: "matched"
 
@@ -505,7 +505,7 @@ Spec:with group:
           - "quoted_text"
           - true
         - Term:optional:
-          - "matching_number"
+          - "matching_num"
           - true
         - Term:optional:
           - "noun"
@@ -526,9 +526,11 @@ Spec:with group:
     - # reads a number specified in words or as digits.
       # stores the result as the parsed number.
       Spec:with flow:
-      - "matching_number"
+      - "matching_num"
       - Flow uses:
-        - Term: "number"
+        - Term:type:
+          - "value"
+          - "num"
 
     - # kinds "have" a ("list of") type ("called" name)
       # ex. Things have some text called a description.

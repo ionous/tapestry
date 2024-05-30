@@ -26,7 +26,7 @@ Spec:with group:
         blockly-color: "MATH_HUE"
       - # Commands which return a number.
         Spec:with slot:
-          - "number_eval"
+          - "num_eval"
           - Slot:
         blockly-color: "MATH_HUE"
       - # Commands which return text.

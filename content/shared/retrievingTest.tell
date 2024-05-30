@@ -61,7 +61,7 @@
                             - AtField: "pawn"
                       - FromText: "apple"
                       - FromText: "Mildred"
-      - Expect output:
+      - Expect text:
           - "  - Fail to retrieve from something closed:"
           - "  The espresso machine isn't open."
           - "  - The soup's parent was: the shelf. Okay, retrieve from supporter:"

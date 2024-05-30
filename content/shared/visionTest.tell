@@ -67,10 +67,10 @@
           Not:
             Illuminates actor:
               FromText: "self"
-      - Expect output: "It is now pitch dark in here!"
+      - Expect text: "It is now pitch dark in here!"
       - Note: "Verify that light breaks forth in a glorious wonder."
       - Set:state:
           - "#kitchen"
           - "lit"
       - PassTime:
-      - Expect output: "The light, it burns."
+      - Expect text: "The light, it burns."

@@ -124,7 +124,7 @@ func (run *Runner) send(name string, rec *rt.Record, tgt rt.Value) (ret rt.Value
 }
 
 func copyPhase(dst *rt.Record, src *rt.Record) (err error) {
-	for i, srcCnt, dstCnt := 0, src.NumField(), dst.NumField(); i < srcCnt && i < dstCnt; i++ {
+	for i, srcCnt, dstCnt := 0, src.FieldCount(), dst.FieldCount(); i < srcCnt && i < dstCnt; i++ {
 		// copy until the fields are mismatched
 		if src.Field(i).Name != dst.Field(i).Name {
 			break

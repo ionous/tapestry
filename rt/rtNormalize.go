@@ -17,7 +17,7 @@ func safeAffinity(v Value) (ret affine.Affinity) {
 func normalizeFloats(v Value) (ret []float64) {
 	switch a := safeAffinity(v); a {
 	case "":
-	case affine.Number:
+	case affine.Num:
 		one := v.Float()
 		ret = []float64{one}
 	case affine.NumList:

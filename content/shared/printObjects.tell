@@ -40,10 +40,10 @@
           - "obj"
           - "object"
     - - Nothing:
-      - Number:initially:
+      - Num:initially:
           - "inline depth"
           - During: "print inline objects"
-      - Number:initially:
+      - Num:initially:
           - "block depth"
           - During: "print block list"
     - - Say: "{.obj}"

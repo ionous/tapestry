@@ -16,7 +16,7 @@ func CopyValue(val Value) (ret Value) {
 	// because we dont have a 'value.set()', the values of primitives are immutable.
 	// therefore we dont have to copy them, which saves us from having to mange their subtypes.
 	// ( ex. copy of an int, should still probably be an int under the hood. )
-	case affine.Bool, affine.Number, affine.Text:
+	case affine.Bool, affine.Num, affine.Text:
 		ret = val
 
 	case affine.Record:

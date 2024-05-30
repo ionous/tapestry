@@ -36,10 +36,10 @@ func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 		byField := inflect.Normalize(op.ByField)
 		switch listAff := vs.Affinity(); listAff {
 		case affine.RecordList:
-			err = sortRecords(run, vs.Records(), byField, affine.Number, op.numSorter)
+			err = sortRecords(run, vs.Records(), byField, affine.Num, op.numSorter)
 
 		case affine.TextList:
-			err = sortObjects(run, vs.Strings(), byField, affine.Number, op.numSorter)
+			err = sortObjects(run, vs.Strings(), byField, affine.Num, op.numSorter)
 
 		default:
 			err = errutil.New("number sort not implemented for", listAff)

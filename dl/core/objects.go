@@ -41,7 +41,7 @@ func (op *ObjectTraits) getTraits(run rt.Runtime) (ret []string, err error) {
 	} else if k, e := run.GetKindByName(kind.String()); e != nil {
 		err = e
 	} else {
-		for i, cnt := 0, k.NumField(); i < cnt; i++ {
+		for i, cnt := 0, k.FieldCount(); i < cnt; i++ {
 			if f := k.Field(i); f.Name == f.Type { // aspect like
 				if a, e := run.GetKindByName(f.Type); e == nil && a.Implements(kindsOf.Aspect.String()) {
 					if str, e := run.GetField(obj.String(), f.Name); e != nil {

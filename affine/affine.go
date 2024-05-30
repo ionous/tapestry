@@ -18,7 +18,7 @@ func (a Affinity) String() (ret string) {
 const (
 	None       Affinity = ""
 	Bool       Affinity = "bool"
-	Number     Affinity = "number"
+	Num        Affinity = "num"
 	Text       Affinity = "text"
 	Record     Affinity = "record"
 	NumList    Affinity = "num_list"
@@ -38,7 +38,7 @@ func Element(list Affinity) (ret Affinity) {
 	case TextList:
 		ret = Text
 	case NumList:
-		ret = Number
+		ret = Num
 	case RecordList:
 		ret = Record
 	}

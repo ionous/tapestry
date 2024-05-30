@@ -456,7 +456,7 @@ func (op *CallTerminal_Slice) Repeats() bool {
 type CallTrigger struct {
 	Name    string
 	Trigger Trigger
-	Num     rtti.NumberEval
+	Num     rtti.NumEval
 	Markup  map[string]any
 }
 
@@ -613,8 +613,8 @@ func (op *ChooseNothingElse_Slice) Repeats() bool {
 // Pick one of two numbers based on a boolean test.
 type ChooseNum struct {
 	If     rtti.BoolEval
-	True   rtti.NumberEval
-	False  rtti.NumberEval
+	True   rtti.NumEval
+	False  rtti.NumEval
 	Markup map[string]any
 }
 
@@ -635,7 +635,7 @@ func (op *ChooseNum) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*ChooseNum)(nil)
+var _ rtti.NumEval = (*ChooseNum)(nil)
 
 // Holds a slice of type ChooseNum.
 type ChooseNum_Slice []ChooseNum
@@ -770,9 +770,9 @@ func (op *CompareValue_Slice) Repeats() bool {
 
 // True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
-	A         rtti.NumberEval
+	A         rtti.NumEval
 	Is        Comparison
-	B         rtti.NumberEval
+	B         rtti.NumEval
 	Tolerance float64
 	Markup    map[string]any
 }
@@ -851,8 +851,8 @@ func (op *CompareText_Slice) Repeats() bool {
 
 // Subtract two numbers.
 type SubtractValue struct {
-	A      rtti.NumberEval
-	B      rtti.NumberEval
+	A      rtti.NumEval
+	B      rtti.NumEval
 	Markup map[string]any
 }
 
@@ -873,7 +873,7 @@ func (op *SubtractValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*SubtractValue)(nil)
+var _ rtti.NumEval = (*SubtractValue)(nil)
 
 // Holds a slice of type SubtractValue.
 type SubtractValue_Slice []SubtractValue
@@ -912,7 +912,7 @@ func (op *During) GetMarkup(ensure bool) map[string]any {
 
 // Ensures the command implements its specified slots.
 var _ rtti.BoolEval = (*During)(nil)
-var _ rtti.NumberEval = (*During)(nil)
+var _ rtti.NumEval = (*During)(nil)
 
 // Holds a slice of type During.
 type During_Slice []During
@@ -1770,7 +1770,7 @@ func (op *Pluralize_Slice) Repeats() bool {
 
 // Writes a number using numerals, eg. '1'.
 type PrintNum struct {
-	Num    rtti.NumberEval
+	Num    rtti.NumEval
 	Markup map[string]any
 }
 
@@ -1808,7 +1808,7 @@ func (op *PrintNum_Slice) Repeats() bool {
 
 // Writes a number in plain english: eg. 'one'.
 type PrintNumWord struct {
-	Num    rtti.NumberEval
+	Num    rtti.NumEval
 	Markup map[string]any
 }
 
@@ -1846,8 +1846,8 @@ func (op *PrintNumWord_Slice) Repeats() bool {
 
 // Multiply two numbers.
 type MultiplyValue struct {
-	A      rtti.NumberEval
-	B      rtti.NumberEval
+	A      rtti.NumEval
+	B      rtti.NumEval
 	Markup map[string]any
 }
 
@@ -1868,7 +1868,7 @@ func (op *MultiplyValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*MultiplyValue)(nil)
+var _ rtti.NumEval = (*MultiplyValue)(nil)
 
 // Holds a slice of type MultiplyValue.
 type MultiplyValue_Slice []MultiplyValue
@@ -1885,8 +1885,8 @@ func (op *MultiplyValue_Slice) Repeats() bool {
 
 // Divide one number by another.
 type DivideValue struct {
-	A      rtti.NumberEval
-	B      rtti.NumberEval
+	A      rtti.NumEval
+	B      rtti.NumEval
 	Markup map[string]any
 }
 
@@ -1907,7 +1907,7 @@ func (op *DivideValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*DivideValue)(nil)
+var _ rtti.NumEval = (*DivideValue)(nil)
 
 // Holds a slice of type DivideValue.
 type DivideValue_Slice []DivideValue
@@ -1924,8 +1924,8 @@ func (op *DivideValue_Slice) Repeats() bool {
 
 // Divide one number by another, and return the remainder.
 type ModValue struct {
-	A      rtti.NumberEval
-	B      rtti.NumberEval
+	A      rtti.NumEval
+	B      rtti.NumEval
 	Markup map[string]any
 }
 
@@ -1946,7 +1946,7 @@ func (op *ModValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*ModValue)(nil)
+var _ rtti.NumEval = (*ModValue)(nil)
 
 // Holds a slice of type ModValue.
 type ModValue_Slice []ModValue
@@ -1962,7 +1962,7 @@ func (op *ModValue_Slice) Repeats() bool {
 }
 
 type AbsValue struct {
-	Value  rtti.NumberEval
+	Value  rtti.NumEval
 	Markup map[string]any
 }
 
@@ -1983,7 +1983,7 @@ func (op *AbsValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*AbsValue)(nil)
+var _ rtti.NumEval = (*AbsValue)(nil)
 
 // Holds a slice of type AbsValue.
 type AbsValue_Slice []AbsValue
@@ -2002,7 +2002,7 @@ func (op *AbsValue_Slice) Repeats() bool {
 // Returns the new value of the number.
 type Increment struct {
 	Target assign.Address
-	Step   rtti.NumberEval
+	Step   rtti.NumEval
 	Markup map[string]any
 }
 
@@ -2023,7 +2023,7 @@ func (op *Increment) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*Increment)(nil)
+var _ rtti.NumEval = (*Increment)(nil)
 var _ rtti.Execute = (*Increment)(nil)
 
 // Holds a slice of type Increment.
@@ -2043,7 +2043,7 @@ func (op *Increment_Slice) Repeats() bool {
 // Returns the new value of the number.
 type Decrement struct {
 	Target assign.Address
-	Step   rtti.NumberEval
+	Step   rtti.NumEval
 	Markup map[string]any
 }
 
@@ -2064,7 +2064,7 @@ func (op *Decrement) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*Decrement)(nil)
+var _ rtti.NumEval = (*Decrement)(nil)
 var _ rtti.Execute = (*Decrement)(nil)
 
 // Holds a slice of type Decrement.
@@ -2085,7 +2085,7 @@ func (op *Decrement_Slice) Repeats() bool {
 type IncrementAspect struct {
 	Target rtti.TextEval
 	Aspect rtti.TextEval
-	Step   rtti.NumberEval
+	Step   rtti.NumEval
 	Clamp  rtti.BoolEval
 	Markup map[string]any
 }
@@ -2128,7 +2128,7 @@ func (op *IncrementAspect_Slice) Repeats() bool {
 type DecrementAspect struct {
 	Target rtti.TextEval
 	Aspect rtti.TextEval
-	Step   rtti.NumberEval
+	Step   rtti.NumEval
 	Clamp  rtti.BoolEval
 	Markup map[string]any
 }
@@ -2434,8 +2434,8 @@ func (op *SpanText_Slice) Repeats() bool {
 
 // Add two numbers.
 type AddValue struct {
-	A      rtti.NumberEval
-	B      rtti.NumberEval
+	A      rtti.NumEval
+	B      rtti.NumEval
 	Markup map[string]any
 }
 
@@ -2456,7 +2456,7 @@ func (op *AddValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*AddValue)(nil)
+var _ rtti.NumEval = (*AddValue)(nil)
 
 // Holds a slice of type AddValue.
 type AddValue_Slice []AddValue
@@ -2832,7 +2832,7 @@ func init() {
 		}, {
 			Name:  "num",
 			Label: "num",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -2910,15 +2910,15 @@ func init() {
 		}, {
 			Name:  "true",
 			Label: "then",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}, {
 			Name:     "false",
 			Label:    "else",
 			Optional: true,
-			Type:     &rtti.Zt_NumberEval,
+			Type:     &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Pick one of two numbers based on a boolean test.",
@@ -2991,7 +2991,7 @@ func init() {
 		Lede: "is",
 		Terms: []typeinfo.Term{{
 			Name: "a",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "is",
 			Label: "matching",
@@ -2999,7 +2999,7 @@ func init() {
 		}, {
 			Name:  "b",
 			Label: "num",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}, {
 			Name:     "tolerance",
 			Label:    "within",
@@ -3007,7 +3007,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "a positive value that indicates how close the two numbers should be",
 			},
-			Type: &prim.Zt_Number,
+			Type: &prim.Zt_Num,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -3043,14 +3043,14 @@ func init() {
 		Lede: "subtract",
 		Terms: []typeinfo.Term{{
 			Name: "a",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Subtract two numbers.",
@@ -3065,7 +3065,7 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Decide whether a pattern is running.",
@@ -3420,7 +3420,7 @@ func init() {
 		Lede: "numeral",
 		Terms: []typeinfo.Term{{
 			Name: "num",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -3435,7 +3435,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "num",
 			Label: "words",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -3449,14 +3449,14 @@ func init() {
 		Lede: "multiply",
 		Terms: []typeinfo.Term{{
 			Name: "a",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Multiply two numbers.",
@@ -3467,14 +3467,14 @@ func init() {
 		Lede: "divide",
 		Terms: []typeinfo.Term{{
 			Name: "a",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Divide one number by another.",
@@ -3485,14 +3485,14 @@ func init() {
 		Lede: "mod",
 		Terms: []typeinfo.Term{{
 			Name: "a",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Divide one number by another, and return the remainder.",
@@ -3504,10 +3504,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "value",
 			Label: "value",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 	}
 	Zt_Increment = typeinfo.Flow{
@@ -3523,10 +3523,10 @@ func init() {
 			Markup: map[string]any{
 				"comment": "if not specified, increments by 1.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
@@ -3546,10 +3546,10 @@ func init() {
 			Markup: map[string]any{
 				"comment": "if not specified, decrements by 1.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
@@ -3573,7 +3573,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "if not specified, increments by a single step.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:     "clamp",
 			Label:    "clamp",
@@ -3608,7 +3608,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "if not specified, increments by a single step.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:     "clamp",
 			Label:    "clamp",
@@ -3735,14 +3735,14 @@ func init() {
 		Lede: "add",
 		Terms: []typeinfo.Term{{
 			Name: "a",
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumberEval,
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
 			"comment": "Add two numbers.",
@@ -3892,8 +3892,8 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	9652861807756732392:  (*AbsValue)(nil),          /* number_eval=Absolute value: */
-	6415467136316515808:  (*AddValue)(nil),          /* number_eval=Add:value: */
+	1399610288338666093:  (*AbsValue)(nil),          /* num_eval=Absolute value: */
+	5038997598380008995:  (*AddValue)(nil),          /* num_eval=Add:value: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */
 	8082607244820951444:  (*AllTrue)(nil),           /* bool_eval=AllTrue: */
 	1979437068831463006:  (*Always)(nil),            /* bool_eval=Always */
@@ -3909,7 +3909,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */
 	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
 	1765941604351725175:  (*Decrement)(nil),         /* execute=Decrease: */
-	16337634811621251476: (*Decrement)(nil),         /* number_eval=Decrease: */
+	2127914973580247945:  (*Decrement)(nil),         /* num_eval=Decrease: */
 	13259725831972112539: (*DecrementAspect)(nil),   /* execute=Decrease:aspect: */
 	9604047801594713852:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect: */
 	11515881376122775668: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:by: */
@@ -3919,10 +3919,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16567257087826189312: (*DecrementAspect)(nil),   /* execute=Decrease:aspect:clamp: */
 	7498537354592687963:  (*DecrementAspect)(nil),   /* text_eval=Decrease:aspect:clamp: */
 	906537561468635208:   (*Decrement)(nil),         /* execute=Decrease:by: */
-	7249930857706662977:  (*Decrement)(nil),         /* number_eval=Decrease:by: */
-	14212233424935015742: (*DivideValue)(nil),       /* number_eval=Divide:value: */
+	10626433780618545830: (*Decrement)(nil),         /* num_eval=Decrease:by: */
+	878353350484094823:   (*DivideValue)(nil),       /* num_eval=Divide:value: */
 	6766679711322815220:  (*During)(nil),            /* bool_eval=During: */
-	1731395596460545319:  (*During)(nil),            /* number_eval=During: */
+	5502083194357667326:  (*During)(nil),            /* num_eval=During: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
 	2224842870997259213:  (*FieldsOfKind)(nil),      /* text_list_eval=Fields of: */
 	13697022905922221509: (*ChooseNothingElse)(nil), /* brancher=Finally do: */
@@ -3935,7 +3935,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11846460753008131314: (*ChooseBranch)(nil),      /* brancher=If:do:else: */
 	9882017885672780228:  (*ChooseBranch)(nil),      /* execute=If:do:else: */
 	3419326304120453839:  (*Increment)(nil),         /* execute=Increase: */
-	5814330157137261092:  (*Increment)(nil),         /* number_eval=Increase: */
+	4329501782528502333:  (*Increment)(nil),         /* num_eval=Increase: */
 	11043224857467493683: (*IncrementAspect)(nil),   /* execute=Increase:aspect: */
 	1296309673842091672:  (*IncrementAspect)(nil),   /* text_eval=Increase:aspect: */
 	4473637830475551932:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:by: */
@@ -3945,7 +3945,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4522630356185077352:  (*IncrementAspect)(nil),   /* execute=Increase:aspect:clamp: */
 	705264554644415287:   (*IncrementAspect)(nil),   /* text_eval=Increase:aspect:clamp: */
 	9916665856596995152:  (*Increment)(nil),         /* execute=Increase:by: */
-	6061586167490323121:  (*Increment)(nil),         /* number_eval=Increase:by: */
+	17764432315137014386: (*Increment)(nil),         /* num_eval=Increase:by: */
 	16720860407833961741: (*HasDominion)(nil),       /* bool_eval=Is domain: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
 	4986574662941955696:  (*CompareNum)(nil),        /* bool_eval=Is:matching:num: */
@@ -3962,13 +3962,13 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
 	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */
-	734548188050460137:   (*ModValue)(nil),          /* number_eval=Mod:value: */
-	17515508702665594117: (*MultiplyValue)(nil),     /* number_eval=Multiply:value: */
+	6501544922110637214:  (*ModValue)(nil),          /* num_eval=Mod:value: */
+	1256349697579623184:  (*MultiplyValue)(nil),     /* num_eval=Multiply:value: */
 	15519818243985955688: (*NameOf)(nil),            /* text_eval=NameOf: */
 	1310533520550597035:  (*Never)(nil),             /* bool_eval=Never */
 	3572677870333466638:  (*Not)(nil),               /* bool_eval=Not: */
-	2793972640309351788:  (*ChooseNum)(nil),         /* number_eval=Num if:then: */
-	1916074756917320013:  (*ChooseNum)(nil),         /* number_eval=Num if:then:else: */
+	9841785069654362751:  (*ChooseNum)(nil),         /* num_eval=Num if:then: */
+	2293377426593441548:  (*ChooseNum)(nil),         /* num_eval=Num if:then:else: */
 	18009133328614046007: (*PrintNumWord)(nil),      /* text_eval=Numeral words: */
 	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
 	15933580486837544843: (*ObjectTraits)(nil),      /* text_list_eval=Object traits: */
@@ -3985,7 +3985,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	13377280423859122588: (*SlashText)(nil),         /* text_eval=Slashes do: */
 	14637971099620461998: (*SpanText)(nil),          /* text_eval=Spaces do: */
 	10180508752412200934: (*CallTerminal)(nil),      /* text_eval=Stopping:over: */
-	6622046790206362641:  (*SubtractValue)(nil),     /* number_eval=Subtract:value: */
+	17065007156382311204: (*SubtractValue)(nil),     /* num_eval=Subtract:value: */
 	10878271994667616824: (*MakeTitleCase)(nil),     /* text_eval=Title: */
 	2711869841453509536:  (*CallTrigger)(nil),       /* bool_eval=Trigger:on:num: */
 	9953804072544503126:  (*ChooseText)(nil),        /* text_eval=Txt if:then: */

@@ -2,9 +2,9 @@
 Spec:with group:
   - "prim"
   - Group contains:
-      - # Booleans values are described using strings:
-        # the tell and json parsers recognize that and allows literal true/false values
-        # go's generated code also recognizes that and generates bool fields.
+      - # A true/false value. Technically, boolean values are described using strings.
+        # However, the tell, json, and generated go code all expect literal true/false values
+        # wherever this bool type is detected. Therefore, only the specs need to use this type.
         Spec:with str:
           - "bool"
           - Str exclusively:uses:
@@ -15,8 +15,9 @@ Spec:with group:
         Spec:with str:
           - "lines"
           - Str uses: []
-      - Spec:with num:
-          - "number"
+      - # An integer or floating point value.
+        Spec:with num:
+          - "num"
           - Num uses: []
       - # A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.
         Spec:with str:

@@ -7,7 +7,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *ListLen) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *ListLen) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if els, e := safe.GetAssignment(run, op.List); e != nil {
 		err = CmdError(op, e)
 	} else if !affine.IsList(els.Affinity()) {

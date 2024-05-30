@@ -93,7 +93,7 @@
                             - "player"
                             - AtField: "pawn"
                       - FromText: "machine"
-      - Expect output:
+      - Expect text:
           - "  - Fail to take from something closed:"
           - "  The espresso machine isn't open."
           - "  - The apple's parent: Mildred. Fail to steal:"

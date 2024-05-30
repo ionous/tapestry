@@ -10,7 +10,7 @@ func (op *CountedKind) Match(q Query, input *InputState) (okay bool) {
 	if start := *input; //
 	Optional(q, &start, &op.Article) || true {
 		if next := start; //
-		op.MatchingNumber.Match(q, &next) &&
+		op.MatchingNum.Match(q, &next) &&
 			op.Kind.Match(q, &next) {
 			op.Matched = start.Cut(start.Len() - next.Len())
 			*input, okay = next, true
@@ -26,7 +26,7 @@ func (op *CountedKind) BuildNouns(q Query, w weaver.Weaves, run rt.Runtime, prop
 	if plural, e := op.Kind.Validate(kindsOf.Kind); e != nil {
 		err = e
 	} else {
-		if cnt := int(op.MatchingNumber.Number); cnt > 0 {
+		if cnt := int(op.MatchingNum.Value); cnt > 0 {
 			singular := run.SingularOf(plural)
 			ret = make([]DesiredNoun, cnt)
 			for i := 0; i < cnt; i++ {

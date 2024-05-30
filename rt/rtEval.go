@@ -15,9 +15,9 @@ type BoolEval interface {
 	GetBool(Runtime) (Value, error)
 }
 
-// NumberEval represents the result of some numeric expression.
-type NumberEval interface {
-	GetNumber(Runtime) (Value, error)
+// NumEval represents the result of some numeric expression.
+type NumEval interface {
+	GetNum(Runtime) (Value, error)
 }
 
 // TextEval represents the result of some expression which creates a string.

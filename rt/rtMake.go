@@ -33,10 +33,10 @@ func StringFrom(v string, subtype string) Value {
 	return makeVariant(affine.Text, subtype, v)
 }
 func FloatFrom(v float64, subtype string) Value {
-	return makeVariant(affine.Number, subtype, v)
+	return makeVariant(affine.Num, subtype, v)
 }
 func IntFrom(v int, subtype string) Value {
-	return makeVariant(affine.Number, subtype, v)
+	return makeVariant(affine.Num, subtype, v)
 }
 
 func StringsFrom(vs []string, subtype string) (ret Value) {

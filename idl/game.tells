@@ -1,24 +1,29 @@
-# system commands
+# System commands that can be issued by script to communicate with the running game.
 Spec:with group:
   - "game"
   - Group contains:
-      - Spec:slots:with flow:
+      - # Immediately end the current game.
+        Spec:slots:with flow:
           - "quit_game"
           - "execute"
           - Flow uses: []
-      - Spec:slots:with flow:
+      - # Save the game.
+        Spec:slots:with flow:
           - "save_game"
           - "execute"
           - Flow uses: []
-      - Spec:slots:with flow:
+      - # Load the most recent save.
+        Spec:slots:with flow:
           - "load_game"
           - "execute"
           - Flow uses: []
-      - Spec:slots:with flow:
+      - # Unimplemented: rewind the game to undo the player's most recent input.
+        Spec:slots:with flow:
           - "undo_turn"
           - "execute"
           - Flow uses: []
-      - Spec:slots:with flow:
+      - # Print the version of the tap executable.
+        Spec:slots:with flow:
           - "print_version"
           - "execute"
           - Flow uses: []

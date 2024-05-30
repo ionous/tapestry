@@ -97,7 +97,7 @@ func getLiteralString(t rt.TextEval) (ret string, okay bool) {
 	return
 }
 
-func getLiteralNumber(t rt.NumberEval) (ret int, okay bool) {
+func getLiteralNumber(t rt.NumEval) (ret int, okay bool) {
 	if a, ok := t.(*literal.NumValue); ok {
 		if v := math.Floor(a.Value); v == a.Value {
 			ret, okay = int(v), true

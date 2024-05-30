@@ -20,7 +20,7 @@ import (
 func (op *SingleValue) Assignment() (ret rt.Assignment) {
 	if n := op.QuotedText; n != nil {
 		ret = n.Assignment()
-	} else if n := op.MatchingNumber; n != nil {
+	} else if n := op.MatchingNum; n != nil {
 		ret = n.Assignment()
 	} else if n := op.Noun; n != nil {
 		ret = nounAsTextValue(n.ActualNoun)
@@ -35,7 +35,7 @@ func (op *SingleValue) Assignment() (ret rt.Assignment) {
 func (op *SingleValue) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	Optional(q, &next, &op.QuotedText) ||
-		Optional(q, &next, &op.MatchingNumber) ||
+		Optional(q, &next, &op.MatchingNum) ||
 		Optional(q, &next, &op.Noun) ||
 		Optional(q, &next, &op.Kind) {
 		*input, okay = next, true
@@ -85,20 +85,20 @@ func (op *QuotedText) Match(q Query, input *InputState) (okay bool) {
 }
 
 // --------------------------------------------------------------
-// MatchingNumber
+// MatchingNum
 // --------------------------------------------------------------
 
-func (op *MatchingNumber) Assignment() rt.Assignment {
-	return number(op.Number, "")
+func (op *MatchingNum) Assignment() rt.Assignment {
+	return number(op.Value, "")
 }
 
 // matches a natural number in words, or a literal natural number.
-func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
+func (op *MatchingNum) Match(q Query, input *InputState) (okay bool) {
 	if ws := input.Words(); len(ws) > 0 && ws[0].Token == match.String {
 		word := ws[0].String()
 		if v, ok := WordsToNum(word); ok && v > 0 {
 			const width = 1
-			op.Number = float64(v)
+			op.Value = float64(v)
 			*input, okay = input.Skip(width), true
 		}
 	}
@@ -114,7 +114,7 @@ func (op *MatchingNumber) Match(q Query, input *InputState) (okay bool) {
 // but... note: text templates.
 // or to have individual methods for the necessary types
 func number(value float64, kind string) rt.Assignment {
-	return &assign.FromNumber{
+	return &assign.FromNum{
 		Value: &literal.NumValue{Value: value, Kind: kind},
 	}
 }
@@ -159,7 +159,7 @@ func getSimpleString(xs template.Expression) (ret string, okay bool) {
 }
 
 // // returns a string or a FromText assignment as a slice of bytes
-// func ConvertNumberTemplate(str string) (ret rt.NumberEval, err error) {
+// func ConvertNumberTemplate(str string) (ret rt.NumEval, err error) {
 // 	if xs, e := template.Parse(str); e != nil {
 // 		err = e
 // 	} else if v, ok := getSimpleValue(xs); ok {
@@ -167,7 +167,7 @@ func getSimpleString(xs template.Expression) (ret string, okay bool) {
 // 	} else {
 // 		if got, e := express.Convert(xs); e != nil {
 // 			err = e
-// 		} else if eval, ok := got.(rt.NumberEval); !ok {
+// 		} else if eval, ok := got.(rt.NumEval); !ok {
 // 			err = fmt.Errorf("render template has unknown expression %T", got)
 // 		} else {
 // 			ret = eval

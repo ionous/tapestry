@@ -197,7 +197,7 @@ func (op *ObjectDot) GetMarkup(ensure bool) map[string]any {
 // Ensures the command implements its specified slots.
 var _ Address = (*ObjectDot)(nil)
 var _ rtti.BoolEval = (*ObjectDot)(nil)
-var _ rtti.NumberEval = (*ObjectDot)(nil)
+var _ rtti.NumEval = (*ObjectDot)(nil)
 var _ rtti.TextEval = (*ObjectDot)(nil)
 var _ rtti.RecordEval = (*ObjectDot)(nil)
 var _ rtti.NumListEval = (*ObjectDot)(nil)
@@ -252,7 +252,7 @@ func (op *VariableDot) GetMarkup(ensure bool) map[string]any {
 // Ensures the command implements its specified slots.
 var _ Address = (*VariableDot)(nil)
 var _ rtti.BoolEval = (*VariableDot)(nil)
-var _ rtti.NumberEval = (*VariableDot)(nil)
+var _ rtti.NumEval = (*VariableDot)(nil)
 var _ rtti.TextEval = (*VariableDot)(nil)
 var _ rtti.RecordEval = (*VariableDot)(nil)
 var _ rtti.NumListEval = (*VariableDot)(nil)
@@ -312,7 +312,7 @@ func (op *AtField_Slice) Repeats() bool {
 
 // Select a value from a list of values.
 type AtIndex struct {
-	Index  rtti.NumberEval
+	Index  rtti.NumEval
 	Markup map[string]any
 }
 
@@ -376,7 +376,7 @@ func (op *CallPattern) GetMarkup(ensure bool) map[string]any {
 // Ensures the command implements its specified slots.
 var _ rtti.Execute = (*CallPattern)(nil)
 var _ rtti.BoolEval = (*CallPattern)(nil)
-var _ rtti.NumberEval = (*CallPattern)(nil)
+var _ rtti.NumEval = (*CallPattern)(nil)
 var _ rtti.TextEval = (*CallPattern)(nil)
 var _ rtti.RecordEval = (*CallPattern)(nil)
 var _ rtti.NumListEval = (*CallPattern)(nil)
@@ -548,21 +548,21 @@ func (op *FromBool_Slice) Repeats() bool {
 }
 
 // Provide a number for an assignment.
-type FromNumber struct {
-	Value  rtti.NumberEval
+type FromNum struct {
+	Value  rtti.NumEval
 	Markup map[string]any
 }
 
-// from_number, a type of flow.
-var Zt_FromNumber typeinfo.Flow
+// from_num, a type of flow.
+var Zt_FromNum typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*FromNumber) TypeInfo() typeinfo.T {
-	return &Zt_FromNumber
+func (*FromNum) TypeInfo() typeinfo.T {
+	return &Zt_FromNum
 }
 
 // Implements [typeinfo.Markup]
-func (op *FromNumber) GetMarkup(ensure bool) map[string]any {
+func (op *FromNum) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -570,18 +570,18 @@ func (op *FromNumber) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.Assignment = (*FromNumber)(nil)
+var _ rtti.Assignment = (*FromNum)(nil)
 
-// Holds a slice of type FromNumber.
-type FromNumber_Slice []FromNumber
+// Holds a slice of type FromNum.
+type FromNum_Slice []FromNum
 
-// Implements [typeinfo.Instance] for a slice of FromNumber.
-func (*FromNumber_Slice) TypeInfo() typeinfo.T {
-	return &Zt_FromNumber
+// Implements [typeinfo.Instance] for a slice of FromNum.
+func (*FromNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromNum
 }
 
-// Implements [typeinfo.Repeats] for a slice of FromNumber.
-func (op *FromNumber_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of FromNum.
+func (op *FromNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -848,7 +848,7 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&Zt_Address,
 			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&rtti.Zt_TextEval,
 			&rtti.Zt_RecordEval,
 			&rtti.Zt_NumListEval,
@@ -875,7 +875,7 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&Zt_Address,
 			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&rtti.Zt_TextEval,
 			&rtti.Zt_RecordEval,
 			&rtti.Zt_NumListEval,
@@ -911,7 +911,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": []interface{}{"The zero-based index to read or write.", "The index must exist within the list being targeted."},
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_Dot,
@@ -941,7 +941,7 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&rtti.Zt_TextEval,
 			&rtti.Zt_RecordEval,
 			&rtti.Zt_NumListEval,
@@ -1024,15 +1024,15 @@ func init() {
 			"comment": "Provide a boolean value for an assignment.",
 		},
 	}
-	Zt_FromNumber = typeinfo.Flow{
-		Name: "from_number",
-		Lede: "from_number",
+	Zt_FromNum = typeinfo.Flow{
+		Name: "from_num",
+		Lede: "from_num",
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
 				"comment": "Number for the assignment.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Assignment,
@@ -1161,7 +1161,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_FromExe,
 	&Zt_FromAddress,
 	&Zt_FromBool,
-	&Zt_FromNumber,
+	&Zt_FromNum,
 	&Zt_FromText,
 	&Zt_FromRecord,
 	&Zt_FromNumList,
@@ -1177,8 +1177,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
 	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
 	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
+	9675109928599400849:  (*CallPattern)(nil),    /* num_eval=Determine:args: */
 	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
-	15584772020364696136: (*CallPattern)(nil),    /* number_eval=Determine:args: */
 	13992013847750998452: (*CallPattern)(nil),    /* record_eval=Determine:args: */
 	352268441608212603:   (*CallPattern)(nil),    /* record_list_eval=Determine:args: */
 	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
@@ -1186,24 +1186,24 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	9651737781749814793:  (*FromAddress)(nil),    /* assignment=FromAddress: */
 	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
 	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
+	13937541344191718121: (*FromNum)(nil),        /* assignment=FromNum: */
 	15276643347016776669: (*FromNumList)(nil),    /* assignment=FromNumList: */
-	10386192108847008240: (*FromNumber)(nil),     /* assignment=FromNumber: */
 	8445595699766392240:  (*FromRecord)(nil),     /* assignment=FromRecord: */
 	17510952281883199828: (*FromRecordList)(nil), /* assignment=FromRecordList: */
 	9783457335751138546:  (*FromText)(nil),       /* assignment=FromText: */
 	3267530751198060154:  (*FromTextList)(nil),   /* assignment=FromTextList: */
 	8656684385605626625:  (*ObjectDot)(nil),      /* address=Object: */
 	6106842879255343810:  (*ObjectDot)(nil),      /* bool_eval=Object: */
+	14709650427635515944: (*ObjectDot)(nil),      /* num_eval=Object: */
 	3322847371150895433:  (*ObjectDot)(nil),      /* num_list_eval=Object: */
-	11863103806351582869: (*ObjectDot)(nil),      /* number_eval=Object: */
 	1988642049281593865:  (*ObjectDot)(nil),      /* record_eval=Object: */
 	9599721143262547914:  (*ObjectDot)(nil),      /* record_list_eval=Object: */
 	16083123907778192555: (*ObjectDot)(nil),      /* text_eval=Object: */
 	15780956574897965792: (*ObjectDot)(nil),      /* text_list_eval=Object: */
 	8121157847033684962:  (*ObjectDot)(nil),      /* address=Object:dot: */
 	5205171710741514089:  (*ObjectDot)(nil),      /* bool_eval=Object:dot: */
+	13854256590934503743: (*ObjectDot)(nil),      /* num_eval=Object:dot: */
 	3914994200631113354:  (*ObjectDot)(nil),      /* num_list_eval=Object:dot: */
-	16900085971697467422: (*ObjectDot)(nil),      /* number_eval=Object:dot: */
 	1364775634664390090:  (*ObjectDot)(nil),      /* record_eval=Object:dot: */
 	16877508779303594737: (*ObjectDot)(nil),      /* record_list_eval=Object:dot: */
 	17663678026468030644: (*ObjectDot)(nil),      /* text_eval=Object:dot: */
@@ -1212,16 +1212,16 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3912570011939708664:  (*SetValue)(nil),       /* execute=Set:value: */
 	13692207992970428220: (*VariableDot)(nil),    /* address=Variable: */
 	17908519799628660539: (*VariableDot)(nil),    /* bool_eval=Variable: */
+	17658028528032582325: (*VariableDot)(nil),    /* num_eval=Variable: */
 	11022385456290008164: (*VariableDot)(nil),    /* num_list_eval=Variable: */
-	14722688844418158720: (*VariableDot)(nil),    /* number_eval=Variable: */
 	15906653930217516836: (*VariableDot)(nil),    /* record_eval=Variable: */
 	16032903663975260899: (*VariableDot)(nil),    /* record_list_eval=Variable: */
 	11181798416019134386: (*VariableDot)(nil),    /* text_eval=Variable: */
 	14769776891888769773: (*VariableDot)(nil),    /* text_list_eval=Variable: */
 	15966558056732701531: (*VariableDot)(nil),    /* address=Variable:dot: */
 	7739360284898038596:  (*VariableDot)(nil),    /* bool_eval=Variable:dot: */
+	4938834444414070846:  (*VariableDot)(nil),    /* num_eval=Variable:dot: */
 	14012826006150347811: (*VariableDot)(nil),    /* num_list_eval=Variable:dot: */
-	2218494529839714071:  (*VariableDot)(nil),    /* number_eval=Variable:dot: */
 	3479001804857346403:  (*VariableDot)(nil),    /* record_eval=Variable:dot: */
 	11938488787528882828: (*VariableDot)(nil),    /* record_list_eval=Variable:dot: */
 	4798713833623285465:  (*VariableDot)(nil),    /* text_eval=Variable:dot: */

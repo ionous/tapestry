@@ -140,7 +140,7 @@ Spec:with group:
                     - "trigger"
                 - Term:type:
                     - "num"
-                    - "number_eval"
+                    - "num_eval"
       - # Returns new text, with the first letter turned into uppercase.
         Spec:slots:groups:with flow:
           - "capitalize"
@@ -193,7 +193,7 @@ Spec:with group:
       - # Pick one of two numbers based on a boolean test.
         Spec:slots:groups:with flow:
           - "choose_num"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "num"
@@ -203,11 +203,11 @@ Spec:with group:
                 - Term:name:type:
                     - "then"
                     - "true"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:optional:
                     - "else"
                     - "false"
-                    - "number_eval"
+                    - "num_eval"
                     - true
       - # Pick one of two strings based on a boolean test.
         Spec:slots:groups:with flow:
@@ -269,7 +269,7 @@ Spec:with group:
               - - Term:name:type:
                     - "_"
                     - "a"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "matching"
                     - "is"
@@ -277,12 +277,12 @@ Spec:with group:
                 - Term:name:type:
                     - "num"
                     - "b"
-                    - "number_eval"
+                    - "num_eval"
                 - # a positive value that indicates how close the two numbers should be
                   Term:name:type:optional:
                     - "within"
                     - "tolerance"
-                    - "number"
+                    - "num"
                     - true
       - # True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
         Spec:slots:groups:with flow:
@@ -306,23 +306,23 @@ Spec:with group:
       - # Subtract two numbers.
         Spec:slots:groups:with flow:
           - "subtract_value"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "subtract"
               - - Term:name:type:
                     - "_"
                     - "a"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "value"
                     - "b"
-                    - "number_eval"
+                    - "num_eval"
       - # Decide whether a pattern is running.
         Spec:slots:groups:with flow:
           - "during"
           - - "bool_eval"
-            - "number_eval"
+            - "num_eval"
           - "patterns"
           - Flow uses:
               - Term:name:type:
@@ -609,7 +609,7 @@ Spec:with group:
               - - Term:name:type:
                     - "_"
                     - "num"
-                    - "number_eval"
+                    - "num_eval"
       - # Writes a number in plain english: eg. 'one'.
         Spec:slots:groups:with flow:
           - "print_num_word"
@@ -620,66 +620,66 @@ Spec:with group:
               - - Term:name:type:
                     - "words"
                     - "num"
-                    - "number_eval"
+                    - "num_eval"
       - # Multiply two numbers.
         Spec:slots:groups:with flow:
           - "multiply_value"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "multiply"
               - - Term:name:type:
                     - "_"
                     - "a"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "value"
                     - "b"
-                    - "number_eval"
+                    - "num_eval"
       - # Divide one number by another.
         Spec:slots:groups:with flow:
           - "divide_value"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "divide"
               - - Term:name:type:
                     - "_"
                     - "a"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "value"
                     - "b"
-                    - "number_eval"
+                    - "num_eval"
       - # Divide one number by another, and return the remainder.
         Spec:slots:groups:with flow:
           - "mod_value"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "mod"
               - - Term:name:type:
                     - "_"
                     - "a"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "value"
                     - "b"
-                    - "number_eval"
+                    - "num_eval"
       - Spec:slots:groups:with flow:
           - "abs_value"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "absolute"
               - - Term:type:
                     - "value"
-                    - "number_eval"
+                    - "num_eval"
       - # Increases the value of a number held in by a variable or object field.
         # Returns the new value of the number.
         Spec:slots:groups:with flow:
           - "increment"
-          - - "number_eval"
+          - - "num_eval"
             - "execute"
           - "math"
           - Flow:uses:
@@ -692,13 +692,13 @@ Spec:with group:
                   Term:name:type:optional:
                     - "by"
                     - "step"
-                    - "number_eval"
+                    - "num_eval"
                     - true
       - # Decrease the value of a number held in by a variable or object field.
         # Returns the new value of the number.
         Spec:slots:groups:with flow:
           - "decrement"
-          - - "number_eval"
+          - - "num_eval"
             - "execute"
           - "math"
           - Flow:uses:
@@ -711,7 +711,7 @@ Spec:with group:
                   Term:name:type:optional:
                     - "by"
                     - "step"
-                    - "number_eval"
+                    - "num_eval"
                     - true
       - # Increases the value of a trait held by an object aspect.
         # Returns the new value of the trait.
@@ -733,7 +733,7 @@ Spec:with group:
                   Term:name:type:optional:
                     - "by"
                     - "step"
-                    - "number_eval"
+                    - "num_eval"
                     - true
                 - # if not specified, wraps.
                   Term:type:optional:
@@ -760,7 +760,7 @@ Spec:with group:
                   Term:name:type:optional:
                     - "by"
                     - "step"
-                    - "number_eval"
+                    - "num_eval"
                     - true
                 - # if not specified, wraps.
                   Term:type:optional:
@@ -847,18 +847,18 @@ Spec:with group:
       - # Add two numbers.
         Spec:slots:groups:with flow:
           - "add_value"
-          - "number_eval"
+          - "num_eval"
           - "math"
           - Flow:uses:
               - "add"
               - - Term:name:type:
                     - "_"
                     - "a"
-                    - "number_eval"
+                    - "num_eval"
                 - Term:name:type:
                     - "value"
                     - "b"
-                    - "number_eval"
+                    - "num_eval"
       - # Helper for counting values.
         Spec:with slot:
           - "trigger"

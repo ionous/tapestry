@@ -35,7 +35,7 @@ func Truthy(v rt.Value) (ret bool) {
 	case affine.Bool:
 		ret = v.Bool()
 
-	case affine.Number:
+	case affine.Num:
 		ret = v.Int() > 0
 
 	case affine.Text:
@@ -58,7 +58,7 @@ func ConvertValue(run rt.Runtime, val rt.Value, out affine.Affinity) (ret rt.Val
 	case out == affine.Text && aff == affine.Bool:
 		ret = rt.StringOf(strconv.FormatBool(val.Bool()))
 
-	case out == affine.Text && aff == affine.Number:
+	case out == affine.Text && aff == affine.Num:
 		ret = rt.StringOf(strconv.FormatFloat(val.Float(), 'g', -1, 64))
 
 	case out == affine.Bool:

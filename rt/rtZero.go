@@ -49,7 +49,7 @@ func ZeroField(aff affine.Affinity, cls string, idx int) (ret Value, err error) 
 	case affine.Bool:
 		ret = BoolFrom(false, cls)
 
-	case affine.Number:
+	case affine.Num:
 		ret = FloatFrom(0, cls)
 
 	case affine.NumList:

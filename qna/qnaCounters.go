@@ -15,7 +15,7 @@ func counterKey(name string) qkey {
 // only updates the cache on setCounter.
 func (run *Runner) getCounter(name string) (ret rt.Value, err error) {
 	key := counterKey(name)
-	if v, e := run.unpackDynamicValue(key, affine.Number, ""); e == nil {
+	if v, e := run.unpackDynamicValue(key, affine.Num, ""); e == nil {
 		ret = v
 	} else if e != errMissing {
 		err = e
@@ -26,7 +26,7 @@ func (run *Runner) getCounter(name string) (ret rt.Value, err error) {
 }
 
 func (run *Runner) setCounter(name string, val rt.Value) (err error) {
-	if aff := val.Affinity(); aff != affine.Number {
+	if aff := val.Affinity(); aff != affine.Num {
 		err = errutil.Fmt("counter %q expected a number got %s", name, aff)
 	} else {
 		key := counterKey(name) // no need to copy: numbers are primitives

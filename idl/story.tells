@@ -636,7 +636,7 @@ Spec:with group:
                 - # The value at which this counter will start to return true.
                   Term:type:
                     - "num"
-                    - "number_eval"
+                    - "num_eval"
 
       - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
         Spec:slots:groups:with flow:
@@ -732,10 +732,10 @@ Spec:with group:
 
       - # A field containing a single number.
         Spec:slots:with flow:
-          - "number_field"
+          - "num_field"
           - "field_definition"
           - Flow:phrase:uses:
-              - "number"
+              - "num"
               - "a number named {name$name} ( {$type} ) {$initially}"
               - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
                   Term:name:type:
@@ -745,7 +745,7 @@ Spec:with group:
                 - # Provides a default value; zero if not specified.
                   Term:type:optional:
                     - "initially"
-                    - "number_eval"
+                    - "num_eval"
                     - true
 
       - # A field containing a single record.

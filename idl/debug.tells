@@ -1,9 +1,9 @@
-# debug and testing statements 
+# Commands for debugging and testing stories.
 Spec:with group:
   - "debug"
   - Group contains:
-      - # a command with a signature of the comment marker metadata.
-        # a cheat to allows nodes that have only a comment marker and no actual command.
+      - # A command with a signature of the comment marker metadata.
+        # This is a cheat to allows nodes that have only a comment marker and no actual command.
         # see also: story.story_break
         internal: true
         Spec:slots:with flow:
@@ -12,7 +12,8 @@ Spec:with group:
           - Flow:uses:
               - "--"
               - []
-      - Spec:slots:with flow:
+      - # Evaluate a boolean command, and generate an error if it returns false.
+        Spec:slots:with flow:
           - "expect"
           - "execute"
           - Flow:uses:
@@ -21,15 +22,8 @@ Spec:with group:
                     - "_"
                     - "value"
                     - "bool_eval"
-      - Spec:slots:with flow:
-          - "expect_output"
-          - "execute"
-          - Flow:uses:
-              - "expect"
-              - - Term:type:
-                    - "output"
-                    - "lines"
-      - Spec:slots:with flow:
+      - # Examine the most recent game output, and generate an error unless it matches the specified text.
+        Spec:slots:with flow:
           - "expect_text"
           - "execute"
           - Flow:uses:
@@ -37,8 +31,11 @@ Spec:with group:
               - - Term:type:
                     - "text"
                     - "text_eval"
-      - # fake input as if the player had typed it themselves.
-        # only works while running checks.
+      - # Process fake input as if the player had typed it themselves.
+        # Multiple commands can be specified by separating them with semi-colons. For example:
+        #   Fabricate input: "s; jump; look"
+        # Fabricate only works while running tests.
+        # It does nothing during normal game play.
         Spec:slots:with flow:
           - "fabricate"
           - "execute"
@@ -47,20 +44,24 @@ Spec:with group:
                   - "input"
                   - "text"
                   - "text_eval"
-      - # Debug log.
+      - # Print a message that is useful during development, and
+        # will not be visible to players in a final game.
         Spec:slots:with flow:
           - "debug_log"
           - "execute"
           - Flow:uses:
               - "log"
-              - - Term:name:type:
+              - - # Importance of the message.
+                  Term:name:type:
                     - "_"
                     - "log_level"
                     - "logging_level"
-                - Term:type:
+                - # Some text, or any other value, to display.
+                  Term:type:
                     - "value"
                     - "assignment"
-      - Spec:with str:
+      - # Used with [DebugLog].
+        Spec:with str:
           - "logging_level"
           - Str exclusively:uses:
               - true

@@ -22,18 +22,18 @@
           DoorVia room:direction:
             - FromText: "foyer"
             - FromText: "south"
-      - Expect output: "curtain"
+      - Expect text: "curtain"
       - Print:
           DirectionThrough room:door:
             - FromText: "foyer"
             - FromText: "curtain"
-      - Expect output: "south"
+      - Expect text: "south"
       - Looking actor:
           FromText:
             Object:dot:
               - "story"
               - AtField: "actor"
-      - Expect output:
+      - Expect text:
           - "**Lobby**"
           - "You can see some double doors and a faux door."
       - TravelingThrough actor:noun:
@@ -42,39 +42,39 @@
                 - "story"
                 - AtField: "actor"
           - FromText: "faux door"
-      - Expect output: "It doesn't lead anywhere."
+      - Expect text: "It doesn't lead anywhere."
       - TravelingThrough actor:noun:
           - FromText:
               Object:dot:
                 - "story"
                 - AtField: "actor"
           - FromText: "double doors"
-      - Expect output: "They seem to be closed."
+      - Expect text: "They seem to be closed."
       - Opening actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "double doors"
-      - Expect output: "You open the double doors."
+      - Expect text: "You open the double doors."
       - TravelingThrough actor:noun:
           - FromText:
               Object:dot:
                 - "player"
                 - AtField: "pawn"
           - FromText: "double doors"
-      - Expect output:
+      - Expect text:
           - "**Foyer**"
           - "You can see a curtain."
       - # test moving south as if the player typed the input
         Fabricate input: "take curtain"
-      - Expect output: "It is fixed in place."
+      - Expect text: "It is fixed in place."
       - # test moving south as if the player typed the input
         Fabricate input: "south"
-      - Expect output: "**Cloak Room**"
+      - Expect text: "**Cloak Room**"
       - # test taking a direction
         Fabricate input: "take north"
-      - Expect output: "You should name something more substantial."
+      - Expect text: "You should name something more substantial."
       - # test looking north
         Fabricate input: "x n"
-      - Expect output: "You see nothing unexpected in that direction."
+      - Expect text: "You see nothing unexpected in that direction."

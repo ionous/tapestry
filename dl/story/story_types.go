@@ -1151,7 +1151,7 @@ func (op *SayResponse_Slice) Repeats() bool {
 // Counters start at zero and are incremented every time the guard is checked.
 type CountOf struct {
 	Trigger core.Trigger
-	Num     rtti.NumberEval
+	Num     rtti.NumEval
 	Markup  map[string]any
 }
 
@@ -1422,22 +1422,22 @@ func (op *BoolField_Slice) Repeats() bool {
 }
 
 // A field containing a single number.
-type NumberField struct {
+type NumField struct {
 	FieldName rtti.TextEval
-	Initially rtti.NumberEval
+	Initially rtti.NumEval
 	Markup    map[string]any
 }
 
-// number_field, a type of flow.
-var Zt_NumberField typeinfo.Flow
+// num_field, a type of flow.
+var Zt_NumField typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*NumberField) TypeInfo() typeinfo.T {
-	return &Zt_NumberField
+func (*NumField) TypeInfo() typeinfo.T {
+	return &Zt_NumField
 }
 
 // Implements [typeinfo.Markup]
-func (op *NumberField) GetMarkup(ensure bool) map[string]any {
+func (op *NumField) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -1445,18 +1445,18 @@ func (op *NumberField) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ FieldDefinition = (*NumberField)(nil)
+var _ FieldDefinition = (*NumField)(nil)
 
-// Holds a slice of type NumberField.
-type NumberField_Slice []NumberField
+// Holds a slice of type NumField.
+type NumField_Slice []NumField
 
-// Implements [typeinfo.Instance] for a slice of NumberField.
-func (*NumberField_Slice) TypeInfo() typeinfo.T {
-	return &Zt_NumberField
+// Implements [typeinfo.Instance] for a slice of NumField.
+func (*NumField_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NumField
 }
 
-// Implements [typeinfo.Repeats] for a slice of NumberField.
-func (op *NumberField_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of NumField.
+func (op *NumField_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2460,7 +2460,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "The value at which this counter will start to return true.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -2576,9 +2576,9 @@ func init() {
 			"comment": []interface{}{"A field containing a boolean ( true/false ) value.", "As a special case, when used to define a boolean field in a kind,", "the boolean becomes a state set consisting of the state and its opposite.", "For instance, a boolean field called \"reasonable\" generates a set called \"reasonable status\" and the states \"reasonable\" and \"not reasonable.\""},
 		},
 	}
-	Zt_NumberField = typeinfo.Flow{
-		Name: "number_field",
-		Lede: "number",
+	Zt_NumField = typeinfo.Flow{
+		Name: "num_field",
+		Lede: "num",
 		Terms: []typeinfo.Term{{
 			Name: "field_name",
 			Markup: map[string]any{
@@ -2592,7 +2592,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "Provides a default value; zero if not specified.",
 			},
-			Type: &rtti.Zt_NumberEval,
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_FieldDefinition,
@@ -2816,7 +2816,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_NothingField,
 	&Zt_AspectField,
 	&Zt_BoolField,
-	&Zt_NumberField,
+	&Zt_NumField,
 	&Zt_RecordField,
 	&Zt_TextField,
 	&Zt_TextListField,
@@ -2875,10 +2875,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16242102660676547183: (*Note)(nil),                  /* execute=Note: */
 	17718266473581357115: (*Note)(nil),                  /* story_statement=Note: */
 	14427731589588473385: (*NothingField)(nil),          /* field_definition=Nothing */
+	6779819952901809746:  (*NumField)(nil),              /* field_definition=Num: */
+	1575190309945393477:  (*NumField)(nil),              /* field_definition=Num:initially: */
 	10299801658819864730: (*NumListField)(nil),          /* field_definition=NumList: */
 	12762197545337845485: (*NumListField)(nil),          /* field_definition=NumList:initially: */
-	16579038690333872565: (*NumberField)(nil),           /* field_definition=Number: */
-	7599754526096278866:  (*NumberField)(nil),           /* field_definition=Number:initially: */
 	7215961239288768263:  (*RecordField)(nil),           /* field_definition=Record:kind: */
 	8334583613109868292:  (*RecordField)(nil),           /* field_definition=Record:kind:initially: */
 	15479801779125468947: (*RecordListField)(nil),       /* field_definition=RecordList:kind: */

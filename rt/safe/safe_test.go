@@ -27,7 +27,7 @@ func TestSafety(t *testing.T) {
 	default:
 		t.Fatal(e)
 	}
-	switch _, e := safe.GetNumber(&run, nil); e.(type) {
+	switch _, e := safe.GetNum(&run, nil); e.(type) {
 	case safe.MissingEval:
 		t.Log("okay", e)
 	default:

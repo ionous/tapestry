@@ -70,7 +70,7 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 }
 
 func (v *visitEach) Execute(run rt.Runtime) (err error) {
-	if i, e := checkVariable(run, "index", affine.Number); e != nil {
+	if i, e := checkVariable(run, "index", affine.Num); e != nil {
 		err = e
 	} else if f, e := checkVariable(run, "first", affine.Bool); e != nil {
 		err = e

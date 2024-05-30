@@ -5,11 +5,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *ChooseNum) GetNumber(run rt.Runtime) (ret rt.Value, err error) {
+func (op *ChooseNum) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if b, e := safe.GetBool(run, op.If); e != nil {
 		err = cmdError(op, e)
 	} else {
-		var next rt.NumberEval
+		var next rt.NumEval
 		if b.Bool() {
 			next = op.True
 		} else {

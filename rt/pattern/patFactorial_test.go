@@ -30,7 +30,7 @@ func TestFactorial(t *testing.T) {
 				Labels: []string{"num"},
 				Return: "num",
 				Fields: []rt.Field{
-					{Name: "num", Affinity: affine.Number},
+					{Name: "num", Affinity: affine.Num},
 				},
 				Rules: []rt.Rule{
 					{Exe: debug.FactorialDefaultRule},
@@ -43,10 +43,10 @@ func TestFactorial(t *testing.T) {
 		PatternName: P("factorial"),
 		Arguments: []assign.Arg{{
 			Name:  "num",
-			Value: &assign.FromNumber{Value: I(3)},
+			Value: &assign.FromNum{Value: I(3)},
 		}},
 	}
-	if v, e := safe.GetNumber(&run, &det); e != nil {
+	if v, e := safe.GetNum(&run, &det); e != nil {
 		t.Fatal(e)
 	} else if got, want := v.Int(), 3*(2*(1*1)); got != want {
 		t.Fatal("mismatch: expected:", want, "have:", got)

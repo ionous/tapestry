@@ -34,7 +34,7 @@ type MatchNumber struct {
 func (op *MatchNumber) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := run.GetField(meta.Variables, "num"); e != nil {
 		err = nil
-	} else if safe.Check(v, affine.Number); e != nil {
+	} else if safe.Check(v, affine.Num); e != nil {
 		err = e
 	} else {
 		ret = rt.BoolOf(v.Int() == op.Val)
@@ -47,7 +47,7 @@ func DetermineSay(i int) *assign.CallPattern {
 		PatternName: "say me",
 		Arguments: []assign.Arg{{
 			Name:  "num",
-			Value: &assign.FromNumber{Value: I(i)},
+			Value: &assign.FromNum{Value: I(i)},
 		}},
 	}
 }

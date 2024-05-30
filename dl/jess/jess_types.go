@@ -513,11 +513,11 @@ func (op *AdditionalNames_Slice) Repeats() bool {
 // provides english specification of a number of objects.
 // ( note: yes, `the five the containers` is permitted. )
 type CountedKind struct {
-	Article        *Article
-	MatchingNumber MatchingNumber
-	Kind           Kind
-	Matched        Matched
-	Markup         map[string]any
+	Article     *Article
+	MatchingNum MatchingNum
+	Kind        Kind
+	Matched     Matched
+	Markup      map[string]any
 }
 
 // counted_kind, a type of flow.
@@ -1395,11 +1395,11 @@ func (op *NounPropertyValue_Slice) Repeats() bool {
 // matches only one of its options
 // ( the options could be represented as a slot; this feels easier for now )
 type SingleValue struct {
-	QuotedText     *QuotedText
-	MatchingNumber *MatchingNumber
-	Noun           *Noun
-	Kind           *Kind
-	Markup         map[string]any
+	QuotedText  *QuotedText
+	MatchingNum *MatchingNum
+	Noun        *Noun
+	Kind        *Kind
+	Markup      map[string]any
 }
 
 // single_value, a type of flow.
@@ -1469,37 +1469,37 @@ func (op *QuotedText_Slice) Repeats() bool {
 
 // reads a number specified in words or as digits.
 // stores the result as the parsed number.
-type MatchingNumber struct {
-	Number float64
+type MatchingNum struct {
+	Value  float64
 	Markup map[string]any
 }
 
-// matching_number, a type of flow.
-var Zt_MatchingNumber typeinfo.Flow
+// matching_num, a type of flow.
+var Zt_MatchingNum typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*MatchingNumber) TypeInfo() typeinfo.T {
-	return &Zt_MatchingNumber
+func (*MatchingNum) TypeInfo() typeinfo.T {
+	return &Zt_MatchingNum
 }
 
 // Implements [typeinfo.Markup]
-func (op *MatchingNumber) GetMarkup(ensure bool) map[string]any {
+func (op *MatchingNum) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// Holds a slice of type MatchingNumber.
-type MatchingNumber_Slice []MatchingNumber
+// Holds a slice of type MatchingNum.
+type MatchingNum_Slice []MatchingNum
 
-// Implements [typeinfo.Instance] for a slice of MatchingNumber.
-func (*MatchingNumber_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MatchingNumber
+// Implements [typeinfo.Instance] for a slice of MatchingNum.
+func (*MatchingNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MatchingNum
 }
 
-// Implements [typeinfo.Repeats] for a slice of MatchingNumber.
-func (op *MatchingNumber_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of MatchingNum.
+func (op *MatchingNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2587,9 +2587,9 @@ func init() {
 			Optional: true,
 			Type:     &Zt_Article,
 		}, {
-			Name:  "matching_number",
-			Label: "matching_number",
-			Type:  &Zt_MatchingNumber,
+			Name:  "matching_num",
+			Label: "matching_num",
+			Type:  &Zt_MatchingNum,
 		}, {
 			Name:  "kind",
 			Label: "kind",
@@ -3163,10 +3163,10 @@ func init() {
 			Optional: true,
 			Type:     &Zt_QuotedText,
 		}, {
-			Name:     "matching_number",
-			Label:    "matching_number",
+			Name:     "matching_num",
+			Label:    "matching_num",
 			Optional: true,
-			Type:     &Zt_MatchingNumber,
+			Type:     &Zt_MatchingNum,
 		}, {
 			Name:     "noun",
 			Label:    "noun",
@@ -3194,13 +3194,13 @@ func init() {
 			"comment": []interface{}{"text that begins and ends with double quotes.", "the quotes themselves are not part of the matched text."},
 		},
 	}
-	Zt_MatchingNumber = typeinfo.Flow{
-		Name: "matching_number",
-		Lede: "matching_number",
+	Zt_MatchingNum = typeinfo.Flow{
+		Name: "matching_num",
+		Lede: "matching_num",
 		Terms: []typeinfo.Term{{
-			Name:  "number",
-			Label: "number",
-			Type:  &prim.Zt_Number,
+			Name:  "value",
+			Label: "value",
+			Type:  &prim.Zt_Num,
 		}},
 		Markup: map[string]any{
 			"comment": []interface{}{"reads a number specified in words or as digits.", "stores the result as the parsed number."},
@@ -3785,7 +3785,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_NounPropertyValue,
 	&Zt_SingleValue,
 	&Zt_QuotedText,
-	&Zt_MatchingNumber,
+	&Zt_MatchingNum,
 	&Zt_KindsHaveProperties,
 	&Zt_CalledName,
 	&Zt_PropertyType,
@@ -3894,7 +3894,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7836789797345891325:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:redirect: */
 	10172864188299309151: (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking: */
 	4228974132366036894:  (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking:additionalDirections: */
-	5641041111806881294:  (*MatchingNumber)(nil),       /* MatchingNumber number: */
+	11956449617596421399: (*MatchingNum)(nil),          /* MatchingNum value: */
 	12459504191875059457: (*MatchingPhrases)(nil),      /* MatchingPhrases understand:timedRule:kindsOf:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
 	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
 	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
@@ -3938,18 +3938,18 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16511386036724990548: (*RuleTarget)(nil),           /* RuleTarget noun: */
 	8620010389824513622:  (*SingleValue)(nil),          /* SingleValue */
 	15504423809522254666: (*SingleValue)(nil),          /* SingleValue kind: */
-	747026252029666750:   (*SingleValue)(nil),          /* SingleValue matchingNumber: */
-	3199991737231408734:  (*SingleValue)(nil),          /* SingleValue matchingNumber:kind: */
-	17789670957933718200: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun: */
-	12644158024662816112: (*SingleValue)(nil),          /* SingleValue matchingNumber:noun:kind: */
+	13476648886480809019: (*SingleValue)(nil),          /* SingleValue matchingNum: */
+	17245554944686574961: (*SingleValue)(nil),          /* SingleValue matchingNum:kind: */
+	10898654930796235819: (*SingleValue)(nil),          /* SingleValue matchingNum:noun: */
+	15096293982933464929: (*SingleValue)(nil),          /* SingleValue matchingNum:noun:kind: */
 	11550266937804910612: (*SingleValue)(nil),          /* SingleValue noun: */
 	15983631673684921876: (*SingleValue)(nil),          /* SingleValue noun:kind: */
 	3958109237643295925:  (*SingleValue)(nil),          /* SingleValue quotedText: */
 	5530597249301129963:  (*SingleValue)(nil),          /* SingleValue quotedText:kind: */
-	17617190106567464055: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber: */
-	13435854409171053573: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:kind: */
-	16335742359860243615: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun: */
-	8688649593759560061:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNumber:noun:kind: */
+	7535017425513492456:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNum: */
+	9722056324474338464:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNum:kind: */
+	7599452507404660086:  (*SingleValue)(nil),          /* SingleValue quotedText:matchingNum:noun: */
+	17308391889632685670: (*SingleValue)(nil),          /* SingleValue quotedText:matchingNum:noun:kind: */
 	7763015042528813017:  (*SingleValue)(nil),          /* SingleValue quotedText:noun: */
 	1174375068044253639:  (*SingleValue)(nil),          /* SingleValue quotedText:noun:kind: */
 	3161285017754785721:  (*SubAssignment)(nil),        /* SubAssignment assignment: */
@@ -3981,8 +3981,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3016234452937755523:  (*VerbNamesAreNames)(nil),    /* VerbNamesAreNames verb:names:are:otherNames: */
 	7322259980003111582:  (*VerbPhrase)(nil),           /* VerbPhrase verb:plainNames: */
 	17678340847396548932: (*Words)(nil),                /* Words matched: */
-	11632287528917650754: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNumber:kind:matched: */
-	6226299220342727794:  (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNumber:kind:matched: */
+	11996597499153245749: (*CountedKind)(nil),          /* noun_builder=CountedKind article:matchingNum:kind:matched: */
+	11024152495623398821: (*CountedKind)(nil),          /* noun_builder=CountedKind matchingNum:kind:matched: */
 	643122070839149560:   (*Kind)(nil),                 /* noun_builder=Kind article:matched: */
 	12803964412357300908: (*Kind)(nil),                 /* noun_builder=Kind matched: */
 	16595966641928411799: (*Name)(nil),                 /* noun_builder=Name article:matched: */

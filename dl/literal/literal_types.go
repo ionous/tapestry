@@ -180,7 +180,7 @@ func (op *NumValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumberEval = (*NumValue)(nil)
+var _ rtti.NumEval = (*NumValue)(nil)
 var _ LiteralValue = (*NumValue)(nil)
 
 // Holds a slice of type NumValue.
@@ -458,7 +458,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "value",
 			Label: "value",
-			Type:  &prim.Zt_Number,
+			Type:  &prim.Zt_Num,
 		}, {
 			Name:     "kind",
 			Label:    "kind",
@@ -466,7 +466,7 @@ func init() {
 			Type:     &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_NumberEval,
+			&rtti.Zt_NumEval,
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
@@ -480,7 +480,7 @@ func init() {
 			Name:    "values",
 			Label:   "values",
 			Repeats: true,
-			Type:    &prim.Zt_Number,
+			Type:    &prim.Zt_Num,
 		}, {
 			Name:     "kind",
 			Label:    "kind",
@@ -630,9 +630,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3205100557739257174:  (*BoolValue)(nil),   /* literal_value=Bool value:kind: */
 	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
 	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
-	1356784465987892467:  (*NumValue)(nil),    /* number_eval=Num value: */
+	16565175635984030252: (*NumValue)(nil),    /* num_eval=Num value: */
 	607468628506983640:   (*NumValue)(nil),    /* literal_value=Num value:kind: */
-	9731162713682842745:  (*NumValue)(nil),    /* number_eval=Num value:kind: */
+	11555965194136863548: (*NumValue)(nil),    /* num_eval=Num value:kind: */
 	12282038377752822419: (*NumValues)(nil),   /* literal_value=Num values: */
 	8089072108541894314:  (*NumValues)(nil),   /* num_list_eval=Num values: */
 	16844579494806292121: (*NumValues)(nil),   /* literal_value=Num values:kind: */

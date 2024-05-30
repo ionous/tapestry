@@ -35,7 +35,7 @@
           - "The common ancestor of the sibling and a pen: {print_name: {common_ancestor: .scalpel .pen}}."
           - "The common ancestor of the pen and its owner: {print_name: {common_ancestor: .Mildred .pen}}."
           - "The common ancestor of the pen's owner and the pen: {print_name: {common_ancestor: .pen .Mildred}}."
-      - Expect output:
+      - Expect text:
           - "Nobody carries the basket."
           - "Mildred's parent is the lab."
           - "The basket's parent is the table."

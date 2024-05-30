@@ -1,4 +1,5 @@
-# shuttle communication
+# Allows the web console to talk to a running game server.
+# None of these commands are available for use in game scripts.
 Spec:with group:
   - "frame"
   - Group contains:

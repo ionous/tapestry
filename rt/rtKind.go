@@ -63,7 +63,7 @@ func (k *Kind) Implements(name string) bool {
 }
 
 // number of fields contained by this ( and all parent kinds )
-func (k *Kind) NumField() int {
+func (k *Kind) FieldCount() int {
 	return len(k.Fields)
 }
 

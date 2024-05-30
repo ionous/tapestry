@@ -65,9 +65,9 @@ var Zt_Text = typeinfo.Str{
 	},
 }
 
-// Number, a type of num.
-var Zt_Number = typeinfo.Num{
-	Name: "number",
+// Num, a type of num.
+var Zt_Num = typeinfo.Num{
+	Name: "num",
 }
 
 // package listing of type data
@@ -90,5 +90,5 @@ var z_str_list = []*typeinfo.Str{
 
 // A list of all nums in this this package.
 var z_num_list = []*typeinfo.Num{
-	&Zt_Number,
+	&Zt_Num,
 }

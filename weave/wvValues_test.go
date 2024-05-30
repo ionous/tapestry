@@ -22,7 +22,7 @@ func TestValueFieldAssignment(t *testing.T) {
 		// the name of the field has to match the name of the aspect
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{
 			{Name: "t", Affinity: affine.Text},
-			{Name: "d", Affinity: affine.Number},
+			{Name: "d", Affinity: affine.Num},
 		}},
 		// nouns with those fields
 		&eph.Nouns{Noun: "apple", Kind: "k"},
@@ -57,7 +57,7 @@ func TestMissingField(t *testing.T) {
 		// some random set of kinds
 		&eph.Kinds{Kind: "k"},
 		// a field
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "d", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "d", Affinity: affine.Num}}},
 		// a noun
 		&eph.Nouns{Noun: "n", Kind: "k"},
 		// and not that field
@@ -126,7 +126,7 @@ func TestValuePaths(t *testing.T) {
 		&eph.Kinds{Kind: kindsOf.Record.String()},
 		// a record with some fields
 		&eph.Kinds{Kind: "inner", Ancestor: kindsOf.Record.String(), Contain: []eph.Params{
-			{Name: "num", Affinity: affine.Number},
+			{Name: "num", Affinity: affine.Num},
 			{Name: "text", Affinity: affine.Text},
 		}},
 		// a record holding that record

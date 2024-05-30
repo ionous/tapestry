@@ -9,9 +9,9 @@ import (
 )
 
 func TestMath(t *testing.T) {
-	match := func(v float64, eval rt.NumberEval) (err error) {
+	match := func(v float64, eval rt.NumEval) (err error) {
 		var run testutil.PanicRuntime
-		if n, e := eval.GetNumber(&run); e != nil {
+		if n, e := eval.GetNum(&run); e != nil {
 			err = e
 		} else if n.Float() != v {
 			err = errutil.Fmt("%v != %v (have != want)", n, v)

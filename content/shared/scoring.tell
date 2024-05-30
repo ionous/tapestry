@@ -4,11 +4,11 @@
     - "tapestry"
     - - Define kind:fields:
           - "story data"
-          - - Number: "score"
+          - - Num: "score"
             - # The max score acts like a hint to the player.
               # The standard rules don't stop the score from growing larger than the max score
               # and nothing happens when the score reaches the max score.
-              Number: "max score"
+              Num: "max score"
       - Define kind:fields:
           - "settings"
           - - Aspect: "score notification"
@@ -31,7 +31,7 @@
                         - 0
                 - - Arg:from:
                       - "change"
-                      - FromNumber:
+                      - FromNum:
                           Subtract:value:
                             - Object:dot:
                                 - "story"
@@ -98,7 +98,7 @@
                 - AtField: "pawn"
           - FromBool: true
       - Fabricate input: "score"
-      - Expect output: "This isn't a competition."
+      - Expect text: "This isn't a competition."
 - Define test:requires:do:
     - "mid game score"
     - "scoring"
@@ -112,14 +112,14 @@
           - Object:dot:
               - "story"
               -  AtField: "max score"
-          - FromNumber: 50
+          - FromNum: 50
       - Set:value:
           - Object:dot:
               - "story"
               - AtField: "score"
-          - FromNumber: 23
+          - FromNum: 23
       - Fabricate input: "score"
-      - Expect output: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
+      - Expect text: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
 - Define test:requires:do:
     - "post game score"
     - "scoring"
@@ -131,19 +131,19 @@
           - Object:dot:
               - "story"
               - AtField: "max score"
-          - FromNumber: 100
+          - FromNum: 100
       - Set:value:
           - Object:dot:
               - "story"
               - AtField: "score"
-          - FromNumber: 100
+          - FromNum: 100
       - Set:value:
           - Object:dot:
               - "story"
               - AtField: "turn count"
-          - FromNumber: 7
+          - FromNum: 7
       - Fabricate input: "score"
-      - Expect output: "In 7 turns, you scored 100 out of a possible 100 points."
+      - Expect text: "In 7 turns, you scored 100 out of a possible 100 points."
 - Define test:requires:scene:do:
     - "score notification"
     - - "scoring"
@@ -157,7 +157,7 @@
                 - Object:dot:
                     - "story"
                     - AtField:  "score"
-                - FromNumber: 50
+                - FromNum: 50
       - Define noun:rule:do:
           - "flashlight"
           - "after deactivating"
@@ -173,12 +173,12 @@
                 - AtField: "pawn"
           - FromBool: true
       - Fabricate input: "switch on flashlight"
-      - Expect output:
+      - Expect text:
           - "You switch on the flashlight."
           - "Your score has just gone up by fifty points."
       - Fabricate input: "switch off flashlight"
-      - Expect output:
+      - Expect text:
           - "You switch off the flashlight."
           - "Your score has just gone down by one point."
       - Fabricate input: "score"
-      - Expect output: "So far, in 3 turns, you have scored 49 points."
+      - Expect text: "So far, in 3 turns, you have scored 49 points."

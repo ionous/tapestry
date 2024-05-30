@@ -19,7 +19,7 @@ func MakeAspects(ks Kinds, fields []Field) (ret []Aspect) {
 		if ft.Affinity == affine.Text && ft.Name == ft.Type {
 			if a, e := ks.GetKindByName(ft.Type); e == nil {
 				if a.Implements(kindsOf.Aspect.String()) {
-					cnt := a.NumField()
+					cnt := a.FieldCount()
 					ts := make([]string, cnt)
 					for i := 0; i < cnt; i++ {
 						t := a.Field(i)

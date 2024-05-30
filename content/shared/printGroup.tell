@@ -82,7 +82,7 @@
                     Variable:dot:
                       - "objs"
                       - - AtIndex: 1
-                - FromNumber:
+                - FromNum:
                     Len:
                       FromTextList: "@objs"
                 - FromText:

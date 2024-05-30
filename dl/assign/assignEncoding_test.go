@@ -32,7 +32,7 @@ func testString(n, a string) (err error) {
 		PatternName: n,
 		Arguments: []assign.Arg{{
 			Name: a,
-			Value: &assign.FromNumber{
+			Value: &assign.FromNum{
 				Value: literal.I(5), // the encode gets unhappy without a real value here.
 			},
 		}}}
@@ -47,6 +47,6 @@ func testString(n, a string) (err error) {
 
 var wantPattern = map[string]any{
 	"PatternName argName:": map[string]any{
-		"FromNumber:": 5.0,
+		"FromNum:": 5.0,
 	},
 }

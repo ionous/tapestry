@@ -63,7 +63,7 @@ Spec:with group:
           - "object_dot"
           - - "address"
             - "bool_eval"
-            - "number_eval"
+            - "num_eval"
             - "text_eval"
             - "record_eval"
             - "num_list_eval"
@@ -91,7 +91,7 @@ Spec:with group:
           - "variable_dot"
           - - "address"
             - "bool_eval"
-            - "number_eval"
+            - "num_eval"
             - "text_eval"
             - "record_eval"
             - "num_list_eval"
@@ -133,7 +133,7 @@ Spec:with group:
                 Term:name:type:
                   - "_"
                   - "index"
-                  - "number_eval"
+                  - "num_eval"
       - # Run a pattern, returning its result (if any).
         # Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
         # Because some patterns can return a value,this implements all of the possible rtti evaluations.
@@ -141,7 +141,7 @@ Spec:with group:
           - "call_pattern"
           - - "execute"
             - "bool_eval"
-            - "number_eval"
+            - "num_eval"
             - "text_eval"
             - "record_eval"
             - "num_list_eval"
@@ -211,14 +211,14 @@ Spec:with group:
                   - "bool_eval"
       - # Provide a number for an assignment.
         Spec:slots:with flow:
-          - "from_number"
+          - "from_num"
           - "assignment"
           - Flow uses:
               - # Number for the assignment.
                 Term:name:type:
                   - "_"
                   - "value"
-                  - "number_eval"
+                  - "num_eval"
       - # Provide a text value for an assignment.
         Spec:slots:with flow:
           - "from_text"

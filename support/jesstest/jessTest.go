@@ -594,7 +594,7 @@ var Phrases = []Phrase{
 	},
 	{
 		test:   "A supporter has a number called carrying capacity.",
-		result: []string{"AddKindFields:", "supporters", "carrying capacity", "number", ""},
+		result: []string{"AddKindFields:", "supporters", "carrying capacity", "num", ""},
 	},
 	{
 		// except for number and text, inform allows "bare" properties: a "list of text" creates a member called "list of text"

@@ -18,8 +18,8 @@ func (op *RenderPattern) GetBool(run rt.Runtime) (rt.Value, error) {
 	return op.RenderEval(run, affine.Bool)
 }
 
-func (op *RenderPattern) GetNumber(run rt.Runtime) (rt.Value, error) {
-	return op.RenderEval(run, affine.Number)
+func (op *RenderPattern) GetNum(run rt.Runtime) (rt.Value, error) {
+	return op.RenderEval(run, affine.Num)
 }
 
 // expressions are text patterns... so for now adapt via text

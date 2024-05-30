@@ -12,7 +12,7 @@ func TestRecordValue(t *testing.T) {
 	k := &rt.Kind{
 		Path: []string{"Ks"},
 		Fields: []rt.Field{
-			{Name: "d", Affinity: affine.Number},
+			{Name: "d", Affinity: affine.Num},
 			{Name: "t", Affinity: affine.Text},
 			{Name: "a", Affinity: affine.Text, Type: "a"},
 		},

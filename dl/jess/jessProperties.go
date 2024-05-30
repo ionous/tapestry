@@ -112,7 +112,7 @@ func (op *PropertyType) GetType(listOf bool) (ret mdl.FieldInfo, err error) {
 		// (well... affinity would have to be a set of const first)
 		if listOf {
 			switch aff {
-			case affine.Number:
+			case affine.Num:
 				aff = affine.NumList
 			case affine.Text:
 				aff = affine.TextList
@@ -133,7 +133,7 @@ func getTypeOfPrim(str string) (retAff affine.Affinity, retCls string) {
 	if str == affine.Text.String() {
 		retAff = affine.Text
 	} else {
-		retAff = affine.Number
+		retAff = affine.Num
 	}
 	return
 }

@@ -48,7 +48,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret rt.Value, err error) {
 				str := strconv.FormatBool(v.Bool())
 				ret = rt.StringOf(str)
 
-			case affine.Number:
+			case affine.Num:
 				str := strconv.FormatFloat(v.Float(), 'g', -1, 64)
 				ret = rt.StringOf(str)
 

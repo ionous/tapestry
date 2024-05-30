@@ -18,7 +18,7 @@ type Record struct {
 
 func NewRecord(k *Kind) *Record {
 	// values are placeholder; zero values generated on demand
-	return &Record{Kind: k, values: make([]Value, k.NumField())}
+	return &Record{Kind: k, values: make([]Value, k.FieldCount())}
 }
 
 // limited change detection
@@ -108,7 +108,7 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 		ft, aff, cls := d.Field(i), val.Affinity(), val.Type()
 		switch aff {
 		// the most flexible: anything can fit into anything.
-		case affine.Bool, affine.Number, affine.Text, affine.TextList, affine.NumList:
+		case affine.Bool, affine.Num, affine.Text, affine.TextList, affine.NumList:
 			okay = aff == ft.Affinity
 		// the least flexible: exact matches are needed.
 		case affine.Record, affine.RecordList:

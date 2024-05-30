@@ -31,8 +31,8 @@ func TestPatternSingle(t *testing.T) {
 				Affinity: affine.NumList,
 			}, {
 				Name:      "l2",
-				Affinity:  affine.Number,
-				Initially: &assign.FromNumber{Value: I(10)},
+				Affinity:  affine.Num,
+				Initially: &assign.FromNum{Value: I(10)},
 			}},
 			Result: &eph.Params{
 				Name:     "success",
@@ -77,8 +77,8 @@ func TestPatternSeparateLocals(t *testing.T) {
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:      "l2",
-				Affinity:  affine.Number,
-				Initially: &assign.FromNumber{Value: I(10)},
+				Affinity:  affine.Num,
+				Initially: &assign.FromNum{Value: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -118,8 +118,8 @@ func TestPatternSeparateDomains(t *testing.T) {
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:      "l2",
-				Affinity:  affine.Number,
-				Initially: &assign.FromNumber{Value: I(10)},
+				Affinity:  affine.Num,
+				Initially: &assign.FromNum{Value: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -141,7 +141,7 @@ func expectFullResults(t *testing.T, dt *testweave.TestWeave) {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outfields, []string{
 		"a:p:l1:num_list:", // field output gets sorted by name
-		"a:p:l2:number:",
+		"a:p:l2:num:",
 		"a:p:p1:text:k",
 		"a:p:success:bool:",
 	}); len(diff) > 0 {
@@ -263,7 +263,7 @@ func TestPatternConflictingInit(t *testing.T) {
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:      "n",
-				Affinity:  affine.Number,
+				Affinity:  affine.Num,
 				Initially: &assign.FromText{Value: T("mismatched")},
 			}},
 		},

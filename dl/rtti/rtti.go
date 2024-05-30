@@ -7,7 +7,7 @@ import (
 type Assignment = rt.Assignment
 type Execute = rt.Execute
 type BoolEval = rt.BoolEval
-type NumberEval = rt.NumberEval
+type NumEval = rt.NumEval
 type TextEval = rt.TextEval
 type RecordEval = rt.RecordEval
 type NumListEval = rt.NumListEval

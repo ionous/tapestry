@@ -19,9 +19,9 @@
           - "next"
           - "object"
       - Text: "dig error"
-      - Number: "lca"
+      - Num: "lca"
       - Text: "reach response"
-      - Number: "reach error"
+      - Num: "reach error"
       - TextList: "path"
     - - Set:value:
           - "@i"
@@ -55,7 +55,7 @@
                                   - FromText: "@action"
                       - - Set:value:
                             - "@reach_error"
-                            - FromNumber:
+                            - FromNum:
                                 Len:
                                   FromTextList: "@path"
                         - Set:value:
@@ -79,7 +79,7 @@
               Is empty: "@i"
           - - Set:value:
                 - "@lca"
-                - FromNumber:
+                - FromNum:
                     Find:inList:
                       - FromText: "@i"
                       - FromTextList: "@path"

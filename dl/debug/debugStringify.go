@@ -20,7 +20,7 @@ func stringifyValue(out *js.Builder, v rt.Value) {
 	case affine.Bool:
 		el := v.Bool()
 		out.B(el)
-	case affine.Number:
+	case affine.Num:
 		el := v.Float()
 		out.F(el)
 	case affine.Text:
@@ -67,7 +67,7 @@ func stringifyValue(out *js.Builder, v rt.Value) {
 func stringifyRecord(out *js.Builder, rec *rt.Record) {
 	out.Brace(js.Obj, func(_ *js.Builder) {
 		if rec != nil {
-			for i, cnt := 0, rec.NumField(); i < cnt; i++ {
+			for i, cnt := 0, rec.FieldCount(); i < cnt; i++ {
 				if i > 0 {
 					out.R(js.Comma)
 				}

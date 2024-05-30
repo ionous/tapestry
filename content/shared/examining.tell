@@ -147,19 +147,19 @@
     - "Kitchenette"
     - - PrintDescription obj:
           FromText: "mortar"
-      - Expect output: "In the mortar is a pestle."
+      - Expect text: "In the mortar is a pestle."
       - PrintDescription obj:
           FromText: "blender"
-      - Expect output: "The blender is empty."
+      - Expect text: "The blender is empty."
       - PrintDescription obj:
           FromText: "hat"
-      - Expect output: "Your aunt's very own witches hat, a Halloween favorite."
+      - Expect text: "Your aunt's very own witches hat, a Halloween favorite."
       - PrintDescription obj:
           FromText: "shelf"
-      - Expect output: "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+      - Expect text: "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
       - PrintDescription obj:
           FromText: "cabinet"
-      - Expect output:
+      - Expect text:
           - "An ancient teak wardrobe repurposed as a kitchen cupboard."
           - "In the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife."
       - Relate:to:via:
@@ -168,4 +168,4 @@
           - "whereabouts"
       - PrintDescription obj:
           FromText: "blender"
-      - Expect output: "You see nothing special about the blender."
+      - Expect text: "You see nothing special about the blender."

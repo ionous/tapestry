@@ -165,7 +165,7 @@
         RecordList:kind:
           - "groups"
           - "object group"
-      - Number: "idx"
+      - Num: "idx"
       - Record:kind:
           - "group"
           - "object group"
@@ -183,7 +183,7 @@
                           - - AtField: "grouping"
                 - - Set:value:
                       - "@idx"
-                      - FromNumber: "@index"
+                      - FromNum: "@index"
       - Note:
           - "if there wasn't an existing group matching the object's settings:"
           - "create a new group."

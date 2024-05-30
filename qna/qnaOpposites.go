@@ -16,7 +16,7 @@ func oppositeDay(ks kinds, aspect, trait string, b bool) (ret string, err error)
 		ret = trait
 	} else if k, e := ks.GetKindByName(aspect); e != nil {
 		err = e
-	} else if cnt := k.NumField(); cnt != 2 {
+	} else if cnt := k.FieldCount(); cnt != 2 {
 		err = errutil.Fmt("couldn't determine the opposite of %s.%s", aspect, trait)
 	} else if i := k.FieldIndex(trait); i < 0 {
 		err = errutil.Fmt("couldn't find the trait %s.%s", aspect, trait)

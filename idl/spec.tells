@@ -67,7 +67,7 @@ Spec:with group:
                     - true
                 - Term:type:repeats:
                     - "uses"
-                    - "number"
+                    - "num"
                     - true
       - # for string options
         # if the label isnt specified, its derived from the name.

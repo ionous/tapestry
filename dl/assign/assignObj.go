@@ -53,8 +53,8 @@ func (op *ObjectDot) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *ObjectDot) GetNumber(run rt.Runtime) (rt.Value, error) {
-	return op.getValue(run, affine.Number)
+func (op *ObjectDot) GetNum(run rt.Runtime) (rt.Value, error) {
+	return op.getValue(run, affine.Num)
 }
 
 // as a special case, if there are no dot parts, return the id of the object
