@@ -19,6 +19,12 @@ div#topbar {
   overflow: hidden;
 }
 
+div#footer {
+  border-top: thin solid #ccc;
+  padding-top: 1.5rem;
+  margin: 2rem;
+}
+
 h4 {
   display: inline;
 }
@@ -53,7 +59,21 @@ h4 {
 ul.commandTerms {
   margin: 0.25em;
 }
+/** str types **/ 
+ul.optionsList li {
+    display: inline;
+}
+ul.optionsList li::after {
+  content: ",";
+}
+ul.optionsList li:last-child::before {
+  content: "and";
+}
+ul.optionsList li:last-child::after {
+  content: ".";
+}
 
+/** idl index list **/
 .indexList {
   list-style: none;
 }
