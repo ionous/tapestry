@@ -1,4 +1,4 @@
-// debug and testing statements
+// Commands for debugging and testing stories.
 package debug
 
 //
@@ -6,14 +6,13 @@ package debug
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"strconv"
 )
 
-// a command with a signature of the comment marker metadata.
-// a cheat to allows nodes that have only a comment marker and no actual command.
+// A command with a signature of the comment marker metadata.
+// This is a cheat to allows nodes that have only a comment marker and no actual command.
 // see also: story.story_break
 type DoNothing struct {
 	Markup map[string]any
@@ -51,6 +50,7 @@ func (op *DoNothing_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Evaluate a boolean command, and generate an error if it returns false.
 type Expect struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
@@ -88,43 +88,7 @@ func (op *Expect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-type ExpectOutput struct {
-	Output string
-	Markup map[string]any
-}
-
-// expect_output, a type of flow.
-var Zt_ExpectOutput typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*ExpectOutput) TypeInfo() typeinfo.T {
-	return &Zt_ExpectOutput
-}
-
-// Implements [typeinfo.Markup]
-func (op *ExpectOutput) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.Execute = (*ExpectOutput)(nil)
-
-// Holds a slice of type ExpectOutput.
-type ExpectOutput_Slice []ExpectOutput
-
-// Implements [typeinfo.Instance] for a slice of ExpectOutput.
-func (*ExpectOutput_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ExpectOutput
-}
-
-// Implements [typeinfo.Repeats] for a slice of ExpectOutput.
-func (op *ExpectOutput_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
+// Examine the most recent game output, and generate an error unless it matches the specified text.
 type ExpectText struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -162,8 +126,10 @@ func (op *ExpectText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// fake input as if the player had typed it themselves.
-// only works while running checks.
+// Process fake input as if the player had typed it themselves.
+// Fabricate only works while running tests, and does nothing during normal game play.
+// Multiple actions can be specified by separating them with semi-colons. For example:
+//   - Fabricate input: "s; jump; look"
 type Fabricate struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -201,7 +167,8 @@ func (op *Fabricate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Debug log.
+// Print a message that is useful during development.
+// It will not be visible to players in a final game.
 type DebugLog struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment
@@ -240,7 +207,7 @@ func (op *DebugLog_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// LoggingLevel, a type of str enum.
+// Used with [DebugLog].
 type LoggingLevel int
 
 // The enumerated values of LoggingLevel.
@@ -285,6 +252,9 @@ var Zt_LoggingLevel = typeinfo.Str{
 		"",
 		"",
 	},
+	Markup: map[string]any{
+		"comment": "Used with [DebugLog].",
+	},
 }
 
 // init the terms of all flows in init
@@ -298,7 +268,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"a command with a signature of the comment marker metadata.", "a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
+			"comment":  []interface{}{"A command with a signature of the comment marker metadata.", "This is a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
 			"internal": true,
 		},
 	}
@@ -312,17 +282,8 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
-	}
-	Zt_ExpectOutput = typeinfo.Flow{
-		Name: "expect_output",
-		Lede: "expect",
-		Terms: []typeinfo.Term{{
-			Name:  "output",
-			Label: "output",
-			Type:  &prim.Zt_Lines,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
+		Markup: map[string]any{
+			"comment": "Evaluate a boolean command, and generate an error if it returns false.",
 		},
 	}
 	Zt_ExpectText = typeinfo.Flow{
@@ -331,10 +292,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "text",
 			Label: "text",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"The expected line or lines.", "If an expectation ends with ellipses \"...\"", "then only the first part of the line has to match.", "For example, if the game printed \"Hello world!\",", "then \"Hello ...\" would match."},
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Examine the most recent game output, and generate an error unless it matches the specified text.",
 		},
 	}
 	Zt_Fabricate = typeinfo.Flow{
@@ -343,13 +310,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "text",
 			Label: "input",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more actions to handle as if typed by the player.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"fake input as if the player had typed it themselves.", "only works while running checks."},
+			"comment": []interface{}{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  - Fabricate input: \"s; jump; look\""},
 		},
 	}
 	Zt_DebugLog = typeinfo.Flow{
@@ -357,17 +327,23 @@ func init() {
 		Lede: "log",
 		Terms: []typeinfo.Term{{
 			Name: "log_level",
+			Markup: map[string]any{
+				"comment": "Importance of the message.",
+			},
 			Type: &Zt_LoggingLevel,
 		}, {
 			Name:  "value",
 			Label: "value",
-			Type:  &rtti.Zt_Assignment,
+			Markup: map[string]any{
+				"comment": "Some text, or any other value, to display.",
+			},
+			Type: &rtti.Zt_Assignment,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Debug log.",
+			"comment": []interface{}{"Print a message that is useful during development.", "It will not be visible to players in a final game."},
 		},
 	}
 }
@@ -376,7 +352,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "debug",
 	Comment: []string{
-		"debug and testing statements ",
+		"Commands for debugging and testing stories.",
 	},
 
 	Flow:       z_flow_list,
@@ -389,7 +365,6 @@ var Z_Types = typeinfo.TypeSet{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_DoNothing,
 	&Zt_Expect,
-	&Zt_ExpectOutput,
 	&Zt_ExpectText,
 	&Zt_Fabricate,
 	&Zt_DebugLog,
@@ -403,10 +378,9 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	15882152812809098721: (*DoNothing)(nil),    /* execute=-- */
-	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
-	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
-	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
-	12332403919453206336: (*Fabricate)(nil),    /* execute=Fabricate input: */
-	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
+	15882152812809098721: (*DoNothing)(nil),  /* execute=-- */
+	16489874106085927697: (*ExpectText)(nil), /* execute=Expect text: */
+	11108202414968227788: (*Expect)(nil),     /* execute=Expect: */
+	12332403919453206336: (*Fabricate)(nil),  /* execute=Fabricate input: */
+	14196615958578686010: (*DebugLog)(nil),   /* execute=Log:value: */
 }

@@ -12,13 +12,14 @@ Spec:with group:
           - Flow:uses:
               - "--"
               - []
-      - # Evaluate a boolean command, and generate an error if it returns false.
+      - # Evaluate a boolean command and ensure it returns true.
         Spec:slots:with flow:
           - "expect"
           - "execute"
           - Flow:uses:
               - "expect"
-              - - Term:name:type:
+              - - # The boolean command. If the command returns false, the expectation will fail and the game will generate an error.
+                  Term:name:type:
                     - "_"
                     - "value"
                     - "bool_eval"
@@ -28,24 +29,30 @@ Spec:with group:
           - "execute"
           - Flow:uses:
               - "expect"
-              - - Term:type:
+              - - # The expected line or lines.
+                  # If an expected line ends with ellipses "..."
+                  # then only the first part of the line has to match.
+                  #
+                  # For example, if the expectation was "Hello...",
+                  # then the output "Hello World!" would match.
+                  Term:type:
                     - "text"
                     - "text_eval"
       - # Process fake input as if the player had typed it themselves.
-        # Multiple commands can be specified by separating them with semi-colons. For example:
+        # Fabricate only works while running tests, and does nothing during normal game play.
+        # Multiple actions can be specified by separating them with semi-colons. For example:
         #   Fabricate input: "s; jump; look"
-        # Fabricate only works while running tests.
-        # It does nothing during normal game play.
         Spec:slots:with flow:
           - "fabricate"
           - "execute"
           - Flow uses:
-              - Term:name:type:
+              - # One or more actions to handle as if typed by the player.
+                Term:name:type:
                   - "input"
                   - "text"
                   - "text_eval"
-      - # Print a message that is useful during development, and
-        # will not be visible to players in a final game.
+      - # Print a message that is useful during development.
+        # It will not be visible to players in a final game.
         Spec:slots:with flow:
           - "debug_log"
           - "execute"

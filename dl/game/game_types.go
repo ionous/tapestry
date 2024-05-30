@@ -1,4 +1,4 @@
-// system commands
+// System commands that can be issued by script to communicate with the running game.
 package game
 
 //
@@ -10,6 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
+// Immediately end the current game.
 type QuitGame struct {
 	Markup map[string]any
 }
@@ -46,6 +47,7 @@ func (op *QuitGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Save the game.
 type SaveGame struct {
 	Markup map[string]any
 }
@@ -82,6 +84,7 @@ func (op *SaveGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Load the most recent save.
 type LoadGame struct {
 	Markup map[string]any
 }
@@ -118,6 +121,7 @@ func (op *LoadGame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Unimplemented: rewind the game to undo the player's most recent input.
 type UndoTurn struct {
 	Markup map[string]any
 }
@@ -154,6 +158,7 @@ func (op *UndoTurn_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Print the version of the tap executable.
 type PrintVersion struct {
 	Markup map[string]any
 }
@@ -200,6 +205,9 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
+		Markup: map[string]any{
+			"comment": "Immediately end the current game.",
+		},
 	}
 	Zt_SaveGame = typeinfo.Flow{
 		Name:  "save_game",
@@ -207,6 +215,9 @@ func init() {
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Save the game.",
 		},
 	}
 	Zt_LoadGame = typeinfo.Flow{
@@ -216,6 +227,9 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
+		Markup: map[string]any{
+			"comment": "Load the most recent save.",
+		},
 	}
 	Zt_UndoTurn = typeinfo.Flow{
 		Name:  "undo_turn",
@@ -223,6 +237,9 @@ func init() {
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": "Unimplemented: rewind the game to undo the player's most recent input.",
 		},
 	}
 	Zt_PrintVersion = typeinfo.Flow{
@@ -232,6 +249,9 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
+		Markup: map[string]any{
+			"comment": "Print the version of the tap executable.",
+		},
 	}
 }
 
@@ -239,7 +259,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "game",
 	Comment: []string{
-		"system commands",
+		"System commands that can be issued by script to communicate with the running game.",
 	},
 
 	Flow:       z_flow_list,

@@ -1,4 +1,5 @@
-// shuttle communication
+// Allows the web console to talk to a running game server.
+// None of these commands are available for use in game scripts.
 package frame
 
 //
@@ -369,7 +370,8 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "frame",
 	Comment: []string{
-		"shuttle communication",
+		"Allows the web console to talk to a running game server.",
+		"None of these commands are available for use in game scripts.",
 	},
 
 	Slot:       z_slot_list,

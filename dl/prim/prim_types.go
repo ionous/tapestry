@@ -10,9 +10,9 @@ import (
 	"strconv"
 )
 
-// Booleans values are described using strings:
-// the tell and json parsers recognize that and allows literal true/false values
-// go's generated code also recognizes that and generates bool fields.
+// A true/false value. Technically, boolean values are described using strings.
+// However, the tell, json, and generated go code all expect literal true/false values
+// wherever this bool type is detected. Therefore, only the specs need to use this type.
 type Bool int
 
 // The enumerated values of Bool.
@@ -45,7 +45,7 @@ var Zt_Bool = typeinfo.Str{
 		"true",
 	},
 	Markup: map[string]any{
-		"comment": []interface{}{"Booleans values are described using strings:", "the tell and json parsers recognize that and allows literal true/false values", "go's generated code also recognizes that and generates bool fields."},
+		"comment": []interface{}{"A true/false value. Technically, boolean values are described using strings.", "However, the tell, json, and generated go code all expect literal true/false values", "wherever this bool type is detected. Therefore, only the specs need to use this type."},
 	},
 }
 
@@ -65,9 +65,12 @@ var Zt_Text = typeinfo.Str{
 	},
 }
 
-// Num, a type of num.
+// An integer or floating point value.
 var Zt_Num = typeinfo.Num{
 	Name: "num",
+	Markup: map[string]any{
+		"comment": "An integer or floating point value.",
+	},
 }
 
 // package listing of type data

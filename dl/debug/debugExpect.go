@@ -17,10 +17,6 @@ type GreatExpectations interface {
 	GetAccumulatedOutput() []string
 }
 
-func (op *ExpectOutput) Execute(run rt.Runtime) (err error) {
-	return compareOutput(run, SplitLines(op.Output))
-}
-
 // separate a string into separate lines whenever a linefeed ( \n ) is detected.
 func SplitLines(str string) []string {
 	return strings.FieldsFunc(str, func(r rune) bool { return r == '\n' })
