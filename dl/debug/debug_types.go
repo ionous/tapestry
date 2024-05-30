@@ -50,7 +50,7 @@ func (op *DoNothing_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Evaluate a boolean command, and generate an error if it returns false.
+// Evaluate a boolean command and ensure it returns true.
 type Expect struct {
 	Value  rtti.BoolEval
 	Markup map[string]any
@@ -129,7 +129,8 @@ func (op *ExpectText_Slice) Repeats() bool {
 // Process fake input as if the player had typed it themselves.
 // Fabricate only works while running tests, and does nothing during normal game play.
 // Multiple actions can be specified by separating them with semi-colons. For example:
-//   - Fabricate input: "s; jump; look"
+//
+//	Fabricate input: "s; jump; look"
 type Fabricate struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -277,13 +278,16 @@ func init() {
 		Lede: "expect",
 		Terms: []typeinfo.Term{{
 			Name: "value",
+			Markup: map[string]any{
+				"comment": "The boolean command. If the command returns false, the expectation will fail and the game will generate an error.",
+			},
 			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Evaluate a boolean command, and generate an error if it returns false.",
+			"comment": "Evaluate a boolean command and ensure it returns true.",
 		},
 	}
 	Zt_ExpectText = typeinfo.Flow{
@@ -293,7 +297,7 @@ func init() {
 			Name:  "text",
 			Label: "text",
 			Markup: map[string]any{
-				"comment": []interface{}{"The expected line or lines.", "If an expectation ends with ellipses \"...\"", "then only the first part of the line has to match.", "For example, if the game printed \"Hello world!\",", "then \"Hello ...\" would match."},
+				"comment": []interface{}{"The expected line or lines.", "If an expected line ends with ellipses \"...\"", "then only the first part of the line has to match.", "", "For example, if the expectation was \"Hello...\",", "then the output \"Hello World!\" would match."},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -319,7 +323,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  - Fabricate input: \"s; jump; look\""},
+			"comment": []interface{}{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  Fabricate input: \"s; jump; look\""},
 		},
 	}
 	Zt_DebugLog = typeinfo.Flow{

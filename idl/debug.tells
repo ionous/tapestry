@@ -52,7 +52,7 @@ Spec:with group:
                   - "text"
                   - "text_eval"
       - # Print a message that is useful during development.
-        # It will not be visible to players in a final game.
+        # It will be hidden from players in the final game.
         Spec:slots:with flow:
           - "debug_log"
           - "execute"
