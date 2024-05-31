@@ -5,9 +5,13 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
@@ -76,17 +80,16 @@ func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret rt.
 }
 
 func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value, err error) {
-	panic("FIXME")
-	// if printedName, e := safe.GetText(run, &core.BufferText{Exe: core.MakeActivity(
-	// 	&assign.CallPattern{
-	// 		PatternName: "print name",
-	// 		Arguments: core.MakeArgs(&assign.FromText{Value: &literal.TextValue{
-	// 			Value: n,
-	// 			Kind:  k,
-	// 		}})})}); e != nil {
-	// 	err = e
-	// } else {
-	// 	ret = printedName
-	// }
+	if printedName, e := safe.GetText(run, &core.BufferText{Exe: core.MakeActivity(
+		&assign.CallPattern{
+			PatternName: "print name",
+			Arguments: core.MakeArgs(&assign.FromText{Value: &literal.TextValue{
+				Value: n,
+				Kind:  k,
+			}})})}); e != nil {
+		err = e
+	} else {
+		ret = printedName
+	}
 	return
 }

@@ -187,6 +187,43 @@ func (op *AnyTrue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+type BufferText struct {
+	Exe    []rtti.Execute
+	Markup map[string]any
+}
+
+// buffer_text, a type of flow.
+var Zt_BufferText typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*BufferText) TypeInfo() typeinfo.T {
+	return &Zt_BufferText
+}
+
+// Implements [typeinfo.Markup]
+func (op *BufferText) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextEval = (*BufferText)(nil)
+
+// Holds a slice of type BufferText.
+type BufferText_Slice []BufferText
+
+// Implements [typeinfo.Instance] for a slice of BufferText.
+func (*BufferText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_BufferText
+}
+
+// Implements [typeinfo.Repeats] for a slice of BufferText.
+func (op *BufferText_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Add a single blank line, unless a blank line was just written.
 // See also <p> in package markup.
 type ParagraphBreak struct {
@@ -2652,6 +2689,19 @@ func init() {
 			"comment": []interface{}{"Test if any condition in a set of conditions returns true.", "Stops testing after the first condition succeeds."},
 		},
 	}
+	Zt_BufferText = typeinfo.Flow{
+		Name: "buffer_text",
+		Lede: "buffers",
+		Terms: []typeinfo.Term{{
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+	}
 	Zt_ParagraphBreak = typeinfo.Flow{
 		Name:  "paragraph_break",
 		Lede:  "paragraph_break",
@@ -3830,6 +3880,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_AllTrue,
 	&Zt_Always,
 	&Zt_AnyTrue,
+	&Zt_BufferText,
 	&Zt_ParagraphBreak,
 	&Zt_PrintParens,
 	&Zt_Break,
@@ -3909,6 +3960,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1963945852392897915:  (*AnyTrue)(nil),           /* bool_eval=AnyTrue: */
 	2233111806717201007:  (*TriggerOnce)(nil),       /* trigger=At */
 	9570569845423374482:  (*Break)(nil),             /* execute=Break */
+	11322251195672034522: (*BufferText)(nil),        /* text_eval=Buffers do: */
 	8695677004499439692:  (*Capitalize)(nil),        /* text_eval=Capitalize: */
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
 	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */

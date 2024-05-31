@@ -1,6 +1,8 @@
 package core
 
 import (
+	"bytes"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -22,6 +24,17 @@ func (op *PrintWords) Execute(run rt.Runtime) error {
 func (op *PrintWords) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	var span print.Spanner
 	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+// collect all text written during this function and return it as a value
+func (op *BufferText) GetText(run rt.Runtime) (ret rt.Value, err error) {
+	var buf bytes.Buffer
+	if v, e := writeSpan(run, &buf, op.Exe, &writer.ChunkWriter{Writer: &buf}); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v

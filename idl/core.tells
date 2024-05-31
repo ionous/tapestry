@@ -30,6 +30,15 @@ Spec:requires:contains:
               - "test"
               - "bool_eval"
               - true
+    - Flow:slots:lede:terms:
+        - "buffer_text"
+        - "text_eval"
+        - "buffers"
+        - - Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
     - # Add a single blank line, unless a blank line was just written.
       # See also <p> in package markup.
       Flow:slots:
