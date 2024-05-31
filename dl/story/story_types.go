@@ -8,7 +8,7 @@ package story
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
@@ -1150,7 +1150,7 @@ func (op *SayResponse_Slice) Repeats() bool {
 // A guard which returns true based on a counter.
 // Counters start at zero and are incremented every time the guard is checked.
 type CountOf struct {
-	Trigger core.Trigger
+	Trigger call.Trigger
 	Num     rtti.NumEval
 	Markup  map[string]any
 }
@@ -2453,7 +2453,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "A unique name for this counter.",
 			},
-			Type: &core.Zt_Trigger,
+			Type: &call.Zt_Trigger,
 		}, {
 			Name:  "num",
 			Label: "num",

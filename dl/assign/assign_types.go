@@ -1,4 +1,4 @@
-// Read values from, and write values to, objects and local variables.
+// Helpers for passing arguments to patterns and other parameterized calls.
 package assign
 
 //
@@ -11,392 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// address, a type of slot.
-var Zt_Address = typeinfo.Slot{
-	Name: "address",
-	Markup: map[string]any{
-		"comment": "Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.",
-	},
-}
-
-// Holds a single slot.
-type Address_Slot struct{ Value Address }
-
-// Implements [typeinfo.Instance] for a single slot.
-func (*Address_Slot) TypeInfo() typeinfo.T {
-	return &Zt_Address
-}
-
-// Holds a slice of slots.
-type Address_Slots []Address
-
-// Implements [typeinfo.Instance] for a slice of slots.
-func (*Address_Slots) TypeInfo() typeinfo.T {
-	return &Zt_Address
-}
-
-// Implements [typeinfo.Repeats] for a slice of slots.
-func (op *Address_Slots) Repeats() bool {
-	return len(*op) > 0
-}
-
-// dot, a type of slot.
-var Zt_Dot = typeinfo.Slot{
-	Name: "dot",
-	Markup: map[string]any{
-		"blockly-color": "MATH_HUE",
-		"comment":       "Access values inside other values.",
-	},
-}
-
-// Holds a single slot.
-type Dot_Slot struct{ Value Dot }
-
-// Implements [typeinfo.Instance] for a single slot.
-func (*Dot_Slot) TypeInfo() typeinfo.T {
-	return &Zt_Dot
-}
-
-// Holds a slice of slots.
-type Dot_Slots []Dot
-
-// Implements [typeinfo.Instance] for a slice of slots.
-func (*Dot_Slots) TypeInfo() typeinfo.T {
-	return &Zt_Dot
-}
-
-// Implements [typeinfo.Repeats] for a slice of slots.
-func (op *Dot_Slots) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Store a value into a variable or object.
-// Values are specified as a generic [Assignment].
-// The various "From" commands exist to cast specific value types into an assignment.
-//
-// WARNING: This doesn't convert values from one type to another.
-// For example:
-//
-//	Set:value:
-//	- "@some_local_variable"
-//	- FromText: "a piece of text to store."
-//
-// will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error.
-type SetValue struct {
-	Target Address
-	Value  rtti.Assignment
-	Markup map[string]any
-}
-
-// set_value, a type of flow.
-var Zt_SetValue typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*SetValue) TypeInfo() typeinfo.T {
-	return &Zt_SetValue
-}
-
-// Implements [typeinfo.Markup]
-func (op *SetValue) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.Execute = (*SetValue)(nil)
-
-// Holds a slice of type SetValue.
-type SetValue_Slice []SetValue
-
-// Implements [typeinfo.Instance] for a slice of SetValue.
-func (*SetValue_Slice) TypeInfo() typeinfo.T {
-	return &Zt_SetValue
-}
-
-// Implements [typeinfo.Repeats] for a slice of SetValue.
-func (op *SetValue_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Set the state of an object or record.
-// See also: story `Define state:names:`.
-type SetState struct {
-	Target Address
-	Trait  rtti.TextEval
-	Markup map[string]any
-}
-
-// set_state, a type of flow.
-var Zt_SetState typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*SetState) TypeInfo() typeinfo.T {
-	return &Zt_SetState
-}
-
-// Implements [typeinfo.Markup]
-func (op *SetState) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.Execute = (*SetState)(nil)
-
-// Holds a slice of type SetState.
-type SetState_Slice []SetState
-
-// Implements [typeinfo.Instance] for a slice of SetState.
-func (*SetState_Slice) TypeInfo() typeinfo.T {
-	return &Zt_SetState
-}
-
-// Implements [typeinfo.Repeats] for a slice of SetState.
-func (op *SetState_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.
-// In .tell files, this command is often specified with a shortcut. For example:
-//
-//	"#my_object.some_field"
-//
-// is a shorter way to say:
-//
-//	Object:dot:
-//	- "my object"
-//	- "some field"
-//
-// WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
-type ObjectDot struct {
-	Name   rtti.TextEval
-	Dot    []Dot
-	Markup map[string]any
-}
-
-// object_dot, a type of flow.
-var Zt_ObjectDot typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*ObjectDot) TypeInfo() typeinfo.T {
-	return &Zt_ObjectDot
-}
-
-// Implements [typeinfo.Markup]
-func (op *ObjectDot) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ Address = (*ObjectDot)(nil)
-var _ rtti.BoolEval = (*ObjectDot)(nil)
-var _ rtti.NumEval = (*ObjectDot)(nil)
-var _ rtti.TextEval = (*ObjectDot)(nil)
-var _ rtti.RecordEval = (*ObjectDot)(nil)
-var _ rtti.NumListEval = (*ObjectDot)(nil)
-var _ rtti.TextListEval = (*ObjectDot)(nil)
-var _ rtti.RecordListEval = (*ObjectDot)(nil)
-
-// Holds a slice of type ObjectDot.
-type ObjectDot_Slice []ObjectDot
-
-// Implements [typeinfo.Instance] for a slice of ObjectDot.
-func (*ObjectDot_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ObjectDot
-}
-
-// Implements [typeinfo.Repeats] for a slice of ObjectDot.
-func (op *ObjectDot_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Read a value from a variable.
-// In .tell files, this command is often specified with a shortcut. For example:
-//
-//	"@some_local_variable"
-//
-// is a shorter way to say:
-//
-//	Variable:dot: "some local variable"
-//
-// WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
-type VariableDot struct {
-	Name   rtti.TextEval
-	Dot    []Dot
-	Markup map[string]any
-}
-
-// variable_dot, a type of flow.
-var Zt_VariableDot typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*VariableDot) TypeInfo() typeinfo.T {
-	return &Zt_VariableDot
-}
-
-// Implements [typeinfo.Markup]
-func (op *VariableDot) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ Address = (*VariableDot)(nil)
-var _ rtti.BoolEval = (*VariableDot)(nil)
-var _ rtti.NumEval = (*VariableDot)(nil)
-var _ rtti.TextEval = (*VariableDot)(nil)
-var _ rtti.RecordEval = (*VariableDot)(nil)
-var _ rtti.NumListEval = (*VariableDot)(nil)
-var _ rtti.TextListEval = (*VariableDot)(nil)
-var _ rtti.RecordListEval = (*VariableDot)(nil)
-
-// Holds a slice of type VariableDot.
-type VariableDot_Slice []VariableDot
-
-// Implements [typeinfo.Instance] for a slice of VariableDot.
-func (*VariableDot_Slice) TypeInfo() typeinfo.T {
-	return &Zt_VariableDot
-}
-
-// Implements [typeinfo.Repeats] for a slice of VariableDot.
-func (op *VariableDot_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Select a named field from a record, or a named property from an object.
-type AtField struct {
-	Field  rtti.TextEval
-	Markup map[string]any
-}
-
-// at_field, a type of flow.
-var Zt_AtField typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*AtField) TypeInfo() typeinfo.T {
-	return &Zt_AtField
-}
-
-// Implements [typeinfo.Markup]
-func (op *AtField) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ Dot = (*AtField)(nil)
-
-// Holds a slice of type AtField.
-type AtField_Slice []AtField
-
-// Implements [typeinfo.Instance] for a slice of AtField.
-func (*AtField_Slice) TypeInfo() typeinfo.T {
-	return &Zt_AtField
-}
-
-// Implements [typeinfo.Repeats] for a slice of AtField.
-func (op *AtField_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Select a value from a list of values.
-type AtIndex struct {
-	Index  rtti.NumEval
-	Markup map[string]any
-}
-
-// at_index, a type of flow.
-var Zt_AtIndex typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*AtIndex) TypeInfo() typeinfo.T {
-	return &Zt_AtIndex
-}
-
-// Implements [typeinfo.Markup]
-func (op *AtIndex) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ Dot = (*AtIndex)(nil)
-
-// Holds a slice of type AtIndex.
-type AtIndex_Slice []AtIndex
-
-// Implements [typeinfo.Instance] for a slice of AtIndex.
-func (*AtIndex_Slice) TypeInfo() typeinfo.T {
-	return &Zt_AtIndex
-}
-
-// Implements [typeinfo.Repeats] for a slice of AtIndex.
-func (op *AtIndex_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Run a pattern, returning its result (if any).
-// Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
-// Because some patterns can return a value,this implements all of the possible rtti evaluations.
-type CallPattern struct {
-	PatternName string
-	Arguments   []Arg
-	Markup      map[string]any
-}
-
-// call_pattern, a type of flow.
-var Zt_CallPattern typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*CallPattern) TypeInfo() typeinfo.T {
-	return &Zt_CallPattern
-}
-
-// Implements [typeinfo.Markup]
-func (op *CallPattern) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.Execute = (*CallPattern)(nil)
-var _ rtti.BoolEval = (*CallPattern)(nil)
-var _ rtti.NumEval = (*CallPattern)(nil)
-var _ rtti.TextEval = (*CallPattern)(nil)
-var _ rtti.RecordEval = (*CallPattern)(nil)
-var _ rtti.NumListEval = (*CallPattern)(nil)
-var _ rtti.TextListEval = (*CallPattern)(nil)
-var _ rtti.RecordListEval = (*CallPattern)(nil)
-
-// Holds a slice of type CallPattern.
-type CallPattern_Slice []CallPattern
-
-// Implements [typeinfo.Instance] for a slice of CallPattern.
-func (*CallPattern_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CallPattern
-}
-
-// Implements [typeinfo.Repeats] for a slice of CallPattern.
-func (op *CallPattern_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Pass a value to a pattern or other similar call.
+// Pass a named value to a parameterized call.
 type Arg struct {
 	Name   string
 	Value  rtti.Assignment
@@ -473,7 +88,7 @@ func (op *FromExe_Slice) Repeats() bool {
 
 // Provide a stored value for an assignment.
 type FromAddress struct {
-	Value  Address
+	Value  rtti.Address
 	Markup map[string]any
 }
 
@@ -778,180 +393,6 @@ func (op *FromRecordList_Slice) Repeats() bool {
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
-	Zt_SetValue = typeinfo.Flow{
-		Name: "set_value",
-		Lede: "set",
-		Terms: []typeinfo.Term{{
-			Name: "target",
-			Markup: map[string]any{
-				"comment": "Object property or variable into which to write the value.",
-			},
-			Type: &Zt_Address,
-		}, {
-			Name:  "value",
-			Label: "value",
-			Markup: map[string]any{
-				"comment": "The value to copy into the destination.",
-			},
-			Type: &rtti.Zt_Assignment,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Store a value into a variable or object.", "Values are specified as a generic [Assignment].", "The various \"From\" commands exist to cast specific value types into an assignment.", "", "WARNING: This doesn't convert values from one type to another.", "For example:", "  Set:value:", "  - \"@some_local_variable\"", "  - FromText: \"a piece of text to store.\"", "will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error."},
-		},
-	}
-	Zt_SetState = typeinfo.Flow{
-		Name: "set_state",
-		Lede: "set",
-		Terms: []typeinfo.Term{{
-			Name: "target",
-			Markup: map[string]any{
-				"comment": "Object or record to change.",
-			},
-			Type: &Zt_Address,
-		}, {
-			Name:  "trait",
-			Label: "state",
-			Markup: map[string]any{
-				"comment": []interface{}{"Name of the state to set.", "Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.", "Errors if the state wasn't declared as part of the object's kind."},
-			},
-			Type: &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Set the state of an object or record.", "See also: story `Define state:names:`."},
-		},
-	}
-	Zt_ObjectDot = typeinfo.Flow{
-		Name: "object_dot",
-		Lede: "object",
-		Terms: []typeinfo.Term{{
-			Name: "name",
-			Markup: map[string]any{
-				"comment": "Id or friendly name of the object.",
-			},
-			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:     "dot",
-			Label:    "dot",
-			Optional: true,
-			Repeats:  true,
-			Markup: map[string]any{
-				"comment": "A field or path within the object to read from.",
-			},
-			Type: &Zt_Dot,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Address,
-			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumEval,
-			&rtti.Zt_TextEval,
-			&rtti.Zt_RecordEval,
-			&rtti.Zt_NumListEval,
-			&rtti.Zt_TextListEval,
-			&rtti.Zt_RecordListEval,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"#my_object.some_field\"", "is a shorter way to say:", "  Object:dot:", "  - \"my object\"", "  - \"some field\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
-		},
-	}
-	Zt_VariableDot = typeinfo.Flow{
-		Name: "variable_dot",
-		Lede: "variable",
-		Terms: []typeinfo.Term{{
-			Name: "name",
-			Type: &rtti.Zt_TextEval,
-		}, {
-			Name:     "dot",
-			Label:    "dot",
-			Optional: true,
-			Repeats:  true,
-			Type:     &Zt_Dot,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Address,
-			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumEval,
-			&rtti.Zt_TextEval,
-			&rtti.Zt_RecordEval,
-			&rtti.Zt_NumListEval,
-			&rtti.Zt_TextListEval,
-			&rtti.Zt_RecordListEval,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Read a value from a variable.", "In .tell files, this command is often specified with a shortcut. For example:", "  \"@some_local_variable\"", "is a shorter way to say:", "  Variable:dot: \"some local variable\"", "WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean."},
-		},
-	}
-	Zt_AtField = typeinfo.Flow{
-		Name: "at_field",
-		Lede: "at_field",
-		Terms: []typeinfo.Term{{
-			Name: "field",
-			Markup: map[string]any{
-				"comment": []interface{}{"The name of the field to read or write.", "The field must exist in the object or record being accessed."},
-			},
-			Type: &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Dot,
-		},
-		Markup: map[string]any{
-			"comment": "Select a named field from a record, or a named property from an object.",
-		},
-	}
-	Zt_AtIndex = typeinfo.Flow{
-		Name: "at_index",
-		Lede: "at_index",
-		Terms: []typeinfo.Term{{
-			Name: "index",
-			Markup: map[string]any{
-				"comment": []interface{}{"The zero-based index to read or write.", "The index must exist within the list being targeted."},
-			},
-			Type: &rtti.Zt_NumEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_Dot,
-		},
-		Markup: map[string]any{
-			"comment": "Select a value from a list of values.",
-		},
-	}
-	Zt_CallPattern = typeinfo.Flow{
-		Name: "call_pattern",
-		Lede: "determine",
-		Terms: []typeinfo.Term{{
-			Name: "pattern_name",
-			Markup: map[string]any{
-				"comment": "The name of the pattern to run.",
-			},
-			Type: &prim.Zt_Text,
-		}, {
-			Name:    "arguments",
-			Label:   "args",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": []interface{}{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
-			},
-			Type: &Zt_Arg,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_Execute,
-			&rtti.Zt_BoolEval,
-			&rtti.Zt_NumEval,
-			&rtti.Zt_TextEval,
-			&rtti.Zt_RecordEval,
-			&rtti.Zt_NumListEval,
-			&rtti.Zt_TextListEval,
-			&rtti.Zt_RecordListEval,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.", "Because some patterns can return a value,this implements all of the possible rtti evaluations."},
-		},
-	}
 	Zt_Arg = typeinfo.Flow{
 		Name: "arg",
 		Lede: "arg",
@@ -970,7 +411,7 @@ func init() {
 			Type: &rtti.Zt_Assignment,
 		}},
 		Markup: map[string]any{
-			"comment": "Pass a value to a pattern or other similar call.",
+			"comment": "Pass a named value to a parameterized call.",
 		},
 	}
 	Zt_FromExe = typeinfo.Flow{
@@ -997,7 +438,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "Address to read from.",
 			},
-			Type: &Zt_Address,
+			Type: &rtti.Zt_Address,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Assignment,
@@ -1132,31 +573,16 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "assign",
 	Comment: []string{
-		"Read values from, and write values to, objects and local variables.",
+		"Helpers for passing arguments to patterns and other parameterized calls.",
 	},
 
-	Slot:       z_slot_list,
 	Flow:       z_flow_list,
 	Signatures: z_signatures,
-}
-
-// A list of all slots in this this package.
-// ( ex. for generating blockly shapes )
-var z_slot_list = []*typeinfo.Slot{
-	&Zt_Address,
-	&Zt_Dot,
 }
 
 // A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
-	&Zt_SetValue,
-	&Zt_SetState,
-	&Zt_ObjectDot,
-	&Zt_VariableDot,
-	&Zt_AtField,
-	&Zt_AtIndex,
-	&Zt_CallPattern,
 	&Zt_Arg,
 	&Zt_FromExe,
 	&Zt_FromAddress,
@@ -1173,16 +599,6 @@ var z_flow_list = []*typeinfo.Flow{
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
-	1683104564853176068:  (*AtField)(nil),        /* dot=AtField: */
-	17908840355303216180: (*AtIndex)(nil),        /* dot=AtIndex: */
-	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
-	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
-	9675109928599400849:  (*CallPattern)(nil),    /* num_eval=Determine:args: */
-	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
-	13992013847750998452: (*CallPattern)(nil),    /* record_eval=Determine:args: */
-	352268441608212603:   (*CallPattern)(nil),    /* record_list_eval=Determine:args: */
-	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
-	13938609641525654217: (*CallPattern)(nil),    /* text_list_eval=Determine:args: */
 	9651737781749814793:  (*FromAddress)(nil),    /* assignment=FromAddress: */
 	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
 	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
@@ -1192,38 +608,4 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17510952281883199828: (*FromRecordList)(nil), /* assignment=FromRecordList: */
 	9783457335751138546:  (*FromText)(nil),       /* assignment=FromText: */
 	3267530751198060154:  (*FromTextList)(nil),   /* assignment=FromTextList: */
-	8656684385605626625:  (*ObjectDot)(nil),      /* address=Object: */
-	6106842879255343810:  (*ObjectDot)(nil),      /* bool_eval=Object: */
-	14709650427635515944: (*ObjectDot)(nil),      /* num_eval=Object: */
-	3322847371150895433:  (*ObjectDot)(nil),      /* num_list_eval=Object: */
-	1988642049281593865:  (*ObjectDot)(nil),      /* record_eval=Object: */
-	9599721143262547914:  (*ObjectDot)(nil),      /* record_list_eval=Object: */
-	16083123907778192555: (*ObjectDot)(nil),      /* text_eval=Object: */
-	15780956574897965792: (*ObjectDot)(nil),      /* text_list_eval=Object: */
-	8121157847033684962:  (*ObjectDot)(nil),      /* address=Object:dot: */
-	5205171710741514089:  (*ObjectDot)(nil),      /* bool_eval=Object:dot: */
-	13854256590934503743: (*ObjectDot)(nil),      /* num_eval=Object:dot: */
-	3914994200631113354:  (*ObjectDot)(nil),      /* num_list_eval=Object:dot: */
-	1364775634664390090:  (*ObjectDot)(nil),      /* record_eval=Object:dot: */
-	16877508779303594737: (*ObjectDot)(nil),      /* record_list_eval=Object:dot: */
-	17663678026468030644: (*ObjectDot)(nil),      /* text_eval=Object:dot: */
-	725008522959645559:   (*ObjectDot)(nil),      /* text_list_eval=Object:dot: */
-	9616350989753725148:  (*SetState)(nil),       /* execute=Set:state: */
-	3912570011939708664:  (*SetValue)(nil),       /* execute=Set:value: */
-	13692207992970428220: (*VariableDot)(nil),    /* address=Variable: */
-	17908519799628660539: (*VariableDot)(nil),    /* bool_eval=Variable: */
-	17658028528032582325: (*VariableDot)(nil),    /* num_eval=Variable: */
-	11022385456290008164: (*VariableDot)(nil),    /* num_list_eval=Variable: */
-	15906653930217516836: (*VariableDot)(nil),    /* record_eval=Variable: */
-	16032903663975260899: (*VariableDot)(nil),    /* record_list_eval=Variable: */
-	11181798416019134386: (*VariableDot)(nil),    /* text_eval=Variable: */
-	14769776891888769773: (*VariableDot)(nil),    /* text_list_eval=Variable: */
-	15966558056732701531: (*VariableDot)(nil),    /* address=Variable:dot: */
-	7739360284898038596:  (*VariableDot)(nil),    /* bool_eval=Variable:dot: */
-	4938834444414070846:  (*VariableDot)(nil),    /* num_eval=Variable:dot: */
-	14012826006150347811: (*VariableDot)(nil),    /* num_list_eval=Variable:dot: */
-	3479001804857346403:  (*VariableDot)(nil),    /* record_eval=Variable:dot: */
-	11938488787528882828: (*VariableDot)(nil),    /* record_list_eval=Variable:dot: */
-	4798713833623285465:  (*VariableDot)(nil),    /* text_eval=Variable:dot: */
-	12039638244497140214: (*VariableDot)(nil),    /* text_list_eval=Variable:dot: */
 }

@@ -893,7 +893,7 @@ func (op *Verb_Slice) Repeats() bool {
 type MatchingPhrases struct {
 	Understand          Understand
 	TimedRule           TimedRule
-	KindsOf             KindsOf
+	KindsAreKind        KindsAreKind
 	AspectsAreTraits    AspectsAreTraits
 	KindsAreTraits      KindsAreTraits
 	KindsHaveProperties KindsHaveProperties
@@ -942,41 +942,41 @@ func (op *MatchingPhrases_Slice) Repeats() bool {
 // interesting to note that inform allows "some kind/s of"
 // this is more strict.
 // like inform `The animals called kittens are a kind of things.` is legal.
-type KindsOf struct {
-	Names   Names
-	Are     Are
-	KindsOf Words
-	Traits  *Traits
-	Name    Name
-	Markup  map[string]any
+type KindsAreKind struct {
+	Names        Names
+	Are          Are
+	KindsAreKind Words
+	Traits       *Traits
+	Name         Name
+	Markup       map[string]any
 }
 
-// kinds_of, a type of flow.
-var Zt_KindsOf typeinfo.Flow
+// kinds_are_kind, a type of flow.
+var Zt_KindsAreKind typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*KindsOf) TypeInfo() typeinfo.T {
-	return &Zt_KindsOf
+func (*KindsAreKind) TypeInfo() typeinfo.T {
+	return &Zt_KindsAreKind
 }
 
 // Implements [typeinfo.Markup]
-func (op *KindsOf) GetMarkup(ensure bool) map[string]any {
+func (op *KindsAreKind) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// Holds a slice of type KindsOf.
-type KindsOf_Slice []KindsOf
+// Holds a slice of type KindsAreKind.
+type KindsAreKind_Slice []KindsAreKind
 
-// Implements [typeinfo.Instance] for a slice of KindsOf.
-func (*KindsOf_Slice) TypeInfo() typeinfo.T {
-	return &Zt_KindsOf
+// Implements [typeinfo.Instance] for a slice of KindsAreKind.
+func (*KindsAreKind_Slice) TypeInfo() typeinfo.T {
+	return &Zt_KindsAreKind
 }
 
-// Implements [typeinfo.Repeats] for a slice of KindsOf.
-func (op *KindsOf_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of KindsAreKind.
+func (op *KindsAreKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2795,9 +2795,9 @@ func init() {
 			Label: "timed_rule",
 			Type:  &Zt_TimedRule,
 		}, {
-			Name:  "kinds_of",
-			Label: "kinds_of",
-			Type:  &Zt_KindsOf,
+			Name:  "kinds_are_kind",
+			Label: "kinds_are_kind",
+			Type:  &Zt_KindsAreKind,
 		}, {
 			Name:  "aspects_are_traits",
 			Label: "aspects_are_traits",
@@ -2851,9 +2851,9 @@ func init() {
 			"comment": []interface{}{"union of all possible matching phrases.", "for any given plain text sentence,", "jess tries each of these looking for the first to succeed.", "different phrases belong to different scheduled phases;", "scheduling is handled manually.", "( an alternative might be slots and some scheduling metadata;", "| this is fine for now )"},
 		},
 	}
-	Zt_KindsOf = typeinfo.Flow{
-		Name: "kinds_of",
-		Lede: "kinds_of",
+	Zt_KindsAreKind = typeinfo.Flow{
+		Name: "kinds_are_kind",
+		Lede: "kinds_are_kind",
 		Terms: []typeinfo.Term{{
 			Name:  "names",
 			Label: "names",
@@ -2866,8 +2866,8 @@ func init() {
 			Label: "are",
 			Type:  &Zt_Are,
 		}, {
-			Name:  "kinds_of",
-			Label: "kinds_of",
+			Name:  "kinds_are_kind",
+			Label: "kinds_are_kind",
 			Markup: map[string]any{
 				"comment": "the phrases \"a kind of\" or \"kinds of\"",
 			},
@@ -3772,7 +3772,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Words,
 	&Zt_Verb,
 	&Zt_MatchingPhrases,
-	&Zt_KindsOf,
+	&Zt_KindsAreKind,
 	&Zt_KindsAreTraits,
 	&Zt_AspectsAreTraits,
 	&Zt_VerbNamesAreNames,
@@ -3859,6 +3859,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	831875526186841727:   (*Kinds)(nil),                /* Kinds traits:matched: */
 	3736619607479472409:  (*Kinds)(nil),                /* Kinds traits:matched:additionalKinds: */
 	2480868085776671009:  (*KindsAreEither)(nil),       /* KindsAreEither kind:canBe:traits: */
+	7915827911946681158:  (*KindsAreKind)(nil),         /* KindsAreKind names:are:kindsAreKind:name: */
+	15219253650407427455: (*KindsAreKind)(nil),         /* KindsAreKind names:are:kindsAreKind:traits:name: */
 	8826794343109131276:  (*KindsAreTraits)(nil),       /* KindsAreTraits kinds:are:usually:traits: */
 	17116270036433389047: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType: */
 	17156006172306843757: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:article:listOf:propertyType:calledName: */
@@ -3868,8 +3870,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	11010766076935860857: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:listOf:propertyType:calledName: */
 	13822756587399879234: (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType: */
 	8006675921873519578:  (*KindsHaveProperties)(nil),  /* KindsHaveProperties kind:have:propertyType:calledName: */
-	11715331887122574628: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:name: */
-	17568620593785114477: (*KindsOf)(nil),              /* KindsOf names:are:kindsOf:traits:name: */
 	1268488188857917463:  (*Linking)(nil),              /* Linking */
 	5424212330747857864:  (*Linking)(nil),              /* Linking kindCalled: */
 	6446505275065105379:  (*Linking)(nil),              /* Linking kindCalled:name: */
@@ -3895,7 +3895,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10172864188299309151: (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking: */
 	4228974132366036894:  (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking:additionalDirections: */
 	11956449617596421399: (*MatchingNum)(nil),          /* MatchingNum value: */
-	12459504191875059457: (*MatchingPhrases)(nil),      /* MatchingPhrases understand:timedRule:kindsOf:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
+	5298623852324545062:  (*MatchingPhrases)(nil),      /* MatchingPhrases understand:timedRule:kindsAreKind:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
 	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
 	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */

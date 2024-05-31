@@ -2,6 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -51,7 +52,7 @@ func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message
 		if args, e := tryPatternArgs(dec, msg); e != nil {
 			err = e
 		} else {
-			ret = &assign.CallPattern{PatternName: msg.Lede, Arguments: args}
+			ret = &call.CallPattern{PatternName: msg.Lede, Arguments: args}
 		}
 	}
 	return

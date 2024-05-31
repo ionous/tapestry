@@ -2,26 +2,11 @@ package dot
 
 import (
 	"fmt"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-// Dotted - path operations to access the contents of certain targets.
-type Dotted interface {
-	Peek(Cursor) (Cursor, error)
-	Poke(Cursor, rt.Value) error
-	writeTo(b *strings.Builder)
-}
-
-// Cursor - generic access to objects, lists, and records.
-type Cursor interface {
-	CurrentValue() rt.Value
-	SetAtIndex(int, rt.Value) error
-	GetAtIndex(int) (Cursor, error)
-	SetAtField(string, rt.Value) error
-	GetAtField(string) (Cursor, error)
-}
+type Cursor = rt.Cursor
 
 func MakeReference(run rt.Runtime, name string) Reference {
 	root := rootDot{run, name}
@@ -30,8 +15,8 @@ func MakeReference(run rt.Runtime, name string) Reference {
 
 // the final position in a path where we might want to get or put a value.
 type Reference struct {
-	pos   Cursor // the pos of value; needed for writing the value back
-	child Dotted // the final part of the path; holds the current value
+	pos   Cursor    // the pos of value; needed for writing the value back
+	child rt.Dotted // the final part of the path; holds the current value
 }
 
 // write a value
@@ -50,7 +35,7 @@ func (at Reference) GetValue() (ret rt.Value, err error) {
 }
 
 // step into the current value
-func (at Reference) Dot(next Dotted) (ret Reference, err error) {
+func (at Reference) Dot(next rt.Dotted) (ret rt.Reference, err error) {
 	if pos, e := at.child.Peek(at.pos); e != nil {
 		err = e
 	} else {
@@ -60,13 +45,14 @@ func (at Reference) Dot(next Dotted) (ret Reference, err error) {
 }
 
 // step into the current value multiple times
-func (at Reference) DotPath(path Path) (ret Reference, err error) {
+func (at Reference) DotPath(path []rt.Dotted) (ret rt.Reference, err error) {
+	var pos = rt.Reference(at)
 	for i, dot := range path {
-		if next, e := at.Dot(dot); e != nil {
+		if next, e := pos.Dot(dot); e != nil {
 			err = fmt.Errorf("%s at %d in %s", e, i, path)
 			break
 		} else {
-			at = next
+			pos = next
 		}
 	}
 	if err == nil {

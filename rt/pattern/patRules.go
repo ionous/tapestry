@@ -3,7 +3,7 @@ package pattern
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -79,7 +79,7 @@ func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 	rule := rs.rules[i] // copies
 	// scan for the first matching case
 	// if none apply then the rule isn't considered to have been run
-	if tree := core.PickTree(rule.Exe); tree == nil {
+	if tree := logic.PickTree(rule.Exe); tree == nil {
 		prog = rule.Exe
 	} else if branch, e := tree.PickBranch(run, &pushes); e != nil {
 		err = e
@@ -88,7 +88,7 @@ func (rs *RuleSet) tryRule(run rt.Runtime, i int) (ret stopJump, err error) {
 	}
 	if err == nil && prog != nil {
 		// println("- ", rule.Name)
-		var i core.DoInterrupt
+		var i logic.DoInterrupt
 		switch e := safe.RunAll(run, prog); {
 		case e == nil:
 			ret = stopJump{

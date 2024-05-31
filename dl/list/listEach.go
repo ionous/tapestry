@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -57,7 +57,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 					err = e
 					break
 				} else if e := safe.RunAll(run, op.Exe); e != nil {
-					var i core.DoInterrupt
+					var i logic.DoInterrupt
 					if !errors.As(e, &i) {
 						err = e
 						break

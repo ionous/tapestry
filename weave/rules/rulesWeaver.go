@@ -1,9 +1,11 @@
 package rules
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/event"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -20,8 +22,8 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 	// fix? this is a little questionable; probably is mucking up the runtime some.
 	// better might be to *extract* user booleans and put them into this filter list.
 	if len(filters) > 0 {
-		exe = []rt.Execute{&core.ChooseBranch{
-			Condition: &core.AllTrue{Test: filters},
+		exe = []rt.Execute{&logic.ChooseBranch{
+			Condition: &logic.AllTrue{Test: filters},
 			Exe:       exe,
 		}}
 	}
@@ -41,9 +43,9 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 // ( jess apples this filter to actor actions unless specifically asked not to )
 func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
-		&core.CompareText{
-			A:  assign.Variable(event.Actor),
-			Is: core.C_Comparison_EqualTo,
+		&math.CompareText{
+			A:  object.Variable(event.Actor),
+			Is: math.C_Comparison_EqualTo,
 			B:  core.T("self"),
 		})
 }
@@ -51,26 +53,26 @@ func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 // filter to the innermost target.
 func AddEventFilters(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
-		&core.CompareText{
-			A:  assign.Variable(event.Object, event.CurrentTarget.String()),
-			Is: core.C_Comparison_EqualTo,
-			B:  assign.Variable(event.Object, event.Target.String()),
+		&math.CompareText{
+			A:  object.Variable(event.Object, event.CurrentTarget.String()),
+			Is: math.C_Comparison_EqualTo,
+			B:  object.Variable(event.Object, event.Target.String()),
 		})
 }
 
 func AddNounFilter(noun string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
-		&core.CompareText{
-			A:  assign.Variable(event.Object, event.Target.String()),
-			Is: core.C_Comparison_EqualTo,
+		&math.CompareText{
+			A:  object.Variable(event.Object, event.Target.String()),
+			Is: math.C_Comparison_EqualTo,
 			B:  &literal.TextValue{Value: noun},
 		})
 }
 
 func AddKindFilter(kind string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
-		&core.IsKindOf{
-			Object: assign.Variable(event.Object, event.Target.String()),
+		&object.IsKindOf{
+			Object: object.Variable(event.Object, event.Target.String()),
 			Kind:   kind,
 		})
 }

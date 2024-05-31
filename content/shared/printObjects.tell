@@ -40,10 +40,10 @@
     - - Nothing:
       - Num:initially:
           - "inline depth"
-          - During: "print inline objects"
+          - Is pattern: "print inline objects"
       - Num:initially:
           - "block depth"
-          - During: "print block list"
+          - Is pattern: "print block list"
     - - Say: "{.obj}"
 - Note: "Say the object's name ( and some object details. )"
 - Define rule:do:

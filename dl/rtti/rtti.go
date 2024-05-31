@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
+type Address = rt.Address
 type Assignment = rt.Assignment
 type Execute = rt.Execute
 type BoolEval = rt.BoolEval

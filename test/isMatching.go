@@ -4,6 +4,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 )
@@ -30,23 +32,23 @@ var matchGroups = testpat.Pattern{
 		core.MakeRule(
 			nil, matches(true)),
 		core.MakeRule(
-			&core.CompareText{
-				A:  assign.Variable("a", "label"),
-				Is: core.C_Comparison_OtherThan,
-				B:  assign.Variable("b", "label"),
+			&math.CompareText{
+				A:  object.Variable("a", "label"),
+				Is: math.C_Comparison_OtherThan,
+				B:  object.Variable("b", "label"),
 			}, matches(false)),
 		core.MakeRule(
-			&core.CompareText{
-				A:  assign.Variable("a", "group options"),
-				Is: core.C_Comparison_OtherThan,
-				B:  assign.Variable("b", "group options"),
+			&math.CompareText{
+				A:  object.Variable("a", "group options"),
+				Is: math.C_Comparison_OtherThan,
+				B:  object.Variable("b", "group options"),
 			}, matches(false)),
 	},
 }
 
 func matches(b bool) rt.Execute {
-	return &assign.SetValue{
-		Target: assign.Variable("matches"),
+	return &object.SetValue{
+		Target: object.Variable("matches"),
 		Value:  &assign.FromBool{Value: B(b)},
 	}
 }

@@ -7,7 +7,7 @@ package render
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -89,7 +89,7 @@ func (op *RenderName_Slice) Repeats() bool {
 // If the name is an object, returns the object id.
 type RenderRef struct {
 	Name   rtti.TextEval
-	Dot    []assign.Dot
+	Dot    []object.Dot
 	Markup map[string]any
 }
 
@@ -281,7 +281,7 @@ func init() {
 			Label:    "dot",
 			Optional: true,
 			Repeats:  true,
-			Type:     &assign.Zt_Dot,
+			Type:     &object.Zt_Dot,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,

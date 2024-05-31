@@ -2,7 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -18,7 +17,7 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
 	pat := inflect.Normalize(op.PatternName)
-	if at, e := assign.GetReference(run, op.Target); e != nil {
+	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e

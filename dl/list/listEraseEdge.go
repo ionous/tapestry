@@ -1,7 +1,6 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -13,8 +12,8 @@ func (op *EraseEdge) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func eraseEdge(run rt.Runtime, tgt assign.Address, atFront rt.BoolEval) (ret rt.Value, err error) {
-	if at, e := assign.GetReference(run, tgt); e != nil {
+func eraseEdge(run rt.Runtime, tgt rt.Address, atFront rt.BoolEval) (ret rt.Value, err error) {
+	if at, e := safe.GetReference(run, tgt); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e

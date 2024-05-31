@@ -1,0 +1,155 @@
+# Common text transformations.
+Spec:requires:contains:
+  - "text"
+  - - "idl/prim"
+    - "idl/rtti"
+  - - # True if text contains text.
+      Flow:slots:lede:terms:
+        - "includes"
+        - "bool_eval"
+        - "contains"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+          - Term:type:
+              - "part"
+              - "text_eval"
+
+    - # True if the text is empty.
+      Flow:slots:lede:terms:
+        - "is_empty"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "empty"
+              - "text"
+              - "text_eval"
+
+    - # Determine whether the specified text is similar to the specified regular expression.
+      Flow:slots:terms:
+        - "matches"
+        - "bool_eval"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+          - Term:name:type:
+              - "to"
+              - "match"
+              - "text"
+          - Term:type:private:
+              - "cache"
+              - "match_cache"
+              - true
+
+    - # Return a copy of some text with its first letter changed to uppercase.
+      Flow:slots:terms:
+        - "capitalize"
+        - "text_eval"
+        - - # The text to capitalize.
+            Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+
+    - # Returns multiple pieces of text as a single new piece of text.
+      Flow:slots:terms:
+        - "join"
+        - "text_eval"
+        - - Term:name:type:optional:
+              - "_"
+              - "sep"
+              - "text_eval"
+              - true
+          - Term:type:repeats:
+              - "parts"
+              - "text_eval"
+              - true
+    - # Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
+      Flow:slots:lede:terms:
+        - "make_lowercase"
+        - "text_eval"
+        - "lower"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
+      Flow:slots:lede:terms:
+        - "make_reversed"
+        - "text_eval"
+        - "reverse"
+        - - Term:type:
+              - "text"
+              - "text_eval"
+    - # Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
+      Flow:slots:lede:terms:
+        - "make_sentence_case"
+        - "text_eval"
+        - "sentence"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
+      Flow:slots:lede:terms:
+        - "make_title_case"
+        - "text_eval"
+        - "title"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
+      Flow:slots:lede:terms:
+        - "make_uppercase"
+        - "text_eval"
+        - "upper"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns the plural form of a singular word. (ex. apples for apple. ).
+      Flow:slots:lede:terms:
+        - "pluralize"
+        - "text_eval"
+        - "plural"
+        - - Term:name:type:
+              - "of"
+              - "text"
+              - "text_eval"
+
+
+    - # Returns the singular form of a plural word. (ex. apple for apples ).
+      Flow:slots:lede:terms:
+        - "singularize"
+        - "text_eval"
+        - "singular"
+        - - Term:name:type:
+              - "of"
+              - "text"
+              - "text_eval"
+
+    - # Writes a number using numerals, eg. '1'.
+      Flow:slots:lede:terms:
+        - "print_num"
+        - "text_eval"
+        - "numeral"
+        - - Term:name:type:
+              - "_"
+              - "num"
+              - "num_eval"
+    - # Writes a number in plain english: eg. 'one'.
+      Flow:slots:lede:terms:
+        - "print_num_word"
+        - "text_eval"
+        - "numeral"
+        - - Term:name:type:
+              - "words"
+              - "num"
+              - "num_eval"
+
+
+
+

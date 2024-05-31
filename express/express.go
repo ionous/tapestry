@@ -5,8 +5,12 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/postfix"
@@ -74,7 +78,7 @@ func (c *Converter) buildCommand(cmd interface{}, arity int) (err error) {
 }
 
 // fix? this is where a Scalar value could come in handy.
-func (c *Converter) buildCompare(cmp core.Comparison) (err error) {
+func (c *Converter) buildCompare(cmp math.Comparison) (err error) {
 	if args, e := c.stack.pop(2); e != nil {
 		err = e
 	} else {
@@ -207,8 +211,8 @@ func (c *Converter) buildUnless(cmd interface{}, arity int) (err error) {
 		if a, ok := arg.Interface().(rt.BoolEval); !ok {
 			err = errutil.New("argument is not a bool", arg.Type().String())
 		} else {
-			args[0] = r.ValueOf(&core.Not{Test: a}) // rewrite the arg.
-			c.stack.push(args...)                   //
+			args[0] = r.ValueOf(&logic.Not{Test: a}) // rewrite the arg.
+			c.stack.push(args...)                    //
 			err = c.buildCommand(cmd, arity)
 		}
 	}
@@ -235,7 +239,7 @@ func (c *Converter) buildSpan(arity int) (err error) {
 			}
 		}
 		if err == nil {
-			c.buildOne(&core.Join{Parts: txts})
+			c.buildOne(&text.Join{Parts: txts})
 		}
 	}
 	return
@@ -281,9 +285,9 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			} else {
 				// a chain of dots indicates one or more fields of a record
 				// ex.  .object.fieldContainingAnRecord.otherField
-				dot := make([]assign.Dot, len(fields)-1)
+				dot := make([]object.Dot, len(fields)-1)
 				for i, field := range fields[1:] {
-					dot[i] = &assign.AtField{Field: T(field)}
+					dot[i] = &object.AtField{Field: T(field)}
 				}
 				c.buildOne(&render.RenderRef{Name: T(firstField), Dot: dot})
 			}
@@ -294,18 +298,18 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 		case types.IfStatement:
 			// it would be nice if this could be choose text or choose number based on context
 			// choose scalar might simplify things....
-			err = c.buildCommand(&core.ChooseText{}, fn.ParameterCount)
+			err = c.buildCommand(&logic.ChooseText{}, fn.ParameterCount)
 		case types.UnlessStatement:
-			err = c.buildUnless(&core.ChooseText{}, fn.ParameterCount)
+			err = c.buildUnless(&logic.ChooseText{}, fn.ParameterCount)
 
 		case types.Stopping:
-			var seq core.CallTerminal
+			var seq printer.CallTerminal
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
-			var seq core.CallShuffle
+			var seq printer.CallShuffle
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
-			var seq core.CallCycle
+			var seq printer.CallCycle
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)
@@ -318,33 +322,33 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 	case types.Operator:
 		switch fn {
 		case types.MUL:
-			err = c.buildTwo(&core.MultiplyValue{})
+			err = c.buildTwo(&math.MultiplyValue{})
 		case types.QUO:
-			err = c.buildTwo(&core.DivideValue{})
+			err = c.buildTwo(&math.DivideValue{})
 		case types.REM:
-			err = c.buildTwo(&core.ModValue{})
+			err = c.buildTwo(&math.ModValue{})
 		case types.ADD:
-			err = c.buildTwo(&core.AddValue{})
+			err = c.buildTwo(&math.AddValue{})
 		case types.SUB:
-			err = c.buildTwo(&core.SubtractValue{})
+			err = c.buildTwo(&math.SubtractValue{})
 
 		case types.EQL:
-			err = c.buildCompare(core.C_Comparison_EqualTo)
+			err = c.buildCompare(math.C_Comparison_EqualTo)
 		case types.NEQ:
-			err = c.buildCompare(core.C_Comparison_OtherThan)
+			err = c.buildCompare(math.C_Comparison_OtherThan)
 		case types.LSS:
-			err = c.buildCompare(core.C_Comparison_LessThan)
+			err = c.buildCompare(math.C_Comparison_LessThan)
 		case types.LEQ:
-			err = c.buildCompare(core.C_Comparison_AtMost)
+			err = c.buildCompare(math.C_Comparison_AtMost)
 		case types.GTR:
-			err = c.buildCompare(core.C_Comparison_GreaterThan)
+			err = c.buildCompare(math.C_Comparison_GreaterThan)
 		case types.GEQ:
-			err = c.buildCompare(core.C_Comparison_AtLeast)
+			err = c.buildCompare(math.C_Comparison_AtLeast)
 
 		case types.LAND:
-			err = c.buildTwo(&core.AllTrue{})
+			err = c.buildTwo(&logic.AllTrue{})
 		case types.LOR:
-			err = c.buildTwo(&core.AnyTrue{})
+			err = c.buildTwo(&logic.AnyTrue{})
 		default:
 			err = errutil.Fmt("unknown operator %s", fn)
 		}

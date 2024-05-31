@@ -1,0 +1,179 @@
+# Common mathematical commands.
+Spec:requires:contains:
+  - "math"
+  - - "idl/prim"
+    - "idl/rtti"
+  - - # Add two numbers.
+      Flow:slots:lede:terms:
+        - "add_value"
+        - "num_eval"
+        - "add"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Subtract two numbers.
+      Flow:slots:lede:terms:
+        - "subtract_value"
+        - "num_eval"
+        - "subtract"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Multiply two numbers.
+      Flow:slots:lede:terms:
+        - "multiply_value"
+        - "num_eval"
+        - "multiply"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Divide one number by another.
+      Flow:slots:lede:terms:
+        - "divide_value"
+        - "num_eval"
+        - "divide"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Divide one number by another, and return the remainder.
+      Flow:slots:lede:terms:
+        - "mod_value"
+        - "num_eval"
+        - "mod"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - Flow:slots:lede:terms:
+        - "abs_value"
+        - "num_eval"
+        - "absolute"
+        - - Term:type:
+              - "value"
+              - "num_eval"
+    - # Increases the value of a number held in by a variable or object field.
+      # Returns the new value of the number.
+      Flow:slots:lede:terms:
+        - "increment"
+        - - "num_eval"
+          - "execute"
+        - "increase"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # if not specified, increments by 1.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+    - # Decrease the value of a number held in by a variable or object field.
+      # Returns the new value of the number.
+      Flow:slots:lede:terms:
+        - "decrement"
+        - - "num_eval"
+          - "execute"
+        - "decrease"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # if not specified, decrements by 1.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+
+    - Str:options:
+        - "comparison"
+        - - Option: "equal_to"
+          - Option: "other_than"
+          - Option: "greater_than"
+          - Option: "less_than"
+          - Option: "at_least"
+          - Option: "at_most"
+
+    - # True if eq,ne,gt,lt,ge,le two numbers.
+      Flow:slots:lede:terms:
+        - "compare_value"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "assignment"
+          - Term:name:type:
+              - "matching"
+              - "is"
+              - "comparison"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "assignment"
+    - # True if eq,ne,gt,lt,ge,le two numbers.
+      Flow:slots:lede:terms:
+        - "compare_num"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "matching"
+              - "is"
+              - "comparison"
+          - Term:name:type:
+              - "num"
+              - "b"
+              - "num_eval"
+          - # a positive value that indicates how close the two numbers should be
+            Term:name:type:optional:
+              - "within"
+              - "tolerance"
+              - "num"
+              - true
+
+    - # True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
+      Flow:slots:lede:terms:
+        - "compare_text"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "text_eval"
+          - Term:name:type:
+              - "matching"
+              - "is"
+              - "comparison"
+          - Term:name:type:
+              - "text"
+              - "b"
+              - "text_eval"

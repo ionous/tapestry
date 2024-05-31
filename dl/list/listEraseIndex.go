@@ -1,7 +1,6 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -15,10 +14,10 @@ func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
 
 func eraseIndex(run rt.Runtime,
 	count rt.NumEval,
-	target assign.Address,
+	target rt.Address,
 	atIndex rt.NumEval,
 ) (ret rt.Value, err error) {
-	if at, e := assign.GetReference(run, target); e != nil {
+	if at, e := safe.GetReference(run, target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e

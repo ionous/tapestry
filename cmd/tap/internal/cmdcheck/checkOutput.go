@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/game"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -56,7 +56,7 @@ func wasQuit(e error) bool {
 // ignores break and continue statements during tests
 // ( some tests only exist to define a scene; and continue in the body of their test )
 func wasInterrupt(e error) bool {
-	var i core.DoInterrupt
+	var i logic.DoInterrupt
 	return errors.As(e, &i)
 }
 

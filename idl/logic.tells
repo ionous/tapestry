@@ -1,0 +1,177 @@
+# Common boolean logic and loop handling.
+Spec:requires:contains:
+  - "logic"
+  - - "idl/prim"
+    - "idl/rtti"
+  - - # Test if a set of conditions all return true.
+      # Stops testing after the first condition fails.
+      Flow:slots:terms:
+        - "all_true"
+        - "bool_eval"
+        - - # One or more conditions to test.
+            Term:name:type:repeats:
+              - "_"
+              - "test"
+              - "bool_eval"
+              - true
+    - # Return true; always.
+      Flow:slots:
+        - "always"
+        - "bool_eval"
+
+    - # Returns false.
+      Flow:slots:
+        - "never"
+        - "bool_eval"
+
+    - # Returns the opposite value.
+      Flow:slots:terms:
+        - "not"
+        - "bool_eval"
+        - - Term:name:type:
+              - "_"
+              - "test"
+              - "bool_eval"
+
+    - # Test if any condition in a set of conditions returns true.
+      # Stops testing after the first condition succeeds.
+      Flow:slots:terms:
+        - "any_true"
+        - "bool_eval"
+        - - # One or more conditions to test.
+            Term:name:type:repeats:
+              - "_"
+              - "test"
+              - "bool_eval"
+              - true
+
+    - # In a repeating loop, exit the loop;
+      # or, in a rule, stop processing rules.
+      Flow:slots:
+        - "break"
+        - "execute"
+
+
+    - # In a repeating loop, try the next iteration of the loop;
+      # or, in a rule, continue to the next rule.
+      Flow:slots:
+        - "continue"
+        - "execute"
+
+    - # Helper for the else statements of [ChooseBranch].
+      Slot: "brancher"
+
+    - # An if statement.
+      Flow:slots:lede:terms:
+        - "choose_branch"
+        - - "execute"
+          - "brancher"
+        - "if"
+        - - # The condition to test.
+            Term:name:type:
+              - "_"
+              - "condition"
+              - "bool_eval"
+          - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
+          - # Statements which run when the condition succeeded.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+          - # An optional set of statements to evaluate when the condition failed.
+            Term:type:optional:
+              - "else"
+              - "brancher"
+              - true
+    - # Run a set of statements after a condition has failed.
+      Flow:slots:lede:terms:
+        - "choose_nothing_else"
+        - "brancher"
+        - "finally"
+        - - # One or more statements to run.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Pick one of two possible text values based on a condition.
+      # ( This acts similar to a ternary. )
+      Flow:slots:lede:terms:
+        - "choose_num"
+        - "num_eval"
+        - "num"
+        - - # The condition to test.
+            Term:type:
+              - "if"
+              - "bool_eval"
+          - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
+          - # The number to use if the condition succeeds.
+            Term:name:type:
+              - "then"
+              - "true"
+              - "num_eval"
+          - # The number to use if the condition fails.
+            Term:name:type:optional:
+              - "else"
+              - "false"
+              - "num_eval"
+              - true
+
+    - # Pick one of two possible text values based on a condition.
+      # ( This acts similar to a ternary. )
+      Flow:slots:lede:terms:
+        - "choose_text"
+        - "text_eval"
+        - "text"
+        - - # The condition to test.
+            Term:type:
+              - "if"
+              - "bool_eval"
+          - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
+          - # The text value to use if the condition succeeds.
+            Term:name:type:
+              - "then"
+              - "true"
+              - "text_eval"
+          - # The text value to use if the condition fails.
+            Term:name:type:optional:
+              - "else"
+              - "false"
+              - "text_eval"
+              - true
+
+
+    - # Keep running a series of actions while a condition is true.
+      Flow:slots:lede:terms:
+        - "while"
+        - "execute"
+        - "repeating"
+        - - Term:name:type:
+              - "_"
+              - "true"
+              - "bool_eval"
+          - Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true

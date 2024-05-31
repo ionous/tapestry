@@ -1,7 +1,7 @@
 package rules
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -20,7 +20,7 @@ func FilterHasCounter(filter rt.BoolEval) (okay bool) {
 // also might be cool to augment or replace the serialized type
 // with our own that has an pre-calced field ( at import, via state parser )
 func searchCounters(m typeinfo.Instance) (okay bool) {
-	if ok, e := searchForFlow(m, &core.Zt_CallTrigger); e != nil {
+	if ok, e := searchForFlow(m, &call.Zt_CallTrigger); e != nil {
 		panic(e)
 	} else {
 		okay = ok != nil

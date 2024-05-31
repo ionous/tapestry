@@ -1,7 +1,10 @@
 # Slots used by the runtime to produce and consume values.
 Spec:contains:
   - "rtti"
-  - - # Provides access to values in a generic way.
+  - - # Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.
+      Slot: "address"
+
+    - # Provides access to values in a generic way.
       # For example, when the type of a value isn't known in advance.
       # See also package assign. ( ex. [assign.FromBool] )
       Slot: "assignment"

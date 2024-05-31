@@ -1,0 +1,270 @@
+# Common operations on objects, variables, and kinds.
+Spec:requires:contains:
+  - "object"
+  - - "idl/prim"
+    - "idl/rtti"
+
+  - - # Access values inside other values.
+      Slot: "dot"
+
+    - # Store a value into a variable or object.
+      # Values are specified as a generic [Assignment].
+      # The various "From" commands exist to cast specific value types into an assignment.
+      #
+      # WARNING: This doesn't convert values from one type to another.
+      # For example:
+      #   Set:value:
+      #   - "@some_local_variable"
+      #   - FromText: "a piece of text to store."
+      # will only work if the local variable can store text. If the variable was declared as a number, the command will generate an error.
+      Flow:slots:lede:terms:
+        - "set_value"
+        - "execute"
+        - "set"
+        - - # Object property or variable into which to write the value.
+            Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # The value to copy into the destination.
+            Term:type:
+              - "value"
+              - "assignment"
+
+    - # Set the state of an object or record.
+      # See also: story `Define state:names:`.
+      Flow:slots:lede:terms:
+        - "set_state"
+        - "execute"
+        - "set"
+        - - # Object or record to change.
+            Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # Name of the state to set.
+            # Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.
+            # Errors if the state wasn't declared as part of the object's kind.
+            Term:name:type:
+              - "state"
+              - "trait"
+              - "text_eval"
+
+    - # Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.
+      # In .tell files, this command is often specified with a shortcut. For example:
+      #   "#my_object.some_field"
+      # is a shorter way to say:
+      #   Object:dot:
+      #   - "my object"
+      #   - "some field"
+      # WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
+      Flow:slots:lede:terms:
+        - "object_dot"
+        - - "address"
+          - "bool_eval"
+          - "num_eval"
+          - "text_eval"
+          - "record_eval"
+          - "num_list_eval"
+          - "text_list_eval"
+          - "record_list_eval"
+        - "object"
+        - - # Id or friendly name of the object.
+            Term:name:type:
+              - "_"
+              - "name"
+              - "text_eval"
+          - # A field or path within the object to read from.
+            Term:optional:repeats:
+              - "dot"
+              - true
+              - true
+
+    - # Read a value from a variable.
+      # In .tell files, this command is often specified with a shortcut. For example:
+      #   "@some_local_variable"
+      # is a shorter way to say:
+      #   Variable:dot: "some local variable"
+      # WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
+      Flow:slots:lede:terms:
+        - "variable_dot"
+        - - "address"
+          - "bool_eval"
+          - "num_eval"
+          - "text_eval"
+          - "record_eval"
+          - "num_list_eval"
+          - "text_list_eval"
+          - "record_list_eval"
+        - "variable"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text_eval"
+          - Term:optional:repeats:
+              - "dot"
+              - true
+              - true
+
+
+      blockly-color: "MATH_HUE"
+    - # Select a named field from a record, or a named property from an object.
+      Flow:slots:terms:
+        - "at_field"
+        - "dot"
+        - - # The name of the field to read or write.
+            # The field must exist in the object or record being accessed.
+            Term:name:type:
+              - "_"
+              - "field"
+              - "text_eval"
+
+    - # Select a value from a list of values.
+      Flow:slots:terms:
+        - "at_index"
+        - "dot"
+        - - # The zero-based index to read or write.
+            # The index must exist within the list being targeted.
+            Term:name:type:
+              - "_"
+              - "index"
+              - "num_eval"
+
+
+    - # Full name of the object.
+      Flow:slots:terms:
+        - "name_of"
+        - "text_eval"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+
+    - # Returns all of the object's current traits as a list of text.
+      Flow:slots:lede:terms:
+        - "object_traits"
+        - "text_list_eval"
+        - "object"
+        - - Term:name:type:
+              - "traits"
+              - "object"
+              - "text_eval"
+
+    - # True if the object is exactly the named kind.
+      Flow:slots:lede:terms:
+        - "is_exact_kind_of"
+        - "bool_eval"
+        - "kind_of"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+          - Term:name:type:
+              - "is_exactly"
+              - "kind"
+              - "text"
+
+    - # True if the object is compatible with the named kind.
+      Flow:slots:lede:terms:
+        - "is_kind_of"
+        - "bool_eval"
+        - "kind_of"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+          - Term:name:type:
+              - "is"
+              - "kind"
+              - "text"
+          - # try to check the type of nothing objects?
+            # normally, nothing objects have no kind.
+            Term:type:optional:
+              - "nothing"
+              - "bool"
+              - true
+
+    - # Friendly name of the object's kind.
+      Flow:slots:terms:
+        - "kind_of"
+        - "text_eval"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+          - # try to check the type of nothing objects?
+            # normally, nothing objects have no kind.
+            Term:type:optional:
+              - "nothing"
+              - "bool"
+              - true
+
+    - # A list of compatible kinds.
+      Flow:slots:terms:
+        - "kinds_of"
+        - "text_list_eval"
+        - - Term:name:type:
+              - "_"
+              - "kind"
+              - "text"
+
+    - # List of the field names of a kind.
+      Flow:slots:lede:terms:
+        - "fields_of_kind"
+        - "text_list_eval"
+        - "fields"
+        - - Term:name:type:
+              - "of"
+              - "kind_name"
+              - "text_eval"
+
+    - # Increases the value of a trait held by an object aspect.
+      # Returns the new value of the trait.
+      Flow:slots:lede:terms:
+        - "increment_aspect"
+        - - "text_eval"
+          - "execute"
+        - "increase"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "text_eval"
+          - Term:type:
+              - "aspect"
+              - "text_eval"
+          - # if not specified, increments by a single step.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+          - # if not specified, wraps.
+            Term:type:optional:
+              - "clamp"
+              - "bool_eval"
+              - true
+    - # Increases the value of a trait held by an object aspect.
+      # Returns the new value of the trait.
+      Flow:slots:lede:terms:
+        - "decrement_aspect"
+        - - "text_eval"
+          - "execute"
+        - "decrease"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "text_eval"
+          - Term:type:
+              - "aspect"
+              - "text_eval"
+          - # if not specified, increments by a single step.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+          - # if not specified, wraps.
+            Term:type:optional:
+              - "clamp"
+              - "bool_eval"
+              - true

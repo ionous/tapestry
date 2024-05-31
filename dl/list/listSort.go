@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -28,7 +27,7 @@ func (op *ListSortText) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
-	if at, e := assign.GetReference(run, op.Target); e != nil {
+	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e
@@ -49,7 +48,7 @@ func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
-	if at, e := assign.GetReference(run, op.Target); e != nil {
+	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e

@@ -1,0 +1,155 @@
+# Common text output commands.
+Spec:requires:contains:
+  - "printer"
+
+  - - "idl/prim"
+    - "idl/rtti"
+
+  - - # Add a single blank line, unless a blank line was just written.
+      # See also <p> in package markup.
+      Flow:slots:
+        - "paragraph_break"
+        - "execute"
+
+    - # Start a new line ( if not already at a new line ).
+      Flow:slots:lede:
+        - "softline"
+        - "execute"
+        - "wbr"
+
+    - # Start a new line.
+      Flow:slots:
+        - "line_break"
+        - "execute"
+
+    - # Runtime version of cycle_text.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_cycle"
+        - "text_eval"
+        - "cycle"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "over"
+              - "parts"
+              - "text_eval"
+              - true
+    - # Runtime version of shuffle_text.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_shuffle"
+        - "text_eval"
+        - "shuffle"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "over"
+              - "parts"
+              - "text_eval"
+              - true
+          - Term:type:private:
+              - "indices"
+              - "shuffler"
+              - true
+    - # Runtime version of stopping_text.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_terminal"
+        - "text_eval"
+        - "stopping"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "over"
+              - "parts"
+              - "text_eval"
+              - true
+    - Flow:slots:lede:terms:
+        - "buffer_text"
+        - "text_eval"
+        - "buffers"
+        - - Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Display some text to the player without apply any additional formatting.
+      Flow:slots:lede:terms:
+        - "print_text"
+        - "execute"
+        - "print"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+
+    - # Writes text, by default putting spaces between words.
+      Flow:slots:lede:terms:
+        - "print_words"
+        - ["execute", "text_eval"]
+        - "print"
+        - - # Optional text to place between adjoining words.
+            Term:type:optional:
+              - "separator"
+              - "text_eval"
+              - true
+          - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "words"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Collect printed text and surrounds the output with parenthesis '()'.
+      # If no text is printed, no parentheses are printed.
+      Flow:slots:lede:terms:
+        - "print_parens"
+        - ["text_eval", "execute"]
+        - "print"
+        - - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "parentheses"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Separates words with commas, and 'and'.
+      Flow:slots:lede:terms:
+        - "print_commas"
+        - ["text_eval", "execute"]
+        - "print"
+        - - Term:name:type:repeats:
+              - "commas"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Group text into a single line <li> as part of a list of lines.
+      # See also: 'rows'.
+      Flow:slots:terms:
+        - "row"
+        - "text_eval"
+        - - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+    - # Group text into an unordered list <ul>.
+      Flow:slots:terms:
+        - "rows"
+        - "text_eval"
+        - - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true

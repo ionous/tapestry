@@ -1,8 +1,6 @@
 package dot
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -15,9 +13,8 @@ func (dot Field) Field() string {
 }
 
 // print friendly string
-func (dot Field) writeTo(b *strings.Builder) {
-	b.WriteRune('.')
-	b.WriteString(dot.Field())
+func (dot Field) String() string {
+	return "." + dot.Field()
 }
 
 func (dot Field) Peek(c Cursor) (Cursor, error) {

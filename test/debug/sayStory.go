@@ -3,7 +3,9 @@ package debug
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -11,7 +13,7 @@ import (
 )
 
 func SayIt(s string) []rt.Execute {
-	return []rt.Execute{&core.PrintText{Text: T(s)}}
+	return []rt.Execute{&printer.PrintText{Text: T(s)}}
 }
 
 type MatchNumber struct {
@@ -42,8 +44,8 @@ func (op *MatchNumber) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func DetermineSay(i int) *assign.CallPattern {
-	return &assign.CallPattern{
+func DetermineSay(i int) *call.CallPattern {
+	return &call.CallPattern{
 		PatternName: "say me",
 		Arguments: []assign.Arg{{
 			Name:  "num",
@@ -80,19 +82,19 @@ var SayPattern = testpat.Pattern{
 	Rules: []rt.Rule{{
 		Name: "default", Exe: SayIt("Not between 1 and 3."),
 	}, {
-		Name: "3b", Exe: []rt.Execute{&core.ChooseBranch{
+		Name: "3b", Exe: []rt.Execute{&logic.ChooseBranch{
 			Condition: &MatchNumber{3}, Exe: SayIt("San!")},
 		},
 	}, {
-		Name: "3a", Exe: []rt.Execute{&core.ChooseBranch{
+		Name: "3a", Exe: []rt.Execute{&logic.ChooseBranch{
 			Condition: &MatchNumber{3}, Exe: SayIt("Three!")},
 		},
 	}, {
-		Name: "2", Exe: []rt.Execute{&core.ChooseBranch{
+		Name: "2", Exe: []rt.Execute{&logic.ChooseBranch{
 			Condition: &MatchNumber{2}, Exe: SayIt("Two!")},
 		},
 	}, {
-		Name: "1", Exe: []rt.Execute{&core.ChooseBranch{
+		Name: "1", Exe: []rt.Execute{&logic.ChooseBranch{
 			Condition: &MatchNumber{1}, Exe: SayIt("One!")},
 		},
 	}},

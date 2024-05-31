@@ -5,13 +5,16 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 )
 
 var runGroupTogther = list.ListMap{
-	Target:      assign.Variable("settings"),
-	List:        &assign.FromTextList{Value: assign.Variable("objects")},
+	Target:      object.Variable("settings"),
+	List:        &assign.FromTextList{Value: object.Variable("objects")},
 	PatternName: P("assign grouping"),
 }
 
@@ -31,16 +34,16 @@ var assignGrouping = testpat.Pattern{
 	},
 	Rules: []rt.Rule{
 		{Exe: []rt.Execute{
-			&assign.SetValue{
-				Target: assign.Variable("out", "name"),
-				Value:  &assign.FromText{Value: assign.Variable("in")}},
-			&core.ChooseBranch{
-				Condition: &core.Matches{
-					Text:  assign.Variable("in"),
+			&object.SetValue{
+				Target: object.Variable("out", "name"),
+				Value:  &assign.FromText{Value: object.Variable("in")}},
+			&logic.ChooseBranch{
+				Condition: &text.Matches{
+					Text:  object.Variable("in"),
 					Match: "^thing"},
 				Exe: core.MakeActivity(
-					&assign.SetValue{
-						Target: assign.Variable("out", "label"),
+					&object.SetValue{
+						Target: object.Variable("out", "label"),
 						Value:  &assign.FromText{Value: T("thingies")}},
 				),
 			},

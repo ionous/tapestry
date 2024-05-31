@@ -6,16 +6,16 @@ import (
 	"strings"
 	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // this can only write addresses and dots composed of literals
-func WriteDots(a assign.Address) (ret string, okay bool) {
+func WriteDots(a rt.Address) (ret string, okay bool) {
 	var out strings.Builder
 	switch a := a.(type) {
-	case *assign.VariableDot:
+	case *object.VariableDot:
 		if n, ok := getLiteralString(a.Name); ok && len(n) > 0 {
 			out.WriteRune(AtSign)
 			out.WriteString(formatName(n))
@@ -23,7 +23,7 @@ func WriteDots(a assign.Address) (ret string, okay bool) {
 				ret, okay = out.String(), true
 			}
 		}
-	case *assign.ObjectDot:
+	case *object.ObjectDot:
 		if n, ok := getLiteralString(a.Name); ok && len(n) > 0 {
 			out.WriteRune(HashMark)
 			out.WriteString(formatName(n))
@@ -35,12 +35,12 @@ func WriteDots(a assign.Address) (ret string, okay bool) {
 	return
 }
 
-func writeDots(out *strings.Builder, dots []assign.Dot) (okay bool) {
+func writeDots(out *strings.Builder, dots []object.Dot) (okay bool) {
 	okay = true // provisionally
 Loop:
 	for _, d := range dots {
 		switch d := d.(type) {
-		case *assign.AtField:
+		case *object.AtField:
 			if field, ok := getLiteralString(d.Field); !ok {
 				okay = false
 				break Loop
@@ -48,7 +48,7 @@ Loop:
 				out.WriteRune(FieldSeparator)
 				out.WriteString(formatName(field))
 			}
-		case *assign.AtIndex:
+		case *object.AtIndex:
 			if idx, ok := getLiteralNumber(d.Index); !ok {
 				okay = false
 				break Loop

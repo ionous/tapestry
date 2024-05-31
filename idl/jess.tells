@@ -266,7 +266,7 @@ Spec:requires:contains:
         - "matching_phrases"
         - - Term: "understand"
           - Term: "timed_rule"
-          - Term: "kinds_of"
+          - Term: "kinds_are_kind"
           - Term: "aspects_are_traits"
           - Term: "kinds_are_traits"
           - Term: "kinds_have_properties"
@@ -285,14 +285,14 @@ Spec:requires:contains:
       # this is more strict.
       # like inform `The animals called kittens are a kind of things.` is legal.
       Flow:terms:
-        - "kinds_of"
+        - "kinds_are_kind"
         - - # can match plain names and existing kinds;
             # only allows a leading kind called, and errors on all counted kinds.
             Term: "names"
           - Term: "are"
           - # the phrases "a kind of" or "kinds of"
             Term:type:
-              - "kinds_of"
+              - "kinds_are_kind"
               - "words"
           - # inform doesnt allow commas or ands here,
             # jess reuses the traits list here, so it does allow comma/and.

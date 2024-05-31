@@ -54,6 +54,16 @@ func WriteText(run rt.Runtime, eval rt.TextEval) (err error) {
 	return
 }
 
+// check that op exists and then call GetPath on it.
+func GetReference(run rt.Runtime, op rt.Address) (ret rt.Reference, err error) {
+	if op == nil {
+		err = errors.New("missing address")
+	} else {
+		ret, err = op.GetReference(run)
+	}
+	return
+}
+
 // handles null assignments by returning "MissingEval" error
 // ( cant live in package safe because package assign uses package safe )
 func GetAssignment(run rt.Runtime, a rt.Assignment) (ret rt.Value, err error) {

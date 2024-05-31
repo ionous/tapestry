@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/dl/game"
@@ -16,12 +16,16 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/play"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/lang/doc"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
@@ -41,7 +45,7 @@ func runDoc() (err error) {
 		fmt.Println("generating to", outPath)
 		err = doc.Build(outPath, []typeinfo.TypeSet{
 			assign.Z_Types,
-			core.Z_Types,
+			call.Z_Types,
 			debug.Z_Types,
 			frame.Z_Types,
 			game.Z_Types,
@@ -49,13 +53,19 @@ func runDoc() (err error) {
 			jess.Z_Types,
 			list.Z_Types,
 			literal.Z_Types,
-			play.Z_Types,
+			logic.Z_Types,
+			math.Z_Types,
+			object.Z_Types,
+			// play.Z_Types,
 			prim.Z_Types,
+			printer.Z_Types,
 			rel.Z_Types,
 			render.Z_Types,
+			game.Z_Types,
 			rtti.Z_Types,
 			story.Z_Types,
 			// testdl.Z_Types,
+			text.Z_Types,
 		})
 	}
 	return

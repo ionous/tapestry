@@ -20,13 +20,13 @@ func matchSentence(z weaver.Phase, q Query, next []match.TokenValue, out *bestMa
 		okay = matchPhrase(q, next, &op.Understand, out)
 
 	case weaver.AncestryPhase:
-		// FIX -- KindsOf needs TRAITS to *match*
+		// FIX -- KindsAreKind needs TRAITS to *match*
 		// to do the idea of match once, generate often;
 		// this would have to delay parsing the trailing phrase.
 		// probably part of the phase has to be scheduled; while the basic naming does not.
 		// ---
 		// names {are} "a kind of"/"kinds of" [traits] kind.
-		okay = matchPhrase(q, next, &op.KindsOf, out) ||
+		okay = matchPhrase(q, next, &op.KindsAreKind, out) ||
 			// The colors are black and blue.
 			matchPhrase(q, next, schedule(&op.AspectsAreTraits), out)
 

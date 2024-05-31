@@ -9,6 +9,35 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
+// address, a type of slot.
+var Zt_Address = typeinfo.Slot{
+	Name: "address",
+	Markup: map[string]any{
+		"comment": "Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.",
+	},
+}
+
+// Holds a single slot.
+type Address_Slot struct{ Value Address }
+
+// Implements [typeinfo.Instance] for a single slot.
+func (*Address_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Address
+}
+
+// Holds a slice of slots.
+type Address_Slots []Address
+
+// Implements [typeinfo.Instance] for a slice of slots.
+func (*Address_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Address
+}
+
+// Implements [typeinfo.Repeats] for a slice of slots.
+func (op *Address_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
 // assignment, a type of slot.
 var Zt_Assignment = typeinfo.Slot{
 	Name: "assignment",
@@ -292,6 +321,7 @@ var Z_Types = typeinfo.TypeSet{
 // A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
+	&Zt_Address,
 	&Zt_Assignment,
 	&Zt_BoolEval,
 	&Zt_Execute,

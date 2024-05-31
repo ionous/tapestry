@@ -1,0 +1,93 @@
+#
+Spec:requires:contains:
+  - "call"
+  - - "idl/prim"
+    - "idl/rtti"
+
+  - - Flow:slots:lede:terms:
+        - "active_scene"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "scene"
+              - "name"
+              - "text"
+
+    - # Decide whether a pattern is running.
+      Flow:slots:lede:terms:
+        - "active_pattern"
+        - - "bool_eval"
+          - "num_eval"
+        - "is"
+        - - Term:name:type:
+              - "pattern"
+              - "pattern_name"
+              - "text"
+
+    - # Run a pattern, returning its result (if any).
+      # Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
+      # Because some patterns can return a value,this implements all of the possible rtti evaluations.
+      Flow:slots:lede:terms:
+        - "call_pattern"
+        - - "execute"
+          - "bool_eval"
+          - "num_eval"
+          - "text_eval"
+          - "record_eval"
+          - "num_list_eval"
+          - "text_list_eval"
+          - "record_list_eval"
+        - "determine"
+        - - # The name of the pattern to run.
+            Term:name:type:
+              - "_"
+              - "pattern_name"
+              - "text"
+          - # Arguments to pass to the pattern.
+            # Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times.
+            Term:name:type:repeats:
+              - "args"
+              - "arguments"
+              - "arg"
+              - true
+
+    - # Runtime version of count_of.
+      # A guard which returns true based on a counter.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_trigger"
+        - "bool_eval"
+        - "trigger"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:
+              - "on"
+              - "trigger"
+          - Term:type:
+              - "num"
+              - "num_eval"
+
+    - # Helper for counting values.
+      internal: true
+      Slot: "trigger"
+
+    - # call_trigger
+      internal: true
+      Flow:slots:lede:
+        - "trigger_cycle"
+        - "trigger"
+        - "every"
+    - # call_trigger
+      internal: true
+      Flow:slots:lede:
+        - "trigger_once"
+        - "trigger"
+        - "at"
+    - # call_trigger
+      internal: true
+      Flow:slots:lede:
+        - "trigger_switch"
+        - "trigger"
+        - "after"

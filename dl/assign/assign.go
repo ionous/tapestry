@@ -1,13 +1,38 @@
 package assign
 
 import (
+	"fmt"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
+
+func ExpandArgs(run rt.Runtime, args []Arg) (retKeys []string, retVals []rt.Value, err error) {
+	if len(args) > 0 {
+		keys, vals := make([]string, 0, len(args)), make([]rt.Value, len(args))
+		for i, a := range args {
+			if val, e := safe.GetAssignment(run, a.Value); e != nil {
+				err = fmt.Errorf("%w while reading arg %d(%s)", e, i, a.Name)
+				break
+			} else if n := inflect.Normalize(a.Name); len(n) > 0 {
+				keys = append(keys, n)
+				vals[i] = val
+			} else if len(keys) > 0 {
+				err = fmt.Errorf("unnamed arguments must precede all named arguments %d", i)
+			} else {
+				vals[i] = val
+			}
+		}
+		if err == nil {
+			retKeys, retVals = keys, vals
+		}
+	}
+	return
+}
 
 func (op *FromExe) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
 	err = safe.RunAll(run, op.Exe)
@@ -15,7 +40,7 @@ func (op *FromExe) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
 }
 
 func (op *FromAddress) GetAssignedValue(run rt.Runtime) (ret rt.Value, err error) {
-	if pos, e := GetReference(run, op.Value); e != nil {
+	if pos, e := safe.GetReference(run, op.Value); e != nil {
 		err = e
 	} else {
 		ret, err = pos.GetValue()
@@ -91,42 +116,6 @@ func Literal(v literal.LiteralValue) (ret rt.Assignment) {
 		ret = &FromRecordList{Value: v}
 	default:
 		log.Panicf("unknown literal %T", v)
-	}
-	return
-}
-
-func Object(name string, path ...any) *ObjectDot {
-	return &ObjectDot{
-		Name: literal.T(name),
-		Dot:  MakeDot(path...),
-	}
-}
-
-// generate a statement which extracts a variable's value.
-// path can include strings ( for reading from records ) or integers ( for reading from lists )
-func Variable(name string, path ...any) *VariableDot {
-	return &VariableDot{
-		Name: literal.T(name),
-		Dot:  MakeDot(path...),
-	}
-}
-
-func MakeDot(path ...any) (ret []Dot) {
-	if cnt := len(path); cnt > 0 {
-		out := make([]Dot, len(path))
-		for i, p := range path {
-			switch el := p.(type) {
-			case string:
-				out[i] = &AtField{Field: literal.T(el)}
-			case int:
-				out[i] = &AtIndex{Index: literal.I(el)}
-			case Dot:
-				out[i] = el
-			default:
-				log.Panicf("expected an int or string element; got %T", el)
-			}
-		}
-		ret = out
 	}
 	return
 }

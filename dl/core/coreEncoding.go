@@ -3,8 +3,8 @@ package core
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/assign/shortcut"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -17,10 +17,10 @@ import (
 // especially because the opposite is handled in... story?
 func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch op := op.(type) {
-	case *assign.CallPattern:
-		ret, err = assign.CustomEncoder(enc, op)
+	case *call.CallPattern:
+		ret, err = call.CustomEncoder(enc, op)
 
-	case assign.Address:
+	case rtti.Address:
 		if str, ok := shortcut.WriteDots(op); !ok {
 			err = compact.Unhandled("address")
 		} else {
@@ -57,7 +57,7 @@ func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret type
 		&rtti.Zt_RecordEval,
 		&rtti.Zt_RecordListEval,
 		// writing to a variable:
-		&assign.Zt_Address:
+		&rtti.Zt_Address:
 		//
 		if str, ok := body.(string); !ok || len(str) == 0 {
 			ret, err = literal.DecodeLiteral(slot, body)

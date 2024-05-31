@@ -2,6 +2,7 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -24,7 +25,7 @@ func MakeRule(filter rt.BoolEval, exe ...rt.Execute) (ret rt.Rule) {
 		ret.Exe = exe
 	} else {
 		ret = rt.Rule{Exe: []rt.Execute{
-			&ChooseBranch{
+			&logic.ChooseBranch{
 				Condition: filter,
 				Exe:       exe,
 			}}}

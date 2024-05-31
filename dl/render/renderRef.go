@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -91,7 +91,7 @@ func (op *RenderRef) RenderEval(run rt.Runtime, hint affine.Affinity) (ret rt.Va
 func (op *RenderRef) renderRef(run rt.Runtime, hint affine.Affinity) (ret rt.Value, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
 		err = fmt.Errorf("%w getting text", e)
-	} else if val, e := assign.GetNamedValue(run, name.String(), op.Dot); e != nil {
+	} else if val, e := object.GetNamedValue(run, name.String(), op.Dot); e != nil {
 		err = e
 	} else {
 		ret, err = safe.ConvertValue(run, val, hint)

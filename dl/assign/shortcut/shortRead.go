@@ -4,15 +4,16 @@ import (
 	"errors"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/rtti"
 )
 
 // should ReadDots try to keep the shortcut string
 // ( ex. for debugging )
 var KeepShortcuts bool
 
-func ReadDots(str string) (ret assign.Address, err error) {
+func ReadDots(str string) (ret rtti.Address, err error) {
 	var a Shortcut
 	if e := Tokenize(str, &a); e != nil {
 		err = e
@@ -25,10 +26,10 @@ func ReadDots(str string) (ret assign.Address, err error) {
 type Shortcut struct {
 	marker Type
 	name   string
-	dot    []assign.Dot
+	dot    []object.Dot
 }
 
-func (a *Shortcut) Finish(str string) (ret assign.Address) {
+func (a *Shortcut) Finish(str string) (ret rtti.Address) {
 	name := literal.T(a.name)
 	var m map[string]any
 	if KeepShortcuts {
@@ -38,13 +39,13 @@ func (a *Shortcut) Finish(str string) (ret assign.Address) {
 	}
 	switch a.marker {
 	case VarMarker:
-		ret = &assign.VariableDot{
+		ret = &object.VariableDot{
 			Name:   name,
 			Dot:    a.dot,
 			Markup: m,
 		}
 	case ObjMarker:
-		ret = &assign.ObjectDot{
+		ret = &object.ObjectDot{
 			Name:   name,
 			Dot:    a.dot,
 			Markup: m,
@@ -70,7 +71,7 @@ func (a *Shortcut) Decoded(t Type, v any) (err error) {
 		} else if name := v.(string); len(a.name) == 0 {
 			a.name = name
 		} else {
-			a.dot = append(a.dot, &assign.AtField{
+			a.dot = append(a.dot, &object.AtField{
 				Field: literal.T(name),
 			})
 		}
@@ -81,7 +82,7 @@ func (a *Shortcut) Decoded(t Type, v any) (err error) {
 		} else if idx == 0 {
 			err = errors.New("zero is an invalid element")
 		} else {
-			a.dot = append(a.dot, &assign.AtIndex{
+			a.dot = append(a.dot, &object.AtIndex{
 				Index: literal.I(idx - 1),
 			})
 		}

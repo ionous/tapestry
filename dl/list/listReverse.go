@@ -1,7 +1,6 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -15,7 +14,7 @@ func (op *ListReverse) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListReverse) reverse(run rt.Runtime) (err error) {
-	if at, e := assign.GetReference(run, op.Target); e != nil {
+	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e

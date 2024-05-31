@@ -11,11 +11,11 @@ import (
 )
 
 // runs in the AncestryPhase phase
-func (op *KindsOf) Phase() weaver.Phase {
+func (op *KindsAreKind) Phase() weaver.Phase {
 	return weaver.AncestryPhase
 }
 
-func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
+func (op *KindsAreKind) Match(q Query, input *InputState) (okay bool) {
 	if next := *input; //
 	op.Names.Match(AddContext(q, ExcludeNounMatching), &next) &&
 		op.Are.Match(q, &next) &&
@@ -28,9 +28,9 @@ func (op *KindsOf) Match(q Query, input *InputState) (okay bool) {
 }
 
 // match "a kind of" or "kinds of"
-func (op *KindsOf) matchKindsOf(input *InputState) (okay bool) {
+func (op *KindsAreKind) matchKindsOf(input *InputState) (okay bool) {
 	if m, width := kindsSpan.FindPrefix(input.Words()); m != nil {
-		op.KindsOf.Matched = input.Cut(width)
+		op.KindsAreKind.Matched = input.Cut(width)
 		*input, okay = input.Skip(width), true
 	}
 	return
@@ -38,7 +38,7 @@ func (op *KindsOf) matchKindsOf(input *InputState) (okay bool) {
 
 var kindsSpan = match.PanicSpans("a kind of", "kinds of")
 
-func (op *KindsOf) GetTraits() (ret Traitor) {
+func (op *KindsAreKind) GetTraits() (ret Traitor) {
 	if op.Traits != nil {
 		ret = op.Traits.GetTraits()
 	}
@@ -46,7 +46,7 @@ func (op *KindsOf) GetTraits() (ret Traitor) {
 }
 
 // The closed containers called safes are a kind of fixed in place thing.
-func (op *KindsOf) Generate(ctx Context) error {
+func (op *KindsAreKind) Generate(ctx Context) error {
 	// manually schedule, so we can query FindKind()
 	return ctx.Schedule(op.Phase(), func(w weaver.Weaves, run rt.Runtime) (err error) {
 		var base kindsOf.Kinds

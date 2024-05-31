@@ -6,8 +6,7 @@ package list
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -15,7 +14,7 @@ import (
 
 // Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
-	Target assign.Address
+	Target rtti.Address
 	AtEdge rtti.BoolEval
 	Markup map[string]any
 }
@@ -55,7 +54,7 @@ func (op *EraseEdge_Slice) Repeats() bool {
 // Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
 	Count   rtti.NumEval
-	Target  assign.Address
+	Target  rtti.Address
 	AtIndex rtti.NumEval
 	Markup  map[string]any
 }
@@ -97,7 +96,7 @@ func (op *EraseIndex_Slice) Repeats() bool {
 // If nothing was erased, the pattern will be called with an empty list.
 type Erasing struct {
 	Count   rtti.NumEval
-	Target  assign.Address
+	Target  rtti.Address
 	AtIndex rtti.NumEval
 	As      string
 	Exe     []rtti.Execute
@@ -140,11 +139,11 @@ func (op *Erasing_Slice) Repeats() bool {
 // Runs an activity with a list containing the erased values;
 // the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	Target assign.Address
+	Target rtti.Address
 	AtEdge rtti.BoolEval
 	As     string
 	Exe    []rtti.Execute
-	Else   core.Brancher
+	Else   logic.Brancher
 	Markup map[string]any
 }
 
@@ -185,7 +184,7 @@ type ListEach struct {
 	List   rtti.Assignment
 	As     string
 	Exe    []rtti.Execute
-	Else   core.Brancher
+	Else   logic.Brancher
 	Markup map[string]any
 }
 
@@ -265,7 +264,7 @@ func (op *ListFind_Slice) Repeats() bool {
 // The named pattern gets with with two parameters for each value in the list:
 // 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Target assign.Address
+	Target rtti.Address
 	From   rtti.Assignment
 	Using  string
 	Markup map[string]any
@@ -453,7 +452,7 @@ func (op *MakeRecordList_Slice) Repeats() bool {
 // Transform the values from one list and place the results in another list.
 // The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	Target      assign.Address
+	Target      rtti.Address
 	List        rtti.Assignment
 	PatternName string
 	Markup      map[string]any
@@ -498,7 +497,7 @@ func (op *ListMap_Slice) Repeats() bool {
 //
 // And, that pattern is expected to return the newly updated value.
 type ListReduce struct {
-	Target      assign.Address
+	Target      rtti.Address
 	List        rtti.Assignment
 	PatternName string
 	Markup      map[string]any
@@ -538,7 +537,7 @@ func (op *ListReduce_Slice) Repeats() bool {
 
 // Reverse a list.
 type ListReverse struct {
-	Target assign.Address
+	Target rtti.Address
 	Markup map[string]any
 }
 
@@ -623,7 +622,7 @@ func (op *ListSlice_Slice) Repeats() bool {
 }
 
 type ListSortNumbers struct {
-	Target     assign.Address
+	Target     rtti.Address
 	ByField    string
 	Descending rtti.BoolEval
 	Markup     map[string]any
@@ -663,7 +662,7 @@ func (op *ListSortNumbers_Slice) Repeats() bool {
 
 // Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
-	Target     assign.Address
+	Target     rtti.Address
 	ByField    string
 	Descending rtti.BoolEval
 	UsingCase  rtti.BoolEval
@@ -710,7 +709,7 @@ func (op *ListSortText_Slice) Repeats() bool {
 // If the remove count is missing, this removes all elements from the start to the end;
 // if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
-	Target assign.Address
+	Target rtti.Address
 	Start  rtti.NumEval
 	Remove rtti.NumEval
 	Insert rtti.Assignment
@@ -755,7 +754,7 @@ func (op *ListSplice_Slice) Repeats() bool {
 // Add a value to a list.
 type ListPush struct {
 	Value  rtti.Assignment
-	Target assign.Address
+	Target rtti.Address
 	AtEdge rtti.BoolEval
 	Markup map[string]any
 }
@@ -845,7 +844,7 @@ func init() {
 		Lede: "erase",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:     "at_edge",
 			Label:    "at_front",
@@ -868,7 +867,7 @@ func init() {
 		}, {
 			Name:  "target",
 			Label: "from",
-			Type:  &assign.Zt_Address,
+			Type:  &rtti.Zt_Address,
 		}, {
 			Name:  "at_index",
 			Label: "at_index",
@@ -890,7 +889,7 @@ func init() {
 		}, {
 			Name:  "target",
 			Label: "from",
-			Type:  &assign.Zt_Address,
+			Type:  &rtti.Zt_Address,
 		}, {
 			Name:  "at_index",
 			Label: "at_index",
@@ -917,7 +916,7 @@ func init() {
 		Lede: "erasing",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:     "at_edge",
 			Label:    "at_front",
@@ -936,7 +935,7 @@ func init() {
 			Name:     "else",
 			Label:    "else",
 			Optional: true,
-			Type:     &core.Zt_Brancher,
+			Type:     &logic.Zt_Brancher,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -965,7 +964,7 @@ func init() {
 			Name:     "else",
 			Label:    "else",
 			Optional: true,
-			Type:     &core.Zt_Brancher,
+			Type:     &logic.Zt_Brancher,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -998,7 +997,7 @@ func init() {
 		Lede: "gather",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:  "from",
 			Label: "from",
@@ -1074,7 +1073,7 @@ func init() {
 		Lede: "map",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:  "list",
 			Label: "from_list",
@@ -1097,7 +1096,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "target",
 			Label: "into",
-			Type:  &assign.Zt_Address,
+			Type:  &rtti.Zt_Address,
 		}, {
 			Name:  "list",
 			Label: "from_list",
@@ -1120,7 +1119,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "target",
 			Label: "list",
-			Type:  &assign.Zt_Address,
+			Type:  &rtti.Zt_Address,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -1160,7 +1159,7 @@ func init() {
 		Lede: "sort_numbers",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:  "by_field",
 			Label: "by_field",
@@ -1180,7 +1179,7 @@ func init() {
 		Lede: "sort_texts",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:  "by_field",
 			Label: "by_field",
@@ -1208,7 +1207,7 @@ func init() {
 		Lede: "splice",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &assign.Zt_Address,
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:  "start",
 			Label: "start",
@@ -1241,7 +1240,7 @@ func init() {
 		}, {
 			Name:  "target",
 			Label: "into",
-			Type:  &assign.Zt_Address,
+			Type:  &rtti.Zt_Address,
 		}, {
 			Name:     "at_edge",
 			Label:    "at_front",

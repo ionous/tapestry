@@ -2,7 +2,6 @@ package dot
 
 import (
 	"errors"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -14,13 +13,14 @@ type rootDot struct {
 }
 
 // print friendly string
-func (dot rootDot) writeTo(b *strings.Builder) {
+func (dot rootDot) String() string {
+	var prefix string
 	if dot.name == meta.Variables {
-		b.WriteRune('@')
+		prefix = "@"
 	} else {
-		b.WriteRune('#')
+		prefix = "#"
 	}
-	b.WriteString(string(dot.name))
+	return prefix + string(dot.name)
 }
 
 func (dot rootDot) Peek(c Cursor) (ret Cursor, err error) {

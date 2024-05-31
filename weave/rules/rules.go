@@ -4,8 +4,8 @@ import (
 	"slices"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -162,12 +162,12 @@ Out:
 			// todo: make a "no op" interface so other things can join in?
 			continue
 
-		case *core.ChooseBranch:
+		case *logic.ChooseBranch:
 			for next := el.Else; next != nil; {
 				switch b := next.(type) {
-				case *core.ChooseBranch:
+				case *logic.ChooseBranch:
 					next = b.Else
-				case *core.ChooseNothingElse:
+				case *logic.ChooseNothingElse:
 					terminal = true
 					break Out
 				default:

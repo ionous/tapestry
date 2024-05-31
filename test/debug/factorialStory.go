@@ -4,8 +4,11 @@ import (
 	_ "embed"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -47,8 +50,8 @@ var FactorialStory = story.StoryFile{
 // run 3! factorial
 var FactorialCheck = []rt.Execute{
 	&debug.Expect{
-		Value: &core.CompareNum{
-			A: F(6), Is: core.C_Comparison_EqualTo, B: &assign.CallPattern{
+		Value: &math.CompareNum{
+			A: F(6), Is: math.C_Comparison_EqualTo, B: &call.CallPattern{
 				PatternName: "factorial",
 				Arguments: []assign.Arg{{
 					Name:  "num",
@@ -62,12 +65,12 @@ var FactorialCheck = []rt.Execute{
 
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
-	&assign.SetValue{
-		Target: assign.Variable("num"),
-		Value: &assign.FromNum{Value: &core.MultiplyValue{
-			A: assign.Variable("num"),
-			B: &core.SubtractValue{
-				A: assign.Variable("num"),
+	&object.SetValue{
+		Target: object.Variable("num"),
+		Value: &assign.FromNum{Value: &math.MultiplyValue{
+			A: object.Variable("num"),
+			B: &math.SubtractValue{
+				A: object.Variable("num"),
 				B: I(1),
 			},
 		}}},
@@ -75,11 +78,11 @@ var FactorialMulMinusOne = []rt.Execute{
 
 // override the default behavior:
 var FactorialDecreaseRule = []rt.Execute{
-	&core.ChooseBranch{
-		Condition: &core.CompareNum{
+	&logic.ChooseBranch{
+		Condition: &math.CompareNum{
 			Markup: UserComment("above zero, subtract one"),
-			A:      assign.Variable("num"),
-			Is:     core.C_Comparison_GreaterThan,
+			A:      object.Variable("num"),
+			Is:     math.C_Comparison_GreaterThan,
 			B:      F(0)},
 		Exe: FactorialMulMinusOne,
 	},
@@ -87,9 +90,9 @@ var FactorialDecreaseRule = []rt.Execute{
 
 // the default rule: use the number 1
 var FactorialDefaultRule = []rt.Execute{
-	&assign.SetValue{
+	&object.SetValue{
 		Markup: UserComment("by default, return one"),
-		Target: assign.Variable("num"),
+		Target: object.Variable("num"),
 		Value:  &assign.FromNum{Value: I(1)},
 	},
 }

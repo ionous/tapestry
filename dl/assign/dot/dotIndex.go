@@ -2,7 +2,6 @@ package dot
 
 import (
 	"strconv"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -16,10 +15,8 @@ func (dot Index) Index() int {
 }
 
 // print friendly string
-func (dot Index) writeTo(b *strings.Builder) {
-	b.WriteRune('[')
-	b.WriteString(strconv.Itoa(dot.Index()))
-	b.WriteRune(']')
+func (dot Index) String() string {
+	return "[" + strconv.Itoa(dot.Index()) + "]"
 }
 
 func (dot Index) Peek(c Cursor) (Cursor, error) {

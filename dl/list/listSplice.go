@@ -2,7 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -48,7 +47,7 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 // modify a list by adding and removing elements.
 // fix: aff?
 func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal rt.Value, retType string, err error) {
-	if at, e := assign.GetReference(run, op.Target); e != nil {
+	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e

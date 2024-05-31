@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -25,10 +25,10 @@ type Domain struct {
 type initialValues []rt.Execute
 
 func (in initialValues) add(noun, field string, val rt.Assignment) initialValues {
-	return append(in, &assign.SetValue{
-		Target: &assign.ObjectDot{
+	return append(in, &object.SetValue{
+		Target: &object.ObjectDot{
 			Name: &literal.TextValue{Value: noun},
-			Dot:  assign.MakeDot(field),
+			Dot:  object.MakeDot(field),
 		},
 		Value: val,
 	})
