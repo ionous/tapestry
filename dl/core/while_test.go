@@ -19,7 +19,7 @@ func TestLoopBreak(t *testing.T) {
 					Target: assign.Variable("i"),
 					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseBranch{
-					If: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
+					Condition: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
 					Exe: MakeActivity(
 						&Break{},
 					),
@@ -44,7 +44,7 @@ func TestLoopNext(t *testing.T) {
 					Target: assign.Variable("i"),
 					Value:  &assign.FromNum{Value: &AddValue{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseBranch{
-					If: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
+					Condition: &CompareNum{A: assign.Variable("i"), Is: C_Comparison_AtLeast, B: I(4)},
 					Exe: MakeActivity(
 						&Break{},
 					),

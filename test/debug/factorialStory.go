@@ -76,7 +76,7 @@ var FactorialMulMinusOne = []rt.Execute{
 // override the default behavior:
 var FactorialDecreaseRule = []rt.Execute{
 	&core.ChooseBranch{
-		If: &core.CompareNum{
+		Condition: &core.CompareNum{
 			Markup: UserComment("above zero, subtract one"),
 			A:      assign.Variable("num"),
 			Is:     core.C_Comparison_GreaterThan,

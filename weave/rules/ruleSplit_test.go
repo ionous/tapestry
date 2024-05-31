@@ -24,10 +24,10 @@ func TestFindTree(t *testing.T) {
 var filter = &literal.BoolValue{}
 
 var tree = &core.ChooseBranch{
-	If: filter,
+	Condition: filter,
 	Else: &core.ChooseBranch{
-		If:   &literal.BoolValue{},
-		Else: &core.ChooseNothingElse{},
+		Condition: &literal.BoolValue{},
+		Else:      &core.ChooseNothingElse{},
 	},
 }
 

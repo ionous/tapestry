@@ -81,19 +81,19 @@ var SayPattern = testpat.Pattern{
 		Name: "default", Exe: SayIt("Not between 1 and 3."),
 	}, {
 		Name: "3b", Exe: []rt.Execute{&core.ChooseBranch{
-			If: &MatchNumber{3}, Exe: SayIt("San!")},
+			Condition: &MatchNumber{3}, Exe: SayIt("San!")},
 		},
 	}, {
 		Name: "3a", Exe: []rt.Execute{&core.ChooseBranch{
-			If: &MatchNumber{3}, Exe: SayIt("Three!")},
+			Condition: &MatchNumber{3}, Exe: SayIt("Three!")},
 		},
 	}, {
 		Name: "2", Exe: []rt.Execute{&core.ChooseBranch{
-			If: &MatchNumber{2}, Exe: SayIt("Two!")},
+			Condition: &MatchNumber{2}, Exe: SayIt("Two!")},
 		},
 	}, {
 		Name: "1", Exe: []rt.Execute{&core.ChooseBranch{
-			If: &MatchNumber{1}, Exe: SayIt("One!")},
+			Condition: &MatchNumber{1}, Exe: SayIt("One!")},
 		},
 	}},
 }

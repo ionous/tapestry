@@ -20,6 +20,11 @@ func NewSpanner() *Spanner {
 	return new(Spanner)
 }
 
+func NewSeparator(str string) *Spanner {
+	span := Spanner{psep: &str}
+	return &span
+}
+
 func (p *Spanner) Len() int {
 	return p.buf.Len()
 }
@@ -46,7 +51,7 @@ func (p *Spanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 	if b, cnt := c.DecodeLastRune(); cnt > 0 {
 		// and already written something and the thing we are writing is not a space?
 		if p.Len() > 0 && !spaceLike(b) {
-			if p.psep != nil {
+			if p.psep == nil {
 				p.buf.WriteRune(' ')
 			} else {
 				p.buf.WriteString(*p.psep)

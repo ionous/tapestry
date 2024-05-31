@@ -22,11 +22,23 @@ func (op *PrintWords) Execute(run rt.Runtime) error {
 }
 
 func (op *PrintWords) GetText(run rt.Runtime) (ret rt.Value, err error) {
-	var span print.Spanner
-	if v, e := writeSpan(run, &span, op.Exe, span.ChunkOutput()); e != nil {
+	if span, e := op.getSpanner(run); e != nil {
+		err = cmdError(op, e)
+	} else if v, e := writeSpan(run, span, op.Exe, span.ChunkOutput()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
+	}
+	return
+}
+
+func (op *PrintWords) getSpanner(run rt.Runtime) (ret *print.Spanner, err error) {
+	if op.Separator == nil {
+		ret = print.NewSpanner()
+	} else if sep, e := op.Separator.GetText(run); e != nil {
+		err = e
+	} else {
+		ret = print.NewSeparator(sep.String())
 	}
 	return
 }
