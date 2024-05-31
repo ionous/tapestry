@@ -144,6 +144,11 @@ func readFlow(spec specData, msg compact.Message, slots []string) (ret flowData,
 			}
 		}
 	}
+	if err != nil {
+		if pos, ok := msg.Markup["pos"].([]int); ok {
+			err = fmt.Errorf("%w at line %d col %d", err, pos[1], pos[0])
+		}
+	}
 	return
 }
 

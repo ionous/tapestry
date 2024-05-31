@@ -30,7 +30,7 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 		flag.Usage()
 		log.Fatal(e)
 	} else if groups, e := readGroups(inPath); e != nil {
-		err = fmt.Errorf("%w trying to read groups from %s", e, inPath)
+		err = fmt.Errorf("%w trying to read from %s", e, inPath)
 	} else if g, e := generate.MakeGenerator(groups); e != nil {
 		err = fmt.Errorf("%w trying to generate groups", e)
 	} else {
