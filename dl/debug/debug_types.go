@@ -169,7 +169,7 @@ func (op *Fabricate_Slice) Repeats() bool {
 }
 
 // Print a message that is useful during development.
-// It will not be visible to players in a final game.
+// It will be hidden from players in the final game.
 type DebugLog struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment
@@ -347,7 +347,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Print a message that is useful during development.", "It will not be visible to players in a final game."},
+			"comment": []interface{}{"Print a message that is useful during development.", "It will be hidden from players in the final game."},
 		},
 	}
 }

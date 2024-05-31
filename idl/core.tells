@@ -1,59 +1,66 @@
-# core
+# Commands for scripting runtime behavior.
 Spec:with group:
   - "core"
   - Group contains:
-      - # Returns true if all of the evaluations are true.
+      - # Test if a set of conditions all return true.
+        # Stops testing after the first condition fails.
         Spec:slots:groups:with flow:
           - "all_true"
           - "bool_eval"
           - "logic"
           - Flow uses:
-              - Term:name:type:repeats:
+              - # One or more conditions to test.
+                Term:name:type:repeats:
                   - "_"
                   - "test"
                   - "bool_eval"
                   - true
-      - # Returns true.
+      - # Return true; always.
         Spec:slots:groups:with flow:
           - "always"
           - "bool_eval"
           - "logic"
           - Flow uses: []
-      - # Returns true if any of the evaluations are true.
+      - # Test if any condition in a set of conditions returns true.
+        # Stops testing after the first condition succeeds.
         Spec:slots:groups:with flow:
           - "any_true"
           - "bool_eval"
           - "logic"
           - Flow uses:
-              - Term:name:type:repeats:
+              - # One or more conditions to test.
+                Term:name:type:repeats:
                   - "_"
                   - "test"
                   - "bool_eval"
                   - true
-      - # Add a single blank line following some text.
+      - # Add a single blank line, unless a blank line was just written.
+        # See also <p> in package markup.
         Spec:slots:groups:with flow:
-          - "blankline"
+          - "paragraph_break"
           - "execute"
           - "printing"
-          - Flow:uses:
-              - "p"
-              - []
-      - # Sandwiches text printed during a block and puts them inside parenthesis '()'.
+          - Flow uses: []
+      - # Collect printed text and surrounds the output with parenthesis '()'.
+        # If no text is printed, no parentheses are printed.
         Spec:slots:groups:with flow:
-          - "bracket_text"
-          - "text_eval"
+          - "print_parens"
+          - ["text_eval", "execute"]
           - "printing"
           - Flow:uses:
-              - "brackets"
-              - - Term:name:type:repeats:
-                    - "do"
+              - "print"
+              - - # Runs one or more statements, and collects any text printed by them.
+                  Term:name:type:repeats:
+                    - "parentheses"
                     - "exe"
                     - "execute"
                     - true
-      - # Helper for choose action.
+
+      - # Helper for the else statements of [ChooseBranch].
         Spec:with slot:
           - "brancher"
           - Slot:
+
       - # In a repeating loop, exit the loop;
         # or, in a rule, stop processing rules.
         Spec:slots:groups:with flow:
@@ -61,17 +68,7 @@ Spec:with group:
           - "execute"
           - "flow"
           - Flow uses: []
-      - Spec:slots:groups:with flow:
-          - "buffer_text"
-          - "text_eval"
-          - "printing"
-          - Flow:uses:
-              - "buffers"
-              - - Term:name:type:repeats:
-                    - "do"
-                    - "exe"
-                    - "execute"
-                    - true
+
       - # Runtime version of cycle_text.
         internal: true
         Spec:slots:with flow:
@@ -125,6 +122,7 @@ Spec:with group:
                     - "text_eval"
                     - true
       - # Runtime version of count_of.
+        # A guard which returns true based on a counter.
         internal: true
         Spec:slots:with flow:
           - "call_trigger"
@@ -141,18 +139,18 @@ Spec:with group:
                 - Term:type:
                     - "num"
                     - "num_eval"
-      - # Returns new text, with the first letter turned into uppercase.
+      - # Return a copy of some text with its first letter changed to uppercase.
         Spec:slots:groups:with flow:
           - "capitalize"
           - "text_eval"
           - "format"
           - Flow uses:
-              - Term:name:type:
+              - # The text to capitalize.
+                Term:name:type:
                   - "_"
                   - "text"
                   - "text_eval"
       - # An if statement.
-        # The provided local fields are evaluated before the if test itself.
         Spec:slots:groups:with flow:
           - "choose_branch"
           - - "execute"
@@ -160,83 +158,111 @@ Spec:with group:
           - "misc"
           - Flow:uses:
               - "if"
-              - - Term:name:type:
+              - - # The condition to test.
+                  Term:name:type:
                     - "_"
-                    - "if"
+                    - "condition"
                     - "bool_eval"
-                - Term:name:type:optional:repeats:
+                - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+                  Term:name:type:optional:repeats:
                     - "assuming"
                     - "args"
                     - "arg"
                     - true
                     - true
-                - Term:name:type:repeats:
+                - # Statements which run when the condition succeeded.
+                  Term:name:type:repeats:
                     - "do"
                     - "exe"
                     - "execute"
                     - true
-                - Term:type:optional:
+                - # An optional set of statements to evaluate when the condition failed.
+                  Term:type:optional:
                     - "else"
                     - "brancher"
                     - true
-      - Spec:slots:groups:with flow:
+      - # Run a set of statements after a condition has failed.
+        Spec:slots:groups:with flow:
           - "choose_nothing_else"
           - "brancher"
           - "misc"
           - Flow:uses:
               - "finally"
-              - - Term:name:type:repeats:
+              - - # One or more statements to run.
+                  Term:name:type:repeats:
                     - "do"
                     - "exe"
                     - "execute"
                     - true
-      - # Pick one of two numbers based on a boolean test.
+      - # Pick one of two possible text values based on a condition.
+        # ( This acts similar to a ternary. )
         Spec:slots:groups:with flow:
           - "choose_num"
           - "num_eval"
           - "math"
           - Flow:uses:
               - "num"
-              - - Term:type:
+              - - # The condition to test.
+                  Term:type:
                     - "if"
                     - "bool_eval"
-                - Term:name:type:
+                - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+                  Term:name:type:optional:repeats:
+                    - "assuming"
+                    - "args"
+                    - "arg"
+                    - true
+                    - true
+                - # The number to use if the condition succeeds.
+                  Term:name:type:
                     - "then"
                     - "true"
                     - "num_eval"
-                - Term:name:type:optional:
+                - # The number to use if the condition fails.
+                  Term:name:type:optional:
                     - "else"
                     - "false"
                     - "num_eval"
                     - true
-      - # Pick one of two strings based on a boolean test.
+      - # Pick one of two possible text values based on a condition.
+        # ( This acts similar to a ternary. )
         Spec:slots:groups:with flow:
           - "choose_text"
           - "text_eval"
           - "format"
           - Flow:uses:
-              - "txt"
-              - - Term:type:
+              - "text"
+              - - # The condition to test.
+                  Term:type:
                     - "if"
                     - "bool_eval"
-                - Term:name:type:
+                - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+                  Term:name:type:optional:repeats:
+                    - "assuming"
+                    - "args"
+                    - "arg"
+                    - true
+                    - true
+                - # The text value to use if the condition succeeds.
+                  Term:name:type:
                     - "then"
                     - "true"
                     - "text_eval"
-                - Term:name:type:optional:
+                - # The text value to use if the condition fails.
+                  Term:name:type:optional:
                     - "else"
                     - "false"
                     - "text_eval"
                     - true
       - # Separates words with commas, and 'and'.
         Spec:slots:groups:with flow:
-          - "comma_text"
-          - "text_eval"
+          - "print_commas"
+          - ["text_eval", "execute"]
           - "printing"
           - Flow:uses:
-              - "commas"
+              - "print"
               - - Term:name:type:repeats:
-                    - "do"
+                    - "commas"
                     - "exe"
                     - "execute"
                     - true
@@ -553,12 +579,10 @@ Spec:with group:
           - Flow uses: []
       - # Start a new line.
         Spec:slots:groups:with flow:
-          - "newline"
+          - "line_break"
           - "execute"
           - "printing"
-          - Flow:uses:
-              - "br"
-              - []
+          - Flow uses: []
       - # In a repeating loop, try the next iteration of the loop;
         # or, in a rule, continue to the next rule.
         Spec:slots:groups:with flow:
@@ -785,7 +809,8 @@ Spec:with group:
           - "text_eval"
           - "printing"
           - Flow uses:
-              - Term:name:type:repeats:
+              - # Runs one or more statements, and collects any text printed by them.
+                Term:name:type:repeats:
                   - "do"
                   - "exe"
                   - "execute"
@@ -796,7 +821,8 @@ Spec:with group:
           - "text_eval"
           - "printing"
           - Flow uses:
-              - Term:name:type:repeats:
+              - # Runs one or more statements, and collects any text printed by them.
+                Term:name:type:repeats:
                   - "do"
                   - "exe"
                   - "execute"
@@ -812,19 +838,8 @@ Spec:with group:
                     - "of"
                     - "text"
                     - "text_eval"
-      - # Separates words with left-leaning slashes '/'.
-        Spec:slots:groups:with flow:
-          - "slash_text"
-          - "text_eval"
-          - "printing"
-          - Flow:uses:
-              - "slashes"
-              - - Term:name:type:repeats:
-                    - "do"
-                    - "exe"
-                    - "execute"
-                    - true
-      - # Start a new line ( if not already at a new line. ).
+
+      - # Start a new line ( if not already at a new line ).
         Spec:slots:groups:with flow:
           - "softline"
           - "execute"
@@ -832,15 +847,21 @@ Spec:with group:
           - Flow:uses:
               - "wbr"
               - []
-      - # Writes text with spaces between words.
+      - # Writes text, by default putting spaces between words.
         Spec:slots:groups:with flow:
-          - "span_text"
-          - "text_eval"
+          - "print_words"
+          - ["execute", "text_eval"]
           - "printing"
           - Flow:uses:
-              - "spaces"
-              - - Term:name:type:repeats:
-                    - "do"
+              - "print"
+              - - # Optional text to place between adjoining words.
+                  Term:type:optional:
+                    - "separator"
+                    - "text_eval"
+                    - true
+                - # Runs one or more statements, and collects any text printed by them.
+                  Term:name:type:repeats:
+                    - "words"
                     - "exe"
                     - "execute"
                     - true
@@ -860,24 +881,31 @@ Spec:with group:
                     - "b"
                     - "num_eval"
       - # Helper for counting values.
+        internal: true
         Spec:with slot:
           - "trigger"
           - Slot:
-      - Spec:slots:groups:with flow:
+      - # call_trigger
+        internal: true
+        Spec:slots:groups:with flow:
           - "trigger_cycle"
           - "trigger"
           - "comparison"
           - Flow:uses:
               - "every"
               - []
-      - Spec:slots:groups:with flow:
+      - # call_trigger
+        internal: true
+        Spec:slots:groups:with flow:
           - "trigger_once"
           - "trigger"
           - "comparison"
           - Flow:uses:
               - "at"
               - []
-      - Spec:slots:groups:with flow:
+      - # call_trigger
+        internal: true
+        Spec:slots:groups:with flow:
           - "trigger_switch"
           - "trigger"
           - "comparison"

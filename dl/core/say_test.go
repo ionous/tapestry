@@ -27,7 +27,7 @@ func ExampleSpan() {
 func ExampleBracket() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &BracketText{Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &PrintParens{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -47,7 +47,7 @@ func ExampleSlash() {
 func ExampleCommas() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &CommaText{Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &PrintCommas{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:

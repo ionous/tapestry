@@ -93,22 +93,21 @@
                               - "greater_than"
                               - 1
                       - - Print: "a few shapely trigons"
-          - - Print:
-                Spaces do:
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "apple"
-                        - "pen"
-                        - "triangle-1"
-                        - "triangle-2"
-                  - Print: ";"
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "apple"
-                        - "pen"
-                        - "triangle-1"
+          - - Print words:
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "apple"
+                      - "pen"
+                      - "triangle-1"
+                      - "triangle-2"
+                - Print: ";"
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "apple"
+                      - "pen"
+                      - "triangle-1"
             - Expect text: "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
       - #
         Define test:scene:do:
@@ -134,20 +133,19 @@
                                 - "grouping"
                                 - - AtField: "hide objects"
                             - FromBool: true
-          - - Print:
-                Spaces do:
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "apple"
-                        - "pen"
-                        - "triangle-1"
-                        - "triangle-2"
-                  - Print: ";"
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "apple"
+          - - Print words:
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "apple"
+                      - "pen"
+                      - "triangle-1"
+                      - "triangle-2"
+                - Print: ";"
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "apple"
             - Expect text: "Clarence and some things; Clarence and an empire apple"
       - #
         Define test:scene:do:
@@ -188,24 +186,23 @@
                           - "@obj"
                           - "scrabble tiles"
                       - - Say: "{.obj}"
-          - - Print:
-                Spaces do:
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "x"
-                        - "w"
-                        - "f"
-                        - "y"
-                        - "z"
-                  - Print: ";"
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "x"
-                        - "w"
-                        - "f"
-                        - "y"
-                        - "z"
+          - - Print words:
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "x"
+                      - "w"
+                      - "f"
+                      - "y"
+                      - "z"
+                - Print: ";"
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "x"
+                      - "w"
+                      - "f"
+                      - "y"
+                      - "z"
             - Expect text: "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
       - #
         Define test:scene:do:
@@ -278,22 +275,21 @@
                                 - "grouping"
                                 - - AtField: "label"
                             - FromText: "things"
-          - - Print:
-                Spaces do:
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "apple"
-                        - "pen"
-                        - "triangle-1"
-                  - Print: ";"
-                  - PrintInlineObjects objs:
-                      FromTextList:
-                        - "Clarence"
-                        - "apple"
-                        - "pen"
-                        - "triangle-1"
-                        - "triangle-2"
+          - - Print words:
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "apple"
+                      - "pen"
+                      - "triangle-1"
+                - Print: ";"
+                - PrintInlineObjects objs:
+                    FromTextList:
+                      - "Clarence"
+                      - "apple"
+                      - "pen"
+                      - "triangle-1"
+                      - "triangle-2"
             - Expect text: "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
     - - # do nothing
         Continue:

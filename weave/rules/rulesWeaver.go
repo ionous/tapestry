@@ -21,8 +21,8 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 	// better might be to *extract* user booleans and put them into this filter list.
 	if len(filters) > 0 {
 		exe = []rt.Execute{&core.ChooseBranch{
-			If:  &core.AllTrue{Test: filters},
-			Exe: exe,
+			Condition: &core.AllTrue{Test: filters},
+			Exe:       exe,
 		}}
 	}
 	//

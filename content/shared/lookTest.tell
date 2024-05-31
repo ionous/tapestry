@@ -9,8 +9,7 @@
               - "kitchen"
               - "shelf"
           - "src"
-          - - Print:
-                Commas do:
+          - - Print commas:
                   - Repeating across:as:do:
                       - FromTextList:
                           TransparentList obj:

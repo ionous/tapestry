@@ -100,7 +100,7 @@ func (op *ChooseBranch) eval(run rt.Runtime, pushed *int) (matched bool, err err
 			run.PushScope(scope.NewPairs(ks, vs))
 			*pushed++
 		}
-		if b, e := safe.GetBool(run, op.If); e != nil {
+		if b, e := safe.GetBool(run, op.Condition); e != nil {
 			err = e
 		} else {
 			matched = b.Bool()

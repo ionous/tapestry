@@ -1,4 +1,4 @@
-// core
+// Commands for scripting runtime behavior.
 package core
 
 //
@@ -17,7 +17,7 @@ import (
 var Zt_Brancher = typeinfo.Slot{
 	Name: "brancher",
 	Markup: map[string]any{
-		"comment": "Helper for choose action.",
+		"comment": "Helper for the else statements of [ChooseBranch].",
 	},
 }
 
@@ -71,7 +71,8 @@ func (op *Trigger_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns true if all of the evaluations are true.
+// Test if a set of conditions all return true.
+// Stops testing after the first condition fails.
 type AllTrue struct {
 	Test   []rtti.BoolEval
 	Markup map[string]any
@@ -109,7 +110,7 @@ func (op *AllTrue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns true.
+// Return true; always.
 type Always struct {
 	Markup map[string]any
 }
@@ -146,7 +147,8 @@ func (op *Always_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns true if any of the evaluations are true.
+// Test if any condition in a set of conditions returns true.
+// Stops testing after the first condition succeeds.
 type AnyTrue struct {
 	Test   []rtti.BoolEval
 	Markup map[string]any
@@ -184,21 +186,22 @@ func (op *AnyTrue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Add a single blank line following some text.
-type Blankline struct {
+// Add a single blank line, unless a blank line was just written.
+// See also <p> in package markup.
+type ParagraphBreak struct {
 	Markup map[string]any
 }
 
-// blankline, a type of flow.
-var Zt_Blankline typeinfo.Flow
+// paragraph_break, a type of flow.
+var Zt_ParagraphBreak typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*Blankline) TypeInfo() typeinfo.T {
-	return &Zt_Blankline
+func (*ParagraphBreak) TypeInfo() typeinfo.T {
+	return &Zt_ParagraphBreak
 }
 
 // Implements [typeinfo.Markup]
-func (op *Blankline) GetMarkup(ensure bool) map[string]any {
+func (op *ParagraphBreak) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -206,37 +209,38 @@ func (op *Blankline) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.Execute = (*Blankline)(nil)
+var _ rtti.Execute = (*ParagraphBreak)(nil)
 
-// Holds a slice of type Blankline.
-type Blankline_Slice []Blankline
+// Holds a slice of type ParagraphBreak.
+type ParagraphBreak_Slice []ParagraphBreak
 
-// Implements [typeinfo.Instance] for a slice of Blankline.
-func (*Blankline_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Blankline
+// Implements [typeinfo.Instance] for a slice of ParagraphBreak.
+func (*ParagraphBreak_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ParagraphBreak
 }
 
-// Implements [typeinfo.Repeats] for a slice of Blankline.
-func (op *Blankline_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ParagraphBreak.
+func (op *ParagraphBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Sandwiches text printed during a block and puts them inside parenthesis '()'.
-type BracketText struct {
+// Collect printed text and surrounds the output with parenthesis '()'.
+// If no text is printed, no parentheses are printed.
+type PrintParens struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
-// bracket_text, a type of flow.
-var Zt_BracketText typeinfo.Flow
+// print_parens, a type of flow.
+var Zt_PrintParens typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*BracketText) TypeInfo() typeinfo.T {
-	return &Zt_BracketText
+func (*PrintParens) TypeInfo() typeinfo.T {
+	return &Zt_PrintParens
 }
 
 // Implements [typeinfo.Markup]
-func (op *BracketText) GetMarkup(ensure bool) map[string]any {
+func (op *PrintParens) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -244,18 +248,19 @@ func (op *BracketText) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*BracketText)(nil)
+var _ rtti.TextEval = (*PrintParens)(nil)
+var _ rtti.Execute = (*PrintParens)(nil)
 
-// Holds a slice of type BracketText.
-type BracketText_Slice []BracketText
+// Holds a slice of type PrintParens.
+type PrintParens_Slice []PrintParens
 
-// Implements [typeinfo.Instance] for a slice of BracketText.
-func (*BracketText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_BracketText
+// Implements [typeinfo.Instance] for a slice of PrintParens.
+func (*PrintParens_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintParens
 }
 
-// Implements [typeinfo.Repeats] for a slice of BracketText.
-func (op *BracketText_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintParens.
+func (op *PrintParens_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -294,43 +299,6 @@ func (*Break_Slice) TypeInfo() typeinfo.T {
 
 // Implements [typeinfo.Repeats] for a slice of Break.
 func (op *Break_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-type BufferText struct {
-	Exe    []rtti.Execute
-	Markup map[string]any
-}
-
-// buffer_text, a type of flow.
-var Zt_BufferText typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*BufferText) TypeInfo() typeinfo.T {
-	return &Zt_BufferText
-}
-
-// Implements [typeinfo.Markup]
-func (op *BufferText) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*BufferText)(nil)
-
-// Holds a slice of type BufferText.
-type BufferText_Slice []BufferText
-
-// Implements [typeinfo.Instance] for a slice of BufferText.
-func (*BufferText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_BufferText
-}
-
-// Implements [typeinfo.Repeats] for a slice of BufferText.
-func (op *BufferText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -492,7 +460,7 @@ func (op *CallTrigger_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns new text, with the first letter turned into uppercase.
+// Return a copy of some text with its first letter changed to uppercase.
 type Capitalize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -531,13 +499,12 @@ func (op *Capitalize_Slice) Repeats() bool {
 }
 
 // An if statement.
-// The provided local fields are evaluated before the if test itself.
 type ChooseBranch struct {
-	If     rtti.BoolEval
-	Args   []assign.Arg
-	Exe    []rtti.Execute
-	Else   Brancher
-	Markup map[string]any
+	Condition rtti.BoolEval
+	Args      []assign.Arg
+	Exe       []rtti.Execute
+	Else      Brancher
+	Markup    map[string]any
 }
 
 // choose_branch, a type of flow.
@@ -573,6 +540,7 @@ func (op *ChooseBranch_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Run a set of statements after a condition has failed.
 type ChooseNothingElse struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -610,9 +578,11 @@ func (op *ChooseNothingElse_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Pick one of two numbers based on a boolean test.
+// Pick one of two possible text values based on a condition.
+// ( This acts similar to a ternary. )
 type ChooseNum struct {
 	If     rtti.BoolEval
+	Args   []assign.Arg
 	True   rtti.NumEval
 	False  rtti.NumEval
 	Markup map[string]any
@@ -650,9 +620,11 @@ func (op *ChooseNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Pick one of two strings based on a boolean test.
+// Pick one of two possible text values based on a condition.
+// ( This acts similar to a ternary. )
 type ChooseText struct {
 	If     rtti.BoolEval
+	Args   []assign.Arg
 	True   rtti.TextEval
 	False  rtti.TextEval
 	Markup map[string]any
@@ -691,21 +663,21 @@ func (op *ChooseText_Slice) Repeats() bool {
 }
 
 // Separates words with commas, and 'and'.
-type CommaText struct {
+type PrintCommas struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
 }
 
-// comma_text, a type of flow.
-var Zt_CommaText typeinfo.Flow
+// print_commas, a type of flow.
+var Zt_PrintCommas typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*CommaText) TypeInfo() typeinfo.T {
-	return &Zt_CommaText
+func (*PrintCommas) TypeInfo() typeinfo.T {
+	return &Zt_PrintCommas
 }
 
 // Implements [typeinfo.Markup]
-func (op *CommaText) GetMarkup(ensure bool) map[string]any {
+func (op *PrintCommas) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -713,18 +685,19 @@ func (op *CommaText) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*CommaText)(nil)
+var _ rtti.TextEval = (*PrintCommas)(nil)
+var _ rtti.Execute = (*PrintCommas)(nil)
 
-// Holds a slice of type CommaText.
-type CommaText_Slice []CommaText
+// Holds a slice of type PrintCommas.
+type PrintCommas_Slice []PrintCommas
 
-// Implements [typeinfo.Instance] for a slice of CommaText.
-func (*CommaText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CommaText
+// Implements [typeinfo.Instance] for a slice of PrintCommas.
+func (*PrintCommas_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintCommas
 }
 
-// Implements [typeinfo.Repeats] for a slice of CommaText.
-func (op *CommaText_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintCommas.
+func (op *PrintCommas_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -1580,20 +1553,20 @@ func (op *Never_Slice) Repeats() bool {
 }
 
 // Start a new line.
-type Newline struct {
+type LineBreak struct {
 	Markup map[string]any
 }
 
-// newline, a type of flow.
-var Zt_Newline typeinfo.Flow
+// line_break, a type of flow.
+var Zt_LineBreak typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*Newline) TypeInfo() typeinfo.T {
-	return &Zt_Newline
+func (*LineBreak) TypeInfo() typeinfo.T {
+	return &Zt_LineBreak
 }
 
 // Implements [typeinfo.Markup]
-func (op *Newline) GetMarkup(ensure bool) map[string]any {
+func (op *LineBreak) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -1601,18 +1574,18 @@ func (op *Newline) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.Execute = (*Newline)(nil)
+var _ rtti.Execute = (*LineBreak)(nil)
 
-// Holds a slice of type Newline.
-type Newline_Slice []Newline
+// Holds a slice of type LineBreak.
+type LineBreak_Slice []LineBreak
 
-// Implements [typeinfo.Instance] for a slice of Newline.
-func (*Newline_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Newline
+// Implements [typeinfo.Instance] for a slice of LineBreak.
+func (*LineBreak_Slice) TypeInfo() typeinfo.T {
+	return &Zt_LineBreak
 }
 
-// Implements [typeinfo.Repeats] for a slice of Newline.
-func (op *Newline_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of LineBreak.
+func (op *LineBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2319,45 +2292,7 @@ func (op *Singularize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Separates words with left-leaning slashes '/'.
-type SlashText struct {
-	Exe    []rtti.Execute
-	Markup map[string]any
-}
-
-// slash_text, a type of flow.
-var Zt_SlashText typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*SlashText) TypeInfo() typeinfo.T {
-	return &Zt_SlashText
-}
-
-// Implements [typeinfo.Markup]
-func (op *SlashText) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*SlashText)(nil)
-
-// Holds a slice of type SlashText.
-type SlashText_Slice []SlashText
-
-// Implements [typeinfo.Instance] for a slice of SlashText.
-func (*SlashText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_SlashText
-}
-
-// Implements [typeinfo.Repeats] for a slice of SlashText.
-func (op *SlashText_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Start a new line ( if not already at a new line. ).
+// Start a new line ( if not already at a new line ).
 type Softline struct {
 	Markup map[string]any
 }
@@ -2394,22 +2329,23 @@ func (op *Softline_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Writes text with spaces between words.
-type SpanText struct {
-	Exe    []rtti.Execute
-	Markup map[string]any
+// Writes text, by default putting spaces between words.
+type PrintWords struct {
+	Separator rtti.TextEval
+	Exe       []rtti.Execute
+	Markup    map[string]any
 }
 
-// span_text, a type of flow.
-var Zt_SpanText typeinfo.Flow
+// print_words, a type of flow.
+var Zt_PrintWords typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*SpanText) TypeInfo() typeinfo.T {
-	return &Zt_SpanText
+func (*PrintWords) TypeInfo() typeinfo.T {
+	return &Zt_PrintWords
 }
 
 // Implements [typeinfo.Markup]
-func (op *SpanText) GetMarkup(ensure bool) map[string]any {
+func (op *PrintWords) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -2417,18 +2353,19 @@ func (op *SpanText) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*SpanText)(nil)
+var _ rtti.Execute = (*PrintWords)(nil)
+var _ rtti.TextEval = (*PrintWords)(nil)
 
-// Holds a slice of type SpanText.
-type SpanText_Slice []SpanText
+// Holds a slice of type PrintWords.
+type PrintWords_Slice []PrintWords
 
-// Implements [typeinfo.Instance] for a slice of SpanText.
-func (*SpanText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_SpanText
+// Implements [typeinfo.Instance] for a slice of PrintWords.
+func (*PrintWords_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintWords
 }
 
-// Implements [typeinfo.Repeats] for a slice of SpanText.
-func (op *SpanText_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintWords.
+func (op *PrintWords_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2669,13 +2606,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "test",
 			Repeats: true,
-			Type:    &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "One or more conditions to test.",
+			},
+			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns true if all of the evaluations are true.",
+			"comment": []interface{}{"Test if a set of conditions all return true.", "Stops testing after the first condition fails."},
 		},
 	}
 	Zt_Always = typeinfo.Flow{
@@ -2686,7 +2626,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns true.",
+			"comment": "Return true; always.",
 		},
 	}
 	Zt_AnyTrue = typeinfo.Flow{
@@ -2695,40 +2635,47 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "test",
 			Repeats: true,
-			Type:    &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "One or more conditions to test.",
+			},
+			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns true if any of the evaluations are true.",
+			"comment": []interface{}{"Test if any condition in a set of conditions returns true.", "Stops testing after the first condition succeeds."},
 		},
 	}
-	Zt_Blankline = typeinfo.Flow{
-		Name:  "blankline",
-		Lede:  "p",
+	Zt_ParagraphBreak = typeinfo.Flow{
+		Name:  "paragraph_break",
+		Lede:  "paragraph_break",
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Add a single blank line following some text.",
+			"comment": []interface{}{"Add a single blank line, unless a blank line was just written.", "See also <p> in package markup."},
 		},
 	}
-	Zt_BracketText = typeinfo.Flow{
-		Name: "bracket_text",
-		Lede: "brackets",
+	Zt_PrintParens = typeinfo.Flow{
+		Name: "print_parens",
+		Lede: "print",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "do",
+			Label:   "parentheses",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "Runs one or more statements, and collects any text printed by them.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
+			"comment": []interface{}{"Collect printed text and surrounds the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
 		},
 	}
 	Zt_Break = typeinfo.Flow{
@@ -2740,19 +2687,6 @@ func init() {
 		},
 		Markup: map[string]any{
 			"comment": []interface{}{"In a repeating loop, exit the loop;", "or, in a rule, stop processing rules."},
-		},
-	}
-	Zt_BufferText = typeinfo.Flow{
-		Name: "buffer_text",
-		Lede: "buffers",
-		Terms: []typeinfo.Term{{
-			Name:    "exe",
-			Label:   "do",
-			Repeats: true,
-			Type:    &rtti.Zt_Execute,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
 		},
 	}
 	Zt_CallCycle = typeinfo.Flow{
@@ -2847,44 +2781,59 @@ func init() {
 		Lede: "capitalize",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to capitalize.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns new text, with the first letter turned into uppercase.",
+			"comment": "Return a copy of some text with its first letter changed to uppercase.",
 		},
 	}
 	Zt_ChooseBranch = typeinfo.Flow{
 		Name: "choose_branch",
 		Lede: "if",
 		Terms: []typeinfo.Term{{
-			Name: "if",
+			Name: "condition",
+			Markup: map[string]any{
+				"comment": "The condition to test.",
+			},
 			Type: &rtti.Zt_BoolEval,
 		}, {
 			Name:     "args",
 			Label:    "assuming",
 			Optional: true,
 			Repeats:  true,
-			Type:     &assign.Zt_Arg,
+			Markup: map[string]any{
+				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
+			},
+			Type: &assign.Zt_Arg,
 		}, {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "Statements which run when the condition succeeded.",
+			},
+			Type: &rtti.Zt_Execute,
 		}, {
 			Name:     "else",
 			Label:    "else",
 			Optional: true,
-			Type:     &Zt_Brancher,
+			Markup: map[string]any{
+				"comment": "An optional set of statements to evaluate when the condition failed.",
+			},
+			Type: &Zt_Brancher,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 			&Zt_Brancher,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"An if statement.", "The provided local fields are evaluated before the if test itself."},
+			"comment": "An if statement.",
 		},
 	}
 	Zt_ChooseNothingElse = typeinfo.Flow{
@@ -2894,10 +2843,16 @@ func init() {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "One or more statements to run.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_Brancher,
+		},
+		Markup: map[string]any{
+			"comment": "Run a set of statements after a condition has failed.",
 		},
 	}
 	Zt_ChooseNum = typeinfo.Flow{
@@ -2906,59 +2861,96 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "if",
 			Label: "if",
-			Type:  &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "The condition to test.",
+			},
+			Type: &rtti.Zt_BoolEval,
+		}, {
+			Name:     "args",
+			Label:    "assuming",
+			Optional: true,
+			Repeats:  true,
+			Markup: map[string]any{
+				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
+			},
+			Type: &assign.Zt_Arg,
 		}, {
 			Name:  "true",
 			Label: "then",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The number to use if the condition succeeds.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:     "false",
 			Label:    "else",
 			Optional: true,
-			Type:     &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The number to use if the condition fails.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Pick one of two numbers based on a boolean test.",
+			"comment": []interface{}{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
 		},
 	}
 	Zt_ChooseText = typeinfo.Flow{
 		Name: "choose_text",
-		Lede: "txt",
+		Lede: "text",
 		Terms: []typeinfo.Term{{
 			Name:  "if",
 			Label: "if",
-			Type:  &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "The condition to test.",
+			},
+			Type: &rtti.Zt_BoolEval,
+		}, {
+			Name:     "args",
+			Label:    "assuming",
+			Optional: true,
+			Repeats:  true,
+			Markup: map[string]any{
+				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
+			},
+			Type: &assign.Zt_Arg,
 		}, {
 			Name:  "true",
 			Label: "then",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The text value to use if the condition succeeds.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "false",
 			Label:    "else",
 			Optional: true,
-			Type:     &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The text value to use if the condition fails.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Pick one of two strings based on a boolean test.",
+			"comment": []interface{}{"Pick one of two possible text values based on a condition.", "( This acts similar to a ternary. )"},
 		},
 	}
-	Zt_CommaText = typeinfo.Flow{
-		Name: "comma_text",
-		Lede: "commas",
+	Zt_PrintCommas = typeinfo.Flow{
+		Name: "print_commas",
+		Lede: "print",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
-			Label:   "do",
+			Label:   "commas",
 			Repeats: true,
 			Type:    &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
 			"comment": "Separates words with commas, and 'and'.",
@@ -3349,9 +3341,9 @@ func init() {
 			"comment": "Returns false.",
 		},
 	}
-	Zt_Newline = typeinfo.Flow{
-		Name:  "newline",
-		Lede:  "br",
+	Zt_LineBreak = typeinfo.Flow{
+		Name:  "line_break",
+		Lede:  "line_break",
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -3647,7 +3639,10 @@ func init() {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "Runs one or more statements, and collects any text printed by them.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -3663,7 +3658,10 @@ func init() {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "Runs one or more statements, and collects any text printed by them.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -3687,22 +3685,6 @@ func init() {
 			"comment": "Returns the singular form of a plural word. (ex. apple for apples ).",
 		},
 	}
-	Zt_SlashText = typeinfo.Flow{
-		Name: "slash_text",
-		Lede: "slashes",
-		Terms: []typeinfo.Term{{
-			Name:    "exe",
-			Label:   "do",
-			Repeats: true,
-			Type:    &rtti.Zt_Execute,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-		},
-		Markup: map[string]any{
-			"comment": "Separates words with left-leaning slashes '/'.",
-		},
-	}
 	Zt_Softline = typeinfo.Flow{
 		Name:  "softline",
 		Lede:  "wbr",
@@ -3711,23 +3693,35 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Start a new line ( if not already at a new line. ).",
+			"comment": "Start a new line ( if not already at a new line ).",
 		},
 	}
-	Zt_SpanText = typeinfo.Flow{
-		Name: "span_text",
-		Lede: "spaces",
+	Zt_PrintWords = typeinfo.Flow{
+		Name: "print_words",
+		Lede: "print",
 		Terms: []typeinfo.Term{{
+			Name:     "separator",
+			Label:    "separator",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "Optional text to place between adjoining words.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
 			Name:    "exe",
-			Label:   "do",
+			Label:   "words",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "Runs one or more statements, and collects any text printed by them.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Writes text with spaces between words.",
+			"comment": "Writes text, by default putting spaces between words.",
 		},
 	}
 	Zt_AddValue = typeinfo.Flow{
@@ -3797,7 +3791,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "core",
 	Comment: []string{
-		"core",
+		"Commands for scripting runtime behavior.",
 	},
 
 	Slot:       z_slot_list,
@@ -3819,10 +3813,9 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_AllTrue,
 	&Zt_Always,
 	&Zt_AnyTrue,
-	&Zt_Blankline,
-	&Zt_BracketText,
+	&Zt_ParagraphBreak,
+	&Zt_PrintParens,
 	&Zt_Break,
-	&Zt_BufferText,
 	&Zt_CallCycle,
 	&Zt_CallShuffle,
 	&Zt_CallTerminal,
@@ -3832,7 +3825,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ChooseNothingElse,
 	&Zt_ChooseNum,
 	&Zt_ChooseText,
-	&Zt_CommaText,
+	&Zt_PrintCommas,
 	&Zt_CompareValue,
 	&Zt_CompareNum,
 	&Zt_CompareText,
@@ -3855,7 +3848,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Matches,
 	&Zt_NameOf,
 	&Zt_Never,
-	&Zt_Newline,
+	&Zt_LineBreak,
 	&Zt_Continue,
 	&Zt_Not,
 	&Zt_ObjectTraits,
@@ -3874,9 +3867,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Row,
 	&Zt_Rows,
 	&Zt_Singularize,
-	&Zt_SlashText,
 	&Zt_Softline,
-	&Zt_SpanText,
+	&Zt_PrintWords,
 	&Zt_AddValue,
 	&Zt_TriggerCycle,
 	&Zt_TriggerOnce,
@@ -3899,12 +3891,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	1979437068831463006:  (*Always)(nil),            /* bool_eval=Always */
 	1963945852392897915:  (*AnyTrue)(nil),           /* bool_eval=AnyTrue: */
 	2233111806717201007:  (*TriggerOnce)(nil),       /* trigger=At */
-	15800853823523633295: (*Newline)(nil),           /* execute=Br */
-	8805770583889466012:  (*BracketText)(nil),       /* text_eval=Brackets do: */
 	9570569845423374482:  (*Break)(nil),             /* execute=Break */
-	11322251195672034522: (*BufferText)(nil),        /* text_eval=Buffers do: */
 	8695677004499439692:  (*Capitalize)(nil),        /* text_eval=Capitalize: */
-	18319016698864768677: (*CommaText)(nil),         /* text_eval=Commas do: */
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
 	3156233792812716886:  (*Continue)(nil),          /* execute=Continue */
 	2636120577324077328:  (*CallCycle)(nil),         /* text_eval=Cycle:over: */
@@ -3960,6 +3948,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7296079450764183372:  (*IsExactKindOf)(nil),     /* bool_eval=KindOf:isExactly: */
 	4254622167054960918:  (*KindOf)(nil),            /* text_eval=KindOf:nothing: */
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
+	10898429598193857104: (*LineBreak)(nil),         /* execute=LineBreak */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
 	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */
 	6501544922110637214:  (*ModValue)(nil),          /* num_eval=Mod:value: */
@@ -3967,13 +3956,23 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	15519818243985955688: (*NameOf)(nil),            /* text_eval=NameOf: */
 	1310533520550597035:  (*Never)(nil),             /* bool_eval=Never */
 	3572677870333466638:  (*Not)(nil),               /* bool_eval=Not: */
+	12220459187031741460: (*ChooseNum)(nil),         /* num_eval=Num if:assuming:then: */
+	2863639051637372837:  (*ChooseNum)(nil),         /* num_eval=Num if:assuming:then:else: */
 	9841785069654362751:  (*ChooseNum)(nil),         /* num_eval=Num if:then: */
 	2293377426593441548:  (*ChooseNum)(nil),         /* num_eval=Num if:then:else: */
 	18009133328614046007: (*PrintNumWord)(nil),      /* text_eval=Numeral words: */
 	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
 	15933580486837544843: (*ObjectTraits)(nil),      /* text_list_eval=Object traits: */
-	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
+	1194153657675604478:  (*ParagraphBreak)(nil),    /* execute=ParagraphBreak */
 	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
+	16169738297367022876: (*PrintCommas)(nil),       /* execute=Print commas: */
+	6231219704730380469:  (*PrintCommas)(nil),       /* text_eval=Print commas: */
+	4206645811149297220:  (*PrintParens)(nil),       /* execute=Print parentheses: */
+	8219093008786386363:  (*PrintParens)(nil),       /* text_eval=Print parentheses: */
+	4149419216708670664:  (*PrintWords)(nil),        /* execute=Print separator:words: */
+	4219359027975954467:  (*PrintWords)(nil),        /* text_eval=Print separator:words: */
+	1331651249232124175:  (*PrintWords)(nil),        /* execute=Print words: */
+	17978150574109115948: (*PrintWords)(nil),        /* text_eval=Print words: */
 	4512128922644282356:  (*PrintText)(nil),         /* execute=Print: */
 	16853421744116592875: (*While)(nil),             /* execute=Repeating:do: */
 	12963686195606417453: (*MakeReversed)(nil),      /* text_eval=Reverse text: */
@@ -3982,14 +3981,14 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10747671703915852065: (*MakeSentenceCase)(nil),  /* text_eval=Sentence: */
 	3632089819497852687:  (*CallShuffle)(nil),       /* text_eval=Shuffle:over: */
 	2397382738676796596:  (*Singularize)(nil),       /* text_eval=Singular of: */
-	13377280423859122588: (*SlashText)(nil),         /* text_eval=Slashes do: */
-	14637971099620461998: (*SpanText)(nil),          /* text_eval=Spaces do: */
 	10180508752412200934: (*CallTerminal)(nil),      /* text_eval=Stopping:over: */
 	17065007156382311204: (*SubtractValue)(nil),     /* num_eval=Subtract:value: */
+	4784360512497235820:  (*ChooseText)(nil),        /* text_eval=Text if:assuming:then: */
+	13980719859951632205: (*ChooseText)(nil),        /* text_eval=Text if:assuming:then:else: */
+	4706788097495762503:  (*ChooseText)(nil),        /* text_eval=Text if:then: */
+	12221021609112050372: (*ChooseText)(nil),        /* text_eval=Text if:then:else: */
 	10878271994667616824: (*MakeTitleCase)(nil),     /* text_eval=Title: */
 	2711869841453509536:  (*CallTrigger)(nil),       /* bool_eval=Trigger:on:num: */
-	9953804072544503126:  (*ChooseText)(nil),        /* text_eval=Txt if:then: */
-	5534583393866490763:  (*ChooseText)(nil),        /* text_eval=Txt if:then:else: */
 	5481656653805454214:  (*MakeUppercase)(nil),     /* text_eval=Upper: */
 	16612725309683107572: (*Softline)(nil),          /* execute=Wbr */
 }

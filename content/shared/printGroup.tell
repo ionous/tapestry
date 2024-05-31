@@ -34,19 +34,16 @@
                     Variable:dot:
                       - "grouping"
                       - - AtField: "hide size"
-                - - Print:
-                      Brackets do:
-                        - Print:
-                            Commas do:
-                              - Repeating across:as:do:
-                                  - FromTextList: "@objs"
-                                  - "obj"
-                                  - - PrintGroupedObject obj:grouping:
-                                        - FromText: "@obj"
-                                        - FromRecord: "@grouping"
+                - - Print parentheses:
+                      - Print commas:
+                          - Repeating across:as:do:
+                              - FromTextList: "@objs"
+                              - "obj"
+                              - - PrintGroupedObject obj:grouping:
+                                    - FromText: "@obj"
+                                    - FromRecord: "@grouping"
                 - Finally do:
-                    - Print:
-                        Commas do:
+                    - Print commas:
                           - Repeating across:as:do:
                               - FromTextList: "@objs"
                               - "obj"
@@ -86,14 +83,11 @@
                     Len:
                       FromTextList: "@objs"
                 - FromText:
-                    Txt if:then:else:
-                      - Variable:dot:
-                          - "grouping"
-                          - - AtField: "hide label"
+                    Text if:then:else:
+                      - "@grouping.hide_label"
                       - ""
-                      - Variable:dot:
-                          - "grouping"
-                          - - AtField: "label"
+                      - "@grouping.label"
+
 - Define rule:named:do:
     - "print group"
     - "ungrouped objects"

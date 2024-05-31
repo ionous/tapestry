@@ -70,5 +70,5 @@
     - "Print news of light"
     - - Nothing:
     - - Nothing:
-    - - P:
+    - - ParagraphBreak:
       - PrintVantage:

@@ -10,14 +10,13 @@
       - Num: "group size"
       - Text: "label"
     - - Nothing:
-    - - Print:
-          Spaces do:
-            - Say: "{print_num_word: .group_size}"
-            - If:do:else:
-                - Is empty: "@label"
-                - - Say: "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
-                - Finally do:
-                    - Say: "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
+    - - Print words:
+          - Say: "{print_num_word: .group_size}"
+          - If:do:else:
+              - Is empty: "@label"
+              - - Say: "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
+              - Finally do:
+                  - Say: "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
 - #
   Define test:scene:do:
     - "print several"

@@ -30,28 +30,28 @@
 - Define test:do:
     - "vowel tests"
     - - Print:
-          Txt if:then:else:
+          Text if:then:else:
             - StartsWithVowel text:
                 FromText: "house"
             - "error: house doesn't start with a vowel."
             - "ok."
       - Expect text: "ok."
       - Print:
-          Txt if:then:else:
+          Text if:then:else:
             - StartsWithVowel text:
                 FromText: "hour"
             - "ok."
             - "error: hour starts with a vowel sound."
       - Expect text: "ok."
       - Print:
-          Txt if:then:else:
+          Text if:then:else:
             - StartsWithVowel text:
                 FromText: "beta"
             - "error: beta doesn't start with a vowel."
             - "ok."
       - Expect text: "ok."
       - Print:
-          Txt if:then:else:
+          Text if:then:else:
             - StartsWithVowel text:
                 FromText: "alpha"
             - "ok."

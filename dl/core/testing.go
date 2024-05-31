@@ -25,8 +25,8 @@ func MakeRule(filter rt.BoolEval, exe ...rt.Execute) (ret rt.Rule) {
 	} else {
 		ret = rt.Rule{Exe: []rt.Execute{
 			&ChooseBranch{
-				If:  filter,
-				Exe: exe,
+				Condition: filter,
+				Exe:       exe,
 			}}}
 	}
 	return

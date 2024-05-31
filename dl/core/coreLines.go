@@ -6,12 +6,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-func (op *Blankline) Execute(run rt.Runtime) (_ error) {
+func (op *ParagraphBreak) Execute(run rt.Runtime) (_ error) {
 	io.WriteString(run.Writer(), "<p>")
 	return
 }
 
-func (op *Newline) Execute(run rt.Runtime) (_ error) {
+func (op *LineBreak) Execute(run rt.Runtime) (_ error) {
 	io.WriteString(run.Writer(), "<br>")
 	return
 }

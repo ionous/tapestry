@@ -167,12 +167,11 @@
                       - # uses 'spaces' to join multiple pieces of text
                         # ( because print response only allows a single text return.
                         # tbd: maybe it'd make more sense for print to take repeated elements and space them automatically.
-                        Spaces do:
+                        Print words:
                           - Say: "{We!|capitalize!} open {the: .noun} revealing"
-                          - Print:
-                              Commas do:
-                                - Repeating across:as:do:
-                                    - FromTextList: "@concealed_items"
-                                    - "item"
-                                    - - Say: "{the: .item}"
+                          - Print commas:
+                              - Repeating across:as:do:
+                                  - FromTextList: "@concealed_items"
+                                  - "item"
+                                  - - Say: "{the: .item}"
                           - Print: "."

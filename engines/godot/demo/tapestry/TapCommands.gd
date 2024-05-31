@@ -29,7 +29,7 @@ func Fabricate(input: String) -> Dictionary:
 # ---------------------------------------------------
 const StoryTitle =	{
 	"FromText:": {
-		"Object:field:": ["story", "title"]
+		"Object:dot:": ["story", "title"]
 	}
 }
 
@@ -41,7 +41,7 @@ const PlayerLocation = {
 				"Arg:from:": [
 					"obj", {
 						"FromText:": {
-						"Object:field:": ["story", "actor"]
+						"Object:dot:": ["story", "actor"]
 					}
 				}
 			]}
@@ -61,20 +61,20 @@ const CurrentObjects = {
 
 # --------------------------------------------------
 const CurrentScore = {
-	"FromNumber:": {
+	"FrmoNum:": {
 	"Num if:then:else:": [
 		{ "Is domain:": "scoring" },
-		{"Object:field:": ["story", "score"]},
+		{"Object:dot:": ["story", "score"]},
 		-1
 	]}
 }
 
 # --------------------------------------------------
 const CurrentTurn = {
-	"FromNumber:": {
+	"FrmoNum:": {
 		"Num if:then:else:": [
 			{ "Is domain:": "scoring" },
-			{"Object:field:": ["story", "turn count"]},
+			{"Object:dot:": ["story", "turn count"]},
 			-1
 		]
 	}
@@ -87,15 +87,13 @@ const CurrentTurn = {
 # and, if possible, get rid of From(s)
 const LocationName = {
 	"FromText:": {
-		"Buffers do:": {
-			"Determine:args:": [
-				"print_name", {
-					"Arg:from:": [
-					"obj",	PlayerLocation
-					]
-				}
-			]
-		}
+		"Determine:args:": [
+			"print_name", {
+				"Arg:from:": [
+				"obj",	PlayerLocation
+				]
+			}
+		]
 	}
 }
 

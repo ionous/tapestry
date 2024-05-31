@@ -58,10 +58,9 @@
                 - Finally do:
                     - Say response:with:
                         - "player searches storage"
-                        - Spaces do:
+                        - Print words:
                             - Say: "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                            - Print:
-                                Commas do:
+                            - Print commas:
                                   - Repeating across:as:do:
                                       - FromTextList: "@items"
                                       - "item"

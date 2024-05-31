@@ -3,17 +3,15 @@
     - "print inline objects"
     - - TextList: "objs"
     - - Nothing:
-    - - Print:
-          Commas do:
-            - Repeating across:as:do:
-                - FromRecordList:
-                    MakeGroups objs:
-                      FromTextList: "@objs"
-                - "group"
-                - - Print:
-                      Spaces do:
-                        - PrintGroup group:
-                            FromRecord: "@group"
+    - - Print commas:
+          - Repeating across:as:do:
+              - FromRecordList:
+                  MakeGroups objs:
+                    FromTextList: "@objs"
+              - "group"
+              - - Print words:
+                    - PrintGroup group:
+                        FromRecord: "@group"
 - #
   Define pattern:requires:provides:do:
     - "print block list"
@@ -60,14 +58,12 @@
                   - "@inline_depth"
                   - "greater_than"
                   - "@block_depth"
-          - - Print:
-                Spaces do:
-                  - A noun:
-                      FromText: "@obj"
-                  - Print:
-                      Brackets do:
-                        - PrintDetails obj:
-                            FromText: "@obj"
+          - - Print words:
+                - A noun:
+                    FromText: "@obj"
+                - Print parentheses:
+                    - PrintDetails obj:
+                        FromText: "@obj"
 - Define rule:do:
     - "print object"
     - - If:do:
@@ -100,14 +96,13 @@
                   FromTextList: "@kids"
               - "greater_than"
               - 0
-    - - Print:
-          Spaces do:
-            - A noun:
-                FromText: "@obj"
-            - PrintStatus obj:isEmpty:
-                - FromText: "@obj"
-                - FromBool:
-                    Not: "@has_kids"
+    - - Print words:
+          - A noun:
+              FromText: "@obj"
+          - PrintStatus obj:isEmpty:
+              - FromText: "@obj"
+              - FromBool:
+                  Not: "@has_kids"
       - If:do:
           - "@has_kids"
           - - PrintBlockList objs:
@@ -144,7 +139,7 @@
           - "kids"
           - VisibleStorage obj:
               FromText: "@obj"
-- Note: "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
+- Note: 'Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see "print status" which writes bare bones information about an object.)'
 - Define rule:do:
     - "print details"
     - - If:do:
@@ -188,13 +183,11 @@
           - "object"
       - Bool: "is empty"
     - - Bool: "skip"
-    - - Print:
-          Brackets do:
-            - Print:
-                Commas do:
-                  - PrintInnerStatus obj:isEmpty:
-                      - FromText: "@obj"
-                      - FromBool: "@is_empty"
+    - - Print parentheses:
+          Print commas:
+            - PrintInnerStatus obj:isEmpty:
+                - FromText: "@obj"
+                - FromBool: "@is_empty"
 - #  called via "print status" to add spacing and comma-and separators
   Define pattern:requires:provides:
     - "print inner status"

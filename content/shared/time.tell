@@ -33,10 +33,11 @@
     - - If:do:
           - Not: "@quietly"
           - - # separate the banner from the vantage (if any)
-              P:
+              ParagraphBreak:
             - PrintVantage:
             - # separate the look from the command line
-              P:
+              ParagraphBreak:
+
 - # fix: ordering of after rules
   Define rule:named:do:
     - "after start game, then continue"
@@ -95,7 +96,7 @@
     - - Nothing:
     - - Set:state:
           - "#story"
-          - Txt if:then:else:
+          - Text if:then:else:
               - Not: "@finally"
               - "concluded"
               - "completed"
