@@ -1,930 +1,799 @@
 # Commands for scripting runtime behavior.
-Spec:with group:
+Spec:requires:contains:
   - "core"
-  - Group contains:
-      - # Test if a set of conditions all return true.
-        # Stops testing after the first condition fails.
-        Spec:slots:groups:with flow:
-          - "all_true"
-          - "bool_eval"
-          - "logic"
-          - Flow uses:
-              - # One or more conditions to test.
-                Term:name:type:repeats:
-                  - "_"
-                  - "test"
-                  - "bool_eval"
-                  - true
-      - # Return true; always.
-        Spec:slots:groups:with flow:
-          - "always"
-          - "bool_eval"
-          - "logic"
-          - Flow uses: []
-      - # Test if any condition in a set of conditions returns true.
-        # Stops testing after the first condition succeeds.
-        Spec:slots:groups:with flow:
-          - "any_true"
-          - "bool_eval"
-          - "logic"
-          - Flow uses:
-              - # One or more conditions to test.
-                Term:name:type:repeats:
-                  - "_"
-                  - "test"
-                  - "bool_eval"
-                  - true
-      - # Add a single blank line, unless a blank line was just written.
-        # See also <p> in package markup.
-        Spec:slots:groups:with flow:
-          - "paragraph_break"
-          - "execute"
-          - "printing"
-          - Flow uses: []
-      - # Collect printed text and surrounds the output with parenthesis '()'.
-        # If no text is printed, no parentheses are printed.
-        Spec:slots:groups:with flow:
-          - "print_parens"
-          - ["text_eval", "execute"]
-          - "printing"
-          - Flow:uses:
-              - "print"
-              - - # Runs one or more statements, and collects any text printed by them.
-                  Term:name:type:repeats:
-                    - "parentheses"
-                    - "exe"
-                    - "execute"
-                    - true
-
-      - # Helper for the else statements of [ChooseBranch].
-        Spec:with slot:
-          - "brancher"
-          - Slot:
-
-      - # In a repeating loop, exit the loop;
-        # or, in a rule, stop processing rules.
-        Spec:slots:groups:with flow:
-          - "break"
-          - "execute"
-          - "flow"
-          - Flow uses: []
-
-      - # Runtime version of cycle_text.
-        internal: true
-        Spec:slots:with flow:
-          - "call_cycle"
-          - "text_eval"
-          - Flow:uses:
-              - "cycle"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text"
-                - Term:name:type:repeats:
-                    - "over"
-                    - "parts"
-                    - "text_eval"
-                    - true
-      - # Runtime version of shuffle_text.
-        internal: true
-        Spec:slots:with flow:
-          - "call_shuffle"
-          - "text_eval"
-          - Flow:uses:
-              - "shuffle"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text"
-                - Term:name:type:repeats:
-                    - "over"
-                    - "parts"
-                    - "text_eval"
-                    - true
-                - Term:type:private:
-                    - "indices"
-                    - "shuffler"
-                    - true
-      - # Runtime version of stopping_text.
-        internal: true
-        Spec:slots:with flow:
-          - "call_terminal"
-          - "text_eval"
-          - Flow:uses:
-              - "stopping"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text"
-                - Term:name:type:repeats:
-                    - "over"
-                    - "parts"
-                    - "text_eval"
-                    - true
-      - # Runtime version of count_of.
-        # A guard which returns true based on a counter.
-        internal: true
-        Spec:slots:with flow:
-          - "call_trigger"
-          - "bool_eval"
-          - Flow:uses:
-              - "trigger"
-              - - Term:name:type:
-                    - "_"
-                    - "name"
-                    - "text"
-                - Term:name:
-                    - "on"
-                    - "trigger"
-                - Term:type:
-                    - "num"
-                    - "num_eval"
-      - # Return a copy of some text with its first letter changed to uppercase.
-        Spec:slots:groups:with flow:
-          - "capitalize"
-          - "text_eval"
-          - "format"
-          - Flow uses:
-              - # The text to capitalize.
-                Term:name:type:
-                  - "_"
-                  - "text"
-                  - "text_eval"
-      - # An if statement.
-        Spec:slots:groups:with flow:
-          - "choose_branch"
-          - - "execute"
-            - "brancher"
-          - "misc"
-          - Flow:uses:
-              - "if"
-              - - # The condition to test.
-                  Term:name:type:
-                    - "_"
-                    - "condition"
-                    - "bool_eval"
-                - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
-                  Term:name:type:optional:repeats:
-                    - "assuming"
-                    - "args"
-                    - "arg"
-                    - true
-                    - true
-                - # Statements which run when the condition succeeded.
-                  Term:name:type:repeats:
-                    - "do"
-                    - "exe"
-                    - "execute"
-                    - true
-                - # An optional set of statements to evaluate when the condition failed.
-                  Term:type:optional:
-                    - "else"
-                    - "brancher"
-                    - true
-      - # Run a set of statements after a condition has failed.
-        Spec:slots:groups:with flow:
-          - "choose_nothing_else"
-          - "brancher"
-          - "misc"
-          - Flow:uses:
-              - "finally"
-              - - # One or more statements to run.
-                  Term:name:type:repeats:
-                    - "do"
-                    - "exe"
-                    - "execute"
-                    - true
-      - # Pick one of two possible text values based on a condition.
-        # ( This acts similar to a ternary. )
-        Spec:slots:groups:with flow:
-          - "choose_num"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "num"
-              - - # The condition to test.
-                  Term:type:
-                    - "if"
-                    - "bool_eval"
-                - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
-                  Term:name:type:optional:repeats:
-                    - "assuming"
-                    - "args"
-                    - "arg"
-                    - true
-                    - true
-                - # The number to use if the condition succeeds.
-                  Term:name:type:
-                    - "then"
-                    - "true"
-                    - "num_eval"
-                - # The number to use if the condition fails.
-                  Term:name:type:optional:
-                    - "else"
-                    - "false"
-                    - "num_eval"
-                    - true
-      - # Pick one of two possible text values based on a condition.
-        # ( This acts similar to a ternary. )
-        Spec:slots:groups:with flow:
-          - "choose_text"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "text"
-              - - # The condition to test.
-                  Term:type:
-                    - "if"
-                    - "bool_eval"
-                - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
-                  Term:name:type:optional:repeats:
-                    - "assuming"
-                    - "args"
-                    - "arg"
-                    - true
-                    - true
-                - # The text value to use if the condition succeeds.
-                  Term:name:type:
-                    - "then"
-                    - "true"
-                    - "text_eval"
-                - # The text value to use if the condition fails.
-                  Term:name:type:optional:
-                    - "else"
-                    - "false"
-                    - "text_eval"
-                    - true
-      - # Separates words with commas, and 'and'.
-        Spec:slots:groups:with flow:
-          - "print_commas"
-          - ["text_eval", "execute"]
-          - "printing"
-          - Flow:uses:
-              - "print"
-              - - Term:name:type:repeats:
-                    - "commas"
-                    - "exe"
-                    - "execute"
-                    - true
-      - # True if eq,ne,gt,lt,ge,le two numbers.
-        Spec:slots:groups:with flow:
-          - "compare_value"
-          - "bool_eval"
-          - "logic"
-          - Flow:uses:
-              - "is"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "assignment"
-                - Term:name:type:
-                    - "matching"
-                    - "is"
-                    - "comparison"
-                - Term:name:type:
-                    - "value"
-                    - "b"
-                    - "assignment"
-      - # True if eq,ne,gt,lt,ge,le two numbers.
-        Spec:slots:groups:with flow:
-          - "compare_num"
-          - "bool_eval"
-          - "logic"
-          - Flow:uses:
-              - "is"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "num_eval"
-                - Term:name:type:
-                    - "matching"
-                    - "is"
-                    - "comparison"
-                - Term:name:type:
-                    - "num"
-                    - "b"
-                    - "num_eval"
-                - # a positive value that indicates how close the two numbers should be
-                  Term:name:type:optional:
-                    - "within"
-                    - "tolerance"
-                    - "num"
-                    - true
-      - # True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
-        Spec:slots:groups:with flow:
-          - "compare_text"
-          - "bool_eval"
-          - "logic"
-          - Flow:uses:
-              - "is"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "text_eval"
-                - Term:name:type:
-                    - "matching"
-                    - "is"
-                    - "comparison"
-                - Term:name:type:
-                    - "text"
-                    - "b"
-                    - "text_eval"
-      - # Subtract two numbers.
-        Spec:slots:groups:with flow:
-          - "subtract_value"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "subtract"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "num_eval"
-                - Term:name:type:
-                    - "value"
-                    - "b"
-                    - "num_eval"
-      - # Decide whether a pattern is running.
-        Spec:slots:groups:with flow:
-          - "during"
-          - - "bool_eval"
-            - "num_eval"
-          - "patterns"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "pattern_name"
-                  - "text"
-      - Spec:with str:
-          - "comparison"
-          - Str exclusively:uses:
+  - - "dl/assign"
+    - "dl/prim"
+    - "dl/rtti"
+  - - # Test if a set of conditions all return true.
+      # Stops testing after the first condition fails.
+      Flow:slots:terms:
+        - "all_true"
+        - "bool_eval"
+        - - # One or more conditions to test.
+            Term:name:type:repeats:
+              - "_"
+              - "test"
+              - "bool_eval"
               - true
-              - - Option: "equal_to"
-                - Option: "other_than"
-                - Option: "greater_than"
-                - Option: "less_than"
-                - Option: "at_least"
-                - Option: "at_most"
-      - # List of the field names of a kind.
-        Spec:slots:groups:with flow:
-          - "fields_of_kind"
-          - "text_list_eval"
-          - "kinds"
-          - Flow:uses:
-              - "fields"
-              - - Term:name:type:
-                    - "of"
-                    - "kind_name"
-                    - "text_eval"
-      - Spec:slots:groups:with flow:
-          - "has_dominion"
-          - "bool_eval"
-          - "logic"
-          - Flow:uses:
-              - "is"
-              - - Term:name:type:
-                    - "domain"
-                    - "name"
-                    - "text"
+    - # Return true; always.
+      Flow:slots:
+        - "always"
+        - "bool_eval"
+    - # Test if any condition in a set of conditions returns true.
+      # Stops testing after the first condition succeeds.
+      Flow:slots:terms:
+        - "any_true"
+        - "bool_eval"
+        - - # One or more conditions to test.
+            Term:name:type:repeats:
+              - "_"
+              - "test"
+              - "bool_eval"
+              - true
+    - # Add a single blank line, unless a blank line was just written.
+      # See also <p> in package markup.
+      Flow:slots:
+        - "paragraph_break"
+        - "execute"
+    - # Collect printed text and surrounds the output with parenthesis '()'.
+      # If no text is printed, no parentheses are printed.
+      Flow:slots:lede:terms:
+        - "print_parens"
+        - ["text_eval", "execute"]
+        - "print"
+        - - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "parentheses"
+              - "exe"
+              - "execute"
+              - true
 
-      - # True if text contains text.
-        Spec:slots:groups:with flow:
-          - "includes"
-          - "bool_eval"
-          - "strings"
-          - Flow:uses:
-              - "contains"
-              - - Term:name:type:
-                    - "_"
-                    - "text"
-                    - "text_eval"
-                - Term:type:
-                    - "part"
-                    - "text_eval"
-      - # True if the text is empty.
-        Spec:slots:groups:with flow:
-          - "is_empty"
-          - "bool_eval"
-          - "strings"
-          - Flow:uses:
-              - "is"
-              - - Term:name:type:
-                    - "empty"
-                    - "text"
-                    - "text_eval"
-      - # True if the object is exactly the named kind.
-        Spec:slots:groups:with flow:
-          - "is_exact_kind_of"
-          - "bool_eval"
-          - "objects"
-          - Flow:uses:
-              - "kind_of"
-              - - Term:name:type:
-                    - "_"
-                    - "object"
-                    - "text_eval"
-                - Term:name:type:
-                    - "is_exactly"
-                    - "kind"
-                    - "text"
-      - # True if the object is compatible with the named kind.
-        Spec:slots:groups:with flow:
-          - "is_kind_of"
-          - "bool_eval"
-          - "objects"
-          - Flow:uses:
-              - "kind_of"
-              - - Term:name:type:
-                    - "_"
-                    - "object"
-                    - "text_eval"
-                - Term:name:type:
-                    - "is"
-                    - "kind"
-                    - "text"
-                - # try to check the type of nothing objects?
-                  # normally, nothing objects have no kind.
-                  Term:type:optional:
-                    - "nothing"
-                    - "bool"
-                    - true
-      - # Returns multiple pieces of text as a single new piece of text.
-        Spec:slots:groups:with flow:
-          - "join"
-          - "text_eval"
-          - "strings"
-          - Flow uses:
-              - Term:name:type:optional:
-                  - "_"
-                  - "sep"
-                  - "text_eval"
-                  - true
-              - Term:type:repeats:
-                  - "parts"
-                  - "text_eval"
-                  - true
-      - # Friendly name of the object's kind.
-        Spec:slots:groups:with flow:
-          - "kind_of"
-          - "text_eval"
-          - "objects"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "object"
-                  - "text_eval"
-              - # try to check the type of nothing objects?
-                # normally, nothing objects have no kind.
-                Term:type:optional:
-                  - "nothing"
-                  - "bool"
-                  - true
-      - # A list of compatible kinds.
-        Spec:slots:groups:with flow:
-          - "kinds_of"
-          - "text_list_eval"
-          - "objects"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "kind"
-                  - "text"
-      - # Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
-        Spec:slots:groups:with flow:
-          - "make_lowercase"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "lower"
-              - - Term:name:type:
-                    - "_"
-                    - "text"
-                    - "text_eval"
-      - # Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
-        Spec:slots:groups:with flow:
-          - "make_reversed"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "reverse"
-              - - Term:type:
-                    - "text"
-                    - "text_eval"
-      - # Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
-        Spec:slots:groups:with flow:
-          - "make_sentence_case"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "sentence"
-              - - Term:name:type:
-                    - "_"
-                    - "text"
-                    - "text_eval"
-      - # Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
-        Spec:slots:groups:with flow:
-          - "make_title_case"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "title"
-              - - Term:name:type:
-                    - "_"
-                    - "text"
-                    - "text_eval"
-      - # Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
-        Spec:slots:groups:with flow:
-          - "make_uppercase"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "upper"
-              - - Term:name:type:
-                    - "_"
-                    - "text"
-                    - "text_eval"
-      - # Determine whether the specified text is similar to the specified regular expression.
-        Spec:slots:groups:with flow:
-          - "matches"
-          - "bool_eval"
-          - "matching"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "text"
-                  - "text_eval"
-              - Term:name:type:
-                  - "to"
-                  - "match"
-                  - "text"
-              - Term:type:private:
-                  - "cache"
-                  - "match_cache"
-                  - true
-      - # Full name of the object.
-        Spec:slots:groups:with flow:
-          - "name_of"
-          - "text_eval"
-          - "objects"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "object"
-                  - "text_eval"
-      - # Returns false.
-        Spec:slots:groups:with flow:
-          - "never"
-          - "bool_eval"
-          - "logic"
-          - Flow uses: []
-      - # Start a new line.
-        Spec:slots:groups:with flow:
-          - "line_break"
-          - "execute"
-          - "printing"
-          - Flow uses: []
-      - # In a repeating loop, try the next iteration of the loop;
-        # or, in a rule, continue to the next rule.
-        Spec:slots:groups:with flow:
-          - "continue"
-          - "execute"
-          - "flow"
-          - Flow uses: []
-      - # Returns the opposite value.
-        Spec:slots:groups:with flow:
-          - "not"
-          - "bool_eval"
-          - "logic"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "test"
-                  - "bool_eval"
+    - # Helper for the else statements of [ChooseBranch].
+      Slot: "brancher"
 
-      - # Returns all of the object's current traits as a list of text.
-        Spec:slots:groups:with flow:
-          - "object_traits"
-          - "text_list_eval"
-          - "objects"
-          - Flow:uses:
+    - # In a repeating loop, exit the loop;
+      # or, in a rule, stop processing rules.
+      Flow:slots:
+        - "break"
+        - "execute"
+
+    - # Runtime version of cycle_text.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_cycle"
+        - "text_eval"
+        - "cycle"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "over"
+              - "parts"
+              - "text_eval"
+              - true
+    - # Runtime version of shuffle_text.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_shuffle"
+        - "text_eval"
+        - "shuffle"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "over"
+              - "parts"
+              - "text_eval"
+              - true
+          - Term:type:private:
+              - "indices"
+              - "shuffler"
+              - true
+    - # Runtime version of stopping_text.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_terminal"
+        - "text_eval"
+        - "stopping"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "over"
+              - "parts"
+              - "text_eval"
+              - true
+    - # Runtime version of count_of.
+      # A guard which returns true based on a counter.
+      internal: true
+      Flow:slots:lede:terms:
+        - "call_trigger"
+        - "bool_eval"
+        - "trigger"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:name:
+              - "on"
+              - "trigger"
+          - Term:type:
+              - "num"
+              - "num_eval"
+    - # Return a copy of some text with its first letter changed to uppercase.
+      Flow:slots:terms:
+        - "capitalize"
+        - "text_eval"
+        - - # The text to capitalize.
+            Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # An if statement.
+      Flow:slots:lede:terms:
+        - "choose_branch"
+        - - "execute"
+          - "brancher"
+        - "if"
+        - - # The condition to test.
+            Term:name:type:
+              - "_"
+              - "condition"
+              - "bool_eval"
+          - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
+          - # Statements which run when the condition succeeded.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+          - # An optional set of statements to evaluate when the condition failed.
+            Term:type:optional:
+              - "else"
+              - "brancher"
+              - true
+    - # Run a set of statements after a condition has failed.
+      Flow:slots:lede:terms:
+        - "choose_nothing_else"
+        - "brancher"
+        - "finally"
+        - - # One or more statements to run.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+    - # Pick one of two possible text values based on a condition.
+      # ( This acts similar to a ternary. )
+      Flow:slots:lede:terms:
+        - "choose_num"
+        - "num_eval"
+        - "num"
+        - - # The condition to test.
+            Term:type:
+              - "if"
+              - "bool_eval"
+          - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
+          - # The number to use if the condition succeeds.
+            Term:name:type:
+              - "then"
+              - "true"
+              - "num_eval"
+          - # The number to use if the condition fails.
+            Term:name:type:optional:
+              - "else"
+              - "false"
+              - "num_eval"
+              - true
+    - # Pick one of two possible text values based on a condition.
+      # ( This acts similar to a ternary. )
+      Flow:slots:lede:terms:
+        - "choose_text"
+        - "text_eval"
+        - "text"
+        - - # The condition to test.
+            Term:type:
+              - "if"
+              - "bool_eval"
+          - # A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
+          - # The text value to use if the condition succeeds.
+            Term:name:type:
+              - "then"
+              - "true"
+              - "text_eval"
+          - # The text value to use if the condition fails.
+            Term:name:type:optional:
+              - "else"
+              - "false"
+              - "text_eval"
+              - true
+    - # Separates words with commas, and 'and'.
+      Flow:slots:lede:terms:
+        - "print_commas"
+        - ["text_eval", "execute"]
+        - "print"
+        - - Term:name:type:repeats:
+              - "commas"
+              - "exe"
+              - "execute"
+              - true
+    - # True if eq,ne,gt,lt,ge,le two numbers.
+      Flow:slots:lede:terms:
+        - "compare_value"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "assignment"
+          - Term:name:type:
+              - "matching"
+              - "is"
+              - "comparison"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "assignment"
+    - # True if eq,ne,gt,lt,ge,le two numbers.
+      Flow:slots:lede:terms:
+        - "compare_num"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "matching"
+              - "is"
+              - "comparison"
+          - Term:name:type:
+              - "num"
+              - "b"
+              - "num_eval"
+          - # a positive value that indicates how close the two numbers should be
+            Term:name:type:optional:
+              - "within"
+              - "tolerance"
+              - "num"
+              - true
+    - # True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
+      Flow:slots:lede:terms:
+        - "compare_text"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "text_eval"
+          - Term:name:type:
+              - "matching"
+              - "is"
+              - "comparison"
+          - Term:name:type:
+              - "text"
+              - "b"
+              - "text_eval"
+    - # Subtract two numbers.
+      Flow:slots:lede:terms:
+        - "subtract_value"
+        - "num_eval"
+        - "subtract"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Decide whether a pattern is running.
+      Flow:slots:terms:
+        - "during"
+        - - "bool_eval"
+          - "num_eval"
+        - - Term:name:type:
+              - "_"
+              - "pattern_name"
+              - "text"
+    - Str:options:
+        - "comparison"
+        - - Option: "equal_to"
+          - Option: "other_than"
+          - Option: "greater_than"
+          - Option: "less_than"
+          - Option: "at_least"
+          - Option: "at_most"
+    - # List of the field names of a kind.
+      Flow:slots:lede:terms:
+        - "fields_of_kind"
+        - "text_list_eval"
+        - "fields"
+        - - Term:name:type:
+              - "of"
+              - "kind_name"
+              - "text_eval"
+    - Flow:slots:lede:terms:
+        - "has_dominion"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "domain"
+              - "name"
+              - "text"
+
+    - # True if text contains text.
+      Flow:slots:lede:terms:
+        - "includes"
+        - "bool_eval"
+        - "contains"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+          - Term:type:
+              - "part"
+              - "text_eval"
+    - # True if the text is empty.
+      Flow:slots:lede:terms:
+        - "is_empty"
+        - "bool_eval"
+        - "is"
+        - - Term:name:type:
+              - "empty"
+              - "text"
+              - "text_eval"
+    - # True if the object is exactly the named kind.
+      Flow:slots:lede:terms:
+        - "is_exact_kind_of"
+        - "bool_eval"
+        - "kind_of"
+        - - Term:name:type:
+              - "_"
               - "object"
-              - - Term:name:type:
-                    - "traits"
-                    - "object"
-                    - "text_eval"
-      - # Returns the plural form of a singular word. (ex. apples for apple. ).
-        Spec:slots:groups:with flow:
-          - "pluralize"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "plural"
-              - - Term:name:type:
-                    - "of"
-                    - "text"
-                    - "text_eval"
-      - # Writes a number using numerals, eg. '1'.
-        Spec:slots:groups:with flow:
-          - "print_num"
-          - "text_eval"
-          - "printing"
-          - Flow:uses:
-              - "numeral"
-              - - Term:name:type:
-                    - "_"
-                    - "num"
-                    - "num_eval"
-      - # Writes a number in plain english: eg. 'one'.
-        Spec:slots:groups:with flow:
-          - "print_num_word"
-          - "text_eval"
-          - "printing"
-          - Flow:uses:
-              - "numeral"
-              - - Term:name:type:
-                    - "words"
-                    - "num"
-                    - "num_eval"
-      - # Multiply two numbers.
-        Spec:slots:groups:with flow:
-          - "multiply_value"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "multiply"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "num_eval"
-                - Term:name:type:
-                    - "value"
-                    - "b"
-                    - "num_eval"
-      - # Divide one number by another.
-        Spec:slots:groups:with flow:
-          - "divide_value"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "divide"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "num_eval"
-                - Term:name:type:
-                    - "value"
-                    - "b"
-                    - "num_eval"
-      - # Divide one number by another, and return the remainder.
-        Spec:slots:groups:with flow:
-          - "mod_value"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "mod"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "num_eval"
-                - Term:name:type:
-                    - "value"
-                    - "b"
-                    - "num_eval"
-      - Spec:slots:groups:with flow:
-          - "abs_value"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "absolute"
-              - - Term:type:
-                    - "value"
-                    - "num_eval"
-      - # Increases the value of a number held in by a variable or object field.
-        # Returns the new value of the number.
-        Spec:slots:groups:with flow:
-          - "increment"
-          - - "num_eval"
-            - "execute"
-          - "math"
-          - Flow:uses:
-              - "increase"
-              - - Term:name:type:
-                    - "_"
-                    - "target"
-                    - "address"
-                - # if not specified, increments by 1.
-                  Term:name:type:optional:
-                    - "by"
-                    - "step"
-                    - "num_eval"
-                    - true
-      - # Decrease the value of a number held in by a variable or object field.
-        # Returns the new value of the number.
-        Spec:slots:groups:with flow:
-          - "decrement"
-          - - "num_eval"
-            - "execute"
-          - "math"
-          - Flow:uses:
-              - "decrease"
-              - - Term:name:type:
-                    - "_"
-                    - "target"
-                    - "address"
-                - # if not specified, decrements by 1.
-                  Term:name:type:optional:
-                    - "by"
-                    - "step"
-                    - "num_eval"
-                    - true
-      - # Increases the value of a trait held by an object aspect.
-        # Returns the new value of the trait.
-        Spec:slots:groups:with flow:
-          - "increment_aspect"
-          - - "text_eval"
-            - "execute"
-          - "math"
-          - Flow:uses:
-              - "increase"
-              - - Term:name:type:
-                    - "_"
-                    - "target"
-                    - "text_eval"
-                - Term:type:
-                    - "aspect"
-                    - "text_eval"
-                - # if not specified, increments by a single step.
-                  Term:name:type:optional:
-                    - "by"
-                    - "step"
-                    - "num_eval"
-                    - true
-                - # if not specified, wraps.
-                  Term:type:optional:
-                    - "clamp"
-                    - "bool_eval"
-                    - true
-      - # Increases the value of a trait held by an object aspect.
-        # Returns the new value of the trait.
-        Spec:slots:groups:with flow:
-          - "decrement_aspect"
-          - - "text_eval"
-            - "execute"
-          - "math"
-          - Flow:uses:
-              - "decrease"
-              - - Term:name:type:
-                    - "_"
-                    - "target"
-                    - "text_eval"
-                - Term:type:
-                    - "aspect"
-                    - "text_eval"
-                - # if not specified, increments by a single step.
-                  Term:name:type:optional:
-                    - "by"
-                    - "step"
-                    - "num_eval"
-                    - true
-                - # if not specified, wraps.
-                  Term:type:optional:
-                    - "clamp"
-                    - "bool_eval"
-                    - true
-      - # Display some text to the player without apply any additional formatting.
-        Spec:slots:groups:with flow:
-          - "print_text"
-          - "execute"
-          - "printing"
-          - Flow:uses:
-              - "print"
-              - - Term:name:type:
-                    - "_"
-                    - "text"
-                    - "text_eval"
-      - # Group text into a single line <li> as part of a list of lines.
-        # See also: 'rows'.
-        Spec:slots:groups:with flow:
-          - "row"
-          - "text_eval"
-          - "printing"
-          - Flow uses:
-              - # Runs one or more statements, and collects any text printed by them.
-                Term:name:type:repeats:
-                  - "do"
-                  - "exe"
-                  - "execute"
-                  - true
-      - # Group text into an unordered list <ul>.
-        Spec:slots:groups:with flow:
-          - "rows"
-          - "text_eval"
-          - "printing"
-          - Flow uses:
-              - # Runs one or more statements, and collects any text printed by them.
-                Term:name:type:repeats:
-                  - "do"
-                  - "exe"
-                  - "execute"
-                  - true
-      - # Returns the singular form of a plural word. (ex. apple for apples ).
-        Spec:slots:groups:with flow:
-          - "singularize"
-          - "text_eval"
-          - "format"
-          - Flow:uses:
-              - "singular"
-              - - Term:name:type:
-                    - "of"
-                    - "text"
-                    - "text_eval"
+              - "text_eval"
+          - Term:name:type:
+              - "is_exactly"
+              - "kind"
+              - "text"
+    - # True if the object is compatible with the named kind.
+      Flow:slots:lede:terms:
+        - "is_kind_of"
+        - "bool_eval"
+        - "kind_of"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+          - Term:name:type:
+              - "is"
+              - "kind"
+              - "text"
+          - # try to check the type of nothing objects?
+            # normally, nothing objects have no kind.
+            Term:type:optional:
+              - "nothing"
+              - "bool"
+              - true
+    - # Returns multiple pieces of text as a single new piece of text.
+      Flow:slots:terms:
+        - "join"
+        - "text_eval"
+        - - Term:name:type:optional:
+              - "_"
+              - "sep"
+              - "text_eval"
+              - true
+          - Term:type:repeats:
+              - "parts"
+              - "text_eval"
+              - true
+    - # Friendly name of the object's kind.
+      Flow:slots:terms:
+        - "kind_of"
+        - "text_eval"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+          - # try to check the type of nothing objects?
+            # normally, nothing objects have no kind.
+            Term:type:optional:
+              - "nothing"
+              - "bool"
+              - true
+    - # A list of compatible kinds.
+      Flow:slots:terms:
+        - "kinds_of"
+        - "text_list_eval"
+        - - Term:name:type:
+              - "_"
+              - "kind"
+              - "text"
+    - # Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
+      Flow:slots:lede:terms:
+        - "make_lowercase"
+        - "text_eval"
+        - "lower"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
+      Flow:slots:lede:terms:
+        - "make_reversed"
+        - "text_eval"
+        - "reverse"
+        - - Term:type:
+              - "text"
+              - "text_eval"
+    - # Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
+      Flow:slots:lede:terms:
+        - "make_sentence_case"
+        - "text_eval"
+        - "sentence"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
+      Flow:slots:lede:terms:
+        - "make_title_case"
+        - "text_eval"
+        - "title"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
+      Flow:slots:lede:terms:
+        - "make_uppercase"
+        - "text_eval"
+        - "upper"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Determine whether the specified text is similar to the specified regular expression.
+      Flow:slots:terms:
+        - "matches"
+        - "bool_eval"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+          - Term:name:type:
+              - "to"
+              - "match"
+              - "text"
+          - Term:type:private:
+              - "cache"
+              - "match_cache"
+              - true
+    - # Full name of the object.
+      Flow:slots:terms:
+        - "name_of"
+        - "text_eval"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+    - # Returns false.
+      Flow:slots:
+        - "never"
+        - "bool_eval"
+    - # Start a new line.
+      Flow:slots:
+        - "line_break"
+        - "execute"
+    - # In a repeating loop, try the next iteration of the loop;
+      # or, in a rule, continue to the next rule.
+      Flow:slots:
+        - "continue"
+        - "execute"
+    - # Returns the opposite value.
+      Flow:slots:terms:
+        - "not"
+        - "bool_eval"
+        - - Term:name:type:
+              - "_"
+              - "test"
+              - "bool_eval"
 
-      - # Start a new line ( if not already at a new line ).
-        Spec:slots:groups:with flow:
-          - "softline"
+    - # Returns all of the object's current traits as a list of text.
+      Flow:slots:lede:terms:
+        - "object_traits"
+        - "text_list_eval"
+        - "object"
+        - - Term:name:type:
+              - "traits"
+              - "object"
+              - "text_eval"
+    - # Returns the plural form of a singular word. (ex. apples for apple. ).
+      Flow:slots:lede:terms:
+        - "pluralize"
+        - "text_eval"
+        - "plural"
+        - - Term:name:type:
+              - "of"
+              - "text"
+              - "text_eval"
+    - # Writes a number using numerals, eg. '1'.
+      Flow:slots:lede:terms:
+        - "print_num"
+        - "text_eval"
+        - "numeral"
+        - - Term:name:type:
+              - "_"
+              - "num"
+              - "num_eval"
+    - # Writes a number in plain english: eg. 'one'.
+      Flow:slots:lede:terms:
+        - "print_num_word"
+        - "text_eval"
+        - "numeral"
+        - - Term:name:type:
+              - "words"
+              - "num"
+              - "num_eval"
+    - # Multiply two numbers.
+      Flow:slots:lede:terms:
+        - "multiply_value"
+        - "num_eval"
+        - "multiply"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Divide one number by another.
+      Flow:slots:lede:terms:
+        - "divide_value"
+        - "num_eval"
+        - "divide"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Divide one number by another, and return the remainder.
+      Flow:slots:lede:terms:
+        - "mod_value"
+        - "num_eval"
+        - "mod"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - Flow:slots:lede:terms:
+        - "abs_value"
+        - "num_eval"
+        - "absolute"
+        - - Term:type:
+              - "value"
+              - "num_eval"
+    - # Increases the value of a number held in by a variable or object field.
+      # Returns the new value of the number.
+      Flow:slots:lede:terms:
+        - "increment"
+        - - "num_eval"
           - "execute"
-          - "printing"
-          - Flow:uses:
-              - "wbr"
-              - []
-      - # Writes text, by default putting spaces between words.
-        Spec:slots:groups:with flow:
-          - "print_words"
-          - ["execute", "text_eval"]
-          - "printing"
-          - Flow:uses:
-              - "print"
-              - - # Optional text to place between adjoining words.
-                  Term:type:optional:
-                    - "separator"
-                    - "text_eval"
-                    - true
-                - # Runs one or more statements, and collects any text printed by them.
-                  Term:name:type:repeats:
-                    - "words"
-                    - "exe"
-                    - "execute"
-                    - true
-      - # Add two numbers.
-        Spec:slots:groups:with flow:
-          - "add_value"
-          - "num_eval"
-          - "math"
-          - Flow:uses:
-              - "add"
-              - - Term:name:type:
-                    - "_"
-                    - "a"
-                    - "num_eval"
-                - Term:name:type:
-                    - "value"
-                    - "b"
-                    - "num_eval"
-      - # Helper for counting values.
-        internal: true
-        Spec:with slot:
-          - "trigger"
-          - Slot:
-      - # call_trigger
-        internal: true
-        Spec:slots:groups:with flow:
-          - "trigger_cycle"
-          - "trigger"
-          - "comparison"
-          - Flow:uses:
-              - "every"
-              - []
-      - # call_trigger
-        internal: true
-        Spec:slots:groups:with flow:
-          - "trigger_once"
-          - "trigger"
-          - "comparison"
-          - Flow:uses:
-              - "at"
-              - []
-      - # call_trigger
-        internal: true
-        Spec:slots:groups:with flow:
-          - "trigger_switch"
-          - "trigger"
-          - "comparison"
-          - Flow:uses:
-              - "after"
-              - []
-      - # Keep running a series of actions while a condition is true.
-        Spec:slots:groups:with flow:
-          - "while"
+        - "increase"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # if not specified, increments by 1.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+    - # Decrease the value of a number held in by a variable or object field.
+      # Returns the new value of the number.
+      Flow:slots:lede:terms:
+        - "decrement"
+        - - "num_eval"
           - "execute"
-          - "flow"
-          - Flow:uses:
-              - "repeating"
-              - - Term:name:type:
-                    - "_"
-                    - "true"
-                    - "bool_eval"
-                - Term:name:type:repeats:
-                    - "do"
-                    - "exe"
-                    - "execute"
-                    - true
+        - "decrease"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # if not specified, decrements by 1.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+    - # Increases the value of a trait held by an object aspect.
+      # Returns the new value of the trait.
+      Flow:slots:lede:terms:
+        - "increment_aspect"
+        - - "text_eval"
+          - "execute"
+        - "increase"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "text_eval"
+          - Term:type:
+              - "aspect"
+              - "text_eval"
+          - # if not specified, increments by a single step.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+          - # if not specified, wraps.
+            Term:type:optional:
+              - "clamp"
+              - "bool_eval"
+              - true
+    - # Increases the value of a trait held by an object aspect.
+      # Returns the new value of the trait.
+      Flow:slots:lede:terms:
+        - "decrement_aspect"
+        - - "text_eval"
+          - "execute"
+        - "decrease"
+        - - Term:name:type:
+              - "_"
+              - "target"
+              - "text_eval"
+          - Term:type:
+              - "aspect"
+              - "text_eval"
+          - # if not specified, increments by a single step.
+            Term:name:type:optional:
+              - "by"
+              - "step"
+              - "num_eval"
+              - true
+          - # if not specified, wraps.
+            Term:type:optional:
+              - "clamp"
+              - "bool_eval"
+              - true
+    - # Display some text to the player without apply any additional formatting.
+      Flow:slots:lede:terms:
+        - "print_text"
+        - "execute"
+        - "print"
+        - - Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+    - # Group text into a single line <li> as part of a list of lines.
+      # See also: 'rows'.
+      Flow:slots:terms:
+        - "row"
+        - "text_eval"
+        - - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+    - # Group text into an unordered list <ul>.
+      Flow:slots:terms:
+        - "rows"
+        - "text_eval"
+        - - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+    - # Returns the singular form of a plural word. (ex. apple for apples ).
+      Flow:slots:lede:terms:
+        - "singularize"
+        - "text_eval"
+        - "singular"
+        - - Term:name:type:
+              - "of"
+              - "text"
+              - "text_eval"
+
+    - # Start a new line ( if not already at a new line ).
+      Flow:slots:lede:
+        - "softline"
+        - "execute"
+        - "wbr"
+    - # Writes text, by default putting spaces between words.
+      Flow:slots:lede:terms:
+        - "print_words"
+        - ["execute", "text_eval"]
+        - "print"
+        - - # Optional text to place between adjoining words.
+            Term:type:optional:
+              - "separator"
+              - "text_eval"
+              - true
+          - # Runs one or more statements, and collects any text printed by them.
+            Term:name:type:repeats:
+              - "words"
+              - "exe"
+              - "execute"
+              - true
+    - # Add two numbers.
+      Flow:slots:lede:terms:
+        - "add_value"
+        - "num_eval"
+        - "add"
+        - - Term:name:type:
+              - "_"
+              - "a"
+              - "num_eval"
+          - Term:name:type:
+              - "value"
+              - "b"
+              - "num_eval"
+    - # Helper for counting values.
+      internal: true
+      Slot: "trigger"
+
+    - # call_trigger
+      internal: true
+      Flow:slots:lede:
+        - "trigger_cycle"
+        - "trigger"
+        - "every"
+    - # call_trigger
+      internal: true
+      Flow:slots:lede:
+        - "trigger_once"
+        - "trigger"
+        - "at"
+    - # call_trigger
+      internal: true
+      Flow:slots:lede:
+        - "trigger_switch"
+        - "trigger"
+        - "after"
+    - # Keep running a series of actions while a condition is true.
+      Flow:slots:lede:terms:
+        - "while"
+        - "execute"
+        - "repeating"
+        - - Term:name:type:
+              - "_"
+              - "true"
+              - "bool_eval"
+          - Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true

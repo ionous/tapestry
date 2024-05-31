@@ -1,119 +1,109 @@
 # grammar
-Spec:with group:
+Spec:requires:contains:
   - "grammar"
-  - Group contains:
-      - # makes a parser scanner producing a script defined action.
-        Spec:slots:with flow:
-          - "action"
-          - "scanner_maker"
-          - Flow:uses:
+  - - "dl/assign"
+    - "dl/prim"
+  - - # makes a parser scanner producing a script defined action.
+      Flow:slots:lede:terms:
+        - "action"
+        - "scanner_maker"
+        - "action"
+        - - Term:name:type:
+              - "_"
               - "action"
-              - - Term:name:type:
-                    - "_"
-                    - "action"
-                    - "text"
-                - Term:name:type:optional:repeats:
-                    - "args"
-                    - "arguments"
-                    - "arg"
-                    - true
-                    - true
-      - # makes a parser scanner.
-        Spec:slots:with flow:
-          - "sequence"
-          - "scanner_maker"
-          - Flow uses:
-              - Term:name:type:repeats:
-                  - "_"
-                  - "series"
-                  - "scanner_maker"
-                  - true
-      - # makes a parser scanner.
-        Spec:slots:with flow:
-          - "choose_one"
-          - "scanner_maker"
-          - Flow:uses:
-              - "one"
-              - - Term:name:type:repeats:
-                    - "of"
-                    - "options"
-                    - "scanner_maker"
-                    - true
-      - # starts a parser scanner.
-        internal: true
-        Spec:slots:with flow:
-          - "directive"
-          - "grammar_maker"
-          - Flow:uses:
-              - "interpret"
-              - - Term:type:
-                    - "name"
-                    - "text"
-                - Term:name:type:repeats:
-                    - "with"
-                    - "series"
-                    - "scanner_maker"
-                    - true
-      - # Helper for defining parser grammars.
-        Spec:with slot:
-          - "grammar_maker"
-          - Slot:
-      - # makes a parser scanner.
-        Spec:slots:with flow:
-          - "noun"
-          - "scanner_maker"
-          - Flow:uses:
-              - "one"
-              - - Term:name:type:
-                    - "noun"
-                    - "kind"
-                    - "text"
-      - # Change to the bounds of the most recent result.
-        Spec:slots:with flow:
-          - "refine"
-          - "scanner_maker"
-          - Flow uses:
-              - Term:name:type:repeats:
-                  - "sequence"
-                  - "series"
-                  - "scanner_maker"
-                  - true
-      - # Swap the first and last matching results.
-        Spec:slots:with flow:
-          - "reverse"
-          - "scanner_maker"
-          - Flow uses:
-              - Term:name:type:repeats:
-                  - "_"
-                  - "reverses"
-                  - "scanner_maker"
-                  - true
-      - # Helper for defining input scanners.
-        Spec:with slot:
-          - "scanner_maker"
-          - Slot:
-      - # Select a specific set of bounds for the scanner.
-        Spec:slots:with flow:
-          - "focus"
-          - "scanner_maker"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "player"
-                  - "text"
-              - Term:name:type:repeats:
-                  - "sequence"
-                  - "series"
-                  - "scanner_maker"
-                  - true
-      - # makes a parser scanner.
-        Spec:slots:with flow:
-          - "words"
-          - "scanner_maker"
-          - Flow:uses:
-              - "one"
-              - - Term:name:type:repeats:
-                    - "word"
-                    - "words"
-                    - "text"
-                    - true
+              - "text"
+          - Term:name:type:optional:repeats:
+              - "args"
+              - "arguments"
+              - "arg"
+              - true
+              - true
+    - # makes a parser scanner.
+      Flow:slots:terms:
+        - "sequence"
+        - "scanner_maker"
+        - - Term:name:type:repeats:
+              - "_"
+              - "series"
+              - "scanner_maker"
+              - true
+    - # makes a parser scanner.
+      Flow:slots:lede:terms:
+        - "choose_one"
+        - "scanner_maker"
+        - "one"
+        - - Term:name:type:repeats:
+              - "of"
+              - "options"
+              - "scanner_maker"
+              - true
+    - # starts a parser scanner.
+      internal: true
+      Flow:slots:lede:terms:
+        - "directive"
+        - "grammar_maker"
+        - "interpret"
+        - - Term:type:
+              - "name"
+              - "text"
+          - Term:name:type:repeats:
+              - "with"
+              - "series"
+              - "scanner_maker"
+              - true
+    - # Helper for defining parser grammars.
+      Slot: "grammar_maker"
+
+    - # makes a parser scanner.
+      Flow:slots:lede:terms:
+        - "noun"
+        - "scanner_maker"
+        - "one"
+        - - Term:name:type:
+              - "noun"
+              - "kind"
+              - "text"
+    - # Change to the bounds of the most recent result.
+      Flow:slots:terms:
+        - "refine"
+        - "scanner_maker"
+        - - Term:name:type:repeats:
+              - "sequence"
+              - "series"
+              - "scanner_maker"
+              - true
+    - # Swap the first and last matching results.
+      Flow:slots:terms:
+        - "reverse"
+        - "scanner_maker"
+        - - Term:name:type:repeats:
+              - "_"
+              - "reverses"
+              - "scanner_maker"
+              - true
+    - # Helper for defining input scanners.
+      Slot: "scanner_maker"
+
+    - # Select a specific set of bounds for the scanner.
+      Flow:slots:terms:
+        - "focus"
+        - "scanner_maker"
+        - - Term:name:type:
+              - "_"
+              - "player"
+              - "text"
+          - Term:name:type:repeats:
+              - "sequence"
+              - "series"
+              - "scanner_maker"
+              - true
+    - # makes a parser scanner.
+      Flow:slots:lede:terms:
+        - "words"
+        - "scanner_maker"
+        - "one"
+        - - Term:name:type:repeats:
+              - "word"
+              - "words"
+              - "text"
+              - true

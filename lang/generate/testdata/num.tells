@@ -1,3 +1,1 @@
-- Spec:with num:
-  - "number"
-  - Num uses: []
+- Num: "number"

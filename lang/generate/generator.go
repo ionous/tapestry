@@ -11,19 +11,21 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 )
 
-// read a "Spec:with group:" message
-func ReadGroup(msg compact.Message) (ret Group, err error) {
-	var gc groupContent
-	if msg.Key != "Spec:with group:" {
-		err = errors.New("expected a top level group spec") // ugh.
-	} else if n, e := parseString("spec", msg.Args[0], ""); e != nil {
-		err = e
-	} else if e := readSpec(n, &gc, msg); e != nil {
-		err = e
-	} else if cmt, e := compact.ExtractComment(msg.Markup); e != nil {
-		err = e
+// read a "Spec:requires:contains:" message
+func ReadSpec(msg compact.Message) (ret Group, err error) {
+	if msg.Lede != "spec" {
+		err = errors.New("expected a spec") // ugh.
 	} else {
-		ret = Group{n, gc, cmt}
+		mm := MakeMessageMap(msg)
+		if name, e := mm.GetString("", ""); e != nil {
+			err = e
+		} else if group, e := readSpec(name, mm); e != nil {
+			err = e
+		} else if comment, e := compact.ExtractComment(msg.Markup); e != nil {
+			err = e
+		} else {
+			ret = Group{name, group, comment}
+		}
 	}
 	return
 }

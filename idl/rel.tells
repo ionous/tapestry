@@ -1,76 +1,67 @@
 # rel
-Spec:with group:
+Spec:contains:
   - "rel"
-  - Group contains:
-      - # Returns the implied relative of a noun (ex. the source in a one-to-many relation.).
-        Spec:slots:with flow:
-          - "reciprocal_of"
-          - "text_eval"
-          - Flow:uses:
-              - "reciprocal"
-              - - Term:name:type:
-                    - "_"
-                    - "via"
-                    - "relation_name"
-                - Term:type:
-                    - "object"
-                    - "text_eval"
-      - # Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).
-        Spec:slots:with flow:
-          - "reciprocals_of"
-          - "text_list_eval"
-          - Flow:uses:
-              - "reciprocals"
-              - - Term:name:type:
-                    - "_"
-                    - "via"
-                    - "relation_name"
-                - Term:type:
-                    - "object"
-                    - "text_eval"
-      - # Relate two nouns.
-        Spec:slots:with flow:
-          - "relate"
-          - "execute"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "object"
-                  - "text_eval"
-              - Term:name:type:
-                  - "to"
-                  - "to_object"
-                  - "text_eval"
-              - Term:type:
-                  - "via"
-                  - "relation_name"
-      - Spec:groups:with str:
-          - "relation_name"
-          - "positioned"
-          - Str uses: []
-      - # Returns the relative of a noun (ex. the target of a one-to-one relation.).
-        Spec:slots:with flow:
-          - "relative_of"
-          - "text_eval"
-          - Flow:uses:
-              - "relative"
-              - - Term:name:type:
-                    - "_"
-                    - "via"
-                    - "relation_name"
-                - Term:type:
-                    - "object"
-                    - "text_eval"
-      - # Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
-        Spec:slots:with flow:
-          - "relatives_of"
-          - "text_list_eval"
-          - Flow:uses:
-              - "relatives"
-              - - Term:name:type:
-                    - "_"
-                    - "via"
-                    - "relation_name"
-                - Term:type:
-                    - "object"
-                    - "text_eval"
+  - - # Returns the implied relative of a noun (ex. the source in a one-to-many relation.).
+      Flow:slots:lede:terms:
+        - "reciprocal_of"
+        - "text_eval"
+        - "reciprocal"
+        - - Term:name:type:
+              - "_"
+              - "via"
+              - "relation_name"
+          - Term:type:
+              - "object"
+              - "text_eval"
+    - # Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).
+      Flow:slots:lede:terms:
+        - "reciprocals_of"
+        - "text_list_eval"
+        - "reciprocals"
+        - - Term:name:type:
+              - "_"
+              - "via"
+              - "relation_name"
+          - Term:type:
+              - "object"
+              - "text_eval"
+    - # Relate two nouns.
+      Flow:slots:terms:
+        - "relate"
+        - "execute"
+        - - Term:name:type:
+              - "_"
+              - "object"
+              - "text_eval"
+          - Term:name:type:
+              - "to"
+              - "to_object"
+              - "text_eval"
+          - Term:type:
+              - "via"
+              - "relation_name"
+    - Str: "relation_name"
+    - # Returns the relative of a noun (ex. the target of a one-to-one relation.).
+      Flow:slots:lede:terms:
+        - "relative_of"
+        - "text_eval"
+        - "relative"
+        - - Term:name:type:
+              - "_"
+              - "via"
+              - "relation_name"
+          - Term:type:
+              - "object"
+              - "text_eval"
+    - # Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
+      Flow:slots:lede:terms:
+        - "relatives_of"
+        - "text_list_eval"
+        - "relatives"
+        - - Term:name:type:
+              - "_"
+              - "via"
+              - "relation_name"
+          - Term:type:
+              - "object"
+              - "text_eval"

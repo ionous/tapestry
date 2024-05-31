@@ -1,32 +1,31 @@
-- Spec:slots:with flow:
-  - "some_command"
-  - "some_eval"
-  - Flow:uses:
+- Flow:slots:lede:terms:
+    - "some_command"
+    - "some_eval"
     - "something"
     - - Term:type:
-        - "slot"
-        - "some_eval"
+          - "slot"
+          - "some_eval"
       - Term:name:type:
-        - "text"
-        - "text_named"
-        - "text"
+          - "text"
+          - "text_named"
+          - "text"
       - Term:name:
-        - "num"
-        - "number"
+          - "num"
+          - "number"
       - Term:type:optional:
-        - "value"
-        - "bool"
-        - true
+          - "value"
+          - "bool"
+          - true
       - Term:type:repeats:
-        - "numbers"
-        - "number"
-        - true
+          - "numbers"
+          - "number"
+          - true
       - Term:type:optional:repeats:
-        - "slots"
-        - "some_eval"
-        - true
-        - true
+          - "slots"
+          - "some_eval"
+          - true
+          - true
       - Term:type:private:
-        - "secret"
-        - "private_type"
-        - true
+          - "secret"
+          - "private_type"
+          - true

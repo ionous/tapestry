@@ -1,6 +1,4 @@
-- Spec:with str:
-  - "bool"
-  - Str exclusively:uses:
-    - true
+- Str:options:
+    - "bool"
     - - Option: "false"
       - Option: "true"

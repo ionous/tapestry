@@ -9,11 +9,12 @@ type Group struct {
 }
 
 type groupContent struct {
-	Flow []typeData
-	Slot []typeData
-	Str  []typeData
-	Num  []typeData
-	Reg  Registry
+	Requires []string
+	Flow     []typeData
+	Slot     []typeData
+	Str      []typeData
+	Num      []typeData
+	Reg      Registry
 }
 
 // dont forget to exclude self

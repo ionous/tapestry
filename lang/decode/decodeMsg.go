@@ -23,8 +23,8 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 			} else {
 				out.AddMarkup(key, v)
 			}
-		} else if len(out.Name) > 0 {
-			err = fmt.Errorf("expected a single key, have %q and %q", out.Name, k)
+		} else if len(out.Lede) > 0 {
+			err = fmt.Errorf("expected a single key, have %q and %q", out.Lede, k)
 			break
 		} else if sig, e := DecodeSignature(k); e != nil {
 			err = e
@@ -32,7 +32,7 @@ func DecodeMessage(msg map[string]any) (ret compact.Message, err error) {
 			err = e
 		} else {
 			out.Key = k
-			out.Name = sig[0]
+			out.Lede = sig[0]
 			out.Labels = sig[1:]
 			out.Args = args
 			continue // keep going to read markup and detect multiple signatures

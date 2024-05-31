@@ -1,76 +1,69 @@
 # Allows the web console to talk to a running game server.
 # None of these commands are available for use in game scripts.
-Spec:with group:
+Spec:requires:contains:
   - "frame"
-  - Group contains:
-      - Spec:with flow:
-          - "frame"
-          - Flow uses:
-              - Term:type:
-                  - "result"
-                  - "text"
-              - Term:type:repeats:
-                  - "events"
-                  - "event"
-                  - true
-              - Term:type:optional:
-                  - "error"
-                  - "text"
-                  - true
-      - Spec:with slot:
-          - "event"
-          - Slot:
-      - Spec:slots:with flow:
-          - "frame_output"
-          - "event"
-          - Flow uses:
-              - Term:name:
-                  - "_"
-                  - "text"
-      - Spec:slots:with flow:
-          - "scene_started"
-          - "event"
-          - Flow uses:
-              - Term:name:type:repeats:
-                  - "_"
-                  - "domains"
-                  - "text"
-                  - true
-      - Spec:slots:with flow:
-          - "scene_ended"
-          - "event"
-          - Flow uses:
-              - Term:name:type:repeats:
-                  - "_"
-                  - "domains"
-                  - "text"
-                  - true
-      - Spec:slots:with flow:
-          - "state_changed"
-          - "event"
-          - Flow uses:
-              - Term:type:
-                  - "noun"
-                  - "text"
-              - Term:type:
-                  - "aspect"
-                  - "text"
-              - Term:type:
-                  - "prev"
-                  - "text"
-              - Term:type:
-                  - "trait"
-                  - "text"
-      - Spec:slots:with flow:
-          - "pair_changed"
-          - "event"
-          - Flow uses:
-              - Term:type:
-                  - "a"
-                  - "text"
-              - Term:type:
-                  - "b"
-                  - "text"
-              - Term:type:
-                  - "rel"
-                  - "text"
+  - "dl/prim"
+  - - Flow:terms:
+        - "frame"
+        - - Term:type:
+              - "result"
+              - "text"
+          - Term:type:repeats:
+              - "events"
+              - "event"
+              - true
+          - Term:type:optional:
+              - "error"
+              - "text"
+              - true
+    - Slot: "event"
+
+    - Flow:slots:terms:
+        - "frame_output"
+        - "event"
+        - - Term:name:
+              - "_"
+              - "text"
+    - Flow:slots:terms:
+        - "scene_started"
+        - "event"
+        - - Term:name:type:repeats:
+              - "_"
+              - "domains"
+              - "text"
+              - true
+    - Flow:slots:terms:
+        - "scene_ended"
+        - "event"
+        - - Term:name:type:repeats:
+              - "_"
+              - "domains"
+              - "text"
+              - true
+    - Flow:slots:terms:
+        - "state_changed"
+        - "event"
+        - - Term:type:
+              - "noun"
+              - "text"
+          - Term:type:
+              - "aspect"
+              - "text"
+          - Term:type:
+              - "prev"
+              - "text"
+          - Term:type:
+              - "trait"
+              - "text"
+    - Flow:slots:terms:
+        - "pair_changed"
+        - "event"
+        - - Term:type:
+              - "a"
+              - "text"
+          - Term:type:
+              - "b"
+              - "text"
+          - Term:type:
+              - "rel"
+              - "text"

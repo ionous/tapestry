@@ -51,7 +51,7 @@ func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message
 		if args, e := tryPatternArgs(dec, msg); e != nil {
 			err = e
 		} else {
-			ret = &assign.CallPattern{PatternName: msg.Name, Arguments: args}
+			ret = &assign.CallPattern{PatternName: msg.Lede, Arguments: args}
 		}
 	}
 	return

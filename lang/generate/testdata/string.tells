@@ -1,3 +1,1 @@
-- Spec:with str:
-  - "text"
-  - Str uses: []
+- Str: "text"

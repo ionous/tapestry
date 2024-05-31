@@ -7,19 +7,23 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 )
 
-func parseString(name string, v any, otherwise string) (ret string, err error) {
-	if v == nil && len(otherwise) > 0 {
-		ret = otherwise
-	} else if a, ok := v.(string); ok {
-		ret = a
-	} else {
-		err = fmt.Errorf("expected a string for %q", name)
+type MessageMap map[string]any
+
+// turn slices of labels and args into a map of { label => arg }
+func MakeMessageMap(msg compact.Message) MessageMap {
+	out := make(MessageMap)
+	for i, l := range msg.Labels {
+		out[l] = msg.Args[i]
 	}
-	return
+	return out
 }
 
-func parseStrings(v any) (ret []string, err error) {
+// expects that v is nil, a string, or a slice of strings
+func (mm MessageMap) GetStrings(key string) (ret []string, err error) {
+	v := mm[key]
 	switch v := v.(type) {
+	case nil:
+		// okay.
 	case string:
 		ret = []string{v}
 	case []any:
@@ -34,9 +38,11 @@ func parseStrings(v any) (ret []string, err error) {
 	return
 }
 
-func parseMessages(v any) (ret []compact.Message, err error) {
+// expects that v is nil, or a slice of messages.
+func (mm MessageMap) GetMessages(key string) (ret []compact.Message, err error) {
+	v := mm[key]
 	if els, ok := v.([]any); !ok && v != nil {
-		err = fmt.Errorf("expected a list, have %T %#v", v, v)
+		err = fmt.Errorf("%q expected a list, have %T %#v", key, v, v)
 	} else {
 		for _, el := range els {
 			if msg, e := decode.ParseMessage(el); e != nil {
@@ -48,17 +54,6 @@ func parseMessages(v any) (ret []compact.Message, err error) {
 		}
 	}
 	return
-}
-
-type MessageMap map[string]any
-
-// turn slices of labels and args into a map of { label => arg }
-func messageMap(msg compact.Message) MessageMap {
-	out := make(MessageMap)
-	for i, l := range msg.Labels {
-		out[l] = msg.Args[i]
-	}
-	return out
 }
 
 // returns false if there was a value, but it wasnt a bool
@@ -74,6 +69,14 @@ func (mm MessageMap) GetBool(name string) (ret bool, err error) {
 }
 
 // returns false if there was a value, but it wasnt a string
-func (mm MessageMap) GetString(name, otherwise string) (ret string, err error) {
-	return parseString(name, mm[name], otherwise)
+func (mm MessageMap) GetString(key, otherwise string) (ret string, err error) {
+	v := mm[key]
+	if v == nil && len(otherwise) > 0 {
+		ret = otherwise
+	} else if a, ok := v.(string); ok {
+		ret = a
+	} else {
+		err = fmt.Errorf("expected a string for %q", key)
+	}
+	return
 }

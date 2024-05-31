@@ -1,74 +1,25 @@
 package generate
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang/compact"
-	"git.sr.ht/~ionous/tapestry/lang/decode"
 )
 
-// ex. "Spec:groups:with flow"
-func readSpec(groupName string, out *groupContent, msg compact.Message) (err error) {
-	if msg.Name != "spec" {
-		err = fmt.Errorf("expected a spec, got %s", msg.Name)
-	} else if name, e := parseString("spec name", msg.Args[0], ""); e != nil {
+// ex. Spec:requires:contains:
+func readSpec(group string, mm MessageMap) (ret groupContent, err error) {
+	if req, e := mm.GetStrings("requires"); e != nil {
+		err = e
+	} else if contents, e := mm.GetMessages("contains"); e != nil {
 		err = e
 	} else {
-		spec := specData{name, groupName, msg.Markup}
-		var slots []string
-		for i, cnt := 1, len(msg.Labels); i < cnt && err == nil; i++ {
-			str := msg.Labels[i]
-			arg := msg.Args[i]
-			switch str {
-			case "slots":
-				// a string or array
-				slots, err = parseStrings(arg)
-			case "groups":
-				// a string or array
-				if _, e := parseStrings(arg); e != nil {
-					err = e
-				}
-			default:
-				if inner, e := decode.ParseMessage(arg); e != nil {
-					err = e
-				} else {
-					switch str {
-					case "with flow":
-						if d, e := readFlow(spec, inner, slots); e != nil {
-							err = e
-						} else {
-							out.Flow = append(out.Flow, d)
-							out.Reg = out.Reg.addFlow(d)
-						}
-					case "with group":
-						err = readGroupContent(groupName, out, inner)
-
-					case "with slot":
-						if d, e := readSlot(spec, inner); e != nil {
-							err = e
-						} else {
-							out.Slot = append(out.Slot, d)
-						}
-					case "with str":
-						if d, e := readStr(spec, inner); e != nil {
-							err = e
-						} else {
-							out.Str = append(out.Str, d)
-						}
-					case "with num":
-						if d, e := readNum(spec, inner); e != nil {
-							err = e
-						} else {
-							out.Num = append(out.Num, d)
-						}
-					default:
-						// fix: the specs should be switched to regular slots
-						// might consider ripping off the out "TypeSpec" part
-						// especially because so much of tapestry only supports slots for flows
-						err = fmt.Errorf("swap no longer supported")
-					}
+		ret.Requires = req
+		for _, msg := range contents {
+			if e := readEntry(group, &ret, msg); e != nil {
+				if pos, ok := msg.Markup["pos"].([]int); ok {
+					err = fmt.Errorf("%w at line %d col %d", e, pos[1], pos[0])
+					break
 				}
 			}
 		}
@@ -76,35 +27,58 @@ func readSpec(groupName string, out *groupContent, msg compact.Message) (err err
 	return
 }
 
-// fix? this doesnt handle subgroups in any good way.
-func readGroupContent(groupName string, out *groupContent, msg compact.Message) (err error) {
-	if msg.Key != "Group contains:" {
-		err = fmt.Errorf("expected group definition, have %s", msg.Key)
-	} else if msgs, e := parseMessages(msg.Args[0]); e != nil {
+func readEntry(group string, out *groupContent, msg compact.Message) (err error) {
+	mm := MakeMessageMap(msg)
+	if name, e := mm.GetString("", ""); e != nil {
 		err = e
 	} else {
-		for _, inner := range msgs {
-			if e := readSpec(groupName, out, inner); e != nil {
+		spec := specData{name, group, msg.Markup}
+		switch msg.Lede {
+		case "flow":
+			if d, e := readFlow(spec, mm); e != nil {
 				err = e
-				break
+			} else {
+				out.Flow = append(out.Flow, d)
+				out.Reg = out.Reg.addFlow(d)
 			}
+		case "slot":
+			if slot, e := readSlot(spec, mm); e != nil {
+				err = e
+			} else {
+				out.Slot = append(out.Slot, slot)
+			}
+		case "str":
+			if d, e := readStr(spec, mm); e != nil {
+				err = e
+			} else {
+				out.Str = append(out.Str, d)
+			}
+		case "num":
+			if d, e := readNum(spec, mm); e != nil {
+				err = e
+			} else {
+				out.Num = append(out.Num, d)
+			}
+		default:
+			err = fmt.Errorf("unknown message %q", name)
 		}
 	}
 	return
 }
 
-func readFlow(spec specData, msg compact.Message, slots []string) (ret flowData, err error) {
-	mm := messageMap(msg)
-	if lede, e := mm.GetString("", spec.Name); e != nil {
+// ex. Flow:slots:lede:terms:
+// only the first term is required: the name.
+func readFlow(spec specData, mm MessageMap) (ret flowData, err error) {
+	if slots, e := mm.GetStrings("slots"); e != nil {
 		err = e
-	} else if uses, ok := mm["uses"]; !ok {
-		err = errors.New("missing flow terms")
-	} else if terms, e := parseMessages(uses); e != nil {
+	} else if lede, e := mm.GetString("lede", spec.Name); e != nil {
+		err = e
+	} else if terms, e := mm.GetMessages("terms"); e != nil {
 		err = e
 	} else {
 		all := make([]termData, len(terms))
 		for i, td := range terms {
-			term := messageMap(td)
+			term := MakeMessageMap(td)
 			if label, e := term.GetString("", ""); e != nil {
 				err = e
 				break
@@ -144,61 +118,31 @@ func readFlow(spec specData, msg compact.Message, slots []string) (ret flowData,
 			}
 		}
 	}
-	if err != nil {
-		if pos, ok := msg.Markup["pos"].([]int); ok {
-			err = fmt.Errorf("%w at line %d col %d", err, pos[1], pos[0])
-		}
-	}
 	return
 }
 
-// generate a slot named "n"
-func readSlot(spec specData, msg compact.Message) (ret slotData, err error) {
-	mm := messageMap(msg)
-	if uses, e := parseMessages(mm["uses"]); e != nil {
+// ex. Slot: "slotname"
+func readSlot(spec specData, mm MessageMap) (ret slotData, _ error) {
+	ret = slotData{specData: spec}
+	return
+}
+
+// ex. Num:
+func readNum(spec specData, mm MessageMap) (ret numData, _ error) {
+	ret = numData{spec}
+	return
+}
+
+// ex. Str:options:
+func readStr(spec specData, mm MessageMap) (ret strData, err error) {
+	if options, e := mm.GetMessages("options"); e != nil {
 		err = e
-	} else if cnt := len(uses); cnt > 0 {
-		err = errors.New("expected no constraints for slot")
+	} else if cnt := len(options); cnt == 0 {
+		ret = strData{specData: spec}
 	} else {
-		ret = slotData{spec}
-	}
-	return
-}
-
-func readStr(spec specData, msg compact.Message) (ret strData, err error) {
-	mm := messageMap(msg)
-	if uses, e := parseMessages(mm["uses"]); e != nil {
-		err = e
-	} else if ex, e := mm.GetBool("exclusively"); e != nil {
-		err = e
-	} else if !ex {
-		ret, err = readSimpleStr(spec, uses)
-	} else {
-		ret, err = readEnum(spec, uses)
-	}
-	return
-}
-
-func readSimpleStr(spec specData, uses []compact.Message) (ret strData, err error) {
-	if cnt := len(uses); cnt > 0 {
-		err = errors.New("expected no constraints for simple string")
-	} else {
-		ret = strData{
-			specData:       spec,
-			Options:        nil,
-			OptionComments: nil,
-		}
-	}
-	return
-}
-
-func readEnum(spec specData, uses []compact.Message) (ret strData, err error) {
-	if cnt := len(uses); cnt == 0 {
-		err = errors.New("expected string choices")
-	} else {
-		options := make([]string, cnt)
+		names := make([]string, cnt)
 		var comments []string
-		for i, msg := range uses {
+		for i, msg := range options {
 			if msg.Key != "Option:" || len(msg.Args) != 1 {
 				err = fmt.Errorf("option %d has unexpected option %q", i, msg.Key)
 				break
@@ -206,7 +150,7 @@ func readEnum(spec specData, uses []compact.Message) (ret strData, err error) {
 				err = fmt.Errorf("option %d has unexpected value %q", i, msg.Key)
 				break
 			} else {
-				options[i] = str
+				names[i] = str
 				if lines, e := compact.ExtractComment(msg.Markup); e != nil {
 					err = fmt.Errorf("option %d has %w", i, e)
 					break
@@ -224,24 +168,10 @@ func readEnum(spec specData, uses []compact.Message) (ret strData, err error) {
 		if err == nil {
 			ret = strData{
 				specData:       spec,
-				Options:        options,
+				Options:        names,
 				OptionComments: comments,
 			}
 		}
-	}
-	return
-}
-
-func readNum(spec specData, msg compact.Message) (ret numData, err error) {
-	mm := messageMap(msg)
-	if _, ok := mm["exclusively"]; ok {
-		err = errors.New("exclusive nums not supported")
-	} else if uses, e := parseMessages(mm["uses"]); e != nil {
-		err = e
-	} else if len(uses) != 0 {
-		err = errors.New("expected no numeric constraints")
-	} else {
-		ret = numData{spec}
 	}
 	return
 }

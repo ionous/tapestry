@@ -1,81 +1,73 @@
 # Commands for debugging and testing stories.
-Spec:with group:
+Spec:requires:contains:
   - "debug"
-  - Group contains:
-      - # A command with a signature of the comment marker metadata.
-        # This is a cheat to allows nodes that have only a comment marker and no actual command.
-        # see also: story.story_break
-        internal: true
-        Spec:slots:with flow:
-          - "do_nothing"
-          - "execute"
-          - Flow:uses:
-              - "--"
-              - []
-      - # Evaluate a boolean command and ensure it returns true.
-        Spec:slots:with flow:
-          - "expect"
-          - "execute"
-          - Flow:uses:
-              - "expect"
-              - - # The boolean command. If the command returns false, the expectation will fail and the game will generate an error.
-                  Term:name:type:
-                    - "_"
-                    - "value"
-                    - "bool_eval"
-      - # Examine the most recent game output, and generate an error unless it matches the specified text.
-        Spec:slots:with flow:
-          - "expect_text"
-          - "execute"
-          - Flow:uses:
-              - "expect"
-              - - # The expected line or lines.
-                  # If an expected line ends with ellipses "..."
-                  # then only the first part of the line has to match.
-                  #
-                  # For example, if the expectation was "Hello...",
-                  # then the output "Hello World!" would match.
-                  Term:type:
-                    - "text"
-                    - "text_eval"
-      - # Process fake input as if the player had typed it themselves.
-        # Fabricate only works while running tests, and does nothing during normal game play.
-        # Multiple actions can be specified by separating them with semi-colons. For example:
-        #   Fabricate input: "s; jump; look"
-        Spec:slots:with flow:
-          - "fabricate"
-          - "execute"
-          - Flow uses:
-              - # One or more actions to handle as if typed by the player.
-                Term:name:type:
-                  - "input"
-                  - "text"
-                  - "text_eval"
-      - # Print a message that is useful during development.
-        # It will be hidden from players in the final game.
-        Spec:slots:with flow:
-          - "debug_log"
-          - "execute"
-          - Flow:uses:
-              - "log"
-              - - # Importance of the message.
-                  Term:name:type:
-                    - "_"
-                    - "log_level"
-                    - "logging_level"
-                - # Some text, or any other value, to display.
-                  Term:type:
-                    - "value"
-                    - "assignment"
-      - # Used with [DebugLog].
-        Spec:with str:
-          - "logging_level"
-          - Str exclusively:uses:
-              - true
-              - - # the lowest logging level.
-                  # not displayed unless specifically requested.
-                  Option: "note"
-                - Option: "debug"
-                - Option: "info"
-                - Option: "warn"
-                - Option: "error"
+  - "dl/rtti"
+  - - # A command with a signature of the comment marker metadata.
+      # This is a cheat to allows nodes that have only a comment marker and no actual command.
+      # see also: story.story_break
+      internal: true
+      Flow:slots:lede:
+        - "do_nothing"
+        - "execute"
+        - "--"
+    - # Evaluate a boolean command and ensure it returns true.
+      Flow:slots:lede:terms:
+        - "expect"
+        - "execute"
+        - "expect"
+        - - # The boolean command. If the command returns false, the expectation will fail and the game will generate an error.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "bool_eval"
+    - # Examine the most recent game output, and generate an error unless it matches the specified text.
+      Flow:slots:lede:terms:
+        - "expect_text"
+        - "execute"
+        - "expect"
+        - - # The expected line or lines.
+            # If an expected line ends with ellipses "..."
+            # then only the first part of the line has to match.
+            #
+            # For example, if the expectation was "Hello...",
+            # then the output "Hello World!" would match.
+            Term:type:
+              - "text"
+              - "text_eval"
+    - # Process fake input as if the player had typed it themselves.
+      # Fabricate only works while running tests, and does nothing during normal game play.
+      # Multiple actions can be specified by separating them with semi-colons. For example:
+      #   Fabricate input: "s; jump; look"
+      Flow:slots:terms:
+        - "fabricate"
+        - "execute"
+        - - # One or more actions to handle as if typed by the player.
+            Term:name:type:
+              - "input"
+              - "text"
+              - "text_eval"
+    - # Print a message that is useful during development.
+      # It will be hidden from players in the final game.
+      Flow:slots:lede:terms:
+        - "debug_log"
+        - "execute"
+        - "log"
+        - - # Importance of the message.
+            Term:name:type:
+              - "_"
+              - "log_level"
+              - "logging_level"
+          - # Some text, or any other value, to display.
+            Term:type:
+              - "value"
+              - "assignment"
+    - # Used with [DebugLog].
+      Str:options:
+        - "logging_level"
+        - - # the lowest logging level.
+            # not displayed unless specifically requested.
+            Option: "note"
+          - Option: "debug"
+          - Option: "info"
+          - Option: "warn"
+          - Option: "error"

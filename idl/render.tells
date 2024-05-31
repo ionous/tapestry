@@ -1,89 +1,85 @@
 # Text template rendering.
 # Keeping these functions separated allows weave to exclude package express from the runtime.
-Spec:with group:
+Spec:requires:contains:
   - "render"
-  - Group contains:
-      - # Handles changing a template like {.boombip} into text.
-        # If the name is a variable containing an object name: return the printed object name ( via "print name" );
-        # if the name is a variable with some other text: return that text;
-        # if the name isn't a variable but refers to some object: return that object's printed object name;
-        # otherwise, its an error.
-        internal: true
-        Spec:slots:with flow:
-          - "render_name"
+  - - "dl/assign"
+    - "dl/prim"
+    - "dl/rtti"
+  - - # Handles changing a template like {.boombip} into text.
+      # If the name is a variable containing an object name: return the printed object name ( via "print name" );
+      # if the name is a variable with some other text: return that text;
+      # if the name isn't a variable but refers to some object: return that object's printed object name;
+      # otherwise, its an error.
+      internal: true
+      Flow:slots:terms:
+        - "render_name"
+        - "text_eval"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+    - # Used with render pattern for arguments of unknown type.
+      internal: true
+      Slot: "render_eval"
+
+    - # Pull a value from name that might refer either to a variable, or to an object.
+      # If the name is an object, returns the object id.
+      internal: true
+      Flow:slots:terms:
+        - "render_ref"
+        - - "bool_eval"
+          - "num_eval"
           - "text_eval"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "name"
-                  - "text"
-      - # Used with render pattern for arguments of unknown type.
-        internal: true
-        Spec:with slot:
+          - "record_eval"
+          - "num_list_eval"
+          - "text_list_eval"
+          - "record_list_eval"
           - "render_eval"
-          - Slot:
-      - # Pull a value from name that might refer either to a variable, or to an object.
-        # If the name is an object, returns the object id.
-        internal: true
-        Spec:slots:with flow:
-          - "render_ref"
-          - - "bool_eval"
-            - "num_eval"
-            - "text_eval"
-            - "record_eval"
-            - "num_list_eval"
-            - "text_list_eval"
-            - "record_list_eval"
-            - "render_eval"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "name"
-                  - "text_eval"
-              - Term:optional:repeats:
-                  - "dot"
-                  - true
-                  - true
-      - # Pull a value from an assignment of unknown affinity.
-        internal: true
-        Spec:slots:with flow:
-          - "render_value"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text_eval"
+          - Term:optional:repeats:
+              - "dot"
+              - true
+              - true
+    - # Pull a value from an assignment of unknown affinity.
+      internal: true
+      Flow:slots:terms:
+        - "render_value"
+        - "render_eval"
+        - - Term:name:type:
+              - "_"
+              - "value"
+              - "assignment"
+    - # A version of core's call pattern
+      # that figures out how to evaluate its arguments at runtime.
+      internal: true
+      Flow:slots:lede:terms:
+        - "render_pattern"
+        - - "bool_eval"
+          - "text_eval"
           - "render_eval"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "value"
-                  - "assignment"
-      - # A version of core's call pattern
-        # that figures out how to evaluate its arguments at runtime.
-        internal: true
-        Spec:slots:with flow:
-          - "render_pattern"
-          - - "bool_eval"
-            - "text_eval"
-            - "render_eval"
-          - Flow:uses:
+        - "render"
+        - - Term:name:type:
+              - "_"
+              - "pattern_name"
+              - "text"
+          - Term:type:repeats:
               - "render"
-              - - Term:name:type:
-                    - "_"
-                    - "pattern_name"
-                    - "text"
-                - Term:type:repeats:
-                    - "render"
-                    - "render_eval"
-                    - true
-      - # Generate text in a replaceable manner.
-        internal: true
-        Spec:slots:with flow:
-          - "render_response"
-          - - "execute"
-            - "text_eval"
-          - Flow uses:
-              - Term:name:type:
-                  - "_"
-                  - "name"
-                  - "text"
-              - Term:type:optional:
-                  - "text"
-                  - "text_eval"
-                  - true
+              - "render_eval"
+              - true
+    - # Generate text in a replaceable manner.
+      internal: true
+      Flow:slots:terms:
+        - "render_response"
+        - - "execute"
+          - "text_eval"
+        - - Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - Term:type:optional:
+              - "text"
+              - "text_eval"
+              - true

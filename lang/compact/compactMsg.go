@@ -8,8 +8,8 @@ package compact
 // Markup keys start with a double dash.
 type Message struct {
 	Key    string         // original specified text: "Sig:label:"
-	Name   string         // names are lower_underscore
-	Labels []string       // parameter names sans colons
+	Lede   string         // the leading part of the signature in lowercase
+	Labels []string       // parameter names sans colons; the first can be blank ( anonymous )
 	Args   []any          // the same length as labels
 	Markup map[string]any // from map keys starting with "--"; stored stripped of the dashes.
 }

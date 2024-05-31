@@ -1,58 +1,45 @@
 # testdl
-Spec:with group:
+Spec:contains:
   - "testdl"
-  - Group contains:
-      - Spec:with str:
-          - "test_bool"
-          - Str exclusively:uses:
+  - - Str:options:
+        - "test_bool"
+        - - Option: "true"
+          - Option: "false"
+    - Flow:slots:lede:terms:
+        - "test_embed"
+        - "test_slot"
+        - "embed"
+        - - Term: "test_flow"
+    - Flow:slots:lede:terms:
+        - "test_flow"
+        - "test_slot"
+        - "flow"
+        - - Term:type:optional:
+              - "slot"
+              - "test_slot"
               - true
-              - - Option: "true"
-                - Option: "false"
-      - Spec:slots:with flow:
-          - "test_embed"
-          - "test_slot"
-          - Flow:uses:
-              - "embed"
-              - - Term: "test_flow"
-      - Spec:slots:with flow:
-          - "test_flow"
-          - "test_slot"
-          - Flow:uses:
-              - "flow"
-              - - Term:type:optional:
-                    - "slot"
-                    - "test_slot"
-                    - true
-                - Term:type:optional:
-                    - "txt"
-                    - "test_txt"
-                    - true
-                - Term:type:optional:
-                    - "num"
-                    - "test_num"
-                    - true
-                - Term:type:optional:
-                    - "bool"
-                    - "test_bool"
-                    - true
-                - Term:type:optional:repeats:
-                    - "slots"
-                    - "test_slot"
-                    - true
-                    - true
-      - Spec:with num:
-          - "test_num"
-          - Num uses: []
-      - Spec:with slot:
-          - "test_slot"
-          - Slot:
-      - Spec:with str:
-          - "test_str"
-          - Str exclusively:uses:
+          - Term:type:optional:
+              - "txt"
+              - "test_txt"
               - true
-              - - Option: "one"
-                - Option: "other"
-                - Option: "option"
-      - Spec:with str:
-          - "test_txt"
-          - Str uses: []
+          - Term:type:optional:
+              - "num"
+              - "test_num"
+              - true
+          - Term:type:optional:
+              - "bool"
+              - "test_bool"
+              - true
+          - Term:type:optional:repeats:
+              - "slots"
+              - "test_slot"
+              - true
+              - true
+    - Num: "test_num"
+    - Slot: "test_slot"
+    - Str:options:
+        - "test_str"
+        - - Option: "one"
+          - Option: "other"
+          - Option: "option"
+    - Str: "test_txt"

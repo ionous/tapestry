@@ -1,44 +1,38 @@
 # play
-Spec:with group:
+Spec:requires:contains:
   - "play"
-  - Group contains:
-      - # a log message that can optionally be displayed to the client.
-        Spec:slots:with flow:
-          - "play_log"
-          - "play_message"
-          - Flow:uses:
-              - "play"
-              - - Term:type:
-                    - "log"
-                    - "text"
-      - # a client-server message for the play app
-        Spec:with slot:
-          - "play_message"
-          - Slot:
-      - # app level change in state.
-        Spec:slots:with flow:
-          - "play_mode"
-          - "play_message"
-          - Flow:uses:
-              - "play"
-              - - Term:type:
-                    - "mode"
-                    - "play_modes"
-      - # enum for play play_mode
-        Spec:with str:
-          - "play_modes"
-          - Str exclusively:uses:
-              - true
-              - - Option: "asm"
-                - Option: "play"
-                - Option: "complete"
-                - Option: "error"
-      - # output from the game itself.
-        Spec:slots:with flow:
-          - "play_out"
-          - "play_message"
-          - Flow:uses:
-              - "play"
-              - - Term:type:
-                    - "out"
-                    - "text"
+  - "dl/prim"
+  - - # a log message that can optionally be displayed to the client.
+      Flow:slots:lede:terms:
+        - "play_log"
+        - "play_message"
+        - "play"
+        - - Term:type:
+              - "log"
+              - "text"
+    - # a client-server message for the play app
+      Slot: "play_message"
+
+    - # app level change in state.
+      Flow:slots:lede:terms:
+        - "play_mode"
+        - "play_message"
+        - "play"
+        - - Term:type:
+              - "mode"
+              - "play_modes"
+    - # enum for play play_mode
+      Str:options:
+        - "play_modes"
+        - - Option: "asm"
+          - Option: "play"
+          - Option: "complete"
+          - Option: "error"
+    - # output from the game itself.
+      Flow:slots:lede:terms:
+        - "play_out"
+        - "play_message"
+        - "play"
+        - - Term:type:
+              - "out"
+              - "text"

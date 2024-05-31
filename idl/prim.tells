@@ -1,25 +1,19 @@
 # prim
-Spec:with group:
+Spec:contains:
   - "prim"
-  - Group contains:
-      - # A true/false value. Technically, boolean values are described using strings.
-        # However, the tell, json, and generated go code all expect literal true/false values
-        # wherever this bool type is detected. Therefore, only the specs need to use this type.
-        Spec:with str:
-          - "bool"
-          - Str exclusively:uses:
-              - true
-              - - Option: "false"
-                - Option: "true"
-      - # A sequence of characters of any length spanning multiple lines. See also: text.
-        Spec:with str:
-          - "lines"
-          - Str uses: []
-      - # An integer or floating point value.
-        Spec:with num:
-          - "num"
-          - Num uses: []
-      - # A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.
-        Spec:with str:
-          - "text"
-          - Str uses: []
+  - - # A true/false value. Technically, boolean values are described using strings.
+      # However, the tell, json, and generated go code all expect literal true/false values
+      # wherever this bool type is detected. Therefore, only the specs need to use this type.
+      Str:options:
+        - "bool"
+        - - Option: "false"
+          - Option: "true"
+
+    - # A sequence of characters of any length spanning multiple lines. See also: text.
+      Str: "lines"
+
+    - # An integer or floating point value.
+      Num: "num"
+
+    - # A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.
+      Str: "text"

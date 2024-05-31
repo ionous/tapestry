@@ -1,51 +1,40 @@
 # Slots used by the runtime to produce and consume values.
-Spec:with group:
+Spec:contains:
   - "rtti"
-  - Group contains:
-      - # Provides access to values in a generic way.
-        # For example, when the type of a value isn't known in advance.
-        # See also package assign. ( ex. [assign.FromBool] )
-        Spec:with slot:
-          - "assignment"
-          - Slot:
-      - # Commands which return true/false values.
-        Spec:with slot:
-          - "bool_eval"
-          - Slot:
-        blockly-color: "LOGIC_HUE"
-      - # Run a series of other commands.
-        Spec:with slot:
-          - "execute"
-          - Slot:
-        blockly-color: "PROCEDURES_HUE"
-        blockly-stack: true
-      - # Commands which return a list of numbers.
-        Spec:with slot:
-          - "num_list_eval"
-          - Slot:
-        blockly-color: "MATH_HUE"
-      - # Commands which return a number.
-        Spec:with slot:
-          - "num_eval"
-          - Slot:
-        blockly-color: "MATH_HUE"
-      - # Commands which return text.
-        Spec:with slot:
-          - "text_eval"
-          - Slot:
-        blockly-color: "TEXTS_HUE"
-      - # Commands which return a list of text.
-        Spec:with slot:
-          - "text_list_eval"
-          - Slot:
-        blockly-color: "TEXTS_HUE"
-      - # Commands which return a record.
-        Spec:with slot:
-          - "record_eval"
-          - Slot:
-        blockly-color: "LISTS_HUE"
-      - # Commands which return a list of records.
-        Spec:with slot:
-          - "record_list_eval"
-          - Slot:
-        blockly-color: "LISTS_HUE"
+  - - # Provides access to values in a generic way.
+      # For example, when the type of a value isn't known in advance.
+      # See also package assign. ( ex. [assign.FromBool] )
+      Slot: "assignment"
+
+    - # Commands which return true/false values.
+      Slot: "bool_eval"
+      blockly-color: "LOGIC_HUE"
+
+    - # Run a series of other commands.
+      Slot: "execute"
+      blockly-color: "PROCEDURES_HUE"
+      blockly-stack: true
+
+    - # Commands which return a list of numbers.
+      Slot: "num_list_eval"
+      blockly-color: "MATH_HUE"
+
+    - # Commands which return a number.
+      Slot: "num_eval"
+      blockly-color: "MATH_HUE"
+
+    - # Commands which return text.
+      Slot: "text_eval"
+      blockly-color: "TEXTS_HUE"
+
+    - # Commands which return a list of text.
+      Slot: "text_list_eval"
+      blockly-color: "TEXTS_HUE"
+
+    - # Commands which return a record.
+      Slot: "record_eval"
+      blockly-color: "LISTS_HUE"
+
+    - # Commands which return a list of records.
+      Slot: "record_list_eval"
+      blockly-color: "LISTS_HUE"

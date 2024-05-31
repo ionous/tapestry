@@ -46,7 +46,8 @@ func (op *Brancher_Slots) Repeats() bool {
 var Zt_Trigger = typeinfo.Slot{
 	Name: "trigger",
 	Markup: map[string]any{
-		"comment": "Helper for counting values.",
+		"comment":  "Helper for counting values.",
+		"internal": true,
 	},
 }
 
@@ -421,6 +422,7 @@ func (op *CallTerminal_Slice) Repeats() bool {
 }
 
 // Runtime version of count_of.
+// A guard which returns true based on a counter.
 type CallTrigger struct {
 	Name    string
 	Trigger Trigger
@@ -2408,6 +2410,7 @@ func (op *AddValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// call_trigger
 type TriggerCycle struct {
 	Markup map[string]any
 }
@@ -2444,6 +2447,7 @@ func (op *TriggerCycle_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// call_trigger
 type TriggerOnce struct {
 	Markup map[string]any
 }
@@ -2480,6 +2484,7 @@ func (op *TriggerOnce_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// call_trigger
 type TriggerSwitch struct {
 	Markup map[string]any
 }
@@ -2772,7 +2777,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment":  "Runtime version of count_of.",
+			"comment":  []interface{}{"Runtime version of count_of.", "A guard which returns true based on a counter."},
 			"internal": true,
 		},
 	}
@@ -3749,6 +3754,10 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&Zt_Trigger,
 		},
+		Markup: map[string]any{
+			"comment":  "call_trigger",
+			"internal": true,
+		},
 	}
 	Zt_TriggerOnce = typeinfo.Flow{
 		Name:  "trigger_once",
@@ -3757,6 +3766,10 @@ func init() {
 		Slots: []*typeinfo.Slot{
 			&Zt_Trigger,
 		},
+		Markup: map[string]any{
+			"comment":  "call_trigger",
+			"internal": true,
+		},
 	}
 	Zt_TriggerSwitch = typeinfo.Flow{
 		Name:  "trigger_switch",
@@ -3764,6 +3777,10 @@ func init() {
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&Zt_Trigger,
+		},
+		Markup: map[string]any{
+			"comment":  "call_trigger",
+			"internal": true,
 		},
 	}
 	Zt_While = typeinfo.Flow{
