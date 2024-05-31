@@ -1,7 +1,7 @@
 # Commands for debugging and testing stories.
 Spec:requires:contains:
   - "debug"
-  - "dl/rtti"
+  - "idl/rtti"
   - - # A command with a signature of the comment marker metadata.
       # This is a cheat to allows nodes that have only a comment marker and no actual command.
       # see also: story.story_break

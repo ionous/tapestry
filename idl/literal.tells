@@ -1,8 +1,8 @@
 # literal
 Spec:requires:contains:
   - "literal"
-  - - "dl/prim"
-    - "dl/rtti"
+  - - "idl/prim"
+    - "idl/rtti"
   - - # Specify an explicit true or false.
       Flow:slots:lede:terms:
         - "bool_value"

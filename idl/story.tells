@@ -3,10 +3,10 @@
 # Most authors will probably prefer the jess plain english style of modeling over these, more explicit, commands. However, there are some commands -- like defining scenes -- which don't currently have a corollary within jess.
 Spec:requires:contains:
   - "story"
-  - - "dl/core"
-    - "dl/grammar"
-    - "dl/prim"
-    - "dl/rtti"
+  - - "idl/core"
+    - "idl/grammar"
+    - "idl/prim"
+    - "idl/rtti"
   - - # A slot for the modeling commands used to define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.
       Slot: "story_statement"
 

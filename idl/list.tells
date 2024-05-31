@@ -1,10 +1,10 @@
 # list
 Spec:requires:contains:
   - "list"
-  - - "dl/assign"
-    - "dl/core"
-    - "dl/prim"
-    - "dl/rtti"
+  - - "idl/assign"
+    - "idl/core"
+    - "idl/prim"
+    - "idl/rtti"
   - - # Erase at edge: Remove one or more values from a list.
       Flow:slots:lede:terms:
         - "erase_edge"

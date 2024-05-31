@@ -1,8 +1,8 @@
 # Read values from, and write values to, objects and local variables.
 Spec:requires:contains:
   - "assign"
-  - - "dl/prim"
-    - "dl/rtti"
+  - - "idl/prim"
+    - "idl/rtti"
   - - # Identifies an object field, local variable, or pattern parameter. Addresses can be read from or written to.
       Slot: "address"
 

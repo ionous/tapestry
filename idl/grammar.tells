@@ -1,8 +1,8 @@
 # grammar
 Spec:requires:contains:
   - "grammar"
-  - - "dl/assign"
-    - "dl/prim"
+  - - "idl/assign"
+    - "idl/prim"
   - - # makes a parser scanner producing a script defined action.
       Flow:slots:lede:terms:
         - "action"

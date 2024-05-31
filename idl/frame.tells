@@ -2,7 +2,7 @@
 # None of these commands are available for use in game scripts.
 Spec:requires:contains:
   - "frame"
-  - "dl/prim"
+  - "idl/prim"
   - - Flow:terms:
         - "frame"
         - - Term:type:

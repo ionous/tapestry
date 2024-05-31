@@ -2,9 +2,9 @@
 # Keeping these functions separated allows weave to exclude package express from the runtime.
 Spec:requires:contains:
   - "render"
-  - - "dl/assign"
-    - "dl/prim"
-    - "dl/rtti"
+  - - "idl/assign"
+    - "idl/prim"
+    - "idl/rtti"
   - - # Handles changing a template like {.boombip} into text.
       # If the name is a variable containing an object name: return the printed object name ( via "print name" );
       # if the name is a variable with some other text: return that text;

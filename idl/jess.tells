@@ -12,8 +12,8 @@
 # containing exactly one member set to the parsed data.
 Spec:requires:contains:
   - "jess"
-  - - "dl/prim"
-    - "dl/rtti"
+  - - "idl/prim"
+    - "idl/rtti"
 
   - - # Used to store matching text
       Slot: "matched"

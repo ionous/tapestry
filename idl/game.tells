@@ -1,7 +1,7 @@
 # System commands that can be issued by script to communicate with the running game.
 Spec:requires:contains:
   - "game"
-  - "dl/rtti"
+  - "idl/rtti"
   - - # Immediately end the current game.
       Flow:slots:
         - "quit_game"

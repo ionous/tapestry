@@ -1,9 +1,9 @@
 # Commands for scripting runtime behavior.
 Spec:requires:contains:
   - "core"
-  - - "dl/assign"
-    - "dl/prim"
-    - "dl/rtti"
+  - - "idl/assign"
+    - "idl/prim"
+    - "idl/rtti"
   - - # Test if a set of conditions all return true.
       # Stops testing after the first condition fails.
       Flow:slots:terms:

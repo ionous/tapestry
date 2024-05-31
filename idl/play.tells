@@ -1,7 +1,7 @@
 # play
 Spec:requires:contains:
   - "play"
-  - "dl/prim"
+  - "idl/prim"
   - - # a log message that can optionally be displayed to the client.
       Flow:slots:lede:terms:
         - "play_log"
