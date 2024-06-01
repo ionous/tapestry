@@ -14,10 +14,10 @@ func TestAllTrue(t *testing.T) {
 	var l boolList
 	evals := []rt.BoolEval{}
 	for i := 0; i < 3; i++ {
-		test := &AllTrue{Test: evals}
+		test := &IsAll{Test: evals}
 		if ok, e := safe.GetBool(run, test); e != nil {
 			t.Fatal(e)
-		} else if !ok.Bool() {
+		} else if ok.Bool() != (i > 0) {
 			t.Fatal("expected success")
 		} else if l.asks != len(l.vals) {
 			t.Fatal("expected all got tested")
@@ -28,7 +28,7 @@ func TestAllTrue(t *testing.T) {
 	}
 	// turn one false.
 	l.vals[1] = false
-	test := &AllTrue{Test: evals}
+	test := &IsAll{Test: evals}
 	if ok, e := safe.GetBool(run, test); e != nil {
 		t.Fatal(e)
 	} else if ok.Bool() {
@@ -43,7 +43,7 @@ func TestAnyTrue(t *testing.T) {
 	var l boolList
 	evals := []rt.BoolEval{}
 	for i := 0; i < 3; i++ {
-		test := &AnyTrue{Test: evals}
+		test := &IsAny{Test: evals}
 		if ok, e := safe.GetBool(run, test); e != nil {
 			t.Fatal(e)
 		} else if ok.Bool() {
@@ -57,7 +57,7 @@ func TestAnyTrue(t *testing.T) {
 	}
 	// turn one true.
 	l.vals[1] = true
-	test := &AnyTrue{Test: evals}
+	test := &IsAny{Test: evals}
 	if ok, e := safe.GetBool(run, test); e != nil {
 		t.Fatal(e)
 	} else if !ok.Bool() {

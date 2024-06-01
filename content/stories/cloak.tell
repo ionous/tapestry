@@ -61,7 +61,7 @@ Instead of examining the message:
 
 Instead of going:
   - If:do:
-    - AllTrue:
+    - Is all:
       - Is:matching:text:
         - "#story.location"
         - "equal_to"
@@ -82,7 +82,7 @@ Instead of going:
 # block actions other than "going" when in the darkened bar:
 Instead of running an action:
   - If:do:
-    - AllTrue:
+    - Is all:
       - Is:matching:text:
           - "#story.location"
           - "equal_to"

@@ -161,7 +161,7 @@
 - Define rule:do:
     - "before can reach"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - "@requires_light"
               - # we know this rule is for the player, so we can rely the illumination cache.
                 Object:dot:
@@ -198,7 +198,7 @@
 - Define rule:do:
     - "reach up"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@from_obj"
                   - "containers"
@@ -249,7 +249,7 @@
 - Define rule:do:
     - "reach down"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@into_obj"
                   - "containers"

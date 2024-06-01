@@ -84,7 +84,7 @@
               Define rule:do:
                 - "print several"
                 - - If:do:
-                      - AllTrue:
+                      - Is all:
                           - KindOf:is:
                               - "@obj"
                               - "triangles"

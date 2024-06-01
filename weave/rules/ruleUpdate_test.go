@@ -14,7 +14,7 @@ import (
 func TestUpdateTracker(t *testing.T) {
 	var up rules.UpdateTracker
 	updates := &call.CallTrigger{}
-	embedded := &logic.AllTrue{Test: []rt.BoolEval{updates}}
+	embedded := &logic.IsAll{Test: []rt.BoolEval{updates}}
 	updatesArg := assign.Arg{Value: &assign.FromBool{Value: updates}}
 	embeddedArg := assign.Arg{Value: &assign.FromBool{Value: embedded}}
 	//

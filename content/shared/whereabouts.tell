@@ -245,7 +245,7 @@
           - "location"
           - "object"
     - - If:assuming:do:
-          - AnyTrue:
+          - Is any:
               - KindOf:is:
                   - "@parent"
                   - "containers"
@@ -345,7 +345,7 @@
               ParentOf obj:
                 FromText: "@obj"
       - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@parent"
                   - "actors"
@@ -371,7 +371,7 @@
           - ParentOf obj:
               FromText: "@obj"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@parent"
                   - "actors"

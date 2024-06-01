@@ -1,7 +1,7 @@
 <h1>{{ Title .Slot.Name }} Slot</h1>
 {{ Comment .Slot.Markup }} 
 <div>
-	Defined in: <a href="{{ LinkByIdl .Slot.Idl }}">{{ Pascal .Slot.Idl }}</a>
+	Defined by idl <a href="{{ LinkByIdl .Slot.Idl }}">{{ .Slot.Idl }}</a>.
 </div>
 <section>
 	<h3 id="pkg-commands">

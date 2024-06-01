@@ -35,7 +35,7 @@
 - Define rule:do:
     - "assign grouping"
     - - If:do:else:
-          - AllTrue:
+          - Is all:
               - Object:dot:
                   - "@obj"
                   - AtField: "counted"
@@ -97,7 +97,7 @@
 - Define rule:do:
     - "match groups"
     - - If:do:else:
-          - AnyTrue:
+          - Is any:
               - Is empty:
                   Variable:dot:
                     - "first"
@@ -110,7 +110,7 @@
                 - "@matching"
                 - FromBool: false
           - If:do:
-              - AllTrue:
+              - Is all:
                   - Is:matching:text:
                       - Variable:dot:
                           - "first"

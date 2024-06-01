@@ -76,7 +76,7 @@
   Define rule:do:
     - "instead of state changing"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@trait"
                   - "equal_to"

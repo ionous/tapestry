@@ -58,12 +58,12 @@
           - - PrintDarkHeader room:
                 FromText: "@room"
             - If:do:
-                - AnyTrue:
+                - Is any:
                     - Is:matching:text:
                         - "@verbosity"
                         - "equal_to"
                         - "verbose"
-                    - AllTrue:
+                    - Is all:
                         - Is:matching:text:
                             - "@verbosity"
                             - "equal_to"
@@ -83,12 +83,12 @@
                   FromTextList: "@enclosures"
               - LineBreak:
               - If:do:
-                  - AnyTrue:
+                  - Is any:
                       - Is:matching:text:
                           - "@verbosity"
                           - "equal_to"
                           - "verbose"
-                      - AllTrue:
+                      - Is all:
                           - Is:matching:text:
                               - "@verbosity"
                               - "equal_to"
@@ -236,7 +236,7 @@
           - # exclude objects that enclose the viewpoint, those get their own locale descriptions
             - If:do:
                 - Not:
-                    AnyTrue:
+                    Is any:
                       - Is:matching:text:
                           - "@it"
                           - "equal_to"
@@ -249,7 +249,7 @@
                 - - PrintObjectDescription obj:
                       FromText: "@it"
                   - If:do:
-                      - AllTrue:
+                      - Is all:
                           - Object:dot:
                               - "@it"
                               - AtField: "not mentioned"
@@ -292,7 +292,7 @@
     - "print object description"
     - "print mentioned supporters"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Object:dot:
                   - "@obj"
                   - AtField: "mentioned"
@@ -307,7 +307,7 @@
     - "print object description"
     - "print scenery supporters"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Object:dot:
                   - "@obj"
                   - AtField: "scenery"
@@ -350,7 +350,7 @@
     - - Bool: "success"
       - Bool:initially:
           - "first look"
-          - AllTrue:
+          - Is all:
               - Object:dot:
                   - "@obj"
                   - AtField: "not mentioned"
@@ -367,7 +367,7 @@
 - Define rule:do:
     - "print impression of"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@obj"
                   - "supporters"
@@ -387,7 +387,7 @@
 - Define rule:do:
     - "Print impression of"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - "@first_look"
               - Object:dot:
                   - "@obj"

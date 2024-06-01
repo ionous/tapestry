@@ -54,7 +54,7 @@
     - "print group"
     - "label without size"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Variable:dot:
                   - "grouping"
                   - - AtField: "hide size"
@@ -92,7 +92,7 @@
     - "print group"
     - "ungrouped objects"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is empty:
                   Variable:dot:
                     - "grouping"

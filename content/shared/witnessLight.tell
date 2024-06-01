@@ -40,7 +40,7 @@
     - "witness light"
     - "discovered the light"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - "@same_actor"
               - "@same_location"
               - "@now_illuminated"
@@ -50,7 +50,7 @@
     - "witness light"
     - "discovered the dark"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - "@same_actor"
               - "@same_location"
               - "@was_illuminated"

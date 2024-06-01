@@ -41,7 +41,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"'a' < 'b'",
 			&math.CompareText{
-				A: T("a"), Is: math.C_Comparison_LessThan, B: T("b"),
+				A: T("a"), Compare: math.C_Comparison_LessThan, B: T("b"),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -50,7 +50,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"7 >= 8",
 			&math.CompareNum{
-				A: F(7), Is: math.C_Comparison_AtLeast, B: F(8),
+				A: F(7), Compare: math.C_Comparison_AtLeast, B: F(8),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -69,10 +69,10 @@ func TestExpressions(t *testing.T) {
 	t.Run("logic", func(t *testing.T) {
 		if e := testExpression(
 			"true and (false or {not: true})",
-			&logic.AllTrue{
+			&logic.IsAll{
 				Test: []rt.BoolEval{
 					B(true),
-					&logic.AnyTrue{
+					&logic.IsAny{
 						Test: []rt.BoolEval{
 							B(false),
 							// isNot requires command parsing
@@ -174,7 +174,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{if 7=7}boop{else}beep{end}",
 			&logic.ChooseText{
 				If: &math.CompareNum{
-					A: F(7), Is: math.C_Comparison_EqualTo, B: F(7),
+					A: F(7), Compare: math.C_Comparison_EqualTo, B: F(7),
 				},
 				True:  T("boop"),
 				False: T("beep"),
@@ -187,7 +187,7 @@ func TestTemplates(t *testing.T) {
 			&logic.ChooseText{
 				If: &logic.Not{
 					Test: &math.CompareNum{
-						A: F(7), Is: math.C_Comparison_EqualTo, B: F(7),
+						A: F(7), Compare: math.C_Comparison_EqualTo, B: F(7),
 					}},
 				True:  T("boop"),
 				False: T("beep"),
@@ -213,7 +213,7 @@ func TestTemplates(t *testing.T) {
 					T(" "),
 					&logic.ChooseText{
 						If: &math.CompareNum{
-							A: F(7), Is: math.C_Comparison_EqualTo, B: F(7),
+							A: F(7), Compare: math.C_Comparison_EqualTo, B: F(7),
 						},
 						True: T("boop"),
 					},

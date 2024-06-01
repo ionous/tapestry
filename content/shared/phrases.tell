@@ -65,7 +65,7 @@
               FromText: "@noun"
           - - Print: "are"
           - If:do:else:
-              - AnyTrue:
+              - Is any:
                   - Is:matching:num:
                       - Len:
                           FromTextList: "@names"

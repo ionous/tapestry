@@ -33,15 +33,15 @@ var matchGroups = testpat.Pattern{
 			nil, matches(true)),
 		makeRule(
 			&math.CompareText{
-				A:  object.Variable("a", "label"),
-				Is: math.C_Comparison_OtherThan,
-				B:  object.Variable("b", "label"),
+				A:       object.Variable("a", "label"),
+				Compare: math.C_Comparison_OtherThan,
+				B:       object.Variable("b", "label"),
 			}, matches(false)),
 		makeRule(
 			&math.CompareText{
-				A:  object.Variable("a", "group options"),
-				Is: math.C_Comparison_OtherThan,
-				B:  object.Variable("b", "group options"),
+				A:       object.Variable("a", "group options"),
+				Compare: math.C_Comparison_OtherThan,
+				B:       object.Variable("b", "group options"),
 			}, matches(false)),
 	},
 }

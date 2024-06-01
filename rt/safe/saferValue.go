@@ -30,19 +30,32 @@ func RectifyText(run rt.Runtime, val rt.Value, aff affine.Affinity, cls string) 
 	return
 }
 
+// The opposite of [Truthy].
+func Falsy(v rt.Value) (ret bool) {
+	return !Truthy(v)
+}
+
+// Determine the true/false implication of a value.
+// Bool values simply return their value.
+// Num values: are true when not exactly zero.
+// Text values: are true whenever they contain content.
+// List values: are true whenever the list is non-empty.
+// ( note this is similar to python, and different than javascript. )
+// Record values: are true whenever they have been initialized.
+// ( only sub-records start uninitialized; record variables are always true. )
 func Truthy(v rt.Value) (ret bool) {
 	switch aff := v.Affinity(); aff {
 	case affine.Bool:
 		ret = v.Bool()
 
 	case affine.Num:
-		ret = v.Int() > 0
+		ret = v.Int() != 0
 
 	case affine.Text:
 		ret = v.String() != ""
 
 	case affine.Record:
-		ret = true
+		ret = v.Record() != nil
 
 	case affine.TextList, affine.NumList, affine.RecordList:
 		ret = v.Len() > 0
@@ -50,15 +63,18 @@ func Truthy(v rt.Value) (ret bool) {
 	return
 }
 
+// Attempt to coerce the passed value into the passed affinity.
+// Bool and num values can become text ( "true" or "false", or the digits as text. )
+// All values can become bool ( according to their truthiness. )
 func ConvertValue(run rt.Runtime, val rt.Value, out affine.Affinity) (ret rt.Value, err error) {
 	switch aff := val.Affinity(); {
 	case aff == out:
 		ret = val
 
-	case out == affine.Text && aff == affine.Bool:
+	case aff == affine.Bool && out == affine.Text:
 		ret = rt.StringOf(strconv.FormatBool(val.Bool()))
 
-	case out == affine.Text && aff == affine.Num:
+	case aff == affine.Num && out == affine.Text:
 		ret = rt.StringOf(strconv.FormatFloat(val.Float(), 'g', -1, 64))
 
 	case out == affine.Bool:
@@ -71,6 +87,5 @@ func ConvertValue(run rt.Runtime, val rt.Value, out affine.Affinity) (ret rt.Val
 			ret = val
 		}
 	}
-
 	return
 }

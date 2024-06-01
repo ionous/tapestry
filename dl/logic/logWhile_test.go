@@ -24,7 +24,7 @@ func TestLoopBreak(t *testing.T) {
 					Target: object.Variable("i"),
 					Value:  &assign.FromNum{Value: &math.AddValue{A: object.Variable("i"), B: literal.I(1)}}},
 				&logic.ChooseBranch{
-					Condition: &math.CompareNum{A: object.Variable("i"), Is: math.C_Comparison_AtLeast, B: literal.I(4)},
+					Condition: &math.CompareNum{A: object.Variable("i"), Compare: math.C_Comparison_AtLeast, B: literal.I(4)},
 					Exe: []rt.Execute{
 						&logic.Break{},
 					},
@@ -49,7 +49,7 @@ func TestLoopNext(t *testing.T) {
 					Target: object.Variable("i"),
 					Value:  &assign.FromNum{Value: &math.AddValue{A: object.Variable("i"), B: literal.I(1)}}},
 				&logic.ChooseBranch{
-					Condition: &math.CompareNum{A: object.Variable("i"), Is: math.C_Comparison_AtLeast, B: literal.I(4)},
+					Condition: &math.CompareNum{A: object.Variable("i"), Compare: math.C_Comparison_AtLeast, B: literal.I(4)},
 					Exe: []rt.Execute{
 						&logic.Break{},
 					},

@@ -51,7 +51,7 @@ var FactorialStory = story.StoryFile{
 var FactorialCheck = []rt.Execute{
 	&debug.Expect{
 		Value: &math.CompareNum{
-			A: F(6), Is: math.C_Comparison_EqualTo, B: &call.CallPattern{
+			A: F(6), Compare: math.C_Comparison_EqualTo, B: &call.CallPattern{
 				PatternName: "factorial",
 				Arguments: []assign.Arg{{
 					Name:  "num",
@@ -80,10 +80,10 @@ var FactorialMulMinusOne = []rt.Execute{
 var FactorialDecreaseRule = []rt.Execute{
 	&logic.ChooseBranch{
 		Condition: &math.CompareNum{
-			Markup: UserComment("above zero, subtract one"),
-			A:      object.Variable("num"),
-			Is:     math.C_Comparison_GreaterThan,
-			B:      F(0)},
+			Markup:  UserComment("above zero, subtract one"),
+			A:       object.Variable("num"),
+			Compare: math.C_Comparison_GreaterThan,
+			B:       F(0)},
 		Exe: FactorialMulMinusOne,
 	},
 }

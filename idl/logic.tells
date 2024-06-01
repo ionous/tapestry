@@ -1,62 +1,107 @@
-# Common boolean logic and loop handling.
+# Common boolean operations and loop handling.
 Spec:requires:contains:
   - "logic"
   - - "idl/prim"
     - "idl/rtti"
-  - - # Test if a set of conditions all return true.
-      # Stops testing after the first condition fails.
-      Flow:slots:terms:
-        - "all_true"
-        - "bool_eval"
-        - - # One or more conditions to test.
-            Term:name:type:repeats:
-              - "_"
-              - "test"
-              - "bool_eval"
-              - true
-    - # Return true; always.
+  - - # Return true; always.
       Flow:slots:
         - "always"
         - "bool_eval"
 
-    - # Returns false.
+    - # Return false.
       Flow:slots:
         - "never"
         - "bool_eval"
 
-    - # Returns the opposite value.
+    - # Determine the true/false implication of a value.
+      # Bool values simply return their value.
+      # Num values: are true when not exactly zero.
+      # Text values: are true whenever they contain content.
+      # List values: are true whenever the list is non-empty.
+      # ( note this is similar to python, and different than javascript. )
+      # Record values: are true whenever they have been initialized.
+      # ( only sub-records start uninitialized; record variables are always true. )
+      Flow:slots:lede:terms:
+        - "is_value"
+        - "bool_eval"
+        - "is"
+        - - # The value to test.
+            Term:type:
+              - "value"
+              - "assignment"
+
+    - # Check if every condition in a set of conditions returns true.
+      # Stops after finding a failed condition.
+      # An empty list returns false.
+      Flow:slots:lede:terms:
+        - "is_all"
+        - "bool_eval"
+        - "is"
+        - - # One or more conditions to test.
+            Term:name:type:repeats:
+              - "all"
+              - "test"
+              - "bool_eval"
+              - true
+
+    - # Check if any condition in a set of conditions returns true.
+      # Stops after finding the first successful condition.
+      # An empty list returns false.
+      Flow:slots:lede:terms:
+        - "is_any"
+        - "bool_eval"
+        - "is"
+        - - # One or more conditions to test.
+            Term:name:type:repeats:
+              - "any"
+              - "test"
+              - "bool_eval"
+              - true
+
+    - # Determine the opposite of a condition.
       Flow:slots:terms:
         - "not"
         - "bool_eval"
-        - - Term:name:type:
+        - - # The condition to check.
+            Term:name:type:
               - "_"
               - "test"
               - "bool_eval"
 
-    - # Test if any condition in a set of conditions returns true.
-      # Stops testing after the first condition succeeds.
-      Flow:slots:terms:
-        - "any_true"
+    - # Determine the true/false implication of a value.
+      # This is the opposite of [TrueValue].
+      Flow:slots:lede:terms:
+        - "not_value"
         - "bool_eval"
-        - - # One or more conditions to test.
-            Term:name:type:repeats:
+        - "not"
+        - - # The value to test.
+            Term:type:
+              - "value"
+              - "assignment"
+
+    - # Check if every condition in a set of conditions returns false.
+      # Stops after finding any successful condition.
+      # An empty list returns false.
+      Flow:slots:terms:
+        - "not_all"
+        - "bool_eval"
+        - - Term:name:type:repeats:
               - "_"
               - "test"
               - "bool_eval"
               - true
 
-    - # In a repeating loop, exit the loop;
-      # or, in a rule, stop processing rules.
-      Flow:slots:
-        - "break"
-        - "execute"
-
-
-    - # In a repeating loop, try the next iteration of the loop;
-      # or, in a rule, continue to the next rule.
-      Flow:slots:
-        - "continue"
-        - "execute"
+    - # Check if any condition in a set of conditions returns false.
+      # Stops after finding any failed condition.
+      # An empty list returns false.
+      Flow:slots:terms:
+        - "not_any"
+        - "bool_eval"
+        - - Term:name:type:repeats:
+              - "_"
+              - "test"
+              - "bool_eval"
+              - true
 
     - # Helper for the else statements of [ChooseBranch].
       Slot: "brancher"
@@ -90,6 +135,7 @@ Spec:requires:contains:
               - "else"
               - "brancher"
               - true
+
     - # Run a set of statements after a condition has failed.
       Flow:slots:lede:terms:
         - "choose_nothing_else"
@@ -160,8 +206,19 @@ Spec:requires:contains:
               - "text_eval"
               - true
 
+    - # In a repeating loop, exit the loop;
+      # or, in a rule, stop processing rules.
+      Flow:slots:
+        - "break"
+        - "execute"
 
-    - # Keep running a series of actions while a condition is true.
+    - # In a repeating loop, try the next iteration of the loop;
+      # or, in a rule, continue to the next rule.
+      Flow:slots:
+        - "continue"
+        - "execute"
+
+    - # Keep running a series of actions while a condition succeeds.
       Flow:slots:lede:terms:
         - "while"
         - "execute"

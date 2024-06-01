@@ -20,7 +20,7 @@ func (op *CompareNum) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 		if op.Tolerance > 0.0 {
 			tolerance = op.Tolerance
 		}
-		cmp := op.Is.Compare()
+		cmp := op.Compare.Compare()
 		res := cmp.CompareFloat(a.Float(), b.Float(), tolerance)
 		ret = rt.BoolOf(res)
 	}
@@ -33,7 +33,7 @@ func (op *CompareText) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	} else if b, e := safe.GetText(run, op.B); e != nil {
 		err = cmd.ErrorCtx(op, "B", e)
 	} else {
-		cmp := op.Is.Compare()
+		cmp := op.Compare.Compare()
 		res := cmp.CompareString(a.String(), b.String())
 		ret = rt.BoolOf(res)
 	}
@@ -50,7 +50,7 @@ func (op *CompareValue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	} else if d, e := compareValues(a, bv, defaultTolerance); e != nil {
 		err = cmd.ErrorCtx(op, "compare", e)
 	} else {
-		cmp := op.Is.Compare()
+		cmp := op.Compare.Compare()
 		res := cmp.diff(d)
 		ret = rt.BoolOf(res)
 	}

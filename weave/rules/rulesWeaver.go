@@ -22,7 +22,7 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 	// better might be to *extract* user booleans and put them into this filter list.
 	if len(filters) > 0 {
 		exe = []rt.Execute{&logic.ChooseBranch{
-			Condition: &logic.AllTrue{Test: filters},
+			Condition: &logic.IsAll{Test: filters},
 			Exe:       exe,
 		}}
 	}
@@ -43,9 +43,9 @@ func (rule RuleInfo) WeaveRule(w weaver.Weaves, filters []rt.BoolEval, exe []rt.
 func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&math.CompareText{
-			A:  object.Variable(event.Actor),
-			Is: math.C_Comparison_EqualTo,
-			B:  literal.T("self"),
+			A:       object.Variable(event.Actor),
+			Compare: math.C_Comparison_EqualTo,
+			B:       literal.T("self"),
 		})
 }
 
@@ -53,18 +53,18 @@ func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 func AddEventFilters(filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&math.CompareText{
-			A:  object.Variable(event.Object, event.CurrentTarget.String()),
-			Is: math.C_Comparison_EqualTo,
-			B:  object.Variable(event.Object, event.Target.String()),
+			A:       object.Variable(event.Object, event.CurrentTarget.String()),
+			Compare: math.C_Comparison_EqualTo,
+			B:       object.Variable(event.Object, event.Target.String()),
 		})
 }
 
 func AddNounFilter(noun string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&math.CompareText{
-			A:  object.Variable(event.Object, event.Target.String()),
-			Is: math.C_Comparison_EqualTo,
-			B:  &literal.TextValue{Value: noun},
+			A:       object.Variable(event.Object, event.Target.String()),
+			Compare: math.C_Comparison_EqualTo,
+			B:       &literal.TextValue{Value: noun},
 		})
 }
 

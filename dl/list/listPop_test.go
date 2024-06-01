@@ -46,8 +46,8 @@ func popTest(front bool, amt int, src ...string) []string {
 					A: &list.ListLen{
 						List: &assign.FromTextList{Value: object.Variable("text")},
 					},
-					Is: math.C_Comparison_EqualTo,
-					B:  literal.I(0),
+					Compare: math.C_Comparison_EqualTo,
+					B:       literal.I(0),
 				},
 				Exe: []rt.Execute{
 					&Write{&out, literal.T("x")},

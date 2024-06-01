@@ -44,7 +44,7 @@
   Define rule:do:
     - "can use"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
@@ -60,7 +60,7 @@
 - Define rule:do:
     - "can use"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"

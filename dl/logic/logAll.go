@@ -6,36 +6,38 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *Never) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	ret = rt.BoolOf(false)
-	return
-}
-
 func (op *Always) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	ret = rt.BoolOf(true)
 	return
 }
 
-func (op *AllTrue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	// stop on the first statement to return false.
-	if i, cnt, e := resolve(run, op.Test, false); e != nil {
+func (op *IsValue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	if val, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = cmd.Error(op, e)
-	} else if i < cnt {
-		ret = rt.False
 	} else {
-		ret = rt.True // return true, resolve never found a false statement
+		ret = rt.BoolOf(safe.Truthy(val))
 	}
 	return
 }
 
-func (op *AnyTrue) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	// stop on the first statement to return true.
+// check if all conditions return true.
+func (op *IsAll) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	// stop on the first condition to return false.
+	if i, cnt, e := resolve(run, op.Test, false); e != nil {
+		err = cmd.Error(op, e)
+	} else {
+		ret = rt.BoolOf(i > 0 && i == cnt)
+	}
+	return
+}
+
+// check if any conditions return true.
+func (op *IsAny) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	// stop on the first condition to return true.
 	if i, cnt, e := resolve(run, op.Test, true); e != nil {
 		err = cmd.Error(op, e)
-	} else if i < cnt {
-		ret = rt.True
 	} else {
-		ret = rt.False // return false, resolve never found a true statement
+		ret = rt.BoolOf(i < cnt)
 	}
 	return
 }

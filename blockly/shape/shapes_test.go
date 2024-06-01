@@ -258,7 +258,7 @@ func TestStrEnum(t *testing.T) {
       },
       {
         "label": "matching",
-        "name": "IS",
+        "name": "COMPARE",
         "type": "field_dropdown",
         "options": [
           [

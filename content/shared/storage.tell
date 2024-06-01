@@ -63,7 +63,7 @@
                 - "it"
                 - - If:do:
                       - Not:
-                          AnyTrue:
+                          Is any:
                             - Is:matching:text:
                                 - "@it"
                                 - "equal_to"
@@ -92,7 +92,7 @@
   Define rule:do:
     - "allows storage"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@obj"
                   - "containers"

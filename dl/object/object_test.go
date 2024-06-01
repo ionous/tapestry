@@ -44,11 +44,11 @@ func TestObjects(t *testing.T) {
 	})
 	t.Run("kind_of", func(t *testing.T) {
 		if e := testTrue(t, &run, &math.CompareText{
-			A: &object.KindOf{Object: this}, Is: math.C_Comparison_EqualTo, B: literal.T(base)}); e != nil {
+			A: &object.KindOf{Object: this}, Compare: math.C_Comparison_EqualTo, B: literal.T(base)}); e != nil {
 			t.Fatal(e)
 		}
 		if e := testTrue(t, &run, &math.CompareText{
-			A: &object.KindOf{Object: that}, Is: math.C_Comparison_EqualTo, B: literal.T(derived)}); e != nil {
+			A: &object.KindOf{Object: that}, Compare: math.C_Comparison_EqualTo, B: literal.T(derived)}); e != nil {
 			t.Fatal(e)
 		}
 	})

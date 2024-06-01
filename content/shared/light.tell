@@ -29,7 +29,7 @@
                 - "@result"
                 - FromBool: true
           - If:do:else:
-              - AllTrue:
+              - Is all:
                   - KindOf:is:
                       - "@obj"
                       - "containers"
@@ -136,7 +136,7 @@
           Not:
             Is empty: "@actor"
       - If:do:
-          - AnyTrue:
+          - Is any:
               - "@refresh"
               - Is:matching:num:
                   - Object:dot:
@@ -205,7 +205,7 @@
                             - FromBool: true
                         - Break:
                       - If:do:
-                          - AnyTrue:
+                          - Is any:
                               - Is:matching:text:
                                   - "@it"
                                   - "equal_to"

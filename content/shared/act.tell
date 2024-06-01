@@ -57,7 +57,7 @@
   Define rule:do:
     - "instead of state changing"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Not:
                   Is empty: "@guard"
               - Not:

@@ -346,9 +346,9 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildCompare(math.C_Comparison_AtLeast)
 
 		case types.LAND:
-			err = c.buildTwo(&logic.AllTrue{})
+			err = c.buildTwo(&logic.IsAll{})
 		case types.LOR:
-			err = c.buildTwo(&logic.AnyTrue{})
+			err = c.buildTwo(&logic.IsAny{})
 		default:
 			err = errutil.Fmt("unknown operator %s", fn)
 		}

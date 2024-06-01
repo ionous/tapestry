@@ -58,8 +58,8 @@ func TestText(t *testing.T) {
 			A: &text.Join{Parts: []rt.TextEval{
 				literal.T("one"), literal.T("two"), literal.T("three"),
 			}},
-			Is: math.C_Comparison_EqualTo,
-			B:  literal.T("onetwothree"),
+			Compare: math.C_Comparison_EqualTo,
+			B:       literal.T("onetwothree"),
 		}); e != nil {
 			t.Fatal(e)
 		}
@@ -67,8 +67,8 @@ func TestText(t *testing.T) {
 			A: &text.Join{Sep: literal.T(" "), Parts: []rt.TextEval{
 				literal.T("one"), literal.T("two"), literal.T("three"),
 			}},
-			Is: math.C_Comparison_EqualTo,
-			B:  literal.T("one two three"),
+			Compare: math.C_Comparison_EqualTo,
+			B:       literal.T("one two three"),
 		}); e != nil {
 			t.Fatal(e)
 		}

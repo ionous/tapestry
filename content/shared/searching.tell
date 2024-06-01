@@ -70,7 +70,7 @@
   Define rule:do:
     - "can reach"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
@@ -86,7 +86,7 @@
 - Define rule:do:
     - "can reach"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"

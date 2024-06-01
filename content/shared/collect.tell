@@ -73,7 +73,7 @@
     - "has accessible children"
     - "closed containers are inaccessible"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@obj"
                   - "containers"
@@ -100,7 +100,7 @@
     - "is accessible"
     - "carried objects are inaccessible"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - KindOf:is:
                   - "@parent"
                   - "actors"

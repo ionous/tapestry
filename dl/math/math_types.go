@@ -1,4 +1,4 @@
-// Common mathematical commands.
+// Common mathematical operations.
 package math
 
 //
@@ -207,6 +207,7 @@ func (op *ModValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Remove the sign from a value, and return its positive value.
 type AbsValue struct {
 	Value  rtti.NumEval
 	Markup map[string]any
@@ -244,8 +245,7 @@ func (op *AbsValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Increases the value of a number held in by a variable or object field.
-// Returns the new value of the number.
+// Increase a stored value; optionally, return the new value.
 type Increment struct {
 	Target rtti.Address
 	Step   rtti.NumEval
@@ -285,8 +285,7 @@ func (op *Increment_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Decrease the value of a number held in by a variable or object field.
-// Returns the new value of the number.
+// Decrease a stored value; optionally, return the new value.
 type Decrement struct {
 	Target rtti.Address
 	Step   rtti.NumEval
@@ -326,12 +325,13 @@ func (op *Decrement_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// True if eq,ne,gt,lt,ge,le two numbers.
+// Compare two values.
+// This attempts to coerce the second value to match the type of the first value in order to compare them.
 type CompareValue struct {
-	A      rtti.Assignment
-	Is     Comparison
-	B      rtti.Assignment
-	Markup map[string]any
+	A       rtti.Assignment
+	Compare Comparison
+	B       rtti.Assignment
+	Markup  map[string]any
 }
 
 // compare_value, a type of flow.
@@ -369,7 +369,7 @@ func (op *CompareValue_Slice) Repeats() bool {
 // True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
 	A         rtti.NumEval
-	Is        Comparison
+	Compare   Comparison
 	B         rtti.NumEval
 	Tolerance float64
 	Markup    map[string]any
@@ -409,10 +409,10 @@ func (op *CompareNum_Slice) Repeats() bool {
 
 // True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
 type CompareText struct {
-	A      rtti.TextEval
-	Is     Comparison
-	B      rtti.TextEval
-	Markup map[string]any
+	A       rtti.TextEval
+	Compare Comparison
+	B       rtti.TextEval
+	Markup  map[string]any
 }
 
 // compare_text, a type of flow.
@@ -447,7 +447,7 @@ func (op *CompareText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Comparison, a type of str enum.
+// Used when comparing values.
 type Comparison int
 
 // The enumerated values of Comparison.
@@ -487,6 +487,9 @@ var Zt_Comparison = typeinfo.Str{
 		"at_least",
 		"at_most",
 	},
+	Markup: map[string]any{
+		"comment": "Used when comparing values.",
+	},
 }
 
 // init the terms of all flows in init
@@ -497,11 +500,17 @@ func init() {
 		Lede: "add",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The augend.",
+			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The addend.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
@@ -515,11 +524,17 @@ func init() {
 		Lede: "subtract",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The minuend.",
+			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The subtrahend.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
@@ -533,11 +548,17 @@ func init() {
 		Lede: "multiply",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The multiplier.",
+			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The multiplicand.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
@@ -551,11 +572,17 @@ func init() {
 		Lede: "divide",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The numerator.",
+			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The divisor.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
@@ -569,11 +596,17 @@ func init() {
 		Lede: "mod",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The dividend.",
+			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The divisor.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
@@ -588,10 +621,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "value",
 			Label: "value",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The value to normalize.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
+		},
+		Markup: map[string]any{
+			"comment": "Remove the sign from a value, and return its positive value.",
 		},
 	}
 	Zt_Increment = typeinfo.Flow{
@@ -599,13 +638,16 @@ func init() {
 		Lede: "increase",
 		Terms: []typeinfo.Term{{
 			Name: "target",
+			Markup: map[string]any{
+				"comment": []interface{}{"A reference to the value to increase.", "This reads and writes to that value."},
+			},
 			Type: &rtti.Zt_Address,
 		}, {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "if not specified, increments by 1.",
+				"comment": "If not specified, increments by 1.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -614,7 +656,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Increases the value of a number held in by a variable or object field.", "Returns the new value of the number."},
+			"comment": "Increase a stored value; optionally, return the new value.",
 		},
 	}
 	Zt_Decrement = typeinfo.Flow{
@@ -622,6 +664,9 @@ func init() {
 		Lede: "decrease",
 		Terms: []typeinfo.Term{{
 			Name: "target",
+			Markup: map[string]any{
+				"comment": []interface{}{"A reference to the value to decrease.", "This reads and writes to that value."},
+			},
 			Type: &rtti.Zt_Address,
 		}, {
 			Name:     "step",
@@ -637,7 +682,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Decrease the value of a number held in by a variable or object field.", "Returns the new value of the number."},
+			"comment": "Decrease a stored value; optionally, return the new value.",
 		},
 	}
 	Zt_CompareValue = typeinfo.Flow{
@@ -645,21 +690,27 @@ func init() {
 		Lede: "is",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": []interface{}{"The first value.", "If needed, the second value will coerced to match the type of the first."},
+			},
 			Type: &rtti.Zt_Assignment,
 		}, {
-			Name:  "is",
+			Name:  "compare",
 			Label: "matching",
 			Type:  &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "value",
-			Type:  &rtti.Zt_Assignment,
+			Markup: map[string]any{
+				"comment": []interface{}{"The first value.", "If needed, this value will coerced to match the type of the first value."},
+			},
+			Type: &rtti.Zt_Assignment,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "True if eq,ne,gt,lt,ge,le two numbers.",
+			"comment": []interface{}{"Compare two values.", "This attempts to coerce the second value to match the type of the first value in order to compare them."},
 		},
 	}
 	Zt_CompareNum = typeinfo.Flow{
@@ -669,7 +720,7 @@ func init() {
 			Name: "a",
 			Type: &rtti.Zt_NumEval,
 		}, {
-			Name:  "is",
+			Name:  "compare",
 			Label: "matching",
 			Type:  &Zt_Comparison,
 		}, {
@@ -699,7 +750,7 @@ func init() {
 			Name: "a",
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "is",
+			Name:  "compare",
 			Label: "matching",
 			Type:  &Zt_Comparison,
 		}, {
@@ -720,7 +771,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "math",
 	Comment: []string{
-		"Common mathematical commands.",
+		"Common mathematical operations.",
 	},
 
 	Flow:       z_flow_list,

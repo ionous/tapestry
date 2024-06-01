@@ -21,7 +21,7 @@
         Define rule:do:
           - "pass time, then continue"
           - - If:assuming:do:
-                - AllTrue:
+                - Is all:
                     - Object:dot:
                         - "settings"
                         - AtField: "score notification on"

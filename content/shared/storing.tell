@@ -80,7 +80,7 @@
   Define rule:do:
     - "can handle"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
@@ -98,7 +98,7 @@
 - Define rule:do:
     - "can handle"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
@@ -119,7 +119,7 @@
     - "reach down"
     - - # Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )
         If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
@@ -140,7 +140,7 @@
 - Define rule:do:
     - "reach down"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
@@ -162,7 +162,7 @@
 - Define rule:do:
     - "reach down"
     - - If:do:
-          - AllTrue:
+          - Is all:
               - Is:matching:text:
                   - "@action"
                   - "equal_to"
