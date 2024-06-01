@@ -145,7 +145,7 @@ func BuildSpec(t *typeinfo.Flow) string {
 				str.WriteRune('[')
 			}
 			if len(t.Label) > 0 {
-				if i == 0 {
+				if i == 0 && !t.Optional {
 					str.WriteRune(' ')
 				}
 				str.WriteString(inflect.Camelize(t.Label))
