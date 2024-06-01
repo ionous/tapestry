@@ -157,7 +157,11 @@ func DoesTerminate(exe []rt.Execute) bool {
 Out:
 	for _, el := range exe {
 		switch el := el.(type) {
-		case *debug.DebugLog:
+		case *debug.Note:
+			// skip comments and debug logs
+			// todo: make a "no op" interface so other things can join in?
+			continue
+		case *debug.LogValue:
 			// skip comments and debug logs
 			// todo: make a "no op" interface so other things can join in?
 			continue

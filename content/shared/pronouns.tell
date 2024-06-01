@@ -6,9 +6,8 @@
     - - TextList: "names"
     - - Nothing:
     - - Print: "you"
-- #
-  Note: "they, [we], [ey], it."
-- Define pattern:requires:provides:do:
+- # they, [we], [ey], it.
+  Define pattern:requires:provides:do:
     - "They"
     - - Text:kind:
           - "noun"

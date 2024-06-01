@@ -1,35 +1,39 @@
 #
 Spec:requires:contains:
   - "call"
-  - - "idl/prim"
+  - - "idl/assign"
+    - "idl/prim"
     - "idl/rtti"
 
-  - - Flow:slots:lede:terms:
+  - - # Determine whether a scene (aka domain) is active.
+      Flow:slots:lede:terms:
         - "active_scene"
         - "bool_eval"
         - "is"
-        - - Term:name:type:
+        - - # The name of the scene to check.
+            Term:name:type:
               - "scene"
               - "name"
               - "text"
 
-    - # Decide whether a pattern is running.
+    - # Determine whether a pattern is running.
       Flow:slots:lede:terms:
         - "active_pattern"
         - - "bool_eval"
           - "num_eval"
         - "is"
-        - - Term:name:type:
+        - - # The name of the pattern to check.
+            Term:name:type:
               - "pattern"
               - "pattern_name"
               - "text"
 
     - # Run a pattern, returning its result (if any).
-      # Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
-      # Because some patterns can return a value,this implements all of the possible rtti evaluations.
+      # Tell files support calling patterns directly, so this is only needed when using the blockly editor.
       Flow:slots:lede:terms:
         - "call_pattern"
-        - - "execute"
+        - # This implements all of the possible evals.
+          - "execute"
           - "bool_eval"
           - "num_eval"
           - "text_eval"

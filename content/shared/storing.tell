@@ -88,13 +88,13 @@
               - AncestorOf obj:root:
                   - FromText: "@other_noun"
                   - FromText: "@noun"
-          - - Set:value:
+          - - # trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )
+              Set:value:
                 - "@response"
                 - FromText:
                     Say response:with:
                       - "can't insert something into itself"
                       - "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
-            - Note: "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
 - Define rule:do:
     - "can handle"
     - - If:do:
@@ -152,7 +152,7 @@
               - Not:
                   ProvidesStorage obj:
                     FromText: "@into_obj"
-          - - Note: "Assuming we are able to reach the noun, check whether it actually provides storage."
+          - # Assuming we are able to reach the noun, check whether it actually provides storage.
             - Set:value:
                 - "@response"
                 - FromText:
@@ -170,9 +170,8 @@
               - KindOf:is:
                   - "@into_obj"
                   - "actors"
-          - - Note:
-                - "If the target noun were owned by reaching actor then the actor would be the lca."
-                - "By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+          - # If the target noun were owned by reaching actor then the actor would be the lca.
+            # By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach.
             - Set:value:
                 - "@response"
                 - FromText:

@@ -1,8 +1,7 @@
 ---
-- Note:
-    - "Determine if text starts with a vowel or vowel sound."
-    - "( This method is from mudconnect.com )"
-- Define pattern:requires:provides:do:
+- # Determine if text starts with a vowel or vowel sound.
+  # ( This method is from mudconnect.com )
+    Define pattern:requires:provides:do:
     - "starts with vowel"
     - - Text: "text"
     - - Bool: "matching"

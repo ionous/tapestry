@@ -41,6 +41,7 @@ func (op *Trigger_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Determine whether a scene (aka domain) is active.
 type ActiveScene struct {
 	Name   string
 	Markup map[string]any
@@ -78,7 +79,7 @@ func (op *ActiveScene_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Decide whether a pattern is running.
+// Determine whether a pattern is running.
 type ActivePattern struct {
 	PatternName string
 	Markup      map[string]any
@@ -118,8 +119,7 @@ func (op *ActivePattern_Slice) Repeats() bool {
 }
 
 // Run a pattern, returning its result (if any).
-// Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.
-// Because some patterns can return a value,this implements all of the possible rtti evaluations.
+// Tell files support calling patterns directly, so this is only needed when using the blockly editor.
 type CallPattern struct {
 	PatternName string
 	Arguments   []assign.Arg
@@ -326,10 +326,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "name",
 			Label: "scene",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The name of the scene to check.",
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
+		},
+		Markup: map[string]any{
+			"comment": "Determine whether a scene (aka domain) is active.",
 		},
 	}
 	Zt_ActivePattern = typeinfo.Flow{
@@ -338,14 +344,17 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "pattern_name",
 			Label: "pattern",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The name of the pattern to check.",
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Decide whether a pattern is running.",
+			"comment": "Determine whether a pattern is running.",
 		},
 	}
 	Zt_CallPattern = typeinfo.Flow{
@@ -377,7 +386,7 @@ func init() {
 			&rtti.Zt_RecordListEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed by authors using the blockly editor.", "Because some patterns can return a value,this implements all of the possible rtti evaluations."},
+			"comment": []interface{}{"Run a pattern, returning its result (if any).", "Tell files support calling patterns directly, so this is only needed when using the blockly editor."},
 		},
 	}
 	Zt_CallTrigger = typeinfo.Flow{

@@ -25,26 +25,16 @@ Spec:requires:contains:
       blockly-color: "TAP_HUE_ROOT"
       mosaic-root: true
 
-    - # A legacy command, used in .if files as a visual divider ( because reading and writing json doesn't otherwise have a way to preserve whitespace. )
-      internal: true
-      Flow:slots:lede:
-        - "story_break"
+    - # Used for the blockly editor so that hash-mark style comments
+      # are visible in the editor. Not needed when using .tell files.
+      Flow:slots:lede:terms:
+        - "story_note"
         - "story_statement"
-        - "--"
-
-    - # Adds documentation about the story for you and other authors.
-      # Notes can used as a modeling commands, or as part of an execute block.
-      # And, they are created automatically from hash-style comments (#) encountered within the plain text sections of tell files.
-      # When used in an execute block, notes become {"Log:value:"} commands.
-      Flow:slots:terms:
         - "note"
-        - - "story_statement"
-          - "execute"
-        - - # One or more lines of text documentation.
-            Term:name:repeats:
-              - "_"
-              - "lines"
-              - true
+        - - Term:name:type:
+            - "_"
+            - "text"
+            - "lines"
 
     - # Defines a scene used for testing a story.
       # Tests can be executed using the `tap check` command.

@@ -5,7 +5,7 @@
           The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Street are rooms.
           You are in the Lobby.
           The faux door is a door in the Lobby.
-          " # "
+          "
       - # fix: this should have made the doors 'plural named' automatically.
         Declare: "North of the lobby are the double doors. The double doors are plural named, closed, and openable doors. Through the double doors is the foyer.
           Down from the lobby is the basement.

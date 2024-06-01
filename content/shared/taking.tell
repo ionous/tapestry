@@ -147,7 +147,7 @@
                   - "@into_obj"
                   - "equal_to"
                   - "@noun"
-          - - Note: "Reaching up to take the noun, means the noun contains the actor."
+          - # Reaching up to take the noun, means the noun contains the actor.
             - Set:value:
                 - "@response"
                 - FromText:

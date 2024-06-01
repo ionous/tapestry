@@ -184,7 +184,7 @@ func (pt *PlainText) flushPhrases(tail rt.Assignment) (err error) {
 func (pt *PlainText) flushComment() {
 	if cs := pt.comment; len(cs) > 0 {
 		pt.comment = nil
-		out := &story.Note{Lines: cs}
+		out := &story.StoryNote{Text: strings.Join(cs, "\n")}
 		pt.out = append(pt.out, out)
 	}
 }

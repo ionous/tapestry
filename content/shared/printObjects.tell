@@ -45,8 +45,8 @@
           - "block depth"
           - Is pattern: "print block list"
     - - Say: "{.obj}"
-- Note: "Say the object's name ( and some object details. )"
-- Define rule:do:
+- # Say the object's name ( and some object details. )
+  Define rule:do:
     - "print object"
     - - If:do:
           - AllTrue:
@@ -139,8 +139,8 @@
           - "kids"
           - VisibleStorage obj:
               FromText: "@obj"
-- Note: 'Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see "print status" which writes bare bones information about an object.)'
-- Define rule:do:
+- # Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see "print status" which writes bare bones information about an object.)
+  Define rule:do:
     - "print details"
     - - If:do:
           - AllTrue:

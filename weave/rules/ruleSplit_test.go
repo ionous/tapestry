@@ -39,9 +39,9 @@ var branchingBlock = []rt.Execute{
 
 // a block with some extraneous debug logs
 var blockWithDebugLogs = []rt.Execute{
-	&debug.DebugLog{},
+	&debug.LogValue{},
 	tree,
-	&debug.DebugLog{},
+	&debug.LogValue{},
 }
 
 // the branching block but has some non-branching trailing statements

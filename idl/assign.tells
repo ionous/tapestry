@@ -30,7 +30,6 @@ Spec:requires:contains:
               - true
 
     - # Provide a stored value for an assignment.
-      internal: true
       Flow:slots:terms:
         - "from_address"
         - "assignment"
@@ -39,7 +38,6 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "address"
-
     - # Provide a boolean value for an assignment.
       Flow:slots:terms:
         - "from_bool"

@@ -32,7 +32,7 @@ func wrapScene(name string, els []story.StoryStatement) []story.StoryStatement {
 func splitStatements(els []story.StoryStatement) (lhs, rhs []story.StoryStatement) {
 	lhs = els
 	for i, el := range els {
-		if _, ok := el.(*story.Note); !ok {
+		if _, ok := el.(*story.StoryNote); !ok {
 			lhs, rhs = els[:i], els[i:]
 			break
 		}

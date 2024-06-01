@@ -170,7 +170,7 @@
           - "group"
           - "object group"
       - TextList: "names"
-    - - Note: "find the index of the matching group"
+    - # find the index of the matching group
       - Repeating across:as:do:
           - FromRecordList: "@groups"
           - "el"
@@ -184,10 +184,8 @@
                 - - Set:value:
                       - "@idx"
                       - FromNum: "@index"
-      - Note:
-          - "if there wasn't an existing group matching the object's settings:"
-          - "create a new group."
-      - If:do:else:
+      - # create a new group if there wasn't an existing group matching the object's settings
+        If:do:else:
           - Is:matching:num:
               - "@idx"
               - "equal_to"
@@ -211,10 +209,9 @@
             - Push:into:
                 - FromRecord: "@group"
                 - "@groups"
-          - Finally do:
-              - Note:
-                  - "found a matching group?"
-                  - "unpack it, add the object name to it, then pack it up again."
+          - # found a matching group?
+            #  unpack it, add the object name to it, then pack it up again
+            Finally do:
               - Set:value:
                   - "@group"
                   - FromRecord:

@@ -77,9 +77,8 @@
               - - Print: "are"
               - Finally do:
                   - Print: "is"
-- #
-  Note: "say the phrase of are not or is not ( depending on the plural of the noun )"
-- Define pattern:requires:provides:do:
+- # say the phrase of are not or is not ( depending on the plural of the noun )
+  Define pattern:requires:provides:do:
     - "Are not"
     - - Text:kind:
           - "noun"

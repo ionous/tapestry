@@ -117,7 +117,8 @@ func PickTree(exe []rt.Execute) (ret *ChooseBranch) {
 FindTree:
 	for i, el := range exe {
 		switch el := el.(type) {
-		case *debug.DebugLog:
+		case *debug.Note:
+		case *debug.LogValue:
 			// skip debug logs when trying to find a tree
 			// FIX: run those logs?
 			// if so, we have to slice them out
@@ -130,8 +131,10 @@ FindTree:
 			// other than a debug log, but even another branch --
 			// then we're not really a switch like series of if-else(s)
 			for _, sib := range exe[i+1:] {
-				if _, ok := sib.(*debug.DebugLog); !ok {
-					break FindTree
+				if _, ok := sib.(*debug.LogValue); !ok {
+					if _, ok := sib.(*debug.Note); !ok {
+						break FindTree
+					}
 				}
 			}
 			ret = el

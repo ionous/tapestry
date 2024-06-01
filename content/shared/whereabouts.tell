@@ -230,7 +230,7 @@
                   - Break:
 - # If the parent of the specified object is a valid enclosure, return its name.
   # By default the valid enclosures are a room, a supporter, or a container.
-  # Note: In inform, the only printable phrase is 'holder of'
+  # note: In inform, the only printable phrase is 'holder of'
   # and that phrase prints the object's world tree parent: room, person, nothing, whatever.
   # Internally, however, it has functions for 'carrier of', 'wearer of', etc.
   # and those are exposed through evaluations and relations.

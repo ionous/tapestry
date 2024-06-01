@@ -14,13 +14,13 @@ func TestLog(t *testing.T) {
 	var b strings.Builder
 	log.SetOutput(&b)
 	//
-	lo := DebugLog{
+	lo := LogValue{
 		LogLevel: C_LoggingLevel_Error,
 		Value:    &assign.FromText{Value: T("hello")},
 	}
 	if e := lo.Execute(nil); e != nil {
 		t.Fatal(e)
-	} else if got := b.String(); !strings.HasSuffix(got, " ##### error \"hello\"\n") {
+	} else if got := b.String(); !strings.HasSuffix(got, " #### error \"hello\"\n") {
 		t.Fatalf("got %q", got)
 	}
 }

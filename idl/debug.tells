@@ -2,14 +2,11 @@
 Spec:requires:contains:
   - "debug"
   - "idl/rtti"
-  - - # A command with a signature of the comment marker metadata.
-      # This is a cheat to allows nodes that have only a comment marker and no actual command.
-      # see also: story.story_break
-      internal: true
-      Flow:slots:lede:
+  - - # A command that does... nothing.
+      Flow:slots:
         - "do_nothing"
         - "execute"
-        - "--"
+
     - # Evaluate a boolean command and ensure it returns true.
       Flow:slots:lede:terms:
         - "expect"
@@ -34,6 +31,7 @@ Spec:requires:contains:
             Term:type:
               - "text"
               - "text_eval"
+
     - # Process fake input as if the player had typed it themselves.
       # Fabricate only works while running tests, and does nothing during normal game play.
       # Multiple actions can be specified by separating them with semi-colons. For example:
@@ -46,10 +44,11 @@ Spec:requires:contains:
               - "input"
               - "text"
               - "text_eval"
-    - # Print a message that is useful during development.
+
+    - # Print a value that might be useful during development.
       # It will be hidden from players in the final game.
       Flow:slots:lede:terms:
-        - "debug_log"
+        - "log_value"
         - "execute"
         - "log"
         - - # Importance of the message.
@@ -61,13 +60,28 @@ Spec:requires:contains:
             Term:type:
               - "value"
               - "assignment"
+
     - # Used with [DebugLog].
       Str:options:
         - "logging_level"
-        - - # the lowest logging level.
-            # not displayed unless specifically requested.
-            Option: "note"
-          - Option: "debug"
+        - - Option: "debug"
           - Option: "info"
           - Option: "warn"
           - Option: "error"
+
+    - # Print a message that might be useful during development.
+      # It will be hidden from players in the final game.
+      Flow:slots:terms:
+        - "note"
+        - "execute"
+        - - # One or more lines of text documentation.
+            Term:name:type:
+              - "_"
+              - "text"
+              - "text_eval"
+          # Control the logging level. Defaults to debug.
+          - Term:name:type:optional:
+              - "level"
+              - "log_level"
+              - "logging_level"
+              - true

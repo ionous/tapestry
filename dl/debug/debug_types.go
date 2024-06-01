@@ -11,9 +11,7 @@ import (
 	"strconv"
 )
 
-// A command with a signature of the comment marker metadata.
-// This is a cheat to allows nodes that have only a comment marker and no actual command.
-// see also: story.story_break
+// A command that does... nothing.
 type DoNothing struct {
 	Markup map[string]any
 }
@@ -168,24 +166,24 @@ func (op *Fabricate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Print a message that is useful during development.
+// Print a value that might be useful during development.
 // It will be hidden from players in the final game.
-type DebugLog struct {
+type LogValue struct {
 	LogLevel LoggingLevel
 	Value    rtti.Assignment
 	Markup   map[string]any
 }
 
-// debug_log, a type of flow.
-var Zt_DebugLog typeinfo.Flow
+// log_value, a type of flow.
+var Zt_LogValue typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*DebugLog) TypeInfo() typeinfo.T {
-	return &Zt_DebugLog
+func (*LogValue) TypeInfo() typeinfo.T {
+	return &Zt_LogValue
 }
 
 // Implements [typeinfo.Markup]
-func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
+func (op *LogValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -193,18 +191,58 @@ func (op *DebugLog) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.Execute = (*DebugLog)(nil)
+var _ rtti.Execute = (*LogValue)(nil)
 
-// Holds a slice of type DebugLog.
-type DebugLog_Slice []DebugLog
+// Holds a slice of type LogValue.
+type LogValue_Slice []LogValue
 
-// Implements [typeinfo.Instance] for a slice of DebugLog.
-func (*DebugLog_Slice) TypeInfo() typeinfo.T {
-	return &Zt_DebugLog
+// Implements [typeinfo.Instance] for a slice of LogValue.
+func (*LogValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_LogValue
 }
 
-// Implements [typeinfo.Repeats] for a slice of DebugLog.
-func (op *DebugLog_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of LogValue.
+func (op *LogValue_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Print a message that might be useful during development.
+// It will be hidden from players in the final game.
+type Note struct {
+	Text     rtti.TextEval
+	LogLevel LoggingLevel
+	Markup   map[string]any
+}
+
+// note, a type of flow.
+var Zt_Note typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*Note) TypeInfo() typeinfo.T {
+	return &Zt_Note
+}
+
+// Implements [typeinfo.Markup]
+func (op *Note) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Execute = (*Note)(nil)
+
+// Holds a slice of type Note.
+type Note_Slice []Note
+
+// Implements [typeinfo.Instance] for a slice of Note.
+func (*Note_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Note
+}
+
+// Implements [typeinfo.Repeats] for a slice of Note.
+func (op *Note_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -213,8 +251,7 @@ type LoggingLevel int
 
 // The enumerated values of LoggingLevel.
 const (
-	C_LoggingLevel_Note LoggingLevel = iota
-	C_LoggingLevel_Debug
+	C_LoggingLevel_Debug LoggingLevel = iota
 	C_LoggingLevel_Info
 	C_LoggingLevel_Warn
 	C_LoggingLevel_Error
@@ -240,18 +277,10 @@ func (op LoggingLevel) String() (ret string) {
 var Zt_LoggingLevel = typeinfo.Str{
 	Name: "logging_level",
 	Options: []string{
-		"note",
 		"debug",
 		"info",
 		"warn",
 		"error",
-	},
-	OptionComments: []string{
-		"the lowest logging level. not displayed unless specifically requested.",
-		"",
-		"",
-		"",
-		"",
 	},
 	Markup: map[string]any{
 		"comment": "Used with [DebugLog].",
@@ -263,14 +292,13 @@ var Zt_LoggingLevel = typeinfo.Str{
 func init() {
 	Zt_DoNothing = typeinfo.Flow{
 		Name:  "do_nothing",
-		Lede:  "--",
+		Lede:  "do_nothing",
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"A command with a signature of the comment marker metadata.", "This is a cheat to allows nodes that have only a comment marker and no actual command.", "see also: story.story_break"},
-			"internal": true,
+			"comment": "A command that does... nothing.",
 		},
 	}
 	Zt_Expect = typeinfo.Flow{
@@ -326,8 +354,8 @@ func init() {
 			"comment": []interface{}{"Process fake input as if the player had typed it themselves.", "Fabricate only works while running tests, and does nothing during normal game play.", "Multiple actions can be specified by separating them with semi-colons. For example:", "  Fabricate input: \"s; jump; look\""},
 		},
 	}
-	Zt_DebugLog = typeinfo.Flow{
-		Name: "debug_log",
+	Zt_LogValue = typeinfo.Flow{
+		Name: "log_value",
 		Lede: "log",
 		Terms: []typeinfo.Term{{
 			Name: "log_level",
@@ -347,7 +375,29 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Print a message that is useful during development.", "It will be hidden from players in the final game."},
+			"comment": []interface{}{"Print a value that might be useful during development.", "It will be hidden from players in the final game."},
+		},
+	}
+	Zt_Note = typeinfo.Flow{
+		Name: "note",
+		Lede: "note",
+		Terms: []typeinfo.Term{{
+			Name: "text",
+			Markup: map[string]any{
+				"comment": "One or more lines of text documentation.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}, {
+			Name:     "log_level",
+			Label:    "level",
+			Optional: true,
+			Type:     &Zt_LoggingLevel,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Execute,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Print a message that might be useful during development.", "It will be hidden from players in the final game."},
 		},
 	}
 }
@@ -371,7 +421,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Expect,
 	&Zt_ExpectText,
 	&Zt_Fabricate,
-	&Zt_DebugLog,
+	&Zt_LogValue,
+	&Zt_Note,
 }
 
 // A list of all strs in this this package.
@@ -382,9 +433,11 @@ var z_str_list = []*typeinfo.Str{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	15882152812809098721: (*DoNothing)(nil),  /* execute=-- */
+	14645287343365598707: (*DoNothing)(nil),  /* execute=DoNothing */
 	16489874106085927697: (*ExpectText)(nil), /* execute=Expect text: */
 	11108202414968227788: (*Expect)(nil),     /* execute=Expect: */
 	12332403919453206336: (*Fabricate)(nil),  /* execute=Fabricate input: */
-	14196615958578686010: (*DebugLog)(nil),   /* execute=Log:value: */
+	14196615958578686010: (*LogValue)(nil),   /* execute=Log:value: */
+	16242102660676547183: (*Note)(nil),       /* execute=Note: */
+	7518350145348849935:  (*Note)(nil),       /* execute=Note:level: */
 }

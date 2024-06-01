@@ -88,7 +88,7 @@
               - Object:dot:
                   - "@obj"
                   - AtField: "proper named"
-              - - Note: "by definition proper named objects have no article."
+              - # by definition proper named objects have no article.
                 - Say: "{.name}"
               - If:do:else:
                   - Is:matching:text:

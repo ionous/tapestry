@@ -31,8 +31,8 @@ No. Really.
 				"It is a good day for plain text.",
 			)),
 		},
-		&story.Note{
-			Lines: []string{"And comments.", "I guess."},
+		&story.StoryNote{
+			Text: "And comments.\nI guess.",
 		},
 		&story.DeclareStatement{
 			Text: &literal.TextValue{

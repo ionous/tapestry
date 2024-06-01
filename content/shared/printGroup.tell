@@ -28,7 +28,7 @@
               Variable:dot:
                 - "grouping"
                 - - AtField: "hide objects"
-          - - Note: "print a bracketed list of objects"
+          - # print a bracketed list of objects
             - If:do:else:
                 - Not:
                     Variable:dot:

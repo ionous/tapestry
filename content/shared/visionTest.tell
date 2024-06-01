@@ -6,7 +6,7 @@
         Define rule:do:
           - "Print news of light"
           - - Print: "The light, it burns."
-    - - Note: "Initialize the story as if we had started a game."
+    - # Initialize the story as if we had started a game.
       - # expect that the kitchen is lit.
         Expect:
           Object:dot:

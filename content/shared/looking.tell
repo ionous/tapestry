@@ -74,8 +74,8 @@
                 - - PrintDarkDescription room:
                       FromText: "@room"
           - # when illuminate
+            # list is inner to outer. the term "locale" here means some enclosure we are in
             Finally do:
-              - Note: "list is inner to outer. the term \"locale\" here means some enclosure we are in."
               - PrintLocaleTitle locale:enclosures:
                   - FromText: "@room"
                   - FromTextList: "@enclosures"
@@ -96,7 +96,7 @@
                           - Object:dot:
                               - "@room"
                               - AtField: "not visited"
-                  - - Note: "Reorder from outer to inner"
+                  - # Reorder from outer to inner
                     - Reverse list: "@enclosures"
                     - Repeating across:as:do:
                         - FromTextList: "@enclosures"
@@ -233,7 +233,7 @@
       - Repeating across:as:do:
           - FromTextList: "@kids"
           - "it"
-          - - Note: "exclude objects that enclose the viewpoint, those get their own locale descriptions"
+          - # exclude objects that enclose the viewpoint, those get their own locale descriptions
             - If:do:
                 - Not:
                     AnyTrue:
@@ -274,9 +274,8 @@
                 - Object:dot:
                     - "story"
                     - AtField: "mentions"
-- #
-  Note: "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
-- Define pattern:requires:provides:do:
+- # prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards.
+  Define pattern:requires:provides:do:
     - "print object description"
     - - Text:kind:
           - "obj"
@@ -324,10 +323,8 @@
           - Object:dot:
               - "@obj"
               - AtField: "not mentioned"
-          - - Note:
-                - "print impression prints objects that have an initial appearance,"
-                - "and flags them as mentioned."
-            - PrintImpressionOf obj:locale:
+          - - # prints objects that have an initial appearance, and flags them as mentioned.
+              PrintImpressionOf obj:locale:
                 - FromText: "@obj"
                 - FromText: "@locale"
 - Define rule:do:
@@ -336,10 +333,9 @@
           - KindOf:is:
               - "@obj"
               - "actors"
-          - - Note:
-                - "This doesn't have to say anything special for actors."
-                - "Stories can change that with their own rules when needed."
-            - Set:value:
+          - - # This doesn't have to say anything special for actors.
+              # Stories can change that with their own rules when needed.
+              Set:value:
                 - "@success"
                 - FromBool: true
 - #
@@ -380,7 +376,7 @@
                       FromText: "@obj"
                   - "equal_to"
                   - "@locale"
-          - - Note: "we check where to stop recursion of supporters in supporters"
+          - # we check where to stop recursion of supporters in supporters
             - Repeating across:as:do:
                 - FromTextList:
                     ChildrenOf obj:

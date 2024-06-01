@@ -111,21 +111,23 @@ func (op *StoryFile_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A legacy command, used in .if files as a visual divider ( because reading and writing json doesn't otherwise have a way to preserve whitespace. )
-type StoryBreak struct {
+// Used for the blockly editor so that hash-mark style comments
+// are visible in the editor. Not needed when using .tell files.
+type StoryNote struct {
+	Text   string
 	Markup map[string]any
 }
 
-// story_break, a type of flow.
-var Zt_StoryBreak typeinfo.Flow
+// story_note, a type of flow.
+var Zt_StoryNote typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*StoryBreak) TypeInfo() typeinfo.T {
-	return &Zt_StoryBreak
+func (*StoryNote) TypeInfo() typeinfo.T {
+	return &Zt_StoryNote
 }
 
 // Implements [typeinfo.Markup]
-func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
+func (op *StoryNote) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -133,60 +135,18 @@ func (op *StoryBreak) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ StoryStatement = (*StoryBreak)(nil)
+var _ StoryStatement = (*StoryNote)(nil)
 
-// Holds a slice of type StoryBreak.
-type StoryBreak_Slice []StoryBreak
+// Holds a slice of type StoryNote.
+type StoryNote_Slice []StoryNote
 
-// Implements [typeinfo.Instance] for a slice of StoryBreak.
-func (*StoryBreak_Slice) TypeInfo() typeinfo.T {
-	return &Zt_StoryBreak
+// Implements [typeinfo.Instance] for a slice of StoryNote.
+func (*StoryNote_Slice) TypeInfo() typeinfo.T {
+	return &Zt_StoryNote
 }
 
-// Implements [typeinfo.Repeats] for a slice of StoryBreak.
-func (op *StoryBreak_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Adds documentation about the story for you and other authors.
-// Notes can used as a modeling commands, or as part of an execute block.
-// And, they are created automatically from hash-style comments (#) encountered within the plain text sections of tell files.
-// When used in an execute block, notes become {"Log:value:"} commands.
-type Note struct {
-	Lines  []string
-	Markup map[string]any
-}
-
-// note, a type of flow.
-var Zt_Note typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*Note) TypeInfo() typeinfo.T {
-	return &Zt_Note
-}
-
-// Implements [typeinfo.Markup]
-func (op *Note) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ StoryStatement = (*Note)(nil)
-var _ rtti.Execute = (*Note)(nil)
-
-// Holds a slice of type Note.
-type Note_Slice []Note
-
-// Implements [typeinfo.Instance] for a slice of Note.
-func (*Note_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Note
-}
-
-// Implements [typeinfo.Repeats] for a slice of Note.
-func (op *Note_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of StoryNote.
+func (op *StoryNote_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -892,7 +852,7 @@ func (op *DefinePatternProvides_Slice) Repeats() bool {
 
 // Change the behavior of an existing pattern.
 //
-// For patterns defined using [DefinePattern], if a rule starts with a [logic.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.
+// For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.
 //
 // For patterns defined using [DefineAction], rules behave as "event listeners". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.
 //
@@ -1720,35 +1680,18 @@ func init() {
 			"mosaic-root":   true,
 		},
 	}
-	Zt_StoryBreak = typeinfo.Flow{
-		Name:  "story_break",
-		Lede:  "--",
-		Terms: []typeinfo.Term{},
-		Slots: []*typeinfo.Slot{
-			&Zt_StoryStatement,
-		},
-		Markup: map[string]any{
-			"comment":  "A legacy command, used in .if files as a visual divider ( because reading and writing json doesn't otherwise have a way to preserve whitespace. )",
-			"internal": true,
-		},
-	}
-	Zt_Note = typeinfo.Flow{
-		Name: "note",
+	Zt_StoryNote = typeinfo.Flow{
+		Name: "story_note",
 		Lede: "note",
 		Terms: []typeinfo.Term{{
-			Name:    "lines",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": "One or more lines of text documentation.",
-			},
+			Name: "text",
 			Type: &prim.Zt_Lines,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_StoryStatement,
-			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Adds documentation about the story for you and other authors.", "Notes can used as a modeling commands, or as part of an execute block.", "And, they are created automatically from hash-style comments (#) encountered within the plain text sections of tell files.", "When used in an execute block, notes become {\"Log:value:\"} commands."},
+			"comment": []interface{}{"Used for the blockly editor so that hash-mark style comments", "are visible in the editor. Not needed when using .tell files."},
 		},
 	}
 	Zt_DefineTest = typeinfo.Flow{
@@ -2287,7 +2230,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [logic.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
+			"comment": []interface{}{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
 		},
 	}
 	Zt_DefineNounRule = typeinfo.Flow{
@@ -2784,8 +2727,7 @@ var z_slot_list = []*typeinfo.Slot{
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_StoryFile,
-	&Zt_StoryBreak,
-	&Zt_Note,
+	&Zt_StoryNote,
 	&Zt_DefineTest,
 	&Zt_DefineScene,
 	&Zt_DefineAction,
@@ -2833,7 +2775,6 @@ var z_str_list = []*typeinfo.Str{
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
-	4360765066804052293:  (*StoryBreak)(nil),            /* story_statement=-- */
 	13010292396640781698: (*AspectField)(nil),           /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),             /* field_definition=Bool:initially: */
@@ -2872,8 +2813,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12975771225654832812: (*DefineAlias)(nil),           /* story_statement=Interpret alias:as: */
 	8001652437005351387:  (*DefineNamedGrammar)(nil),    /* story_statement=Interpret name:with: */
 	6001249499689096432:  (*DefineLeadingGrammar)(nil),  /* story_statement=Interpret:with: */
-	16242102660676547183: (*Note)(nil),                  /* execute=Note: */
-	17718266473581357115: (*Note)(nil),                  /* story_statement=Note: */
+	17718266473581357115: (*StoryNote)(nil),             /* story_statement=Note: */
 	14427731589588473385: (*NothingField)(nil),          /* field_definition=Nothing */
 	6779819952901809746:  (*NumField)(nil),              /* field_definition=Num: */
 	1575190309945393477:  (*NumField)(nil),              /* field_definition=Num:initially: */

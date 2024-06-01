@@ -85,7 +85,7 @@
                   - "equal_to"
                   - LocationOf obj:
                       FromText: "@noun"
-          - - Note: "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
+          - # Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )
             - Set:value:
                 - "@response"
                 - FromText:

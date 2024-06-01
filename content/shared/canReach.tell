@@ -29,7 +29,7 @@
       - Repeating:do:
           - Not:
               Is empty: "@i"
-          - - Note: "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
+          - # There's no problem reaching yourself, so start by putting yourself in the list of visited places.
             - Push:into:
                 - FromText: "@i"
                 - "@path"
@@ -40,7 +40,7 @@
                       FromText: "@i"
             - If:do:
                 - Is empty: "@reach_response"
-                - - Note: "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized."
+                - # Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized.
                   - If:assuming:do:
                       - Not:
                           Is empty: "@response"
@@ -61,15 +61,16 @@
                         - Set:value:
                             - "@reach_response"
                             - FromText: "@response"
-                        - Note:
-                            - "This doesn't exit the loop."
-                            - "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
+                        - # This doesn't exit the loop.
+                          # It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked.
+                          DoNothing:
+
             - Set:value:
                 - "@i"
                 - FromText: "@next"
-      - Note: "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
-      - Log:value:
-          - "note"
+      - # Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)
+        Log:value:
+          - "debug"
           - FromTextList: "@path"
       - Set:value:
           - "@i"
@@ -88,7 +89,7 @@
                     - "@lca"
                     - "greater_than"
                     - 0
-                - - Note: "Exit once we've found the lca."
+                - # Exit once we've found the lca.
                   - Break:
             - Set:value:
                 - "@next"
@@ -107,22 +108,22 @@
                             - FromText: "@actor"
                             - FromText: "@noun"
                             - FromText: "@action"
-                - - Set:value:
+                - # To find the outermost dig error keep going,
+                  # updating the error each time.
+                  - Set:value:
                       - "@dig_error"
                       - FromText: "@response"
-                  - Note:
-                      - "To find the outermost dig error keep going,"
-                      - "updating the error each time."
+
             - Set:value:
                 - "@i"
                 - FromText: "@next"
-      - Note: "Return the best response."
-      - If:do:else:
+      - # Return the best response.
+        If:do:else:
           - Is:matching:num:
               - "@lca"
               - "equal_to"
               - 0
-          - - Note: "No lca ever found? That's the most important error."
+          - # No lca ever found? That's the most important error.
             - Set:value:
                 - "@response"
                 - FromText:
@@ -134,14 +135,14 @@
                   - "@reach_error"
                   - "less_than"
                   - "@lca"
-              - - Note: "There is an error reaching up from the actor towards the lca."
+              - # There is an error reaching up from the actor towards the lca.
                 - Set:value:
                     - "@response"
                     - FromText: "@reach_response"
               - If:do:
                   - Not:
                       Is empty: "@dig_error"
-                  - - Note: "There was no error reaching up to the lca, so return any errors digging down to the noun."
+                  - # There was no error reaching up to the lca, so return any errors digging down to the noun.
                     - Set:value:
                         - "@response"
                         - FromText: "@dig_error"
@@ -166,10 +167,9 @@
                 Object:dot:
                   - "@actor"
                   - AtField: "not illuminated"
-          - - Note:
-                - "Used to determine whether an action needing light can proceed."
-                - "Returns some response text if the action is blocked."
-                - "Relies on has light."
+          - # Used to determine whether an action needing light can proceed.
+            # Returns some response text if the action is blocked.
+            # Relies on has light.
             - Set:value:
                 - "@response"
                 - FromText:
@@ -214,7 +214,7 @@
 - Define rule:do:
     - "reach up"
     - - Log:value:
-          - "note"
+          - "debug"
           - FromText:
               Say: "reach up: from:{.from_obj} -> into:{.into_obj}"
       - If:do:
@@ -270,7 +270,7 @@
 - Define rule:do:
     - "reach down"
     - - Log:value:
-          - "note"
+          - "debug"
           - FromText:
               Say: "reach down: from:{.from_obj} -> into:{.into_obj}"
       - If:do:

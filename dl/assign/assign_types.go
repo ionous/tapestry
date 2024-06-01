@@ -444,8 +444,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment":  "Provide a stored value for an assignment.",
-			"internal": true,
+			"comment": "Provide a stored value for an assignment.",
 		},
 	}
 	Zt_FromBool = typeinfo.Flow{

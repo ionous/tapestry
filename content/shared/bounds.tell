@@ -35,7 +35,7 @@
                             - Not:
                                 FullyOpaque obj:
                                   FromText: "@kid"
-                            - - Note: "add this kid for additional processing"
+                            - # add this kid for additional processing
                               - Push:into:
                                   - FromText: "@kid"
                                   - "@queue"

@@ -22,7 +22,7 @@ func TestStoring(t *testing.T) {
 	reg := unblock.MakeBlockCreator([]*typeinfo.TypeSet{
 		&literal.Z_Types,
 		&testdl.Z_Types,
-		&story.Z_Types, // for StoryBreak; fix: make a test_empty?
+		&story.Z_Types, // for Comment; fix: make a test_empty?
 	})
 
 	for _, p := range test.Pairs {

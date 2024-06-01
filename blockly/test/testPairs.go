@@ -207,12 +207,15 @@ var Pairs = []struct {
 }`}, {
 	// ------------------------------------------------------------
 	// nested content-free blocks
+	// fix? these used to be empty story breaks;
+	// now they are notes -- which can have text
+	// so .. these aren't "content free" anymore.
 	/*test*/ "Stack",
 	&story.StoryFile{
 		Statements: []story.StoryStatement{
-			&story.StoryBreak{},
-			&story.StoryBreak{},
-			&story.StoryBreak{},
+			&story.StoryNote{},
+			&story.StoryNote{},
+			&story.StoryNote{},
 		}}, `{
   "type": "story_file",
   "id": "test-1",
@@ -222,19 +225,34 @@ var Pairs = []struct {
   "inputs": {
     "STATEMENTS": {
       "block": {
-        "type": "_story_break_stack",
+        "type": "_story_note_stack",
         "id": "test-2",
-        "extraState": {},
+        "extraState": {
+          "TEXT": 1
+        },
+        "fields": {
+          "TEXT": ""
+        },
         "next": {
           "block": {
-            "type": "_story_break_stack",
+            "type": "_story_note_stack",
             "id": "test-3",
-            "extraState": {},
+            "extraState": {
+              "TEXT": 1
+            },
+            "fields": {
+              "TEXT": ""
+            },
             "next": {
               "block": {
-                "type": "_story_break_stack",
+                "type": "_story_note_stack",
                 "id": "test-4",
-                "extraState": {}
+                "extraState": {
+                  "TEXT": 1
+                },
+                "fields": {
+                  "TEXT": ""
+                }
               }
             }
           }
