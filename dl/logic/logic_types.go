@@ -728,7 +728,7 @@ func init() {
 			Label:   "all",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more conditions to test.",
+				"comment": "One or more conditions to check for success.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -747,7 +747,7 @@ func init() {
 			Label:   "any",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "One or more conditions to test.",
+				"comment": "One or more conditions to check for success.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -799,7 +799,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "test",
 			Repeats: true,
-			Type:    &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "One or more conditions to check for failure.",
+			},
+			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -814,7 +817,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "test",
 			Repeats: true,
-			Type:    &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": "One or more conditions to check for failure.",
+			},
+			Type: &rtti.Zt_BoolEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -908,7 +914,7 @@ func init() {
 			Name:  "true",
 			Label: "then",
 			Markup: map[string]any{
-				"comment": "The number to use if the condition succeeds.",
+				"comment": []interface{}{"The number to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -916,7 +922,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "The number to use if the condition fails.",
+				"comment": []interface{}{"The number to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
@@ -950,7 +956,7 @@ func init() {
 			Name:  "true",
 			Label: "then",
 			Markup: map[string]any{
-				"comment": "The text value to use if the condition succeeds.",
+				"comment": []interface{}{"The text to use if the condition succeeds.", "( The eval is only processed if the condition succeeded. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}, {
@@ -958,7 +964,7 @@ func init() {
 			Label:    "else",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "The text value to use if the condition fails.",
+				"comment": []interface{}{"The text to use if the condition fails.", "( The eval is only processed if the condition failed. )"},
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -997,7 +1003,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "condition",
 			Label: "if",
-			Type:  &rtti.Zt_BoolEval,
+			Markup: map[string]any{
+				"comment": []interface{}{"The condition to check before running the loop.", "If it succeeds, execute the loop;", "if it fails, stop executing the loop."},
+			},
+			Type: &rtti.Zt_BoolEval,
 		}, {
 			Name:     "initial",
 			Label:    "initially",
@@ -1013,14 +1022,17 @@ func init() {
 			Optional: true,
 			Repeats:  true,
 			Markup: map[string]any{
-				"comment": []interface{}{"A set of variables available to the loop;", "evaluated before each iteration of the loop."},
+				"comment": []interface{}{"A set of variables available to the loop;", "evaluated before each iteration of the loop.", "( These take precedence over the initial variables.", "If the same names appear in both sets of variables, the ones here win. )"},
 			},
 			Type: &assign.Zt_Arg,
 		}, {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "The statements to execute every loop.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,

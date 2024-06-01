@@ -37,7 +37,7 @@ Spec:requires:contains:
         - "is_all"
         - "bool_eval"
         - "is"
-        - - # One or more conditions to test.
+        - - # One or more conditions to check for success.
             Term:name:type:repeats:
               - "all"
               - "test"
@@ -51,7 +51,7 @@ Spec:requires:contains:
         - "is_any"
         - "bool_eval"
         - "is"
-        - - # One or more conditions to test.
+        - - # One or more conditions to check for success.
             Term:name:type:repeats:
               - "any"
               - "test"
@@ -85,7 +85,8 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "not_all"
         - "bool_eval"
-        - - Term:name:type:repeats:
+        - - # One or more conditions to check for failure.
+            Term:name:type:repeats:
               - "_"
               - "test"
               - "bool_eval"
@@ -97,7 +98,8 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "not_any"
         - "bool_eval"
-        - - Term:name:type:repeats:
+        - - # One or more conditions to check for failure.
+            Term:name:type:repeats:
               - "_"
               - "test"
               - "bool_eval"
@@ -166,11 +168,13 @@ Spec:requires:contains:
               - true
               - true
           - # The number to use if the condition succeeds.
+            # ( The eval is only processed if the condition succeeded. )
             Term:name:type:
               - "then"
               - "true"
               - "num_eval"
           - # The number to use if the condition fails.
+            # ( The eval is only processed if the condition failed. )
             Term:name:type:optional:
               - "else"
               - "false"
@@ -194,12 +198,14 @@ Spec:requires:contains:
               - "arg"
               - true
               - true
-          - # The text value to use if the condition succeeds.
+          - # The text to use if the condition succeeds.
+            # ( The eval is only processed if the condition succeeded. )
             Term:name:type:
               - "then"
               - "true"
               - "text_eval"
-          - # The text value to use if the condition fails.
+          - # The text to use if the condition fails.
+            # ( The eval is only processed if the condition failed. )
             Term:name:type:optional:
               - "else"
               - "false"
@@ -222,7 +228,10 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "repeat"
         - "execute"
-        - - Term:name:type:
+        - - # The condition to check before running the loop.
+            # If it succeeds, execute the loop;
+            # if it fails, stop executing the loop.
+            Term:name:type:
               - "if"
               - "condition"
               - "bool_eval"
@@ -236,13 +245,16 @@ Spec:requires:contains:
               - true
           - # A set of variables available to the loop;
             # evaluated before each iteration of the loop.
+            # ( These take precedence over the initial variables.
+            # If the same names appear in both sets of variables, the ones here win. )
             Term:name:type:optional:repeats:
               - "assuming"
               - "args"
               - "arg"
               - true
               - true
-          - Term:name:type:repeats:
+          - # The statements to execute every loop.
+            Term:name:type:repeats:
               - "do"
               - "exe"
               - "execute"

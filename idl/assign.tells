@@ -56,11 +56,11 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "num_eval"
-    - # Provide a text value for an assignment.
+    - # Provide some text for an assignment.
       Flow:slots:terms:
         - "from_text"
         - "assignment"
-        - - # Text value for the assignment.
+        - - # Text for the assignment.
             Term:name:type:
               - "_"
               - "value"

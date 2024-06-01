@@ -200,7 +200,7 @@ func (op *FromNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Provide a text value for an assignment.
+// Provide some text for an assignment.
 type FromText struct {
 	Value  rtti.TextEval
 	Markup map[string]any
@@ -487,7 +487,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "value",
 			Markup: map[string]any{
-				"comment": "Text value for the assignment.",
+				"comment": "Text for the assignment.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -495,7 +495,7 @@ func init() {
 			&rtti.Zt_Assignment,
 		},
 		Markup: map[string]any{
-			"comment": "Provide a text value for an assignment.",
+			"comment": "Provide some text for an assignment.",
 		},
 	}
 	Zt_FromRecord = typeinfo.Flow{
