@@ -1,9 +1,16 @@
-# literal
+# Commands for supplying constant values to runtime evaluations.
+# ( ie. a specific number when a [NumEval] is required. )
+#
+# Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )
 Spec:requires:contains:
   - "literal"
   - - "idl/prim"
     - "idl/rtti"
-  - - # Specify an explicit true or false.
+  - - # A slot to identify constant values.
+      Slot: "literal_value"
+      blockly-color: "MATH_HUE"
+
+    - # Specify an explicit true or false.
       Flow:slots:lede:terms:
         - "bool_value"
         - - "bool_eval"
@@ -16,7 +23,8 @@ Spec:requires:contains:
               - "kind"
               - "text"
               - true
-    - # A fixed value of a record.
+
+    - # A value for specifying a literal record.
       Flow:lede:terms:
         - "field_value"
         - "field"
@@ -27,7 +35,8 @@ Spec:requires:contains:
           - Term:type:
               - "value"
               - "literal_value"
-    - # A series of values all for the same record.
+
+    - # A series of values used to build a record.
       # While it can be specified wherever a literal value can, it only has meaning when the record type is known.
       Flow:slots:lede:terms:
         - "field_list"
@@ -38,10 +47,7 @@ Spec:requires:contains:
               - "fields"
               - "field_value"
               - true
-    - # Slot for constant values.
-      Slot: "literal_value"
 
-      blockly-color: "MATH_HUE"
     - # Specify a particular number.
       Flow:slots:lede:terms:
         - "num_value"
@@ -55,7 +61,8 @@ Spec:requires:contains:
               - "kind"
               - "text"
               - true
-    - # Number List: Specify a list of numbers.
+
+    - # Specify a list of literal numbers.
       Flow:slots:lede:terms:
         - "num_values"
         - - "num_list_eval"
@@ -69,6 +76,7 @@ Spec:requires:contains:
               - "kind"
               - "text"
               - true
+
     - # Specify a record composed of literal values.
       Flow:slots:lede:terms:
         - "record_value"
@@ -87,6 +95,7 @@ Spec:requires:contains:
               - "cache"
               - "record_cache"
               - true
+
     - # Specify a series of records, all of the same kind.
       Flow:slots:lede:terms:
         - "record_list"
@@ -106,7 +115,8 @@ Spec:requires:contains:
               - "cache"
               - "records_cache"
               - true
-    - # Specify a small bit of text.
+
+    - # Specify some constant text.
       Flow:slots:lede:terms:
         - "text_value"
         - - "text_eval"
@@ -119,7 +129,8 @@ Spec:requires:contains:
               - "kind"
               - "text"
               - true
-    - # Text List: Specifies a set of text values.
+
+    - # Specify a list of literal text values.
       Flow:slots:lede:terms:
         - "text_values"
         - - "text_list_eval"
