@@ -3,7 +3,7 @@ package test
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -29,15 +29,15 @@ var matchGroups = testpat.Pattern{
 	Return: "matches",
 	// rules are evaluated in reverse order
 	Rules: []rt.Rule{
-		core.MakeRule(
+		makeRule(
 			nil, matches(true)),
-		core.MakeRule(
+		makeRule(
 			&math.CompareText{
 				A:  object.Variable("a", "label"),
 				Is: math.C_Comparison_OtherThan,
 				B:  object.Variable("b", "label"),
 			}, matches(false)),
-		core.MakeRule(
+		makeRule(
 			&math.CompareText{
 				A:  object.Variable("a", "group options"),
 				Is: math.C_Comparison_OtherThan,
@@ -51,4 +51,18 @@ func matches(b bool) rt.Execute {
 		Target: object.Variable("matches"),
 		Value:  &assign.FromBool{Value: B(b)},
 	}
+}
+
+// for tests
+func makeRule(filter rt.BoolEval, exe ...rt.Execute) (ret rt.Rule) {
+	if filter == nil {
+		ret.Exe = exe
+	} else {
+		ret = rt.Rule{Exe: []rt.Execute{
+			&logic.ChooseBranch{
+				Condition: filter,
+				Exe:       exe,
+			}}}
+	}
+	return
 }

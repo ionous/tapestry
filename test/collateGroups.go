@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/object"
@@ -52,7 +51,7 @@ var collateGroups = testpat.Pattern{
 					&logic.ChooseBranch{
 						Condition: &call.CallPattern{
 							PatternName: ("match groups"),
-							Arguments: core.MakeArgs(
+							Arguments: assign.MakeArgs(
 								&assign.FromRecord{Value: object.Variable("settings")},
 								// "el" is specified by us during ListEach
 								// fix: use a special $element name, and require "Up" scope to reach out.

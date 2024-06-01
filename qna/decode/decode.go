@@ -6,10 +6,10 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
+	"git.sr.ht/~ionous/tapestry/lang/shortcut"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -21,7 +21,7 @@ func NewDecoder(signatures decode.SignatureTable) *Decoder {
 	// fix: doesnt really have to be a pointer...
 	dec := new(decode.Decoder).
 		Signatures(signatures...).
-		Customize(core.CustomDecoder)
+		Customize(shortcut.Decoder)
 	return (*Decoder)(dec)
 }
 

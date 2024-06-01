@@ -3,8 +3,8 @@ package object
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign/dot"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/dot"
 )
 
 // Dot - access to a value inside another value.

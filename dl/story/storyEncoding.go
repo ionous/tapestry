@@ -3,18 +3,18 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/shortcut"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
 func Encode(file *StoryFile) (ret any, err error) {
 	var enc encode.Encoder
 	return enc.
-		Customize(core.CustomEncoder).
+		Customize(shortcut.Encoder).
 		Encode(file)
 }
 
@@ -31,7 +31,7 @@ func DecodeMessage(out typeinfo.Instance, msg map[string]any) error {
 func NewDecoder() *decode.Decoder {
 	var dec decode.Decoder
 	dec.Signatures(AllSignatures...).
-		Customize(core.CustomDecoder).
+		Customize(shortcut.Decoder).
 		Patternize(DecodePattern)
 	return &dec
 }

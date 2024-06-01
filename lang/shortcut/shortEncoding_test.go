@@ -1,4 +1,4 @@
-package core_test
+package shortcut_test
 
 import (
 	"encoding/json"
@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
@@ -14,6 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
+	"git.sr.ht/~ionous/tapestry/lang/shortcut"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
@@ -83,7 +83,7 @@ func testPairs(t *testing.T, pairs []testPair) {
 
 func marshal(v typeinfo.Instance) (ret any, err error) {
 	var enc encode.Encoder
-	return enc.Customize(core.CustomEncoder).Encode(v)
+	return enc.Customize(shortcut.Encoder).Encode(v)
 }
 
 func unmarshal(out typeinfo.Instance, plainData any) (err error) {
@@ -96,6 +96,6 @@ func unmarshal(out typeinfo.Instance, plainData any) (err error) {
 			printer.Z_Types.Signatures,
 			text.Z_Types.Signatures,
 		).
-		Customize(core.CustomDecoder).
+		Customize(shortcut.Decoder).
 		Decode(out, plainData)
 }

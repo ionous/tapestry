@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -85,7 +85,7 @@ func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value
 	if printedName, e := safe.GetText(run, &printer.BufferText{Exe: []rt.Execute{
 		&call.CallPattern{
 			PatternName: "print name",
-			Arguments: core.MakeArgs(&assign.FromText{Value: &literal.TextValue{
+			Arguments: assign.MakeArgs(&assign.FromText{Value: &literal.TextValue{
 				Value: n,
 				Kind:  k,
 			}})}}}); e != nil {

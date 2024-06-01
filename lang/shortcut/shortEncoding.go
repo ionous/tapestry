@@ -1,9 +1,8 @@
-package core
+package shortcut
 
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign/shortcut"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
@@ -14,13 +13,13 @@ import (
 )
 
 // move to a better location...
-func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
+func Encoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch op := op.(type) {
-	case *call.CallPattern:
+	case *call.CallPattern: // fix? i dont love this dependency.
 		ret, err = call.CustomEncoder(enc, op)
 
 	case rtti.Address:
-		if str, ok := shortcut.WriteDots(op); !ok {
+		if str, ok := WriteDots(op); !ok {
 			err = compact.Unhandled("address")
 		} else {
 			ret = str
@@ -41,7 +40,7 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err erro
 	return
 }
 
-func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.Instance, err error) {
+func Decoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret typeinfo.Instance, err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch slot {
 	default:
@@ -61,8 +60,8 @@ func CustomDecoder(dec *decode.Decoder, slot *typeinfo.Slot, body any) (ret type
 		if str, ok := body.(string); !ok || len(str) == 0 {
 			ret, err = literal.DecodeLiteral(slot, body)
 		} else {
-			var clip shortcut.NotShort
-			if a, e := shortcut.ReadDots(str); e == nil {
+			var clip NotShort
+			if a, e := ReadDots(str); e == nil {
 				ret = a.(typeinfo.Instance)
 			} else if !errors.As(e, &clip) {
 				err = e
