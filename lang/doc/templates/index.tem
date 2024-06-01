@@ -28,7 +28,7 @@ In order to branch out from world modeling into changing how a game behaves at r
 
 <h3>Overview</h3>
 
-Commands are defined using a custom interface description language. They separated by functionality into different idl files.
+Commands are defined using a custom interface description language, separated by functionality.
 
 <h3>Index</h3>
 
