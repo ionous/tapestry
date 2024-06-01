@@ -32,9 +32,9 @@ Spec:requires:contains:
         - "story_statement"
         - "note"
         - - Term:name:type:
-            - "_"
-            - "text"
-            - "lines"
+              - "_"
+              - "text"
+              - "lines"
 
     - # Defines a scene used for testing a story.
       # Tests can be executed using the `tap check` command.
@@ -612,14 +612,14 @@ Spec:requires:contains:
         - "stopping_text" # "stopping {_$parts}"
         - "text_eval"
         - - # One or more pieces of text to shift through.
-              Term:name:type:repeats:
-                - "_"
-                - "parts"
-                - "text_eval"
-                - true
+            Term:name:type:repeats:
+              - "_"
+              - "parts"
+              - "text_eval"
+              - true
 
     - # Fields describe the members of kinds, records, patterns, and so on.
-      Slot:  "field_definition"
+      Slot: "field_definition"
 
     - # A valueless field.
       # Intended mainly as a way for patterns which don't return a value.
@@ -646,10 +646,9 @@ Spec:requires:contains:
       # the boolean becomes a state set consisting of the state and its opposite.
       # For instance, a boolean field called "reasonable" generates a set called "reasonable status" and the states "reasonable" and "not reasonable."
       Flow:slots:lede:terms:
-        - "bool_field"
+        - "bool_field" # "a true/false value named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "bool"
-        # - "a true/false value named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
@@ -663,10 +662,9 @@ Spec:requires:contains:
 
     - # A field containing a single number.
       Flow:slots:lede:terms:
-        - "num_field"
+        - "num_field" # "a number named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "num"
-        # - "a number named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
@@ -680,10 +678,9 @@ Spec:requires:contains:
 
     - # A field containing a single record.
       Flow:slots:lede:terms:
-        - "record_field"
+        - "record_field" # "a record named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "record"
-        # - "a record named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
@@ -705,10 +702,9 @@ Spec:requires:contains:
     - # A field containing a single piece of text.
       # Text fields can be used to store anything from the name of a noun, the name of a state or set of states, or something to display to the player.
       Flow:slots:lede:terms:
-        - "text_field"
+        - "text_field" # "some text named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "text"
-        # - "some text named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
@@ -728,10 +724,9 @@ Spec:requires:contains:
 
     - # A field containing a list of text.
       Flow:slots:lede:terms:
-        - "text_list_field"
+        - "text_list_field" #"a list of text named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "text_list"
-        # - "a list of text named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
@@ -751,10 +746,9 @@ Spec:requires:contains:
 
     - # A field containing a list of numbers.
       Flow:slots:lede:terms:
-        - "num_list_field"
+        - "num_list_field" # "a list of nums named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "num_list"
-        # - "a list of nums named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
@@ -769,10 +763,9 @@ Spec:requires:contains:
     - # A field containing a list of records.
       # All of the records in the list must be of the same type.
       Flow:slots:lede:terms:
-        - "record_list_field"
+        - "record_list_field" # "a list of records named {name$name} ( {$type} ) {$initially}"
         - "field_definition"
         - "record_list"
-        # - "a list of records named {name$name} ( {$type} ) {$initially}"
         - - # Name for the field. Must be unique within the set of fields (eg. within the kind.)
             Term:name:type:
               - "_"
