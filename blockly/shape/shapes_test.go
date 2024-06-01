@@ -3,6 +3,7 @@ package shape_test
 import (
 	_ "embed"
 	"encoding/json"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -119,15 +120,20 @@ func findRepeatingContainers(ts shape.TypeMap) (ret []repeatingContainer, err er
 	return
 }
 
+func extractTooltip(x *typeinfo.Flow) string {
+	lines, _ := compact.ExtractComment(x.Markup)
+	str := strings.Join(lines, "\\n")
+	return strconv.Quote(str)
+}
+
 // make sure that story file has no output and one stacked input.
 func TestStoryFileShape(t *testing.T) {
 	x := &story.Zt_StoryFile
-	comment, _ := compact.ExtractComment(x.Markup)
-	tooltip := strings.Join(comment, "\\n")
+	tooltip := extractTooltip(x)
 	expect := `{
   "type": "story_file",
   "colour": "%{BKY_TAP_HUE_ROOT}",
-  "tooltip": "` + tooltip + `",
+  "tooltip": ` + tooltip + `,
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
@@ -148,10 +154,8 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	ts := shape.TypeMap{x.Name: x}
-
 	var out js.Builder
-	w := shape.ShapeWriter{ts}
+	w := shape.ShapeWriter{shape.TypeMap{x.Name: x}}
 	if !w.WriteShape(&out, x) {
 		t.Fatal("couldn't write shape flie")
 	} else {
@@ -169,8 +173,7 @@ func TestStoryFileShape(t *testing.T) {
 // make sure that story file has no output and one stacked input.
 func TestStoryTextShape(t *testing.T) {
 	x := &story.Zt_TextField
-	comment, _ := compact.ExtractComment(x.Markup)
-	tooltip := strings.Join(comment, "\\n")
+	tooltip := extractTooltip(x)
 	expect := `{
   "type": "text_field",
   "output": [
@@ -178,7 +181,7 @@ func TestStoryTextShape(t *testing.T) {
     "field_definition"
   ],
   "colour": "%{BKY_TAP_HUE}",
-  "tooltip": "` + tooltip + `",
+  "tooltip": ` + tooltip + `,
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
@@ -217,10 +220,8 @@ func TestStoryTextShape(t *testing.T) {
     ]
   }
 }`
-	ts := shape.TypeMap{x.Name: x}
-
 	var out js.Builder
-	w := shape.ShapeWriter{ts}
+	w := shape.ShapeWriter{shape.TypeMap{x.Name: x}}
 	w.WriteShape(&out, x)
 	//
 	str := files.Indent(out.String())
@@ -231,6 +232,8 @@ func TestStoryTextShape(t *testing.T) {
 
 // test the generation of an enumeration
 func TestStrEnum(t *testing.T) {
+	x := &math.Zt_CompareText
+	tooltip := extractTooltip(x)
 	expect := `{
   "type": "compare_text",
   "output": [
@@ -238,7 +241,7 @@ func TestStrEnum(t *testing.T) {
     "bool_eval"
   ],
   "colour": "%{BKY_LOGIC_HUE}",
-  "tooltip": "True if eq,ne,gt,lt,ge,le two strings ( lexical. ).",
+  "tooltip": ` + tooltip + `,
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
@@ -298,11 +301,8 @@ func TestStrEnum(t *testing.T) {
     ]
   }
 }`
-	x := &math.Zt_CompareText
-	ts := shape.TypeMap{x.Name: x}
-
 	var out js.Builder
-	w := shape.ShapeWriter{ts}
+	w := shape.ShapeWriter{shape.TypeMap{x.Name: x}}
 	w.WriteShape(&out, x)
 	//
 	str := files.Indent(out.String())

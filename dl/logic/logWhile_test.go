@@ -18,8 +18,8 @@ import (
 func TestLoopBreak(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
-		&logic.While{
-			True: literal.B(true), Exe: []rt.Execute{
+		&logic.Repeat{
+			Condition: literal.B(true), Exe: []rt.Execute{
 				&object.SetValue{
 					Target: object.Variable("i"),
 					Value:  &assign.FromNum{Value: &math.AddValue{A: object.Variable("i"), B: literal.I(1)}}},
@@ -43,8 +43,8 @@ func TestLoopBreak(t *testing.T) {
 func TestLoopNext(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
-		&logic.While{
-			True: literal.B(true), Exe: []rt.Execute{
+		&logic.Repeat{
+			Condition: literal.B(true), Exe: []rt.Execute{
 				&object.SetValue{
 					Target: object.Variable("i"),
 					Value:  &assign.FromNum{Value: &math.AddValue{A: object.Variable("i"), B: literal.I(1)}}},
@@ -70,8 +70,8 @@ func TestLoopInfinite(t *testing.T) {
 	logic.MaxLoopIterations = 100
 	var run loopRuntime
 	if e := safe.Run(&run,
-		&logic.While{
-			True: literal.B(true), Exe: []rt.Execute{
+		&logic.Repeat{
+			Condition: literal.B(true), Exe: []rt.Execute{
 				&object.SetValue{
 					Target: object.Variable("i"),
 					Value:  &assign.FromNum{Value: &math.AddValue{A: object.Variable("i"), B: literal.I(1)}}},

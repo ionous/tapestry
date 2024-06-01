@@ -40,7 +40,7 @@ func (op *Brancher_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return true; always.
+// This always returns true.
 type Always struct {
 	Markup map[string]any
 }
@@ -77,7 +77,7 @@ func (op *Always_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return false.
+// This always returns false.
 type Never struct {
 	Markup map[string]any
 }
@@ -114,7 +114,7 @@ func (op *Never_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Determine the true/false implication of a value.
+// Determine the "truthiness" of a value.
 // Bool values simply return their value.
 // Num values: are true when not exactly zero.
 // Text values: are true whenever they contain content.
@@ -159,7 +159,7 @@ func (op *IsValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Check if every condition in a set of conditions returns true.
+// Check that every condition in a set of conditions returns true.
 // Stops after finding a failed condition.
 // An empty list returns false.
 type IsAll struct {
@@ -199,7 +199,7 @@ func (op *IsAll_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Check if any condition in a set of conditions returns true.
+// Check whether any condition in a set of conditions returns true.
 // Stops after finding the first successful condition.
 // An empty list returns false.
 type IsAny struct {
@@ -277,7 +277,7 @@ func (op *Not_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Determine the true/false implication of a value.
+// Determine the "falsiness" of a value.
 // This is the opposite of [TrueValue].
 type NotValue struct {
 	Value  rtti.Assignment
@@ -316,7 +316,7 @@ func (op *NotValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Check if every condition in a set of conditions returns false.
+// Check that every condition in a set of conditions returns false.
 // Stops after finding any successful condition.
 // An empty list returns false.
 type NotAll struct {
@@ -356,7 +356,7 @@ func (op *NotAll_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Check if any condition in a set of conditions returns false.
+// Check whether any condition in a set of conditions returns false.
 // Stops after finding any failed condition.
 // An empty list returns false.
 type NotAny struct {
@@ -637,22 +637,24 @@ func (op *Continue_Slice) Repeats() bool {
 }
 
 // Keep running a series of actions while a condition succeeds.
-type While struct {
-	True   rtti.BoolEval
-	Exe    []rtti.Execute
-	Markup map[string]any
+type Repeat struct {
+	Condition rtti.BoolEval
+	Initial   []assign.Arg
+	Args      []assign.Arg
+	Exe       []rtti.Execute
+	Markup    map[string]any
 }
 
-// while, a type of flow.
-var Zt_While typeinfo.Flow
+// repeat, a type of flow.
+var Zt_Repeat typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*While) TypeInfo() typeinfo.T {
-	return &Zt_While
+func (*Repeat) TypeInfo() typeinfo.T {
+	return &Zt_Repeat
 }
 
 // Implements [typeinfo.Markup]
-func (op *While) GetMarkup(ensure bool) map[string]any {
+func (op *Repeat) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -660,18 +662,18 @@ func (op *While) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.Execute = (*While)(nil)
+var _ rtti.Execute = (*Repeat)(nil)
 
-// Holds a slice of type While.
-type While_Slice []While
+// Holds a slice of type Repeat.
+type Repeat_Slice []Repeat
 
-// Implements [typeinfo.Instance] for a slice of While.
-func (*While_Slice) TypeInfo() typeinfo.T {
-	return &Zt_While
+// Implements [typeinfo.Instance] for a slice of Repeat.
+func (*Repeat_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Repeat
 }
 
-// Implements [typeinfo.Repeats] for a slice of While.
-func (op *While_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of Repeat.
+func (op *Repeat_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -686,7 +688,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Return true; always.",
+			"comment": "This always returns true.",
 		},
 	}
 	Zt_Never = typeinfo.Flow{
@@ -697,7 +699,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Return false.",
+			"comment": "This always returns false.",
 		},
 	}
 	Zt_IsValue = typeinfo.Flow{
@@ -715,7 +717,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine the true/false implication of a value.", "Bool values simply return their value.", "Num values: are true when not exactly zero.", "Text values: are true whenever they contain content.", "List values: are true whenever the list is non-empty.", "( note this is similar to python, and different than javascript. )", "Record values: are true whenever they have been initialized.", "( only sub-records start uninitialized; record variables are always true. )"},
+			"comment": []interface{}{"Determine the \"truthiness\" of a value.", "Bool values simply return their value.", "Num values: are true when not exactly zero.", "Text values: are true whenever they contain content.", "List values: are true whenever the list is non-empty.", "( note this is similar to python, and different than javascript. )", "Record values: are true whenever they have been initialized.", "( only sub-records start uninitialized; record variables are always true. )"},
 		},
 	}
 	Zt_IsAll = typeinfo.Flow{
@@ -734,7 +736,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check if every condition in a set of conditions returns true.", "Stops after finding a failed condition.", "An empty list returns false."},
+			"comment": []interface{}{"Check that every condition in a set of conditions returns true.", "Stops after finding a failed condition.", "An empty list returns false."},
 		},
 	}
 	Zt_IsAny = typeinfo.Flow{
@@ -753,7 +755,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check if any condition in a set of conditions returns true.", "Stops after finding the first successful condition.", "An empty list returns false."},
+			"comment": []interface{}{"Check whether any condition in a set of conditions returns true.", "Stops after finding the first successful condition.", "An empty list returns false."},
 		},
 	}
 	Zt_Not = typeinfo.Flow{
@@ -788,7 +790,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine the true/false implication of a value.", "This is the opposite of [TrueValue]."},
+			"comment": []interface{}{"Determine the \"falsiness\" of a value.", "This is the opposite of [TrueValue]."},
 		},
 	}
 	Zt_NotAll = typeinfo.Flow{
@@ -803,7 +805,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check if every condition in a set of conditions returns false.", "Stops after finding any successful condition.", "An empty list returns false."},
+			"comment": []interface{}{"Check that every condition in a set of conditions returns false.", "Stops after finding any successful condition.", "An empty list returns false."},
 		},
 	}
 	Zt_NotAny = typeinfo.Flow{
@@ -818,7 +820,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Check if any condition in a set of conditions returns false.", "Stops after finding any failed condition.", "An empty list returns false."},
+			"comment": []interface{}{"Check whether any condition in a set of conditions returns false.", "Stops after finding any failed condition.", "An empty list returns false."},
 		},
 	}
 	Zt_ChooseBranch = typeinfo.Flow{
@@ -989,12 +991,31 @@ func init() {
 			"comment": []interface{}{"In a repeating loop, try the next iteration of the loop;", "or, in a rule, continue to the next rule."},
 		},
 	}
-	Zt_While = typeinfo.Flow{
-		Name: "while",
-		Lede: "repeating",
+	Zt_Repeat = typeinfo.Flow{
+		Name: "repeat",
+		Lede: "repeat",
 		Terms: []typeinfo.Term{{
-			Name: "true",
-			Type: &rtti.Zt_BoolEval,
+			Name:  "condition",
+			Label: "if",
+			Type:  &rtti.Zt_BoolEval,
+		}, {
+			Name:     "initial",
+			Label:    "initially",
+			Optional: true,
+			Repeats:  true,
+			Markup: map[string]any{
+				"comment": []interface{}{"A set of variables available to the loop;", "evaluated just once, before the loop's first run."},
+			},
+			Type: &assign.Zt_Arg,
+		}, {
+			Name:     "args",
+			Label:    "assuming",
+			Optional: true,
+			Repeats:  true,
+			Markup: map[string]any{
+				"comment": []interface{}{"A set of variables available to the loop;", "evaluated before each iteration of the loop."},
+			},
+			Type: &assign.Zt_Arg,
 		}, {
 			Name:    "exe",
 			Label:   "do",
@@ -1046,7 +1067,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ChooseText,
 	&Zt_Break,
 	&Zt_Continue,
-	&Zt_While,
+	&Zt_Repeat,
 }
 
 // a list of all command signatures
@@ -1076,7 +1097,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	2863639051637372837:  (*ChooseNum)(nil),         /* num_eval=Num if:assuming:then:else: */
 	9841785069654362751:  (*ChooseNum)(nil),         /* num_eval=Num if:then: */
 	2293377426593441548:  (*ChooseNum)(nil),         /* num_eval=Num if:then:else: */
-	16853421744116592875: (*While)(nil),             /* execute=Repeating:do: */
+	765031688964517969:   (*Repeat)(nil),            /* execute=Repeat if:assuming:do: */
+	8691975868338143968:  (*Repeat)(nil),            /* execute=Repeat if:do: */
+	3143868389463768902:  (*Repeat)(nil),            /* execute=Repeat if:initially:assuming:do: */
+	6032823766141856509:  (*Repeat)(nil),            /* execute=Repeat if:initially:do: */
 	4784360512497235820:  (*ChooseText)(nil),        /* text_eval=Text if:assuming:then: */
 	13980719859951632205: (*ChooseText)(nil),        /* text_eval=Text if:assuming:then:else: */
 	4706788097495762503:  (*ChooseText)(nil),        /* text_eval=Text if:then: */

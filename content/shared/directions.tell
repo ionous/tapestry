@@ -46,7 +46,7 @@ Doors have a room called the destination.
           - "door"
     - - # names one of the fields of compass
         Text: "direction"
-    - - Repeating across:as:do:
+    - - Repeat across:as:do:
           - FromTextList:
               Fields of: "compasses"
           - "dir"

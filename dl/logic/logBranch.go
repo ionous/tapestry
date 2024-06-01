@@ -97,7 +97,7 @@ func (op *ChooseBranch) eval(run rt.Runtime, pushed *int) (matched bool, err err
 	if ks, vs, e := assign.ExpandArgs(run, op.Args); e != nil {
 		err = e
 	} else {
-		if len(op.Args) > 0 {
+		if len(vs) > 0 {
 			run.PushScope(scope.NewPairs(ks, vs))
 			*pushed++
 		}

@@ -92,7 +92,7 @@ Spec:requires:contains:
       Flow:slots:lede:terms:
         - "list_each"
         - "execute"
-        - "repeating"
+        - "repeat"
         - - Term:name:type:
               - "across"
               - "list"

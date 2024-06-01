@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-// Add two numbers.
+// Add two numbers and return the result.
 type AddValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
@@ -51,7 +51,7 @@ func (op *AddValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Subtract two numbers.
+// Subtract two numbers and return the result.
 type SubtractValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
@@ -90,7 +90,7 @@ func (op *SubtractValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Multiply two numbers.
+// Multiply two numbers and return the result.
 type MultiplyValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
@@ -129,7 +129,7 @@ func (op *MultiplyValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Divide one number by another.
+// Divide one number by another and return the result.
 type DivideValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
@@ -168,7 +168,7 @@ func (op *DivideValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Divide one number by another, and return the remainder.
+// Divide one number by another and return the remainder.
 type ModValue struct {
 	A      rtti.NumEval
 	B      rtti.NumEval
@@ -207,7 +207,7 @@ func (op *ModValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Remove the sign from a value, and return its positive value.
+// Remove the sign from a value and return its positive value.
 type AbsValue struct {
 	Value  rtti.NumEval
 	Markup map[string]any
@@ -245,7 +245,7 @@ func (op *AbsValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Increase a stored value; optionally, return the new value.
+// Increase a stored value and, optionally, return the new value.
 type Increment struct {
 	Target rtti.Address
 	Step   rtti.NumEval
@@ -285,7 +285,7 @@ func (op *Increment_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Decrease a stored value; optionally, return the new value.
+// Decrease a stored value and, optionally, return the new value.
 type Decrement struct {
 	Target rtti.Address
 	Step   rtti.NumEval
@@ -326,7 +326,13 @@ func (op *Decrement_Slice) Repeats() bool {
 }
 
 // Compare two values.
-// This attempts to coerce the second value to match the type of the first value in order to compare them.
+// If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.
+//
+// Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.
+// Otherwise, the types of the values must match exactly.
+//
+// Numbers are compared using an internally determined default tolerance.
+// To control the tolerance between numbers, use [CompareNum].
 type CompareValue struct {
 	A       rtti.Assignment
 	Compare Comparison
@@ -366,7 +372,7 @@ func (op *CompareValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// True if eq,ne,gt,lt,ge,le two numbers.
+// Compare two numbers.
 type CompareNum struct {
 	A         rtti.NumEval
 	Compare   Comparison
@@ -407,7 +413,7 @@ func (op *CompareNum_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
+// Compare two text values in "lexical" ( alphabetical ) order.
 type CompareText struct {
 	A       rtti.TextEval
 	Compare Comparison
@@ -516,7 +522,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Add two numbers.",
+			"comment": "Add two numbers and return the result.",
 		},
 	}
 	Zt_SubtractValue = typeinfo.Flow{
@@ -540,7 +546,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Subtract two numbers.",
+			"comment": "Subtract two numbers and return the result.",
 		},
 	}
 	Zt_MultiplyValue = typeinfo.Flow{
@@ -564,7 +570,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Multiply two numbers.",
+			"comment": "Multiply two numbers and return the result.",
 		},
 	}
 	Zt_DivideValue = typeinfo.Flow{
@@ -588,7 +594,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Divide one number by another.",
+			"comment": "Divide one number by another and return the result.",
 		},
 	}
 	Zt_ModValue = typeinfo.Flow{
@@ -612,7 +618,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Divide one number by another, and return the remainder.",
+			"comment": "Divide one number by another and return the remainder.",
 		},
 	}
 	Zt_AbsValue = typeinfo.Flow{
@@ -630,7 +636,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Remove the sign from a value, and return its positive value.",
+			"comment": "Remove the sign from a value and return its positive value.",
 		},
 	}
 	Zt_Increment = typeinfo.Flow{
@@ -656,7 +662,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Increase a stored value; optionally, return the new value.",
+			"comment": "Increase a stored value and, optionally, return the new value.",
 		},
 	}
 	Zt_Decrement = typeinfo.Flow{
@@ -682,7 +688,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Decrease a stored value; optionally, return the new value.",
+			"comment": "Decrease a stored value and, optionally, return the new value.",
 		},
 	}
 	Zt_CompareValue = typeinfo.Flow{
@@ -697,7 +703,10 @@ func init() {
 		}, {
 			Name:  "compare",
 			Label: "matching",
-			Type:  &Zt_Comparison,
+			Markup: map[string]any{
+				"comment": "The specific way to compare the two values.",
+			},
+			Type: &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "value",
@@ -710,7 +719,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Compare two values.", "This attempts to coerce the second value to match the type of the first value in order to compare them."},
+			"comment": []interface{}{"Compare two values.", "If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.", "", "Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.", "Otherwise, the types of the values must match exactly.", "", "Numbers are compared using an internally determined default tolerance.", "To control the tolerance between numbers, use [CompareNum]."},
 		},
 	}
 	Zt_CompareNum = typeinfo.Flow{
@@ -718,21 +727,30 @@ func init() {
 		Lede: "is",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The first number.",
+			},
 			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:  "compare",
 			Label: "matching",
-			Type:  &Zt_Comparison,
+			Markup: map[string]any{
+				"comment": "The specific way to compare the two numbers.",
+			},
+			Type: &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "num",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The second number.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}, {
 			Name:     "tolerance",
 			Label:    "within",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "a positive value that indicates how close the two numbers should be",
+				"comment": "A positive value to indicate how close the two numbers can be.",
 			},
 			Type: &prim.Zt_Num,
 		}},
@@ -740,7 +758,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "True if eq,ne,gt,lt,ge,le two numbers.",
+			"comment": "Compare two numbers.",
 		},
 	}
 	Zt_CompareText = typeinfo.Flow{
@@ -748,21 +766,30 @@ func init() {
 		Lede: "is",
 		Terms: []typeinfo.Term{{
 			Name: "a",
+			Markup: map[string]any{
+				"comment": "The first text value.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:  "compare",
 			Label: "matching",
-			Type:  &Zt_Comparison,
+			Markup: map[string]any{
+				"comment": "The specific way to compare the two text values.",
+			},
+			Type: &Zt_Comparison,
 		}, {
 			Name:  "b",
 			Label: "text",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The second text value.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "True if eq,ne,gt,lt,ge,le two strings ( lexical. ).",
+			"comment": "Compare two text values in \"lexical\" ( alphabetical ) order.",
 		},
 	}
 }

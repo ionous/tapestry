@@ -85,7 +85,7 @@
     - "update last known status"
     - - Nothing:
     - - Nothing:
-    - - Repeating across:as:do:
+    - - Repeat across:as:do:
           - FromTextList:
               Fields of: "story data"
           - "field"

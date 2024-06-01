@@ -12,7 +12,7 @@
           - "queue"
           - List ofText:
               - "@obj"
-    - - Repeating:do:
+    - - Repeat if:do:
           - Is:matching:num:
               - Len:
                   FromTextList: "@queue"
@@ -23,7 +23,7 @@
                 - "@queue"
                 - true
                 - "enc"
-                - - Repeating across:as:do:
+                - - Repeat across:as:do:
                       - FromTextList:
                           ChildrenOf obj:
                             FromText: "@enc"

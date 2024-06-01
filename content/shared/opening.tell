@@ -170,7 +170,7 @@
                         Print words:
                           - Say: "{We!|capitalize!} open {the: .noun} revealing"
                           - Print commas:
-                              - Repeating across:as:do:
+                              - Repeat across:as:do:
                                   - FromTextList: "@concealed_items"
                                   - "item"
                                   - - Say: "{the: .item}"

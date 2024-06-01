@@ -4,7 +4,7 @@
     - - TextList: "objs"
     - - Nothing:
     - - Print commas:
-          - Repeating across:as:do:
+          - Repeat across:as:do:
               - FromRecordList:
                   MakeGroups objs:
                     FromTextList: "@objs"
@@ -24,7 +24,7 @@
               FromTextList: "@objs"
     - - Print:
           Rows do:
-            - Repeating across:as:do:
+            - Repeat across:as:do:
                 - FromRecordList: "@groups"
                 - "group"
                 - - Print:

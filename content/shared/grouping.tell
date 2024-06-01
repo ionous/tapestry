@@ -171,7 +171,7 @@
           - "object group"
       - TextList: "names"
     - # find the index of the matching group
-      - Repeating across:as:do:
+      - Repeat across:as:do:
           - FromRecordList: "@groups"
           - "el"
           - - If:do:

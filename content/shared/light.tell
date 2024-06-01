@@ -81,7 +81,7 @@
           - "obj"
           - "object"
     - - TextList: "list"
-    - - Repeating:do:
+    - - Repeat if:do:
           - Not:
               Is empty: "@obj"
           - - Push:into:
@@ -171,7 +171,7 @@
       - TextList: "queue"
       - Text: "ceiling"
     - - # determine the ceiling.
-        Repeating:do:
+        Repeat if:do:
           - Not:
               Is empty: "@object"
           - - Set:value:
@@ -186,7 +186,7 @@
         Push:into:
           - FromText: "@ceiling"
           - "@queue"
-      - Repeating:do:
+      - Repeat if:do:
           - Is:matching:num:
               - Len:
                   FromTextList: "@queue"

@@ -20,7 +20,7 @@
           - - Nothing:
           - - Print:
                 Rows do:
-                  - Repeating across:as:do:
+                  - Repeat across:as:do:
                       - FromTextList:
                           Fields of:
                             KindOf: "@object"

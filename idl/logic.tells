@@ -3,17 +3,17 @@ Spec:requires:contains:
   - "logic"
   - - "idl/prim"
     - "idl/rtti"
-  - - # Return true; always.
+  - - # This always returns true.
       Flow:slots:
         - "always"
         - "bool_eval"
 
-    - # Return false.
+    - # This always returns false.
       Flow:slots:
         - "never"
         - "bool_eval"
 
-    - # Determine the true/false implication of a value.
+    - # Determine the "truthiness" of a value.
       # Bool values simply return their value.
       # Num values: are true when not exactly zero.
       # Text values: are true whenever they contain content.
@@ -30,7 +30,7 @@ Spec:requires:contains:
               - "value"
               - "assignment"
 
-    - # Check if every condition in a set of conditions returns true.
+    - # Check that every condition in a set of conditions returns true.
       # Stops after finding a failed condition.
       # An empty list returns false.
       Flow:slots:lede:terms:
@@ -44,7 +44,7 @@ Spec:requires:contains:
               - "bool_eval"
               - true
 
-    - # Check if any condition in a set of conditions returns true.
+    - # Check whether any condition in a set of conditions returns true.
       # Stops after finding the first successful condition.
       # An empty list returns false.
       Flow:slots:lede:terms:
@@ -68,7 +68,7 @@ Spec:requires:contains:
               - "test"
               - "bool_eval"
 
-    - # Determine the true/false implication of a value.
+    - # Determine the "falsiness" of a value.
       # This is the opposite of [TrueValue].
       Flow:slots:lede:terms:
         - "not_value"
@@ -79,7 +79,7 @@ Spec:requires:contains:
               - "value"
               - "assignment"
 
-    - # Check if every condition in a set of conditions returns false.
+    - # Check that every condition in a set of conditions returns false.
       # Stops after finding any successful condition.
       # An empty list returns false.
       Flow:slots:terms:
@@ -91,7 +91,7 @@ Spec:requires:contains:
               - "bool_eval"
               - true
 
-    - # Check if any condition in a set of conditions returns false.
+    - # Check whether any condition in a set of conditions returns false.
       # Stops after finding any failed condition.
       # An empty list returns false.
       Flow:slots:terms:
@@ -219,14 +219,29 @@ Spec:requires:contains:
         - "execute"
 
     - # Keep running a series of actions while a condition succeeds.
-      Flow:slots:lede:terms:
-        - "while"
+      Flow:slots:terms:
+        - "repeat"
         - "execute"
-        - "repeating"
         - - Term:name:type:
-              - "_"
-              - "true"
+              - "if"
+              - "condition"
               - "bool_eval"
+          - # A set of variables available to the loop;
+            # evaluated just once, before the loop's first run.
+            Term:name:type:optional:repeats:
+              - "initially"
+              - "initial"
+              - "arg"
+              - true
+              - true
+          - # A set of variables available to the loop;
+            # evaluated before each iteration of the loop.
+            Term:name:type:optional:repeats:
+              - "assuming"
+              - "args"
+              - "arg"
+              - true
+              - true
           - Term:name:type:repeats:
               - "do"
               - "exe"

@@ -61,7 +61,7 @@
                         - Print words:
                             - Say: "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
                             - Print commas:
-                                  - Repeating across:as:do:
+                                  - Repeat across:as:do:
                                       - FromTextList: "@items"
                                       - "item"
                                       - - Say: "{the: .item}"

@@ -26,7 +26,7 @@
     - - Set:value:
           - "@i"
           - FromText: "@actor"
-      - Repeating:do:
+      - Repeat if:do:
           - Not:
               Is empty: "@i"
           - # There's no problem reaching yourself, so start by putting yourself in the list of visited places.
@@ -75,7 +75,7 @@
       - Set:value:
           - "@i"
           - FromText: "@noun"
-      - Repeating:do:
+      - Repeat if:do:
           - Not:
               Is empty: "@i"
           - - Set:value:

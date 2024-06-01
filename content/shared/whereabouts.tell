@@ -43,7 +43,7 @@
           - "obj"
           - "object"
     - - TextList: "list"
-    - - Repeating:do:
+    - - Repeat if:do:
           - Not:
               Is empty: "@obj"
           - - Push:into:
@@ -80,7 +80,7 @@
           - "search"
           - "object"
           - "@obj"
-    - - Repeating:do:
+    - - Repeat if:do:
           - Not:
               Is empty: "@search"
           - - If:do:
@@ -126,12 +126,12 @@
           - "@o1"
           - FromText: "@object"
       - # We search every parent of the second object for every parent of the first object. Slow but simple.
-        Repeating:do:
+        Repeat if:do:
           - Is empty: "@ancestor"
           - - Set:value:
                 - "@o2"
                 - FromText: "@other_object"
-            - Repeating:do:
+            - Repeat if:do:
                 - true
                 - - If:do:
                       - Is:matching:text:
@@ -196,7 +196,7 @@
     - - Set:value:
           - "@up"
           - FromText: "@obj"
-      - Repeating:do:
+      - Repeat if:do:
           - true
           - - # Step up immediately, indirect implies objects dont hold themselves.
               Set:value:

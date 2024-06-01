@@ -36,7 +36,7 @@
                       - - AtField: "hide size"
                 - - Print parentheses:
                       - Print commas:
-                          - Repeating across:as:do:
+                          - Repeat across:as:do:
                               - FromTextList: "@objs"
                               - "obj"
                               - - PrintGroupedObject obj:grouping:
@@ -44,7 +44,7 @@
                                     - FromRecord: "@grouping"
                 - Finally do:
                     - Print commas:
-                          - Repeating across:as:do:
+                          - Repeat across:as:do:
                               - FromTextList: "@objs"
                               - "obj"
                               - - PrintGroupedObject obj:grouping:

@@ -98,7 +98,7 @@
                               - AtField: "not visited"
                   - # Reorder from outer to inner
                     - Reverse list: "@enclosures"
-                    - Repeating across:as:do:
+                    - Repeat across:as:do:
                         - FromTextList: "@enclosures"
                         - "it"
                         - - PrintLocaleDescription locale:viewpoint:room:
@@ -185,7 +185,7 @@
               - - AtIndex:
                     Len:
                       FromTextList: "@enclosures"
-    - - Repeating across:as:do:
+    - - Repeat across:as:do:
           - FromTextList: "@enclosures"
           - "it"
           - - If:do:
@@ -230,7 +230,7 @@
       - SortTexts:byField:
           - "@kids"
           - "grouping label"
-      - Repeating across:as:do:
+      - Repeat across:as:do:
           - FromTextList: "@kids"
           - "it"
           - # exclude objects that enclose the viewpoint, those get their own locale descriptions
@@ -377,7 +377,7 @@
                   - "equal_to"
                   - "@locale"
           - # we check where to stop recursion of supporters in supporters
-            - Repeating across:as:do:
+            - Repeat across:as:do:
                 - FromTextList:
                     ChildrenOf obj:
                       FromText: "@obj"
@@ -427,7 +427,7 @@
               - "story"
               - AtField: "mentions"
           - FromNum: 0
-      - Repeating across:as:do:
+      - Repeat across:as:do:
           - FromTextList:
               KindsOf: "things"
           - "it"

@@ -3,14 +3,14 @@
     - "base vis"
     - "Kitchenette"
     - # Say the list of visible objects from one of several vantage points.
-      - Repeating across:as:do:
+      - Repeat across:as:do:
           - FromTextList:
               - "cabinet"
               - "kitchen"
               - "shelf"
           - "src"
           - - Print commas:
-                  - Repeating across:as:do:
+                  - Repeat across:as:do:
                       - FromTextList:
                           TransparentList obj:
                             FromText: "@src"
@@ -27,7 +27,7 @@
               - "cabinet"
               - AtField: "closed"
           - FromBool: true
-      - Repeating across:as:do:
+      - Repeat across:as:do:
           - FromTextList:
               TransparentList obj:
                 FromText: "cabinet"

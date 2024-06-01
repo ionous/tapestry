@@ -946,7 +946,7 @@ func init() {
 	}
 	Zt_ListEach = typeinfo.Flow{
 		Name: "list_each",
-		Lede: "repeating",
+		Lede: "repeat",
 		Terms: []typeinfo.Term{{
 			Name:  "list",
 			Label: "across",
@@ -1342,8 +1342,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
 	14227857065891717050: (*Range)(nil),           /* num_list_eval=Range:from:byStep: */
 	18245549119758376391: (*ListReduce)(nil),      /* execute=Reduce into:fromList:using: */
-	7084717997213120806:  (*ListEach)(nil),        /* execute=Repeating across:as:do: */
-	12445157229684471803: (*ListEach)(nil),        /* execute=Repeating across:as:do:else: */
+	4974307639961863486:  (*ListEach)(nil),        /* execute=Repeat across:as:do: */
+	2783644050959378755:  (*ListEach)(nil),        /* execute=Repeat across:as:do:else: */
 	177314099445105829:   (*ListReverse)(nil),     /* execute=Reverse list: */
 	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
 	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */

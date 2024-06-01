@@ -27,7 +27,7 @@
                     - Every:
                     - 2
                 - - Print: "*"
-    - - Repeating across:as:do:
+    - - Repeat across:as:do:
           - FromNumList:
               Range: 7
           - "i"

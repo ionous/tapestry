@@ -47,7 +47,7 @@
         If:do:
           - HasAccessibleChildren obj:
               FromText: "@obj"
-          - - Repeating across:as:do:
+          - - Repeat across:as:do:
                 - FromTextList:
                     ChildrenOf obj:
                       FromText: "@obj"
