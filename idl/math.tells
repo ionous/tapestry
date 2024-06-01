@@ -3,7 +3,7 @@ Spec:requires:contains:
   - "math"
   - - "idl/prim"
     - "idl/rtti"
-  - - # Add two numbers.
+  - - # Add two numbers and return the result.
       Flow:slots:lede:terms:
         - "add_value"
         - "num_eval"
@@ -18,7 +18,8 @@ Spec:requires:contains:
               - "value"
               - "b"
               - "num_eval"
-    - # Subtract two numbers.
+
+    - # Subtract two numbers and return the result.
       Flow:slots:lede:terms:
         - "subtract_value"
         - "num_eval"
@@ -33,7 +34,8 @@ Spec:requires:contains:
               - "value"
               - "b"
               - "num_eval"
-    - # Multiply two numbers.
+
+    - # Multiply two numbers and return the result.
       Flow:slots:lede:terms:
         - "multiply_value"
         - "num_eval"
@@ -48,7 +50,8 @@ Spec:requires:contains:
               - "value"
               - "b"
               - "num_eval"
-    - # Divide one number by another.
+
+    - # Divide one number by another and return the result.
       Flow:slots:lede:terms:
         - "divide_value"
         - "num_eval"
@@ -63,7 +66,8 @@ Spec:requires:contains:
               - "value"
               - "b"
               - "num_eval"
-    - # Divide one number by another, and return the remainder.
+
+    - # Divide one number by another and return the remainder.
       Flow:slots:lede:terms:
         - "mod_value"
         - "num_eval"
@@ -78,7 +82,8 @@ Spec:requires:contains:
               - "value"
               - "b"
               - "num_eval"
-    - # Remove the sign from a value, and return its positive value.
+
+    - # Remove the sign from a value and return its positive value.
       Flow:slots:lede:terms:
         - "abs_value"
         - "num_eval"
@@ -87,7 +92,8 @@ Spec:requires:contains:
             Term:type:
               - "value"
               - "num_eval"
-    - # Increase a stored value; optionally, return the new value.
+
+    - # Increase a stored value and, optionally, return the new value.
       Flow:slots:lede:terms:
         - "increment"
         - - "num_eval"
@@ -105,7 +111,8 @@ Spec:requires:contains:
               - "step"
               - "num_eval"
               - true
-    - # Decrease a stored value; optionally, return the new value.
+
+    - # Decrease a stored value and, optionally, return the new value.
       Flow:slots:lede:terms:
         - "decrement"
         - - "num_eval"
@@ -135,7 +142,13 @@ Spec:requires:contains:
           - Option: "at_most"
 
     - # Compare two values.
-      # This attempts to coerce the second value to match the type of the first value in order to compare them.
+      # If the two values are of different types, this will attempt -- in a limited way -- to coerce the second value to match the type of the first value before comparing them.
+      #
+      # Any value can be coerced to bool ( following the truthiness rules for [IsValue] ), and bool and num values can be coerced into text.
+      # Otherwise, the types of the values must match exactly.
+      #
+      # Numbers are compared using an internally determined default tolerance.
+      # To control the tolerance between numbers, use [CompareNum].
       Flow:slots:lede:terms:
         - "compare_value"
         - "bool_eval"
@@ -146,7 +159,8 @@ Spec:requires:contains:
               - "_"
               - "a"
               - "assignment"
-          - Term:name:type:
+          - # The specific way to compare the two values.
+            Term:name:type:
               - "matching"
               - "compare"
               - "comparison"
@@ -156,44 +170,51 @@ Spec:requires:contains:
               - "value"
               - "b"
               - "assignment"
-    - # True if eq,ne,gt,lt,ge,le two numbers.
+
+    - # Compare two numbers.
       Flow:slots:lede:terms:
         - "compare_num"
         - "bool_eval"
         - "is"
-        - - Term:name:type:
+        - - # The first number.
+            Term:name:type:
               - "_"
               - "a"
               - "num_eval"
-          - Term:name:type:
+          - # The specific way to compare the two numbers.
+            Term:name:type:
               - "matching"
               - "compare"
               - "comparison"
-          - Term:name:type:
+          - # The second number.
+            Term:name:type:
               - "num"
               - "b"
               - "num_eval"
-          - # a positive value that indicates how close the two numbers should be
+          - # A positive value to indicate how close the two numbers can be.
             Term:name:type:optional:
               - "within"
               - "tolerance"
               - "num"
               - true
 
-    - # True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
+    - # Compare two text values in "lexical" ( alphabetical ) order.
       Flow:slots:lede:terms:
         - "compare_text"
         - "bool_eval"
         - "is"
-        - - Term:name:type:
+        - - # The first text value.
+            Term:name:type:
               - "_"
               - "a"
               - "text_eval"
-          - Term:name:type:
+          - # The specific way to compare the two text values.
+            Term:name:type:
               - "matching"
               - "compare"
               - "comparison"
-          - Term:name:type:
+          - # The second text value.
+            Term:name:type:
               - "text"
               - "b"
               - "text_eval"
