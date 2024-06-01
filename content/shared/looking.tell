@@ -81,8 +81,7 @@
                   - FromTextList: "@enclosures"
               - PrintLocaleSubtitle enclosures:
                   FromTextList: "@enclosures"
-              - # Line break
-                Br:
+              - LineBreak:
               - If:do:
                   - AnyTrue:
                       - Is:matching:text:
