@@ -1,4 +1,5 @@
 # Common text output commands.
+# The default Tapestry runtime will process printed text according to its [markup rules](https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup).
 Spec:requires:contains:
   - "format"
   - - "idl/prim"
@@ -7,31 +8,30 @@ Spec:requires:contains:
   - - # A slot used internally for generating unique names during weave.
       Slot: "counter"
 
-    - # Add a single blank line, unless a blank line was just written.
-      # See also <p> in package markup.
+    - # Add a single blank line ( unless a blank line was just written ).
+      # See also the <p> markup.
       Flow:slots:
         - "paragraph_break"
         - "execute"
 
     - # Start a new line ( if not already at a new line ).
-      # See also <wbr> in package markup.
-      Flow:slots:lede:
+      # See also the <wbr> markup.
+      Flow:slots:
         - "soft_break"
         - "execute"
-        - "wbr"
 
     - # Start a new line.
-      # See also <br> in package markup.
+      # See also the <br> markup.
       Flow:slots:
         - "line_break"
         - "execute"
 
-    - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
+    - # Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in their specified order, then it loops back to the first value again.
       Flow:slots:lede:terms:
         - "cycle_text"
         - [ "counter", "text_eval" ]
         - "cycle"
-        - - # An optional name used for controlling internal state. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.
+        - - # An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.
             Term:type:optional:
               - "name"
               - "text"
@@ -43,12 +43,12 @@ Spec:requires:contains:
               - "text_eval"
               - true
 
-    - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.
+    - # Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in a randomized order. After returning all of the available options, it begins again with a new ordering.
       Flow:slots:lede:terms:
         - "shuffle_text"
         - [ "counter", "text_eval" ]
         - "shuffle"
-        - - # An optional name used for controlling internal state. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.
+        - - # An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.
             Term:type:optional:
               - "name"
               - "text"
@@ -64,14 +64,14 @@ Spec:requires:contains:
               - "shuffler"
               - true
 
-    - # Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.
+    - # Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.
       #
-      # As a special case, if there was only ever one option, returns that option followed by the empty string forever after.
+      # As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after.
       Flow:slots:lede:terms:
         - "stopping_text"
         - [ "counter", "text_eval" ]
         - "stopping"
-        - - # An optional name used for controlling internal state. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.
+        - - # An optional name used for controlling internal state. When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.
             Term:type:optional:
               - "name"
               - "text"
@@ -95,7 +95,9 @@ Spec:requires:contains:
               - "execute"
               - true
 
-    - # Display some text to the player without apply any additional formatting.
+    - # Display some text to the player.
+      # The default runtime will format the text according to the rules specified by the Tapestry markup package:
+      # https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup
       Flow:slots:lede:terms:
         - "print_text"
         - "execute"

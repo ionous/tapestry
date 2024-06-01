@@ -1,4 +1,5 @@
 // Common text output commands.
+// The default Tapestry runtime will process printed text according to its [markup rules](https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup).
 package format
 
 //
@@ -40,8 +41,8 @@ func (op *Counter_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Add a single blank line, unless a blank line was just written.
-// See also <p> in package markup.
+// Add a single blank line ( unless a blank line was just written ).
+// See also the <p> markup.
 type ParagraphBreak struct {
 	Markup map[string]any
 }
@@ -79,7 +80,7 @@ func (op *ParagraphBreak_Slice) Repeats() bool {
 }
 
 // Start a new line ( if not already at a new line ).
-// See also <wbr> in package markup.
+// See also the <wbr> markup.
 type SoftBreak struct {
 	Markup map[string]any
 }
@@ -117,7 +118,7 @@ func (op *SoftBreak_Slice) Repeats() bool {
 }
 
 // Start a new line.
-// See also <br> in package markup.
+// See also the <br> markup.
 type LineBreak struct {
 	Markup map[string]any
 }
@@ -154,7 +155,7 @@ func (op *LineBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
+// Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in their specified order, then it loops back to the first value again.
 type CycleText struct {
 	Name   string
 	Parts  []rtti.TextEval
@@ -194,7 +195,7 @@ func (op *CycleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.
+// Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in a randomized order. After returning all of the available options, it begins again with a new ordering.
 type ShuffleText struct {
 	Name    string
 	Parts   []rtti.TextEval
@@ -235,8 +236,9 @@ func (op *ShuffleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.
-// As a special case, if there was only ever one option, returns that option followed by the empty string forever after.
+// Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.
+//
+// As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after.
 type StoppingText struct {
 	Name   string
 	Parts  []rtti.TextEval
@@ -276,6 +278,7 @@ func (op *StoppingText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\n').
 type BufferText struct {
 	Exe    []rtti.Execute
 	Markup map[string]any
@@ -313,7 +316,9 @@ func (op *BufferText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Display some text to the player without apply any additional formatting.
+// Display some text to the player.
+// The default runtime will format the text according to the rules specified by the Tapestry markup package:
+// https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup
 type PrintText struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -558,18 +563,18 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Add a single blank line, unless a blank line was just written.", "See also <p> in package markup."},
+			"comment": []interface{}{"Add a single blank line ( unless a blank line was just written ).", "See also the <p> markup."},
 		},
 	}
 	Zt_SoftBreak = typeinfo.Flow{
 		Name:  "soft_break",
-		Lede:  "wbr",
+		Lede:  "soft_break",
 		Terms: []typeinfo.Term{},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Start a new line ( if not already at a new line ).", "See also <wbr> in package markup."},
+			"comment": []interface{}{"Start a new line ( if not already at a new line ).", "See also the <wbr> markup."},
 		},
 	}
 	Zt_LineBreak = typeinfo.Flow{
@@ -580,7 +585,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Start a new line.", "See also <br> in package markup."},
+			"comment": []interface{}{"Start a new line.", "See also the <br> markup."},
 		},
 	}
 	Zt_CycleText = typeinfo.Flow{
@@ -591,7 +596,7 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional name used internally for controlling the state of the counter. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.",
+				"comment": "An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -608,7 +613,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.",
+			"comment": "Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in their specified order, then it loops back to the first value again.",
 		},
 	}
 	Zt_ShuffleText = typeinfo.Flow{
@@ -619,7 +624,7 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional name used internally for controlling the state of the counter. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.",
+				"comment": "An optional name used for controlling internal state.  When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -640,7 +645,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.",
+			"comment": "Returns some text selected from a set of predefined values. When called multiple times, this returns each one of the values in a randomized order. After returning all of the available options, it begins again with a new ordering.",
 		},
 	}
 	Zt_StoppingText = typeinfo.Flow{
@@ -651,7 +656,7 @@ func init() {
 			Label:    "name",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "An optional name used internally for controlling the state of the counter. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.",
+				"comment": "An optional name used for controlling internal state. When omitted, weave automatically generates a globally unique name. Commands with the same name will share internal state.",
 			},
 			Type: &prim.Zt_Text,
 		}, {
@@ -668,7 +673,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.", "As a special case, if there was only ever one option, returns that option followed by the empty string forever after."},
+			"comment": []interface{}{"Returns some text selected from a set of predefined values. When called multiple times, this returns each of its inputs in turn. After returning all of the available options, it sticks to using the last option.", "", "As a special case, if there was only ever one option: it returns that option followed by nothing ( the empty string ) forever after."},
 		},
 	}
 	Zt_BufferText = typeinfo.Flow{
@@ -678,10 +683,16 @@ func init() {
 			Name:    "exe",
 			Label:   "do",
 			Repeats: true,
-			Type:    &rtti.Zt_Execute,
+			Markup: map[string]any{
+				"comment": "The statements to capture text output from.",
+			},
+			Type: &rtti.Zt_Execute,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": "Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\\n').",
 		},
 	}
 	Zt_PrintText = typeinfo.Flow{
@@ -695,7 +706,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Display some text to the player without apply any additional formatting.",
+			"comment": []interface{}{"Display some text to the player.", "The default runtime will format the text according to the rules specified by the Tapestry markup package:", "https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup"},
 		},
 	}
 	Zt_PrintWords = typeinfo.Flow{
@@ -808,6 +819,7 @@ var Z_Types = typeinfo.TypeSet{
 	Name: "format",
 	Comment: []string{
 		"Common text output commands.",
+		"The default Tapestry runtime will process printed text according to its [markup rules](https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup).",
 	},
 
 	Slot:       z_slot_list,
@@ -864,9 +876,9 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	8909818107999898193:  (*ShuffleText)(nil),    /* text_eval=Shuffle name:text: */
 	3444877746271964624:  (*ShuffleText)(nil),    /* counter=Shuffle text: */
 	7835310741853066190:  (*ShuffleText)(nil),    /* text_eval=Shuffle text: */
+	17335248920749226950: (*SoftBreak)(nil),      /* execute=SoftBreak */
 	13115056552370612412: (*StoppingText)(nil),   /* counter=Stopping name:text: */
 	11830555676954637550: (*StoppingText)(nil),   /* text_eval=Stopping name:text: */
 	13363393271236249653: (*StoppingText)(nil),   /* counter=Stopping text: */
 	9145628730349656131:  (*StoppingText)(nil),   /* text_eval=Stopping text: */
-	16612725309683107572: (*SoftBreak)(nil),      /* execute=Wbr */
 }
