@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -303,13 +303,13 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildUnless(&logic.ChooseText{}, fn.ParameterCount)
 
 		case types.Stopping:
-			var seq printer.CallTerminal
+			var seq format.CallTerminal
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
-			var seq printer.CallShuffle
+			var seq format.CallShuffle
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
-			var seq printer.CallCycle
+			var seq format.CallCycle
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)

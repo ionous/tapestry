@@ -21,11 +21,11 @@ func TestCheck(t *testing.T) {
 		Test: []rt.Execute{
 			&logic.ChooseBranch{
 				Condition: &literal.BoolValue{Value: true},
-				Exe: []rt.Execute{&printer.PrintText{
+				Exe: []rt.Execute{&format.PrintText{
 					Text: &literal.TextValue{Value: "hello"},
 				}},
 				Else: &logic.ChooseNothingElse{
-					Exe: []rt.Execute{&printer.PrintText{
+					Exe: []rt.Execute{&format.PrintText{
 						Text: &literal.TextValue{Value: "goodbye"},
 					}}},
 			}},

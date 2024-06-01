@@ -4,10 +4,10 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -139,7 +139,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("cycle", func(t *testing.T) {
 		if e := testTemplate("{cycle}a{or}b{or}c{end}",
-			&printer.CallCycle{
+			&format.CallCycle{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -150,7 +150,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("once", func(t *testing.T) {
 		if e := testTemplate("{once}a{or}b{or}c{end}",
-			&printer.CallTerminal{
+			&format.CallTerminal{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -161,7 +161,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("shuffle", func(t *testing.T) {
 		if e := testTemplate("{shuffle}a{or}b{or}c{end}",
-			&printer.CallShuffle{
+			&format.CallShuffle{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),

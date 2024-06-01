@@ -1,10 +1,10 @@
 package express
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
@@ -28,7 +28,7 @@ func (k *nameCache) get(n string) (ret any, okay bool) {
 		addSig(m, math.Z_Types.Signatures)
 		addSig(m, object.Z_Types.Signatures)
 		addSig(m, text.Z_Types.Signatures)
-		addSig(m, printer.Z_Types.Signatures)
+		addSig(m, format.Z_Types.Signatures)
 		k.els = m
 	}
 	ret, okay = k.els[n]

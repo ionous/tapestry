@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
@@ -35,7 +35,7 @@ func TestCoreEncoding(t *testing.T) {
 		`{"Add:value:":["@a","#b.field"]}`,
 	}, {
 		// unary
-		&printer.Softline{},
+		&format.SoftBreak{},
 		`{"Wbr":true}`,
 	}, {
 		// verify that things that arent variables dont get encoded as variables
@@ -93,7 +93,7 @@ func unmarshal(out typeinfo.Instance, plainData any) (err error) {
 			assign.Z_Types.Signatures,
 			math.Z_Types.Signatures,
 			object.Z_Types.Signatures,
-			printer.Z_Types.Signatures,
+			format.Z_Types.Signatures,
 			text.Z_Types.Signatures,
 		).
 		Customize(shortcut.Decoder).

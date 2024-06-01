@@ -1,4 +1,7 @@
-// literal
+// Commands for supplying constant values to runtime evaluations.
+// ( ie. a specific number when a [NumEval] is required. )
+//
+// Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )
 package literal
 
 //
@@ -16,7 +19,7 @@ var Zt_LiteralValue = typeinfo.Slot{
 	Name: "literal_value",
 	Markup: map[string]any{
 		"blockly-color": "MATH_HUE",
-		"comment":       "Slot for constant values.",
+		"comment":       "A slot to identify constant values.",
 	},
 }
 
@@ -81,7 +84,7 @@ func (op *BoolValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A fixed value of a record.
+// A value for specifying a literal record.
 type FieldValue struct {
 	Field  string
 	Value  LiteralValue
@@ -117,7 +120,7 @@ func (op *FieldValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A series of values all for the same record.
+// A series of values used to build a record.
 // While it can be specified wherever a literal value can, it only has meaning when the record type is known.
 type FieldList struct {
 	Fields []FieldValue
@@ -196,7 +199,7 @@ func (op *NumValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Number List: Specify a list of numbers.
+// Specify a list of literal numbers.
 type NumValues struct {
 	Values []float64
 	Kind   string
@@ -318,7 +321,7 @@ func (op *RecordList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Specify a small bit of text.
+// Specify some constant text.
 type TextValue struct {
 	Value  string
 	Kind   string
@@ -358,7 +361,7 @@ func (op *TextValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Text List: Specifies a set of text values.
+// Specify a list of literal text values.
 type TextValues struct {
 	Values []string
 	Kind   string
@@ -434,7 +437,7 @@ func init() {
 			Type:  &Zt_LiteralValue,
 		}},
 		Markup: map[string]any{
-			"comment": "A fixed value of a record.",
+			"comment": "A value for specifying a literal record.",
 		},
 	}
 	Zt_FieldList = typeinfo.Flow{
@@ -449,7 +452,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"A series of values all for the same record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
+			"comment": []interface{}{"A series of values used to build a record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
 		},
 	}
 	Zt_NumValue = typeinfo.Flow{
@@ -492,7 +495,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Number List: Specify a list of numbers.",
+			"comment": "Specify a list of literal numbers.",
 		},
 	}
 	Zt_RecordValue = typeinfo.Flow{
@@ -561,7 +564,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify a small bit of text.",
+			"comment": "Specify some constant text.",
 		},
 	}
 	Zt_TextValues = typeinfo.Flow{
@@ -583,7 +586,7 @@ func init() {
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Text List: Specifies a set of text values.",
+			"comment": "Specify a list of literal text values.",
 		},
 	}
 }
@@ -592,7 +595,10 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "literal",
 	Comment: []string{
-		"literal",
+		"Commands for supplying constant values to runtime evaluations.",
+		"( ie. a specific number when a [NumEval] is required. )",
+		"",
+		"Tell files support \"shortcuts\" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command \"Num value: 5\" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )",
 	},
 
 	Slot:       z_slot_list,

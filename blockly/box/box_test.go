@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
@@ -18,7 +19,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
@@ -54,7 +54,7 @@ var blocks = []*typeinfo.TypeSet{
 	&object.Z_Types,
 	// &play.Z_Types,
 	&prim.Z_Types,
-	&printer.Z_Types,
+	&format.Z_Types,
 	&rel.Z_Types,
 	&render.Z_Types,
 	&game.Z_Types,

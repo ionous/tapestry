@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/list"
@@ -12,7 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/text"
@@ -35,7 +35,7 @@ var AllSignatures = []map[uint64]typeinfo.Instance{
 	object.Z_Types.Signatures,
 	// play.Z_Types.Signatures,
 	prim.Z_Types.Signatures,
-	printer.Z_Types.Signatures,
+	format.Z_Types.Signatures,
 	rel.Z_Types.Signatures,
 	render.Z_Types.Signatures,
 	game.Z_Types.Signatures,

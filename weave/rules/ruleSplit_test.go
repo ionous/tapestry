@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -46,7 +46,7 @@ var blockWithDebugLogs = []rt.Execute{
 
 // the branching block but has some non-branching trailing statements
 // ( so its not really a pure set of rules )
-var blockWithTail = append(blockWithDebugLogs, &printer.PrintText{})
+var blockWithTail = append(blockWithDebugLogs, &format.PrintText{})
 
 // two sibling blocks -- these should be considered as non-branching.
 var blockWithSiblingBranches = []rt.Execute{

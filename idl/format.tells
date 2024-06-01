@@ -1,6 +1,6 @@
 # Common text output commands.
 Spec:requires:contains:
-  - "printer"
+  - "format"
 
   - - "idl/prim"
     - "idl/rtti"
@@ -13,7 +13,7 @@ Spec:requires:contains:
 
     - # Start a new line ( if not already at a new line ).
       Flow:slots:lede:
-        - "softline"
+        - "soft_break"
         - "execute"
         - "wbr"
 

@@ -1,4 +1,4 @@
-package printer
+package format
 
 import (
 	"io"
@@ -16,7 +16,7 @@ func (op *LineBreak) Execute(run rt.Runtime) (_ error) {
 	return
 }
 
-func (op *Softline) Execute(run rt.Runtime) (_ error) {
+func (op *SoftBreak) Execute(run rt.Runtime) (_ error) {
 	io.WriteString(run.Writer(), "<wbr>")
 	return
 }

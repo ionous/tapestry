@@ -3,8 +3,8 @@ package story_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave"
 
@@ -20,7 +20,7 @@ func TestImportSequence(t *testing.T) {
 	cat := weave.NewCatalog(db)
 
 	// create a statement that uses CycleText
-	printText := &printer.PrintText{Text: &story.CycleText{Parts: []rt.TextEval{
+	printText := &format.PrintText{Text: &story.CycleText{Parts: []rt.TextEval{
 		literal.T("a"),
 		literal.T("b"),
 		literal.T("c"),
@@ -37,7 +37,7 @@ func TestImportSequence(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		// validate that it was transformed into this:
-		expect := printer.CallCycle{
+		expect := format.CallCycle{
 			Name: "seq-1",
 			Parts: []rt.TextEval{
 				T("a"),

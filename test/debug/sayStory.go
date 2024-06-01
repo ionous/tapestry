@@ -4,8 +4,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -13,7 +13,7 @@ import (
 )
 
 func SayIt(s string) []rt.Execute {
-	return []rt.Execute{&printer.PrintText{Text: T(s)}}
+	return []rt.Execute{&format.PrintText{Text: T(s)}}
 }
 
 type MatchNumber struct {

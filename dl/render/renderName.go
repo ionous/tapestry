@@ -8,8 +8,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -82,7 +82,7 @@ func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret rt.
 }
 
 func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value, err error) {
-	if printedName, e := safe.GetText(run, &printer.BufferText{Exe: []rt.Execute{
+	if printedName, e := safe.GetText(run, &format.BufferText{Exe: []rt.Execute{
 		&call.CallPattern{
 			PatternName: "print name",
 			Arguments: assign.MakeArgs(&assign.FromText{Value: &literal.TextValue{

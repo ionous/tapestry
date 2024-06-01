@@ -1,4 +1,4 @@
-package printer
+package format
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
