@@ -14,6 +14,7 @@ func MakeReference(run rt.Runtime, name string) Reference {
 }
 
 // the final position in a path where we might want to get or put a value.
+// implements rt.Reference
 type Reference struct {
 	pos   Cursor    // the pos of value; needed for writing the value back
 	child rt.Dotted // the final part of the path; holds the current value
@@ -45,8 +46,7 @@ func (at Reference) Dot(next rt.Dotted) (ret rt.Reference, err error) {
 }
 
 // step into the current value multiple times
-func (at Reference) DotPath(path []rt.Dotted) (ret rt.Reference, err error) {
-	var pos = rt.Reference(at)
+func Path(pos rt.Reference, path []rt.Dotted) (ret rt.Reference, err error) {
 	for i, dot := range path {
 		if next, e := pos.Dot(dot); e != nil {
 			err = fmt.Errorf("%s at %d in %s", e, i, path)
@@ -56,7 +56,7 @@ func (at Reference) DotPath(path []rt.Dotted) (ret rt.Reference, err error) {
 		}
 	}
 	if err == nil {
-		ret = at
+		ret = pos
 	}
 	return
 }

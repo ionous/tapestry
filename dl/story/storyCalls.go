@@ -4,7 +4,7 @@ package story
 // 	return &eph.Refs{Refs: refs}
 // }
 
-// func ImportCall(op *assign.CallPattern) *eph.Refs {
+// func ImportCall(op *call.CallPattern) *eph.Refs {
 // 	return refArgs(op.PatternName, kindsOf.Pattern, op.Arguments)
 // }
 

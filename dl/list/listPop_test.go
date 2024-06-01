@@ -4,8 +4,12 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
 )
 
@@ -30,21 +34,30 @@ func popTest(front bool, amt int, src ...string) []string {
 	} else {
 		start = -1
 	}
+	// this will be run "amt" times
 	pop := &list.Erasing{
-		Count:   I(1),
-		AtIndex: I(start),
-		Target:  assign.Variable("source"),
-		As:      W("text"),
-		Exe: core.MakeActivity(&core.ChooseBranch{
-			Condition: &core.CompareNum{
-				A:  &list.ListLen{List: &assign.FromTextList{Value: assign.Variable("text")}},
-				Is: core.C_Comparison_EqualTo,
-				B:  I(0)},
-			Exe: core.MakeActivity(&Write{&out, T("x")}),
-			Else: &core.ChooseNothingElse{
-				Exe: core.MakeActivity(&Write{&out, assign.Variable("text", 1)}),
-			},
-		}),
+		Count:   literal.I(1),
+		AtIndex: literal.I(start),
+		Target:  object.Variable("source"),
+		As:      "text",
+		Exe: []rt.Execute{
+			&logic.ChooseBranch{
+				Condition: &math.CompareNum{
+					A: &list.ListLen{
+						List: &assign.FromTextList{Value: object.Variable("text")},
+					},
+					Is: math.C_Comparison_EqualTo,
+					B:  literal.I(0),
+				},
+				Exe: []rt.Execute{
+					&Write{&out, literal.T("x")},
+				},
+				Else: &logic.ChooseNothingElse{
+					Exe: []rt.Execute{
+						&Write{&out, object.Variable("text", 1)},
+					},
+				},
+			}},
 	}
 	if run, e := newListTime(src, nil); e != nil {
 		panic(e)

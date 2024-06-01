@@ -1,23 +1,26 @@
-package printer
+package printer_test
 
 import (
 	"os"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
-var helloThereWorld = MakeActivity(
-	&PrintText{Text: T("hello")},
-	&PrintText{Text: T("there")},
-	&PrintText{Text: T("world")},
-)
+var helloThereWorld = []rt.Execute{
+	&printer.PrintText{Text: literal.T("hello")},
+	&printer.PrintText{Text: literal.T("there")},
+	&printer.PrintText{Text: literal.T("world")},
+}
 
 func ExamplePrintWords() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &PrintWords{Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &printer.PrintWords{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -27,7 +30,7 @@ func ExamplePrintWords() {
 func ExamplePrintParens() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &PrintParens{Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &printer.PrintParens{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -37,7 +40,11 @@ func ExamplePrintParens() {
 func ExampleSlash() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &PrintWords{Separator: T(" / "), Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run,
+		&printer.PrintWords{
+			Separator: literal.T(" / "),
+			Exe:       helloThereWorld,
+		}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -47,7 +54,7 @@ func ExampleSlash() {
 func ExamplePrintCommas() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &PrintCommas{Exe: helloThereWorld}); e != nil {
+	if e := safe.WriteText(&run, &printer.PrintCommas{Exe: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:

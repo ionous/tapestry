@@ -3,8 +3,9 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
 
@@ -71,9 +72,9 @@ func splice(src []string, start, cnt int, ins ...string) (ret string, err error)
 		err = e
 	} else {
 		rub := joinText(run, &list.ListSplice{
-			Target: assign.Variable("source"),
-			Start:  I(start),
-			Remove: I(cnt),
+			Target: object.Variable("source"),
+			Start:  literal.I(start),
+			Remove: literal.I(cnt),
 			Insert: FromTs(ins)},
 		)
 		if strs, e := run.GetField(meta.Variables, "source"); e != nil {

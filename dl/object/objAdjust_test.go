@@ -4,7 +4,8 @@ import (
 	"strconv"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
@@ -25,50 +26,50 @@ func TestAdjustTraits(t *testing.T) {
 		ObjectMap: objs,
 	}
 
-	if v, e := safe.GetText(&lt, &core.IncrementAspect{
-		Target: core.T("msg"),
-		Aspect: core.T("neatness"),
+	if v, e := safe.GetText(&lt, &object.IncrementAspect{
+		Target: literal.T("msg"),
+		Aspect: literal.T("neatness"),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "scuffed" {
 		t.Fatal(str)
-	} else if v, e := safe.GetText(&lt, &core.IncrementAspect{
-		Target: core.T("msg"),
-		Aspect: core.T("neatness"),
-		Step:   core.I(2),
+	} else if v, e := safe.GetText(&lt, &object.IncrementAspect{
+		Target: literal.T("msg"),
+		Aspect: literal.T("neatness"),
+		Step:   literal.I(2),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "neat" {
 		t.Fatal(str)
-	} else if v, e := safe.GetText(&lt, &core.IncrementAspect{
-		Target: core.T("msg"),
-		Aspect: core.T("neatness"),
-		Step:   core.I(5),
-		Clamp:  core.B(true),
+	} else if v, e := safe.GetText(&lt, &object.IncrementAspect{
+		Target: literal.T("msg"),
+		Aspect: literal.T("neatness"),
+		Step:   literal.I(5),
+		Clamp:  literal.B(true),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "trampled" {
 		t.Fatal(str)
-	} else if v, e := safe.GetText(&lt, &core.DecrementAspect{
-		Target: core.T("msg"),
-		Aspect: core.T("neatness"),
+	} else if v, e := safe.GetText(&lt, &object.DecrementAspect{
+		Target: literal.T("msg"),
+		Aspect: literal.T("neatness"),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "scuffed" {
 		t.Fatal(str)
-	} else if v, e := safe.GetText(&lt, &core.DecrementAspect{
-		Target: core.T("msg"),
-		Aspect: core.T("neatness"),
-		Step:   core.I(2),
+	} else if v, e := safe.GetText(&lt, &object.DecrementAspect{
+		Target: literal.T("msg"),
+		Aspect: literal.T("neatness"),
+		Step:   literal.I(2),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "trampled" {
 		t.Fatal(str)
-	} else if v, e := safe.GetText(&lt, &core.DecrementAspect{
-		Target: core.T("msg"),
-		Aspect: core.T("neatness"),
-		Step:   core.I(5),
-		Clamp:  core.B(true),
+	} else if v, e := safe.GetText(&lt, &object.DecrementAspect{
+		Target: literal.T("msg"),
+		Aspect: literal.T("neatness"),
+		Step:   literal.I(5),
+		Clamp:  literal.B(true),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "neat" {

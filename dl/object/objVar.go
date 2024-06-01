@@ -19,7 +19,7 @@ func (op *VariableDot) GetReference(run rt.Runtime) (ret rt.Reference, err error
 		if at, e := at.Dot(dot.Field(name.String())); e != nil {
 			err = e
 		} else {
-			ret, err = at.DotPath(path)
+			ret, err = dot.Path(at, path)
 		}
 	}
 	return

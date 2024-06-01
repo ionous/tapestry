@@ -4,8 +4,12 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/template"
 	"github.com/ionous/errutil"
@@ -36,8 +40,8 @@ func TestExpressions(t *testing.T) {
 	t.Run("T cmp", func(t *testing.T) {
 		if e := testExpression(
 			"'a' < 'b'",
-			&core.CompareText{
-				A: T("a"), Is: core.C_Comparison_LessThan, B: T("b"),
+			&math.CompareText{
+				A: T("a"), Is: math.C_Comparison_LessThan, B: T("b"),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -45,8 +49,8 @@ func TestExpressions(t *testing.T) {
 	t.Run("num cmp", func(t *testing.T) {
 		if e := testExpression(
 			"7 >= 8",
-			&core.CompareNum{
-				A: F(7), Is: core.C_Comparison_AtLeast, B: F(8),
+			&math.CompareNum{
+				A: F(7), Is: math.C_Comparison_AtLeast, B: F(8),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -54,9 +58,9 @@ func TestExpressions(t *testing.T) {
 	t.Run("math", func(t *testing.T) {
 		if e := testExpression(
 			"(5+6)*(1+2)",
-			&core.MultiplyValue{
-				A: &core.AddValue{A: F(5), B: F(6)},
-				B: &core.AddValue{A: F(1), B: F(2)},
+			&math.MultiplyValue{
+				A: &math.AddValue{A: F(5), B: F(6)},
+				B: &math.AddValue{A: F(1), B: F(2)},
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -65,14 +69,14 @@ func TestExpressions(t *testing.T) {
 	t.Run("logic", func(t *testing.T) {
 		if e := testExpression(
 			"true and (false or {not: true})",
-			&core.AllTrue{
+			&logic.AllTrue{
 				Test: []rt.BoolEval{
 					B(true),
-					&core.AnyTrue{
+					&logic.AnyTrue{
 						Test: []rt.BoolEval{
 							B(false),
 							// isNot requires command parsing
-							&core.Not{
+							&logic.Not{
 								Test: B(true),
 							},
 						}},
@@ -101,7 +105,7 @@ func TestExpressions(t *testing.T) {
 	})
 	t.Run("binary", func(t *testing.T) {
 		if e := testExpression(".A.num * .b.num",
-			&core.MultiplyValue{
+			&math.MultiplyValue{
 				A: renderRef("A", "num"),
 				B: renderRef("b", "num"),
 			}); e != nil {
@@ -125,7 +129,7 @@ func testExpression(str string, want interface{}) (err error) {
 func TestTemplates(t *testing.T) {
 	t.Run("print", func(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
-			&core.PrintNumWord{
+			&text.PrintNumWord{
 				Num: &render.RenderRef{
 					Name: T("group_size"),
 				},
@@ -135,7 +139,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("cycle", func(t *testing.T) {
 		if e := testTemplate("{cycle}a{or}b{or}c{end}",
-			&core.CallCycle{
+			&printer.CallCycle{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -146,7 +150,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("once", func(t *testing.T) {
 		if e := testTemplate("{once}a{or}b{or}c{end}",
-			&core.CallTerminal{
+			&printer.CallTerminal{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -157,7 +161,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("shuffle", func(t *testing.T) {
 		if e := testTemplate("{shuffle}a{or}b{or}c{end}",
-			&core.CallShuffle{
+			&printer.CallShuffle{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -168,9 +172,9 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("if", func(t *testing.T) {
 		if e := testTemplate("{if 7=7}boop{else}beep{end}",
-			&core.ChooseText{
-				If: &core.CompareNum{
-					A: F(7), Is: core.C_Comparison_EqualTo, B: F(7),
+			&logic.ChooseText{
+				If: &math.CompareNum{
+					A: F(7), Is: math.C_Comparison_EqualTo, B: F(7),
 				},
 				True:  T("boop"),
 				False: T("beep"),
@@ -180,10 +184,10 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("unless", func(t *testing.T) {
 		if e := testTemplate("{unless 7=7}boop{otherwise}beep{end}",
-			&core.ChooseText{
-				If: &core.Not{
-					Test: &core.CompareNum{
-						A: F(7), Is: core.C_Comparison_EqualTo, B: F(7),
+			&logic.ChooseText{
+				If: &logic.Not{
+					Test: &math.CompareNum{
+						A: F(7), Is: math.C_Comparison_EqualTo, B: F(7),
 					}},
 				True:  T("boop"),
 				False: T("beep"),
@@ -193,7 +197,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("filter", func(t *testing.T) {
 		if e := testTemplate("{15|print_num!}",
-			&core.PrintNum{
+			&text.PrintNum{
 				Num: I(15),
 			}); e != nil {
 			t.Fatal(e)
@@ -203,13 +207,13 @@ func TestTemplates(t *testing.T) {
 	// plain text between bracketed sections becomes text evals
 	t.Run("span", func(t *testing.T) {
 		if e := testTemplate("{15|print_num!} {if 7=7}boop{end}",
-			&core.Join{
+			&text.Join{
 				Parts: []rt.TextEval{
-					&core.PrintNum{Num: F(15)},
+					&text.PrintNum{Num: F(15)},
 					T(" "),
-					&core.ChooseText{
-						If: &core.CompareNum{
-							A: F(7), Is: core.C_Comparison_EqualTo, B: F(7),
+					&logic.ChooseText{
+						If: &math.CompareNum{
+							A: F(7), Is: math.C_Comparison_EqualTo, B: F(7),
 						},
 						True: T("boop"),
 					},
@@ -222,7 +226,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
-				PatternName: W("hello"), Render: []render.RenderEval{
+				PatternName: ("hello"), Render: []render.RenderEval{
 					&render.RenderValue{Value: &assign.FromText{Value: T("world")}},
 				}}); e != nil {
 			t.Fatal(e)
@@ -232,7 +236,7 @@ func TestTemplates(t *testing.T) {
 	// as a lowercase dotted name, we try to get the actual object name first from a variable named "object"
 	t.Run("object", func(t *testing.T) {
 		if e := testTemplate("hello {.object}",
-			&core.Join{Parts: []rt.TextEval{
+			&text.Join{Parts: []rt.TextEval{
 				T("hello "),
 				&render.RenderName{Name: "object"}}},
 		); e != nil {
@@ -252,7 +256,7 @@ func TestTemplates(t *testing.T) {
 }
 
 func renderRef(v string, path ...any) *render.RenderRef {
-	return &render.RenderRef{Name: T(v), Dot: assign.MakeDot(path...)}
+	return &render.RenderRef{Name: T(v), Dot: object.MakeDot(path...)}
 }
 
 func testTemplate(str string, want interface{}) (err error) {

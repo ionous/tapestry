@@ -1,66 +1,74 @@
-package text
+package text_test
 
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 func TestText(t *testing.T) {
+	type baseRuntime struct {
+		testutil.PanicRuntime
+	}
 	var run baseRuntime
 
 	t.Run("is", func(t *testing.T) {
-		if e := testTrue(t, &run, B(true)); e != nil {
+		if e := testTrue(t, &run, literal.B(true)); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &Not{Test: B(false)}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: literal.B(false)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 
 	t.Run("isEmpty", func(t *testing.T) {
-		if e := testTrue(t, &run, &IsEmpty{Text: T("")}); e != nil {
+		if e := testTrue(t, &run, &text.IsEmpty{Text: literal.T("")}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &Not{Test: &IsEmpty{Text: T("xxx")}}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: &text.IsEmpty{Text: literal.T("xxx")}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 
 	t.Run("includes", func(t *testing.T) {
-		if e := testTrue(t, &run, &Includes{
-			Text: T("full"),
-			Part: T("ll"),
+		if e := testTrue(t, &run, &text.Includes{
+			Text: literal.T("full"),
+			Part: literal.T("ll"),
 		}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &Not{Test: &Includes{
-			Text: T("full"),
-			Part: T("bull"),
+		if e := testTrue(t, &run, &logic.Not{Test: &text.Includes{
+			Text: literal.T("full"),
+			Part: literal.T("bull"),
 		}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 
 	t.Run("join", func(t *testing.T) {
-		if e := testTrue(t, &run, &CompareText{
-			A: &Join{Parts: []rt.TextEval{
-				T("one"), T("two"), T("three"),
+		if e := testTrue(t, &run, &math.CompareText{
+			A: &text.Join{Parts: []rt.TextEval{
+				literal.T("one"), literal.T("two"), literal.T("three"),
 			}},
-			Is: C_Comparison_EqualTo,
-			B:  T("onetwothree"),
+			Is: math.C_Comparison_EqualTo,
+			B:  literal.T("onetwothree"),
 		}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{
-			A: &Join{Sep: T(" "), Parts: []rt.TextEval{
-				T("one"), T("two"), T("three"),
+		if e := testTrue(t, &run, &math.CompareText{
+			A: &text.Join{Sep: literal.T(" "), Parts: []rt.TextEval{
+				literal.T("one"), literal.T("two"), literal.T("three"),
 			}},
-			Is: C_Comparison_EqualTo,
-			B:  T("one two three"),
+			Is: math.C_Comparison_EqualTo,
+			B:  literal.T("one two three"),
 		}); e != nil {
 			t.Fatal(e)
 		}

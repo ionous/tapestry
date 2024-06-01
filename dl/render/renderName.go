@@ -82,13 +82,13 @@ func (op *RenderName) getPrintedObjectName(run rt.Runtime, name string) (ret rt.
 }
 
 func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value, err error) {
-	if printedName, e := safe.GetText(run, &printer.BufferText{Exe: core.MakeActivity(
+	if printedName, e := safe.GetText(run, &printer.BufferText{Exe: []rt.Execute{
 		&call.CallPattern{
 			PatternName: "print name",
 			Arguments: core.MakeArgs(&assign.FromText{Value: &literal.TextValue{
 				Value: n,
 				Kind:  k,
-			}})})}); e != nil {
+			}})}}}); e != nil {
 		err = e
 	} else {
 		ret = printedName

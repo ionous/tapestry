@@ -5,6 +5,8 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/debug"
@@ -39,11 +41,11 @@ func TestFactorial(t *testing.T) {
 			}}}
 
 	// determine the factorial of the number 3
-	det := assign.CallPattern{
-		PatternName: P("factorial"),
+	det := call.CallPattern{
+		PatternName: ("factorial"),
 		Arguments: []assign.Arg{{
 			Name:  "num",
-			Value: &assign.FromNum{Value: I(3)},
+			Value: &assign.FromNum{Value: literal.I(3)},
 		}},
 	}
 	if v, e := safe.GetNum(&run, &det); e != nil {

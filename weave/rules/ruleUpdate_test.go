@@ -4,19 +4,21 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/rules"
 )
 
 func TestUpdateTracker(t *testing.T) {
 	var up rules.UpdateTracker
-	updates := &core.CallTrigger{}
-	embedded := &core.AllTrue{Test: []rt.BoolEval{updates}}
+	updates := &call.CallTrigger{}
+	embedded := &logic.AllTrue{Test: []rt.BoolEval{updates}}
 	updatesArg := assign.Arg{Value: &assign.FromBool{Value: updates}}
 	embeddedArg := assign.Arg{Value: &assign.FromBool{Value: embedded}}
 	//
-	negative := &core.IsEmpty{}
+	negative := &text.IsEmpty{}
 	negativeArg := assign.Arg{Value: &assign.FromBool{Value: negative}}
 	//
 	if b := up.CheckFilter(nil); b != false {

@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
@@ -32,7 +33,7 @@ func TestPatternSingle(t *testing.T) {
 			}, {
 				Name:      "l2",
 				Affinity:  affine.Num,
-				Initially: &assign.FromNum{Value: I(10)},
+				Initially: &assign.FromNum{Value: literal.I(10)},
 			}},
 			Result: &eph.Params{
 				Name:     "success",
@@ -78,7 +79,7 @@ func TestPatternSeparateLocals(t *testing.T) {
 			Locals: []eph.Params{{
 				Name:      "l2",
 				Affinity:  affine.Num,
-				Initially: &assign.FromNum{Value: I(10)},
+				Initially: &assign.FromNum{Value: literal.I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -119,7 +120,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 			Locals: []eph.Params{{
 				Name:      "l2",
 				Affinity:  affine.Num,
-				Initially: &assign.FromNum{Value: I(10)},
+				Initially: &assign.FromNum{Value: literal.I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -264,7 +265,7 @@ func TestPatternConflictingInit(t *testing.T) {
 			Locals: []eph.Params{{
 				Name:      "n",
 				Affinity:  affine.Num,
-				Initially: &assign.FromText{Value: T("mismatched")},
+				Initially: &assign.FromText{Value: literal.T("mismatched")},
 			}},
 		},
 	)

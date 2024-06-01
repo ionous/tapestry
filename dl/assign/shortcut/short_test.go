@@ -7,27 +7,27 @@ import (
 	"reflect"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 )
 
 func TestWrite(t *testing.T) {
-	if a, ok := WriteDots(assign.Object("obj", "field", 0, "el")); !ok {
+	if a, ok := WriteDots(object.Object("obj", "field", 0, "el")); !ok {
 		t.Fatal("couldnt write")
 	} else if a != "#obj.field.1.el" {
 		t.Fatal("mismatch", a)
 	}
 
-	if a, ok := WriteDots(assign.Variable("var")); !ok {
+	if a, ok := WriteDots(object.Variable("var")); !ok {
 		t.Fatal("couldnt write")
 	} else if a != "@var" {
 		t.Fatal("mismatch", a)
 	}
-	if a, ok := WriteDots(assign.Object("the obj")); !ok {
+	if a, ok := WriteDots(object.Object("the obj")); !ok {
 		t.Fatal("couldnt write")
 	} else if a != "#the_obj" {
 		t.Fatal("mismatch", a)
 	}
-	if a, ok := WriteDots(assign.Variable("bob's nephew", "headgear")); !ok {
+	if a, ok := WriteDots(object.Variable("bob's nephew", "headgear")); !ok {
 		t.Fatal("couldnt write")
 	} else if a != "@`bob's nephew`.headgear" {
 		t.Fatal("mismatch", a)

@@ -2,17 +2,8 @@ package list_test
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
-)
-
-var (
-	B = literal.B
-	F = literal.F
-	I = literal.I
-	T = literal.T
-	W = core.W
 )
 
 func FromTs(vs []string) (ret rt.Assignment) {

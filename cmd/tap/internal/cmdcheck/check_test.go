@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	check "git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
@@ -19,15 +19,15 @@ func TestCheck(t *testing.T) {
 		Name:   t.Name(),
 		Expect: "hello",
 		Test: []rt.Execute{
-			&core.ChooseBranch{
+			&logic.ChooseBranch{
 				Condition: &literal.BoolValue{Value: true},
-				Exe: core.MakeActivity(&core.PrintText{
+				Exe: []rt.Execute{&printer.PrintText{
 					Text: &literal.TextValue{Value: "hello"},
-				}),
-				Else: &core.ChooseNothingElse{
-					Exe: core.MakeActivity(&core.PrintText{
+				}},
+				Else: &logic.ChooseNothingElse{
+					Exe: []rt.Execute{&printer.PrintText{
 						Text: &literal.TextValue{Value: "goodbye"},
-					})},
+					}}},
 			}},
 	}
 	if e := runTest(prog); e != nil {

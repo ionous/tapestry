@@ -41,7 +41,7 @@ func getNamedValue(run rt.Runtime, name string, path []rt.Dotted) (ret rt.Value,
 				at := dot.MakeReference(run, meta.Variables)
 				if at, e := at.Dot(dot.Field(name)); e != nil {
 					err = e
-				} else if at, e := at.DotPath(path); e != nil {
+				} else if at, e := dot.Path(at, path); e != nil {
 					err = e
 				} else {
 					ret, err = at.GetValue()
@@ -71,7 +71,7 @@ func getObjValue(run rt.Runtime, name string, path []rt.Dotted) (ret rt.Value, e
 		ret = id
 	} else {
 		at := dot.MakeReference(run, id.String())
-		if at, e := at.DotPath(path); e != nil {
+		if at, e := dot.Path(at, path); e != nil {
 			err = e
 		} else {
 			ret, err = at.GetValue()

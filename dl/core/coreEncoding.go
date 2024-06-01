@@ -13,8 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// fix: move some part of this into package assign?
-// especially because the opposite is handled in... story?
+// move to a better location...
 func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err error) {
 	switch op := op.(type) {
 	case *call.CallPattern:

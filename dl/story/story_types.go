@@ -892,7 +892,7 @@ func (op *DefinePatternProvides_Slice) Repeats() bool {
 
 // Change the behavior of an existing pattern.
 //
-// For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.
+// For patterns defined using [DefinePattern], if a rule starts with a [logic.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.
 //
 // For patterns defined using [DefineAction], rules behave as "event listeners". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.
 //
@@ -2287,7 +2287,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [core.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
+			"comment": []interface{}{"Change the behavior of an existing pattern.", "", "For patterns defined using [DefinePattern], if a rule starts with a [logic.ChooseBranch] command, and none of the branches are chosen, the pattern checks the next specified rule; and so on, until the pattern finds a branch that succeeds.", "", "For patterns defined using [DefineAction], rules behave as \"event listeners\". They continue to the next listener unless specifically stopped. And, by default, they only respond to actions triggered by the player.", "", "See the Tapestry guide for more in-depth information."},
 		},
 	}
 	Zt_DefineNounRule = typeinfo.Flow{

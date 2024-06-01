@@ -4,8 +4,9 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
@@ -117,15 +118,15 @@ func TestMapRecords(t *testing.T) {
 }
 
 var remapStrings = list.ListMap{
-	Target:      assign.Variable("results"),
-	List:        &assign.FromTextList{Value: assign.Variable("fruits")},
-	PatternName: W("reverse"),
+	Target:      object.Variable("results"),
+	List:        &assign.FromTextList{Value: object.Variable("fruits")},
+	PatternName: ("reverse"),
 }
 
 var remapRecords = list.ListMap{
-	Target:      assign.Variable("results"),
-	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
-	PatternName: W("reverse"),
+	Target:      object.Variable("results"),
+	List:        &assign.FromRecordList{Value: object.Variable("fruits")},
+	PatternName: ("reverse"),
 }
 
 // a pattern which takes a string from "in" and returns the reverse of it via "out"
@@ -134,11 +135,11 @@ var reverseText = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Exe: core.MakeActivity(
-			&assign.SetValue{
-				Target: assign.Variable("out"),
-				Value:  &assign.FromText{Value: &core.MakeReversed{Text: assign.Variable("in")}}},
-		),
+		Exe: []rt.Execute{
+			&object.SetValue{
+				Target: object.Variable("out"),
+				Value:  &assign.FromText{Value: &text.MakeReversed{Text: object.Variable("in")}}},
+		},
 	}},
 }
 
@@ -148,10 +149,10 @@ var reverseField = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Exe: core.MakeActivity(
-			&assign.SetValue{
-				Target: assign.Variable("out", "name"),
-				Value:  &assign.FromText{Value: &core.MakeReversed{Text: assign.Variable("in", "name")}}},
-		),
+		Exe: []rt.Execute{
+			&object.SetValue{
+				Target: object.Variable("out", "name"),
+				Value:  &assign.FromText{Value: &text.MakeReversed{Text: object.Variable("in", "name")}}},
+		},
 	}},
 }

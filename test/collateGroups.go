@@ -15,7 +15,7 @@ import (
 var runCollateGroups = list.ListReduce{
 	Target:      object.Variable("collation"),
 	List:        &assign.FromRecordList{Value: object.Variable("settings")},
-	PatternName: W("collate groups")}
+	PatternName: ("collate groups")}
 
 // pattern:
 type CollateGroups struct {
@@ -42,16 +42,16 @@ var collateGroups = testpat.Pattern{
 		{Name: "group", Affinity: affine.Record, Type: "grouped objects"},
 	},
 	Rules: []rt.Rule{{
-		Exe: core.MakeActivity(
+		Exe: []rt.Execute{
 			// walk collation.groups, set .idx to whichever best matches.
 			// fix: could this be list find? ( could list find take an optional pattern )
 			&list.ListEach{
 				List: &assign.FromRecordList{Value: object.Variable("collation", "groups")},
-				As:   W("el"),
-				Exe: core.MakeActivity(
+				As:   ("el"),
+				Exe: []rt.Execute{
 					&logic.ChooseBranch{
 						Condition: &call.CallPattern{
-							PatternName: P("match groups"),
+							PatternName: ("match groups"),
 							Arguments: core.MakeArgs(
 								&assign.FromRecord{Value: object.Variable("settings")},
 								// "el" is specified by us during ListEach
@@ -60,7 +60,7 @@ var collateGroups = testpat.Pattern{
 								&assign.FromRecord{Value: object.Variable("el", "settings")},
 							),
 						},
-						Exe: core.MakeActivity(
+						Exe: []rt.Execute{
 							&object.SetValue{
 								Target: object.Variable("found"),
 								Value:  &assign.FromBool{Value: B(true)},
@@ -73,16 +73,16 @@ var collateGroups = testpat.Pattern{
 									&object.AtIndex{Index: object.Variable("index")}, "objects"),
 								Value: &assign.FromText{Value: object.Variable("settings", "name")}},
 							// todo: implement a "break"
-						),
+						},
 					},
-				)}, // end go-each
+				}}, // end go-each
 			&logic.ChooseBranch{
 				// didn't find a matching group?
 				Condition: &logic.Not{Test: object.Variable("found")},
 				// pack the object and its settings into the local 'group'
 				// then push the group into the groups.
 				// FIX: a command to MakeRecord from args, and remove the local.
-				Exe: core.MakeActivity(
+				Exe: []rt.Execute{
 					&object.SetValue{
 						Target: object.Variable("group", "settings"),
 						Value:  &assign.FromRecord{Value: object.Variable("settings")}},
@@ -93,8 +93,8 @@ var collateGroups = testpat.Pattern{
 						Target: object.Variable("collation", "groups"),
 						Value:  &assign.FromRecord{Value: object.Variable("group")},
 					},
-				), // end true
+				}, // end true
 			},
-		)},
+		}},
 	},
 }

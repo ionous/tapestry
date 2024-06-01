@@ -19,7 +19,7 @@ type Domain struct {
 	currPhase     weaver.Phase // updated during weave, ends at NumPhases
 	steps         []StepFunction
 	scheduling    [weaver.NumPhases][]memento // separates commands into phases
-	initialValues initialValues               // all of type assign.SetValue
+	initialValues initialValues               // all of type object.SetValue
 }
 
 type initialValues []rt.Execute

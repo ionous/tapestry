@@ -13,8 +13,6 @@ type Reference interface {
 	GetValue() (ret Value, err error)
 	// peeks into the current cursor at the requested field or index.
 	Dot(next Dotted) (ret Reference, err error)
-	// peeks into the current cursor at the requested fields or indices.
-	DotPath(path []Dotted) (ret Reference, err error)
 }
 
 // a "pointer" into the contents of some as yet unspecified target:

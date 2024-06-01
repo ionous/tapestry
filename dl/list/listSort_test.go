@@ -3,8 +3,9 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -36,7 +37,7 @@ func TestSort(t *testing.T) {
 	}
 	// sorts in place
 	sorter := &list.ListSortText{
-		Target:  assign.Variable("objects"),
+		Target:  object.Variable("objects"),
 		ByField: "key",
 	}
 	if e := safe.Run(&lt, sorter); e != nil {
@@ -46,7 +47,7 @@ func TestSort(t *testing.T) {
 		t.Fatal(objectNames)
 	}
 	//
-	sorter.UsingCase = B(true)
+	sorter.UsingCase = literal.B(true)
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
 	}
@@ -54,7 +55,7 @@ func TestSort(t *testing.T) {
 		t.Fatal(objectNames)
 	}
 	//
-	sorter.Descending = B(true)
+	sorter.Descending = literal.B(true)
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
 	}

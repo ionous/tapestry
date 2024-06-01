@@ -3,31 +3,32 @@ package rules_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func TestFindTree(t *testing.T) {
-	if n := core.PickTree(branchingBlock); n != tree {
+	if n := logic.PickTree(branchingBlock); n != tree {
 		t.Fatal("expected to find the branching tree")
-	} else if n := core.PickTree(blockWithDebugLogs); n != tree {
+	} else if n := logic.PickTree(blockWithDebugLogs); n != tree {
 		t.Fatal("expected to find the branching tree")
-	} else if n := core.PickTree(blockWithTail); n != nil {
+	} else if n := logic.PickTree(blockWithTail); n != nil {
 		t.Fatal("should have rejected the branching tree")
-	} else if n := core.PickTree(blockWithSiblingBranches); n != nil {
+	} else if n := logic.PickTree(blockWithSiblingBranches); n != nil {
 		t.Fatal("should have rejected the sibling branches")
 	}
 }
 
 var filter = &literal.BoolValue{}
 
-var tree = &core.ChooseBranch{
+var tree = &logic.ChooseBranch{
 	Condition: filter,
-	Else: &core.ChooseBranch{
+	Else: &logic.ChooseBranch{
 		Condition: &literal.BoolValue{},
-		Else:      &core.ChooseNothingElse{},
+		Else:      &logic.ChooseNothingElse{},
 	},
 }
 
@@ -45,7 +46,7 @@ var blockWithDebugLogs = []rt.Execute{
 
 // the branching block but has some non-branching trailing statements
 // ( so its not really a pure set of rules )
-var blockWithTail = append(blockWithDebugLogs, &core.PrintText{})
+var blockWithTail = append(blockWithDebugLogs, &printer.PrintText{})
 
 // two sibling blocks -- these should be considered as non-branching.
 var blockWithSiblingBranches = []rt.Execute{

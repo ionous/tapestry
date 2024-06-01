@@ -7,6 +7,11 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/printer"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -17,25 +22,25 @@ import (
 // verify that core variables are written and read as @ strings
 func TestCoreEncoding(t *testing.T) {
 	testPairs(t, []testPair{{
-		&assign.ObjectDot{
-			Name: assign.Variable("noun"),
-			Dot:  []assign.Dot{&assign.AtField{Field: assign.Variable("trait")}},
+		&object.ObjectDot{
+			Name: object.Variable("noun"),
+			Dot:  []object.Dot{&object.AtField{Field: object.Variable("trait")}},
 		},
 		`{"Object:dot:":["@noun",[{"AtField:":"@trait"}]]}`,
 	}, {
-		&core.AddValue{
-			A: assign.Variable("a"),
-			B: assign.Object("b", "field"),
+		&math.AddValue{
+			A: object.Variable("a"),
+			B: object.Object("b", "field"),
 		},
 		`{"Add:value:":["@a","#b.field"]}`,
 	}, {
 		// unary
-		&core.Softline{},
+		&printer.Softline{},
 		`{"Wbr":true}`,
 	}, {
 		// verify that things that arent variables dont get encoded as variables
-		&core.Join{Parts: []rt.TextEval{
-			core.T("one"), core.T("two"), core.T("three"),
+		&text.Join{Parts: []rt.TextEval{
+			literal.T("one"), literal.T("two"), literal.T("three"),
 		}},
 		`{"Join parts:":["one","two","three"]}`,
 	},
@@ -84,7 +89,13 @@ func marshal(v typeinfo.Instance) (ret any, err error) {
 func unmarshal(out typeinfo.Instance, plainData any) (err error) {
 	var dec decode.Decoder
 	return dec.
-		Signatures(assign.Z_Types.Signatures, core.Z_Types.Signatures).
+		Signatures(
+			assign.Z_Types.Signatures,
+			math.Z_Types.Signatures,
+			object.Z_Types.Signatures,
+			printer.Z_Types.Signatures,
+			text.Z_Types.Signatures,
+		).
 		Customize(core.CustomDecoder).
 		Decode(out, plainData)
 }

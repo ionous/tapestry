@@ -1,7 +1,6 @@
 package rules
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
@@ -46,7 +45,7 @@ func AddPlayerFilter(filters []rt.BoolEval) (ret []rt.BoolEval) {
 		&math.CompareText{
 			A:  object.Variable(event.Actor),
 			Is: math.C_Comparison_EqualTo,
-			B:  core.T("self"),
+			B:  literal.T("self"),
 		})
 }
 

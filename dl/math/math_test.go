@@ -1,8 +1,10 @@
-package math
+package math_test
 
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
@@ -19,32 +21,32 @@ func TestMath(t *testing.T) {
 		return
 	}
 	t.Run("Add", func(t *testing.T) {
-		if e := match(11, &AddValue{A: I(1), B: I(10)}); e != nil {
+		if e := match(11, &math.AddValue{A: literal.I(1), B: literal.I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Sub", func(t *testing.T) {
-		if e := match(-9, &SubtractValue{A: I(1), B: I(10)}); e != nil {
+		if e := match(-9, &math.SubtractValue{A: literal.I(1), B: literal.I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Mul", func(t *testing.T) {
-		if e := match(200, &MultiplyValue{A: I(20), B: I(10)}); e != nil {
+		if e := match(200, &math.MultiplyValue{A: literal.I(20), B: literal.I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Div", func(t *testing.T) {
-		if e := match(2, &DivideValue{A: I(20), B: I(10)}); e != nil {
+		if e := match(2, &math.DivideValue{A: literal.I(20), B: literal.I(10)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("Div By Zero", func(t *testing.T) {
-		if e := match(0, &DivideValue{A: I(20), B: I(0)}); e == nil {
+		if e := match(0, &math.DivideValue{A: literal.I(20), B: literal.I(0)}); e == nil {
 			t.Fatal("expected error")
 		}
 	})
 	t.Run("Mod", func(t *testing.T) {
-		if e := match(1, &ModValue{A: I(3), B: I(2)}); e != nil {
+		if e := match(1, &math.ModValue{A: literal.I(3), B: literal.I(2)}); e != nil {
 			t.Fatal(e)
 		}
 	})

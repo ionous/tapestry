@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
@@ -30,10 +31,10 @@ func TestValueFieldAssignment(t *testing.T) {
 		&eph.Nouns{Noun: "toy boat", Kind: "m"},
 		&eph.Nouns{Noun: "boat", Kind: "m"},
 		// values using those fields
-		&eph.Values{Noun: "apple", Field: "t", Value: T("some text")},
-		&eph.Values{Noun: "pear", Field: "d", Value: I(123)},
-		&eph.Values{Noun: "toy", Field: "d", Value: I(321)},
-		&eph.Values{Noun: "boat", Field: "t", Value: T("more text")},
+		&eph.Values{Noun: "apple", Field: "t", Value: literal.T("some text")},
+		&eph.Values{Noun: "pear", Field: "d", Value: literal.I(123)},
+		&eph.Values{Noun: "toy", Field: "d", Value: literal.I(321)},
+		&eph.Values{Noun: "boat", Field: "t", Value: literal.T("more text")},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
@@ -61,7 +62,7 @@ func TestMissingField(t *testing.T) {
 		// a noun
 		&eph.Nouns{Noun: "n", Kind: "k"},
 		// and not that field
-		&eph.Values{Noun: "n", Field: "t", Value: T("no such field")},
+		&eph.Values{Noun: "n", Field: "t", Value: literal.T("no such field")},
 	)
 
 	_, e := dt.Assemble()
@@ -96,10 +97,10 @@ func TestValueTraitAssignment(t *testing.T) {
 		&eph.Nouns{Noun: "toy boat", Kind: "m"},
 		&eph.Nouns{Noun: "boat", Kind: "m"},
 		// values using those aspects or traits from those aspects:
-		&eph.Values{Noun: "apple", Field: "a", Value: T("y")}, // assign to the aspect directly
-		&eph.Values{Noun: "pear", Field: "x", Value: B(true)}, // assign to some traits indirectly
-		&eph.Values{Noun: "toy", Field: "w", Value: B(true)},
-		&eph.Values{Noun: "boat", Field: "z", Value: B(true)},
+		&eph.Values{Noun: "apple", Field: "a", Value: literal.T("y")}, // assign to the aspect directly
+		&eph.Values{Noun: "pear", Field: "x", Value: literal.B(true)}, // assign to some traits indirectly
+		&eph.Values{Noun: "toy", Field: "w", Value: literal.B(true)},
+		&eph.Values{Noun: "boat", Field: "z", Value: literal.B(true)},
 	)
 
 	if _, e := dt.Assemble(); e != nil {
@@ -142,7 +143,7 @@ func TestValuePaths(t *testing.T) {
 		// a noun of that kind, with the record of records.
 		&eph.Nouns{Noun: "test", Kind: "k"},
 		// values targeting a field inside the record
-		&eph.Values{Noun: "test", Field: "text", Value: T("some text"), Path: []string{
+		&eph.Values{Noun: "test", Field: "text", Value: literal.T("some text"), Path: []string{
 			"outer", "inner",
 		}},
 	)

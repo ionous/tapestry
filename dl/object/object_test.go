@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/math"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -28,54 +30,54 @@ func TestObjects(t *testing.T) {
 		ObjectMap: objs,
 	}
 	const base, derived = "base", "derived"
-	this := core.T("this")
-	that := core.T("that")
-	nothing := core.T("nothing")
+	this := literal.T("this")
+	that := literal.T("that")
+	nothing := literal.T("nothing")
 
 	t.Run("exists", func(t *testing.T) {
-		if e := testTrue(t, &run, &assign.ObjectDot{Name: this}); e != nil {
+		if e := testTrue(t, &run, &object.ObjectDot{Name: this}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.Not{Test: &assign.ObjectDot{Name: nothing}}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: &object.ObjectDot{Name: nothing}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &core.CompareText{
-			A: &core.KindOf{Object: this}, Is: core.C_Comparison_EqualTo, B: core.T(base)}); e != nil {
+		if e := testTrue(t, &run, &math.CompareText{
+			A: &object.KindOf{Object: this}, Is: math.C_Comparison_EqualTo, B: literal.T(base)}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.CompareText{
-			A: &core.KindOf{Object: that}, Is: core.C_Comparison_EqualTo, B: core.T(derived)}); e != nil {
+		if e := testTrue(t, &run, &math.CompareText{
+			A: &object.KindOf{Object: that}, Is: math.C_Comparison_EqualTo, B: literal.T(derived)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("is_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &core.IsKindOf{Object: this, Kind: base}); e != nil {
+		if e := testTrue(t, &run, &object.IsKindOf{Object: this, Kind: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.IsKindOf{Object: that, Kind: base}); e != nil {
+		if e := testTrue(t, &run, &object.IsKindOf{Object: that, Kind: base}); e != nil {
 			t.Fatal(e)
 		}
 
-		if e := testTrue(t, &run, &core.IsKindOf{Object: that, Kind: derived}); e != nil {
+		if e := testTrue(t, &run, &object.IsKindOf{Object: that, Kind: derived}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.Not{Test: &core.IsKindOf{Object: this, Kind: derived}}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: &object.IsKindOf{Object: this, Kind: derived}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("is_exact_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &core.IsExactKindOf{Object: this, Kind: base}); e != nil {
+		if e := testTrue(t, &run, &object.IsExactKindOf{Object: this, Kind: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.Not{Test: &core.IsExactKindOf{Object: that, Kind: base}}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: &object.IsExactKindOf{Object: that, Kind: base}}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.IsExactKindOf{Object: that, Kind: derived}); e != nil {
+		if e := testTrue(t, &run, &object.IsExactKindOf{Object: that, Kind: derived}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &core.Not{Test: &core.IsExactKindOf{Object: this, Kind: derived}}); e != nil {
+		if e := testTrue(t, &run, &logic.Not{Test: &object.IsExactKindOf{Object: this, Kind: derived}}); e != nil {
 			t.Fatal(e)
 		}
 	})

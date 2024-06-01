@@ -6,7 +6,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/errutil"
@@ -39,10 +41,10 @@ func TestMatching(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		a, b := a.Record(), b.Record()
-		runMatching := &assign.CallPattern{
-			PatternName: P(kargs.Name()), Arguments: core.MakeArgs(
-				&assign.FromRecord{Value: assign.Variable("a")},
-				&assign.FromRecord{Value: assign.Variable("b")},
+		runMatching := &call.CallPattern{
+			PatternName: (kargs.Name()), Arguments: core.MakeArgs(
+				&assign.FromRecord{Value: object.Variable("a")},
+				&assign.FromRecord{Value: object.Variable("b")},
 			)}
 		// default should match
 		{

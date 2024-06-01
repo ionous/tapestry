@@ -4,8 +4,9 @@ import (
 	"strconv"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -54,9 +55,9 @@ func push(src []string, front bool, ins []string) (ret string, err error) {
 	if run, e := newListTime(src, nil); e != nil {
 		err = e
 	} else if e := safe.Run(run, &list.ListPush{
-		Target: assign.Variable("source"),
+		Target: object.Variable("source"),
 		Value:  FromTs(ins),
-		AtEdge: B(front)},
+		AtEdge: literal.B(front)},
 	); e != nil {
 		err = e
 	} else if strs, e := run.GetField(meta.Variables, "source"); e != nil {

@@ -1,4 +1,4 @@
-package assign_test
+package call_test
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 )
@@ -28,7 +29,7 @@ func TestEncodePattern(t *testing.T) {
 
 func testString(n, a string) (err error) {
 	var enc encode.Encoder
-	out := &assign.CallPattern{
+	out := &call.CallPattern{
 		PatternName: n,
 		Arguments: []assign.Arg{{
 			Name: a,
@@ -37,7 +38,7 @@ func testString(n, a string) (err error) {
 			},
 		}}}
 	// calls EncodePattern indirectly
-	if got, e := enc.Customize(assign.CustomEncoder).Encode(out); e != nil {
+	if got, e := enc.Customize(call.CustomEncoder).Encode(out); e != nil {
 		err = e
 	} else if !reflect.DeepEqual(got, wantPattern) {
 		err = fmt.Errorf("mismatch %#v", got)

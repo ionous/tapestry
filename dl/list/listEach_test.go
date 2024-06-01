@@ -5,8 +5,10 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/logic"
+	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -53,11 +55,11 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var out []string
 	var visits []accum
 	each := &list.ListEach{
-		List: &assign.FromTextList{Value: assign.Variable("source")},
-		As:   W("text"),
-		Exe:  core.MakeActivity(&visitEach{&visits}),
-		Else: &core.ChooseNothingElse{
-			Exe: core.MakeActivity(&Write{&out, T("x")}),
+		List: &assign.FromTextList{Value: object.Variable("source")},
+		As:   ("text"),
+		Exe:  []rt.Execute{&visitEach{&visits}},
+		Else: &logic.ChooseNothingElse{
+			Exe: []rt.Execute{&Write{&out, literal.T("x")}},
 		},
 	}
 	if lt, e := newListTime(src, nil); e != nil {

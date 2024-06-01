@@ -17,7 +17,7 @@ func (op *ObjectDot) GetReference(run rt.Runtime) (ret rt.Reference, err error) 
 		err = e
 	} else {
 		pos := dot.MakeReference(run, name.String())
-		ret, err = pos.DotPath(path)
+		ret, err = dot.Path(pos, path)
 	}
 	return
 }

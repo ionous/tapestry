@@ -3,9 +3,11 @@ package printer
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
 func TestSequences(t *testing.T) {
@@ -21,9 +23,9 @@ func TestSequences(t *testing.T) {
 			"a", "b", "c", "a", "b", "c", "a",
 		}, &CallCycle{
 			Name: t.Name(), Parts: []rt.TextEval{
-				T("a"),
-				T("b"),
-				T("c"),
+				literal.T("a"),
+				literal.T("b"),
+				literal.T("c"),
 			}})
 	})
 	t.Run("stopping", func(t *testing.T) {
@@ -31,9 +33,9 @@ func TestSequences(t *testing.T) {
 			"a", "b", "c", "c", "c", "c", "c",
 		}, &CallTerminal{
 			Name: t.Name(), Parts: []rt.TextEval{
-				T("a"),
-				T("b"),
-				T("c"),
+				literal.T("a"),
+				literal.T("b"),
+				literal.T("c"),
 			}})
 	})
 	t.Run("once", func(t *testing.T) {
@@ -41,7 +43,7 @@ func TestSequences(t *testing.T) {
 			"a", "", "", "", "",
 		}, &CallTerminal{
 			Name: t.Name(), Parts: []rt.TextEval{
-				T("a"),
+				literal.T("a"),
 			}})
 	})
 	t.Run("shuffle one", func(t *testing.T) {
@@ -49,7 +51,7 @@ func TestSequences(t *testing.T) {
 			"a", "a",
 		}, &CallShuffle{
 			Name: t.Name(), Parts: []rt.TextEval{
-				T("a"),
+				literal.T("a"),
 			}})
 	})
 	t.Run("shuffle", func(t *testing.T) {
@@ -57,11 +59,11 @@ func TestSequences(t *testing.T) {
 			"c", "d", "b", "e", "a", "b", "e",
 		}, &CallShuffle{
 			Name: t.Name(), Parts: []rt.TextEval{
-				T("a"),
-				T("b"),
-				T("c"),
-				T("d"),
-				T("e"),
+				literal.T("a"),
+				literal.T("b"),
+				literal.T("c"),
+				literal.T("d"),
+				literal.T("e"),
 			}})
 	})
 }
@@ -81,6 +83,9 @@ func matchSequence(t *testing.T, want []string, seq rt.TextEval) {
 	t.Log(t.Name(), have)
 }
 
+type baseRuntime struct {
+	testutil.PanicRuntime
+}
 type seqTest struct {
 	baseRuntime
 	counters map[string]int

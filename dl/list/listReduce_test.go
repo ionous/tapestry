@@ -4,8 +4,10 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/object"
+	"git.sr.ht/~ionous/tapestry/dl/text"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
@@ -69,9 +71,9 @@ func TestReduce(t *testing.T) {
 }
 
 var reduce = list.ListReduce{
-	Target:      assign.Variable("results"),
-	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
-	PatternName: W("reduce"),
+	Target:      object.Variable("results"),
+	List:        &assign.FromRecordList{Value: object.Variable("fruits")},
+	PatternName: ("reduce"),
 }
 
 // join each record in turn
@@ -80,15 +82,15 @@ var reduceRecords = testpat.Pattern{
 	Return: "out",
 	Labels: []string{"in", "out"},
 	Rules: []rt.Rule{{
-		Exe: core.MakeActivity(
-			&assign.SetValue{
-				Target: assign.Variable("out"),
-				Value: &assign.FromText{Value: &core.Join{
-					Sep: T(", "),
+		Exe: []rt.Execute{
+			&object.SetValue{
+				Target: object.Variable("out"),
+				Value: &assign.FromText{Value: &text.Join{
+					Sep: literal.T(", "),
 					Parts: []rt.TextEval{
-						assign.Variable("out"),
-						assign.Variable("in", "name"),
+						object.Variable("out"),
+						object.Variable("in", "name"),
 					}}}},
-		),
+		},
 	}},
 }

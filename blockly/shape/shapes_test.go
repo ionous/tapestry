@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/shape"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/dl/game"
@@ -299,7 +298,7 @@ func TestStrEnum(t *testing.T) {
     ]
   }
 }`
-	x := &core.Zt_CompareText
+	x := &math.Zt_CompareText
 	ts := shape.TypeMap{x.Name: x}
 
 	var out js.Builder
