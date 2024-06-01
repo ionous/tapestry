@@ -13,14 +13,14 @@ import (
 	"github.com/kr/pretty"
 )
 
-// test that importing cycling text transforms to the proper runtime command
+// test that importing a sequence generates a valid counter
 func TestImportSequence(t *testing.T) {
 	db := tables.CreateTest(t.Name(), true)
 	defer db.Close()
 	cat := weave.NewCatalog(db)
 
 	// create a statement that uses CycleText
-	printText := &format.PrintText{Text: &story.CycleText{Parts: []rt.TextEval{
+	printText := &format.PrintText{Text: &format.CycleText{Parts: []rt.TextEval{
 		literal.T("a"),
 		literal.T("b"),
 		literal.T("c"),
@@ -37,7 +37,7 @@ func TestImportSequence(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		// validate that it was transformed into this:
-		expect := format.CallCycle{
+		expect := format.CycleText{
 			Name: "seq-1",
 			Parts: []rt.TextEval{
 				T("a"),

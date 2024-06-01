@@ -1,6 +1,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/inspect"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -28,13 +29,24 @@ func Weave(cat *weave.Catalog, all []StoryStatement) (err error) {
 		OnSlot: func(slot inspect.It) (err error) {
 			t := slot.TypeInfo().(*typeinfo.Slot)
 			updateActivityDepth(cat, t, 1)
-			var tgt PreImport
-			if ok := slot.GetSlot(&tgt); ok {
-				if rep, e := tgt.PreImport(cat); e != nil {
-					err = errutil.New(e, "failed to create pre import")
-				} else if rep != nil {
-					if !slot.SetSlot(rep) {
-						err = errutil.New("couldnt assign pre import")
+			var counter format.Counter
+			if ok := slot.GetSlot(&counter); ok {
+				// tbd: this is inelegant ... what might work better?
+				// originally it would use pre import to "generically" replace the command
+				// but that requires duplicate commands in story and the target package
+				// and that seems even worse.
+				if pstr := counter.GetInternalCounter(); len(*pstr) == 0 {
+					*pstr = cat.NewCounter("seq")
+				}
+			} else {
+				var tgt PreImport
+				if ok := slot.GetSlot(&tgt); ok {
+					if rep, e := tgt.PreImport(cat); e != nil {
+						err = errutil.New(e, "failed to create pre import")
+					} else if rep != nil {
+						if !slot.SetSlot(rep) {
+							err = errutil.New("couldnt assign pre import")
+						}
 					}
 				}
 			}

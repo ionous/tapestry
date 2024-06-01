@@ -11,6 +11,35 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
+// counter, a type of slot.
+var Zt_Counter = typeinfo.Slot{
+	Name: "counter",
+	Markup: map[string]any{
+		"comment": "A slot used internally for generating unique names during weave.",
+	},
+}
+
+// Holds a single slot.
+type Counter_Slot struct{ Value Counter }
+
+// Implements [typeinfo.Instance] for a single slot.
+func (*Counter_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Counter
+}
+
+// Holds a slice of slots.
+type Counter_Slots []Counter
+
+// Implements [typeinfo.Instance] for a slice of slots.
+func (*Counter_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Counter
+}
+
+// Implements [typeinfo.Repeats] for a slice of slots.
+func (op *Counter_Slots) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Add a single blank line, unless a blank line was just written.
 // See also <p> in package markup.
 type ParagraphBreak struct {
@@ -50,6 +79,7 @@ func (op *ParagraphBreak_Slice) Repeats() bool {
 }
 
 // Start a new line ( if not already at a new line ).
+// See also <wbr> in package markup.
 type SoftBreak struct {
 	Markup map[string]any
 }
@@ -87,6 +117,7 @@ func (op *SoftBreak_Slice) Repeats() bool {
 }
 
 // Start a new line.
+// See also <br> in package markup.
 type LineBreak struct {
 	Markup map[string]any
 }
@@ -123,23 +154,23 @@ func (op *LineBreak_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Runtime version of cycle_text.
-type CallCycle struct {
+// Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
+type CycleText struct {
 	Name   string
 	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
-// call_cycle, a type of flow.
-var Zt_CallCycle typeinfo.Flow
+// cycle_text, a type of flow.
+var Zt_CycleText typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*CallCycle) TypeInfo() typeinfo.T {
-	return &Zt_CallCycle
+func (*CycleText) TypeInfo() typeinfo.T {
+	return &Zt_CycleText
 }
 
 // Implements [typeinfo.Markup]
-func (op *CallCycle) GetMarkup(ensure bool) map[string]any {
+func (op *CycleText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -147,39 +178,40 @@ func (op *CallCycle) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*CallCycle)(nil)
+var _ Counter = (*CycleText)(nil)
+var _ rtti.TextEval = (*CycleText)(nil)
 
-// Holds a slice of type CallCycle.
-type CallCycle_Slice []CallCycle
+// Holds a slice of type CycleText.
+type CycleText_Slice []CycleText
 
-// Implements [typeinfo.Instance] for a slice of CallCycle.
-func (*CallCycle_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CallCycle
+// Implements [typeinfo.Instance] for a slice of CycleText.
+func (*CycleText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_CycleText
 }
 
-// Implements [typeinfo.Repeats] for a slice of CallCycle.
-func (op *CallCycle_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of CycleText.
+func (op *CycleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Runtime version of shuffle_text.
-type CallShuffle struct {
+// Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.
+type ShuffleText struct {
 	Name    string
 	Parts   []rtti.TextEval
 	Indices Shuffler
 	Markup  map[string]any
 }
 
-// call_shuffle, a type of flow.
-var Zt_CallShuffle typeinfo.Flow
+// shuffle_text, a type of flow.
+var Zt_ShuffleText typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*CallShuffle) TypeInfo() typeinfo.T {
-	return &Zt_CallShuffle
+func (*ShuffleText) TypeInfo() typeinfo.T {
+	return &Zt_ShuffleText
 }
 
 // Implements [typeinfo.Markup]
-func (op *CallShuffle) GetMarkup(ensure bool) map[string]any {
+func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -187,38 +219,40 @@ func (op *CallShuffle) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*CallShuffle)(nil)
+var _ Counter = (*ShuffleText)(nil)
+var _ rtti.TextEval = (*ShuffleText)(nil)
 
-// Holds a slice of type CallShuffle.
-type CallShuffle_Slice []CallShuffle
+// Holds a slice of type ShuffleText.
+type ShuffleText_Slice []ShuffleText
 
-// Implements [typeinfo.Instance] for a slice of CallShuffle.
-func (*CallShuffle_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CallShuffle
+// Implements [typeinfo.Instance] for a slice of ShuffleText.
+func (*ShuffleText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ShuffleText
 }
 
-// Implements [typeinfo.Repeats] for a slice of CallShuffle.
-func (op *CallShuffle_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ShuffleText.
+func (op *ShuffleText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Runtime version of stopping_text.
-type CallTerminal struct {
+// Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.
+// As a special case, if there was only ever one option, returns that option followed by the empty string forever after.
+type StoppingText struct {
 	Name   string
 	Parts  []rtti.TextEval
 	Markup map[string]any
 }
 
-// call_terminal, a type of flow.
-var Zt_CallTerminal typeinfo.Flow
+// stopping_text, a type of flow.
+var Zt_StoppingText typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*CallTerminal) TypeInfo() typeinfo.T {
-	return &Zt_CallTerminal
+func (*StoppingText) TypeInfo() typeinfo.T {
+	return &Zt_StoppingText
 }
 
 // Implements [typeinfo.Markup]
-func (op *CallTerminal) GetMarkup(ensure bool) map[string]any {
+func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -226,18 +260,19 @@ func (op *CallTerminal) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*CallTerminal)(nil)
+var _ Counter = (*StoppingText)(nil)
+var _ rtti.TextEval = (*StoppingText)(nil)
 
-// Holds a slice of type CallTerminal.
-type CallTerminal_Slice []CallTerminal
+// Holds a slice of type StoppingText.
+type StoppingText_Slice []StoppingText
 
-// Implements [typeinfo.Instance] for a slice of CallTerminal.
-func (*CallTerminal_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CallTerminal
+// Implements [typeinfo.Instance] for a slice of StoppingText.
+func (*StoppingText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_StoppingText
 }
 
-// Implements [typeinfo.Repeats] for a slice of CallTerminal.
-func (op *CallTerminal_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of StoppingText.
+func (op *StoppingText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -534,7 +569,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Start a new line ( if not already at a new line ).",
+			"comment": []interface{}{"Start a new line ( if not already at a new line ).", "See also <wbr> in package markup."},
 		},
 	}
 	Zt_LineBreak = typeinfo.Flow{
@@ -545,71 +580,95 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "Start a new line.",
+			"comment": []interface{}{"Start a new line.", "See also <br> in package markup."},
 		},
 	}
-	Zt_CallCycle = typeinfo.Flow{
-		Name: "call_cycle",
+	Zt_CycleText = typeinfo.Flow{
+		Name: "cycle_text",
 		Lede: "cycle",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "An optional name used internally for controlling the state of the counter. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.",
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "parts",
-			Label:   "over",
+			Label:   "text",
 			Repeats: true,
-			Type:    &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more pieces of text to cycle through.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
+			&Zt_Counter,
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  "Runtime version of cycle_text.",
-			"internal": true,
+			"comment": "Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.",
 		},
 	}
-	Zt_CallShuffle = typeinfo.Flow{
-		Name: "call_shuffle",
+	Zt_ShuffleText = typeinfo.Flow{
+		Name: "shuffle_text",
 		Lede: "shuffle",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "An optional name used internally for controlling the state of the counter. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.",
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "parts",
-			Label:   "over",
+			Label:   "text",
 			Repeats: true,
-			Type:    &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more pieces of text to shuffle through.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:    "indices",
 			Label:   "indices",
 			Private: true,
 		}},
 		Slots: []*typeinfo.Slot{
+			&Zt_Counter,
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  "Runtime version of shuffle_text.",
-			"internal": true,
+			"comment": "Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.",
 		},
 	}
-	Zt_CallTerminal = typeinfo.Flow{
-		Name: "call_terminal",
+	Zt_StoppingText = typeinfo.Flow{
+		Name: "stopping_text",
 		Lede: "stopping",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name:     "name",
+			Label:    "name",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": "An optional name used internally for controlling the state of the counter. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.",
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "parts",
-			Label:   "over",
+			Label:   "text",
 			Repeats: true,
-			Type:    &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "One or more pieces of text to shift through.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
+			&Zt_Counter,
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment":  "Runtime version of stopping_text.",
-			"internal": true,
+			"comment": []interface{}{"Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.", "As a special case, if there was only ever one option, returns that option followed by the empty string forever after."},
 		},
 	}
 	Zt_BufferText = typeinfo.Flow{
@@ -751,8 +810,15 @@ var Z_Types = typeinfo.TypeSet{
 		"Common text output commands.",
 	},
 
+	Slot:       z_slot_list,
 	Flow:       z_flow_list,
 	Signatures: z_signatures,
+}
+
+// A list of all slots in this this package.
+// ( ex. for generating blockly shapes )
+var z_slot_list = []*typeinfo.Slot{
+	&Zt_Counter,
 }
 
 // A list of all flows in this this package.
@@ -761,9 +827,9 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_ParagraphBreak,
 	&Zt_SoftBreak,
 	&Zt_LineBreak,
-	&Zt_CallCycle,
-	&Zt_CallShuffle,
-	&Zt_CallTerminal,
+	&Zt_CycleText,
+	&Zt_ShuffleText,
+	&Zt_StoppingText,
 	&Zt_BufferText,
 	&Zt_PrintText,
 	&Zt_PrintWords,
@@ -777,7 +843,10 @@ var z_flow_list = []*typeinfo.Flow{
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	11322251195672034522: (*BufferText)(nil),     /* text_eval=Buffers do: */
-	2636120577324077328:  (*CallCycle)(nil),      /* text_eval=Cycle:over: */
+	16098131496381194958: (*CycleText)(nil),      /* counter=Cycle name:text: */
+	5355971188045229340:  (*CycleText)(nil),      /* text_eval=Cycle name:text: */
+	17596073119249480739: (*CycleText)(nil),      /* counter=Cycle text: */
+	1237120803959249173:  (*CycleText)(nil),      /* text_eval=Cycle text: */
 	10898429598193857104: (*LineBreak)(nil),      /* execute=LineBreak */
 	1194153657675604478:  (*ParagraphBreak)(nil), /* execute=ParagraphBreak */
 	16169738297367022876: (*PrintCommas)(nil),    /* execute=Print commas: */
@@ -791,7 +860,13 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	4512128922644282356:  (*PrintText)(nil),      /* execute=Print: */
 	14820902432990466009: (*Row)(nil),            /* text_eval=Row do: */
 	42419598592471524:    (*Rows)(nil),           /* text_eval=Rows do: */
-	3632089819497852687:  (*CallShuffle)(nil),    /* text_eval=Shuffle:over: */
-	10180508752412200934: (*CallTerminal)(nil),   /* text_eval=Stopping:over: */
+	12460624099586212271: (*ShuffleText)(nil),    /* counter=Shuffle name:text: */
+	8909818107999898193:  (*ShuffleText)(nil),    /* text_eval=Shuffle name:text: */
+	3444877746271964624:  (*ShuffleText)(nil),    /* counter=Shuffle text: */
+	7835310741853066190:  (*ShuffleText)(nil),    /* text_eval=Shuffle text: */
+	13115056552370612412: (*StoppingText)(nil),   /* counter=Stopping name:text: */
+	11830555676954637550: (*StoppingText)(nil),   /* text_eval=Stopping name:text: */
+	13363393271236249653: (*StoppingText)(nil),   /* counter=Stopping text: */
+	9145628730349656131:  (*StoppingText)(nil),   /* text_eval=Stopping text: */
 	16612725309683107572: (*SoftBreak)(nil),      /* execute=Wbr */
 }

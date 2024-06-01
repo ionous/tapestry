@@ -35,7 +35,11 @@ func getNextText(run rt.Runtime, parts []rt.TextEval, onedex int) (ret rt.Value,
 	return
 }
 
-func (op *CallCycle) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *CycleText) GetInternalCounter() *string {
+	return &op.Name
+}
+
+func (op *CycleText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if onedex, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmd.Error(op, e)
 	} else {
@@ -44,7 +48,11 @@ func (op *CallCycle) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *CallShuffle) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *ShuffleText) GetInternalCounter() *string {
+	return &op.Name
+}
+
+func (op *ShuffleText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if curr, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmd.Error(op, e)
 	} else if curr, max := curr-1, len(op.Parts); curr < max {
@@ -54,7 +62,11 @@ func (op *CallShuffle) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *CallTerminal) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *StoppingText) GetInternalCounter() *string {
+	return &op.Name
+}
+
+func (op *StoppingText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if onedex, e := op.stopping(run); e != nil {
 		err = cmd.Error(op, e)
 	} else {
@@ -63,7 +75,7 @@ func (op *CallTerminal) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *CallTerminal) stopping(run rt.Runtime) (ret int, err error) {
+func (op *StoppingText) stopping(run rt.Runtime) (ret int, err error) {
 	switch max := len(op.Parts); max {
 	case 0:
 		// no elements, nothing to do.

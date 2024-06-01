@@ -303,13 +303,13 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildUnless(&logic.ChooseText{}, fn.ParameterCount)
 
 		case types.Stopping:
-			var seq format.CallTerminal
+			var seq format.StoppingText
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
-			var seq format.CallShuffle
+			var seq format.ShuffleText
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
-			var seq format.CallCycle
+			var seq format.CycleText
 			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)

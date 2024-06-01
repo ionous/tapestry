@@ -139,7 +139,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("cycle", func(t *testing.T) {
 		if e := testTemplate("{cycle}a{or}b{or}c{end}",
-			&format.CallCycle{
+			&format.CycleText{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -150,7 +150,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("once", func(t *testing.T) {
 		if e := testTemplate("{once}a{or}b{or}c{end}",
-			&format.CallTerminal{
+			&format.StoppingText{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
@@ -161,7 +161,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("shuffle", func(t *testing.T) {
 		if e := testTemplate("{shuffle}a{or}b{or}c{end}",
-			&format.CallShuffle{
+			&format.ShuffleText{
 				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),

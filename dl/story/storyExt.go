@@ -26,24 +26,6 @@ func (*CountOf) GetBool(rt.Runtime) (rt.Value, error) {
 	panic("unexpected use of story method")
 }
 
-var _ PreImport = (*CycleText)(nil)
-
-func (*CycleText) GetText(rt.Runtime) (rt.Value, error) {
-	panic("unexpected use of story method")
-}
-
-var _ PreImport = (*ShuffleText)(nil)
-
-func (*ShuffleText) GetText(rt.Runtime) (rt.Value, error) {
-	panic("unexpected use of story method")
-}
-
-var _ PreImport = (*StoppingText)(nil)
-
-func (*StoppingText) GetText(rt.Runtime) (rt.Value, error) {
-	panic("unexpected use of story method")
-}
-
 // the import step transforms say template into a render.RenderResponse
 var _ PreImport = (*SayTemplate)(nil)
 

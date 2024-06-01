@@ -1,54 +1,61 @@
 # Common text output commands.
 Spec:requires:contains:
   - "format"
-
   - - "idl/prim"
     - "idl/rtti"
 
-  - - # Add a single blank line, unless a blank line was just written.
+  - - # A slot used internally for generating unique names during weave.
+      Slot: "counter"
+
+    - # Add a single blank line, unless a blank line was just written.
       # See also <p> in package markup.
       Flow:slots:
         - "paragraph_break"
         - "execute"
 
     - # Start a new line ( if not already at a new line ).
+      # See also <wbr> in package markup.
       Flow:slots:lede:
         - "soft_break"
         - "execute"
         - "wbr"
 
     - # Start a new line.
+      # See also <br> in package markup.
       Flow:slots:
         - "line_break"
         - "execute"
 
-    - # Runtime version of cycle_text.
-      internal: true
+    - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
       Flow:slots:lede:terms:
-        - "call_cycle"
-        - "text_eval"
+        - "cycle_text"
+        - [ "counter", "text_eval" ]
         - "cycle"
-        - - Term:name:type:
-              - "_"
+        - - # An optional name used for controlling internal state. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.
+            Term:type:optional:
               - "name"
               - "text"
-          - Term:name:type:repeats:
-              - "over"
+              - true
+          - # One or more pieces of text to cycle through.
+            Term:name:type:repeats:
+              - "text"
               - "parts"
               - "text_eval"
               - true
-    - # Runtime version of shuffle_text.
-      internal: true
+
+    - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.
       Flow:slots:lede:terms:
-        - "call_shuffle"
-        - "text_eval"
+        - "shuffle_text"
+        - [ "counter", "text_eval" ]
         - "shuffle"
-        - - Term:name:type:
-              - "_"
+        - - # An optional name used for controlling internal state. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.
+            Term:type:optional:
               - "name"
               - "text"
-          - Term:name:type:repeats:
-              - "over"
+              - true
+          - # One or more pieces of text to shuffle through.
+            Term:name:type:repeats:
+              - "text"
               - "parts"
               - "text_eval"
               - true
@@ -56,26 +63,33 @@ Spec:requires:contains:
               - "indices"
               - "shuffler"
               - true
-    - # Runtime version of stopping_text.
-      internal: true
+
+    - # Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.
+      #
+      # As a special case, if there was only ever one option, returns that option followed by the empty string forever after.
       Flow:slots:lede:terms:
-        - "call_terminal"
-        - "text_eval"
+        - "stopping_text"
+        - [ "counter", "text_eval" ]
         - "stopping"
-        - - Term:name:type:
-              - "_"
+        - - # An optional name used for controlling internal state. Weave will generate a globally unique name automatically when a name isn't specified. Commands with the same name will share internal state.
+            Term:type:optional:
               - "name"
               - "text"
-          - Term:name:type:repeats:
-              - "over"
+              - true
+          - # One or more pieces of text to shift through.
+            Term:name:type:repeats:
+              - "text"
               - "parts"
               - "text_eval"
               - true
-    - Flow:slots:lede:terms:
+
+    - # Capture any and all text printed by the game, and return it as a single string of continuous text. New lines are stored as line feeds ('\n').
+      Flow:slots:lede:terms:
         - "buffer_text"
         - "text_eval"
         - "buffers"
-        - - Term:name:type:repeats:
+        - - # The statements to capture text output from.
+            Term:name:type:repeats:
               - "do"
               - "exe"
               - "execute"

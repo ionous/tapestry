@@ -584,39 +584,6 @@ Spec:requires:contains:
               - "num"
               - "num_eval"
 
-    - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
-      Flow:slots:terms:
-        - "cycle_text" #"cycle {_$parts}"
-        - "text_eval"
-        - - # One or more pieces of text to cycle through.
-            Term:name:type:repeats:
-              - "_"
-              - "parts"
-              - "text_eval"
-              - true
-
-    - # Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.
-      Flow:slots:terms:
-        - "shuffle_text" #  "shuffle {_$parts}"
-        - "text_eval"
-        - - # One or more pieces of text to shuffle through.
-            Term:name:type:repeats:
-              - "_"
-              - "parts"
-              - "text_eval"
-              - true
-
-    - # Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.
-      # As a special case, if there was only ever one option, returns that option followed by the empty string forever after.
-      Flow:slots:terms:
-        - "stopping_text" # "stopping {_$parts}"
-        - "text_eval"
-        - - # One or more pieces of text to shift through.
-            Term:name:type:repeats:
-              - "_"
-              - "parts"
-              - "text_eval"
-              - true
 
     - # Fields describe the members of kinds, records, patterns, and so on.
       Slot: "field_definition"

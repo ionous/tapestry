@@ -1147,121 +1147,6 @@ func (op *CountOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.
-type CycleText struct {
-	Parts  []rtti.TextEval
-	Markup map[string]any
-}
-
-// cycle_text, a type of flow.
-var Zt_CycleText typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*CycleText) TypeInfo() typeinfo.T {
-	return &Zt_CycleText
-}
-
-// Implements [typeinfo.Markup]
-func (op *CycleText) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*CycleText)(nil)
-
-// Holds a slice of type CycleText.
-type CycleText_Slice []CycleText
-
-// Implements [typeinfo.Instance] for a slice of CycleText.
-func (*CycleText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_CycleText
-}
-
-// Implements [typeinfo.Repeats] for a slice of CycleText.
-func (op *CycleText_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.
-type ShuffleText struct {
-	Parts  []rtti.TextEval
-	Markup map[string]any
-}
-
-// shuffle_text, a type of flow.
-var Zt_ShuffleText typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*ShuffleText) TypeInfo() typeinfo.T {
-	return &Zt_ShuffleText
-}
-
-// Implements [typeinfo.Markup]
-func (op *ShuffleText) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*ShuffleText)(nil)
-
-// Holds a slice of type ShuffleText.
-type ShuffleText_Slice []ShuffleText
-
-// Implements [typeinfo.Instance] for a slice of ShuffleText.
-func (*ShuffleText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ShuffleText
-}
-
-// Implements [typeinfo.Repeats] for a slice of ShuffleText.
-func (op *ShuffleText_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.
-// As a special case, if there was only ever one option, returns that option followed by the empty string forever after.
-type StoppingText struct {
-	Parts  []rtti.TextEval
-	Markup map[string]any
-}
-
-// stopping_text, a type of flow.
-var Zt_StoppingText typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*StoppingText) TypeInfo() typeinfo.T {
-	return &Zt_StoppingText
-}
-
-// Implements [typeinfo.Markup]
-func (op *StoppingText) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*StoppingText)(nil)
-
-// Holds a slice of type StoppingText.
-type StoppingText_Slice []StoppingText
-
-// Implements [typeinfo.Instance] for a slice of StoppingText.
-func (*StoppingText_Slice) TypeInfo() typeinfo.T {
-	return &Zt_StoppingText
-}
-
-// Implements [typeinfo.Repeats] for a slice of StoppingText.
-func (op *StoppingText_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // A valueless field.
 // Intended mainly as a way for patterns which don't return a value.
 type NothingField struct {
@@ -2412,60 +2297,6 @@ func init() {
 			"comment": []interface{}{"A guard which returns true based on a counter.", "Counters start at zero and are incremented every time the guard is checked."},
 		},
 	}
-	Zt_CycleText = typeinfo.Flow{
-		Name: "cycle_text",
-		Lede: "cycle_text",
-		Terms: []typeinfo.Term{{
-			Name:    "parts",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": "One or more pieces of text to cycle through.",
-			},
-			Type: &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-		},
-		Markup: map[string]any{
-			"comment": "Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in their specified order, then loops.",
-		},
-	}
-	Zt_ShuffleText = typeinfo.Flow{
-		Name: "shuffle_text",
-		Lede: "shuffle_text",
-		Terms: []typeinfo.Term{{
-			Name:    "parts",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": "One or more pieces of text to shuffle through.",
-			},
-			Type: &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-		},
-		Markup: map[string]any{
-			"comment": "Returns a single piece of text selected from a set of predefined values. When called multiple times, returns each one of the values in a randomized order. After returning the available options, begins again with a new ordering.",
-		},
-	}
-	Zt_StoppingText = typeinfo.Flow{
-		Name: "stopping_text",
-		Lede: "stopping_text",
-		Terms: []typeinfo.Term{{
-			Name:    "parts",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": "One or more pieces of text to shift through.",
-			},
-			Type: &rtti.Zt_TextEval,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Returns a single piece of text selected from a set of predefined values. When called multiple times returns each of its inputs in turn, sticking to the last one.", "As a special case, if there was only ever one option, returns that option followed by the empty string forever after."},
-		},
-	}
 	Zt_NothingField = typeinfo.Flow{
 		Name:  "nothing_field",
 		Lede:  "nothing",
@@ -2752,9 +2583,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_SayTemplate,
 	&Zt_SayResponse,
 	&Zt_CountOf,
-	&Zt_CycleText,
-	&Zt_ShuffleText,
-	&Zt_StoppingText,
 	&Zt_NothingField,
 	&Zt_AspectField,
 	&Zt_BoolField,
@@ -2779,7 +2607,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),             /* field_definition=Bool:initially: */
 	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
-	231398832069830353:   (*CycleText)(nil),             /* text_eval=CycleText: */
 	9796202271034753943:  (*DeclareStatement)(nil),      /* story_statement=Declare: */
 	11228697653156044284: (*DeclareStatement)(nil),      /* story_statement=Declare:assign: */
 	14790755516297707674: (*DefineAction)(nil),          /* story_statement=Define action:requires: */
@@ -2827,8 +2654,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7921553818502082370:  (*SayResponse)(nil),           /* text_eval=Say response:with: */
 	9556993961571292952:  (*SayTemplate)(nil),           /* execute=Say: */
 	15989777734244204735: (*SayTemplate)(nil),           /* text_eval=Say: */
-	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
-	13921723804355948971: (*StoppingText)(nil),          /* text_eval=StoppingText: */
 	9387832592330456403:  (*TextField)(nil),             /* field_definition=Text: */
 	16637694412733787472: (*TextField)(nil),             /* field_definition=Text:initially: */
 	15791809714384972761: (*TextField)(nil),             /* field_definition=Text:kind: */
