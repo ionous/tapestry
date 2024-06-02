@@ -1,4 +1,4 @@
-// prim
+// Common type definitions.
 package prim
 
 //
@@ -57,11 +57,11 @@ var Zt_Lines = typeinfo.Str{
 	},
 }
 
-// A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.
+// A sequence of characters of any length, all on one line. See also: lines.
 var Zt_Text = typeinfo.Str{
 	Name: "text",
 	Markup: map[string]any{
-		"comment": "A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.",
+		"comment": "A sequence of characters of any length, all on one line. See also: lines.",
 	},
 }
 
@@ -77,7 +77,7 @@ var Zt_Num = typeinfo.Num{
 var Z_Types = typeinfo.TypeSet{
 	Name: "prim",
 	Comment: []string{
-		"prim",
+		"Common type definitions.",
 	},
 
 	Str: z_str_list,

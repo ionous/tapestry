@@ -1,8 +1,11 @@
-# play
+# Low level communication between a game console and a running game.
+# None of these commands are available for use in game scripts.
 Spec:requires:contains:
   - "play"
   - "idl/prim"
-  - - # a log message that can optionally be displayed to the client.
+  - - # a client-server message for the play app
+      Slot: "play_message"
+    - # a log message that can optionally be displayed to the client.
       Flow:slots:lede:terms:
         - "play_log"
         - "play_message"
@@ -10,9 +13,6 @@ Spec:requires:contains:
         - - Term:type:
               - "log"
               - "text"
-    - # a client-server message for the play app
-      Slot: "play_message"
-
     - # app level change in state.
       Flow:slots:lede:terms:
         - "play_mode"

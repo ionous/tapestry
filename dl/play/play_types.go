@@ -1,4 +1,5 @@
-// play
+// Low level communication between a game console and a running game.
+// None of these commands are available for use in game scripts.
 package play
 
 //
@@ -249,7 +250,8 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "play",
 	Comment: []string{
-		"play",
+		"Low level communication between a game console and a running game.",
+		"None of these commands are available for use in game scripts.",
 	},
 
 	Slot:       z_slot_list,

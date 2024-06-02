@@ -19,7 +19,7 @@ type GlobalData struct {
 	// cmds name -> cmds
 	cmds map[string]FlowInfo
 	// str/num name -> flow
-	prims map[string]PrimInfo
+	str, num map[string]PrimInfo
 	//
 	allCommands []FlowInfo
 }
@@ -67,7 +67,8 @@ func makeGlobalData(idl []typeinfo.TypeSet) GlobalData {
 	types := make(map[string]typeinfo.TypeSet)
 	flow := make(map[string]FlowInfo)
 	slot := make(map[string]SlotInfo)
-	prim := make(map[string]PrimInfo)
+	str := make(map[string]PrimInfo)
+	num := make(map[string]PrimInfo)
 	var flat []FlowInfo
 	for _, ts := range idl {
 		types[ts.Name] = ts
@@ -84,10 +85,10 @@ func makeGlobalData(idl []typeinfo.TypeSet) GlobalData {
 			slot[t.Name] = SlotInfo{ts.Name, t}
 		}
 		for _, t := range ts.Str {
-			prim[t.Name] = PrimInfo{ts.Name, t}
+			str[t.Name] = PrimInfo{ts.Name, t}
 		}
 		for _, t := range ts.Num {
-			prim[t.Name] = PrimInfo{ts.Name, t}
+			num[t.Name] = PrimInfo{ts.Name, t}
 		}
 	}
 	// sort all the commands by spec.
@@ -100,7 +101,7 @@ func makeGlobalData(idl []typeinfo.TypeSet) GlobalData {
 	})
 
 	return GlobalData{
-		types, slot, flow, prim, flat,
+		types, slot, flow, str, num, flat,
 	}
 }
 
@@ -123,7 +124,9 @@ func (g *GlobalData) linkByName(name string) (ret string, err error) {
 		ret = linkToSlot(name, "")
 	} else if flow, ok := g.cmds[name]; ok {
 		ret = linkToType(flow.Idl, name)
-	} else if prim, ok := g.prims[name]; ok {
+	} else if prim, ok := g.str[name]; ok {
+		ret = linkToType(prim.Idl, name)
+	} else if prim, ok := g.num[name]; ok {
 		ret = linkToType(prim.Idl, name)
 	} else {
 		err = fmt.Errorf("couldnt find type %q", name)
@@ -134,7 +137,7 @@ func (g *GlobalData) linkByName(name string) (ret string, err error) {
 // Build the document style signature for this flow
 // it's different than the actual signature because,
 // among other things, it includes markers for optional elements.
-func BuildSpec(t *typeinfo.Flow) string {
+func BuildSpec(t *typeinfo.Flow) (ret string) {
 	var str strings.Builder
 	str.WriteString(inflect.Pascal(t.Lede))
 	if len(t.Terms) == 0 {
@@ -153,6 +156,8 @@ func BuildSpec(t *typeinfo.Flow) string {
 			str.WriteRune(':')
 			if t.Optional {
 				str.WriteRune(']')
+			} else {
+				// str.WriteRune(' ')
 			}
 		}
 	}

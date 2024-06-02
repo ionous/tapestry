@@ -1,4 +1,4 @@
-// rel
+// Interrogate and manipulate object relationships.
 package rel
 
 //
@@ -314,7 +314,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "rel",
 	Comment: []string{
-		"rel",
+		"Interrogate and manipulate object relationships.",
 	},
 
 	Flow:       z_flow_list,

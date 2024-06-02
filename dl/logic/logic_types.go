@@ -1,4 +1,4 @@
-// Common boolean operations and loop handling.
+// Boolean operations and loop handling.
 package logic
 
 //
@@ -1047,7 +1047,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "logic",
 	Comment: []string{
-		"Common boolean operations and loop handling.",
+		"Boolean operations and loop handling.",
 	},
 
 	Slot:       z_slot_list,

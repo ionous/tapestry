@@ -31,15 +31,27 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 	} else if e := CopyStaticFiles(outDir); e != nil {
 		err = e
 	} else {
-		index := filepath.Join(outDir)
-		if e := Create(index, tem, map[string]any{
+		apiHome := filepath.Join(outDir)
+		if e := Create(apiHome, tem, map[string]any{
 			"Name":      "Reference",
 			"SourceUrl": SourceUrl,
-			"AllSlots":  g.slots,
+			"Slots":     g.slots,
 			"AllTypes":  g.types,
 		}); e != nil {
 			err = e
 			return // early out
+		}
+
+		// generate an alphabetical index of all commands
+		alphaList := filepath.Join(outDir, "alpha")
+		if e := Create(alphaList, tem, map[string]any{
+			"Name":     "Index",
+			"Commands": g.allCommands,
+			"Slots":    g.slots,
+			"Num":      g.num,
+			"Str":      g.str,
+		}); e != nil {
+			err = e
 		}
 
 		//

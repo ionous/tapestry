@@ -1,4 +1,4 @@
-# rel
+# Interrogate and manipulate object relationships.
 Spec:contains:
   - "rel"
   - - # Returns the implied relative of a noun (ex. the source in a one-to-many relation.).

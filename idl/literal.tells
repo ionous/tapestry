@@ -1,4 +1,4 @@
-# Commands for supplying constant values to runtime evaluations.
+# Supply constant values to runtime evaluations.
 # ( ie. a specific number when a [NumEval] is required. )
 #
 # Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )

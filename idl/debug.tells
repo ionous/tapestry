@@ -1,4 +1,4 @@
-# Commands for debugging and testing stories.
+# Scripting commands to debug and test stories.
 Spec:requires:contains:
   - "debug"
   - "idl/rtti"

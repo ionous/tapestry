@@ -1,4 +1,4 @@
-// list
+// List queries, transformations, etc.
 package list
 
 //
@@ -1284,7 +1284,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "list",
 	Comment: []string{
-		"list",
+		"List queries, transformations, etc.",
 	},
 
 	Flow:       z_flow_list,

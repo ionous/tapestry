@@ -1,4 +1,4 @@
-// Commands for debugging and testing stories.
+// Scripting commands to debug and test stories.
 package debug
 
 //
@@ -406,7 +406,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "debug",
 	Comment: []string{
-		"Commands for debugging and testing stories.",
+		"Scripting commands to debug and test stories.",
 	},
 
 	Flow:       z_flow_list,

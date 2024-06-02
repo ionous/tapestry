@@ -10,7 +10,7 @@
 {{ if .Types.Num  }}
 <section>
 <h3>
-	Number Types:
+	Numeric Types:
 </h3>
 </section>
 	<ul class="indexList">

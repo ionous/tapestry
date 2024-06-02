@@ -1,4 +1,4 @@
-// Allows the web console to talk to a running game server.
+// Low level communication with a game server.
 // None of these commands are available for use in game scripts.
 package frame
 
@@ -370,7 +370,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "frame",
 	Comment: []string{
-		"Allows the web console to talk to a running game server.",
+		"Low level communication with a game server.",
 		"None of these commands are available for use in game scripts.",
 	},
 

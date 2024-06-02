@@ -1,4 +1,4 @@
-// Common operations on objects, variables, and kinds.
+// Operations on objects, variables, and kinds.
 package object
 
 //
@@ -15,7 +15,7 @@ import (
 var Zt_Dot = typeinfo.Slot{
 	Name: "dot",
 	Markup: map[string]any{
-		"comment": "Access values inside other values.",
+		"comment": "Access values stored inside other values.",
 	},
 }
 
@@ -1020,7 +1020,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "object",
 	Comment: []string{
-		"Common operations on objects, variables, and kinds.",
+		"Operations on objects, variables, and kinds.",
 	},
 
 	Slot:       z_slot_list,

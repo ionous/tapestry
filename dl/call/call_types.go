@@ -1,4 +1,4 @@
-// Pattern calls and related helpers.
+// Pattern calls, argument handling, and related helpers.
 package call
 
 //
@@ -1006,7 +1006,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "call",
 	Comment: []string{
-		"Pattern calls and related helpers.",
+		"Pattern calls, argument handling, and related helpers.",
 	},
 
 	Slot:       z_slot_list,

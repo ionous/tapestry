@@ -1,7 +1,7 @@
-# list
+# List queries, transformations, etc.
 Spec:requires:contains:
   - "list"
-  - - "idl/assign"
+  - - "idl/call"
     - "idl/core"
     - "idl/prim"
     - "idl/rtti"

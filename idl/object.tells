@@ -1,10 +1,10 @@
-# Common operations on objects, variables, and kinds.
+# Operations on objects, variables, and kinds.
 Spec:requires:contains:
   - "object"
   - - "idl/prim"
     - "idl/rtti"
 
-  - - # Access values inside other values.
+  - - # Access values stored inside other values.
       Slot: "dot"
 
     - # Store a value into a variable or object.

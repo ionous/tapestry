@@ -2,7 +2,7 @@
 # Keeping these functions separated allows weave to exclude package express from the runtime.
 Spec:requires:contains:
   - "render"
-  - - "idl/assign"
+  - - "idl/call"
     - "idl/prim"
     - "idl/rtti"
   - - # Handles changing a template like {.boombip} into text.

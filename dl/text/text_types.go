@@ -1,4 +1,4 @@
-// Common text transformations.
+// Text manipulation and transformation.
 package text
 
 //
@@ -778,7 +778,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "text",
 	Comment: []string{
-		"Common text transformations.",
+		"Text manipulation and transformation.",
 	},
 
 	Flow:       z_flow_list,

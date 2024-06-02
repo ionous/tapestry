@@ -1,4 +1,4 @@
-// Common text output commands.
+// Text printing and output control.
 // The default Tapestry runtime will process printed text according to its [markup rules](https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup).
 package format
 
@@ -818,7 +818,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "format",
 	Comment: []string{
-		"Common text output commands.",
+		"Text printing and output control.",
 		"The default Tapestry runtime will process printed text according to its [markup rules](https://pkg.go.dev/git.sr.ht/~ionous/tapestry/web/markup).",
 	},
 

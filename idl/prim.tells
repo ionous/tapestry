@@ -1,4 +1,4 @@
-# prim
+# Common type definitions.
 Spec:contains:
   - "prim"
   - - # A true/false value. Technically, boolean values are described using strings.
@@ -15,5 +15,5 @@ Spec:contains:
     - # An integer or floating point value.
       Num: "num"
 
-    - # A sequence of characters of any length, all on one line. Examples include letters, words, or short sentences. Text is generally something displayed to the player. See also: lines.
+    - # A sequence of characters of any length, all on one line. See also: lines.
       Str: "text"

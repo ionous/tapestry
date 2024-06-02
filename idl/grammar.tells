@@ -1,7 +1,7 @@
-# grammar
+# Player input parsing.
 Spec:requires:contains:
   - "grammar"
-  - - "idl/assign"
+  - - "idl/call"
     - "idl/prim"
   - - # makes a parser scanner producing a script defined action.
       Flow:slots:lede:terms:

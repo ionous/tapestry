@@ -1,4 +1,4 @@
-# Common boolean operations and loop handling.
+# Boolean operations and loop handling.
 Spec:requires:contains:
   - "logic"
   - - "idl/prim"

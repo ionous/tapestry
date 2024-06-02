@@ -1,4 +1,4 @@
-// grammar
+// Player input parsing.
 package grammar
 
 //
@@ -576,7 +576,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "grammar",
 	Comment: []string{
-		"grammar",
+		"Player input parsing.",
 	},
 
 	Slot:       z_slot_list,

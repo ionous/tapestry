@@ -1,4 +1,4 @@
-# Common text transformations.
+# Text manipulation and transformation.
 Spec:requires:contains:
   - "text"
   - - "idl/prim"

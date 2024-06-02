@@ -24,7 +24,7 @@
     "doc-tar": "tar -C bin/doc -cvz . > bin/site.tar.gz",
     "xdoc-publish": "hut pages publish -d tapestry.ionous.net bin/site.tar.gz",
     "mosaic": "npm run -w www dev",
-    "hugo": "exec-bin bin/hugo/hugo server --disableFastRender --logLevel info -s doc -d ../bin/doc",
+    "hugo": "exec-bin bin/hugo/hugo server -s doc -d ../bin/doc",
     "postinstall": "hugo-installer --version 0.125.7"
   },
   "version": "1.0.0",

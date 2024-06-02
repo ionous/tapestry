@@ -1,4 +1,4 @@
-// Slots used by the runtime to produce and consume values.
+// Slots used to produce and consume values.
 package rtti
 
 //
@@ -103,7 +103,7 @@ var Zt_Execute = typeinfo.Slot{
 	Markup: map[string]any{
 		"blockly-color": "PROCEDURES_HUE",
 		"blockly-stack": true,
-		"comment":       "Run a series of other commands.",
+		"comment":       "Commands which don't return a value.",
 	},
 }
 
@@ -312,7 +312,7 @@ func (op *RecordListEval_Slots) Repeats() bool {
 var Z_Types = typeinfo.TypeSet{
 	Name: "rtti",
 	Comment: []string{
-		"Slots used by the runtime to produce and consume values.",
+		"Slots used to produce and consume values.",
 	},
 
 	Slot: z_slot_list,

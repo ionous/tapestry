@@ -1,4 +1,4 @@
-# Pattern calls and related helpers.
+# Pattern calls, argument handling, and related helpers.
 Spec:requires:contains:
   - "call"
   - - "idl/prim"
@@ -6,7 +6,7 @@ Spec:requires:contains:
 
   - - # Determine whether a scene (aka domain) is active.
       Flow:slots:lede:terms:
-        - "active_scene"  # For lack of a better place, here we are.
+        - "active_scene" # For lack of a better place, here we are.
         - "bool_eval"
         - "is"
         - - # The name of the scene to check.
@@ -62,6 +62,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "address"
+
     - # Provide a boolean value for an assignment.
       Flow:slots:terms:
         - "from_bool"
@@ -71,6 +72,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "bool_eval"
+
     - # Provide a number for an assignment.
       Flow:slots:terms:
         - "from_num"
@@ -80,6 +82,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "num_eval"
+
     - # Provide some text for an assignment.
       Flow:slots:terms:
         - "from_text"
@@ -89,6 +92,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "text_eval"
+
     - # Provide a record for an assignment.
       Flow:slots:terms:
         - "from_record"
@@ -98,6 +102,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "record_eval"
+
     - # Provide a list of numbers for an assignment.
       Flow:slots:terms:
         - "from_num_list"
@@ -107,6 +112,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "num_list_eval"
+
     - # Provide a list of text values for an assignment.
       Flow:slots:terms:
         - "from_text_list"
@@ -116,6 +122,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "text_list_eval"
+
     - # Provide a list of records for an assignment.
       Flow:slots:terms:
         - "from_record_list"
@@ -125,7 +132,6 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "record_list_eval"
-
 
     - # Run a pattern, returning its result (if any).
       # Tell files support calling patterns directly, so this is only needed when using the blockly editor.
@@ -182,12 +188,14 @@ Spec:requires:contains:
         - "trigger_cycle"
         - "trigger"
         - "every"
+
     - # call_trigger
       internal: true
       Flow:slots:lede:
         - "trigger_once"
         - "trigger"
         - "at"
+
     - # call_trigger
       internal: true
       Flow:slots:lede:

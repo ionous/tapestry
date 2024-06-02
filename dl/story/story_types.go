@@ -1,4 +1,4 @@
-// Modeling commands used to define a game world. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.
+// Game world modeling using Tapestry commands. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.
 //
 // Most authors will probably prefer the jess plain english style of modeling over these, more explicit, commands. However, there are some commands -- like defining scenes -- which don't currently have a corollary within jess.
 package story
@@ -51,7 +51,7 @@ func (op *StoryStatement_Slots) Repeats() bool {
 var Zt_FieldDefinition = typeinfo.Slot{
 	Name: "field_definition",
 	Markup: map[string]any{
-		"comment": "Fields describe the members of kinds, records, patterns, and so on.",
+		"comment": "Describe the members of kinds, records, patterns, and so on.",
 	},
 }
 
@@ -2536,7 +2536,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "story",
 	Comment: []string{
-		"Modeling commands used to define a game world. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.",
+		"Game world modeling using Tapestry commands. These commands include the description of scenes, kinds of objects, specific nouns and their properties, the placement and relation between nouns, and so on.",
 		"",
 		"Most authors will probably prefer the jess plain english style of modeling over these, more explicit, commands. However, there are some commands -- like defining scenes -- which don't currently have a corollary within jess.",
 	},

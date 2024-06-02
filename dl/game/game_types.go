@@ -1,4 +1,4 @@
-// System commands that can be issued by script to communicate with the running game.
+// System commands to manage a running game ( save, load, etc ).
 package game
 
 //
@@ -259,7 +259,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "game",
 	Comment: []string{
-		"System commands that can be issued by script to communicate with the running game.",
+		"System commands to manage a running game ( save, load, etc ).",
 	},
 
 	Flow:       z_flow_list,

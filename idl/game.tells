@@ -1,4 +1,4 @@
-# System commands that can be issued by script to communicate with the running game.
+# System commands to manage a running game ( save, load, etc ).
 Spec:requires:contains:
   - "game"
   - "idl/rtti"
