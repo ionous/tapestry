@@ -36,7 +36,7 @@ func TestCoreEncoding(t *testing.T) {
 	}, {
 		// unary
 		&format.SoftBreak{},
-		`{"Wbr":true}`,
+		`{"SoftBreak":true}`,
 	}, {
 		// verify that things that arent variables dont get encoded as variables
 		&text.Join{Parts: []rt.TextEval{
