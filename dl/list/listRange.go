@@ -2,6 +2,7 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -9,7 +10,7 @@ import (
 
 func (op *Range) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if vs, e := op.getNumList(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = vs
 	}

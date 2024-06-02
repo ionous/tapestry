@@ -1,6 +1,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -23,7 +24,7 @@ func (op *MakeNumList) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 
 func (op *MakeTextList) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.makeList(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = v
 	}
@@ -47,7 +48,7 @@ func (op *MakeTextList) makeList(run rt.Runtime) (ret rt.Value, err error) {
 
 func (op *MakeRecordList) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.makeList(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = v
 	}

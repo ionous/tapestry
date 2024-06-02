@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -14,7 +15,7 @@ import (
 
 func (op *ListEach) Execute(run rt.Runtime) (err error) {
 	if e := op.forEach(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

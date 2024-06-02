@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -19,7 +19,7 @@ var Stepper func(words string) error
 
 func (op *Fabricate) Execute(run rt.Runtime) (err error) {
 	if e := op.fabricate(run); e != nil {
-		err = assign.CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

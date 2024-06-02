@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -26,7 +27,7 @@ func (op *RenderPattern) GetNum(run rt.Runtime) (rt.Value, error) {
 // ideally could generate the buffer based on the pattern type at assembly type
 func (op *RenderPattern) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.getText(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = v
 	}
@@ -67,7 +68,7 @@ func (op *RenderPattern) GetRecordList(run rt.Runtime) (rt.Value, error) {
 // the hint tells us what return value type is expected.
 func (op *RenderPattern) RenderEval(run rt.Runtime, hint affine.Affinity) (ret rt.Value, err error) {
 	if v, e := op.render(run, hint); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = v
 	}

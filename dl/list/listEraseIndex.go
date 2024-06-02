@@ -1,13 +1,14 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
 	if _, e := eraseIndex(run, op.Count, op.Target, op.AtIndex); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

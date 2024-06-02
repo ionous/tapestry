@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -16,7 +17,7 @@ func (op *LogValue) Execute(run rt.Runtime) (err error) {
 	// fix? currently, weave can't guarantee a lack of side-effects;
 	// so this always evals even if it doesn't print.
 	if v, e := safe.GetAssignment(run, op.Value); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		printLog(op.LogLevel, Stringify(v))
 	}
@@ -27,7 +28,7 @@ func (op *Note) Execute(run rt.Runtime) (err error) {
 	// fix? currently, weave can't guarantee a lack of side-effects;
 	// so this always evals even if it doesn't print.
 	if v, e := safe.GetText(run, op.Text); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		printLog(op.LogLevel, v.String())
 	}

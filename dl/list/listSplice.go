@@ -2,20 +2,21 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *ListSplice) Execute(run rt.Runtime) (err error) {
 	if _, _, e := op.spliceList(run, ""); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }
 
 func (op *ListSplice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.NumList); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else if v == nil {
 		ret = rt.FloatsOf(nil)
 	} else {
@@ -25,7 +26,7 @@ func (op *ListSplice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 }
 func (op *ListSplice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.TextList); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else if v == nil {
 		ret = rt.StringsOf(nil)
 	} else {
@@ -35,7 +36,7 @@ func (op *ListSplice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 }
 func (op *ListSplice) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, t, e := op.spliceList(run, affine.RecordList); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else if v == nil {
 		ret = rt.RecordsFrom(nil, t)
 	} else {

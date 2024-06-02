@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -13,7 +14,7 @@ import (
 // prints the response via the runtime's writer.
 func (op *RenderResponse) Execute(run rt.Runtime) (err error) {
 	if e := op.printResponse(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }
@@ -21,7 +22,7 @@ func (op *RenderResponse) Execute(run rt.Runtime) (err error) {
 // return the rendered response as a text value.
 func (op *RenderResponse) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.getResponse(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = v
 	}

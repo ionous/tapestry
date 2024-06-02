@@ -2,6 +2,7 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
@@ -12,7 +13,7 @@ func (op *ListFind) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	// fix: with autoconversion of int to bool and one-based indices -
 	// only the GetNum variant would be needed.
 	if i, e := op.getIndex(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = rt.BoolOf(i >= 0)
 	}
@@ -22,7 +23,7 @@ func (op *ListFind) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 // returns 1 based index of the value in the list
 func (op *ListFind) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if i, e := op.getIndex(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = rt.IntOf(i + 1)
 	}

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
 func TestLog(t *testing.T) {
@@ -16,7 +17,7 @@ func TestLog(t *testing.T) {
 	//
 	lo := LogValue{
 		LogLevel: C_LoggingLevel_Error,
-		Value:    &assign.FromText{Value: T("hello")},
+		Value:    &assign.FromText{Value: literal.T("hello")},
 	}
 	if e := lo.Execute(nil); e != nil {
 		t.Fatal(e)

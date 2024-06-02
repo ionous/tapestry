@@ -2,13 +2,14 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *ListSlice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.sliceList(run, affine.NumList); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else if v == nil {
 		ret = rt.FloatsOf(nil)
 	} else {
@@ -19,7 +20,7 @@ func (op *ListSlice) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 
 func (op *ListSlice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, _, e := op.sliceList(run, affine.TextList); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else if v == nil {
 		ret = rt.StringsOf(nil)
 	} else {
@@ -30,7 +31,7 @@ func (op *ListSlice) GetTextList(run rt.Runtime) (ret rt.Value, err error) {
 
 func (op *ListSlice) GetRecordList(run rt.Runtime) (ret rt.Value, err error) {
 	if v, t, e := op.sliceList(run, affine.RecordList); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else if v == nil {
 		ret = rt.RecordsFrom(nil, t)
 	} else {

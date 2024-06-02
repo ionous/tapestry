@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -14,14 +15,14 @@ import (
 
 func (op *ListSortNumbers) Execute(run rt.Runtime) (err error) {
 	if e := op.sortByNum(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }
 
 func (op *ListSortText) Execute(run rt.Runtime) (err error) {
 	if e := op.sortByText(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

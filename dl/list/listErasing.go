@@ -1,6 +1,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -8,7 +9,7 @@ import (
 
 func (op *Erasing) Execute(run rt.Runtime) (err error) {
 	if e := op.popping(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }
@@ -26,7 +27,7 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 
 func (op *ErasingEdge) Execute(run rt.Runtime) (err error) {
 	if e := op.popping(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

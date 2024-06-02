@@ -1,13 +1,14 @@
 package rel
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *Relate) Execute(run rt.Runtime) (err error) {
 	if e := op.setRelation(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

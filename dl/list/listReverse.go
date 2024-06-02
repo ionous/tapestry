@@ -1,6 +1,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -8,7 +9,7 @@ import (
 // A normal reduce would return a value, instead we accumulate into a variable
 func (op *ListReverse) Execute(run rt.Runtime) (err error) {
 	if e := op.reverse(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	}
 	return
 }

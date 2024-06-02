@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
+	"git.sr.ht/~ionous/tapestry/dl/cmd"
 
 	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -19,7 +20,7 @@ import (
 
 func (op *RenderName) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if v, e := op.getName(run); e != nil {
-		err = CmdError(op, e)
+		err = cmd.Error(op, e)
 	} else {
 		ret = v
 	}

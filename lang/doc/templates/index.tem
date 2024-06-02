@@ -1,8 +1,7 @@
 <h1>API Reference</h1>
 
 <p>
-You've found the documentation for the commands used in <i>.tell</i> story files. For the Go language reference, see <a href="{{ .SourceUrl }}">pkg.go.dev</a>.
-
+You've found the documentation for the commands used in <i>.tell</i> story files. For the Go language reference, see <a href="{{ .SourceUrl }}">pkg.go.dev</a>. For more descriptive documentation, see the <a href="/">Tapestry guide.</a>
 
 <h2>Slots</h2>
 
