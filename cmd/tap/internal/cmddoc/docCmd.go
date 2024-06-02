@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/format"
@@ -38,7 +37,6 @@ func runDoc(ctx context.Context, cmd *base.Command, args []string) (err error) {
 		log.Fatal(e)
 	} else {
 		err = doc.Build(outPath, []typeinfo.TypeSet{
-			assign.Z_Types,
 			call.Z_Types,
 			debug.Z_Types,
 			frame.Z_Types,

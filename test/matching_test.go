@@ -3,7 +3,6 @@ package test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/object"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -40,9 +39,9 @@ func TestMatching(t *testing.T) {
 	} else {
 		a, b := a.Record(), b.Record()
 		runMatching := &call.CallPattern{
-			PatternName: (kargs.Name()), Arguments: assign.MakeArgs(
-				&assign.FromRecord{Value: object.Variable("a")},
-				&assign.FromRecord{Value: object.Variable("b")},
+			PatternName: (kargs.Name()), Arguments: call.MakeArgs(
+				&call.FromRecord{Value: object.Variable("a")},
+				&call.FromRecord{Value: object.Variable("b")},
 			)}
 		// default should match
 		{

@@ -6,7 +6,7 @@ package grammar
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
@@ -72,7 +72,7 @@ func (op *ScannerMaker_Slots) Repeats() bool {
 // makes a parser scanner producing a script defined action.
 type Action struct {
 	Action    string
-	Arguments []assign.Arg
+	Arguments []call.Arg
 	Markup    map[string]any
 }
 
@@ -428,7 +428,7 @@ func init() {
 			Label:    "args",
 			Optional: true,
 			Repeats:  true,
-			Type:     &assign.Zt_Arg,
+			Type:     &call.Zt_Arg,
 		}},
 		Slots: []*typeinfo.Slot{
 			&Zt_ScannerMaker,

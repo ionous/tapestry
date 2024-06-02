@@ -1,3 +1,4 @@
+// Pattern calls and related helpers.
 package call
 
 //
@@ -5,7 +6,6 @@ package call
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
@@ -118,11 +118,390 @@ func (op *ActivePattern_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Pass a named value to a parameterized call.
+type Arg struct {
+	Name   string
+	Value  rtti.Assignment
+	Markup map[string]any
+}
+
+// arg, a type of flow.
+var Zt_Arg typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*Arg) TypeInfo() typeinfo.T {
+	return &Zt_Arg
+}
+
+// Implements [typeinfo.Markup]
+func (op *Arg) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Holds a slice of type Arg.
+type Arg_Slice []Arg
+
+// Implements [typeinfo.Instance] for a slice of Arg.
+func (*Arg_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Arg
+}
+
+// Implements [typeinfo.Repeats] for a slice of Arg.
+func (op *Arg_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide one or more execute commands for an assignment.
+// Used internally for jess rules.
+type FromExe struct {
+	Exe    []rtti.Execute
+	Markup map[string]any
+}
+
+// from_exe, a type of flow.
+var Zt_FromExe typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromExe) TypeInfo() typeinfo.T {
+	return &Zt_FromExe
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromExe) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromExe)(nil)
+
+// Holds a slice of type FromExe.
+type FromExe_Slice []FromExe
+
+// Implements [typeinfo.Instance] for a slice of FromExe.
+func (*FromExe_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromExe
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromExe.
+func (op *FromExe_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a stored value for an assignment.
+type FromAddress struct {
+	Value  rtti.Address
+	Markup map[string]any
+}
+
+// from_address, a type of flow.
+var Zt_FromAddress typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromAddress) TypeInfo() typeinfo.T {
+	return &Zt_FromAddress
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromAddress) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromAddress)(nil)
+
+// Holds a slice of type FromAddress.
+type FromAddress_Slice []FromAddress
+
+// Implements [typeinfo.Instance] for a slice of FromAddress.
+func (*FromAddress_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromAddress
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromAddress.
+func (op *FromAddress_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a boolean value for an assignment.
+type FromBool struct {
+	Value  rtti.BoolEval
+	Markup map[string]any
+}
+
+// from_bool, a type of flow.
+var Zt_FromBool typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromBool) TypeInfo() typeinfo.T {
+	return &Zt_FromBool
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromBool) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromBool)(nil)
+
+// Holds a slice of type FromBool.
+type FromBool_Slice []FromBool
+
+// Implements [typeinfo.Instance] for a slice of FromBool.
+func (*FromBool_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromBool
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromBool.
+func (op *FromBool_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a number for an assignment.
+type FromNum struct {
+	Value  rtti.NumEval
+	Markup map[string]any
+}
+
+// from_num, a type of flow.
+var Zt_FromNum typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromNum) TypeInfo() typeinfo.T {
+	return &Zt_FromNum
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromNum) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromNum)(nil)
+
+// Holds a slice of type FromNum.
+type FromNum_Slice []FromNum
+
+// Implements [typeinfo.Instance] for a slice of FromNum.
+func (*FromNum_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromNum
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromNum.
+func (op *FromNum_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide some text for an assignment.
+type FromText struct {
+	Value  rtti.TextEval
+	Markup map[string]any
+}
+
+// from_text, a type of flow.
+var Zt_FromText typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromText) TypeInfo() typeinfo.T {
+	return &Zt_FromText
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromText) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromText)(nil)
+
+// Holds a slice of type FromText.
+type FromText_Slice []FromText
+
+// Implements [typeinfo.Instance] for a slice of FromText.
+func (*FromText_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromText
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromText.
+func (op *FromText_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a record for an assignment.
+type FromRecord struct {
+	Value  rtti.RecordEval
+	Markup map[string]any
+}
+
+// from_record, a type of flow.
+var Zt_FromRecord typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromRecord) TypeInfo() typeinfo.T {
+	return &Zt_FromRecord
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromRecord) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromRecord)(nil)
+
+// Holds a slice of type FromRecord.
+type FromRecord_Slice []FromRecord
+
+// Implements [typeinfo.Instance] for a slice of FromRecord.
+func (*FromRecord_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromRecord
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromRecord.
+func (op *FromRecord_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a list of numbers for an assignment.
+type FromNumList struct {
+	Value  rtti.NumListEval
+	Markup map[string]any
+}
+
+// from_num_list, a type of flow.
+var Zt_FromNumList typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromNumList) TypeInfo() typeinfo.T {
+	return &Zt_FromNumList
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromNumList) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromNumList)(nil)
+
+// Holds a slice of type FromNumList.
+type FromNumList_Slice []FromNumList
+
+// Implements [typeinfo.Instance] for a slice of FromNumList.
+func (*FromNumList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromNumList
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromNumList.
+func (op *FromNumList_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a list of text values for an assignment.
+type FromTextList struct {
+	Value  rtti.TextListEval
+	Markup map[string]any
+}
+
+// from_text_list, a type of flow.
+var Zt_FromTextList typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromTextList) TypeInfo() typeinfo.T {
+	return &Zt_FromTextList
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromTextList) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromTextList)(nil)
+
+// Holds a slice of type FromTextList.
+type FromTextList_Slice []FromTextList
+
+// Implements [typeinfo.Instance] for a slice of FromTextList.
+func (*FromTextList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromTextList
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromTextList.
+func (op *FromTextList_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Provide a list of records for an assignment.
+type FromRecordList struct {
+	Value  rtti.RecordListEval
+	Markup map[string]any
+}
+
+// from_record_list, a type of flow.
+var Zt_FromRecordList typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*FromRecordList) TypeInfo() typeinfo.T {
+	return &Zt_FromRecordList
+}
+
+// Implements [typeinfo.Markup]
+func (op *FromRecordList) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.Assignment = (*FromRecordList)(nil)
+
+// Holds a slice of type FromRecordList.
+type FromRecordList_Slice []FromRecordList
+
+// Implements [typeinfo.Instance] for a slice of FromRecordList.
+func (*FromRecordList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FromRecordList
+}
+
+// Implements [typeinfo.Repeats] for a slice of FromRecordList.
+func (op *FromRecordList_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Run a pattern, returning its result (if any).
 // Tell files support calling patterns directly, so this is only needed when using the blockly editor.
 type CallPattern struct {
 	PatternName string
-	Arguments   []assign.Arg
+	Arguments   []Arg
 	Markup      map[string]any
 }
 
@@ -357,6 +736,179 @@ func init() {
 			"comment": "Determine whether a pattern is running.",
 		},
 	}
+	Zt_Arg = typeinfo.Flow{
+		Name: "arg",
+		Lede: "arg",
+		Terms: []typeinfo.Term{{
+			Name: "name",
+			Markup: map[string]any{
+				"comment": "Name of the parameter. An empty string is treated as an unnamed parameter.",
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:  "value",
+			Label: "from",
+			Markup: map[string]any{
+				"comment": "Value to assign to the parameter.",
+			},
+			Type: &rtti.Zt_Assignment,
+		}},
+		Markup: map[string]any{
+			"comment": "Pass a named value to a parameterized call.",
+		},
+	}
+	Zt_FromExe = typeinfo.Flow{
+		Name: "from_exe",
+		Lede: "from_exe",
+		Terms: []typeinfo.Term{{
+			Name:    "exe",
+			Repeats: true,
+			Type:    &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment":  []interface{}{"Provide one or more execute commands for an assignment.", "Used internally for jess rules."},
+			"internal": true,
+		},
+	}
+	Zt_FromAddress = typeinfo.Flow{
+		Name: "from_address",
+		Lede: "from_address",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Address to read from.",
+			},
+			Type: &rtti.Zt_Address,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a stored value for an assignment.",
+		},
+	}
+	Zt_FromBool = typeinfo.Flow{
+		Name: "from_bool",
+		Lede: "from_bool",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Boolean value for the assignment.",
+			},
+			Type: &rtti.Zt_BoolEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a boolean value for an assignment.",
+		},
+	}
+	Zt_FromNum = typeinfo.Flow{
+		Name: "from_num",
+		Lede: "from_num",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Number for the assignment.",
+			},
+			Type: &rtti.Zt_NumEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a number for an assignment.",
+		},
+	}
+	Zt_FromText = typeinfo.Flow{
+		Name: "from_text",
+		Lede: "from_text",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Text for the assignment.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide some text for an assignment.",
+		},
+	}
+	Zt_FromRecord = typeinfo.Flow{
+		Name: "from_record",
+		Lede: "from_record",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Record for the assignment.",
+			},
+			Type: &rtti.Zt_RecordEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a record for an assignment.",
+		},
+	}
+	Zt_FromNumList = typeinfo.Flow{
+		Name: "from_num_list",
+		Lede: "from_num_list",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Numbers for the assignment.",
+			},
+			Type: &rtti.Zt_NumListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a list of numbers for an assignment.",
+		},
+	}
+	Zt_FromTextList = typeinfo.Flow{
+		Name: "from_text_list",
+		Lede: "from_text_list",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Text values for the assignment.",
+			},
+			Type: &rtti.Zt_TextListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a list of text values for an assignment.",
+		},
+	}
+	Zt_FromRecordList = typeinfo.Flow{
+		Name: "from_record_list",
+		Lede: "from_record_list",
+		Terms: []typeinfo.Term{{
+			Name: "value",
+			Markup: map[string]any{
+				"comment": "Record values for the assignment.",
+			},
+			Type: &rtti.Zt_RecordListEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_Assignment,
+		},
+		Markup: map[string]any{
+			"comment": "Provide a list of records for an assignment.",
+		},
+	}
 	Zt_CallPattern = typeinfo.Flow{
 		Name: "call_pattern",
 		Lede: "determine",
@@ -373,7 +925,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": []interface{}{"Arguments to pass to the pattern.", "Any unnamed arguments must proceed all named arguments. Unnamed arguments are assigned to parameters in the order the parameters were declared. It's considered an error to assign the same parameter multiple times."},
 			},
-			Type: &assign.Zt_Arg,
+			Type: &Zt_Arg,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -454,7 +1006,7 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "call",
 	Comment: []string{
-		"",
+		"Pattern calls and related helpers.",
 	},
 
 	Slot:       z_slot_list,
@@ -473,6 +1025,16 @@ var z_slot_list = []*typeinfo.Slot{
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_ActiveScene,
 	&Zt_ActivePattern,
+	&Zt_Arg,
+	&Zt_FromExe,
+	&Zt_FromAddress,
+	&Zt_FromBool,
+	&Zt_FromNum,
+	&Zt_FromText,
+	&Zt_FromRecord,
+	&Zt_FromNumList,
+	&Zt_FromTextList,
+	&Zt_FromRecordList,
 	&Zt_CallPattern,
 	&Zt_CallTrigger,
 	&Zt_TriggerCycle,
@@ -483,19 +1045,29 @@ var z_flow_list = []*typeinfo.Flow{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	9392469773844077696:  (*TriggerSwitch)(nil), /* trigger=After */
-	2233111806717201007:  (*TriggerOnce)(nil),   /* trigger=At */
-	5430006510328108403:  (*CallPattern)(nil),   /* bool_eval=Determine:args: */
-	11666175118824200195: (*CallPattern)(nil),   /* execute=Determine:args: */
-	9675109928599400849:  (*CallPattern)(nil),   /* num_eval=Determine:args: */
-	16219448703619493492: (*CallPattern)(nil),   /* num_list_eval=Determine:args: */
-	13992013847750998452: (*CallPattern)(nil),   /* record_eval=Determine:args: */
-	352268441608212603:   (*CallPattern)(nil),   /* record_list_eval=Determine:args: */
-	5079530186593846942:  (*CallPattern)(nil),   /* text_eval=Determine:args: */
-	13938609641525654217: (*CallPattern)(nil),   /* text_list_eval=Determine:args: */
-	1457631626735043065:  (*TriggerCycle)(nil),  /* trigger=Every */
-	10847423070654993213: (*ActivePattern)(nil), /* bool_eval=Is pattern: */
-	15097434718788250679: (*ActivePattern)(nil), /* num_eval=Is pattern: */
-	2257319580031922583:  (*ActiveScene)(nil),   /* bool_eval=Is scene: */
-	2711869841453509536:  (*CallTrigger)(nil),   /* bool_eval=Trigger:on:num: */
+	6291103735245333139:  (*Arg)(nil),            /* Arg:from: */
+	9392469773844077696:  (*TriggerSwitch)(nil),  /* trigger=After */
+	2233111806717201007:  (*TriggerOnce)(nil),    /* trigger=At */
+	5430006510328108403:  (*CallPattern)(nil),    /* bool_eval=Determine:args: */
+	11666175118824200195: (*CallPattern)(nil),    /* execute=Determine:args: */
+	9675109928599400849:  (*CallPattern)(nil),    /* num_eval=Determine:args: */
+	16219448703619493492: (*CallPattern)(nil),    /* num_list_eval=Determine:args: */
+	13992013847750998452: (*CallPattern)(nil),    /* record_eval=Determine:args: */
+	352268441608212603:   (*CallPattern)(nil),    /* record_list_eval=Determine:args: */
+	5079530186593846942:  (*CallPattern)(nil),    /* text_eval=Determine:args: */
+	13938609641525654217: (*CallPattern)(nil),    /* text_list_eval=Determine:args: */
+	1457631626735043065:  (*TriggerCycle)(nil),   /* trigger=Every */
+	9651737781749814793:  (*FromAddress)(nil),    /* assignment=FromAddress: */
+	16065241269206568079: (*FromBool)(nil),       /* assignment=FromBool: */
+	9721304908210135401:  (*FromExe)(nil),        /* assignment=FromExe: */
+	13937541344191718121: (*FromNum)(nil),        /* assignment=FromNum: */
+	15276643347016776669: (*FromNumList)(nil),    /* assignment=FromNumList: */
+	8445595699766392240:  (*FromRecord)(nil),     /* assignment=FromRecord: */
+	17510952281883199828: (*FromRecordList)(nil), /* assignment=FromRecordList: */
+	9783457335751138546:  (*FromText)(nil),       /* assignment=FromText: */
+	3267530751198060154:  (*FromTextList)(nil),   /* assignment=FromTextList: */
+	10847423070654993213: (*ActivePattern)(nil),  /* bool_eval=Is pattern: */
+	15097434718788250679: (*ActivePattern)(nil),  /* num_eval=Is pattern: */
+	2257319580031922583:  (*ActiveScene)(nil),    /* bool_eval=Is scene: */
+	2711869841453509536:  (*CallTrigger)(nil),    /* bool_eval=Trigger:on:num: */
 }

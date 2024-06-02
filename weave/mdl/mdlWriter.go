@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -753,7 +753,7 @@ func (pen *Pen) addRule(pattern kindInfo, name string, rank int, stop bool, jump
 }
 
 func (pen *Pen) AddKindTrait(kind, trait string) (err error) {
-	return pen.AddDefaultValue(kind, trait, &assign.FromBool{
+	return pen.AddDefaultValue(kind, trait, &call.FromBool{
 		Value: &literal.BoolValue{Value: true},
 	})
 }
@@ -789,7 +789,7 @@ func (pen *Pen) AddNounPath(noun string, path []string, value literal.LiteralVal
 	if len(path) == 0 {
 		err = errutil.New("can't set an empty path")
 	} else if len(path) == 1 {
-		err = pen.addFieldValue(noun, path[0], assign.Literal(value))
+		err = pen.addFieldValue(noun, path[0], call.Literal(value))
 	} else {
 		err = pen.addPathValue(noun, path, value)
 	}

@@ -1,7 +1,7 @@
 package jess
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -27,7 +27,7 @@ func (op *QuotedTexts) Assignment() (ret rt.Assignment) {
 		next := it.GetNextText()
 		els = append(els, next.TextEval())
 	}
-	return &assign.FromTextList{
+	return &call.FromTextList{
 		Value: &list.MakeTextList{
 			Values: els,
 		},

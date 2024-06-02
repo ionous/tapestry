@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 
@@ -86,7 +85,7 @@ func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value
 	if printedName, e := safe.GetText(run, &format.BufferText{Exe: []rt.Execute{
 		&call.CallPattern{
 			PatternName: "print name",
-			Arguments: assign.MakeArgs(&assign.FromText{Value: &literal.TextValue{
+			Arguments: call.MakeArgs(&call.FromText{Value: &literal.TextValue{
 				Value: n,
 				Kind:  k,
 			}})}}}); e != nil {

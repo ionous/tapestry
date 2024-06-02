@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -73,6 +73,12 @@ func (op *DefineNounStates) Weave(cat *weave.Catalog) error {
 	})
 }
 
+func truly() rt.Assignment {
+	return &call.FromBool{
+		Value: &literal.BoolValue{Value: true},
+	}
+}
+
 // ex. The description of the nets is xxx
 func (op *DefineNounValue) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weaver.ValuePhase, func(w weaver.Weaves, run rt.Runtime) (err error) {
@@ -84,7 +90,7 @@ func (op *DefineNounValue) Weave(cat *weave.Catalog) error {
 			// try to convert from literal templates ( if any )
 			value := op.Value
 			switch wrapper := op.Value.(type) {
-			case *assign.FromText:
+			case *call.FromText:
 				switch text := wrapper.Value.(type) {
 				case *literal.TextValue:
 					value, err = convertTextAssignment(text.Value)

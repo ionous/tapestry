@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/decode"
@@ -31,7 +31,7 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 			} else {
 				var dec decode.Decoder
 				if e := dec.
-					Signatures(grammar.Z_Types.Signatures, assign.Z_Types.Signatures, literal.Z_Types.Signatures).
+					Signatures(grammar.Z_Types.Signatures, call.Z_Types.Signatures, literal.Z_Types.Signatures).
 					Customize(literal.CustomDecoder).
 					Decode(&dir, msg); e != nil {
 					err = e

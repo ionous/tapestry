@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -123,12 +123,12 @@ func (pt *Playtime) scan(words string) (ret parser.Result, err error) {
 }
 
 // execute a command
-func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err error) {
+func (pt *Playtime) play(act string, nouns []string, args []call.Arg) (err error) {
 	if outOfWorld := strings.HasPrefix(act, "request "); outOfWorld {
 		if len(nouns) != 0 {
 			// fix: check at weave?
 			err = errutil.New("out of world actions don't expect any nouns")
-		} else if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
+		} else if ks, vs, e := call.ExpandArgs(pt, args); e != nil {
 			err = e
 		} else {
 			_, err = pt.Runtime.Call(act, affine.None, ks, vs)
@@ -142,7 +142,7 @@ func (pt *Playtime) play(act string, nouns []string, args []assign.Arg) (err err
 		} else if !ok {
 			_, err = pt.Runtime.Call("pass time", affine.None, nil, nil)
 		} else {
-			if ks, vs, e := assign.ExpandArgs(pt, args); e != nil {
+			if ks, vs, e := call.ExpandArgs(pt, args); e != nil {
 				err = e
 			} else {
 				// the actor ( and any nouns ) need to precede the "keyed" fields.

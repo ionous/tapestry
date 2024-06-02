@@ -2,7 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/render"
@@ -50,7 +50,7 @@ func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, er
 				return w.AddKindFields(kindsOf.Response.String(), []mdl.FieldInfo{{
 					Name:     name,
 					Affinity: affine.Text,
-					Init:     &assign.FromText{Value: txt}},
+					Init:     &call.FromText{Value: txt}},
 				})
 			}); e != nil {
 				err = e
@@ -76,7 +76,7 @@ func convertTextAssignment(str string) (ret rt.Assignment, err error) {
 	if txt, e := jess.ConvertTextTemplate(str); e != nil {
 		err = e
 	} else {
-		ret = &assign.FromText{Value: txt}
+		ret = &call.FromText{Value: txt}
 	}
 	return
 }

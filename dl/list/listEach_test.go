@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
@@ -55,7 +55,7 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var out []string
 	var visits []accum
 	each := &list.ListEach{
-		List: &assign.FromTextList{Value: object.Variable("source")},
+		List: &call.FromTextList{Value: object.Variable("source")},
 		As:   ("text"),
 		Exe:  []rt.Execute{&visitEach{&visits}},
 		Else: &logic.ChooseNothingElse{

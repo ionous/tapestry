@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
@@ -211,30 +211,30 @@ func marshalAssignment(val rt.Assignment, wantAff affine.Affinity) (ret string, 
 		provisional = true
 		val = a.Assignment
 	}
-	if aff := assign.GetAffinity(val); aff != wantAff {
+	if aff := call.GetAffinity(val); aff != wantAff {
 		err = errutil.Fmt("%w assignment wanted %s not %s", Conflict, aff, wantAff)
 	} else {
 		// strip off the From section to avoid serializing redundant info
 		switch v := val.(type) {
-		case *assign.FromBool:
+		case *call.FromBool:
 			slot := rtti.BoolEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromNum:
+		case *call.FromNum:
 			slot := rtti.NumEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromText:
+		case *call.FromText:
 			slot := rtti.TextEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromRecord:
+		case *call.FromRecord:
 			slot := rtti.RecordEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromNumList:
+		case *call.FromNumList:
 			slot := rtti.NumListEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromTextList:
+		case *call.FromTextList:
 			slot := rtti.TextListEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
-		case *assign.FromRecordList:
+		case *call.FromRecordList:
 			slot := rtti.RecordListEval_Slot{Value: v.Value}
 			ret, err = marshal(&slot)
 		default:

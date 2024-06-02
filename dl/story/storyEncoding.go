@@ -1,7 +1,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/compact"
@@ -58,14 +57,14 @@ func DecodePattern(dec *decode.Decoder, slot *typeinfo.Slot, msg compact.Message
 	return
 }
 
-func tryPatternArgs(dec *decode.Decoder, msg compact.Message) (ret []assign.Arg, err error) {
+func tryPatternArgs(dec *decode.Decoder, msg compact.Message) (ret []call.Arg, err error) {
 	for i, p := range msg.Labels {
 		var val rtti.Assignment_Slot
 		if e := dec.Decode(&val, msg.Args[i]); e != nil {
 			err = e
 			break
 		} else {
-			ret = append(ret, assign.Arg{Name: p, Value: val.Value})
+			ret = append(ret, call.Arg{Name: p, Value: val.Value})
 		}
 	}
 	return

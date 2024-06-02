@@ -5,7 +5,7 @@ import (
 	r "reflect"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/math"
@@ -90,7 +90,7 @@ func unmarshal(out typeinfo.Instance, plainData any) (err error) {
 	var dec decode.Decoder
 	return dec.
 		Signatures(
-			assign.Z_Types.Signatures,
+			call.Z_Types.Signatures,
 			math.Z_Types.Signatures,
 			object.Z_Types.Signatures,
 			format.Z_Types.Signatures,

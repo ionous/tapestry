@@ -6,7 +6,7 @@ package logic
 //
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
@@ -399,7 +399,7 @@ func (op *NotAny_Slice) Repeats() bool {
 // An if statement.
 type ChooseBranch struct {
 	Condition rtti.BoolEval
-	Args      []assign.Arg
+	Args      []call.Arg
 	Exe       []rtti.Execute
 	Else      Brancher
 	Markup    map[string]any
@@ -480,7 +480,7 @@ func (op *ChooseNothingElse_Slice) Repeats() bool {
 // ( This acts similar to a ternary. )
 type ChooseNum struct {
 	If     rtti.BoolEval
-	Args   []assign.Arg
+	Args   []call.Arg
 	True   rtti.NumEval
 	False  rtti.NumEval
 	Markup map[string]any
@@ -522,7 +522,7 @@ func (op *ChooseNum_Slice) Repeats() bool {
 // ( This acts similar to a ternary. )
 type ChooseText struct {
 	If     rtti.BoolEval
-	Args   []assign.Arg
+	Args   []call.Arg
 	True   rtti.TextEval
 	False  rtti.TextEval
 	Markup map[string]any
@@ -639,8 +639,8 @@ func (op *Continue_Slice) Repeats() bool {
 // Keep running a series of actions while a condition succeeds.
 type Repeat struct {
 	Condition rtti.BoolEval
-	Initial   []assign.Arg
-	Args      []assign.Arg
+	Initial   []call.Arg
+	Args      []call.Arg
 	Exe       []rtti.Execute
 	Markup    map[string]any
 }
@@ -846,7 +846,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
 			},
-			Type: &assign.Zt_Arg,
+			Type: &call.Zt_Arg,
 		}, {
 			Name:    "exe",
 			Label:   "do",
@@ -909,7 +909,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
 			},
-			Type: &assign.Zt_Arg,
+			Type: &call.Zt_Arg,
 		}, {
 			Name:  "true",
 			Label: "then",
@@ -951,7 +951,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": "A set of local variables available while testing the condition and while running the do/else statements. These are initialized before testing the condition.",
 			},
-			Type: &assign.Zt_Arg,
+			Type: &call.Zt_Arg,
 		}, {
 			Name:  "true",
 			Label: "then",
@@ -1015,7 +1015,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": []interface{}{"A set of variables available to the loop;", "evaluated just once, before the loop's first run."},
 			},
-			Type: &assign.Zt_Arg,
+			Type: &call.Zt_Arg,
 		}, {
 			Name:     "args",
 			Label:    "assuming",
@@ -1024,7 +1024,7 @@ func init() {
 			Markup: map[string]any{
 				"comment": []interface{}{"A set of variables available to the loop;", "evaluated before each iteration of the loop.", "( These take precedence over the initial variables.", "If the same names appear in both sets of variables, the ones here win. )"},
 			},
-			Type: &assign.Zt_Arg,
+			Type: &call.Zt_Arg,
 		}, {
 			Name:    "exe",
 			Label:   "do",

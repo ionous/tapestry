@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -98,7 +98,7 @@ func (pt *PlainText) Decoded(tv match.TokenValue) (err error) {
 			if exe, e := decodeExecute(msg); e != nil {
 				err = e
 			} else {
-				err = pt.writeAssignment(tv.Pos, &assign.FromExe{
+				err = pt.writeAssignment(tv.Pos, &call.FromExe{
 					Exe: exe,
 				})
 			}

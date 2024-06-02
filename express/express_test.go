@@ -3,7 +3,7 @@ package express
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
@@ -227,7 +227,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
 				PatternName: ("hello"), Render: []render.RenderEval{
-					&render.RenderValue{Value: &assign.FromText{Value: T("world")}},
+					&render.RenderValue{Value: &call.FromText{Value: T("world")}},
 				}}); e != nil {
 			t.Fatal(e)
 		}

@@ -3,7 +3,7 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
@@ -44,7 +44,7 @@ func popTest(front bool, amt int, src ...string) []string {
 			&logic.ChooseBranch{
 				Condition: &math.CompareNum{
 					A: &list.ListLen{
-						List: &assign.FromTextList{Value: object.Variable("text")},
+						List: &call.FromTextList{Value: object.Variable("text")},
 					},
 					Compare: math.C_Comparison_EqualTo,
 					B:       literal.I(0),

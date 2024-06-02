@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -160,7 +160,7 @@ func (f *fieldInfo) rewriteTrait(name string, value rt.Assignment) (ret rt.Assig
 		switch v := value.(type) {
 		default:
 			err = errutil.Fmt("incompatible assignment to trait, got %T", value)
-		case *assign.FromBool:
+		case *call.FromBool:
 			switch b := v.Value.(type) {
 			default:
 				err = errutil.Fmt("traits only support literal bools, got %T", value)
@@ -168,7 +168,7 @@ func (f *fieldInfo) rewriteTrait(name string, value rt.Assignment) (ret rt.Assig
 				if !b.Value {
 					err = errutil.New("opposite trait assignment not supported")
 				} else {
-					ret = &assign.FromText{Value: &literal.TextValue{Value: name}}
+					ret = &call.FromText{Value: &literal.TextValue{Value: name}}
 				}
 			}
 		}

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -127,7 +127,7 @@ func (op *SubAssignment) Match(input *InputState) (okay bool) {
 }
 
 func (op *SubAssignment) GetExe() (ret []rt.Execute, okay bool) {
-	if a, ok := op.Assignment.(*assign.FromExe); ok {
+	if a, ok := op.Assignment.(*call.FromExe); ok {
 		ret, okay = a.Exe, true
 	}
 	return

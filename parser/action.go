@@ -1,13 +1,13 @@
 package parser
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 )
 
 // Action terminates a matcher sequence, resolving to the named action.
 type Action struct {
 	Name string
-	Args []assign.Arg
+	Args []call.Arg
 }
 
 // Scan matches only if the cursor has finished with all words.

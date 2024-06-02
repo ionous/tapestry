@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -979,7 +979,7 @@ func (p *Phrase) Test() (string, rt.Assignment, bool) {
 	var a rt.Assignment
 	if p.assign {
 		// we only need to test matching and generation; parsing sub docs is elsewhere
-		a = &assign.FromExe{}
+		a = &call.FromExe{}
 	}
 	return p.test, a, p.result != nil
 }

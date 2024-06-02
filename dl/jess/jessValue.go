@@ -3,7 +3,7 @@ package jess
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/express"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -60,7 +60,7 @@ func (op *QuotedText) String() string {
 }
 
 func (op *QuotedText) Assignment() rt.Assignment {
-	return &assign.FromText{Value: op.TextEval()}
+	return &call.FromText{Value: op.TextEval()}
 }
 
 func (op *QuotedText) TextEval() (ret rt.TextEval) {
@@ -114,13 +114,13 @@ func (op *MatchingNum) Match(q Query, input *InputState) (okay bool) {
 // but... note: text templates.
 // or to have individual methods for the necessary types
 func number(value float64, kind string) rt.Assignment {
-	return &assign.FromNum{
+	return &call.FromNum{
 		Value: &literal.NumValue{Value: value, Kind: kind},
 	}
 }
 
 func text(value, kind string) rt.Assignment {
-	return &assign.FromText{
+	return &call.FromText{
 		Value: &literal.TextValue{Value: value, Kind: kind},
 	}
 }

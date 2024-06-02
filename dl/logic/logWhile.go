@@ -3,7 +3,7 @@ package logic
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -19,7 +19,7 @@ var MaxLoopIterations MaxLoopError = 0xbad
 
 func (op *Repeat) Execute(run rt.Runtime) (err error) {
 	var pop bool
-	if ks, vs, e := assign.ExpandArgs(run, op.Initial); e != nil {
+	if ks, vs, e := call.ExpandArgs(run, op.Initial); e != nil {
 		err = cmd.Error(op, e)
 	} else {
 		if pop = len(vs) > 0; pop {
@@ -41,7 +41,7 @@ func (op *Repeat) loop(run rt.Runtime) (err error) {
 		if i >= int(MaxLoopIterations) {
 			err = MaxLoopIterations
 		} else {
-			if ks, vs, e := assign.ExpandArgs(run, op.Args); e != nil {
+			if ks, vs, e := call.ExpandArgs(run, op.Args); e != nil {
 				err = e
 			} else {
 				var pop bool

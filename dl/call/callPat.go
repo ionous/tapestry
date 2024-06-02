@@ -2,7 +2,6 @@ package call
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -45,7 +44,7 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (rt.Value, error) {
 // i no longer am sure why. doing stops game.Signals(s) ( ex SignalQuit ) from reaching the parser.
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret rt.Value, err error) {
 	name := inflect.Normalize(op.PatternName)
-	if k, v, e := assign.ExpandArgs(run, op.Arguments); e != nil {
+	if k, v, e := ExpandArgs(run, op.Arguments); e != nil {
 		err = cmd.ErrorCtx(op, name, e)
 	} else if v, e := run.Call(name, aff, k, v); e != nil {
 		err = cmd.ErrorCtx(op, name, e)

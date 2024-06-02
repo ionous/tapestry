@@ -4,7 +4,7 @@ import (
 	r "reflect"
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
@@ -184,19 +184,19 @@ func unpackPatternArg(arg r.Value) render.RenderEval {
 	case *render.RenderPattern:
 		return arg
 	case rt.BoolEval:
-		out = &assign.FromBool{Value: arg}
+		out = &call.FromBool{Value: arg}
 	case rt.NumEval:
-		out = &assign.FromNum{Value: arg}
+		out = &call.FromNum{Value: arg}
 	case rt.TextEval:
-		out = &assign.FromText{Value: arg}
+		out = &call.FromText{Value: arg}
 	case rt.RecordEval:
-		out = &assign.FromRecord{Value: arg}
+		out = &call.FromRecord{Value: arg}
 	case rt.NumListEval:
-		out = &assign.FromNumList{Value: arg}
+		out = &call.FromNumList{Value: arg}
 	case rt.TextListEval:
-		out = &assign.FromTextList{Value: arg}
+		out = &call.FromTextList{Value: arg}
 	case rt.RecordListEval:
-		out = &assign.FromRecordList{Value: arg}
+		out = &call.FromRecordList{Value: arg}
 	}
 	// fall through handling for assignments
 	return &render.RenderValue{Value: out}

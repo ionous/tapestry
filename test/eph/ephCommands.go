@@ -1,7 +1,7 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -230,7 +230,7 @@ func (op *Values) Assert(cat *weave.Catalog) error {
 		} else {
 			n := n.String()
 			if field, path := op.Field, op.Path; len(path) == 0 {
-				err = w.AddNounValue(n, field, assign.Literal(op.Value))
+				err = w.AddNounValue(n, field, call.Literal(op.Value))
 			} else {
 				path := append(path, field)
 				err = w.AddNounPath(n, path, op.Value)

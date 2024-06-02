@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -10,7 +10,7 @@ import (
 
 func (op *ChooseNum) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	var pop bool
-	if ks, vs, e := assign.ExpandArgs(run, op.Args); e != nil {
+	if ks, vs, e := call.ExpandArgs(run, op.Args); e != nil {
 		err = cmd.Error(op, e)
 	} else {
 		if pop = len(vs) > 0; pop {
@@ -41,7 +41,7 @@ func (op *ChooseNum) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 
 func (op *ChooseText) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	var pop bool
-	if ks, vs, e := assign.ExpandArgs(run, op.Args); e != nil {
+	if ks, vs, e := call.ExpandArgs(run, op.Args); e != nil {
 		err = cmd.Error(op, e)
 	} else {
 		if pop = len(vs) > 0; pop {

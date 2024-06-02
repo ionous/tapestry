@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -114,7 +114,7 @@ func (fs *fieldSet) writeDefaultTraits(pen *Pen) (err error) {
 						err = e
 						break
 					} else if e := pen.addDefaultValue(kind, field.Name, ProvisionalAssignment{
-						&assign.FromText{Value: &literal.TextValue{
+						&call.FromText{Value: &literal.TextValue{
 							Value: defaultTrait,
 						}}}); e != nil {
 						err = e

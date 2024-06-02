@@ -2,7 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
@@ -36,7 +36,7 @@ func (op *AspectField) GetFieldInfo(run rt.Runtime) (ret mdl.FieldInfo) {
 func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromBool{Value: i}
+		init = &call.FromBool{Value: i}
 	}
 	return defineField(run, op.FieldName, nil, affine.Bool, init)
 }
@@ -44,7 +44,7 @@ func (op *BoolField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 func (op *NumField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromNum{Value: i}
+		init = &call.FromNum{Value: i}
 	}
 	return defineField(run, op.FieldName, nil, affine.Num, init)
 }
@@ -52,7 +52,7 @@ func (op *NumField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 func (op *TextField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromText{Value: i}
+		init = &call.FromText{Value: i}
 	}
 	return defineField(run, op.FieldName, op.KindName, affine.Text, init)
 }
@@ -60,7 +60,7 @@ func (op *TextField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 func (op *RecordField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromRecord{Value: i}
+		init = &call.FromRecord{Value: i}
 	}
 	return defineField(run, op.FieldName, op.RecordName, affine.Record, init)
 }
@@ -68,7 +68,7 @@ func (op *RecordField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 func (op *NumListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromNumList{Value: i}
+		init = &call.FromNumList{Value: i}
 	}
 	return defineField(run, op.FieldName, nil, affine.NumList, init)
 }
@@ -76,7 +76,7 @@ func (op *NumListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 func (op *TextListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromTextList{Value: i}
+		init = &call.FromTextList{Value: i}
 	}
 	return defineField(run, op.FieldName, op.KindName, affine.TextList, init)
 }
@@ -84,7 +84,7 @@ func (op *TextListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 func (op *RecordListField) GetFieldInfo(run rt.Runtime) mdl.FieldInfo {
 	var init rt.Assignment
 	if i := op.Initially; i != nil {
-		init = &assign.FromRecordList{Value: i}
+		init = &call.FromRecordList{Value: i}
 	}
 	return defineField(run, op.FieldName, op.RecordName, affine.RecordList, init)
 }

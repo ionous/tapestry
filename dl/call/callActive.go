@@ -7,6 +7,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
+func (op *ActiveScene) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	return run.GetField(meta.Domain, op.Name)
+}
+
 // GetBool returns the first matching bool evaluation.
 func (op *ActivePattern) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if depth, e := op.GetNum(run); e != nil {

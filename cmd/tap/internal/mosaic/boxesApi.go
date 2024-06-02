@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"git.sr.ht/~ionous/tapestry/blockly/box"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/format"
@@ -52,7 +51,6 @@ func BoxesApi(*Config) web.Resource {
 }
 
 var blocks = []*typeinfo.TypeSet{
-	&assign.Z_Types,
 	&call.Z_Types,
 	&debug.Z_Types,
 	&frame.Z_Types,

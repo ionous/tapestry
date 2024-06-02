@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -94,7 +94,7 @@ Pick:
 }
 
 func (op *ChooseBranch) eval(run rt.Runtime, pushed *int) (matched bool, err error) {
-	if ks, vs, e := assign.ExpandArgs(run, op.Args); e != nil {
+	if ks, vs, e := call.ExpandArgs(run, op.Args); e != nil {
 		err = e
 	} else {
 		if len(vs) > 0 {

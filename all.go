@@ -1,7 +1,6 @@
 package tapestry
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/format"
@@ -21,7 +20,6 @@ import (
 
 // all important runtime signatures
 var AllSignatures = []map[uint64]typeinfo.Instance{
-	assign.Z_Types.Signatures,
 	call.Z_Types.Signatures,
 	debug.Z_Types.Signatures,
 	// frame.Z_Types.Signatures,

@@ -3,7 +3,6 @@ package debug
 import (
 	_ "embed"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
@@ -53,9 +52,9 @@ var FactorialCheck = []rt.Execute{
 		Value: &math.CompareNum{
 			A: F(6), Compare: math.C_Comparison_EqualTo, B: &call.CallPattern{
 				PatternName: "factorial",
-				Arguments: []assign.Arg{{
+				Arguments: []call.Arg{{
 					Name:  "num",
-					Value: &assign.FromNum{Value: F(3)},
+					Value: &call.FromNum{Value: F(3)},
 					// fix: for some reason, the comment isn't appearing in the output.
 					// Markup: UserComment("start the factorial with '3'"),
 				}}},
@@ -67,7 +66,7 @@ var FactorialCheck = []rt.Execute{
 var FactorialMulMinusOne = []rt.Execute{
 	&object.SetValue{
 		Target: object.Variable("num"),
-		Value: &assign.FromNum{Value: &math.MultiplyValue{
+		Value: &call.FromNum{Value: &math.MultiplyValue{
 			A: object.Variable("num"),
 			B: &math.SubtractValue{
 				A: object.Variable("num"),
@@ -93,6 +92,6 @@ var FactorialDefaultRule = []rt.Execute{
 	&object.SetValue{
 		Markup: UserComment("by default, return one"),
 		Target: object.Variable("num"),
-		Value:  &assign.FromNum{Value: I(1)},
+		Value:  &call.FromNum{Value: I(1)},
 	},
 }

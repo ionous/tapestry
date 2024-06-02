@@ -1,13 +1,12 @@
-#
+# Pattern calls and related helpers.
 Spec:requires:contains:
   - "call"
-  - - "idl/assign"
-    - "idl/prim"
+  - - "idl/prim"
     - "idl/rtti"
 
   - - # Determine whether a scene (aka domain) is active.
       Flow:slots:lede:terms:
-        - "active_scene"
+        - "active_scene"  # For lack of a better place, here we are.
         - "bool_eval"
         - "is"
         - - # The name of the scene to check.
@@ -27,6 +26,106 @@ Spec:requires:contains:
               - "pattern"
               - "pattern_name"
               - "text"
+
+    - # Pass a named value to a parameterized call.
+      Flow:terms:
+        - "arg"
+        - - # Name of the parameter. An empty string is treated as an unnamed parameter.
+            Term:name:type:
+              - "_"
+              - "name"
+              - "text"
+          - # Value to assign to the parameter.
+            Term:name:type:
+              - "from"
+              - "value"
+              - "assignment"
+
+    - # Provide one or more execute commands for an assignment.
+      # Used internally for jess rules.
+      internal: true
+      Flow:slots:terms:
+        - "from_exe"
+        - "assignment"
+        - - Term:name:type:repeats:
+              - "_"
+              - "exe"
+              - "execute"
+              - true
+
+    - # Provide a stored value for an assignment.
+      Flow:slots:terms:
+        - "from_address"
+        - "assignment"
+        - - # Address to read from.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "address"
+    - # Provide a boolean value for an assignment.
+      Flow:slots:terms:
+        - "from_bool"
+        - "assignment"
+        - - # Boolean value for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "bool_eval"
+    - # Provide a number for an assignment.
+      Flow:slots:terms:
+        - "from_num"
+        - "assignment"
+        - - # Number for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "num_eval"
+    - # Provide some text for an assignment.
+      Flow:slots:terms:
+        - "from_text"
+        - "assignment"
+        - - # Text for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "text_eval"
+    - # Provide a record for an assignment.
+      Flow:slots:terms:
+        - "from_record"
+        - "assignment"
+        - - # Record for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "record_eval"
+    - # Provide a list of numbers for an assignment.
+      Flow:slots:terms:
+        - "from_num_list"
+        - "assignment"
+        - - # Numbers for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "num_list_eval"
+    - # Provide a list of text values for an assignment.
+      Flow:slots:terms:
+        - "from_text_list"
+        - "assignment"
+        - - # Text values for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "text_list_eval"
+    - # Provide a list of records for an assignment.
+      Flow:slots:terms:
+        - "from_record_list"
+        - "assignment"
+        - - # Record values for the assignment.
+            Term:name:type:
+              - "_"
+              - "value"
+              - "record_list_eval"
+
 
     - # Run a pattern, returning its result (if any).
       # Tell files support calling patterns directly, so this is only needed when using the blockly editor.

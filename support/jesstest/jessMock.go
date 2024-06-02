@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -162,11 +162,11 @@ func (m *Mock) AddNounTrait(name, trait string) (_ error) {
 func (m *Mock) AddNounValue(name, prop string, v rt.Assignment) (err error) {
 	// prettify the output slightly
 	var el any = v
-	if t, ok := v.(*assign.FromText); ok {
+	if t, ok := v.(*call.FromText); ok {
 		if _, ok := t.Value.(*literal.TextValue); ok {
 			el = t.Value
 		}
-	} else if n, ok := v.(*assign.FromNum); ok {
+	} else if n, ok := v.(*call.FromNum); ok {
 		if _, ok := n.Value.(literal.LiteralValue); ok {
 			el = n.Value
 		}

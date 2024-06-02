@@ -2,7 +2,6 @@ package test
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
@@ -13,7 +12,7 @@ import (
 
 var runCollateGroups = list.ListReduce{
 	Target:      object.Variable("collation"),
-	List:        &assign.FromRecordList{Value: object.Variable("settings")},
+	List:        &call.FromRecordList{Value: object.Variable("settings")},
 	PatternName: ("collate groups")}
 
 // pattern:
@@ -45,24 +44,24 @@ var collateGroups = testpat.Pattern{
 			// walk collation.groups, set .idx to whichever best matches.
 			// fix: could this be list find? ( could list find take an optional pattern )
 			&list.ListEach{
-				List: &assign.FromRecordList{Value: object.Variable("collation", "groups")},
+				List: &call.FromRecordList{Value: object.Variable("collation", "groups")},
 				As:   ("el"),
 				Exe: []rt.Execute{
 					&logic.ChooseBranch{
 						Condition: &call.CallPattern{
 							PatternName: ("match groups"),
-							Arguments: assign.MakeArgs(
-								&assign.FromRecord{Value: object.Variable("settings")},
+							Arguments: call.MakeArgs(
+								&call.FromRecord{Value: object.Variable("settings")},
 								// "el" is specified by us during ListEach
 								// fix: use a special $element name, and require "Up" scope to reach out.
 								// ( or allow locals and force them to assign )
-								&assign.FromRecord{Value: object.Variable("el", "settings")},
+								&call.FromRecord{Value: object.Variable("el", "settings")},
 							),
 						},
 						Exe: []rt.Execute{
 							&object.SetValue{
 								Target: object.Variable("found"),
-								Value:  &assign.FromBool{Value: B(true)},
+								Value:  &call.FromBool{Value: B(true)},
 							},
 							// found a matching group? add the object to it group.
 							&list.ListPush{
@@ -70,7 +69,7 @@ var collateGroups = testpat.Pattern{
 								Target: object.Variable(
 									"collation", "groups",
 									&object.AtIndex{Index: object.Variable("index")}, "objects"),
-								Value: &assign.FromText{Value: object.Variable("settings", "name")}},
+								Value: &call.FromText{Value: object.Variable("settings", "name")}},
 							// todo: implement a "break"
 						},
 					},
@@ -84,13 +83,13 @@ var collateGroups = testpat.Pattern{
 				Exe: []rt.Execute{
 					&object.SetValue{
 						Target: object.Variable("group", "settings"),
-						Value:  &assign.FromRecord{Value: object.Variable("settings")}},
+						Value:  &call.FromRecord{Value: object.Variable("settings")}},
 					&list.ListPush{
 						Target: object.Variable("group", "objects"),
-						Value:  &assign.FromText{Value: object.Variable("settings", "name")}},
+						Value:  &call.FromText{Value: object.Variable("settings", "name")}},
 					&list.ListPush{
 						Target: object.Variable("collation", "groups"),
-						Value:  &assign.FromRecord{Value: object.Variable("group")},
+						Value:  &call.FromRecord{Value: object.Variable("group")},
 					},
 				}, // end true
 			},

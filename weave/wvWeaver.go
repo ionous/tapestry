@@ -3,7 +3,7 @@ package weave
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -46,7 +46,7 @@ func (ja localWeaver) AddNounValue(noun, field string, value rt.Assignment) (err
 }
 
 func truly() rt.Assignment {
-	return &assign.FromBool{
+	return &call.FromBool{
 		Value: &literal.BoolValue{Value: true},
 	}
 }

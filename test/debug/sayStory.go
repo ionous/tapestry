@@ -2,7 +2,6 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/format"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
@@ -47,9 +46,9 @@ func (op *MatchNumber) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 func DetermineSay(i int) *call.CallPattern {
 	return &call.CallPattern{
 		PatternName: "say me",
-		Arguments: []assign.Arg{{
+		Arguments: []call.Arg{{
 			Name:  "num",
-			Value: &assign.FromNum{Value: I(i)},
+			Value: &call.FromNum{Value: I(i)},
 		}},
 	}
 }

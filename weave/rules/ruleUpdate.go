@@ -1,7 +1,7 @@
 package rules
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -16,7 +16,7 @@ func (b updateTracker) HasUpdate() bool {
 	return b > 0
 }
 
-func (b *updateTracker) CheckArgs(args []assign.Arg) (okay bool) {
+func (b *updateTracker) CheckArgs(args []call.Arg) (okay bool) {
 	for _, arg := range args {
 		slot := rtti.Assignment_Slot{Value: arg.Value}
 		if searchCounters(&slot) {

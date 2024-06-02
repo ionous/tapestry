@@ -8,12 +8,12 @@ package story
 // 	return refArgs(op.PatternName, kindsOf.Pattern, op.Arguments)
 // }
 
-// func refArgs(k string, parentKind kindsOf.Kinds, args []assign.Arg) (ret *eph.Refs) {
+// func refArgs(k string, parentKind kindsOf.Kinds, args []call.Arg) (ret *eph.Refs) {
 // 	var refs []eph.Params
 // 	for _, arg := range args {
 // 		refs = append(refs, eph.Params{
 // 			Name:     arg.Name,
-// 			Affinity: affineToAffinity(assign.GetAffinity(arg.Value)),
+// 			Affinity: affineToAffinity(call.GetAffinity(arg.Value)),
 // 		})
 // 	}
 // 	ret = Refs(&eph.Kinds{

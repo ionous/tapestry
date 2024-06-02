@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang/encode"
@@ -31,9 +30,9 @@ func testString(n, a string) (err error) {
 	var enc encode.Encoder
 	out := &call.CallPattern{
 		PatternName: n,
-		Arguments: []assign.Arg{{
+		Arguments: []call.Arg{{
 			Name: a,
-			Value: &assign.FromNum{
+			Value: &call.FromNum{
 				Value: literal.I(5), // the encode gets unhappy without a real value here.
 			},
 		}}}

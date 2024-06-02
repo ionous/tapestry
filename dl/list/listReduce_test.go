@@ -3,7 +3,7 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/object"
@@ -72,7 +72,7 @@ func TestReduce(t *testing.T) {
 
 var reduce = list.ListReduce{
 	Target:      object.Variable("results"),
-	List:        &assign.FromRecordList{Value: object.Variable("fruits")},
+	List:        &call.FromRecordList{Value: object.Variable("fruits")},
 	PatternName: ("reduce"),
 }
 
@@ -85,7 +85,7 @@ var reduceRecords = testpat.Pattern{
 		Exe: []rt.Execute{
 			&object.SetValue{
 				Target: object.Variable("out"),
-				Value: &assign.FromText{Value: &text.Join{
+				Value: &call.FromText{Value: &text.Join{
 					Sep: literal.T(", "),
 					Parts: []rt.TextEval{
 						object.Variable("out"),

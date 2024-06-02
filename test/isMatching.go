@@ -2,7 +2,7 @@ package test
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/dl/math"
 	"git.sr.ht/~ionous/tapestry/dl/object"
@@ -49,7 +49,7 @@ var matchGroups = testpat.Pattern{
 func matches(b bool) rt.Execute {
 	return &object.SetValue{
 		Target: object.Variable("matches"),
-		Value:  &assign.FromBool{Value: B(b)},
+		Value:  &call.FromBool{Value: B(b)},
 	}
 }
 
