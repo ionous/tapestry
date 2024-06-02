@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/call"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/format"
-	"git.sr.ht/~ionous/tapestry/dl/frame"
 	"git.sr.ht/~ionous/tapestry/dl/game"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/jess"
@@ -41,7 +40,7 @@ func TestToolbox(t *testing.T) {
 var blocks = []*typeinfo.TypeSet{
 	&call.Z_Types,
 	&debug.Z_Types,
-	&frame.Z_Types,
+	// &frame.Z_Types,
 	&game.Z_Types,
 	&grammar.Z_Types,
 	&jess.Z_Types,
