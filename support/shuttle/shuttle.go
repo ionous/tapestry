@@ -90,12 +90,12 @@ func (c *Shuttle) EnsurePlay() (ret *play.Playtime, err error) {
 }
 
 type Collector struct {
-	events []frame.Event
+	events []frame.Notification
 	buf    strings.Builder
 }
 
 // returns and clears all events
-func (out *Collector) GetEvents() (ret []frame.Event) {
+func (out *Collector) GetEvents() (ret []frame.Notification) {
 	ret, out.events = out.flush(), nil
 	return
 }
@@ -116,10 +116,10 @@ func (out *Collector) onChangeRel(a, b, rel string) {
 	out.flush()
 	out.addEvent(&frame.PairChanged{A: a, B: b, Rel: rel})
 }
-func (out *Collector) addEvent(evt frame.Event) {
+func (out *Collector) addEvent(evt frame.Notification) {
 	out.events = append(out.events, evt)
 }
-func (out *Collector) flush() []frame.Event {
+func (out *Collector) flush() []frame.Notification {
 	if out.buf.Len() > 0 {
 		str := out.buf.String()
 		out.buf.Reset()

@@ -85,7 +85,7 @@ func (op *NounBuilder_Slots) Repeats() bool {
 // Also note:
 //   - The lack of a recognized article makes something proper-named.
 //   - See 'counted_kind' for names with leading numbers: (ex. five or 27).
-//   - Using "some"  (ex. "some coins") will set nouns as "plural named"
+//   - Using "some"  (ex. "some coins") will set nouns as "plural named".
 type Article struct {
 	Text   string
 	Flags  ArticleFlags
@@ -1209,8 +1209,8 @@ func (op *NamesAreLikeVerbs_Slice) Repeats() bool {
 // A phrase, starting with a verb, that ends a sentence.
 // ex.
 //
-//	... in the kitchen."
-//	... carries the football and sousaphone."
+//	... in the kitchen.
+//	... carries the football and sousaphone.
 type VerbPhrase struct {
 	Verb       Verb
 	PlainNames Names
@@ -2113,8 +2113,8 @@ func (op *MapLocations_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// matches additional directions
-// only used by map_locations
+// Matches additional directions.
+// only used by map_locations.
 type AdditionalDirections struct {
 	CommaAnd             CommaAnd
 	DirectionOfLinking   DirectionOfLinking
@@ -2400,7 +2400,7 @@ func init() {
 			Private: true,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"One of a predefined set of determiners: the, a/n, some, our.", "This only matches if the first letter is lowercase, or uppercase at the start of a sentence;", "otherwise, the article gets treated as part of the name.", "", "Also note:", "  - The lack of a recognized article makes something proper-named.", "  - See 'counted_kind' for names with leading numbers: (ex. five or 27).", "  - Using \"some\"  (ex. \"some coins\") will set nouns as \"plural named\""},
+			"comment": []interface{}{"One of a predefined set of determiners: the, a/n, some, our.", "This only matches if the first letter is lowercase, or uppercase at the start of a sentence;", "otherwise, the article gets treated as part of the name.", "", "Also note:", "  - The lack of a recognized article makes something proper-named.", "  - See 'counted_kind' for names with leading numbers: (ex. five or 27).", "  - Using \"some\"  (ex. \"some coins\") will set nouns as \"plural named\"."},
 		},
 	}
 	Zt_CommaAnd = typeinfo.Flow{
@@ -3063,7 +3063,7 @@ func init() {
 			Type:  &Zt_Names,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"A phrase, starting with a verb, that ends a sentence.", "ex.", "  ... in the kitchen.\"", "  ... carries the football and sousaphone.\""},
+			"comment": []interface{}{"A phrase, starting with a verb, that ends a sentence.", "ex.", "  ... in the kitchen.", "  ... carries the football and sousaphone."},
 		},
 	}
 	Zt_Adjectives = typeinfo.Flow{
@@ -3605,7 +3605,7 @@ func init() {
 			Type:     &Zt_AdditionalDirections,
 		}},
 		Markup: map[string]any{
-			"comment": []interface{}{"matches additional directions", "only used by map_locations"},
+			"comment": []interface{}{"Matches additional directions.", "only used by map_locations."},
 		},
 	}
 	Zt_MapDirections = typeinfo.Flow{

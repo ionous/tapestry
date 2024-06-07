@@ -3,67 +3,92 @@
 Spec:requires:contains:
   - "frame"
   - "idl/prim"
-  - - Flow:terms:
+  - - # The results of a a player initiated turn, or other client to server query.
+      Flow:terms:
         - "frame"
-        - - Term:type:
+        - - # The result of a query assignment sent to the server.
+            Term:type:
               - "result"
               - "text"
-          - Term:type:repeats:
+          - # Changes as a result of a player's turn or a client query.
+            Term:type:repeats:
               - "events"
-              - "event"
+              - "notification"
               - true
-          - Term:type:optional:
+          - # Any critical server errors.
+            # Returned to the client as a string
+            # so that it can be displayed to the player.
+            Term:type:optional:
               - "error"
               - "text"
               - true
-    - Slot: "event"
+    - # Marker interface used by all frame events.
+      Slot: "notification"
 
-    - Flow:slots:terms:
+    - # Printed text that should be visible the player.
+      Flow:slots:terms:
         - "frame_output"
-        - "event"
-        - - Term:name:
+        - "notification"
+        - - # The text to show to the player.
+            Term:name:
               - "_"
               - "text"
-    - Flow:slots:terms:
+
+    - # One or more scenes ( aka. domain ) have started.
+      Flow:slots:terms:
         - "scene_started"
-        - "event"
-        - - Term:name:type:repeats:
+        - "notification"
+        - - # The names of the scenes.
+            Term:name:type:repeats:
               - "_"
               - "domains"
               - "text"
               - true
-    - Flow:slots:terms:
+    - # One or more scenes ( aka. domain ) have finished.
+      Flow:slots:terms:
         - "scene_ended"
-        - "event"
-        - - Term:name:type:repeats:
+        - "notification"
+        - - # The names of the scenes.
+            Term:name:type:repeats:
               - "_"
               - "domains"
               - "text"
               - true
-    - Flow:slots:terms:
+
+    - # Some object in the game has changed from one state to another.
+      Flow:slots:terms:
         - "state_changed"
-        - "event"
-        - - Term:type:
+        - "notification"
+        - - # The object who's state has changed.
+            Term:type:
               - "noun"
               - "text"
-          - Term:type:
+          - # The name of the set of states involved.
+            Term:type:
               - "aspect"
               - "text"
-          - Term:type:
+          - # The name of the old state.
+            Term:type:
               - "prev"
               - "text"
-          - Term:type:
+          - # The name of the new state.
+            Term:type:
               - "trait"
               - "text"
-    - Flow:slots:terms:
+
+    - # The relationship between two objects has changed. For instance, an object's whereabouts as indicated by a parent-child type relation.
+      Flow:slots:terms:
         - "pair_changed"
-        - "event"
-        - - Term:type:
+        - "notification"
+        - - # The id of the primary object.
+            Term:type:
               - "a"
               - "text"
-          - Term:type:
+          - # The id of the secondary object.
+            Term:type:
               - "b"
               - "text"
-          - Term:type:
+          - # The name of the relation in question.
+            Term:type:
               - "rel"
               - "text"

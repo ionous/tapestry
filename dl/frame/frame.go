@@ -1,3 +1,3 @@
 package frame
 
-type Event interface{}
+type Notification interface{}

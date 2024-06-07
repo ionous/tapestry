@@ -11,35 +11,39 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// event, a type of slot.
-var Zt_Event = typeinfo.Slot{
-	Name: "event",
+// notification, a type of slot.
+var Zt_Notification = typeinfo.Slot{
+	Name: "notification",
+	Markup: map[string]any{
+		"comment": "Marker interface used by all frame events.",
+	},
 }
 
 // Holds a single slot.
-type Event_Slot struct{ Value Event }
+type Notification_Slot struct{ Value Notification }
 
 // Implements [typeinfo.Instance] for a single slot.
-func (*Event_Slot) TypeInfo() typeinfo.T {
-	return &Zt_Event
+func (*Notification_Slot) TypeInfo() typeinfo.T {
+	return &Zt_Notification
 }
 
 // Holds a slice of slots.
-type Event_Slots []Event
+type Notification_Slots []Notification
 
 // Implements [typeinfo.Instance] for a slice of slots.
-func (*Event_Slots) TypeInfo() typeinfo.T {
-	return &Zt_Event
+func (*Notification_Slots) TypeInfo() typeinfo.T {
+	return &Zt_Notification
 }
 
 // Implements [typeinfo.Repeats] for a slice of slots.
-func (op *Event_Slots) Repeats() bool {
+func (op *Notification_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
+// The results of a a player initiated turn, or other client to server query.
 type Frame struct {
 	Result string
-	Events []Event
+	Events []Notification
 	Error  string
 	Markup map[string]any
 }
@@ -73,6 +77,7 @@ func (op *Frame_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Printed text that should be visible the player.
 type FrameOutput struct {
 	Text   string
 	Markup map[string]any
@@ -95,7 +100,7 @@ func (op *FrameOutput) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Event = (*FrameOutput)(nil)
+var _ Notification = (*FrameOutput)(nil)
 
 // Holds a slice of type FrameOutput.
 type FrameOutput_Slice []FrameOutput
@@ -110,6 +115,7 @@ func (op *FrameOutput_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// One or more scenes ( aka. domain ) have started.
 type SceneStarted struct {
 	Domains []string
 	Markup  map[string]any
@@ -132,7 +138,7 @@ func (op *SceneStarted) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Event = (*SceneStarted)(nil)
+var _ Notification = (*SceneStarted)(nil)
 
 // Holds a slice of type SceneStarted.
 type SceneStarted_Slice []SceneStarted
@@ -147,6 +153,7 @@ func (op *SceneStarted_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// One or more scenes ( aka. domain ) have finished.
 type SceneEnded struct {
 	Domains []string
 	Markup  map[string]any
@@ -169,7 +176,7 @@ func (op *SceneEnded) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Event = (*SceneEnded)(nil)
+var _ Notification = (*SceneEnded)(nil)
 
 // Holds a slice of type SceneEnded.
 type SceneEnded_Slice []SceneEnded
@@ -184,6 +191,7 @@ func (op *SceneEnded_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Some object in the game has changed from one state to another.
 type StateChanged struct {
 	Noun   string
 	Aspect string
@@ -209,7 +217,7 @@ func (op *StateChanged) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Event = (*StateChanged)(nil)
+var _ Notification = (*StateChanged)(nil)
 
 // Holds a slice of type StateChanged.
 type StateChanged_Slice []StateChanged
@@ -224,6 +232,7 @@ func (op *StateChanged_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// The relationship between two objects has changed. For instance, an object's whereabouts as indicated by a parent-child type relation.
 type PairChanged struct {
 	A      string
 	B      string
@@ -248,7 +257,7 @@ func (op *PairChanged) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ Event = (*PairChanged)(nil)
+var _ Notification = (*PairChanged)(nil)
 
 // Holds a slice of type PairChanged.
 type PairChanged_Slice []PairChanged
@@ -272,28 +281,46 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "result",
 			Label: "result",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The result of a query assignment sent to the server.",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:    "events",
 			Label:   "events",
 			Repeats: true,
-			Type:    &Zt_Event,
+			Markup: map[string]any{
+				"comment": "Changes as a result of a player's turn or a client query.",
+			},
+			Type: &Zt_Notification,
 		}, {
 			Name:     "error",
 			Label:    "error",
 			Optional: true,
-			Type:     &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": []interface{}{"Any critical server errors.", "Returned to the client as a string", "so that it can be displayed to the player."},
+			},
+			Type: &prim.Zt_Text,
 		}},
+		Markup: map[string]any{
+			"comment": "The results of a a player initiated turn, or other client to server query.",
+		},
 	}
 	Zt_FrameOutput = typeinfo.Flow{
 		Name: "frame_output",
 		Lede: "frame_output",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to show to the player.",
+			},
 			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_Event,
+			&Zt_Notification,
+		},
+		Markup: map[string]any{
+			"comment": "Printed text that should be visible the player.",
 		},
 	}
 	Zt_SceneStarted = typeinfo.Flow{
@@ -302,10 +329,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "domains",
 			Repeats: true,
-			Type:    &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The names of the scenes.",
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_Event,
+			&Zt_Notification,
+		},
+		Markup: map[string]any{
+			"comment": "One or more scenes ( aka. domain ) have started.",
 		},
 	}
 	Zt_SceneEnded = typeinfo.Flow{
@@ -314,10 +347,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:    "domains",
 			Repeats: true,
-			Type:    &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The names of the scenes.",
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_Event,
+			&Zt_Notification,
+		},
+		Markup: map[string]any{
+			"comment": "One or more scenes ( aka. domain ) have finished.",
 		},
 	}
 	Zt_StateChanged = typeinfo.Flow{
@@ -326,22 +365,37 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "noun",
 			Label: "noun",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The object who's state has changed.",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:  "aspect",
 			Label: "aspect",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The name of the set of states involved.",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:  "prev",
 			Label: "prev",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The name of the old state.",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:  "trait",
 			Label: "trait",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The name of the new state.",
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_Event,
+			&Zt_Notification,
+		},
+		Markup: map[string]any{
+			"comment": "Some object in the game has changed from one state to another.",
 		},
 	}
 	Zt_PairChanged = typeinfo.Flow{
@@ -350,18 +404,30 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "a",
 			Label: "a",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The id of the primary object.",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:  "b",
 			Label: "b",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The id of the secondary object.",
+			},
+			Type: &prim.Zt_Text,
 		}, {
 			Name:  "rel",
 			Label: "rel",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The name of the relation in question.",
+			},
+			Type: &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
-			&Zt_Event,
+			&Zt_Notification,
+		},
+		Markup: map[string]any{
+			"comment": "The relationship between two objects has changed. For instance, an object's whereabouts as indicated by a parent-child type relation.",
 		},
 	}
 }
@@ -382,7 +448,7 @@ var Z_Types = typeinfo.TypeSet{
 // A list of all slots in this this package.
 // ( ex. for generating blockly shapes )
 var z_slot_list = []*typeinfo.Slot{
-	&Zt_Event,
+	&Zt_Notification,
 }
 
 // A list of all flows in this this package.
@@ -401,9 +467,9 @@ var z_flow_list = []*typeinfo.Flow{
 var z_signatures = map[uint64]typeinfo.Instance{
 	14657663848717440116: (*Frame)(nil),        /* Frame result:events: */
 	2438049115146588168:  (*Frame)(nil),        /* Frame result:events:error: */
-	4385780296792938688:  (*FrameOutput)(nil),  /* event=FrameOutput: */
-	17021232753503984522: (*PairChanged)(nil),  /* event=PairChanged a:b:rel: */
-	14005264853352099464: (*SceneEnded)(nil),   /* event=SceneEnded: */
-	12902248384806780167: (*SceneStarted)(nil), /* event=SceneStarted: */
-	7027046405509259850:  (*StateChanged)(nil), /* event=StateChanged noun:aspect:prev:trait: */
+	1471826827262877163:  (*FrameOutput)(nil),  /* notification=FrameOutput: */
+	7717838589161657001:  (*PairChanged)(nil),  /* notification=PairChanged a:b:rel: */
+	5707328743025875669:  (*SceneEnded)(nil),   /* notification=SceneEnded: */
+	6789405419350772834:  (*SceneStarted)(nil), /* notification=SceneStarted: */
+	4672682947926144893:  (*StateChanged)(nil), /* notification=StateChanged noun:aspect:prev:trait: */
 }
