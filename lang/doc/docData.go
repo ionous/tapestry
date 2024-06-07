@@ -144,6 +144,9 @@ func BuildSpec(t *typeinfo.Flow) (ret string) {
 		str.WriteString(":")
 	} else {
 		for i, t := range t.Terms {
+			if t.Private {
+				continue
+			}
 			if t.Optional {
 				str.WriteRune('[')
 			}
