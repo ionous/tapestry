@@ -164,7 +164,7 @@ func BuildSpec(t *typeinfo.Flow) (ret string) {
 	return str.String()
 }
 
-// idl name is a .tells file without the extension.
+// idl name is an .idl file without the extension.
 func linkToType(idlName, typeName string) string {
 	out := path.Join(baseUrl, typesFolder, idlName)
 	if len(typeName) > 0 {

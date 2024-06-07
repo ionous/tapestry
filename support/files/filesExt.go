@@ -11,7 +11,7 @@ const (
 	BlockExt   Extension = iota + 1 // .block
 	CompactExt                      // .if
 	SpecExt                         // .ifspecs
-	TellSpec                        // .tells
+	TellSpec                        // .idl
 	TellStory                       // .tell
 )
 

@@ -86,7 +86,7 @@ var CmdGenerate = &base.Command{
 	UsageLine: "tap gen [-in ../../idl] [-out ../../dl] [-db -dbFile]",
 	Short:     "extend tapestry with new golang code",
 	Long: `
-Generates .go source code for reading and writing story files from .tells files.`,
+Generates .go source code for reading and writing story files from .idl files.`,
 }
 
 // collection of local flags

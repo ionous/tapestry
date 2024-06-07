@@ -15,9 +15,9 @@ func _() {
 	_ = x[TellStory-5]
 }
 
-const _Extension_name = ".block.if.ifspecs.tells.tell"
+const _Extension_name = ".block.if.ifspecs.idl.tell"
 
-var _Extension_index = [...]uint8{0, 6, 9, 17, 23, 28}
+var _Extension_index = [...]uint8{0, 6, 9, 17, 21, 26}
 
 func (i Extension) String() string {
 	i -= 1

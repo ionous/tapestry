@@ -44,7 +44,7 @@ func linkToSlot(slotName, typeName string) string {
 	return out
 }
 
-// idl name is a .tells file without the extension.
+// idl name is an .idl file without the extension.
 func linkToType(idlName, typeName string) string {
 	out := apiDocs.site + path.Join(apiDocs.types, idlName)
 	if len(typeName) > 0 {
