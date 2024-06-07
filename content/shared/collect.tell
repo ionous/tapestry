@@ -74,7 +74,7 @@
     - "closed containers are inaccessible"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "containers"
               - Object:dot:
@@ -101,7 +101,7 @@
     - "carried objects are inaccessible"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@parent"
                   - "actors"
               - Not:

@@ -62,7 +62,7 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - KindOf:isExactly:
+                      - Is object:exactly:
                           - "@obj"
                           - "props"
                       - - Set:value:
@@ -85,7 +85,7 @@
                 - "print several"
                 - - If:do:
                       - Is all:
-                          - KindOf:is:
+                          - Is object:kind:
                               - "@obj"
                               - "triangles"
                           - Is:matching:num:
@@ -115,7 +115,7 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:
@@ -153,7 +153,7 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:
@@ -182,7 +182,7 @@
               Define rule:do:
                 - "print grouped object"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Say: "{.obj}"
@@ -210,7 +210,7 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Set:value:
@@ -222,7 +222,7 @@
               Define rule:do:
                 - "print grouped object"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Say: "{.obj}"
@@ -241,7 +241,7 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Set:value:
@@ -267,7 +267,7 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - KindOf:is:
+                      - Is object:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:

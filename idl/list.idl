@@ -116,11 +116,11 @@ Spec:requires:contains:
           - "num_eval"
         - "find"
         - - Term:name:type:
-              - "_"
+              - "in"
               - "value"
               - "assignment"
           - Term:name:type:
-              - "in_list"
+              - "list"
               - "list"
               - "assignment"
     - # Transform the values from a list.

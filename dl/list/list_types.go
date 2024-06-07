@@ -977,11 +977,12 @@ func init() {
 		Name: "list_find",
 		Lede: "find",
 		Terms: []typeinfo.Term{{
-			Name: "value",
-			Type: &rtti.Zt_Assignment,
+			Name:  "value",
+			Label: "in",
+			Type:  &rtti.Zt_Assignment,
 		}, {
 			Name:  "list",
-			Label: "in_list",
+			Label: "list",
 			Type:  &rtti.Zt_Assignment,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -1328,8 +1329,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7006351070379896671:  (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do: */
 	12034742036302137452: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:do:else: */
 	1044384912965145788:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:do: */
-	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
-	601643447576840751:   (*ListFind)(nil),        /* num_eval=Find:inList: */
+	17139374789225258763: (*ListFind)(nil),        /* bool_eval=Find in:list: */
+	13381059865853376477: (*ListFind)(nil),        /* num_eval=Find in:list: */
 	16505935681170918234: (*ListLen)(nil),         /* num_eval=Len: */
 	11141869806069158915: (*MakeNumList)(nil),     /* num_list_eval=List ofNumbers: */
 	10609280349940760977: (*MakeRecordList)(nil),  /* record_list_eval=List ofRecords:ofType: */

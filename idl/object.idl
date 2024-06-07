@@ -154,13 +154,12 @@ Spec:requires:contains:
       Flow:slots:lede:terms:
         - "is_exact_kind_of"
         - "bool_eval"
-        - "kind_of"
-        - - Term:name:type:
-              - "_"
+        - "is"
+        - - Term:type:
               - "object"
               - "text_eval"
           - Term:name:type:
-              - "is_exactly"
+              - "exactly"
               - "kind"
               - "text"
 
@@ -168,13 +167,12 @@ Spec:requires:contains:
       Flow:slots:lede:terms:
         - "is_kind_of"
         - "bool_eval"
-        - "kind_of"
-        - - Term:name:type:
-              - "_"
+        - "is"
+        - - Term:type:
               - "object"
               - "text_eval"
           - Term:name:type:
-              - "is"
+              - "kind"
               - "kind"
               - "text"
           - # try to check the type of nothing objects?

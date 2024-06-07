@@ -2275,16 +2275,17 @@ func init() {
 	}
 	Zt_CountOf = typeinfo.Flow{
 		Name: "count_of",
-		Lede: "count_of",
+		Lede: "is",
 		Terms: []typeinfo.Term{{
-			Name: "trigger",
+			Name:  "trigger",
+			Label: "count",
 			Markup: map[string]any{
 				"comment": "A unique name for this counter.",
 			},
 			Type: &call.Zt_Trigger,
 		}, {
 			Name:  "num",
-			Label: "num",
+			Label: "of",
 			Markup: map[string]any{
 				"comment": "The value at which this counter will start to return true.",
 			},
@@ -2606,7 +2607,6 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	13010292396640781698: (*AspectField)(nil),           /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),             /* field_definition=Bool: */
 	18077675806901364237: (*BoolField)(nil),             /* field_definition=Bool:initially: */
-	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
 	9796202271034753943:  (*DeclareStatement)(nil),      /* story_statement=Declare: */
 	11228697653156044284: (*DeclareStatement)(nil),      /* story_statement=Declare:assign: */
 	14790755516297707674: (*DefineAction)(nil),          /* story_statement=Define action:requires: */
@@ -2640,6 +2640,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12975771225654832812: (*DefineAlias)(nil),           /* story_statement=Interpret alias:as: */
 	8001652437005351387:  (*DefineNamedGrammar)(nil),    /* story_statement=Interpret name:with: */
 	6001249499689096432:  (*DefineLeadingGrammar)(nil),  /* story_statement=Interpret:with: */
+	12822136469581551871: (*CountOf)(nil),               /* bool_eval=Is count:of: */
 	17718266473581357115: (*StoryNote)(nil),             /* story_statement=Note: */
 	14427731589588473385: (*NothingField)(nil),          /* field_definition=Nothing */
 	6779819952901809746:  (*NumField)(nil),              /* field_definition=Num: */

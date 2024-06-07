@@ -17,7 +17,7 @@
           - "parent"
           - "object"
     - - If:do:else:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "agents"
           - - Set:value:
@@ -84,7 +84,7 @@
           - Not:
               Is empty: "@search"
           - - If:do:
-                - KindOf:is:
+                - Is object:kind:
                     - "@search"
                     - "rooms"
                 - - Set:value:
@@ -246,13 +246,13 @@
           - "object"
     - - If:assuming:do:
           - Is any:
-              - KindOf:is:
+              - Is object:kind:
                   - "@parent"
                   - "containers"
-              - KindOf:is:
+              - Is object:kind:
                   - "@parent"
                   - "supporters"
-              - KindOf:is:
+              - Is object:kind:
                   - "@parent"
                   - "rooms"
           - - Arg:from:
@@ -273,7 +273,7 @@
           - "supporter"
           - "supporter"
     - - If:assuming:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@parent"
               - "supporters"
           - - Arg:from:
@@ -299,7 +299,7 @@
           - ParentOf obj:
               FromText: "@obj"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@parent"
               - "containers"
           - - Set:value:
@@ -315,7 +315,7 @@
           - "owner"
           - "actor"
     - - If:assuming:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@parent"
               - "actors"
           - - Arg:from:
@@ -346,7 +346,7 @@
                 FromText: "@obj"
       - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@parent"
                   - "actors"
               - Object:dot:
@@ -372,7 +372,7 @@
               FromText: "@obj"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@parent"
                   - "actors"
               - Object:dot:

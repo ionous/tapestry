@@ -572,18 +572,19 @@ Spec:requires:contains:
 
     - # A guard which returns true based on a counter.
       # Counters start at zero and are incremented every time the guard is checked.
-      Flow:slots:terms:
+      Flow:slots:lede:terms:
         - "count_of" # "trigger {_$trigger} {$num}"
         - "bool_eval"
+        - "is"
         - - # A unique name for this counter.
             Term:name:
-              - "_"
+              - "count"
               - "trigger"
           - # The value at which this counter will start to return true.
-            Term:type:
+            Term:name:type:
+              - "of"
               - "num"
               - "num_eval"
-
 
     - # Describe the members of kinds, records, patterns, and so on.
       Slot: "field_definition"

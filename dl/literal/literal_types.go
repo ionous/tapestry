@@ -404,8 +404,7 @@ func init() {
 		Name: "bool_value",
 		Lede: "bool",
 		Terms: []typeinfo.Term{{
-			Name:  "value",
-			Label: "value",
+			Name: "value",
 			Markup: map[string]any{
 				"comment": "The true or false value.",
 			},
@@ -423,8 +422,7 @@ func init() {
 		Name: "num_value",
 		Lede: "num",
 		Terms: []typeinfo.Term{{
-			Name:  "value",
-			Label: "value",
+			Name: "value",
 			Markup: map[string]any{
 				"comment": "A literal number.",
 			},
@@ -462,8 +460,7 @@ func init() {
 		Name: "text_value",
 		Lede: "text",
 		Terms: []typeinfo.Term{{
-			Name:  "value",
-			Label: "value",
+			Name: "value",
 			Markup: map[string]any{
 				"comment": "Some literal text.",
 			},
@@ -653,13 +650,13 @@ var z_flow_list = []*typeinfo.Flow{
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
-	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
-	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
+	1949078217737575331:  (*BoolValue)(nil),   /* bool_eval=Bool: */
+	10481381284080410489: (*BoolValue)(nil),   /* literal_value=Bool: */
 	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
 	17669305546968596769: (*NumList)(nil),     /* literal_value=Num list: */
 	4715091378117636320:  (*NumList)(nil),     /* num_list_eval=Num list: */
-	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
-	16565175635984030252: (*NumValue)(nil),    /* num_eval=Num value: */
+	2220603612539786023:  (*NumValue)(nil),    /* literal_value=Num: */
+	1780244674541709571:  (*NumValue)(nil),    /* num_eval=Num: */
 	5942123174065535899:  (*RecordValue)(nil), /* literal_value=Record:fields: */
 	5794725022419893180:  (*RecordValue)(nil), /* record_eval=Record:fields: */
 	10603460329938405688: (*RecordList)(nil),  /* literal_value=Record:list: */
@@ -668,8 +665,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	3361062536970077668:  (*TextList)(nil),    /* text_list_eval=Text list: */
 	13530574299467497336: (*TextList)(nil),    /* literal_value=Text list:kind: */
 	624306084502072676:   (*TextList)(nil),    /* text_list_eval=Text list:kind: */
-	13114183353368545439: (*TextValue)(nil),   /* literal_value=Text value: */
-	4705033170011872932:  (*TextValue)(nil),   /* text_eval=Text value: */
-	6339203747835692413:  (*TextValue)(nil),   /* literal_value=Text value:kind: */
-	18213962910681037476: (*TextValue)(nil),   /* text_eval=Text value:kind: */
+	658583341421440944:   (*TextValue)(nil),   /* literal_value=Text: */
+	13576766980248532683: (*TextValue)(nil),   /* text_eval=Text: */
+	13638423844565115896: (*TextValue)(nil),   /* literal_value=Text:kind: */
+	12291215226209480193: (*TextValue)(nil),   /* text_eval=Text:kind: */
 }

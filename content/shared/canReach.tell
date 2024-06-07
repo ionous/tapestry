@@ -81,7 +81,7 @@
           - - Set:value:
                 - "@lca"
                 - FromNum:
-                    Find:inList:
+                    Find in:list:
                       - FromText: "@i"
                       - FromTextList: "@path"
             - If:do:
@@ -199,7 +199,7 @@
     - "reach up"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@from_obj"
                   - "containers"
               - Object:dot:
@@ -218,7 +218,7 @@
           - FromText:
               Say: "reach up: from:{.from_obj} -> into:{.into_obj}"
       - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@from_obj"
               - "rooms"
           - - Set:value:
@@ -250,7 +250,7 @@
     - "reach down"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@into_obj"
                   - "containers"
               - Object:dot:
@@ -274,7 +274,7 @@
           - FromText:
               Say: "reach down: from:{.from_obj} -> into:{.into_obj}"
       - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@into_obj"
               - "rooms"
           - - Set:value:

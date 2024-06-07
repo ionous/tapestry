@@ -39,15 +39,15 @@ func TestText(t *testing.T) {
 	})
 
 	t.Run("includes", func(t *testing.T) {
-		if e := testTrue(t, &run, &text.Includes{
-			Text: literal.T("full"),
-			Part: literal.T("ll"),
+		if e := testTrue(t, &run, &text.FindText{
+			Text:    literal.T("full"),
+			Subtext: literal.T("ll"),
 		}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &logic.Not{Test: &text.Includes{
-			Text: literal.T("full"),
-			Part: literal.T("bull"),
+		if e := testTrue(t, &run, &logic.Not{Test: &text.FindText{
+			Text:    literal.T("full"),
+			Subtext: literal.T("bull"),
 		}}); e != nil {
 			t.Fatal(e)
 		}

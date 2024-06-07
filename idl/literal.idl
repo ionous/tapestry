@@ -17,7 +17,8 @@ Spec:requires:contains:
           - "literal_value"
         - "bool"
         - - # The true or false value.
-            Term:type:
+            Term:name:type:
+              - "_"
               - "value"
               - "bool"
 
@@ -28,7 +29,8 @@ Spec:requires:contains:
           - "literal_value"
         - "num"
         - - # A literal number.
-            Term:type:
+            Term:name:type:
+              - "_"
               - "value"
               - "num"
 
@@ -52,7 +54,8 @@ Spec:requires:contains:
           - "literal_value"
         - "text"
         - - # Some literal text.
-            Term:type:
+            Term:name:type:
+              - "_"
               - "value"
               - "text"
           - # Optionally, when the text represents the name of an (existing) object,

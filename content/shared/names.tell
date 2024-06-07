@@ -72,7 +72,7 @@
     - "Print nothing"
     - "print nowhere rule"
     - - If:do:
-          - KindOf:is:nothing:
+          - Is object:kind:nothing:
               - "@obj"
               - "rooms"
               - true
@@ -81,7 +81,7 @@
     - "Print nothing"
     - "print nobody rule"
     - - If:do:
-          - KindOf:is:nothing:
+          - Is object:kind:nothing:
               - "@obj"
               - "actors"
               - true
@@ -94,7 +94,7 @@
           - "object"
     - - Nothing:
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "things"
           - - Set:value:

@@ -9,21 +9,21 @@
       - Define rule:do:
           - "magic symbols"
           - - If:do:
-                - CountOf:num:
+                - Is count:of:
                     - After:
                     - 5
                 - - Print: "x"
       - Define rule:do:
           - "magic symbols"
           - - If:do:
-                - CountOf:num:
+                - Is count:of:
                     - At:
                     - 3
                 - - Print: "-"
       - Define rule:do:
           - "magic symbols"
           - - If:do:
-                - CountOf:num:
+                - Is count:of:
                     - Every:
                     - 2
                 - - Print: "*"

@@ -795,9 +795,10 @@ func init() {
 	}
 	Zt_NotAll = typeinfo.Flow{
 		Name: "not_all",
-		Lede: "not_all",
+		Lede: "not",
 		Terms: []typeinfo.Term{{
 			Name:    "test",
+			Label:   "all",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "One or more conditions to check for failure.",
@@ -813,9 +814,10 @@ func init() {
 	}
 	Zt_NotAny = typeinfo.Flow{
 		Name: "not_any",
-		Lede: "not_any",
+		Lede: "not",
 		Terms: []typeinfo.Term{{
 			Name:    "test",
+			Label:   "any",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "One or more conditions to check for failure.",
@@ -1101,10 +1103,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10841523351090882945: (*IsAny)(nil),             /* bool_eval=Is any: */
 	14617237694045471748: (*IsValue)(nil),           /* bool_eval=Is value: */
 	1310533520550597035:  (*Never)(nil),             /* bool_eval=Never */
+	1619507005253470411:  (*NotAll)(nil),            /* bool_eval=Not all: */
+	588371806463953504:   (*NotAny)(nil),            /* bool_eval=Not any: */
 	14241778230257487825: (*NotValue)(nil),          /* bool_eval=Not value: */
 	3572677870333466638:  (*Not)(nil),               /* bool_eval=Not: */
-	6669677179380565259:  (*NotAll)(nil),            /* bool_eval=NotAll: */
-	5393658750804336032:  (*NotAny)(nil),            /* bool_eval=NotAny: */
 	12220459187031741460: (*ChooseNum)(nil),         /* num_eval=Num if:assuming:then: */
 	2863639051637372837:  (*ChooseNum)(nil),         /* num_eval=Num if:assuming:then:else: */
 	9841785069654362751:  (*ChooseNum)(nil),         /* num_eval=Num if:then: */

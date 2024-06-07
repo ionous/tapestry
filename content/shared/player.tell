@@ -31,7 +31,7 @@
     - "is player"
     - "play from agent"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "agents"
           - - Set:value:
@@ -45,7 +45,7 @@
     - "is player"
     - "player from actor"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "actors"
           - - Set:value:

@@ -851,13 +851,14 @@ func init() {
 	}
 	Zt_IsExactKindOf = typeinfo.Flow{
 		Name: "is_exact_kind_of",
-		Lede: "kind_of",
+		Lede: "is",
 		Terms: []typeinfo.Term{{
-			Name: "object",
-			Type: &rtti.Zt_TextEval,
+			Name:  "object",
+			Label: "object",
+			Type:  &rtti.Zt_TextEval,
 		}, {
 			Name:  "kind",
-			Label: "is_exactly",
+			Label: "exactly",
 			Type:  &prim.Zt_Text,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -869,13 +870,14 @@ func init() {
 	}
 	Zt_IsKindOf = typeinfo.Flow{
 		Name: "is_kind_of",
-		Lede: "kind_of",
+		Lede: "is",
 		Terms: []typeinfo.Term{{
-			Name: "object",
-			Type: &rtti.Zt_TextEval,
+			Name:  "object",
+			Label: "object",
+			Type:  &rtti.Zt_TextEval,
 		}, {
 			Name:  "kind",
-			Label: "is",
+			Label: "kind",
 			Type:  &prim.Zt_Text,
 		}, {
 			Name:     "nothing",
@@ -1076,10 +1078,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16465259325356451354: (*IncrementAspect)(nil), /* text_eval=Increase:aspect:by:clamp: */
 	4522630356185077352:  (*IncrementAspect)(nil), /* execute=Increase:aspect:clamp: */
 	705264554644415287:   (*IncrementAspect)(nil), /* text_eval=Increase:aspect:clamp: */
+	2112965277461200598:  (*IsExactKindOf)(nil),   /* bool_eval=Is object:exactly: */
+	13998300864651118772: (*IsKindOf)(nil),        /* bool_eval=Is object:kind: */
+	1848015039325151105:  (*IsKindOf)(nil),        /* bool_eval=Is object:kind:nothing: */
 	16305715626122315047: (*KindOf)(nil),          /* text_eval=KindOf: */
-	16744881049704292640: (*IsKindOf)(nil),        /* bool_eval=KindOf:is: */
-	210805642732508805:   (*IsKindOf)(nil),        /* bool_eval=KindOf:is:nothing: */
-	7296079450764183372:  (*IsExactKindOf)(nil),   /* bool_eval=KindOf:isExactly: */
 	4254622167054960918:  (*KindOf)(nil),          /* text_eval=KindOf:nothing: */
 	6869420318733086481:  (*KindsOf)(nil),         /* text_list_eval=KindsOf: */
 	15519818243985955688: (*NameOf)(nil),          /* text_eval=NameOf: */

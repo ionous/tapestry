@@ -16,7 +16,7 @@ import (
 var Zt_PlayMessage = typeinfo.Slot{
 	Name: "play_message",
 	Markup: map[string]any{
-		"comment": "a client-server message for the play app",
+		"comment": "A client-server message for the play app.",
 	},
 }
 
@@ -41,7 +41,7 @@ func (op *PlayMessage_Slots) Repeats() bool {
 	return len(*op) > 0
 }
 
-// a log message that can optionally be displayed to the client.
+// A log message that might be displayed to the client for debugging.
 type PlayLog struct {
 	Log    string
 	Markup map[string]any
@@ -79,7 +79,7 @@ func (op *PlayLog_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// app level change in state.
+// An app level change in state.
 type PlayMode struct {
 	Mode   PlayModes
 	Markup map[string]any
@@ -117,7 +117,7 @@ func (op *PlayMode_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// output from the game itself.
+// Text that should be displayed to the player.
 type PlayOut struct {
 	Out    string
 	Markup map[string]any
@@ -155,7 +155,7 @@ func (op *PlayOut_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// enum for play play_mode
+// One of the app level states communicated by [PlayMode].
 type PlayModes int
 
 // The enumerated values of PlayModes.
@@ -192,7 +192,7 @@ var Zt_PlayModes = typeinfo.Str{
 		"error",
 	},
 	Markup: map[string]any{
-		"comment": "enum for play play_mode",
+		"comment": "One of the app level states communicated by [PlayMode].",
 	},
 }
 
@@ -211,7 +211,7 @@ func init() {
 			&Zt_PlayMessage,
 		},
 		Markup: map[string]any{
-			"comment": "a log message that can optionally be displayed to the client.",
+			"comment": "A log message that might be displayed to the client for debugging.",
 		},
 	}
 	Zt_PlayMode = typeinfo.Flow{
@@ -226,7 +226,7 @@ func init() {
 			&Zt_PlayMessage,
 		},
 		Markup: map[string]any{
-			"comment": "app level change in state.",
+			"comment": "An app level change in state.",
 		},
 	}
 	Zt_PlayOut = typeinfo.Flow{
@@ -241,7 +241,7 @@ func init() {
 			&Zt_PlayMessage,
 		},
 		Markup: map[string]any{
-			"comment": "output from the game itself.",
+			"comment": "Text that should be displayed to the player.",
 		},
 	}
 }

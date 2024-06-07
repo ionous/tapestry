@@ -13,7 +13,7 @@
 - Define rule:do:
     - "provides storage"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "supporters"
           - - Set:value:
@@ -22,7 +22,7 @@
 - Define rule:do:
     - "provides storage"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "containers"
           - - Set:value:
@@ -93,7 +93,7 @@
     - "allows storage"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "containers"
               - Object:dot:

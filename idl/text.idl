@@ -3,39 +3,80 @@ Spec:requires:contains:
   - "text"
   - - "idl/prim"
     - "idl/rtti"
-  - - # True if text contains text.
+  - - # Determine whether some piece of text can be found in another.
       Flow:slots:lede:terms:
-        - "includes"
-        - "bool_eval"
-        - "contains"
-        - - Term:name:type:
-              - "_"
+        - "find_text"
+        - ["bool_eval", "num_eval"]
+        - "find"
+        - - # The text to search within.
+            Term:name:type:
+              - "in"
               - "text"
               - "text_eval"
-          - Term:type:
-              - "part"
+          - # The text to find.
+            Term:name:type:
+              - "text"
+              - "subtext"
               - "text_eval"
 
-    - # True if the text is empty.
+    - # Determine whether some piece of text starts with another.
+      Flow:slots:lede:terms:
+        - "text_starts_with"
+        - "bool_eval"
+        - "is"
+        - - # The text to search within.
+            Term:name:type:
+              - "text"
+              - "text"
+              - "text_eval"
+          - # The text to find.
+            Term:name:type:
+              - "prefix"
+              - "subtext"
+              - "text_eval"
+
+    - # Determine whether some piece of text ends with another.
+      Flow:slots:lede:terms:
+        - "text_ends_with"
+        - "bool_eval"
+        - "is"
+        - - # The text to search within.
+            Term:name:type:
+              - "text"
+              - "text"
+              - "text_eval"
+          - # The text to find.
+            Term:name:type:
+              - "suffix"
+              - "subtext"
+              - "text_eval"
+
+    - # Determine whether some text is completely without content.
+      # Even spaces are considered content. The text "" is considered empty,
+      # the text " " is considered *not* empty.
       Flow:slots:lede:terms:
         - "is_empty"
         - "bool_eval"
         - "is"
-        - - Term:name:type:
+        - - # The text to check for content.
+            Term:name:type:
               - "empty"
               - "text"
               - "text_eval"
 
-    - # Determine whether the specified text is similar to the specified regular expression.
-      Flow:slots:terms:
+    - # Determine whether the some text matches a regular expression.
+      Flow:slots:lede:terms:
         - "matches"
         - "bool_eval"
-        - - Term:name:type:
-              - "_"
+        - "is"
+        - - # The text to match the expression against.
+            Term:name:type:
+              - "text"
               - "text"
               - "text_eval"
-          - Term:name:type:
-              - "to"
+          - # The expression to match against the text.
+            Term:name:type:
+              - "expression"
               - "match"
               - "text"
           - Term:type:private:
@@ -53,20 +94,24 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Returns multiple pieces of text as a single new piece of text.
+    - # Return multiple pieces of text as a single new piece of text.
       Flow:slots:terms:
         - "join"
         - "text_eval"
-        - - Term:name:type:optional:
+        - - # Optionally, a separator to put between each piece of text.
+            Term:name:type:optional:
               - "_"
               - "sep"
               - "text_eval"
               - true
-          - Term:type:repeats:
+          - # The text values to concatenate.
+            Term:type:repeats:
               - "parts"
               - "text_eval"
               - true
-    - # Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
+
+    - # Return some new text with every letter of the specified text turned into lowercase.
+      # For example, turns "QUIET" into "quiet.
       Flow:slots:lede:terms:
         - "make_lowercase"
         - "text_eval"
@@ -75,7 +120,9 @@ Spec:requires:contains:
               - "_"
               - "text"
               - "text_eval"
-    - # Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
+
+    - # Return some new text with the contents of the specified text flipped back to front.
+      # For example, turns "Tapestry" into 'yrtsepaT'.
       Flow:slots:lede:terms:
         - "make_reversed"
         - "text_eval"
@@ -83,7 +130,9 @@ Spec:requires:contains:
         - - Term:type:
               - "text"
               - "text_eval"
-    - # Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
+
+    - # Return some new text with each sentence of the specified text transformed so that it starts with a capital letter.
+      # For example, "see the doctor run. run doctor. run." into "See the doctor run. Run doctor. Run."
       Flow:slots:lede:terms:
         - "make_sentence_case"
         - "text_eval"
@@ -92,7 +141,9 @@ Spec:requires:contains:
               - "_"
               - "text"
               - "text_eval"
-    - # Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
+
+    - # Return some new text starting each word of the specified text with a capital letter.
+      # For example, turns "empire apple" into "Empire Apple".
       Flow:slots:lede:terms:
         - "make_title_case"
         - "text_eval"
@@ -101,7 +152,8 @@ Spec:requires:contains:
               - "_"
               - "text"
               - "text_eval"
-    - # Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
+
+    - # Return some new text with every letter of the specified turned into uppercase. For example, transforms "loud" into "LOUD".
       Flow:slots:lede:terms:
         - "make_uppercase"
         - "text_eval"
@@ -110,7 +162,9 @@ Spec:requires:contains:
               - "_"
               - "text"
               - "text_eval"
-    - # Returns the plural form of a singular word. (ex. apples for apple. ).
+
+    - # Return the plural form of a singular word.
+      # For example, given the word "apple", return "apples".
       Flow:slots:lede:terms:
         - "pluralize"
         - "text_eval"
@@ -120,8 +174,8 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-
-    - # Returns the singular form of a plural word. (ex. apple for apples ).
+    - # Return the singular form of a plural word.
+      # For example, given the word "apples", return "apple".
       Flow:slots:lede:terms:
         - "singularize"
         - "text_eval"
@@ -131,7 +185,8 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Writes a number using numerals, eg. '1'.
+    - # Writes a number using numerals.
+      # For example, '1'.
       Flow:slots:lede:terms:
         - "print_num"
         - "text_eval"
@@ -140,7 +195,9 @@ Spec:requires:contains:
               - "_"
               - "num"
               - "num_eval"
-    - # Writes a number in plain english: eg. 'one'.
+
+    - # Writes a number in plain english.
+      # For example, 'one'.
       Flow:slots:lede:terms:
         - "print_num_word"
         - "text_eval"
@@ -149,7 +206,3 @@ Spec:requires:contains:
               - "words"
               - "num"
               - "num_eval"
-
-
-
-

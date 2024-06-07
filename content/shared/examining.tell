@@ -39,7 +39,7 @@
   Define rule:do:
     - "instead of examining"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@noun"
               - "directions"
           - - Say response:with:
@@ -106,7 +106,7 @@
     - "Print particulars"
     - "the print containers contents rule"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "containers"
           - - If:do:else:
@@ -132,7 +132,7 @@
     - "Print particulars"
     - "the print supporter contents rule"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "supporters"
           - - If:do:

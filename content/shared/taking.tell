@@ -55,7 +55,7 @@
                   - "@action"
                   - "equal_to"
                   - "taking"
-              - KindOf:is:
+              - Is object:kind:
                   - "@noun"
                   - "actors"
           - - Set:value:
@@ -125,7 +125,7 @@
                   - "equal_to"
                   - "taking"
               - Not:
-                  KindOf:is:
+                  Is object:kind:
                     - "@noun"
                     - "things"
           - - Set:value:
@@ -163,7 +163,7 @@
                   - "@action"
                   - "equal_to"
                   - "taking"
-              - KindOf:is:
+              - Is object:kind:
                   - "@from_obj"
                   - "actors"
           - - # If the target noun were owned by the reaching actor then the actor would be the lca.

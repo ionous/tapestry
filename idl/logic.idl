@@ -82,12 +82,13 @@ Spec:requires:contains:
     - # Check that every condition in a set of conditions returns false.
       # Stops after finding any successful condition.
       # An empty list returns false.
-      Flow:slots:terms:
+      Flow:slots:lede:terms:
         - "not_all"
         - "bool_eval"
+        - "not"
         - - # One or more conditions to check for failure.
             Term:name:type:repeats:
-              - "_"
+              - "all"
               - "test"
               - "bool_eval"
               - true
@@ -95,12 +96,13 @@ Spec:requires:contains:
     - # Check whether any condition in a set of conditions returns false.
       # Stops after finding any failed condition.
       # An empty list returns false.
-      Flow:slots:terms:
+      Flow:slots:lede:terms:
         - "not_any"
         - "bool_eval"
+        - "not"
         - - # One or more conditions to check for failure.
             Term:name:type:repeats:
-              - "_"
+              - "any"
               - "test"
               - "bool_eval"
               - true

@@ -16,7 +16,7 @@
           - "object"
     - - Nothing:
     - - If:do:else:
-          - KindOf:is:
+          - Is object:kind:
               - "@noun"
               - "containers"
           - - Print: "contain"
@@ -31,7 +31,7 @@
           - "object"
     - - Nothing:
     - - If:do:else:
-          - KindOf:is:
+          - Is object:kind:
               - "@noun"
               - "containers"
           - - Print: "in"
@@ -46,7 +46,7 @@
           - "object"
     - - Nothing:
     - - If:do:else:
-          - KindOf:is:
+          - Is object:kind:
               - "@noun"
               - "containers"
           - - Print: "out"

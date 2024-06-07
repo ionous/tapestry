@@ -296,7 +296,7 @@
               - Object:dot:
                   - "@obj"
                   - AtField: "mentioned"
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "supporters"
           - - PrintInlineStorage obj:
@@ -311,7 +311,7 @@
               - Object:dot:
                   - "@obj"
                   - AtField: "scenery"
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "supporters"
           - - Mention obj:
@@ -330,7 +330,7 @@
 - Define rule:do:
     - "print object description"
     - - If:do:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "actors"
           - - # This doesn't have to say anything special for actors.
@@ -368,7 +368,7 @@
     - "print impression of"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "supporters"
               - Is:matching:text:

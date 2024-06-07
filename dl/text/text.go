@@ -19,13 +19,48 @@ func (op *IsEmpty) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *Includes) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+func (op *FindText) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if text, e := safe.GetText(run, op.Text); e != nil {
 		err = cmd.ErrorCtx(op, "Text", e)
-	} else if part, e := safe.GetText(run, op.Part); e != nil {
+	} else if part, e := safe.GetText(run, op.Subtext); e != nil {
 		err = cmd.ErrorCtx(op, "Part", e)
 	} else {
 		contains := strings.Contains(text.String(), part.String())
+		ret = rt.BoolOf(contains)
+	}
+	return
+}
+
+func (op *FindText) GetNum(run rt.Runtime) (ret rt.Value, err error) {
+	if text, e := safe.GetText(run, op.Text); e != nil {
+		err = cmd.ErrorCtx(op, "Text", e)
+	} else if part, e := safe.GetText(run, op.Subtext); e != nil {
+		err = cmd.ErrorCtx(op, "Part", e)
+	} else {
+		idx := strings.Index(text.String(), part.String())
+		ret = rt.IntOf(idx)
+	}
+	return
+}
+
+func (op *TextStartsWith) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	if text, e := safe.GetText(run, op.Text); e != nil {
+		err = cmd.ErrorCtx(op, "Text", e)
+	} else if part, e := safe.GetText(run, op.Subtext); e != nil {
+		err = cmd.ErrorCtx(op, "Part", e)
+	} else {
+		contains := strings.HasPrefix(text.String(), part.String())
+		ret = rt.BoolOf(contains)
+	}
+	return
+}
+func (op *TextEndsWith) GetBool(run rt.Runtime) (ret rt.Value, err error) {
+	if text, e := safe.GetText(run, op.Text); e != nil {
+		err = cmd.ErrorCtx(op, "Text", e)
+	} else if part, e := safe.GetText(run, op.Subtext); e != nil {
+		err = cmd.ErrorCtx(op, "Part", e)
+	} else {
+		contains := strings.HasSuffix(text.String(), part.String())
 		ret = rt.BoolOf(contains)
 	}
 	return

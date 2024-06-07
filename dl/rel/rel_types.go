@@ -1,4 +1,4 @@
-// Interrogate and manipulate object relationships.
+// Interrogate and manipulate object relationships at runtime.
 package rel
 
 //
@@ -10,11 +10,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// Returns the implied relative of a noun (ex. the source in a one-to-many relation.).
+// Return the implied relative of a noun.
+// For example the source in a one-to-many relation.
 type ReciprocalOf struct {
-	Via    string
-	Object rtti.TextEval
-	Markup map[string]any
+	RelationName rtti.TextEval
+	NounName     rtti.TextEval
+	Markup       map[string]any
 }
 
 // reciprocal_of, a type of flow.
@@ -49,11 +50,12 @@ func (op *ReciprocalOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).
+// Return the implied relatives of a noun.
+// For example: the sources of a many-to-many relation.
 type ReciprocalsOf struct {
-	Via    string
-	Object rtti.TextEval
-	Markup map[string]any
+	RelationName rtti.TextEval
+	NounName     rtti.TextEval
+	Markup       map[string]any
 }
 
 // reciprocals_of, a type of flow.
@@ -90,10 +92,10 @@ func (op *ReciprocalsOf_Slice) Repeats() bool {
 
 // Relate two nouns.
 type Relate struct {
-	Object   rtti.TextEval
-	ToObject rtti.TextEval
-	Via      string
-	Markup   map[string]any
+	NounName      rtti.TextEval
+	OtherNounName rtti.TextEval
+	RelationName  rtti.TextEval
+	Markup        map[string]any
 }
 
 // relate, a type of flow.
@@ -128,11 +130,11 @@ func (op *Relate_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns the relative of a noun (ex. the target of a one-to-one relation.).
+// Return the relative of a noun (ex. the target of a one-to-one relation.).
 type RelativeOf struct {
-	Via    string
-	Object rtti.TextEval
-	Markup map[string]any
+	RelationName rtti.TextEval
+	NounName     rtti.TextEval
+	Markup       map[string]any
 }
 
 // relative_of, a type of flow.
@@ -167,11 +169,11 @@ func (op *RelativeOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
+// Return the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
-	Via    string
-	Object rtti.TextEval
-	Markup map[string]any
+	RelationName rtti.TextEval
+	NounName     rtti.TextEval
+	Markup       map[string]any
 }
 
 // relatives_of, a type of flow.
@@ -206,11 +208,6 @@ func (op *RelativesOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// RelationName, a type of str.
-var Zt_RelationName = typeinfo.Str{
-	Name: "relation_name",
-}
-
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
@@ -218,10 +215,10 @@ func init() {
 		Name: "reciprocal_of",
 		Lede: "reciprocal",
 		Terms: []typeinfo.Term{{
-			Name: "via",
-			Type: &Zt_RelationName,
+			Name: "relation_name",
+			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "object",
+			Name:  "noun_name",
 			Label: "object",
 			Type:  &rtti.Zt_TextEval,
 		}},
@@ -229,17 +226,17 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
+			"comment": []interface{}{"Return the implied relative of a noun.", "For example the source in a one-to-many relation."},
 		},
 	}
 	Zt_ReciprocalsOf = typeinfo.Flow{
 		Name: "reciprocals_of",
 		Lede: "reciprocals",
 		Terms: []typeinfo.Term{{
-			Name: "via",
-			Type: &Zt_RelationName,
+			Name: "relation_name",
+			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "object",
+			Name:  "noun_name",
 			Label: "object",
 			Type:  &rtti.Zt_TextEval,
 		}},
@@ -247,23 +244,23 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
+			"comment": []interface{}{"Return the implied relatives of a noun.", "For example: the sources of a many-to-many relation."},
 		},
 	}
 	Zt_Relate = typeinfo.Flow{
 		Name: "relate",
 		Lede: "relate",
 		Terms: []typeinfo.Term{{
-			Name: "object",
+			Name: "noun_name",
 			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "to_object",
+			Name:  "other_noun_name",
 			Label: "to",
 			Type:  &rtti.Zt_TextEval,
 		}, {
-			Name:  "via",
+			Name:  "relation_name",
 			Label: "via",
-			Type:  &Zt_RelationName,
+			Type:  &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Execute,
@@ -276,10 +273,10 @@ func init() {
 		Name: "relative_of",
 		Lede: "relative",
 		Terms: []typeinfo.Term{{
-			Name: "via",
-			Type: &Zt_RelationName,
+			Name: "relation_name",
+			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "object",
+			Name:  "noun_name",
 			Label: "object",
 			Type:  &rtti.Zt_TextEval,
 		}},
@@ -287,17 +284,17 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
+			"comment": "Return the relative of a noun (ex. the target of a one-to-one relation.).",
 		},
 	}
 	Zt_RelativesOf = typeinfo.Flow{
 		Name: "relatives_of",
 		Lede: "relatives",
 		Terms: []typeinfo.Term{{
-			Name: "via",
-			Type: &Zt_RelationName,
+			Name: "relation_name",
+			Type: &rtti.Zt_TextEval,
 		}, {
-			Name:  "object",
+			Name:  "noun_name",
 			Label: "object",
 			Type:  &rtti.Zt_TextEval,
 		}},
@@ -305,7 +302,7 @@ func init() {
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
+			"comment": "Return the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
 		},
 	}
 }
@@ -314,11 +311,10 @@ func init() {
 var Z_Types = typeinfo.TypeSet{
 	Name: "rel",
 	Comment: []string{
-		"Interrogate and manipulate object relationships.",
+		"Interrogate and manipulate object relationships at runtime.",
 	},
 
 	Flow:       z_flow_list,
-	Str:        z_str_list,
 	Signatures: z_signatures,
 }
 
@@ -330,11 +326,6 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_Relate,
 	&Zt_RelativeOf,
 	&Zt_RelativesOf,
-}
-
-// A list of all strs in this this package.
-var z_str_list = []*typeinfo.Str{
-	&Zt_RelationName,
 }
 
 // a list of all command signatures

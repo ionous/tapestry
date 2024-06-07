@@ -6,21 +6,21 @@
     - - Text: "text"
     - - Bool: "matching"
     - - If:do:else:
-          - Matches:to:
+          - Is text:expression:
               - "@text"
               - "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
           - - Set:value:
                 - "@matching"
                 - FromBool: true
           - If:do:else:
-              - Matches:to:
+              - Is text:expression:
                   - "@text"
                   - "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
               - - Set:value:
                     - "@matching"
                     - FromBool: false
               - If:do:
-                  - Matches:to:
+                  - Is text:expression:
                       - "@text"
                       - "^(?i:A|E|I|O|U)"
                   - - Set:value:

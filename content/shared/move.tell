@@ -15,7 +15,7 @@
     - "before move object"
     - - If:do:
           - Not:
-              KindOf:is:
+              Is object:kind:
                 - "@obj"
                 - "things"
           - - # check for tangibility instead?

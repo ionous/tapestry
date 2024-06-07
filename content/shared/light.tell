@@ -21,7 +21,7 @@
           - "object"
     - - Bool: "result"
     - - If:do:else:
-          - KindOf:is:
+          - Is object:kind:
               - "@obj"
               - "rooms"
           - # a room is the top of line.
@@ -30,7 +30,7 @@
                 - FromBool: true
           - If:do:else:
               - Is all:
-                  - KindOf:is:
+                  - Is object:kind:
                       - "@obj"
                       - "containers"
                   - Object:dot:

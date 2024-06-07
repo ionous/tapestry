@@ -144,7 +144,7 @@
     - "print details"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "containers"
           - - Say response:with:
@@ -154,7 +154,7 @@
     - "print details"
     - - If:do:
           - Is all:
-              - KindOf:is:
+              - Is object:kind:
                   - "@obj"
                   - "containers"
               - Object:dot:

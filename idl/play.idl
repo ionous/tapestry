@@ -3,9 +3,9 @@
 Spec:requires:contains:
   - "play"
   - "idl/prim"
-  - - # a client-server message for the play app
+  - - # A client-server message for the play app.
       Slot: "play_message"
-    - # a log message that can optionally be displayed to the client.
+    - # A log message that might be displayed to the client for debugging.
       Flow:slots:lede:terms:
         - "play_log"
         - "play_message"
@@ -13,7 +13,7 @@ Spec:requires:contains:
         - - Term:type:
               - "log"
               - "text"
-    - # app level change in state.
+    - # An app level change in state.
       Flow:slots:lede:terms:
         - "play_mode"
         - "play_message"
@@ -21,14 +21,14 @@ Spec:requires:contains:
         - - Term:type:
               - "mode"
               - "play_modes"
-    - # enum for play play_mode
+    - # One of the app level states communicated by [PlayMode].
       Str:options:
         - "play_modes"
         - - Option: "asm"
           - Option: "play"
           - Option: "complete"
           - Option: "error"
-    - # output from the game itself.
+    - # Text that should be displayed to the player.
       Flow:slots:lede:terms:
         - "play_out"
         - "play_message"
