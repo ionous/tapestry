@@ -102,12 +102,13 @@ Spec:requires:contains:
         - "print_text"
         - "execute"
         - "print"
-        - - Term:name:type:
+        - - # The text to print.
+            Term:name:type:
               - "_"
               - "text"
               - "text_eval"
 
-    - # Writes text, by default putting spaces between words.
+    - # Collect printed text and separate that text by single spaces.
       Flow:slots:lede:terms:
         - "print_words"
         - ["execute", "text_eval"]
@@ -124,7 +125,7 @@ Spec:requires:contains:
               - "execute"
               - true
 
-    - # Collect printed text and surrounds the output with parenthesis '()'.
+    - # Collect printed text and surround the output with parenthesis '()'.
       # If no text is printed, no parentheses are printed.
       Flow:slots:lede:terms:
         - "print_parens"
@@ -148,10 +149,10 @@ Spec:requires:contains:
               - "execute"
               - true
 
-    - # Group text into a single line <li> as part of a list of lines.
-      # See also: 'rows'.
+
+    - # Group text into an unordered list <ul>.
       Flow:slots:terms:
-        - "row"
+        - "rows"
         - "text_eval"
         - - # Runs one or more statements, and collects any text printed by them.
             Term:name:type:repeats:
@@ -159,9 +160,11 @@ Spec:requires:contains:
               - "exe"
               - "execute"
               - true
-    - # Group text into an unordered list <ul>.
+
+    - # Group text into a single line <li> as part of a list of lines.
+      # See also: 'rows'.
       Flow:slots:terms:
-        - "rows"
+        - "row"
         - "text_eval"
         - - # Runs one or more statements, and collects any text printed by them.
             Term:name:type:repeats:

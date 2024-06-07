@@ -28,13 +28,13 @@ func CustomEncoder(enc *encode.Encoder, op typeinfo.Instance) (ret any, err erro
 		ret = out.Value
 	case *TextValue:
 		ret = out.Value
-	case *NumValues:
+	case *NumList:
 		if len(out.Values) == 1 {
 			ret = out.Values[0]
 		} else {
 			ret = anySlice(out.Values)
 		}
-	case *TextValues:
+	case *TextList:
 		if len(out.Values) == 1 {
 			ret = out.Values[0]
 		} else {
@@ -98,14 +98,14 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 		if v, ok := val.(bool); !ok {
 			err = compact.Unhandled("bool")
 		} else {
-			ret = &BoolValue{Value: v, Kind: kind}
+			ret = &BoolValue{Value: v}
 		}
 
 	case rtti.Zt_NumEval.Name:
 		if v, ok := val.(float64); !ok {
 			err = compact.Unhandled("float")
 		} else {
-			ret = &NumValue{Value: v, Kind: kind}
+			ret = &NumValue{Value: v}
 		}
 
 	case rtti.Zt_TextEval.Name:
@@ -128,10 +128,10 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 			if vs, ok := compact.SliceFloats(v); !ok {
 				err = compact.Unhandled("floats")
 			} else {
-				ret = &NumValues{Values: vs, Kind: kind}
+				ret = &NumList{Values: vs}
 			}
 		case float64:
-			ret = &NumValues{Values: []float64{v}, Kind: kind}
+			ret = &NumList{Values: []float64{v}}
 		default:
 			err = compact.Unhandled("numbers")
 		}
@@ -142,10 +142,10 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 			if vs, ok := compact.SliceStrings(v); !ok {
 				err = compact.Unhandled("strings")
 			} else {
-				ret = &TextValues{Values: vs, Kind: kind}
+				ret = &TextList{Values: vs, Kind: kind}
 			}
 		case string:
-			ret = &TextValues{Values: []string{v}, Kind: kind}
+			ret = &TextList{Values: []string{v}, Kind: kind}
 		default:
 			err = compact.Unhandled("text values")
 		}

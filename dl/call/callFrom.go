@@ -83,9 +83,9 @@ func Literal(v literal.LiteralValue) (ret rt.Assignment) {
 		ret = &FromText{Value: v}
 	case *literal.RecordValue:
 		ret = &FromRecord{Value: v}
-	case *literal.NumValues:
+	case *literal.NumList:
 		ret = &FromNumList{Value: v}
-	case *literal.TextValues:
+	case *literal.TextList:
 		ret = &FromTextList{Value: v}
 	case *literal.RecordList:
 		ret = &FromRecordList{Value: v}

@@ -47,7 +47,6 @@ func (op *LiteralValue_Slots) Repeats() bool {
 // Specify an explicit true or false.
 type BoolValue struct {
 	Value  bool
-	Kind   string
 	Markup map[string]any
 }
 
@@ -84,85 +83,9 @@ func (op *BoolValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A value for specifying a literal record.
-type FieldValue struct {
-	Field  string
-	Value  LiteralValue
-	Markup map[string]any
-}
-
-// field_value, a type of flow.
-var Zt_FieldValue typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*FieldValue) TypeInfo() typeinfo.T {
-	return &Zt_FieldValue
-}
-
-// Implements [typeinfo.Markup]
-func (op *FieldValue) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Holds a slice of type FieldValue.
-type FieldValue_Slice []FieldValue
-
-// Implements [typeinfo.Instance] for a slice of FieldValue.
-func (*FieldValue_Slice) TypeInfo() typeinfo.T {
-	return &Zt_FieldValue
-}
-
-// Implements [typeinfo.Repeats] for a slice of FieldValue.
-func (op *FieldValue_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// A series of values used to build a record.
-// While it can be specified wherever a literal value can, it only has meaning when the record type is known.
-type FieldList struct {
-	Fields []FieldValue
-	Markup map[string]any
-}
-
-// field_list, a type of flow.
-var Zt_FieldList typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*FieldList) TypeInfo() typeinfo.T {
-	return &Zt_FieldList
-}
-
-// Implements [typeinfo.Markup]
-func (op *FieldList) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ LiteralValue = (*FieldList)(nil)
-
-// Holds a slice of type FieldList.
-type FieldList_Slice []FieldList
-
-// Implements [typeinfo.Instance] for a slice of FieldList.
-func (*FieldList_Slice) TypeInfo() typeinfo.T {
-	return &Zt_FieldList
-}
-
-// Implements [typeinfo.Repeats] for a slice of FieldList.
-func (op *FieldList_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
 // Specify a particular number.
 type NumValue struct {
 	Value  float64
-	Kind   string
 	Markup map[string]any
 }
 
@@ -200,22 +123,21 @@ func (op *NumValue_Slice) Repeats() bool {
 }
 
 // Specify a list of literal numbers.
-type NumValues struct {
+type NumList struct {
 	Values []float64
-	Kind   string
 	Markup map[string]any
 }
 
-// num_values, a type of flow.
-var Zt_NumValues typeinfo.Flow
+// num_list, a type of flow.
+var Zt_NumList typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*NumValues) TypeInfo() typeinfo.T {
-	return &Zt_NumValues
+func (*NumList) TypeInfo() typeinfo.T {
+	return &Zt_NumList
 }
 
 // Implements [typeinfo.Markup]
-func (op *NumValues) GetMarkup(ensure bool) map[string]any {
+func (op *NumList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -223,19 +145,99 @@ func (op *NumValues) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.NumListEval = (*NumValues)(nil)
-var _ LiteralValue = (*NumValues)(nil)
+var _ rtti.NumListEval = (*NumList)(nil)
+var _ LiteralValue = (*NumList)(nil)
 
-// Holds a slice of type NumValues.
-type NumValues_Slice []NumValues
+// Holds a slice of type NumList.
+type NumList_Slice []NumList
 
-// Implements [typeinfo.Instance] for a slice of NumValues.
-func (*NumValues_Slice) TypeInfo() typeinfo.T {
-	return &Zt_NumValues
+// Implements [typeinfo.Instance] for a slice of NumList.
+func (*NumList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_NumList
 }
 
-// Implements [typeinfo.Repeats] for a slice of NumValues.
-func (op *NumValues_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of NumList.
+func (op *NumList_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Specify some constant text.
+type TextValue struct {
+	Value  string
+	Kind   string
+	Markup map[string]any
+}
+
+// text_value, a type of flow.
+var Zt_TextValue typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*TextValue) TypeInfo() typeinfo.T {
+	return &Zt_TextValue
+}
+
+// Implements [typeinfo.Markup]
+func (op *TextValue) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextEval = (*TextValue)(nil)
+var _ LiteralValue = (*TextValue)(nil)
+
+// Holds a slice of type TextValue.
+type TextValue_Slice []TextValue
+
+// Implements [typeinfo.Instance] for a slice of TextValue.
+func (*TextValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TextValue
+}
+
+// Implements [typeinfo.Repeats] for a slice of TextValue.
+func (op *TextValue_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
+// Specify a list of literal text values.
+type TextList struct {
+	Values []string
+	Kind   string
+	Markup map[string]any
+}
+
+// text_list, a type of flow.
+var Zt_TextList typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*TextList) TypeInfo() typeinfo.T {
+	return &Zt_TextList
+}
+
+// Implements [typeinfo.Markup]
+func (op *TextList) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextListEval = (*TextList)(nil)
+var _ LiteralValue = (*TextList)(nil)
+
+// Holds a slice of type TextList.
+type TextList_Slice []TextList
+
+// Implements [typeinfo.Instance] for a slice of TextList.
+func (*TextList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TextList
+}
+
+// Implements [typeinfo.Repeats] for a slice of TextList.
+func (op *TextList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -321,23 +323,22 @@ func (op *RecordList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Specify some constant text.
-type TextValue struct {
-	Value  string
-	Kind   string
+// A series of values used to build a record.
+type FieldList struct {
+	Fields []FieldValue
 	Markup map[string]any
 }
 
-// text_value, a type of flow.
-var Zt_TextValue typeinfo.Flow
+// field_list, a type of flow.
+var Zt_FieldList typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*TextValue) TypeInfo() typeinfo.T {
-	return &Zt_TextValue
+func (*FieldList) TypeInfo() typeinfo.T {
+	return &Zt_FieldList
 }
 
 // Implements [typeinfo.Markup]
-func (op *TextValue) GetMarkup(ensure bool) map[string]any {
+func (op *FieldList) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -345,59 +346,54 @@ func (op *TextValue) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*TextValue)(nil)
-var _ LiteralValue = (*TextValue)(nil)
+var _ LiteralValue = (*FieldList)(nil)
 
-// Holds a slice of type TextValue.
-type TextValue_Slice []TextValue
+// Holds a slice of type FieldList.
+type FieldList_Slice []FieldList
 
-// Implements [typeinfo.Instance] for a slice of TextValue.
-func (*TextValue_Slice) TypeInfo() typeinfo.T {
-	return &Zt_TextValue
+// Implements [typeinfo.Instance] for a slice of FieldList.
+func (*FieldList_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FieldList
 }
 
-// Implements [typeinfo.Repeats] for a slice of TextValue.
-func (op *TextValue_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of FieldList.
+func (op *FieldList_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Specify a list of literal text values.
-type TextValues struct {
-	Values []string
-	Kind   string
+// The name and value of a field used for initializing a literal record.
+type FieldValue struct {
+	Field  string
+	Value  LiteralValue
 	Markup map[string]any
 }
 
-// text_values, a type of flow.
-var Zt_TextValues typeinfo.Flow
+// field_value, a type of flow.
+var Zt_FieldValue typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*TextValues) TypeInfo() typeinfo.T {
-	return &Zt_TextValues
+func (*FieldValue) TypeInfo() typeinfo.T {
+	return &Zt_FieldValue
 }
 
 // Implements [typeinfo.Markup]
-func (op *TextValues) GetMarkup(ensure bool) map[string]any {
+func (op *FieldValue) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// Ensures the command implements its specified slots.
-var _ rtti.TextListEval = (*TextValues)(nil)
-var _ LiteralValue = (*TextValues)(nil)
+// Holds a slice of type FieldValue.
+type FieldValue_Slice []FieldValue
 
-// Holds a slice of type TextValues.
-type TextValues_Slice []TextValues
-
-// Implements [typeinfo.Instance] for a slice of TextValues.
-func (*TextValues_Slice) TypeInfo() typeinfo.T {
-	return &Zt_TextValues
+// Implements [typeinfo.Instance] for a slice of FieldValue.
+func (*FieldValue_Slice) TypeInfo() typeinfo.T {
+	return &Zt_FieldValue
 }
 
-// Implements [typeinfo.Repeats] for a slice of TextValues.
-func (op *TextValues_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of FieldValue.
+func (op *FieldValue_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -410,12 +406,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "value",
 			Label: "value",
-			Type:  &prim.Zt_Bool,
-		}, {
-			Name:     "kind",
-			Label:    "kind",
-			Optional: true,
-			Type:     &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The true or false value.",
+			},
+			Type: &prim.Zt_Bool,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
@@ -425,48 +419,16 @@ func init() {
 			"comment": "Specify an explicit true or false.",
 		},
 	}
-	Zt_FieldValue = typeinfo.Flow{
-		Name: "field_value",
-		Lede: "field",
-		Terms: []typeinfo.Term{{
-			Name: "field",
-			Type: &prim.Zt_Text,
-		}, {
-			Name:  "value",
-			Label: "value",
-			Type:  &Zt_LiteralValue,
-		}},
-		Markup: map[string]any{
-			"comment": "A value for specifying a literal record.",
-		},
-	}
-	Zt_FieldList = typeinfo.Flow{
-		Name: "field_list",
-		Lede: "field_list",
-		Terms: []typeinfo.Term{{
-			Name:    "fields",
-			Repeats: true,
-			Type:    &Zt_FieldValue,
-		}},
-		Slots: []*typeinfo.Slot{
-			&Zt_LiteralValue,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"A series of values used to build a record.", "While it can be specified wherever a literal value can, it only has meaning when the record type is known."},
-		},
-	}
 	Zt_NumValue = typeinfo.Flow{
 		Name: "num_value",
 		Lede: "num",
 		Terms: []typeinfo.Term{{
 			Name:  "value",
 			Label: "value",
-			Type:  &prim.Zt_Num,
-		}, {
-			Name:     "kind",
-			Label:    "kind",
-			Optional: true,
-			Type:     &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "A literal number.",
+			},
+			Type: &prim.Zt_Num,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumEval,
@@ -476,19 +438,17 @@ func init() {
 			"comment": "Specify a particular number.",
 		},
 	}
-	Zt_NumValues = typeinfo.Flow{
-		Name: "num_values",
+	Zt_NumList = typeinfo.Flow{
+		Name: "num_list",
 		Lede: "num",
 		Terms: []typeinfo.Term{{
 			Name:    "values",
-			Label:   "values",
+			Label:   "list",
 			Repeats: true,
-			Type:    &prim.Zt_Num,
-		}, {
-			Name:     "kind",
-			Label:    "kind",
-			Optional: true,
-			Type:     &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "Zero or more literal numbers.",
+			},
+			Type: &prim.Zt_Num,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_NumListEval,
@@ -498,17 +458,78 @@ func init() {
 			"comment": "Specify a list of literal numbers.",
 		},
 	}
+	Zt_TextValue = typeinfo.Flow{
+		Name: "text_value",
+		Lede: "text",
+		Terms: []typeinfo.Term{{
+			Name:  "value",
+			Label: "value",
+			Markup: map[string]any{
+				"comment": "Some literal text.",
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"Optionally, when the text represents the name of an (existing) object,", "the kind of the object in question."},
+			},
+			Type: &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+			&Zt_LiteralValue,
+		},
+		Markup: map[string]any{
+			"comment": "Specify some constant text.",
+		},
+	}
+	Zt_TextList = typeinfo.Flow{
+		Name: "text_list",
+		Lede: "text",
+		Terms: []typeinfo.Term{{
+			Name:    "values",
+			Label:   "list",
+			Repeats: true,
+			Markup: map[string]any{
+				"comment": "Zero or more text literals.",
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:     "kind",
+			Label:    "kind",
+			Optional: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"Optionally, when the text represents the names of (existing) objects,", "the kind of the objects in question."},
+			},
+			Type: &prim.Zt_Text,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextListEval,
+			&Zt_LiteralValue,
+		},
+		Markup: map[string]any{
+			"comment": "Specify a list of literal text values.",
+		},
+	}
 	Zt_RecordValue = typeinfo.Flow{
 		Name: "record_value",
 		Lede: "record",
 		Terms: []typeinfo.Term{{
 			Name: "kind",
+			Markup: map[string]any{
+				"comment": []interface{}{"The kind of the record being constructed.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "fields",
 			Label:   "fields",
 			Repeats: true,
-			Type:    &Zt_FieldValue,
+			Markup: map[string]any{
+				"comment": []interface{}{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
+			},
+			Type: &Zt_FieldValue,
 		}, {
 			Name:    "cache",
 			Label:   "cache",
@@ -527,12 +548,18 @@ func init() {
 		Lede: "record",
 		Terms: []typeinfo.Term{{
 			Name: "kind",
+			Markup: map[string]any{
+				"comment": []interface{}{"The kind of the records being constructed.", "All of the records in the list must be of the same kind.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
+			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "records",
-			Label:   "values",
+			Label:   "list",
 			Repeats: true,
-			Type:    &Zt_FieldList,
+			Markup: map[string]any{
+				"comment": "Zero or more record literals.",
+			},
+			Type: &Zt_FieldList,
 		}, {
 			Name:    "cache",
 			Label:   "cache",
@@ -546,47 +573,43 @@ func init() {
 			"comment": "Specify a series of records, all of the same kind.",
 		},
 	}
-	Zt_TextValue = typeinfo.Flow{
-		Name: "text_value",
-		Lede: "text",
+	Zt_FieldList = typeinfo.Flow{
+		Name: "field_list",
+		Lede: "field_list",
 		Terms: []typeinfo.Term{{
-			Name:  "value",
-			Label: "value",
-			Type:  &prim.Zt_Text,
-		}, {
-			Name:     "kind",
-			Label:    "kind",
-			Optional: true,
-			Type:     &prim.Zt_Text,
+			Name:    "fields",
+			Repeats: true,
+			Markup: map[string]any{
+				"comment": []interface{}{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
+			},
+			Type: &Zt_FieldValue,
 		}},
 		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
 			&Zt_LiteralValue,
 		},
 		Markup: map[string]any{
-			"comment": "Specify some constant text.",
+			"comment": "A series of values used to build a record.",
 		},
 	}
-	Zt_TextValues = typeinfo.Flow{
-		Name: "text_values",
-		Lede: "text",
+	Zt_FieldValue = typeinfo.Flow{
+		Name: "field_value",
+		Lede: "field",
 		Terms: []typeinfo.Term{{
-			Name:    "values",
-			Label:   "values",
-			Repeats: true,
-			Type:    &prim.Zt_Text,
+			Name: "field",
+			Markup: map[string]any{
+				"comment": []interface{}{"The name of a field in a record to initialize.", "New field names cannot be added to records at runtime;", "the field names must be part of the original declaration of the kind."},
+			},
+			Type: &prim.Zt_Text,
 		}, {
-			Name:     "kind",
-			Label:    "kind",
-			Optional: true,
-			Type:     &prim.Zt_Text,
+			Name:  "value",
+			Label: "value",
+			Markup: map[string]any{
+				"comment": []interface{}{"The literal value of the field.", "The type of value must match the original declaration of the field.", "( ex. If the field was declared as a number, only a number can be used to initialize it. )"},
+			},
+			Type: &Zt_LiteralValue,
 		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextListEval,
-			&Zt_LiteralValue,
-		},
 		Markup: map[string]any{
-			"comment": "Specify a list of literal text values.",
+			"comment": "The name and value of a field used for initializing a literal record.",
 		},
 	}
 }
@@ -616,14 +639,14 @@ var z_slot_list = []*typeinfo.Slot{
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_BoolValue,
-	&Zt_FieldValue,
-	&Zt_FieldList,
 	&Zt_NumValue,
-	&Zt_NumValues,
+	&Zt_NumList,
+	&Zt_TextValue,
+	&Zt_TextList,
 	&Zt_RecordValue,
 	&Zt_RecordList,
-	&Zt_TextValue,
-	&Zt_TextValues,
+	&Zt_FieldList,
+	&Zt_FieldValue,
 }
 
 // a list of all command signatures
@@ -632,27 +655,21 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
 	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
 	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
-	10808478223495627740: (*BoolValue)(nil),   /* bool_eval=Bool value:kind: */
-	3205100557739257174:  (*BoolValue)(nil),   /* literal_value=Bool value:kind: */
 	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
+	17669305546968596769: (*NumList)(nil),     /* literal_value=Num list: */
+	4715091378117636320:  (*NumList)(nil),     /* num_list_eval=Num list: */
 	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
 	16565175635984030252: (*NumValue)(nil),    /* num_eval=Num value: */
-	607468628506983640:   (*NumValue)(nil),    /* literal_value=Num value:kind: */
-	11555965194136863548: (*NumValue)(nil),    /* num_eval=Num value:kind: */
-	12282038377752822419: (*NumValues)(nil),   /* literal_value=Num values: */
-	8089072108541894314:  (*NumValues)(nil),   /* num_list_eval=Num values: */
-	16844579494806292121: (*NumValues)(nil),   /* literal_value=Num values:kind: */
-	18166562587031464546: (*NumValues)(nil),   /* num_list_eval=Num values:kind: */
 	5942123174065535899:  (*RecordValue)(nil), /* literal_value=Record:fields: */
 	5794725022419893180:  (*RecordValue)(nil), /* record_eval=Record:fields: */
-	8711768526197034738:  (*RecordList)(nil),  /* literal_value=Record:values: */
-	14652198550804167624: (*RecordList)(nil),  /* record_list_eval=Record:values: */
+	10603460329938405688: (*RecordList)(nil),  /* literal_value=Record:list: */
+	2654503288592519818:  (*RecordList)(nil),  /* record_list_eval=Record:list: */
+	17984278622183554608: (*TextList)(nil),    /* literal_value=Text list: */
+	3361062536970077668:  (*TextList)(nil),    /* text_list_eval=Text list: */
+	13530574299467497336: (*TextList)(nil),    /* literal_value=Text list:kind: */
+	624306084502072676:   (*TextList)(nil),    /* text_list_eval=Text list:kind: */
 	13114183353368545439: (*TextValue)(nil),   /* literal_value=Text value: */
 	4705033170011872932:  (*TextValue)(nil),   /* text_eval=Text value: */
 	6339203747835692413:  (*TextValue)(nil),   /* literal_value=Text value:kind: */
 	18213962910681037476: (*TextValue)(nil),   /* text_eval=Text value:kind: */
-	2231933745037898906:  (*TextValues)(nil),  /* literal_value=Text values: */
-	5151885117815687006:  (*TextValues)(nil),  /* text_list_eval=Text values: */
-	4866602258857929938:  (*TextValues)(nil),  /* literal_value=Text values:kind: */
-	10847058762172166526: (*TextValues)(nil),  /* text_list_eval=Text values:kind: */
 }

@@ -356,7 +356,7 @@ func (op *PrintText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Writes text, by default putting spaces between words.
+// Collect printed text and separate that text by single spaces.
 type PrintWords struct {
 	Separator rtti.TextEval
 	Exe       []rtti.Execute
@@ -396,7 +396,7 @@ func (op *PrintWords_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Collect printed text and surrounds the output with parenthesis '()'.
+// Collect printed text and surround the output with parenthesis '()'.
 // If no text is printed, no parentheses are printed.
 type PrintParens struct {
 	Exe    []rtti.Execute
@@ -475,6 +475,44 @@ func (op *PrintCommas_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
+// Group text into an unordered list <ul>.
+type Rows struct {
+	Exe    []rtti.Execute
+	Markup map[string]any
+}
+
+// rows, a type of flow.
+var Zt_Rows typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*Rows) TypeInfo() typeinfo.T {
+	return &Zt_Rows
+}
+
+// Implements [typeinfo.Markup]
+func (op *Rows) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.TextEval = (*Rows)(nil)
+
+// Holds a slice of type Rows.
+type Rows_Slice []Rows
+
+// Implements [typeinfo.Instance] for a slice of Rows.
+func (*Rows_Slice) TypeInfo() typeinfo.T {
+	return &Zt_Rows
+}
+
+// Implements [typeinfo.Repeats] for a slice of Rows.
+func (op *Rows_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Group text into a single line <li> as part of a list of lines.
 // See also: 'rows'.
 type Row struct {
@@ -511,44 +549,6 @@ func (*Row_Slice) TypeInfo() typeinfo.T {
 
 // Implements [typeinfo.Repeats] for a slice of Row.
 func (op *Row_Slice) Repeats() bool {
-	return len(*op) > 0
-}
-
-// Group text into an unordered list <ul>.
-type Rows struct {
-	Exe    []rtti.Execute
-	Markup map[string]any
-}
-
-// rows, a type of flow.
-var Zt_Rows typeinfo.Flow
-
-// Implements [typeinfo.Instance]
-func (*Rows) TypeInfo() typeinfo.T {
-	return &Zt_Rows
-}
-
-// Implements [typeinfo.Markup]
-func (op *Rows) GetMarkup(ensure bool) map[string]any {
-	if ensure && op.Markup == nil {
-		op.Markup = make(map[string]any)
-	}
-	return op.Markup
-}
-
-// Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*Rows)(nil)
-
-// Holds a slice of type Rows.
-type Rows_Slice []Rows
-
-// Implements [typeinfo.Instance] for a slice of Rows.
-func (*Rows_Slice) TypeInfo() typeinfo.T {
-	return &Zt_Rows
-}
-
-// Implements [typeinfo.Repeats] for a slice of Rows.
-func (op *Rows_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -700,6 +700,9 @@ func init() {
 		Lede: "print",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to print.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -734,7 +737,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Writes text, by default putting spaces between words.",
+			"comment": "Collect printed text and separate that text by single spaces.",
 		},
 	}
 	Zt_PrintParens = typeinfo.Flow{
@@ -754,7 +757,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Collect printed text and surrounds the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
+			"comment": []interface{}{"Collect printed text and surround the output with parenthesis '()'.", "If no text is printed, no parentheses are printed."},
 		},
 	}
 	Zt_PrintCommas = typeinfo.Flow{
@@ -774,25 +777,6 @@ func init() {
 			"comment": "Separates words with commas, and 'and'.",
 		},
 	}
-	Zt_Row = typeinfo.Flow{
-		Name: "row",
-		Lede: "row",
-		Terms: []typeinfo.Term{{
-			Name:    "exe",
-			Label:   "do",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": "Runs one or more statements, and collects any text printed by them.",
-			},
-			Type: &rtti.Zt_Execute,
-		}},
-		Slots: []*typeinfo.Slot{
-			&rtti.Zt_TextEval,
-		},
-		Markup: map[string]any{
-			"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
-		},
-	}
 	Zt_Rows = typeinfo.Flow{
 		Name: "rows",
 		Lede: "rows",
@@ -810,6 +794,25 @@ func init() {
 		},
 		Markup: map[string]any{
 			"comment": "Group text into an unordered list <ul>.",
+		},
+	}
+	Zt_Row = typeinfo.Flow{
+		Name: "row",
+		Lede: "row",
+		Terms: []typeinfo.Term{{
+			Name:    "exe",
+			Label:   "do",
+			Repeats: true,
+			Markup: map[string]any{
+				"comment": "Runs one or more statements, and collects any text printed by them.",
+			},
+			Type: &rtti.Zt_Execute,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_TextEval,
+		},
+		Markup: map[string]any{
+			"comment": []interface{}{"Group text into a single line <li> as part of a list of lines.", "See also: 'rows'."},
 		},
 	}
 }
@@ -847,8 +850,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_PrintWords,
 	&Zt_PrintParens,
 	&Zt_PrintCommas,
-	&Zt_Row,
 	&Zt_Rows,
+	&Zt_Row,
 }
 
 // a list of all command signatures

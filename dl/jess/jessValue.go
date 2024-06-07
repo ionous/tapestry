@@ -115,7 +115,7 @@ func (op *MatchingNum) Match(q Query, input *InputState) (okay bool) {
 // or to have individual methods for the necessary types
 func number(value float64, kind string) rt.Assignment {
 	return &call.FromNum{
-		Value: &literal.NumValue{Value: value, Kind: kind},
+		Value: &literal.NumValue{Value: value},
 	}
 }
 

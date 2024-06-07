@@ -49,9 +49,9 @@ Loop:
 			i = &NumValue{Value: val}
 		case []any:
 			if vs, ok := compact.SliceFloats(val); ok {
-				i = &NumValues{Values: vs}
+				i = &NumList{Values: vs}
 			} else if vs, ok := compact.SliceStrings(val); ok {
-				i = &TextValues{Values: vs}
+				i = &TextList{Values: vs}
 			}
 		case map[string]any:
 			if x, e := unmarshalFields(val); e != nil {

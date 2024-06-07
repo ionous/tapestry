@@ -11,7 +11,10 @@ import (
 	"strconv"
 )
 
-// A command that does... nothing.
+// A runtime command that does... nothing.
+// ( Can be used to fill in branches ( ex. of if statements )
+//
+//	or rules which aren't supposed to do anything. )
 type DoNothing struct {
 	Markup map[string]any
 }
@@ -298,7 +301,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": "A command that does... nothing.",
+			"comment": []interface{}{"A runtime command that does... nothing.", "( Can be used to fill in branches ( ex. of if statements )", " or rules which aren't supposed to do anything. )"},
 		},
 	}
 	Zt_Expect = typeinfo.Flow{

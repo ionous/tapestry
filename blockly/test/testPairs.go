@@ -191,10 +191,10 @@ var Pairs = []struct {
 	// ( noting that blockly ignores dummies when saving,
 	// so they get saved in the "fields" section )
 	/*test*/ "List",
-	&literal.TextValues{
+	&literal.TextList{
 		Values: []string{"a", "b", "c"},
 	}, `{
-  "type": "text_values",
+  "type": "text_list",
   "id": "test-1",
   "extraState": {
     "VALUES": 3

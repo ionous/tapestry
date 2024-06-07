@@ -19,7 +19,7 @@ func (op *BoolValue) String() string {
 }
 
 func (op *BoolValue) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
-	ret = rt.BoolFrom(op.Value, op.Kind)
+	ret = rt.BoolOf(op.Value)
 	return
 }
 
@@ -68,25 +68,25 @@ func (op *TextValue) GetText(run rt.Runtime) (rt.Value, error) {
 	return op.GetLiteralValue(run)
 }
 
-func (op *NumValues) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
+func (op *NumList) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
 	// fix? would copying be better?
 	ret = rt.FloatsOf(op.Values)
 	return
 }
 
 // GetNumList implements rt.NumListEval providing the dl with a literal list of numbers.
-func (op *NumValues) GetNumList(run rt.Runtime) (rt.Value, error) {
+func (op *NumList) GetNumList(run rt.Runtime) (rt.Value, error) {
 	return op.GetLiteralValue(run)
 }
 
-func (op *TextValues) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
+func (op *TextList) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
 	// fix? would copying be better?
 	ret = rt.StringsOf(op.Values)
 	return
 }
 
 // GetTextList implements rt.TextListEval providing the dl with a literal list of text.
-func (op *TextValues) GetTextList(run rt.Runtime) (ret rt.Value, _ error) {
+func (op *TextList) GetTextList(run rt.Runtime) (ret rt.Value, _ error) {
 	return op.GetLiteralValue(run)
 }
 
@@ -129,9 +129,9 @@ func GetAffinity(a LiteralValue) (ret affine.Affinity) {
 			ret = affine.Text
 		case *RecordValue:
 			ret = affine.Record
-		case *NumValues:
+		case *NumList:
 			ret = affine.NumList
-		case *TextValues:
+		case *TextList:
 			ret = affine.TextList
 		case *RecordList:
 			ret = affine.RecordList

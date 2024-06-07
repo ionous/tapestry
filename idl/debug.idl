@@ -2,7 +2,9 @@
 Spec:requires:contains:
   - "debug"
   - "idl/rtti"
-  - - # A command that does... nothing.
+  - - # A runtime command that does... nothing.
+      # ( Can be used to fill in branches ( ex. of if statements )
+      #  or rules which aren't supposed to do anything. )
       Flow:slots:
         - "do_nothing"
         - "execute"
@@ -17,6 +19,7 @@ Spec:requires:contains:
               - "_"
               - "value"
               - "bool_eval"
+
     - # Examine the most recent game output, and generate an error unless it matches the specified text.
       Flow:slots:lede:terms:
         - "expect_text"

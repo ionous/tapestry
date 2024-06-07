@@ -24,16 +24,16 @@ func TestLiteralEncoding(t *testing.T) {
 		&literal.TextValue{Value: "hello"},
 		"hello",
 	}, {
-		&literal.NumValues{Values: []float64{1, 3, 9}},
+		&literal.NumList{Values: []float64{1, 3, 9}},
 		[]any{1.0, 3.0, 9.0},
 	}, {
-		&literal.TextValues{Values: []string{"won", "too", "trees"}},
+		&literal.TextList{Values: []string{"won", "too", "trees"}},
 		[]any{"won", "too", "trees"},
 	}, {
-		&literal.NumValues{Values: []float64{7}},
+		&literal.NumList{Values: []float64{7}},
 		7.0,
 	}, {
-		&literal.TextValues{Values: []string{"literal"}},
+		&literal.TextList{Values: []string{"literal"}},
 		"literal",
 	}})
 }

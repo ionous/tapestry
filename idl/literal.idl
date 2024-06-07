@@ -16,37 +16,10 @@ Spec:requires:contains:
         - - "bool_eval"
           - "literal_value"
         - "bool"
-        - - Term:type:
+        - - # The true or false value.
+            Term:type:
               - "value"
               - "bool"
-          - Term:type:optional:
-              - "kind"
-              - "text"
-              - true
-
-    - # A value for specifying a literal record.
-      Flow:lede:terms:
-        - "field_value"
-        - "field"
-        - - Term:name:type:
-              - "_"
-              - "field"
-              - "text"
-          - Term:type:
-              - "value"
-              - "literal_value"
-
-    - # A series of values used to build a record.
-      # While it can be specified wherever a literal value can, it only has meaning when the record type is known.
-      Flow:slots:lede:terms:
-        - "field_list"
-        - "literal_value"
-        - "field_list"
-        - - Term:name:type:repeats:
-              - "_"
-              - "fields"
-              - "field_value"
-              - true
 
     - # Specify a particular number.
       Flow:slots:lede:terms:
@@ -54,25 +27,56 @@ Spec:requires:contains:
         - - "num_eval"
           - "literal_value"
         - "num"
-        - - Term:type:
+        - - # A literal number.
+            Term:type:
               - "value"
               - "num"
-          - Term:type:optional:
+
+    - # Specify a list of literal numbers.
+      Flow:slots:lede:terms:
+        - "num_list"
+        - - "num_list_eval"
+          - "literal_value"
+        - "num"
+        - - # Zero or more literal numbers.
+            Term:name:type:repeats:
+              - "list"
+              - "values"
+              - "num"
+              - true
+
+    - # Specify some constant text.
+      Flow:slots:lede:terms:
+        - "text_value"
+        - - "text_eval"
+          - "literal_value"
+        - "text"
+        - - # Some literal text.
+            Term:type:
+              - "value"
+              - "text"
+          - # Optionally, when the text represents the name of an (existing) object,
+            # the kind of the object in question.
+            Term:type:optional:
               - "kind"
               - "text"
               - true
 
-    - # Specify a list of literal numbers.
+    - # Specify a list of literal text values.
       Flow:slots:lede:terms:
-        - "num_values"
-        - - "num_list_eval"
+        - "text_list"
+        - - "text_list_eval"
           - "literal_value"
-        - "num"
-        - - Term:type:repeats:
+        - "text"
+        - - # Zero or more text literals.
+            Term:name:type:repeats:
+              - "list"
               - "values"
-              - "num"
+              - "text"
               - true
-          - Term:type:optional:
+          - # Optionally, when the text represents the names of (existing) objects,
+            # the kind of the objects in question.
+            Term:type:optional:
               - "kind"
               - "text"
               - true
@@ -83,11 +87,16 @@ Spec:requires:contains:
         - - "record_eval"
           - "literal_value"
         - "record"
-        - - Term:name:type:
+        - - # The kind of the record being constructed.
+            # All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )
+            Term:name:type:
               - "_"
               - "kind"
               - "text"
-          - Term:type:repeats:
+          - # A set of literal values for the fields of the record.
+            # Any fields of the record which are not specified here,
+            # are "zero initialized."
+            Term:type:repeats:
               - "fields"
               - "field_value"
               - true
@@ -102,12 +111,16 @@ Spec:requires:contains:
         - - "record_list_eval"
           - "literal_value"
         - "record"
-        - - Term:name:type:
+        - - # The kind of the records being constructed.
+            # All of the records in the list must be of the same kind.
+            # All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )
+            Term:name:type:
               - "_"
               - "kind"
               - "text"
-          - Term:name:type:repeats:
-              - "values"
+          - # Zero or more record literals.
+            Term:name:type:repeats:
+              - "list"
               - "records"
               - "field_list"
               - true
@@ -116,31 +129,34 @@ Spec:requires:contains:
               - "records_cache"
               - true
 
-    - # Specify some constant text.
+    - # A series of values used to build a record.
       Flow:slots:lede:terms:
-        - "text_value"
-        - - "text_eval"
-          - "literal_value"
-        - "text"
-        - - Term:type:
-              - "value"
-              - "text"
-          - Term:type:optional:
-              - "kind"
-              - "text"
+        - "field_list"
+        - "literal_value"
+        - "field_list"
+        - - # A set of literal values for the fields of the record.
+            # Any fields of the record which are not specified here,
+            # are "zero initialized."
+            Term:name:type:repeats:
+              - "_"
+              - "fields"
+              - "field_value"
               - true
 
-    - # Specify a list of literal text values.
-      Flow:slots:lede:terms:
-        - "text_values"
-        - - "text_list_eval"
-          - "literal_value"
-        - "text"
-        - - Term:type:repeats:
-              - "values"
+    - # The name and value of a field used for initializing a literal record.
+      Flow:lede:terms:
+        - "field_value"
+        - "field"
+        - - # The name of a field in a record to initialize.
+            # New field names cannot be added to records at runtime;
+            # the field names must be part of the original declaration of the kind.
+            Term:name:type:
+              - "_"
+              - "field"
               - "text"
-              - true
-          - Term:type:optional:
-              - "kind"
-              - "text"
-              - true
+          - # The literal value of the field.
+            # The type of value must match the original declaration of the field.
+            # ( ex. If the field was declared as a number, only a number can be used to initialize it. )
+            Term:type:
+              - "value"
+              - "literal_value"
