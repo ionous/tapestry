@@ -1,5 +1,7 @@
 // Text template rendering.
-// Keeping these functions separated allows weave to exclude package express from the runtime.
+// ( everything is "internal" because text templates generate the commands;
+//
+//	nothing is exposed for authors. )
 package render
 
 //
@@ -86,23 +88,28 @@ func (op *RenderName_Slice) Repeats() bool {
 }
 
 // Pull a value from name that might refer either to a variable, or to an object.
-// If the name is an object, returns the object id.
-type RenderRef struct {
+// This gets used by text templates when processing names.
+// The templates don't attempt to determine which names are objects and which names are variables.
+// For instance:
+//   - Say: "{.story.title} by {.story.author}"
+//
+// uses UnknownDot for accessing "story".
+type UnknownDot struct {
 	Name   rtti.TextEval
 	Dot    []object.Dot
 	Markup map[string]any
 }
 
-// render_ref, a type of flow.
-var Zt_RenderRef typeinfo.Flow
+// unknown_dot, a type of flow.
+var Zt_UnknownDot typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*RenderRef) TypeInfo() typeinfo.T {
-	return &Zt_RenderRef
+func (*UnknownDot) TypeInfo() typeinfo.T {
+	return &Zt_UnknownDot
 }
 
 // Implements [typeinfo.Markup]
-func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
+func (op *UnknownDot) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -110,25 +117,25 @@ func (op *RenderRef) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.BoolEval = (*RenderRef)(nil)
-var _ rtti.NumEval = (*RenderRef)(nil)
-var _ rtti.TextEval = (*RenderRef)(nil)
-var _ rtti.RecordEval = (*RenderRef)(nil)
-var _ rtti.NumListEval = (*RenderRef)(nil)
-var _ rtti.TextListEval = (*RenderRef)(nil)
-var _ rtti.RecordListEval = (*RenderRef)(nil)
-var _ RenderEval = (*RenderRef)(nil)
+var _ rtti.BoolEval = (*UnknownDot)(nil)
+var _ rtti.NumEval = (*UnknownDot)(nil)
+var _ rtti.TextEval = (*UnknownDot)(nil)
+var _ rtti.RecordEval = (*UnknownDot)(nil)
+var _ rtti.NumListEval = (*UnknownDot)(nil)
+var _ rtti.TextListEval = (*UnknownDot)(nil)
+var _ rtti.RecordListEval = (*UnknownDot)(nil)
+var _ RenderEval = (*UnknownDot)(nil)
 
-// Holds a slice of type RenderRef.
-type RenderRef_Slice []RenderRef
+// Holds a slice of type UnknownDot.
+type UnknownDot_Slice []UnknownDot
 
-// Implements [typeinfo.Instance] for a slice of RenderRef.
-func (*RenderRef_Slice) TypeInfo() typeinfo.T {
-	return &Zt_RenderRef
+// Implements [typeinfo.Instance] for a slice of UnknownDot.
+func (*UnknownDot_Slice) TypeInfo() typeinfo.T {
+	return &Zt_UnknownDot
 }
 
-// Implements [typeinfo.Repeats] for a slice of RenderRef.
-func (op *RenderRef_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of UnknownDot.
+func (op *UnknownDot_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -270,9 +277,9 @@ func init() {
 			"internal": true,
 		},
 	}
-	Zt_RenderRef = typeinfo.Flow{
-		Name: "render_ref",
-		Lede: "render_ref",
+	Zt_UnknownDot = typeinfo.Flow{
+		Name: "unknown_dot",
+		Lede: "unknown",
 		Terms: []typeinfo.Term{{
 			Name: "name",
 			Type: &rtti.Zt_TextEval,
@@ -294,7 +301,7 @@ func init() {
 			&Zt_RenderEval,
 		},
 		Markup: map[string]any{
-			"comment":  []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "If the name is an object, returns the object id."},
+			"comment":  []interface{}{"Pull a value from name that might refer either to a variable, or to an object.", "This gets used by text templates when processing names.", "The templates don't attempt to determine which names are objects and which names are variables.", "For instance:", "  - Say: \"{.story.title} by {.story.author}\"", "uses UnknownDot for accessing \"story\"."},
 			"internal": true,
 		},
 	}
@@ -363,7 +370,8 @@ var Z_Types = typeinfo.TypeSet{
 	Name: "render",
 	Comment: []string{
 		"Text template rendering.",
-		"Keeping these functions separated allows weave to exclude package express from the runtime.",
+		"( everything is \"internal\" because text templates generate the commands;",
+		" nothing is exposed for authors. )",
 	},
 
 	Slot:       z_slot_list,
@@ -381,7 +389,7 @@ var z_slot_list = []*typeinfo.Slot{
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
 	&Zt_RenderName,
-	&Zt_RenderRef,
+	&Zt_UnknownDot,
 	&Zt_RenderValue,
 	&Zt_RenderPattern,
 	&Zt_RenderResponse,
@@ -394,25 +402,25 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	2910903954323771519:  (*RenderPattern)(nil),  /* render_eval=Render:render: */
 	3385363614654173788:  (*RenderPattern)(nil),  /* text_eval=Render:render: */
 	4328811686385928991:  (*RenderName)(nil),     /* text_eval=RenderName: */
-	12372540113328333010: (*RenderRef)(nil),      /* bool_eval=RenderRef: */
-	15295137765008583080: (*RenderRef)(nil),      /* num_eval=RenderRef: */
-	17707941731931999319: (*RenderRef)(nil),      /* num_list_eval=RenderRef: */
-	11952381947639314199: (*RenderRef)(nil),      /* record_eval=RenderRef: */
-	5794615276964665178:  (*RenderRef)(nil),      /* record_list_eval=RenderRef: */
-	15289959684061875714: (*RenderRef)(nil),      /* render_eval=RenderRef: */
-	10542331033523904889: (*RenderRef)(nil),      /* text_eval=RenderRef: */
-	4171261980310148416:  (*RenderRef)(nil),      /* text_list_eval=RenderRef: */
-	18249933776929959289: (*RenderRef)(nil),      /* bool_eval=RenderRef:dot: */
-	7340889015221784767:  (*RenderRef)(nil),      /* num_eval=RenderRef:dot: */
-	9735547470721472920:  (*RenderRef)(nil),      /* num_list_eval=RenderRef:dot: */
-	8324158095841155032:  (*RenderRef)(nil),      /* record_eval=RenderRef:dot: */
-	17618593433797581633: (*RenderRef)(nil),      /* record_list_eval=RenderRef:dot: */
-	7883271647282708009:  (*RenderRef)(nil),      /* render_eval=RenderRef:dot: */
-	239223853229152058:   (*RenderRef)(nil),      /* text_eval=RenderRef:dot: */
-	3872622981826050135:  (*RenderRef)(nil),      /* text_list_eval=RenderRef:dot: */
 	15658359855727638606: (*RenderResponse)(nil), /* execute=RenderResponse: */
 	6351613444865908923:  (*RenderResponse)(nil), /* text_eval=RenderResponse: */
 	167592851841791829:   (*RenderResponse)(nil), /* execute=RenderResponse:text: */
 	10415880721138830946: (*RenderResponse)(nil), /* text_eval=RenderResponse:text: */
 	7608693554121607902:  (*RenderValue)(nil),    /* render_eval=RenderValue: */
+	17111570366262455799: (*UnknownDot)(nil),     /* bool_eval=Unknown: */
+	7142945508556196257:  (*UnknownDot)(nil),     /* num_eval=Unknown: */
+	15564117523268286718: (*UnknownDot)(nil),     /* num_list_eval=Unknown: */
+	4698552628680730302:  (*UnknownDot)(nil),     /* record_eval=Unknown: */
+	9884996934000827391:  (*UnknownDot)(nil),     /* record_list_eval=Unknown: */
+	6204944562707286791:  (*UnknownDot)(nil),     /* render_eval=Unknown: */
+	6131627441378931796:  (*UnknownDot)(nil),     /* text_eval=Unknown: */
+	8175014555023519193:  (*UnknownDot)(nil),     /* text_list_eval=Unknown: */
+	11460948231998939576: (*UnknownDot)(nil),     /* bool_eval=Unknown:dot: */
+	8896491134250799106:  (*UnknownDot)(nil),     /* num_eval=Unknown:dot: */
+	16386625613115534957: (*UnknownDot)(nil),     /* num_list_eval=Unknown:dot: */
+	13261214435043729325: (*UnknownDot)(nil),     /* record_eval=Unknown:dot: */
+	10839879350254307744: (*UnknownDot)(nil),     /* record_list_eval=Unknown:dot: */
+	8068510348549084104:  (*UnknownDot)(nil),     /* render_eval=Unknown:dot: */
+	16265816148057261651: (*UnknownDot)(nil),     /* text_eval=Unknown:dot: */
+	3954920282304405402:  (*UnknownDot)(nil),     /* text_list_eval=Unknown:dot: */
 }

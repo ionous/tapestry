@@ -23,7 +23,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/play"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
-	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/rtti"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/dl/text"
@@ -52,7 +51,9 @@ func runDoc(ctx context.Context, cmd *base.Command, args []string) (err error) {
 			prim.Z_Types,
 			format.Z_Types,
 			rel.Z_Types,
-			render.Z_Types,
+			// fix? all of the render command are "internal"
+			// but could we detect that during the generation?
+			// render.Z_Types,
 			rtti.Z_Types,
 			story.Z_Types,
 			// testdl.Z_Types,

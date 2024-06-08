@@ -29,7 +29,7 @@
                             Row do:
                               - Say: "{.field}:"
                               - Print:
-                                  RenderRef:dot:
+                                  Object:dot:
                                     - "@object"
                                     - - AtField: "@field"
       - Define pattern:requires:provides:do:

@@ -130,7 +130,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("print", func(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
 			&text.PrintNumWord{
-				Num: &render.RenderRef{
+				Num: &render.UnknownDot{
 					Name: T("group_size"),
 				},
 			}); e != nil {
@@ -255,8 +255,8 @@ func TestTemplates(t *testing.T) {
 	})
 }
 
-func renderRef(v string, path ...any) *render.RenderRef {
-	return &render.RenderRef{Name: T(v), Dot: object.MakeDot(path...)}
+func renderRef(v string, path ...any) *render.UnknownDot {
+	return &render.UnknownDot{Name: T(v), Dot: object.MakeDot(path...)}
 }
 
 func testTemplate(str string, want interface{}) (err error) {

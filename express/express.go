@@ -289,7 +289,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 				for i, field := range fields[1:] {
 					dot[i] = &object.AtField{Field: T(field)}
 				}
-				c.buildOne(&render.RenderRef{Name: T(firstField), Dot: dot})
+				c.buildOne(&render.UnknownDot{Name: T(firstField), Dot: dot})
 			}
 		}
 
