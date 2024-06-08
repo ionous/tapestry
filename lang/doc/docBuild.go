@@ -75,20 +75,22 @@ func Build(outDir string, idl []typeinfo.TypeSet) (err error) {
 		}
 		// generate slot docs:
 		for _, slot := range g.slots {
-			var cmds []FlowInfo
-			for _, t := range g.allCommands {
-				if slices.Contains(t.Slots, slot.Slot) {
-					cmds = append(cmds, t)
+			if internal, _ := slot.Markup["internal"].(bool); !internal {
+				var cmds []FlowInfo
+				for _, t := range g.allCommands {
+					if slices.Contains(t.Slots, slot.Slot) {
+						cmds = append(cmds, t)
+					}
 				}
-			}
-			outFile := filepath.Join(outDir, slotFolder, slot.Name)
-			if e := Create(outFile, tem, map[string]any{
-				"Name":     slot.Name,
-				"Slot":     slot,
-				"Commands": cmds,
-			}); e != nil {
-				err = e
-				break
+				outFile := filepath.Join(outDir, slotFolder, slot.Name)
+				if e := Create(outFile, tem, map[string]any{
+					"Name":     slot.Name,
+					"Slot":     slot,
+					"Commands": cmds,
+				}); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 	}

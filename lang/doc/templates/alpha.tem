@@ -45,11 +45,11 @@ Slots are at the heart of Tapestry. They define what kinds of scripting commands
 </p>
 <h3>Index</h3>
 	<ul class="indexList">
-		{{ range .Slots }}
+		{{ range .Slots }}{{ if not .Markup.internal }}
 		<li>
 			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
 		</li>
-		{{ end }}
+		{{ end }}{{ end }}
 	</ul>
 </section>
 
@@ -65,10 +65,10 @@ Tapestry commands fit into slots. Commands can be composed of string and number 
 
 <h3>Index</h3>
 	<ul class="indexList">
-	{{ range  .Commands }}
+	{{ range  .Commands }}{{ if not .Markup.internal }}
 		<li>
 			<a class="code" href="{{ LinkByName .Name }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
-	{{ end }}
+	{{ end }}{{ end }}
 	</ul>
 </section>

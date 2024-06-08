@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,15 +33,25 @@
 
 	{{/* -------------------------------------------------
 	page container
+	( the more correct way to do this would be to have each
+	  type render itself using "blocks" to structure the page "chrome"
 	-------------------------------------------------	*/}}
 	<div id="page" class="wide" style="outline: 0px;">
 		<div class="container">
-			{{- if .Slot }}{{ template "slot.tem" . }}
-			{{- else if .Types }}{{ template "idl.tem" . }}
-			{{- else if .Commands }}{{ template "alpha.tem" . }}
-			{{- else }}{{ template "api.tem" . }}
-			{{- end -}}
-			{{/*-------------------------------------------------
+			{{ if .Slot }}
+				{{/* the slot, and all its comands */}}
+				{{ template "slot.tem" . }}
+			{{ else if .Types }}
+				{{/* the idl, and all its types */}}
+				{{ template "idl.tem" . }}
+			{{ else if .Commands }}
+				{{/* index of all commands */}}
+				{{ template "alpha.tem" . }}
+			{{ else }}
+				{{/* root index page */}}
+				{{ template "api.tem" . }}
+			{{ end }}
+			{{/*----------------------------------
 			page footer ( inside the container )
 			------------------------------------------------- */}}
 			<div id="footer">

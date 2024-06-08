@@ -1,3 +1,4 @@
+{{/* a page for all the slots implemented by a command */}}
 <h1>{{ Title .Slot.Name }} Slot</h1>
 {{ Comment .Slot.Markup }} 
 <div>
@@ -8,12 +9,10 @@
 		Implemented by:
 	</h3>
 	<ul class="indexList">
-	{{ range  .Commands }}
-		{{if .Slots }}
+	{{ range  .Commands }}{{ if not .Markup.internal }}
 		<li>
 			<a class="code" href="{{ LinkByType . }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
-		{{ end }}
-	{{ end }}
+	{{ end }}{{ end }}
 	</ul>
 </section>

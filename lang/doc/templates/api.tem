@@ -17,11 +17,11 @@ In order to branch from world modeling into changing how a game behaves at runti
 <p>This is the list of all known slots:
 
 	<ul class="indexList">
-		{{ range .Slots }}
+		{{ range .Slots }}{{ if not .Markup.internal }}
 		<li>
 			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
 		</li>
-		{{ end }}
+		{{ end }}{{ end }}
 	</ul>
 </section>
 

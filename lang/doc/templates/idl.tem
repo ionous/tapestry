@@ -47,11 +47,11 @@
 	Slots:
 </h3>
 	<ul class="indexList">
-		{{ range .Types.Slot }}
+		{{ range .Types.Slot }}{{ if not .Markup.internal }}
 		<li>
 			<a href="{{ LinkByType . }}">{{ Title .Name }}</a>: {{ Snippet .Markup }}
 		</li>
-		{{ end }}
+		{{ end }}{{ end }}
 	</ul>
 </section>
 {{ end }}
@@ -63,11 +63,11 @@
 	Commands:
 </h3>
 	<ul class="indexList">
-	{{ range  .Commands }}
+	{{ range  .Commands }}{{ if not .Markup.internal }}
 		<li>
 			<a class="code" href="#{{ .Name }}">{{ .Spec }}</a> {{ Snippet .Markup }}
 		</li>
-	{{ end }}
+	{{ end }}{{ end }}
 	</ul>
 </section>
 {{ end }}
