@@ -7,7 +7,7 @@ Spec:requires:contains:
     - "idl/grammar"
     - "idl/prim"
     - "idl/rtti"
-  - - # A slot for the modeling commands used to define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.
+  - - # Commands for modeling a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.
       Slot: "story_statement"
       blockly-stack: true
       blockly-color: "VARIABLES_HUE"
@@ -162,7 +162,6 @@ Spec:requires:contains:
               - "text_eval"
 
     - # Creates a grammar used to parse player input.
-      # See the Tapestry guide for details.
       Flow:slots:lede:terms:
         - "define_leading_grammar"
         - "story_statement"

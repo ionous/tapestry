@@ -57,9 +57,9 @@ func (s *Survey) GetFocalObject() (ret rt.Value) {
 	return
 }
 
-// fix: PlayerBounds, PlayerLocale and ObjectBounds might be better delegated to scris.
+// fix: PlayerBounds, PlayerLocale and ObjectBounds might be better delegated to scripts.
 // it would use the same bits as "locationBounded", only all the bounds requests would use it.
-// the scris would switch on the passed string similar to this --
+// the scripts would switch on the passed string similar to this --
 // ( one string and assume that the parser always refers to whatever actor in the global player variable )
 // that would probably narrow the dependency on rt -- maybe just to a "call" that could be configured with rt externally.
 // ( the "Scope" command could request the named pattern to ensure it exists. )
@@ -90,9 +90,9 @@ func (s *Survey) GetBounds(who, where string) (ret parser.Bounds, err error) {
 	return
 }
 
-// fix: this assumes all objects are emsy
+// fix: this assumes all objects are empty
 // add containment, whatever...
-func (s *Survey) getObjectBounds(obj string) parser.Bounds {
+func (s *Survey) getObjectBounds(_ string) parser.Bounds {
 	return func(cb parser.NounVisitor) (ret bool) {
 		return
 	}

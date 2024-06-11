@@ -22,7 +22,7 @@ var Zt_StoryStatement = typeinfo.Slot{
 	Markup: map[string]any{
 		"blockly-color": "VARIABLES_HUE",
 		"blockly-stack": true,
-		"comment":       "A slot for the modeling commands used to define a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.",
+		"comment":       "Commands for modeling a game world. All commands in a tell file start with a story statement. Specific commands can specify slots for other commands including those for running scripts, parsing the player's input, and more.",
 	},
 }
 
@@ -360,7 +360,6 @@ func (op *DefineAlias_Slice) Repeats() bool {
 }
 
 // Creates a grammar used to parse player input.
-// See the Tapestry guide for details.
 type DefineLeadingGrammar struct {
 	Lede   []string
 	Scans  []grammar.ScannerMaker
@@ -1765,7 +1764,7 @@ func init() {
 			&Zt_StoryStatement,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Creates a grammar used to parse player input.", "See the Tapestry guide for details."},
+			"comment": "Creates a grammar used to parse player input.",
 		},
 	}
 	Zt_DefineNamedGrammar = typeinfo.Flow{

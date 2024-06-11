@@ -24,7 +24,7 @@ import (
 var Zt_Matched = typeinfo.Slot{
 	Name: "matched",
 	Markup: map[string]any{
-		"comment": "Used to store matching text",
+		"comment": "Used to store matching text.",
 	},
 }
 

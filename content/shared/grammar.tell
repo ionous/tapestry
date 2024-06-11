@@ -99,6 +99,7 @@
       - "check"
     - - One noun: "objects"
       - Action: "examining"
+
 - # getting in/from; taking
   Interpret:with:
     - "get"
@@ -127,6 +128,7 @@
           - Sequence:
               - One noun: "objects"
               - Action: "taking"
+
 - # go (travel, enter)
   Interpret:with:
     - - "go"
@@ -149,6 +151,7 @@
           - Sequence:
               - One noun: "objects"
               - Action: "traveling through"
+
 - Interpret name:with:
     - "going a direction"
     - - # even though the directions are in scope by default

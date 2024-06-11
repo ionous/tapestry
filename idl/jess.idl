@@ -13,7 +13,7 @@ Spec:requires:contains:
   - - "idl/prim"
     - "idl/rtti"
 
-  - - # Used to store matching text
+  - - # Used to store matching text.
       Slot: "matched"
 
     - # One of a predefined set of determiners: the, a/n, some, our.
