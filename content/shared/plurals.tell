@@ -14,7 +14,7 @@
           - Is:matching:text:
               - Object:dot:
                   - "@obj"
-                  - AtField: "printed plural name"
+                  - At field: "printed plural name"
               - "other_than"
               - ""
           - - Say: "{.obj.printed_plural_name}"

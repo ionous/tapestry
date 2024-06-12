@@ -42,7 +42,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromBool: true
       - Fabricate input: "look"
       - Expect text:

@@ -412,9 +412,9 @@ func (op *MakeNumList_Slice) Repeats() bool {
 }
 
 type MakeRecordList struct {
-	Values []rtti.RecordEval
-	Kind   rtti.TextEval
-	Markup map[string]any
+	Values   []rtti.RecordEval
+	KindName rtti.TextEval
+	Markup   map[string]any
 }
 
 // make_record_list, a type of flow.
@@ -1061,7 +1061,7 @@ func init() {
 			Repeats: true,
 			Type:    &rtti.Zt_RecordEval,
 		}, {
-			Name:  "kind",
+			Name:  "kind_name",
 			Label: "of_type",
 			Type:  &rtti.Zt_TextEval,
 		}},

@@ -16,7 +16,7 @@ func MakeDot(path ...any) (ret []Dot) {
 		for i, p := range path {
 			switch el := p.(type) {
 			case string:
-				out[i] = &AtField{Field: literal.T(el)}
+				out[i] = &AtField{FieldName: literal.T(el)}
 			case int:
 				out[i] = &AtIndex{Index: literal.I(el)}
 			case Dot:
@@ -32,8 +32,8 @@ func MakeDot(path ...any) (ret []Dot) {
 
 func Object(name string, path ...any) *ObjectDot {
 	return &ObjectDot{
-		Name: literal.T(name),
-		Dot:  MakeDot(path...),
+		NounName: literal.T(name),
+		Dot:      MakeDot(path...),
 	}
 }
 
@@ -41,8 +41,8 @@ func Object(name string, path ...any) *ObjectDot {
 // path can include strings ( for reading from records ) or integers ( for reading from lists )
 func Variable(name string, path ...any) *VariableDot {
 	return &VariableDot{
-		Name: literal.T(name),
-		Dot:  MakeDot(path...),
+		VariableName: literal.T(name),
+		Dot:          MakeDot(path...),
 	}
 }
 
@@ -58,7 +58,7 @@ func (op *AtIndex) Resolve(run rt.Runtime) (ret rt.Dotted, err error) {
 
 // return a dot.Field
 func (op *AtField) Resolve(run rt.Runtime) (ret rt.Dotted, err error) {
-	if field, e := safe.GetText(run, op.Field); e != nil {
+	if field, e := safe.GetText(run, op.FieldName); e != nil {
 		err = cmd.Error(op, e)
 	} else {
 		ret = dot.Field(field.String())

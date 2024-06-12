@@ -46,5 +46,5 @@
     - "The directions are everywhere and nowhere rule."
     - - Push:into:
           - FromTextList:
-              KindsOf: "directions"
+              Objects of: "directions"
           - "@bounds"

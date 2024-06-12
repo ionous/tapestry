@@ -36,7 +36,7 @@
     - - Set:value:
           - Object:dot:
               - "@noun"
-              - AtField: "@trait"
+              - At field: "@trait"
           - FromBool: true
 - # Print the results of the change.
   Define rule:do:
@@ -63,7 +63,7 @@
               - Not:
                   Object:dot:
                     - "@noun"
-                    - AtField: "@guard"
+                    - At field: "@guard"
           - - Say response:with:
                 - "can't change the unchangeable"
                 - "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
@@ -73,7 +73,7 @@
     - - If:do:
           - Object:dot:
               - "@noun"
-              - AtField: "@trait"
+              - At field: "@trait"
           - - Say response:with:
                 - "can't change what is"
                 - "{They: .noun|capitalize!} {are:.noun} already {.trait}."

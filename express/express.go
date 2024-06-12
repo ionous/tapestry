@@ -287,7 +287,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 				// ex.  .object.fieldContainingAnRecord.otherField
 				dot := make([]object.Dot, len(fields)-1)
 				for i, field := range fields[1:] {
-					dot[i] = &object.AtField{Field: T(field)}
+					dot[i] = &object.AtField{FieldName: T(field)}
 				}
 				c.buildOne(&render.UnknownDot{Name: T(firstField), Dot: dot})
 			}

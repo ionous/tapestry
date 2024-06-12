@@ -144,7 +144,7 @@
     - "print details"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@obj"
                   - "containers"
           - - Say response:with:
@@ -154,12 +154,12 @@
     - "print details"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@obj"
                   - "containers"
               - Object:dot:
                   - "@obj"
-                  - AtField: "closed"
+                  - At field: "closed"
           - - Say response:with:
                 - "closed container"
                 - "closed"
@@ -201,7 +201,7 @@
     - - If:do:
           - Object:dot:
               - "@obj"
-              - AtField: "locked"
+              - At field: "locked"
           - - Say response:with:
                 - "locked status"
                 - "{if .obj.closed and .obj.locked}locked{end}"
@@ -211,10 +211,10 @@
           - Is all:
               - Object:dot:
                   - "@obj"
-                  - AtField: "transparent"
+                  - At field: "transparent"
               - Object:dot:
                   - "@obj"
-                  - AtField: "unopenable"
+                  - At field: "unopenable"
           - - Say response:with:
                 - "transparent status"
                 - "{if .is_empty}empty{end}"
@@ -223,7 +223,7 @@
     - - If:do:
           - Object:dot:
               - "@obj"
-              - AtField: "openable"
+              - At field: "openable"
           - - Say response:with:
                 - "openable status"
                 - "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
@@ -232,7 +232,7 @@
     - - If:do:
           - Object:dot:
               - "@obj"
-              - AtField: "worn"
+              - At field: "worn"
           - - Say response:with:
                 - "inner worn status"
                 - "being worn"
@@ -241,7 +241,7 @@
     - - If:do:
           - Object:dot:
               - "@obj"
-              - AtField: "lit"
+              - At field: "lit"
           - - Say response:with:
                 - "lit status"
                 - "providing light"

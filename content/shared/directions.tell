@@ -56,8 +56,8 @@ Doors have a room called the destination.
                     - "equal_to"
                     - Object:dot:
                         - "@room"
-                        - - AtField: "compass"
-                          - AtField: "@dir"
+                        - - At field: "compass"
+                          - At field: "@dir"
                 - - Set:value:
                       - "@direction"
                       - FromText: "@dir"
@@ -81,5 +81,5 @@ Doors have a room called the destination.
           - FromText:
               Object:dot:
                 - "@room"
-                - - AtField: "compass"
-                  - AtField: "@direction"
+                - - At field: "compass"
+                  - At field: "@direction"

@@ -16,7 +16,7 @@
           - "object"
     - - Nothing:
     - - If:do:else:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@noun"
               - "containers"
           - - Print: "contain"
@@ -31,7 +31,7 @@
           - "object"
     - - Nothing:
     - - If:do:else:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@noun"
               - "containers"
           - - Print: "in"
@@ -46,7 +46,7 @@
           - "object"
     - - Nothing:
     - - If:do:else:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@noun"
               - "containers"
           - - Print: "out"
@@ -73,7 +73,7 @@
                       - 1
                   - Object:dot:
                       - "@noun"
-                      - AtField: "plural named"
+                      - At field: "plural named"
               - - Print: "are"
               - Finally do:
                   - Print: "is"
@@ -91,7 +91,7 @@
           - If:do:else:
               - Object:dot:
                   - "@noun"
-                  - AtField: "plural named"
+                  - At field: "plural named"
               - - Print: "are not"
               - Finally do:
                   - Print: "is not"
@@ -109,7 +109,7 @@
           - If:do:else:
               - Object:dot:
                   - "@noun"
-                  - AtField: "plural named"
+                  - At field: "plural named"
               - - Print: "aren't"
               - Finally do:
                   - Print: "isn't"
@@ -123,7 +123,7 @@
     - - If:do:else:
           - Object:dot:
               - "@noun"
-              - AtField: "plural named"
+              - At field: "plural named"
           - - Print: "don't"
           - Finally do:
               - Print: "doesn't"

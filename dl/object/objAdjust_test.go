@@ -27,49 +27,49 @@ func TestAdjustTraits(t *testing.T) {
 	}
 
 	if v, e := safe.GetText(&lt, &object.IncrementAspect{
-		Target: literal.T("msg"),
-		Aspect: literal.T("neatness"),
+		Target:     object.Object("msg"),
+		AspectName: literal.T("neatness"),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "scuffed" {
 		t.Fatal(str)
 	} else if v, e := safe.GetText(&lt, &object.IncrementAspect{
-		Target: literal.T("msg"),
-		Aspect: literal.T("neatness"),
-		Step:   literal.I(2),
+		Target:     object.Object("msg"),
+		AspectName: literal.T("neatness"),
+		Step:       literal.I(2),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "neat" {
 		t.Fatal(str)
 	} else if v, e := safe.GetText(&lt, &object.IncrementAspect{
-		Target: literal.T("msg"),
-		Aspect: literal.T("neatness"),
-		Step:   literal.I(5),
-		Clamp:  literal.B(true),
+		Target:     object.Object("msg"),
+		AspectName: literal.T("neatness"),
+		Step:       literal.I(5),
+		Clamp:      literal.B(true),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "trampled" {
 		t.Fatal(str)
 	} else if v, e := safe.GetText(&lt, &object.DecrementAspect{
-		Target: literal.T("msg"),
-		Aspect: literal.T("neatness"),
+		Target:     object.Object("msg"),
+		AspectName: literal.T("neatness"),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "scuffed" {
 		t.Fatal(str)
 	} else if v, e := safe.GetText(&lt, &object.DecrementAspect{
-		Target: literal.T("msg"),
-		Aspect: literal.T("neatness"),
-		Step:   literal.I(2),
+		Target:     object.Object("msg"),
+		AspectName: literal.T("neatness"),
+		Step:       literal.I(2),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "trampled" {
 		t.Fatal(str)
 	} else if v, e := safe.GetText(&lt, &object.DecrementAspect{
-		Target: literal.T("msg"),
-		Aspect: literal.T("neatness"),
-		Step:   literal.I(5),
-		Clamp:  literal.B(true),
+		Target:     object.Object("msg"),
+		AspectName: literal.T("neatness"),
+		Step:       literal.I(5),
+		Clamp:      literal.B(true),
 	}); e != nil {
 		t.Fatal(e)
 	} else if str := v.String(); str != "neat" {

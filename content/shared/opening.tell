@@ -124,10 +124,10 @@
                   - "open"
               - Object:dot:
                   - "@noun"
-                  - AtField: "lockable"
+                  - At field: "lockable"
               - Object:dot:
                   - "@noun"
-                  - AtField: "locked"
+                  - At field: "locked"
           - - Say response:with:
                 - "can't open when locked"
                 - "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
@@ -145,7 +145,7 @@
                   - "open"
               - Object:dot:
                   - "@noun"
-                  - AtField: "opaque"
+                  - At field: "opaque"
               - Not:
                   AncestorOf obj:root:
                     - FromText: "@noun"

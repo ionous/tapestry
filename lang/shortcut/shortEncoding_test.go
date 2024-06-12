@@ -23,8 +23,8 @@ import (
 func TestCoreEncoding(t *testing.T) {
 	testPairs(t, []testPair{{
 		&object.ObjectDot{
-			Name: object.Variable("noun"),
-			Dot:  []object.Dot{&object.AtField{Field: object.Variable("trait")}},
+			NounName: object.Variable("noun"),
+			Dot:      []object.Dot{&object.AtField{FieldName: object.Variable("trait")}},
 		},
 		`{"Object:dot:":["@noun",[{"AtField:":"@trait"}]]}`,
 	}, {

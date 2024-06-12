@@ -23,7 +23,7 @@
                   - Repeat across:as:do:
                       - FromTextList:
                           Fields of:
-                            KindOf: "@object"
+                            Kind of: "@object"
                       - "field"
                       - - Print:
                             Row do:
@@ -31,7 +31,7 @@
                               - Print:
                                   Object:dot:
                                     - "@object"
-                                    - - AtField: "@field"
+                                    - - At field: "@field"
       - Define pattern:requires:provides:do:
           - "request debug location"
           - - Text:kind:

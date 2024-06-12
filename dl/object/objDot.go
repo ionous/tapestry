@@ -11,7 +11,7 @@ import (
 )
 
 func (op *ObjectDot) GetReference(run rt.Runtime) (ret rt.Reference, err error) {
-	if name, e := safe.ObjectText(run, op.Name); e != nil {
+	if name, e := safe.ObjectText(run, op.NounName); e != nil {
 		err = e
 	} else if path, e := resolveDots(run, op.Dot); e != nil {
 		err = e
@@ -38,7 +38,7 @@ func (op *ObjectDot) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 			err = cmd.Error(op, e)
 		}
 	} else {
-		switch obj, e := safe.ObjectText(run, op.Name); e.(type) {
+		switch obj, e := safe.ObjectText(run, op.NounName); e.(type) {
 		case rt.Unknown:
 			ret = rt.False // no such object
 		case nil:
@@ -63,7 +63,7 @@ func (op *ObjectDot) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if len(op.Dot) > 0 {
 		ret, err = op.getValue(run, affine.Text)
 	} else {
-		ret, err = safe.ObjectText(run, op.Name)
+		ret, err = safe.ObjectText(run, op.NounName)
 	}
 	return
 }

@@ -136,12 +136,12 @@ Spec:requires:contains:
       Flow:slots:lede:terms:
         - "field_list"
         - "literal_value"
-        - "field_list"
+        - "field"
         - - # A set of literal values for the fields of the record.
             # Any fields of the record which are not specified here,
             # are "zero initialized."
             Term:name:type:repeats:
-              - "_"
+              - "list"
               - "fields"
               - "field_value"
               - true

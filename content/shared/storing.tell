@@ -167,7 +167,7 @@
                   - "@action"
                   - "equal_to"
                   - "storing"
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@into_obj"
                   - "actors"
           - # If the target noun were owned by reaching actor then the actor would be the lca.

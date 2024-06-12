@@ -40,15 +40,15 @@ func (a *Shortcut) Finish(str string) (ret rtti.Address) {
 	switch a.marker {
 	case VarMarker:
 		ret = &object.VariableDot{
-			Name:   name,
-			Dot:    a.dot,
-			Markup: m,
+			VariableName: name,
+			Dot:          a.dot,
+			Markup:       m,
 		}
 	case ObjMarker:
 		ret = &object.ObjectDot{
-			Name:   name,
-			Dot:    a.dot,
-			Markup: m,
+			NounName: name,
+			Dot:      a.dot,
+			Markup:   m,
 		}
 	default:
 		panic("unexpected error")
@@ -72,7 +72,7 @@ func (a *Shortcut) Decoded(t Type, v any) (err error) {
 			a.name = name
 		} else {
 			a.dot = append(a.dot, &object.AtField{
-				Field: literal.T(name),
+				FieldName: literal.T(name),
 			})
 		}
 

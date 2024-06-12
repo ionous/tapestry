@@ -56,7 +56,7 @@ func (op *MakeRecordList) GetRecordList(run rt.Runtime) (ret rt.Value, err error
 }
 
 func (op *MakeRecordList) makeList(run rt.Runtime) (ret rt.Value, err error) {
-	if subtype, e := safe.GetText(run, op.Kind); e != nil {
+	if subtype, e := safe.GetText(run, op.KindName); e != nil {
 		err = e
 	} else if subtype := subtype.String(); len(subtype) == 0 {
 		err = errutil.New("expected a valid record name")

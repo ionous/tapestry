@@ -38,27 +38,27 @@
           - Is all:
               - Object:dot:
                   - "@obj"
-                  - AtField: "counted"
+                  - At field: "counted"
               - Is empty:
                   Variable:dot:
                     - "grouping"
-                    - - AtField: "label"
+                    - - At field: "label"
           - - # unless already grouped, use print several for unnamed counted nouns.
               Set:value:
                 - Variable:dot:
                     - "grouping"
-                    - - AtField: "label"
+                    - - At field: "label"
                 - FromText:
-                    KindOf: "@obj"
+                    Kind of: "@obj"
             - Set:value:
                 - Variable:dot:
                     - "grouping"
-                    - - AtField: "hide label"
+                    - - At field: "hide label"
                 - FromBool: true
             - Set:value:
                 - Variable:dot:
                     - "grouping"
-                    - - AtField: "hide objects"
+                    - - At field: "hide objects"
                 - FromBool: true
           - Finally do:
               - Set:value:
@@ -101,11 +101,11 @@
               - Is empty:
                   Variable:dot:
                     - "first"
-                    - - AtField: "label"
+                    - - At field: "label"
               - Is empty:
                   Variable:dot:
                     - "second"
-                    - - AtField: "label"
+                    - - At field: "label"
           - - Set:value:
                 - "@matching"
                 - FromBool: false
@@ -114,41 +114,41 @@
                   - Is:matching:text:
                       - Variable:dot:
                           - "first"
-                          - - AtField: "label"
+                          - - At field: "label"
                       - "equal_to"
                       - Variable:dot:
                           - "second"
-                          - - AtField: "label"
+                          - - At field: "label"
                   - Is:matching:value:
                       - FromBool:
                           Variable:dot:
                             - "first"
-                            - - AtField: "hide label"
+                            - - At field: "hide label"
                       - "equal_to"
                       - FromBool:
                           Variable:dot:
                             - "second"
-                            - - AtField: "hide label"
+                            - - At field: "hide label"
                   - Is:matching:value:
                       - FromBool:
                           Variable:dot:
                             - "first"
-                            - - AtField: "hide size"
+                            - - At field: "hide size"
                       - "equal_to"
                       - FromBool:
                           Variable:dot:
                             - "second"
-                            - - AtField: "hide size"
+                            - - At field: "hide size"
                   - Is:matching:value:
                       - FromBool:
                           Variable:dot:
                             - "first"
-                            - - AtField: "hide objects"
+                            - - At field: "hide objects"
                       - "equal_to"
                       - FromBool:
                           Variable:dot:
                             - "second"
-                            - - AtField: "hide objects"
+                            - - At field: "hide objects"
               - - Set:value:
                     - "@matching"
                     - FromBool: true
@@ -180,7 +180,7 @@
                     - FromRecord:
                         Variable:dot:
                           - "el"
-                          - - AtField: "grouping"
+                          - - At field: "grouping"
                 - - Set:value:
                       - "@idx"
                       - FromNum: "@index"
@@ -194,17 +194,17 @@
                 - FromText:
                     Variable:dot:
                       - "grouping"
-                      - - AtField: "name"
+                      - - At field: "name"
                 - "@names"
             - Set:value:
                 - Variable:dot:
                     - "group"
-                    - - AtField: "objects"
+                    - - At field: "objects"
                 - FromTextList: "@names"
             - Set:value:
                 - Variable:dot:
                     - "group"
-                    - - AtField: "grouping"
+                    - - At field: "grouping"
                 - FromRecord: "@grouping"
             - Push:into:
                 - FromRecord: "@group"
@@ -217,26 +217,26 @@
                   - FromRecord:
                       Variable:dot:
                         - "groups"
-                        - - AtIndex: "@idx"
+                        - - At index: "@idx"
               - Set:value:
                   - "@names"
                   - FromTextList:
                       Variable:dot:
                         - "group"
-                        - - AtField: "objects"
+                        - - At field: "objects"
               - Push:into:
                   - FromText:
                       Variable:dot:
                         - "grouping"
-                        - - AtField: "name"
+                        - - At field: "name"
                   - "@names"
               - Set:value:
                   - Variable:dot:
                       - "group"
-                      - - AtField: "objects"
+                      - - At field: "objects"
                   - FromTextList: "@names"
               - Set:value:
                   - Variable:dot:
                       - "groups"
-                      - - AtIndex: "@idx"
+                      - - At index: "@idx"
                   - FromRecord: "@group"

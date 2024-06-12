@@ -16,7 +16,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromBool: true
       - Print:
           DoorVia room:direction:
@@ -32,7 +32,7 @@
           FromText:
             Object:dot:
               - "story"
-              - AtField: "actor"
+              - At field: "actor"
       - Expect text:
           - "**Lobby**"
           - "You can see some double doors and a faux door."
@@ -40,28 +40,28 @@
           - FromText:
               Object:dot:
                 - "story"
-                - AtField: "actor"
+                - At field: "actor"
           - FromText: "faux door"
       - Expect text: "It doesn't lead anywhere."
       - TravelingThrough actor:noun:
           - FromText:
               Object:dot:
                 - "story"
-                - AtField: "actor"
+                - At field: "actor"
           - FromText: "double doors"
       - Expect text: "They seem to be closed."
       - Opening actor:noun:
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "double doors"
       - Expect text: "You open the double doors."
       - TravelingThrough actor:noun:
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "double doors"
       - Expect text:
           - "**Foyer**"

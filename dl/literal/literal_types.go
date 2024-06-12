@@ -572,9 +572,10 @@ func init() {
 	}
 	Zt_FieldList = typeinfo.Flow{
 		Name: "field_list",
-		Lede: "field_list",
+		Lede: "field",
 		Terms: []typeinfo.Term{{
 			Name:    "fields",
+			Label:   "list",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": []interface{}{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
@@ -652,7 +653,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
 	1949078217737575331:  (*BoolValue)(nil),   /* bool_eval=Bool: */
 	10481381284080410489: (*BoolValue)(nil),   /* literal_value=Bool: */
-	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
+	1426627792852548653:  (*FieldList)(nil),   /* literal_value=Field list: */
 	17669305546968596769: (*NumList)(nil),     /* literal_value=Num list: */
 	4715091378117636320:  (*NumList)(nil),     /* num_list_eval=Num list: */
 	2220603612539786023:  (*NumValue)(nil),    /* literal_value=Num: */

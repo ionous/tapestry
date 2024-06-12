@@ -14,7 +14,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "clutch"
                       - FromText: "mildred"
                   - Say: "clutch parent: {parent_of:.purse}."
@@ -25,7 +25,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "coffee"
                       - FromText: "machine"
                   - Say: "coffee parent: {parent_of:.coffee}."
@@ -36,7 +36,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "clutch"
                       - FromText: "purse"
                   - Say: "clutch parent: {parent_of:.clutch}."
@@ -47,7 +47,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "coffee"
                       - FromText: "purse"
                   - Say: "coffee parent: {parent_of:.coffee}."
@@ -58,7 +58,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "coin"
                       - FromText: "shelf"
                   - Say: "coin parent: {parent_of:.coin}."
@@ -69,7 +69,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "flower"
                       - FromText: "shelf"
                   - Say: "flower parent: {parent_of:.flower}."
@@ -80,7 +80,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "broom"
                       - FromText: "cabinet"
                   - Say: "broom parent: {parent_of:.broom}."
@@ -91,7 +91,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "knife"
                       - FromText: "purse"
                   - Say: "knife parent: {parent_of:.knife}."
@@ -102,7 +102,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "purse"
                       - FromText: "wisdom"
                   - Say: "purse parent: {parent_of:.purse}."

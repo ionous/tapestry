@@ -45,7 +45,7 @@
     - - Increase:
           Object:dot:
             - "story"
-            - AtField: "turn count"
+            - At field: "turn count"
       - Set:state:
           - "#story"
           - "playing"
@@ -92,7 +92,7 @@
           - "saying"
           - Object:dot:
               - "story"
-              - AtField: "ending message"
+              - At field: "ending message"
     - - Nothing:
     - - Set:state:
           - "#story"

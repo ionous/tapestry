@@ -22,27 +22,27 @@
     - - Set:value:
           - Variable:dot:
               - "result"
-              - - AtField: "id"
+              - - At field: "id"
           - FromText:
               Object: "@obj"
       - Set:value:
           - Variable:dot:
               - "result"
-              - - AtField: "name"
+              - - At field: "name"
           - FromText:
-              NameOf: "@obj"
+              Object name: "@obj"
       - Set:value:
           - Variable:dot:
               - "result"
-              - - AtField: "kind"
+              - - At field: "kind"
           - FromText:
-              KindOf: "@obj"
+              Kind of: "@obj"
       - Set:value:
           - Variable:dot:
               - "result"
-              - - AtField: "traits"
+              - - At field: "traits"
           - FromTextList:
-              Object traits: "@obj"
+              Object states: "@obj"
       - # if we can see into the object, collect its children
         If:do:
           - HasAccessibleChildren obj:
@@ -58,7 +58,7 @@
                             FromText: "@kid"
                       - Variable:dot:
                           - "result"
-                          - - AtField: "kids"
+                          - - At field: "kids"
 - Define pattern:requires:provides:do:
     - "has accessible children"
     - - Text:kind:
@@ -74,12 +74,12 @@
     - "closed containers are inaccessible"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@obj"
                   - "containers"
               - Object:dot:
                   - "@obj"
-                  - AtField: "closed"
+                  - At field: "closed"
           - - Set:value:
                 - "@accessible"
                 - FromBool: false
@@ -101,13 +101,13 @@
     - "carried objects are inaccessible"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@parent"
                   - "actors"
               - Not:
                   Variable:dot:
                     - "child"
-                    - - AtField: "worn"
+                    - - At field: "worn"
           - - Set:value:
                 - "@accessible"
                 - FromBool: false

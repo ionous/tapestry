@@ -27,8 +27,8 @@ type initialValues []rt.Execute
 func (in initialValues) add(noun, field string, val rt.Assignment) initialValues {
 	return append(in, &object.SetValue{
 		Target: &object.ObjectDot{
-			Name: &literal.TextValue{Value: noun},
-			Dot:  object.MakeDot(field),
+			NounName: literal.T(noun),
+			Dot:      object.MakeDot(field),
 		},
 		Value: val,
 	})

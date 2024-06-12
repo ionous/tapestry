@@ -20,7 +20,7 @@
           - "room"
           - Object:dot:
               - "@noun"
-              - AtField: "destination"
+              - At field: "destination"
       - # Determine the direction, if any, traveling through the door.
         Text:initially:
           - "direction"
@@ -94,7 +94,7 @@
                   - "traveling through"
               - Object:dot:
                   - "@noun"
-                  - AtField: "closed"
+                  - At field: "closed"
           - - Set:value:
                 - "@response"
                 - FromText:
@@ -111,10 +111,10 @@
                   - "traveling through"
               - Object:dot:
                   - "@noun"
-                  - AtField: "closed"
+                  - At field: "closed"
               - Object:dot:
                   - "@noun"
-                  - AtField: "locked"
+                  - At field: "locked"
           - - Set:value:
                 - "@response"
                 - FromText:

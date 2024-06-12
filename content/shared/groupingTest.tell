@@ -62,30 +62,30 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - Is object:exactly:
+                      - Is exactly:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "label"
+                                - - At field: "label"
                             - FromText: "props"
                         - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "hide label"
+                                - - At field: "hide label"
                             - FromBool: true
                         - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "hide size"
+                                - - At field: "hide size"
                             - FromBool: true
             - #
               Define rule:do:
                 - "print several"
                 - - If:do:
                       - Is all:
-                          - Is object:kind:
+                          - Is compatible:kind:
                               - "@obj"
                               - "triangles"
                           - Is:matching:num:
@@ -115,23 +115,23 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "label"
+                                - - At field: "label"
                             - FromText: "some things"
                         - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "hide size"
+                                - - At field: "hide size"
                             - FromBool: true
                         - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "hide objects"
+                                - - At field: "hide objects"
                             - FromBool: true
           - - Print words:
                 - PrintInlineObjects objs:
@@ -153,18 +153,18 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "label"
+                                - - At field: "label"
                             - FromText: "the tiles"
                         - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "hide size"
+                                - - At field: "hide size"
                             - FromBool: true
             - #
               Define rule:do:
@@ -173,8 +173,8 @@
                       - Is:matching:text:
                           - Variable:dot:
                               - "group"
-                              - - AtField: "grouping"
-                                - AtField: "label"
+                              - - At field: "grouping"
+                                - At field: "label"
                           - "equal_to"
                           - "the tiles"
                       - - Print: "from a Scrabble set"
@@ -182,7 +182,7 @@
               Define rule:do:
                 - "print grouped object"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Say: "{.obj}"
@@ -210,19 +210,19 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "label"
+                                - - At field: "label"
                             - FromText: "scrabble tiles"
             - #
               Define rule:do:
                 - "print grouped object"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Say: "{.obj}"
@@ -241,13 +241,13 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "scrabble tiles"
                       - - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "label"
+                                - - At field: "label"
                             - FromText: "scrabble tiles"
           - - PrintInlineObjects objs:
                 FromTextList:
@@ -267,13 +267,13 @@
           - - Define rule:do:
                 - "assign grouping"
                 - - If:do:
-                      - Is object:kind:
+                      - Is compatible:kind:
                           - "@obj"
                           - "props"
                       - - Set:value:
                             - Variable:dot:
                                 - "grouping"
-                                - - AtField: "label"
+                                - - At field: "label"
                             - FromText: "things"
           - - Print words:
                 - PrintInlineObjects objs:

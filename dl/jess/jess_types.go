@@ -4,10 +4,9 @@
 //	The kitchen is a room. The closed container called the cabinet is in the kitchen.
 //	The cabinet contains a mug. The mug is transparent.
 //
-// The types of sentences jess can process are based on Inform7. The way in which jess processes sentences, however, are based on parse trees defined by Tapestry commands.
+// These commands aren't specified by authors. Instead, they are created as a byproduct of reading a sentence.  Each successfully matched English sentence results in a single [MatchingPhrases] instance with exactly one valid member.
 //
-// The root of all parse trees is the "MatchingPhrases:" command.
-// Each successfully matched plain English sentence results a single [MatchingPhrases] instance with exactly one valid member.
+// The types of sentences jess can process are based on the sentences described in Inform7's documentation. However, Inform can handle a much wider range of sentences than jess.
 package jess
 
 //
@@ -3765,10 +3764,9 @@ var Z_Types = typeinfo.TypeSet{
 		" The kitchen is a room. The closed container called the cabinet is in the kitchen.",
 		" The cabinet contains a mug. The mug is transparent.",
 		"",
-		"The types of sentences jess can process are based on Inform7. The way in which jess processes sentences, however, are based on parse trees defined by Tapestry commands.",
+		"These commands aren't specified by authors. Instead, they are created as a byproduct of reading a sentence.  Each successfully matched English sentence results in a single [MatchingPhrases] instance with exactly one valid member.",
 		"",
-		"The root of all parse trees is the \"MatchingPhrases:\" command.",
-		"Each successfully matched plain English sentence results a single [MatchingPhrases] instance with exactly one valid member.",
+		"The types of sentences jess can process are based on the sentences described in Inform7's documentation. However, Inform can handle a much wider range of sentences than jess.",
 	},
 
 	Slot:       z_slot_list,

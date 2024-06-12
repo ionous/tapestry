@@ -16,7 +16,7 @@
     - - If:do:else:
           - Object:dot:
               - "@noun"
-              - AtField: "plural named"
+              - At field: "plural named"
           - - Print: "they"
           - Finally do:
               - Print: "it"
@@ -30,7 +30,7 @@
     - - If:do:else:
           - Object:dot:
               - "@noun"
-              - AtField: "plural named"
+              - At field: "plural named"
           - - Print: "these"
           - Finally do:
               - Print: "that"

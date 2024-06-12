@@ -21,7 +21,7 @@
           - "object"
     - - Bool: "result"
     - - If:do:else:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "rooms"
           - # a room is the top of line.
@@ -30,15 +30,15 @@
                 - FromBool: true
           - If:do:else:
               - Is all:
-                  - Is object:kind:
+                  - Is compatible:kind:
                       - "@obj"
                       - "containers"
                   - Object:dot:
                       - "@obj"
-                      - AtField: "opaque"
+                      - At field: "opaque"
                   - Object:dot:
                       - "@obj"
-                      - AtField: "closed"
+                      - At field: "closed"
               - - Set:value:
                     - "@result"
                     - FromBool: true
@@ -108,8 +108,8 @@
           - FromBool:
               Object:dot:
                 - "@actor"
-                - - AtField: "lighting"
-                  - AtField: "illuminated"
+                - - At field: "lighting"
+                  - At field: "illuminated"
 - Declare: "A lighting status is a kind of record."
 - Define kind:fields:
     - "actors"
@@ -141,22 +141,22 @@
               - Is:matching:num:
                   - Object:dot:
                       - "story"
-                      - AtField: "turn count"
+                      - At field: "turn count"
                   - "greater_than"
                   - Object:dot:
                       - "@actor"
-                      - - AtField: "lighting"
-                        - AtField: "last turn"
+                      - - At field: "lighting"
+                        - At field: "last turn"
           - - Set:value:
                 - Object:dot:
                     - "@actor"
-                    - AtField: "lighting"
+                    - At field: "lighting"
                 - FromRecord:
                     LightingStatus lastTurn:illuminated:
                       - FromNum:
                           Object:dot:
                             - "story"
-                            - AtField: "turn count"
+                            - At field: "turn count"
                       - FromBool:
                           ContainsLight object:
                             FromText: "@actor"
@@ -199,7 +199,7 @@
                   - If:do:else:
                       - Object:dot:
                           - "@it"
-                          - AtField: "lit"
+                          - At field: "lit"
                       - - Set:value:
                             - "@result"
                             - FromBool: true

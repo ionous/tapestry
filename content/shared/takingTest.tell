@@ -16,7 +16,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "coffee"
             - Print:
                 Row do:
@@ -26,7 +26,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "apple"
             - Print:
                 Row do:
@@ -35,7 +35,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "coin"
             - Print:
                 Row do:
@@ -44,7 +44,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "purse"
             - Print:
                 Row do:
@@ -54,7 +54,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "knife"
                   - Say: "The knife's parent is: {the: {parent_of: .knife}}."
             - Print:
@@ -64,7 +64,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "self"
             - Print:
                 Row do:
@@ -73,7 +73,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "mildred"
             - Print:
                 Row do:
@@ -82,7 +82,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "cabinet"
             - Print:
                 Row do:
@@ -91,7 +91,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "machine"
       - Expect text:
           - "  - Fail to take from something closed:"

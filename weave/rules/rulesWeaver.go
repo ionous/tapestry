@@ -71,7 +71,7 @@ func AddNounFilter(noun string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 func AddKindFilter(kind string, filters []rt.BoolEval) (ret []rt.BoolEval) {
 	return append(filters,
 		&object.IsKindOf{
-			Object: object.Variable(event.Object, event.Target.String()),
-			Kind:   kind,
+			Target:   object.Variable(event.Object, event.Target.String()),
+			KindName: literal.T(kind),
 		})
 }

@@ -16,7 +16,7 @@ func WriteDots(a rt.Address) (ret string, okay bool) {
 	var out strings.Builder
 	switch a := a.(type) {
 	case *object.VariableDot:
-		if n, ok := getLiteralString(a.Name); ok && len(n) > 0 {
+		if n, ok := getLiteralString(a.VariableName); ok && len(n) > 0 {
 			out.WriteRune(AtSign)
 			out.WriteString(formatName(n))
 			if writeDots(&out, a.Dot) {
@@ -24,7 +24,7 @@ func WriteDots(a rt.Address) (ret string, okay bool) {
 			}
 		}
 	case *object.ObjectDot:
-		if n, ok := getLiteralString(a.Name); ok && len(n) > 0 {
+		if n, ok := getLiteralString(a.NounName); ok && len(n) > 0 {
 			out.WriteRune(HashMark)
 			out.WriteString(formatName(n))
 			if writeDots(&out, a.Dot) {
@@ -41,7 +41,7 @@ Loop:
 	for _, d := range dots {
 		switch d := d.(type) {
 		case *object.AtField:
-			if field, ok := getLiteralString(d.Field); !ok {
+			if field, ok := getLiteralString(d.FieldName); !ok {
 				okay = false
 				break Loop
 			} else {

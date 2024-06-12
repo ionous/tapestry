@@ -25,7 +25,7 @@
       - Set:value:
           - Object:dot:
               - "cabinet"
-              - AtField: "closed"
+              - At field: "closed"
           - FromBool: true
       - Repeat across:as:do:
           - FromTextList:
@@ -47,7 +47,7 @@
       - Set:value:
           - Object:dot:
               - "cabinet"
-              - AtField: "open"
+              - At field: "open"
           - FromBool: true
       - Expect:
           Is:matching:num:
@@ -99,7 +99,7 @@
       - Set:value:
           - Object:dot:
               - "cabinet"
-              - AtField: "closed"
+              - At field: "closed"
           - FromBool: true
       - PrintVantage location:illuminated:verbosity:
           - FromText: "cabinet"

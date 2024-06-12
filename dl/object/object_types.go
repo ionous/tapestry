@@ -93,9 +93,9 @@ func (op *SetValue_Slice) Repeats() bool {
 // Set the state of an object or record.
 // See also: story `Define state:names:`.
 type SetState struct {
-	Target rtti.Address
-	Trait  rtti.TextEval
-	Markup map[string]any
+	Target    rtti.Address
+	StateName rtti.TextEval
+	Markup    map[string]any
 }
 
 // set_state, a type of flow.
@@ -143,9 +143,9 @@ func (op *SetState_Slice) Repeats() bool {
 //
 // WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
 type ObjectDot struct {
-	Name   rtti.TextEval
-	Dot    []Dot
-	Markup map[string]any
+	NounName rtti.TextEval
+	Dot      []Dot
+	Markup   map[string]any
 }
 
 // object_dot, a type of flow.
@@ -198,9 +198,9 @@ func (op *ObjectDot_Slice) Repeats() bool {
 //
 // WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
 type VariableDot struct {
-	Name   rtti.TextEval
-	Dot    []Dot
-	Markup map[string]any
+	VariableName rtti.TextEval
+	Dot          []Dot
+	Markup       map[string]any
 }
 
 // variable_dot, a type of flow.
@@ -244,8 +244,8 @@ func (op *VariableDot_Slice) Repeats() bool {
 
 // Select a named field from a record, or a named property from an object.
 type AtField struct {
-	Field  rtti.TextEval
-	Markup map[string]any
+	FieldName rtti.TextEval
+	Markup    map[string]any
 }
 
 // at_field, a type of flow.
@@ -318,22 +318,25 @@ func (op *AtIndex_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Full name of the object.
-type NameOf struct {
-	Object rtti.TextEval
+// The full name of an object as originally specified by the author.
+// Generates an error for unknown objects except
+// it returns empty text when given empty text.
+// See also [ObjectDot] which can return the object's unique id.
+type ObjectName struct {
+	Target rtti.Address
 	Markup map[string]any
 }
 
-// name_of, a type of flow.
-var Zt_NameOf typeinfo.Flow
+// object_name, a type of flow.
+var Zt_ObjectName typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*NameOf) TypeInfo() typeinfo.T {
-	return &Zt_NameOf
+func (*ObjectName) TypeInfo() typeinfo.T {
+	return &Zt_ObjectName
 }
 
 // Implements [typeinfo.Markup]
-func (op *NameOf) GetMarkup(ensure bool) map[string]any {
+func (op *ObjectName) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -341,37 +344,38 @@ func (op *NameOf) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*NameOf)(nil)
+var _ rtti.TextEval = (*ObjectName)(nil)
 
-// Holds a slice of type NameOf.
-type NameOf_Slice []NameOf
+// Holds a slice of type ObjectName.
+type ObjectName_Slice []ObjectName
 
-// Implements [typeinfo.Instance] for a slice of NameOf.
-func (*NameOf_Slice) TypeInfo() typeinfo.T {
-	return &Zt_NameOf
+// Implements [typeinfo.Instance] for a slice of ObjectName.
+func (*ObjectName_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ObjectName
 }
 
-// Implements [typeinfo.Repeats] for a slice of NameOf.
-func (op *NameOf_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ObjectName.
+func (op *ObjectName_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Returns all of the object's current traits as a list of text.
-type ObjectTraits struct {
-	Object rtti.TextEval
+// All of an object's current states as a list of text.
+// ( Despite the name, can also be used on records. )
+type ObjectStates struct {
+	Target rtti.Address
 	Markup map[string]any
 }
 
-// object_traits, a type of flow.
-var Zt_ObjectTraits typeinfo.Flow
+// object_states, a type of flow.
+var Zt_ObjectStates typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*ObjectTraits) TypeInfo() typeinfo.T {
-	return &Zt_ObjectTraits
+func (*ObjectStates) TypeInfo() typeinfo.T {
+	return &Zt_ObjectStates
 }
 
 // Implements [typeinfo.Markup]
-func (op *ObjectTraits) GetMarkup(ensure bool) map[string]any {
+func (op *ObjectStates) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -379,26 +383,29 @@ func (op *ObjectTraits) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextListEval = (*ObjectTraits)(nil)
+var _ rtti.TextListEval = (*ObjectStates)(nil)
 
-// Holds a slice of type ObjectTraits.
-type ObjectTraits_Slice []ObjectTraits
+// Holds a slice of type ObjectStates.
+type ObjectStates_Slice []ObjectStates
 
-// Implements [typeinfo.Instance] for a slice of ObjectTraits.
-func (*ObjectTraits_Slice) TypeInfo() typeinfo.T {
-	return &Zt_ObjectTraits
+// Implements [typeinfo.Instance] for a slice of ObjectStates.
+func (*ObjectStates_Slice) TypeInfo() typeinfo.T {
+	return &Zt_ObjectStates
 }
 
-// Implements [typeinfo.Repeats] for a slice of ObjectTraits.
-func (op *ObjectTraits_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of ObjectStates.
+func (op *ObjectStates_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// True if the object is exactly the named kind.
+// Determine whether an object (or record) is of exactly the named kind.
+// For example, all containers are a kind of prop.
+// Asking if a container is exactly a prop would return false.
+// See also [IsKindOf].
 type IsExactKindOf struct {
-	Object rtti.TextEval
-	Kind   string
-	Markup map[string]any
+	Target   rtti.Address
+	KindName rtti.TextEval
+	Markup   map[string]any
 }
 
 // is_exact_kind_of, a type of flow.
@@ -433,12 +440,15 @@ func (op *IsExactKindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// True if the object is compatible with the named kind.
+// Determine whether an object (or record) is compatible with the named kind.
+// For example, all containers are a kind of prop.
+// Asking if a container is a kind of a prop would return true.
+// See also [IsExactKindOf].
 type IsKindOf struct {
-	Object  rtti.TextEval
-	Kind    string
-	Nothing bool
-	Markup  map[string]any
+	Target   rtti.Address
+	KindName rtti.TextEval
+	Nothing  bool
+	Markup   map[string]any
 }
 
 // is_kind_of, a type of flow.
@@ -473,9 +483,9 @@ func (op *IsKindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Friendly name of the object's kind.
+// The kind of an object or record.
 type KindOf struct {
-	Object  rtti.TextEval
+	Target  rtti.Address
 	Nothing bool
 	Markup  map[string]any
 }
@@ -512,10 +522,10 @@ func (op *KindOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// A list of compatible kinds.
+// A list of all objects accessible by the current scene that compatible with the specified kind.
 type KindsOf struct {
-	Kind   string
-	Markup map[string]any
+	KindName rtti.TextEval
+	Markup   map[string]any
 }
 
 // kinds_of, a type of flow.
@@ -550,7 +560,7 @@ func (op *KindsOf_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// List of the field names of a kind.
+// A list of the fields of a given kind.
 type FieldsOfKind struct {
 	KindName rtti.TextEval
 	Markup   map[string]any
@@ -588,14 +598,16 @@ func (op *FieldsOfKind_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Increases the value of a trait held by an object aspect.
-// Returns the new value of the trait.
+// Change to the next state in some particular set of states for a given object ( or record. )
+// Optionally, returns the new value of the state.
+// Uses the order of the states where as they were originally defined.
+// See [DefineState].
 type IncrementAspect struct {
-	Target rtti.TextEval
-	Aspect rtti.TextEval
-	Step   rtti.NumEval
-	Clamp  rtti.BoolEval
-	Markup map[string]any
+	Target     rtti.Address
+	AspectName rtti.TextEval
+	Step       rtti.NumEval
+	Clamp      rtti.BoolEval
+	Markup     map[string]any
 }
 
 // increment_aspect, a type of flow.
@@ -631,14 +643,16 @@ func (op *IncrementAspect_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Increases the value of a trait held by an object aspect.
-// Returns the new value of the trait.
+// Change to the previous state in some particular set of states for a given object ( or record. )
+// Optionally, returns the new value of the state.
+// Uses the order of the states where as they were originally defined.
+// See [DefineState].
 type DecrementAspect struct {
-	Target rtti.TextEval
-	Aspect rtti.TextEval
-	Step   rtti.NumEval
-	Clamp  rtti.BoolEval
-	Markup map[string]any
+	Target     rtti.Address
+	AspectName rtti.TextEval
+	Step       rtti.NumEval
+	Clamp      rtti.BoolEval
+	Markup     map[string]any
 }
 
 // decrement_aspect, a type of flow.
@@ -711,7 +725,7 @@ func init() {
 			},
 			Type: &rtti.Zt_Address,
 		}, {
-			Name:  "trait",
+			Name:  "state_name",
 			Label: "state",
 			Markup: map[string]any{
 				"comment": []interface{}{"Name of the state to set.", "Only one state in a state set is considered active at a time so this implicitly deactivates the other states in its set.", "Errors if the state wasn't declared as part of the object's kind."},
@@ -729,7 +743,7 @@ func init() {
 		Name: "object_dot",
 		Lede: "object",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "noun_name",
 			Markup: map[string]any{
 				"comment": "Id or friendly name of the object.",
 			},
@@ -762,14 +776,20 @@ func init() {
 		Name: "variable_dot",
 		Lede: "variable",
 		Terms: []typeinfo.Term{{
-			Name: "name",
+			Name: "variable_name",
+			Markup: map[string]any{
+				"comment": "Exact name of the variable in question.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "dot",
 			Label:    "dot",
 			Optional: true,
 			Repeats:  true,
-			Type:     &Zt_Dot,
+			Markup: map[string]any{
+				"comment": []interface{}{"The field or path within the variable to read from.", "Specifying a dot only makes sense when the variable contains", "a record, a list, or the id an object.", "When this isn't specified, the command returns the value of the variable itself."},
+			},
+			Type: &Zt_Dot,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_Address,
@@ -788,9 +808,10 @@ func init() {
 	}
 	Zt_AtField = typeinfo.Flow{
 		Name: "at_field",
-		Lede: "at_field",
+		Lede: "at",
 		Terms: []typeinfo.Term{{
-			Name: "field",
+			Name:  "field_name",
+			Label: "field",
 			Markup: map[string]any{
 				"comment": []interface{}{"The name of the field to read or write.", "The field must exist in the object or record being accessed."},
 			},
@@ -805,9 +826,10 @@ func init() {
 	}
 	Zt_AtIndex = typeinfo.Flow{
 		Name: "at_index",
-		Lede: "at_index",
+		Lede: "at",
 		Terms: []typeinfo.Term{{
-			Name: "index",
+			Name:  "index",
+			Label: "index",
 			Markup: map[string]any{
 				"comment": []interface{}{"The zero-based index to read or write.", "The index must exist within the list being targeted."},
 			},
@@ -820,71 +842,90 @@ func init() {
 			"comment": "Select a value from a list of values.",
 		},
 	}
-	Zt_NameOf = typeinfo.Flow{
-		Name: "name_of",
-		Lede: "name_of",
+	Zt_ObjectName = typeinfo.Flow{
+		Name: "object_name",
+		Lede: "object",
 		Terms: []typeinfo.Term{{
-			Name: "object",
-			Type: &rtti.Zt_TextEval,
+			Name:  "target",
+			Label: "name",
+			Markup: map[string]any{
+				"comment": []interface{}{"The object in question.", "( Records don't have names. )"},
+			},
+			Type: &rtti.Zt_Address,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Full name of the object.",
+			"comment": []interface{}{"The full name of an object as originally specified by the author.", "Generates an error for unknown objects except", "it returns empty text when given empty text.", "See also [ObjectDot] which can return the object's unique id."},
 		},
 	}
-	Zt_ObjectTraits = typeinfo.Flow{
-		Name: "object_traits",
+	Zt_ObjectStates = typeinfo.Flow{
+		Name: "object_states",
 		Lede: "object",
 		Terms: []typeinfo.Term{{
-			Name:  "object",
-			Label: "traits",
-			Type:  &rtti.Zt_TextEval,
+			Name:  "target",
+			Label: "states",
+			Markup: map[string]any{
+				"comment": "The object or record in question.",
+			},
+			Type: &rtti.Zt_Address,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": "Returns all of the object's current traits as a list of text.",
+			"comment": []interface{}{"All of an object's current states as a list of text.", "( Despite the name, can also be used on records. )"},
 		},
 	}
 	Zt_IsExactKindOf = typeinfo.Flow{
 		Name: "is_exact_kind_of",
 		Lede: "is",
 		Terms: []typeinfo.Term{{
-			Name:  "object",
-			Label: "object",
-			Type:  &rtti.Zt_TextEval,
-		}, {
-			Name:  "kind",
+			Name:  "target",
 			Label: "exactly",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The object or record in question.",
+			},
+			Type: &rtti.Zt_Address,
+		}, {
+			Name:  "kind_name",
+			Label: "kind",
+			Markup: map[string]any{
+				"comment": "The kind to check.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "True if the object is exactly the named kind.",
+			"comment": []interface{}{"Determine whether an object (or record) is of exactly the named kind.", "For example, all containers are a kind of prop.", "Asking if a container is exactly a prop would return false.", "See also [IsKindOf]."},
 		},
 	}
 	Zt_IsKindOf = typeinfo.Flow{
 		Name: "is_kind_of",
 		Lede: "is",
 		Terms: []typeinfo.Term{{
-			Name:  "object",
-			Label: "object",
-			Type:  &rtti.Zt_TextEval,
+			Name:  "target",
+			Label: "compatible",
+			Markup: map[string]any{
+				"comment": "The object or record in question.",
+			},
+			Type: &rtti.Zt_Address,
 		}, {
-			Name:  "kind",
+			Name:  "kind_name",
 			Label: "kind",
-			Type:  &prim.Zt_Text,
+			Markup: map[string]any{
+				"comment": "The kind to check.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "nothing",
 			Label:    "nothing",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"try to check the type of nothing objects?", "normally, nothing objects have no kind."},
+				"comment": []interface{}{"Check whether the requested text of the object is empty", "but the type of the requested text is still of requested kind."},
 			},
 			Type: &prim.Zt_Bool,
 		}},
@@ -892,21 +933,25 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "True if the object is compatible with the named kind.",
+			"comment": []interface{}{"Determine whether an object (or record) is compatible with the named kind.", "For example, all containers are a kind of prop.", "Asking if a container is a kind of a prop would return true.", "See also [IsExactKindOf]."},
 		},
 	}
 	Zt_KindOf = typeinfo.Flow{
 		Name: "kind_of",
-		Lede: "kind_of",
+		Lede: "kind",
 		Terms: []typeinfo.Term{{
-			Name: "object",
-			Type: &rtti.Zt_TextEval,
+			Name:  "target",
+			Label: "of",
+			Markup: map[string]any{
+				"comment": "The object or record in question.",
+			},
+			Type: &rtti.Zt_Address,
 		}, {
 			Name:     "nothing",
 			Label:    "nothing",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": []interface{}{"try to check the type of nothing objects?", "normally, nothing objects have no kind."},
+				"comment": []interface{}{"Check whether the requested text of the object is empty", "but the type of the requested text is still of requested kind."},
 			},
 			Type: &prim.Zt_Bool,
 		}},
@@ -914,21 +959,25 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Friendly name of the object's kind.",
+			"comment": "The kind of an object or record.",
 		},
 	}
 	Zt_KindsOf = typeinfo.Flow{
 		Name: "kinds_of",
-		Lede: "kinds_of",
+		Lede: "objects",
 		Terms: []typeinfo.Term{{
-			Name: "kind",
-			Type: &prim.Zt_Text,
+			Name:  "kind_name",
+			Label: "of",
+			Markup: map[string]any{
+				"comment": "The kind in question.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": "A list of compatible kinds.",
+			"comment": "A list of all objects accessible by the current scene that compatible with the specified kind.",
 		},
 	}
 	Zt_FieldsOfKind = typeinfo.Flow{
@@ -937,13 +986,16 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "kind_name",
 			Label: "of",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The kind in question.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextListEval,
 		},
 		Markup: map[string]any{
-			"comment": "List of the field names of a kind.",
+			"comment": "A list of the fields of a given kind.",
 		},
 	}
 	Zt_IncrementAspect = typeinfo.Flow{
@@ -951,17 +1003,23 @@ func init() {
 		Lede: "increase",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The object or record in question.",
+			},
+			Type: &rtti.Zt_Address,
 		}, {
-			Name:  "aspect",
-			Label: "aspect",
-			Type:  &rtti.Zt_TextEval,
+			Name:  "aspect_name",
+			Label: "state",
+			Markup: map[string]any{
+				"comment": []interface{}{"The name of the set of states in question.", "See also [DefineState]."},
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "if not specified, increments by a single step.",
+				"comment": "Customize the size of the increment. When not specified, increase by a single step.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -969,7 +1027,7 @@ func init() {
 			Label:    "clamp",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "if not specified, wraps.",
+				"comment": "Customize the behavior of increment when the last state has been reached. If clamp if false ( or not specified ), increment will wrap around to the first state. When clamp is true, increment will stick to the last state.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -978,7 +1036,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Increases the value of a trait held by an object aspect.", "Returns the new value of the trait."},
+			"comment": []interface{}{"Change to the next state in some particular set of states for a given object ( or record. )", "Optionally, returns the new value of the state.", "Uses the order of the states where as they were originally defined.", "See [DefineState]."},
 		},
 	}
 	Zt_DecrementAspect = typeinfo.Flow{
@@ -986,17 +1044,23 @@ func init() {
 		Lede: "decrease",
 		Terms: []typeinfo.Term{{
 			Name: "target",
-			Type: &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The object or record in question.",
+			},
+			Type: &rtti.Zt_Address,
 		}, {
-			Name:  "aspect",
-			Label: "aspect",
-			Type:  &rtti.Zt_TextEval,
+			Name:  "aspect_name",
+			Label: "state",
+			Markup: map[string]any{
+				"comment": []interface{}{"The name of the set of states in question.", "See also [DefineState]."},
+			},
+			Type: &rtti.Zt_TextEval,
 		}, {
 			Name:     "step",
 			Label:    "by",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "if not specified, increments by a single step.",
+				"comment": "Customize the size of the decrement. When not specified, decrease by a single step.",
 			},
 			Type: &rtti.Zt_NumEval,
 		}, {
@@ -1004,7 +1068,7 @@ func init() {
 			Label:    "clamp",
 			Optional: true,
 			Markup: map[string]any{
-				"comment": "if not specified, wraps.",
+				"comment": " Customize the behavior of decrement when the first state has been reached. If clamp if false ( or not specified ), decrement will wrap around to the last state. When clamp is true, decrement will stick to the first state.",
 			},
 			Type: &rtti.Zt_BoolEval,
 		}},
@@ -1013,7 +1077,7 @@ func init() {
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Increases the value of a trait held by an object aspect.", "Returns the new value of the trait."},
+			"comment": []interface{}{"Change to the previous state in some particular set of states for a given object ( or record. )", "Optionally, returns the new value of the state.", "Uses the order of the states where as they were originally defined.", "See [DefineState]."},
 		},
 	}
 }
@@ -1045,8 +1109,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_VariableDot,
 	&Zt_AtField,
 	&Zt_AtIndex,
-	&Zt_NameOf,
-	&Zt_ObjectTraits,
+	&Zt_ObjectName,
+	&Zt_ObjectStates,
 	&Zt_IsExactKindOf,
 	&Zt_IsKindOf,
 	&Zt_KindOf,
@@ -1059,33 +1123,32 @@ var z_flow_list = []*typeinfo.Flow{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	1683104564853176068:  (*AtField)(nil),         /* dot=AtField: */
-	17908840355303216180: (*AtIndex)(nil),         /* dot=AtIndex: */
-	13259725831972112539: (*DecrementAspect)(nil), /* execute=Decrease:aspect: */
-	9604047801594713852:  (*DecrementAspect)(nil), /* text_eval=Decrease:aspect: */
-	11515881376122775668: (*DecrementAspect)(nil), /* execute=Decrease:aspect:by: */
-	1589765377795283065:  (*DecrementAspect)(nil), /* text_eval=Decrease:aspect:by: */
-	10691394634979399555: (*DecrementAspect)(nil), /* execute=Decrease:aspect:by:clamp: */
-	16351892255943407142: (*DecrementAspect)(nil), /* text_eval=Decrease:aspect:by:clamp: */
-	16567257087826189312: (*DecrementAspect)(nil), /* execute=Decrease:aspect:clamp: */
-	7498537354592687963:  (*DecrementAspect)(nil), /* text_eval=Decrease:aspect:clamp: */
+	15204531541525437496: (*AtField)(nil),         /* dot=At field: */
+	7476101450221130208:  (*AtIndex)(nil),         /* dot=At index: */
+	14169556874784221862: (*DecrementAspect)(nil), /* execute=Decrease:state: */
+	17587985027489164579: (*DecrementAspect)(nil), /* text_eval=Decrease:state: */
+	7559406936622200143:  (*DecrementAspect)(nil), /* execute=Decrease:state:by: */
+	419651371872152076:   (*DecrementAspect)(nil), /* text_eval=Decrease:state:by: */
+	13093349901141291332: (*DecrementAspect)(nil), /* execute=Decrease:state:by:clamp: */
+	12748959322317977131: (*DecrementAspect)(nil), /* text_eval=Decrease:state:by:clamp: */
+	3351294293920048277:  (*DecrementAspect)(nil), /* execute=Decrease:state:clamp: */
+	16963765904232890520: (*DecrementAspect)(nil), /* text_eval=Decrease:state:clamp: */
 	2224842870997259213:  (*FieldsOfKind)(nil),    /* text_list_eval=Fields of: */
-	11043224857467493683: (*IncrementAspect)(nil), /* execute=Increase:aspect: */
-	1296309673842091672:  (*IncrementAspect)(nil), /* text_eval=Increase:aspect: */
-	4473637830475551932:  (*IncrementAspect)(nil), /* execute=Increase:aspect:by: */
-	18328024260427443133: (*IncrementAspect)(nil), /* text_eval=Increase:aspect:by: */
-	1150598923989934235:  (*IncrementAspect)(nil), /* execute=Increase:aspect:by:clamp: */
-	16465259325356451354: (*IncrementAspect)(nil), /* text_eval=Increase:aspect:by:clamp: */
-	4522630356185077352:  (*IncrementAspect)(nil), /* execute=Increase:aspect:clamp: */
-	705264554644415287:   (*IncrementAspect)(nil), /* text_eval=Increase:aspect:clamp: */
-	2112965277461200598:  (*IsExactKindOf)(nil),   /* bool_eval=Is object:exactly: */
-	13998300864651118772: (*IsKindOf)(nil),        /* bool_eval=Is object:kind: */
-	1848015039325151105:  (*IsKindOf)(nil),        /* bool_eval=Is object:kind:nothing: */
-	16305715626122315047: (*KindOf)(nil),          /* text_eval=KindOf: */
-	4254622167054960918:  (*KindOf)(nil),          /* text_eval=KindOf:nothing: */
-	6869420318733086481:  (*KindsOf)(nil),         /* text_list_eval=KindsOf: */
-	15519818243985955688: (*NameOf)(nil),          /* text_eval=NameOf: */
-	15933580486837544843: (*ObjectTraits)(nil),    /* text_list_eval=Object traits: */
+	1983679666160899438:  (*IncrementAspect)(nil), /* execute=Increase:state: */
+	11027003704027006847: (*IncrementAspect)(nil), /* text_eval=Increase:state: */
+	9009918931836719719:  (*IncrementAspect)(nil), /* execute=Increase:state:by: */
+	4759094076173014048:  (*IncrementAspect)(nil), /* text_eval=Increase:state:by: */
+	5055672601277968076:  (*IncrementAspect)(nil), /* execute=Increase:state:by:clamp: */
+	4231756894592955311:  (*IncrementAspect)(nil), /* text_eval=Increase:state:by:clamp: */
+	13691223217116632397: (*IncrementAspect)(nil), /* execute=Increase:state:clamp: */
+	1440462751062399988:  (*IncrementAspect)(nil), /* text_eval=Increase:state:clamp: */
+	1438230010307446237:  (*IsKindOf)(nil),        /* bool_eval=Is compatible:kind: */
+	11610383747721345480: (*IsKindOf)(nil),        /* bool_eval=Is compatible:kind:nothing: */
+	13266154688715980549: (*IsExactKindOf)(nil),   /* bool_eval=Is exactly:kind: */
+	6032980780630230203:  (*KindOf)(nil),          /* text_eval=Kind of: */
+	10655425131305457554: (*KindOf)(nil),          /* text_eval=Kind of:nothing: */
+	4315817498883274344:  (*ObjectName)(nil),      /* text_eval=Object name: */
+	15083953234702869198: (*ObjectStates)(nil),    /* text_list_eval=Object states: */
 	8656684385605626625:  (*ObjectDot)(nil),       /* address=Object: */
 	6106842879255343810:  (*ObjectDot)(nil),       /* bool_eval=Object: */
 	14709650427635515944: (*ObjectDot)(nil),       /* num_eval=Object: */
@@ -1102,6 +1165,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	16877508779303594737: (*ObjectDot)(nil),       /* record_list_eval=Object:dot: */
 	17663678026468030644: (*ObjectDot)(nil),       /* text_eval=Object:dot: */
 	725008522959645559:   (*ObjectDot)(nil),       /* text_list_eval=Object:dot: */
+	13479346777286647466: (*KindsOf)(nil),         /* text_list_eval=Objects of: */
 	9616350989753725148:  (*SetState)(nil),        /* execute=Set:state: */
 	3912570011939708664:  (*SetValue)(nil),        /* execute=Set:value: */
 	13692207992970428220: (*VariableDot)(nil),     /* address=Variable: */

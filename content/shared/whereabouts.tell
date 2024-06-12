@@ -17,7 +17,7 @@
           - "parent"
           - "object"
     - - If:do:else:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "agents"
           - - Set:value:
@@ -27,7 +27,7 @@
                       - "whereabouts"
                       - Object:dot:
                           - "@obj"
-                          - AtField: "pawn"
+                          - At field: "pawn"
           - Finally do:
               - Set:value:
                   - "@parent"
@@ -84,7 +84,7 @@
           - Not:
               Is empty: "@search"
           - - If:do:
-                - Is object:kind:
+                - Is compatible:kind:
                     - "@search"
                     - "rooms"
                 - - Set:value:
@@ -246,13 +246,13 @@
           - "object"
     - - If:assuming:do:
           - Is any:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@parent"
                   - "containers"
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@parent"
                   - "supporters"
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@parent"
                   - "rooms"
           - - Arg:from:
@@ -273,7 +273,7 @@
           - "supporter"
           - "supporter"
     - - If:assuming:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@parent"
               - "supporters"
           - - Arg:from:
@@ -299,7 +299,7 @@
           - ParentOf obj:
               FromText: "@obj"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@parent"
               - "containers"
           - - Set:value:
@@ -315,7 +315,7 @@
           - "owner"
           - "actor"
     - - If:assuming:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@parent"
               - "actors"
           - - Arg:from:
@@ -346,12 +346,12 @@
                 FromText: "@obj"
       - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@parent"
                   - "actors"
               - Object:dot:
                   - "@obj"
-                  - AtField: "not worn"
+                  - At field: "not worn"
           - - Set:value:
                 - "@carrier"
                 - FromText: "@parent"
@@ -372,12 +372,12 @@
               FromText: "@obj"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@parent"
                   - "actors"
               - Object:dot:
                   - "@obj"
-                  - AtField: "worn"
+                  - At field: "worn"
           - - Set:value:
                 - "@wearer"
                 - FromText: "@parent"

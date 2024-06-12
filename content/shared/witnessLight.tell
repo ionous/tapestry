@@ -9,31 +9,31 @@
           - Is:matching:text:
               - Object:dot:
                   - "story"
-                  - AtField: "actor"
+                  - At field: "actor"
               - "equal_to"
               - Object:dot:
                   - "last known"
-                  - AtField: "actor"
+                  - At field: "actor"
       - Bool:initially:
           - "same location"
           - Is:matching:text:
               - Object:dot:
                   - "story"
-                  - AtField: "location"
+                  - At field: "location"
               - "equal_to"
               - Object:dot:
                   - "last known"
-                  - AtField: "location"
+                  - At field: "location"
       - Bool:initially:
           - "was illuminated"
           - Object:dot:
               - "last known"
-              - AtField: "illuminated"
+              - At field: "illuminated"
       - Bool:initially:
           - "now illuminated"
           - Object:dot:
               - "story"
-              - AtField: "illuminated"
+              - At field: "illuminated"
     - - # allow after actions
         Continue:
 - Define rule:named:do:

@@ -57,25 +57,25 @@
           - "actor"
           - Object:dot:
               - "story"
-              - AtField: "actor"
+              - At field: "actor"
       - Bool: "refresh"
     - - Nothing:
     - - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "actor"
+              - At field: "actor"
           - FromText: "@actor"
       - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "location"
+              - At field: "location"
           - FromText:
               LocationOf obj:
                 FromText: "@actor"
       - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "illuminated"
+              - At field: "illuminated"
           - FromBool:
               Illuminates actor:refresh:
                 - FromText: "@actor"
@@ -92,11 +92,11 @@
           - - Set:value:
                 - Object:dot:
                     - "last known"
-                    - AtField:  "@field"
+                    - At field:  "@field"
                 - FromAddress:
                     Object:dot:
                       - "story"
-                      - AtField: "@field"
+                      - At field: "@field"
 - # updates 'last known' story state. anything comparing
   # 'story' and 'last known' has to happen in an earlier phase.
   Define rule:named:do:
@@ -106,7 +106,7 @@
       - Increase:
           Object:dot:
             - "story"
-            - AtField: "turn count"
+            - At field: "turn count"
 - Interpret:with:
     - "score"
     - - Action: "request the score"

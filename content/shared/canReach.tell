@@ -151,7 +151,7 @@
     - - If:do:
           - Object:dot:
               - "@noun"
-              - AtField: "intangible"
+              - At field: "intangible"
           - - Set:value:
                 - "@response"
                 - FromText:
@@ -166,7 +166,7 @@
               - # we know this rule is for the player, so we can rely the illumination cache.
                 Object:dot:
                   - "@actor"
-                  - AtField: "not illuminated"
+                  - At field: "not illuminated"
           - # Used to determine whether an action needing light can proceed.
             # Returns some response text if the action is blocked.
             # Relies on has light.
@@ -199,12 +199,12 @@
     - "reach up"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@from_obj"
                   - "containers"
               - Object:dot:
                   - "@from_obj"
-                  - AtField: "closed"
+                  - At field: "closed"
           - - Set:value:
                 - "@response"
                 - FromText:
@@ -218,7 +218,7 @@
           - FromText:
               Say: "reach up: from:{.from_obj} -> into:{.into_obj}"
       - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@from_obj"
               - "rooms"
           - - Set:value:
@@ -250,12 +250,12 @@
     - "reach down"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@into_obj"
                   - "containers"
               - Object:dot:
                   - "@into_obj"
-                  - AtField: "closed"
+                  - At field: "closed"
               - Not:
                   Is:matching:text:
                     - "@into_obj"
@@ -274,7 +274,7 @@
           - FromText:
               Say: "reach down: from:{.from_obj} -> into:{.into_obj}"
       - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@into_obj"
               - "rooms"
           - - Set:value:

@@ -55,7 +55,7 @@
                   - "@action"
                   - "equal_to"
                   - "taking"
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@noun"
                   - "actors"
           - - Set:value:
@@ -92,7 +92,7 @@
                   - "taking"
               - Object:dot:
                   - "@noun"
-                  - AtField: "scenery"
+                  - At field: "scenery"
           - - Set:value:
                 - "@response"
                 - FromText:
@@ -109,7 +109,7 @@
                   - "taking"
               - Object:dot:
                   - "@noun"
-                  - AtField: "fixed in place"
+                  - At field: "fixed in place"
           - - Set:value:
                 - "@response"
                 - FromText:
@@ -125,7 +125,7 @@
                   - "equal_to"
                   - "taking"
               - Not:
-                  Is object:kind:
+                  Is compatible:kind:
                     - "@noun"
                     - "things"
           - - Set:value:
@@ -163,7 +163,7 @@
                   - "@action"
                   - "equal_to"
                   - "taking"
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@from_obj"
                   - "actors"
           - - # If the target noun were owned by the reaching actor then the actor would be the lca.

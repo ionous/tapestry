@@ -24,7 +24,7 @@
                 - Is all:
                     - Object:dot:
                         - "settings"
-                        - AtField: "score notification on"
+                        - At field: "score notification on"
                     - Is:matching:num:
                         - "@change"
                         - "other_than"
@@ -35,10 +35,10 @@
                           Subtract:value:
                             - Object:dot:
                                 - "story"
-                                - AtField: "score"
+                                - At field: "score"
                             - Object:dot:
                                 - "last known"
-                                - AtField: "score"
+                                - At field: "score"
                 - - Say response:with:
                       - "notify score changed"
                       - "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} {if .change > 1}points{else}point{end}."
@@ -95,7 +95,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromBool: true
       - Fabricate input: "score"
       - Expect text: "This isn't a competition."
@@ -106,17 +106,17 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField:  "pawn"
+                - At field:  "pawn"
           - FromBool: true
       - Set:value:
           - Object:dot:
               - "story"
-              -  AtField: "max score"
+              -  At field: "max score"
           - FromNum: 50
       - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "score"
+              - At field: "score"
           - FromNum: 23
       - Fabricate input: "score"
       - Expect text: "So far, in 1 turn, you have scored 23 out of a possible 50 points."
@@ -130,17 +130,17 @@
       - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "max score"
+              - At field: "max score"
           - FromNum: 100
       - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "score"
+              - At field: "score"
           - FromNum: 100
       - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "turn count"
+              - At field: "turn count"
           - FromNum: 7
       - Fabricate input: "score"
       - Expect text: "In 7 turns, you scored 100 out of a possible 100 points."
@@ -156,7 +156,7 @@
               Set:value:
                 - Object:dot:
                     - "story"
-                    - AtField:  "score"
+                    - At field:  "score"
                 - FromNum: 50
       - Define noun:rule:do:
           - "flashlight"
@@ -165,12 +165,12 @@
               Decrease:
                 Object:dot:
                   - "story"
-                  - AtField: "score"
+                  - At field: "score"
     - - StartGame actor:quietly:
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromBool: true
       - Fabricate input: "switch on flashlight"
       - Expect text:

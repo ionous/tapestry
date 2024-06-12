@@ -47,7 +47,7 @@ Spec:requires:contains:
             # Errors if the state wasn't declared as part of the object's kind.
             Term:name:type:
               - "state"
-              - "trait"
+              - "state_name"
               - "text_eval"
 
     - # Read a value from an object. As a special case, if there are no dot parts, this will return the id of the object.
@@ -72,7 +72,7 @@ Spec:requires:contains:
         - - # Id or friendly name of the object.
             Term:name:type:
               - "_"
-              - "name"
+              - "noun_name"
               - "text_eval"
           - # A field or path within the object to read from.
             Term:optional:repeats:
@@ -86,6 +86,7 @@ Spec:requires:contains:
       # is a shorter way to say:
       #   Variable:dot: "some local variable"
       # WARNING: This doesn't convert values from one type to another. For instance, if a field was declared as text, this will error if read as a boolean.
+      blockly-color: "MATH_HUE"
       Flow:slots:lede:terms:
         - "variable_dot"
         - - "address"
@@ -97,171 +98,212 @@ Spec:requires:contains:
           - "text_list_eval"
           - "record_list_eval"
         - "variable"
-        - - Term:name:type:
+        - - # Exact name of the variable in question.
+            Term:name:type:
               - "_"
-              - "name"
+              - "variable_name"
               - "text_eval"
-          - Term:optional:repeats:
+          - # The field or path within the variable to read from.
+            # Specifying a dot only makes sense when the variable contains
+            # a record, a list, or the id an object.
+            # When this isn't specified, the command returns the value of the variable itself.
+            Term:optional:repeats:
               - "dot"
               - true
               - true
 
-
-      blockly-color: "MATH_HUE"
     - # Select a named field from a record, or a named property from an object.
-      Flow:slots:terms:
+      Flow:slots:lede:terms:
         - "at_field"
         - "dot"
+        - "at"
         - - # The name of the field to read or write.
             # The field must exist in the object or record being accessed.
             Term:name:type:
-              - "_"
               - "field"
+              - "field_name"
               - "text_eval"
 
     - # Select a value from a list of values.
-      Flow:slots:terms:
+      Flow:slots:lede:terms:
         - "at_index"
         - "dot"
+        - "at"
         - - # The zero-based index to read or write.
             # The index must exist within the list being targeted.
-            Term:name:type:
-              - "_"
+            Term:type:
               - "index"
               - "num_eval"
 
-
-    - # Full name of the object.
-      Flow:slots:terms:
-        - "name_of"
-        - "text_eval"
-        - - Term:name:type:
-              - "_"
-              - "object"
-              - "text_eval"
-
-    - # Returns all of the object's current traits as a list of text.
+    - # The full name of an object as originally specified by the author.
+      # Generates an error for unknown objects except
+      # it returns empty text when given empty text.
+      # See also [ObjectDot] which can return the object's unique id.
       Flow:slots:lede:terms:
-        - "object_traits"
+        - "object_name"
+        - "text_eval"
+        - "object"
+        - - # The object in question.
+            # ( Records don't have names. )
+            Term:name:type:
+              - "name"
+              - "target"
+              - "address"
+
+    - # All of an object's current states as a list of text.
+      # ( Despite the name, can also be used on records. )
+      Flow:slots:lede:terms:
+        - "object_states"
         - "text_list_eval"
         - "object"
-        - - Term:name:type:
-              - "traits"
-              - "object"
-              - "text_eval"
+        - - # The object or record in question.
+            Term:name:type:
+              - "states"
+              - "target"
+              - "address"
 
-    - # True if the object is exactly the named kind.
+    - # Determine whether an object (or record) is of exactly the named kind.
+      # For example, all containers are a kind of prop.
+      # Asking if a container is exactly a prop would return false.
+      # See also [IsKindOf].
       Flow:slots:lede:terms:
         - "is_exact_kind_of"
         - "bool_eval"
         - "is"
-        - - Term:type:
-              - "object"
-              - "text_eval"
-          - Term:name:type:
+        - - # The object or record in question.
+            Term:name:type:
               - "exactly"
+              - "target"
+              - "address"
+          - # The kind to check.
+            Term:name:type:
               - "kind"
-              - "text"
+              - "kind_name"
+              - "text_eval"
 
-    - # True if the object is compatible with the named kind.
+    - # Determine whether an object (or record) is compatible with the named kind.
+      # For example, all containers are a kind of prop.
+      # Asking if a container is a kind of a prop would return true.
+      # See also [IsExactKindOf].
       Flow:slots:lede:terms:
         - "is_kind_of"
         - "bool_eval"
         - "is"
-        - - Term:type:
-              - "object"
+        - - # The object or record in question.
+            Term:name:type:
+              - "compatible"
+              - "target"
+              - "address"
+          - # The kind to check.
+            Term:name:type:
+              - "kind"
+              - "kind_name"
               - "text_eval"
-          - Term:name:type:
-              - "kind"
-              - "kind"
-              - "text"
-          - # try to check the type of nothing objects?
-            # normally, nothing objects have no kind.
+          - # Check whether the requested text of the object is empty
+            # but the type of the requested text is still of requested kind.
             Term:type:optional:
               - "nothing"
               - "bool"
               - true
 
-    - # Friendly name of the object's kind.
-      Flow:slots:terms:
+    - # The kind of an object or record.
+      Flow:slots:lede:terms:
         - "kind_of"
         - "text_eval"
-        - - Term:name:type:
-              - "_"
-              - "object"
-              - "text_eval"
-          - # try to check the type of nothing objects?
-            # normally, nothing objects have no kind.
+        - "kind"
+        - - # The object or record in question.
+            Term:name:type:
+              - "of"
+              - "target"
+              - "address"
+          - # Check whether the requested text of the object is empty
+            # but the type of the requested text is still of requested kind.
             Term:type:optional:
               - "nothing"
               - "bool"
               - true
 
-    - # A list of compatible kinds.
-      Flow:slots:terms:
+    - # A list of all objects accessible by the current scene that compatible with the specified kind.
+      Flow:slots:lede:terms:
         - "kinds_of"
         - "text_list_eval"
-        - - Term:name:type:
-              - "_"
-              - "kind"
-              - "text"
-
-    - # List of the field names of a kind.
-      Flow:slots:lede:terms:
-        - "fields_of_kind"
-        - "text_list_eval"
-        - "fields"
-        - - Term:name:type:
+        - "objects"
+        - - # The kind in question.
+            Term:name:type:
               - "of"
               - "kind_name"
               - "text_eval"
 
-    - # Increases the value of a trait held by an object aspect.
-      # Returns the new value of the trait.
+    - # A list of the fields of a given kind.
+      Flow:slots:lede:terms:
+        - "fields_of_kind"
+        - "text_list_eval"
+        - "fields"
+        - -  # The kind in question.
+             Term:name:type:
+              - "of"
+              - "kind_name"
+              - "text_eval"
+
+    - # Change to the next state in some particular set of states for a given object ( or record. )
+      # Optionally, returns the new value of the state.
+      # Uses the order of the states where as they were originally defined.
+      # See [DefineState].
       Flow:slots:lede:terms:
         - "increment_aspect"
         - - "text_eval"
           - "execute"
         - "increase"
-        - - Term:name:type:
+        - - # The object or record in question.
+            Term:name:type:
               - "_"
               - "target"
+              - "address"
+          - # The name of the set of states in question.
+            # See also [DefineState].
+            Term:name:type:
+              - "state"
+              - "aspect_name"
               - "text_eval"
-          - Term:type:
-              - "aspect"
-              - "text_eval"
-          - # if not specified, increments by a single step.
+          - # Customize the size of the increment. When not specified, increase by a single step.
             Term:name:type:optional:
               - "by"
               - "step"
               - "num_eval"
               - true
-          - # if not specified, wraps.
+          - # Customize the behavior of increment when the last state has been reached. If clamp if false ( or not specified ), increment will wrap around to the first state. When clamp is true, increment will stick to the last state.
             Term:type:optional:
               - "clamp"
               - "bool_eval"
               - true
-    - # Increases the value of a trait held by an object aspect.
-      # Returns the new value of the trait.
+
+    - # Change to the previous state in some particular set of states for a given object ( or record. )
+      # Optionally, returns the new value of the state.
+      # Uses the order of the states where as they were originally defined.
+      # See [DefineState].
       Flow:slots:lede:terms:
         - "decrement_aspect"
         - - "text_eval"
           - "execute"
         - "decrease"
-        - - Term:name:type:
+        - - # The object or record in question.
+            Term:name:type:
               - "_"
               - "target"
+              - "address"
+          - # The name of the set of states in question.
+            # See also [DefineState].
+            Term:name:type:
+              - "state"
+              - "aspect_name"
               - "text_eval"
-          - Term:type:
-              - "aspect"
-              - "text_eval"
-          - # if not specified, increments by a single step.
+          - # Customize the size of the decrement. When not specified, decrease by a single step.
             Term:name:type:optional:
               - "by"
               - "step"
               - "num_eval"
               - true
-          - # if not specified, wraps.
+          - #  Customize the behavior of decrement when the first state has been reached. If clamp if false ( or not specified ), decrement will wrap around to the last state. When clamp is true, decrement will stick to the first state.
             Term:type:optional:
               - "clamp"
               - "bool_eval"

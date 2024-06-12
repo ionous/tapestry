@@ -39,7 +39,7 @@
   Define rule:do:
     - "instead of examining"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@noun"
               - "directions"
           - - Say response:with:
@@ -89,7 +89,7 @@
                 - FromText:
                     Object:dot:
                       - "@obj"
-                      - AtField: "description"
+                      - At field: "description"
           - - Print: "@description"
             - PrintParticulars obj:
                 FromText: "@obj"
@@ -106,7 +106,7 @@
     - "Print particulars"
     - "the print containers contents rule"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "containers"
           - - If:do:else:
@@ -132,7 +132,7 @@
     - "Print particulars"
     - "the print supporter contents rule"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "supporters"
           - - If:do:

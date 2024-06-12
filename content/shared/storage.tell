@@ -13,7 +13,7 @@
 - Define rule:do:
     - "provides storage"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "supporters"
           - - Set:value:
@@ -22,7 +22,7 @@
 - Define rule:do:
     - "provides storage"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "containers"
           - - Set:value:
@@ -70,7 +70,7 @@
                                 - "#player.pawn"
                             - Object:dot:
                                 - "@it"
-                                - AtField: "scenery"
+                                - At field: "scenery"
                       - - Push:into:
                             - FromText: "@it"
                             - "@out"
@@ -93,12 +93,12 @@
     - "allows storage"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@obj"
                   - "containers"
               - Object:dot:
                   - "@obj"
-                  - AtField: "closed"
+                  - At field: "closed"
           - - Set:value:
                 - "@success"
                 - FromBool: false

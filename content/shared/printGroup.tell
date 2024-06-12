@@ -17,23 +17,23 @@
           - "grouping"
           - Variable:dot:
               - "group"
-              - - AtField: "grouping"
+              - - At field: "grouping"
       - TextList:initially:
           - "objs"
           - Variable:dot:
               - "group"
-              - - AtField: "objects"
+              - - At field: "objects"
     - - If:do:
           - Not:
               Variable:dot:
                 - "grouping"
-                - - AtField: "hide objects"
+                - - At field: "hide objects"
           - # print a bracketed list of objects
             - If:do:else:
                 - Not:
                     Variable:dot:
                       - "grouping"
-                      - - AtField: "hide size"
+                      - - At field: "hide size"
                 - - Print parentheses:
                       - Print commas:
                           - Repeat across:as:do:
@@ -57,15 +57,15 @@
           - Is all:
               - Variable:dot:
                   - "grouping"
-                  - - AtField: "hide size"
+                  - - At field: "hide size"
               - Not:
                   Variable:dot:
                     - "grouping"
-                    - - AtField: "hide label"
+                    - - At field: "hide label"
           - - Print:
                 Variable:dot:
                   - "grouping"
-                  - - AtField: "label"
+                  - - At field: "label"
 - Define rule:named:do:
     - "print group"
     - "size of group"
@@ -73,12 +73,12 @@
           - Not:
               Variable:dot:
                 - "grouping"
-                - - AtField: "hide size"
+                - - At field: "hide size"
           - - PrintSeveral obj:groupSize:label:
                 - FromText:
                     Variable:dot:
                       - "objs"
-                      - - AtIndex: 1
+                      - - At index: 1
                 - FromNum:
                     Len:
                       FromTextList: "@objs"
@@ -96,12 +96,12 @@
               - Is empty:
                   Variable:dot:
                     - "grouping"
-                    - - AtField: "label"
+                    - - At field: "label"
           - - PrintGroupedObject obj:
                 FromText:
                   Variable:dot:
                     - "objs"
-                    - - AtIndex: 1
+                    - - At index: 1
             - # this is the only rule that sets success
               # doing so blocks the other rules from running.
               Set:value:

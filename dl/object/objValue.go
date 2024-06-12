@@ -35,7 +35,7 @@ func (op *SetState) Execute(run rt.Runtime) (err error) {
 func (op *SetState) setState(run rt.Runtime) (err error) {
 	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
-	} else if trait, e := safe.GetText(run, op.Trait); e != nil {
+	} else if trait, e := safe.GetText(run, op.StateName); e != nil {
 		err = e
 	} else if at, e := at.Dot(dot.Field(trait.String())); e != nil {
 		err = e

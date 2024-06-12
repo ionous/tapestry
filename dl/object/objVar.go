@@ -10,7 +10,7 @@ import (
 )
 
 func (op *VariableDot) GetReference(run rt.Runtime) (ret rt.Reference, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
+	if name, e := safe.GetText(run, op.VariableName); e != nil {
 		err = e
 	} else if path, e := resolveDots(run, op.Dot); e != nil {
 		err = e

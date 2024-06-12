@@ -11,7 +11,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "flower"
       - # The 'can't change what is' response.
         Expect text: "It is already worn."
@@ -20,7 +20,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "flower"
       - Expect text: "You take off the flower."
       - Say: "The flower's new parent: {the: {parent_of: .flower}}, {.flower.possessiveness}."
@@ -30,7 +30,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "flower"
       - Expect text: "You aren't wearing that!"
       - Note: "Wear the flower again:"
@@ -38,7 +38,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "flower"
       - Expect text: "You put on the flower."
       - Say: "The flower's new parent: {the: {parent_of: .flower}}, {.flower.possessiveness}."
@@ -50,7 +50,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "knife"
       - Expect text: "It isn't something you can put on."
       - Say: "The knife's parent: {the: {parent_of: .knife}}, {.knife.possessiveness}."
@@ -62,7 +62,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "purse"
       - Expect text: "You haven't got that!"
       - Note: "Fail to remove something not held:"
@@ -70,7 +70,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "purse"
       - Expect text: "You haven't got that!"
       - Note: "Fail to put on something not reachable:"
@@ -78,7 +78,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "purse"
       - Expect text: "You haven't got that!"
       - Say: "The purse's parent: {the: {parent_of: .purse}}, {.purse.possessiveness}."

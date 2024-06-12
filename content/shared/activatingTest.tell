@@ -11,7 +11,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "controls"
       - Expect text: "You switch on the espresso controls."
       - Say: "The controls are {.controls.activation}."
@@ -20,7 +20,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "controls"
       - Expect text: "You switch off the espresso controls."
       - Say: "The controls are {.controls.activation}."
@@ -30,6 +30,6 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "knife"
       - Expect text: "It isn't something you can switch on."

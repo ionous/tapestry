@@ -87,7 +87,7 @@
           - If:do:else:
               - Object:dot:
                   - "@obj"
-                  - AtField: "proper named"
+                  - At field: "proper named"
               - # by definition proper named objects have no article.
                 - Say: "{.name}"
               - If:do:else:
@@ -100,14 +100,14 @@
                       - Is:matching:text:
                           - Object:dot:
                               - "@obj"
-                              - AtField: "indefinite article"
+                              - At field: "indefinite article"
                           - "other_than"
                           - ""
                       - - Say: "{.obj.indefinite_article} {.name}"
                       - If:do:else:
                           - Object:dot:
                               - "@obj"
-                              - AtField: "plural named"
+                              - At field: "plural named"
                           - - Say: "some {.name}"
                           - If:do:else:
                               - StartsWithVowel text:

@@ -14,7 +14,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "coffee"
                       - FromText: "machine"
             - Print:
@@ -25,7 +25,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "soup"
                       - FromText: "shelf"
                   - Say: "The soup's parent is: {the: {parent_of: .soup}}."
@@ -37,7 +37,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "hook"
                       - FromText: "cabinet"
                   - Say: "The hook's parent is: {the: {parent_of: .hook}}."
@@ -48,7 +48,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "hat"
                       - FromText: "cabinet"
             - Print:
@@ -58,7 +58,7 @@
                       - FromText:
                           Object:dot:
                             - "player"
-                            - AtField: "pawn"
+                            - At field: "pawn"
                       - FromText: "apple"
                       - FromText: "Mildred"
       - Expect text:

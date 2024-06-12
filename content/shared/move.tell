@@ -15,7 +15,7 @@
     - "before move object"
     - - If:do:
           - Not:
-              Is object:kind:
+              Is compatible:kind:
                 - "@obj"
                 - "things"
           - - # check for tangibility instead?
@@ -45,18 +45,18 @@
               - "equal_to"
               - Object:dot:
                   - "story"
-                  - AtField: "actor"
+                  - At field: "actor"
           - - UpdateStory:
 - Define rule:do:
     - "move object"
     - - If:do:
           - Object:dot:
               - "@obj"
-              - AtField: "worn"
+              - At field: "worn"
           - - Set:value:
                 - Object:dot:
                     - "@obj"
-                    - AtField: "not worn"
+                    - At field: "not worn"
                 - FromBool: true
       - If:do:
           - Is:matching:text:
@@ -83,7 +83,7 @@
       - Set:value:
           - Object:dot:
               - "@obj"
-              - AtField: "not worn"
+              - At field: "not worn"
           - FromBool: true
       - Relate:to:via:
           - ""
@@ -119,5 +119,5 @@
           - - Set:value:
                 - Object:dot:
                     - "@obj"
-                    - AtField: "not worn"
+                    - At field: "not worn"
                 - FromBool: true

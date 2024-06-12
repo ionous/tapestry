@@ -31,13 +31,13 @@
               - Is:matching:text:
                   - Object:dot:
                       - "@obj"
-                      - AtField: "printed name"
+                      - At field: "printed name"
                   - "other_than"
                   - ""
               - - Print:
                     Object:dot:
                       - "@obj"
-                      - AtField: "printed name"
+                      - At field: "printed name"
                 - Mention obj:
                     FromText: "@obj"
               - # if the object is publicly named, print the original name of the object;
@@ -45,16 +45,16 @@
                 If:do:else:
                   - Object:dot:
                       - "@obj"
-                      - AtField: "publicly named"
+                      - At field: "publicly named"
                   - - Print:
-                        NameOf: "@obj"
+                        Object name: "@obj"
                     - Mention obj:
                         FromText: "@obj"
                   - # if nothing else was printed, print the singular name of the kind: 'room', 'container', etc.
                     Finally do:
                       - Print:
                           Singular of:
-                            KindOf: "@obj"
+                            Kind of: "@obj"
                       - Mention obj:
                           FromText: "@obj"
 - #
@@ -72,7 +72,7 @@
     - "Print nothing"
     - "print nowhere rule"
     - - If:do:
-          - Is object:kind:nothing:
+          - Is compatible:kind:nothing:
               - "@obj"
               - "rooms"
               - true
@@ -81,7 +81,7 @@
     - "Print nothing"
     - "print nobody rule"
     - - If:do:
-          - Is object:kind:nothing:
+          - Is compatible:kind:nothing:
               - "@obj"
               - "actors"
               - true
@@ -94,21 +94,21 @@
           - "object"
     - - Nothing:
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "things"
           - - Set:value:
                 - Object:dot:
                     - "@obj"
-                    - AtField: "mentioned"
+                    - At field: "mentioned"
                 - FromBool: true
             - Set:value:
                 - Object:dot:
                     - "story"
-                    - AtField: "mentions"
+                    - At field: "mentions"
                 - FromNum:
                     Add:value:
                       - 1
                       - Object:dot:
                           - "story"
-                          - AtField: "mentions"
+                          - At field: "mentions"

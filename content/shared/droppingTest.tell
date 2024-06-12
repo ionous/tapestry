@@ -9,7 +9,7 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "knife"
       - Expect text: "Dropped."
       - Say: "The knife's new parent: {the: {parent_of: .knife}}."
@@ -18,6 +18,6 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "knife"
       - Expect text: "You haven't got that!"

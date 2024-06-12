@@ -26,14 +26,14 @@
           - "object"
           - Object:dot:
               - "story"
-              - AtField: "location"
+              - At field: "location"
       - # Whether the location is illuminated or not.
         # If not specified, uses the current story illumination.
         Bool:initially:
           - "illuminated"
           - Object:dot:
               - "story"
-              - AtField: "illuminated"
+              - At field: "illuminated"
       - # One of the verbosity traits.
         # If not specified, uses the setting's verbosity.
         Text:kind:initially:
@@ -41,7 +41,7 @@
           - "verbosity"
           - Object:dot:
               - "settings"
-              - AtField: "verbosity"
+              - At field: "verbosity"
     - - Nothing:
       - TextList:initially:
           - "enclosures"
@@ -70,7 +70,7 @@
                             - "brief"
                         - Object:dot:
                             - "story"
-                            - AtField: "not darkness witnessed"
+                            - At field: "not darkness witnessed"
                 - - PrintDarkDescription room:
                       FromText: "@room"
           - # when illuminate
@@ -95,7 +95,7 @@
                               - "brief"
                           - Object:dot:
                               - "@room"
-                              - AtField: "not visited"
+                              - At field: "not visited"
                   - # Reorder from outer to inner
                     - Reverse list: "@enclosures"
                     - Repeat across:as:do:
@@ -110,13 +110,13 @@
           - - Set:value:
                 - Object:dot:
                     - "story"
-                    - AtField: "darkness witnessed"
+                    - At field: "darkness witnessed"
                 - FromBool: true
           - Finally do:
               - Set:value:
                   - Object:dot:
                       - "@room"
-                      - AtField: "visited"
+                      - At field: "visited"
                   - FromBool: true
 - #
   Define pattern:requires:provides:do:
@@ -162,7 +162,7 @@
                 - FromText:
                     Variable:dot:
                       - "enclosures"
-                      - - AtIndex:
+                      - - At index:
                             Len:
                               FromTextList: "@enclosures"
           - - Say: "<b>{.locale}</b>"
@@ -182,7 +182,7 @@
           - "object"
           - Variable:dot:
               - "enclosures"
-              - - AtIndex:
+              - - At index:
                     Len:
                       FromTextList: "@enclosures"
     - - Repeat across:as:do:
@@ -216,7 +216,7 @@
           - "previous mentions"
           - Object:dot:
               - "story"
-              - AtField: "mentions"
+              - At field: "mentions"
       - TextList: "remaining kids"
     - - If:do:
           - Is:matching:text:
@@ -226,7 +226,7 @@
           - - Print:
                 Object:dot:
                   - "@room"
-                  - AtField: "description"
+                  - At field: "description"
       - SortTexts:byField:
           - "@kids"
           - "grouping label"
@@ -252,10 +252,10 @@
                       - Is all:
                           - Object:dot:
                               - "@it"
-                              - AtField: "not mentioned"
+                              - At field: "not mentioned"
                           - Object:dot:
                               - "@it"
-                              - AtField: "not scenery"
+                              - At field: "not scenery"
                       - - Push:into:
                             - FromText: "@it"
                             - "@remaining_kids"
@@ -273,7 +273,7 @@
                 - "equal_to"
                 - Object:dot:
                     - "story"
-                    - AtField: "mentions"
+                    - At field: "mentions"
 - # prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards.
   Define pattern:requires:provides:do:
     - "print object description"
@@ -295,8 +295,8 @@
           - Is all:
               - Object:dot:
                   - "@obj"
-                  - AtField: "mentioned"
-              - Is object:kind:
+                  - At field: "mentioned"
+              - Is compatible:kind:
                   - "@obj"
                   - "supporters"
           - - PrintInlineStorage obj:
@@ -310,8 +310,8 @@
           - Is all:
               - Object:dot:
                   - "@obj"
-                  - AtField: "scenery"
-              - Is object:kind:
+                  - At field: "scenery"
+              - Is compatible:kind:
                   - "@obj"
                   - "supporters"
           - - Mention obj:
@@ -322,7 +322,7 @@
     - - If:do:
           - Object:dot:
               - "@obj"
-              - AtField: "not mentioned"
+              - At field: "not mentioned"
           - - # prints objects that have an initial appearance, and flags them as mentioned.
               PrintImpressionOf obj:locale:
                 - FromText: "@obj"
@@ -330,7 +330,7 @@
 - Define rule:do:
     - "print object description"
     - - If:do:
-          - Is object:kind:
+          - Is compatible:kind:
               - "@obj"
               - "actors"
           - - # This doesn't have to say anything special for actors.
@@ -353,22 +353,22 @@
           - Is all:
               - Object:dot:
                   - "@obj"
-                  - AtField: "not mentioned"
+                  - At field: "not mentioned"
               - Object:dot:
                   - "@obj"
-                  - AtField: "not scenery"
+                  - At field: "not scenery"
               - Not:
                   Is empty:
                     Object:dot:
                       - "@obj"
-                      - AtField: "initial appearance"
+                      - At field: "initial appearance"
     - - # no default rules
         Continue:
 - Define rule:do:
     - "print impression of"
     - - If:do:
           - Is all:
-              - Is object:kind:
+              - Is compatible:kind:
                   - "@obj"
                   - "supporters"
               - Is:matching:text:
@@ -391,7 +391,7 @@
               - "@first_look"
               - Object:dot:
                   - "@obj"
-                  - AtField: "not mentioned"
+                  - At field: "not mentioned"
           - - Say: "{.obj.initial_appearance}"
             - Mention obj:
                 FromText: "@obj"
@@ -425,14 +425,14 @@
     - - Set:value:
           - Object:dot:
               - "story"
-              - AtField: "mentions"
+              - At field: "mentions"
           - FromNum: 0
       - Repeat across:as:do:
           - FromTextList:
-              KindsOf: "things"
+              Objects of: "things"
           - "it"
           - - Set:value:
                 - Object:dot:
                     - "@it"
-                    - AtField: "not mentioned"
+                    - At field: "not mentioned"
                 - FromBool: true

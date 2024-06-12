@@ -93,8 +93,8 @@ Instead of running an action:
         - "going"
       - "#bar.unlit"
     - - # increase neatness, clamp so that it doesn't go past 'trampled'
-        Increase:aspect:clamp:
-          - "message"
+        Increase:state:clamp:
+          - "#message"
           - "neatness"
           - true
       - Say: "In the dark? You could easily disturb something."

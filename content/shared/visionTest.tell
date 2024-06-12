@@ -11,7 +11,7 @@
         Expect:
           Object:dot:
             - "kitchen"
-            - AtField: "lit"
+            - At field: "lit"
       - # check that the outermost light source is the kitchen.
         Expect:
           Is:matching:value:
@@ -28,19 +28,19 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField:  "pawn"
+                - At field:  "pawn"
           - FromBool: true
       - # start game should set the actor to is illuminated.
         Expect:
           Object:dot:
             - "self"
-            - - AtField: "lighting"
-              - AtField: "illuminated"
+            - - At field: "lighting"
+              - At field: "illuminated"
       - # start game should set the story's cache.
         Expect:
           Object:dot:
             - "story"
-            - AtField: "illuminated"
+            - At field: "illuminated"
       - # and asking through the illuminates pattern should be fine.
         Expect:
           Illuminates actor:
@@ -55,13 +55,13 @@
           Not:
             Object:dot:
               - "self"
-              - - AtField: "lighting"
-                - AtField: "illuminated"
+              - - At field: "lighting"
+                - At field: "illuminated"
       - # update should set the story to not is illuminated
         Expect:
           Object:dot:
             - "story"
-            - AtField: "not illuminated"
+            - At field: "not illuminated"
       - # asking through the pattern should also be fine.
         Expect:
           Not:

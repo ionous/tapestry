@@ -8,27 +8,27 @@
           - FromText:
               Object:dot:
                 - "player"
-                - AtField:  "pawn"
+                - At field:  "pawn"
           - FromText: "knife"
       - Expect text: "You find nothing of interest."
       - Searching actor:noun:
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "machine"
       - Expect text: "You can't see inside, it is closed."
       - Searching actor:noun:
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "counter"
       - Expect text: "On the counter are the blender, the espresso machine, and the mortar."
       - Searching actor:noun:
           - FromText:
               Object:dot:
                 - "player"
-                - AtField: "pawn"
+                - At field: "pawn"
           - FromText: "purse"
       - Expect text: "In the purse is the coin."
