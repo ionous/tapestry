@@ -12,7 +12,7 @@ import (
 func ExamplePrintNum() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &PrintNum{Num: literal.F(213)}); e != nil {
+	if e := safe.WriteText(&run, &PrintNumDigits{Num: literal.F(213)}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -22,7 +22,7 @@ func ExamplePrintNum() {
 func ExamplePrintNumWord() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
-	if e := safe.WriteText(&run, &PrintNumWord{Num: literal.F(213)}); e != nil {
+	if e := safe.WriteText(&run, &PrintNumWords{Num: literal.F(213)}); e != nil {
 		panic(e)
 	}
 	// Output:

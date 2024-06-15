@@ -129,7 +129,7 @@ func testExpression(str string, want interface{}) (err error) {
 func TestTemplates(t *testing.T) {
 	t.Run("print", func(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
-			&text.PrintNumWord{
+			&text.PrintNumWords{
 				Num: &render.UnknownDot{
 					Name: T("group_size"),
 				},
@@ -197,7 +197,7 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("filter", func(t *testing.T) {
 		if e := testTemplate("{15|print_num!}",
-			&text.PrintNum{
+			&text.PrintNumDigits{
 				Num: I(15),
 			}); e != nil {
 			t.Fatal(e)
@@ -209,7 +209,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{15|print_num!} {if 7=7}boop{end}",
 			&text.Join{
 				Parts: []rt.TextEval{
-					&text.PrintNum{Num: F(15)},
+					&text.PrintNumDigits{Num: F(15)},
 					T(" "),
 					&logic.ChooseText{
 						If: &math.CompareNum{

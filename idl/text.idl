@@ -3,7 +3,7 @@ Spec:requires:contains:
   - "text"
   - - "idl/prim"
     - "idl/rtti"
-  - - # Determine whether some piece of text can be found in another.
+  - - # Determine whether one piece of text contains a second piece of text.
       Flow:slots:lede:terms:
         - "find_text"
         - ["bool_eval", "num_eval"]
@@ -19,7 +19,7 @@ Spec:requires:contains:
               - "subtext"
               - "text_eval"
 
-    - # Determine whether some piece of text starts with another.
+    - # Determine whether text starts in a particular way.
       Flow:slots:lede:terms:
         - "text_starts_with"
         - "bool_eval"
@@ -35,7 +35,7 @@ Spec:requires:contains:
               - "subtext"
               - "text_eval"
 
-    - # Determine whether some piece of text ends with another.
+    - # Determine whether text ends in a particular way.
       Flow:slots:lede:terms:
         - "text_ends_with"
         - "bool_eval"
@@ -51,7 +51,7 @@ Spec:requires:contains:
               - "subtext"
               - "text_eval"
 
-    - # Determine whether some text is completely without content.
+    - # Determine whether text is completely without content.
       # Even spaces are considered content. The text "" is considered empty,
       # the text " " is considered *not* empty.
       Flow:slots:lede:terms:
@@ -64,7 +64,10 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Determine whether the some text matches a regular expression.
+    - # Determine whether text matches a regular expression.
+      # The expressions used are defined by go.
+      # https://pkg.go.dev/regexp/syntax
+      # https://github.com/google/re2/wiki/Syntax
       Flow:slots:lede:terms:
         - "matches"
         - "bool_eval"
@@ -84,7 +87,7 @@ Spec:requires:contains:
               - "match_cache"
               - true
 
-    - # Return a copy of some text with its first letter changed to uppercase.
+    - # Copy some text, changing its first letter to uppercase.
       Flow:slots:terms:
         - "capitalize"
         - "text_eval"
@@ -94,7 +97,7 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return multiple pieces of text as a single new piece of text.
+    - # Combine text to produce new text.
       Flow:slots:terms:
         - "join"
         - "text_eval"
@@ -110,7 +113,7 @@ Spec:requires:contains:
               - "text_eval"
               - true
 
-    - # Return some new text with every letter of the specified text turned into lowercase.
+    - # Copy some text, changing every letter into lowercase.
       # For example, turns "QUIET" into "quiet.
       Flow:slots:lede:terms:
         - "make_lowercase"
@@ -121,7 +124,7 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return some new text with the contents of the specified text flipped back to front.
+    - # Copy some text with its contents flipped back to front.
       # For example, turns "Tapestry" into 'yrtsepaT'.
       Flow:slots:lede:terms:
         - "make_reversed"
@@ -131,7 +134,7 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return some new text with each sentence of the specified text transformed so that it starts with a capital letter.
+    - # Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, "sentences" are considered to be a series of characters ending with a full-stop followed by a space. )
       # For example, "see the doctor run. run doctor. run." into "See the doctor run. Run doctor. Run."
       Flow:slots:lede:terms:
         - "make_sentence_case"
@@ -142,7 +145,7 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return some new text starting each word of the specified text with a capital letter.
+    - # Copy some text, making every word start with a capital letter.
       # For example, turns "empire apple" into "Empire Apple".
       Flow:slots:lede:terms:
         - "make_title_case"
@@ -153,7 +156,8 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return some new text with every letter of the specified turned into uppercase. For example, transforms "loud" into "LOUD".
+    - # Copy some text, changing every letter into uppercase.
+      # For example, transforms "loud" into "LOUD".
       Flow:slots:lede:terms:
         - "make_uppercase"
         - "text_eval"
@@ -163,8 +167,13 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return the plural form of a singular word.
-      # For example, given the word "apple", return "apples".
+    - # Pluralize a word.
+      # The singular form of a word can have more than one plural form.
+      # For example: "person" can be "people" or "persons".
+      # If more than one exists, this chooses arbitrarily.
+      #
+      # Note, The transformation uses predefined rules and some explicit mappings.
+      # The story command [DefinePlural] can add new mappings.
       Flow:slots:lede:terms:
         - "pluralize"
         - "text_eval"
@@ -174,8 +183,10 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Return the singular form of a plural word.
-      # For example, given the word "apples", return "apple".
+    - # Change a plural word into its singular form.
+      # A plural word only has one singular form.
+      # For example, given the word "people", return "person".
+      # See [pluralize] for more information.
       Flow:slots:lede:terms:
         - "singularize"
         - "text_eval"
@@ -185,22 +196,28 @@ Spec:requires:contains:
               - "text"
               - "text_eval"
 
-    - # Writes a number using numerals.
-      # For example, '1'.
+    - # Express a number using numerals.
+      # For example, given the number `1` return the text "1".
+      #
+      # The [story.Execute] version prints the text for the player.
       Flow:slots:lede:terms:
-        - "print_num"
-        - "text_eval"
+        - "print_num_digits"
+        - ["text_eval", "execute"]
         - "numeral"
         - - Term:name:type:
-              - "_"
+              - "digits"
               - "num"
               - "num_eval"
 
-    - # Writes a number in plain english.
-      # For example, 'one'.
+    - # Express an integer in plain english.
+      # For example, given the number `1` return the text "one".
+      # It converts floating point numbers to integer by truncating:
+      # given `1.6`, it returns "one".
+      #
+      # The [story.Execute] version prints the text for the player.
       Flow:slots:lede:terms:
-        - "print_num_word"
-        - "text_eval"
+        - "print_num_words"
+        - ["text_eval", "execute"]
         - "numeral"
         - - Term:name:type:
               - "words"

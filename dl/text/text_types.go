@@ -11,7 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
-// Determine whether some piece of text can be found in another.
+// Determine whether one piece of text contains a second piece of text.
 type FindText struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
@@ -51,7 +51,7 @@ func (op *FindText_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Determine whether some piece of text starts with another.
+// Determine whether text starts in a particular way.
 type TextStartsWith struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
@@ -90,7 +90,7 @@ func (op *TextStartsWith_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Determine whether some piece of text ends with another.
+// Determine whether text ends in a particular way.
 type TextEndsWith struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
@@ -129,7 +129,7 @@ func (op *TextEndsWith_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Determine whether some text is completely without content.
+// Determine whether text is completely without content.
 // Even spaces are considered content. The text "" is considered empty,
 // the text " " is considered *not* empty.
 type IsEmpty struct {
@@ -169,7 +169,10 @@ func (op *IsEmpty_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Determine whether the some text matches a regular expression.
+// Determine whether text matches a regular expression.
+// The expressions used are defined by go.
+// https://pkg.go.dev/regexp/syntax
+// https://github.com/google/re2/wiki/Syntax
 type Matches struct {
 	Text   rtti.TextEval
 	Match  string
@@ -209,7 +212,7 @@ func (op *Matches_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return a copy of some text with its first letter changed to uppercase.
+// Copy some text, changing its first letter to uppercase.
 type Capitalize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -247,7 +250,7 @@ func (op *Capitalize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return multiple pieces of text as a single new piece of text.
+// Combine text to produce new text.
 type Join struct {
 	Sep    rtti.TextEval
 	Parts  []rtti.TextEval
@@ -286,7 +289,7 @@ func (op *Join_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return some new text with every letter of the specified text turned into lowercase.
+// Copy some text, changing every letter into lowercase.
 // For example, turns "QUIET" into "quiet.
 type MakeLowercase struct {
 	Text   rtti.TextEval
@@ -325,7 +328,7 @@ func (op *MakeLowercase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return some new text with the contents of the specified text flipped back to front.
+// Copy some text with its contents flipped back to front.
 // For example, turns "Tapestry" into 'yrtsepaT'.
 type MakeReversed struct {
 	Text   rtti.TextEval
@@ -364,7 +367,7 @@ func (op *MakeReversed_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return some new text with each sentence of the specified text transformed so that it starts with a capital letter.
+// Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, "sentences" are considered to be a series of characters ending with a full-stop followed by a space. )
 // For example, "see the doctor run. run doctor. run." into "See the doctor run. Run doctor. Run."
 type MakeSentenceCase struct {
 	Text   rtti.TextEval
@@ -403,7 +406,7 @@ func (op *MakeSentenceCase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return some new text starting each word of the specified text with a capital letter.
+// Copy some text, making every word start with a capital letter.
 // For example, turns "empire apple" into "Empire Apple".
 type MakeTitleCase struct {
 	Text   rtti.TextEval
@@ -442,7 +445,8 @@ func (op *MakeTitleCase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return some new text with every letter of the specified turned into uppercase. For example, transforms "loud" into "LOUD".
+// Copy some text, changing every letter into uppercase.
+// For example, transforms "loud" into "LOUD".
 type MakeUppercase struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -480,8 +484,13 @@ func (op *MakeUppercase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return the plural form of a singular word.
-// For example, given the word "apple", return "apples".
+// Pluralize a word.
+// The singular form of a word can have more than one plural form.
+// For example: "person" can be "people" or "persons".
+// If more than one exists, this chooses arbitrarily.
+//
+// Note, The transformation uses predefined rules and some explicit mappings.
+// The story command [DefinePlural] can add new mappings.
 type Pluralize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -519,8 +528,10 @@ func (op *Pluralize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Return the singular form of a plural word.
-// For example, given the word "apples", return "apple".
+// Change a plural word into its singular form.
+// A plural word only has one singular form.
+// For example, given the word "people", return "person".
+// See [pluralize] for more information.
 type Singularize struct {
 	Text   rtti.TextEval
 	Markup map[string]any
@@ -558,23 +569,25 @@ func (op *Singularize_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Writes a number using numerals.
-// For example, '1'.
-type PrintNum struct {
+// Express a number using numerals.
+// For example, given the number `1` return the text "1".
+//
+// The [story.Execute] version prints the text for the player.
+type PrintNumDigits struct {
 	Num    rtti.NumEval
 	Markup map[string]any
 }
 
-// print_num, a type of flow.
-var Zt_PrintNum typeinfo.Flow
+// print_num_digits, a type of flow.
+var Zt_PrintNumDigits typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*PrintNum) TypeInfo() typeinfo.T {
-	return &Zt_PrintNum
+func (*PrintNumDigits) TypeInfo() typeinfo.T {
+	return &Zt_PrintNumDigits
 }
 
 // Implements [typeinfo.Markup]
-func (op *PrintNum) GetMarkup(ensure bool) map[string]any {
+func (op *PrintNumDigits) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -582,38 +595,44 @@ func (op *PrintNum) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*PrintNum)(nil)
+var _ rtti.TextEval = (*PrintNumDigits)(nil)
+var _ rtti.Execute = (*PrintNumDigits)(nil)
 
-// Holds a slice of type PrintNum.
-type PrintNum_Slice []PrintNum
+// Holds a slice of type PrintNumDigits.
+type PrintNumDigits_Slice []PrintNumDigits
 
-// Implements [typeinfo.Instance] for a slice of PrintNum.
-func (*PrintNum_Slice) TypeInfo() typeinfo.T {
-	return &Zt_PrintNum
+// Implements [typeinfo.Instance] for a slice of PrintNumDigits.
+func (*PrintNumDigits_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintNumDigits
 }
 
-// Implements [typeinfo.Repeats] for a slice of PrintNum.
-func (op *PrintNum_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintNumDigits.
+func (op *PrintNumDigits_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
-// Writes a number in plain english.
-// For example, 'one'.
-type PrintNumWord struct {
+// Express an integer in plain english.
+// For example, given the number `1` return the text "one".
+//
+// It converts floating point numbers to integer by truncating.
+// For example, given `1.6` it returns "one".
+//
+// The [story.Execute] version prints the text for the player.
+type PrintNumWords struct {
 	Num    rtti.NumEval
 	Markup map[string]any
 }
 
-// print_num_word, a type of flow.
-var Zt_PrintNumWord typeinfo.Flow
+// print_num_words, a type of flow.
+var Zt_PrintNumWords typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*PrintNumWord) TypeInfo() typeinfo.T {
-	return &Zt_PrintNumWord
+func (*PrintNumWords) TypeInfo() typeinfo.T {
+	return &Zt_PrintNumWords
 }
 
 // Implements [typeinfo.Markup]
-func (op *PrintNumWord) GetMarkup(ensure bool) map[string]any {
+func (op *PrintNumWords) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
@@ -621,18 +640,19 @@ func (op *PrintNumWord) GetMarkup(ensure bool) map[string]any {
 }
 
 // Ensures the command implements its specified slots.
-var _ rtti.TextEval = (*PrintNumWord)(nil)
+var _ rtti.TextEval = (*PrintNumWords)(nil)
+var _ rtti.Execute = (*PrintNumWords)(nil)
 
-// Holds a slice of type PrintNumWord.
-type PrintNumWord_Slice []PrintNumWord
+// Holds a slice of type PrintNumWords.
+type PrintNumWords_Slice []PrintNumWords
 
-// Implements [typeinfo.Instance] for a slice of PrintNumWord.
-func (*PrintNumWord_Slice) TypeInfo() typeinfo.T {
-	return &Zt_PrintNumWord
+// Implements [typeinfo.Instance] for a slice of PrintNumWords.
+func (*PrintNumWords_Slice) TypeInfo() typeinfo.T {
+	return &Zt_PrintNumWords
 }
 
-// Implements [typeinfo.Repeats] for a slice of PrintNumWord.
-func (op *PrintNumWord_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of PrintNumWords.
+func (op *PrintNumWords_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -662,7 +682,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether some piece of text can be found in another.",
+			"comment": "Determine whether one piece of text contains a second piece of text.",
 		},
 	}
 	Zt_TextStartsWith = typeinfo.Flow{
@@ -687,7 +707,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether some piece of text starts with another.",
+			"comment": "Determine whether text starts in a particular way.",
 		},
 	}
 	Zt_TextEndsWith = typeinfo.Flow{
@@ -712,7 +732,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether some piece of text ends with another.",
+			"comment": "Determine whether text ends in a particular way.",
 		},
 	}
 	Zt_IsEmpty = typeinfo.Flow{
@@ -730,7 +750,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Determine whether some text is completely without content.", "Even spaces are considered content. The text \"\" is considered empty,", "the text \" \" is considered *not* empty."},
+			"comment": []interface{}{"Determine whether text is completely without content.", "Even spaces are considered content. The text \"\" is considered empty,", "the text \" \" is considered *not* empty."},
 		},
 	}
 	Zt_Matches = typeinfo.Flow{
@@ -759,7 +779,7 @@ func init() {
 			&rtti.Zt_BoolEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether the some text matches a regular expression.",
+			"comment": []interface{}{"Determine whether text matches a regular expression.", "The expressions used are defined by go.", "https://pkg.go.dev/regexp/syntax", "https://github.com/google/re2/wiki/Syntax"},
 		},
 	}
 	Zt_Capitalize = typeinfo.Flow{
@@ -776,7 +796,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Return a copy of some text with its first letter changed to uppercase.",
+			"comment": "Copy some text, changing its first letter to uppercase.",
 		},
 	}
 	Zt_Join = typeinfo.Flow{
@@ -802,7 +822,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Return multiple pieces of text as a single new piece of text.",
+			"comment": "Combine text to produce new text.",
 		},
 	}
 	Zt_MakeLowercase = typeinfo.Flow{
@@ -816,7 +836,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return some new text with every letter of the specified text turned into lowercase.", "For example, turns \"QUIET\" into \"quiet."},
+			"comment": []interface{}{"Copy some text, changing every letter into lowercase.", "For example, turns \"QUIET\" into \"quiet."},
 		},
 	}
 	Zt_MakeReversed = typeinfo.Flow{
@@ -831,7 +851,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return some new text with the contents of the specified text flipped back to front.", "For example, turns \"Tapestry\" into 'yrtsepaT'."},
+			"comment": []interface{}{"Copy some text with its contents flipped back to front.", "For example, turns \"Tapestry\" into 'yrtsepaT'."},
 		},
 	}
 	Zt_MakeSentenceCase = typeinfo.Flow{
@@ -845,7 +865,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return some new text with each sentence of the specified text transformed so that it starts with a capital letter.", "For example, \"see the doctor run. run doctor. run.\" into \"See the doctor run. Run doctor. Run.\""},
+			"comment": []interface{}{"Copy text, changing the start of each sentence so that it starts with a capital letter. ( Currently, \"sentences\" are considered to be a series of characters ending with a full-stop followed by a space. )", "For example, \"see the doctor run. run doctor. run.\" into \"See the doctor run. Run doctor. Run.\""},
 		},
 	}
 	Zt_MakeTitleCase = typeinfo.Flow{
@@ -859,7 +879,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return some new text starting each word of the specified text with a capital letter.", "For example, turns \"empire apple\" into \"Empire Apple\"."},
+			"comment": []interface{}{"Copy some text, making every word start with a capital letter.", "For example, turns \"empire apple\" into \"Empire Apple\"."},
 		},
 	}
 	Zt_MakeUppercase = typeinfo.Flow{
@@ -873,7 +893,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": "Return some new text with every letter of the specified turned into uppercase. For example, transforms \"loud\" into \"LOUD\".",
+			"comment": []interface{}{"Copy some text, changing every letter into uppercase.", "For example, transforms \"loud\" into \"LOUD\"."},
 		},
 	}
 	Zt_Pluralize = typeinfo.Flow{
@@ -888,7 +908,7 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the plural form of a singular word.", "For example, given the word \"apple\", return \"apples\"."},
+			"comment": []interface{}{"Pluralize a word.", "The singular form of a word can have more than one plural form.", "For example: \"person\" can be \"people\" or \"persons\".", "If more than one exists, this chooses arbitrarily.", "", "Note, The transformation uses predefined rules and some explicit mappings.", "The story command [DefinePlural] can add new mappings."},
 		},
 	}
 	Zt_Singularize = typeinfo.Flow{
@@ -903,25 +923,27 @@ func init() {
 			&rtti.Zt_TextEval,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Return the singular form of a plural word.", "For example, given the word \"apples\", return \"apple\"."},
+			"comment": []interface{}{"Change a plural word into its singular form.", "A plural word only has one singular form.", "For example, given the word \"people\", return \"person\".", "See [pluralize] for more information."},
 		},
 	}
-	Zt_PrintNum = typeinfo.Flow{
-		Name: "print_num",
+	Zt_PrintNumDigits = typeinfo.Flow{
+		Name: "print_num_digits",
 		Lede: "numeral",
 		Terms: []typeinfo.Term{{
-			Name: "num",
-			Type: &rtti.Zt_NumEval,
+			Name:  "num",
+			Label: "digits",
+			Type:  &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Writes a number using numerals.", "For example, '1'."},
+			"comment": []interface{}{"Express a number using numerals.", "For example, given the number `1` return the text \"1\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
-	Zt_PrintNumWord = typeinfo.Flow{
-		Name: "print_num_word",
+	Zt_PrintNumWords = typeinfo.Flow{
+		Name: "print_num_words",
 		Lede: "numeral",
 		Terms: []typeinfo.Term{{
 			Name:  "num",
@@ -930,9 +952,10 @@ func init() {
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
+			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Writes a number in plain english.", "For example, 'one'."},
+			"comment": []interface{}{"Express an integer in plain english.", "For example, given the number `1` return the text \"one\".", "", "It converts floating point numbers to integer by truncating.", "For example, given `1.6` it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 }
@@ -965,8 +988,8 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_MakeUppercase,
 	&Zt_Pluralize,
 	&Zt_Singularize,
-	&Zt_PrintNum,
-	&Zt_PrintNumWord,
+	&Zt_PrintNumDigits,
+	&Zt_PrintNumWords,
 }
 
 // a list of all command signatures
@@ -982,8 +1005,10 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	10106284345457008764: (*Join)(nil),             /* text_eval=Join parts: */
 	16037301925772243654: (*Join)(nil),             /* text_eval=Join:parts: */
 	11334467785012784241: (*MakeLowercase)(nil),    /* text_eval=Lower: */
-	18009133328614046007: (*PrintNumWord)(nil),     /* text_eval=Numeral words: */
-	5709077775967698380:  (*PrintNum)(nil),         /* text_eval=Numeral: */
+	4721393964025254579:  (*PrintNumDigits)(nil),   /* execute=Numeral digits: */
+	14515844015968836994: (*PrintNumDigits)(nil),   /* text_eval=Numeral digits: */
+	9655583796217513308:  (*PrintNumWords)(nil),    /* execute=Numeral words: */
+	18009133328614046007: (*PrintNumWords)(nil),    /* text_eval=Numeral words: */
 	11420921600352749983: (*Pluralize)(nil),        /* text_eval=Plural of: */
 	12963686195606417453: (*MakeReversed)(nil),     /* text_eval=Reverse text: */
 	10747671703915852065: (*MakeSentenceCase)(nil), /* text_eval=Sentence: */

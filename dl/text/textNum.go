@@ -9,24 +9,34 @@ import (
 	"git.sr.ht/~ionous/tapestry/support/inflect"
 )
 
-func (op *PrintNum) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *PrintNumDigits) Execute(run rt.Runtime) (err error) {
+	return safe.WriteText(run, op)
+}
+func (op *PrintNumDigits) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if n, e := safe.GetNum(run, op.Num); e != nil {
 		err = cmd.Error(op, e)
-	} else if s := strconv.FormatFloat(n.Float(), 'g', -1, 64); len(s) > 0 {
-		ret = rt.StringOf(s)
 	} else {
-		ret = rt.StringOf("<num>")
+		ret = rt.StringOf(formatNumber(n))
 	}
 	return
 }
 
-func (op *PrintNumWord) GetText(run rt.Runtime) (ret rt.Value, err error) {
+func (op *PrintNumWords) Execute(run rt.Runtime) (err error) {
+	return safe.WriteText(run, op)
+}
+func (op *PrintNumWords) GetText(run rt.Runtime) (ret rt.Value, err error) {
 	if n, e := safe.GetNum(run, op.Num); e != nil {
 		err = cmd.Error(op, e)
-	} else if s, ok := inflect.NumToWords(n.Int()); ok {
-		ret = rt.StringOf(s)
 	} else {
-		ret = rt.StringOf("<num>")
+		s, ok := inflect.NumToWords(n.Int())
+		if !ok {
+			s = formatNumber(n)
+		}
+		ret = rt.StringOf(s)
 	}
 	return
+}
+
+func formatNumber(n rt.Value) string {
+	return strconv.FormatFloat(n.Float(), 'g', -1, 64)
 }
