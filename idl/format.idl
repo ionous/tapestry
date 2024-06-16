@@ -87,7 +87,7 @@ Spec:requires:contains:
       Flow:slots:lede:terms:
         - "buffer_text"
         - "text_eval"
-        - "buffers"
+        - "buffer"
         - - # The statements to capture text output from.
             Term:name:type:repeats:
               - "do"

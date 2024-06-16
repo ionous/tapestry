@@ -121,7 +121,7 @@ func number(value float64, kind string) rt.Assignment {
 
 func text(value, kind string) rt.Assignment {
 	return &call.FromText{
-		Value: &literal.TextValue{Value: value, Kind: kind},
+		Value: &literal.TextValue{Value: value, KindName: kind},
 	}
 }
 

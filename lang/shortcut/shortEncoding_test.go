@@ -26,7 +26,7 @@ func TestCoreEncoding(t *testing.T) {
 			NounName: object.Variable("noun"),
 			Dot:      []object.Dot{&object.AtField{FieldName: object.Variable("trait")}},
 		},
-		`{"Object:dot:":["@noun",[{"AtField:":"@trait"}]]}`,
+		`{"Object:dot:":["@noun",[{"At field:":"@trait"}]]}`,
 	}, {
 		&math.AddValue{
 			A: object.Variable("a"),

@@ -43,7 +43,7 @@
               FromText: "@noun"
           - - If:assuming:do:else:
                 - Is:matching:num:
-                    - Len:
+                    - List length:
                         FromTextList: "@items"
                     - "equal_to"
                     - 0

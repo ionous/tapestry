@@ -34,17 +34,17 @@ func TestStringify(t *testing.T) {
 	}
 	kinds.AddKinds((*Fruit)(nil))
 	l1 := literal.RecordValue{
-		Kind: "fruit",
+		KindName: "fruit",
 		Fields: []literal.FieldValue{{
-			Field: "name",
-			Value: &literal.TextValue{Value: "pomegranate"},
+			FieldName: "name",
+			Value:     &literal.TextValue{Value: "pomegranate"},
 		}, {
-			Field: "fruit",
+			FieldName: "fruit",
 			Value: &literal.RecordValue{
-				Kind: "fruit",
+				KindName: "fruit",
 				Fields: []literal.FieldValue{{
-					Field: "name",
-					Value: &literal.TextValue{Value: "aril"},
+					FieldName: "name",
+					Value:     &literal.TextValue{Value: "aril"},
 				}},
 			},
 		}},

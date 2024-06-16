@@ -30,8 +30,8 @@ func TestBoolChoice(t *testing.T) {
 // blocks with optional members should just skip happily to the next member
 // fix? empty strings render extraState -- but they probably dont need to.
 func TestSkippedSlot(t *testing.T) {
-	if e := testBlocks(&list.ListEach{}, `{
-  "type": "list_each",
+	if e := testBlocks(&list.ListRepeat{}, `{
+  "type": "list_repeat",
   "id": "test-1",
   "extraState": {
     "AS": 1

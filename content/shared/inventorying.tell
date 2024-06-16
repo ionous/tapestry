@@ -28,7 +28,7 @@
               FromText: "@actor"
     - - If:do:else:
           - Is:matching:num:
-              - Len:
+              - List length:
                   FromTextList: "@kids"
               - "greater_than"
               - 0

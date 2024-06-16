@@ -41,7 +41,7 @@
                                 - At field: "score"
                 - - Say response:with:
                       - "notify score changed"
-                      - "Your score has just gone {if .change > 0}up by {print_num_word: .change}{else}down by {.change|abs_value!|print_num_word!}{end} {if .change > 1}points{else}point{end}."
+                      - "Your score has just gone {if .change > 0}up by {print_num_words: .change}{else}down by {.change|abs_value!|print_num_words!}{end} {if .change > 1}points{else}point{end}."
       - # blocks the default no score rule from happening.
         # alt: could replace the default rule or response.
         Define rule:do:

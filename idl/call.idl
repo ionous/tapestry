@@ -16,6 +16,8 @@ Spec:requires:contains:
               - "text"
 
     - # Determine whether a pattern is running.
+      #
+      # The [rtti.num_eval] version returns the distance to the pattern.
       Flow:slots:lede:terms:
         - "active_pattern"
         - - "bool_eval"

@@ -163,7 +163,7 @@
                     Variable:dot:
                       - "enclosures"
                       - - At index:
-                            Len:
+                            List length:
                               FromTextList: "@enclosures"
           - - Say: "<b>{.locale}</b>"
           - # The top most object is contained somewhere in the locale.
@@ -183,7 +183,7 @@
           - Variable:dot:
               - "enclosures"
               - - At index:
-                    Len:
+                    List length:
                       FromTextList: "@enclosures"
     - - Repeat across:as:do:
           - FromTextList: "@enclosures"
@@ -227,7 +227,7 @@
                 Object:dot:
                   - "@room"
                   - At field: "description"
-      - SortTexts:byField:
+      - Sort:field:
           - "@kids"
           - "grouping label"
       - Repeat across:as:do:
@@ -256,9 +256,9 @@
                           - Object:dot:
                               - "@it"
                               - At field: "not scenery"
-                      - - Push:into:
-                            - FromText: "@it"
+                      - - Push:value:
                             - "@remaining_kids"
+                            - FromText: "@it"
       - CanAlsoSee where:here:children:firstMention:
           - FromText: "@locale"
           - FromBool:
@@ -410,7 +410,7 @@
     - - Nothing:
     - - If:do:
           - Is:matching:num:
-              - Len:
+              - List length:
                   FromTextList: "@children"
               - "greater_than"
               - 0

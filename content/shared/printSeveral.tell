@@ -11,7 +11,7 @@
       - Text: "label"
     - - Nothing:
     - - Print words:
-          - Say: "{print_num_word: .group_size}"
+          - Say: "{print_num_words: .group_size}"
           - If:do:else:
               - Is empty: "@label"
               - - Say: "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"

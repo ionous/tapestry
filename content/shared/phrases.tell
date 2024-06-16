@@ -67,7 +67,7 @@
           - If:do:else:
               - Is any:
                   - Is:matching:num:
-                      - Len:
+                      - List length:
                           FromTextList: "@names"
                       - "greater_than"
                       - 1

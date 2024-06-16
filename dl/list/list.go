@@ -1,9 +1,10 @@
 package list
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"github.com/ionous/errutil"
 )
 
 // can v be inserted into els?
@@ -39,7 +40,7 @@ type insertError struct {
 }
 
 func (e insertError) Error() string {
-	return errutil.Sprintf("%s of %q isn't insertable into %s of %q",
+	return fmt.Sprintf("%s of %q isn't insertable into %s of %q",
 		e.v.Affinity(), e.v.Type(),
 		e.els.Affinity(), e.els.Type())
 }

@@ -71,9 +71,9 @@
                             - Object:dot:
                                 - "@it"
                                 - At field: "scenery"
-                      - - Push:into:
-                            - FromText: "@it"
+                      - - Push:value:
                             - "@out"
+                            - FromText: "@it"
 - #
   Define pattern:requires:provides:do:
     - "allows storage"

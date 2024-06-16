@@ -1,7 +1,7 @@
 # Supply constant values to runtime evaluations.
 # ( ie. a specific number when a [NumEval] is required. )
 #
-# Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )
+# Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed.
 Spec:requires:contains:
   - "literal"
   - - "idl/prim"
@@ -17,8 +17,7 @@ Spec:requires:contains:
           - "literal_value"
         - "bool"
         - - # The true or false value.
-            Term:name:type:
-              - "_"
+            Term:type:
               - "value"
               - "bool"
 
@@ -29,8 +28,7 @@ Spec:requires:contains:
           - "literal_value"
         - "num"
         - - # A literal number.
-            Term:name:type:
-              - "_"
+            Term:type:
               - "value"
               - "num"
 
@@ -41,8 +39,7 @@ Spec:requires:contains:
           - "literal_value"
         - "num"
         - - # Zero or more literal numbers.
-            Term:name:type:repeats:
-              - "list"
+            Term:type:repeats:
               - "values"
               - "num"
               - true
@@ -53,17 +50,17 @@ Spec:requires:contains:
         - - "text_eval"
           - "literal_value"
         - "text"
-        - - # Some literal text.
-            Term:name:type:
-              - "_"
-              - "value"
-              - "text"
-          - # Optionally, when the text represents the name of an (existing) object,
+        - - # Optionally, when the text represents the name of an (existing) object,
             # the kind of the object in question.
-            Term:type:optional:
+            Term:name:type:optional:
               - "kind"
+              - "kind_name"
               - "text"
               - true
+          - # Some literal text.
+            Term:type:
+              - "value"
+              - "text"
 
     - # Specify a list of literal text values.
       Flow:slots:lede:terms:
@@ -71,16 +68,16 @@ Spec:requires:contains:
         - - "text_list_eval"
           - "literal_value"
         - "text"
-        - - # Zero or more text literals.
-            Term:name:type:repeats:
-              - "list"
-              - "values"
+        - - # Optionally, when the text represents the names of (existing) objects,
+            # the kind of the objects in question.
+            Term:name:type:optional:
+              - "kind"
+              - "kind_name"
               - "text"
               - true
-          - # Optionally, when the text represents the names of (existing) objects,
-            # the kind of the objects in question.
-            Term:type:optional:
-              - "kind"
+          - # Zero or more text literals.
+            Term:type:repeats:
+              - "values"
               - "text"
               - true
 
@@ -94,12 +91,13 @@ Spec:requires:contains:
             # All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )
             Term:name:type:
               - "_"
-              - "kind"
+              - "kind_name"
               - "text"
           - # A set of literal values for the fields of the record.
             # Any fields of the record which are not specified here,
             # are "zero initialized."
-            Term:type:repeats:
+            Term:name:type:repeats:
+              - "value"
               - "fields"
               - "field_value"
               - true
@@ -119,11 +117,11 @@ Spec:requires:contains:
             # All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )
             Term:name:type:
               - "_"
-              - "kind"
+              - "kind_name"
               - "text"
           - # Zero or more record literals.
             Term:name:type:repeats:
-              - "list"
+              - "values"
               - "records"
               - "field_list"
               - true
@@ -155,7 +153,7 @@ Spec:requires:contains:
             # the field names must be part of the original declaration of the kind.
             Term:name:type:
               - "_"
-              - "field"
+              - "field_name"
               - "text"
           - # The literal value of the field.
             # The type of value must match the original declaration of the field.

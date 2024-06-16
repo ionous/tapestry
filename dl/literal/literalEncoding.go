@@ -74,7 +74,7 @@ func ReadLiteral(aff affine.Affinity, kind string, val any) (ret LiteralValue, e
 	} else if fields, e := unmarshalFields(msg); e != nil {
 		err = e
 	} else {
-		ret = &RecordValue{Kind: kind, Fields: fields}
+		ret = &RecordValue{KindName: kind, Fields: fields}
 	}
 	return
 }
@@ -111,12 +111,12 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 	case rtti.Zt_TextEval.Name:
 		switch v := val.(type) {
 		case string:
-			ret = &TextValue{Value: v, Kind: kind}
+			ret = &TextValue{Value: v, KindName: kind}
 		case []any:
 			if lines, ok := compact.JoinLines(v); !ok {
 				err = compact.Unhandled("lines")
 			} else {
-				ret = &TextValue{Value: lines, Kind: kind}
+				ret = &TextValue{Value: lines, KindName: kind}
 			}
 		default:
 			err = compact.Unhandled("text")
@@ -142,10 +142,10 @@ func readLiteral(typeName, kind string, val any) (ret literalCommand, err error)
 			if vs, ok := compact.SliceStrings(v); !ok {
 				err = compact.Unhandled("strings")
 			} else {
-				ret = &TextList{Values: vs, Kind: kind}
+				ret = &TextList{Values: vs, KindName: kind}
 			}
 		case string:
-			ret = &TextList{Values: []string{v}, Kind: kind}
+			ret = &TextList{Values: []string{v}, KindName: kind}
 		default:
 			err = compact.Unhandled("text values")
 		}

@@ -80,11 +80,11 @@ func buildRecord(kinds rt.Kinds, k *rt.Kind, fields []FieldValue) (ret *rt.Recor
 	set := make([]bool, k.FieldCount())
 	// fields of name, literal value
 	for _, fv := range fields {
-		if idx := k.FieldIndex(fv.Field); idx < 0 {
-			err = errutil.Fmt("unknown field %q in kind %q", fv.Field, k.Name())
+		if idx := k.FieldIndex(fv.FieldName); idx < 0 {
+			err = errutil.Fmt("unknown field %q in kind %q", fv.FieldName, k.Name())
 			break
 		} else if set[idx] {
-			err = errutil.New("duplicate fields set by literal", fv.Field)
+			err = errutil.New("duplicate fields set by literal", fv.FieldName)
 			break
 		} else if v, e := makeValue(kinds, k.Field(idx), fv.Value); e != nil {
 			err = e

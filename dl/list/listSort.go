@@ -1,6 +1,7 @@
 package list
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 
@@ -13,50 +14,52 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *ListSortNumbers) Execute(run rt.Runtime) (err error) {
-	if e := op.sortByNum(run); e != nil {
-		err = cmd.Error(op, e)
-	}
-	return
-}
+// func (op *ListSortNumbers) Execute(run rt.Runtime) (err error) {
+// 	if e := op.sortByNum(run); e != nil {
+// 		err = cmd.Error(op, e)
+// 	}
+// 	return
+// }
 
-func (op *ListSortText) Execute(run rt.Runtime) (err error) {
+func (op *ListSort) Execute(run rt.Runtime) (err error) {
 	if e := op.sortByText(run); e != nil {
 		err = cmd.Error(op, e)
 	}
 	return
 }
 
-func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
-	if at, e := safe.GetReference(run, op.Target); e != nil {
-		err = e
-	} else if vs, e := at.GetValue(); e != nil {
-		err = e
-	} else {
-		byField := inflect.Normalize(op.ByField)
-		switch listAff := vs.Affinity(); listAff {
-		case affine.RecordList:
-			err = sortRecords(run, vs.Records(), byField, affine.Num, op.numSorter)
+// func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
+// 	if at, e := safe.GetReference(run, op.Target); e != nil {
+// 		err = e
+// 	} else if vs, e := at.GetValue(); e != nil {
+// 		err = e
+// 	} else {
+// 		byField := inflect.Normalize(op.ByField)
+// 		switch listAff := vs.Affinity(); listAff {
+// 		case affine.RecordList:
+// 			err = sortRecords(run, vs.Records(), byField, affine.Num, op.numSorter)
 
-		case affine.TextList:
-			err = sortObjects(run, vs.Strings(), byField, affine.Num, op.numSorter)
+// 		case affine.TextList:
+// 			err = sortObjects(run, vs.Strings(), byField, affine.Num, op.numSorter)
 
-		default:
-			err = errutil.New("number sort not implemented for", listAff)
-		}
-	}
-	return
-}
+// 		default:
+// 			err = errors.New("number sort not implemented for", listAff)
+// 		}
+// 	}
+// 	return
+// }
 
-func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
+func (op *ListSort) sortByText(run rt.Runtime) (err error) {
 	if at, e := safe.GetReference(run, op.Target); e != nil {
 		err = e
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e
 	} else if e := safe.Check(vs, affine.TextList); e != nil {
 		err = e
+	} else if field, e := safe.GetOptionalText(run, op.FieldName, ""); e != nil {
+		err = e
 	} else {
-		name := inflect.Normalize(op.ByField)
+		name := inflect.Normalize(field.String())
 		switch listAff := vs.Affinity(); listAff {
 		case affine.TextList:
 			err = sortObjects(run, vs.Strings(), name, affine.Text, op.textSorter)
@@ -65,27 +68,27 @@ func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
 			err = sortRecords(run, vs.Records(), name, affine.Text, op.textSorter)
 
 		default:
-			err = errutil.New("text sort not implemented for", listAff)
+			err = fmt.Errorf("text sort not implemented for %s", listAff)
 		}
 	}
 	return
 }
 
-func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
-	aa, bb := a.Float(), b.Float()
-	if descending, e := safe.GetOptionalBool(run, op.Descending, false); e != nil {
-		err = e
-	} else if !descending.Bool() {
-		ret = aa < bb
-	} else {
-		ret = bb < aa
-	}
-	return
-}
+// func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
+// 	aa, bb := a.Float(), b.Float()
+// 	if descending, e := safe.GetOptionalBool(run, op.Descending, false); e != nil {
+// 		err = e
+// 	} else if !descending.Bool() {
+// 		ret = aa < bb
+// 	} else {
+// 		ret = bb < aa
+// 	}
+// 	return
+// }
 
-func (op *ListSortText) textSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
+func (op *ListSort) textSorter(run rt.Runtime, a, b rt.Value) (ret bool, err error) {
 	aa, bb := a.String(), b.String()
-	if sensitive, e := safe.GetOptionalBool(run, op.UsingCase, false); e != nil {
+	if sensitive, e := safe.GetOptionalBool(run, op.Case, false); e != nil {
 		err = e
 	} else if !sensitive.Bool() {
 		aa, bb = strings.ToLower(aa), strings.ToLower(bb)

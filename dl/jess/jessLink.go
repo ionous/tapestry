@@ -55,7 +55,7 @@ func writeDirection(w weaver.Weaves, direction string, room, otherRoom *jessLink
 func (room jessLink) writeCompass(w weaver.Weaves, direction, door string) error {
 	return w.AddNounPath(room.Noun,
 		[]string{Compass, direction},
-		&literal.TextValue{Value: door, Kind: Doors},
+		&literal.TextValue{Value: door, KindName: Doors},
 	)
 }
 

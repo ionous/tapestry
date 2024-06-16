@@ -3,14 +3,28 @@ Spec:requires:contains:
   - "text"
   - - "idl/prim"
     - "idl/rtti"
-  - - # Determine whether one piece of text contains a second piece of text.
+  - - # Count the number of characters in some text.
+      Flow:slots:lede:terms:
+        - "text_len"
+        - "num_eval"
+        - "text"
+        - - # The text to measure.
+            Term:name:type:
+              - "length"
+              - "text"
+              - "text_eval"
+
+    - # Determine whether one piece of text contains a second piece of text.
+      #
+      # The [rt.NumEval] version returns the first index at which the text appears,
+      # or zero if not found.
       Flow:slots:lede:terms:
         - "find_text"
         - ["bool_eval", "num_eval"]
         - "find"
         - - # The text to search within.
             Term:name:type:
-              - "in"
+              - "_"
               - "text"
               - "text_eval"
           - # The text to find.
@@ -91,7 +105,7 @@ Spec:requires:contains:
       Flow:slots:terms:
         - "capitalize"
         - "text_eval"
-        - - # The text to capitalize.
+        - - # The text to copy, then capitalize.
             Term:name:type:
               - "_"
               - "text"
@@ -107,7 +121,7 @@ Spec:requires:contains:
               - "sep"
               - "text_eval"
               - true
-          - # The text values to concatenate.
+          - # The pieces of text to combine.
             Term:type:repeats:
               - "parts"
               - "text_eval"
@@ -119,7 +133,8 @@ Spec:requires:contains:
         - "make_lowercase"
         - "text_eval"
         - "lower"
-        - - Term:name:type:
+        - - # The text to copy, then lowercase.
+            Term:name:type:
               - "_"
               - "text"
               - "text_eval"
@@ -130,7 +145,8 @@ Spec:requires:contains:
         - "make_reversed"
         - "text_eval"
         - "reverse"
-        - - Term:type:
+        - - # The text to copy and then reverse.
+            Term:type:
               - "text"
               - "text_eval"
 
@@ -140,7 +156,8 @@ Spec:requires:contains:
         - "make_sentence_case"
         - "text_eval"
         - "sentence"
-        - - Term:name:type:
+        - - # The text to copy and then transform.
+            Term:name:type:
               - "_"
               - "text"
               - "text_eval"
@@ -151,7 +168,8 @@ Spec:requires:contains:
         - "make_title_case"
         - "text_eval"
         - "title"
-        - - Term:name:type:
+        - - # The text to copy and then transform.
+            Term:name:type:
               - "_"
               - "text"
               - "text_eval"
@@ -162,7 +180,8 @@ Spec:requires:contains:
         - "make_uppercase"
         - "text_eval"
         - "upper"
-        - - Term:name:type:
+        - - # The text to copy and then transform into uppercase.
+            Term:name:type:
               - "_"
               - "text"
               - "text_eval"
@@ -178,7 +197,8 @@ Spec:requires:contains:
         - "pluralize"
         - "text_eval"
         - "plural"
-        - - Term:name:type:
+        - - # The text to pluralize.
+            Term:name:type:
               - "of"
               - "text"
               - "text_eval"
@@ -191,7 +211,8 @@ Spec:requires:contains:
         - "singularize"
         - "text_eval"
         - "singular"
-        - - Term:name:type:
+        - - # The text to turn into its singular form.
+            Term:name:type:
               - "of"
               - "text"
               - "text_eval"
@@ -204,7 +225,8 @@ Spec:requires:contains:
         - "print_num_digits"
         - ["text_eval", "execute"]
         - "numeral"
-        - - Term:name:type:
+        - - # The number to change into text, or to print.
+            Term:name:type:
               - "digits"
               - "num"
               - "num_eval"
@@ -219,7 +241,8 @@ Spec:requires:contains:
         - "print_num_words"
         - ["text_eval", "execute"]
         - "numeral"
-        - - Term:name:type:
+        - - # The number to change into words, or to print.
+            Term:name:type:
               - "words"
               - "num"
               - "num_eval"

@@ -6,8 +6,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
-	if _, e := eraseIndex(run, op.Count, op.Target, op.AtIndex); e != nil {
+func (op *ListErase) Execute(run rt.Runtime) (err error) {
+	if _, e := eraseIndex(run, op.Count, op.Target, op.Index); e != nil {
 		err = cmd.Error(op, e)
 	}
 	return
@@ -24,9 +24,9 @@ func eraseIndex(run rt.Runtime,
 		err = e
 	} else if e := safe.CheckList(vs); e != nil {
 		err = e
-	} else if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
+	} else if rub, e := safe.GetOptionalNumber(run, count, 1); e != nil {
 		err = e
-	} else if startOne, e := safe.GetNum(run, atIndex); e != nil {
+	} else if startOne, e := safe.GetOptionalNumber(run, atIndex, 1); e != nil {
 		err = e
 	} else {
 		start, listLen := startOne.Int(), vs.Len()

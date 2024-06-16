@@ -57,7 +57,7 @@ func push(src []string, front bool, ins []string) (ret string, err error) {
 	} else if e := safe.Run(run, &list.ListPush{
 		Target: object.Variable("source"),
 		Value:  FromTs(ins),
-		AtEdge: literal.B(front)},
+		Edge:   literal.B(front)},
 	); e != nil {
 		err = e
 	} else if strs, e := run.GetField(meta.Variables, "source"); e != nil {

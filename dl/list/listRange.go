@@ -1,15 +1,16 @@
 package list
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
 func (op *Range) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
-	if vs, e := op.getNumList(run); e != nil {
+	if vs, e := op.generateRange(run); e != nil {
 		err = cmd.Error(op, e)
 	} else {
 		ret = vs
@@ -17,15 +18,15 @@ func (op *Range) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
-func (op *Range) getNumList(run rt.Runtime) (ret rt.Value, err error) {
-	if start, e := safe.GetOptionalNumber(run, op.From, 1); e != nil {
+func (op *Range) generateRange(run rt.Runtime) (ret rt.Value, err error) {
+	if start, e := safe.GetOptionalNumber(run, op.Start, 1); e != nil {
 		err = e
 	} else if stop, e := safe.GetOptionalNumber(run, op.To, start.Float()); e != nil {
 		err = e
-	} else if step, e := safe.GetOptionalNumber(run, op.ByStep, 1); e != nil {
+	} else if step, e := safe.GetOptionalNumber(run, op.Step, 1); e != nil {
 		err = e
 	} else if step := step.Int(); step == 0 {
-		err = errutil.New("Range error, step cannot be zero")
+		err = errors.New("Range error, step cannot be zero")
 	} else {
 		ret = &ranger{start: start.Int(), stop: stop.Int(), step: step}
 	}

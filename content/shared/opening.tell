@@ -152,7 +152,7 @@
                     - FromText: "@actor"
           - - If:assuming:do:
                 - Is:matching:num:
-                    - Len:
+                    - List length:
                         FromTextList: "@concealed_items"
                     - "greater_than"
                     - 0

@@ -6,20 +6,20 @@
           - "object"
     - - TextList:initially:
           - "bounds"
-          - List ofText:
+          - Text list:
               - "@obj"
       - TextList:initially:
           - "queue"
-          - List ofText:
+          - Text list:
               - "@obj"
     - - Repeat if:do:
           - Is:matching:num:
-              - Len:
+              - List length:
                   FromTextList: "@queue"
               - "greater_than"
               - 0
           - - # process the queue
-              Erasing:atFront:as:do:
+              Pop:front:as:do:
                 - "@queue"
                 - true
                 - "enc"
@@ -28,23 +28,26 @@
                           ChildrenOf obj:
                             FromText: "@enc"
                       - "kid"
-                      - - Push:into:
-                            - FromText: "@kid"
+                      - - Push:value:
                             - "@bounds"
+                            - FromText: "@kid"
+
                         - If:do:
                             - Not:
                                 FullyOpaque obj:
                                   FromText: "@kid"
                             - # add this kid for additional processing
-                              - Push:into:
-                                  - FromText: "@kid"
+                              - Push:value:
                                   - "@queue"
+                                  - FromText: "@kid"
+
 - # add all the directions into the bounds.
   # they act as global objects available everywhere.
   Define rule:named:do:
     - "survey bounds, then continue"
     - "The directions are everywhere and nowhere rule."
-    - - Push:into:
+    - - Push:value:
+          - "@bounds"
           - FromTextList:
               Objects of: "directions"
-          - "@bounds"
+

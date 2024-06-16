@@ -84,9 +84,9 @@
     - - Repeat if:do:
           - Not:
               Is empty: "@obj"
-          - - Push:into:
-                - FromText: "@obj"
+          - - Push:value:
                 - "@list"
+                - FromText: "@obj"
             - Set:value:
                 - "@obj"
                 - FromText:
@@ -183,16 +183,16 @@
                     TransparentOf obj:
                       FromText: "@object"
       - # add the ceiling for processing.
-        Push:into:
-          - FromText: "@ceiling"
+        Push:value:
           - "@queue"
+          - FromText: "@ceiling"
       - Repeat if:do:
           - Is:matching:num:
-              - Len:
+              - List length:
                   FromTextList: "@queue"
               - "greater_than"
               - 0
-          - - Erasing:as:do:
+          - - Pop:as:do:
                 - "@queue"
                 - "it"
                 - # objects which generate light are considered to be bright both inside and out; all of their surfaces aglow.
@@ -214,8 +214,8 @@
                                   FullyOpaque obj:
                                     FromText: "@it"
                           - # Any children of our ceiling will be considered for their light contributions.
-                            - Push:into:
+                            - Push:value:
+                                - "@queue"
                                 - FromTextList:
                                     ChildrenOf obj:
                                       FromText: "@it"
-                                - "@queue"

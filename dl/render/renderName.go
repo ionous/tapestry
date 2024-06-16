@@ -86,8 +86,8 @@ func (op *RenderName) getPrintedValue(run rt.Runtime, n, k string) (ret rt.Value
 		&call.CallPattern{
 			PatternName: "print name",
 			Arguments: call.MakeArgs(&call.FromText{Value: &literal.TextValue{
-				Value: n,
-				Kind:  k,
+				Value:    n,
+				KindName: k,
 			}})}}}); e != nil {
 		err = e
 	} else {

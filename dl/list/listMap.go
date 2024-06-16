@@ -1,12 +1,13 @@
 package list
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/inflect"
-	"github.com/ionous/errutil"
 )
 
 func (op *ListMap) Execute(run rt.Runtime) (err error) {
@@ -27,7 +28,7 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 	} else if src, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(src.Affinity()) {
-		err = errutil.New("not a list")
+		err = errors.New("not a list")
 	} else {
 		var changes int
 		aff := affine.Element(vs.Affinity())

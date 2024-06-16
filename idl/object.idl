@@ -129,7 +129,7 @@ Spec:requires:contains:
         - "at_index"
         - "dot"
         - "at"
-        - - # The zero-based index to read or write.
+        - - # The one-based index to read or write.
             # The index must exist within the list being targeted.
             Term:type:
               - "index"

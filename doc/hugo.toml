@@ -31,3 +31,6 @@ enableRobotsTXT = true
 
 [taxonomies]
    tag = "tags"
+
+# For search Geekdoc uses: 
+# https://github.com/nextapps-de/flexsearch

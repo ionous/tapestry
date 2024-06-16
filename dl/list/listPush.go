@@ -25,7 +25,7 @@ func (op *ListPush) push(run rt.Runtime) (err error) {
 	} else if !IsAppendable(ins, vs) {
 		err = insertError{ins, vs}
 	} else {
-		if atFront, e := safe.GetOptionalBool(run, op.AtEdge, false); e != nil {
+		if atFront, e := safe.GetOptionalBool(run, op.Edge, false); e != nil {
 			err = e
 		} else {
 			if !atFront.Bool() {

@@ -59,19 +59,19 @@ Tapestry treats them the same.
 
 ## More about Quoted Text
 
-There are actually a couple different **flavors of quoted text**, depending on what's needed. Every piece of quoted text is either considered interpreted or raw; and can be either specified 'inline' or as a 'heredoc.' Interpreted inline strings are the "normal" kind of string. They use double quotes, and cannot contain a newline. (TODO: they really should be able to contain newlines. )
+There are actually a couple different **flavors of quoted text**. Every piece of quoted text is either considered "interpreted" or "raw"; and can be either specified 'inline' or as a 'heredoc.'
 
 The specifics of the different string types can be found in the [tell documentation](http://github.com/ionous/tell) 
-
  
 # Json
 
-There is a wholly different, alternative file format to `.tell` which uses the `.if` extension and contains [`json`](https://en.wikipedia.org/wiki/JSON) data.  This is the format that Tapestry uses to save commands to the story database.  It is more verbose than `tell`, all plain-text sections must be manually wrapped in `Declare:`and `Comment:` commands.
+There is a wholly different, alternative file format to `.tell` which uses the `.if` extension and contains [`json`](https://en.wikipedia.org/wiki/JSON) data.  This is the format that Tapestry uses to save commands to the story database.  It is more verbose than `tell`. For instance, all plain-text sections must be manually wrapped in `Declare:`and `Comment:` commands.
 
 It is unlikely anyone would want to author files using `.if`. But, it exists.
 
 ```json
 {
+    "--": "This is an example comment for an example command.",
     "Say:": [
         "Hello, json."
     ]

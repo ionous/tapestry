@@ -92,7 +92,7 @@
       - Bool:initially:
           - "has kids"
           - Is:matching:num:
-              - Len:
+              - List length:
                   FromTextList: "@kids"
               - "greater_than"
               - 0
@@ -116,7 +116,7 @@
     - - Nothing:
     - - If:assuming:do:
           - Is:matching:num:
-              - Len:
+              - List length:
                   FromTextList: "@kids"
               - "greater_than"
               - 0
@@ -168,7 +168,7 @@
     - - If:do:
           - Is all:
               - Is:matching:num:
-                  - Len:
+                  - List length:
                       FromTextList: "@kids"
                   - "greater_than"
                   - 0

@@ -46,9 +46,9 @@
     - - Repeat if:do:
           - Not:
               Is empty: "@obj"
-          - - Push:into:
-                - FromText: "@obj"
+          - - Push:value:
                 - "@list"
+                - FromText: "@obj"
             - Set:value:
                 - "@obj"
                 - FromText:

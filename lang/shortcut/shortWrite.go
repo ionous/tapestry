@@ -91,7 +91,7 @@ Loop:
 }
 
 func getLiteralString(t rt.TextEval) (ret string, okay bool) {
-	if a, ok := t.(*literal.TextValue); ok && len(a.Kind) == 0 {
+	if a, ok := t.(*literal.TextValue); ok && len(a.KindName) == 0 {
 		ret, okay = a.Value, true
 	}
 	return

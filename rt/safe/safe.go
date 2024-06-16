@@ -65,7 +65,6 @@ func GetReference(run rt.Runtime, op rt.Address) (ret rt.Reference, err error) {
 }
 
 // handles null assignments by returning "MissingEval" error
-// ( cant live in package safe because package call uses package safe )
 func GetAssignment(run rt.Runtime, a rt.Assignment) (ret rt.Value, err error) {
 	if a == nil {
 		err = MissingEval("assigned value")

@@ -1,299 +1,364 @@
 # List queries, transformations, etc.
+# Lists are a series of zero or more values, all of the same fundamental type.
+# There can be lists of numbers, text, or records.
+# Lists of boolean values are not supported.
+# The first value of a list is at index 1 (one).
 Spec:requires:contains:
   - "list"
   - - "idl/call"
     - "idl/core"
     - "idl/prim"
     - "idl/rtti"
-  - - # Erase at edge: Remove one or more values from a list.
+  - - # Remove a value from the end ( or the start ) of a list.
       Flow:slots:lede:terms:
-        - "erase_edge"
+        - "list_pop"
         - "execute"
-        - "erase"
-        - - Term:name:type:
+        - "pop"
+        - - # The list to modify.
+            Term:name:type:
               - "_"
               - "target"
               - "address"
-          - Term:name:type:optional:
-              - "at_front"
-              - "at_edge"
+          - # Whether to remove from the front or the back of the list.
+            # If not specified, removes from the back.
+            Term:name:type:optional:
+              - "front"
+              - "edge"
               - "bool_eval"
               - true
-    - # Erase at index: Remove one or more values from a list.
+
+    - # Remove one or more values from a list.
       Flow:slots:lede:terms:
-        - "erase_index"
+        - "list_erase"
         - "execute"
         - "erase"
-        - - Term:name:type:
+        - - # The list to modify.
+            Term:name:type:
               - "_"
-              - "count"
-              - "num_eval"
-          - Term:name:type:
-              - "from"
               - "target"
               - "address"
-          - Term:type:
-              - "at_index"
+          - # The one-based index at which to start removing values.
+            # If not specified, starts with the first value.
+            Term:type:optional:
+              - "index"
               - "num_eval"
-    - # Erase elements from the front or back of a list.
-      # Runs a pattern with a list containing the erased values.
-      # If nothing was erased, the pattern will be called with an empty list.
-      Flow:slots:terms:
-        - "erasing"
+              - true
+          - # The number of values to remove.
+            # If not specified, removes one value.
+            Term:type:optional:
+              - "count"
+              - "num_eval"
+              - true
+
+    - # Remove a number of values from a list starting at a specified index.
+      # Run a series of statements, giving them a new local variable
+      # containing a list of removed values.
+      Flow:slots:lede:terms:
+        - "list_erasing"
         - "execute"
-        - - Term:name:type:
+        - "erase"
+        - - # The list to modify.
+            Term:name:type:
               - "_"
-              - "count"
-              - "num_eval"
-          - Term:name:type:
-              - "from"
               - "target"
               - "address"
-          - Term:type:
-              - "at_index"
+          - # The one-based index at which to start removing values.
+            # If not specified, starts with the first value.
+            Term:type:optional:
+              - "index"
               - "num_eval"
-          - Term:type:
+              - true
+          - # The number of values to remove.
+            # If not specified, removes one value.
+            Term:type:optional:
+              - "count"
+              - "num_eval"
+              - true
+          - # The new local variable which contains the erased values.
+            Term:type:
               - "as"
               - "text"
-          - Term:name:type:repeats:
+          - # The statements to call with the erased values.
+            # If no "else" branch is specified, and no values were removed,
+            # this will be called with an empty list.
+            Term:name:type:repeats:
               - "do"
               - "exe"
               - "execute"
               - true
-    - # Erase one element from the front or back of a list.
-      # Runs an activity with a list containing the erased values;
-      # the list can be empty if nothing was erased.
-      Flow:slots:lede:terms:
-        - "erasing_edge"
-        - "execute"
-        - "erasing"
-        - - Term:name:type:
-              - "_"
-              - "target"
-              - "address"
-          - Term:name:type:optional:
-              - "at_front"
-              - "at_edge"
-              - "bool_eval"
-              - true
-          - Term:type:
-              - "as"
-              - "text"
-          - Term:name:type:repeats:
-              - "do"
-              - "exe"
-              - "execute"
-              - true
-          - Term:type:optional:
+          - # Optional statements to run if no values were removed.
+            Term:type:optional:
               - "else"
               - "brancher"
               - true
-    - # Loops over the elements in the passed list, or runs the 'else' activity if empty.
+
+    - # Remove a value from the end ( or the start ) of a list.
+      # Run a series of statements, giving them a new local variable
+      # containing the removed value.
       Flow:slots:lede:terms:
-        - "list_each"
+        - "list_popping"
+        - "execute"
+        - "pop"
+        - - # The list to modify.
+            Term:name:type:
+              - "_"
+              - "target"
+              - "address"
+          - # Control whether to remove from the front or the back of the list.
+            # If not specified, removes from the back.
+            Term:name:type:optional:
+              - "front"
+              - "edge"
+              - "bool_eval"
+              - true
+          - # The name of a new local variable to receive the removed value.
+            # The variable is only in scope for the duration of the "do" statements.
+            Term:type:
+              - "as"
+              - "text"
+          - # A series of statements to run if a value was removed.
+            Term:name:type:repeats:
+              - "do"
+              - "exe"
+              - "execute"
+              - true
+          - # Optional statements to run if the specified list was empty.
+            # There are no special local variables defined when this is called.
+            Term:type:optional:
+              - "else"
+              - "brancher"
+              - true
+
+    - # Run a series of statements for each value in a list.
+      # Several local variables are available to those statements:
+      #   1. the value in the list, named as specified.
+      #   2. "index", the one-based index of the current value in the list.
+      #   3. "first", a boolean indicating if this is the first value
+      #   4. "last", a boolean indicating if this is the last value.
+      # If the list was empty, this runs the else branch instead.
+      Flow:slots:lede:terms:
+        - "list_repeat"
         - "execute"
         - "repeat"
-        - - Term:name:type:
+        - - # The list to read values from.
+            Term:name:type:
               - "across"
               - "list"
               - "assignment"
-          - Term:type:
+          - # The name of a (new) variable, given to the "do" statements,
+            # filled with the values from the list, one at a time.
+            Term:type:
               - "as"
               - "text"
-          - Term:name:type:repeats:
+          - # A series of statements to run.
+            Term:name:type:repeats:
               - "do"
               - "exe"
               - "execute"
               - true
-          - Term:type:optional:
+          - # Optional statements to run if the specified list was empty.
+            # There are no special local variables defined when this is called.
+            Term:type:optional:
               - "else"
               - "brancher"
               - true
+
     - # Search a list for a specific value.
+      #
+      # The [rt.NumEval] version returns the index of the value in the list.
       Flow:slots:lede:terms:
         - "list_find"
         - - "bool_eval"
           - "num_eval"
         - "find"
-        - - Term:name:type:
-              - "in"
+        - - # The list to search.
+            Term:name:type:
+              - "_"
+              - "list"
+              - "assignment"
+          - # The value to find.
+            Term:name:type:
+              - "value"
               - "value"
               - "assignment"
-          - Term:name:type:
-              - "list"
-              - "list"
-              - "assignment"
-    - # Transform the values from a list.
-      # The named pattern gets with with two parameters for each value in the list:
-      # 'in' as each value from the list, and 'out' as the var passed to the gather.
-      Flow:lede:terms:
-        - "list_gather"
-        - "gather"
-        - - Term:name:type:
-              - "_"
-              - "target"
-              - "address"
-          - Term:type:
-              - "from"
-              - "assignment"
-          - Term:type:
-              - "using"
-              - "text"
-    - # Determines the number of values in a list.
+
+    - # Determine the number of values in a list.
       Flow:slots:lede:terms:
         - "list_len"
         - "num_eval"
-        - "len"
-        - - Term:name:type:
-              - "_"
+        - "list"
+        - - # The list to measure.
+            Term:name:type:
+              - "length"
               - "list"
               - "assignment"
-    - Flow:slots:lede:terms:
+
+    - # Collect one or more text values into a list.
+      Flow:slots:lede:terms:
         - "make_text_list"
         - "text_list_eval"
-        - "list"
-        - - Term:name:type:repeats:
-              - "of_text"
+        - "text"
+        - - # One or more text statements to evaluate.
+            Term:name:type:repeats:
+              - "list"
               - "values"
               - "text_eval"
               - true
-    - Flow:slots:lede:terms:
+
+    - # Collect one or more numbers into a list.
+      Flow:slots:lede:terms:
         - "make_num_list"
         - "num_list_eval"
-        - "list"
-        - - Term:name:type:repeats:
-              - "of_numbers"
+        - "num"
+        - - # One or more number values to evaluate.
+            Term:name:type:repeats:
+              - "list"
               - "values"
               - "num_eval"
               - true
-    - Flow:slots:lede:terms:
+
+    - # Collect one or more records into a list.
+      # All of the records must be of the same type.
+      Flow:slots:lede:terms:
         - "make_record_list"
         - "record_list_eval"
-        - "list"
-        - - Term:name:type:repeats:
-              - "of_records"
-              - "values"
+        - "record"
+        - - # One or more record values to evaluate.
+            Term:type:repeats:
+              - "list"
               - "record_eval"
               - true
-          - Term:name:type:
-              - "of_type"
-              - "kind_name"
-              - "text_eval"
-    - # Transform the values from one list and place the results in another list.
-      # The designated pattern is called with each value from the 'from list', one value at a time.
+
+    - # Transform the values from one list and append the results to another.
+      # The designated pattern is called with each value, one value at a time.
       Flow:slots:lede:terms:
         - "list_map"
         - "execute"
         - "map"
-        - - Term:name:type:
+        - - # The list to push new values into.
+            # The type of this list needs to match the type of the list being evaluated.
+            Term:name:type:
               - "_"
               - "target"
               - "address"
-          - Term:name:type:
-              - "from_list"
-              - "list"
-              - "assignment"
-          - Term:name:type:
+          - # The pattern to call for every value in the list being evaluated.
+            Term:name:type:
               - "using"
               - "pattern_name"
               - "text"
-    - # Combine all of the values in a list into a single value.
-      # The designated pattern is called with two parameters:
-      #   1. each element of the list; and,
-      #   2. the value being combined.
-      # And, that pattern is expected to return the newly updated value.
+          - # The list being evaluated. Every value in this list will be sent to the mapping pattern.
+            # The type of this list needs to match the type of the list being written to.
+            Term:type:
+              - "list"
+              - "assignment"
+
+    - # Pack the values of a list down into a single value.
+      # The designated pattern is called with a pair of parameters for each value in the list:
+      #   1. the current value from the list;
+      #   2. the value being packed.
+      # The pattern is expected to return the newly updated value.
       Flow:slots:lede:terms:
         - "list_reduce"
         - "execute"
         - "reduce"
-        - - Term:name:type:
-              - "into"
+        - - # The value being packed.
+            Term:name:type:
+              - "_"
               - "target"
               - "address"
-          - Term:name:type:
-              - "from_list"
-              - "list"
-              - "assignment"
-          - Term:name:type:
+          - # The pattern to call for every value in the list being reduced.
+            Term:name:type:
               - "using"
               - "pattern_name"
               - "text"
-    - # Reverse a list.
+          - # The list being reduced.
+            Term:name:type:
+              - "list"
+              - "list"
+              - "assignment"
+
+    - # Reverse the order of the values in a list.
+      # The first becomes last, the weak become strong, the list gets reversed,
+      # all that.
       Flow:slots:lede:terms:
         - "list_reverse"
         - "execute"
         - "reverse"
-        - - Term:name:type:
+        - - # The list to modify.
+            Term:name:type:
               - "list"
               - "target"
               - "address"
-    - # Create a new list from a section of another list.
-      # Start is optional, if omitted slice starts at the first element.
+
+    - # Create a new list from part of another list.
+      # Start is optional, if omitted slice starts at the beginning.
       # If start is greater the length, an empty array is returned.
-      # Slice doesnt include the ending index.
+      # Slice doesn't include the ending index.
       # Negatives indices indicates an offset from the end.
-      # When end is omitted, copy up to and including the last element;
-      # and do the same if the end is greater than the length
+      # When end is omitted, or if its greater than the the length of the list,
+      # the slice will include everything from start up to and including the last value.
       Flow:slots:lede:terms:
         - "list_slice"
         - - "num_list_eval"
           - "text_list_eval"
           - "record_list_eval"
         - "slice"
-        - - Term:name:type:
+        - - # The list to copy values from.
+            Term:name:type:
               - "_"
               - "list"
               - "assignment"
-          - Term:type:optional:
+          - # The one-based index to start copying from.
+            # See the command documentation for full details.
+            Term:type:optional:
               - "start"
               - "num_eval"
               - true
-          - Term:type:optional:
+          - # The one-based index of the last value to copy.
+            # See the command documentation for full details.
+            Term:type:optional:
               - "end"
               - "num_eval"
               - true
-    - Flow:slots:lede:terms:
-        - "list_sort_numbers"
-        - "execute"
-        - "sort_numbers"
-        - - Term:name:type:
-              - "_"
-              - "target"
-              - "address"
-          - Term:type:
-              - "by_field"
-              - "text"
-          - Term:type:optional:
-              - "descending"
-              - "bool_eval"
-              - true
-    - # Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
+
+    - # Rearrange the values in a list.
       Flow:slots:lede:terms:
-        - "list_sort_text"
+        - "list_sort"
         - "execute"
-        - "sort_texts"
-        - - Term:name:type:
+        - "sort"
+        - - # The list to modify.
+            Term:name:type:
               - "_"
               - "target"
               - "address"
-          - Term:type:
-              - "by_field"
-              - "text"
-          - Term:type:optional:
+          - # Use the specified field to compare values.
+            # Optional, and only makes sense for lists containing records or objects.
+            Term:name:type:optional:
+              - "field"
+              - "field_name"
+              - "text_eval"
+              - true
+          - # When true, reorder the list by decreasing value: largest value first.
+            # Otherwise, reorder the list by increasing value: smallest value first.
+            Term:type:optional:
               - "descending"
               - "bool_eval"
               - true
-          - Term:type:optional:
-              - "using_case"
+          - # When sorting text this indicates whether the lower case letters should be considered different than upper case letters.
+            # By default, they are considered the same.
+            # ( This uses ascii comparisons, so uppercase 'A' is considered less than lowercase 'a' )
+            Term:type:optional:
+              - "case"
               - "bool_eval"
               - true
-    - # Modify a list by adding and removing elements.
-      # The type of the elements being added must match the type of the list.
-      # Text cant be added to a list of numbers, numbers cant be added to a list of text.
-      # If the starting index is negative, this begins that many elements from the end of the array;
+
+    - # Modify a list by adding and removing values.
+      # The type of the values being added must match the type of the list.
+      # ( ie. Text cant be added to a list of numbers, and numbers cant be added to a list of text. )
+      # If the starting index is negative, this begins that many values from the end of the array;
       # if list's length plus the start is less than zero, this begins from index zero.
-      # If the remove count is missing, this removes all elements from the start to the end;
-      # if the remove count is zero or negative, no elements are removed.
+      # If the remove count is missing, this removes all values from the start to the end;
+      # if the remove count is zero or negative, no values are removed.
       Flow:slots:lede:terms:
         - "list_splice"
         - - "execute"
@@ -301,55 +366,75 @@ Spec:requires:contains:
           - "text_list_eval"
           - "record_list_eval"
         - "splice"
-        - - Term:name:type:
+        - - # The list to modify.
+            Term:name:type:
               - "_"
               - "target"
               - "address"
-          - Term:type:
+          - # The one-based index to start cutting from.
+            # See the command documentation for full details.
+            Term:type:optional:
               - "start"
               - "num_eval"
-          - Term:type:
-              - "remove"
+              - true
+          - # The number of values to cut.
+            # See the command documentation for full details.
+            Term:type:optional:
+              - "count"
               - "num_eval"
-          - Term:type:
+              - true
+          - # Optionally, a set of new values to inject into the list,
+            # starting at the location that was cut.
+            # See the command documentation for full details.
+            Term:type:optional:
               - "insert"
               - "assignment"
-    - # Add a value to a list.
+              - true
+
+    - # Add a value to the end ( or the beginning ) of a list.
       Flow:slots:lede:terms:
         - "list_push"
         - "execute"
         - "push"
-        - - Term:name:type:
+        - - # The list to modify.
+            Term:name:type:
               - "_"
-              - "value"
-              - "assignment"
-          - Term:name:type:
-              - "into"
               - "target"
               - "address"
-          - Term:name:type:optional:
-              - "at_front"
-              - "at_edge"
+          - # The value to add to the list.
+            Term:type:
+              - "value"
+              - "assignment"
+          - # Control whether to add the new value to the front or to the back of the list.
+            # If not specified, adds to the back.
+            Term:name:type:optional:
+              - "front"
+              - "edge"
               - "bool_eval"
               - true
-    - # Generates a series of numbers r[i] = (start + step*i) where i>=0.
-      # Start and step default to 1, stop defaults to start;
-      # the inputs are truncated to produce whole numbers;
-      # a zero step returns an error.
-      # A positive step ends the series when the returned value would exceed stop
-      # while a negative step ends before generating a value less than stop.
+
+    - # Generate a list of numbers r[i] = (start + step*i) where i>=0.
+      # Inputs are truncated to produce whole numbers.
+      # A positive step ends the series when the returned value would exceed stop.
+      # A negative step ends before generating a value less than stop.
       Flow:slots:terms:
         - "range"
         - "num_list_eval"
-        - - Term:name:type:
+        - - # The last number to generate.
+            Term:name:type:
               - "_"
               - "to"
               - "num_eval"
-          - Term:type:optional:
-              - "from"
+          - # The first number generated.
+            # Defaults to one(1) if not specified.
+            Term:type:optional:
+              - "start"
               - "num_eval"
               - true
-          - Term:type:optional:
-              - "by_step"
+          - # The step to reach the next number.
+            # Defaults to one(1), errors if zero.
+            Term:name:type:optional:
+              - "by"  # matches "increment:by:"
+              - "step"
               - "num_eval"
               - true

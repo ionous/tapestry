@@ -1,21 +1,20 @@
 package list
 
 import (
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
 // return true if the value exists in the list
 func (op *ListFind) GetBool(run rt.Runtime) (ret rt.Value, err error) {
-	// fix: with autoconversion of int to bool and one-based indices -
-	// only the GetNum variant would be needed.
 	if i, e := op.getIndex(run); e != nil {
 		err = cmd.Error(op, e)
 	} else {
-		ret = rt.BoolOf(i >= 0)
+		ret = rt.BoolOf(i >= 0) // getIndex() returns a zero-based index.
 	}
 	return
 }
@@ -25,19 +24,19 @@ func (op *ListFind) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 	if i, e := op.getIndex(run); e != nil {
 		err = cmd.Error(op, e)
 	} else {
-		ret = rt.IntOf(i + 1)
+		ret = rt.IntOf(i + 1) // convert zero to a one-based index.
 	}
 	return
 }
 
-// zero-based
+// returns a zero-based index.
 func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
 	if val, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
 	} else if els, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if listAff, aff := els.Affinity(), val.Affinity(); aff != affine.Element(listAff) {
-		err = errutil.New(listAff, "can't contain", aff)
+		err = fmt.Errorf("%s can't contain %s", listAff, aff)
 	} else {
 		switch aff {
 		case affine.Num:
@@ -45,7 +44,7 @@ func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
 		case affine.Text:
 			ret = findString(els, val.String())
 		default:
-			err = errutil.New(aff, "not implemented")
+			err = fmt.Errorf("%s not implemented")
 		}
 	}
 	return

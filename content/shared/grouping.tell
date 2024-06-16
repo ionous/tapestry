@@ -10,15 +10,15 @@
           - "groupings"
           - "grouping"
     - - # for each object, create an object group
-        Map:fromList:using:
+        Map:using:list:
           - "@groupings"
-          - FromTextList: "@objs"
           - "assign grouping"
+          - FromTextList: "@objs"
       - # remove any duplicate groups
-        Reduce into:fromList:using:
+        Reduce:using:list:
           - "@groups"
-          - FromRecordList: "@groupings"
           - "collate groups"
+          - FromRecordList: "@groupings"
 - #
   Define pattern:requires:provides:do:
     - "assign grouping"
@@ -190,12 +190,13 @@
               - "@idx"
               - "equal_to"
               - 0
-          - - Push:into:
+          - - Push:value:
+                - "@names"
                 - FromText:
                     Variable:dot:
                       - "grouping"
                       - - At field: "name"
-                - "@names"
+
             - Set:value:
                 - Variable:dot:
                     - "group"
@@ -206,9 +207,10 @@
                     - "group"
                     - - At field: "grouping"
                 - FromRecord: "@grouping"
-            - Push:into:
-                - FromRecord: "@group"
+            - Push:value:
                 - "@groups"
+                - FromRecord: "@group"
+
           - # found a matching group?
             #  unpack it, add the object name to it, then pack it up again
             Finally do:
@@ -224,12 +226,13 @@
                       Variable:dot:
                         - "group"
                         - - At field: "objects"
-              - Push:into:
+              - Push:value:
+                  - "@names"
                   - FromText:
                       Variable:dot:
                         - "grouping"
                         - - At field: "name"
-                  - "@names"
+
               - Set:value:
                   - Variable:dot:
                       - "group"

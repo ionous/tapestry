@@ -35,11 +35,11 @@ func popTest(front bool, amt int, src ...string) []string {
 		start = -1
 	}
 	// this will be run "amt" times
-	pop := &list.Erasing{
-		Count:   literal.I(1),
-		AtIndex: literal.I(start),
-		Target:  object.Variable("source"),
-		As:      "text",
+	pop := &list.ListErasing{
+		Count:  literal.I(1),
+		Index:  literal.I(start),
+		Target: object.Variable("source"),
+		As:     "text",
 		Exe: []rt.Execute{
 			&logic.ChooseBranch{
 				Condition: &math.CompareNum{

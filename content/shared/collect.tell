@@ -52,13 +52,14 @@
                     ChildrenOf obj:
                       FromText: "@obj"
                 - "kid"
-                - - Push:into:
-                      - FromTextList:
-                          CollectObjects obj:
-                            FromText: "@kid"
+                - - Push:value:
                       - Variable:dot:
                           - "result"
                           - - At field: "kids"
+                      - FromTextList:
+                          CollectObjects obj:
+                            FromText: "@kid"
+
 - Define pattern:requires:provides:do:
     - "has accessible children"
     - - Text:kind:

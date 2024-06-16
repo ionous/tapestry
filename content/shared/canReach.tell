@@ -30,9 +30,10 @@
           - Not:
               Is empty: "@i"
           - # There's no problem reaching yourself, so start by putting yourself in the list of visited places.
-            - Push:into:
-                - FromText: "@i"
+            - Push:value:
                 - "@path"
+                - FromText: "@i"
+
             - Set:value:
                 - "@next"
                 - FromText:
@@ -56,7 +57,7 @@
                       - - Set:value:
                             - "@reach_error"
                             - FromNum:
-                                Len:
+                                List length:
                                   FromTextList: "@path"
                         - Set:value:
                             - "@reach_response"
@@ -78,20 +79,23 @@
       - Repeat if:do:
           - Not:
               Is empty: "@i"
-          - - Set:value:
+          - - # set lca to the index of i in path
+              Set:value:
                 - "@lca"
                 - FromNum:
-                    Find in:list:
-                      - FromText: "@i"
+                    Find:value:
                       - FromTextList: "@path"
-            - If:do:
+                      - FromText: "@i"
+
+            - # Exit once we've found the lca.
+              If:do:
                 - Is:matching:num:
                     - "@lca"
                     - "greater_than"
                     - 0
-                - # Exit once we've found the lca.
-                  - Break:
-            - Set:value:
+                - - Break:
+            - # otherwise:
+              Set:value:
                 - "@next"
                 - FromText:
                     ParentOf obj:

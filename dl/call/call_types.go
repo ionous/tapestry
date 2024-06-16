@@ -80,6 +80,8 @@ func (op *ActiveScene_Slice) Repeats() bool {
 }
 
 // Determine whether a pattern is running.
+//
+// The [rtti.num_eval] version returns the distance to the pattern.
 type ActivePattern struct {
 	PatternName string
 	Markup      map[string]any
@@ -733,7 +735,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether a pattern is running.",
+			"comment": []interface{}{"Determine whether a pattern is running.", "", "The [rtti.num_eval] version returns the distance to the pattern."},
 		},
 	}
 	Zt_Arg = typeinfo.Flow{

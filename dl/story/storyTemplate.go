@@ -64,7 +64,7 @@ func (op *SayResponse) PostImport(cat *weave.Catalog) (ret typeinfo.Instance, er
 }
 
 func convertEval(txt rt.TextEval) (ret rt.TextEval, err error) {
-	if lit, ok := txt.(*literal.TextValue); !ok || len(lit.Kind) > 0 {
+	if lit, ok := txt.(*literal.TextValue); !ok || len(lit.KindName) > 0 {
 		ret = txt
 	} else {
 		ret, err = jess.ConvertTextTemplate(lit.Value)

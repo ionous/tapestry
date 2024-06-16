@@ -1,7 +1,7 @@
 // Supply constant values to runtime evaluations.
 // ( ie. a specific number when a [NumEval] is required. )
 //
-// Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )
+// Tell files support "shortcuts" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command "Num value: 5" whenever that's needed.
 package literal
 
 //
@@ -163,9 +163,9 @@ func (op *NumList_Slice) Repeats() bool {
 
 // Specify some constant text.
 type TextValue struct {
-	Value  string
-	Kind   string
-	Markup map[string]any
+	KindName string
+	Value    string
+	Markup   map[string]any
 }
 
 // text_value, a type of flow.
@@ -203,9 +203,9 @@ func (op *TextValue_Slice) Repeats() bool {
 
 // Specify a list of literal text values.
 type TextList struct {
-	Values []string
-	Kind   string
-	Markup map[string]any
+	KindName string
+	Values   []string
+	Markup   map[string]any
 }
 
 // text_list, a type of flow.
@@ -243,10 +243,10 @@ func (op *TextList_Slice) Repeats() bool {
 
 // Specify a record composed of literal values.
 type RecordValue struct {
-	Kind   string
-	Fields []FieldValue
-	Cache  RecordCache
-	Markup map[string]any
+	KindName string
+	Fields   []FieldValue
+	Cache    RecordCache
+	Markup   map[string]any
 }
 
 // record_value, a type of flow.
@@ -284,10 +284,10 @@ func (op *RecordValue_Slice) Repeats() bool {
 
 // Specify a series of records, all of the same kind.
 type RecordList struct {
-	Kind    string
-	Records []FieldList
-	Cache   RecordsCache
-	Markup  map[string]any
+	KindName string
+	Records  []FieldList
+	Cache    RecordsCache
+	Markup   map[string]any
 }
 
 // record_list, a type of flow.
@@ -363,9 +363,9 @@ func (op *FieldList_Slice) Repeats() bool {
 
 // The name and value of a field used for initializing a literal record.
 type FieldValue struct {
-	Field  string
-	Value  LiteralValue
-	Markup map[string]any
+	FieldName string
+	Value     LiteralValue
+	Markup    map[string]any
 }
 
 // field_value, a type of flow.
@@ -404,7 +404,8 @@ func init() {
 		Name: "bool_value",
 		Lede: "bool",
 		Terms: []typeinfo.Term{{
-			Name: "value",
+			Name:  "value",
+			Label: "value",
 			Markup: map[string]any{
 				"comment": "The true or false value.",
 			},
@@ -422,7 +423,8 @@ func init() {
 		Name: "num_value",
 		Lede: "num",
 		Terms: []typeinfo.Term{{
-			Name: "value",
+			Name:  "value",
+			Label: "value",
 			Markup: map[string]any{
 				"comment": "A literal number.",
 			},
@@ -441,7 +443,7 @@ func init() {
 		Lede: "num",
 		Terms: []typeinfo.Term{{
 			Name:    "values",
-			Label:   "list",
+			Label:   "values",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "Zero or more literal numbers.",
@@ -460,17 +462,18 @@ func init() {
 		Name: "text_value",
 		Lede: "text",
 		Terms: []typeinfo.Term{{
-			Name: "value",
-			Markup: map[string]any{
-				"comment": "Some literal text.",
-			},
-			Type: &prim.Zt_Text,
-		}, {
-			Name:     "kind",
+			Name:     "kind_name",
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
 				"comment": []interface{}{"Optionally, when the text represents the name of an (existing) object,", "the kind of the object in question."},
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:  "value",
+			Label: "value",
+			Markup: map[string]any{
+				"comment": "Some literal text.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -486,19 +489,19 @@ func init() {
 		Name: "text_list",
 		Lede: "text",
 		Terms: []typeinfo.Term{{
-			Name:    "values",
-			Label:   "list",
-			Repeats: true,
-			Markup: map[string]any{
-				"comment": "Zero or more text literals.",
-			},
-			Type: &prim.Zt_Text,
-		}, {
-			Name:     "kind",
+			Name:     "kind_name",
 			Label:    "kind",
 			Optional: true,
 			Markup: map[string]any{
 				"comment": []interface{}{"Optionally, when the text represents the names of (existing) objects,", "the kind of the objects in question."},
+			},
+			Type: &prim.Zt_Text,
+		}, {
+			Name:    "values",
+			Label:   "values",
+			Repeats: true,
+			Markup: map[string]any{
+				"comment": "Zero or more text literals.",
 			},
 			Type: &prim.Zt_Text,
 		}},
@@ -514,14 +517,14 @@ func init() {
 		Name: "record_value",
 		Lede: "record",
 		Terms: []typeinfo.Term{{
-			Name: "kind",
+			Name: "kind_name",
 			Markup: map[string]any{
 				"comment": []interface{}{"The kind of the record being constructed.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "fields",
-			Label:   "fields",
+			Label:   "value",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": []interface{}{"A set of literal values for the fields of the record.", "Any fields of the record which are not specified here,", "are \"zero initialized.\""},
@@ -544,14 +547,14 @@ func init() {
 		Name: "record_list",
 		Lede: "record",
 		Terms: []typeinfo.Term{{
-			Name: "kind",
+			Name: "kind_name",
 			Markup: map[string]any{
 				"comment": []interface{}{"The kind of the records being constructed.", "All of the records in the list must be of the same kind.", "All kinds must be pre-declared ( ex. via [DefineKind] or via jess. )"},
 			},
 			Type: &prim.Zt_Text,
 		}, {
 			Name:    "records",
-			Label:   "list",
+			Label:   "values",
 			Repeats: true,
 			Markup: map[string]any{
 				"comment": "Zero or more record literals.",
@@ -593,7 +596,7 @@ func init() {
 		Name: "field_value",
 		Lede: "field",
 		Terms: []typeinfo.Term{{
-			Name: "field",
+			Name: "field_name",
 			Markup: map[string]any{
 				"comment": []interface{}{"The name of a field in a record to initialize.", "New field names cannot be added to records at runtime;", "the field names must be part of the original declaration of the kind."},
 			},
@@ -619,7 +622,7 @@ var Z_Types = typeinfo.TypeSet{
 		"Supply constant values to runtime evaluations.",
 		"( ie. a specific number when a [NumEval] is required. )",
 		"",
-		"Tell files support \"shortcuts\" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command \"Num value: 5\" whenever that's needed. Therefore, these commands are mainly for internal representation ( and for the blockly editor. )",
+		"Tell files support \"shortcuts\" which turn primitive values into literal commands. For instance, the number '5' in a .tell file is automatically transformed into the command \"Num value: 5\" whenever that's needed.",
 	},
 
 	Slot:       z_slot_list,
@@ -651,23 +654,23 @@ var z_flow_list = []*typeinfo.Flow{
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
-	1949078217737575331:  (*BoolValue)(nil),   /* bool_eval=Bool: */
-	10481381284080410489: (*BoolValue)(nil),   /* literal_value=Bool: */
+	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
+	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
 	1426627792852548653:  (*FieldList)(nil),   /* literal_value=Field list: */
-	17669305546968596769: (*NumList)(nil),     /* literal_value=Num list: */
-	4715091378117636320:  (*NumList)(nil),     /* num_list_eval=Num list: */
-	2220603612539786023:  (*NumValue)(nil),    /* literal_value=Num: */
-	1780244674541709571:  (*NumValue)(nil),    /* num_eval=Num: */
-	5942123174065535899:  (*RecordValue)(nil), /* literal_value=Record:fields: */
-	5794725022419893180:  (*RecordValue)(nil), /* record_eval=Record:fields: */
-	10603460329938405688: (*RecordList)(nil),  /* literal_value=Record:list: */
-	2654503288592519818:  (*RecordList)(nil),  /* record_list_eval=Record:list: */
-	17984278622183554608: (*TextList)(nil),    /* literal_value=Text list: */
-	3361062536970077668:  (*TextList)(nil),    /* text_list_eval=Text list: */
-	13530574299467497336: (*TextList)(nil),    /* literal_value=Text list:kind: */
-	624306084502072676:   (*TextList)(nil),    /* text_list_eval=Text list:kind: */
-	658583341421440944:   (*TextValue)(nil),   /* literal_value=Text: */
-	13576766980248532683: (*TextValue)(nil),   /* text_eval=Text: */
-	13638423844565115896: (*TextValue)(nil),   /* literal_value=Text:kind: */
-	12291215226209480193: (*TextValue)(nil),   /* text_eval=Text:kind: */
+	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
+	16565175635984030252: (*NumValue)(nil),    /* num_eval=Num value: */
+	12282038377752822419: (*NumList)(nil),     /* literal_value=Num values: */
+	8089072108541894314:  (*NumList)(nil),     /* num_list_eval=Num values: */
+	5076557270712812679:  (*RecordValue)(nil), /* literal_value=Record:value: */
+	6692708173911561442:  (*RecordValue)(nil), /* record_eval=Record:value: */
+	8711768526197034738:  (*RecordList)(nil),  /* literal_value=Record:values: */
+	14652198550804167624: (*RecordList)(nil),  /* record_list_eval=Record:values: */
+	9199430333197009343:  (*TextValue)(nil),   /* literal_value=Text kind:value: */
+	4296855323747417954:  (*TextValue)(nil),   /* text_eval=Text kind:value: */
+	1727066802786539834:  (*TextList)(nil),    /* literal_value=Text kind:values: */
+	17727986415105280230: (*TextList)(nil),    /* text_list_eval=Text kind:values: */
+	13114183353368545439: (*TextValue)(nil),   /* literal_value=Text value: */
+	4705033170011872932:  (*TextValue)(nil),   /* text_eval=Text value: */
+	2231933745037898906:  (*TextList)(nil),    /* literal_value=Text values: */
+	5151885117815687006:  (*TextList)(nil),    /* text_list_eval=Text values: */
 }

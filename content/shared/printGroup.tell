@@ -80,7 +80,7 @@
                       - "objs"
                       - - At index: 1
                 - FromNum:
-                    Len:
+                    List length:
                       FromTextList: "@objs"
                 - FromText:
                     Text if:then:else:

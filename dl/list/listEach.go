@@ -10,27 +10,26 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/logic"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
-func (op *ListEach) Execute(run rt.Runtime) (err error) {
+func (op *ListRepeat) Execute(run rt.Runtime) (err error) {
 	if e := op.forEach(run); e != nil {
 		err = cmd.Error(op, e)
 	}
 	return
 }
 
-func (op *ListEach) forEach(run rt.Runtime) (err error) {
+func (op *ListRepeat) forEach(run rt.Runtime) (err error) {
 	if vs, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(vs.Affinity()) {
-		err = errutil.New("not a list")
+		err = errors.New("not a list")
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)
 	} else if cnt > 0 {
 		if it := op.As; len(it) == 0 {
 			// fix: a more robust check? an assembly check?
-			err = errutil.New("list iterator was undefined")
+			err = errors.New("list iterator was undefined")
 		} else {
 			// could cache this -- just trying to keep it simple right now.
 			// maybe this type could live in the db.
@@ -46,7 +45,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 			for i := 0; i < cnt; i++ {
 				at := vs.Index(i)
 				if e := ls.SetIndexedField(el, at); e != nil {
-					err = e
+					err = e // ^ note: the record index doesnt copy the value.
 					break
 				} else if e := ls.SetIndexedField(index, rt.IntOf(i+1)); e != nil {
 					err = e

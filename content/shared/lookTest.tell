@@ -37,7 +37,7 @@
       - Note: "( Validate the number of items in the list directly. )"
       - Expect:
           Is:matching:num:
-            - Len:
+            - List length:
                 FromTextList:
                   TransparentList obj:
                     FromText: "cabinet"
@@ -51,7 +51,7 @@
           - FromBool: true
       - Expect:
           Is:matching:num:
-            - Len:
+            - List length:
                 FromTextList:
                   TransparentList obj:
                     FromText: "cabinet"

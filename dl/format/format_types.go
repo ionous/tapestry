@@ -678,7 +678,7 @@ func init() {
 	}
 	Zt_BufferText = typeinfo.Flow{
 		Name: "buffer_text",
-		Lede: "buffers",
+		Lede: "buffer",
 		Terms: []typeinfo.Term{{
 			Name:    "exe",
 			Label:   "do",
@@ -857,7 +857,7 @@ var z_flow_list = []*typeinfo.Flow{
 // a list of all command signatures
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
-	11322251195672034522: (*BufferText)(nil),     /* text_eval=Buffers do: */
+	9767668117811810575:  (*BufferText)(nil),     /* text_eval=Buffer do: */
 	16098131496381194958: (*CycleText)(nil),      /* counter=Cycle name:text: */
 	5355971188045229340:  (*CycleText)(nil),      /* text_eval=Cycle name:text: */
 	17596073119249480739: (*CycleText)(nil),      /* counter=Cycle text: */

@@ -19,6 +19,15 @@ func (op *IsEmpty) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	return
 }
 
+func (op *TextLen) GetNum(run rt.Runtime) (ret rt.Value, err error) {
+	if text, e := safe.GetText(run, op.Text); e != nil {
+		err = cmd.ErrorCtx(op, "Text", e)
+	} else {
+		ret = rt.IntOf(text.Len())
+	}
+	return
+}
+
 func (op *FindText) GetBool(run rt.Runtime) (ret rt.Value, err error) {
 	if text, e := safe.GetText(run, op.Text); e != nil {
 		err = cmd.ErrorCtx(op, "Text", e)
@@ -38,7 +47,7 @@ func (op *FindText) GetNum(run rt.Runtime) (ret rt.Value, err error) {
 		err = cmd.ErrorCtx(op, "Part", e)
 	} else {
 		idx := strings.Index(text.String(), part.String())
-		ret = rt.IntOf(idx)
+		ret = rt.IntOf(idx + 1) // convert zero to a one-based index.
 	}
 	return
 }

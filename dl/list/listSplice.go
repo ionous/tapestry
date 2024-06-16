@@ -53,8 +53,8 @@ func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal rt.V
 	} else if vs, e := at.GetValue(); e != nil {
 		err = e
 	} else if e := safe.CheckList(vs); e != nil {
-		err = e
-	} else if ins, e := safe.GetAssignment(run, op.Insert); e != nil {
+		err = e // ^ validate the value is a list.
+	} else if ins, e := op.getNewValues(run, vs); e != nil {
 		err = e
 	} else if !IsAppendable(ins, vs) {
 		err = insertError{ins, vs}
@@ -71,10 +71,22 @@ func (op *ListSplice) spliceList(run rt.Runtime, _ affine.Affinity) (retVal rt.V
 	return
 }
 
+func (op *ListSplice) getNewValues(run rt.Runtime, src rt.Value) (ret rt.Value, err error) {
+	switch ins, e := safe.GetAssignment(run, op.Insert); e.(type) {
+	case safe.MissingEval:
+		ret, err = rt.ZeroField(src.Affinity(), src.Type(), -1)
+	case nil:
+		ret = ins
+	default:
+		err = e
+	}
+	return
+}
+
 func (op *ListSplice) getIndices(run rt.Runtime, cnt int) (reti, retj int, err error) {
 	if i, e := safe.GetOptionalNumber(run, op.Start, 0); e != nil {
 		err = e
-	} else if rng, e := safe.GetOptionalNumber(run, op.Remove, float64(cnt)); e != nil {
+	} else if rng, e := safe.GetOptionalNumber(run, op.Count, float64(cnt)); e != nil {
 		err = e
 	} else {
 		reti = clipStart(i.Int(), cnt)

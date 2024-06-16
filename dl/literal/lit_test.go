@@ -15,13 +15,13 @@ func TestRecord(t *testing.T) {
 	}
 	kinds.AddKinds((*Fruit)(nil))
 	l1 := literal.RecordValue{
-		Kind: "fruit",
+		KindName: "fruit",
 		Fields: textFields(
 			"name", "apple",
 		),
 	}
 	l2 := literal.RecordValue{
-		Kind: "fruit",
+		KindName: "fruit",
 		Fields: textFields(
 			"variety", "gala",
 			"name", "apple",
@@ -51,7 +51,7 @@ func TestRecord(t *testing.T) {
 	}
 	// fail
 	l3 := literal.RecordValue{
-		Kind: "fruit",
+		KindName: "fruit",
 		Fields: textFields(
 			"variety", "gala",
 			"variety", "gala",
@@ -70,17 +70,17 @@ func TestRecordRecursion(t *testing.T) {
 	}
 	kinds.AddKinds((*Fruit)(nil))
 	l1 := literal.RecordValue{
-		Kind: "fruit",
+		KindName: "fruit",
 		Fields: []literal.FieldValue{{
-			Field: "name",
-			Value: &literal.TextValue{Value: "pomegranate"},
+			FieldName: "name",
+			Value:     &literal.TextValue{Value: "pomegranate"},
 		}, {
-			Field: "fruit",
+			FieldName: "fruit",
 			Value: &literal.RecordValue{
-				Kind: "fruit",
+				KindName: "fruit",
 				Fields: []literal.FieldValue{{
-					Field: "name",
-					Value: &literal.TextValue{Value: "aril"},
+					FieldName: "name",
+					Value:     &literal.TextValue{Value: "aril"},
 				}},
 			},
 		}},
@@ -105,16 +105,16 @@ func TestInnerRecord(t *testing.T) {
 	}
 	kinds.AddKinds((*Fruit)(nil))
 	l1 := literal.RecordValue{
-		Kind: "fruit",
+		KindName: "fruit",
 		Fields: []literal.FieldValue{{
-			Field: "name",
-			Value: &literal.TextValue{Value: "pomegranate"},
+			FieldName: "name",
+			Value:     &literal.TextValue{Value: "pomegranate"},
 		}, {
-			Field: "fruit",
+			FieldName: "fruit",
 			Value: &literal.FieldList{
 				Fields: []literal.FieldValue{{
-					Field: "name",
-					Value: &literal.TextValue{Value: "aril"},
+					FieldName: "name",
+					Value:     &literal.TextValue{Value: "aril"},
 				}},
 			},
 		}},
@@ -135,8 +135,8 @@ func textFields(els ...string) (ret []literal.FieldValue) {
 	for i, cnt := 0, len(els); i < cnt; i += 2 {
 		a, b := els[i], els[i+1]
 		ret = append(ret, literal.FieldValue{
-			Field: a,
-			Value: &literal.TextValue{Value: b},
+			FieldName: a,
+			Value:     &literal.TextValue{Value: b},
 		})
 	}
 	return

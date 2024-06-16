@@ -434,7 +434,7 @@ var Phrases = []Phrase{
 	// ------------------------------------------------------------------------
 	{
 		// fix? mixed feelings on the trailing full-stop.
-		test: `The story has the title "{15|print_num!}".`,
+		test: `The story has the title "{15|print_num_digits!}".`,
 		result: []string{
 			// test that it can convert a template
 			"AddNounValue:", "story", "title", `{"FromText:":{"Numeral:":{"Num:":15}}}`,
@@ -1034,13 +1034,13 @@ func Marshal(a any) (ret string, err error) {
 }
 
 func text(str string) string {
-	return fmt.Sprintf(`{"Text:":%q}`, str)
+	return fmt.Sprintf(`{"Text value:":%q}`, str)
 }
 
 func textKind(str, kind string) string {
-	return fmt.Sprintf(`{"Text:kind:":[%q,%q]}`, str, kind)
+	return fmt.Sprintf(`{"Text kind:value:":[%q,%q]}`, kind, str)
 }
 
 func number(num float64) string {
-	return fmt.Sprintf(`{"Num:":%g}`, num)
+	return fmt.Sprintf(`{"Num value:":%g}`, num)
 }

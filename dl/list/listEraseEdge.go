@@ -6,8 +6,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-func (op *EraseEdge) Execute(run rt.Runtime) (err error) {
-	if _, e := eraseEdge(run, op.Target, op.AtEdge); e != nil {
+func (op *ListPop) Execute(run rt.Runtime) (err error) {
+	if _, e := eraseEdge(run, op.Target, op.Edge); e != nil {
 		err = cmd.Error(op, e)
 	}
 	return

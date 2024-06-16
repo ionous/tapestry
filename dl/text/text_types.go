@@ -11,7 +11,48 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang/typeinfo"
 )
 
+// Count the number of characters in some text.
+type TextLen struct {
+	Text   rtti.TextEval
+	Markup map[string]any
+}
+
+// text_len, a type of flow.
+var Zt_TextLen typeinfo.Flow
+
+// Implements [typeinfo.Instance]
+func (*TextLen) TypeInfo() typeinfo.T {
+	return &Zt_TextLen
+}
+
+// Implements [typeinfo.Markup]
+func (op *TextLen) GetMarkup(ensure bool) map[string]any {
+	if ensure && op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	return op.Markup
+}
+
+// Ensures the command implements its specified slots.
+var _ rtti.NumEval = (*TextLen)(nil)
+
+// Holds a slice of type TextLen.
+type TextLen_Slice []TextLen
+
+// Implements [typeinfo.Instance] for a slice of TextLen.
+func (*TextLen_Slice) TypeInfo() typeinfo.T {
+	return &Zt_TextLen
+}
+
+// Implements [typeinfo.Repeats] for a slice of TextLen.
+func (op *TextLen_Slice) Repeats() bool {
+	return len(*op) > 0
+}
+
 // Determine whether one piece of text contains a second piece of text.
+//
+// The [rt.NumEval] version returns the first index at which the text appears,
+// or zero if not found.
 type FindText struct {
 	Text    rtti.TextEval
 	Subtext rtti.TextEval
@@ -613,9 +654,8 @@ func (op *PrintNumDigits_Slice) Repeats() bool {
 
 // Express an integer in plain english.
 // For example, given the number `1` return the text "one".
-//
-// It converts floating point numbers to integer by truncating.
-// For example, given `1.6` it returns "one".
+// It converts floating point numbers to integer by truncating:
+// given `1.6`, it returns "one".
 //
 // The [story.Execute] version prints the text for the player.
 type PrintNumWords struct {
@@ -659,12 +699,29 @@ func (op *PrintNumWords_Slice) Repeats() bool {
 // init the terms of all flows in init
 // so that they can refer to each other when needed.
 func init() {
+	Zt_TextLen = typeinfo.Flow{
+		Name: "text_len",
+		Lede: "text",
+		Terms: []typeinfo.Term{{
+			Name:  "text",
+			Label: "length",
+			Markup: map[string]any{
+				"comment": "The text to measure.",
+			},
+			Type: &rtti.Zt_TextEval,
+		}},
+		Slots: []*typeinfo.Slot{
+			&rtti.Zt_NumEval,
+		},
+		Markup: map[string]any{
+			"comment": "Count the number of characters in some text.",
+		},
+	}
 	Zt_FindText = typeinfo.Flow{
 		Name: "find_text",
 		Lede: "find",
 		Terms: []typeinfo.Term{{
-			Name:  "text",
-			Label: "in",
+			Name: "text",
 			Markup: map[string]any{
 				"comment": "The text to search within.",
 			},
@@ -682,7 +739,7 @@ func init() {
 			&rtti.Zt_NumEval,
 		},
 		Markup: map[string]any{
-			"comment": "Determine whether one piece of text contains a second piece of text.",
+			"comment": []interface{}{"Determine whether one piece of text contains a second piece of text.", "", "The [rt.NumEval] version returns the first index at which the text appears,", "or zero if not found."},
 		},
 	}
 	Zt_TextStartsWith = typeinfo.Flow{
@@ -788,7 +845,7 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name: "text",
 			Markup: map[string]any{
-				"comment": "The text to capitalize.",
+				"comment": "The text to copy, then capitalize.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -814,7 +871,7 @@ func init() {
 			Label:   "parts",
 			Repeats: true,
 			Markup: map[string]any{
-				"comment": "The text values to concatenate.",
+				"comment": "The pieces of text to combine.",
 			},
 			Type: &rtti.Zt_TextEval,
 		}},
@@ -830,6 +887,9 @@ func init() {
 		Lede: "lower",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to copy, then lowercase.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -845,7 +905,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "text",
 			Label: "text",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The text to copy and then reverse.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -859,6 +922,9 @@ func init() {
 		Lede: "sentence",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to copy and then transform.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -873,6 +939,9 @@ func init() {
 		Lede: "title",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to copy and then transform.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -887,6 +956,9 @@ func init() {
 		Lede: "upper",
 		Terms: []typeinfo.Term{{
 			Name: "text",
+			Markup: map[string]any{
+				"comment": "The text to copy and then transform into uppercase.",
+			},
 			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
@@ -902,7 +974,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "text",
 			Label: "of",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The text to pluralize.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -917,7 +992,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "text",
 			Label: "of",
-			Type:  &rtti.Zt_TextEval,
+			Markup: map[string]any{
+				"comment": "The text to turn into its singular form.",
+			},
+			Type: &rtti.Zt_TextEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -932,7 +1010,10 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "num",
 			Label: "digits",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The number to change into text, or to print.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
@@ -948,14 +1029,17 @@ func init() {
 		Terms: []typeinfo.Term{{
 			Name:  "num",
 			Label: "words",
-			Type:  &rtti.Zt_NumEval,
+			Markup: map[string]any{
+				"comment": "The number to change into words, or to print.",
+			},
+			Type: &rtti.Zt_NumEval,
 		}},
 		Slots: []*typeinfo.Slot{
 			&rtti.Zt_TextEval,
 			&rtti.Zt_Execute,
 		},
 		Markup: map[string]any{
-			"comment": []interface{}{"Express an integer in plain english.", "For example, given the number `1` return the text \"one\".", "", "It converts floating point numbers to integer by truncating.", "For example, given `1.6` it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
+			"comment": []interface{}{"Express an integer in plain english.", "For example, given the number `1` return the text \"one\".", "It converts floating point numbers to integer by truncating:", "given `1.6`, it returns \"one\".", "", "The [story.Execute] version prints the text for the player."},
 		},
 	}
 }
@@ -974,6 +1058,7 @@ var Z_Types = typeinfo.TypeSet{
 // A list of all flows in this this package.
 // ( ex. for reading blockly blocks )
 var z_flow_list = []*typeinfo.Flow{
+	&Zt_TextLen,
 	&Zt_FindText,
 	&Zt_TextStartsWith,
 	&Zt_TextEndsWith,
@@ -996,8 +1081,8 @@ var z_flow_list = []*typeinfo.Flow{
 // ( for processing and verifying story files )
 var z_signatures = map[uint64]typeinfo.Instance{
 	8695677004499439692:  (*Capitalize)(nil),       /* text_eval=Capitalize: */
-	12607894193114927890: (*FindText)(nil),         /* bool_eval=Find in:text: */
-	16244114700846560048: (*FindText)(nil),         /* num_eval=Find in:text: */
+	7190419643383427713:  (*FindText)(nil),         /* bool_eval=Find:text: */
+	2922486476891061679:  (*FindText)(nil),         /* num_eval=Find:text: */
 	10867951538760575464: (*IsEmpty)(nil),          /* bool_eval=Is empty: */
 	6139101839500298168:  (*Matches)(nil),          /* bool_eval=Is text:expression: */
 	43416298232103202:    (*TextStartsWith)(nil),   /* bool_eval=Is text:prefix: */
@@ -1013,6 +1098,7 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	12963686195606417453: (*MakeReversed)(nil),     /* text_eval=Reverse text: */
 	10747671703915852065: (*MakeSentenceCase)(nil), /* text_eval=Sentence: */
 	2397382738676796596:  (*Singularize)(nil),      /* text_eval=Singular of: */
+	5968278258259888036:  (*TextLen)(nil),          /* num_eval=Text length: */
 	10878271994667616824: (*MakeTitleCase)(nil),    /* text_eval=Title: */
 	5481656653805454214:  (*MakeUppercase)(nil),    /* text_eval=Upper: */
 }

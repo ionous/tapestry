@@ -74,7 +74,7 @@ func splice(src []string, start, cnt int, ins ...string) (ret string, err error)
 		rub := joinText(run, &list.ListSplice{
 			Target: object.Variable("source"),
 			Start:  literal.I(start),
-			Remove: literal.I(cnt),
+			Count:  literal.I(cnt),
 			Insert: FromTs(ins)},
 		)
 		if strs, e := run.GetField(meta.Variables, "source"); e != nil {

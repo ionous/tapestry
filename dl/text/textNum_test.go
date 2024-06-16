@@ -9,7 +9,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
-func ExamplePrintNum() {
+func ExamplePrintNumDigits() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &PrintNumDigits{Num: literal.F(213)}); e != nil {
@@ -19,7 +19,7 @@ func ExamplePrintNum() {
 	// 213
 }
 
-func ExamplePrintNumWord() {
+func ExamplePrintNumWords() {
 	var run sayTester
 	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &PrintNumWords{Num: literal.F(213)}); e != nil {

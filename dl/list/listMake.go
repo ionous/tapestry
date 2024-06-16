@@ -1,10 +1,12 @@
 package list
 
 import (
+	"errors"
+	"fmt"
+
 	"git.sr.ht/~ionous/tapestry/dl/cmd"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
 func (op *MakeNumList) GetNumList(run rt.Runtime) (ret rt.Value, err error) {
@@ -56,19 +58,19 @@ func (op *MakeRecordList) GetRecordList(run rt.Runtime) (ret rt.Value, err error
 }
 
 func (op *MakeRecordList) makeList(run rt.Runtime) (ret rt.Value, err error) {
-	if subtype, e := safe.GetText(run, op.KindName); e != nil {
-		err = e
-	} else if subtype := subtype.String(); len(subtype) == 0 {
-		err = errutil.New("expected a valid record name")
-	} else if k, e := run.GetKindByName(subtype); e != nil {
-		err = errutil.Fmt("expected a known record name, got %q", subtype)
+	if cnt := len(op.List); cnt == 0 {
+		err = errors.New("record list is empty")
 	} else {
-		vs := make([]*rt.Record, len(op.Values))
-		for i, a := range op.Values {
+		var subtype string
+		vs := make([]*rt.Record, cnt)
+		for i, a := range op.List {
 			if v, e := safe.GetRecord(run, a); e != nil {
 				err = e
-			} else if v.Type() != k.Name() {
-				err = errutil.Fmt("record %d of type %q not %q", i, v.Type(), subtype)
+			} else if vt := v.Type(); len(subtype) == 0 {
+				subtype = vt
+			} else if vt != subtype {
+				err = fmt.Errorf("record %d of type %q not %q", i, vt, subtype)
+				break
 			} else {
 				vs[i] = v.Record()
 			}

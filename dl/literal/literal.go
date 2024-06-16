@@ -59,7 +59,7 @@ func (op *TextValue) String() string {
 }
 
 func (op *TextValue) GetLiteralValue(rt.Kinds) (ret rt.Value, _ error) {
-	ret = rt.StringFrom(op.Value, op.Kind)
+	ret = rt.StringFrom(op.Value, op.KindName)
 	return
 }
 
@@ -91,7 +91,7 @@ func (op *TextList) GetTextList(run rt.Runtime) (ret rt.Value, _ error) {
 }
 
 func (op *RecordValue) GetLiteralValue(kinds rt.Kinds) (ret rt.Value, err error) {
-	return op.Cache.GetRecord(kinds, op.Kind, op.Fields)
+	return op.Cache.GetRecord(kinds, op.KindName, op.Fields)
 }
 
 // GetRecord implements interface rt.RecordEval providing the dl with a structured literal.
@@ -100,7 +100,7 @@ func (op *RecordValue) GetRecord(run rt.Runtime) (rt.Value, error) {
 }
 
 func (op *RecordList) GetLiteralValue(kinds rt.Kinds) (rt.Value, error) {
-	return op.Cache.GetRecords(kinds, op.Kind, op.Records)
+	return op.Cache.GetRecords(kinds, op.KindName, op.Records)
 }
 
 // GetNumList implements rt.RecordListEval providing the dl with a literal list of records.

@@ -18,11 +18,11 @@ var Pairs = []struct {
 	/*test*/ "Slice",
 	&literal.FieldList{
 		Fields: []literal.FieldValue{{
-			Field: "first",
+			FieldName: "first",
 			Value: &literal.NumValue{
 				Value: 5,
 			}}, {
-			Field: "second",
+			FieldName: "second",
 			Value: &literal.TextValue{
 				Value: "five",
 			}},
@@ -39,11 +39,11 @@ var Pairs = []struct {
         "type": "field_value",
         "id": "test-2",
         "extraState": {
-          "FIELD": 1,
+          "FIELD_NAME": 1,
           "VALUE": 1
         },
         "fields": {
-          "FIELD": "first"
+          "FIELD_NAME": "first"
         },
         "inputs": {
           "VALUE": {
@@ -66,11 +66,11 @@ var Pairs = []struct {
         "type": "field_value",
         "id": "test-4",
         "extraState": {
-          "FIELD": 1,
+          "FIELD_NAME": 1,
           "VALUE": 1
         },
         "fields": {
-          "FIELD": "second"
+          "FIELD_NAME": "second"
         },
         "inputs": {
           "VALUE": {
@@ -115,18 +115,18 @@ var Pairs = []struct {
 	// a flow with a single slot.
 	/*test*/ "Slot",
 	&literal.FieldValue{
-		Field: "test",
+		FieldName: "test",
 		Value: &literal.NumValue{
 			Value: 5,
 		}}, `{
   "type": "field_value",
   "id": "test-1",
   "extraState": {
-    "FIELD": 1,
+    "FIELD_NAME": 1,
     "VALUE": 1
   },
   "fields": {
-    "FIELD": "test"
+    "FIELD_NAME": "test"
   },
   "inputs": {
     "VALUE": {

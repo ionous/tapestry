@@ -831,7 +831,7 @@ func init() {
 			Name:  "index",
 			Label: "index",
 			Markup: map[string]any{
-				"comment": []interface{}{"The zero-based index to read or write.", "The index must exist within the list being targeted."},
+				"comment": []interface{}{"The one-based index to read or write.", "The index must exist within the list being targeted."},
 			},
 			Type: &rtti.Zt_NumEval,
 		}},
