@@ -13,7 +13,7 @@ import (
 // different phases (z) can match different phrases (ws)
 // should a match occur, return true; and set 'out' to the matched phrase.
 func matchSentence(z weaver.Phase, q Query, next []match.TokenValue, out *bestMatch) (okay bool) {
-	var op MatchingPhrases
+	var op MatchedPhrase
 	switch z {
 	case weaver.LanguagePhase:
 		// "understand" {quoted text} as .....

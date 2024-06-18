@@ -4,7 +4,7 @@
 //	The kitchen is a room. The closed container called the cabinet is in the kitchen.
 //	The cabinet contains a mug. The mug is transparent.
 //
-// These commands aren't specified by authors. Instead, they are created as a byproduct of reading a sentence.  Each successfully matched English sentence results in a single [MatchingPhrases] instance with exactly one valid member.
+// The commands in this idl aren't used directly by authors. Instead, these commands are created as a byproduct of reading a sentence. Each successfully matched English sentence results in a single [matched_phrase] with exactly one valid member.
 //
 // The types of sentences jess can process are based on the sentences described in Inform7's documentation. However, Inform can handle a much wider range of sentences than jess.
 package jess
@@ -895,7 +895,7 @@ func (op *Verb_Slice) Repeats() bool {
 // scheduling is handled manually.
 // ( tbd: an alternative might be slots and some scheduling metadata;
 // this is fine for now )
-type MatchingPhrases struct {
+type MatchedPhrase struct {
 	Understand          Understand
 	TimedRule           TimedRule
 	KindsAreKind        KindsAreKind
@@ -914,32 +914,32 @@ type MatchingPhrases struct {
 	Markup              map[string]any
 }
 
-// matching_phrases, a type of flow.
-var Zt_MatchingPhrases typeinfo.Flow
+// matched_phrase, a type of flow.
+var Zt_MatchedPhrase typeinfo.Flow
 
 // Implements [typeinfo.Instance]
-func (*MatchingPhrases) TypeInfo() typeinfo.T {
-	return &Zt_MatchingPhrases
+func (*MatchedPhrase) TypeInfo() typeinfo.T {
+	return &Zt_MatchedPhrase
 }
 
 // Implements [typeinfo.Markup]
-func (op *MatchingPhrases) GetMarkup(ensure bool) map[string]any {
+func (op *MatchedPhrase) GetMarkup(ensure bool) map[string]any {
 	if ensure && op.Markup == nil {
 		op.Markup = make(map[string]any)
 	}
 	return op.Markup
 }
 
-// Holds a slice of type MatchingPhrases.
-type MatchingPhrases_Slice []MatchingPhrases
+// Holds a slice of type MatchedPhrase.
+type MatchedPhrase_Slice []MatchedPhrase
 
-// Implements [typeinfo.Instance] for a slice of MatchingPhrases.
-func (*MatchingPhrases_Slice) TypeInfo() typeinfo.T {
-	return &Zt_MatchingPhrases
+// Implements [typeinfo.Instance] for a slice of MatchedPhrase.
+func (*MatchedPhrase_Slice) TypeInfo() typeinfo.T {
+	return &Zt_MatchedPhrase
 }
 
-// Implements [typeinfo.Repeats] for a slice of MatchingPhrases.
-func (op *MatchingPhrases_Slice) Repeats() bool {
+// Implements [typeinfo.Repeats] for a slice of MatchedPhrase.
+func (op *MatchedPhrase_Slice) Repeats() bool {
 	return len(*op) > 0
 }
 
@@ -2820,9 +2820,9 @@ func init() {
 			"comment": []interface{}{"Matches one or more predefined verbs.", "( verbs are nouns of the verb kind )"},
 		},
 	}
-	Zt_MatchingPhrases = typeinfo.Flow{
-		Name: "matching_phrases",
-		Lede: "matching_phrases",
+	Zt_MatchedPhrase = typeinfo.Flow{
+		Name: "matched_phrase",
+		Lede: "matched_phrase",
 		Terms: []typeinfo.Term{{
 			Name:  "understand",
 			Label: "understand",
@@ -3764,7 +3764,7 @@ var Z_Types = typeinfo.TypeSet{
 		" The kitchen is a room. The closed container called the cabinet is in the kitchen.",
 		" The cabinet contains a mug. The mug is transparent.",
 		"",
-		"These commands aren't specified by authors. Instead, they are created as a byproduct of reading a sentence.  Each successfully matched English sentence results in a single [MatchingPhrases] instance with exactly one valid member.",
+		"The commands in this idl aren't used directly by authors. Instead, these commands are created as a byproduct of reading a sentence. Each successfully matched English sentence results in a single [matched_phrase] with exactly one valid member.",
 		"",
 		"The types of sentences jess can process are based on the sentences described in Inform7's documentation. However, Inform can handle a much wider range of sentences than jess.",
 	},
@@ -3805,7 +3805,7 @@ var z_flow_list = []*typeinfo.Flow{
 	&Zt_AdditionalTraits,
 	&Zt_Words,
 	&Zt_Verb,
-	&Zt_MatchingPhrases,
+	&Zt_MatchedPhrase,
 	&Zt_KindsAreKind,
 	&Zt_KindsAreTraits,
 	&Zt_AspectsAreTraits,
@@ -3928,8 +3928,8 @@ var z_signatures = map[uint64]typeinfo.Instance{
 	7836789797345891325:  (*MapDirections)(nil),        /* MapDirections directionOfLinking:are:redirect: */
 	10172864188299309151: (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking: */
 	4228974132366036894:  (*MapLocations)(nil),         /* MapLocations linking:are:directionOfLinking:additionalDirections: */
+	11899649486792651832: (*MatchedPhrase)(nil),        /* MatchedPhrase understand:timedRule:kindsAreKind:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
 	11956449617596421399: (*MatchingNum)(nil),          /* MatchingNum value: */
-	5298623852324545062:  (*MatchingPhrases)(nil),      /* MatchingPhrases understand:timedRule:kindsAreKind:aspectsAreTraits:kindsAreTraits:kindsHaveProperties:kindsAreEither:mapConnections:mapDirections:mapLocations:propertyNounValue:nounPropertyValue:verbNamesAreNames:namesVerbNames:namesAreLikeVerbs: */
 	9752692754416089114:  (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives: */
 	12792661932982325564: (*NamesAreLikeVerbs)(nil),    /* NamesAreLikeVerbs names:are:adjectives:verbPhrase: */
 	2930727231635963135:  (*NamesVerbNames)(nil),       /* NamesVerbNames names:are:verb:otherNames: */
